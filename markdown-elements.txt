@@ -1,0 +1,157 @@
+=== BASE MARKDOWN ===
+
+https://www.markdownguide.org/basic-syntax/
+https://www.markdownguide.org/extended-syntax/
+
+== TEXT ==
+
+double line break         => paragraph delimiter
+double space + line break => line break
+
+*text* or _text_         => italic
+**text** or __text__     => bold
+***text*** or ___text___ => bold italic
+~~text~~                 => strikethrough
+==text==                 => highlight
+H~2~0                    => subscript
+X^2^                     => superscript
+
+
+== HEADINGS ==
+
+# H1 title
+## H2 title
+### H3 title
+#### H4 title
+##### H5 title
+###### H6 title
+
+# Title {#custom-id}
+
+
+== QUOTES ==
+
+> Single paragraph quote
+
+> Multi paragraph
+>
+> quote
+
+> Top level quote
+>
+>> Nested quote
+
+
+== LISTS ==
+
+1. First
+2. Second
+3. Third
+(Must start with 1, but doesn't need to be in order)
+
+1. First
+2. Second
+    1. Indented first
+    2. Indented second
+3. Third
+
+- A
+- B
+- C
+(* and + instead of - are also okay)
+
+- A
+- B
+    - Indented A
+    - Indented B
+- C
+
+1. First
+2. Second
+    - Indented A
+    - Indented B
+3. Third
+
+- A
+- B
+
+    Another B paragraph (or anything else, 4 spaces or 1 tab indented)
+
+- C
+
+- [x] Done task
+- [ ] Undone task
+
+
+== CODE ==
+
+4 spaces or 1 tab indented
+    <html>
+        Code block
+    </html>
+
+```
+<html>
+    Code block
+</html>
+```
+
+```html
+<html>
+    Code block
+</html>
+```
+
+`Inline code`
+
+``Inline `code` escape``
+
+
+== HORIZONTAL RULES ==
+
+3 or more, with empty lines before and after:
+
+***
+
+---
+
+___
+
+
+== LINKS ==
+
+[Text](url)
+
+[Text](url "Title")
+
+<url>
+
+
+== IMAGES ==
+
+![Alt](url)
+
+![Alt](url "Title")
+
+
+== ESCAPING ==
+
+\`
+\*
+\#
+and other key characters
+
+
+== TABLES ==
+
+Markdown tables are quite impractical. Might create a new easier syntax...
+
+== FOOTNOTES ==
+
+A text[^note] about something[^anothernote].
+
+[^note]: First note
+
+[^anothernote]: A note
+    
+    With multiple paragraphs
