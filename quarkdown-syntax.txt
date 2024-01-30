@@ -1,7 +1,119 @@
 === ADDITIONAL SYNTAX ===
 
+.function
+
+.instruction {arg1} {arg2}
+
+.instruction {
+    body
+} 
+
+.instruction {arg1} {arg2} {
+    body
+}
+
+Any kind of content can be passed as an argument, including Markdown content and other instructions.
+Therefore, "body" is treated as a regular argument.
+
+Instructions must be standalone:
+- some text.instruction renders "some text.instruction"
+- some text .instruction renders "some text" and executes the instruction
+- **.instruction** renders as bold ".instruction"
+- `.instruction` renders as monospaced ".instruction", and so on
+
+
+== DOCUMENT ==
+
+.docname {DocumentName}     Sets the value
+.docauthor {Name Surname}   Sets the value
+.aspectratio {16:9}         e.g. A4 is 1:1.41
+
+
+== PAGE ==
+
+.page                       Starts a new page
+.titlepage                  Starts a new title page ()
+
+
+== LAYOUT ==
+
+.row {stretch|expand} {      Row that uses the needed space only (stretch)
+    content1                 or expands through the available space (expand)
+
+    content2
+}
+
+.row {                       Like .row {stretch}
+    content1
+
+    content2
+}
+
+.column {stretch|expand} {  Column that uses the needed space only (stretch)
+    content1                or expands through the available space (expand)
+
+    content2
+}
+
+.column {                   Like .column {stretch}
+    content1
+
+    content2
+}
+
+.align {topleft|bottomleft|center|...} {    Aligns content
+    content
+}
+
+
 == FOOTER ==
 
-static footer
-footer with page count
-progress bar
+.footer {                Sets global footer applied to every page
+    content
+}
+
+
+== ECHO ==
+
+"Macros" that expand into other content:
+
+.docname                 Document name
+.docauthor               Document author
+.currentpage             Index of the current page
+.pagecount               Amount of pages
+
+
+== BOXES ==
+
+.box {title} {           Titled default box
+    content
+}
+
+.box {                   Untitled default box
+    content
+}
+
+
+== GRAPHICS ==
+
+.theme {ThemeName}       Sets global CSS theme
+
+.fontfamily {Arial}      Sets global font family (overrides theme)
+.fontfamily {Arial} {    Sets local font family
+    content
+}
+
+.fontsize {14}           Sets global body text font size (overrides theme)
+.fontsize {14} {         Sets local body text font size
+    content
+}
+
+.backgroundcolor {white}      Sets global background color (overrides theme)
+.backgroundcolor {white} {    Sets local background color
+    content
+}
+
+.textcolor {black}            Sets global text color (overrides theme)
+.textcolor {black} {          Sets local text color
+    content
+}
