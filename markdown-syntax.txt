@@ -3,6 +3,10 @@
 https://www.markdownguide.org/basic-syntax/
 https://www.markdownguide.org/extended-syntax/
 
+Useful links:
+https://github.com/JetBrains/markdown
+https://spec.commonmark.org/0.31.2/#appendix-a-parsing-strategy
+
 == TEXT ==
 
 double line break         => paragraph delimiter

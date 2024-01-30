@@ -1,0 +1,7 @@
+=== ADDITIONAL SYNTAX ===
+
+== FOOTER ==
+
+static footer
+footer with page count
+progress bar
