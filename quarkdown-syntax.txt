@@ -2,18 +2,13 @@
 
 .instruction
 
-.instruction {arg1} {arg2}
+.instruction [arg1] [arg2]
 
-.instruction {
+.instruction
     body
-} 
 
-.instruction {arg1} {arg2} {
+.instruction [arg1] [arg2]
     body
-}
-
-Any kind of content can be passed as an argument, including Markdown content and other instructions.
-Therefore "body" should be treated as a regular argument.
 
 Instructions must be standalone:
 - some text.instruction renders "some text.instruction"
@@ -24,15 +19,15 @@ Instructions must be standalone:
 
 == DOCUMENT ==
 
-.docname {DocumentName}     Sets the value
-.docauthor {Name Surname}   Sets the value
-.aspectratio {16:9}         e.g. A4 is 1:1.41
+.docname [DocumentName]     Sets the value
+.docauthor [Name Surname]   Sets the value
+.aspectratio [16:9]         e.g. A4 is 1:1.41
 
 
 == PAGE ==
 
 .page                       Starts a new page
-.page {Name}                Starts a new named page
+.page [Name]                Starts a new named page
                             which defines a section that shows up
                             in the table of contents
 
@@ -41,40 +36,40 @@ Instructions must be standalone:
 
 == LAYOUT ==
 
-.row {stretch|expand} {      Row that uses the needed space only (stretch)
+.row [stretch|expand]        Row that uses the needed space only (stretch)
     content1                 or expands through the available space (expand)
 
     content2
-}
 
-.row {                       Like .row {stretch}
+
+.row                        Like .row [stretch]
     content1
 
     content2
-}
 
-.column {stretch|expand} {  Column that uses the needed space only (stretch)
+
+.column [stretch|expand]    Column that uses the needed space only (stretch)
     content1                or expands through the available space (expand)
 
     content2
-}
 
-.column {                   Like .column {stretch}
+
+.column                     Like .column [stretch]
     content1
 
     content2
-}
 
-.align {topleft|bottomleft|center|...} {    Aligns content
+
+.align [topleft|bottomleft|center|...]      Aligns content
     content
-}
+
 
 
 == FOOTER ==
 
-.footer {                Sets global footer applied to every page
+.footer                  Sets global footer applied to every page
     content
-}
+
 
 
 == ECHO ==
@@ -94,54 +89,54 @@ $$expression$$           Renders a LaTeX expression
 
 == BOXES ==
 
-.box {title} {           Titled default box
+.box [title]             Titled default box
     content
-}
 
-.box {                   Untitled default box
+
+.box                     Untitled default box
     content
-}
 
-.codeblock {lang} {      A code block with syntax highlighting
+
+.codeblock [lang]        A code block with syntax highlighting
     text
-}
+
 
 
 == NAVIGATION ==
 
 .tableofcontents         Displays the table of contents
 .dynamictableofcontents  Displays the table of contents that
-                         highlights the current section (defined by .page {name})
+                         highlights the current section (defined by .page [name])
 
 
 == GRAPHICS ==
 
-.colortheme {ThemeName}  Sets global color CSS theme
-.layouttheme {ThemeName} Sets global layout CSS theme
+.colortheme [ThemeName]  Sets global color CSS theme
+.layouttheme [ThemeName] Sets global layout CSS theme
 
-.fontfamily {Arial}      Sets global font family (overrides theme)
-.fontfamily {Arial} {    Sets local font family
+.fontfamily [Arial]      Sets global font family (overrides theme)
+.fontfamily [Arial]      Sets local font family
     content
-}
 
-.fontsize {big|normal|small|...}    Sets global body text font size (overrides theme)
-.fontsize {big|normal|small|...} {  Sets local body text font size
-    content
-}
 
-.backgroundcolor {white}      Sets global background color (overrides theme)
-.backgroundcolor {white} {    Sets local background color
+.fontsize [big|normal|small|...]    Sets global body text font size (overrides theme)
+.fontsize [big|normal|small|...]    Sets local body text font size
     content
-}
 
-.textcolor {black}            Sets global text color (overrides theme)
-.textcolor {black} {          Sets local text color
+
+.backgroundcolor [white]      Sets global background color (overrides theme)
+.backgroundcolor [white]      Sets local background color
     content
-}
+
+
+.textcolor [black]            Sets global text color (overrides theme)
+.textcolor [black]            Sets local text color
+    content
+
 
 == MISC ==
 
-.filecontent {file}           Loads text content from a file
-.filecontent {file} {lines}   Loads clipped text content from a file.
+.filecontent [file]           Loads text content from a file
+.filecontent [file] [lines]   Loads clipped text content from a file.
                               "lines" is a range, either closed (e.g. 5..10) or open (e.g. 5..)
 
