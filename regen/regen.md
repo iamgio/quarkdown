@@ -40,6 +40,8 @@ a.a. 2022/2023
 ![Boxes](img/box.jpg)
 
 ```
+.page
+
 # Dai meccanismi alla buona progettazione/programmazione
 
 .box {La nostra analisi} {
@@ -57,3 +59,24 @@ a.a. 2022/2023
 
 $$\Rightarrow$$ un percorso articolato: muoviamo i primi passi...
 ```
+
+![Outline](img/outline.jpg)
+
+```
+.page {Alcuni principi di buona progettazione}
+            <-- Naming a page makes it show up in the table of contents
+
+.dynamictableofcontents    <-- Highlights the current section
+```
+
+![Code](img/code.jpg)
+
+    .page
+
+    # Esempio: Point3D pt 1
+
+    ```java
+    public class Point3D {
+        ...
+    }
+    ```

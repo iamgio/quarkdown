@@ -32,7 +32,10 @@ Instructions must be standalone:
 == PAGE ==
 
 .page                       Starts a new page
-.titlepage                  Starts a new title page ()
+.page {Name}                Starts a new named page which shows up
+                            in the table of contents
+
+.titlepage                  Starts a new title page (appearance changes)
 
 
 == LAYOUT ==
@@ -97,6 +100,13 @@ $$expression$$           Renders a LaTeX expression
 .box {                   Untitled default box
     content
 }
+
+
+== NAVIGATION ==
+
+.tableofcontents         Displays the table of contents
+.dynamictableofcontents  Displays the table of contents that
+                         highlights the current section (defined by .page {name})
 
 
 == GRAPHICS ==
