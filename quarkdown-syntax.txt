@@ -1,6 +1,6 @@
 === ADDITIONAL SYNTAX ===
 
-.function
+.instruction
 
 .instruction {arg1} {arg2}
 
@@ -13,7 +13,7 @@
 }
 
 Any kind of content can be passed as an argument, including Markdown content and other instructions.
-Therefore, "body" is treated as a regular argument.
+Therefore "body" should be treated as a regular argument.
 
 Instructions must be standalone:
 - some text.instruction renders "some text.instruction"
