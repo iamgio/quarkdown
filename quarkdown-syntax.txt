@@ -32,7 +32,8 @@ Instructions must be standalone:
 == PAGE ==
 
 .page                       Starts a new page
-.page {Name}                Starts a new named page which shows up
+.page {Name}                Starts a new named page
+                            which defines a section that shows up
                             in the table of contents
 
 .titlepage                  Starts a new title page (appearance changes)

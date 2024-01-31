@@ -3,7 +3,7 @@ Setting up:
 ```
 .docname {OOP05: Incapsulamento}
 .docauthor {Mirko Viroli}
-.aspectratio {16:9}
+.aspectratio {4:3}
 
 .colortheme {ThemeName}
 .layouttheme {ThemeName}
@@ -64,7 +64,8 @@ $$\Rightarrow$$ un percorso articolato: muoviamo i primi passi...
 
 ```
 .page {Alcuni principi di buona progettazione}
-            <-- Naming a page makes it show up in the table of contents
+            <-- Naming a page defines a section
+                and makes it show up in the table of contents
 
 .dynamictableofcontents    <-- Highlights the current section
 ```
