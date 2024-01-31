@@ -67,6 +67,8 @@ $$\Rightarrow$$ un percorso articolato: muoviamo i primi passi...
             <-- Naming a page defines a section
                 and makes it show up in the table of contents
 
+# Outline
+
 .dynamictableofcontents    <-- Highlights the current section
 ```
 
