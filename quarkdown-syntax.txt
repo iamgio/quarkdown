@@ -83,6 +83,11 @@ Instructions must be standalone:
 .pagecount               Amount of pages
 
 
+== TEXT ==
+
+$$expression$$           Renders a LaTeX expression
+
+
 == BOXES ==
 
 .box {title} {           Titled default box
@@ -96,15 +101,16 @@ Instructions must be standalone:
 
 == GRAPHICS ==
 
-.theme {ThemeName}       Sets global CSS theme
+.colortheme {ThemeName}  Sets global color CSS theme
+.layouttheme {ThemeName} Sets global layout CSS theme
 
 .fontfamily {Arial}      Sets global font family (overrides theme)
 .fontfamily {Arial} {    Sets local font family
     content
 }
 
-.fontsize {14}           Sets global body text font size (overrides theme)
-.fontsize {14} {         Sets local body text font size
+.fontsize {big|normal|small|...}    Sets global body text font size (overrides theme)
+.fontsize {big|normal|small|...} {  Sets local body text font size
     content
 }
 
@@ -117,3 +123,4 @@ Instructions must be standalone:
 .textcolor {black} {          Sets local text color
     content
 }
+           

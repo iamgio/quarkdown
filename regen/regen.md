@@ -5,9 +5,10 @@ Setting up:
 .docauthor {Mirko Viroli}
 .aspectratio {16:9}
 
-.theme {ThemeName}
+.colortheme {ThemeName}
+.layouttheme {ThemeName}
 
-.footer {      <-- Placement and aesthetics are handled by the theme
+.footer {      <-- Placement and aesthetics are handled by the themes
     Mirko Viroli (Università di Bologna)
         
     .docname
@@ -28,10 +29,31 @@ Setting up:
 Mirko Viroli  
 `mirko.viroli@unibo.it`
 
-.fontsize {12} {
+.fontsize {small} {
     C.D.L. Ingegneria e Scienze Informatiche  
     Alma Mater Studiorum - Università di Bologna, Cesena
 }
 
 a.a. 2022/2023
+```
+
+![Boxes](img/box.jpg)
+
+```
+# Dai meccanismi alla buona progettazione/programmazione
+
+.box {La nostra analisi} {
+    - Parte imperativa/procedurale
+    - Classi, oggetti, costruttori, campi, metodi
+    - Codice statico, controllo d'accesso
+}
+
+.box {Detto ciò, come realizziamo un buon sistema?} {
+    Come programmiamo il sistema
+
+    1. per giungere al risultato voluto, e
+    2. così che sia facilmente manutenibile
+}
+
+$$\Rightarrow$$ un percorso articolato: muoviamo i primi passi...
 ```
