@@ -83,3 +83,15 @@ $$\Rightarrow$$ un percorso articolato: muoviamo i primi passi...
         ...
     }
     ```
+
+Alternative from file:
+
+```
+.page
+
+# Esempio: Point3D pt 1
+
+.codeblock {java} {
+    .filecontent {file.java} {1..30}   <-- Loads lines 1-30 from file.java
+}
+```

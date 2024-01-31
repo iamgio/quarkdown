@@ -102,6 +102,10 @@ $$expression$$           Renders a LaTeX expression
     content
 }
 
+.codeblock {lang} {      A code block with syntax highlighting
+    text
+}
+
 
 == NAVIGATION ==
 
@@ -134,4 +138,10 @@ $$expression$$           Renders a LaTeX expression
 .textcolor {black} {          Sets local text color
     content
 }
-           
+
+== MISC ==
+
+.filecontent {file}           Loads text content from a file
+.filecontent {file} {lines}   Loads clipped text content from a file.
+                              "lines" is a range, either closed (e.g. 5..10) or open (e.g. 5..)
+
