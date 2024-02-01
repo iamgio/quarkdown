@@ -1,0 +1,130 @@
+# Title
+
+Some text
+
+Output:
+#, Title, \n\n, Some text
+
+===
+
+# Title {#custom-id}
+
+Output:
+#, Title, {, #, custom-id, }
+
+===
+
+## Title
+
+Some **text** and _other **text**_.
+
+Output:
+##, Title, **, text, **, and, _, other, **, text, **, _, .
+
+===
+
+***Bold and italic***
+
+Output:
+*, **, Bold and italic, **, *
+
+===
+
+_**Bold and italic**_
+
+Output:
+_, **, Bold and italic, **, _
+
+===
+
+**`Monospaced and bold`**
+
+Output:
+**, `, Monospaced and bold, `, **
+
+===
+
+Some text.  
+Line break.
+
+Output:
+Some text., <doublespace>, \n, Line break.
+
+===
+
+Paragraph 1.
+
+Paragraph 2.
+
+Output:
+Paragraph1., \n\n, Paragraph2.
+
+===
+
+[An URL](url)
+
+Output:
+[, An URL, ], (, url, )
+
+===
+
+[An URL](url "Title")
+
+Output:
+[, An URL, ], (, url, "Title", )
+
+===
+
+![An image](url)
+
+Output:
+![, An image, ], (, url, )
+
+===
+
+Line1
+
+---
+
+Line2
+
+Output:
+Line1, \n---\n, Line2
+
+===
+
+Text.
+
+> Quote
+
+Output:
+Text., \n\n, >, Quote
+
+===
+
+1. First
+2. Second
+3. Third
+
+Output:
+1., First, \n, 2., Second, \n, 3. Third
+
+===
+
+- A
+- B
+- C
+
+Output:
+-, A, \n, -, B, \n, -, C
+
+===
+
+- A
+- B
+    - Indented A
+    - Indented B
+- C
+
+Output:
+-, A, \n, -, B, \n, <indent>, -, Indented A, \n, <indent>, Indented B, \n, -, C
