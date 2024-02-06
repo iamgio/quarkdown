@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <LevelPatternSelector defaultPattern="%m%n">
+                    <PatternMatch key="warn" pattern="[!] %m%n" />
+                    <PatternMatch key="debug" pattern="[%p] %m%n" />
+                </LevelPatternSelector>
+            </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT" />
+            </Filters>
+        </Console>
+        <Console name="STDERR" target="SYSTEM_ERR">
+            <PatternLayout pattern="%m%n"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="${sys:loglevel:-info}">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="STDERR"/>
+        </Root>
+    </Loggers>
+</Configuration>
