@@ -32,6 +32,7 @@ X^2^                     => superscript
 
 # Title {#custom-id}
 
+# Title ###         <-- Trailing '#'s are ignored
 
 == QUOTES ==
 

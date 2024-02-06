@@ -20,6 +20,15 @@ Instructions must be standalone:
 - **.instruction** renders as bold ".instruction"
 - `.instruction` renders as monospaced ".instruction", and so on
 
+Arguments between brackets must be in the same line, body is a special argument that must be indented on a new line.
+
+Arguments can be of type:
+- string: Hello!
+- number: 10, 12.4
+- boolean: yes, no
+- enum: like string, but existance is checked at compile time
+- markdown: like string, but contains markdown content
+
 
 == DOCUMENT ==
 
