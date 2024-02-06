@@ -19,6 +19,9 @@ double space + line break => line break
 ==text==                 => highlight
 H~2~0                    => subscript
 X^2^                     => superscript
+$expression$             => LaTeX expression
+
+No space between content and the characters.
 
 
 == HEADINGS ==
@@ -111,6 +114,12 @@ X^2^                     => superscript
 
 ``Inline `code` escape``
 
+
+== MATH ==
+
+$$
+LaTeX expression
+$$
 
 == HORIZONTAL RULES ==
 

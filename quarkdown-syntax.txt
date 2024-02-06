@@ -95,10 +95,6 @@ Arguments can be of type:
 .pagecount               Amount of pages
 
 
-== TEXT ==
-
-$$expression$$           Renders a LaTeX expression
-
 
 == BOXES ==
 
