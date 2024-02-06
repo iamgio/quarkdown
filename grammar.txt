@@ -2,8 +2,9 @@ newline         -> "\n"
 indent          -> "\t" | "\s\s"
 
 instruction     -> "." name ("[" argument "]")* (newline indent markdown)?
-argument        -> STRING|NUMBER|boolean|markdown_line
+argument        -> STRING|NUMBER|boolean|range|markdown_line
 boolean         -> "yes"|"no"
+range           -> NUMBER? ".." NUMBER?
 
 markdown        -> (block)*
 block           -> (markdown_line|paragraph|heading|blockquote|codeblock|orderedlist|unorderedlist|latexblock|hrule|footnote) newline

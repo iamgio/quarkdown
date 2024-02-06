@@ -28,6 +28,7 @@ Arguments can be of type:
 - boolean: yes, no
 - enum: like string, but existance is checked at compile time
 - markdown: like string, but contains markdown content
+- range: 2..10, ..4, 10.. (both ends are inclusive)
 
 
 == DOCUMENT ==
