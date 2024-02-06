@@ -1,0 +1,33 @@
+newline         -> "\n"
+indent          -> "\t" | "\s\s"
+
+instruction     -> "." name ("[" argument "]")* (newline indent markdown)?
+argument        -> STRING|NUMBER|boolean|range|markdown_line
+boolean         -> "yes"|"no"
+range           -> NUMBER? ".." NUMBER?
+
+markdown        -> (block)*
+block           -> (markdown_line|paragraph|heading|blockquote|codeblock|orderedlist|unorderedlist|latexblock|hrule|footnote) newline
+subblock        -> newline indent block
+paragraph       -> block newline
+heading         -> "#"{1,6} markdown_line "#"*
+blockquote      -> (">" block)+
+codeblock       -> ("```" STRING? newline STRING newline "```")|(indent indent STRING newline)*
+orderedlist     -> "1. " block subblock* ("\d. " block subblock*)*
+unorderedlist   -> ("-"|"*"|"+") block subblock*
+latexblock      -> "$$" newline? STRING newline? "$$"
+hrule           -> ("*"{3,}|"-"{3,}|"_"{3,})
+footnote        -> "[^" name "]: " markdown_line (newline indent block)*
+
+markdown_line   -> markdown_elem*
+markdown_elem   -> STRING|bold|italic|strikethrough|code|highlight|subscript|superscript|latex|link|image
+
+bold            -> ("**" markdown_elem "**")|("__" markdown_elem "__")
+italic          -> ("*" markdown_elem "*")|("_" markdown_elem "_")
+strikethrough   -> "~~" markdown_elem "~~"
+highlight       -> "==" markdown_elem "=="
+subscript       -> "~" markdown_elem "~"
+superscript     -> "^" markdown_elem "^"
+latex           -> "$" STRING "$"
+link            -> "[" markdown_elem "](" STRING ("\"" STRING "\"")? ")"
+image           -> "![" markdown_elem "](" STRING ("\"" STRING "\"")? ")"

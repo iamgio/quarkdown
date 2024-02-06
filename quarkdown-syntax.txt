@@ -10,11 +10,25 @@
 .instruction [arg1] [arg2]
     body
 
+.instruction [
+    arg1        Invalid syntax: args must be inline
+]
+
 Instructions must be standalone:
 - some text.instruction renders "some text.instruction"
 - some text .instruction renders "some text" and executes the instruction
 - **.instruction** renders as bold ".instruction"
 - `.instruction` renders as monospaced ".instruction", and so on
+
+Arguments between brackets must be in the same line, body is a special argument that must be indented on a new line.
+
+Arguments can be of type:
+- string: Hello!
+- number: 10, 12.4
+- boolean: yes, no
+- enum: like string, but existance is checked at compile time
+- markdown: like string, but contains markdown content
+- range: 2..10, ..4, 10.. (both ends are inclusive)
 
 
 == DOCUMENT ==
@@ -81,10 +95,6 @@ Instructions must be standalone:
 .currentpage             Index of the current page
 .pagecount               Amount of pages
 
-
-== TEXT ==
-
-$$expression$$           Renders a LaTeX expression
 
 
 == BOXES ==
