@@ -14,6 +14,20 @@ Output:
 
 ===
 
+#, Title ####
+
+Output:
+#, Title, ####
+
+===
+
+####### Not a title!
+
+Output:
+####### Not a title!
+
+===
+
 ## Title
 
 Some **text** and _other **text**_.
@@ -48,7 +62,7 @@ Some text.
 Line break.
 
 Output:
-Some text., <doublespace>, \n, Line break.
+Some text., <indent>, \n, Line break.
 
 ===
 
@@ -128,3 +142,42 @@ Output:
 
 Output:
 -, A, \n, -, B, \n, <indent>, -, Indented A, \n, <indent>, Indented B, \n, -, C
+
+===
+
+```java
+class Point {
+
+}
+```
+
+Output:
+```, java, class Point {
+
+}, ```
+
+===
+
+    class Point {
+
+    }
+
+Output:
+<indent>, class Point {, <newline>, <indent>, <newline>, <indent>, }
+
+===
+
+.instruction [arg]
+
+Output:
+., instruction, [, arg, ]
+
+===
+
+.instruction [arg]
+    body paragraph 1
+
+    body paragraph 2
+
+Output:
+., instruction, [, arg, ], <newline>, <indent>, body paragraph 1, <newline>, <newline>, <indent>, body paragraph 2
