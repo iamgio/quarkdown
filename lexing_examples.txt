@@ -3,7 +3,7 @@
 Some text
 
 Output:
-#, Title, \n\n, Some text
+#, Title, <newline>, <newline>, , Some text
 
 ===
 
@@ -62,7 +62,7 @@ Some text.
 Line break.
 
 Output:
-Some text., <indent>, \n, Line break.
+Some text., <indent>, <newline>, , Line break.
 
 ===
 
@@ -71,7 +71,7 @@ Paragraph 1.
 Paragraph 2.
 
 Output:
-Paragraph1., \n\n, Paragraph2.
+Paragraph1., <newline>, <newline>, Paragraph2.
 
 ===
 
@@ -103,7 +103,7 @@ Line1
 Line2
 
 Output:
-Line1, \n---\n, Line2
+Line1, <newline>, <hrule>, <newline>, Line2
 
 ===
 
@@ -112,7 +112,7 @@ Text.
 > Quote
 
 Output:
-Text., \n\n, >, Quote
+Text., <newline>, <newline>, >, Quote
 
 ===
 
@@ -121,7 +121,7 @@ Text., \n\n, >, Quote
 3. Third
 
 Output:
-1., First, \n, 2., Second, \n, 3. Third
+1., First, <newline>, 2., Second, <newline>, 3. Third
 
 ===
 
@@ -130,7 +130,7 @@ Output:
 - C
 
 Output:
--, A, \n, -, B, \n, -, C
+-, A, <newline>, -, B, <newline>, -, C
 
 ===
 
@@ -141,7 +141,7 @@ Output:
 - C
 
 Output:
--, A, \n, -, B, \n, <indent>, -, Indented A, \n, <indent>, Indented B, \n, -, C
+-, A, <newline>, -, B, <newline>, <indent>, -, Indented A, <newline>, <indent>, Indented B, <newline>, -, C
 
 ===
 
@@ -181,3 +181,54 @@ Output:
 
 Output:
 ., instruction, [, arg, ], <newline>, <indent>, body paragraph 1, <newline>, <newline>, <indent>, body paragraph 2
+
+
+
+
+
+
+=== COMPLETE EXAMPLE ===
+
+
+.docname [Doc name]
+.docauthor [Doc author]
+.aspectratio [16:9]
+
+# My title
+
+.box [Box `title`]
+    This is the $content$ of the box.
+    
+    ---
+
+    1. This is the **first** piece of _information_.
+    2. This was created by .docauthor
+
+.page [New section]
+
+## This is a new _section_
+
+This is some text,
+with a line break.
+
+
+== Output ==
+
+., docname, [, Doc name, ], <newline>,
+., doc, [, Doc name, ], <newline>,
+., aspectratio, [, 16:9, ], <newline>,
+<newline>,
+#, My title, <newline>,
+<newline>
+., box, [, Box , `, title, `, ], <newline>
+<indent>, This is the , $, content, $, of the box., <newline>,
+<indent><hrule><newline>
+<indent>, 1., This is the , **, first, **, piece of , _, information, _, ., <newline>
+<indent>, 2., This was created by, ., docauthor, <newline>
+<newline>
+., page, [, New section, ], <newline>
+<newline>,
+##, This is a new , _, section, _, <newline>,
+<newline>
+This is some text, <indent>, <newline>
+with a line break.
