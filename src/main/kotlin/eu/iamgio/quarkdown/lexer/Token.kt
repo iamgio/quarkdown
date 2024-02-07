@@ -11,6 +11,7 @@ package eu.iamgio.quarkdown.lexer
 data class Token(
     val type: TokenType,
     val text: String,
-    val literal: Any,
-    val coordinates: TokenCoordinates,
+    val literal: Any?,
+    //val coordinates: TokenCoordinates,
+    val range: IntRange
 )

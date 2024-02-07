@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.Lexer
-import eu.iamgio.quarkdown.lexer.TokenTypePattern
 import eu.iamgio.quarkdown.log.Log
 import java.io.File
 import kotlin.system.exitProcess
@@ -15,6 +14,5 @@ fun main(args: Array<String>) {
     val sourceFile = File(args.first())
 
     val lexer = Lexer(sourceFile.readText())
-
-    println(TokenTypePattern.groupify())
+    println(lexer.tokenize())
 }
