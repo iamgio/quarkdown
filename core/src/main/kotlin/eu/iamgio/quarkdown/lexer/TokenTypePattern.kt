@@ -11,12 +11,17 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     /**
      * Four spaces or a tabulation at the beginning of the line.
      */
-    LEADINGINDENT(TokenType.LEADING_INDENT, "((?<=^| {4}|\\t)( {4}|\\t))".toRegex()),
+    LEADINGINDENT(TokenType.LEADING_INDENT, "(?<=^)( {4}|\\t)+".toRegex()),
 
     /**
      * Two spaces or a tabulation at the end of the line.
      */
-    TRAILINGINDENT(TokenType.TRAILING_INDENT, "( {2}|\\t)(?=$| {2}|\\t)".toRegex()),
+    TRAILINGINDENT(TokenType.TRAILING_INDENT, "( {2,}|\\t)+(?=$)".toRegex()),
+
+    /**
+     * Two spacer or a tabulation (or more) in middle of a line.
+     */
+    MIDDLEWHITESPACE(TokenType.MIDDLE_WHITESPACE, "( {2,}|\\t)+".toRegex()),
 
     /**
      * End of line.
