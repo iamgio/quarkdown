@@ -9,9 +9,9 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     // Note: names must not contain underscores to prevent issues with RegEx named groups.
 
     /**
-     * Two spaces or a tabulation at the beginning of the line.
+     * Four spaces or a tabulation at the beginning of the line.
      */
-    LEADINGINDENT(TokenType.LEADING_INDENT, "((?<=^| {2}|\\t)( {2}|\\t))".toRegex()),
+    LEADINGINDENT(TokenType.LEADING_INDENT, "((?<=^| {4}|\\t)( {4}|\\t))".toRegex()),
 
     /**
      * Two spaces or a tabulation at the end of the line.
@@ -21,12 +21,7 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     /**
      * End of line.
      */
-    EOL(TokenType.EOL, "$".toRegex()),
-
-    /**
-     * Text content, alias anything that was previously unmatched.
-     */
-    TEXT(TokenType.TEXT, ".+".toRegex()),
+    EOL(TokenType.EOL, "$(\\R)?".toRegex()),
     ;
 
     companion object {
@@ -40,6 +35,7 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
                     "(?<${pattern.name}>${pattern.regex})"
                 }
                 .joinToString(separator = "|")
+                .also { println(it) }
                 .toRegex(RegexOption.MULTILINE)
     }
 }
