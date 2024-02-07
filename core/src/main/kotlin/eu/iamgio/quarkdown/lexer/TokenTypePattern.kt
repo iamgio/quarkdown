@@ -7,11 +7,7 @@ package eu.iamgio.quarkdown.lexer
  */
 enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     // Note: names must not contain underscores to prevent issues with RegEx named groups.
-
-    /**
-     * Four spaces or a tabulation at the beginning of the line.
-     */
-    LEADINGINDENT(TokenType.LEADING_INDENT, "(?<=^)( {4}|\\t)+".toRegex()),
+    // The order of the entries is relevant to determine match priorities.
 
     /**
      * Two spaces or a tabulation at the end of the line.
@@ -19,9 +15,14 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     TRAILINGINDENT(TokenType.TRAILING_INDENT, "( {2,}|\\t)+(?=$)".toRegex()),
 
     /**
-     * Two spacer or a tabulation (or more) in middle of a line.
+     * Two spaces or a tabulation (or more) in the middle of a line.
      */
-    MIDDLEWHITESPACE(TokenType.MIDDLE_WHITESPACE, "( {2,}|\\t)+".toRegex()),
+    MIDDLEWHITESPACE(TokenType.MIDDLE_WHITESPACE, "(?<!^| |\\t)( {2,}|\\t)+(?!\$| |\\t)".toRegex()),
+
+    /**
+     * Four spaces or a tabulation at the beginning of the line.
+     */
+    LEADINGINDENT(TokenType.LEADING_INDENT, "(?<=^| {4}|\\t)( {4}|\\t)".toRegex()),
 
     /**
      * End of line.
