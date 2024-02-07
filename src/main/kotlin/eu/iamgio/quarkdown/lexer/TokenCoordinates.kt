@@ -9,3 +9,12 @@ data class TokenCoordinates(
     val line: Int,
     val column: Int,
 )
+
+/**
+ * Converts a range of indexes within a string to its `(x, y)` coordinates.
+ * @param source source to extract coordinates from
+ * @return `(x, y)` coordinates
+ */
+fun IntRange.toCoordinates(source: CharSequence): TokenCoordinates {
+    TODO()
+}

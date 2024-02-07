@@ -6,12 +6,11 @@ package eu.iamgio.quarkdown.lexer
  * @param type type of this token
  * @param text the substring extracted from the source code, also known as _lexeme_.
  * @param literal the literal value stored in this token, such as a string or number.
- * @param coordinates location of the token within the source code
+ * @param position location of the token within the source code
  */
 data class Token(
     val type: TokenType,
     val text: String,
     val literal: Any?,
-    //val coordinates: TokenCoordinates,
-    val range: IntRange
+    val position: IntRange
 )
