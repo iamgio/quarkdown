@@ -28,6 +28,11 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
      * End of line.
      */
     EOL(TokenType.EOL, "$(\\R)?".toRegex()),
+
+    /**
+     * 1 to 6 `#` characters at the beginning of the line, followed by a space and text.
+     */
+    HEADINGBEGIN(TokenType.HEADING_BEGIN, "(?<=^)#{1,6} (?=.+)".toRegex()),
     ;
 
     companion object {

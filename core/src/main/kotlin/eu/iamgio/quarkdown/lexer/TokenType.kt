@@ -5,6 +5,23 @@ package eu.iamgio.quarkdown.lexer
  */
 enum class TokenType {
     /**
+     * Beginning of a title.
+     * i.e. the `##` in `## Title`
+     */
+    HEADING_BEGIN,
+
+    /**
+     * End of a title.
+     * i.e. the `####` in `## Title ####`
+     */
+    HEADING_END,
+
+    /**
+     * Plain textual content.
+     */
+    TEXT,
+
+    /**
      * Indentation at the beginning of the line.
      */
     LEADING_INDENT,
@@ -23,9 +40,4 @@ enum class TokenType {
      * End of line.
      */
     EOL,
-
-    /**
-     * Plain textual content.
-     */
-    TEXT,
 }
