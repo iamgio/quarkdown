@@ -40,6 +40,7 @@ class Lexer(private val source: CharSequence) {
             val match = regex.findAll(source)
 
             match.forEach { result ->
+                println(result.groups)
                 addAll(extractMatchingTokens(result))
             }
         }

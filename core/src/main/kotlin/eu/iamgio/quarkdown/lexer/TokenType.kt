@@ -18,4 +18,9 @@ enum class TokenType {
      * End of line.
      */
     EOL,
+
+    /**
+     * Plain textual content.
+     */
+    TEXT,
 }

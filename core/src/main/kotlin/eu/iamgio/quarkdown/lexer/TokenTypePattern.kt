@@ -22,6 +22,11 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
      * End of line.
      */
     EOL(TokenType.EOL, "$".toRegex()),
+
+    /**
+     * Text content, alias anything that was previously unmatched.
+     */
+    TEXT(TokenType.TEXT, ".+".toRegex()),
     ;
 
     companion object {
@@ -34,6 +39,7 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
                 .map { pattern ->
                     "(?<${pattern.name}>${pattern.regex})"
                 }
-                .joinToString(separator = "|").also { println(it) }.toRegex(RegexOption.MULTILINE)
+                .joinToString(separator = "|")
+                .toRegex(RegexOption.MULTILINE)
     }
 }
