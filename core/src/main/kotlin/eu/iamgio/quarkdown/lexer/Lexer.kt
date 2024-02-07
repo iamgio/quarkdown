@@ -24,7 +24,7 @@ class Lexer(private val source: CharSequence) {
                     text = group.value,
                     // TODO
                     literal = null,
-                    range = group.range,
+                    position = group.range,
                 )
             }
 
