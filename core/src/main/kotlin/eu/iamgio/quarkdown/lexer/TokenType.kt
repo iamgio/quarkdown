@@ -8,13 +8,13 @@ enum class TokenType {
      * Beginning of a title.
      * i.e. the `##` in `## Title`
      */
-    HEADING_BEGIN,
+    HEADING,
 
     /**
-     * End of a title.
+     * End of a title, for visuals only.
      * i.e. the `####` in `## Title ####`
      */
-    HEADING_END,
+    HEADING_CLOSE,
 
     /**
      * Plain textual content.
@@ -40,4 +40,10 @@ enum class TokenType {
      * End of line.
      */
     EOL,
+    ;
+
+    /**
+     * @return whether this type represents a whitespace
+     */
+    fun isWhitespace() = this == LEADING_INDENT || this == TRAILING_INDENT || this == MIDDLE_WHITESPACE || this == EOL
 }

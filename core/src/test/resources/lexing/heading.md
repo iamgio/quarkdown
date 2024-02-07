@@ -1,11 +1,15 @@
 # Title
 ## Title
-####### Not a title
-a	## Not a title
+   ### Title
 
-# 
+####### Not a title
+a   ## Not a title
+
+
+
+#
 Not a title
 
     # Not a title
 
-## Title with decorations ###
+## Title with closing sequence ###

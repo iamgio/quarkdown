@@ -30,9 +30,14 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
     EOL(TokenType.EOL, "$(\\R)?".toRegex()),
 
     /**
-     * 1 to 6 `#` characters at the beginning of the line, followed by a space and text.
+     * 1 to 6 `#` characters at the beginning of the line (indented with up to 3 spaces), followed by an optional space.
      */
-    HEADINGBEGIN(TokenType.HEADING_BEGIN, "(?<=^)#{1,6} (?=.+)".toRegex()),
+    HEADING(TokenType.HEADING, "(?<=^) {0,3}#{1,6}( |$)".toRegex()),
+
+    /**
+     * `#` characters at the end of a heading, followed by optional spaces.
+     */
+    HEADINGCLOSE(TokenType.HEADING_CLOSE, "[ \\t]#+\\s*(?=\$)".toRegex()), // TODO check if this is a heading line
     ;
 
     companion object {

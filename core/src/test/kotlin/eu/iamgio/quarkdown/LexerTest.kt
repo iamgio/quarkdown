@@ -38,4 +38,29 @@ class LexerTest {
         assertEquals(TokenType.EOL, tokens.next())
         assertEquals(TokenType.EOL, tokens.next())
     }
+
+    @Test
+    fun headings() {
+        val tokens =
+            Lexer(readSource("/lexing/heading.md")).tokenize().asSequence()
+                .map { it.type }
+                .filterNot { it.isWhitespace() }
+                .iterator()
+
+        assertEquals(TokenType.HEADING, tokens.next())
+        assertEquals(TokenType.TEXT, tokens.next())
+        assertEquals(TokenType.HEADING, tokens.next())
+        assertEquals(TokenType.TEXT, tokens.next())
+        assertEquals(TokenType.HEADING, tokens.next())
+        assertEquals(TokenType.TEXT, tokens.next())
+        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
+        assertEquals(TokenType.TEXT, tokens.next()) // "a"
+        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
+        assertEquals(TokenType.HEADING, tokens.next()) // Empty title
+        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
+        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
+        assertEquals(TokenType.HEADING, tokens.next())
+        assertEquals(TokenType.TEXT, tokens.next())
+        assertEquals(TokenType.HEADING_CLOSE, tokens.next())
+    }
 }
