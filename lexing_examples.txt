@@ -3,28 +3,35 @@
 Some text
 
 Output:
-#, Title, <newline>, <newline>, , Some text
+#, Title, <eol>, <eol>, , Some text, <eol>
 
 ===
 
 # Title {#custom-id}
 
 Output:
-#, Title, {, #, custom-id, }
+#, Title, {, #, custom-id, }, <eol>
 
 ===
 
 #, Title ####
 
 Output:
-#, Title, ####
+#, Title, ####, <eol>
 
 ===
 
 ####### Not a title!
 
 Output:
-####### Not a title!
+####### Not a title!, <eol>
+
+===
+
+Middle whitespace       is ignored.
+
+Output:
+Middle whitespace, <middlewhitespace>, is ignored, <eol>
 
 ===
 
@@ -33,28 +40,28 @@ Output:
 Some **text** and _other **text**_.
 
 Output:
-##, Title, **, text, **, and, _, other, **, text, **, _, .
+##, Title, **, text, **, and, _, other, **, text, **, _, ., <eol>
 
 ===
 
 ***Bold and italic***
 
 Output:
-*, **, Bold and italic, **, *
+*, **, Bold and italic, **, *, <eol>
 
 ===
 
 _**Bold and italic**_
 
 Output:
-_, **, Bold and italic, **, _
+_, **, Bold and italic, **, _, <eol>
 
 ===
 
 **`Monospaced and bold`**
 
 Output:
-**, `, Monospaced and bold, `, **
+**, `, Monospaced and bold, `, **, <eol>
 
 ===
 
@@ -62,7 +69,7 @@ Some text.
 Line break.
 
 Output:
-Some text., <indent>, <newline>, , Line break.
+Some text., <trailingindent>, <eol>, , Line break., <eol>
 
 ===
 
@@ -71,28 +78,28 @@ Paragraph 1.
 Paragraph 2.
 
 Output:
-Paragraph1., <newline>, <newline>, Paragraph2.
+Paragraph1., <eol>, <eol>, Paragraph2., <eol>
 
 ===
 
 [An URL](url)
 
 Output:
-[, An URL, ], (, url, )
+[, An URL, ], (, url, ), <eol>
 
 ===
 
 [An URL](url "Title")
 
 Output:
-[, An URL, ], (, url, "Title", )
+[, An URL, ], (, url, "Title", ), <eol>
 
 ===
 
 ![An image](url)
 
 Output:
-![, An image, ], (, url, )
+![, An image, ], (, url, ), <eol>
 
 ===
 
@@ -103,7 +110,7 @@ Line1
 Line2
 
 Output:
-Line1, <newline>, <hrule>, <newline>, Line2
+Line1, <eol>, <hrule>, <eol>, Line2, <eol>
 
 ===
 
@@ -112,7 +119,7 @@ Text.
 > Quote
 
 Output:
-Text., <newline>, <newline>, >, Quote
+Text., <eol>, <eol>, >, Quote, <eol>
 
 ===
 
@@ -121,7 +128,7 @@ Text., <newline>, <newline>, >, Quote
 3. Third
 
 Output:
-1., First, <newline>, 2., Second, <newline>, 3. Third
+1., First, <eol>, 2., Second, <eol>, 3. Third, <eol>
 
 ===
 
@@ -130,7 +137,7 @@ Output:
 - C
 
 Output:
--, A, <newline>, -, B, <newline>, -, C
+-, A, <eol>, -, B, <eol>, -, C, <eol>
 
 ===
 
@@ -141,7 +148,7 @@ Output:
 - C
 
 Output:
--, A, <newline>, -, B, <newline>, <indent>, -, Indented A, <newline>, <indent>, Indented B, <newline>, -, C
+-, A, <eol>, -, B, <eol>, <indent>, -, Indented A, <eol>, <indent>, Indented B, <eol>, -, C, <eol>
 
 ===
 
@@ -163,14 +170,14 @@ Output:
     }
 
 Output:
-<indent>, class Point {, <newline>, <indent>, <newline>, <indent>, }
+<indent>, class Point {, <eol>, <indent>, <eol>, <indent>, }, <eol>
 
 ===
 
 .instruction [arg]
 
 Output:
-., instruction, [, arg, ]
+., instruction, [, arg, ], <eol>
 
 ===
 
@@ -180,7 +187,7 @@ Output:
     body paragraph 2
 
 Output:
-., instruction, [, arg, ], <newline>, <indent>, body paragraph 1, <newline>, <newline>, <indent>, body paragraph 2
+., instruction, [, arg, ], <eol>, <indent>, body paragraph 1, <eol>, <eol>, <indent>, body paragraph 2, <eol>
 
 
 
@@ -214,21 +221,21 @@ with a line break.
 
 == Output ==
 
-., docname, [, Doc name, ], <newline>,
-., doc, [, Doc name, ], <newline>,
-., aspectratio, [, 16:9, ], <newline>,
-<newline>,
-#, My title, <newline>,
-<newline>
-., box, [, Box , `, title, `, ], <newline>
-<indent>, This is the , $, content, $, of the box., <newline>,
-<indent><hrule><newline>
-<indent>, 1., This is the , **, first, **, piece of , _, information, _, ., <newline>
-<indent>, 2., This was created by, ., docauthor, <newline>
-<newline>
-., page, [, New section, ], <newline>
-<newline>,
-##, This is a new , _, section, _, <newline>,
-<newline>
-This is some text, <indent>, <newline>
-with a line break.
+., docname, [, Doc name, ], <eol>,
+., doc, [, Doc name, ], <eol>,
+., aspectratio, [, 16:9, ], <eol>,
+<eol>,
+#, My title, <eol>,
+<eol>
+., box, [, Box , `, title, `, ], <eol>
+<indent>, This is the , $, content, $, of the box., <eol>,
+<indent><hrule><eol>
+<indent>, 1., This is the , **, first, **, piece of , _, information, _, ., <eol>
+<indent>, 2., This was created by, ., docauthor, <eol>
+<eol>
+., page, [, New section, ], <eol>
+<eol>,
+##, This is a new , _, section, _, <eol>,
+<eol>
+This is some text, <indent>, <eol>,
+with a line break., <eol>
