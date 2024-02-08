@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockLexer
+import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import java.io.File
 import kotlin.system.exitProcess
@@ -16,5 +17,5 @@ fun main(args: Array<String>) {
     val lexer = BlockLexer(sourceFile.readText())
     val tokens = lexer.tokenize()
 
-    Log.debug(tokens.joinToString(separator = "\n"))
+    Log.debug("Tokens: \n" + DebugFormatter.formatTokens(tokens))
 }
