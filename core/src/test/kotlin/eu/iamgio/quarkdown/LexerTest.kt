@@ -1,7 +1,8 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockLexer
-import eu.iamgio.quarkdown.lexer.type.InlineTokenType
+import eu.iamgio.quarkdown.lexer.StandardRegexLexer
+import eu.iamgio.quarkdown.lexer.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,29 +14,36 @@ import kotlin.test.assertEquals
 class LexerTest {
     @Test
     fun whitespaces() {
-        val tokens = BlockLexer(readSource("/lexing/whitespace.md")).tokenize().map { it.type }.iterator()
+        val lexer =
+            StandardRegexLexer(
+                readSource("/lexing/whitespace.md"),
+                patterns = WhitespaceTokenRegexPattern.values().toList(),
+                fillTokenType = WhitespaceTokenType.NON_WHITESPACE,
+            )
 
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "First paragraph."
+        val tokens = lexer.tokenize().map { it.type }.iterator()
+
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "First paragraph."
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next()) // Empty line
         assertEquals(WhitespaceTokenType.LEADING_INDENT, tokens.next())
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "Indented second paragraph."
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "Indented second paragraph."
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next()) // Empty line
         assertEquals(WhitespaceTokenType.LEADING_INDENT, tokens.next())
         assertEquals(WhitespaceTokenType.LEADING_INDENT, tokens.next())
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "Doubly indented third paragraph."
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "Doubly indented third paragraph."
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next()) // Empty line
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "This is a"
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "This is a"
         assertEquals(WhitespaceTokenType.TRAILING_INDENT, tokens.next()) // Line break
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "line break"
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "line break"
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next()) // Empty line
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "This is"
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "This is"
         assertEquals(WhitespaceTokenType.MIDDLE_WHITESPACE, tokens.next()) // Ignored
-        assertEquals(InlineTokenType.TEXT, tokens.next()) // "ignored whitespace"
+        assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "ignored whitespace"
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
     }
