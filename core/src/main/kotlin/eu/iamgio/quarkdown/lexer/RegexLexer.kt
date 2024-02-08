@@ -10,6 +10,17 @@ import eu.iamgio.quarkdown.lexer.pattern.groupify
  */
 abstract class RegexLexer(source: CharSequence, private val patterns: List<TokenRegexPattern>) : AbstractLexer(source) {
     /**
+     * Adds a token to fill the gap between the last matched index and [untilIndex], if there is any.
+     * @param untilIndex end of the gap range
+     * @see createFillToken
+     */
+    private fun MutableList<Token>.pushFillToken(untilIndex: Int) {
+        if (untilIndex > currentIndex) {
+            createFillToken(position = currentIndex until untilIndex)?.let { this += it }
+        }
+    }
+
+    /**
      * Converts captured groups of a [Regex] match to a sequence of tokens.
      * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
@@ -33,9 +44,7 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
 
                 // Text tokens are substrings that were not captured by any pattern.
                 // These uncaptured groups are scanned and converted to tokens.
-                if (range.first > currentIndex) {
-                    createFillToken(position = currentIndex until range.first)?.let { this += it }
-                }
+                pushFillToken(untilIndex = range.first)
 
                 this += token
 
@@ -53,6 +62,9 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
             match.forEach { result ->
                 addAll(extractMatchingTokens(result))
             }
+
+            // Add a token to fill the gap between the last token and the EOF.
+            pushFillToken(untilIndex = source.length)
         }.let { manipulate(it) }
 
     /**
