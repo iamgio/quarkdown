@@ -34,7 +34,7 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
                 // Text tokens are substrings that were not captured by any pattern.
                 // These uncaptured groups are scanned and converted to tokens.
                 if (range.first > currentIndex) {
-                    this += createFillToken(position = range)
+                    this += createFillToken(position = currentIndex until range.first)
                 }
 
                 this += token
