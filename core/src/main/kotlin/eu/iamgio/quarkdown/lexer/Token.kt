@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.lexer
 
+import eu.iamgio.quarkdown.lexer.type.TokenType
+
 /**
  * A single, usually small, component of the source code that stores a chunk of information.
  * For instance, the Markdown code `Hello _Quarkdown_` contains the tokens `Hello `, `_`, `Quarkdown`, `_`.
