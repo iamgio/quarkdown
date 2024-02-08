@@ -14,5 +14,7 @@ fun main(args: Array<String>) {
     val sourceFile = File(args.first())
 
     val lexer = Lexer(sourceFile.readText())
-    println(lexer.tokenize().joinToString("\n"))
+    val tokens = lexer.tokenize()
+
+    Log.debug(tokens.joinToString(separator = "\n"))
 }

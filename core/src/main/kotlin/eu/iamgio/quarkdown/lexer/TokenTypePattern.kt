@@ -51,7 +51,6 @@ enum class TokenTypePattern(val tokenType: TokenType, val regex: Regex) {
                     "(?<${pattern.name}>${pattern.regex})"
                 }
                 .joinToString(separator = "|")
-                .also { println(it) }
                 .toRegex(RegexOption.MULTILINE)
     }
 }
