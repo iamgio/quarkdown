@@ -6,6 +6,8 @@ https://www.markdownguide.org/extended-syntax/
 Useful links:
 https://github.com/JetBrains/markdown
 https://spec.commonmark.org/0.31.2/#appendix-a-parsing-strategy
+https://github.github.com/gfm
+https://github.github.com/gfm/#appendix-a-parsing-strategy
 
 == TEXT ==
 
@@ -140,12 +142,37 @@ ___
 
 <url>
 
+Title wrappers: ", ', (
+
+
+== LINK REFERENCE == https://github.github.com/gfm/#link-reference-definition
+
+[Label]: url
+
+[Label]: url "Title"
+
+[Label]: url "
+title line 1
+title line 2
+"
+
+Title wrappers: ", ', (
+
+Call to reference:
+[Label]
+
 
 == IMAGES ==
 
 ![Alt](url)
 
 ![Alt](url "Title")
+
+[Label]: url "Title"
+...
+![Label]
+
+Title wrappers: ", ', (
 
 
 == ESCAPING ==
