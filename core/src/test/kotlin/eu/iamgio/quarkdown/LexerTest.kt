@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.lexer.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 /**
  * Tokenization tests.
@@ -46,6 +47,14 @@ class LexerTest {
         assertEquals(WhitespaceTokenType.NON_WHITESPACE, tokens.next()) // "ignored whitespace"
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
         assertEquals(WhitespaceTokenType.EOL, tokens.next())
+        assertFalse(tokens.hasNext())
+    }
+
+    @Test
+    fun blocks() {
+        val tokens = BlockLexer(readSource("/lexing/blocks.md")).tokenize().map { it.type }.iterator()
+
+
     }
 
     /*@Test

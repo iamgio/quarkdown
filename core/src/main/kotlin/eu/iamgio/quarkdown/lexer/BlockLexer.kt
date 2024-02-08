@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.lexer
 
-import eu.iamgio.quarkdown.lexer.pattern.WhitespaceTokenRegexPattern
+import eu.iamgio.quarkdown.lexer.pattern.BlockTokenRegexPattern
+import eu.iamgio.quarkdown.lexer.type.InlineTokenType
 
 /**
  * A [Lexer] that tokenizes macro-blocks. A block contains further information that needs to be processed by other components.
@@ -8,5 +9,6 @@ import eu.iamgio.quarkdown.lexer.pattern.WhitespaceTokenRegexPattern
  */
 class BlockLexer(source: CharSequence) : StandardRegexLexer(
     source,
-    patterns = WhitespaceTokenRegexPattern.values().toList(),
+    patterns = BlockTokenRegexPattern.values().toList(),
+    fillTokenType = InlineTokenType.TEXT
 )
