@@ -1,0 +1,13 @@
+# Heading
+
+A paragraph...
+Some text.
+
+> Quote
+>> Inner quote
+
+1st stage output:
+HEADING, PARAGRAPH, QUOTE
+
+2nd stage output:
+HEADING, PARAGRAPH, QUOTE[QUOTE]
