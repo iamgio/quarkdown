@@ -1,6 +1,7 @@
-package eu.iamgio.quarkdown.lexer
+package eu.iamgio.quarkdown.lexer.regex
 
-import eu.iamgio.quarkdown.lexer.pattern.TokenRegexPattern
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.TokenType
 
 /**

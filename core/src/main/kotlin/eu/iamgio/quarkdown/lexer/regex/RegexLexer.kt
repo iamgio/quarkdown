@@ -1,7 +1,9 @@
-package eu.iamgio.quarkdown.lexer
+package eu.iamgio.quarkdown.lexer.regex
 
-import eu.iamgio.quarkdown.lexer.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.pattern.groupify
+import eu.iamgio.quarkdown.lexer.AbstractLexer
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
+import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 
 /**
  * A [Lexer] that identifies tokens by matching [Regex] patterns.

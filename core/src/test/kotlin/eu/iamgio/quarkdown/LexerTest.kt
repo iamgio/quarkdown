@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockLexer
-import eu.iamgio.quarkdown.lexer.StandardRegexLexer
-import eu.iamgio.quarkdown.lexer.pattern.WhitespaceTokenRegexPattern
+import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
+import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import kotlin.test.Test
 import kotlin.test.assertEquals

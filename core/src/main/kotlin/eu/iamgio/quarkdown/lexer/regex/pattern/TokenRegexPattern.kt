@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.lexer.pattern
+package eu.iamgio.quarkdown.lexer.regex.pattern
 
 import eu.iamgio.quarkdown.lexer.type.TokenType
 

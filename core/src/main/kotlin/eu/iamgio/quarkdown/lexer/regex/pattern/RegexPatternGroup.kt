@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.lexer.pattern
+package eu.iamgio.quarkdown.lexer.regex.pattern
 
 /**
  * Groups a sequence of patterns into a single [Regex] where every capture group is identified by its token type.

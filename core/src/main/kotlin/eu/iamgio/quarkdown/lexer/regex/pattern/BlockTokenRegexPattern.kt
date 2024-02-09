@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.lexer.pattern
+package eu.iamgio.quarkdown.lexer.regex.pattern
 
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
 import eu.iamgio.quarkdown.lexer.type.TokenType
@@ -7,5 +7,6 @@ import eu.iamgio.quarkdown.lexer.type.TokenType
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
-    HEADING(BlockTokenType.HEADING, "(?<=^) {0,3}#{1,6}(.+)?".toRegex())
+    HEADING(BlockTokenType.HEADING, "(?<=^) {0,3}#{1,6}( |\$)".toRegex()),
+    BLOCKQUOTE(BlockTokenType.BLOCKQUOTE, "(?<=^) {0,3}>".toRegex())
 }
