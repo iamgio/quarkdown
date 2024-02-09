@@ -4,15 +4,28 @@ import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
+import eu.iamgio.quarkdown.lexer.walker.SourceReader
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 /**
  * Tokenization tests.
  * @see BlockLexer
  */
 class LexerTest {
+    @Test
+    fun sourceReader() {
+        val reader = SourceReader("Test")
+        assertEquals('T', reader.read())
+        assertEquals('e', reader.peek())
+        assertEquals('e', reader.read())
+        assertEquals('s', reader.read())
+        assertEquals('t', reader.read())
+        assertNull(reader.read())
+    }
+
     @Test
     fun whitespaces() {
         val lexer =
