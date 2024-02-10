@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.lexer.type.TokenType
 /**
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
+// TODO add test
 enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
     // Credits: https://github.com/markedjs/marked/blob/master/src/rules.ts
     BLOCKQUOTE(
@@ -46,12 +47,12 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
             .build(RegexOption.IGNORE_CASE),
     ),
-    LISTHEADING(
-        BlockTokenType.LIST_HEADING,
+    SETEXTHEADING(
+        BlockTokenType.SETEXT_HEADING,
         RegexBuilder("^(?!bullet )((?:.|\\n(?!\\s*?\\n|bullet ))+?)\\n {0,3}(=+|-+) *(?:\\n+|$)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
-            .build(),
+            .build().also { println(it) },
     ),
     LIST(
         BlockTokenType.LIST,

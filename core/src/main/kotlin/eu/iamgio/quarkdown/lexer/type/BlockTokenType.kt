@@ -9,7 +9,7 @@ enum class BlockTokenType : TokenType {
     FENCES_CODE,
     HORIZONTAL_RULE,
     HEADING,
-    LIST_HEADING,
+    SETEXT_HEADING,
     BLOCK_TEXT,
     LINK_DEFINITION,
     LIST,
