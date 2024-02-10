@@ -8,6 +8,12 @@ import java.io.Reader
  */
 class SourceReader(private val reader: Reader) {
     /**
+     * The current character index the reader is at.
+     */
+    var index = 0
+        private set
+
+    /**
      * @param source source string to generate the reader for
      */
     constructor(source: CharSequence) : this(source.toString().reader())
@@ -17,9 +23,13 @@ class SourceReader(private val reader: Reader) {
      */
     fun peek(): Char? {
         reader.mark(1)
-        return read().also {
+        return readWithoutIncrement().also {
             reader.reset()
         }
+    }
+
+    private fun readWithoutIncrement(): Char? {
+        return reader.read().takeUnless { it == -1 }?.toChar()
     }
 
     /**
@@ -27,6 +37,6 @@ class SourceReader(private val reader: Reader) {
      * @return the value at the current index, if there is any
      */
     fun read(): Char? {
-        return reader.read().takeUnless { it == -1 }?.toChar()
+        return readWithoutIncrement()?.also { index++ }
     }
 }
