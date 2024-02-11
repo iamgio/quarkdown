@@ -1,10 +1,16 @@
 # Heading
 
-Paragraph
+Paragraph 1
 
 ## Heading
 
-Paragraph
+Paragraph 2
+
+Setext heading
+-----
+
+Paragraph...
+some text.
 
 - A
 
@@ -28,6 +34,8 @@ Code (fences)
 [link]: url "Title
 multiline"
 
-<html lang="en">
-    ...
-</html>
+---
+
+<p>
+    HTML
+</p>

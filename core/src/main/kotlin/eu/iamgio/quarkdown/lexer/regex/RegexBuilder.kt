@@ -30,4 +30,9 @@ class RegexBuilder(baseRegex: String) {
      * @return a new [Regex] with the given [option].
      */
     fun build(option: RegexOption): Regex = pattern.toString().toRegex(option)
+
+    /**
+     * @return a new [Regex] with the given [options].
+     */
+    fun build(vararg options: RegexOption): Regex = pattern.toString().toRegex(options.toSet())
 }

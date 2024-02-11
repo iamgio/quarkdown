@@ -15,8 +15,6 @@ open class StandardRegexLexer(
     patterns: List<TokenRegexPattern>,
     private val fillTokenType: TokenType? = null,
 ) : RegexLexer(source, patterns) {
-    // TODO use block patterns
-
     override fun createFillToken(position: IntRange): Token? {
         if (fillTokenType == null) {
             return null
@@ -35,5 +33,5 @@ open class StandardRegexLexer(
         )
     }
 
-    override fun manipulate(tokens: List<Token>) = tokens
+    override fun manipulate(tokens: List<Token>) = tokens.sortedBy { it.position.last }
 }

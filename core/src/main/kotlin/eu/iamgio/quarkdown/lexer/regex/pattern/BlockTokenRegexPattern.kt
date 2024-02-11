@@ -14,30 +14,41 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
         BlockTokenType.BLOCKQUOTE,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
             .withReference("paragraph", PARAGRAPH_PATTERN.pattern)
-            .build(),
+            .build(RegexOption.MULTILINE),
     ),
     BLOCKCODE(
         BlockTokenType.BLOCK_CODE,
-        "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+".toRegex(),
+        "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
+            .toRegex(RegexOption.MULTILINE),
     ), // TODO check wrong detection instead of list paragraph and HTML content
     LINKDEFINITION(
         BlockTokenType.LINK_DEFINITION,
         RegexBuilder("^ {0,3}\\[(label)\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *(?:\\n+|$)")
             .withReference("label", BLOCK_LABEL_HELPER)
             .withReference("title", "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))")
-            .build(),
+            .build(RegexOption.MULTILINE),
     ),
     FENCESCODE(
         BlockTokenType.FENCES_CODE,
-        "^ {0,3}(`{3,}(?=[^`\\n]*(?:\\n|$))|~{3,})([^\\n]*)(?:\\n|$)(?:|([\\s\\S]*?)(?:\\n|$))(?: {0,3}\\1[~`]* *(?=\\n|$)|$)".toRegex(),
+        "^ {0,3}(`{3,}(?=[^`\\n]*(?:\\n|$))|~{3,})([^\\n]*)(?:\\n|$)(?:|([\\s\\S]*?)(?:\\n|$))(?: {0,3}\\1[~`]* *(?=\\n|$)|$)"
+            .toRegex(RegexOption.MULTILINE),
     ),
     HEADING(
         BlockTokenType.HEADING,
-        "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)".toRegex(),
+        "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
+            .toRegex(RegexOption.MULTILINE),
     ),
     HORIZONTALRULE(
         BlockTokenType.HORIZONTAL_RULE,
-        HORIZONTAL_RULE_HELPER.toRegex(),
+        HORIZONTAL_RULE_HELPER
+            .toRegex(RegexOption.MULTILINE),
+    ),
+    SETEXTHEADING(
+        BlockTokenType.SETEXT_HEADING,
+        RegexBuilder("^(?!bullet )((?:.|\\n(?!\\s*?\\n|bullet ))+?)\\n {0,3}(=+|-+) *(?:\\n+|$)")
+            .withReference("bullet", BULLET_HELPER)
+            .withReference("bullet", BULLET_HELPER)
+            .build(RegexOption.DOT_MATCHES_ALL),
     ),
     HTML(
         BlockTokenType.HTML,
@@ -45,24 +56,18 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
-            .build(RegexOption.IGNORE_CASE),
-    ),
-    SETEXTHEADING(
-        BlockTokenType.SETEXT_HEADING,
-        RegexBuilder("^(?!bullet )((?:.|\\n(?!\\s*?\\n|bullet ))+?)\\n {0,3}(=+|-+) *(?:\\n+|$)")
-            .withReference("bullet", BULLET_HELPER)
-            .withReference("bullet", BULLET_HELPER)
-            .build().also { println(it) },
+            .build(RegexOption.IGNORE_CASE, RegexOption.MULTILINE),
     ),
     LIST(
         BlockTokenType.LIST,
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")
             .withReference("bullet", BULLET_HELPER)
-            .build(),
+            .build(RegexOption.MULTILINE),
     ),
     NEWLINE(
         BlockTokenType.NEWLINE,
-        "^(?: *(?:\\n|$))+".toRegex(),
+        "^(?: *(?:\\n|$))+"
+            .toRegex(RegexOption.MULTILINE),
     ),
     PARAGRAPH(
         BlockTokenType.PARAGRAPH,
@@ -70,13 +75,14 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
     ),
     BLOCKTEXT(
         BlockTokenType.BLOCK_TEXT,
-        "^[^\\n]+".toRegex(),
+        "^[^\\n]+"
+            .toRegex(RegexOption.MULTILINE),
     ),
 }
 
 // Helper expressions
 
-private const val BULLET_HELPER = "[*+-]|\\d{1,9}[.)]"
+private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
 
 private const val HORIZONTAL_RULE_HELPER = "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\n+|$)"
 
@@ -94,17 +100,17 @@ private const val TAG_HELPER =
 
 private const val HTML_HELPER =
     "^ {0,3}(?:" +
-        "<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)" +
+        "<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:<\\/\\1>[^\\n]*\\n+|$)" +
         "|comment[^\\n]*(\\n+|$)" +
         "|<\\?[\\s\\S]*?(?:\\?>\\n*|$)" +
         "|<![A-Z][\\s\\S]*?(?:>\\n*|$)" +
         "|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)" +
-        "|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
-        "|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
-        "|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
+        "|<\\/?(tag)(?: +|\\n|\\/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
+        "|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? *\\/?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
+        "|<\\/(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
         ")"
 
-private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->|\$))"
+private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->|$))"
 
 private val PARAGRAPH_PATTERN =
     RegexBuilder(PARAGRAPH_HELPER)
@@ -112,7 +118,7 @@ private val PARAGRAPH_PATTERN =
         .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
         .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
         .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
-        .withReference("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)")
+        .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
         .withReference("blockquote", " {0,3}>")
         .withReference("tag", TAG_HELPER)
-        .build()
+        .build(RegexOption.MULTILINE)
