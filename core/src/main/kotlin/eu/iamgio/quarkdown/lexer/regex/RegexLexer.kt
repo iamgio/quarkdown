@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.lexer.regex
 
 import eu.iamgio.quarkdown.lexer.AbstractLexer
-import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
+import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 
 /**
  * A [Lexer] that identifies tokens by matching [Regex] patterns.
@@ -23,42 +23,50 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
     }
 
     /**
-     * Converts a capture of a [Regex] match to a sequence of tokens.
+     * Converts captured groups of a [Regex] match to a sequence of tokens.
+     * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
-     * @param pattern the pattern used to retrieve the result
-     * @return a new token that matches the result
+     * @return stream of matched tokens
      */
-    private fun extractToken(
-        result: MatchResult,
-        pattern: TokenRegexPattern,
-    ) = Token(
-        type = pattern.tokenType,
-        text = result.value,
-        // TODO
-        literal = null,
-        position = result.range,
-    )
+    private fun extractMatchingTokens(result: MatchResult): List<Token> =
+        buildList {
+            patterns.forEach { pattern ->
+                val group = result.groups[pattern.name] ?: return@forEach
+                val range = group.range
+
+                // The token itself.
+                val token =
+                    Token(
+                        type = pattern.tokenType,
+                        text = group.value,
+                        // TODO
+                        literal = null,
+                        position = range,
+                    )
+
+                // Text tokens are substrings that were not captured by any pattern.
+                // These uncaptured groups are scanned and converted to tokens.
+                pushFillToken(untilIndex = range.first)
+
+                this += token
+
+                currentIndex = range.last + 1
+            }
+        }
 
     override fun tokenize(): List<Token> =
         buildList {
             currentIndex = 0
 
-            while (currentIndex <= source.length) {
-                for (pattern in patterns) {
-                    val result = pattern.regex.find(source, startIndex = currentIndex) ?: continue
-                    if (result.range.first != currentIndex) continue
+            val regex: Regex = patterns.groupify()
+            val match: Sequence<MatchResult> = regex.findAll(source)
 
-                    // Match found
-                    this += extractToken(result, pattern)
-                    currentIndex = result.range.last + 1
-                    break
-                }
-
-                currentIndex++
+            match.forEach { result ->
+                addAll(extractMatchingTokens(result))
             }
 
             // Add a token to fill the gap between the last token and the EOF.
-            // pushFillToken(untilIndex = source.length)
+            pushFillToken(untilIndex = source.length)
         }.let { manipulate(it) }
 
     /**
