@@ -33,5 +33,5 @@ open class StandardRegexLexer(
         )
     }
 
-    override fun manipulate(tokens: List<Token>) = tokens.sortedBy { it.position.last }
+    override fun manipulate(tokens: List<Token>) = tokens
 }

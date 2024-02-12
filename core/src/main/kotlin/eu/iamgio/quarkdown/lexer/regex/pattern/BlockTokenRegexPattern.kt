@@ -49,7 +49,7 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
             .build(),
-    ),
+    ), // TODO match might fail
     HTML(
         BlockTokenType.HTML,
         RegexBuilder(HTML_HELPER)
@@ -57,7 +57,7 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("tag", TAG_HELPER)
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
             .build(),
-    ),
+    ), // TODO match whole block
     LIST(
         BlockTokenType.LIST,
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")

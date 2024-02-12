@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockLexer
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
@@ -12,7 +13,7 @@ import kotlin.test.assertNull
 
 /**
  * Tokenization tests.
- * @see BlockLexer
+ * @see Lexer
  */
 class LexerTest {
     @Test
@@ -67,7 +68,7 @@ class LexerTest {
     fun blocks() {
         val tokens = BlockLexer(readSource("/lexing/blocks.md")).tokenize().map { it.type }.iterator()
 
-
+        // TODO
     }
 
     /*@Test
