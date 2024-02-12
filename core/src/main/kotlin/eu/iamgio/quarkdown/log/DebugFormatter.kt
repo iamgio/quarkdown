@@ -17,10 +17,13 @@ object DebugFormatter {
         return tokens.joinToString(separator = "\n") { token ->
             val type = "type: ${token.type}"
             val pos = "pos: ${token.position}"
-            val text = "text: " + token.text
+
+            val content = token.text
                 .replace("\\R".toRegex(), "\\\\n")
                 .replace("\t", "\\t")
                 .replace("    ", "\\t")
+
+            val text = "text: $content"
 
             format.format(type, pos, text)
         }
