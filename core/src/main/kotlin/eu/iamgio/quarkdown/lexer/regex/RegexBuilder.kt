@@ -18,7 +18,9 @@ class RegexBuilder(baseRegex: String) {
         regex: String,
     ) = apply {
         val index = pattern.indexOf(label)
-        pattern.replace(index, index + label.length, regex)
+        if (index >= 0) {
+            pattern.replace(index, index + label.length, regex)
+        }
     }
 
     /**

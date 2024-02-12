@@ -45,10 +45,10 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
     ),
     SETEXTHEADING(
         BlockTokenType.SETEXT_HEADING,
-        RegexBuilder("^(?!bullet )((?:.|\\n(?!\\s*?\\n|bullet ))+?)\\n {0,3}(=+|-+) *(?:\\n+|$)")
+        RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
-            .build(RegexOption.DOT_MATCHES_ALL),
+            .build(RegexOption.MULTILINE),
     ),
     HTML(
         BlockTokenType.HTML,
@@ -75,7 +75,7 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
     ),
     BLOCKTEXT(
         BlockTokenType.BLOCK_TEXT,
-        "^[^\\n]+"
+        "^[\\n]+"
             .toRegex(RegexOption.MULTILINE),
     ),
 }
