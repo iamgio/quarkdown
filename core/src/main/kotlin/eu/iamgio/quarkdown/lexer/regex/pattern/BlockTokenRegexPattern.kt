@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.lexer.type.TokenType
  */
 // TODO add test
 enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
-    // Credits: https://github.com/markedjs/marked/blob/master/src/rules.ts
+    // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
     BLOCKQUOTE(
         BlockTokenType.BLOCKQUOTE,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
@@ -26,29 +26,29 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
         RegexBuilder("^ {0,3}\\[(label)\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *(?:\\n+|$)")
             .withReference("label", BLOCK_LABEL_HELPER)
             .withReference("title", "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))")
-            .build(RegexOption.MULTILINE),
+            .build(),
     ),
     FENCESCODE(
         BlockTokenType.FENCES_CODE,
-        "^ {0,3}(`{3,}(?=[^`\\n]*(?:\\n|$))|~{3,})([^\\n]*)(?:\\n|$)(?:|([\\s\\S]*?)(?:\\n|$))(?: {0,3}\\1[~`]* *(?=\\n|$)|$)"
-            .toRegex(RegexOption.MULTILINE),
+        "^ {0,3}((`{3,})(\\s*.+\\R)?((.|\\s)+?)(`{3,}))|((~{3,})(\\s*.+\\R)?((.|\\s)+?)(~{3,}))"
+            .toRegex(),
     ),
     HEADING(
         BlockTokenType.HEADING,
         "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
-            .toRegex(RegexOption.MULTILINE),
+            .toRegex(),
     ),
     HORIZONTALRULE(
         BlockTokenType.HORIZONTAL_RULE,
         HORIZONTAL_RULE_HELPER
-            .toRegex(RegexOption.MULTILINE),
+            .toRegex(),
     ),
     SETEXTHEADING(
         BlockTokenType.SETEXT_HEADING,
         RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
-            .build(RegexOption.MULTILINE),
+            .build(),
     ),
     HTML(
         BlockTokenType.HTML,
@@ -56,18 +56,18 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
-            .build(RegexOption.IGNORE_CASE, RegexOption.MULTILINE),
+            .build(),
     ),
     LIST(
         BlockTokenType.LIST,
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")
             .withReference("bullet", BULLET_HELPER)
-            .build(RegexOption.MULTILINE),
+            .build(),
     ),
     NEWLINE(
         BlockTokenType.NEWLINE,
         "^(?: *(?:\\n|$))+"
-            .toRegex(RegexOption.MULTILINE),
+            .toRegex(),
     ),
     PARAGRAPH(
         BlockTokenType.PARAGRAPH,
@@ -75,8 +75,8 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
     ),
     BLOCKTEXT(
         BlockTokenType.BLOCK_TEXT,
-        "^[\\n]+"
-            .toRegex(RegexOption.MULTILINE),
+        "^[^\\n]+"
+            .toRegex(),
     ),
 }
 
