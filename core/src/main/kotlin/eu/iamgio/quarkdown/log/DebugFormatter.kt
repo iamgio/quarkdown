@@ -11,25 +11,18 @@ object DebugFormatter {
      * @param tokens tokens to format
      * @return formatted string
      */
-    fun formatTokens(tokens: Iterable<Token>) =
-        tokens.joinToString(separator = "\n") { token ->
-            buildString {
-                append("type: ")
-                append(token.type)
-                append("\t\t")
+    fun formatTokens(tokens: Iterable<Token>): String {
+        val format = "%-30s %-20s %s" // Columns
 
-                append("pos: ")
-                append(token.position)
-                append("\t\t")
+        return tokens.joinToString(separator = "\n") { token ->
+            val type = "type: ${token.type}"
+            val pos = "pos: ${token.position}"
+            val text = "text: " + token.text
+                .replace("\\R".toRegex(), "\\\\n")
+                .replace("\t", "\\t")
+                .replace("    ", "\\t")
 
-                append("text: ")
-
-                append(
-                    token.text
-                        .replace("\\R".toRegex(), "\\\\n")
-                        .replace("\t", "\\t")
-                        .replace("    ", "\\t"),
-                )
-            }
+            format.format(type, pos, text)
         }
+    }
 }
