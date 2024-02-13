@@ -14,7 +14,7 @@ some text.
 
 - A
 
-    Inner content
+  Inner content
 
 - B
 

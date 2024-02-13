@@ -4,12 +4,13 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
 import eu.iamgio.quarkdown.lexer.type.TokenType
 
+// Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
+
 /**
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 // TODO add test
 enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
-    // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
     BLOCKQUOTE(
         BlockTokenType.BLOCKQUOTE,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
@@ -56,8 +57,8 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
-            .build().also { println(it) },
-    ), // TODO match whole block
+            .build(),
+    ),
     LIST(
         BlockTokenType.LIST,
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")
