@@ -9,7 +9,6 @@ import eu.iamgio.quarkdown.lexer.type.TokenType
 /**
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
-// TODO add test
 enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
     BLOCKQUOTE(
         BlockTokenType.BLOCKQUOTE,
@@ -50,7 +49,7 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
             .build(),
-    ), // TODO match might fail
+    ),
     HTML(
         BlockTokenType.HTML,
         RegexBuilder(HTML_HELPER)

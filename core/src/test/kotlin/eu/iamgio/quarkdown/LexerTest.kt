@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
+import eu.iamgio.quarkdown.lexer.type.BlockTokenType
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
 import kotlin.test.Test
@@ -66,9 +67,31 @@ class LexerTest {
 
     @Test
     fun blocks() {
-        val tokens = BlockLexer(readSource("/lexing/blocks.md")).tokenize().map { it.type }.iterator()
+        val tokens =
+            BlockLexer(readSource("/lexing/blocks.md")).tokenize().asSequence()
+                .map { it.type }
+                .filter { it != BlockTokenType.NEWLINE }
+                .iterator()
 
-        // TODO
+        assertEquals(BlockTokenType.HEADING, tokens.next())
+        assertEquals(BlockTokenType.PARAGRAPH, tokens.next())
+        assertEquals(BlockTokenType.HEADING, tokens.next())
+        assertEquals(BlockTokenType.PARAGRAPH, tokens.next())
+        assertEquals(BlockTokenType.SETEXT_HEADING, tokens.next())
+        assertEquals(BlockTokenType.PARAGRAPH, tokens.next())
+        assertEquals(BlockTokenType.LIST, tokens.next())
+        assertEquals(BlockTokenType.PARAGRAPH, tokens.next())
+        assertEquals(BlockTokenType.LIST, tokens.next())
+        assertEquals(BlockTokenType.LIST, tokens.next())
+        assertEquals(BlockTokenType.LIST, tokens.next())
+        assertEquals(BlockTokenType.BLOCKQUOTE, tokens.next())
+        assertEquals(BlockTokenType.BLOCKQUOTE, tokens.next())
+        assertEquals(BlockTokenType.BLOCK_CODE, tokens.next())
+        assertEquals(BlockTokenType.FENCES_CODE, tokens.next())
+        assertEquals(BlockTokenType.HORIZONTAL_RULE, tokens.next())
+        assertEquals(BlockTokenType.HTML, tokens.next())
+        assertEquals(BlockTokenType.LINK_DEFINITION, tokens.next())
+        assertEquals(BlockTokenType.HORIZONTAL_RULE, tokens.next())
     }
 
     /*@Test

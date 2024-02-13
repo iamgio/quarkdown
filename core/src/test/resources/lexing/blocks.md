@@ -31,13 +31,13 @@ some text.
 Code (fences)
 ```
 
-[link]: url "Title
-multiline"
-
 ---
 
 <p>
     HTML
 </p>
 
-End
+[link]: url "Title
+multiline"
+
+***
