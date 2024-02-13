@@ -56,7 +56,7 @@ enum class BlockTokenRegexPattern(override val tokenType: TokenType, override va
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
             .withReference("attribute", " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?")
-            .build(),
+            .build().also { println(it) },
     ), // TODO match whole block
     LIST(
         BlockTokenType.LIST,
@@ -100,17 +100,17 @@ private const val TAG_HELPER =
 
 private const val HTML_HELPER =
     "^ {0,3}(?:" +
-        "<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:<\\/\\1>[^\\n]*\\n+|$)" +
-        "|comment[^\\n]*(\\n+|$)" +
-        "|<\\?[\\s\\S]*?(?:\\?>\\n*|$)" +
-        "|<![A-Z][\\s\\S]*?(?:>\\n*|$)" +
-        "|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)" +
-        "|<\\/?(tag)(?: +|\\n|\\/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
-        "|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? *\\/?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
-        "|<\\/(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)" +
+        "<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:<\\/\\1>[^\\n]*\\n+)" +
+        "|comment[^\\n]*(\\n+)" +
+        "|<\\?[\\s\\S]*?(?:\\?>\\n*)" +
+        "|<![A-Z][\\s\\S]*?(?:>\\n*)" +
+        "|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*)" +
+        "|<\\/?(tag)(?: +|\\n|\\/?>)[\\s\\S]*?(?:(?:\\n *)+\\n)" +
+        "|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? *\\/?>(?=[ \\t]*(?:\\n))[\\s\\S]*?(?:(?:\\n *)+\\n)" +
+        "|<\\/(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n))[\\s\\S]*?(?:(?:\\n *)+\\n)" +
         ")"
 
-private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->|$))"
+private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"
 
 private val PARAGRAPH_PATTERN =
     RegexBuilder(PARAGRAPH_HELPER)
