@@ -3,8 +3,10 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
+import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
+import eu.iamgio.quarkdown.lexer.type.TokenType
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
 import kotlin.test.Test
@@ -26,6 +28,78 @@ class LexerTest {
         assertEquals('s', reader.read())
         assertEquals('t', reader.read())
         assertNull(reader.read())
+    }
+
+    @Test
+    fun regex() {
+        val lexer =
+            StandardRegexLexer(
+                "ABC\nABB\nDEF\nGHI\nDE",
+                listOf(
+                    object : TokenRegexPattern {
+                        override val name = "FIRST"
+                        override val tokenType =
+                            object : TokenType {
+                                override val name: String = "FIRST"
+                            }
+                        override val regex: Regex = "AB.".toRegex()
+                    },
+                    object : TokenRegexPattern {
+                        override val name = "SECOND"
+                        override val tokenType =
+                            object : TokenType {
+                                override val name: String = "SECOND"
+                            }
+                        override val regex: Regex = "DE.?".toRegex()
+                    },
+                    object : TokenRegexPattern {
+                        override val name = "NEWLINE"
+                        override val tokenType =
+                            object : TokenType {
+                                override val name: String = "NEWLINE"
+                            }
+                        override val regex: Regex = "\\R".toRegex()
+                    },
+                ),
+                fillTokenType =
+                    object : TokenType {
+                        override val name: String = "FILL"
+                    },
+            )
+
+        val tokens = lexer.tokenize().iterator()
+        with(tokens.next()) {
+            assertEquals("ABC", text)
+            assertEquals("FIRST", type.name)
+        }
+
+        assertEquals("NEWLINE", tokens.next().type.name)
+
+        with(tokens.next()) {
+            assertEquals("ABB", text)
+            assertEquals("FIRST", type.name)
+        }
+
+        assertEquals("NEWLINE", tokens.next().type.name)
+
+        with(tokens.next()) {
+            assertEquals("DEF", text)
+            assertEquals("SECOND", type.name)
+        }
+
+        assertEquals("NEWLINE", tokens.next().type.name)
+
+        with(tokens.next()) {
+            assertEquals("GHI", text)
+            assertEquals("FILL", type.name)
+        }
+
+        assertEquals("NEWLINE", tokens.next().type.name)
+
+        with(tokens.next()) {
+            assertEquals("DE", text)
+            assertEquals("SECOND", type.name)
+        }
     }
 
     @Test
