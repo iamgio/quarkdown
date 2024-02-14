@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.lexer.regex
 
-import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.RawToken
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.type.TokenType
+import eu.iamgio.quarkdown.lexer.type.Token
 
 /**
  * A standard [RegexLexer] implementation that does not perform any manipulation on the final output and has an optional fixed fill token.
@@ -13,25 +13,21 @@ import eu.iamgio.quarkdown.lexer.type.TokenType
 open class StandardRegexLexer(
     source: CharSequence,
     patterns: List<TokenRegexPattern>,
-    private val fillTokenType: TokenType? = null,
+    private val fillTokenType: Token? = null,
 ) : RegexLexer(source, patterns) {
-    override fun createFillToken(position: IntRange): Token? {
+    override fun createFillToken(position: IntRange): RawToken? {
         if (fillTokenType == null) {
             return null
         }
 
         val text = source.substring(position)
 
-        // TODO literal value could also be number or boolean (need to parse here)
-        // TODO use correct token type
-
-        return Token(
+        return RawToken(
             fillTokenType,
-            text,
             text,
             position,
         )
     }
 
-    override fun manipulate(tokens: List<Token>) = tokens
+    override fun manipulate(tokens: List<RawToken>) = tokens
 }

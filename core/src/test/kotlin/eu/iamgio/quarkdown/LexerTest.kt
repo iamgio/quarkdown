@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
-import eu.iamgio.quarkdown.lexer.type.TokenType
+import eu.iamgio.quarkdown.lexer.type.Token
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
 import kotlin.test.Test
@@ -39,7 +39,7 @@ class LexerTest {
                     object : TokenRegexPattern {
                         override val name = "FIRST"
                         override val tokenType =
-                            object : TokenType {
+                            object : Token {
                                 override val name: String = "FIRST"
                             }
                         override val regex: Regex = "AB.".toRegex()
@@ -47,7 +47,7 @@ class LexerTest {
                     object : TokenRegexPattern {
                         override val name = "SECOND"
                         override val tokenType =
-                            object : TokenType {
+                            object : Token {
                                 override val name: String = "SECOND"
                             }
                         override val regex: Regex = "DE.?".toRegex()
@@ -55,14 +55,14 @@ class LexerTest {
                     object : TokenRegexPattern {
                         override val name = "NEWLINE"
                         override val tokenType =
-                            object : TokenType {
+                            object : Token {
                                 override val name: String = "NEWLINE"
                             }
                         override val regex: Regex = "\\R".toRegex()
                     },
                 ),
                 fillTokenType =
-                    object : TokenType {
+                    object : Token {
                         override val name: String = "FILL"
                     },
             )

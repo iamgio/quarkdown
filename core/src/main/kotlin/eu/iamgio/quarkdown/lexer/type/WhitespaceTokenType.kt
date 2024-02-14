@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.lexer.type
 /**
  * Token types that represent whitespaces.
  */
-enum class WhitespaceTokenType : TokenType {
+enum class WhitespaceTokenType : Token {
     /**
      * Indentation at the beginning of the line.
      */

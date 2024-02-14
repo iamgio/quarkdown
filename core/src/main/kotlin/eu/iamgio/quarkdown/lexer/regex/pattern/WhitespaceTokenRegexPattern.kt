@@ -1,12 +1,12 @@
 package eu.iamgio.quarkdown.lexer.regex.pattern
 
-import eu.iamgio.quarkdown.lexer.type.TokenType
+import eu.iamgio.quarkdown.lexer.type.Token
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 
 /**
  * Collection of [TokenRegexPattern]s that match whitespaces.
  */
-enum class WhitespaceTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) :
+enum class WhitespaceTokenRegexPattern(override val tokenType: Token, override val regex: Regex) :
     TokenRegexPattern {
     // Note: names must not contain underscores to prevent issues with RegEx named groups.
     // The order of the entries is relevant to determine match priorities.

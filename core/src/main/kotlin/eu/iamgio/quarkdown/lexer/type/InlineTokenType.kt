@@ -3,6 +3,6 @@ package eu.iamgio.quarkdown.lexer.type
 /**
  *
  */
-enum class InlineTokenType : TokenType {
+enum class InlineTokenType : Token {
     TEXT
 }

@@ -2,14 +2,14 @@ package eu.iamgio.quarkdown.lexer.regex.pattern
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
-import eu.iamgio.quarkdown.lexer.type.TokenType
+import eu.iamgio.quarkdown.lexer.type.Token
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
 
 /**
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
-enum class BlockTokenRegexPattern(override val tokenType: TokenType, override val regex: Regex) : TokenRegexPattern {
+enum class BlockTokenRegexPattern(override val tokenType: Token, override val regex: Regex) : TokenRegexPattern {
     BLOCKQUOTE(
         BlockTokenType.BLOCKQUOTE,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
