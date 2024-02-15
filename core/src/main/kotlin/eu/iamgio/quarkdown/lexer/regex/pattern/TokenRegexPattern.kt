@@ -17,7 +17,7 @@ interface TokenRegexPattern {
     /**
      * A function that wraps a general token into its specific wrapper.
      */
-    val tokenWrapper: (Token) -> TokenWrapper
+    val wrap: (Token) -> TokenWrapper
 
     /**
      * Regex pattern to match.

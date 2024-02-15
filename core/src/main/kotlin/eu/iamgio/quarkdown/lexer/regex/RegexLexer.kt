@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.lexer.regex
 
 import eu.iamgio.quarkdown.lexer.AbstractLexer
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenWrapper
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
@@ -43,7 +44,7 @@ abstract class RegexLexer(
                     Token(
                         text = group.value,
                         position = range,
-                    ).let { pattern.tokenWrapper(it) }
+                    ).let { pattern.wrap(it) }
 
                 // Text tokens are substrings that were not captured by any pattern.
                 // These uncaptured groups are scanned and converted to tokens.

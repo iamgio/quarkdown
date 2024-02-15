@@ -22,7 +22,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 enum class BlockTokenRegexPattern(
-    override val tokenWrapper: (Token) -> TokenWrapper,
+    override val wrap: (Token) -> TokenWrapper,
     override val regex: Regex,
 ) : TokenRegexPattern {
     BLOCKQUOTE(
