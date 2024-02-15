@@ -26,47 +26,47 @@ enum class BlockTokenRegexPattern(
     override val regex: Regex,
 ) : TokenRegexPattern {
     BLOCKQUOTE(
-        { BlockQuoteToken(it) },
+        ::BlockQuoteToken,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
             .withReference("paragraph", PARAGRAPH_PATTERN.pattern)
-            .build(RegexOption.MULTILINE),
+            .build(),
     ),
     BLOCKCODE(
-        { BlockCodeToken(it) },
+        ::BlockCodeToken,
         "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
-            .toRegex(RegexOption.MULTILINE),
+            .toRegex(),
     ),
     LINKDEFINITION(
-        { LinkDefinitionToken(it) },
+        ::LinkDefinitionToken,
         RegexBuilder("^ {0,3}\\[(label)\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *(?:\\n+|$)")
             .withReference("label", BLOCK_LABEL_HELPER)
             .withReference("title", "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))")
             .build(),
     ),
     FENCESCODE(
-        { FencesCodeToken(it) },
+        ::FencesCodeToken,
         "^ {0,3}((`{3,})(\\s*.+\\R)?((.|\\s)+?)(`{3,}))|((~{3,})(\\s*.+\\R)?((.|\\s)+?)(~{3,}))"
             .toRegex(),
     ),
     HEADING(
-        { HeadingToken(it) },
+        ::HeadingToken,
         "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
             .toRegex(),
     ),
     HORIZONTALRULE(
-        { HorizontalRuleToken(it) },
+        ::HorizontalRuleToken,
         HORIZONTAL_RULE_HELPER
             .toRegex(),
     ),
     SETEXTHEADING(
-        { SetextHeadingToken(it) },
+        ::SetextHeadingToken,
         RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
             .build(),
     ),
     HTML(
-        { HtmlToken(it) },
+        ::HtmlToken,
         RegexBuilder(HTML_HELPER)
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
@@ -77,22 +77,22 @@ enum class BlockTokenRegexPattern(
             .build(),
     ),
     LIST(
-        { ListItemToken(it) },
+        ::ListItemToken,
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")
             .withReference("bullet", BULLET_HELPER)
             .build(),
     ),
     NEWLINE(
-        { NewlineToken(it) },
+        ::NewlineToken,
         "^(?: *(?:\\n|$))+"
             .toRegex(),
     ),
     PARAGRAPH(
-        { ParagraphToken(it) },
+        ::ParagraphToken,
         PARAGRAPH_PATTERN,
     ),
     BLOCKTEXT(
-        { BlockTextToken(it) },
+        ::BlockTextToken,
         "^[^\\n]+"
             .toRegex(),
     ),
