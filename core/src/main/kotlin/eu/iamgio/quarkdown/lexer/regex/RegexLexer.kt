@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.lexer.regex
 
 import eu.iamgio.quarkdown.lexer.AbstractLexer
 import eu.iamgio.quarkdown.lexer.RawToken
+import eu.iamgio.quarkdown.lexer.RawTokenWrapper
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 
@@ -10,13 +11,16 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
  * @param source the content to be tokenized
  * @param patterns the patterns to search for, in descending order of priority
  */
-abstract class RegexLexer(source: CharSequence, private val patterns: List<TokenRegexPattern>) : AbstractLexer(source) {
+abstract class RegexLexer(
+    source: CharSequence,
+    private val patterns: List<TokenRegexPattern>,
+) : AbstractLexer(source) {
     /**
      * Adds a token to fill the gap between the last matched index and [untilIndex], if there is any.
      * @param untilIndex end of the gap range
      * @see createFillToken
      */
-    private fun MutableList<RawToken>.pushFillToken(untilIndex: Int) {
+    private fun MutableList<RawTokenWrapper>.pushFillToken(untilIndex: Int) {
         if (untilIndex > currentIndex) {
             createFillToken(position = currentIndex until untilIndex)?.let { this += it }
         }
@@ -28,7 +32,7 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
      * @param result result of the [Regex] match
      * @return stream of matched tokens
      */
-    private fun extractMatchingTokens(result: MatchResult): List<RawToken> =
+    private fun extractMatchingTokens(result: MatchResult): List<RawTokenWrapper> =
         buildList {
             patterns.forEach { pattern ->
                 val group = result.groups[pattern.name] ?: return@forEach
@@ -37,10 +41,9 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
                 // The token itself.
                 val token =
                     RawToken(
-                        type = pattern.tokenType,
                         text = group.value,
                         position = range,
-                    )
+                    ).let { pattern.tokenWrapper(it) }
 
                 // Text tokens are substrings that were not captured by any pattern.
                 // These uncaptured groups are scanned and converted to tokens.
@@ -52,7 +55,7 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
             }
         }
 
-    override fun tokenize(): List<RawToken> =
+    override fun tokenize(): List<RawTokenWrapper> =
         buildList {
             currentIndex = 0
 
@@ -71,12 +74,12 @@ abstract class RegexLexer(source: CharSequence, private val patterns: List<Token
      * @param position range of the uncaptured group
      * @return a new token that represents the uncaptured content in order to fill the gaps, or `null` to not fill gaps
      */
-    abstract fun createFillToken(position: IntRange): RawToken?
+    abstract fun createFillToken(position: IntRange): RawTokenWrapper?
 
     /**
      * Performs operations on the final (post-tokenization) list of [tokens].
      * @param tokens unprocessed tokenization output
      * @return processed tokenization output
      */
-    abstract fun manipulate(tokens: List<RawToken>): List<RawToken>
+    abstract fun manipulate(tokens: List<RawTokenWrapper>): List<RawTokenWrapper>
 }

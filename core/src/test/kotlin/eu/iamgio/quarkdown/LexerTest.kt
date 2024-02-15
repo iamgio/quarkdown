@@ -2,11 +2,11 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.WhitespaceTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.type.BlockTokenType
-import eu.iamgio.quarkdown.lexer.type.Token
 import eu.iamgio.quarkdown.lexer.type.WhitespaceTokenType
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
 import kotlin.test.Test

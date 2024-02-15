@@ -1,11 +1,7 @@
 package eu.iamgio.quarkdown.lexer.type
 
-/**
- * A token that may contain nested tokens.
- */
-interface NestableTokenType {
-    val children: List<Token>
-}
+import eu.iamgio.quarkdown.lexer.NestableTokenType
+import eu.iamgio.quarkdown.lexer.Token
 
 /**
  * A new line.

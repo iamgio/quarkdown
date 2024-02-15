@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.lexer.regex.pattern
 
-import eu.iamgio.quarkdown.lexer.type.Token
+import eu.iamgio.quarkdown.lexer.RawToken
+import eu.iamgio.quarkdown.lexer.RawTokenWrapper
+import eu.iamgio.quarkdown.lexer.Token
 
 /**
  * A [Regex] pattern that captures a corresponding [Token] from a raw string.
@@ -13,9 +15,9 @@ interface TokenRegexPattern {
     val name: String
 
     /**
-     * Type of token this pattern captures.
+     * A function that wraps a general token into its specific wrapper.
      */
-    val tokenType: Token
+    val tokenWrapper: (RawToken) -> RawTokenWrapper
 
     /**
      * Regex pattern to match.
