@@ -15,30 +15,30 @@ import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 
 /**
  * A visitor for block [eu.iamgio.quarkdown.lexer.TokenWrapper]s.
- * @param O output type of the `visit` methods
+ * @param T output type of the `visit` methods
  */
-interface BlockTokenVisitor<O> {
-    fun visit(token: NewlineToken): O
+interface BlockTokenVisitor<T> {
+    fun visit(token: NewlineToken): T
 
-    fun visit(token: BlockCodeToken): O
+    fun visit(token: BlockCodeToken): T
 
-    fun visit(token: FencesCodeToken): O
+    fun visit(token: FencesCodeToken): T
 
-    fun visit(token: HorizontalRuleToken): O
+    fun visit(token: HorizontalRuleToken): T
 
-    fun visit(token: HeadingToken): O
+    fun visit(token: HeadingToken): T
 
-    fun visit(token: SetextHeadingToken): O
+    fun visit(token: SetextHeadingToken): T
 
-    fun visit(token: LinkDefinitionToken): O
+    fun visit(token: LinkDefinitionToken): T
 
-    fun visit(token: ListItemToken): O
+    fun visit(token: ListItemToken): T
 
-    fun visit(token: HtmlToken): O
+    fun visit(token: HtmlToken): T
 
-    fun visit(token: ParagraphToken): O
+    fun visit(token: ParagraphToken): T
 
-    fun visit(token: BlockQuoteToken): O
+    fun visit(token: BlockQuoteToken): T
 
-    fun visit(token: BlockTextToken): O
+    fun visit(token: BlockTextToken): T
 }

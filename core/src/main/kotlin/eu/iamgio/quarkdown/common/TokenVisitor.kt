@@ -2,6 +2,6 @@ package eu.iamgio.quarkdown.common
 
 /**
  * A visitor for [eu.iamgio.quarkdown.lexer.TokenWrapper]s.
- * @param O output type of the `visit` methods
+ * @param T output type of the `visit` methods
  */
-interface TokenVisitor<O> : BlockTokenVisitor<O> // , InlineTokenVisitor<O>
+interface TokenVisitor<T> : BlockTokenVisitor<T> // , InlineTokenVisitor<O>

@@ -17,8 +17,8 @@ sealed class TokenWrapper(val data: Token) {
 
     /**
      * Accepts a visitor.
-     * @param O output type of the visitor
+     * @param T output type of the visitor
      * @return output of the visit
      */
-    abstract fun <O> accept(visitor: BlockTokenVisitor<O>): O // TODO change to general TokenParser
+    abstract fun <T> accept(visitor: BlockTokenVisitor<T>): T // TODO change to general TokenVisitor
 }
