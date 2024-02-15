@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.lexer.regex
 import eu.iamgio.quarkdown.lexer.AbstractLexer
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.TokenWrapper
+import eu.iamgio.quarkdown.lexer.TokenDecorator
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 
@@ -21,7 +21,7 @@ abstract class RegexLexer(
      * @param untilIndex end of the gap range
      * @see createFillToken
      */
-    private fun MutableList<TokenWrapper>.pushFillToken(untilIndex: Int) {
+    private fun MutableList<TokenDecorator>.pushFillToken(untilIndex: Int) {
         if (untilIndex > currentIndex) {
             createFillToken(position = currentIndex until untilIndex)?.let { this += it }
         }
@@ -33,7 +33,7 @@ abstract class RegexLexer(
      * @param result result of the [Regex] match
      * @return stream of matched tokens
      */
-    private fun extractMatchingTokens(result: MatchResult): List<TokenWrapper> =
+    private fun extractMatchingTokens(result: MatchResult): List<TokenDecorator> =
         buildList {
             patterns.forEach { pattern ->
                 val group = result.groups[pattern.name] ?: return@forEach
@@ -56,7 +56,7 @@ abstract class RegexLexer(
             }
         }
 
-    override fun tokenize(): List<TokenWrapper> =
+    override fun tokenize(): List<TokenDecorator> =
         buildList {
             currentIndex = 0
 
@@ -75,12 +75,12 @@ abstract class RegexLexer(
      * @param position range of the uncaptured group
      * @return a new token that represents the uncaptured content in order to fill the gaps, or `null` to not fill gaps
      */
-    abstract fun createFillToken(position: IntRange): TokenWrapper?
+    abstract fun createFillToken(position: IntRange): TokenDecorator?
 
     /**
      * Performs operations on the final (post-tokenization) list of [tokens].
      * @param tokens unprocessed tokenization output
      * @return processed tokenization output
      */
-    abstract fun manipulate(tokens: List<TokenWrapper>): List<TokenWrapper>
+    abstract fun manipulate(tokens: List<TokenDecorator>): List<TokenDecorator>
 }

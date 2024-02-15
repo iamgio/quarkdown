@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 
 /**
- * A visitor for block [eu.iamgio.quarkdown.lexer.TokenWrapper]s.
+ * A visitor for block [eu.iamgio.quarkdown.lexer.TokenDecorator]s.
  * @param T output type of the `visit` methods
  */
 interface BlockTokenVisitor<T> {
