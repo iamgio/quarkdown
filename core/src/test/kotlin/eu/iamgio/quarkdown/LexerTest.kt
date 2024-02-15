@@ -41,7 +41,7 @@ class LexerTest {
 
     @Test
     fun regex() {
-        val wrapper: (Token) -> TokenWrapper = { ParagraphToken(it) }
+        val wrap: (Token) -> TokenWrapper = { ParagraphToken(it) }
 
         val lexer =
             StandardRegexLexer(
@@ -49,21 +49,21 @@ class LexerTest {
                 listOf(
                     object : TokenRegexPattern {
                         override val name = "FIRST"
-                        override val tokenWrapper = wrapper
+                        override val wrap = wrap
                         override val regex = "AB.".toRegex()
                     },
                     object : TokenRegexPattern {
                         override val name = "SECOND"
-                        override val tokenWrapper = wrapper
+                        override val wrap = wrap
                         override val regex = "DE.?".toRegex()
                     },
                     object : TokenRegexPattern {
                         override val name = "NEWLINE"
-                        override val tokenWrapper = wrapper
+                        override val wrap = wrap
                         override val regex = "\\R".toRegex()
                     },
                 ),
-                fillTokenType = wrapper,
+                fillTokenType = wrap,
             )
 
         val tokens = lexer.tokenize().iterator()
