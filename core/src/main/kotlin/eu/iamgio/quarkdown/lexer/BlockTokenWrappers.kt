@@ -2,9 +2,9 @@ package eu.iamgio.quarkdown.lexer
 
 /**
  * A wrapper of a [Token] that may be parsed by a specific parser in order to extract information.
- * @param token the wrapped token
+ * @param data the wrapped token
  */
-sealed class TokenWrapper(val token: Token)
+sealed class TokenWrapper(val data: Token)
 
 /**
  * @see eu.iamgio.quarkdown.ast.Newline

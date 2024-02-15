@@ -16,10 +16,10 @@ object DebugFormatter {
 
         return tokens.joinToString(separator = "\n") { token ->
             val type = "type: ${token.javaClass.simpleName.removeSuffix("Token")}"
-            val pos = "pos: ${token.token.position}"
+            val pos = "pos: ${token.data.position}"
 
             val content =
-                token.token.text
+                token.data.text
                     .replace("\\R".toRegex(), "\\\\n")
                     .replace("\t", "\\t")
                     .replace("    ", "\\t")

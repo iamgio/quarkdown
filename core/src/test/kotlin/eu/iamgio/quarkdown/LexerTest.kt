@@ -68,7 +68,7 @@ class LexerTest {
 
         val tokens = lexer.tokenize().iterator()
 
-        fun nextText() = tokens.next().token.text
+        fun nextText() = tokens.next().data.text
 
         assertEquals("ABC", nextText())
         assertEquals("\n", nextText())
