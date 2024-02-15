@@ -1,19 +1,19 @@
 package eu.iamgio.quarkdown.lexer.regex.pattern
 
-import eu.iamgio.quarkdown.lexer.RawBlockCode
-import eu.iamgio.quarkdown.lexer.RawBlockQuote
-import eu.iamgio.quarkdown.lexer.RawBlockText
-import eu.iamgio.quarkdown.lexer.RawFencesCode
-import eu.iamgio.quarkdown.lexer.RawHeading
-import eu.iamgio.quarkdown.lexer.RawHorizontalRule
-import eu.iamgio.quarkdown.lexer.RawHtml
-import eu.iamgio.quarkdown.lexer.RawLinkDefinition
-import eu.iamgio.quarkdown.lexer.RawListItem
-import eu.iamgio.quarkdown.lexer.RawNewline
-import eu.iamgio.quarkdown.lexer.RawParagraph
-import eu.iamgio.quarkdown.lexer.RawSetextHeading
-import eu.iamgio.quarkdown.lexer.RawToken
-import eu.iamgio.quarkdown.lexer.RawTokenWrapper
+import eu.iamgio.quarkdown.lexer.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.BlockTextToken
+import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.HeadingToken
+import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.ParagraphToken
+import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenWrapper
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
@@ -22,51 +22,51 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 enum class BlockTokenRegexPattern(
-    override val tokenWrapper: (RawToken) -> RawTokenWrapper,
+    override val tokenWrapper: (Token) -> TokenWrapper,
     override val regex: Regex,
 ) : TokenRegexPattern {
     BLOCKQUOTE(
-        { RawBlockQuote(it) },
+        { BlockQuoteToken(it) },
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
             .withReference("paragraph", PARAGRAPH_PATTERN.pattern)
             .build(RegexOption.MULTILINE),
     ),
     BLOCKCODE(
-        { RawBlockCode(it) },
+        { BlockCodeToken(it) },
         "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
             .toRegex(RegexOption.MULTILINE),
     ),
     LINKDEFINITION(
-        { RawLinkDefinition(it) },
+        { LinkDefinitionToken(it) },
         RegexBuilder("^ {0,3}\\[(label)\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *(?:\\n+|$)")
             .withReference("label", BLOCK_LABEL_HELPER)
             .withReference("title", "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))")
             .build(),
     ),
     FENCESCODE(
-        { RawFencesCode(it) },
+        { FencesCodeToken(it) },
         "^ {0,3}((`{3,})(\\s*.+\\R)?((.|\\s)+?)(`{3,}))|((~{3,})(\\s*.+\\R)?((.|\\s)+?)(~{3,}))"
             .toRegex(),
     ),
     HEADING(
-        { RawHeading(it) },
+        { HeadingToken(it) },
         "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
             .toRegex(),
     ),
     HORIZONTALRULE(
-        { RawHorizontalRule(it) },
+        { HorizontalRuleToken(it) },
         HORIZONTAL_RULE_HELPER
             .toRegex(),
     ),
     SETEXTHEADING(
-        { RawSetextHeading(it) },
+        { SetextHeadingToken(it) },
         RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
             .build(),
     ),
     HTML(
-        { RawHtml(it) },
+        { HtmlToken(it) },
         RegexBuilder(HTML_HELPER)
             .withReference("comment", COMMENT_HELPER)
             .withReference("tag", TAG_HELPER)
@@ -77,22 +77,22 @@ enum class BlockTokenRegexPattern(
             .build(),
     ),
     LIST(
-        { RawListItem(it) },
+        { ListItemToken(it) },
         RegexBuilder("^( {0,3}bullet)([ \\t][^\\n]+?)?(?:\\n|\$)")
             .withReference("bullet", BULLET_HELPER)
             .build(),
     ),
     NEWLINE(
-        { RawNewline(it) },
+        { NewlineToken(it) },
         "^(?: *(?:\\n|$))+"
             .toRegex(),
     ),
     PARAGRAPH(
-        { RawParagraph(it) },
+        { ParagraphToken(it) },
         PARAGRAPH_PATTERN,
     ),
     BLOCKTEXT(
-        { RawBlockText(it) },
+        { BlockTextToken(it) },
         "^[^\\n]+"
             .toRegex(),
     ),

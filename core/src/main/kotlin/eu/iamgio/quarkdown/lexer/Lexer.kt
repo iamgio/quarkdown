@@ -15,5 +15,5 @@ interface Lexer {
      * Disassembles some raw string into smaller tokens.
      * @return the ordered list of tokens
      */
-    fun tokenize(): List<RawTokenWrapper>
+    fun tokenize(): List<TokenWrapper>
 }

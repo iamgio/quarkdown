@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.lexer.regex
 
 import eu.iamgio.quarkdown.lexer.AbstractLexer
-import eu.iamgio.quarkdown.lexer.RawToken
-import eu.iamgio.quarkdown.lexer.RawTokenWrapper
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenWrapper
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 
@@ -20,7 +20,7 @@ abstract class RegexLexer(
      * @param untilIndex end of the gap range
      * @see createFillToken
      */
-    private fun MutableList<RawTokenWrapper>.pushFillToken(untilIndex: Int) {
+    private fun MutableList<TokenWrapper>.pushFillToken(untilIndex: Int) {
         if (untilIndex > currentIndex) {
             createFillToken(position = currentIndex until untilIndex)?.let { this += it }
         }
@@ -32,7 +32,7 @@ abstract class RegexLexer(
      * @param result result of the [Regex] match
      * @return stream of matched tokens
      */
-    private fun extractMatchingTokens(result: MatchResult): List<RawTokenWrapper> =
+    private fun extractMatchingTokens(result: MatchResult): List<TokenWrapper> =
         buildList {
             patterns.forEach { pattern ->
                 val group = result.groups[pattern.name] ?: return@forEach
@@ -40,7 +40,7 @@ abstract class RegexLexer(
 
                 // The token itself.
                 val token =
-                    RawToken(
+                    Token(
                         text = group.value,
                         position = range,
                     ).let { pattern.tokenWrapper(it) }
@@ -55,7 +55,7 @@ abstract class RegexLexer(
             }
         }
 
-    override fun tokenize(): List<RawTokenWrapper> =
+    override fun tokenize(): List<TokenWrapper> =
         buildList {
             currentIndex = 0
 
@@ -74,12 +74,12 @@ abstract class RegexLexer(
      * @param position range of the uncaptured group
      * @return a new token that represents the uncaptured content in order to fill the gaps, or `null` to not fill gaps
      */
-    abstract fun createFillToken(position: IntRange): RawTokenWrapper?
+    abstract fun createFillToken(position: IntRange): TokenWrapper?
 
     /**
      * Performs operations on the final (post-tokenization) list of [tokens].
      * @param tokens unprocessed tokenization output
      * @return processed tokenization output
      */
-    abstract fun manipulate(tokens: List<RawTokenWrapper>): List<RawTokenWrapper>
+    abstract fun manipulate(tokens: List<TokenWrapper>): List<TokenWrapper>
 }

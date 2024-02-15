@@ -1,13 +1,13 @@
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.lexer.RawToken
-import eu.iamgio.quarkdown.lexer.type.Heading
+import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.lexer.Token
 
 /**
  *
  */
 class HeadingParser : TokenParser<Heading> {
-    override fun parse(raw: RawToken): Heading {
+    override fun parse(raw: Token): Heading {
         TODO()
     }
 }

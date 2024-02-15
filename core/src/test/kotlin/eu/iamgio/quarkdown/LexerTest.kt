@@ -1,20 +1,20 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockLexer
+import eu.iamgio.quarkdown.lexer.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.HeadingToken
+import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.Lexer
-import eu.iamgio.quarkdown.lexer.RawBlockCode
-import eu.iamgio.quarkdown.lexer.RawBlockQuote
-import eu.iamgio.quarkdown.lexer.RawFencesCode
-import eu.iamgio.quarkdown.lexer.RawHeading
-import eu.iamgio.quarkdown.lexer.RawHorizontalRule
-import eu.iamgio.quarkdown.lexer.RawHtml
-import eu.iamgio.quarkdown.lexer.RawLinkDefinition
-import eu.iamgio.quarkdown.lexer.RawListItem
-import eu.iamgio.quarkdown.lexer.RawNewline
-import eu.iamgio.quarkdown.lexer.RawParagraph
-import eu.iamgio.quarkdown.lexer.RawSetextHeading
-import eu.iamgio.quarkdown.lexer.RawToken
-import eu.iamgio.quarkdown.lexer.RawTokenWrapper
+import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.ParagraphToken
+import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenWrapper
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
@@ -41,7 +41,7 @@ class LexerTest {
 
     @Test
     fun regex() {
-        val wrapper: (RawToken) -> RawTokenWrapper = { RawParagraph(it) }
+        val wrapper: (Token) -> TokenWrapper = { ParagraphToken(it) }
 
         val lexer =
             StandardRegexLexer(
@@ -85,28 +85,28 @@ class LexerTest {
     fun blocks() {
         val tokens =
             BlockLexer(readSource("/lexing/blocks.md")).tokenize().asSequence()
-                .filter { it !is RawNewline }
+                .filter { it !is NewlineToken }
                 .iterator()
 
-        assertIs<RawHeading>(tokens.next())
-        assertIs<RawParagraph>(tokens.next())
-        assertIs<RawHeading>(tokens.next())
-        assertIs<RawParagraph>(tokens.next())
-        assertIs<RawSetextHeading>(tokens.next())
-        assertIs<RawParagraph>(tokens.next())
-        assertIs<RawListItem>(tokens.next())
-        assertIs<RawParagraph>(tokens.next())
-        assertIs<RawListItem>(tokens.next())
-        assertIs<RawListItem>(tokens.next())
-        assertIs<RawListItem>(tokens.next())
-        assertIs<RawBlockQuote>(tokens.next())
-        assertIs<RawBlockQuote>(tokens.next())
-        assertIs<RawBlockCode>(tokens.next())
-        assertIs<RawFencesCode>(tokens.next())
-        assertIs<RawHorizontalRule>(tokens.next())
-        assertIs<RawHtml>(tokens.next())
-        assertIs<RawLinkDefinition>(tokens.next())
-        assertIs<RawHorizontalRule>(tokens.next())
+        assertIs<HeadingToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<HeadingToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<SetextHeadingToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<ListItemToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<ListItemToken>(tokens.next())
+        assertIs<ListItemToken>(tokens.next())
+        assertIs<ListItemToken>(tokens.next())
+        assertIs<BlockQuoteToken>(tokens.next())
+        assertIs<BlockQuoteToken>(tokens.next())
+        assertIs<BlockCodeToken>(tokens.next())
+        assertIs<FencesCodeToken>(tokens.next())
+        assertIs<HorizontalRuleToken>(tokens.next())
+        assertIs<HtmlToken>(tokens.next())
+        assertIs<LinkDefinitionToken>(tokens.next())
+        assertIs<HorizontalRuleToken>(tokens.next())
     }
 
     /*@Test

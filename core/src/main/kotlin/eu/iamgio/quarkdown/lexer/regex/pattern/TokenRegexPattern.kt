@@ -1,11 +1,11 @@
 package eu.iamgio.quarkdown.lexer.regex.pattern
 
-import eu.iamgio.quarkdown.lexer.RawToken
-import eu.iamgio.quarkdown.lexer.RawTokenWrapper
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenWrapper
 
 /**
- * A [Regex] pattern that captures a corresponding [Token] from a raw string.
+ * A [Regex] pattern that captures a corresponding [Node] from a raw string.
  */
 interface TokenRegexPattern {
     /**
@@ -17,7 +17,7 @@ interface TokenRegexPattern {
     /**
      * A function that wraps a general token into its specific wrapper.
      */
-    val tokenWrapper: (RawToken) -> RawTokenWrapper
+    val tokenWrapper: (Token) -> TokenWrapper
 
     /**
      * Regex pattern to match.

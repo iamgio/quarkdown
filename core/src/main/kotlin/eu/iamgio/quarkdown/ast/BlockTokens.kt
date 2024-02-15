@@ -1,12 +1,9 @@
-package eu.iamgio.quarkdown.lexer.type
-
-import eu.iamgio.quarkdown.lexer.NestableTokenType
-import eu.iamgio.quarkdown.lexer.Token
+package eu.iamgio.quarkdown.ast
 
 /**
  * A new line.
  */
-class Newline : Token
+class Newline : Node
 
 /**
  * A code block defined via indentation.
@@ -17,7 +14,7 @@ class Newline : Token
  */
 data class BlockCode(
     val code: String,
-) : Token
+) : Node
 
 /**
  * A code block defined via fences.
@@ -31,7 +28,7 @@ data class BlockCode(
 data class FencesCode(
     val code: String,
     val lang: String?,
-) : Token
+) : Node
 
 /**
  * A horizontal line.
@@ -40,7 +37,7 @@ data class FencesCode(
  * ---
  * ```
  */
-class HorizontalRule : Token
+class HorizontalRule : Node
 
 /**
  * A heading defined via prefix symbols.
@@ -57,7 +54,7 @@ class HorizontalRule : Token
 data class Heading(
     val depth: Int,
     val text: String,
-) : Token
+) : Node
 
 /**
  * Creation of a link reference.
@@ -86,8 +83,8 @@ data class LinkDefinition(
 data class ListItem(
     val text: String,
     val ordered: Boolean,
-    override val children: List<Token>,
-) : NestableTokenType
+    override val children: List<Node>,
+) : NestableNode
 
 /**
  * An HTML block.
@@ -100,15 +97,15 @@ data class ListItem(
  */
 data class Html(
     val content: String,
-) : Token
+) : Node
 
 /**
  * A text paragraph.
  */
 data class Paragraph(
     val text: String,
-    override val children: List<Token>,
-) : NestableTokenType
+    override val children: List<Node>,
+) : NestableNode
 
 /**
  * A block quote.
@@ -119,10 +116,10 @@ data class Paragraph(
  */
 data class BlockQuote(
     val text: String,
-    override val children: List<Token>,
-) : NestableTokenType
+    override val children: List<Node>,
+) : NestableNode
 
 /**
  * Anything else (should not happen).
  */
-class BlockText : Token
+class BlockText : Node

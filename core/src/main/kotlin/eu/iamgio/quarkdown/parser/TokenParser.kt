@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.lexer.RawToken
+import eu.iamgio.quarkdown.lexer.Token
 
 /**
  *
  */
 interface TokenParser<T> {
-    fun parse(raw: RawToken): T
+    fun parse(raw: Token): T
 }
