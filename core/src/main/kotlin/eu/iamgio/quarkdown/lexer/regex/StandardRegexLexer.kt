@@ -1,9 +1,7 @@
 package eu.iamgio.quarkdown.lexer.regex
 
-import eu.iamgio.quarkdown.lexer.RawBlockText
 import eu.iamgio.quarkdown.lexer.RawToken
 import eu.iamgio.quarkdown.lexer.RawTokenWrapper
-import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
@@ -15,7 +13,7 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 open class StandardRegexLexer(
     source: CharSequence,
     patterns: List<TokenRegexPattern>,
-    private val fillTokenType: Token? = null,
+    private val fillTokenType: ((RawToken) -> RawTokenWrapper)? = null,
 ) : RegexLexer(source, patterns) {
     override fun createFillToken(position: IntRange): RawTokenWrapper? {
         if (fillTokenType == null) {
@@ -24,12 +22,10 @@ open class StandardRegexLexer(
 
         val text = source.substring(position)
 
-        return RawBlockText(
-            RawToken(
-                text,
-                position,
-            ),
-        )
+        return RawToken(
+            text,
+            position,
+        ).let { fillTokenType.invoke(it) }
     }
 
     override fun manipulate(tokens: List<RawTokenWrapper>) = tokens

@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.lexer.RawBlockQuote
 import eu.iamgio.quarkdown.lexer.RawBlockText
 import eu.iamgio.quarkdown.lexer.RawFencesCode
 import eu.iamgio.quarkdown.lexer.RawHeading
-import eu.iamgio.quarkdown.lexer.RawHorizontalLine
+import eu.iamgio.quarkdown.lexer.RawHorizontalRule
 import eu.iamgio.quarkdown.lexer.RawHtml
 import eu.iamgio.quarkdown.lexer.RawLinkDefinition
 import eu.iamgio.quarkdown.lexer.RawListItem
@@ -54,7 +54,7 @@ enum class BlockTokenRegexPattern(
             .toRegex(),
     ),
     HORIZONTALRULE(
-        { RawHorizontalLine(it) },
+        { RawHorizontalRule(it) },
         HORIZONTAL_RULE_HELPER
             .toRegex(),
     ),

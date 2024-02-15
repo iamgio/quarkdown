@@ -24,7 +24,7 @@ class RawFencesCode(token: RawToken) : RawTokenWrapper(token)
 /**
  * @see eu.iamgio.quarkdown.lexer.type.HorizontalRule
  */
-class RawHorizontalLine(token: RawToken) : RawTokenWrapper(token)
+class RawHorizontalRule(token: RawToken) : RawTokenWrapper(token)
 
 /**
  * @see eu.iamgio.quarkdown.lexer.type.Heading
