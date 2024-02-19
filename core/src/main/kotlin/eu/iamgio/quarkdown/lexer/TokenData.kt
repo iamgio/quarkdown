@@ -5,9 +5,11 @@ package eu.iamgio.quarkdown.lexer
  * For instance, the Markdown code `Hello _Quarkdown_` contains the tokens `Hello `, `_`, `Quarkdown`, `_`.
  * @param text the substring extracted from the source code, also known as _lexeme_.
  * @param position location of the token within the source code
+ * @param groups capture groups for this token (not empty only if this was extracted via regex)
  * @see Token
  */
 open class TokenData(
     val text: String,
     val position: IntRange,
+    val groups: List<MatchGroup> = emptyList(),
 )
