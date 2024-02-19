@@ -44,7 +44,7 @@ abstract class RegexLexer(
                     TokenData(
                         text = group.value,
                         position = range,
-                        groups = result.groups.filterNotNull(),
+                        groups = result.groups.asSequence().filterNotNull().map { it.value },
                     ).let { pattern.wrap(it) }
 
                 // Text tokens are substrings that were not captured by any pattern.
