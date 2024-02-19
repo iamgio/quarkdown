@@ -1,13 +1,25 @@
 package eu.iamgio.quarkdown.lexer
 
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.common.BlockTokenVisitor
+import eu.iamgio.quarkdown.parser.BlockTokenParser
+
 /**
- * A single, usually small, component of the source code that stores a chunk of information.
- * For instance, the Markdown code `Hello _Quarkdown_` contains the tokens `Hello `, `_`, `Quarkdown`, `_`.
+ * A wrapper of a [TokenData] that may be parsed in order to extract information.
  * A token can be parsed into a [eu.iamgio.quarkdown.ast.Node].
- * @param text the substring extracted from the source code, also known as _lexeme_.
- * @param position location of the token within the source code
+ * @param data the wrapped token
  */
-open class Token(
-    val text: String,
-    val position: IntRange,
-)
+sealed class Token(val data: TokenData) {
+    /**
+     * Parses this token into an AST [Node].
+     * @param parser parser to delegate the parsing process to
+     */
+    fun parse(parser: BlockTokenParser): Node = this.accept(parser)
+
+    /**
+     * Accepts a visitor.
+     * @param T output type of the visitor
+     * @return output of the visit
+     */
+    abstract fun <T> accept(visitor: BlockTokenVisitor<T>): T // TODO change to general TokenVisitor
+}

@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.TokenDecorator
+import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
@@ -22,7 +22,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 enum class BlockTokenRegexPattern(
-    override val wrap: (Token) -> TokenDecorator,
+    override val wrap: (TokenData) -> Token,
     override val regex: Regex,
 ) : TokenRegexPattern {
     BLOCKQUOTE(

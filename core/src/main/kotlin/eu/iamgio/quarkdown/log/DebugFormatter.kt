@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.log
 
-import eu.iamgio.quarkdown.lexer.TokenDecorator
+import eu.iamgio.quarkdown.lexer.Token
 
 /**
  * Utilities to log prettier debugging data.
@@ -11,7 +11,7 @@ object DebugFormatter {
      * @param tokens tokens to format
      * @return formatted string
      */
-    fun formatTokens(tokens: Iterable<TokenDecorator>): String {
+    fun formatTokens(tokens: Iterable<Token>): String {
         val format = "%-25s %-20s %s" // Columns
 
         return tokens.joinToString(separator = "\n") { token ->

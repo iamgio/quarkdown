@@ -5,83 +5,83 @@ import eu.iamgio.quarkdown.common.BlockTokenVisitor
 /**
  * @see eu.iamgio.quarkdown.ast.Newline
  */
-class NewlineToken(token: Token) : TokenDecorator(token) {
+class NewlineToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.BlockCode
  */
-class BlockCodeToken(token: Token) : TokenDecorator(token) {
+class BlockCodeToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.Newline
  */
-class FencesCodeToken(token: Token) : TokenDecorator(token) {
+class FencesCodeToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.HorizontalRule
  */
-class HorizontalRuleToken(token: Token) : TokenDecorator(token) {
+class HorizontalRuleToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.Heading
  */
-class HeadingToken(token: Token) : TokenDecorator(token) {
+class HeadingToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.Heading
  */
-class SetextHeadingToken(token: Token) : TokenDecorator(token) {
+class SetextHeadingToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.LinkDefinition
  */
-class LinkDefinitionToken(token: Token) : TokenDecorator(token) {
+class LinkDefinitionToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.ListItem
  */
-class ListItemToken(token: Token) : TokenDecorator(token) {
+class ListItemToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.Html
  */
-class HtmlToken(token: Token) : TokenDecorator(token) {
+class HtmlToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.Paragraph
  */
-class ParagraphToken(token: Token) : TokenDecorator(token) {
+class ParagraphToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.BlockQuote
  */
-class BlockQuoteToken(token: Token) : TokenDecorator(token) {
+class BlockQuoteToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see eu.iamgio.quarkdown.ast.BlockText
  */
-class BlockTextToken(token: Token) : TokenDecorator(token) {
+class BlockTextToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }

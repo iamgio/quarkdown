@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.TokenDecorator
+import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
@@ -41,7 +41,7 @@ class LexerTest {
 
     @Test
     fun regex() {
-        val wrap: (Token) -> TokenDecorator = { ParagraphToken(it) }
+        val wrap: (TokenData) -> Token = { ParagraphToken(it) }
 
         val lexer =
             StandardRegexLexer(
