@@ -13,8 +13,8 @@ class Newline : Node
  * ```
  */
 data class BlockCode(
-    val code: String,
-) : Node
+    override val text: String,
+) : TextNode
 
 /**
  * A code block defined via fences.
@@ -26,9 +26,9 @@ data class BlockCode(
  * ~~~
  */
 data class FencesCode(
-    val code: String,
+    override val text: String,
     val lang: String?,
-) : Node
+) : TextNode
 
 /**
  * A horizontal line.
@@ -53,8 +53,8 @@ class HorizontalRule : Node
  */
 data class Heading(
     val depth: Int,
-    val text: String,
-) : Node
+    override val text: String,
+) : TextNode
 
 /**
  * Creation of a link reference.
@@ -64,10 +64,10 @@ data class Heading(
  * ```
  */
 data class LinkDefinition(
-    val label: String,
+    override val text: String,
     val url: String,
     val title: String?,
-)
+) : TextNode
 
 /**
  * A list, either ordered or unordered.
@@ -81,10 +81,10 @@ data class LinkDefinition(
  * ```
  */
 data class ListItem(
-    val text: String,
+    override val text: String,
     val ordered: Boolean,
     override val children: List<Node>,
-) : NestableNode
+) : NestableNode, TextNode
 
 /**
  * An HTML block.
@@ -103,9 +103,9 @@ data class Html(
  * A text paragraph.
  */
 data class Paragraph(
-    val text: String,
+    override val text: String,
     override val children: List<Node>,
-) : NestableNode
+) : NestableNode, TextNode
 
 /**
  * A block quote.
@@ -115,9 +115,9 @@ data class Paragraph(
  * ```
  */
 data class BlockQuote(
-    val text: String,
+    override val text: String,
     override val children: List<Node>,
-) : NestableNode
+) : NestableNode, TextNode
 
 /**
  * Anything else (should not happen).

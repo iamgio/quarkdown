@@ -11,3 +11,10 @@ interface Node
 interface NestableNode : Node {
     val children: List<Node>
 }
+
+/**
+ * A node that may contain text.
+ */
+interface TextNode : Node {
+    val text: String
+}
