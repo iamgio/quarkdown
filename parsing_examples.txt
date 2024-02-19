@@ -1,0 +1,170 @@
+== HEADING ==
+
+# Title
+
+Output: Heading[text=Title, depth=1]
+
+## Title ####
+
+Output: Heading[text=Title, depth=2]
+
+
+== SETEXT HEADING ==
+
+Title
+===
+
+Output: Heading[text=Title, depth=1]
+
+Title
+-----
+
+Output: Heading[text=Title, depth=2]
+
+
+== PARAGRAPH ==
+
+Text
+
+Output: Paragraph[text=Text]
+
+Text
+with line break
+
+Output: Paragraph[text=Text\nwith line break]
+
+Text
+with lazy line
+
+Output: Paragraph[text=Text with lazy line]
+
+
+== BLOCKQUOTE ==
+
+> Text
+
+Output: BlockQuote[text=Text]
+
+> Text
+> with line break
+
+Output: BlockQuote[text=Text\nwith line break]
+
+> Text
+> with lazy line
+
+Output: BlockQuote[text=Text with lazy line]
+
+> Text
+>> Nested
+
+Output: BlockQuote[text=Text, children=BlockQuote[text=Nested]]
+
+> - Nested list
+
+Output: BlockQuote[text=, children=ListItem[text=Nested list]]
+
+
+== BLOCK CODE ==
+
+    Code line 1
+    Code line 2
+    Code line 3
+
+Output: BlockCode[text=Code line 1\nCode line 2\nCode line 3]
+
+
+== FENCES BLOCK ==
+
+```
+Code line 1
+Code line 2
+Code line 3
+```
+
+Output: FencesCode[text=Code line 1\nCode line 2\nCode line 3]
+
+```java
+Code line 1
+Code line 2
+```
+
+Output: FencesCode[text=Code line 1\nCode line 2, language=java]
+
+== LATEX BLOCK ==
+
+$$
+Expression
+$$
+
+Output: LatexBlock[text=Expression]
+
+
+== HORIZONTAL RULE ==
+
+---
+
+Output: HorizontalRule
+
+*****
+
+Output: HorizontalRule
+
+
+== LINK DEFINITION ==
+
+[Label]: url "Title"
+
+Output:
+LinkDefinition(label=Label, url=url, title=Title)
+
+[Label]: url (Title line 1
+Title line 2)
+
+Output: LinkDefinition(label=Label, url=url, title=Title line 1\nTitle line 2)
+
+
+== UNORDERED LIST ==
+
+- Text
+
+Output: UnorderedListItem[text=Text]
+
+- Text
+  with line break
+
+Output: UnorderedListItem[text=Text\nwith line break]
+
+- Text
+  with lazy line
+
+Output: UnorderedListItem[text=Text with line break]
+
+- Text
+
+    Nested
+
+Output: UnorderedListItem[text=Text, children=Paragraph[text=Nested]]
+
+
+== ORDERED LIST ==
+
+1. Text
+
+Output: OrderedListItem[text=Text]
+
+1. Text
+  with line break
+
+Output: OrderedListItem[text=Text\nwith line break]
+
+1. Text
+  with lazy line
+
+Output: OrderedListItem[text=Text with line break]
+
+1. Text
+
+    Nested
+
+Output: OrderedListItem[text=Text, children=Paragraph[text=Nested]]
