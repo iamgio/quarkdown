@@ -7,10 +7,11 @@ boolean         -> "yes"|"no"
 range           -> NUMBER? ".." NUMBER?
 
 markdown        -> (block)*
-block           -> (paragraph|heading|blockquote|codeblock|orderedlist|unorderedlist|latexblock|hrule|linkref|footnote) newline
+block           -> (paragraph|heading|setextheading|blockquote|codeblock|orderedlist|unorderedlist|latexblock|hrule|linkref|footnote) newline
 subblock        -> newline indent block
 paragraph       -> block newline
 heading         -> "#"{1,6} markdown_line "#"*
+setextheading   -> markdown_line newline ("="+|"-"+)
 blockquote      -> (">" block)+
 codeblock       -> ("```" STRING? newline STRING newline "```")|(indent indent STRING newline)*
 orderedlist     -> "1. " block subblock* ("\d. " block subblock*)*
