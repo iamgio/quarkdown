@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.lexer.BlockLexer
@@ -116,5 +117,11 @@ class ParserTest {
             assertEquals("let x;", text)
             assertEquals("ecmascript 6", lang)
         }
+    }
+
+    @Test
+    fun horizontalRule() {
+        val nodes = nodesIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
+        assertEquals(6, nodes.asSequence().count())
     }
 }

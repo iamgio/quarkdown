@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -55,7 +56,7 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: HorizontalRuleToken): Node {
-        TODO("Not yet implemented")
+        return HorizontalRule()
     }
 
     override fun visit(token: HeadingToken): Node {
