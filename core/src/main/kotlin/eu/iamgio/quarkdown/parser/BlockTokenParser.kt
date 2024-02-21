@@ -87,7 +87,16 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: SetextHeadingToken): Node {
-        TODO("Not yet implemented")
+        val groups = groupsIterator(token, consumeAmount = 2)
+        return Heading(
+            text = groups.next().trim(),
+            depth =
+                when (groups.next().firstOrNull()) {
+                    '=' -> 1
+                    '-' -> 2
+                    else -> throw IllegalStateException("Invalid setext heading characters") // Should not happen
+                },
+        )
     }
 
     override fun visit(token: LinkDefinitionToken): Node {

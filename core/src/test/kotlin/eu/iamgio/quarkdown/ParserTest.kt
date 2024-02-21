@@ -86,6 +86,24 @@ class ParserTest {
     }
 
     @Test
+    fun setextHeading() {
+        val nodes = nodesIterator<Heading>(readSource("/parsing/setextheading.md"))
+
+        repeat(3) {
+            with(nodes.next()) {
+                assertEquals("Title 1", text)
+                assertEquals(1, depth)
+            }
+        }
+        repeat(3) {
+            with(nodes.next()) {
+                assertEquals("Title 2", text)
+                assertEquals(2, depth)
+            }
+        }
+    }
+
+    @Test
     fun blockCode() {
         val nodes = nodesIterator<Code>(readSource("/parsing/blockcode.md"))
 
