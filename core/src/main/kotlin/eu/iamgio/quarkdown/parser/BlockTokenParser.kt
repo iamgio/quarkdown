@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.parser
 
+import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -46,7 +47,11 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: FencesCodeToken): Node {
-        TODO("Not yet implemented")
+        val groups = groupsIterator(token, consumeAmount = 4)
+        return FencesCode(
+            lang = groups.next().takeIf { it.isNotBlank() }?.trim(),
+            text = groups.next().trim(),
+        )
     }
 
     override fun visit(token: HorizontalRuleToken): Node {
