@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -72,6 +73,48 @@ class ParserTest {
         with(nodes.next()) {
             assertEquals("Title with closing sequence", text)
             assertEquals(2, depth)
+        }
+    }
+
+    @Test
+    fun fencesCode() {
+        val nodes = nodesIterator<FencesCode>(readSource("/parsing/fencescode.md"))
+
+        with(nodes.next()) {
+            assertEquals("Code", text)
+            assertEquals(null, lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code", text)
+            assertEquals(null, lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2", text)
+            assertEquals(null, lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\n    Code line 2", text)
+            assertEquals(null, lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code", text)
+            assertEquals("text", lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code", text)
+            assertEquals("text", lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2", text)
+            assertEquals("text", lang)
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\n    Code line 2", text)
+            assertEquals("text", lang)
+        }
+        with(nodes.next()) {
+            assertEquals("let x;", text)
+            assertEquals("ecmascript 6", lang)
         }
     }
 }
