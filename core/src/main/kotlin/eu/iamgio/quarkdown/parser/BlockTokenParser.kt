@@ -62,7 +62,16 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
         val groups = groupsIterator(token, consumeAmount = 2)
         return Heading(
             depth = groups.next().length,
-            text = groups.next().trim(),
+            text =
+                groups.next().trim().let {
+                    // Trim trailing #s preceeded by a space
+                    val trailingIndex = it.lastIndexOf(" #")
+                    if (trailingIndex >= 0) {
+                        it.substring(0, trailingIndex)
+                    } else {
+                        it
+                    }
+                },
         )
     }
 
