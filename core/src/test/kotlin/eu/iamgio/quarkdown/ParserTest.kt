@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.lexer.BlockLexer
@@ -11,6 +12,7 @@ import eu.iamgio.quarkdown.parser.BlockTokenParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * Parsing tests.
@@ -123,5 +125,15 @@ class ParserTest {
     fun horizontalRule() {
         val nodes = nodesIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
         assertEquals(6, nodes.asSequence().count())
+    }
+
+    @Test
+    fun html() {
+        val nodes = nodesIterator<Html>(readSource("/parsing/html.md"))
+
+        assertEquals("<p>Text</p>", nodes.next().content)
+        assertEquals("<p><i>Text</i></p>", nodes.next().content)
+        assertTrue { nodes.next().content.endsWith("</header>") }
+        assertTrue { nodes.next().content.endsWith("</html>") }
     }
 }

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.parser
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -89,7 +90,9 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: HtmlToken): Node {
-        TODO("Not yet implemented")
+        return Html(
+            content = token.data.text.trim(),
+        )
     }
 
     override fun visit(token: ParagraphToken): Node {
