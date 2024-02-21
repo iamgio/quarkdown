@@ -23,3 +23,9 @@ sealed class Token(val data: TokenData) {
      */
     abstract fun <T> accept(visitor: BlockTokenVisitor<T>): T // TODO change to general TokenVisitor
 }
+
+/**
+ * Parses a list of tokens into a list of AST [Node]s.
+ * @param parser parser to delegate the parsing process to
+ */
+fun Iterable<Token>.parseAll(parser: BlockTokenParser): List<Node> = this.map { it.parse(parser) }

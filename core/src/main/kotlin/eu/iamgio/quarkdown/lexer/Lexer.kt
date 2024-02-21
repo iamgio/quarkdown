@@ -16,4 +16,10 @@ interface Lexer {
      * @return the ordered list of tokens
      */
     fun tokenize(): List<Token>
+
+    /**
+     * @param source the content to be tokenized by the new lexer
+     * @return a new instance of this kind of lexer with [source] as its source
+     */
+    fun copyWith(source: CharSequence): Lexer
 }

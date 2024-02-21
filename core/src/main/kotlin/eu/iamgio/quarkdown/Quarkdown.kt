@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Document
 import eu.iamgio.quarkdown.lexer.BlockLexer
+import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.parser.BlockTokenParser
@@ -21,7 +22,8 @@ fun main(args: Array<String>) {
 
     Log.debug("Tokens: \n" + DebugFormatter.formatTokens(tokens))
 
-    val document = Document(children = tokens.map { it.parse(BlockTokenParser()) })
+    val parser = BlockTokenParser(lexer)
+    val document = Document(children = tokens.parseAll(parser))
 
     Log.debug(document)
 }

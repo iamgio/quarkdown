@@ -5,8 +5,11 @@ import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
+import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.parser.BlockTokenParser
@@ -19,8 +22,6 @@ import kotlin.test.assertTrue
  * Parsing tests.
  */
 class ParserTest {
-    private val blockParser = BlockTokenParser()
-
     /**
      * Tokenizes and parses a [source] code, parses each token.
      * @param source source code
@@ -32,9 +33,12 @@ class ParserTest {
         source: CharSequence,
         assertType: Boolean = true,
     ): Iterator<T> {
-        return BlockLexer(source).tokenize().asSequence()
+        val lexer = BlockLexer(source)
+        val parser = BlockTokenParser(lexer)
+
+        return lexer.tokenize().asSequence()
             .filterNot { it is NewlineToken }
-            .map { it.parse(blockParser) }
+            .map { it.parse(parser) }
             .onEach {
                 if (assertType) {
                     assertIs<T>(it)
@@ -132,11 +136,26 @@ class ParserTest {
     fun blockQuote() {
         val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"))
 
-        fun text(blockQuote: BlockQuote) = (blockQuote.children.first() as Paragraph).text
+        fun text(
+            node: NestableNode,
+            childIndex: Int = 0,
+        ) = (node.children[childIndex] as TextNode).text
 
         assertEquals("Text", text(nodes.next()))
         assertEquals("Text", text(nodes.next()))
         assertEquals("Line 1\nLine 2", text(nodes.next()))
+
+        with(nodes.next()) {
+            assertEquals("Paragraph 1", text(this, childIndex = 0))
+            assertIs<Newline>(children[1])
+            assertEquals("Paragraph 2", text(this, childIndex = 2))
+        }
+
+        with(nodes.next()) {
+            assertEquals("Text", text(this))
+            assertIs<BlockQuote>(children[1])
+            assertEquals("Inner quote", text(children[1] as NestableNode))
+        }
     }
 
     @Test

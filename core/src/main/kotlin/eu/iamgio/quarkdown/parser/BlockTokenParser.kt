@@ -17,17 +17,20 @@ import eu.iamgio.quarkdown.lexer.FencesCodeToken
 import eu.iamgio.quarkdown.lexer.HeadingToken
 import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.parseAll
 
 /**
  * A parser for block tokens.
+ * @param lexer lexer to parse sub-blocks with
  */
-class BlockTokenParser : BlockTokenVisitor<Node> {
+class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     /**
      * @param token token to extract the group iterator from
      * @param consumeAmount amount of initial groups to consume/skip (the first group is always the whole match)
@@ -108,8 +111,7 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
         return BlockQuote(
-            // TODO tokenize and parse text
-            children = listOf(Paragraph(text)),
+            children = lexer.copyWith(source = text).tokenize().parseAll(this),
         )
     }
 
