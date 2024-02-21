@@ -104,8 +104,7 @@ data class Html(
  */
 data class Paragraph(
     override val text: String,
-    override val children: List<Node>,
-) : NestableNode, TextNode
+) : TextNode
 
 /**
  * A block quote.
@@ -115,9 +114,8 @@ data class Paragraph(
  * ```
  */
 data class BlockQuote(
-    override val text: String,
     override val children: List<Node>,
-) : NestableNode, TextNode
+) : NestableNode
 
 /**
  * Anything else (should not happen).

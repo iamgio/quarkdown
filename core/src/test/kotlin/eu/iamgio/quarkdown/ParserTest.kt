@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
@@ -125,6 +126,17 @@ class ParserTest {
     fun horizontalRule() {
         val nodes = nodesIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
         assertEquals(6, nodes.asSequence().count())
+    }
+
+    @Test
+    fun blockQuote() {
+        val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"))
+
+        fun text(blockQuote: BlockQuote) = (blockQuote.children.first() as Paragraph).text
+
+        assertEquals("Text", text(nodes.next()))
+        assertEquals("Text", text(nodes.next()))
+        assertEquals("Line 1\nLine 2", text(nodes.next()))
     }
 
     @Test

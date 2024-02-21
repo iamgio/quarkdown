@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.parser
 
+import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.FencesCode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
@@ -98,15 +100,20 @@ class BlockTokenParser : BlockTokenVisitor<Node> {
     override fun visit(token: ParagraphToken): Node {
         return Paragraph(
             text = token.data.text.trim(),
-            children = emptyList(),
         )
     }
 
     override fun visit(token: BlockQuoteToken): Node {
-        TODO("Not yet implemented")
+        // Remove leading >
+        val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
+
+        return BlockQuote(
+            // TODO tokenize and parse text
+            children = listOf(Paragraph(text)),
+        )
     }
 
     override fun visit(token: BlockTextToken): Node {
-        TODO("Not yet implemented")
+        return BlockText()
     }
 }
