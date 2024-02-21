@@ -6,17 +6,6 @@ package eu.iamgio.quarkdown.ast
 class Newline : Node
 
 /**
- * A code block defined via indentation.
- * Example:
- * ```
- *     Code
- * ```
- */
-data class BlockCode(
-    override val text: String,
-) : TextNode
-
-/**
  * A code block defined via fences.
  * Example:
  * ~~~
@@ -24,10 +13,14 @@ data class BlockCode(
  * Code
  * ```
  * ~~~
+ * Alternative:
+ * ```
+ *     Code
+ * ```
  */
-data class FencesCode(
+data class Code(
     override val text: String,
-    val lang: String?,
+    val language: String?,
 ) : TextNode
 
 /**

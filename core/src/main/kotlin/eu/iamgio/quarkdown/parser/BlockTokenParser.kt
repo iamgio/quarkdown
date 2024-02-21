@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
-import eu.iamgio.quarkdown.ast.FencesCode
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -50,13 +50,17 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: BlockCodeToken): Node {
-        TODO("Not yet implemented")
+        return Code(
+            language = null,
+            // Remove first indentation
+            text = token.data.text.replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "").trim(),
+        )
     }
 
     override fun visit(token: FencesCodeToken): Node {
         val groups = groupsIterator(token, consumeAmount = 4)
-        return FencesCode(
-            lang = groups.next().takeIf { it.isNotBlank() }?.trim(),
+        return Code(
+            language = groups.next().takeIf { it.isNotBlank() }?.trim(),
             text = groups.next().trim(),
         )
     }

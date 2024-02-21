@@ -17,7 +17,7 @@ class BlockCodeToken(token: TokenData) : Token(token) {
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.FencesCode
+ * @see eu.iamgio.quarkdown.ast.Code
  */
 class FencesCodeToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)

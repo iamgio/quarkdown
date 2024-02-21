@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.FencesCode
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.parser.BlockTokenParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -85,44 +86,52 @@ class ParserTest {
     }
 
     @Test
+    fun blockCode() {
+        val nodes = nodesIterator<Code>(readSource("/parsing/blockcode.md"))
+
+        assertEquals("Code line 1\nCode line 2\n\nCode line 3", nodes.next().text)
+        assertFalse(nodes.hasNext())
+    }
+
+    @Test
     fun fencesCode() {
-        val nodes = nodesIterator<FencesCode>(readSource("/parsing/fencescode.md"))
+        val nodes = nodesIterator<Code>(readSource("/parsing/fencescode.md"))
 
         with(nodes.next()) {
             assertEquals("Code", text)
-            assertEquals(null, lang)
+            assertEquals(null, language)
         }
         with(nodes.next()) {
             assertEquals("Code", text)
-            assertEquals(null, lang)
+            assertEquals(null, language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", text)
-            assertEquals(null, lang)
+            assertEquals(null, language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\n    Code line 2", text)
-            assertEquals(null, lang)
+            assertEquals(null, language)
         }
         with(nodes.next()) {
             assertEquals("Code", text)
-            assertEquals("text", lang)
+            assertEquals("text", language)
         }
         with(nodes.next()) {
             assertEquals("Code", text)
-            assertEquals("text", lang)
+            assertEquals("text", language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", text)
-            assertEquals("text", lang)
+            assertEquals("text", language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\n    Code line 2", text)
-            assertEquals("text", lang)
+            assertEquals("text", language)
         }
         with(nodes.next()) {
             assertEquals("let x;", text)
-            assertEquals("ecmascript 6", lang)
+            assertEquals("ecmascript 6", language)
         }
     }
 
