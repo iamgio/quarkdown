@@ -39,19 +39,20 @@ abstract class RegexLexer(
                 val group = result.groups[pattern.name] ?: return@forEach
                 val range = group.range
 
-                // The token itself.
-                val token =
+                // The token data.
+                val data =
                     TokenData(
                         text = group.value,
                         position = range,
                         groups = result.groups.asSequence().filterNotNull().map { it.value },
-                    ).let { pattern.wrap(it) }
+                    )
 
                 // Text tokens are substrings that were not captured by any pattern.
                 // These uncaptured groups are scanned and converted to tokens.
                 pushFillToken(untilIndex = range.first)
 
-                this += token
+                // Lets the corresponding Token subclass wrap the data.
+                this += pattern.wrap(data)
 
                 currentIndex = range.last + 1
             }
