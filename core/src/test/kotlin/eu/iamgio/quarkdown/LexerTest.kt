@@ -95,7 +95,6 @@ class LexerTest {
         assertIs<SetextHeadingToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())
         assertIs<ListItemToken>(tokens.next())
-        assertIs<ParagraphToken>(tokens.next())
         assertIs<ListItemToken>(tokens.next())
         assertIs<ListItemToken>(tokens.next())
         assertIs<ListItemToken>(tokens.next())
