@@ -76,7 +76,7 @@ enum class BlockTokenRegexPattern(
             )
             .build(),
     ),
-    LIST(
+    LIST_ITEM(
         ::ListItemToken,
         RegexBuilder("^( {0,3}bullet)(?!bullet)[ \\t]?(((.+(\\n(?!(\\s+\\n| {0,3}bullet)))?)*((\\s*\\n)( {2,}))*)*)")
             .withReference("bullet", BULLET_HELPER)
