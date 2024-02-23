@@ -63,7 +63,8 @@ abstract class RegexLexer(
             currentIndex = 0
 
             val regex: Regex = patterns.groupify()
-            val match: Sequence<MatchResult> = regex.findAll(source)
+            // Append an empty line to the tokenized source to prevent issues with some expressions.
+            val match: Sequence<MatchResult> = regex.findAll("$source\n")
 
             match.forEach { result ->
                 addAll(extractMatchingTokens(result))
