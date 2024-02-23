@@ -73,9 +73,17 @@ data class LinkDefinition(
  * 2. Second
  * ```
  */
+data class ListBlock(
+    val ordered: Boolean,
+    val isTask: Boolean,
+    val items: List<ListItem>,
+) : Node
+
+/**
+ * An item of a [ListBlock]
+ */
 data class ListItem(
     override val text: String,
-    val ordered: Boolean,
     override val children: List<Node>,
 ) : NestableNode, TextNode
 
