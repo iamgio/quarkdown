@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
+import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -182,6 +183,49 @@ class ParserTest {
             assertEquals("Text", text(this))
             assertIs<BlockQuote>(children[1])
             assertEquals("Inner quote", text(children[1] as NestableNode))
+        }
+    }
+
+    @Test
+    fun linkDefinition() {
+        val nodes = nodesIterator<LinkDefinition>(readSource("/parsing/linkdefinition.md"))
+
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("https://google.com", url)
+            assertEquals(null, title)
+        }
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("url", url)
+            assertEquals(null, title)
+        }
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("/url", url)
+            assertEquals(null, title)
+        }
+        repeat(3) {
+            with(nodes.next()) {
+                assertEquals("label", text)
+                assertEquals("https://google.com", url)
+                assertEquals("Title", title)
+            }
+        }
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("https://google.com", url)
+            assertEquals("Multiline\ntitle", title)
+        }
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("https://google.com", url)
+            assertEquals("Line 1\nLine 2\nLine 3", title)
+        }
+        with(nodes.next()) {
+            assertEquals("label", text)
+            assertEquals("/url", url)
+            assertEquals("Title", title)
         }
     }
 

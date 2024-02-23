@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
+import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -100,7 +101,18 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: LinkDefinitionToken): Node {
-        TODO("Not yet implemented")
+        val groups = groupsIterator(token, consumeAmount = 2)
+        return LinkDefinition(
+            text = groups.next().trim(),
+            url = groups.next().trim(),
+            title =
+                if (groups.hasNext()) {
+                    // Remove first and last character
+                    groups.next().trim().let { it.substring(1, it.length - 1) }.trim()
+                } else {
+                    null
+                },
+        )
     }
 
     override fun visit(token: ListItemToken): Node {
