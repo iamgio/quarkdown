@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -116,7 +117,14 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: ListItemToken): Node {
-        TODO("Not yet implemented")
+        val groups = groupsIterator(token, consumeAmount = 2)
+        val marker = groups.next()
+
+        val content = token.data.text.removePrefix(marker)
+
+        return ListItem(
+            children = lexer.copyWith(source = content).tokenize().parseAll(this),
+        )
     }
 
     override fun visit(token: HtmlToken): Node {

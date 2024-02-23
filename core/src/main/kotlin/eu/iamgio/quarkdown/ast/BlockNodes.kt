@@ -80,12 +80,11 @@ data class ListBlock(
 ) : Node
 
 /**
- * An item of a [ListBlock]
+ * An item of a [ListBlock].
  */
 data class ListItem(
-    override val text: String,
     override val children: List<Node>,
-) : NestableNode, TextNode
+) : NestableNode
 
 /**
  * An HTML block.
