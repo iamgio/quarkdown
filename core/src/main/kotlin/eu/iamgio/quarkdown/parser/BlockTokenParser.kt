@@ -118,12 +118,33 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
 
     override fun visit(token: ListItemToken): Node {
         val groups = groupsIterator(token, consumeAmount = 2)
-        val marker = groups.next()
+        val marker = groups.next() // Bullet/number
 
         val content = token.data.text.removePrefix(marker)
+        val lines = content.lines()
+
+        if (lines.isEmpty()) {
+            return ListItem(children = emptyList())
+        }
+
+        // Gets the amount of indentation to trim from the content.
+        var indent = 0
+        for (char in lines.first()) {
+            if (char.isWhitespace()) {
+                indent++
+            } else {
+                break
+            }
+        }
+
+        // Removes indentation from each line.
+        val trimmedContent =
+            lines.joinToString(separator = "\n") {
+                it.replaceFirst("^ {0,$indent}".toRegex(), "")
+            }
 
         return ListItem(
-            children = lexer.copyWith(source = content).tokenize().parseAll(this),
+            children = lexer.copyWith(source = trimmedContent).tokenize().parseAll(this),
         )
     }
 
