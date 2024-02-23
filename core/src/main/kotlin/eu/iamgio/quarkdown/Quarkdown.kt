@@ -20,10 +20,10 @@ fun main(args: Array<String>) {
     val lexer = BlockLexer(sourceFile.readText())
     val tokens = lexer.tokenize()
 
-    Log.debug("Tokens: \n" + DebugFormatter.formatTokens(tokens))
+    Log.debug("Tokens:\n" + DebugFormatter.formatTokens(tokens))
 
     val parser = BlockTokenParser(lexer)
     val document = Document(children = tokens.parseAll(parser))
 
-    Log.debug(document)
+    Log.debug("AST:\n" + DebugFormatter.formatAST(document))
 }

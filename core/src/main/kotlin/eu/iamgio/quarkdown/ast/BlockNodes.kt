@@ -3,7 +3,9 @@ package eu.iamgio.quarkdown.ast
 /**
  * A new line.
  */
-class Newline : Node
+class Newline : Node {
+    override fun toString() = "Newline"
+}
 
 /**
  * A code block defined via fences.
@@ -30,7 +32,9 @@ data class Code(
  * ---
  * ```
  */
-class HorizontalRule : Node
+class HorizontalRule : Node {
+    override fun toString() = "HorizontalRule"
+}
 
 /**
  * A heading defined via prefix symbols.

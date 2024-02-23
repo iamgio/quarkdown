@@ -1,11 +1,18 @@
 package eu.iamgio.quarkdown.log
 
+import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.lexer.Token
 
 /**
  * Utilities to log prettier debugging data.
  */
 object DebugFormatter {
+    private fun String.replaceEscapeCharacters() =
+        replace("\\R".toRegex(), "\\\\n")
+            .replace("\t", "\\t")
+            .replace("    ", "\\t")
+
     /**
      * Pretty-formats a list of tokens.
      * @param tokens tokens to format
@@ -17,16 +24,59 @@ object DebugFormatter {
         return tokens.joinToString(separator = "\n") { token ->
             val type = "type: ${token.javaClass.simpleName.removeSuffix("Token")}"
             val pos = "pos: ${token.data.position}"
-
-            val content =
-                token.data.text
-                    .replace("\\R".toRegex(), "\\\\n")
-                    .replace("\t", "\\t")
-                    .replace("    ", "\\t")
+            val content = token.data.text.replaceEscapeCharacters()
 
             val text = "text: $content"
 
             format.format(type, pos, text)
         }
     }
+
+    /**
+     * Pretty-formats an AST node.
+     * @param node node to format
+     * @return formatted string (without the 'children' attribute)
+     */
+    private fun formatNode(node: Node): String =
+        buildString {
+            // Remove children from the node's toString()
+            val text = node.toString()
+            val index = text.indexOf("children=")
+            append(
+                if (index >= 0) {
+                    text.substring(0, index)
+                } else {
+                    text
+                }.replaceEscapeCharacters(),
+            )
+            if (endsWith("(")) {
+                setLength(length - 1)
+            }
+        }
+
+    /**
+     * Pretty-formats an AST.
+     * @param root root node of the AST
+     * @param initialIndent initial amount of indentation
+     * @return formatted string
+     */
+    fun formatAST(
+        root: NestableNode,
+        initialIndent: Int = 0,
+    ): String =
+        buildString {
+            val indent = "\t"
+            append(indent.repeat(initialIndent))
+            append(formatNode(root))
+            append("\n")
+
+            root.children.forEach {
+                if (it is NestableNode) {
+                    append(formatAST(it, initialIndent + 1))
+                } else {
+                    append(indent.repeat(initialIndent + 1)).append(formatNode(it))
+                    append("\n")
+                }
+            }
+        }
 }
