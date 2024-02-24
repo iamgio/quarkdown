@@ -18,7 +18,7 @@
 
 - B
 
-- - A
+- - Nested
 
 End of list
 
@@ -32,4 +32,11 @@ with lazy line
 - A
 - B
 ---
+- A
+> End of list
+- A
+- B
+```
+End of list
+```
 - A

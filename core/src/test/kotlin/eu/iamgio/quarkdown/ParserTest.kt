@@ -260,6 +260,14 @@ class ParserTest {
         with(nodes.next()) {
         }
 
+        // Fifth list (after blockquote)
+        with(nodes.next()) {
+        }
+
+        // Sixth list (after fence code)
+        with(nodes.next()) {
+        }
+
         assertFalse(nodes.hasNext())
     }
 }
