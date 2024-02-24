@@ -9,12 +9,13 @@ import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
-import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
@@ -94,10 +95,8 @@ class LexerTest {
         assertIs<ParagraphToken>(tokens.next())
         assertIs<SetextHeadingToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())
-        assertIs<ListItemToken>(tokens.next())
-        assertIs<ListItemToken>(tokens.next())
-        assertIs<ListItemToken>(tokens.next())
-        assertIs<ListItemToken>(tokens.next())
+        assertIs<UnorderedListToken>(tokens.next())
+        assertIs<OrderedListToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockCodeToken>(tokens.next())

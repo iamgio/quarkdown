@@ -1,10 +1,7 @@
-> a
-b
-
 - A
 - B
 - C
-# a
+
 
 - A
   - B
@@ -14,6 +11,12 @@ b
 
   Some paragraph
   - B
+
+- A
+
+  Some paragraph
+
+- B
 
 - - A
 

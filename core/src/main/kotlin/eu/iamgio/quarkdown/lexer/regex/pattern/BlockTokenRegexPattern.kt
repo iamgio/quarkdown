@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
@@ -78,11 +79,11 @@ enum class BlockTokenRegexPattern(
     ),
     UNORDEREDLIST(
         ::UnorderedListToken,
-        RegexBuilder("^(( {0,3}[*+-])[ \\t]?.+(\\n|\$)((.+(\\n|\$)|\\n\\s*^ {2,})(?!heading|hr))*)+")
-            .withReference("bullet", BULLET_HELPER)
-            .withReference("heading", HEADING_PATTERN.pattern)
-            .withReference("hr", HORIZONTAL_RULE_HELPER)
-            .build(),
+        listPattern(bullet = "[*+-]"),
+    ),
+    ORDEREDLIST(
+        ::OrderedListToken,
+        listPattern(bullet = "\\d{1,9}[\\.)]"),
     ),
     NEWLINE(
         ::NewlineToken,
@@ -155,3 +156,11 @@ private val PARAGRAPH_PATTERN =
 private val HEADING_PATTERN =
     "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
         .toRegex()
+
+private fun listPattern(bullet: String) =
+    RegexBuilder("^(( {0,3}bullet)[ \\t]?.+(\\n|\$)((.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet))(?!heading|hr))*)+")
+        .withReference("bullet", bullet)
+        .withReference("bullet", bullet)
+        .withReference("heading", HEADING_PATTERN.pattern)
+        .withReference("hr", HORIZONTAL_RULE_HELPER)
+        .build()
