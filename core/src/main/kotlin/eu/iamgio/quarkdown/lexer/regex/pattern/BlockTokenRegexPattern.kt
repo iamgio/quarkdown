@@ -51,8 +51,7 @@ enum class BlockTokenRegexPattern(
     ),
     HEADING(
         ::HeadingToken,
-        "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
-            .toRegex(),
+        HEADING_PATTERN,
     ),
     HORIZONTALRULE(
         ::HorizontalRuleToken,
@@ -79,15 +78,10 @@ enum class BlockTokenRegexPattern(
     ),
     UNORDEREDLIST(
         ::UnorderedListBlockToken,
-        "^( {0,3}[*+-])(?![*+-]|\\d{1,9}[.)])[ \\t]?(.|\\n)+(?=\\n)"
-            .toRegex(),
-    ),
-    LISTITEM(
-        ::ListItemToken,
-        RegexBuilder("^( {0,3}bullet)(?!bullet)[ \\t]?(((.+(\\n(?!(\\s+\\n| {0,3}bullet)))?)*((\\s*\\n)( {2,}))*)*)")
+        RegexBuilder("^(( {0,3}[*+-])[ \\t]?.+(\\n|\$)((.+(\\n|\$)|\\n\\s*^ {2,})(?!heading|hr))*)+")
             .withReference("bullet", BULLET_HELPER)
-            .withReference("bullet", BULLET_HELPER)
-            .withReference("bullet", BULLET_HELPER)
+            .withReference("heading", HEADING_PATTERN.pattern)
+            .withReference("hr", HORIZONTAL_RULE_HELPER)
             .build(),
     ),
     NEWLINE(
@@ -97,12 +91,20 @@ enum class BlockTokenRegexPattern(
     ),
     PARAGRAPH(
         ::ParagraphToken,
-        PARAGRAPH_PATTERN,
+        PARAGRAPH_PATTERN.also { println(it) },
     ),
     BLOCKTEXT(
         ::BlockTextToken,
         "^[^\\n]+"
             .toRegex(),
+    ),
+    LISTITEM(
+        ::ListItemToken,
+        RegexBuilder("^( {0,3}bullet)(?!bullet)[ \\t]?(((.+(\\n(?!(\\s+\\n| {0,3}bullet)))?)*((\\s*\\n)( {2,}))*)*)")
+            .withReference("bullet", BULLET_HELPER)
+            .withReference("bullet", BULLET_HELPER)
+            .withReference("bullet", BULLET_HELPER)
+            .build(),
     ),
 }
 
@@ -149,3 +151,7 @@ private val PARAGRAPH_PATTERN =
         .withReference("blockquote", " {0,3}>")
         .withReference("tag", TAG_HELPER)
         .build(RegexOption.MULTILINE)
+
+private val HEADING_PATTERN =
+    "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
+        .toRegex()
