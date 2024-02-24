@@ -23,3 +23,13 @@
 End of list
 
 - Another list
+with lazy line
+
+- # Heading
+- Something
+# End of list
+
+- A
+- B
+---
+- A

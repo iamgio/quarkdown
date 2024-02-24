@@ -158,7 +158,7 @@ private val HEADING_PATTERN =
         .toRegex()
 
 private fun listPattern(bullet: String) =
-    RegexBuilder("^(( {0,3}bullet)[ \\t]?.+(\\n|\$)((.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet))(?!heading|hr))*)+")
+    RegexBuilder("^(( {0,3}bullet)[ \\t].+(\\n|\$)((?!hr)(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))(?!heading))*)+")
         .withReference("bullet", bullet)
         .withReference("bullet", bullet)
         .withReference("heading", HEADING_PATTERN.pattern)

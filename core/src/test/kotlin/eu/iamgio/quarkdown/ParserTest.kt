@@ -248,9 +248,15 @@ class ParserTest {
         with(nodes.next()) {
         }
 
-        // TODO fix list not interrupting at paragraph, heading, etc.
+        // Second list (after paragraph)
+        with(nodes.next()) {
+        }
 
-        // Second list
+        // Third list (after heading)
+        with(nodes.next()) {
+        }
+
+        // Fourth list (after horizontal rule)
         with(nodes.next()) {
         }
 
