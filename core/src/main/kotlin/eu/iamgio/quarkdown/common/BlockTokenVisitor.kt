@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.UnorderedListBlockToken
 
 /**
  * A visitor for block [eu.iamgio.quarkdown.lexer.Token]s.
@@ -31,6 +32,8 @@ interface BlockTokenVisitor<T> {
     fun visit(token: SetextHeadingToken): T
 
     fun visit(token: LinkDefinitionToken): T
+
+    fun visit(token: UnorderedListBlockToken): T
 
     fun visit(token: ListItemToken): T
 

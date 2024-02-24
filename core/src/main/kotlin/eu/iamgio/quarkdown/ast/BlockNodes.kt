@@ -80,8 +80,8 @@ data class LinkDefinition(
 data class ListBlock(
     val ordered: Boolean,
     val isTask: Boolean,
-    val items: List<ListItem>,
-) : Node
+    override val children: List<Node>,
+) : NestableNode
 
 /**
  * An item of a [ListBlock].

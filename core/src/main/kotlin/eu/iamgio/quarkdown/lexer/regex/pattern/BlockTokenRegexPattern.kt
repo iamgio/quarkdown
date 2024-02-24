@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.UnorderedListBlockToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
@@ -75,6 +76,11 @@ enum class BlockTokenRegexPattern(
                 " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?",
             )
             .build(),
+    ),
+    UNORDEREDLIST(
+        ::UnorderedListBlockToken,
+        "^( {0,3}[*+-])(?![*+-]|\\d{1,9}[.)])[ \\t]?(.|\\n)+(?=\\n)"
+            .toRegex(),
     ),
     LISTITEM(
         ::ListItemToken,
