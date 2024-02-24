@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
-import eu.iamgio.quarkdown.lexer.UnorderedListBlockToken
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
@@ -77,7 +77,7 @@ enum class BlockTokenRegexPattern(
             .build(),
     ),
     UNORDEREDLIST(
-        ::UnorderedListBlockToken,
+        ::UnorderedListToken,
         RegexBuilder("^(( {0,3}[*+-])[ \\t]?.+(\\n|\$)((.+(\\n|\$)|\\n\\s*^ {2,})(?!heading|hr))*)+")
             .withReference("bullet", BULLET_HELPER)
             .withReference("heading", HEADING_PATTERN.pattern)
@@ -91,7 +91,7 @@ enum class BlockTokenRegexPattern(
     ),
     PARAGRAPH(
         ::ParagraphToken,
-        PARAGRAPH_PATTERN.also { println(it) },
+        PARAGRAPH_PATTERN,
     ),
     BLOCKTEXT(
         ::BlockTextToken,

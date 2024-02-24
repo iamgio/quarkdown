@@ -52,9 +52,16 @@ class LinkDefinitionToken(token: TokenData) : Token(token) {
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.ListBlock
+ * @see eu.iamgio.quarkdown.ast.UnorderedList
  */
-class UnorderedListBlockToken(token: TokenData) : Token(token) {
+class UnorderedListToken(token: TokenData) : Token(token) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * @see eu.iamgio.quarkdown.ast.OrderedList
+ */
+class OrderedListToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 

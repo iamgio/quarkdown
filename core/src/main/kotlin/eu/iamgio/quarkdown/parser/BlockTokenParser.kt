@@ -7,11 +7,11 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.common.BlockTokenVisitor
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
@@ -24,10 +24,11 @@ import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.UnorderedListBlockToken
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.BlockTokenRegexPattern
@@ -120,10 +121,8 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         )
     }
 
-    override fun visit(token: UnorderedListBlockToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
-        return ListBlock(
-            ordered = false,
+    override fun visit(token: UnorderedListToken): Node {
+        return UnorderedList(
             // TODO task
             isTask = false,
             // Parse each item
@@ -133,6 +132,10 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
                     listOf(BlockTokenRegexPattern.LISTITEM),
                 ).tokenize().parseAll(this),
         )
+    }
+
+    override fun visit(token: OrderedListToken): Node {
+        TODO("Not yet implemented")
     }
 
     override fun visit(token: ListItemToken): Node {

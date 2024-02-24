@@ -68,20 +68,36 @@ data class LinkDefinition(
 
 /**
  * A list, either ordered or unordered.
- * Examples:
+ */
+interface ListBlock : NestableNode {
+    val isTask: Boolean
+}
+
+/**
+ * An unordered list.
+ * Example:
  * ```
  * - A
  * - B
- *
+ * ```
+ */
+data class UnorderedList(
+    override val isTask: Boolean,
+    override val children: List<Node>,
+) : ListBlock
+
+/**
+ * An ordered list.
+ * Example:
+ * ```
  * 1. First
  * 2. Second
  * ```
  */
-data class ListBlock(
-    val ordered: Boolean,
-    val isTask: Boolean,
+data class OrderedList(
+    override val isTask: Boolean,
     override val children: List<Node>,
-) : NestableNode
+) : ListBlock
 
 /**
  * An item of a [ListBlock].

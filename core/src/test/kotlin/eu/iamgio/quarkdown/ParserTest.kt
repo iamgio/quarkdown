@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -237,5 +238,22 @@ class ParserTest {
         assertEquals("<p><i>Text</i></p>", nodes.next().content)
         assertTrue { nodes.next().content.endsWith("</header>") }
         assertTrue { nodes.next().content.endsWith("</html>") }
+    }
+
+    @Test
+    fun unorderedList() {
+        val nodes = nodesIterator<ListBlock>(readSource("/parsing/unorderedlist.md"), assertType = false)
+
+        // First list
+        with(nodes.next()) {
+        }
+
+        // TODO fix list not interrupting at paragraph, heading, etc.
+
+        // Second list
+        with(nodes.next()) {
+        }
+
+        assertFalse(nodes.hasNext())
     }
 }
