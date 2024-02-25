@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.common.BlockTokenVisitor
@@ -121,21 +122,30 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         )
     }
 
+    /**
+     * Parses list items from a list [token].
+     * @param token list token to extract the items from
+     */
+    private fun extractListItems(token: Token) =
+        StandardRegexLexer(
+            source = token.data.text,
+            listOf(BlockTokenRegexPattern.LISTITEM),
+        ).tokenize().parseAll(this)
+
     override fun visit(token: UnorderedListToken): Node {
         return UnorderedList(
-            // TODO task
-            isTask = false,
-            // Parse each item
-            children =
-                StandardRegexLexer(
-                    source = token.data.text,
-                    listOf(BlockTokenRegexPattern.LISTITEM),
-                ).tokenize().parseAll(this),
+            // TODO loose
+            isLoose = false,
+            children = extractListItems(token),
         )
     }
 
     override fun visit(token: OrderedListToken): Node {
-        TODO("Not yet implemented")
+        return OrderedList(
+            // TODO loose
+            isLoose = false,
+            children = extractListItems(token),
+        )
     }
 
     override fun visit(token: ListItemToken): Node {
