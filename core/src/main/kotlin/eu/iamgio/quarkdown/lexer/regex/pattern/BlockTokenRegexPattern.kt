@@ -101,7 +101,7 @@ enum class BlockTokenRegexPattern(
     ),
     LISTITEM(
         ::ListItemToken,
-        RegexBuilder("^( {0,3}bullet)(?!bullet)[ \\t]?(((.+(\\n(?!(\\s+\\n| {0,3}bullet)))?)*((\\s*\\n)( {2,}))*)*)")
+        RegexBuilder("^( {0,3}(bullet))(?!bullet)[ \\t]?(((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*((\\s*\\n)( {2,}))*)*)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
@@ -160,7 +160,7 @@ private val HEADING_PATTERN =
         .toRegex()
 
 private fun listPattern(bullet: String) =
-    RegexBuilder("^(( {0,3}bullet)[ \\t]((?!^(\\s*\\n){2})(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))(?!^(interruption)))*)+")
+    RegexBuilder("^(( {0,3}(bullet))[ \\t]((?!^(\\s*\\n){2})(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}(bullet)[ \\t]))(?!^(interruption)))*)+")
         .withReference("bullet", bullet)
         .withReference("bullet", bullet)
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)

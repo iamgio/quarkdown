@@ -160,7 +160,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         }
 
         // Gets the amount of indentation to trim from the content.
-        var indent = 0
+        var indent = marker.trim().length
         for (char in lines.first()) {
             if (char.isWhitespace()) {
                 indent++
@@ -172,7 +172,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         // Removes indentation from each line.
         val trimmedContent =
             lines.joinToString(separator = "\n") {
-                it.replaceFirst("^ {0,$indent}".toRegex(), "")
+                it.replaceFirst("^ {1,$indent}".toRegex(), "")
             }
 
         return ListItem(

@@ -6,10 +6,12 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.ast.UnorderedList
@@ -246,9 +248,9 @@ class ParserTest {
         assertTrue { nodes.next().content.endsWith("</html>") }
     }
 
-    @Test
-    fun unorderedList() {
-        val nodes = nodesIterator<UnorderedList>(readSource("/parsing/unorderedlist.md"), assertType = false)
+    // This is shared by both unordered and ordered list tests.
+    private inline fun <reified T : ListBlock> list(source: CharSequence) {
+        val nodes = nodesIterator<T>(source, assertType = false)
 
         // First list
         with(nodes.next().children.iterator()) {
@@ -284,7 +286,7 @@ class ParserTest {
                 assertEquals("B", text(this))
                 assertIs<Paragraph>(children[0])
                 with(children[1]) {
-                    assertIs<UnorderedList>(this)
+                    assertIs<T>(this)
                     assertEquals(1, children.size)
                     with(children[0]) {
                         // Second list item
@@ -292,7 +294,7 @@ class ParserTest {
                         assertEquals("Nested 1", text(this))
                         assertIs<Paragraph>(children[0])
                         with(children[1]) {
-                            assertIs<UnorderedList>(this)
+                            assertIs<T>(this)
                             with(children[0]) {
                                 // Third list item
                                 assertIs<ListItem>(this)
@@ -324,7 +326,7 @@ class ParserTest {
                 assertIs<Paragraph>(children[2])
                 assertEquals("Some paragraph", text(this, childIndex = 2))
                 with(children[3]) {
-                    assertIs<UnorderedList>(this)
+                    assertIs<T>(this)
                     with(children[0]) {
                         assertIs<ListItem>(this)
                         assertIs<Paragraph>(children[0])
@@ -337,7 +339,7 @@ class ParserTest {
             with(next()) {
                 assertIs<ListItem>(this)
                 with(children[0]) {
-                    assertIs<UnorderedList>(this)
+                    assertIs<T>(this)
                     with(children[0]) {
                         assertIs<ListItem>(this)
                         assertIs<Paragraph>(children[0])
@@ -360,7 +362,7 @@ class ParserTest {
                 assertEquals("B", text(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<Paragraph>(children[2])
-                assertEquals("Some paragraph\n with lazy line", text(this, childIndex = 2))
+                assertEquals("Some paragraph\nwith lazy line", text(this, childIndex = 2))
             }
             with(next()) {
                 assertIs<ListItem>(this)
@@ -434,5 +436,15 @@ class ParserTest {
         }
 
         assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun unorderedList() {
+        list<UnorderedList>(readSource("/parsing/unorderedlist.md"))
+    }
+
+    @Test
+    fun orderedList() {
+        list<OrderedList>(readSource("/parsing/orderedlist.md"))
     }
 }
