@@ -160,10 +160,9 @@ private val HEADING_PATTERN =
         .toRegex()
 
 private fun listPattern(bullet: String) =
-    RegexBuilder("^(( {0,3}bullet)[ \\t]((?!hr)(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))(?!^(interruption)))*)+")
+    RegexBuilder("^(( {0,3}bullet)[ \\t]((?!^(\\s*\\n){2})(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))(?!^(interruption)))*)+")
         .withReference("bullet", bullet)
         .withReference("bullet", bullet)
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)
         .withReference("|list", "")
-        .withReference("hr", HORIZONTAL_RULE_HELPER)
         .build()
