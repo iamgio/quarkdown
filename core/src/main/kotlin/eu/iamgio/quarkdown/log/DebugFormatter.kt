@@ -52,6 +52,10 @@ object DebugFormatter {
             if (endsWith("(")) {
                 setLength(length - 1)
             }
+            if (endsWith(", ")) {
+                setLength(length - 2)
+                append(")")
+            }
         }
 
     /**
