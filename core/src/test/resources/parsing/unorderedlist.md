@@ -25,6 +25,8 @@ End of list
 - Another list
 with lazy line
 
+- X
+
 - # Heading
 - Something
 # End of list
@@ -34,7 +36,7 @@ with lazy line
 ---
 - A
 > End of list
-- A
+- > Quote
 - B
 ```
 End of list

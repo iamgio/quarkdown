@@ -126,7 +126,7 @@ private const val TAG_HELPER =
         "|tr|track|ul"
 
 private val PARAGRAPH_INTERRUPTION_HELPER =
-    RegexBuilder("(?!hr|heading|lheading|blockquote|fences|list|html|table| +\\n)")
+    RegexBuilder("hr|heading|lheading|blockquote|fences|list|html|table| +\\n")
         .withReference("hr", HORIZONTAL_RULE_HELPER)
         .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
         .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
@@ -134,9 +134,6 @@ private val PARAGRAPH_INTERRUPTION_HELPER =
         .withReference("blockquote", " {0,3}>")
         .withReference("tag", TAG_HELPER)
         .build()
-
-private const val PARAGRAPH_HELPER =
-    "^([^\\n]+(?:\\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\\n)[^\\n]+)*)"
 
 private const val HTML_HELPER =
     "^ {0,3}(?:" +
@@ -153,7 +150,7 @@ private const val HTML_HELPER =
 private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"
 
 private val PARAGRAPH_PATTERN =
-    RegexBuilder("^([^\\n]+(?:\\ninterruption[^\\n]+)*)")
+    RegexBuilder("^([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)
         .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
         .build()
@@ -163,7 +160,7 @@ private val HEADING_PATTERN =
         .toRegex()
 
 private fun listPattern(bullet: String) =
-    RegexBuilder("^(( {0,3}bullet)[ \\t]((?!hr)(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))interruption)*)+")
+    RegexBuilder("^(( {0,3}bullet)[ \\t]((?!hr)(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}bullet[ \\t]))(?!^(interruption)))*)+")
         .withReference("bullet", bullet)
         .withReference("bullet", bullet)
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)
