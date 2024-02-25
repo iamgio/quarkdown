@@ -10,7 +10,7 @@ class NewlineToken(token: TokenData) : Token(token) {
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.BlockCode
+ * @see eu.iamgio.quarkdown.ast.Code
  */
 class BlockCodeToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
@@ -31,6 +31,10 @@ class HorizontalRuleToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * # Heading
+ * ```
  * @see eu.iamgio.quarkdown.ast.Heading
  */
 class HeadingToken(token: TokenData) : Token(token) {
@@ -38,6 +42,15 @@ class HeadingToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Examples:
+ * ```
+ * Heading
+ * ====
+ * ```
+ * ```
+ * Heading
+ * ---
+ * ```
  * @see eu.iamgio.quarkdown.ast.Heading
  */
 class SetextHeadingToken(token: TokenData) : Token(token) {
@@ -45,6 +58,10 @@ class SetextHeadingToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * [label]: url "Title"
+ * ```
  * @see eu.iamgio.quarkdown.ast.LinkDefinition
  */
 class LinkDefinitionToken(token: TokenData) : Token(token) {
@@ -52,6 +69,11 @@ class LinkDefinitionToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * - A
+ * - B
+ * ```
  * @see eu.iamgio.quarkdown.ast.UnorderedList
  */
 class UnorderedListToken(token: TokenData) : Token(token) {
@@ -59,6 +81,11 @@ class UnorderedListToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * 1. First
+ * 2. Second
+ * ```
  * @see eu.iamgio.quarkdown.ast.OrderedList
  */
 class OrderedListToken(token: TokenData) : Token(token) {
@@ -66,6 +93,13 @@ class OrderedListToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Examples:
+ * ```
+ * - A
+ * ```
+ * ```
+ * 1. First
+ * ```
  * @see eu.iamgio.quarkdown.ast.ListItem
  */
 class ListItemToken(token: TokenData) : Token(token) {
@@ -73,6 +107,12 @@ class ListItemToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * <p>
+ *     Content
+ * </p>
+ * ```
  * @see eu.iamgio.quarkdown.ast.Html
  */
 class HtmlToken(token: TokenData) : Token(token) {
@@ -87,6 +127,10 @@ class ParagraphToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ * > Quote
+ * ```
  * @see eu.iamgio.quarkdown.ast.BlockQuote
  */
 class BlockQuoteToken(token: TokenData) : Token(token) {

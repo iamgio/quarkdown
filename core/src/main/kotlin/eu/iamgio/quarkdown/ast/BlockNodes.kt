@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
 /**
- * A new line.
+ * A blank line.
  */
 class Newline : Node {
     override fun toString() = "Newline"
@@ -9,16 +9,8 @@ class Newline : Node {
 
 /**
  * A code block defined via fences.
- * Example:
- * ~~~
- * ```lang
- * Code
- * ```
- * ~~~
- * Alternative:
- * ```
- *     Code
- * ```
+ * @param text code content
+ * @param language optional syntax language
  */
 data class Code(
     override val text: String,
@@ -26,11 +18,7 @@ data class Code(
 ) : TextNode
 
 /**
- * A horizontal line.
- * Example:
- * ```
- * ---
- * ```
+ * A horizontal line (thematic break).
  */
 class HorizontalRule : Node {
     override fun toString() = "HorizontalRule"
@@ -38,15 +26,7 @@ class HorizontalRule : Node {
 
 /**
  * A heading defined via prefix symbols.
- * Example:
- * ```
- * # Heading
- * ```
- * Alternative:
- * ```
- * Heading
- * ====
- * ```
+ * @param depth importance (`depth=1` for H1, `depth=6` for H6)
  */
 data class Heading(
     val depth: Int,
@@ -55,10 +35,9 @@ data class Heading(
 
 /**
  * Creation of a link reference.
- * Example:
- * ```
- * [label]: url "Title"
- * ```
+ * @param text label to be referenced
+ * @param url associated URL
+ * @param title optional reference title
  */
 data class LinkDefinition(
     override val text: String,
@@ -78,11 +57,8 @@ interface ListBlock : NestableNode {
 
 /**
  * An unordered list.
- * Example:
- * ```
- * - A
- * - B
- * ```
+ * @param isLoose whether the list is loose
+ * @param children items
  */
 data class UnorderedList(
     override val isLoose: Boolean,
@@ -91,11 +67,8 @@ data class UnorderedList(
 
 /**
  * An ordered list.
- * Example:
- * ```
- * 1. First
- * 2. Second
- * ```
+ * @param isLoose whether the list is loose
+ * @param children items
  */
 data class OrderedList(
     override val isLoose: Boolean,
@@ -104,6 +77,7 @@ data class OrderedList(
 
 /**
  * An item of a [ListBlock].
+ * @param children content
  */
 data class ListItem(
     override val children: List<Node>,
@@ -111,12 +85,7 @@ data class ListItem(
 
 /**
  * An HTML block.
- * Example:
- * ```
- * <p>
- *     Code
- * </p>
- * ```
+ * @param content raw HTML content
  */
 data class Html(
     val content: String,
@@ -124,6 +93,7 @@ data class Html(
 
 /**
  * A text paragraph.
+ * @param text text content
  */
 data class Paragraph(
     override val text: String,
@@ -131,10 +101,7 @@ data class Paragraph(
 
 /**
  * A block quote.
- * Example:
- * ```
- * > Quote
- * ```
+ * @param children content
  */
 data class BlockQuote(
     override val children: List<Node>,
