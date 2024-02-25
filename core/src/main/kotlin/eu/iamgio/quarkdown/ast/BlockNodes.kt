@@ -70,7 +70,10 @@ data class LinkDefinition(
  * A list, either ordered or unordered.
  */
 interface ListBlock : NestableNode {
-    val isTask: Boolean
+    /**
+     * Whether the list is loose.
+     */
+    val isLoose: Boolean
 }
 
 /**
@@ -82,7 +85,7 @@ interface ListBlock : NestableNode {
  * ```
  */
 data class UnorderedList(
-    override val isTask: Boolean,
+    override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock
 
@@ -95,7 +98,7 @@ data class UnorderedList(
  * ```
  */
 data class OrderedList(
-    override val isTask: Boolean,
+    override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock
 
