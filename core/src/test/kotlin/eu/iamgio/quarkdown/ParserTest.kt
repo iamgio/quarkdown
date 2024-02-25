@@ -264,8 +264,6 @@ class ParserTest {
                 assertIs<ListItem>(this)
                 assertEquals("C", text(this))
             }
-            // TODO this should be a separate list (divided by double empty line)
-            // (done, just test) (should be ok, update tests and commit)
         }
 
         // List after two blank lines
