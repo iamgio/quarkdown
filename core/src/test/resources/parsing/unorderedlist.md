@@ -54,3 +54,6 @@ with lazy line
 End of list
 ```
 - A
+- ```
+  Some code
+  ```

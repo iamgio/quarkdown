@@ -424,6 +424,13 @@ class ParserTest {
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this))
             }
+            with(next()) {
+                assertIs<ListItem>(this)
+                with(children[0]) {
+                    assertIs<Code>(this)
+                    assertEquals("Some code", this.text)
+                }
+            }
         }
 
         assertFalse(nodes.hasNext())
