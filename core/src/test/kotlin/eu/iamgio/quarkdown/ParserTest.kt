@@ -6,12 +6,13 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.ListBlock
+import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.TextNode
+import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.parser.BlockTokenParser
@@ -50,6 +51,16 @@ class ParserTest {
             .filterIsInstance<T>()
             .iterator()
     }
+
+    /**
+     * @param node parent node
+     * @param childIndex index of the text child
+     * @return text content of the [childIndex]-th child
+     */
+    private fun text(
+        node: NestableNode,
+        childIndex: Int = 0,
+    ) = (node.children[childIndex] as TextNode).text
 
     @Test
     fun paragraph() {
@@ -165,11 +176,6 @@ class ParserTest {
     fun blockQuote() {
         val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"))
 
-        fun text(
-            node: NestableNode,
-            childIndex: Int = 0,
-        ) = (node.children[childIndex] as TextNode).text
-
         assertEquals("Text", text(nodes.next()))
         assertEquals("Text", text(nodes.next()))
         assertEquals("Line 1\nLine 2", text(nodes.next()))
@@ -242,30 +248,184 @@ class ParserTest {
 
     @Test
     fun unorderedList() {
-        val nodes = nodesIterator<ListBlock>(readSource("/parsing/unorderedlist.md"), assertType = false)
+        val nodes = nodesIterator<UnorderedList>(readSource("/parsing/unorderedlist.md"), assertType = false)
 
         // First list
-        with(nodes.next()) {
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertEquals("A", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertEquals("B", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertEquals("C", text(this))
+            }
+            // TODO this should be a separate list (divided by double empty line)
+            // (done, just test) (should be ok, update tests and commit)
         }
 
-        // Second list (after paragraph)
-        with(nodes.next()) {
+        // List after two blank lines
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("A", text(this, childIndex = 0))
+                assertIs<Newline>(children[1])
+                assertIs<Paragraph>(children[2])
+                assertEquals("Some paragraph", text(this, childIndex = 2))
+            }
+
+            // Nested list
+            with(next()) {
+                // First list item
+                assertIs<ListItem>(this)
+                assertEquals("B", text(this))
+                assertIs<Paragraph>(children[0])
+                with(children[1]) {
+                    assertIs<UnorderedList>(this)
+                    assertEquals(1, children.size)
+                    with(children[0]) {
+                        // Second list item
+                        assertIs<ListItem>(this)
+                        assertEquals("Nested 1", text(this))
+                        assertIs<Paragraph>(children[0])
+                        with(children[1]) {
+                            assertIs<UnorderedList>(this)
+                            with(children[0]) {
+                                // Third list item
+                                assertIs<ListItem>(this)
+                                assertIs<Paragraph>(children[0])
+                                assertEquals("Nested 2", text(this))
+                                assertIs<Newline>(children[1])
+                                assertIs<Paragraph>(children[2])
+                                assertEquals("Some paragraph", text(this, childIndex = 2))
+                            }
+                        }
+                    }
+                }
+            }
+
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("C", text(this, childIndex = 0))
+                assertIs<Newline>(children[1])
+                assertIs<BlockQuote>(children[2])
+                assertEquals("Some quote", text(children[2] as NestableNode, childIndex = 0))
+            }
+
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("D", text(this, childIndex = 0))
+                assertIs<Newline>(children[1])
+                assertIs<Paragraph>(children[2])
+                assertEquals("Some paragraph", text(this, childIndex = 2))
+                with(children[3]) {
+                    assertIs<UnorderedList>(this)
+                    with(children[0]) {
+                        assertIs<ListItem>(this)
+                        assertIs<Paragraph>(children[0])
+                        assertEquals("E", text(this))
+                        assertIs<Code>(children[1])
+                    }
+                }
+            }
+
+            with(next()) {
+                assertIs<ListItem>(this)
+                with(children[0]) {
+                    assertIs<UnorderedList>(this)
+                    with(children[0]) {
+                        assertIs<ListItem>(this)
+                        assertIs<Paragraph>(children[0])
+                        assertEquals("E", text(this))
+                    }
+                }
+            }
         }
 
-        // Third list (after heading)
-        with(nodes.next()) {
+        // List after paragraph
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("Another list\nwith lazy line", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("B", text(this, childIndex = 0))
+                assertIs<Newline>(children[1])
+                assertIs<Paragraph>(children[2])
+                assertEquals("Some paragraph\n with lazy line", text(this, childIndex = 2))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Heading>(children[0])
+                assertEquals("Heading", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("C", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Heading>(children[0])
+                assertEquals("Heading", text(this, childIndex = 0))
+                assertIs<Paragraph>(children[1])
+                assertEquals("Some paragraph", text(this, childIndex = 1))
+            }
         }
 
-        // Fourth list (after horizontal rule)
-        with(nodes.next()) {
+        // List after heading
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("A", text(this))
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("B", text(this))
+            }
         }
 
-        // Fifth list (after blockquote)
-        with(nodes.next()) {
+        // List after horizontal rule
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("A", text(this))
+            }
         }
 
-        // Sixth list (after fence code)
-        with(nodes.next()) {
+        // List after blockquote
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<BlockQuote>(children[0])
+            }
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("A", text(this))
+            }
+        }
+
+        // List after fence code
+        with(nodes.next().children.iterator()) {
+            with(next()) {
+                assertIs<ListItem>(this)
+                assertIs<Paragraph>(children[0])
+                assertEquals("A", text(this))
+            }
         }
 
         assertFalse(nodes.hasNext())
