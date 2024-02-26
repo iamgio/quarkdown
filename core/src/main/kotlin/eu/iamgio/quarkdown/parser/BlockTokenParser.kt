@@ -129,22 +129,26 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     private fun extractListItems(token: Token) =
         StandardRegexLexer(
             source = token.data.text,
-            listOf(BlockTokenRegexPattern.LISTITEM),
-        ).tokenize().parseAll(this)
+            listOf(BlockTokenRegexPattern.LISTITEM, BlockTokenRegexPattern.NEWLINE),
+        ).tokenize()
+            .parseAll(this)
+            .dropLastWhile { it is Newline } // Remove trailing blank lines
 
     override fun visit(token: UnorderedListToken): Node {
+        val children = extractListItems(token)
+
         return UnorderedList(
-            // TODO loose
-            isLoose = false,
-            children = extractListItems(token),
+            isLoose = children.any { it is Newline },
+            children,
         )
     }
 
     override fun visit(token: OrderedListToken): Node {
+        val children = extractListItems(token)
+
         return OrderedList(
-            // TODO loose
-            isLoose = false,
-            children = extractListItems(token),
+            isLoose = children.any { it is Newline },
+            children,
         )
     }
 

@@ -253,24 +253,33 @@ class ParserTest {
         val nodes = nodesIterator<T>(source, assertType = false)
 
         // First list
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertEquals("A", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertEquals("B", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertEquals("C", text(this))
             }
         }
 
         // List after two blank lines
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertTrue(isLoose)
+
+            val items = children.iterator()
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this, childIndex = 0))
@@ -279,8 +288,10 @@ class ParserTest {
                 assertEquals("Some paragraph", text(this, childIndex = 2))
             }
 
+            assertIs<Newline>(items.next())
+
             // Nested list
-            with(next()) {
+            with(items.next()) {
                 // First list item
                 assertIs<ListItem>(this)
                 assertEquals("B", text(this))
@@ -295,6 +306,7 @@ class ParserTest {
                         assertIs<Paragraph>(children[0])
                         with(children[1]) {
                             assertIs<T>(this)
+                            assertFalse(isLoose)
                             with(children[0]) {
                                 // Third list item
                                 assertIs<ListItem>(this)
@@ -309,7 +321,9 @@ class ParserTest {
                 }
             }
 
-            with(next()) {
+            assertIs<Newline>(items.next())
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("C", text(this, childIndex = 0))
@@ -318,7 +332,9 @@ class ParserTest {
                 assertEquals("Some quote", text(children[2] as NestableNode, childIndex = 0))
             }
 
-            with(next()) {
+            assertIs<Newline>(items.next())
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("D", text(this, childIndex = 0))
@@ -336,7 +352,9 @@ class ParserTest {
                 }
             }
 
-            with(next()) {
+            assertIs<Newline>(items.next())
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 with(children[0]) {
                     assertIs<T>(this)
@@ -350,13 +368,20 @@ class ParserTest {
         }
 
         // List after paragraph
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertTrue(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("Another list\nwith lazy line", text(this))
             }
-            with(next()) {
+
+            assertIs<Newline>(items.next())
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("B", text(this, childIndex = 0))
@@ -364,17 +389,20 @@ class ParserTest {
                 assertIs<Paragraph>(children[2])
                 assertEquals("Some paragraph\nwith lazy line", text(this, childIndex = 2))
             }
-            with(next()) {
+
+            assertIs<Newline>(items.next())
+
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Heading>(children[0])
                 assertEquals("Heading", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("C", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Heading>(children[0])
                 assertEquals("Heading", text(this, childIndex = 0))
@@ -384,13 +412,17 @@ class ParserTest {
         }
 
         // List after heading
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("B", text(this))
@@ -398,8 +430,10 @@ class ParserTest {
         }
 
         // List after horizontal rule
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+            with(children.iterator().next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this))
@@ -407,12 +441,16 @@ class ParserTest {
         }
 
         // List after blockquote
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<BlockQuote>(children[0])
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this))
@@ -420,13 +458,17 @@ class ParserTest {
         }
 
         // List after fence code
-        with(nodes.next().children.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", text(this))
             }
-            with(next()) {
+            with(items.next()) {
                 assertIs<ListItem>(this)
                 with(children[0]) {
                     assertIs<Code>(this)
