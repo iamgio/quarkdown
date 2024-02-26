@@ -1,5 +1,6 @@
-package eu.iamgio.quarkdown.lexer
+package eu.iamgio.quarkdown.lexer.impl
 
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.BlockTokenRegexPattern
 
@@ -11,5 +12,3 @@ class BlockLexer(source: CharSequence) : StandardRegexLexer(
     source,
     patterns = BlockTokenRegexPattern.values().toList(),
 )
-
-// TODO handle nested recursive lexing for blocks, and use new refactor from UML (remove tokentype enums)

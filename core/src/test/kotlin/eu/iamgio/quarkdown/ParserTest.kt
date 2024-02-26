@@ -15,8 +15,8 @@ import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.impl.BlockLexer
 import eu.iamgio.quarkdown.parser.BlockTokenParser
 import kotlin.test.Test
 import kotlin.test.assertEquals

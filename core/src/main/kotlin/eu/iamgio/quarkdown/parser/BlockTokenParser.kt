@@ -30,9 +30,8 @@ import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.impl.ListItemLexer
 import eu.iamgio.quarkdown.lexer.parseAll
-import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
-import eu.iamgio.quarkdown.lexer.regex.pattern.BlockTokenRegexPattern
 
 /**
  * A parser for block tokens.
@@ -127,10 +126,8 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
      * @param token list token to extract the items from
      */
     private fun extractListItems(token: Token) =
-        StandardRegexLexer(
-            source = token.data.text,
-            listOf(BlockTokenRegexPattern.LISTITEM, BlockTokenRegexPattern.NEWLINE),
-        ).tokenize()
+        ListItemLexer(source = token.data.text)
+            .tokenize()
             .parseAll(this)
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 

@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Document
-import eu.iamgio.quarkdown.lexer.BlockLexer
+import eu.iamgio.quarkdown.lexer.impl.BlockLexer
 import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log

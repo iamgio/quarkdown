@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
-import eu.iamgio.quarkdown.lexer.BlockLexer
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.FencesCodeToken
 import eu.iamgio.quarkdown.lexer.HeadingToken
@@ -16,6 +15,7 @@ import eu.iamgio.quarkdown.lexer.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.impl.BlockLexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
