@@ -306,15 +306,23 @@ class ParserTest {
                         assertIs<Paragraph>(children[0])
                         with(children[1]) {
                             assertIs<T>(this)
-                            assertFalse(isLoose)
+                            assertTrue(isLoose)
                             with(children[0]) {
                                 // Third list item
                                 assertIs<ListItem>(this)
                                 assertIs<Paragraph>(children[0])
-                                assertEquals("Nested 2", text(this))
+                                assertEquals("Nested A", text(this))
                                 assertIs<Newline>(children[1])
                                 assertIs<Paragraph>(children[2])
                                 assertEquals("Some paragraph", text(this, childIndex = 2))
+                            }
+
+                            assertIs<Newline>(children[1])
+
+                            with(children[2]) {
+                                assertIs<ListItem>(this)
+                                assertIs<Paragraph>(children[0])
+                                assertEquals("Nested B", text(this))
                             }
                         }
                     }

@@ -9,9 +9,11 @@
 
 - B
   - Nested 1
-    - Nested 2
+    - Nested A
       
       Some paragraph
+    
+    - Nested B
 
 - C
 
