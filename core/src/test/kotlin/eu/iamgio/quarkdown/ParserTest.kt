@@ -257,6 +257,10 @@ class ParserTest {
             assertIs<T>(this)
             assertFalse(isLoose)
 
+            if (this is OrderedList) {
+                assertEquals(1, startIndex)
+            }
+
             val items = children.iterator()
             with(items.next()) {
                 assertIs<ListItem>(this)
@@ -423,6 +427,10 @@ class ParserTest {
         with(nodes.next()) {
             assertIs<T>(this)
             assertFalse(isLoose)
+
+            if (this is OrderedList) {
+                assertEquals(9, startIndex)
+            }
 
             val items = children.iterator()
             with(items.next()) {

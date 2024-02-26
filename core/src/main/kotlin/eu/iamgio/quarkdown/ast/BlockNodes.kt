@@ -69,8 +69,10 @@ data class UnorderedList(
  * An ordered list.
  * @param isLoose whether the list is loose
  * @param children items
+ * @param startIndex index of the first item
  */
 data class OrderedList(
+    val startIndex: Int,
     override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock

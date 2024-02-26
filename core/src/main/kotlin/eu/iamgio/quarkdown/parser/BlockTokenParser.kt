@@ -145,8 +145,12 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
 
     override fun visit(token: OrderedListToken): Node {
         val children = extractListItems(token)
+        val groups = groupsIterator(token, consumeAmount = 3)
+
+        val marker = groups.next().trim()
 
         return OrderedList(
+            startIndex = marker.removeSuffix(".").toIntOrNull() ?: 1,
             isLoose = children.any { it is Newline },
             children,
         )

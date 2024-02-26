@@ -45,8 +45,8 @@ with lazy line
    Some paragraph
 # End of list
 
-1. A
-2. B
+9. A
+10. B
 ---
 1. A
 > End of list
