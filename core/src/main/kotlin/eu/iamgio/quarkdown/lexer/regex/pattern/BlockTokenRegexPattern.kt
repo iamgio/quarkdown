@@ -150,7 +150,7 @@ private const val HTML_HELPER =
 private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"
 
 private val PARAGRAPH_PATTERN =
-    RegexBuilder("^([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
+    RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)
         .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
         .build()

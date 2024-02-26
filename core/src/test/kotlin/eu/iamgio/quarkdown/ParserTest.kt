@@ -176,13 +176,14 @@ class ParserTest {
 
     @Test
     fun blockQuote() {
-        val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"))
+        val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"), assertType = false)
 
         assertEquals("Text", text(nodes.next()))
         assertEquals("Text", text(nodes.next()))
         assertEquals("Line 1\nLine 2", text(nodes.next()))
 
         with(nodes.next()) {
+            assertIs<Paragraph>(children[0])
             assertEquals("Paragraph 1", text(this, childIndex = 0))
             assertIs<Newline>(children[1])
             assertEquals("Paragraph 2", text(this, childIndex = 2))
@@ -193,6 +194,18 @@ class ParserTest {
             assertIs<BlockQuote>(children[1])
             assertEquals("Inner quote", text(children[1] as NestableNode))
         }
+
+        with(nodes.next()) {
+            assertEquals("Text\nwith lazy line", text(this))
+        }
+
+        repeat(3) {
+            assertEquals("Text", text(nodes.next()))
+        }
+
+        assertIs<OrderedList>(nodes.next().children.first())
+
+        assertFalse(nodes.hasNext())
     }
 
     @Test

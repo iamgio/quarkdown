@@ -11,3 +11,17 @@
 
 > Text
 >> Inner quote
+
+> Text
+with lazy line
+
+> Text
+# Heading
+> Text
+```
+Code
+```
+> Text
+
+> 1. A
+> 2. B
