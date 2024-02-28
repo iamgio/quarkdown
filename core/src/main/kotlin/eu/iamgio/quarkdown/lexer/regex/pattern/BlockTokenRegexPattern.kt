@@ -104,7 +104,6 @@ enum class BlockTokenRegexPattern(
         RegexBuilder("^( {0,3}(bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*((\\s*\\n)( {2,}))*)*)")
             .withReference("bullet", BULLET_HELPER)
             .withReference("bullet", BULLET_HELPER)
-            .withReference("bullet", BULLET_HELPER)
             .build(),
     ),
 }
@@ -126,7 +125,7 @@ private const val TAG_HELPER =
         "|tr|track|ul"
 
 private val PARAGRAPH_INTERRUPTION_HELPER =
-    RegexBuilder("hr|heading|lheading|blockquote|fences|list|html|table| +\\n")
+    RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
         .withReference("hr", HORIZONTAL_RULE_HELPER)
         .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
         .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
