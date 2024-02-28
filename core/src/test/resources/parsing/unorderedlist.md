@@ -59,3 +59,8 @@ End of list
 - ```
   Some code
   ```
+## End of list
+
+- [x] Checked
+- [X] Checked
+- [ ] Unchecked

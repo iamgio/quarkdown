@@ -57,5 +57,10 @@ End of list
 ```
 003. A
 004. ```
-   Some code
-   ```
+     Some code
+     ```
+## End of list
+
+1. [x] Checked
+2. [X] Checked
+3. [ ] Unchecked

@@ -79,11 +79,26 @@ data class OrderedList(
 
 /**
  * An item of a [ListBlock].
+ */
+interface ListItem : NestableNode
+
+/**
+ * An item of a [ListBlock].
  * @param children content
  */
-data class ListItem(
+data class BaseListItem(
     override val children: List<Node>,
-) : NestableNode
+) : ListItem
+
+/**
+ * An item of a [ListBlock] that includes a task, with a checked/unchecked value.
+ * @param isChecked whether the task is checked
+ * @param children content
+ */
+data class TaskListItem(
+    val isChecked: Boolean,
+    override val children: List<Node>,
+) : ListItem
 
 /**
  * An HTML block.

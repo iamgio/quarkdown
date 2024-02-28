@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.parser
 
+import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.Code
@@ -7,11 +8,11 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.common.BlockTokenVisitor
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
@@ -156,12 +157,14 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     override fun visit(token: ListItemToken): Node {
         val groups = groupsIterator(token, consumeAmount = 2)
         val marker = groups.next() // Bullet/number
+        groups.next() // Consume
+        val task = groups.next() // Optional GFM task
 
-        val content = token.data.text.removePrefix(marker)
+        val content = token.data.text.removePrefix(marker).removePrefix(task)
         val lines = content.lines()
 
         if (lines.isEmpty()) {
-            return ListItem(children = emptyList())
+            return BaseListItem(children = emptyList())
         }
 
         // Gets the amount of indentation to trim from the content.
@@ -180,9 +183,18 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
                 it.replaceFirst("^ {1,$indent}".toRegex(), "")
             }
 
-        return ListItem(
-            children = lexer.copyWith(source = trimmedContent).tokenize().parseAll(this),
-        )
+        // Parsed content.
+        val children = lexer.copyWith(source = trimmedContent).tokenize().parseAll(this)
+
+        return when {
+            // GFM task list item.
+            task.isNotBlank() -> {
+                val isChecked = "[ ]" !in task
+                TaskListItem(isChecked, children)
+            }
+            // Regular list item.
+            else -> BaseListItem(children)
+        }
     }
 
     override fun visit(token: HtmlToken): Node {
