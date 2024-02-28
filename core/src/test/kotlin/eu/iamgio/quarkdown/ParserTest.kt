@@ -506,7 +506,7 @@ class ParserTest {
                 assertIs<BaseListItem>(this)
                 with(children[0]) {
                     assertIs<Code>(this)
-                    assertEquals("Some code", this.text)
+                    assertEquals("Some multiline\ncode", this.text)
                 }
             }
         }

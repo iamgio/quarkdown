@@ -57,7 +57,8 @@ End of list
 ```
 - A
 - ```
-  Some code
+  Some multiline
+  code
   ```
 ## End of list
 
