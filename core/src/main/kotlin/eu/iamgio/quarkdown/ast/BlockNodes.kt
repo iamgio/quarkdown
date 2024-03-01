@@ -8,13 +8,21 @@ class Newline : Node {
 }
 
 /**
- * A code block defined via fences.
+ * A code block.
  * @param text code content
  * @param language optional syntax language
  */
 data class Code(
     override val text: String,
     val language: String?,
+) : TextNode
+
+/**
+ * A math (TeX) block.
+ * @param text expression content
+ */
+data class Math(
+    override val text: String,
 ) : TextNode
 
 /**

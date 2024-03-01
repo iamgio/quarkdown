@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
@@ -25,6 +26,7 @@ import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.MathToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
@@ -69,6 +71,13 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         val groups = groupsIterator(token, consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),
+            text = groups.next().trim(),
+        )
+    }
+
+    override fun visit(token: MathToken): Node {
+        val groups = groupsIterator(token, consumeAmount = 3)
+        return Math(
             text = groups.next().trim(),
         )
     }

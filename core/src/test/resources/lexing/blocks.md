@@ -39,6 +39,11 @@ with lazy line
 Code (fences)
 ```
 
+$$$
+Math
+expression
+$$$
+
 ---
 
 <p>

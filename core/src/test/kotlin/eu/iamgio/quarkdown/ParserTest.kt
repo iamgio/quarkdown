@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
+import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -167,6 +168,16 @@ class ParserTest {
             assertEquals("let x;", text)
             assertEquals("ecmascript 6", language)
         }
+    }
+
+    @Test
+    fun math() {
+        val nodes = nodesIterator<Math>(readSource("/parsing/math.md"), assertType = false)
+
+        repeat(3) {
+            assertEquals("Math", nodes.next().text)
+        }
+        assertEquals("Line 1\nLine 2", nodes.next().text)
     }
 
     @Test

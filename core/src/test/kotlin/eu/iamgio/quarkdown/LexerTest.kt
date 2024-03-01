@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.MathToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
@@ -104,6 +105,7 @@ class LexerTest {
         assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockCodeToken>(tokens.next())
         assertIs<FencesCodeToken>(tokens.next())
+        assertIs<MathToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<HtmlToken>(tokens.next())
         assertIs<LinkDefinitionToken>(tokens.next())

@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.MathToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
@@ -48,6 +49,11 @@ enum class BlockTokenRegexPattern(
     FENCESCODE(
         ::FencesCodeToken,
         "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
+            .toRegex(),
+    ),
+    MATH(
+        ::MathToken,
+        "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
             .toRegex(),
     ),
     HEADING(
@@ -126,10 +132,11 @@ private const val TAG_HELPER =
 
 // Remember to add the "list" reference when using this pattern.
 private val PARAGRAPH_INTERRUPTION_HELPER =
-    RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
+    RegexBuilder("hr|heading|blockquote|fences|math|list|html|table| +\\n")
         .withReference("hr", HORIZONTAL_RULE_HELPER)
         .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
         .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
+        .withReference("math", " {0,3}(?:\\\${3,})[^\\n]*\\n")
         .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
         .withReference("blockquote", " {0,3}>")
         .withReference("tag", TAG_HELPER)

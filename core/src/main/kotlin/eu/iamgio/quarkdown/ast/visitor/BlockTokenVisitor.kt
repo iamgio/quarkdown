@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.MathToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
@@ -25,6 +26,8 @@ interface BlockTokenVisitor<T> {
     fun visit(token: BlockCodeToken): T
 
     fun visit(token: FencesCodeToken): T
+
+    fun visit(token: MathToken): T
 
     fun visit(token: HorizontalRuleToken): T
 

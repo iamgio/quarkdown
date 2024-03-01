@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.lexer
 import eu.iamgio.quarkdown.ast.visitor.BlockTokenVisitor
 
 /**
+ * A blank line.
  * @see eu.iamgio.quarkdown.ast.Newline
  */
 class NewlineToken(token: TokenData) : Token(token) {
@@ -10,6 +11,10 @@ class NewlineToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * ```
+ *     Code
+ * ```
  * @see eu.iamgio.quarkdown.ast.Code
  */
 class BlockCodeToken(token: TokenData) : Token(token) {
@@ -17,6 +22,18 @@ class BlockCodeToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Examples:
+ * ~~~
+ * ```language
+ * Code
+ * ```
+ * ~~~
+ *
+ * ```
+ * ~~~language
+ * Code
+ * ~~~
+ * ```
  * @see eu.iamgio.quarkdown.ast.Code
  */
 class FencesCodeToken(token: TokenData) : Token(token) {
@@ -24,6 +41,24 @@ class FencesCodeToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * Example:
+ * $$$
+ * LaTeX expression
+ * $$$
+ * @see eu.iamgio.quarkdown.ast.Math
+ */
+class MathToken(token: TokenData) : Token(token) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Examples:
+ * ```
+ * ---
+ * ```
+ * ```
+ * *****
+ * ```
  * @see eu.iamgio.quarkdown.ast.HorizontalRule
  */
 class HorizontalRuleToken(token: TokenData) : Token(token) {
