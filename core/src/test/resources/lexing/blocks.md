@@ -25,6 +25,12 @@ some text.
 
 >> Double blockquote
 
+> Blockquote
+>> Inner quote
+
+> Blockquote
+with lazy line
+
     Code (indentation)
 
 ```markdown

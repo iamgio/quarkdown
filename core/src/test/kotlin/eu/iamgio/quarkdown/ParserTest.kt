@@ -200,6 +200,12 @@ class ParserTest {
             assertEquals("Text\nwith lazy line", text(this))
         }
 
+        with(nodes.next()) {
+            assertEquals("Text", text(this))
+            assertIs<BlockQuote>(children[1])
+            assertEquals("Inner text\nwith lazy\nlines", text(children[1] as NestableNode))
+        }
+
         repeat(3) {
             assertEquals("Text", text(nodes.next()))
         }

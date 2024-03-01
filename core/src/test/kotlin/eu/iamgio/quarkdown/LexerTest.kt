@@ -99,6 +99,8 @@ class LexerTest {
         assertIs<OrderedListToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())
+        assertIs<BlockQuoteToken>(tokens.next())
+        assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockCodeToken>(tokens.next())
         assertIs<FencesCodeToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
@@ -106,29 +108,4 @@ class LexerTest {
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
     }
-
-    /*@Test
-    fun headings() {
-        val tokens =
-            Lexer(readSource("/lexing/heading.md")).tokenize().asSequence()
-                .map { it.type }
-                .filterNot { it.isWhitespace() }
-                .iterator()
-
-        assertEquals(TokenType.HEADING, tokens.next())
-        assertEquals(TokenType.TEXT, tokens.next())
-        assertEquals(TokenType.HEADING, tokens.next())
-        assertEquals(TokenType.TEXT, tokens.next())
-        assertEquals(TokenType.HEADING, tokens.next())
-        assertEquals(TokenType.TEXT, tokens.next())
-        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
-        assertEquals(TokenType.TEXT, tokens.next()) // "a"
-        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
-        assertEquals(TokenType.HEADING, tokens.next()) // Empty title
-        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
-        assertEquals(TokenType.TEXT, tokens.next()) // Not a title
-        assertEquals(TokenType.HEADING, tokens.next())
-        assertEquals(TokenType.TEXT, tokens.next())
-        assertEquals(TokenType.HEADING_CLOSE, tokens.next())
-    }*/
 }

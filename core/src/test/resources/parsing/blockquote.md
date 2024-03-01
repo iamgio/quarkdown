@@ -16,6 +16,11 @@
 with lazy line
 
 > Text
+>> Inner text
+with lazy
+> lines
+
+> Text
 # Heading
 > Text
 ```
