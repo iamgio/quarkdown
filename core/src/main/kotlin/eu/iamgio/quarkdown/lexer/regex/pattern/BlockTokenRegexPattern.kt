@@ -47,7 +47,7 @@ enum class BlockTokenRegexPattern(
     ),
     FENCESCODE(
         ::FencesCodeToken,
-        "^ {0,3}((`{3,})($|\\s*.+$)((.|\\s)+?)(`{3,}))|((~{3,})($|\\s*.+$)((.|\\s)+?)(~{3,}))"
+        "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
             .toRegex(),
     ),
     HEADING(
