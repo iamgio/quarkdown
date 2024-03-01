@@ -96,6 +96,7 @@ class LexerTest {
         assertIs<SetextHeadingToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())
         assertIs<UnorderedListToken>(tokens.next())
+        assertIs<UnorderedListToken>(tokens.next())
         assertIs<OrderedListToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())
         assertIs<BlockQuoteToken>(tokens.next())

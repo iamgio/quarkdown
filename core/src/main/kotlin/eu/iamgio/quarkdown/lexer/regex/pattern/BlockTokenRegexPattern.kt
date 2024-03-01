@@ -79,11 +79,11 @@ enum class BlockTokenRegexPattern(
     ),
     UNORDEREDLIST(
         ::UnorderedListToken,
-        listPattern(bullet = "[*+-]"),
+        listPattern(bulletInitialization = "(?<unorderedbull>[*+-])", bulletContinuation = "\\k<unorderedbull>"),
     ),
     ORDEREDLIST(
         ::OrderedListToken,
-        listPattern(bullet = "\\d{1,9}[\\.)]"),
+        listPattern(bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])", bulletContinuation = "\\d{1,9}\\k<orderedbull>"),
     ),
     NEWLINE(
         ::NewlineToken,
@@ -124,6 +124,7 @@ private const val TAG_HELPER =
         "|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title" +
         "|tr|track|ul"
 
+// Remember to add the "list" reference when using this pattern.
 private val PARAGRAPH_INTERRUPTION_HELPER =
     RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
         .withReference("hr", HORIZONTAL_RULE_HELPER)
@@ -158,10 +159,20 @@ private val HEADING_PATTERN =
     "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
         .toRegex()
 
-private fun listPattern(bullet: String) =
-    RegexBuilder("^(( {0,3}(bullet))[ \\t]((?!^(\\s*\\n){2})(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}(bullet)[ \\t]))(?!^(interruption)))*)+")
-        .withReference("bullet", bullet)
-        .withReference("bullet", bullet)
+/**
+ * Generates a regex pattern that matches a whole list block.
+ * @param bulletInitialization bullet pattern that begins the block
+ * @param bulletContinuation bullet pattern that continues the block (all the items should ideally share the same bullet type)
+ */
+private fun listPattern(
+    bulletInitialization: String,
+    bulletContinuation: String,
+): Regex {
+    val initialization = "^(( {0,3}$bulletInitialization)[ \\t]((?!^(\\s*\\n){2})"
+    val continuation = "(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}$bulletContinuation[ \\t]))"
+
+    return RegexBuilder("$initialization$continuation(?!^(interruption)))*)+")
         .withReference("interruption", PARAGRAPH_INTERRUPTION_HELPER.pattern)
-        .withReference("|list", "")
+        .withReference("list", " {0,3}(?:[*+-]|\\d[.)]) ")
         .build()
+}

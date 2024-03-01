@@ -4,6 +4,11 @@
 
 
 - A
+- B
+* C
+
+
+- A
 
   Some paragraph
 

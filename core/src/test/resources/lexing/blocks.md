@@ -17,6 +17,8 @@ some text.
   Inner content
 
 - B
+* A
+* B
 
 1. First
 2. Second

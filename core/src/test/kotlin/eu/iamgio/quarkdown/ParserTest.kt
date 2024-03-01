@@ -299,6 +299,34 @@ class ParserTest {
         // List after two blank lines
         with(nodes.next()) {
             assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(items.next()) {
+                assertIs<BaseListItem>(this)
+                assertEquals("A", text(this))
+            }
+            with(items.next()) {
+                assertIs<BaseListItem>(this)
+                assertEquals("B", text(this))
+            }
+        }
+
+        // Different list for different bullet character
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+
+            val items = children.iterator()
+            with(children.first()) {
+                assertIs<BaseListItem>(this)
+                assertEquals("C", text(this))
+            }
+        }
+
+        // List after two blank lines
+        with(nodes.next()) {
+            assertIs<T>(this)
             assertTrue(isLoose)
 
             val items = children.iterator()
