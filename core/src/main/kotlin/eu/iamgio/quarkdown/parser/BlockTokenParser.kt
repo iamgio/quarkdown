@@ -145,10 +145,11 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         val children = extractListItems(token)
         val groups = groupsIterator(token, consumeAmount = 3)
 
+        // e.g. "1."
         val marker = groups.next().trim()
 
         return OrderedList(
-            startIndex = marker.removeSuffix(".").toIntOrNull() ?: 1,
+            startIndex = marker.dropLast(1).toIntOrNull() ?: 1,
             isLoose = children.any { it is Newline },
             children,
         )
