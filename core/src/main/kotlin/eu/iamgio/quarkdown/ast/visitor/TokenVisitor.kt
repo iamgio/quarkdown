@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.common
+package eu.iamgio.quarkdown.ast.visitor
 
 /**
  * A visitor for [eu.iamgio.quarkdown.lexer.Token]s.

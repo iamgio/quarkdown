@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.common.BlockTokenVisitor
+import eu.iamgio.quarkdown.ast.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.BlockTextToken

@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.lexer
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.common.BlockTokenVisitor
+import eu.iamgio.quarkdown.ast.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.parser.BlockTokenParser
 
 /**
