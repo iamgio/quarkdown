@@ -41,13 +41,29 @@ class FencesCodeToken(token: TokenData) : Token(token) {
 }
 
 /**
+ * A multiline fenced block that contains a TeX expression.
+ * This is a custom Quarkdown block.
+ *
  * Example:
  * $$$
- * LaTeX expression
+ * LaTeX expression line 1
+ * LaTeX expression line 2
  * $$$
  * @see eu.iamgio.quarkdown.ast.Math
  */
-class MathToken(token: TokenData) : Token(token) {
+class MultilineMathToken(token: TokenData) : Token(token) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * A one-line fenced block that contains a TeX expression.
+ * This is a custom Quarkdown block.
+ *
+ * Example:
+ * $ LaTeX expression $
+ * @see eu.iamgio.quarkdown.ast.Math
+ */
+class OnelineMathToken(token: TokenData) : Token(token) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>) = visitor.visit(this)
 }
 

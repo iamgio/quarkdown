@@ -44,6 +44,8 @@ Math
 expression
 $$$
 
+$ Math expression $
+
 ---
 
 <p>

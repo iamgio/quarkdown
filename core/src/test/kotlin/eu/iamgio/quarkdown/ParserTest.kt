@@ -171,13 +171,22 @@ class ParserTest {
     }
 
     @Test
-    fun math() {
-        val nodes = nodesIterator<Math>(readSource("/parsing/math.md"), assertType = false)
+    fun multilineMath() {
+        val nodes = nodesIterator<Math>(readSource("/parsing/math_multiline.md"), assertType = false)
 
         repeat(3) {
-            assertEquals("Math", nodes.next().text)
+            assertEquals("Math expression", nodes.next().text)
         }
         assertEquals("Line 1\nLine 2", nodes.next().text)
+    }
+
+    @Test
+    fun onelineMath() {
+        val nodes = nodesIterator<Math>(readSource("/parsing/math_oneline.md"), assertType = false)
+
+        repeat(3) {
+            assertEquals("Math expression", nodes.next().text)
+        }
     }
 
     @Test

@@ -1,14 +1,14 @@
 $$$
-Math
+Math expression
 $$$
 
 A paragraph
 $$$
-Math
+Math expression
 $$$
 
   $$$
-Math
+Math expression
 $$$
 
 ```

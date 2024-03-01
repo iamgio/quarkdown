@@ -9,8 +9,9 @@ import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
-import eu.iamgio.quarkdown.lexer.MathToken
+import eu.iamgio.quarkdown.lexer.MultilineMathToken
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OnelineMathToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
@@ -51,10 +52,14 @@ enum class BlockTokenRegexPattern(
         "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
             .toRegex(),
     ),
-    MATH(
-        ::MathToken,
+    MULTILINEMATH(
+        ::MultilineMathToken,
         "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
             .toRegex(),
+    ),
+    ONELINEMATH(
+        ::OnelineMathToken,
+        ONELINE_MATH_HELPER.toRegex(),
     ),
     HEADING(
         ::HeadingToken,
@@ -89,7 +94,10 @@ enum class BlockTokenRegexPattern(
     ),
     ORDEREDLIST(
         ::OrderedListToken,
-        listPattern(bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])", bulletContinuation = "\\d{1,9}\\k<orderedbull>"),
+        listPattern(
+            bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])",
+            bulletContinuation = "\\d{1,9}\\k<orderedbull>",
+        ),
     ),
     NEWLINE(
         ::NewlineToken,
@@ -118,6 +126,8 @@ enum class BlockTokenRegexPattern(
 
 private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
 
+private const val ONELINE_MATH_HELPER = " {0,3}\\\$[ \\t](.+?)[ \\t]\\\$\\s*\$"
+
 private const val HORIZONTAL_RULE_HELPER = "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\n+|$)"
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
@@ -130,13 +140,15 @@ private const val TAG_HELPER =
         "|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title" +
         "|tr|track|ul"
 
+// The rules that defines when a paragraph must interrupt.
 // Remember to add the "list" reference when using this pattern.
 private val PARAGRAPH_INTERRUPTION_HELPER =
-    RegexBuilder("hr|heading|blockquote|fences|math|list|html|table| +\\n")
-        .withReference("hr", HORIZONTAL_RULE_HELPER)
+    RegexBuilder("hr|heading|blockquote|fences|mmath|omath|list|html|table| +\\n")
+        .withReference("hr", HORIZONTAL_RULE_HELPER) // Interrupts on horizontal rule
         .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
         .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
-        .withReference("math", " {0,3}(?:\\\${3,})[^\\n]*\\n")
+        .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
+        .withReference("omath", ONELINE_MATH_HELPER)
         .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
         .withReference("blockquote", " {0,3}>")
         .withReference("tag", TAG_HELPER)
