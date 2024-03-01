@@ -162,9 +162,9 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         val task = groups.next() // Optional GFM task
 
         val content = token.data.text.removePrefix(marker).removePrefix(task)
-        val lines = content.lines()
+        val lines = content.lineSequence()
 
-        if (lines.isEmpty()) {
+        if (lines.none()) {
             return BaseListItem(children = emptyList())
         }
 
