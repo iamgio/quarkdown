@@ -65,3 +65,7 @@ End of list
 1. [x] Checked
 2. [X] Checked
 3. [ ] Unchecked
+## End of list
+  1. A
+   2. B (not enough indentation to nest)
+      1. [x] C (nested in C) 

@@ -539,6 +539,28 @@ class ParserTest {
             }
         }
 
+        // List after heading
+        with(nodes.next()) {
+            assertIs<T>(this)
+            assertFalse(isLoose)
+            assertEquals(2, children.size)
+
+            with((children[1] as BaseListItem).children[1]) {
+                assertIs<T>(this)
+
+                if (this is OrderedList) {
+                    assertEquals(1, startIndex)
+                }
+
+                with(children[0]) {
+                    assertIs<TaskListItem>(this)
+                    assertTrue(isChecked)
+
+                    assertIs<Paragraph>(children[0])
+                }
+            }
+        }
+
         assertFalse(nodes.hasNext())
     }
 
