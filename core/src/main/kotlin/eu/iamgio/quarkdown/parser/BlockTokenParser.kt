@@ -37,6 +37,7 @@ import eu.iamgio.quarkdown.lexer.impl.ListItemLexer
 import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
+import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 
 /**
  * A parser for block tokens.
@@ -81,16 +82,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Heading(
             depth = groups.next().length,
-            text =
-                groups.next().trim().let {
-                    // Trim trailing #s preceeded by a space
-                    val trailingIndex = it.lastIndexOf(" #")
-                    if (trailingIndex >= 0) {
-                        it.substring(0, trailingIndex)
-                    } else {
-                        it
-                    }
-                },
+            text = groups.next().trim().takeUntilLastOccurrence(" #"),
         )
     }
 
