@@ -36,26 +36,13 @@ import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.impl.ListItemLexer
 import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
+import eu.iamgio.quarkdown.util.iterator
 
 /**
  * A parser for block tokens.
  * @param lexer lexer to parse sub-blocks with
  */
 class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
-    /**
-     * @param token token to extract the group iterator from
-     * @param consumeAmount amount of initial groups to consume/skip (the first group is always the whole match)
-     * @return a new group iterator for this token, sliced from the first [consumeAmount] items
-     */
-    private fun groupsIterator(
-        token: Token,
-        consumeAmount: Int = 1,
-    ) = token.data.groups.iterator().apply {
-        repeat(consumeAmount) {
-            next()
-        }
-    }
-
     override fun visit(token: NewlineToken): Node {
         return Newline()
     }
@@ -69,7 +56,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: FencesCodeToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 4)
+        val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),
             text = groups.next().trim(),
@@ -77,12 +64,12 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: MultilineMathToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 3)
+        val groups = token.data.groups.iterator(consumeAmount = 3)
         return Math(text = groups.next().trim())
     }
 
     override fun visit(token: OnelineMathToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
         return Math(text = groups.next().trim())
     }
 
@@ -91,7 +78,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: HeadingToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
         return Heading(
             depth = groups.next().length,
             text =
@@ -108,7 +95,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: SetextHeadingToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
         return Heading(
             text = groups.next().trim(),
             depth =
@@ -121,7 +108,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: LinkDefinitionToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
         return LinkDefinition(
             text = groups.next().trim(),
             url = groups.next().trim(),
@@ -156,7 +143,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
 
     override fun visit(token: OrderedListToken): Node {
         val children = extractListItems(token)
-        val groups = groupsIterator(token, consumeAmount = 3)
+        val groups = token.data.groups.iterator(consumeAmount = 3)
 
         // e.g. "1."
         val marker = groups.next().trim()
@@ -169,7 +156,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
     }
 
     override fun visit(token: ListItemToken): Node {
-        val groups = groupsIterator(token, consumeAmount = 2)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
         val marker = groups.next() // Bullet/number
         groups.next() // Consume
         val task = groups.next() // Optional GFM task
