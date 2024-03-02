@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.lexer
 
-import eu.iamgio.quarkdown.ast.visitor.BlockTokenVisitor
+import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 
 /**
  * A blank line.

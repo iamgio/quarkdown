@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.ast.visitor
+package eu.iamgio.quarkdown.parser.visitor
 
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken

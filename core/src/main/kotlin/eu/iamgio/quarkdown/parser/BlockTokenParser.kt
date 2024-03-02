@@ -15,7 +15,6 @@ import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.ast.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.BlockTextToken
@@ -36,6 +35,7 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.impl.ListItemLexer
 import eu.iamgio.quarkdown.lexer.parseAll
+import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 
 /**
  * A parser for block tokens.
