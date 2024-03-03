@@ -10,23 +10,25 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
  *
  */
 class QuarkdownBlockTokenRegexPatterns : BaseBlockTokenRegexPatterns() {
-    val multilineMath =
-        TokenRegexPattern(
-            name = "MultilineMath",
-            ::MultilineMathToken,
-            regex =
-                "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
-                    .toRegex(),
-        )
+    val multilineMath
+        get() =
+            TokenRegexPattern(
+                name = "MultilineMath",
+                ::MultilineMathToken,
+                regex =
+                    "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
+                        .toRegex(),
+            )
 
-    val onelineMath =
-        TokenRegexPattern(
-            name = "OnelineMath",
-            ::OnelineMathToken,
-            regex =
-                " {0,3}\\\$[ \\t](.+?)[ \\t]\\\$\\s*\$"
-                    .toRegex(),
-        )
+    val onelineMath
+        get() =
+            TokenRegexPattern(
+                name = "OnelineMath",
+                ::OnelineMathToken,
+                regex =
+                    " {0,3}\\\$[ \\t](.+?)[ \\t]\\\$\\s*\$"
+                        .toRegex(),
+            )
 
     override val interruptionRule =
         RegexBuilder("mmath|omath|" + super.interruptionRule.pattern)
