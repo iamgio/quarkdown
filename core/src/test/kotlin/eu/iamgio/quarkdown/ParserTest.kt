@@ -1,35 +1,17 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.BaseListItem
-import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.Code
-import eu.iamgio.quarkdown.ast.Heading
-import eu.iamgio.quarkdown.ast.HorizontalRule
-import eu.iamgio.quarkdown.ast.Html
-import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.ListBlock
-import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.NestableNode
-import eu.iamgio.quarkdown.ast.Newline
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.OrderedList
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.TaskListItem
-import eu.iamgio.quarkdown.ast.TextNode
-import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.*
+import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.lexer.NewlineToken
-import eu.iamgio.quarkdown.lexer.impl.BlockLexer
 import eu.iamgio.quarkdown.parser.BlockTokenParser
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * Parsing tests.
  */
 class ParserTest {
+    private fun blockLexer(source: CharSequence) = BaseMarkdownFlavor().lexerFactory.newBlockLexer(source)
+
     /**
      * Tokenizes and parses a [source] code, parses each token.
      * @param source source code
@@ -41,7 +23,7 @@ class ParserTest {
         source: CharSequence,
         assertType: Boolean = true,
     ): Iterator<T> {
-        val lexer = BlockLexer(source)
+        val lexer = blockLexer(source)
         val parser = BlockTokenParser(lexer)
 
         return lexer.tokenize().asSequence()

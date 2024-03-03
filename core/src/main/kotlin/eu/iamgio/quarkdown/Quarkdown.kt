@@ -1,7 +1,8 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Document
-import eu.iamgio.quarkdown.lexer.impl.BlockLexer
+import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.lexer.parseAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
@@ -15,9 +16,11 @@ fun main(args: Array<String>) {
         exitProcess(NO_SOURCE_FILE_EXIT_CODE)
     }
 
+    val flavor: MarkdownFlavor = BaseMarkdownFlavor()
+
     val sourceFile = File(args.first())
 
-    val lexer = BlockLexer(sourceFile.readText())
+    val lexer = flavor.lexerFactory.newBlockLexer(sourceFile.readText())
     val tokens = lexer.tokenize()
 
     Log.debug("Tokens:\n" + DebugFormatter.formatTokens(tokens))
