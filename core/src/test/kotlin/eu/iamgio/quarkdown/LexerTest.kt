@@ -1,6 +1,8 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
@@ -15,7 +17,7 @@ import kotlin.test.assertNull
  * @see Lexer
  */
 class LexerTest {
-    private fun blockLexer(source: CharSequence) = BaseMarkdownFlavor().lexerFactory.newBlockLexer(source)
+    private fun blockLexer(source: CharSequence) = QuarkdownFlavor().lexerFactory.newBlockLexer(source)
 
     @Test
     fun sourceReader() {

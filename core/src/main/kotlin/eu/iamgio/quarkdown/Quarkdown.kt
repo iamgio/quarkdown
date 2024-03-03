@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Document
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
-import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
         exitProcess(NO_SOURCE_FILE_EXIT_CODE)
     }
 
-    val flavor: MarkdownFlavor = BaseMarkdownFlavor()
+    val flavor: MarkdownFlavor = QuarkdownFlavor()
 
     val sourceFile = File(args.first())
 

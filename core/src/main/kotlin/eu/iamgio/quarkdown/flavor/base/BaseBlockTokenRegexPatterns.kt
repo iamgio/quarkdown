@@ -22,12 +22,10 @@ open class BaseBlockTokenRegexPatterns {
     // The rules that defines when a text node must interrupt.
     // Remember to add the "list" reference when using this TokenRegexPattern.
     open val interruptionRule =
-        RegexBuilder("hr|heading|blockquote|fences|mmath|omath|list|html|table| +\\n")
+        RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
             .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
-            // .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
-            // .withReference("omath", ONELINE_MATH_HELPER)
             .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
             .withReference("blockquote", " {0,3}>")
             .withReference("tag", TAG_HELPER)
@@ -195,7 +193,7 @@ open class BaseBlockTokenRegexPatterns {
 
 private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
 
-private const val TAG_HELPER =
+internal const val TAG_HELPER =
     "address|article|aside|base|basefont|blockquote|body|caption" +
         "|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption" +
         "|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe" +

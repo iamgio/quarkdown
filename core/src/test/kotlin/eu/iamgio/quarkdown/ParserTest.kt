@@ -3,7 +3,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.*
-import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.NewlineToken
 import kotlin.test.*
 
@@ -22,7 +22,7 @@ class ParserTest {
         source: CharSequence,
         assertType: Boolean = true,
     ): Iterator<T> {
-        val flavor = BaseMarkdownFlavor()
+        val flavor = QuarkdownFlavor()
         val lexer = flavor.lexerFactory.newBlockLexer(source)
         val parser = flavor.parserFactory.newBlockParser()
 
