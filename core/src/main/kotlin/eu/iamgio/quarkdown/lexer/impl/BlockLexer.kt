@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.lexer.impl
 
+import eu.iamgio.quarkdown.flavor.base._BaseBlockTokenRegexPattern
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
-import eu.iamgio.quarkdown.lexer.regex.pattern.BlockTokenRegexPattern
 
 /**
  * A [Lexer] that splits the source into macro-blocks tokens.
@@ -10,5 +10,5 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.BlockTokenRegexPattern
  */
 class BlockLexer(source: CharSequence) : StandardRegexLexer(
     source,
-    patterns = BlockTokenRegexPattern.values().toList(),
+    patterns = _BaseBlockTokenRegexPattern.values().toList(),
 )

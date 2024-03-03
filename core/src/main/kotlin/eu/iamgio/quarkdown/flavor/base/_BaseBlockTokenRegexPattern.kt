@@ -1,31 +1,15 @@
-package eu.iamgio.quarkdown.lexer.regex.pattern
+package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.BlockCodeToken
-import eu.iamgio.quarkdown.lexer.BlockQuoteToken
-import eu.iamgio.quarkdown.lexer.BlockTextToken
-import eu.iamgio.quarkdown.lexer.FencesCodeToken
-import eu.iamgio.quarkdown.lexer.HeadingToken
-import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.HtmlToken
-import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
-import eu.iamgio.quarkdown.lexer.ListItemToken
-import eu.iamgio.quarkdown.lexer.MultilineMathToken
-import eu.iamgio.quarkdown.lexer.NewlineToken
-import eu.iamgio.quarkdown.lexer.OnelineMathToken
-import eu.iamgio.quarkdown.lexer.OrderedListToken
-import eu.iamgio.quarkdown.lexer.ParagraphToken
-import eu.iamgio.quarkdown.lexer.SetextHeadingToken
-import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.TokenData
-import eu.iamgio.quarkdown.lexer.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
+import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 // Some of the following patterns were taken or inspired by https://github.com/markedjs/marked/blob/master/src/rules.ts
 
 /**
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
-enum class BlockTokenRegexPattern(
+enum class _BaseBlockTokenRegexPattern(
     override val wrap: (TokenData) -> Token,
     override val regex: Regex,
 ) : TokenRegexPattern {
