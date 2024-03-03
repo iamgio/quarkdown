@@ -7,11 +7,15 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
- *
+ * Regex patterns for [BaseMarkdownFlavor]
  */
-open class BaseBlockTokenRegexPatterns {
-    // The rules that defines when a text node must interrupt.
-    // Remember to add the "list" reference when using this TokenRegexPattern.
+open class BaseMarkdownBlockTokenRegexPatterns {
+    /**
+     * The rules that defines when a text node must interrupt.
+     * This might be overridden by subclasses to add new interruptions.
+     *
+     * Note: remember to add the `list` reference when using this pattern.
+     */
     open val interruptionRule =
         RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
@@ -22,6 +26,10 @@ open class BaseBlockTokenRegexPatterns {
             .withReference("tag", TAG_HELPER)
             .build()
 
+    /**
+     * 4-spaces indented content.
+     * @see BlockCodeToken
+     */
     val blockCode
         get() =
             TokenRegexPattern(
@@ -32,6 +40,10 @@ open class BaseBlockTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * `>`-beginning content.
+     * @see BlockQuoteToken
+     */
     val blockQuote
         get() =
             TokenRegexPattern(
@@ -43,6 +55,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * Any previously unmatched content (should not happen).
+     * @see BlockTextToken
+     */
     val blockText =
         TokenRegexPattern(
             name = "BlockText",
@@ -52,6 +68,10 @@ open class BaseBlockTokenRegexPatterns {
                     .toRegex(),
         )
 
+    /**
+     * Fenced content within triple backticks or tildes, with an optional language tag.
+     * @see FencesCodeToken
+     */
     val fencesCode
         get() =
             TokenRegexPattern(
@@ -62,6 +82,10 @@ open class BaseBlockTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * Content that begins by a variable amount of `#`s.
+     * @see HeadingToken
+     */
     val heading
         get() =
             TokenRegexPattern(
@@ -72,6 +96,10 @@ open class BaseBlockTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * Three or more bullets in sequence.
+     * @see HorizontalRuleToken
+     */
     val horizontalRule
         get() =
             TokenRegexPattern(
@@ -82,6 +110,10 @@ open class BaseBlockTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * HTML content.
+     * @see HtmlToken
+     */
     val html
         get() =
             TokenRegexPattern(
@@ -98,6 +130,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * Creation of a link reference defined by label, url and optional title.
+     * @see LinkDefinitionToken
+     */
     val linkDefinition
         get() =
             TokenRegexPattern(
@@ -113,6 +149,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * Item of a list.
+     * @see ListItemToken
+     */
     val listItem
         get() =
             TokenRegexPattern(
@@ -127,6 +167,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * A blank line.
+     * @see NewlineToken
+     */
     val newline =
         TokenRegexPattern(
             name = "Newline",
@@ -136,6 +180,10 @@ open class BaseBlockTokenRegexPatterns {
                     .toRegex(),
         )
 
+    /**
+     * A numbered list.
+     * @see OrderedListToken
+     */
     val orderedList
         get() =
             TokenRegexPattern(
@@ -148,6 +196,10 @@ open class BaseBlockTokenRegexPatterns {
                     ),
             )
 
+    /**
+     * Plain text content.
+     * @see ParagraphToken
+     */
     val paragraph
         get() =
             TokenRegexPattern(
@@ -160,6 +212,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * Text followed by a horizontal rule on a new line.
+     * @see SetextHeadingToken
+     */
     val setextHeading
         get() =
             TokenRegexPattern(
@@ -172,6 +228,10 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * A non-numbered list defined by the same kind of bullets.
+     * @see UnorderedListToken
+     */
     val unorderedList
         get() =
             TokenRegexPattern(

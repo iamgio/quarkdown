@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
 /**
- *
+ * [QuarkdownFlavor] lexer factory.
  */
 class QuarkdownLexerFactory : LexerFactory {
     private val base = BaseMarkdownLexerFactory()

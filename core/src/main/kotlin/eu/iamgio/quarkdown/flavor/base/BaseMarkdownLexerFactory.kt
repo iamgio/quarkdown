@@ -5,11 +5,11 @@ import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
 /**
- *
+ * [BaseMarkdownFlavor] lexer factory.
  */
 class BaseMarkdownLexerFactory : LexerFactory {
     override fun newBlockLexer(source: CharSequence): Lexer =
-        with(BaseBlockTokenRegexPatterns()) {
+        with(BaseMarkdownBlockTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,
                 listOf(
@@ -31,7 +31,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
         }
 
     override fun newListLexer(source: CharSequence): Lexer =
-        with(BaseBlockTokenRegexPatterns()) {
+        with(BaseMarkdownBlockTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,
                 listOf(listItem, newline),
