@@ -1,17 +1,16 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.*
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.lexer.NewlineToken
-import eu.iamgio.quarkdown.parser.BlockTokenParser
 import kotlin.test.*
 
 /**
  * Parsing tests.
  */
 class ParserTest {
-    private fun blockLexer(source: CharSequence) = BaseMarkdownFlavor().lexerFactory.newBlockLexer(source)
-
     /**
      * Tokenizes and parses a [source] code, parses each token.
      * @param source source code
@@ -23,12 +22,13 @@ class ParserTest {
         source: CharSequence,
         assertType: Boolean = true,
     ): Iterator<T> {
-        val lexer = blockLexer(source)
-        val parser = BlockTokenParser(lexer)
+        val flavor = BaseMarkdownFlavor()
+        val lexer = flavor.lexerFactory.newBlockLexer(source)
+        val parser = flavor.parserFactory.newBlockParser()
 
         return lexer.tokenize().asSequence()
             .filterNot { it is NewlineToken }
-            .map { it.parse(parser) }
+            .map { it.accept(parser) }
             .onEach {
                 if (assertType) {
                     assertIs<T>(it)

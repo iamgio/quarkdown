@@ -10,9 +10,9 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
  * Collection of [TokenRegexPattern]s that match macro-blocks.
  */
 enum class _BaseBlockTokenRegexPattern(
-    override val wrap: (TokenData) -> Token,
-    override val regex: Regex,
-) : TokenRegexPattern {
+    val wrap: (TokenData) -> Token,
+    val regex: Regex,
+) {
     BLOCKQUOTE(
         ::BlockQuoteToken,
         RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")

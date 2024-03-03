@@ -1,49 +1,17 @@
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.ast.BaseListItem
-import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.BlockText
-import eu.iamgio.quarkdown.ast.Code
-import eu.iamgio.quarkdown.ast.Heading
-import eu.iamgio.quarkdown.ast.HorizontalRule
-import eu.iamgio.quarkdown.ast.Html
-import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.Newline
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.OrderedList
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.TaskListItem
-import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.lexer.BlockCodeToken
-import eu.iamgio.quarkdown.lexer.BlockQuoteToken
-import eu.iamgio.quarkdown.lexer.BlockTextToken
-import eu.iamgio.quarkdown.lexer.FencesCodeToken
-import eu.iamgio.quarkdown.lexer.HeadingToken
-import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.HtmlToken
-import eu.iamgio.quarkdown.lexer.Lexer
-import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
-import eu.iamgio.quarkdown.lexer.ListItemToken
-import eu.iamgio.quarkdown.lexer.MultilineMathToken
-import eu.iamgio.quarkdown.lexer.NewlineToken
-import eu.iamgio.quarkdown.lexer.OnelineMathToken
-import eu.iamgio.quarkdown.lexer.OrderedListToken
-import eu.iamgio.quarkdown.lexer.ParagraphToken
-import eu.iamgio.quarkdown.lexer.SetextHeadingToken
-import eu.iamgio.quarkdown.lexer.Token
-import eu.iamgio.quarkdown.lexer.UnorderedListToken
-import eu.iamgio.quarkdown.lexer.impl.ListItemLexer
-import eu.iamgio.quarkdown.lexer.parseAll
+import eu.iamgio.quarkdown.ast.*
+import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 
 /**
  * A parser for block tokens.
- * @param lexer lexer to parse sub-blocks with
+ * @param flavor flavor to use in order to analyze and parse sub-blocks
  */
-class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
+class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<Node> {
     override fun visit(token: NewlineToken): Node {
         return Newline()
     }
@@ -119,9 +87,9 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
      * @param token list token to extract the items from
      */
     private fun extractListItems(token: Token) =
-        ListItemLexer(source = token.data.text)
+        flavor.lexerFactory.newListLexer(source = token.data.text)
             .tokenize()
-            .parseAll(this)
+            .acceptAll(this)
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
     override fun visit(token: UnorderedListToken): Node {
@@ -177,7 +145,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
             }
 
         // Parsed content.
-        val children = lexer.copyWith(source = trimmedContent).tokenize().parseAll(this)
+        val children = flavor.lexerFactory.newBlockLexer(source = trimmedContent).tokenize().acceptAll(this)
 
         return when {
             // GFM task list item.
@@ -207,7 +175,7 @@ class BlockTokenParser(private val lexer: Lexer) : BlockTokenVisitor<Node> {
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
         return BlockQuote(
-            children = lexer.copyWith(source = text).tokenize().parseAll(this),
+            children = flavor.lexerFactory.newBlockLexer(source = text).tokenize().acceptAll(this),
         )
     }
 

@@ -30,6 +30,14 @@ class BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
+    override fun newListLexer(source: CharSequence): Lexer =
+        with(BaseBlockTokenRegexPatterns()) {
+            StandardRegexLexer(
+                source,
+                listOf(listItem, newline),
+            )
+        }
+
     override fun newInlineLexer(source: CharSequence): Lexer {
         TODO("Not yet implemented")
     }

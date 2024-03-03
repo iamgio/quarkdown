@@ -36,21 +36,21 @@ class LexerTest {
             StandardRegexLexer(
                 "ABC\nABB\nDEF\nGHI\nDE",
                 listOf(
-                    object : TokenRegexPattern {
-                        override val name = "FIRST"
-                        override val wrap = wrap
-                        override val regex = "AB.".toRegex()
-                    },
-                    object : TokenRegexPattern {
-                        override val name = "SECOND"
-                        override val wrap = wrap
-                        override val regex = "DE.?".toRegex()
-                    },
-                    object : TokenRegexPattern {
-                        override val name = "NEWLINE"
-                        override val wrap = wrap
-                        override val regex = "\\R".toRegex()
-                    },
+                    TokenRegexPattern(
+                        name = "FIRST",
+                        wrap = wrap,
+                        regex = "AB.".toRegex(),
+                    ),
+                    TokenRegexPattern(
+                        name = "SECOND",
+                        wrap = wrap,
+                        regex = "DE.?".toRegex(),
+                    ),
+                    TokenRegexPattern(
+                        name = "NEWLINE",
+                        wrap = wrap,
+                        regex = "\\R".toRegex(),
+                    ),
                 ),
                 fillTokenType = wrap,
             )

@@ -3,10 +3,9 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.Document
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
-import eu.iamgio.quarkdown.lexer.parseAll
+import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
-import eu.iamgio.quarkdown.parser.BlockTokenParser
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -25,8 +24,8 @@ fun main(args: Array<String>) {
 
     Log.debug("Tokens:\n" + DebugFormatter.formatTokens(tokens))
 
-    val parser = BlockTokenParser(lexer)
-    val document = Document(children = tokens.parseAll(parser))
+    val parser = flavor.parserFactory.newBlockParser()
+    val document = Document(children = tokens.acceptAll(parser))
 
     Log.debug("AST:\n" + DebugFormatter.formatAST(document))
 }

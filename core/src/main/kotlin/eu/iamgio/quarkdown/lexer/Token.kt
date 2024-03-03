@@ -1,7 +1,5 @@
 package eu.iamgio.quarkdown.lexer
 
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.parser.BlockTokenParser
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 
 /**
@@ -11,12 +9,6 @@ import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
  */
 sealed class Token(val data: TokenData) {
     /**
-     * Parses this token into an AST [Node].
-     * @param parser parser to delegate the parsing process to
-     */
-    fun parse(parser: BlockTokenParser): Node = this.accept(parser)
-
-    /**
      * Accepts a visitor.
      * @param T output type of the visitor
      * @return output of the visit
@@ -25,7 +17,8 @@ sealed class Token(val data: TokenData) {
 }
 
 /**
- * Parses a list of tokens into a list of AST [Node]s.
- * @param parser parser to delegate the parsing process to
+ * Accepts a list of tokens to a shared visitor.
+ * @param visitor the visitor to visit for each token.
+ * @return the list of results from each visit
  */
-fun Iterable<Token>.parseAll(parser: BlockTokenParser): List<Node> = this.map { it.parse(parser) }
+fun <T> Iterable<Token>.acceptAll(visitor: BlockTokenVisitor<T>): List<T> = this.map { it.accept(visitor) }
