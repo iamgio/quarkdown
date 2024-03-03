@@ -10,19 +10,9 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
  *
  */
 open class BaseBlockTokenRegexPatterns {
-    val horizontalRule
-        get() =
-            TokenRegexPattern(
-                name = "HorizontalRule",
-                wrap = ::HorizontalRuleToken,
-                regex =
-                    "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\n+|$)"
-                        .toRegex(),
-            )
-
     // The rules that defines when a text node must interrupt.
     // Remember to add the "list" reference when using this TokenRegexPattern.
-    open val interruptionRule = // TODO avoid null from subclasses
+    open val interruptionRule =
         RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
@@ -32,18 +22,6 @@ open class BaseBlockTokenRegexPatterns {
             .withReference("tag", TAG_HELPER)
             .build()
 
-    val paragraph
-        get() =
-            TokenRegexPattern(
-                name = "Paragraph",
-                wrap = ::ParagraphToken,
-                regex =
-                    RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
-                        .withReference("interruption", interruptionRule.pattern)
-                        .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
-                        .build(),
-            )
-
     val blockCode
         get() =
             TokenRegexPattern(
@@ -51,16 +29,6 @@ open class BaseBlockTokenRegexPatterns {
                 wrap = ::BlockCodeToken,
                 regex =
                     "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
-                        .toRegex(),
-            )
-
-    val fencesCode
-        get() =
-            TokenRegexPattern(
-                name = "FencesCode",
-                wrap = ::FencesCodeToken,
-                regex =
-                    "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
                         .toRegex(),
             )
 
@@ -75,6 +43,25 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
+    val blockText =
+        TokenRegexPattern(
+            name = "BlockText",
+            wrap = ::BlockTextToken,
+            regex =
+                "^[^\\n]+"
+                    .toRegex(),
+        )
+
+    val fencesCode
+        get() =
+            TokenRegexPattern(
+                name = "FencesCode",
+                wrap = ::FencesCodeToken,
+                regex =
+                    "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
+                        .toRegex(),
+            )
+
     val heading
         get() =
             TokenRegexPattern(
@@ -85,15 +72,29 @@ open class BaseBlockTokenRegexPatterns {
                         .toRegex(),
             )
 
-    val setextHeading
+    val horizontalRule
         get() =
             TokenRegexPattern(
-                name = "SetextHeading",
-                wrap = ::SetextHeadingToken,
+                name = "HorizontalRule",
+                wrap = ::HorizontalRuleToken,
                 regex =
-                    RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
-                        .withReference("bullet", BULLET_HELPER)
-                        .withReference("bullet", BULLET_HELPER)
+                    "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\n+|$)"
+                        .toRegex(),
+            )
+
+    val html
+        get() =
+            TokenRegexPattern(
+                name = "HTML",
+                wrap = ::HtmlToken,
+                regex =
+                    RegexBuilder(HTML_HELPER)
+                        .withReference("comment", COMMENT_HELPER)
+                        .withReference("tag", TAG_HELPER)
+                        .withReference(
+                            "attribute",
+                            " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?",
+                        )
                         .build(),
             )
 
@@ -112,20 +113,75 @@ open class BaseBlockTokenRegexPatterns {
                         .build(),
             )
 
-    val html
+    val listItem
         get() =
             TokenRegexPattern(
-                name = "HTML",
-                wrap = ::HtmlToken,
+                name = "ListItem",
+                wrap = ::ListItemToken,
                 regex =
-                    RegexBuilder(HTML_HELPER)
-                        .withReference("comment", COMMENT_HELPER)
-                        .withReference("tag", TAG_HELPER)
-                        .withReference(
-                            "attribute",
-                            " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?",
-                        )
+                    RegexBuilder(
+                        "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
+                    )
+                        .withReference("bullet", BULLET_HELPER)
+                        .withReference("bullet", BULLET_HELPER)
                         .build(),
+            )
+
+    val newline =
+        TokenRegexPattern(
+            name = "Newline",
+            wrap = ::NewlineToken,
+            regex =
+                "^(?: *(?:\\n|$))+"
+                    .toRegex(),
+        )
+
+    val orderedList
+        get() =
+            TokenRegexPattern(
+                name = "OrderedList",
+                wrap = ::OrderedListToken,
+                regex =
+                    listPattern(
+                        bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])",
+                        bulletContinuation = "\\d{1,9}\\k<orderedbull>",
+                    ),
+            )
+
+    val paragraph
+        get() =
+            TokenRegexPattern(
+                name = "Paragraph",
+                wrap = ::ParagraphToken,
+                regex =
+                    RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
+                        .withReference("interruption", interruptionRule.pattern)
+                        .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
+                        .build(),
+            )
+
+    val setextHeading
+        get() =
+            TokenRegexPattern(
+                name = "SetextHeading",
+                wrap = ::SetextHeadingToken,
+                regex =
+                    RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
+                        .withReference("bullet", BULLET_HELPER)
+                        .withReference("bullet", BULLET_HELPER)
+                        .build(),
+            )
+
+    val unorderedList
+        get() =
+            TokenRegexPattern(
+                name = "UnorderedList",
+                wrap = ::UnorderedListToken,
+                regex =
+                    listPattern(
+                        bulletInitialization = "(?<unorderedbull>[*+-])",
+                        bulletContinuation = "\\k<unorderedbull>",
+                    ),
             )
 
     /**
@@ -145,61 +201,6 @@ open class BaseBlockTokenRegexPatterns {
             .withReference("list", " {0,3}(?:[*+-]|\\d[.)]) ")
             .build()
     }
-
-    val unorderedList by lazy {
-        TokenRegexPattern(
-            name = "UnorderedList",
-            wrap = ::UnorderedListToken,
-            regex =
-                listPattern(
-                    bulletInitialization = "(?<unorderedbull>[*+-])",
-                    bulletContinuation = "\\k<unorderedbull>",
-                ),
-        )
-    }
-
-    val orderedList by lazy {
-        TokenRegexPattern(
-            name = "OrderedList",
-            wrap = ::OrderedListToken,
-            regex =
-                listPattern(
-                    bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])",
-                    bulletContinuation = "\\d{1,9}\\k<orderedbull>",
-                ),
-        )
-    }
-
-    val listItem =
-        TokenRegexPattern(
-            name = "ListItem",
-            wrap = ::ListItemToken,
-            regex =
-                RegexBuilder(
-                    "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
-                )
-                    .withReference("bullet", BULLET_HELPER)
-                    .withReference("bullet", BULLET_HELPER)
-                    .build(),
-        )
-
-    val newline =
-        TokenRegexPattern(
-            name = "Newline",
-            wrap = ::NewlineToken,
-            regex =
-                "^(?: *(?:\\n|$))+"
-                    .toRegex(),
-        )
-
-    val blockText =
-        TokenRegexPattern(
-            name = "BlockText",
-            wrap = ::BlockTextToken,
-            regex =
-                "^[^\\n]+"
-                    .toRegex(),
-        )
 }
 
 // Helper expressions
