@@ -110,5 +110,6 @@ class LexerTest {
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor()).tokenize()
         assertTrue(tokens.filterIsInstance<MultilineMathToken>().isEmpty())
         assertTrue(tokens.filterIsInstance<OnelineMathToken>().isEmpty())
+        assertFalse(tokens.filterIsInstance<BlockQuoteToken>().isEmpty())
     }
 }
