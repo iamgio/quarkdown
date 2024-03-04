@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.*
