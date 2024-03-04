@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.flavor.ParserFactory
  * - Math blocks
  * - To do...
  */
-class QuarkdownFlavor : MarkdownFlavor {
+object QuarkdownFlavor : MarkdownFlavor {
     override val lexerFactory: LexerFactory = QuarkdownLexerFactory()
-    override val parserFactory: ParserFactory = QuarkdownParserFactory(this)
+    override val parserFactory: ParserFactory = QuarkdownParserFactory()
 }

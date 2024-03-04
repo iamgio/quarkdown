@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
         exitProcess(NO_SOURCE_FILE_EXIT_CODE)
     }
 
-    val flavor: MarkdownFlavor = QuarkdownFlavor()
+    val flavor: MarkdownFlavor = QuarkdownFlavor
 
     val sourceFile = File(args.first())
 

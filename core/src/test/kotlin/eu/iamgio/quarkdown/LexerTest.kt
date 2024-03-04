@@ -9,7 +9,12 @@ import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * Tokenization tests.
@@ -18,7 +23,7 @@ import kotlin.test.*
 class LexerTest {
     private fun blockLexer(
         source: CharSequence,
-        flavor: MarkdownFlavor = QuarkdownFlavor(),
+        flavor: MarkdownFlavor = QuarkdownFlavor,
     ) = flavor.lexerFactory.newBlockLexer(source)
 
     @Test
@@ -107,7 +112,7 @@ class LexerTest {
     @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
-        val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor()).tokenize()
+        val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
         assertTrue(tokens.filterIsInstance<MultilineMathToken>().isEmpty())
         assertTrue(tokens.filterIsInstance<OnelineMathToken>().isEmpty())
         assertFalse(tokens.filterIsInstance<BlockQuoteToken>().isEmpty())

@@ -6,7 +6,11 @@ import eu.iamgio.quarkdown.ast.*
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.NewlineToken
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * Parsing tests.
@@ -23,7 +27,7 @@ class ParserTest {
     private inline fun <reified T : Node> nodesIterator(
         source: CharSequence,
         assertType: Boolean = true,
-        flavor: MarkdownFlavor = QuarkdownFlavor(),
+        flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newBlockLexer(source)
         val parser = flavor.parserFactory.newBlockParser()

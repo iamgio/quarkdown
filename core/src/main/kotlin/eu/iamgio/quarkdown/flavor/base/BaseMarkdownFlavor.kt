@@ -7,7 +7,7 @@ import eu.iamgio.quarkdown.flavor.ParserFactory
 /**
  * The vanilla [CommonMark](https://spec.commonmark.org) Markdown with several [GFM](https://github.github.com/gfm) features and extensions.
  */
-class BaseMarkdownFlavor : MarkdownFlavor {
+object BaseMarkdownFlavor : MarkdownFlavor {
     override val lexerFactory: LexerFactory = BaseMarkdownLexerFactory()
-    override val parserFactory: ParserFactory = BaseMarkdownParserFactory(this)
+    override val parserFactory: ParserFactory = BaseMarkdownParserFactory()
 }
