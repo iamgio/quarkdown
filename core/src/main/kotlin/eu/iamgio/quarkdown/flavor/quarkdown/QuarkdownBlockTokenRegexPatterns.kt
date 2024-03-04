@@ -7,7 +7,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
- *
+ * Regex patterns for [QuarkdownFlavor].
  */
 class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
     override val interruptionRule =
@@ -16,6 +16,10 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             .withReference("omath", onelineMath.regex.pattern)
             .build()
 
+    /**
+     * Fenced content within triple dollar signs.
+     * @see MultilineMathToken
+     */
     val multilineMath
         get() =
             TokenRegexPattern(
@@ -26,6 +30,10 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
                         .toRegex(),
             )
 
+    /**
+     * Fenced content within spaced dollar signs on the same line.
+     * @see OnelineMathToken
+     */
     val onelineMath
         get() =
             TokenRegexPattern(

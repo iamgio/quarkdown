@@ -7,7 +7,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
- * Regex patterns for [BaseMarkdownFlavor]
+ * Regex patterns for [BaseMarkdownFlavor].
  */
 open class BaseMarkdownBlockTokenRegexPatterns {
     /**
