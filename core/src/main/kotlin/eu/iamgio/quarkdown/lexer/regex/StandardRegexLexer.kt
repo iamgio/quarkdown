@@ -27,6 +27,4 @@ open class StandardRegexLexer(
             position,
         ).let { fillTokenType.invoke(it) }
     }
-
-    override fun copyWith(source: CharSequence) = StandardRegexLexer(source, super.patterns, this.fillTokenType)
 }
