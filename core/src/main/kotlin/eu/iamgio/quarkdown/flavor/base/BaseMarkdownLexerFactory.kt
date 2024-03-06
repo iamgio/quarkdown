@@ -38,7 +38,16 @@ class BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
-    override fun newInlineLexer(source: CharSequence): Lexer {
-        TODO("Not yet implemented")
-    }
+    override fun newInlineLexer(source: CharSequence): Lexer =
+        with(BaseMarkdownInlineTokenRegexPatterns()) {
+            StandardRegexLexer(
+                source,
+                listOf(
+                    lineBreak,
+                    code,
+                    escape,
+                    text,
+                ),
+            )
+        }
 }
