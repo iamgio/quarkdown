@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.flavor.base
 
+import eu.iamgio.quarkdown.lexer.AutolinkToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.InlineCodeToken
 import eu.iamgio.quarkdown.lexer.InlineTextToken
@@ -99,7 +100,23 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     RegexBuilder(STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER)
                         .withReference("punct", PUNCTUATION_HELPER)
-                        .build().also { println(it) },
+                        .build(),
+            )
+
+    val autolink
+        get() =
+            TokenRegexPattern(
+                name = "InlineAutolink",
+                wrap = ::AutolinkToken,
+                regex =
+                    RegexBuilder("<(scheme:[^\\s\\x00-\\x1f<>]*|email)>")
+                        .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
+                        .withReference(
+                            "email",
+                            "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
+                                "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
+                        )
+                        .build(),
             )
 
     val text
