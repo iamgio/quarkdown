@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.InlineCodeToken
 import eu.iamgio.quarkdown.lexer.InlineTextToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PunctuationToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisLeftDelimeterToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterAsteriskToken
@@ -103,6 +104,19 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    val link
+        get() =
+            TokenRegexPattern(
+                name = "InlineLink",
+                wrap = ::LinkToken,
+                regex =
+                    RegexBuilder("^!?\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
+                        .withReference("label", LABEL_HELPER)
+                        .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
+                        .withReference("title", "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)")
+                        .build(),
+            )
+
     val autolink
         get() =
             TokenRegexPattern(
@@ -150,3 +164,6 @@ private const val STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER =
         "|(?!_)[punct\\s](_+)(?=[^punct\\s])" + // (3) #___a, ___a can only be Left Delimiter
         "|[\\s](_+)(?!_)(?=[punct])" + // (4) ___# can only be Left Delimiter
         "|(?!_)[punct](_+)(?!_)(?=[punct])"
+
+// [this is a label]
+private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"

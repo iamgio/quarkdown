@@ -43,6 +43,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
+                    // todo anyPunctuation
                     autolink, // ok
                     // blockSkip,
                     lineBreak, // ok
@@ -51,6 +52,12 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     // strongEmphasisRightDelimeterAsterisk,
                     // strongEmphasisRightDelimeterUnderscore,
                     escape,
+                    link, // ok
+                    // todo nolink
+                    // punctuation
+                    // todo reflink
+                    // todo reflinkSearch
+                    // todo tag
                     text,
                 ),
             )
