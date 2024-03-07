@@ -43,7 +43,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
-                    // todo anyPunctuation
+                    anyPunctuation,
                     autolink, // ok
                     // blockSkip,
                     lineBreak, // ok

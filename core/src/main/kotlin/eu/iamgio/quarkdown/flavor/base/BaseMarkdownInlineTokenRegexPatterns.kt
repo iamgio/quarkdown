@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.flavor.base
 
+import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
 import eu.iamgio.quarkdown.lexer.AutolinkToken
 import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
@@ -37,6 +38,17 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::PunctuationToken,
                 regex =
                     RegexBuilder("((?![*_])[\\spunct])")
+                        .withReference("punct", PUNCTUATION_HELPER)
+                        .build(),
+            )
+
+    val anyPunctuation
+        get() =
+            TokenRegexPattern(
+                name = "InlineAnyPunctuation",
+                wrap = ::AnyPunctuationToken,
+                regex =
+                    RegexBuilder("\\([punct])")
                         .withReference("punct", PUNCTUATION_HELPER)
                         .build(),
             )
