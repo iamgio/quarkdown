@@ -2,7 +2,20 @@
 
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.BlockTextToken
+import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.HeadingToken
+import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
+import eu.iamgio.quarkdown.lexer.ParagraphToken
+import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -163,7 +176,6 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                         "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
                     )
                         .withReference("bullet", BULLET_HELPER)
-                        .withReference("bullet", BULLET_HELPER)
                         .build(),
             )
 
@@ -223,7 +235,6 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 wrap = ::SetextHeadingToken,
                 regex =
                     RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
-                        .withReference("bullet", BULLET_HELPER)
                         .withReference("bullet", BULLET_HELPER)
                         .build(),
             )

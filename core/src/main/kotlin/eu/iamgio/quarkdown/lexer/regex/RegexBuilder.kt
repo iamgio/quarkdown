@@ -8,17 +8,17 @@ class RegexBuilder(baseRegex: String) {
     private val pattern = StringBuilder(baseRegex)
 
     /**
-     * Adds a reference to the pattern. The first occurrence be later replaced.
+     * Adds a reference to the pattern. All the occurrences will be replaced.
      * @param label text to be replaced
-     * @param regex new pattern to insert
+     * @param regex new pattern to replace the label with
      * @return this for concatenation
      */
     fun withReference(
         label: String,
         regex: String,
     ) = apply {
-        val index = pattern.indexOf(label)
-        if (index >= 0) {
+        var index: Int
+        while (pattern.indexOf(label).also { index = it } >= 0) {
             pattern.replace(index, index + label.length, regex)
         }
     }
