@@ -48,10 +48,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
     val blockSkip
         get() =
             TokenRegexPattern(
-                name = "InlinePunctuation",
-                wrap = ::PunctuationToken,
+                name = "InlineBlockSkip",
+                wrap = ::BlockSkipToken,
                 regex =
-                    RegexBuilder("\\[[^[\\]]*?\\]\\([^()]*?\\)|`[^`]*?`|<[^<>]*?>")
+                    RegexBuilder("\\[[^\\[\\]]*?\\]\\([^\\(\\)]*?\\)|`[^`]*?`|<[^<>]*?>")
                         .build(),
             )
 
