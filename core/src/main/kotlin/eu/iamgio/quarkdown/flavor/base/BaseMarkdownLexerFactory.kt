@@ -43,8 +43,12 @@ class BaseMarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
+                    // blockSkip,
                     lineBreak,
                     code,
+                    // strongEmphasisLeftDelimeter,
+                    // strongEmphasisRightDelimeterAsterisk,
+                    // strongEmphasisRightDelimeterUnderscore,
                     escape,
                     text,
                 ),
