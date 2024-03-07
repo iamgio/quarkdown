@@ -8,3 +8,4 @@ not newline
 [reference][]
 [reference]
 ![img](https://google.com)
+<!-- comment -->

@@ -44,20 +44,20 @@ class BaseMarkdownLexerFactory : LexerFactory {
                 source,
                 listOf(
                     anyPunctuation,
-                    autolink, // ok
+                    autolink,
                     // blockSkip,
-                    lineBreak, // ok
-                    code, // ok
-                    // strongEmphasisLeftDelimeter,
+                    lineBreak,
+                    code,
+                    strongEmphasisLeftDelimeter,
                     // strongEmphasisRightDelimeterAsterisk,
                     // strongEmphasisRightDelimeterUnderscore,
                     escape,
-                    link, // ok
-                    // punctuation
-                    referenceLink, // ok
+                    link,
+                    // punctuation,
+                    referenceLink,
                     collapsedReferenceLink,
                     referenceLinkSearch,
-                    // todo tag
+                    comment,
                     text,
                 ),
             )

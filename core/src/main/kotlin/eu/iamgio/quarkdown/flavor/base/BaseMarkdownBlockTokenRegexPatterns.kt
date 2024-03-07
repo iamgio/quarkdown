@@ -298,4 +298,4 @@ private const val HTML_HELPER =
         "|<\\/(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n))[\\s\\S]*?(?:(?:\\n *)+\\n)" +
         ")"
 
-private const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"
+internal const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"

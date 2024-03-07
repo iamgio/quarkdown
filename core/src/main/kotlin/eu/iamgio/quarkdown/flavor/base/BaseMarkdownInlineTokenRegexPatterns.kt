@@ -1,19 +1,8 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
-import eu.iamgio.quarkdown.lexer.AutolinkToken
-import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.EscapeToken
-import eu.iamgio.quarkdown.lexer.InlineCodeToken
-import eu.iamgio.quarkdown.lexer.InlineTextToken
-import eu.iamgio.quarkdown.lexer.LineBreakToken
-import eu.iamgio.quarkdown.lexer.LinkToken
-import eu.iamgio.quarkdown.lexer.PunctuationToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkSearchToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisLeftDelimeterToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterAsteriskToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterUnderscoreToken
+import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -48,7 +37,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineAnyPunctuation",
                 wrap = ::AnyPunctuationToken,
                 regex =
-                    RegexBuilder("\\([punct])")
+                    RegexBuilder("\\\\([punct])")
                         .withReference("punct", PUNCTUATION_HELPER)
                         .build(),
             )
@@ -128,7 +117,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                     RegexBuilder("!?\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                         .withReference("label", LABEL_HELPER)
                         .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
-                        .withReference("title", "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)")
+                        .withReference(
+                            "title",
+                            "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)",
+                        )
                         .build(),
             )
 
@@ -192,6 +184,21 @@ class BaseMarkdownInlineTokenRegexPatterns {
                     "(`+|[^`])(?:(?= {2,}\\n)|[\\s\\S]*?(?:(?=[\\\\<!\\[`*_]|\\b_|\$)|[^ ](?= {2,}\\n)))"
                         .toRegex(),
             )
+
+    val comment
+        get() =
+            TokenRegexPattern(
+                name = "InlineComment",
+                wrap = ::CommentToken,
+                regex =
+                    RegexBuilder(COMMENT_TAG_HELPER)
+                        .withReference("comment", COMMENT_HELPER)
+                        .withReference(
+                            "attribute",
+                            "\\s+[a-zA-Z:_][\\w.:-]*(?:\\s*=\\s*\"[^\"]*\"|\\s*=\\s*'[^']*'|\\s*=\\s*[^\\s\"'=<>`]+)?",
+                        )
+                        .build(),
+            )
 }
 
 private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
@@ -219,3 +226,11 @@ private const val STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER =
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
+
+private const val COMMENT_TAG_HELPER =
+    "comment" +
+        "|^</[a-zA-Z][\\w:-]*\\s*>" + // self-closing tag
+        "|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>" + // open tag
+        "|^<\\?[\\s\\S]*?\\?>" + // processing instruction, e.g. <?php ?>
+        "|^<![a-zA-Z]+\\s[\\s\\S]*?>" + // declaration, e.g. <!DOCTYPE html>
+        "|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>" // CDATA section
