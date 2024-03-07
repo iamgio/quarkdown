@@ -6,3 +6,5 @@ not newline
 [label](https://google.com 'url')
 [label][reference]
 [reference][]
+[reference]
+![img](https://google.com)

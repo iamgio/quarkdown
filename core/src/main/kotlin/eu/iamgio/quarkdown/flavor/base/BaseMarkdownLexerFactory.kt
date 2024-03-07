@@ -56,7 +56,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     // punctuation
                     referenceLink, // ok
                     collapsedReferenceLink,
-                    // todo reflinkSearch
+                    referenceLinkSearch,
                     // todo tag
                     text,
                 ),

@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.lexer.InlineTextToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PunctuationToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkSearchToken
 import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisLeftDelimeterToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterAsteriskToken
@@ -139,6 +140,18 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     RegexBuilder("!?\\[(ref)\\](?:\\[\\])?")
                         .withReference("ref", BLOCK_LABEL_HELPER)
+                        .build(),
+            )
+
+    val referenceLinkSearch
+        get() =
+            TokenRegexPattern(
+                name = "InlineReferenceLinkSearch",
+                wrap = ::ReferenceLinkSearchToken,
+                regex =
+                    RegexBuilder("reflink|nolink(?!\\()")
+                        .withReference("reflink", referenceLink.regex.pattern)
+                        .withReference("nolink", collapsedReferenceLink.regex.pattern)
                         .build(),
             )
 
