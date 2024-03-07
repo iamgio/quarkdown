@@ -1,12 +1,14 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.lexer.AutolinkToken
+import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.InlineCodeToken
 import eu.iamgio.quarkdown.lexer.InlineTextToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PunctuationToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisLeftDelimeterToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterAsteriskToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisRightDelimeterUnderscoreToken
@@ -110,10 +112,33 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineLink",
                 wrap = ::LinkToken,
                 regex =
-                    RegexBuilder("^!?\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
+                    RegexBuilder("!?\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                         .withReference("label", LABEL_HELPER)
                         .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
                         .withReference("title", "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)")
+                        .build(),
+            )
+
+    val referenceLink
+        get() =
+            TokenRegexPattern(
+                name = "InlineReferenceLink",
+                wrap = ::ReferenceLinkToken,
+                regex =
+                    RegexBuilder("!?\\[(label)\\]\\[(ref)\\]")
+                        .withReference("label", LABEL_HELPER)
+                        .withReference("ref", BLOCK_LABEL_HELPER)
+                        .build(),
+            )
+
+    val collapsedReferenceLink
+        get() =
+            TokenRegexPattern(
+                name = "InlineCollapsedReferenceLink",
+                wrap = ::CollapsedReferenceLinkToken,
+                regex =
+                    RegexBuilder("!?\\[(ref)\\](?:\\[\\])?")
+                        .withReference("ref", BLOCK_LABEL_HELPER)
                         .build(),
             )
 
@@ -167,3 +192,5 @@ private const val STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER =
 
 // [this is a label]
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
+
+private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"

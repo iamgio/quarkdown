@@ -53,9 +53,9 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     // strongEmphasisRightDelimeterUnderscore,
                     escape,
                     link, // ok
-                    // todo nolink
                     // punctuation
-                    // todo reflink
+                    referenceLink, // ok
+                    collapsedReferenceLink,
                     // todo reflinkSearch
                     // todo tag
                     text,

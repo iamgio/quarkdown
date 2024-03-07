@@ -74,13 +74,19 @@ class LinkToken(data: TokenData) : Token(data) {
     }
 }
 
-class LinkReferenceToken(data: TokenData) : Token(data) {
+class ReferenceLinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
-class LinkReferenceSearchToken(data: TokenData) : Token(data) {
+class CollapsedReferenceLinkToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+        TODO("Not yet implemented")
+    }
+}
+
+class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
