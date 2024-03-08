@@ -23,4 +23,10 @@ interface LexerFactory {
      * @return a new [Lexer] instance that tokenizes inline content
      */
     fun newInlineLexer(source: CharSequence): Lexer
+
+    /**
+     * @param source raw text input
+     * @return a new [Lexer] instance that tokenizes inline text content (bold, italics, monospaced, etc.)
+     */
+    fun newInlineEmphasisLexer(source: CharSequence): Lexer
 }

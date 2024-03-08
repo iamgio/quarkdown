@@ -38,4 +38,6 @@ class QuarkdownLexerFactory : LexerFactory {
     override fun newListLexer(source: CharSequence): Lexer = base.newListLexer(source)
 
     override fun newInlineLexer(source: CharSequence) = base.newInlineLexer(source)
+
+    override fun newInlineEmphasisLexer(source: CharSequence) = base.newInlineEmphasisLexer(source)
 }

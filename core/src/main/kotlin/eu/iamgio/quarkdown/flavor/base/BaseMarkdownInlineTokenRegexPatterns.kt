@@ -181,7 +181,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineText",
                 wrap = ::InlineTextToken,
                 regex =
-                    "(`+|[^`])(?:(?= {2,}\\n)|[\\s\\S]*?(?:(?=[\\\\<!\\[`*_]|\\b_|\$)|[^ ](?= {2,}\\n)))"
+                    "(`+|[^`])(?:(?= {2,}\\n)|[\\s\\S]*?(?:(?=[\\\\<!\\[`]|\\b_|\$)|[^ ](?= {2,}\\n)))"
                         .toRegex(),
             )
 

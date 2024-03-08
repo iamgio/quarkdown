@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.flavor.LexerFactory
+import eu.iamgio.quarkdown.lexer.InlineContentToken
+import eu.iamgio.quarkdown.lexer.InlineTextToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
@@ -43,23 +45,33 @@ class BaseMarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
-                    anyPunctuation,
+                    // anyPunctuation,
                     autolink,
                     // blockSkip,
                     lineBreak,
                     code,
-                    strongEmphasisLeftDelimeter,
-                    // strongEmphasisRightDelimeterAsterisk,
-                    // strongEmphasisRightDelimeterUnderscore,
                     escape,
                     link,
                     // punctuation,
                     referenceLink,
                     collapsedReferenceLink,
-                    referenceLinkSearch,
+                    // referenceLinkSearch,
                     comment,
-                    text,
                 ),
+                fillTokenType = ::InlineTextToken,
+            )
+        }
+
+    override fun newInlineEmphasisLexer(source: CharSequence): Lexer =
+        with(BaseMarkdownInlineTokenRegexPatterns()) {
+            StandardRegexLexer(
+                source,
+                listOf(
+                    strongEmphasisLeftDelimeter,
+                    // strongEmphasisRightDelimeterAsterisk,
+                    // strongEmphasisRightDelimeterUnderscore,
+                ),
+                fillTokenType = ::InlineContentToken,
             )
         }
 }
