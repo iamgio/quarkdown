@@ -1,0 +1,10 @@
+This is **strong**, this is __emphasis__ and this is ***strong emphasis***
+
+Output:
+PLAIN, STRONG[PLAIN], EMPHASIS[PLAIN], PLAIN, STRONG_EMPHASIS[PLAIN]
+
+
+This is **some _text_**
+
+Output;
+PLAIN, STRONG[PLAIN, EMPHASIS[PLAIN]]
