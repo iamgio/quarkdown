@@ -81,7 +81,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineStrongEmphasisLeftDelimeter",
                 wrap = ::StrongEmphasisLeftDelimeterToken,
                 regex =
-                    RegexBuilder("(?:\\*+(?:((?!\\*)[punct])|[^\\s*]))|_+(?:((?!_)[punct])|([^\\s_]))")
+                    RegexBuilder("(?:\\*+(?:((?!\\*)[punct])|(?!\\s|\\*)))|_+(?:((?!_)[punct])|((?!\\s|_)))")
                         .withReference("punct", PUNCTUATION_HELPER)
                         .build(),
             )
@@ -205,7 +205,7 @@ private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
 
 private const val STRONG_EMPHASIS_RIGHT_DELIMETER_ASTERISK_HELPER =
     "[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)" + // Skip orphan inside strong
-        "|[^*]+(?=[^*])" + // Consume to delim
+        "|([^*]+)(\\*+)" + // Consume to delim
         "|(?!\\*)[punct](\\*+)(?=[\\s]|$)" + // (1) #*** can only be a Right Delimiter
         "|[^punct\\s](\\*+)(?!\\*)(?=[punct\\s]|$)" + // (2) a***#, a*** can only be a Right Delimiter
         "|(?!\\*)[punct\\s](\\*+)(?=[^punct\\s])" + // (3) #***a, ***a can only be Left Delimiter
@@ -215,7 +215,7 @@ private const val STRONG_EMPHASIS_RIGHT_DELIMETER_ASTERISK_HELPER =
 
 private const val STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER =
     "[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)" + // Skip orphan inside strong
-        "|[^_]+(?=[^_])" + // Consume to delim
+        "|([^_]+)(_+)" + // Consume to delim
         "|(?!_)[punct](_+)(?=[\\s]|$)" + // (1) #___ can only be a Right Delimiter
         "|[^punct\\s](_+)(?!_)(?=[punct\\s]|$)" + // (2) a___#, a___ can only be a Right Delimiter
         "|(?!_)[punct\\s](_+)(?=[^punct\\s])" + // (3) #___a, ___a can only be Left Delimiter

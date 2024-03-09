@@ -17,17 +17,6 @@ abstract class RegexLexer(
     protected val patterns: List<TokenRegexPattern>,
 ) : AbstractLexer(source) {
     /**
-     * Adds a token to fill the gap between the last matched index and [untilIndex], if there is any.
-     * @param untilIndex end of the gap range
-     * @see createFillToken
-     */
-    private fun MutableList<Token>.pushFillToken(untilIndex: Int) {
-        if (untilIndex > currentIndex) {
-            createFillToken(position = currentIndex until untilIndex)?.let { this += it }
-        }
-    }
-
-    /**
      * Converts captured groups of a [Regex] match to a sequence of tokens.
      * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
@@ -76,10 +65,4 @@ abstract class RegexLexer(
             // Add a token to fill the gap between the last token and the EOF.
             pushFillToken(untilIndex = source.length)
         }
-
-    /**
-     * @param position range of the uncaptured group
-     * @return a new token that represents the uncaptured content in order to fill the gaps, or `null` to not fill gaps
-     */
-    abstract fun createFillToken(position: IntRange): Token?
 }

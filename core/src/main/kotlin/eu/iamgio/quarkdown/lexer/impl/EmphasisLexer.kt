@@ -1,88 +1,90 @@
 package eu.iamgio.quarkdown.lexer.impl
 
+import eu.iamgio.quarkdown.lexer.AbstractLexer
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
-import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
+import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
+import kotlin.math.min
 
 /**
  *
  */
 class EmphasisLexer(
     source: CharSequence,
-) : WalkerLexer(source) {
-    enum class TokenType(val wrap: (TokenData) -> Token) {
-        PLAIN(::PlainTextToken),
-        STRONG(::StrongToken),
-        EMPHASIS(::EmphasisToken),
-        STRONG_EMPHASIS(::StrongEmphasisToken),
-    }
+    private val leftDelimeterPattern: TokenRegexPattern,
+    private val rightDelimeterPattern: TokenRegexPattern,
+    // TODO multiple right delimeters
+) : AbstractLexer(source) {
+    private fun MutableList<Token>.nextSequence(): Token? {
+        // The left delimeter (e.g. **).
+        val startMatch = leftDelimeterPattern.regex.find(source, startIndex = super.currentIndex) ?: return null
 
-    // TODO support multiple right delimeter types
+        // The right delimeter + the content (e.g. some text**).
+        val endMatch =
+            rightDelimeterPattern.regex.find(
+                source.removeRange(startMatch.range.first, startMatch.range.last + 1),
+                startIndex = super.currentIndex,
+            ) ?: return null
 
-    // TODO maybe override RegexLexer's extractMatchingToken?
-    // The emphasis lexer matches the left delimeter and THEN searches for its right delimeter
-    // or maybe just tweak the delimeter regex... could be easier to lex using the standard way
+        // The left delimeter as a string.
+        val leftDelimeter = startMatch.value
+        // The right delimeter as a string.
+        val rightDelimeter = endMatch.groups[2]?.value ?: return null
+        // The amount of delimeter characters on either side.
+        val delimeterLength = min(leftDelimeter.length, rightDelimeter.length)
 
-    private var type = TokenType.PLAIN
+        // The complete range of the token.
+        // The source string substringed to this range goes from the left delimeter to the right delimeter (inclusive).
+        val range = (startMatch.range.first)..(endMatch.range.last + leftDelimeter.length)
 
-    private var lastMatchIndex = 0
-
-    private var currentPrefix = StringBuilder()
-
-    private fun MutableList<Token>.push() {
-        if (buffer.isEmpty()) {
-            return
+        if (range.last > source.length || range.first > source.length) {
+            return null
         }
+
+        pushFillToken(untilIndex = range.first)
 
         // The token data.
         val data =
             TokenData(
-                text = buffer.toString(),
-                position = lastMatchIndex until reader.index,
-                groups = emptySequence(),
-                // TODO groups
+                text = source.substring(range),
+                position = range,
+                groups =
+                    sequence {
+                        yieldAll(startMatch.groupValues)
+                        yieldAll(endMatch.groupValues)
+                    },
             )
 
-        lastMatchIndex = reader.index
-        buffer.clear()
+        currentIndex = endMatch.range.last + leftDelimeter.length + 1
 
-        this += type.wrap(data)
+        val wrap =
+            when {
+                delimeterLength % 2 != 0 -> ::EmphasisToken
+                else -> ::StrongToken
+            }
+
+        return wrap(data)
     }
 
     override fun tokenize(): List<Token> =
         buildList {
-            reader.readWhileNotNull { char ->
-                if (char == '*') {
-                    when (type) {
-                        TokenType.PLAIN -> {
-                            push()
-                            type = TokenType.EMPHASIS
-                        }
-                        TokenType.EMPHASIS -> {
-                            if (buffer.length == 1) {
-                                type = TokenType.STRONG
-                            } else {
-                                push()
-                            }
-                        }
-                        TokenType.STRONG -> {
-                            if (buffer.length == 2) {
-                                type = TokenType.STRONG_EMPHASIS
-                            } else {
-                                push()
-                            }
-                        }
-                        TokenType.STRONG_EMPHASIS -> push()
-                    }
-                }
-
-                buffer.append(char)
+            var next: Token? = null
+            while (nextSequence().also { next = it } != null) {
+                add(next!!)
             }
-
-            push()
+            // add(nextSequence()!!) // TODO debug
+            pushFillToken(untilIndex = source.length)
         }
+
+    override fun createFillToken(position: IntRange): Token {
+        return PlainTextToken(
+            TokenData(
+                text = source.substring(position),
+                position,
+            ),
+        )
+    }
 }

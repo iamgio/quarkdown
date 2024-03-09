@@ -62,16 +62,12 @@ class BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
-    override fun newInlineEmphasisLexer(source: CharSequence): Lexer = EmphasisLexer(source)
-        /*with(BaseMarkdownInlineTokenRegexPatterns()) {
-            StandardRegexLexer(
+    override fun newInlineEmphasisLexer(source: CharSequence): Lexer =
+        with(BaseMarkdownInlineTokenRegexPatterns()) {
+            EmphasisLexer(
                 source,
-                listOf(
-                    strongEmphasisLeftDelimeter,
-                    // strongEmphasisRightDelimeterAsterisk,
-                    // strongEmphasisRightDelimeterUnderscore,
-                ),
-                fillTokenType = ::InlineContentToken,
+                strongEmphasisLeftDelimeter,
+                strongEmphasisRightDelimeterAsterisk,
             )
-        }*/
+        }
 }

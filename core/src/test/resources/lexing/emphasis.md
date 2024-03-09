@@ -1,1 +1,1 @@
-This is **bold** and this is _italic_.
+abc **strong abc** text **test** aaaa *emphasis*
