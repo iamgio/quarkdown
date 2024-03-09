@@ -22,19 +22,27 @@ class StrongEmphasisRightDelimeterUnderscoreToken(data: TokenData) : Token(data)
     }
 }
 
-class InlineContentToken(data: TokenData) : Token(data) {
+// ---
+
+interface InlineSpan
+
+interface InlineEmphasis : InlineSpan {
+    val content: MutableList<InlineSpan>
+}
+
+class InlineContentToken(data: TokenData) : Token(data), InlineSpan {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
-class StrongToken(data: TokenData) : Token(data) {
+class StrongToken(data: TokenData, override val content: MutableList<InlineSpan> = mutableListOf()) : Token(data), InlineEmphasis {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
-class EmphasisToken(data: TokenData) : Token(data) {
+class EmphasisToken(data: TokenData, override val content: MutableList<InlineSpan> = mutableListOf()) : Token(data), InlineEmphasis {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }

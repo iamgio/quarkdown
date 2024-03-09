@@ -1,1 +1,1 @@
-**strong *strongemphasis***
+**strong1** text **strong2**

@@ -66,8 +66,6 @@ class BaseMarkdownLexerFactory : LexerFactory {
         with(BaseMarkdownInlineTokenRegexPatterns()) {
             EmphasisLexer(
                 source,
-                strongEmphasisLeftDelimeter,
-                strongEmphasisRightDelimeterAsterisk,
             )
         }
 }
