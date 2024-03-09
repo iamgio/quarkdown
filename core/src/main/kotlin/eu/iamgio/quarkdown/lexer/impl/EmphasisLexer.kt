@@ -21,52 +21,73 @@ class EmphasisLexer(
     private fun MutableList<Token>.nextSequence(): Token? {
         // The left delimeter (e.g. **).
         val startMatch = leftDelimeterPattern.regex.find(source, startIndex = super.currentIndex) ?: return null
+        var delimTotal = 0
 
-        // The right delimeter + the content (e.g. some text**).
-        val endMatch =
-            rightDelimeterPattern.regex.find(
-                source.removeRange(startMatch.range.first, startMatch.range.last + 1),
-                startIndex = super.currentIndex,
-            ) ?: return null
+        while (currentIndex < source.length) {
+            // The right delimeter + the content (e.g. some text**).
+            val endMatch =
+                rightDelimeterPattern.regex.find(
+                    source.removeRange(startMatch.range.first, startMatch.range.last + 1),
+                    startIndex = super.currentIndex,
+                ) ?: break
 
-        // The left delimeter as a string.
-        val leftDelimeter = startMatch.value
-        // The right delimeter as a string.
-        val rightDelimeter = endMatch.groups[2]?.value ?: return null
-        // The amount of delimeter characters on either side.
-        val delimeterLength = min(leftDelimeter.length, rightDelimeter.length)
+            // The left delimeter as a string.
+            val leftDelimeter = startMatch.value
+            // The right delimeter as a string.
+            val rightDelimeter = endMatch.groups[2]?.value ?: continue
 
-        // The complete range of the token.
-        // The source string substringed to this range goes from the left delimeter to the right delimeter (inclusive).
-        val range = (startMatch.range.first)..(endMatch.range.last + leftDelimeter.length)
+            println(endMatch.groups)
 
-        if (range.last > source.length || range.first > source.length) {
-            return null
-        }
-
-        pushFillToken(untilIndex = range.first)
-
-        // The token data.
-        val data =
-            TokenData(
-                text = source.substring(range),
-                position = range,
-                groups =
-                    sequence {
-                        yieldAll(startMatch.groupValues)
-                        yieldAll(endMatch.groupValues)
-                    },
-            )
-
-        currentIndex = endMatch.range.last + leftDelimeter.length + 1
-
-        val wrap =
-            when {
-                delimeterLength % 2 != 0 -> ::EmphasisToken
-                else -> ::StrongToken
+            if (endMatch.groups[5] != null || endMatch.groups[6] != null) {
+                delimTotal += rightDelimeter.length
+                continue
+            } else if (endMatch.groups[7] != null || endMatch.groups[8] != null) {
+                // TODO
+                continue
             }
 
-        return wrap(data)
+            delimTotal -= rightDelimeter.length
+            if (delimTotal > 0) {
+                continue
+            }
+
+            // The amount of delimeter characters on either side.
+            val delimeterLength = min(leftDelimeter.length, rightDelimeter.length)
+
+            // The complete range of the token.
+            // The source string substringed to this range goes from the left delimeter to the right delimeter (inclusive).
+            val range = (startMatch.range.first)..(endMatch.range.last + leftDelimeter.length)
+
+            if (range.last > source.length || range.first > source.length) {
+                continue
+            }
+
+            pushFillToken(untilIndex = range.first)
+
+            // The token data.
+            val data =
+                TokenData(
+                    text = source.substring(range),
+                    position = range,
+                    groups =
+                        sequence {
+                            yieldAll(startMatch.groupValues)
+                            yieldAll(endMatch.groupValues)
+                        },
+                )
+
+            currentIndex = endMatch.range.last + leftDelimeter.length + 1
+
+            val wrap =
+                when {
+                    delimeterLength % 2 != 0 -> ::EmphasisToken
+                    else -> ::StrongToken
+                }
+
+            return wrap(data)
+        }
+
+        return null
     }
 
     override fun tokenize(): List<Token> =

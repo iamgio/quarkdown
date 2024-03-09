@@ -110,6 +110,31 @@ class LexerTest {
     }
 
     @Test
+    fun emphasis() {
+        fun lex(source: CharSequence) =
+            QuarkdownFlavor.lexerFactory.newInlineEmphasisLexer(source)
+                .tokenize().asSequence()
+                .filter { it !is NewlineToken }
+                .iterator()
+
+        val sources = readSource("/lexing/emphasis.md").split("\n---\n").iterator()
+
+        with(lex(sources.next())) {
+            assertIs<PlainTextToken>(next())
+            assertIs<StrongToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertIs<StrongToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertIs<EmphasisToken>(next())
+        }
+
+        with(lex(sources.next())) {
+            assertIs<StrongToken>(next())
+            assertFalse(hasNext())
+        }
+    }
+
+    @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
