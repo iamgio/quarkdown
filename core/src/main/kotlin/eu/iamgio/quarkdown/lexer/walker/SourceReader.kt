@@ -39,4 +39,11 @@ class SourceReader(private val reader: Reader) {
     fun read(): Char? {
         return readWithoutIncrement()?.also { index++ }
     }
+
+    fun readWhileNotNull(action: (Char) -> Unit) {
+        var char: Char? = null
+        while (read()?.also { char = it } != null) {
+            action(char!!)
+        }
+    }
 }

@@ -12,4 +12,6 @@ abstract class WalkerLexer(source: CharSequence) : AbstractLexer(source) {
      * A char-by-char string reader.
      */
     protected val reader = SourceReader(source)
+
+    protected val buffer = StringBuilder()
 }
