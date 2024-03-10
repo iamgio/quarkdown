@@ -1,1 +1,1 @@
-text **strong** text**not strong**  ** not strong** 
+text **strong*x*m** text**not strong**  ** not strong**

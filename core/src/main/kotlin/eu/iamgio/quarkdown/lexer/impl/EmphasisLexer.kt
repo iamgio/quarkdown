@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.lexer.impl
 
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
@@ -13,15 +13,11 @@ import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
 class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
     private var lastMatchIndex = 0
 
-    private fun MutableList<Token>.push(
+    private fun createToken(
         startDelimeter: StringBuilder,
         endDelimeter: StringBuilder,
-    ) {
-        if (buffer.isEmpty()) {
-            return
-        }
-
-        // The token data.
+        content: List<Token> = emptyList(),
+    ): Token {
         val data =
             TokenData(
                 text = buffer.toString(),
@@ -31,29 +27,32 @@ class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
             )
 
         // Trims start delimeter to balance.
-        if (startDelimeter.length > endDelimeter.length) {
-            // TODO push removed delimeters as text
-            startDelimeter.delete(0, startDelimeter.length - endDelimeter.length)
-        }
+//        if (startDelimeter.length > endDelimeter.length) {
+//            // TODO push removed delimeters as text
+//            startDelimeter.delete(0, startDelimeter.length - endDelimeter.length)
+//        }
 
-        val wrap: (TokenData) -> Token =
-            when {
-                startDelimeter.isEmpty() -> ::PlainTextToken
-                startDelimeter.length % 2 == 0 -> ::StrongEmphasisToken
-                else -> ::EmphasisToken
-            }
+        return when {
+            startDelimeter.isEmpty() -> PlainTextToken(data)
+            startDelimeter.length % 2 == 0 -> StrongToken(data, content)
+            else -> EmphasisToken(data, content)
+        }
+    }
+
+    private fun MutableList<Token>.push(token: Token) {
+        // if (token.data.text.isEmpty()) {
+        //    return
+        // }
+
+        this += token
 
         lastMatchIndex = reader.index
         buffer.clear()
-        startDelimeter.clear()
-        endDelimeter.clear()
-
-        this += wrap(data)
     }
 
-    private fun MutableList<Token>.pushText() = push(StringBuilder(), StringBuilder())
+    // private fun MutableList<Token>.pushText() = push(StringBuilder(), StringBuilder())
 
-    private fun MutableList<Token>.nextDelimeteredSequence() {
+    private fun MutableList<Token>.nextDelimeteredSequence(): Token {
         val startDelimeterStreakBuffer = StringBuilder()
         val endDelimeterStreakBuffer = StringBuilder()
 
@@ -68,18 +67,7 @@ class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
         }
 
         // Content
-        // TODO should be nextSequence() for proper recursion
-        while (true) {
-            val next = reader.peek()?.takeIf { it != '*' }
-            /*if (next == '\\' && reader.peek() == '*') {
-                reader.read() // Escape
-            }*/
-            if (next == null) {
-                break
-            }
-            buffer.append(next)
-            reader.read()
-        }
+        val sequence = nextSequence()
 
         // Right delimeter
         while (true) {
@@ -92,35 +80,36 @@ class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
             reader.read()
         }
 
-        push(startDelimeterStreakBuffer, endDelimeterStreakBuffer)
+        return createToken(startDelimeterStreakBuffer, endDelimeterStreakBuffer, sequence)
     }
 
-    private fun MutableList<Token>.nextSequence() {
-        while (true) {
-            val next = reader.peek() ?: break
-            buffer.append(next)
-            if (next.isWhitespace()) {
-                reader.read()
+    private fun nextSequence() =
+        buildList {
+            while (true) {
+                val next = reader.peek() ?: break
+                // buffer.append(next)
+                // if (next.isWhitespace()) {
+                // reader.read()
                 if (reader.peek() == '*') {
-                    pushText()
-                    nextDelimeteredSequence()
+                    push(createToken(StringBuilder(), StringBuilder()))
+                    push(nextDelimeteredSequence())
                     continue
                 } else {
                     reader.peek()?.let {
                         buffer.append(it)
                     }
                 }
+                // }
+                reader.read()
             }
-            reader.read()
+            // push()
         }
-        pushText()
-    }
 
     override fun tokenize(): List<Token> =
         buildList {
-            nextSequence()
-            pushText()
-        }
+            addAll(nextSequence())
+            push(createToken(StringBuilder(), StringBuilder()))
+        }.also { println(it.joinToString(separator = "\n")) }
 
     override fun createFillToken(position: IntRange): Token {
         return PlainTextToken(
