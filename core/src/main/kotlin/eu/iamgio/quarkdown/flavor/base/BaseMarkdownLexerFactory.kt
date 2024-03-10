@@ -58,6 +58,8 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     comment,
                     strongAsterisk,
                     strongUnderscore,
+                    emphasisAsterisk,
+                    emphasisUnderscore,
                 ),
                 fillTokenType = ::PlainTextToken,
             )

@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.lexer.AutolinkToken
 import eu.iamgio.quarkdown.lexer.BlockSkipToken
 import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.InlineCodeToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
@@ -14,7 +15,7 @@ import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PunctuationToken
 import eu.iamgio.quarkdown.lexer.ReferenceLinkSearchToken
 import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -185,7 +186,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
         get() =
             TokenRegexPattern(
                 name = "InlineStrongAsterisk",
-                wrap = ::StrongEmphasisToken,
+                wrap = ::StrongToken,
                 regex = delimiteredPattern(startDelimiter = "\\*{2}", endDelimiter = "\\*{2,}", strict = false),
             )
 
@@ -193,8 +194,24 @@ class BaseMarkdownInlineTokenRegexPatterns {
         get() =
             TokenRegexPattern(
                 name = "InlineStrongUnderscore",
-                wrap = ::StrongEmphasisToken,
+                wrap = ::StrongToken,
                 regex = delimiteredPattern(startDelimiter = "_{2}", endDelimiter = "_{2,}", strict = true),
+            )
+
+    val emphasisAsterisk
+        get() =
+            TokenRegexPattern(
+                name = "InlineEmphasisAsterisk",
+                wrap = ::EmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
+            )
+
+    val emphasisUnderscore
+        get() =
+            TokenRegexPattern(
+                name = "InlineEmphasisUnderscore",
+                wrap = ::EmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
             )
 }
 

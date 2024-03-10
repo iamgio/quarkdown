@@ -112,24 +112,26 @@ class LexerTest {
     @Test
     fun emphasis() {
         fun lex(source: CharSequence) =
-            QuarkdownFlavor.lexerFactory.newInlineLexer(source)
+            QuarkdownFlavor.lexerFactory.newInlineLexer(source.trim())
                 .tokenize().asSequence()
                 .filter { it !is NewlineToken }
                 .iterator()
 
         val sources = readSource("/lexing/emphasis.md").split("\n---\n").iterator()
 
-        with(lex(sources.next())) {
-            assertIs<PlainTextToken>(next())
-            assertIs<StrongEmphasisToken>(next())
-            assertIs<PlainTextToken>(next())
-            assertIs<StrongEmphasisToken>(next())
-            assertIs<PlainTextToken>(next())
-            assertIs<StrongEmphasisToken>(next())
+        repeat(2) {
+            with(lex(sources.next())) {
+                assertIs<PlainTextToken>(next())
+                assertIs<StrongToken>(next())
+                assertIs<PlainTextToken>(next())
+                assertIs<StrongToken>(next())
+                assertIs<PlainTextToken>(next())
+                assertIs<EmphasisToken>(next())
+            }
         }
 
         with(lex(sources.next())) {
-            assertIs<StrongEmphasisToken>(next())
+            assertIs<StrongToken>(next())
             assertFalse(hasNext())
         }
     }

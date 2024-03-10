@@ -84,7 +84,13 @@ class CommentToken(data: TokenData) : Token(data) {
 
 // Emphasis
 
-class StrongEmphasisToken(data: TokenData) : Token(data) {
+class StrongToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+        TODO("Not yet implemented")
+    }
+}
+
+class EmphasisToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
