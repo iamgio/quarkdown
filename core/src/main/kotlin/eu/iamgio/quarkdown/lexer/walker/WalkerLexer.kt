@@ -6,12 +6,8 @@ import eu.iamgio.quarkdown.lexer.Lexer
 /**
  * A [Lexer] that scans the source character-by-character.
  * @param source the content to be tokenized
+ * @param reader a char-by-char string reader
  */
-abstract class WalkerLexer(source: CharSequence) : AbstractLexer(source) {
-    /**
-     * A char-by-char string reader.
-     */
-    protected val reader = SourceReader(source)
-
+abstract class WalkerLexer(source: CharSequence, protected val reader: SourceReader = SourceReader(source)) : AbstractLexer(source) {
     protected val buffer = StringBuilder()
 }

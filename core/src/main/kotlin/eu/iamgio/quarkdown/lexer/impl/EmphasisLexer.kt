@@ -13,10 +13,10 @@ import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
 class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
     private var lastMatchIndex = 0
 
-    private var startDelimeterStreakBuffer = StringBuilder()
-    private var endDelimeterStreakBuffer = StringBuilder()
-
-    private fun MutableList<Token>.push() {
+    private fun MutableList<Token>.push(
+        startDelimeter: StringBuilder,
+        endDelimeter: StringBuilder,
+    ) {
         if (buffer.isEmpty()) {
             return
         }
@@ -31,27 +31,32 @@ class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
             )
 
         // Trims start delimeter to balance.
-        if (startDelimeterStreakBuffer.length > endDelimeterStreakBuffer.length) {
+        if (startDelimeter.length > endDelimeter.length) {
             // TODO push removed delimeters as text
-            startDelimeterStreakBuffer.delete(0, startDelimeterStreakBuffer.length - endDelimeterStreakBuffer.length)
+            startDelimeter.delete(0, startDelimeter.length - endDelimeter.length)
         }
 
         val wrap: (TokenData) -> Token =
             when {
-                startDelimeterStreakBuffer.isEmpty() -> ::PlainTextToken
-                startDelimeterStreakBuffer.length % 2 == 0 -> ::StrongEmphasisToken
+                startDelimeter.isEmpty() -> ::PlainTextToken
+                startDelimeter.length % 2 == 0 -> ::StrongEmphasisToken
                 else -> ::EmphasisToken
             }
 
         lastMatchIndex = reader.index
         buffer.clear()
-        startDelimeterStreakBuffer.clear()
-        endDelimeterStreakBuffer.clear()
+        startDelimeter.clear()
+        endDelimeter.clear()
 
         this += wrap(data)
     }
 
+    private fun MutableList<Token>.pushText() = push(StringBuilder(), StringBuilder())
+
     private fun MutableList<Token>.nextDelimeteredSequence() {
+        val startDelimeterStreakBuffer = StringBuilder()
+        val endDelimeterStreakBuffer = StringBuilder()
+
         // Left delimeter
         while (true) {
             val next = reader.peek()?.takeIf { it == '*' }
@@ -87,27 +92,34 @@ class EmphasisLexer(source: CharSequence) : WalkerLexer("\n$source") {
             reader.read()
         }
 
-        push()
+        push(startDelimeterStreakBuffer, endDelimeterStreakBuffer)
     }
 
     private fun MutableList<Token>.nextSequence() {
         while (true) {
             val next = reader.peek() ?: break
-            if (next == '*') {
-                push()
-                nextDelimeteredSequence()
-                continue
-            }
             buffer.append(next)
+            if (next.isWhitespace()) {
+                reader.read()
+                if (reader.peek() == '*') {
+                    pushText()
+                    nextDelimeteredSequence()
+                    continue
+                } else {
+                    reader.peek()?.let {
+                        buffer.append(it)
+                    }
+                }
+            }
             reader.read()
         }
-        push()
+        pushText()
     }
 
     override fun tokenize(): List<Token> =
         buildList {
             nextSequence()
-            push()
+            pushText()
         }
 
     override fun createFillToken(position: IntRange): Token {
