@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.flavor.LexerFactory
-import eu.iamgio.quarkdown.lexer.InlineTextToken
 import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
 /**
@@ -59,7 +59,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     strongAsterisk,
                     strongUnderscore,
                 ),
-                fillTokenType = ::InlineTextToken,
+                fillTokenType = ::PlainTextToken,
             )
         }
 }

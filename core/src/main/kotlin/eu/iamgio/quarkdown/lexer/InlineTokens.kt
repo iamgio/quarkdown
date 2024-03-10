@@ -22,7 +22,7 @@ class LineBreakToken(data: TokenData) : Token(data) {
     }
 }
 
-class InlineTextToken(data: TokenData) : Token(data) {
+class PlainTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
@@ -87,15 +87,5 @@ class CommentToken(data: TokenData) : Token(data) {
 class StrongEmphasisToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
-    }
-}
-
-class PlainTextToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
-
-    override fun toString(): String {
-        return "Plain(${data.text.trim()})"
     }
 }
