@@ -56,10 +56,10 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     collapsedReferenceLink,
                     // referenceLinkSearch,
                     comment,
-                    strongAsterisk,
-                    strongUnderscore,
                     emphasisAsterisk,
                     emphasisUnderscore,
+                    strongAsterisk,
+                    strongUnderscore,
                 ),
                 fillTokenType = ::PlainTextToken,
             )

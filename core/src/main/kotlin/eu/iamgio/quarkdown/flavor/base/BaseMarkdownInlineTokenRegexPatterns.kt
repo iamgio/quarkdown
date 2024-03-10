@@ -245,17 +245,23 @@ private fun delimiteredPattern(
     endDelimiter: String = startDelimiter,
     strict: Boolean,
 ) = RegexBuilder(
-    // Start delimiter
-    if (strict) {
-        // If strict, the start delimiter must not be right-flanking
-        "(?<=[\\spunct])(start(?!\\s))"
-    } else {
-        "(start(?![\\spunct])|(?<=[\\spunct])start(?!\\s))"
-    } +
+    "(?<!start)" +
+        // Start delimiter
+        if (strict) {
+            // If strict, the start delimiter must also not be right-flanking
+            "(?<=[\\spunct])(start(?!\\s))"
+        } else {
+            "(start(?![\\spunct])|(?<=[\\spunct])start(?!\\s))"
+        } +
         // Content
-        ".+?" +
-        // End delimiter (TODO make strict)
-        "((?<![\\spunct])end|(?<!\\s)\\*\\*(?=[\\spunct]))",
+        "(?!start).+?" +
+        // End delimiter
+        if (strict) {
+            // If strict, the start delimiter must also not be left-flanking
+            "((?<![\\spunct])end(?=[\\spunct]))"
+        } else {
+            "((?<![\\spunct])end|(?<!\\s)end(?=[\\spunct]))"
+        },
 )
     .withReference("punct", PUNCTUATION_HELPER)
     .withReference("start", startDelimiter)
