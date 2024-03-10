@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.lexer
 
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 
-// Inline elements
+// Inline tokens
 
 class EscapeToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
@@ -79,5 +79,23 @@ class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
 class CommentToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
         TODO("Not yet implemented")
+    }
+}
+
+// Emphasis
+
+class StrongEmphasisToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+        TODO("Not yet implemented")
+    }
+}
+
+class PlainTextToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+        TODO("Not yet implemented")
+    }
+
+    override fun toString(): String {
+        return "Plain(${data.text.trim()})"
     }
 }
