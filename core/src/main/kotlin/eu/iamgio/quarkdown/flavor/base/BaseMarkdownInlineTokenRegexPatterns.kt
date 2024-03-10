@@ -2,7 +2,19 @@
 
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
+import eu.iamgio.quarkdown.lexer.AutolinkToken
+import eu.iamgio.quarkdown.lexer.BlockSkipToken
+import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.InlineCodeToken
+import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkToken
+import eu.iamgio.quarkdown.lexer.PunctuationToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkSearchToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -75,39 +87,6 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
-    val strongEmphasisLeftDelimeter
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongEmphasisLeftDelimeter",
-                wrap = ::StrongEmphasisLeftDelimeterToken,
-                regex =
-                    RegexBuilder("(?:\\*+(?:((?!\\*)[punct])|(?!\\s|\\*)))|_+(?:((?!_)[punct])|((?!\\s|_)))")
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
-            )
-
-    val strongEmphasisRightDelimeterAsterisk
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongEmphasisRightDelimeterAsterisk",
-                wrap = ::StrongEmphasisRightDelimeterAsteriskToken,
-                regex =
-                    RegexBuilder(STRONG_EMPHASIS_RIGHT_DELIMETER_ASTERISK_HELPER)
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
-            )
-
-    val strongEmphasisRightDelimeterUnderscore
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongEmphasisRightDelimeterUnderscore",
-                wrap = ::StrongEmphasisRightDelimeterUnderscoreToken,
-                regex =
-                    RegexBuilder(STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER)
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
-            )
-
     val link
         get() =
             TokenRegexPattern(
@@ -175,7 +154,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
-    val text
+    /*val text
         get() =
             TokenRegexPattern(
                 name = "InlineText",
@@ -183,7 +162,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     "(`+|[^`])(?:(?= {2,}\\n)|[\\s\\S]*?(?:(?=[\\\\<!\\[`]|\\b_|\$)|[^ ](?= {2,}\\n)))"
                         .toRegex(),
-            )
+            )*/
 
     val comment
         get() =
@@ -197,6 +176,26 @@ class BaseMarkdownInlineTokenRegexPatterns {
                             "attribute",
                             "\\s+[a-zA-Z:_][\\w.:-]*(?:\\s*=\\s*\"[^\"]*\"|\\s*=\\s*'[^']*'|\\s*=\\s*[^\\s\"'=<>`]+)?",
                         )
+                        .build(),
+            )
+
+    // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
+
+    val strongAsterisk
+        get() =
+            TokenRegexPattern(
+                name = "InlineStrong",
+                wrap = ::StrongEmphasisToken,
+                regex =
+                    RegexBuilder(
+                        // Start delimeter
+                        "(\\*\\*(?![\\spunct])|(?<=[\\spunct])\\*\\*(?!\\s))" +
+                            // Content
+                            ".+?" +
+                            // End delimeter
+                            "((?<![\\spunct])\\*\\*|(?<!\\s)\\*\\*(?=[\\spunct]))",
+                    )
+                        .withReference("punct", PUNCTUATION_HELPER)
                         .build(),
             )
 }
