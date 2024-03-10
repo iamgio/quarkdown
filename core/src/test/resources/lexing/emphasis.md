@@ -26,4 +26,4 @@ foo***bar***baz
 
 ---
 
-*foo**bar***
+*foo _bar* baz_
