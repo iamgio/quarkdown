@@ -170,3 +170,18 @@ class EmphasisToken(data: TokenData) : Token(data) {
         TODO("Not yet implemented")
     }
 }
+
+/**
+ * Examples:
+ * ```
+ * ***emphasis***
+ * ```
+ * ```
+ * ___emphasis___
+ * ```
+ */
+class StrongEmphasisToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+        TODO("Not yet implemented")
+    }
+}

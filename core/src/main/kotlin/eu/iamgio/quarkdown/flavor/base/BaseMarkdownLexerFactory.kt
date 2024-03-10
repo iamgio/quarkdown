@@ -56,6 +56,8 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     collapsedReferenceLink,
                     // referenceLinkSearch,
                     comment,
+                    strongEmphasisAsterisk,
+                    strongEmphasisUnderscore,
                     emphasisAsterisk,
                     emphasisUnderscore,
                     strongAsterisk,

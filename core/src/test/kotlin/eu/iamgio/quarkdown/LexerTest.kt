@@ -148,6 +148,11 @@ class LexerTest {
             assertIs<StrongToken>(next())
             assertFalse(hasNext())
         }
+
+        with(lex(sources.next())) {
+            assertIs<StrongEmphasisToken>(next())
+            assertFalse(hasNext())
+        }
     }
 
     @Test

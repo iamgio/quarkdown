@@ -2,20 +2,7 @@
 
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
-import eu.iamgio.quarkdown.lexer.AutolinkToken
-import eu.iamgio.quarkdown.lexer.BlockSkipToken
-import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.CommentToken
-import eu.iamgio.quarkdown.lexer.EmphasisToken
-import eu.iamgio.quarkdown.lexer.EscapeToken
-import eu.iamgio.quarkdown.lexer.InlineCodeToken
-import eu.iamgio.quarkdown.lexer.LineBreakToken
-import eu.iamgio.quarkdown.lexer.LinkToken
-import eu.iamgio.quarkdown.lexer.PunctuationToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkSearchToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.StrongToken
+import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -182,6 +169,22 @@ class BaseMarkdownInlineTokenRegexPatterns {
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
 
+    val emphasisAsterisk
+        get() =
+            TokenRegexPattern(
+                name = "InlineEmphasisAsterisk",
+                wrap = ::EmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
+            )
+
+    val emphasisUnderscore
+        get() =
+            TokenRegexPattern(
+                name = "InlineEmphasisUnderscore",
+                wrap = ::EmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
+            )
+
     val strongAsterisk
         get() =
             TokenRegexPattern(
@@ -198,20 +201,20 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "_{2}", endDelimiter = "_{2,}", strict = true),
             )
 
-    val emphasisAsterisk
+    val strongEmphasisAsterisk
         get() =
             TokenRegexPattern(
-                name = "InlineEmphasisAsterisk",
-                wrap = ::EmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
+                name = "InlineStrongEmphasisAsterisk",
+                wrap = ::StrongEmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "\\*{3}", endDelimiter = "\\*{3,}", strict = false),
             )
 
-    val emphasisUnderscore
+    val strongEmphasisUnderscore
         get() =
             TokenRegexPattern(
-                name = "InlineEmphasisUnderscore",
-                wrap = ::EmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
+                name = "InlineStrongEmphasisUnderscore",
+                wrap = ::StrongEmphasisToken,
+                regex = delimiteredPattern(startDelimiter = "_{3}", endDelimiter = "_{3,}", strict = true),
             )
 }
 
