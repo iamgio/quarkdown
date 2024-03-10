@@ -184,42 +184,21 @@ class BaseMarkdownInlineTokenRegexPatterns {
     val strongAsterisk
         get() =
             TokenRegexPattern(
-                name = "InlineStrong",
+                name = "InlineStrongAsterisk",
                 wrap = ::StrongEmphasisToken,
-                regex =
-                    RegexBuilder(
-                        // Start delimeter
-                        "(\\*\\*(?![\\spunct])|(?<=[\\spunct])\\*\\*(?!\\s))" +
-                            // Content
-                            ".+?" +
-                            // End delimeter
-                            "((?<![\\spunct])\\*\\*|(?<!\\s)\\*\\*(?=[\\spunct]))",
-                    )
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
+                regex = delimeteredPattern("\\*\\*", strict = false),
+            )
+
+    val strongUnderscore
+        get() =
+            TokenRegexPattern(
+                name = "InlineStrongUnderscore",
+                wrap = ::StrongEmphasisToken,
+                regex = delimeteredPattern("__", strict = true),
             )
 }
 
 private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
-
-private const val STRONG_EMPHASIS_RIGHT_DELIMETER_ASTERISK_HELPER =
-    "[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)" + // Skip orphan inside strong
-        "|([^*]+)(\\*+)" + // Consume to delim
-        "|(?!\\*)[punct](\\*+)(?=[\\s]|$)" + // (1) #*** can only be a Right Delimiter
-        "|[^punct\\s](\\*+)(?!\\*)(?=[punct\\s]|$)" + // (2) a***#, a*** can only be a Right Delimiter
-        "|(?!\\*)[punct\\s](\\*+)(?=[^punct\\s])" + // (3) #***a, ***a can only be Left Delimiter
-        "|[\\s](\\*+)(?!\\*)(?=[punct])" + // (4) ***# can only be Left Delimiter
-        "|(?!\\*)[punct](\\*+)(?!\\*)(?=[punct])" + // (5) #***# can be either Left or Right Delimiter
-        "|[^punct\\s](\\*+)(?=[^punct\\s])" // (6) a***a can be either Left or Right Delimiter
-
-private const val STRONG_EMPHASIS_RIGHT_DELIMETER_UNDERSCORE_HELPER =
-    "[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)" + // Skip orphan inside strong
-        "|([^_]+)(_+)" + // Consume to delim
-        "|(?!_)[punct](_+)(?=[\\s]|$)" + // (1) #___ can only be a Right Delimiter
-        "|[^punct\\s](_+)(?!_)(?=[punct\\s]|$)" + // (2) a___#, a___ can only be a Right Delimiter
-        "|(?!_)[punct\\s](_+)(?=[^punct\\s])" + // (3) #___a, ___a can only be Left Delimiter
-        "|[\\s](_+)(?!_)(?=[punct])" + // (4) ___# can only be Left Delimiter
-        "|(?!_)[punct](_+)(?!_)(?=[punct])"
 
 // [this is a label]
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
@@ -233,3 +212,35 @@ private const val COMMENT_TAG_HELPER =
         "|^<\\?[\\s\\S]*?\\?>" + // processing instruction, e.g. <?php ?>
         "|^<![a-zA-Z]+\\s[\\s\\S]*?>" + // declaration, e.g. <!DOCTYPE html>
         "|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>" // CDATA section
+
+/**
+ * @param startDelimeter begin of the match (included)
+ * @param endDelimeter end of the match (included)
+ * @param strict if `true`, restrictions are applied to the delimeter checks.
+ * According to the CommonMark spec:
+ * - non-strict means the start delimeter must be left-flanking and end delimeter must be right-flanking
+ * - strict means any of the delimeters must not be left and right-flanking at the same time
+ *
+ * @return a new regex that matches the content between [startDelimeter] and [endDelimeter]
+ */
+private fun delimeteredPattern(
+    startDelimeter: String,
+    endDelimeter: String = startDelimeter,
+    strict: Boolean,
+) = RegexBuilder(
+    // Start delimeter
+    if (strict) {
+        // If strict, the start delimeter must not be right-flanking
+        "(?<=[\\spunct])(start(?!\\s))"
+    } else {
+        "(start(?![\\spunct])|(?<=[\\spunct])start(?!\\s))"
+    } +
+        // Content
+        ".+?" +
+        // End delimeter (TODO make strict)
+        "((?<![\\spunct])end|(?<!\\s)\\*\\*(?=[\\spunct]))",
+)
+    .withReference("punct", PUNCTUATION_HELPER)
+    .withReference("start", startDelimeter)
+    .withReference("end", endDelimeter)
+    .build()

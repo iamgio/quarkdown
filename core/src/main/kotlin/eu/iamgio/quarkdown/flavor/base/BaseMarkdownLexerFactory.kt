@@ -57,6 +57,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     // referenceLinkSearch,
                     comment,
                     strongAsterisk,
+                    strongUnderscore,
                 ),
                 fillTokenType = ::InlineTextToken,
             )
