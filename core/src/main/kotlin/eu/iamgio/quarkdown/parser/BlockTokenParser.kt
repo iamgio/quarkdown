@@ -91,7 +91,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
     private fun extractListItems(token: Token) =
         flavor.lexerFactory.newListLexer(source = token.data.text)
             .tokenize()
-            .acceptAll(this)
+            .acceptAll(flavor.parserFactory.newParser())
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
     override fun visit(token: UnorderedListToken): Node {
@@ -147,7 +147,10 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
             }
 
         // Parsed content.
-        val children = flavor.lexerFactory.newBlockLexer(source = trimmedContent).tokenize().acceptAll(this)
+        val children =
+            flavor.lexerFactory.newBlockLexer(source = trimmedContent)
+                .tokenize()
+                .acceptAll(flavor.parserFactory.newParser())
 
         return when {
             // GFM task list item.
@@ -177,7 +180,10 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
         return BlockQuote(
-            children = flavor.lexerFactory.newBlockLexer(source = text).tokenize().acceptAll(this),
+            children =
+                flavor.lexerFactory.newBlockLexer(source = text)
+                    .tokenize()
+                    .acceptAll(flavor.parserFactory.newParser()),
         )
     }
 

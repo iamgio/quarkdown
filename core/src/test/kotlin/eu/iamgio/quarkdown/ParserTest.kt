@@ -30,7 +30,7 @@ class ParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newBlockLexer(source)
-        val parser = flavor.parserFactory.newBlockParser()
+        val parser = flavor.parserFactory.newParser()
 
         return lexer.tokenize().asSequence()
             .filterNot { it is NewlineToken }

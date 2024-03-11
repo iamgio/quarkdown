@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.lexer
 
-import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
+import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
 
 // Inline tokens
 
@@ -12,7 +12,7 @@ import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
  * ```
  */
 class EscapeToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -27,7 +27,7 @@ class EscapeToken(data: TokenData) : Token(data) {
  * ```
  */
 class InlineCodeToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -41,25 +41,25 @@ class InlineCodeToken(data: TokenData) : Token(data) {
  * ```
  */
 class LineBreakToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
 class PunctuationToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
 class BlockSkipToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
 class AnyPunctuationToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -71,7 +71,7 @@ class AnyPunctuationToken(data: TokenData) : Token(data) {
  * ```
  */
 class AutolinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -83,7 +83,7 @@ class AutolinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class LinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -95,7 +95,7 @@ class LinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class ReferenceLinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -107,13 +107,13 @@ class ReferenceLinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class CollapsedReferenceLinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
 
 class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -125,7 +125,7 @@ class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
  * ```
  */
 class CommentToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -134,9 +134,7 @@ class CommentToken(data: TokenData) : Token(data) {
  * Text content.
  */
 class PlainTextToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 // Emphasis
@@ -151,7 +149,7 @@ class PlainTextToken(data: TokenData) : Token(data) {
  * ```
  */
 class StrongToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -166,7 +164,7 @@ class StrongToken(data: TokenData) : Token(data) {
  * ```
  */
 class EmphasisToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
@@ -181,7 +179,7 @@ class EmphasisToken(data: TokenData) : Token(data) {
  * ```
  */
 class StrongEmphasisToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: BlockTokenVisitor<T>): T {
+    override fun <T> accept(visitor: TokenVisitor<T>): T {
         TODO("Not yet implemented")
     }
 }
