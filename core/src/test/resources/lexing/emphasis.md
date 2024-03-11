@@ -34,4 +34,12 @@ foo***bar***baz
 
 ---
 
+**foo__
+
+---
+
 *foo _bar* baz_
+
+---
+
+abc **def*g __h__ i*jkl** mno

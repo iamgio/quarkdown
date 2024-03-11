@@ -172,7 +172,19 @@ class LexerTest {
         }
 
         with(lex(sources.next())) {
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        with(lex(sources.next())) {
             assertIs<EmphasisToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        with(lex(sources.next())) {
+            assertIs<PlainTextToken>(next())
+            assertIs<StrongToken>(next())
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
