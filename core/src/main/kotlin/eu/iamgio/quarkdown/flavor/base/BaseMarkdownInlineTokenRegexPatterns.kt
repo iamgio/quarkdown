@@ -252,9 +252,9 @@ private fun delimiteredPattern(
         // Start delimiter
         if (strict) {
             // If strict, the start delimiter must also not be right-flanking
-            "(?<=[\\spunct])(start(?!\\s))"
+            "(?<=^|[\\spunct])(start(?!\\s))"
         } else {
-            "(start(?![\\spunct])|(?<=[\\spunct])start(?!\\s))"
+            "(start(?![\\spunct])|(?<=^|[\\spunct])start(?!\\s))"
         } +
         // Content
         "(?!start)(.+?)" +

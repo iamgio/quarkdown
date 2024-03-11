@@ -121,6 +121,13 @@ class LexerTest {
 
         repeat(2) {
             with(lex(sources.next())) {
+                assertIs<StrongToken>(next())
+                assertFalse(hasNext())
+            }
+        }
+
+        repeat(2) {
+            with(lex(sources.next())) {
                 assertIs<PlainTextToken>(next())
                 assertIs<StrongToken>(next())
                 assertIs<PlainTextToken>(next())

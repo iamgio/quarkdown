@@ -1,3 +1,11 @@
+**text**
+
+---
+
+__text__
+
+---
+
 abc **strong abc** text **test** aaaa *emphasis*
 
 ---
