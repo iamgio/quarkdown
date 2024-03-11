@@ -257,7 +257,7 @@ private fun delimiteredPattern(
             "(start(?![\\spunct])|(?<=[\\spunct])start(?!\\s))"
         } +
         // Content
-        "(?!start).+?" +
+        "(?!start)(.+?)" +
         // End delimiter
         if (strict) {
             // If strict, the start delimiter must also not be left-flanking

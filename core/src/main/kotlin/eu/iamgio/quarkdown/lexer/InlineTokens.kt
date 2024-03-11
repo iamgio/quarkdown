@@ -132,6 +132,7 @@ class CommentToken(data: TokenData) : Token(data) {
 
 /**
  * Text content.
+ * @see eu.iamgio.quarkdown.ast.PlainText
  */
 class PlainTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -147,11 +148,10 @@ class PlainTextToken(data: TokenData) : Token(data) {
  * ```
  * __strong__
  * ```
+ * @see eu.iamgio.quarkdown.ast.Strong
  */
 class StrongToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -162,11 +162,10 @@ class StrongToken(data: TokenData) : Token(data) {
  * ```
  * _emphasis_
  * ```
+ * @see eu.iamgio.quarkdown.ast.Emphasis
  */
 class EmphasisToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -177,9 +176,8 @@ class EmphasisToken(data: TokenData) : Token(data) {
  * ```
  * ___emphasis___
  * ```
+ * @see eu.iamgio.quarkdown.ast.StrongEmphasis
  */
 class StrongEmphasisToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
