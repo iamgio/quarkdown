@@ -63,22 +63,20 @@ class AnyPunctuationToken(data: TokenData) : Token(data) {
 /**
  * Example:
  * ```
- * <https://github.com/iamgio/quarkdown>
+ * [Quarkdown](https://github.com/iamgio/quarkdown)
  * ```
  */
-class AutolinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+class LinkToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * Example:
  * ```
- * [Quarkdown](https://github.com/iamgio/quarkdown)
+ * <https://github.com/iamgio/quarkdown>
  * ```
  */
-class LinkToken(data: TokenData) : Token(data) {
+class AutolinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 

@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.lexer.AutolinkToken
 import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
@@ -73,6 +74,16 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
             url = groups.next().trim(),
             // Removes leading and trailing delimiters.
             title = groups.nextOrNull()?.run { substring(1, length - 1) }?.trim(),
+        )
+    }
+
+    override fun visit(token: AutolinkToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val url = groups.next()
+        return Link(
+            label = listOf(PlainText(url)),
+            url = url,
+            title = null,
         )
     }
 

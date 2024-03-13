@@ -73,6 +73,18 @@ class InlineParserTest {
                 assertEquals(title, "Title")
             }
         }
+
+        // Autolink
+        with(nodes.next()) {
+            assertEquals("https://google.com", url)
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals(url, text)
+            }
+            assertNull(title)
+        }
+
+        assertFalse(nodes.hasNext())
     }
 
     @Test
