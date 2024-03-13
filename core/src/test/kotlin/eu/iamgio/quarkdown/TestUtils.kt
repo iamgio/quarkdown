@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
 import kotlin.test.assertIs
 
@@ -31,6 +32,7 @@ inline fun <reified T : Node> nodesIterator(
 ): Iterator<T> {
     return lexer.tokenize().asSequence()
         .filterNot { it is NewlineToken }
+        .filterNot { it is PlainTextToken && it.data.text.isBlank() }
         .map { it.accept(parser) }
         .onEach {
             if (assertType) {

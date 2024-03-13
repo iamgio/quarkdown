@@ -1,11 +1,16 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.Strong
+import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
 
 /**
  * Parser tests for inline content.
@@ -40,5 +45,128 @@ class InlineParserTest {
         assertEquals(",", nodes.next().text)
         assertEquals("[", nodes.next().text)
         assertEquals("]", nodes.next().text)
+    }
+
+    @Test
+    fun strong() {
+        val nodes = inlineIterator<Strong>(readSource("/parsing/inline/strong.md"))
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+        }
+
+        with(nodes.next()) {
+            val content = children.iterator()
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            with(content.next()) {
+                assertIs<Emphasis>(this)
+                assertIs<PlainText>(children.first())
+                assertEquals("bar", (children.first() as PlainText).text)
+            }
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("baz", text)
+            }
+        }
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo_bar_baz", text)
+            }
+        }
+
+        /*
+        TODO fix for **foo*bar***
+        with(nodes.next()) {
+            val content = children.iterator()
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            with(content.next()) {
+                assertIs<Emphasis>(this)
+                assertIs<PlainText>(children.first())
+                assertEquals("bar", (children.first() as PlainText).text)
+            }
+        }
+         */
+
+        assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun emphasis() {
+        val nodes = inlineIterator<Emphasis>(readSource("/parsing/inline/emphasis.md"))
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+        }
+
+        with(nodes.next()) {
+            val content = children.iterator()
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            with(content.next()) {
+                assertIs<Strong>(this)
+                assertIs<PlainText>(children.first())
+                assertEquals("bar", (children.first() as PlainText).text)
+            }
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("baz", text)
+            }
+        }
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo_bar_baz", text)
+            }
+        }
+
+        assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun strongEmphasis() {
+        val nodes = inlineIterator<StrongEmphasis>(readSource("/parsing/inline/strongemphasis.md"))
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+        }
+
+        with(nodes.next()) {
+            val content = children.iterator()
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            with(content.next()) {
+                assertIs<Emphasis>(this)
+                assertIs<PlainText>(children.first())
+                assertEquals("bar", (children.first() as PlainText).text)
+            }
+            with(content.next()) {
+                assertIs<PlainText>(this)
+                assertEquals("baz", text)
+            }
+        }
+
+        assertFalse(nodes.hasNext())
     }
 }
