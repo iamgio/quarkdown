@@ -12,9 +12,7 @@ import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
  * ```
  */
 class EscapeToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
 }
 
 /**

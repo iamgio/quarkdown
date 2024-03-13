@@ -208,6 +208,19 @@ class LexerTest {
     }
 
     @Test
+    fun escape() {
+        val tokens = inlineLex(readSource("/lexing/escape.md"))
+        assertIsNot<EscapeToken>(tokens.next()) // 'Text '
+        assertIs<EscapeToken>(tokens.next()) // \#
+        assertIsNot<EscapeToken>(tokens.next()) // ' text \m '
+        assertIs<EscapeToken>(tokens.next()) // \!
+        assertIsNot<EscapeToken>(tokens.next()) // ' '
+        assertIs<EscapeToken>(tokens.next()) // \.
+        assertIs<EscapeToken>(tokens.next()) // \,
+        assertIsNot<EscapeToken>(tokens.next()) // ' text'
+    }
+
+    @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
