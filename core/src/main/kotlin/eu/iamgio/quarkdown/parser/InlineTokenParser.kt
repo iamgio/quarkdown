@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strong
@@ -10,6 +11,7 @@ import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.StrongToken
@@ -35,6 +37,10 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: CommentToken): Node {
         // Content is ignored.
         return Comment()
+    }
+
+    override fun visit(token: LineBreakToken): Node {
+        return LineBreak()
     }
 
     override fun visit(token: PlainTextToken): Node {

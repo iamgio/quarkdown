@@ -39,9 +39,7 @@ class InlineCodeToken(data: TokenData) : Token(data) {
  * ```
  */
 class LineBreakToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
 }
 
 class PunctuationToken(data: TokenData) : Token(data) {

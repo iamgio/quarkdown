@@ -7,6 +7,13 @@ class Comment : Node {
     override fun toString() = "Comment"
 }
 
+/**
+ * A hard line break.
+ */
+class LineBreak : Node {
+    override fun toString() = "LineBreak"
+}
+
 // Emphasis
 
 /**

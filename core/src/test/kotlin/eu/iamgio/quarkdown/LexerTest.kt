@@ -221,6 +221,18 @@ class LexerTest {
     }
 
     @Test
+    fun lineBreak() {
+        val tokens = inlineLex(readSource("/lexing/linebreak.md"))
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LineBreakToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LineBreakToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LineBreakToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+    }
+
+    @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
