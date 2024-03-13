@@ -1,5 +1,12 @@
 package eu.iamgio.quarkdown.ast
 
+/**
+ * A comment whose content is ignored.
+ */
+class Comment : Node {
+    override fun toString() = "Comment"
+}
+
 // Emphasis
 
 /**

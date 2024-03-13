@@ -1,11 +1,13 @@
 package eu.iamgio.quarkdown.parser
 
+import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
@@ -23,6 +25,11 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         flavor.lexerFactory.newInlineLexer(source)
             .tokenize()
             .acceptAll(flavor.parserFactory.newParser())
+
+    override fun visit(token: CommentToken): Node {
+        // Content is ignored.
+        return Comment()
+    }
 
     override fun visit(token: PlainTextToken): Node {
         return PlainText(token.data.text)

@@ -13,6 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertIsNot
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -25,6 +26,12 @@ class LexerTest {
         source: CharSequence,
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ) = flavor.lexerFactory.newBlockLexer(source)
+
+    private fun inlineLex(source: CharSequence) =
+        QuarkdownFlavor.lexerFactory.newInlineLexer(source.trim())
+            .tokenize().asSequence()
+            .filter { it !is NewlineToken }
+            .iterator()
 
     @Test
     fun sourceReader() {
@@ -111,23 +118,17 @@ class LexerTest {
 
     @Test
     fun emphasis() {
-        fun lex(source: CharSequence) =
-            QuarkdownFlavor.lexerFactory.newInlineLexer(source.trim())
-                .tokenize().asSequence()
-                .filter { it !is NewlineToken }
-                .iterator()
-
         val sources = readSource("/lexing/emphasis.md").split("\n---\n").iterator()
 
         repeat(2) {
-            with(lex(sources.next())) {
+            with(inlineLex(sources.next())) {
                 assertIs<StrongToken>(next())
                 assertFalse(hasNext())
             }
         }
 
         repeat(2) {
-            with(lex(sources.next())) {
+            with(inlineLex(sources.next())) {
                 assertIs<PlainTextToken>(next())
                 assertIs<StrongToken>(next())
                 assertIs<PlainTextToken>(next())
@@ -138,7 +139,7 @@ class LexerTest {
             }
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<PlainTextToken>(next())
             assertIs<StrongToken>(next())
             assertIs<PlainTextToken>(next())
@@ -147,47 +148,63 @@ class LexerTest {
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<PlainTextToken>(next())
             assertIs<StrongToken>(next())
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<StrongToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<StrongEmphasisToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<PlainTextToken>(next())
             assertIs<StrongEmphasisToken>(next())
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<EmphasisToken>(next())
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
 
-        with(lex(sources.next())) {
+        with(inlineLex(sources.next())) {
             assertIs<PlainTextToken>(next())
             assertIs<StrongToken>(next())
             assertIs<PlainTextToken>(next())
             assertFalse(hasNext())
         }
+    }
+
+    @Test
+    fun comments() {
+        val tokens = inlineLex(readSource("/lexing/comment.md"))
+        assertIsNot<CommentToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIsNot<CommentToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIsNot<CommentToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIsNot<CommentToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIsNot<CommentToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIsNot<CommentToken>(tokens.next())
     }
 
     @Test
