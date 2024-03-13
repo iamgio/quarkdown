@@ -41,18 +41,34 @@ $ This is a LaTeX expression $
 
 The project is under development. Currently parsed:
 
-- Base Markdown
+- Base Markdown blocks
   - [x] Paragraphs
   - [x] Headings
   - [x] Code
   - [x] Quotes
-  - [x] Lists
+  - [x] Lists (with GFM tasks)
   - [x] Horizontal lines
   - [x] Link references
-  - [ ] Tables
-  - [ ] Footnotes
-  - [ ] Inline content
+  - [ ] GFM tables
+  - [ ] GFM footnotes
+
+- Base Markdown inline
+  - [x] Text
+  - [x] Link
+  - [x] Autolink (with GFM extension)
+  - [x] Reference link
+  - [x] Comment
+  - [x] Emphasis
+  - [ ] Code
+  - [ ] GFM strikethrough
 
 - Quarkdown features
   - [ ] Functions
+  - [ ] Styles
   - [x] Math (LaTeX) blocks
+  - [ ] Highlight
+  - [ ] Subscript/superscript
+
+- Rendering
+  - [ ] HTML
+  - [ ] LaTeX?
