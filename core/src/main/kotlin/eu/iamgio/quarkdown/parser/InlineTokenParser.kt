@@ -10,9 +10,9 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
-import eu.iamgio.quarkdown.lexer.AutolinkToken
 import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.DiamondAutolinkToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.Lexer
@@ -22,6 +22,7 @@ import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.StrongToken
+import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
@@ -77,9 +78,18 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         )
     }
 
-    override fun visit(token: AutolinkToken): Node {
+    override fun visit(token: DiamondAutolinkToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        val url = groups.next()
+        val url = groups.next().trim()
+        return Link(
+            label = listOf(PlainText(url)),
+            url = url,
+            title = null,
+        )
+    }
+
+    override fun visit(token: UrlAutolinkToken): Node {
+        val url = token.data.text.trim()
         return Link(
             label = listOf(PlainText(url)),
             url = url,

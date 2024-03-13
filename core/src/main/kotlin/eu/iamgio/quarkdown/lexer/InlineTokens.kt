@@ -76,7 +76,18 @@ class LinkToken(data: TokenData) : Token(data) {
  * <https://github.com/iamgio/quarkdown>
  * ```
  */
-class AutolinkToken(data: TokenData) : Token(data) {
+class DiamondAutolinkToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * GFM extension.
+ * Example:
+ * ```
+ * https://github.com/iamgio/quarkdown
+ * ```
+ */
+class UrlAutolinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 

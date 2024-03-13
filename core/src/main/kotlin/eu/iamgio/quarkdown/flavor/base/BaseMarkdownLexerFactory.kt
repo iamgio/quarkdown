@@ -45,7 +45,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                 source,
                 listOf(
                     // anyPunctuation,
-                    autolink,
+                    diamondAutolink,
                     // blockSkip,
                     lineBreak,
                     code,
@@ -55,6 +55,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     referenceLink,
                     collapsedReferenceLink,
                     comment,
+                    urlAutolink,
                     strongEmphasisAsterisk,
                     strongEmphasisUnderscore,
                     emphasisAsterisk,

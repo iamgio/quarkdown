@@ -2,20 +2,7 @@
 
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
-import eu.iamgio.quarkdown.lexer.AutolinkToken
-import eu.iamgio.quarkdown.lexer.BlockSkipToken
-import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.CommentToken
-import eu.iamgio.quarkdown.lexer.EmphasisToken
-import eu.iamgio.quarkdown.lexer.EscapeToken
-import eu.iamgio.quarkdown.lexer.InlineCodeToken
-import eu.iamgio.quarkdown.lexer.LineBreakToken
-import eu.iamgio.quarkdown.lexer.LinkToken
-import eu.iamgio.quarkdown.lexer.PunctuationToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
-import eu.iamgio.quarkdown.lexer.StrongToken
+import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -104,6 +91,34 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    val diamondAutolink
+        get() =
+            TokenRegexPattern(
+                name = "InlineDiamondAutolink",
+                wrap = ::DiamondAutolinkToken,
+                regex =
+                    RegexBuilder("<(scheme:[^\\s\\x00-\\x1f<>]*|email)>")
+                        .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
+                        .withReference(
+                            "email",
+                            "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
+                                "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
+                        )
+                        .build(),
+            )
+
+    val urlAutolink
+        get() =
+            TokenRegexPattern(
+                name = "InlineUrlAutolink",
+                wrap = ::UrlAutolinkToken,
+                regex =
+                    RegexBuilder("url|email")
+                        .withReference("url", "((?:ftp|https?):\\/\\/|www\\.)(?:[a-zA-Z0-9\\-]+\\.?)+[^\\s<]*")
+                        .withReference("email", "[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])")
+                        .build(),
+            )
+
     val referenceLink
         get() =
             TokenRegexPattern(
@@ -124,22 +139,6 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     RegexBuilder("!?\\[(ref)\\](?:\\[\\])?")
                         .withReference("ref", BLOCK_LABEL_HELPER)
-                        .build(),
-            )
-
-    val autolink
-        get() =
-            TokenRegexPattern(
-                name = "InlineAutolink",
-                wrap = ::AutolinkToken,
-                regex =
-                    RegexBuilder("<(scheme:[^\\s\\x00-\\x1f<>]*|email)>")
-                        .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
-                        .withReference(
-                            "email",
-                            "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
-                                "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
-                        )
                         .build(),
             )
 

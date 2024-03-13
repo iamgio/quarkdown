@@ -74,14 +74,16 @@ class InlineParserTest {
             }
         }
 
-        // Autolink
-        with(nodes.next()) {
-            assertEquals("https://google.com", url)
-            with(label.first()) {
-                assertIs<PlainText>(this)
-                assertEquals(url, text)
+        // Autolink (first: diamond, second: URL)
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("https://google.com", url)
+                with(label.first()) {
+                    assertIs<PlainText>(this)
+                    assertEquals(url, text)
+                }
+                assertNull(title)
             }
-            assertNull(title)
         }
 
         assertFalse(nodes.hasNext())
