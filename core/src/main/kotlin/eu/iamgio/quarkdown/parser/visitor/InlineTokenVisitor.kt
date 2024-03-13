@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.StrongToken
@@ -18,6 +19,8 @@ interface InlineTokenVisitor<T> {
     fun visit(token: CommentToken): T
 
     fun visit(token: LineBreakToken): T
+
+    fun visit(token: LinkToken): T
 
     // Emphasis
 

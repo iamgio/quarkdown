@@ -79,9 +79,7 @@ class AutolinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class LinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
 }
 
 /**

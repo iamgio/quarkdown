@@ -8,5 +8,3 @@ data class AstRoot(
 ) : NestableNode
 
 typealias Document = AstRoot
-
-typealias InlineContent = AstRoot

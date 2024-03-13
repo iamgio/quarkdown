@@ -7,3 +7,5 @@ package eu.iamgio.quarkdown.util
 fun <T> Sequence<T>.iterator(consumeAmount: Int): Iterator<T> {
     return drop(consumeAmount).iterator()
 }
+
+fun <T> Iterator<T>.nextOrNull(): T? = if (hasNext()) next() else null

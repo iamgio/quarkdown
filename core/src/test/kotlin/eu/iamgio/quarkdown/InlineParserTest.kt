@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strong
@@ -11,6 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 /**
  * Parser tests for inline content.
@@ -45,6 +47,31 @@ class InlineParserTest {
         assertEquals(",", nodes.next().text)
         assertEquals("[", nodes.next().text)
         assertEquals("]", nodes.next().text)
+    }
+
+    @Test
+    fun link() {
+        val nodes = inlineIterator<Link>(readSource("/parsing/inline/link.md"))
+
+        with(nodes.next()) {
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            assertEquals("https://google.com", url)
+            assertNull(title)
+        }
+
+        repeat(2) {
+            with(nodes.next()) {
+                with(label.first()) {
+                    assertIs<PlainText>(this)
+                    assertEquals("foo", text)
+                }
+                assertEquals("https://google.com", url)
+                assertEquals(title, "Title")
+            }
+        }
     }
 
     @Test

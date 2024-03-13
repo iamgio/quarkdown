@@ -43,7 +43,7 @@ object DebugFormatter {
             val text = node.toString()
             val index = text.indexOf("children=")
             append(
-                if (index >= 0) {
+                if (node is NestableNode && index >= 0) {
                     text.substring(0, index)
                 } else {
                     text
