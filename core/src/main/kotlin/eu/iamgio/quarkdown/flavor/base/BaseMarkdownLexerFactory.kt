@@ -66,4 +66,24 @@ class BaseMarkdownLexerFactory : LexerFactory {
                 fillTokenType = ::PlainTextToken,
             )
         }
+
+    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
+        with(BaseMarkdownInlineTokenRegexPatterns()) {
+            StandardRegexLexer(
+                source,
+                listOf(
+                    lineBreak,
+                    code,
+                    escape,
+                    comment,
+                    strongEmphasisAsterisk,
+                    strongEmphasisUnderscore,
+                    emphasisAsterisk,
+                    emphasisUnderscore,
+                    strongAsterisk,
+                    strongUnderscore,
+                ),
+                fillTokenType = ::PlainTextToken,
+            )
+        }
 }

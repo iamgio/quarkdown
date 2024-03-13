@@ -4,3 +4,5 @@
 
 [foo](   https://google.com
     "Title"  )
+
+[foo *[bar [baz](/uri)](/uri)*](/uri)

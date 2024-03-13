@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
@@ -27,10 +28,19 @@ import eu.iamgio.quarkdown.util.nextOrNull
  * @param flavor flavor to use in order to analyze and parse sub-tokens
  */
 class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor<Node> {
-    private fun parseSubContent(source: String) =
-        flavor.lexerFactory.newInlineLexer(source)
-            .tokenize()
-            .acceptAll(flavor.parserFactory.newParser())
+    /**
+     * Tokenizes and parses sub-nodes.
+     * @param lexer lexer to use to tokenize
+     * @return parsed nodes
+     */
+    private fun parseSubContent(lexer: Lexer) = lexer.tokenize().acceptAll(flavor.parserFactory.newParser())
+
+    /**
+     * Tokenizes and parses sub-nodes.
+     * @param source source to tokenize using the default inline lexer from this [flavor]
+     * @return parsed nodes
+     */
+    private fun parseSubContent(source: CharSequence) = parseSubContent(flavor.lexerFactory.newInlineLexer(source))
 
     override fun visit(token: EscapeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
@@ -49,7 +59,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: LinkToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Link(
-            label = parseSubContent(groups.next()),
+            label = parseSubContent(flavor.lexerFactory.newLinkLabelInlineLexer(groups.next())),
             url = groups.next(),
             // Removes leading and trailing delimiters.
             title = groups.nextOrNull()?.run { substring(1, length - 1) },
