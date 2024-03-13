@@ -1,3 +1,5 @@
 [label][ref]
 
 [ref]
+
+[ref][]

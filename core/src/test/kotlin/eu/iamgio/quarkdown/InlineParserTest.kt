@@ -87,12 +87,14 @@ class InlineParserTest {
             assertEquals("ref", reference)
         }
 
-        with(nodes.next()) {
-            with(label.first()) {
-                assertIs<PlainText>(this)
-                assertEquals("ref", text)
+        repeat(2) {
+            with(nodes.next()) {
+                with(label.first()) {
+                    assertIs<PlainText>(this)
+                    assertEquals("ref", text)
+                }
+                assertEquals("ref", reference)
             }
-            assertEquals("ref", reference)
         }
     }
 
