@@ -2,7 +2,20 @@
 
 package eu.iamgio.quarkdown.flavor.base
 
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.AnyPunctuationToken
+import eu.iamgio.quarkdown.lexer.AutolinkToken
+import eu.iamgio.quarkdown.lexer.BlockSkipToken
+import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.EmphasisToken
+import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.InlineCodeToken
+import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkToken
+import eu.iamgio.quarkdown.lexer.PunctuationToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
@@ -111,18 +124,6 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     RegexBuilder("!?\\[(ref)\\](?:\\[\\])?")
                         .withReference("ref", BLOCK_LABEL_HELPER)
-                        .build(),
-            )
-
-    val referenceLinkSearch
-        get() =
-            TokenRegexPattern(
-                name = "InlineReferenceLinkSearch",
-                wrap = ::ReferenceLinkSearchToken,
-                regex =
-                    RegexBuilder("reflink|nolink(?!\\()")
-                        .withReference("reflink", referenceLink.regex.pattern)
-                        .withReference("nolink", collapsedReferenceLink.regex.pattern)
                         .build(),
             )
 

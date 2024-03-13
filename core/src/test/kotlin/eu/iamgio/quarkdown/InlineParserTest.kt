@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
@@ -71,6 +72,27 @@ class InlineParserTest {
                 assertEquals("https://google.com", url)
                 assertEquals(title, "Title")
             }
+        }
+    }
+
+    @Test
+    fun referenceLink() {
+        val nodes = inlineIterator<ReferenceLink>(readSource("/parsing/inline/reflink.md"))
+
+        with(nodes.next()) {
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("label", text)
+            }
+            assertEquals("ref", reference)
+        }
+
+        with(nodes.next()) {
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("ref", text)
+            }
+            assertEquals("ref", reference)
         }
     }
 

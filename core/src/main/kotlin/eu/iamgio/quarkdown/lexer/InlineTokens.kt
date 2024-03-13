@@ -12,7 +12,7 @@ import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
  * ```
  */
 class EscapeToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -39,7 +39,7 @@ class InlineCodeToken(data: TokenData) : Token(data) {
  * ```
  */
 class LineBreakToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 class PunctuationToken(data: TokenData) : Token(data) {
@@ -79,7 +79,7 @@ class AutolinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class LinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -89,27 +89,20 @@ class LinkToken(data: TokenData) : Token(data) {
  * ```
  */
 class ReferenceLinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
- * Example:
+ * Examples:
+ * ```
+ * [label]
+ * ```
  * ```
  * [label][]
  * ```
  */
 class CollapsedReferenceLinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
-}
-
-class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -119,7 +112,7 @@ class ReferenceLinkSearchToken(data: TokenData) : Token(data) {
  * ```
  */
 class CommentToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T = visitor.visit(this)
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**

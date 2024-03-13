@@ -6,9 +6,11 @@ import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.lexer.CollapsedReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.CommentToken
 import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
@@ -16,6 +18,7 @@ import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -42,6 +45,13 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
      */
     private fun parseSubContent(source: CharSequence) = parseSubContent(flavor.lexerFactory.newInlineLexer(source))
 
+    /**
+     * Tokenizes and parses sub-nodes within a link label.
+     * @param source source to tokenize using the link label inline lexer from this [flavor]
+     * @return parsed nodes
+     */
+    private fun parseLinkLabelSubContent(source: CharSequence) = parseSubContent(flavor.lexerFactory.newLinkLabelInlineLexer(source))
+
     override fun visit(token: EscapeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return PlainText(text = groups.next())
@@ -59,10 +69,28 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: LinkToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Link(
-            label = parseSubContent(flavor.lexerFactory.newLinkLabelInlineLexer(groups.next())),
-            url = groups.next(),
+            label = parseLinkLabelSubContent(groups.next()),
+            url = groups.next().trim(),
             // Removes leading and trailing delimiters.
-            title = groups.nextOrNull()?.run { substring(1, length - 1) },
+            title = groups.nextOrNull()?.run { substring(1, length - 1) }?.trim(),
+        )
+    }
+
+    override fun visit(token: ReferenceLinkToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        return ReferenceLink(
+            label = parseLinkLabelSubContent(groups.next()),
+            reference = groups.next(),
+        )
+    }
+
+    override fun visit(token: CollapsedReferenceLinkToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val reference = groups.next()
+        // When the reference is collapsed, the label is the same as the reference label.
+        return ReferenceLink(
+            label = parseLinkLabelSubContent(reference),
+            reference = reference,
         )
     }
 

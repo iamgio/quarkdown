@@ -26,6 +26,16 @@ data class Link(
     val title: String?,
 ) : Node
 
+/**
+ * A link that references a [LinkDefinition].
+ * @param label inline content of the displayed label
+ * @param reference label of the [LinkDefinition] this link points to
+ */
+data class ReferenceLink(
+    val label: List<Node>,
+    val reference: String,
+) : Node
+
 // Emphasis
 
 /**
