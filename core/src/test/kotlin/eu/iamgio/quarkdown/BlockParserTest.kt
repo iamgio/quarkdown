@@ -5,7 +5,6 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.*
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.lexer.NewlineToken
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -15,33 +14,23 @@ import kotlin.test.assertTrue
 /**
  * Parsing tests.
  */
-class ParserTest {
+class BlockParserTest {
     /**
-     * Tokenizes and parses a [source] code, parses each token.
+     * Tokenizes and parses a [source] code.
      * @param source source code
      * @param assertType if `true`, asserts each output node is of type [T]
      * @param flavor Markdown flavor to use
      * @param T type of the nodes to output
      * @return iterator of the parsed nodes
      */
-    private inline fun <reified T : Node> nodesIterator(
+    private inline fun <reified T : Node> blocksIterator(
         source: CharSequence,
         assertType: Boolean = true,
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newBlockLexer(source)
         val parser = flavor.parserFactory.newParser()
-
-        return lexer.tokenize().asSequence()
-            .filterNot { it is NewlineToken }
-            .map { it.accept(parser) }
-            .onEach {
-                if (assertType) {
-                    assertIs<T>(it)
-                }
-            }
-            .filterIsInstance<T>()
-            .iterator()
+        return nodesIterator(lexer, parser, assertType)
     }
 
     /**
@@ -56,7 +45,7 @@ class ParserTest {
 
     @Test
     fun paragraph() {
-        val nodes = nodesIterator<Paragraph>(readSource("/parsing/paragraph.md"))
+        val nodes = blocksIterator<Paragraph>(readSource("/parsing/paragraph.md"))
 
         assertEquals("Paragraph 1", nodes.next().text)
         assertEquals("Paragraph 2", nodes.next().text)
@@ -66,7 +55,7 @@ class ParserTest {
 
     @Test
     fun heading() {
-        val nodes = nodesIterator<Heading>(readSource("/parsing/heading.md"), assertType = false)
+        val nodes = blocksIterator<Heading>(readSource("/parsing/heading.md"), assertType = false)
 
         with(nodes.next()) {
             assertEquals("Title", text)
@@ -92,7 +81,7 @@ class ParserTest {
 
     @Test
     fun setextHeading() {
-        val nodes = nodesIterator<Heading>(readSource("/parsing/setextheading.md"))
+        val nodes = blocksIterator<Heading>(readSource("/parsing/setextheading.md"))
 
         repeat(3) {
             with(nodes.next()) {
@@ -110,7 +99,7 @@ class ParserTest {
 
     @Test
     fun blockCode() {
-        val nodes = nodesIterator<Code>(readSource("/parsing/blockcode.md"))
+        val nodes = blocksIterator<Code>(readSource("/parsing/blockcode.md"))
 
         assertEquals("Code line 1\nCode line 2\n\nCode line 3", nodes.next().text)
         assertFalse(nodes.hasNext())
@@ -118,7 +107,7 @@ class ParserTest {
 
     @Test
     fun fencesCode() {
-        val nodes = nodesIterator<Code>(readSource("/parsing/fencescode.md"))
+        val nodes = blocksIterator<Code>(readSource("/parsing/fencescode.md"))
 
         with(nodes.next()) {
             assertEquals("Code", text)
@@ -160,7 +149,7 @@ class ParserTest {
 
     @Test
     fun multilineMath() {
-        val nodes = nodesIterator<Math>(readSource("/parsing/math_multiline.md"), assertType = false)
+        val nodes = blocksIterator<Math>(readSource("/parsing/math_multiline.md"), assertType = false)
 
         repeat(3) {
             assertEquals("Math expression", nodes.next().text)
@@ -170,7 +159,7 @@ class ParserTest {
 
     @Test
     fun onelineMath() {
-        val nodes = nodesIterator<Math>(readSource("/parsing/math_oneline.md"), assertType = false)
+        val nodes = blocksIterator<Math>(readSource("/parsing/math_oneline.md"), assertType = false)
 
         repeat(3) {
             assertEquals("Math expression", nodes.next().text)
@@ -179,13 +168,13 @@ class ParserTest {
 
     @Test
     fun horizontalRule() {
-        val nodes = nodesIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
+        val nodes = blocksIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
         assertEquals(6, nodes.asSequence().count())
     }
 
     @Test
     fun blockQuote() {
-        val nodes = nodesIterator<BlockQuote>(readSource("/parsing/blockquote.md"), assertType = false)
+        val nodes = blocksIterator<BlockQuote>(readSource("/parsing/blockquote.md"), assertType = false)
 
         assertEquals("Text", text(nodes.next()))
         assertEquals("Text", text(nodes.next()))
@@ -225,7 +214,7 @@ class ParserTest {
 
     @Test
     fun linkDefinition() {
-        val nodes = nodesIterator<LinkDefinition>(readSource("/parsing/linkdefinition.md"))
+        val nodes = blocksIterator<LinkDefinition>(readSource("/parsing/linkdefinition.md"))
 
         with(nodes.next()) {
             assertEquals("label", text)
@@ -268,7 +257,7 @@ class ParserTest {
 
     @Test
     fun html() {
-        val nodes = nodesIterator<Html>(readSource("/parsing/html.md"))
+        val nodes = blocksIterator<Html>(readSource("/parsing/html.md"))
 
         assertEquals("<p>Text</p>", nodes.next().content)
         assertEquals("<p><i>Text</i></p>", nodes.next().content)
@@ -278,7 +267,7 @@ class ParserTest {
 
     // This is shared by both unordered and ordered list tests.
     private inline fun <reified T : ListBlock> list(source: CharSequence) {
-        val nodes = nodesIterator<T>(source, assertType = false)
+        val nodes = blocksIterator<T>(source, assertType = false)
 
         // First list
         with(nodes.next()) {
@@ -325,7 +314,6 @@ class ParserTest {
             assertIs<T>(this)
             assertFalse(isLoose)
 
-            val items = children.iterator()
             with(children.first()) {
                 assertIs<BaseListItem>(this)
                 assertEquals("C", text(this))
