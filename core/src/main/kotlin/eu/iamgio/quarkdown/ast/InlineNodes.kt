@@ -15,6 +15,11 @@ class LineBreak : Node {
 }
 
 /**
+ * A character that requires special treatment during the rendering stage.
+ */
+data class CriticalCharacter(val char: Char) : Node
+
+/**
  * A link.
  * @param label inline content of the displayed label
  * @param url URL this link points to

@@ -20,6 +20,16 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    val criticalCharacter
+        get() =
+            TokenRegexPattern(
+                name = "InlineCriticalCharacter",
+                wrap = ::CriticalCharacterToken,
+                regex =
+                    "[&<>\"']"
+                        .toRegex(),
+            )
+
     val punctuation
         get() =
             TokenRegexPattern(
