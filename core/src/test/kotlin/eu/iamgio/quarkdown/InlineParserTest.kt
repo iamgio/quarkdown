@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
@@ -50,6 +51,28 @@ class InlineParserTest {
         assertEquals(",", nodes.next().text)
         assertEquals("[", nodes.next().text)
         assertEquals("]", nodes.next().text)
+    }
+
+    @Test
+    fun entity() {
+        val nodes = inlineIterator<CriticalContent>(readSource("/parsing/inline/entity.md"))
+
+        // Decimal
+        assertEquals(35.toChar().toString(), nodes.next().content)
+        assertEquals(1234.toChar().toString(), nodes.next().content)
+        assertEquals(992.toChar().toString(), nodes.next().content)
+        assertEquals(65533.toChar().toString(), nodes.next().content)
+
+        // Hexadecimal
+        assertEquals(0x22.toChar().toString(), nodes.next().content)
+        assertEquals(0xD06.toChar().toString(), nodes.next().content)
+        assertEquals(0xCAB.toChar().toString(), nodes.next().content)
+
+        // HTML
+        assertEquals(" ", nodes.next().content)
+        assertEquals("&", nodes.next().content)
+        assertEquals("©", nodes.next().content)
+        assertEquals("Æ", nodes.next().content)
     }
 
     @Test

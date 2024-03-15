@@ -22,6 +22,12 @@ import eu.iamgio.quarkdown.util.nextOrNull
 import org.apache.commons.text.StringEscapeUtils
 
 /**
+ * ASCII of the character that replaces null characters,
+ * following CommonMark's security guideline _(2.3 Insecure characters)_.
+ */
+private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
+
+/**
  * A parser for inline tokens.
  * @param flavor flavor to use in order to analyze and parse sub-tokens
  */
@@ -56,16 +62,18 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val entity = groups.next().trim().lowercase()
 
-        // CommonMark's security guideline (2.3 Insecure characters)
-        val nullCharReplacement = 65533.toChar()
-
         /**
          * @param radix radix to decode the numeric value for (`radix = 10` for decimal, `radix = 16` for hexadecimal)
          * @return [this] string to its corresponding character in [radix] representation.
          */
         fun String.decodeToContent(radix: Int): String {
             val ascii = toIntOrNull(radix) ?: return ""
-            return (ascii.takeUnless { it == 0 }?.toChar() ?: nullCharReplacement).toString()
+            // CommonMark's security guideline (2.3 Insecure characters)
+            return if (ascii != 0) {
+                ascii.toChar()
+            } else {
+                NULL_CHAR_REPLACEMENT_ASCII.toChar()
+            }.toString()
         }
 
         // Critical because further checks and mappings may be required during the rendering stage.
