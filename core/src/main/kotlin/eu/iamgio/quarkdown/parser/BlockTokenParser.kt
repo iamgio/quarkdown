@@ -14,6 +14,15 @@ import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
  * @param flavor flavor to use in order to analyze and parse sub-blocks
  */
 class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<Node> {
+    /**
+     * @return [this] raw string tokenized and parsed into processed inline content,
+     *                based on this [flavor]'s specifics
+     */
+    private fun String.toInline(): InlineContent =
+        flavor.lexerFactory.newInlineLexer(this)
+            .tokenize()
+            .acceptAll(flavor.parserFactory.newParser())
+
     override fun visit(token: NewlineToken): Node {
         return Newline()
     }
@@ -22,7 +31,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         return Code(
             language = null,
             // Remove first indentation
-            text = token.data.text.replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "").trim(),
+            content = token.data.text.replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "").trim(),
         )
     }
 
@@ -30,18 +39,18 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),
-            text = groups.next().trim(),
+            content = groups.next().trim(),
         )
     }
 
     override fun visit(token: MultilineMathToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 3)
-        return Math(text = groups.next().trim())
+        return Math(expression = groups.next().trim())
     }
 
     override fun visit(token: OnelineMathToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return Math(text = groups.next().trim())
+        return Math(expression = groups.next().trim())
     }
 
     override fun visit(token: HorizontalRuleToken): Node {
@@ -52,14 +61,14 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Heading(
             depth = groups.next().length,
-            text = groups.next().trim().takeUntilLastOccurrence(" #"),
+            text = groups.next().trim().takeUntilLastOccurrence(" #").toInline(),
         )
     }
 
     override fun visit(token: SetextHeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Heading(
-            text = groups.next().trim(),
+            text = groups.next().trim().toInline(),
             depth =
                 when (groups.next().firstOrNull()) {
                     '=' -> 1
@@ -72,7 +81,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
     override fun visit(token: LinkDefinitionToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return LinkDefinition(
-            text = groups.next().trim(),
+            text = groups.next().trim().toInline(),
             url = groups.next().trim(),
             title =
                 if (groups.hasNext()) {
@@ -171,7 +180,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
 
     override fun visit(token: ParagraphToken): Node {
         return Paragraph(
-            text = token.data.text.trim(),
+            text = token.data.text.trim().toInline(),
         )
     }
 

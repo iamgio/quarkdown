@@ -9,21 +9,21 @@ class Newline : Node {
 
 /**
  * A code block.
- * @param text code content
+ * @param content code content
  * @param language optional syntax language
  */
 data class Code(
-    override val text: String,
+    val content: String,
     val language: String?,
-) : TextNode
+) : Node
 
 /**
  * A math (TeX) block.
- * @param text expression content
+ * @param expression expression content
  */
 data class Math(
-    override val text: String,
-) : TextNode
+    val expression: String,
+) : Node
 
 /**
  * A horizontal line (thematic break).
@@ -38,7 +38,7 @@ class HorizontalRule : Node {
  */
 data class Heading(
     val depth: Int,
-    override val text: String,
+    override val text: InlineContent,
 ) : TextNode
 
 /**
@@ -48,7 +48,7 @@ data class Heading(
  * @param title optional reference title
  */
 data class LinkDefinition(
-    override val text: String,
+    override val text: InlineContent,
     val url: String,
     val title: String?,
 ) : TextNode
@@ -121,7 +121,7 @@ data class Html(
  * @param text text content
  */
 data class Paragraph(
-    override val text: String,
+    override val text: InlineContent,
 ) : TextNode
 
 /**

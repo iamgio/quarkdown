@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
+typealias InlineContent = List<Node>
+
 /**
  * A comment whose content is ignored.
  */
@@ -26,7 +28,7 @@ data class CriticalContent(val content: String) : Node
  * @param title optional title
  */
 data class Link(
-    val label: List<Node>,
+    val label: InlineContent,
     val url: String,
     val title: String?,
 ) : Node
@@ -38,7 +40,7 @@ data class Link(
  * @param fallback supplier of the node to show instead of [label] in case the reference is invalid
  */
 data class ReferenceLink(
-    val label: List<Node>,
+    val label: InlineContent,
     val reference: String,
     val fallback: () -> Node,
 ) : Node
@@ -71,16 +73,16 @@ data class PlainText(val text: String) : Node
  * Weakly emphasized content.
  * @param children content
  */
-data class Emphasis(override val children: List<Node>) : NestableNode
+data class Emphasis(override val children: InlineContent) : NestableNode
 
 /**
  * Strongly emphasized content.
  * @param children content
  */
-data class Strong(override val children: List<Node>) : NestableNode
+data class Strong(override val children: InlineContent) : NestableNode
 
 /**
  * Heavily emphasized content.
  * @param children content
  */
-data class StrongEmphasis(override val children: List<Node>) : NestableNode
+data class StrongEmphasis(override val children: InlineContent) : NestableNode

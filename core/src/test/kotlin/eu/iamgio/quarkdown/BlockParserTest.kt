@@ -33,24 +33,34 @@ class BlockParserTest {
         return nodesIterator(lexer, parser, assertType)
     }
 
+    private val TextNode.rawText: String
+        get() {
+            if (text.size == 1) {
+                (text.first() as? PlainText)?.let {
+                    return it.text
+                }
+            }
+            throw IllegalStateException("rawText requires a single PlainText node")
+        }
+
     /**
      * @param node parent node
      * @param childIndex index of the text child
      * @return text content of the [childIndex]-th child
      */
-    private fun text(
+    private fun rawText(
         node: NestableNode,
         childIndex: Int = 0,
-    ) = (node.children[childIndex] as TextNode).text
+    ): String = (node.children[childIndex] as TextNode).rawText
 
     @Test
     fun paragraph() {
         val nodes = blocksIterator<Paragraph>(readSource("/parsing/paragraph.md"))
 
-        assertEquals("Paragraph 1", nodes.next().text)
-        assertEquals("Paragraph 2", nodes.next().text)
-        assertEquals("Paragraph 3", nodes.next().text)
-        assertEquals("Paragraph 4\nwith lazy line", nodes.next().text)
+        assertEquals("Paragraph 1", nodes.next().rawText)
+        assertEquals("Paragraph 2", nodes.next().rawText)
+        assertEquals("Paragraph 3", nodes.next().rawText)
+        assertEquals("Paragraph 4\nwith lazy line", nodes.next().rawText)
     }
 
     @Test
@@ -58,40 +68,40 @@ class BlockParserTest {
         val nodes = blocksIterator<Heading>(readSource("/parsing/heading.md"), assertType = false)
 
         with(nodes.next()) {
-            assertEquals("Title", text)
+            assertEquals("Title", rawText)
             assertEquals(1, depth)
         }
         with(nodes.next()) {
-            assertEquals("Title", text)
+            assertEquals("Title", rawText)
             assertEquals(2, depth)
         }
         with(nodes.next()) {
-            assertEquals("Title", text)
+            assertEquals("Title", rawText)
             assertEquals(3, depth)
         }
         with(nodes.next()) {
-            assertEquals("", text)
+            assertTrue(text.isEmpty())
             assertEquals(1, depth)
         }
         with(nodes.next()) {
-            assertEquals("Title with closing sequence", text)
+            assertEquals("Title with closing sequence", rawText)
             assertEquals(2, depth)
         }
     }
 
     @Test
-    fun setextHeading() {
+    fun serawTextHeading() {
         val nodes = blocksIterator<Heading>(readSource("/parsing/setextheading.md"))
 
         repeat(3) {
             with(nodes.next()) {
-                assertEquals("Title 1", text)
+                assertEquals("Title 1", rawText)
                 assertEquals(1, depth)
             }
         }
         repeat(3) {
             with(nodes.next()) {
-                assertEquals("Title 2", text)
+                assertEquals("Title 2", rawText)
                 assertEquals(2, depth)
             }
         }
@@ -101,7 +111,7 @@ class BlockParserTest {
     fun blockCode() {
         val nodes = blocksIterator<Code>(readSource("/parsing/blockcode.md"))
 
-        assertEquals("Code line 1\nCode line 2\n\nCode line 3", nodes.next().text)
+        assertEquals("Code line 1\nCode line 2\n\nCode line 3", nodes.next().content)
         assertFalse(nodes.hasNext())
     }
 
@@ -110,39 +120,39 @@ class BlockParserTest {
         val nodes = blocksIterator<Code>(readSource("/parsing/fencescode.md"))
 
         with(nodes.next()) {
-            assertEquals("Code", text)
+            assertEquals("Code", content)
             assertEquals(null, language)
         }
         with(nodes.next()) {
-            assertEquals("Code", text)
+            assertEquals("Code", content)
             assertEquals(null, language)
         }
         with(nodes.next()) {
-            assertEquals("Code line 1\nCode line 2", text)
+            assertEquals("Code line 1\nCode line 2", content)
             assertEquals(null, language)
         }
         with(nodes.next()) {
-            assertEquals("Code line 1\n    Code line 2", text)
+            assertEquals("Code line 1\n    Code line 2", content)
             assertEquals(null, language)
         }
         with(nodes.next()) {
-            assertEquals("Code", text)
+            assertEquals("Code", content)
             assertEquals("text", language)
         }
         with(nodes.next()) {
-            assertEquals("Code", text)
+            assertEquals("Code", content)
             assertEquals("text", language)
         }
         with(nodes.next()) {
-            assertEquals("Code line 1\nCode line 2", text)
+            assertEquals("Code line 1\nCode line 2", content)
             assertEquals("text", language)
         }
         with(nodes.next()) {
-            assertEquals("Code line 1\n    Code line 2", text)
+            assertEquals("Code line 1\n    Code line 2", content)
             assertEquals("text", language)
         }
         with(nodes.next()) {
-            assertEquals("let x;", text)
+            assertEquals("let x;", content)
             assertEquals("ecmascript 6", language)
         }
     }
@@ -152,9 +162,9 @@ class BlockParserTest {
         val nodes = blocksIterator<Math>(readSource("/parsing/math_multiline.md"), assertType = false)
 
         repeat(3) {
-            assertEquals("Math expression", nodes.next().text)
+            assertEquals("Math expression", nodes.next().expression)
         }
-        assertEquals("Line 1\nLine 2", nodes.next().text)
+        assertEquals("Line 1\nLine 2", nodes.next().expression)
     }
 
     @Test
@@ -162,7 +172,7 @@ class BlockParserTest {
         val nodes = blocksIterator<Math>(readSource("/parsing/math_oneline.md"), assertType = false)
 
         repeat(3) {
-            assertEquals("Math expression", nodes.next().text)
+            assertEquals("Math expression", nodes.next().expression)
         }
     }
 
@@ -176,35 +186,35 @@ class BlockParserTest {
     fun blockQuote() {
         val nodes = blocksIterator<BlockQuote>(readSource("/parsing/blockquote.md"), assertType = false)
 
-        assertEquals("Text", text(nodes.next()))
-        assertEquals("Text", text(nodes.next()))
-        assertEquals("Line 1\nLine 2", text(nodes.next()))
+        assertEquals("Text", rawText(nodes.next()))
+        assertEquals("Text", rawText(nodes.next()))
+        assertEquals("Line 1\nLine 2", rawText(nodes.next()))
 
         with(nodes.next()) {
             assertIs<Paragraph>(children[0])
-            assertEquals("Paragraph 1", text(this, childIndex = 0))
+            assertEquals("Paragraph 1", rawText(this, childIndex = 0))
             assertIs<Newline>(children[1])
-            assertEquals("Paragraph 2", text(this, childIndex = 2))
+            assertEquals("Paragraph 2", rawText(this, childIndex = 2))
         }
 
         with(nodes.next()) {
-            assertEquals("Text", text(this))
+            assertEquals("Text", rawText(this))
             assertIs<BlockQuote>(children[1])
-            assertEquals("Inner quote", text(children[1] as NestableNode))
+            assertEquals("Inner quote", rawText(children[1] as NestableNode))
         }
 
         with(nodes.next()) {
-            assertEquals("Text\nwith lazy line", text(this))
+            assertEquals("Text\nwith lazy line", rawText(this))
         }
 
         with(nodes.next()) {
-            assertEquals("Text", text(this))
+            assertEquals("Text", rawText(this))
             assertIs<BlockQuote>(children[1])
-            assertEquals("Inner text\nwith lazy\nlines", text(children[1] as NestableNode))
+            assertEquals("Inner text\nwith lazy\nlines", rawText(children[1] as NestableNode))
         }
 
         repeat(3) {
-            assertEquals("Text", text(nodes.next()))
+            assertEquals("Text", rawText(nodes.next()))
         }
 
         assertIs<OrderedList>(nodes.next().children.first())
@@ -217,39 +227,39 @@ class BlockParserTest {
         val nodes = blocksIterator<LinkDefinition>(readSource("/parsing/linkdefinition.md"))
 
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("https://google.com", url)
             assertEquals(null, title)
         }
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("url", url)
             assertEquals(null, title)
         }
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("/url", url)
             assertEquals(null, title)
         }
         repeat(3) {
             with(nodes.next()) {
-                assertEquals("label", text)
+                assertEquals("label", rawText)
                 assertEquals("https://google.com", url)
                 assertEquals("Title", title)
             }
         }
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("https://google.com", url)
             assertEquals("Multiline\ntitle", title)
         }
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("https://google.com", url)
             assertEquals("Line 1\nLine 2\nLine 3", title)
         }
         with(nodes.next()) {
-            assertEquals("label", text)
+            assertEquals("label", rawText)
             assertEquals("/url", url)
             assertEquals("Title", title)
         }
@@ -281,15 +291,15 @@ class BlockParserTest {
             val items = children.iterator()
             with(items.next()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("B", text(this))
+                assertEquals("B", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("C", text(this))
+                assertEquals("C", rawText(this))
             }
         }
 
@@ -301,11 +311,11 @@ class BlockParserTest {
             val items = children.iterator()
             with(items.next()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("B", text(this))
+                assertEquals("B", rawText(this))
             }
         }
 
@@ -316,7 +326,7 @@ class BlockParserTest {
 
             with(children.first()) {
                 assertIs<BaseListItem>(this)
-                assertEquals("C", text(this))
+                assertEquals("C", rawText(this))
             }
         }
 
@@ -330,10 +340,10 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("A", text(this, childIndex = 0))
+                assertEquals("A", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<Paragraph>(children[2])
-                assertEquals("Some paragraph", text(this, childIndex = 2))
+                assertEquals("Some paragraph", rawText(this, childIndex = 2))
             }
 
             assertIs<Newline>(items.next())
@@ -342,7 +352,7 @@ class BlockParserTest {
             with(items.next()) {
                 // First list item
                 assertIs<BaseListItem>(this)
-                assertEquals("B", text(this))
+                assertEquals("B", rawText(this))
                 assertIs<Paragraph>(children[0])
                 with(children[1]) {
                     assertIs<T>(this)
@@ -350,7 +360,7 @@ class BlockParserTest {
                     with(children[0]) {
                         // Second list item
                         assertIs<BaseListItem>(this)
-                        assertEquals("Nested 1", text(this))
+                        assertEquals("Nested 1", rawText(this))
                         assertIs<Paragraph>(children[0])
                         with(children[1]) {
                             assertIs<T>(this)
@@ -359,10 +369,10 @@ class BlockParserTest {
                                 // Third list item
                                 assertIs<BaseListItem>(this)
                                 assertIs<Paragraph>(children[0])
-                                assertEquals("Nested A", text(this))
+                                assertEquals("Nested A", rawText(this))
                                 assertIs<Newline>(children[1])
                                 assertIs<Paragraph>(children[2])
-                                assertEquals("Some paragraph", text(this, childIndex = 2))
+                                assertEquals("Some paragraph", rawText(this, childIndex = 2))
                             }
 
                             assertIs<Newline>(children[1])
@@ -370,7 +380,7 @@ class BlockParserTest {
                             with(children[2]) {
                                 assertIs<BaseListItem>(this)
                                 assertIs<Paragraph>(children[0])
-                                assertEquals("Nested B", text(this))
+                                assertEquals("Nested B", rawText(this))
                             }
                         }
                     }
@@ -382,10 +392,10 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("C", text(this, childIndex = 0))
+                assertEquals("C", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<BlockQuote>(children[2])
-                assertEquals("Some quote", text(children[2] as NestableNode, childIndex = 0))
+                assertEquals("Some quote", rawText(children[2] as NestableNode, childIndex = 0))
             }
 
             assertIs<Newline>(items.next())
@@ -393,16 +403,16 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("D", text(this, childIndex = 0))
+                assertEquals("D", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<Paragraph>(children[2])
-                assertEquals("Some paragraph", text(this, childIndex = 2))
+                assertEquals("Some paragraph", rawText(this, childIndex = 2))
                 with(children[3]) {
                     assertIs<T>(this)
                     with(children[0]) {
                         assertIs<BaseListItem>(this)
                         assertIs<Paragraph>(children[0])
-                        assertEquals("E", text(this))
+                        assertEquals("E", rawText(this))
                         assertIs<Code>(children[1])
                     }
                 }
@@ -417,7 +427,7 @@ class BlockParserTest {
                     with(children[0]) {
                         assertIs<BaseListItem>(this)
                         assertIs<Paragraph>(children[0])
-                        assertEquals("E", text(this))
+                        assertEquals("E", rawText(this))
                     }
                 }
             }
@@ -432,7 +442,7 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("Another list\nwith lazy line", text(this))
+                assertEquals("Another list\nwith lazy line", rawText(this))
             }
 
             assertIs<Newline>(items.next())
@@ -440,10 +450,10 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("B", text(this, childIndex = 0))
+                assertEquals("B", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<Paragraph>(children[2])
-                assertEquals("Some paragraph\nwith lazy line", text(this, childIndex = 2))
+                assertEquals("Some paragraph\nwith lazy line", rawText(this, childIndex = 2))
             }
 
             assertIs<Newline>(items.next())
@@ -451,19 +461,19 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Heading>(children[0])
-                assertEquals("Heading", text(this))
+                assertEquals("Heading", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("C", text(this))
+                assertEquals("C", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Heading>(children[0])
-                assertEquals("Heading", text(this, childIndex = 0))
+                assertEquals("Heading", rawText(this, childIndex = 0))
                 assertIs<Paragraph>(children[1])
-                assertEquals("Some paragraph", text(this, childIndex = 1))
+                assertEquals("Some paragraph", rawText(this, childIndex = 1))
             }
         }
 
@@ -480,12 +490,12 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("B", text(this))
+                assertEquals("B", rawText(this))
             }
         }
 
@@ -496,7 +506,7 @@ class BlockParserTest {
             with(children.iterator().next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
         }
 
@@ -513,7 +523,7 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
         }
 
@@ -530,13 +540,13 @@ class BlockParserTest {
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("A", text(this))
+                assertEquals("A", rawText(this))
             }
             with(items.next()) {
                 assertIs<BaseListItem>(this)
                 with(children[0]) {
                     assertIs<Code>(this)
-                    assertEquals("Some multiline\ncode", this.text)
+                    assertEquals("Some multiline\ncode", this.content)
                 }
             }
         }
@@ -551,14 +561,14 @@ class BlockParserTest {
                 with(items.next()) {
                     assertIs<TaskListItem>(this)
                     assertIs<Paragraph>(children[0])
-                    assertEquals("Checked", text(this))
+                    assertEquals("Checked", rawText(this))
                     assertTrue(isChecked)
                 }
             }
             with(items.next()) {
                 assertIs<TaskListItem>(this)
                 assertIs<Paragraph>(children[0])
-                assertEquals("Unchecked", text(this))
+                assertEquals("Unchecked", rawText(this))
                 assertFalse(isChecked)
             }
         }

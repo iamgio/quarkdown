@@ -16,5 +16,8 @@ interface NestableNode : Node {
  * A node that may contain text.
  */
 interface TextNode : Node {
-    val text: String
+    /**
+     * The text of the node as processed inline content.
+     */
+    val text: InlineContent
 }
