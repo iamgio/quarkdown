@@ -51,6 +51,31 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         return PlainText(text = groups.next())
     }
 
+    override fun visit(token: EntityToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val entity = groups.next().trim().lowercase()
+
+        // CommonMark's security guideline (2.3 Insecure characters)
+        val nullCharReplacement = 65533.toChar()
+
+        /**
+         * @param radix radix to decode the numeric value for (`radix = 10` for decimal, `radix = 16` for hexadecimal)
+         * @return [this] string to its corresponding character in [radix] representation.
+         */
+        fun String.decodeToChar(radix: Int) = toIntOrNull(radix)?.takeUnless { it == 0 }?.toChar() ?: nullCharReplacement
+
+        return CriticalCharacter(
+            when {
+                entity == "colon" -> ':'
+                // Hexadecimal
+                entity.startsWith("#x") -> groups.next().decodeToChar(radix = 16)
+                // Decimal
+                entity.startsWith("#") -> groups.next().decodeToChar(radix = 10)
+                else -> ' ' // TODO decode HTML entities
+            },
+        )
+    }
+
     override fun visit(token: CriticalCharacterToken): Node {
         return CriticalCharacter(token.data.text.first())
     }

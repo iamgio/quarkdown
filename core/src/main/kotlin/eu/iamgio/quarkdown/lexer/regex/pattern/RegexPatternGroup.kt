@@ -10,4 +10,4 @@ fun Iterable<TokenRegexPattern>.groupify(): Regex =
             "(?<${pattern.name}>${pattern.regex})"
         }
         .joinToString(separator = "|")
-        .toRegex(RegexOption.MULTILINE)
+        .toRegex(setOf(RegexOption.MULTILINE, RegexOption.IGNORE_CASE))

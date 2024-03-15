@@ -1,5 +1,1 @@
-[label][ref]
-
-[ref]
-
-[ref][]
+&#X22; &#XD06; &#xcab;

@@ -20,6 +20,16 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    val entity
+        get() =
+            TokenRegexPattern(
+                name = "InlineEntity",
+                wrap = ::EntityToken,
+                regex =
+                    "&(#(\\d+)|#x([0-9A-Fa-f]+)|\\w+);?"
+                        .toRegex(),
+            )
+
     val criticalCharacter
         get() =
             TokenRegexPattern(

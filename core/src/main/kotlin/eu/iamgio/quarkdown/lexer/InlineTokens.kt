@@ -6,12 +6,17 @@ import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
 
 /**
  * An escaped character.
- * Example:
- * ```
- * \#
- * ```
+ * Examples: `\#`, `\>`, ...
  */
 class EscapeToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * An entity reference character.
+ * Examples: `&nbsp;`, `&amp;`, `&copy;`, '&#35', `&#x22`, ...
+ */
+class EntityToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 

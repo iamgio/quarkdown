@@ -2,20 +2,7 @@
 
 package eu.iamgio.quarkdown.parser.visitor
 
-import eu.iamgio.quarkdown.lexer.CommentToken
-import eu.iamgio.quarkdown.lexer.CriticalCharacterToken
-import eu.iamgio.quarkdown.lexer.DiamondAutolinkToken
-import eu.iamgio.quarkdown.lexer.EmphasisToken
-import eu.iamgio.quarkdown.lexer.EscapeToken
-import eu.iamgio.quarkdown.lexer.ImageToken
-import eu.iamgio.quarkdown.lexer.LineBreakToken
-import eu.iamgio.quarkdown.lexer.LinkToken
-import eu.iamgio.quarkdown.lexer.PlainTextToken
-import eu.iamgio.quarkdown.lexer.ReferenceImageToken
-import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
-import eu.iamgio.quarkdown.lexer.StrongToken
-import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
+import eu.iamgio.quarkdown.lexer.*
 
 /**
  * A visitor for inline [eu.iamgio.quarkdown.lexer.Token]s.
@@ -23,6 +10,8 @@ import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
  */
 interface InlineTokenVisitor<T> {
     fun visit(token: EscapeToken): T
+
+    fun visit(token: EntityToken): T
 
     fun visit(token: CriticalCharacterToken): T
 

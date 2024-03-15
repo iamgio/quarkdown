@@ -221,8 +221,8 @@ class LexerTest {
     }
 
     @Test
-    fun lineBreak() {
-        val tokens = inlineLex(readSource("/lexing/linebreak.md"))
+    fun entity() {
+        val tokens = inlineLex(readSource("/lexing/entity.md"))
         assertIs<PlainTextToken>(tokens.next())
         assertIs<LineBreakToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
