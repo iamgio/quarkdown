@@ -64,7 +64,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     emphasisUnderscore,
                     strongAsterisk,
                     strongUnderscore,
-                    criticalCharacter,
+                    criticalContent,
                 ),
                 fillTokenType = ::PlainTextToken,
             )
@@ -88,7 +88,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     emphasisUnderscore,
                     strongAsterisk,
                     strongUnderscore,
-                    criticalCharacter,
+                    criticalContent,
                 ),
                 fillTokenType = ::PlainTextToken,
             )

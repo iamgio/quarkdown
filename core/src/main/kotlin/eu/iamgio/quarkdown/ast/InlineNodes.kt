@@ -15,9 +15,9 @@ class LineBreak : Node {
 }
 
 /**
- * A character that requires special treatment during the rendering stage.
+ * Content (usually a single character) that requires special treatment during the rendering stage.
  */
-data class CriticalCharacter(val char: Char) : Node
+data class CriticalContent(val content: String) : Node
 
 /**
  * A link.

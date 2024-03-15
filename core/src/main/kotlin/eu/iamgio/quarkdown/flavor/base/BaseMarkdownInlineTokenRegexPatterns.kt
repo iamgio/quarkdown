@@ -30,11 +30,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
-    val criticalCharacter
+    val criticalContent
         get() =
             TokenRegexPattern(
-                name = "InlineCriticalCharacter",
-                wrap = ::CriticalCharacterToken,
+                name = "InlineCriticalContent",
+                wrap = ::CriticalContentToken,
                 regex =
                     "[&<>\"']"
                         .toRegex(),

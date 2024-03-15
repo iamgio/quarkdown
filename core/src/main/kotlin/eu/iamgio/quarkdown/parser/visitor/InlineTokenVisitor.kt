@@ -13,7 +13,7 @@ interface InlineTokenVisitor<T> {
 
     fun visit(token: EntityToken): T
 
-    fun visit(token: CriticalCharacterToken): T
+    fun visit(token: CriticalContentToken): T
 
     fun visit(token: CommentToken): T
 

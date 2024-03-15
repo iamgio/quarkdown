@@ -239,6 +239,8 @@ class LexerTest {
         assertIs<EntityToken>(tokens.next())
         assertIs<EntityToken>(tokens.next())
         assertIs<EntityToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
     }
 
     @Test

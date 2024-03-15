@@ -24,7 +24,7 @@ class EntityToken(data: TokenData) : Token(data) {
  * A character that requires special treatment during the rendering stage.
  * Examples: `&`, `<`, `>`, `"`, `'`, ...
  */
-class CriticalCharacterToken(data: TokenData) : Token(data) {
+class CriticalContentToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 

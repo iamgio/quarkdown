@@ -3,7 +3,7 @@
 package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.Comment
-import eu.iamgio.quarkdown.ast.CriticalCharacter
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
@@ -19,6 +19,7 @@ import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
+import org.apache.commons.text.StringEscapeUtils
 
 /**
  * A parser for inline tokens.
@@ -62,22 +63,27 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
          * @param radix radix to decode the numeric value for (`radix = 10` for decimal, `radix = 16` for hexadecimal)
          * @return [this] string to its corresponding character in [radix] representation.
          */
-        fun String.decodeToChar(radix: Int) = toIntOrNull(radix)?.takeUnless { it == 0 }?.toChar() ?: nullCharReplacement
+        fun String.decodeToContent(radix: Int): String {
+            val ascii = toIntOrNull(radix) ?: return ""
+            return (ascii.takeUnless { it == 0 }?.toChar() ?: nullCharReplacement).toString()
+        }
 
-        return CriticalCharacter(
+        // Critical because further checks and mappings may be required during the rendering stage.
+        return CriticalContent(
             when {
-                entity == "colon" -> ':'
-                // Hexadecimal
-                entity.startsWith("#x") -> groups.next().decodeToChar(radix = 16)
-                // Decimal
-                entity.startsWith("#") -> groups.next().decodeToChar(radix = 10)
-                else -> ' ' // TODO decode HTML entities
+                entity == "colon" -> ":"
+                // Hexadecimal (e.g. &#xD06)
+                entity.startsWith("#x") -> groups.next().decodeToContent(radix = 16)
+                // Decimal (e.g. &#35)
+                entity.startsWith("#") -> groups.next().decodeToContent(radix = 10)
+                // HTML entity (e.g. &nbsp;)
+                else -> StringEscapeUtils.unescapeHtml4(token.data.text)
             },
         )
     }
 
-    override fun visit(token: CriticalCharacterToken): Node {
-        return CriticalCharacter(token.data.text.first())
+    override fun visit(token: CriticalContentToken): Node {
+        return CriticalContent(token.data.text)
     }
 
     override fun visit(token: CommentToken): Node {
