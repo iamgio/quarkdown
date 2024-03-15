@@ -223,13 +223,22 @@ class LexerTest {
     @Test
     fun entity() {
         val tokens = inlineLex(readSource("/lexing/entity.md"))
+        assertIs<EntityToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
         assertIs<LineBreakToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
-        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
+        assertIs<EntityToken>(tokens.next())
     }
 
     @Test
