@@ -5,10 +5,12 @@ package eu.iamgio.quarkdown.parser
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalCharacter
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -103,6 +105,21 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
             label = parseLinkLabelSubContent(reference),
             reference = reference,
         )
+    }
+
+    override fun visit(token: ImageToken): Node {
+        val link = visit(LinkToken(token.data)) as Link
+        return Image(link)
+    }
+
+    override fun visit(token: ReferenceImageToken): Node {
+        val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
+        return ReferenceImage(link)
+    }
+
+    override fun visit(token: CollapsedReferenceImageToken): Node {
+        val link = visit(CollapsedReferenceLinkToken(token.data)) as ReferenceLink
+        return ReferenceImage(link)
     }
 
     override fun visit(token: PlainTextToken): Node {

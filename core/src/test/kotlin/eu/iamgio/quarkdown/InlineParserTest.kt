@@ -1,9 +1,11 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -103,6 +105,54 @@ class InlineParserTest {
 
         repeat(2) {
             with(nodes.next()) {
+                with(label.first()) {
+                    assertIs<PlainText>(this)
+                    assertEquals("ref", text)
+                }
+                assertEquals("ref", reference)
+            }
+        }
+    }
+
+    @Test
+    fun image() {
+        val nodes = inlineIterator<Image>(readSource("/parsing/inline/image.md"))
+
+        with(nodes.next().link) {
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("foo", text)
+            }
+            assertEquals("/img", url)
+            assertNull(title)
+        }
+
+        repeat(2) {
+            with(nodes.next().link) {
+                with(label.first()) {
+                    assertIs<PlainText>(this)
+                    assertEquals("foo", text)
+                }
+                assertEquals("/img", url)
+                assertEquals(title, "Title")
+            }
+        }
+    }
+
+    @Test
+    fun referenceImage() {
+        val nodes = inlineIterator<ReferenceImage>(readSource("/parsing/inline/refimage.md"))
+
+        with(nodes.next().link) {
+            with(label.first()) {
+                assertIs<PlainText>(this)
+                assertEquals("label", text)
+            }
+            assertEquals("ref", reference)
+        }
+
+        repeat(2) {
+            with(nodes.next().link) {
                 with(label.first()) {
                     assertIs<PlainText>(this)
                     assertEquals("ref", text)

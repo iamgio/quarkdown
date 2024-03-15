@@ -125,6 +125,36 @@ class CollapsedReferenceLinkToken(data: TokenData) : Token(data) {
 /**
  * Example:
  * ```
+ * ![Label](img.png)
+ * ```
+ */
+class ImageToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Example:
+ * ```
+ * ![text][label]
+ * ```
+ */
+class ReferenceImageToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Example:
+ * ```
+ * ![label][]
+ * ```
+ */
+class CollapsedReferenceImageToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Example:
+ * ```
  * <!-- comment -->
  * ```
  */

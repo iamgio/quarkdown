@@ -41,6 +41,22 @@ data class ReferenceLink(
     val reference: String,
 ) : Node
 
+/**
+ * An image.
+ * @param link the link the image points to
+ */
+data class Image(
+    val link: Link,
+) : Node
+
+/**
+ * An images that references a [LinkDefinition].
+ * @param link the link the image references
+ */
+data class ReferenceImage(
+    val link: ReferenceLink,
+) : Node
+
 // Emphasis
 
 /**
