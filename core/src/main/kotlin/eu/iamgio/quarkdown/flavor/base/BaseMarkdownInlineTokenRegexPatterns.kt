@@ -138,19 +138,8 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineReferenceLink",
                 wrap = ::ReferenceLinkToken,
                 regex =
-                    RegexBuilder("\\[(label)\\]\\[(ref)\\]")
+                    RegexBuilder("\\[(label)\\](?:\\[(ref)?\\])?")
                         .withReference("label", LABEL_HELPER)
-                        .withReference("ref", BLOCK_LABEL_HELPER)
-                        .build(),
-            )
-
-    val collapsedReferenceLink
-        get() =
-            TokenRegexPattern(
-                name = "InlineCollapsedReferenceLink",
-                wrap = ::CollapsedReferenceLinkToken,
-                regex =
-                    RegexBuilder("\\[(ref)\\](?:\\[\\])?")
                         .withReference("ref", BLOCK_LABEL_HELPER)
                         .build(),
             )
@@ -174,17 +163,6 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex =
                     RegexBuilder("!link")
                         .withReference("link", referenceLink.regex.pattern)
-                        .build(),
-            )
-
-    val collapsedReferenceImage
-        get() =
-            TokenRegexPattern(
-                name = "InlineCollapsedReferenceImage",
-                wrap = ::CollapsedReferenceImageToken,
-                regex =
-                    RegexBuilder("!link")
-                        .withReference("link", collapsedReferenceLink.regex.pattern)
                         .build(),
             )
 

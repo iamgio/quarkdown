@@ -100,25 +100,18 @@ class UrlAutolinkToken(data: TokenData) : Token(data) {
 }
 
 /**
- * Example:
- * ```
- * [text][label]
- * ```
- */
-class ReferenceLinkToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
-}
-
-/**
  * Examples:
  * ```
- * [label]
+ * [text][label]
  * ```
  * ```
  * [label][]
  * ```
+ * ```
+ * [label]
+ * ```
  */
-class CollapsedReferenceLinkToken(data: TokenData) : Token(data) {
+class ReferenceLinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -133,22 +126,18 @@ class ImageToken(data: TokenData) : Token(data) {
 }
 
 /**
- * Example:
+ * Examples:
  * ```
  * ![text][label]
  * ```
- */
-class ReferenceImageToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
-}
-
-/**
- * Example:
  * ```
  * ![label][]
  * ```
+ * ```
+ * ![label]
+ * ```
  */
-class CollapsedReferenceImageToken(data: TokenData) : Token(data) {
+class ReferenceImageToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
