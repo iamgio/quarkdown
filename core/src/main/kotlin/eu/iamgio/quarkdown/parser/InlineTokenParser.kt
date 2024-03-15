@@ -120,6 +120,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         return ReferenceLink(
             label = parseLinkLabelSubContent(label),
             reference = groups.nextOrNull() ?: label,
+            fallback = { PlainText(token.data.text) },
         )
     }
 

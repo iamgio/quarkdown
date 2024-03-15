@@ -35,10 +35,12 @@ data class Link(
  * A link that references a [LinkDefinition].
  * @param label inline content of the displayed label
  * @param reference label of the [LinkDefinition] this link points to
+ * @param fallback supplier of the node to show instead of [label] in case the reference is invalid
  */
 data class ReferenceLink(
     val label: List<Node>,
     val reference: String,
+    val fallback: () -> Node,
 ) : Node
 
 /**
