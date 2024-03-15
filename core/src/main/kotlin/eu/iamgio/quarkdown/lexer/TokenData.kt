@@ -8,7 +8,7 @@ package eu.iamgio.quarkdown.lexer
  * @param groups capture groups values for this token
  * @see Token
  */
-open class TokenData(
+data class TokenData(
     val text: String,
     val position: IntRange,
     val groups: Sequence<String> = emptySequence(),

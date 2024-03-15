@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.Comment
@@ -73,11 +75,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: DiamondAutolinkToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val url = groups.next().trim()
-        return Link(
-            label = listOf(PlainText(url)),
-            url = url,
-            title = null,
-        )
+        return visit(UrlAutolinkToken(token.data.copy(text = url)))
     }
 
     override fun visit(token: UrlAutolinkToken): Node {
