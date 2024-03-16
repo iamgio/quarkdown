@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.log
 
+import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -13,6 +14,12 @@ object Log {
     private val logger: Logger by lazy { LogManager.getLogger(this.javaClass.name) }
 
     // Log4J wrapper functions
+
+    /**
+     * Whether the logger is at debugging level.
+     */
+    val isDebug: Boolean
+        get() = logger.level == Level.DEBUG
 
     fun debug(message: Any) = logger.debug(message)
 
