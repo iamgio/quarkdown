@@ -252,11 +252,20 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         }
 
         // Other rows.
-        groups.next().lineSequence().forEach { row ->
-            parseRow(row).forEachIndexed { index, cell ->
-                columns.getOrNull(index)?.cells?.add(cell)
+        groups.next().lineSequence()
+            .filterNot { it.isBlank() }
+            .forEach { row ->
+                var cellCount = 0
+                // Push cell.
+                parseRow(row).forEachIndexed { index, cell ->
+                    columns.getOrNull(index)?.cells?.add(cell)
+                    cellCount = index
+                }
+                // Fill missing cells.
+                ((cellCount + 1) until columns.size).forEach {
+                    columns[it].cells += Table.Cell(emptyList())
+                }
             }
-        }
 
         return Table(
             columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },

@@ -1,7 +1,7 @@
 | foo | bar |
 |-----|-----|
-| baz | bim |
-| baz | bim |
+| abc | def |
+| ghi | jkl |
 
 | abc | defghi |
 :-: | -----------:
@@ -13,6 +13,6 @@ bar | baz
 | b **\|** im |
 
 | abc | def |
-| --- | --- |
+| --- |:----|
 | bar |
 | bar | baz | boo |

@@ -302,15 +302,15 @@ class BlockParserTest {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertEquals(PlainText("foo"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(PlainText("baz"), cells[0].text.first())
-                assertEquals(PlainText("baz"), cells[1].text.first())
+                assertEquals(PlainText("abc"), cells[0].text.first())
+                assertEquals(PlainText("ghi"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertEquals(PlainText("bar"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(PlainText("bim"), cells[0].text.first())
-                assertEquals(PlainText("bim"), cells[1].text.first())
+                assertEquals(PlainText("def"), cells[0].text.first())
+                assertEquals(PlainText("jkl"), cells[1].text.first())
             }
         }
 
@@ -337,7 +337,7 @@ class BlockParserTest {
             assertFalse(hasNext())
         }
 
-        /*with(nodes.next().columns.iterator()) {
+        with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertEquals(PlainText("abc"), header.text.first())
@@ -346,7 +346,7 @@ class BlockParserTest {
                 assertEquals(PlainText("bar"), cells[1].text.first())
             }
             with(next()) {
-                assertEquals(Table.Alignment.CENTER, alignment)
+                assertEquals(Table.Alignment.LEFT, alignment)
                 assertEquals(PlainText("def"), header.text.first())
                 assertEquals(2, cells.size)
                 assertTrue(cells[0].text.isEmpty())
@@ -354,9 +354,9 @@ class BlockParserTest {
             }
 
             assertFalse(hasNext())
-        }*/
+        }
 
-        // assertFalse(nodes.hasNext())
+        assertFalse(nodes.hasNext())
     }
 
     // This is shared by both unordered and ordered list tests.
