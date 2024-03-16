@@ -62,7 +62,7 @@ The project is under development. Currently parsed:
   - [x] Comment
   - [x] Emphasis
   - [x] Code span
-  - [ ] GFM strikethrough
+  - [x] GFM strikethrough
 
 - Quarkdown features
   - [ ] Functions

@@ -187,3 +187,14 @@ class EmphasisToken(data: TokenData) : Token(data) {
 class StrongEmphasisToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
+
+/**
+ * Example:
+ * ```
+ * ~~text~~
+ * ```
+ * @see eu.iamgio.quarkdown.ast.Strikethrough
+ */
+class StrikethroughToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}

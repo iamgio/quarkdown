@@ -215,6 +215,14 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::StrongEmphasisToken,
                 regex = delimiteredPattern(startDelimiter = "_{3}", endDelimiter = "_{3,}", strict = true),
             )
+
+    val strikethrough
+        get() =
+            TokenRegexPattern(
+                name = "InlineStrikethrough",
+                wrap = ::StrikethroughToken,
+                regex = delimiteredPattern("~{2}", strict = false),
+            )
 }
 
 private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"

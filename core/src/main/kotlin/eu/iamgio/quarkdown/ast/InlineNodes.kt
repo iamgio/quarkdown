@@ -88,3 +88,9 @@ data class Strong(override val children: InlineContent) : NestableNode
  * @param children content
  */
 data class StrongEmphasis(override val children: InlineContent) : NestableNode
+
+/**
+ * Strikethrough content.
+ * @param children content
+ */
+data class Strikethrough(override val children: InlineContent) : NestableNode

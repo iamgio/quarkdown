@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
@@ -197,6 +198,14 @@ class InlineParserTest {
         assertEquals(" a", nodes.next().text)
         assertEquals("b", nodes.next().text)
         assertEquals("foo bar   baz", nodes.next().text)
+    }
+
+    @Test
+    fun strikethrough() {
+        val nodes = inlineIterator<Strikethrough>(readSource("/parsing/inline/strikethrough.md"), assertType = false)
+
+        assertEquals("foo", (nodes.next().children.first() as PlainText).text)
+        assertEquals("Hi", (nodes.next().children.first() as PlainText).text)
     }
 
     @Test

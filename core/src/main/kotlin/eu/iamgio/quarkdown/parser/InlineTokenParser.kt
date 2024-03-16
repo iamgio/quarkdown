@@ -2,19 +2,7 @@
 
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.ast.CodeSpan
-import eu.iamgio.quarkdown.ast.Comment
-import eu.iamgio.quarkdown.ast.CriticalContent
-import eu.iamgio.quarkdown.ast.Emphasis
-import eu.iamgio.quarkdown.ast.Image
-import eu.iamgio.quarkdown.ast.LineBreak
-import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.PlainText
-import eu.iamgio.quarkdown.ast.ReferenceImage
-import eu.iamgio.quarkdown.ast.ReferenceLink
-import eu.iamgio.quarkdown.ast.Strong
-import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.*
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
@@ -173,18 +161,29 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         return PlainText(token.data.text)
     }
 
-    override fun visit(token: EmphasisToken): Node {
+    /**
+     * @param token emphasis token to parse the content for
+     * @return parsed content of an emphasis token
+     */
+    private fun emphasisContent(token: Token): InlineContent {
+        // The raw string content, without the delimiters.
         val text = token.data.groups.iterator(consumeAmount = 3).next()
-        return Emphasis(children = parseSubContent(text))
+        return parseSubContent(text)
+    }
+
+    override fun visit(token: EmphasisToken): Node {
+        return Emphasis(emphasisContent(token))
     }
 
     override fun visit(token: StrongToken): Node {
-        val text = token.data.groups.iterator(consumeAmount = 3).next()
-        return Strong(children = parseSubContent(text))
+        return Strong(emphasisContent(token))
     }
 
     override fun visit(token: StrongEmphasisToken): Node {
-        val text = token.data.groups.iterator(consumeAmount = 3).next()
-        return StrongEmphasis(children = parseSubContent(text))
+        return StrongEmphasis(emphasisContent(token))
+    }
+
+    override fun visit(token: StrikethroughToken): Node {
+        return Strikethrough(emphasisContent(token))
     }
 }

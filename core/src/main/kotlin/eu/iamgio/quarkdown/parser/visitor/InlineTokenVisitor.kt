@@ -42,4 +42,6 @@ interface InlineTokenVisitor<T> {
     fun visit(token: StrongToken): T
 
     fun visit(token: StrongEmphasisToken): T
+
+    fun visit(token: StrikethroughToken): T
 }
