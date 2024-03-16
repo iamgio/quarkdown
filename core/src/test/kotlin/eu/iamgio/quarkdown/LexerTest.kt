@@ -244,6 +244,53 @@ class LexerTest {
     }
 
     @Test
+    fun inline() {
+        val tokens = inlineLex(readSource("/lexing/inline.md"))
+
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EscapeToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<CodeSpanToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<CodeSpanToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LinkToken>(tokens.next())
+        assertIs<LineBreakToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<StrongToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<EmphasisToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<StrongEmphasisToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<DiamondAutolinkToken>(tokens.next())
+        assertIs<UrlAutolinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<LinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ReferenceLinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ReferenceLinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ReferenceLinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ImageToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ReferenceImageToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<CommentToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<StrongToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<ReferenceLinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+
+        assertFalse(tokens.hasNext())
+    }
+
+    @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
