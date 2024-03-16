@@ -51,7 +51,7 @@ The project is under development. Currently parsed:
   - [x] Lists (+ GFM tasks)
   - [x] Horizontal lines
   - [x] Link references
-  - [ ] GFM tables
+  - [x] GFM tables
   - [ ] GFM footnotes
 
 - Base Markdown inline
