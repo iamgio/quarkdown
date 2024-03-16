@@ -40,41 +40,6 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
-    val punctuation
-        get() =
-            TokenRegexPattern(
-                name = "InlinePunctuation",
-                wrap = ::PunctuationToken,
-                regex =
-                    RegexBuilder("((?![*_])[\\spunct])")
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
-            )
-
-    val anyPunctuation
-        get() =
-            TokenRegexPattern(
-                name = "InlineAnyPunctuation",
-                wrap = ::AnyPunctuationToken,
-                regex =
-                    RegexBuilder("\\\\([punct])")
-                        .withReference("punct", PUNCTUATION_HELPER)
-                        .build(),
-            )
-
-    /**
-     * Sequences emphasis should skip over: `[title](link)`, `\`code\``, `<html>`
-     */
-    val blockSkip
-        get() =
-            TokenRegexPattern(
-                name = "InlineBlockSkip",
-                wrap = ::BlockSkipToken,
-                regex =
-                    RegexBuilder("\\[[^\\[\\]]*?\\]\\([^\\(\\)]*?\\)|`[^`]*?`|<[^<>]*?>")
-                        .build(),
-            )
-
     val codeSpan
         get() =
             TokenRegexPattern(
