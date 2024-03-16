@@ -56,3 +56,7 @@ $ Math expression $
 multiline"
 
 ***
+
+| foo | bar |
+|-----|-----|
+| abc | def |

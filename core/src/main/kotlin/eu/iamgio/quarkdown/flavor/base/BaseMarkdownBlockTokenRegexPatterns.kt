@@ -27,18 +27,26 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     /**
      * The rules that defines when a text node must interrupt.
      * This might be overridden by subclasses to add new interruptions.
-     *
-     * Note: remember to add the `list` reference when using this pattern.
+     * @param includeList whether the `list` reference should be filled
+     * @param includeTable whether the `table` reference should be filled
      */
-    open val interruptionRule =
-        RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
+    open fun interruptionRule(
+        includeList: Boolean = true,
+        includeTable: Boolean = true,
+    ): Regex {
+        return RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
             .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
             .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
             .withReference("blockquote", " {0,3}>")
             .withReference("tag", TAG_HELPER)
-            .build() // TODO table
+            .apply {
+                if (includeList) withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
+                if (includeTable) withReference("table", table.regex.pattern)
+            }
+            .build()
+    }
 
     /**
      * 4-spaces indented content.
@@ -220,8 +228,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 wrap = ::ParagraphToken,
                 regex =
                     RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
-                        .withReference("interruption", interruptionRule.pattern)
-                        .withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
+                        .withReference("interruption", interruptionRule().pattern)
                         .build(),
             )
 
@@ -258,7 +265,8 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                             // Cells
                             "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
                     )
-                        .withReference("interruption", interruptionRule.pattern)
+                        .withReference("interruption", interruptionRule(includeTable = false).pattern)
+                        .withReference("|table", "")
                         .build(),
             )
 
@@ -291,7 +299,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         val continuation = "(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}$bulletContinuation[ \\t]))"
 
         return RegexBuilder("$initialization$continuation(?!^(interruption)))*)+")
-            .withReference("interruption", interruptionRule.pattern)
+            .withReference("interruption", interruptionRule(includeList = false).pattern)
             .withReference("list", " {0,3}(?:[*+-]|\\d[.)]) ")
             .build()
     }

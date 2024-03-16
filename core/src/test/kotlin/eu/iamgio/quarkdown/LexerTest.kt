@@ -5,7 +5,39 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.CodeSpanToken
+import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.DiamondAutolinkToken
+import eu.iamgio.quarkdown.lexer.EmphasisToken
+import eu.iamgio.quarkdown.lexer.EntityToken
+import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.HeadingToken
+import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.ImageToken
+import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.LinkToken
+import eu.iamgio.quarkdown.lexer.MultilineMathToken
+import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OnelineMathToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
+import eu.iamgio.quarkdown.lexer.ParagraphToken
+import eu.iamgio.quarkdown.lexer.PlainTextToken
+import eu.iamgio.quarkdown.lexer.ReferenceImageToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.StrongToken
+import eu.iamgio.quarkdown.lexer.TableToken
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
@@ -114,6 +146,7 @@ class LexerTest {
         assertIs<HtmlToken>(tokens.next())
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
+        assertIs<TableToken>(tokens.next())
     }
 
     @Test

@@ -10,11 +10,15 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
  * Regex patterns for [QuarkdownFlavor].
  */
 class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
-    override val interruptionRule =
-        RegexBuilder("mmath|omath|" + super.interruptionRule.pattern)
+    override fun interruptionRule(
+        includeList: Boolean,
+        includeTable: Boolean,
+    ): Regex {
+        return RegexBuilder("mmath|omath|" + super.interruptionRule(includeList, includeTable).pattern)
             .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
             .withReference("omath", onelineMath.regex.pattern)
             .build()
+    }
 
     /**
      * Fenced content within triple dollar signs.
