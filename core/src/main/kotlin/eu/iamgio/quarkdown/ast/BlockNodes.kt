@@ -117,6 +117,38 @@ data class Html(
 ) : Node
 
 /**
+ * A table.
+ * @param columns columns of the table. Each column has a header and multiple cells
+ */
+data class Table(
+    val columns: List<Column>,
+) : Node {
+    /**
+     * A column of a table.
+     * @param alignment text alignment
+     * @param header header cell
+     * @param cells other cells
+     */
+    data class Column(val alignment: Alignment, val header: Cell, val cells: List<Cell>)
+
+    /**
+     * A single cell of a table.
+     * @param text content
+     */
+    data class Cell(val text: InlineContent)
+
+    /**
+     * Text alignment of a [Column].
+     */
+    enum class Alignment {
+        LEFT,
+        CENTER,
+        RIGHT,
+        NONE,
+    }
+}
+
+/**
  * A text paragraph.
  * @param text text content
  */

@@ -2,9 +2,43 @@
 
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.ast.*
+import eu.iamgio.quarkdown.ast.BaseListItem
+import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
+import eu.iamgio.quarkdown.ast.InlineContent
+import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.Newline
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
+import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.Table
+import eu.iamgio.quarkdown.ast.TaskListItem
+import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.BlockTextToken
+import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.HeadingToken
+import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.ListItemToken
+import eu.iamgio.quarkdown.lexer.MultilineMathToken
+import eu.iamgio.quarkdown.lexer.NewlineToken
+import eu.iamgio.quarkdown.lexer.OnelineMathToken
+import eu.iamgio.quarkdown.lexer.OrderedListToken
+import eu.iamgio.quarkdown.lexer.ParagraphToken
+import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.TableToken
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
@@ -170,6 +204,63 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
             // Regular list item.
             else -> BaseListItem(children)
         }
+    }
+
+    override fun visit(token: TableToken): Node {
+        /**
+         * A temporary mutable [Table.Column].
+         */
+        class MutableColumn(var alignment: Table.Alignment, val header: Table.Cell, val cells: MutableList<Table.Cell>)
+
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val columns = mutableListOf<MutableColumn>()
+
+        /**
+         * Extracts the cells from a table row as raw strings.
+         */
+        fun splitRow(row: String): Sequence<String> =
+            row.split("(?<!\\\\)\\|".toRegex()).asSequence()
+                .filterNot { it.isBlank() }
+                .map { it.trim() }
+
+        /**
+         * Extracts the cells from a table row as processed [Table.Cell]s.
+         */
+        fun parseRow(row: String): Sequence<Table.Cell> = splitRow(row).map { Table.Cell(it.toInline()) }
+
+        // Header row.
+        parseRow(groups.next()).forEach {
+            columns += MutableColumn(Table.Alignment.NONE, it, mutableListOf())
+        }
+
+        // Delimiter row (defines alignment).
+        splitRow(groups.next()).forEachIndexed { index, delimiter ->
+            // The position of this character in the delimiter defines the column alignment.
+            val alignmentChar = ':'
+
+            columns.getOrNull(index)?.alignment =
+                when {
+                    // :---:
+                    delimiter.firstOrNull() == alignmentChar && delimiter.lastOrNull() == alignmentChar -> Table.Alignment.CENTER
+                    // :---
+                    delimiter.firstOrNull() == alignmentChar -> Table.Alignment.LEFT
+                    // ---:
+                    delimiter.lastOrNull() == alignmentChar -> Table.Alignment.RIGHT
+                    // ---
+                    else -> Table.Alignment.NONE
+                }
+        }
+
+        // Other rows.
+        groups.next().lineSequence().forEach { row ->
+            parseRow(row).forEachIndexed { index, cell ->
+                columns.getOrNull(index)?.cells?.add(cell)
+            }
+        }
+
+        return Table(
+            columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
+        )
     }
 
     override fun visit(token: HtmlToken): Node {

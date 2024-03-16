@@ -21,6 +21,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     heading,
                     horizontalRule,
                     setextHeading,
+                    table,
                     html,
                     unorderedList,
                     orderedList,

@@ -2,7 +2,25 @@
 
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.*
+import eu.iamgio.quarkdown.ast.BaseListItem
+import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
+import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListBlock
+import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Newline
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
+import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.Table
+import eu.iamgio.quarkdown.ast.TaskListItem
+import eu.iamgio.quarkdown.ast.TextNode
+import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
@@ -90,7 +108,7 @@ class BlockParserTest {
     }
 
     @Test
-    fun serawTextHeading() {
+    fun setextHeading() {
         val nodes = blocksIterator<Heading>(readSource("/parsing/setextheading.md"))
 
         repeat(3) {
@@ -273,6 +291,72 @@ class BlockParserTest {
         assertEquals("<p><i>Text</i></p>", nodes.next().content)
         assertTrue { nodes.next().content.endsWith("</header>") }
         assertTrue { nodes.next().content.endsWith("</html>") }
+    }
+
+    @Test
+    fun table() {
+        val nodes = blocksIterator<Table>(readSource("/parsing/table.md"))
+
+        with(nodes.next().columns.iterator()) {
+            with(next()) {
+                assertEquals(Table.Alignment.NONE, alignment)
+                assertEquals(PlainText("foo"), header.text.first())
+                assertEquals(2, cells.size)
+                assertEquals(PlainText("baz"), cells[0].text.first())
+                assertEquals(PlainText("baz"), cells[1].text.first())
+            }
+            with(next()) {
+                assertEquals(Table.Alignment.NONE, alignment)
+                assertEquals(PlainText("bar"), header.text.first())
+                assertEquals(2, cells.size)
+                assertEquals(PlainText("bim"), cells[0].text.first())
+                assertEquals(PlainText("bim"), cells[1].text.first())
+            }
+        }
+
+        with(nodes.next().columns.iterator()) {
+            with(next()) {
+                assertEquals(Table.Alignment.CENTER, alignment)
+                assertEquals(PlainText("abc"), header.text.first())
+                assertEquals(1, cells.size)
+                assertEquals(PlainText("bar"), cells.first().text.first())
+            }
+            with(next()) {
+                assertEquals(Table.Alignment.RIGHT, alignment)
+                assertEquals(PlainText("defghi"), header.text.first())
+                assertEquals(1, cells.size)
+                assertEquals(PlainText("baz"), cells.first().text.first())
+            }
+        }
+
+        with(nodes.next().columns.iterator()) {
+            with(next()) {
+                assertEquals(Table.Alignment.NONE, alignment)
+                assertEquals(2, cells.size)
+            }
+            assertFalse(hasNext())
+        }
+
+        /*with(nodes.next().columns.iterator()) {
+            with(next()) {
+                assertEquals(Table.Alignment.NONE, alignment)
+                assertEquals(PlainText("abc"), header.text.first())
+                assertEquals(2, cells.size)
+                assertEquals(PlainText("bar"), cells[0].text.first())
+                assertEquals(PlainText("bar"), cells[1].text.first())
+            }
+            with(next()) {
+                assertEquals(Table.Alignment.CENTER, alignment)
+                assertEquals(PlainText("def"), header.text.first())
+                assertEquals(2, cells.size)
+                assertTrue(cells[0].text.isEmpty())
+                assertEquals(PlainText("baz"), cells[1].text.first())
+            }
+
+            assertFalse(hasNext())
+        }*/
+
+        // assertFalse(nodes.hasNext())
     }
 
     // This is shared by both unordered and ordered list tests.

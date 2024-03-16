@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package eu.iamgio.quarkdown.parser.visitor
 
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
@@ -15,6 +17,7 @@ import eu.iamgio.quarkdown.lexer.OnelineMathToken
 import eu.iamgio.quarkdown.lexer.OrderedListToken
 import eu.iamgio.quarkdown.lexer.ParagraphToken
 import eu.iamgio.quarkdown.lexer.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.TableToken
 import eu.iamgio.quarkdown.lexer.UnorderedListToken
 
 /**
@@ -45,6 +48,8 @@ interface BlockTokenVisitor<T> {
     fun visit(token: OrderedListToken): T
 
     fun visit(token: ListItemToken): T
+
+    fun visit(token: TableToken): T
 
     fun visit(token: HtmlToken): T
 

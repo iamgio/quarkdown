@@ -25,6 +25,7 @@ class QuarkdownLexerFactory : LexerFactory {
                     heading,
                     horizontalRule,
                     setextHeading,
+                    table,
                     html,
                     unorderedList,
                     orderedList,

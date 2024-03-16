@@ -158,6 +158,24 @@ class ListItemToken(data: TokenData) : Token(data) {
 }
 
 /**
+ * Examples:
+ * ```
+ * | foo | bar |
+ * | --- | --- |
+ * | baz | bim |
+ * ```
+ * ```
+ * | foo  |  bar |
+ * | :--- | ---: |
+ * | baz  |  bim |
+ * ```
+ * @see eu.iamgio.quarkdown.ast.Table
+ */
+class TableToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
  * Example:
  * ```
  * <p>
