@@ -46,7 +46,7 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineCodeSpan",
                 wrap = ::CodeSpanToken,
                 regex =
-                    "(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
+                    "(?<!`)(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
                         .toRegex(),
             )
 
