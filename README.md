@@ -3,6 +3,8 @@
 Quarkdown is a work-in-progress markup language to create documents with the minimalism and straightforwardness of Markdown,
 while allowing full control over the structure and style of the document that LaTeX provides.
 
+The base Markdown parsing is CommonMark-compliant, along with several GFM extensions.
+
 ## Overview
 
 This is an example of what Quarkdown aims to look like:
