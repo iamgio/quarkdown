@@ -63,6 +63,8 @@ data class ReferenceImage(
 
 // Emphasis
 
+data class CodeSpan(val text: String) : Node
+
 /**
  * Plain inline text.
  * @param text text content.

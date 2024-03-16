@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
@@ -183,6 +184,19 @@ class InlineParserTest {
                 assertEquals("ref", reference)
             }
         }
+    }
+
+    @Test
+    fun codeSpan() {
+        val nodes = inlineIterator<CodeSpan>(readSource("/parsing/inline/codespan.md"))
+
+        assertEquals("foo", nodes.next().text)
+        assertEquals("foo ` bar", nodes.next().text)
+        assertEquals("``", nodes.next().text)
+        assertEquals(" `` ", nodes.next().text)
+        assertEquals(" a", nodes.next().text)
+        assertEquals("b", nodes.next().text)
+        assertEquals("foo bar   baz", nodes.next().text)
     }
 
     @Test

@@ -37,10 +37,8 @@ class CriticalContentToken(data: TokenData) : Token(data) {
  * ````code````
  * ```
  */
-class InlineCodeToken(data: TokenData) : Token(data) {
-    override fun <T> accept(visitor: TokenVisitor<T>): T {
-        TODO("Not yet implemented")
-    }
+class CodeSpanToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**

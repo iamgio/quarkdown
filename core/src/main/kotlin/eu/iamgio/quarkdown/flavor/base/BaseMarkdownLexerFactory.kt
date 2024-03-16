@@ -48,7 +48,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     diamondAutolink,
                     // blockSkip,
                     lineBreak,
-                    code,
+                    codeSpan,
                     escape,
                     entity,
                     comment,
@@ -76,7 +76,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                 source,
                 listOf(
                     lineBreak,
-                    code,
+                    codeSpan,
                     escape,
                     entity,
                     comment,

@@ -75,11 +75,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
-    val code
+    val codeSpan
         get() =
             TokenRegexPattern(
-                name = "InlineCode",
-                wrap = ::InlineCodeToken,
+                name = "InlineCodeSpan",
+                wrap = ::CodeSpanToken,
                 regex =
                     "(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
                         .toRegex(),

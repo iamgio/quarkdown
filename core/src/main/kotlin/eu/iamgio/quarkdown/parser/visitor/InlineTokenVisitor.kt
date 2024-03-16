@@ -31,6 +31,8 @@ interface InlineTokenVisitor<T> {
 
     fun visit(token: ReferenceImageToken): T
 
+    fun visit(token: CodeSpanToken): T
+
     // Emphasis
 
     fun visit(token: PlainTextToken): T

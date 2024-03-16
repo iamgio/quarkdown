@@ -2,6 +2,7 @@
 
 package eu.iamgio.quarkdown.parser
 
+import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
@@ -19,6 +20,7 @@ import eu.iamgio.quarkdown.lexer.*
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
+import eu.iamgio.quarkdown.util.trimDelimiters
 import org.apache.commons.text.StringEscapeUtils
 
 /**
@@ -109,7 +111,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
             label = parseLinkLabelSubContent(groups.next()),
             url = groups.next().trim(),
             // Removes leading and trailing delimiters.
-            title = groups.nextOrNull()?.run { substring(1, length - 1) }?.trim(),
+            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
         )
     }
 
@@ -147,6 +149,24 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: ReferenceImageToken): Node {
         val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
         return ReferenceImage(link)
+    }
+
+    override fun visit(token: CodeSpanToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 3)
+        val text = groups.next().replace("\n", " ")
+
+        // If the text start and ends by a space, and does contain non-space characters,
+        // the leading and trailing spaces are trimmed (according to CommonMark).
+        val hasNonSpaceChars = text.any { it != ' ' }
+        val hasSpaceCharsOnBothEnds = text.firstOrNull() == ' ' && text.lastOrNull() == ' '
+
+        return CodeSpan(
+            if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
+                text.trimDelimiters()
+            } else {
+                text
+            },
+        )
     }
 
     override fun visit(token: PlainTextToken): Node {

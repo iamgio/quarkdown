@@ -46,7 +46,7 @@ The project is under development. Currently parsed:
   - [x] Headings
   - [x] Code
   - [x] Quotes
-  - [x] Lists (with GFM tasks)
+  - [x] Lists (+ GFM tasks)
   - [x] Horizontal lines
   - [x] Link references
   - [ ] GFM tables
@@ -55,11 +55,13 @@ The project is under development. Currently parsed:
 - Base Markdown inline
   - [x] Text
   - [x] Link
-  - [x] Autolink (with GFM extension)
   - [x] Reference link
+  - [x] Autolink (+ GFM extension)
+  - [x] Image
+  - [x] Reference image
   - [x] Comment
   - [x] Emphasis
-  - [ ] Code
+  - [x] Code span
   - [ ] GFM strikethrough
 
 - Quarkdown features

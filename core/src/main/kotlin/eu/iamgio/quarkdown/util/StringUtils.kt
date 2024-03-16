@@ -13,3 +13,8 @@ fun String.takeUntilLastOccurrence(string: String): String {
         this
     }
 }
+
+/**
+ * @return [this] string without the first and last characters, if possible
+ */
+fun String.trimDelimiters(): String = if (length >= 2) substring(1, length - 1) else this
