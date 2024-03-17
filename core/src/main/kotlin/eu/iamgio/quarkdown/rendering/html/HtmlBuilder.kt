@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.rendering.NodeVisitor
+import eu.iamgio.quarkdown.util.indent
 
 private const val INDENT = "  "
 
@@ -36,26 +37,19 @@ class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<Ch
             }
             append(">")
 
+            // If this is a void tag, neither content nor closing tag is expected.
             if (isVoid) {
                 return@buildString
             }
 
-            // append("\n")
-
-            content.lineSequence()
-                .filterNot { it.isEmpty() }
-                .forEach { append("\n").append(INDENT).append(it) }
-
             append("\n")
 
-            // Indented inner content.
+            // Indented text content.
+            append(content.indent(INDENT))
+
+            // Indented content from inner tags.
             builders.forEach { builder ->
-                builder.build()
-                    .lineSequence()
-                    .filterNot { it.isEmpty() }
-                    .forEach {
-                        append(INDENT).append(it).append("\n")
-                    }
+                append(builder.build().indent(INDENT))
             }
 
             // Closing tag.
