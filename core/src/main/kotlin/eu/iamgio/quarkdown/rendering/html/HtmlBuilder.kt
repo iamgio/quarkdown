@@ -3,13 +3,16 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.util.indent
 
+/**
+ * String used to indent nested code.
+ */
 private const val INDENT = "  "
 
 /**
  * A builder of an HTML tag.
  * @param name name of the root tag
  * @param renderer node renderer, used to add nodes directly to the code
- * @see simpleTagBuilder
+ * @see tagBuilder
  */
 class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRenderer) {
     /**
@@ -162,4 +165,16 @@ fun HtmlNodeRenderer.buildTag(
 fun HtmlNodeRenderer.buildTag(
     name: String,
     content: List<Node>,
+) = buildTag(name) { +content }
+
+/**
+ * A quick way to build a simple HTML tag.
+ * @param name tag name
+ * @param content string content of the tag
+ * @return HTML code of the tag
+ * @see tagBuilder
+ */
+fun HtmlNodeRenderer.buildTag(
+    name: String,
+    content: String,
 ) = buildTag(name) { +content }

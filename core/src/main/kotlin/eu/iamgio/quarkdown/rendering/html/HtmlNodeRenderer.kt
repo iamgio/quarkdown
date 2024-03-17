@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strikethrough
@@ -32,6 +33,8 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
     override fun visit(node: PlainText): CharSequence {
         return node.text
     }
+
+    override fun visit(node: CodeSpan): CharSequence = buildTag("code", node.text)
 
     override fun visit(node: Emphasis): CharSequence = buildTag("em", node.children)
 

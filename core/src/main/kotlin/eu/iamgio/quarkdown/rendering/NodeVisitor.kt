@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strikethrough
@@ -19,6 +20,8 @@ interface NodeVisitor<T> {
     // Inline
 
     fun visit(node: PlainText): T
+
+    fun visit(node: CodeSpan): T
 
     fun visit(node: Emphasis): T
 

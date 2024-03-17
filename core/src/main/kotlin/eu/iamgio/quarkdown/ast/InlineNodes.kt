@@ -80,7 +80,7 @@ data class ReferenceImage(
 // Emphasis
 
 data class CodeSpan(val text: String) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
