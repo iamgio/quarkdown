@@ -153,7 +153,7 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
  */
 fun HtmlNodeRenderer.tagBuilder(
     name: String,
-    init: HtmlBuilder.() -> Unit,
+    init: HtmlBuilder.() -> Unit = {},
 ) = HtmlBuilder(name, renderer = this).also(init)
 
 /**

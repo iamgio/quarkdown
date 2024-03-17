@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strikethrough
@@ -37,6 +38,14 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
         }
             .attribute("href", node.url)
             .optionalAttribute("title", node.title)
+            .build()
+
+    override fun visit(node: Image) =
+        tagBuilder("img")
+            .attribute("src", node.link.url)
+            .attribute("alt", node.link.label) // TODO get as plain text
+            .optionalAttribute("title", node.link.title)
+            .void(true)
             .build()
 
     override fun visit(node: PlainText) = node.text
