@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.rendering.NodeVisitor
 class HtmlNodeRenderer : NodeVisitor<CharSequence> {
     override fun visit(node: AstRoot): CharSequence =
         "<!DOCTYPE html>\n" +
-            tagBuilder("html") {
+            buildTag("html") {
                 tag("head") {
                     tag("meta")
                         .attribute("charset", "UTF-8")
@@ -23,7 +23,7 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
                 tag("body") {
                     +node.children
                 }
-            }.build()
+            }
 
     // Block
 
@@ -33,16 +33,16 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
         return node.text
     }
 
-    override fun visit(node: Emphasis): CharSequence = simpleTagBuilder("em", node.children).build()
+    override fun visit(node: Emphasis): CharSequence = buildTag("em", node.children)
 
-    override fun visit(node: Strong): CharSequence = simpleTagBuilder("strong", node.children).build()
+    override fun visit(node: Strong): CharSequence = buildTag("strong", node.children)
 
     override fun visit(node: StrongEmphasis): CharSequence =
-        tagBuilder("em") {
+        buildTag("em") {
             tag("strong") {
                 +node.children
             }
-        }.build()
+        }
 
-    override fun visit(node: Strikethrough): CharSequence = simpleTagBuilder("del", node.children).build()
+    override fun visit(node: Strikethrough): CharSequence = buildTag("del", node.children)
 }

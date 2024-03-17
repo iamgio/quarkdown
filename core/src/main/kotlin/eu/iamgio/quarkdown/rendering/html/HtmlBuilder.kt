@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.rendering.NodeVisitor
 import eu.iamgio.quarkdown.util.indent
 
 private const val INDENT = "  "
@@ -12,7 +11,7 @@ private const val INDENT = "  "
  * @param renderer node renderer, used to add nodes directly to the code
  * @see simpleTagBuilder
  */
-class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<CharSequence>) {
+class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRenderer) {
     /**
      * Sub-builders for nested tags.
      */
@@ -132,16 +131,35 @@ class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<Ch
  * ```
  *
  *
- * @param name name of the root tag
+ * @param name tag name
  * @param init action to run at initialization
  * @return the new builder
  */
-fun NodeVisitor<CharSequence>.tagBuilder(
+fun HtmlNodeRenderer.tagBuilder(
     name: String,
     init: HtmlBuilder.() -> Unit,
 ) = HtmlBuilder(name, renderer = this).also(init)
 
-fun NodeVisitor<CharSequence>.simpleTagBuilder(
+/**
+ * Builds an HTML tag.
+ * @param name tag name
+ * @param init action to run at initialization
+ * @return HTML code of the tag
+ * @see tagBuilder
+ */
+fun HtmlNodeRenderer.buildTag(
+    name: String,
+    init: HtmlBuilder.() -> Unit,
+) = tagBuilder(name, init).build()
+
+/**
+ * A quick way to build a simple HTML tag.
+ * @param name tag name
+ * @param content nodes to render as HTML within the tag
+ * @return HTML code of the tag
+ * @see tagBuilder
+ */
+fun HtmlNodeRenderer.buildTag(
     name: String,
     content: List<Node>,
-) = tagBuilder(name) { +content }
+) = buildTag(name) { +content }
