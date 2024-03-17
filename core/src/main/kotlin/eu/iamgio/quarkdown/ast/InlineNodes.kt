@@ -104,7 +104,7 @@ data class Emphasis(override val children: InlineContent) : NestableNode {
  * @param children content
  */
 data class Strong(override val children: InlineContent) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

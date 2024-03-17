@@ -1,10 +1,14 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.rendering.NodeVisitor
+
 /**
  * The AST root.
  */
 data class AstRoot(
     override val children: List<Node>,
-) : NestableNode
+) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}
 
 typealias Document = AstRoot
