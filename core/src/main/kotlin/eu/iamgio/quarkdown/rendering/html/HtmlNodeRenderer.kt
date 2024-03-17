@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.rendering.NodeVisitor
 
 /**
- *
+ * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
  */
 class HtmlNodeRenderer : NodeVisitor<CharSequence> {
     override fun visit(node: AstRoot): CharSequence =
