@@ -10,7 +10,7 @@ private const val INDENT = "  "
  * A builder of an HTML tag.
  * @param name name of the root tag
  * @param renderer node renderer, used to add nodes directly to the code
- * @see tagBuilder
+ * @see simpleTagBuilder
  */
 class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<CharSequence>) {
     /**
@@ -140,3 +140,8 @@ fun NodeVisitor<CharSequence>.tagBuilder(
     name: String,
     init: HtmlBuilder.() -> Unit,
 ) = HtmlBuilder(name, renderer = this).also(init)
+
+fun NodeVisitor<CharSequence>.simpleTagBuilder(
+    name: String,
+    content: List<Node>,
+) = tagBuilder(name) { +content }

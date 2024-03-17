@@ -1,8 +1,11 @@
 package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
+import eu.iamgio.quarkdown.ast.StrongEmphasis
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.
@@ -17,5 +20,11 @@ interface NodeVisitor<T> {
 
     fun visit(node: PlainText): T
 
+    fun visit(node: Emphasis): T
+
     fun visit(node: Strong): T
+
+    fun visit(node: StrongEmphasis): T
+
+    fun visit(node: Strikethrough): T
 }

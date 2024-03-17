@@ -96,7 +96,7 @@ data class PlainText(val text: String) : Node {
  * @param children content
  */
 data class Emphasis(override val children: InlineContent) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -112,7 +112,7 @@ data class Strong(override val children: InlineContent) : NestableNode {
  * @param children content
  */
 data class StrongEmphasis(override val children: InlineContent) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -120,5 +120,5 @@ data class StrongEmphasis(override val children: InlineContent) : NestableNode {
  * @param children content
  */
 data class Strikethrough(override val children: InlineContent) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
