@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
+import eu.iamgio.quarkdown.rendering.RendererFactory
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -32,4 +33,6 @@ fun main(args: Array<String>) {
     if (Log.isDebug) {
         Log.debug("AST:\n" + DebugFormatter.formatAST(document))
     }
+
+    val renderer = RendererFactory.html()
 }

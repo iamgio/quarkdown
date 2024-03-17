@@ -1,10 +1,14 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.rendering.NodeVisitor
+
 /**
  * A blank line.
  */
 class Newline : Node {
     override fun toString() = "Newline"
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
 }
 
 /**
@@ -15,7 +19,9 @@ class Newline : Node {
 data class Code(
     val content: String,
     val language: String?,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A math (TeX) block.
@@ -23,13 +29,17 @@ data class Code(
  */
 data class Math(
     val expression: String,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A horizontal line (thematic break).
  */
 class HorizontalRule : Node {
     override fun toString() = "HorizontalRule"
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
 }
 
 /**
@@ -39,7 +49,9 @@ class HorizontalRule : Node {
 data class Heading(
     val depth: Int,
     override val text: InlineContent,
-) : TextNode
+) : TextNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Creation of a link reference.
@@ -51,7 +63,9 @@ data class LinkDefinition(
     override val text: InlineContent,
     val url: String,
     val title: String?,
-) : TextNode
+) : TextNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A list, either ordered or unordered.
@@ -71,7 +85,9 @@ interface ListBlock : NestableNode {
 data class UnorderedList(
     override val isLoose: Boolean,
     override val children: List<Node>,
-) : ListBlock
+) : ListBlock {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An ordered list.
@@ -83,7 +99,9 @@ data class OrderedList(
     val startIndex: Int,
     override val isLoose: Boolean,
     override val children: List<Node>,
-) : ListBlock
+) : ListBlock {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An item of a [ListBlock].
@@ -96,7 +114,9 @@ interface ListItem : NestableNode
  */
 data class BaseListItem(
     override val children: List<Node>,
-) : ListItem
+) : ListItem {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An item of a [ListBlock] that includes a task, with a checked/unchecked value.
@@ -106,7 +126,9 @@ data class BaseListItem(
 data class TaskListItem(
     val isChecked: Boolean,
     override val children: List<Node>,
-) : ListItem
+) : ListItem {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An HTML block.
@@ -114,7 +136,9 @@ data class TaskListItem(
  */
 data class Html(
     val content: String,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A table.
@@ -146,6 +170,8 @@ data class Table(
         RIGHT,
         NONE,
     }
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
 }
 
 /**
@@ -154,7 +180,9 @@ data class Table(
  */
 data class Paragraph(
     override val text: InlineContent,
-) : TextNode
+) : TextNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A block quote.
@@ -162,9 +190,13 @@ data class Paragraph(
  */
 data class BlockQuote(
     override val children: List<Node>,
-) : NestableNode
+) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Anything else (should not happen).
  */
-class BlockText : Node
+class BlockText : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}

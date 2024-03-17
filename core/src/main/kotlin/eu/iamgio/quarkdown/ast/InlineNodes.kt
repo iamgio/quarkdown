@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.rendering.NodeVisitor
+
 typealias InlineContent = List<Node>
 
 /**
@@ -7,6 +9,8 @@ typealias InlineContent = List<Node>
  */
 class Comment : Node {
     override fun toString() = "Comment"
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
 }
 
 /**
@@ -14,12 +18,16 @@ class Comment : Node {
  */
 class LineBreak : Node {
     override fun toString() = "LineBreak"
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
 }
 
 /**
  * Content (usually a single character) that requires special treatment during the rendering stage.
  */
-data class CriticalContent(val content: String) : Node
+data class CriticalContent(val content: String) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A link.
@@ -31,7 +39,9 @@ data class Link(
     val label: InlineContent,
     val url: String,
     val title: String?,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * A link that references a [LinkDefinition].
@@ -43,7 +53,9 @@ data class ReferenceLink(
     val label: InlineContent,
     val reference: String,
     val fallback: () -> Node,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An image.
@@ -51,7 +63,9 @@ data class ReferenceLink(
  */
 data class Image(
     val link: Link,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * An images that references a [LinkDefinition].
@@ -59,38 +73,52 @@ data class Image(
  */
 data class ReferenceImage(
     val link: ReferenceLink,
-) : Node
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 // Emphasis
 
-data class CodeSpan(val text: String) : Node
+data class CodeSpan(val text: String) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Plain inline text.
  * @param text text content.
  */
-data class PlainText(val text: String) : Node
+data class PlainText(val text: String) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}
 
 /**
  * Weakly emphasized content.
  * @param children content
  */
-data class Emphasis(override val children: InlineContent) : NestableNode
+data class Emphasis(override val children: InlineContent) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Strongly emphasized content.
  * @param children content
  */
-data class Strong(override val children: InlineContent) : NestableNode
+data class Strong(override val children: InlineContent) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Heavily emphasized content.
  * @param children content
  */
-data class StrongEmphasis(override val children: InlineContent) : NestableNode
+data class StrongEmphasis(override val children: InlineContent) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
 
 /**
  * Strikethrough content.
  * @param children content
  */
-data class Strikethrough(override val children: InlineContent) : NestableNode
+data class Strikethrough(override val children: InlineContent) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}
