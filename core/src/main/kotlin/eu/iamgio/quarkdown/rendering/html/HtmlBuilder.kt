@@ -43,8 +43,21 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
      */
     fun attribute(
         key: String,
-        value: String,
+        value: Any,
     ) = apply { this.attributes[key] = value }
+
+    /**
+     * Adds an attribute to this tag only if [value] is not `null`.
+     * @param key attribute key
+     * @param value attribute value, applied only if not `null`
+     * @return this for concatenation
+     */
+    fun optionalAttribute(
+        key: String,
+        value: Any?,
+    ) = apply {
+        if (value != null) attribute(key, value)
+    }
 
     /**
      * Sets whether this tag is void.

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.rendering
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
@@ -18,6 +19,8 @@ interface NodeVisitor<T> {
     // Block
 
     // Inline
+
+    fun visit(node: Link): T
 
     fun visit(node: PlainText): T
 
