@@ -34,7 +34,7 @@ class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<Ch
             attributes.entries.forEach { (key, value) ->
                 append(" $key=\"$value\"")
             }
-            append(">\n")
+            append(">")
 
             if (isVoid) {
                 return@buildString
@@ -44,18 +44,17 @@ class HtmlBuilder(private val name: String, private val renderer: NodeVisitor<Ch
 
             content.lineSequence()
                 .filterNot { it.isEmpty() }
-                .forEach { line -> append("\n").append(INDENT).append(line) }
+                .forEach { append("\n").append(INDENT).append(it) }
 
             append("\n")
 
             // Indented inner content.
-            builders.forEach {
-                it.build()
+            builders.forEach { builder ->
+                builder.build()
                     .lineSequence()
-                    .filterNot { line -> line.isEmpty() }
-                    .forEach { line ->
-                        append("\n")
-                        append(INDENT).append(line)
+                    .filterNot { it.isEmpty() }
+                    .forEach {
+                        append(INDENT).append(it).append("\n")
                     }
             }
 
