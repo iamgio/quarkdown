@@ -2,10 +2,15 @@ package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.CodeSpan
+import eu.iamgio.quarkdown.ast.Comment
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
+import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceImage
+import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -21,9 +26,19 @@ interface NodeVisitor<T> {
 
     // Inline
 
+    fun visit(node: Comment): T
+
+    fun visit(node: LineBreak): T
+
+    fun visit(node: CriticalContent): T
+
     fun visit(node: Link): T
 
+    fun visit(node: ReferenceLink): T
+
     fun visit(node: Image): T
+
+    fun visit(node: ReferenceImage): T
 
     fun visit(node: PlainText): T
 

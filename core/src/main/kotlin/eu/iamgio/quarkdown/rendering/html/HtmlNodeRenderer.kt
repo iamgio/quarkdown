@@ -2,10 +2,15 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.CodeSpan
+import eu.iamgio.quarkdown.ast.Comment
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
+import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.PlainText
+import eu.iamgio.quarkdown.ast.ReferenceImage
+import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -32,6 +37,17 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
 
     // Inline
 
+    override fun visit(node: Comment) = "" // Ignored
+
+    override fun visit(node: LineBreak) =
+        tagBuilder("br")
+            .void(true)
+            .build()
+
+    override fun visit(node: CriticalContent): CharSequence {
+        TODO("Not yet implemented")
+    }
+
     override fun visit(node: Link) =
         tagBuilder("a") {
             +node.label
@@ -40,6 +56,10 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
             .optionalAttribute("title", node.title)
             .build()
 
+    override fun visit(node: ReferenceLink): CharSequence {
+        TODO("Not yet implemented")
+    }
+
     override fun visit(node: Image) =
         tagBuilder("img")
             .attribute("src", node.link.url)
@@ -47,6 +67,10 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
             .optionalAttribute("title", node.link.title)
             .void(true)
             .build()
+
+    override fun visit(node: ReferenceImage): CharSequence {
+        TODO("Not yet implemented")
+    }
 
     override fun visit(node: PlainText) = node.text
 

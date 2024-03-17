@@ -10,7 +10,7 @@ typealias InlineContent = List<Node>
 class Comment : Node {
     override fun toString() = "Comment"
 
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -19,14 +19,14 @@ class Comment : Node {
 class LineBreak : Node {
     override fun toString() = "LineBreak"
 
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * Content (usually a single character) that requires special treatment during the rendering stage.
  */
 data class CriticalContent(val content: String) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -54,7 +54,7 @@ data class ReferenceLink(
     val reference: String,
     val fallback: () -> Node,
 ) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -74,7 +74,7 @@ data class Image(
 data class ReferenceImage(
     val link: ReferenceLink,
 ) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 // Emphasis
