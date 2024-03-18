@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
@@ -131,5 +132,13 @@ class HtmlRendererTest {
 
         assertEquals(out.next(), StrongEmphasis(listOf(Text("Foo bar"))).render())
         assertEquals(out.next(), StrongEmphasis(listOf(StrongEmphasis(listOf(Text("Foo bar"))))).render())
+    }
+
+    @Test
+    fun strikethrough() {
+        val out = readParts("inline/strikethrough.html")
+
+        assertEquals(out.next(), Strikethrough(listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Strikethrough(listOf(Strong(listOf(Text("Foo bar"))))).render())
     }
 }
