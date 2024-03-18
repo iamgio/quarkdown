@@ -5,6 +5,14 @@ import eu.iamgio.quarkdown.rendering.NodeVisitor
 typealias InlineContent = List<Node>
 
 /**
+ * A [Node] that contains plain text.
+ * @see eu.iamgio.quarkdown.util.toPlainText
+ */
+interface PlainTextNode : Node {
+    val text: String
+}
+
+/**
  * A comment whose content is ignored.
  */
 class Comment : Node {
@@ -24,8 +32,9 @@ class LineBreak : Node {
 
 /**
  * Content (usually a single character) that requires special treatment during the rendering stage.
+ * @param text wrapped text
  */
-data class CriticalContent(val content: String) : Node {
+data class CriticalContent(override val text: String) : PlainTextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -78,14 +87,6 @@ data class ReferenceImage(
 }
 
 // Emphasis
-
-/**
- * A [Node] that contains plain text.
- * @see eu.iamgio.quarkdown.util.toPlainText
- */
-interface PlainTextNode : Node {
-    val text: String
-}
 
 /**
  * Inline code.
