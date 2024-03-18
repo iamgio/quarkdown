@@ -79,7 +79,19 @@ data class ReferenceImage(
 
 // Emphasis
 
-data class CodeSpan(val text: String) : Node {
+/**
+ * A [Node] that contains plain text.
+ * @see eu.iamgio.quarkdown.util.toPlainText
+ */
+interface PlainTextNode : Node {
+    val text: String
+}
+
+/**
+ * Inline code.
+ * @param text text content
+ */
+data class CodeSpan(override val text: String) : PlainTextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -87,7 +99,7 @@ data class CodeSpan(val text: String) : Node {
  * Plain inline text.
  * @param text text content.
  */
-data class Text(val text: String) : Node {
+data class Text(override val text: String) : PlainTextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 

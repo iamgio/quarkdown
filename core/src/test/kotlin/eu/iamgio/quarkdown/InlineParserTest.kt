@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
+import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
@@ -14,6 +15,7 @@ import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -329,5 +331,27 @@ class InlineParserTest {
         }
 
         assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun plainTextConversion() {
+        val inline: InlineContent =
+            listOf(
+                Text("abc"),
+                Strong(
+                    listOf(
+                        Emphasis(
+                            listOf(
+                                Text("def"),
+                                CodeSpan("ghi"),
+                            ),
+                        ),
+                        CodeSpan("jkl"),
+                    ),
+                ),
+                Text("mno"),
+            )
+
+        assertEquals("abcdefghijklmno", inline.toPlainText())
     }
 }

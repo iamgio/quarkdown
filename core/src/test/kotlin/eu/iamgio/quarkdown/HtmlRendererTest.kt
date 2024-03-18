@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
@@ -67,8 +68,6 @@ class HtmlRendererTest {
     fun image() {
         val out = readParts("inline/image.html")
 
-        /*
-        TODO get correct alt text
         assertEquals(
             out.next(),
             Image(
@@ -80,7 +79,7 @@ class HtmlRendererTest {
             Image(
                 Link(label = listOf(), url = "/url", title = "Title"),
             ).render(),
-        )*/
+        )
     }
 
     @Test

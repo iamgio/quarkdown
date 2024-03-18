@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.rendering.NodeVisitor
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
@@ -63,7 +64,7 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
     override fun visit(node: Image) =
         tagBuilder("img")
             .attribute("src", node.link.url)
-            .attribute("alt", node.link.label) // TODO get as plain text
+            .attribute("alt", node.link.label.toPlainText()) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .void(true)
             .build()
