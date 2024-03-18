@@ -4,7 +4,6 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
-import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
@@ -16,7 +15,6 @@ import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -63,21 +61,21 @@ class InlineParserTest {
         val nodes = inlineIterator<CriticalContent>(readSource("/parsing/inline/entity.md"))
 
         // Decimal
-        assertEquals(35.toChar().toString(), nodes.next().content)
-        assertEquals(1234.toChar().toString(), nodes.next().content)
-        assertEquals(992.toChar().toString(), nodes.next().content)
-        assertEquals(65533.toChar().toString(), nodes.next().content)
+        assertEquals(35.toChar().toString(), nodes.next().text)
+        assertEquals(1234.toChar().toString(), nodes.next().text)
+        assertEquals(992.toChar().toString(), nodes.next().text)
+        assertEquals(65533.toChar().toString(), nodes.next().text)
 
         // Hexadecimal
-        assertEquals(0x22.toChar().toString(), nodes.next().content)
-        assertEquals(0xD06.toChar().toString(), nodes.next().content)
-        assertEquals(0xCAB.toChar().toString(), nodes.next().content)
+        assertEquals(0x22.toChar().toString(), nodes.next().text)
+        assertEquals(0xD06.toChar().toString(), nodes.next().text)
+        assertEquals(0xCAB.toChar().toString(), nodes.next().text)
 
         // HTML
-        assertEquals(" ", nodes.next().content)
-        assertEquals("&", nodes.next().content)
-        assertEquals("©", nodes.next().content)
-        assertEquals("Æ", nodes.next().content)
+        assertEquals(" ", nodes.next().text)
+        assertEquals("&", nodes.next().text)
+        assertEquals("©", nodes.next().text)
+        assertEquals("Æ", nodes.next().text)
     }
 
     @Test
@@ -332,27 +330,5 @@ class InlineParserTest {
         }
 
         assertFalse(nodes.hasNext())
-    }
-
-    @Test
-    fun plainTextConversion() {
-        val inline: InlineContent =
-            listOf(
-                Text("abc"),
-                Strong(
-                    listOf(
-                        Emphasis(
-                            listOf(
-                                Text("def"),
-                                CodeSpan("ghi"),
-                            ),
-                        ),
-                        CodeSpan("jkl"),
-                    ),
-                ),
-                Text("mno"),
-            )
-
-        assertEquals("abcdefghijklmno", inline.toPlainText())
     }
 }

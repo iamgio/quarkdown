@@ -2,8 +2,10 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
+import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
@@ -12,7 +14,8 @@ import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.rendering.html.HtmlNodeRenderer
+import eu.iamgio.quarkdown.rendering.RendererFactory
+import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,7 +29,9 @@ class HtmlRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun Node.render() = this.accept(HtmlNodeRenderer(MutableAstAttributes()))
+    private fun renderer() = RendererFactory.html(MutableAstAttributes())
+
+    private fun Node.render() = this.accept(renderer())
 
     // Inline
 
@@ -42,6 +47,9 @@ class HtmlRendererTest {
 
     @Test
     fun criticalContent() {
+        assertEquals("&amp;", CriticalContent("&").render())
+        assertEquals("&gt;", CriticalContent(">").render())
+        assertEquals("~", CriticalContent("~").render())
     }
 
     @Test
@@ -141,5 +149,30 @@ class HtmlRendererTest {
 
         assertEquals(out.next(), Strikethrough(listOf(Text("Foo bar"))).render())
         assertEquals(out.next(), Strikethrough(listOf(Strong(listOf(Text("Foo bar"))))).render())
+    }
+
+    @Test
+    fun plainTextConversion() {
+        val inline: InlineContent =
+            listOf(
+                Text("abc"),
+                Strong(
+                    listOf(
+                        Emphasis(
+                            listOf(
+                                Text("def"),
+                                CodeSpan("ghi"),
+                            ),
+                        ),
+                        CodeSpan("jkl"),
+                    ),
+                ),
+                Text("mno"),
+                CriticalContent("&"),
+            )
+
+        assertEquals("abcdefghijklmno&", inline.toPlainText())
+        // Critical content is rendered differently
+        assertEquals("abcdefghijklmno&amp;", inline.toPlainText(renderer()))
     }
 }

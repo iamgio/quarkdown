@@ -47,9 +47,15 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             .void(true)
             .build()
 
-    override fun visit(node: CriticalContent): CharSequence {
-        TODO("Not yet implemented")
-    }
+    override fun visit(node: CriticalContent) =
+        when (node.text) {
+            "&" -> "&amp;"
+            "<" -> "&lt;"
+            ">" -> "&gt;"
+            "\"" -> "&quot;"
+            "\'" -> "&#39;"
+            else -> node.text
+        }
 
     override fun visit(node: Link) =
         tagBuilder("a") {
@@ -66,7 +72,7 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
     override fun visit(node: Image) =
         tagBuilder("img")
             .attribute("src", node.link.url)
-            .attribute("alt", node.link.label.toPlainText()) // Emphasis is discarded (CommonMark 6.4)
+            .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .void(true)
             .build()
