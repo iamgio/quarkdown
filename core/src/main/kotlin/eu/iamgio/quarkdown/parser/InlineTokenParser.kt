@@ -144,11 +144,11 @@ class InlineTokenParser(
 
     override fun visit(token: ReferenceLinkToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        val label = groups.next()
+        val label = parseLinkLabelSubContent(groups.next())
         // When the reference is collapsed, the label is the same as the reference label.
         return ReferenceLink(
-            label = parseLinkLabelSubContent(label),
-            reference = groups.nextOrNull() ?: label,
+            label = label,
+            reference = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
             fallback = { Text(token.data.text) },
         )
     }

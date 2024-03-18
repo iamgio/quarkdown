@@ -60,7 +60,7 @@ data class Link(
  */
 data class ReferenceLink(
     val label: InlineContent,
-    val reference: String,
+    val reference: InlineContent,
     val fallback: () -> Node,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

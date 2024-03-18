@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
@@ -8,8 +9,10 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -29,9 +32,9 @@ class HtmlRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer() = RendererFactory.html(MutableAstAttributes())
+    private fun renderer(attributes: AstAttributes = MutableAstAttributes()) = RendererFactory.html(attributes)
 
-    private fun Node.render() = this.accept(renderer())
+    private fun Node.render(attributes: AstAttributes = MutableAstAttributes()) = this.accept(renderer(attributes))
 
     // Inline
 
@@ -72,6 +75,36 @@ class HtmlRendererTest {
 
     @Test
     fun referenceLink() {
+        val out = readParts("inline/reflink.html")
+
+        val label = listOf(Strong(listOf(Text("Foo"))))
+
+        val attributes =
+            MutableAstAttributes(
+                linkDefinitions =
+                    mutableListOf(
+                        LinkDefinition(
+                            label,
+                            url = "/url",
+                            title = "Title",
+                        ),
+                    ),
+            )
+
+        val fallback = { Emphasis(listOf(Text("fallback"))) }
+
+        assertEquals(
+            out.next(),
+            ReferenceLink(label, label, fallback).render(attributes),
+        )
+        assertEquals(
+            out.next(),
+            ReferenceLink(listOf(Text("label")), label, fallback).render(attributes),
+        )
+        assertEquals(
+            out.next(),
+            ReferenceLink(listOf(Text("label")), label, fallback).render(),
+        )
     }
 
     @Test

@@ -126,7 +126,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("label", text)
             }
-            assertEquals("ref", reference)
+            assertEquals(Text("ref"), reference.first())
         }
 
         repeat(2) {
@@ -135,7 +135,7 @@ class InlineParserTest {
                     assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
-                assertEquals("ref", reference)
+                assertEquals(Text("ref"), reference.first())
             }
         }
     }
@@ -174,7 +174,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("label", text)
             }
-            assertEquals("ref", reference)
+            assertEquals(Text("ref"), reference.first())
         }
 
         repeat(2) {
@@ -183,7 +183,7 @@ class InlineParserTest {
                     assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
-                assertEquals("ref", reference)
+                assertEquals(Text("ref"), reference.first())
             }
         }
     }

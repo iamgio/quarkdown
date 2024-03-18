@@ -25,6 +25,6 @@ data class MutableAstAttributes(
  * @return the corresponding link node, if it exists
  */
 fun AstAttributes.resolveLinkReference(reference: ReferenceLink): LinkNode? {
-    return linkDefinitions.firstOrNull { it.label == reference.label }
-        ?.let { Link(it.label, it.url, it.title) }
+    return linkDefinitions.firstOrNull { it.label == reference.reference }
+        ?.let { Link(reference.label, it.url, it.title) }
 }
