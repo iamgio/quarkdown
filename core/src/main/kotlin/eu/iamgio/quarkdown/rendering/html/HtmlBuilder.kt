@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.util.indent
 /**
  * String used to indent nested code.
  */
-private const val INDENT = "  "
+private const val INDENT = "    "
 
 /**
  * A builder of an HTML tag.
