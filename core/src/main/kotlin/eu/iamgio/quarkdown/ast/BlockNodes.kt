@@ -55,15 +55,15 @@ data class Heading(
 
 /**
  * Creation of a link reference.
- * @param label label to be referenced
- * @param url associated URL
- * @param title optional reference title
+ * @param label inline content of the displayed label
+ * @param url URL this link points to
+ * @param title optional title
  */
 data class LinkDefinition(
-    val label: InlineContent,
-    val url: String,
-    val title: String?,
-) : TextNode {
+    override val label: InlineContent,
+    override val url: String,
+    override val title: String?,
+) : LinkNode, TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**

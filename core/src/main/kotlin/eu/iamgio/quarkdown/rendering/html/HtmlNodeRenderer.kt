@@ -76,8 +76,9 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             .build()
 
     override fun visit(node: ReferenceLink) =
-        attributes.resolveLinkReference(node)?.let { visit(it) }
-            ?: node.fallback().accept(this)
+        // The fallback node is rendered if a corresponding definition can't be found.
+        (attributes.resolveLinkReference(node) ?: node.fallback())
+            .accept(this)
 
     override fun visit(node: Image) =
         tagBuilder("img")

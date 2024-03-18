@@ -30,3 +30,25 @@ interface TextNode : Node {
      */
     val text: InlineContent
 }
+
+/**
+ * A general link node.
+ * @see Link
+ * @see LinkDefinition
+ */
+interface LinkNode : Node {
+    /**
+     * Inline content of the displayed label.
+     */
+    val label: InlineContent
+
+    /**
+     * URL this link points to.
+     */
+    val url: String
+
+    /**
+     * Optional title.
+     */
+    val title: String?
+}

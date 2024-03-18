@@ -24,8 +24,7 @@ data class MutableAstAttributes(
  * @param reference reference link to lookup
  * @return the corresponding link node, if it exists
  */
-fun AstAttributes.resolveLinkReference(reference: ReferenceLink): Link? {
-    val definition = linkDefinitions.firstOrNull { it.label == reference.label } ?: return null
-    // TODO make common interface to avoid this
-    return Link(definition.label, definition.url, definition.title)
+fun AstAttributes.resolveLinkReference(reference: ReferenceLink): LinkNode? {
+    return linkDefinitions.firstOrNull { it.label == reference.label }
+        ?.let { Link(it.label, it.url, it.title) }
 }

@@ -45,10 +45,10 @@ data class CriticalContent(override val text: String) : PlainTextNode {
  * @param title optional title
  */
 data class Link(
-    val label: InlineContent,
-    val url: String,
-    val title: String?,
-) : Node {
+    override val label: InlineContent,
+    override val url: String,
+    override val title: String?,
+) : LinkNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
