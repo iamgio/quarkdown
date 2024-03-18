@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.flavor
 
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
@@ -11,17 +12,24 @@ import eu.iamgio.quarkdown.parser.visitor.TokenVisitorAdapter
  */
 interface ParserFactory {
     /**
+     * @param attributes writeable attributes that are modified during the parsing process,
+     *                   and carry useful information for the next stages of the pipeline
      * @return a new [BlockTokenVisitor] instance that parses tokens into [Node]s.
      */
-    fun newBlockParser(): BlockTokenVisitor<Node>
+    fun newBlockParser(attributes: MutableAstAttributes): BlockTokenVisitor<Node>
 
     /**
+     * @param attributes writeable attributes that are modified during the parsing process,
+     *                   and carry useful information for the next stages of the pipeline
      * @return a new [BlockTokenVisitor] instance that parses tokens into [Node]s.
      */
-    fun newInlineParser(): InlineTokenVisitor<Node>
+    fun newInlineParser(attributes: MutableAstAttributes): InlineTokenVisitor<Node>
 
     /**
+     * @param attributes writeable attributes that are modified during the parsing process,
+     *                   and carry useful information for the next stages of the pipeline
      * @return a new [TokenVisitor] instance that includes operations by both [newBlockParser] and [newInlineParser]
      */
-    fun newParser(): TokenVisitor<Node> = TokenVisitorAdapter(newBlockParser(), newInlineParser())
+    fun newParser(attributes: MutableAstAttributes): TokenVisitor<Node> =
+        TokenVisitorAdapter(newBlockParser(attributes), newInlineParser(attributes))
 }

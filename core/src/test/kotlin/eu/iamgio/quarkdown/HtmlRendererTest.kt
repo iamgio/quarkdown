@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
@@ -25,7 +26,7 @@ class HtmlRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun Node.render() = this.accept(HtmlNodeRenderer())
+    private fun Node.render() = this.accept(HtmlNodeRenderer(MutableAstAttributes()))
 
     // Inline
 

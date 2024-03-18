@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
@@ -27,6 +28,7 @@ import eu.iamgio.quarkdown.lexer.FencesCodeToken
 import eu.iamgio.quarkdown.lexer.HeadingToken
 import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
 import eu.iamgio.quarkdown.lexer.ListItemToken
 import eu.iamgio.quarkdown.lexer.MultilineMathToken
@@ -46,16 +48,26 @@ import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 /**
  * A parser for block tokens.
  * @param flavor flavor to use in order to analyze and parse sub-blocks
+ * @param attributes attributes to affect during the parsing process
  */
-class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<Node> {
+class BlockTokenParser(
+    private val flavor: MarkdownFlavor,
+    private val attributes: MutableAstAttributes,
+) : BlockTokenVisitor<Node> {
+    /**
+     * @return the parsed content of the tokenization from [this] lexer
+     */
+    private fun Lexer.tokenizeAndParse(): List<Node> =
+        this.tokenize()
+            .acceptAll(flavor.parserFactory.newParser(attributes))
+
     /**
      * @return [this] raw string tokenized and parsed into processed inline content,
      *                based on this [flavor]'s specifics
      */
     private fun String.toInline(): InlineContent =
         flavor.lexerFactory.newInlineLexer(this)
-            .tokenize()
-            .acceptAll(flavor.parserFactory.newParser())
+            .tokenizeAndParse()
 
     override fun visit(token: NewlineToken): Node {
         return Newline()
@@ -114,17 +126,23 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
 
     override fun visit(token: LinkDefinitionToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return LinkDefinition(
-            text = groups.next().trim().toInline(),
-            url = groups.next().trim(),
-            title =
-                if (groups.hasNext()) {
-                    // Remove first and last character
-                    groups.next().trim().let { it.substring(1, it.length - 1) }.trim()
-                } else {
-                    null
-                },
-        )
+        val definition =
+            LinkDefinition(
+                text = groups.next().trim().toInline(),
+                url = groups.next().trim(),
+                title =
+                    if (groups.hasNext()) {
+                        // Remove first and last character
+                        groups.next().trim().let { it.substring(1, it.length - 1) }.trim()
+                    } else {
+                        null
+                    },
+            )
+
+        // Storing the link definitions for easier lookups.
+        attributes.linkDefinitions += definition
+
+        return definition
     }
 
     /**
@@ -133,8 +151,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
      */
     private fun extractListItems(token: Token) =
         flavor.lexerFactory.newListLexer(source = token.data.text)
-            .tokenize()
-            .acceptAll(flavor.parserFactory.newParser())
+            .tokenizeAndParse()
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
     override fun visit(token: UnorderedListToken): Node {
@@ -190,10 +207,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
             }
 
         // Parsed content.
-        val children =
-            flavor.lexerFactory.newBlockLexer(source = trimmedContent)
-                .tokenize()
-                .acceptAll(flavor.parserFactory.newParser())
+        val children = flavor.lexerFactory.newBlockLexer(source = trimmedContent).tokenizeAndParse()
 
         return when {
             // GFM task list item.
@@ -289,10 +303,7 @@ class BlockTokenParser(private val flavor: MarkdownFlavor) : BlockTokenVisitor<N
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
         return BlockQuote(
-            children =
-                flavor.lexerFactory.newBlockLexer(source = text)
-                    .tokenize()
-                    .acceptAll(flavor.parserFactory.newParser()),
+            children = flavor.lexerFactory.newBlockLexer(source = text).tokenizeAndParse(),
         )
     }
 

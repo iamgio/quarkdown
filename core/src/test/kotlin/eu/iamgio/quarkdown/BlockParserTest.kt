@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -47,7 +48,7 @@ class BlockParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newBlockLexer(source)
-        val parser = flavor.parserFactory.newParser()
+        val parser = flavor.parserFactory.newParser(MutableAstAttributes())
         return nodesIterator(lexer, parser, assertType)
     }
 

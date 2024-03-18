@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -40,7 +41,7 @@ class InlineParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newInlineLexer(source)
-        val parser = flavor.parserFactory.newParser()
+        val parser = flavor.parserFactory.newParser(MutableAstAttributes())
         return nodesIterator(lexer, parser, assertType)
     }
 

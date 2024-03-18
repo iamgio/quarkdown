@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Document
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -28,13 +29,16 @@ fun main(args: Array<String>) {
         Log.debug("Tokens:\n" + DebugFormatter.formatTokens(tokens))
     }
 
-    val parser = flavor.parserFactory.newParser()
+    // Mutable attributes are affected by the parsing stage in order to store useful information.
+    // This allows gathering information on-the-fly without additional visits of the whole tree.
+    val attributes = MutableAstAttributes()
+    val parser = flavor.parserFactory.newParser(attributes)
     val document = Document(children = tokens.acceptAll(parser))
 
     if (Log.isDebug) {
         Log.debug("AST:\n" + DebugFormatter.formatAST(document))
     }
 
-    val renderer = RendererFactory.html()
-    println(renderer.visit(document))
+    val renderer = RendererFactory.html(attributes)
+    Log.info(renderer.visit(document))
 }

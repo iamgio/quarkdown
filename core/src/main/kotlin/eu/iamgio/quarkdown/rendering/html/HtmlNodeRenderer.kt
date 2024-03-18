@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -19,8 +20,9 @@ import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
+ * @param attributes additional attributes of the node tree
  */
-class HtmlNodeRenderer : NodeVisitor<CharSequence> {
+class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<CharSequence> {
     override fun visit(node: AstRoot) =
         "<!DOCTYPE html>\n" +
             buildTag("html") {
