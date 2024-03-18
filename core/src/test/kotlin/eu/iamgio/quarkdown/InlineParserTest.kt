@@ -6,12 +6,12 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
@@ -45,7 +45,7 @@ class InlineParserTest {
     @Test
     fun escape() {
         // EscapeToken is parsed into PlainText.
-        val nodes = inlineIterator<PlainText>(readSource("/parsing/inline/escape.md"))
+        val nodes = inlineIterator<Text>(readSource("/parsing/inline/escape.md"))
 
         assertEquals("#", nodes.next().text)
         assertEquals("!", nodes.next().text)
@@ -83,7 +83,7 @@ class InlineParserTest {
 
         with(nodes.next()) {
             with(label.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
             assertEquals("https://google.com", url)
@@ -93,7 +93,7 @@ class InlineParserTest {
         repeat(2) {
             with(nodes.next()) {
                 with(label.first()) {
-                    assertIs<PlainText>(this)
+                    assertIs<Text>(this)
                     assertEquals("foo", text)
                 }
                 assertEquals("https://google.com", url)
@@ -106,7 +106,7 @@ class InlineParserTest {
             with(nodes.next()) {
                 assertEquals("https://google.com", url)
                 with(label.first()) {
-                    assertIs<PlainText>(this)
+                    assertIs<Text>(this)
                     assertEquals(url, text)
                 }
                 assertNull(title)
@@ -122,7 +122,7 @@ class InlineParserTest {
 
         with(nodes.next()) {
             with(label.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("label", text)
             }
             assertEquals("ref", reference)
@@ -131,7 +131,7 @@ class InlineParserTest {
         repeat(2) {
             with(nodes.next()) {
                 with(label.first()) {
-                    assertIs<PlainText>(this)
+                    assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
                 assertEquals("ref", reference)
@@ -145,7 +145,7 @@ class InlineParserTest {
 
         with(nodes.next().link) {
             with(label.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
             assertEquals("/img", url)
@@ -155,7 +155,7 @@ class InlineParserTest {
         repeat(2) {
             with(nodes.next().link) {
                 with(label.first()) {
-                    assertIs<PlainText>(this)
+                    assertIs<Text>(this)
                     assertEquals("foo", text)
                 }
                 assertEquals("/img", url)
@@ -170,7 +170,7 @@ class InlineParserTest {
 
         with(nodes.next().link) {
             with(label.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("label", text)
             }
             assertEquals("ref", reference)
@@ -179,7 +179,7 @@ class InlineParserTest {
         repeat(2) {
             with(nodes.next().link) {
                 with(label.first()) {
-                    assertIs<PlainText>(this)
+                    assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
                 assertEquals("ref", reference)
@@ -204,8 +204,8 @@ class InlineParserTest {
     fun strikethrough() {
         val nodes = inlineIterator<Strikethrough>(readSource("/parsing/inline/strikethrough.md"), assertType = false)
 
-        assertEquals("foo", (nodes.next().children.first() as PlainText).text)
-        assertEquals("Hi", (nodes.next().children.first() as PlainText).text)
+        assertEquals("foo", (nodes.next().children.first() as Text).text)
+        assertEquals("Hi", (nodes.next().children.first() as Text).text)
     }
 
     @Test
@@ -214,7 +214,7 @@ class InlineParserTest {
 
         with(nodes.next()) {
             with(children.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
         }
@@ -222,23 +222,23 @@ class InlineParserTest {
         with(nodes.next()) {
             val content = children.iterator()
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
             with(content.next()) {
                 assertIs<Emphasis>(this)
-                assertIs<PlainText>(children.first())
-                assertEquals("bar", (children.first() as PlainText).text)
+                assertIs<Text>(children.first())
+                assertEquals("bar", (children.first() as Text).text)
             }
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("baz", text)
             }
         }
 
         with(nodes.next()) {
             with(children.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo_bar_baz", text)
             }
         }
@@ -268,7 +268,7 @@ class InlineParserTest {
 
         with(nodes.next()) {
             with(children.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
         }
@@ -276,23 +276,23 @@ class InlineParserTest {
         with(nodes.next()) {
             val content = children.iterator()
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
             with(content.next()) {
                 assertIs<Strong>(this)
-                assertIs<PlainText>(children.first())
-                assertEquals("bar", (children.first() as PlainText).text)
+                assertIs<Text>(children.first())
+                assertEquals("bar", (children.first() as Text).text)
             }
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("baz", text)
             }
         }
 
         with(nodes.next()) {
             with(children.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo_bar_baz", text)
             }
         }
@@ -306,7 +306,7 @@ class InlineParserTest {
 
         with(nodes.next()) {
             with(children.first()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
         }
@@ -314,16 +314,16 @@ class InlineParserTest {
         with(nodes.next()) {
             val content = children.iterator()
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("foo", text)
             }
             with(content.next()) {
                 assertIs<Emphasis>(this)
-                assertIs<PlainText>(children.first())
-                assertEquals("bar", (children.first() as PlainText).text)
+                assertIs<Text>(children.first())
+                assertEquals("bar", (children.first() as Text).text)
             }
             with(content.next()) {
-                assertIs<PlainText>(this)
+                assertIs<Text>(this)
                 assertEquals("baz", text)
             }
         }

@@ -2,9 +2,42 @@
 
 package eu.iamgio.quarkdown.parser
 
-import eu.iamgio.quarkdown.ast.*
+import eu.iamgio.quarkdown.ast.CodeSpan
+import eu.iamgio.quarkdown.ast.Comment
+import eu.iamgio.quarkdown.ast.CriticalContent
+import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Image
+import eu.iamgio.quarkdown.ast.InlineContent
+import eu.iamgio.quarkdown.ast.LineBreak
+import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.ReferenceImage
+import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.ast.Strikethrough
+import eu.iamgio.quarkdown.ast.Strong
+import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
-import eu.iamgio.quarkdown.lexer.*
+import eu.iamgio.quarkdown.lexer.CodeSpanToken
+import eu.iamgio.quarkdown.lexer.CommentToken
+import eu.iamgio.quarkdown.lexer.CriticalContentToken
+import eu.iamgio.quarkdown.lexer.DiamondAutolinkToken
+import eu.iamgio.quarkdown.lexer.EmphasisToken
+import eu.iamgio.quarkdown.lexer.EntityToken
+import eu.iamgio.quarkdown.lexer.EscapeToken
+import eu.iamgio.quarkdown.lexer.ImageToken
+import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.LineBreakToken
+import eu.iamgio.quarkdown.lexer.LinkToken
+import eu.iamgio.quarkdown.lexer.PlainTextToken
+import eu.iamgio.quarkdown.lexer.ReferenceImageToken
+import eu.iamgio.quarkdown.lexer.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.StrikethroughToken
+import eu.iamgio.quarkdown.lexer.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.StrongToken
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
+import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
@@ -45,7 +78,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
 
     override fun visit(token: EscapeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return PlainText(text = groups.next())
+        return Text(text = groups.next())
     }
 
     override fun visit(token: EntityToken): Node {
@@ -110,7 +143,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
         return ReferenceLink(
             label = parseLinkLabelSubContent(label),
             reference = groups.nextOrNull() ?: label,
-            fallback = { PlainText(token.data.text) },
+            fallback = { Text(token.data.text) },
         )
     }
 
@@ -123,7 +156,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     override fun visit(token: UrlAutolinkToken): Node {
         val url = token.data.text.trim()
         return Link(
-            label = listOf(PlainText(url)),
+            label = listOf(Text(url)),
             url = url,
             title = null,
         )
@@ -158,7 +191,7 @@ class InlineTokenParser(private val flavor: MarkdownFlavor) : InlineTokenVisitor
     }
 
     override fun visit(token: PlainTextToken): Node {
-        return PlainText(token.data.text)
+        return Text(token.data.text)
     }
 
     /**

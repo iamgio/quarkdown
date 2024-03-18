@@ -8,12 +8,12 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.rendering.NodeVisitor
 
 /**
@@ -72,7 +72,7 @@ class HtmlNodeRenderer : NodeVisitor<CharSequence> {
         TODO("Not yet implemented")
     }
 
-    override fun visit(node: PlainText) = node.text
+    override fun visit(node: Text) = node.text
 
     override fun visit(node: CodeSpan) = buildTag("code", node.text)
 

@@ -8,12 +8,12 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Text
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.
@@ -40,7 +40,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: ReferenceImage): T
 
-    fun visit(node: PlainText): T
+    fun visit(node: Text): T
 
     fun visit(node: CodeSpan): T
 

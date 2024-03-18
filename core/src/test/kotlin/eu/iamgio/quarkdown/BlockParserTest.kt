@@ -16,9 +16,9 @@ import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
@@ -54,7 +54,7 @@ class BlockParserTest {
     private val TextNode.rawText: String
         get() {
             if (text.size == 1) {
-                (text.first() as? PlainText)?.let {
+                (text.first() as? Text)?.let {
                     return it.text
                 }
             }
@@ -300,32 +300,32 @@ class BlockParserTest {
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(PlainText("foo"), header.text.first())
+                assertEquals(Text("foo"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(PlainText("abc"), cells[0].text.first())
-                assertEquals(PlainText("ghi"), cells[1].text.first())
+                assertEquals(Text("abc"), cells[0].text.first())
+                assertEquals(Text("ghi"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(PlainText("bar"), header.text.first())
+                assertEquals(Text("bar"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(PlainText("def"), cells[0].text.first())
-                assertEquals(PlainText("jkl"), cells[1].text.first())
+                assertEquals(Text("def"), cells[0].text.first())
+                assertEquals(Text("jkl"), cells[1].text.first())
             }
         }
 
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.CENTER, alignment)
-                assertEquals(PlainText("abc"), header.text.first())
+                assertEquals(Text("abc"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(PlainText("bar"), cells.first().text.first())
+                assertEquals(Text("bar"), cells.first().text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.RIGHT, alignment)
-                assertEquals(PlainText("defghi"), header.text.first())
+                assertEquals(Text("defghi"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(PlainText("baz"), cells.first().text.first())
+                assertEquals(Text("baz"), cells.first().text.first())
             }
         }
 
@@ -340,17 +340,17 @@ class BlockParserTest {
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(PlainText("abc"), header.text.first())
+                assertEquals(Text("abc"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(PlainText("bar"), cells[0].text.first())
-                assertEquals(PlainText("bar"), cells[1].text.first())
+                assertEquals(Text("bar"), cells[0].text.first())
+                assertEquals(Text("bar"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.LEFT, alignment)
-                assertEquals(PlainText("def"), header.text.first())
+                assertEquals(Text("def"), header.text.first())
                 assertEquals(2, cells.size)
                 assertTrue(cells[0].text.isEmpty())
-                assertEquals(PlainText("baz"), cells[1].text.first())
+                assertEquals(Text("baz"), cells[1].text.first())
             }
 
             assertFalse(hasNext())

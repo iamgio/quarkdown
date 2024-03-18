@@ -87,7 +87,7 @@ data class CodeSpan(val text: String) : Node {
  * Plain inline text.
  * @param text text content.
  */
-data class PlainText(val text: String) : Node {
+data class Text(val text: String) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 

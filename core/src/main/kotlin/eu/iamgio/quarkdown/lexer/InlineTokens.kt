@@ -138,7 +138,7 @@ class CommentToken(data: TokenData) : Token(data) {
 
 /**
  * Text content.
- * @see eu.iamgio.quarkdown.ast.PlainText
+ * @see eu.iamgio.quarkdown.ast.Text
  */
 class PlainTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)

@@ -6,9 +6,9 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.PlainText
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.rendering.html.HtmlNodeRenderer
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,15 +47,15 @@ class HtmlRendererTest {
 
         assertEquals(
             out.next(),
-            Link(label = listOf(PlainText("Foo bar")), url = "https://google.com", title = null).render(),
+            Link(label = listOf(Text("Foo bar")), url = "https://google.com", title = null).render(),
         )
         assertEquals(
             out.next(),
-            Link(label = listOf(Strong(listOf(PlainText("Foo bar")))), url = "/url", title = null).render(),
+            Link(label = listOf(Strong(listOf(Text("Foo bar")))), url = "/url", title = null).render(),
         )
         assertEquals(
             out.next(),
-            Link(label = listOf(PlainText("Foo bar baz")), url = "url", title = "Title").render(),
+            Link(label = listOf(Text("Foo bar baz")), url = "url", title = "Title").render(),
         )
     }
 
@@ -88,7 +88,7 @@ class HtmlRendererTest {
     }
 
     @Test
-    fun plainText() {
+    fun text() {
     }
 
     @Test
@@ -102,23 +102,23 @@ class HtmlRendererTest {
     fun emphasis() {
         val out = readParts("inline/emphasis.html")
 
-        assertEquals(out.next(), Emphasis(listOf(PlainText("Foo bar"))).render())
-        assertEquals(out.next(), Emphasis(listOf(Emphasis(listOf(PlainText("Foo bar"))))).render())
+        assertEquals(out.next(), Emphasis(listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Emphasis(listOf(Emphasis(listOf(Text("Foo bar"))))).render())
     }
 
     @Test
     fun strong() {
         val out = readParts("inline/strong.html")
 
-        assertEquals(out.next(), Strong(listOf(PlainText("Foo bar"))).render())
-        assertEquals(out.next(), Strong(listOf(Strong(listOf(PlainText("Foo bar"))))).render())
+        assertEquals(out.next(), Strong(listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Strong(listOf(Strong(listOf(Text("Foo bar"))))).render())
     }
 
     @Test
     fun strongEmphasis() {
         val out = readParts("inline/strongemphasis.html")
 
-        assertEquals(out.next(), StrongEmphasis(listOf(PlainText("Foo bar"))).render())
-        assertEquals(out.next(), StrongEmphasis(listOf(StrongEmphasis(listOf(PlainText("Foo bar"))))).render())
+        assertEquals(out.next(), StrongEmphasis(listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), StrongEmphasis(listOf(StrongEmphasis(listOf(Text("Foo bar"))))).render())
     }
 }
