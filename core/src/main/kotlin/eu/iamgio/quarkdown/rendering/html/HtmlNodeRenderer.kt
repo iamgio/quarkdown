@@ -9,12 +9,16 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.Newline
+import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.resolveLinkReference
 import eu.iamgio.quarkdown.rendering.NodeVisitor
 import eu.iamgio.quarkdown.util.toPlainText
 
@@ -37,6 +41,12 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             }
 
     // Block
+
+    override fun visit(node: Newline) = ""
+
+    override fun visit(node: LinkDefinition) = "" // Not rendered
+
+    override fun visit(node: Paragraph) = buildTag("p", node.text)
 
     // Inline
 
@@ -65,9 +75,9 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             .optionalAttribute("title", node.title)
             .build()
 
-    override fun visit(node: ReferenceLink): CharSequence {
-        TODO("Not yet implemented")
-    }
+    override fun visit(node: ReferenceLink) =
+        attributes.resolveLinkReference(node)?.let { visit(it) }
+            ?: node.fallback().accept(this)
 
     override fun visit(node: Image) =
         tagBuilder("img")

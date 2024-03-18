@@ -8,6 +8,9 @@ import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.Newline
+import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
@@ -23,6 +26,12 @@ interface NodeVisitor<T> {
     fun visit(node: AstRoot): T
 
     // Block
+
+    fun visit(node: Newline): T
+
+    fun visit(node: LinkDefinition): T
+
+    fun visit(node: Paragraph): T
 
     // Inline
 

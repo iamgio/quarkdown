@@ -128,7 +128,7 @@ class BlockTokenParser(
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val definition =
             LinkDefinition(
-                text = groups.next().trim().toInline(),
+                label = groups.next().trim().toInline(),
                 url = groups.next().trim(),
                 title =
                     if (groups.hasNext()) {

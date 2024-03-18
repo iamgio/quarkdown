@@ -21,8 +21,8 @@ fun main(args: Array<String>) {
 
     val sourceFile = File(args.first())
 
-    // val lexer = flavor.lexerFactory.newBlockLexer(sourceFile.readText())
-    val lexer = flavor.lexerFactory.newInlineLexer(sourceFile.readText())
+    val lexer = flavor.lexerFactory.newBlockLexer(sourceFile.readText())
+    // val lexer = flavor.lexerFactory.newInlineLexer(sourceFile.readText())
     val tokens = lexer.tokenize()
 
     if (Log.isDebug) {

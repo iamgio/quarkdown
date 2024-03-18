@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.rendering.NodeVisitor
 class Newline : Node {
     override fun toString() = "Newline"
 
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -55,16 +55,22 @@ data class Heading(
 
 /**
  * Creation of a link reference.
- * @param text label to be referenced
+ * @param label label to be referenced
  * @param url associated URL
  * @param title optional reference title
  */
 data class LinkDefinition(
-    override val text: InlineContent,
+    val label: InlineContent,
     val url: String,
     val title: String?,
 ) : TextNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    /**
+     * Alias for [label].
+     */
+    override val text: InlineContent
+        get() = label
 }
 
 /**
@@ -181,7 +187,7 @@ data class Table(
 data class Paragraph(
     override val text: InlineContent,
 ) : TextNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

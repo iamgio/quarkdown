@@ -19,3 +19,13 @@ interface AstAttributes {
 data class MutableAstAttributes(
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
 ) : AstAttributes
+
+/**
+ * @param reference reference link to lookup
+ * @return the corresponding link node, if it exists
+ */
+fun AstAttributes.resolveLinkReference(reference: ReferenceLink): Link? {
+    val definition = linkDefinitions.firstOrNull { it.label == reference.label } ?: return null
+    // TODO make common interface to avoid this
+    return Link(definition.label, definition.url, definition.title)
+}
