@@ -71,7 +71,7 @@ data class ReferenceLink(
  * @param link the link the image points to
  */
 data class Image(
-    val link: Link,
+    val link: LinkNode,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

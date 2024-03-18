@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
@@ -139,6 +140,36 @@ class HtmlRendererTest {
 
     @Test
     fun referenceImage() {
+        val out = readParts("inline/refimage.html")
+
+        val label = listOf(Text("Foo"))
+
+        val attributes =
+            MutableAstAttributes(
+                linkDefinitions =
+                    mutableListOf(
+                        LinkDefinition(
+                            label,
+                            url = "/url",
+                            title = "Title",
+                        ),
+                    ),
+            )
+
+        val fallback = { Emphasis(listOf(Text("fallback"))) }
+
+        assertEquals(
+            out.next(),
+            ReferenceImage(ReferenceLink(label, label, fallback)).render(attributes),
+        )
+        assertEquals(
+            out.next(),
+            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(attributes),
+        )
+        assertEquals(
+            out.next(),
+            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(),
+        )
     }
 
     @Test

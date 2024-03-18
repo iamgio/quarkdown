@@ -88,9 +88,9 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             .void(true)
             .build()
 
-    override fun visit(node: ReferenceImage): CharSequence {
-        TODO("Not yet implemented")
-    }
+    override fun visit(node: ReferenceImage) =
+        (attributes.resolveLinkReference(node.link)?.let { Image(it) } ?: node.link.fallback())
+            .accept(this)
 
     override fun visit(node: Text) = node.text
 
