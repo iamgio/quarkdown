@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
@@ -12,6 +13,7 @@ import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
@@ -238,5 +240,24 @@ class HtmlRendererTest {
         assertEquals("abcdefghijklmno&", inline.toPlainText())
         // Critical content is rendered differently
         assertEquals("abcdefghijklmno&amp;", inline.toPlainText(renderer()))
+    }
+
+    // Block
+
+    @Test
+    fun code() {
+        val out = readParts("block/code.html")
+
+        assertEquals(out.next(), Code("Code", language = null).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java").render())
+    }
+
+    @Test
+    fun paragraph() {
+        val out = readParts("block/paragraph.html")
+
+        assertEquals(out.next(), Paragraph(listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar"))).render())
     }
 }

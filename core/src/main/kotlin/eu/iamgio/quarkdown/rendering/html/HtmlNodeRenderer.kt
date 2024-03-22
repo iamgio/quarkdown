@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
@@ -43,6 +44,16 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
     // Block
 
     override fun visit(node: Newline) = ""
+
+    override fun visit(node: Code) =
+        buildTag("pre") {
+            tag("code") {
+                // TODO escape critical content
+                // TODO don't indent output code
+                +node.content
+            }
+                .optionalAttribute("class", node.language?.let { "language-$it" })
+        }
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 

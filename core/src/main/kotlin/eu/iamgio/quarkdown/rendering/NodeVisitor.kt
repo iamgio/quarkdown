@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
@@ -28,6 +29,8 @@ interface NodeVisitor<T> {
     // Block
 
     fun visit(node: Newline): T
+
+    fun visit(node: Code): T
 
     fun visit(node: LinkDefinition): T
 
