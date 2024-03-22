@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.Newline
+import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -20,6 +21,7 @@ import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.UnorderedList
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.
@@ -39,6 +41,10 @@ interface NodeVisitor<T> {
     fun visit(node: Heading): T
 
     fun visit(node: LinkDefinition): T
+
+    fun visit(node: OrderedList): T
+
+    fun visit(node: UnorderedList): T
 
     fun visit(node: Paragraph): T
 

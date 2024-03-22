@@ -92,7 +92,7 @@ data class UnorderedList(
     override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -106,7 +106,7 @@ data class OrderedList(
     override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

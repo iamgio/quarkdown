@@ -157,6 +157,18 @@ fun HtmlNodeRenderer.tagBuilder(
 ) = HtmlBuilder(name, renderer = this).also(init)
 
 /**
+ * A quick way to create a simple HTML tag builder.
+ * @param name tag name
+ * @param content nodes to render as HTML within the tag
+ * @return the new builder
+ * @see tagBuilder
+ */
+fun HtmlNodeRenderer.tagBuilder(
+    name: String,
+    content: List<Node>,
+) = tagBuilder(name) { +content }
+
+/**
  * Builds an HTML tag.
  * @param name tag name
  * @param init action to run at initialization
@@ -173,7 +185,7 @@ fun HtmlNodeRenderer.buildTag(
  * @param name tag name
  * @param content nodes to render as HTML within the tag
  * @return HTML code of the tag
- * @see tagBuilder
+ * @see buildTag
  */
 fun HtmlNodeRenderer.buildTag(
     name: String,
@@ -185,7 +197,7 @@ fun HtmlNodeRenderer.buildTag(
  * @param name tag name
  * @param content string content of the tag
  * @return HTML code of the tag
- * @see tagBuilder
+ * @see buildTag
  */
 fun HtmlNodeRenderer.buildTag(
     name: String,
