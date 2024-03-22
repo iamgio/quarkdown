@@ -60,7 +60,7 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
     }
 
     /**
-     * Sets whether this tag is void.
+     * Sets whether this tag is void (without a closing tag).
      * @param isVoid whether the tag does not expect a closing tag
      * @return this for concatenation
      */
@@ -88,14 +88,14 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
             attributes.entries.forEach { (key, value) ->
                 append(" $key=\"$value\"")
             }
-            append(">")
 
             // If this is a void tag, neither content nor closing tag is expected.
             if (isVoid) {
+                append(" />")
                 return@buildString
             }
 
-            append("\n")
+            append(">\n")
 
             // Indented text content.
             append(content.indent(INDENT))

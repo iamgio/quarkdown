@@ -49,7 +49,7 @@ class HtmlRendererTest {
 
     @Test
     fun lineBreak() {
-        assertEquals("<br>", LineBreak().render())
+        assertEquals("<br />", LineBreak().render())
     }
 
     @Test
@@ -256,7 +256,7 @@ class HtmlRendererTest {
 
     @Test
     fun horizontalRule() {
-        assertEquals("<hr>", HorizontalRule().render())
+        assertEquals("<hr />", HorizontalRule().render())
     }
 
     @Test
