@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
@@ -54,6 +55,11 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             }
                 .optionalAttribute("class", node.language?.let { "language-$it" })
         }
+
+    override fun visit(node: HorizontalRule) =
+        tagBuilder("hr")
+            .void(true)
+            .build()
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 

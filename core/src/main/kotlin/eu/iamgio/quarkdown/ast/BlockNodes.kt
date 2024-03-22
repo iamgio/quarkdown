@@ -39,7 +39,7 @@ data class Math(
 class HorizontalRule : Node {
     override fun toString() = "HorizontalRule"
 
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

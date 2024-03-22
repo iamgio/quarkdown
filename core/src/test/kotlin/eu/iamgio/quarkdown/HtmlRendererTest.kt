@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
@@ -251,6 +252,11 @@ class HtmlRendererTest {
         assertEquals(out.next(), Code("Code", language = null).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java").render())
+    }
+
+    @Test
+    fun horizontalRule() {
+        assertEquals("<hr>", HorizontalRule().render())
     }
 
     @Test
