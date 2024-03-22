@@ -50,7 +50,7 @@ data class Heading(
     val depth: Int,
     override val text: InlineContent,
 ) : TextNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
@@ -257,6 +258,16 @@ class HtmlRendererTest {
     @Test
     fun horizontalRule() {
         assertEquals("<hr />", HorizontalRule().render())
+    }
+
+    @Test
+    fun heading() {
+        val out = readParts("block/heading.html")
+
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render())
+        assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render())
+        assertEquals(out.next(), Heading(4, listOf(Text("Foo "), Emphasis(listOf(Text("bar"))))).render())
     }
 
     @Test

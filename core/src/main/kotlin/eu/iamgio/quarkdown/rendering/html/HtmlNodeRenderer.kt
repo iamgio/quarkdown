@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
@@ -60,6 +61,8 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
         tagBuilder("hr")
             .void(true)
             .build()
+
+    override fun visit(node: Heading) = buildTag("h${node.depth}", node.text)
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 

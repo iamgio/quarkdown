@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
@@ -34,6 +35,8 @@ interface NodeVisitor<T> {
     fun visit(node: Code): T
 
     fun visit(node: HorizontalRule): T
+
+    fun visit(node: Heading): T
 
     fun visit(node: LinkDefinition): T
 
