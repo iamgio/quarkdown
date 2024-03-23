@@ -152,7 +152,7 @@ data class TaskListItem(
 data class Html(
     val content: String,
 ) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

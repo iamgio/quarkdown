@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
@@ -51,6 +52,8 @@ interface NodeVisitor<T> {
     fun visit(node: BaseListItem): T
 
     fun visit(node: TaskListItem): T
+
+    fun visit(node: Html): T
 
     fun visit(node: Paragraph): T
 

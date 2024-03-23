@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
@@ -114,6 +115,8 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
 
             appendListItemContent(node)
         }
+
+    override fun visit(node: Html) = node.content
 
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 

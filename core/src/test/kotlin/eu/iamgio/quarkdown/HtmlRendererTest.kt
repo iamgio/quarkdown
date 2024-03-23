@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
+import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
@@ -367,6 +368,11 @@ class HtmlRendererTest {
                 .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
                 .render(),
         )
+    }
+
+    @Test
+    fun html() {
+        assertEquals("<p><strong>test</p></strong>", Html("<p><strong>test</p></strong>").render())
     }
 
     @Test
