@@ -41,7 +41,7 @@ $ This is a LaTeX expression $
 
 ## Status
 
-The project is under development. Currently parsed:
+The project is under development. Currently supported:
 
 - Base Markdown blocks
   - [x] Paragraphs
@@ -74,5 +74,5 @@ The project is under development. Currently parsed:
   - [ ] Subscript/superscript
 
 - Rendering
-  - [ ] HTML
-  - [ ] LaTeX?
+  - [x] HTML
+  - [ ] LaTeX (in the future...)
