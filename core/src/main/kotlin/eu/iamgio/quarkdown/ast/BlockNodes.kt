@@ -206,7 +206,7 @@ data class Paragraph(
 data class BlockQuote(
     override val children: List<Node>,
 ) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

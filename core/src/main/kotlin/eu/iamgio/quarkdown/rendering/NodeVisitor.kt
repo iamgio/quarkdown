@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
+import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -56,6 +57,8 @@ interface NodeVisitor<T> {
     fun visit(node: Html): T
 
     fun visit(node: Paragraph): T
+
+    fun visit(node: BlockQuote): T
 
     // Inline
 

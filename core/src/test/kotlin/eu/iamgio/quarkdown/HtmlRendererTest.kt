@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.BaseListItem
+import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -381,5 +382,20 @@ class HtmlRendererTest {
 
         assertEquals(out.next(), Paragraph(listOf(Text("Foo bar"))).render())
         assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar"))).render())
+    }
+
+    @Test
+    fun blockquote() {
+        val out = readParts("block/blockquote.html")
+
+        assertEquals(
+            out.next(),
+            BlockQuote(
+                listOf(
+                    Paragraph(listOf(Text("Foo bar"))),
+                    Paragraph(listOf(Text("Baz bim"))),
+                ),
+            ).render(),
+        )
     }
 }
