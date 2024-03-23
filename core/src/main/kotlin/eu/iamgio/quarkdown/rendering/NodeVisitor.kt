@@ -24,6 +24,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
@@ -56,6 +57,8 @@ interface NodeVisitor<T> {
     fun visit(node: TaskListItem): T
 
     fun visit(node: Html): T
+
+    fun visit(node: Table): T
 
     fun visit(node: Paragraph): T
 

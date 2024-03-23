@@ -26,6 +26,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
@@ -394,6 +395,63 @@ class HtmlRendererTest {
                 listOf(
                     Paragraph(listOf(Text("Foo bar"))),
                     Paragraph(listOf(Text("Baz bim"))),
+                ),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun table() {
+        val out = readParts("block/table.html")
+
+        assertEquals(
+            out.next(),
+            Table(
+                listOf(
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("A"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("C"))),
+                                Table.Cell(listOf(Text("E"))),
+                            ),
+                    ),
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("B"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("D"))),
+                                Table.Cell(listOf(Text("F"))),
+                            ),
+                    ),
+                ),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Table(
+                listOf(
+                    Table.Column(
+                        Table.Alignment.CENTER,
+                        header = Table.Cell(listOf(Text("A"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("C"))),
+                                Table.Cell(listOf(Text("E"))),
+                            ),
+                    ),
+                    Table.Column(
+                        Table.Alignment.RIGHT,
+                        header = Table.Cell(listOf(Text("B"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("D"))),
+                                Table.Cell(listOf(Strong(listOf(Text("F"))))),
+                            ),
+                    ),
                 ),
             ).render(),
         )

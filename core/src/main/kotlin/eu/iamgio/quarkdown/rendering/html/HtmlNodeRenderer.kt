@@ -26,6 +26,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
@@ -119,6 +120,35 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
         }
 
     override fun visit(node: Html) = node.content
+
+    override fun visit(node: Table) =
+        buildTag("table") {
+            // Tables are stored by columns and here transposed to a row-based structure.
+            val header = tag("thead")
+            val headerRow = header.tag("tr")
+            val body = tag("tbody")
+            val bodyRows = mutableListOf<HtmlBuilder>()
+
+            node.columns.forEach { column ->
+                // Value to assign to the 'align' attribute for each cell of this column.
+                val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.name?.lowercase()
+
+                // Header cell.
+                headerRow.tag("th", column.header.text)
+                    .optionalAttribute("align", alignment)
+
+                // Body cells.
+                column.cells.forEachIndexed { index, cell ->
+                    // Adding a new row if needed.
+                    if (index >= bodyRows.size) {
+                        bodyRows += body.tag("tr")
+                    }
+                    // Adding a cell.
+                    bodyRows[index].tag("td", cell.text)
+                        .optionalAttribute("align", alignment)
+                }
+            }
+        }
 
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 

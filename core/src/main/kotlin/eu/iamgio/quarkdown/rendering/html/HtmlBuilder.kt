@@ -212,3 +212,14 @@ fun HtmlNodeRenderer.buildTag(
     name: String,
     content: String,
 ) = buildTag(name) { +content }
+
+/**
+ * Appends a sub-tag.
+ * @param name name of the tag
+ * @param content nodes to render as HTML within the tag
+ * @return this for concatenation
+ */
+fun HtmlBuilder.tag(
+    name: String,
+    content: List<Node>,
+) = tag(name) { +content }
