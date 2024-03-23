@@ -31,14 +31,21 @@ import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.resolveLinkReference
+import eu.iamgio.quarkdown.rendering.NodeRenderer
+import eu.iamgio.quarkdown.rendering.buildTag
+import eu.iamgio.quarkdown.rendering.tagBuilder
 import eu.iamgio.quarkdown.util.toPlainText
-import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
  * @param attributes additional attributes of the node tree
  */
-class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<CharSequence> {
+class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlBuilder>() {
+    override fun createBuilder(
+        name: String,
+        pretty: Boolean,
+    ) = HtmlBuilder(name, renderer = this, pretty)
+
     override fun visit(node: AstRoot) =
         "<!DOCTYPE html>\n" +
             buildTag("html") {

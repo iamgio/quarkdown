@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.isPrettyOutputEnabled
+import eu.iamgio.quarkdown.rendering.RenderBuilder
+import eu.iamgio.quarkdown.rendering.tagBuilder
 import eu.iamgio.quarkdown.util.indent
 
 /**
@@ -12,25 +12,32 @@ private const val INDENT = "    "
 
 /**
  * A builder of an HTML tag.
- * @param name name of the root tag
- * @param renderer node renderer, used to add nodes directly to the code
+ *
+ * Example:
+ * ```
+ * val builder = tagBuilder("html") {
+ *     tag("head") {
+ *         tag("meta")
+ *             .attribute("charset", "UTF-8")
+ *             .void(true)
+ *     }
+ *     tag("body") {
+ *         +node.children
+ *     }
+ * ```
+ *
+ * @see RenderBuilder
  * @see tagBuilder
  */
-class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRenderer, private val pretty: Boolean) {
-    /**
-     * Sub-builders for nested tags.
-     */
-    private val builders = mutableListOf<HtmlBuilder>()
-
+class HtmlBuilder(
+    private val name: String,
+    private val renderer: HtmlNodeRenderer,
+    private val pretty: Boolean,
+) : RenderBuilder(name, renderer, pretty) {
     /**
      * Attributes of the tag.
      */
     private val attributes = mutableMapOf<String, Any>()
-
-    /**
-     * Text content of the tag.
-     */
-    private val content = StringBuilder()
 
     /**
      * Whether the tag does not expect a closing tag.
@@ -69,20 +76,9 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
     fun void(isVoid: Boolean) = apply { this.isVoid = isVoid }
 
     /**
-     * Appends a sub-tag.
-     * @param name name of the tag
-     * @param init action to run at initialization
-     * @return this for concatenation
-     */
-    fun tag(
-        name: String,
-        init: HtmlBuilder.() -> Unit = {},
-    ) = renderer.tagBuilder(name, this.pretty, init).also { builders += it }
-
-    /**
      * @return this builder and its nested content into stringified HTML code.
      */
-    fun build(): String =
+    override fun build(): String =
         buildString {
             fun CharSequence.indent() = if (pretty) this.indent(INDENT) else this
 
@@ -119,117 +115,30 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
             append(">")
         }
 
-    /**
-     * Appends a string value to this tag's content.
-     * Usage: `+"Some string"`
-     */
-    operator fun CharSequence.unaryPlus() {
-        content.append(this)
-        if (pretty) content.append("\n")
+    override fun append(content: CharSequence) {
+        super.content.append(content)
+        if (pretty) super.content.append("\n")
     }
 
     /**
-     * Appends a node to this tag's content.
-     * Their string representation is given by this [HtmlBuilder]'s [renderer].
-     * Usage: `+someNode`
+     * Appends a sub-tag.
+     * @param name name of the tag
+     * @param init action to run at initialization
+     * @return this for concatenation
      */
-    operator fun Node.unaryPlus() {
-        +this.accept(renderer)
-    }
+    fun tag(
+        name: String,
+        init: HtmlBuilder.() -> Unit = {},
+    ) = renderer.tagBuilder(name, pretty, init).also { builders += it }
 
     /**
-     * Appends a sequence of nodes to this tag's content.
-     * Their string representation is given by this [HtmlBuilder]'s [renderer].
-     * Usage: `+someNode.children`
+     * Appends a sub-tag.
+     * @param name name of the tag
+     * @param content nodes to render as HTML within the tag
+     * @return this for concatenation
      */
-    operator fun List<Node>.unaryPlus() {
-        forEach { +it }
-    }
+    fun tag(
+        name: String,
+        content: List<Node>,
+    ) = tag(name) { +content }
 }
-
-/**
- * Creates an HTML tag builder.
- *
- * Example:
- * ```
- * val builder = tagBuilder("html") {
- *     tag("head") {
- *         tag("meta")
- *             .attribute("charset", "UTF-8")
- *             .void(true)
- *     }
- *     tag("body") {
- *         +node.children
- *     }
- * ```
- *
- *
- * @param name tag name
- * @param pretty whether the output code should be pretty
- * @param init action to run at initialization
- * @return the new builder
- */
-fun HtmlNodeRenderer.tagBuilder(
-    name: String,
-    pretty: Boolean = SystemProperties.isPrettyOutputEnabled,
-    init: HtmlBuilder.() -> Unit = {},
-) = HtmlBuilder(name, renderer = this, pretty).also(init)
-
-/**
- * A quick way to create a simple HTML tag builder.
- * @param name tag name
- * @param content nodes to render as HTML within the tag
- * @return the new builder
- * @see tagBuilder
- */
-fun HtmlNodeRenderer.tagBuilder(
-    name: String,
-    content: List<Node>,
-) = tagBuilder(name) { +content }
-
-/**
- * Builds an HTML tag.
- * @param name tag name
- * @param init action to run at initialization
- * @return HTML code of the tag
- * @see tagBuilder
- */
-fun HtmlNodeRenderer.buildTag(
-    name: String,
-    init: HtmlBuilder.() -> Unit,
-) = tagBuilder(name, init = init).build()
-
-/**
- * A quick way to build a simple HTML tag.
- * @param name tag name
- * @param content nodes to render as HTML within the tag
- * @return HTML code of the tag
- * @see buildTag
- */
-fun HtmlNodeRenderer.buildTag(
-    name: String,
-    content: List<Node>,
-) = buildTag(name) { +content }
-
-/**
- * A quick way to build a simple HTML tag.
- * @param name tag name
- * @param content string content of the tag
- * @return HTML code of the tag
- * @see buildTag
- */
-fun HtmlNodeRenderer.buildTag(
-    name: String,
-    content: String,
-) = buildTag(name) { +content }
-
-/**
- * Appends a sub-tag.
- * @param name name of the tag
- * @param content nodes to render as HTML within the tag
- * @return this for concatenation
- */
-fun HtmlBuilder.tag(
-    name: String,
-    content: List<Node>,
-) = tag(name) { +content }

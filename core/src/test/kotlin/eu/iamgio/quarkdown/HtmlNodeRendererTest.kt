@@ -39,7 +39,7 @@ import kotlin.test.assertEquals
 /**
  * HTML node rendering tests.
  */
-class HtmlRendererTest {
+class HtmlNodeRendererTest {
     private fun readParts(path: String) =
         readSource("/rendering/$path")
             .split("\n---\n")
