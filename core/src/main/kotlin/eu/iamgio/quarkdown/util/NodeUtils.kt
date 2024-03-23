@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.PlainTextNode
-import eu.iamgio.quarkdown.rendering.NodeVisitor
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * Converts processed [InlineContent] to its plain text representation.

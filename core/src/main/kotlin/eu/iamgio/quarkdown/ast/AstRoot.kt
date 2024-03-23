@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
-import eu.iamgio.quarkdown.rendering.NodeVisitor
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * The AST root.

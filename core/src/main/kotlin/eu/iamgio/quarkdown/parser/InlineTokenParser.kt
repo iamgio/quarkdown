@@ -39,10 +39,10 @@ import eu.iamgio.quarkdown.lexer.StrongToken
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.UrlAutolinkToken
 import eu.iamgio.quarkdown.lexer.acceptAll
-import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.trimDelimiters
+import eu.iamgio.quarkdown.visitor.token.InlineTokenVisitor
 import org.apache.commons.text.StringEscapeUtils
 
 /**

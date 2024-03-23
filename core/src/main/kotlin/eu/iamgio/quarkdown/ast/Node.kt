@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
-import eu.iamgio.quarkdown.rendering.NodeVisitor
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A node of the abstract syntax tree - can be either a block or an inline element.

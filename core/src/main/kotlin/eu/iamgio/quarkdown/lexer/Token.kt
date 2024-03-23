@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.lexer
 
-import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
+import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 /**
  * A wrapper of a [TokenData] that may be parsed in order to extract information.

@@ -31,8 +31,8 @@ import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.resolveLinkReference
-import eu.iamgio.quarkdown.rendering.NodeVisitor
 import eu.iamgio.quarkdown.util.toPlainText
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.

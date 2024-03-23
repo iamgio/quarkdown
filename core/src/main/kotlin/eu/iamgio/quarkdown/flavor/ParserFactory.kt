@@ -2,10 +2,10 @@ package eu.iamgio.quarkdown.flavor
 
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.parser.visitor.BlockTokenVisitor
-import eu.iamgio.quarkdown.parser.visitor.InlineTokenVisitor
-import eu.iamgio.quarkdown.parser.visitor.TokenVisitor
-import eu.iamgio.quarkdown.parser.visitor.TokenVisitorAdapter
+import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
+import eu.iamgio.quarkdown.visitor.token.InlineTokenVisitor
+import eu.iamgio.quarkdown.visitor.token.TokenVisitor
+import eu.iamgio.quarkdown.visitor.token.TokenVisitorAdapter
 
 /**
  * Provider of parser instances. Each factory method returns a specialized implementation for a specific kind of parsing.

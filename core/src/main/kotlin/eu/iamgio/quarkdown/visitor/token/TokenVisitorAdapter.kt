@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.parser.visitor
+package eu.iamgio.quarkdown.visitor.token
 
 /**
  * A general [TokenVisitor] that delegates its visiting operations to one of its members.

@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.rendering.html.HtmlNodeRenderer
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * Static provider of rendering strategies.
