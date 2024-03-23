@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.isPrettyOutputEnabled
 import eu.iamgio.quarkdown.util.indent
 
 /**
@@ -14,7 +16,7 @@ private const val INDENT = "    "
  * @param renderer node renderer, used to add nodes directly to the code
  * @see tagBuilder
  */
-class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRenderer) {
+class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRenderer, private val pretty: Boolean) {
     /**
      * Sub-builders for nested tags.
      */
@@ -75,13 +77,15 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
     fun tag(
         name: String,
         init: HtmlBuilder.() -> Unit = {},
-    ) = renderer.tagBuilder(name, init).also { builders += it }
+    ) = renderer.tagBuilder(name, this.pretty, init).also { builders += it }
 
     /**
      * @return this builder and its nested content into stringified HTML code.
      */
     fun build(): String =
         buildString {
+            fun CharSequence.indent() = if (pretty) this.indent(INDENT) else this
+
             // Opening tag.
             append("<")
             append(name)
@@ -95,15 +99,19 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
                 return@buildString
             }
 
-            append(">\n")
+            append(">")
+
+            if (pretty) {
+                append("\n")
+            }
 
             // Indented content from inner tags.
             builders.forEach { builder ->
-                append(builder.build().indent(INDENT))
+                append(builder.build().indent())
             }
 
             // Indented text content.
-            append(content.indent(INDENT))
+            append(content.indent())
 
             // Closing tag.
             append("</")
@@ -113,29 +121,29 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
 
     /**
      * Appends a string value to this tag's content.
+     * Usage: `+"Some string"`
      */
-    operator fun String.unaryPlus() {
-        content.append(this).append("\n")
+    operator fun CharSequence.unaryPlus() {
+        content.append(this)
+        if (pretty) content.append("\n")
     }
 
     /**
      * Appends a node to this tag's content.
      * Their string representation is given by this [HtmlBuilder]'s [renderer].
+     * Usage: `+someNode`
      */
     operator fun Node.unaryPlus() {
-        content.append(this.accept(renderer))
-        content.append("\n")
+        +this.accept(renderer)
     }
 
     /**
      * Appends a sequence of nodes to this tag's content.
      * Their string representation is given by this [HtmlBuilder]'s [renderer].
+     * Usage: `+someNode.children`
      */
     operator fun List<Node>.unaryPlus() {
-        forEach {
-            content.append(it.accept(renderer))
-            content.append("\n")
-        }
+        forEach { +it }
     }
 }
 
@@ -157,13 +165,15 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
  *
  *
  * @param name tag name
+ * @param pretty whether the output code should be pretty
  * @param init action to run at initialization
  * @return the new builder
  */
 fun HtmlNodeRenderer.tagBuilder(
     name: String,
+    pretty: Boolean = SystemProperties.isPrettyOutputEnabled,
     init: HtmlBuilder.() -> Unit = {},
-) = HtmlBuilder(name, renderer = this).also(init)
+) = HtmlBuilder(name, renderer = this, pretty).also(init)
 
 /**
  * A quick way to create a simple HTML tag builder.
@@ -187,7 +197,7 @@ fun HtmlNodeRenderer.tagBuilder(
 fun HtmlNodeRenderer.buildTag(
     name: String,
     init: HtmlBuilder.() -> Unit,
-) = tagBuilder(name, init).build()
+) = tagBuilder(name, init = init).build()
 
 /**
  * A quick way to build a simple HTML tag.

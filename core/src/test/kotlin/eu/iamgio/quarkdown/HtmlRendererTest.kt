@@ -32,6 +32,7 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.rendering.RendererFactory
 import eu.iamgio.quarkdown.util.toPlainText
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -49,8 +50,13 @@ class HtmlRendererTest {
 
     private fun Node.render(attributes: AstAttributes = MutableAstAttributes()) = this.accept(renderer(attributes))
 
-    // Inline
+    @BeforeTest
+    fun setup() {
+        // Enable pretty output.
+        SystemProperties[SystemProperties.PRETTY_OUTPUT] = ""
+    }
 
+    // Inline
     @Test
     fun comment() {
         assertEquals("", Comment().render())
