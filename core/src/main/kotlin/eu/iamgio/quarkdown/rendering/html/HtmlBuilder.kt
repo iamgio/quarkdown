@@ -97,13 +97,13 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
 
             append(">\n")
 
-            // Indented text content.
-            append(content.indent(INDENT))
-
             // Indented content from inner tags.
             builders.forEach { builder ->
                 append(builder.build().indent(INDENT))
             }
+
+            // Indented text content.
+            append(content.indent(INDENT))
 
             // Closing tag.
             append("</")
@@ -116,6 +116,15 @@ class HtmlBuilder(private val name: String, private val renderer: HtmlNodeRender
      */
     operator fun String.unaryPlus() {
         content.append(this).append("\n")
+    }
+
+    /**
+     * Appends a node to this tag's content.
+     * Their string representation is given by this [HtmlBuilder]'s [renderer].
+     */
+    operator fun Node.unaryPlus() {
+        content.append(this.accept(renderer))
+        content.append("\n")
     }
 
     /**

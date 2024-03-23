@@ -11,6 +11,8 @@ import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListBlock
+import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Newline
@@ -154,13 +156,25 @@ class BlockTokenParser(
             .tokenizeAndParse()
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
+    /**
+     * Sets [list] as the owner of each of its [ListItem]s.
+     * Ownership is used while rendering to determine whether a [ListItem]
+     * is part of a loose or tight list.
+     * @param list list to set ownership for
+     */
+    private fun updateListItemsOwnership(list: ListBlock) {
+        list.children.asSequence()
+            .filterIsInstance<ListItem>()
+            .forEach { it.owner = list }
+    }
+
     override fun visit(token: UnorderedListToken): Node {
         val children = extractListItems(token)
 
         return UnorderedList(
             isLoose = children.any { it is Newline },
             children,
-        )
+        ).also(::updateListItemsOwnership)
     }
 
     override fun visit(token: OrderedListToken): Node {
@@ -174,7 +188,7 @@ class BlockTokenParser(
             startIndex = marker.dropLast(1).toIntOrNull() ?: 1,
             isLoose = children.any { it is Newline },
             children,
-        )
+        ).also(::updateListItemsOwnership)
     }
 
     override fun visit(token: ListItemToken): Node {

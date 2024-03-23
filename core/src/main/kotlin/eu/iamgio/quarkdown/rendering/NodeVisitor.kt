@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -20,6 +21,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 
@@ -45,6 +47,10 @@ interface NodeVisitor<T> {
     fun visit(node: OrderedList): T
 
     fun visit(node: UnorderedList): T
+
+    fun visit(node: BaseListItem): T
+
+    fun visit(node: TaskListItem): T
 
     fun visit(node: Paragraph): T
 

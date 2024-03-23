@@ -112,7 +112,12 @@ data class OrderedList(
 /**
  * An item of a [ListBlock].
  */
-interface ListItem : NestableNode
+interface ListItem : NestableNode {
+    /**
+     * The list that owns this item.
+     */
+    var owner: ListBlock?
+}
 
 /**
  * An item of a [ListBlock].
@@ -121,7 +126,9 @@ interface ListItem : NestableNode
 data class BaseListItem(
     override val children: List<Node>,
 ) : ListItem {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override var owner: ListBlock? = null
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**
@@ -133,7 +140,9 @@ data class TaskListItem(
     val isChecked: Boolean,
     override val children: List<Node>,
 ) : ListItem {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override var owner: ListBlock? = null
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

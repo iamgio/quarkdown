@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -13,6 +14,7 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -21,6 +23,7 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.resolveLinkReference
@@ -74,6 +77,43 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
             .build()
 
     override fun visit(node: UnorderedList) = buildTag("ul", node.children)
+
+    /**
+     * Appends the base content of a [ListItem] to an [HtmlBuilder],
+     * following the loose/tight rendering rules (CommonMark 5.3).
+     */
+    private fun HtmlBuilder.appendListItemContent(node: ListItem) {
+        // Loose lists (or items not linked to a list for some reason) are rendered as-is.
+        if (node.owner?.isLoose != false) {
+            +node.children
+            return
+        }
+        // Tight lists don't wrap paragraphs in <p> tags (CommonMark 5.3).
+        node.children.forEach {
+            if (it is Paragraph) {
+                +it.text
+            } else {
+                +it
+            }
+        }
+    }
+
+    override fun visit(node: BaseListItem) =
+        buildTag("li") {
+            appendListItemContent(node)
+        }
+
+    override fun visit(node: TaskListItem) =
+        buildTag("li") {
+            // GFM 5.3 extension
+            tag("input")
+                .attribute("disabled", "")
+                .attribute("type", "checkbox")
+                .optionalAttribute("checked", "".takeIf { node.isChecked })
+                .void(true)
+
+            appendListItemContent(node)
+        }
 
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 

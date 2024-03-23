@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -13,15 +14,19 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
+import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.rendering.RendererFactory
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
@@ -268,6 +273,100 @@ class HtmlRendererTest {
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render())
         assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render())
         assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render())
+    }
+
+    private fun listItems() =
+        listOf(
+            BaseListItem(
+                listOf(
+                    Paragraph(listOf(Text("A1"))),
+                    HorizontalRule(),
+                    Paragraph(listOf(Text("A2"))),
+                ),
+            ),
+            BaseListItem(
+                listOf(
+                    Paragraph(listOf(Text("B1"))),
+                    HorizontalRule(),
+                    Paragraph(listOf(Text("B2"))),
+                ),
+            ),
+            BaseListItem(
+                listOf(
+                    Paragraph(listOf(Text("C1"))),
+                    HorizontalRule(),
+                    Paragraph(listOf(Text("C2"))),
+                ),
+            ),
+            TaskListItem(
+                isChecked = true,
+                listOf(
+                    Paragraph(listOf(Text("D1"))),
+                    HorizontalRule(),
+                    Paragraph(listOf(Text("D2"))),
+                ),
+            ),
+        )
+
+    @Test
+    fun orderedList() {
+        val out = readParts("block/orderedlist.html")
+
+        assertEquals(out.next(), OrderedList(startIndex = 1, isLoose = false, emptyList()).render())
+
+        assertEquals(
+            out.next(),
+            OrderedList(
+                startIndex = 1,
+                isLoose = true,
+                listItems(),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            OrderedList(
+                startIndex = 12,
+                isLoose = true,
+                listItems(),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            OrderedList(
+                startIndex = 1,
+                isLoose = false,
+                listItems(),
+            )
+                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
+                .render(),
+        )
+    }
+
+    @Test
+    fun unorderedList() {
+        val out = readParts("block/unorderedlist.html")
+
+        assertEquals(out.next(), UnorderedList(isLoose = false, emptyList()).render())
+
+        assertEquals(
+            out.next(),
+            UnorderedList(
+                isLoose = true,
+                listItems(),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            UnorderedList(
+                isLoose = false,
+                listItems(),
+            )
+                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
+                .render(),
+        )
     }
 
     @Test
