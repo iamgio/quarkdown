@@ -213,5 +213,5 @@ data class BlockQuote(
  * Anything else (should not happen).
  */
 class BlockText : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

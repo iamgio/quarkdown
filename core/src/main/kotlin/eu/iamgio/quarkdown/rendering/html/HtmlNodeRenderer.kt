@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -122,6 +123,8 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeVisitor<Char
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 
     override fun visit(node: BlockQuote) = buildTag("blockquote", node.children)
+
+    override fun visit(node: BlockText) = "" // Fallback block, should not happen
 
     // Inline
 
