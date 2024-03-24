@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering
 
+import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -16,4 +17,17 @@ abstract class NodeRenderer<B : TagBuilder> : NodeVisitor<CharSequence> {
         name: String,
         pretty: Boolean,
     ): B
+
+    /**
+     * @param unescaped input to escape critical content for
+     * @return the input string with the critical content escaped into safe content
+     *         (e.g. in HTML `<` is escaped to `&lt;`).
+     * @see CriticalContent
+     */
+    abstract fun escapeCriticalContent(unescaped: String): CharSequence
+
+    /**
+     * @see escapeCriticalContent
+     */
+    override fun visit(node: CriticalContent) = escapeCriticalContent(node.text)
 }

@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
-import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
@@ -46,6 +45,16 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
         pretty: Boolean,
     ) = HtmlTagBuilder(name, renderer = this, pretty)
 
+    override fun escapeCriticalContent(unescaped: String) =
+        unescaped
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("\'", "&#39;")
+
+    // Root
+
     override fun visit(node: AstRoot) =
         "<!DOCTYPE html>\n" +
             buildTag("html") {
@@ -66,8 +75,7 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
     override fun visit(node: Code) =
         buildTag("pre") {
             tag("code") {
-                // TODO escape critical content
-                +node.content
+                +escapeCriticalContent(node.content)
             }
                 .optionalAttribute("class", node.language?.let { "language-$it" })
         }
@@ -171,16 +179,6 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
             .void(true)
             .build()
 
-    override fun visit(node: CriticalContent) =
-        when (node.text) {
-            "&" -> "&amp;"
-            "<" -> "&lt;"
-            ">" -> "&gt;"
-            "\"" -> "&quot;"
-            "\'" -> "&#39;"
-            else -> node.text
-        }
-
     override fun visit(node: Link) =
         tagBuilder("a", node.label)
             .attribute("href", node.url)
@@ -206,7 +204,7 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
 
     override fun visit(node: Text) = node.text
 
-    override fun visit(node: CodeSpan) = buildTag("code", node.text)
+    override fun visit(node: CodeSpan) = buildTag("code", escapeCriticalContent(node.text))
 
     override fun visit(node: Emphasis) = buildTag("em", node.children)
 

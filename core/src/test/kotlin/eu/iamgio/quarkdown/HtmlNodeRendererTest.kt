@@ -199,6 +199,7 @@ class HtmlNodeRendererTest {
         val out = readParts("inline/codespan.html")
 
         assertEquals(out.next(), CodeSpan("Foo bar").render())
+        assertEquals(out.next(), CodeSpan("<a href=\"#\">").render())
     }
 
     @Test
@@ -267,6 +268,7 @@ class HtmlNodeRendererTest {
         assertEquals(out.next(), Code("Code", language = null).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java").render())
+        assertEquals(out.next(), Code("<a href=\"#\">", language = "html").render())
     }
 
     @Test
