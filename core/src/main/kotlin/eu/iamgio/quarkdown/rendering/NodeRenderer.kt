@@ -3,10 +3,10 @@ package eu.iamgio.quarkdown.rendering
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- * A converter of [eu.iamgio.quarkdown.ast.Node]s into output code, by using
- * a DSL-like approach provided by [RenderBuilder].
+ * A converter of [eu.iamgio.quarkdown.ast.Node]s into tag-based output code,
+ * by using a DSL-like approach provided by [TagBuilder].
  */
-abstract class NodeRenderer<B : RenderBuilder> : NodeVisitor<CharSequence> {
+abstract class NodeRenderer<B : TagBuilder> : NodeVisitor<CharSequence> {
     /**
      * Factory method that creates a new builder.
      * @param name name of the tag to open

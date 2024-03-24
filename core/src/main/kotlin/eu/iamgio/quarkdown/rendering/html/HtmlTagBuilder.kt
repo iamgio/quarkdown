@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.rendering.RenderBuilder
+import eu.iamgio.quarkdown.rendering.TagBuilder
 import eu.iamgio.quarkdown.rendering.tagBuilder
 import eu.iamgio.quarkdown.util.indent
 
@@ -26,14 +26,14 @@ private const val INDENT = "    "
  *     }
  * ```
  *
- * @see RenderBuilder
+ * @see TagBuilder
  * @see tagBuilder
  */
-class HtmlBuilder(
+class HtmlTagBuilder(
     private val name: String,
     private val renderer: HtmlNodeRenderer,
     private val pretty: Boolean,
-) : RenderBuilder(name, renderer, pretty) {
+) : TagBuilder(name, renderer, pretty) {
     /**
      * Attributes of the tag.
      */
@@ -128,7 +128,7 @@ class HtmlBuilder(
      */
     fun tag(
         name: String,
-        init: HtmlBuilder.() -> Unit = {},
+        init: HtmlTagBuilder.() -> Unit = {},
     ) = renderer.tagBuilder(name, pretty, init).also { builders += it }
 
     /**

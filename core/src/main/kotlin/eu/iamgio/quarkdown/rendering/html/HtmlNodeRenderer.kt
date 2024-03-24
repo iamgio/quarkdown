@@ -40,11 +40,11 @@ import eu.iamgio.quarkdown.util.toPlainText
  * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
  * @param attributes additional attributes of the node tree
  */
-class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlBuilder>() {
+class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlTagBuilder>() {
     override fun createBuilder(
         name: String,
         pretty: Boolean,
-    ) = HtmlBuilder(name, renderer = this, pretty)
+    ) = HtmlTagBuilder(name, renderer = this, pretty)
 
     override fun visit(node: AstRoot) =
         "<!DOCTYPE html>\n" +
@@ -67,7 +67,6 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
         buildTag("pre") {
             tag("code") {
                 // TODO escape critical content
-                // TODO don't indent output code
                 +node.content
             }
                 .optionalAttribute("class", node.language?.let { "language-$it" })
@@ -90,10 +89,10 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
     override fun visit(node: UnorderedList) = buildTag("ul", node.children)
 
     /**
-     * Appends the base content of a [ListItem] to an [HtmlBuilder],
+     * Appends the base content of a [ListItem] to an [HtmlTagBuilder],
      * following the loose/tight rendering rules (CommonMark 5.3).
      */
-    private fun HtmlBuilder.appendListItemContent(node: ListItem) {
+    private fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
         // Loose lists (or items not linked to a list for some reason) are rendered as-is.
         if (node.owner?.isLoose != false) {
             +node.children
@@ -134,7 +133,7 @@ class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<Htm
             val header = tag("thead")
             val headerRow = header.tag("tr")
             val body = tag("tbody")
-            val bodyRows = mutableListOf<HtmlBuilder>()
+            val bodyRows = mutableListOf<HtmlTagBuilder>()
 
             node.columns.forEach { column ->
                 // Value to assign to the 'align' attribute for each cell of this column.

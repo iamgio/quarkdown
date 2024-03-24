@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.isPrettyOutputEnabled
 
 /**
- * A builder of a generic output code.
+ * A builder of a generic output code wrapped within tags (of any kind) which can be unlimitedly nested.
  * Custom `tag` methods that allow nesting builders must be provided by
  * the implementations, in order to allow type matching between sub-builders their parent builder,
  * by using a DSL-like approach.
@@ -13,9 +13,9 @@ import eu.iamgio.quarkdown.isPrettyOutputEnabled
  * @param renderer node renderer, used to add nodes directly to the code
  * @param pretty whether the output code should be pretty
  * @see tagBuilder
- * @see eu.iamgio.quarkdown.rendering.html.HtmlBuilder
+ * @see eu.iamgio.quarkdown.rendering.html.HtmlTagBuilder
  */
-abstract class RenderBuilder(
+abstract class TagBuilder(
     private val name: String,
     private val renderer: NodeRenderer<*>,
     private val pretty: Boolean,
@@ -23,7 +23,7 @@ abstract class RenderBuilder(
     /**
      * Sub-builders for nested tags.
      */
-    protected val builders = mutableListOf<RenderBuilder>()
+    protected val builders = mutableListOf<TagBuilder>()
 
     /**
      * Text content of the tag.
@@ -51,7 +51,7 @@ abstract class RenderBuilder(
 
     /**
      * Appends a node to this tag's content.
-     * Their string representation is given by this [RenderBuilder]'s [renderer].
+     * Their string representation is given by this [TagBuilder]'s [renderer].
      * Usage: `+someNode`
      */
     operator fun Node.unaryPlus() {
@@ -60,7 +60,7 @@ abstract class RenderBuilder(
 
     /**
      * Appends a sequence of nodes to this tag's content.
-     * Their string representation is given by this [RenderBuilder]'s [renderer].
+     * Their string representation is given by this [TagBuilder]'s [renderer].
      * Usage: `+someNode.children`
      */
     operator fun List<Node>.unaryPlus() {
@@ -84,7 +84,7 @@ abstract class RenderBuilder(
  * @param init action to run at initialization
  * @return the new builder
  */
-fun <B : RenderBuilder> NodeRenderer<B>.tagBuilder(
+fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
     name: String,
     pretty: Boolean = SystemProperties.isPrettyOutputEnabled,
     init: B.() -> Unit = {},
@@ -103,7 +103,7 @@ fun <B : RenderBuilder> NodeRenderer<B>.tagBuilder(
  * @return the new builder
  * @see tagBuilder
  */
-fun <B : RenderBuilder> NodeRenderer<B>.tagBuilder(
+fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
     name: String,
     content: List<Node>,
 ) = tagBuilder(name) { +content }
@@ -121,7 +121,7 @@ fun <B : RenderBuilder> NodeRenderer<B>.tagBuilder(
  * @return output code of the tag
  * @see tagBuilder
  */
-fun <B : RenderBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> NodeRenderer<B>.buildTag(
     name: String,
     init: B.() -> Unit,
 ) = tagBuilder(name, init = init).build()
@@ -137,7 +137,7 @@ fun <B : RenderBuilder> NodeRenderer<B>.buildTag(
  * @return output code of the tag
  * @see buildTag
  */
-fun <B : RenderBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> NodeRenderer<B>.buildTag(
     name: String,
     content: List<Node>,
 ) = buildTag(name) { +content }
@@ -153,7 +153,7 @@ fun <B : RenderBuilder> NodeRenderer<B>.buildTag(
  * @return output code of the tag
  * @see buildTag
  */
-fun <B : RenderBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> NodeRenderer<B>.buildTag(
     name: String,
     content: String,
 ) = buildTag(name) { +content }
