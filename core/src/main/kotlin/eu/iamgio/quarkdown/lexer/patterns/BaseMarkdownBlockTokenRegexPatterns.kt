@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:no-wildcard-imports")
 
-package eu.iamgio.quarkdown.flavor.base
+package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken

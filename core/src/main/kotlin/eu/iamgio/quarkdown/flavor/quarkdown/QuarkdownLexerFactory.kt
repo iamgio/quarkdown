@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.flavor.quarkdown
 import eu.iamgio.quarkdown.flavor.LexerFactory
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownLexerFactory
 import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.patterns.QuarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
 /**

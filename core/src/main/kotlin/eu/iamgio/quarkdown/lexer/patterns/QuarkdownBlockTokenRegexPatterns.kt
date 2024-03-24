@@ -1,6 +1,5 @@
-package eu.iamgio.quarkdown.flavor.quarkdown
+package eu.iamgio.quarkdown.lexer.patterns
 
-import eu.iamgio.quarkdown.flavor.base.BaseMarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.MultilineMathToken
 import eu.iamgio.quarkdown.lexer.OnelineMathToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
