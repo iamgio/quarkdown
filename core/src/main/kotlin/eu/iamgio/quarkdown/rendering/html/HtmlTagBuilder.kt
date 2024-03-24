@@ -31,7 +31,7 @@ private const val INDENT = "    "
  */
 class HtmlTagBuilder(
     private val name: String,
-    private val renderer: HtmlNodeRenderer,
+    private val renderer: BaseHtmlNodeRenderer,
     private val pretty: Boolean,
 ) : TagBuilder(name, renderer, pretty) {
     /**

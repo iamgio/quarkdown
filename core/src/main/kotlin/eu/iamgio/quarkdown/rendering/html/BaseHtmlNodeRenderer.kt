@@ -36,10 +36,10 @@ import eu.iamgio.quarkdown.rendering.tagBuilder
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
- * A renderer for [eu.iamgio.quarkdown.ast.Node]s that export their content into valid HTML code.
+ * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param attributes additional attributes of the node tree
  */
-class HtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlTagBuilder>() {
+open class BaseHtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlTagBuilder>() {
     override fun createBuilder(
         name: String,
         pretty: Boolean,

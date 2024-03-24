@@ -30,7 +30,7 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.rendering.RendererFactory
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -46,7 +46,7 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(attributes: AstAttributes = MutableAstAttributes()) = RendererFactory.html(attributes)
+    private fun renderer(attributes: AstAttributes = MutableAstAttributes()) = QuarkdownFlavor.rendererFactory.html(attributes)
 
     private fun Node.render(attributes: AstAttributes = MutableAstAttributes()) = this.accept(renderer(attributes))
 

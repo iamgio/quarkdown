@@ -7,12 +7,17 @@ package eu.iamgio.quarkdown.flavor
  */
 interface MarkdownFlavor {
     /**
-     * The provider of new lexer instances to tokenize various scopes from a raw string input.
+     * The supplier of new lexer instances to tokenize various scopes from a raw string input.
      */
     val lexerFactory: LexerFactory
 
     /**
-     * The provider of new parser instances to obtain processed nodes from raw tokens.
+     * The supplier of new parser instances to obtain processed nodes from raw tokens.
      */
     val parserFactory: ParserFactory
+
+    /**
+     * The supplier of new renderer instances to convert processed nodes to output content.
+     */
+    val rendererFactory: RendererFactory
 }
