@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
  */
 abstract class RegexLexer(
     source: CharSequence,
-    protected val patterns: List<TokenRegexPattern>,
+    private val patterns: List<TokenRegexPattern>,
 ) : AbstractLexer(source) {
     /**
      * Converts captured groups of a [Regex] match to a sequence of tokens.
@@ -52,8 +52,6 @@ abstract class RegexLexer(
 
     override fun tokenize(): List<Token> =
         buildList {
-            currentIndex = 0
-
             val regex: Regex = patterns.groupify()
             // Append an empty line to the tokenized source to prevent issues with some expressions.
             val match: Sequence<MatchResult> = regex.findAll("$source\n")
