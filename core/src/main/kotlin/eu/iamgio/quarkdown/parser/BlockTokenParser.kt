@@ -43,6 +43,7 @@ import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
+import eu.iamgio.quarkdown.util.trimDelimiters
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
 
 /**
@@ -133,7 +134,7 @@ class BlockTokenParser(
                 title =
                     if (groups.hasNext()) {
                         // Remove first and last character
-                        groups.next().trim().let { it.substring(1, it.length - 1) }.trim()
+                        groups.next().trim().trimDelimiters().trim()
                     } else {
                         null
                     },

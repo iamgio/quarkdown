@@ -258,7 +258,7 @@ class BlockParserTest {
             assertEquals("/url", url)
             assertEquals(null, title)
         }
-        repeat(3) {
+        repeat(4) {
             with(nodes.next()) {
                 assertEquals("label", rawText)
                 assertEquals("https://google.com", url)

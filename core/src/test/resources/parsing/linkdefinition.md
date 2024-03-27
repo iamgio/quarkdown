@@ -10,6 +10,8 @@
 
 [label]: https://google.com (Title)
 
+[label]: https://google.com "  Title "
+
 [label]: https://google.com "Multiline
 title"
 
