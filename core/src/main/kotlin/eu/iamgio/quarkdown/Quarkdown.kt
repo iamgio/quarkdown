@@ -24,14 +24,10 @@ fun main(args: Array<String>) {
     val hooks =
         PipelineHooks(
             afterLexing = { tokens ->
-                if (Log.isDebug) {
-                    Log.debug("Tokens:\n" + DebugFormatter.formatTokens(tokens))
-                }
+                Log.debug { "Tokens:\n" + DebugFormatter.formatTokens(tokens) }
             },
             afterParsing = { document ->
-                if (Log.isDebug) {
-                    Log.debug("AST:\n" + DebugFormatter.formatAST(document))
-                }
+                Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
             },
             afterRendering = { rendered ->
                 Log.info(rendered)

@@ -18,10 +18,19 @@ object Log {
     /**
      * Whether the logger is at debugging level.
      */
-    val isDebug: Boolean
+    private val isDebug: Boolean
         get() = logger.level == Level.DEBUG
 
     fun debug(message: Any) = logger.debug(message)
+
+    /**
+     * Logs the result of [message] lazily, only if the logger is set at debug level.
+     */
+    fun debug(message: () -> Any) {
+        if (isDebug) {
+            logger.debug(message())
+        }
+    }
 
     fun info(message: Any) = logger.info(message)
 
