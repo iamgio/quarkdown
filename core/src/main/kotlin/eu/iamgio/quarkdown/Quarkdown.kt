@@ -34,6 +34,7 @@ fun main(args: Array<String>) {
             },
         )
 
+    // Pipeline initialization.
     val pipeline =
         Pipeline(
             source = sourceFile.readText(),
