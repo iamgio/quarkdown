@@ -22,9 +22,13 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
- *
+ * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] inlines.
  */
 class BaseMarkdownInlineTokenRegexPatterns {
+    /**
+     * A backslash followed by a punctuation character.
+     * @see EscapeToken
+     */
     val escape
         get() =
             TokenRegexPattern(
@@ -35,6 +39,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * A text entity: `&#10`, `&xFF`, `&nbsp;`.
+     * @see EntityToken
+     */
     val entity
         get() =
             TokenRegexPattern(
@@ -45,6 +53,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * Characters that require attention in the rendering stage.
+     * @see CriticalContentToken
+     */
     val criticalContent
         get() =
             TokenRegexPattern(
@@ -55,6 +67,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * An inline fragment of code wrapped by sequences of backticks of the same length.
+     * @see CodeSpanToken
+     */
     val codeSpan
         get() =
             TokenRegexPattern(
@@ -65,6 +81,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * A hard line break given by two or more spaces at the end of the line.
+     * @see LineBreakToken
+     */
     val lineBreak
         get() =
             TokenRegexPattern(
@@ -75,6 +95,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )
 
+    /**
+     * A link with its label in square brackets and its URL and optional title in parentheses,
+     * without spaces in-between.
+     * @see LinkToken
+     */
     val link
         get() =
             TokenRegexPattern(
@@ -91,6 +116,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * A URL wrapped in angle brackets.
+     * @see DiamondAutolinkToken
+     */
     val diamondAutolink
         get() =
             TokenRegexPattern(
@@ -107,6 +136,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * A plain URL.
+     * @see UrlAutolinkToken
+     */
     val urlAutolink
         get() =
             TokenRegexPattern(
@@ -122,6 +155,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * A link whose reference in brackets matches that of a link definition,
+     * with an optional label in brackets at the beginning.
+     * @see ReferenceLinkToken
+     */
     val referenceLink
         get() =
             TokenRegexPattern(
@@ -134,6 +172,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * An image, same as a link preceeded by a `!`.
+     * @see ImageToken
+     * @see link
+     */
     val image
         get() =
             TokenRegexPattern(
@@ -145,6 +188,11 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .build(),
             )
 
+    /**
+     * An image that references a link definition, same as a reference link preceeded by a `!`.
+     * @see ReferenceImageToken
+     * @see referenceLink
+     */
     val referenceImage
         get() =
             TokenRegexPattern(
@@ -166,6 +214,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                         .toRegex(),
             )*/
 
+    /**
+     * An ignored piece of content wrapped in `<!-- ... -->` (the amount of `-` can vary).
+     * @see CommentToken
+     */
     val comment
         get() =
             TokenRegexPattern(
@@ -183,6 +235,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
 
+    /**
+     * Content wrapped in single asterisks, following CommonMark emphasis guidelines.
+     * @see EmphasisToken
+     */
     val emphasisAsterisk
         get() =
             TokenRegexPattern(
@@ -191,6 +247,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
             )
 
+    /**
+     * Content wrapped in single underscored, following CommonMark emphasis guidelines.
+     * @see EmphasisToken
+     */
     val emphasisUnderscore
         get() =
             TokenRegexPattern(
@@ -199,6 +259,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
             )
 
+    /**
+     * Content wrapped in double asterisks, following CommonMark emphasis guidelines.
+     * @see StrongToken
+     */
     val strongAsterisk
         get() =
             TokenRegexPattern(
@@ -207,6 +271,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "\\*{2}", endDelimiter = "\\*{2,}", strict = false),
             )
 
+    /**
+     * Content wrapped in double underscores, following CommonMark emphasis guidelines.
+     * @see StrongToken
+     */
     val strongUnderscore
         get() =
             TokenRegexPattern(
@@ -215,6 +283,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "_{2}", endDelimiter = "_{2,}", strict = true),
             )
 
+    /**
+     * Content wrapped in triple asterisks, following CommonMark emphasis guidelines.
+     * @see StrongEmphasisToken
+     */
     val strongEmphasisAsterisk
         get() =
             TokenRegexPattern(
@@ -223,6 +295,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "\\*{3}", endDelimiter = "\\*{3,}", strict = false),
             )
 
+    /**
+     * Content wrapped in triple underscores, following CommonMark emphasis guidelines.
+     * @see StrongEmphasisToken
+     */
     val strongEmphasisUnderscore
         get() =
             TokenRegexPattern(
@@ -231,6 +307,10 @@ class BaseMarkdownInlineTokenRegexPatterns {
                 regex = delimiteredPattern(startDelimiter = "_{3}", endDelimiter = "_{3,}", strict = true),
             )
 
+    /**
+     * Content wrapped in double tildes, following CommonMark emphasis guidelines.
+     * @see StrikethroughToken
+     */
     val strikethrough
         get() =
             TokenRegexPattern(
