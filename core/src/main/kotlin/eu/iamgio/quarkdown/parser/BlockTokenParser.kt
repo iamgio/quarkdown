@@ -42,6 +42,7 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.util.iterator
+import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 import eu.iamgio.quarkdown.util.trimDelimiters
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
@@ -131,13 +132,8 @@ class BlockTokenParser(
             LinkDefinition(
                 label = groups.next().trim().toInline(),
                 url = groups.next().trim(),
-                title =
-                    if (groups.hasNext()) {
-                        // Remove first and last character
-                        groups.next().trim().trimDelimiters().trim()
-                    } else {
-                        null
-                    },
+                // Remove first and last character
+                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
             )
 
         // Storing the link definitions for easier lookups.
