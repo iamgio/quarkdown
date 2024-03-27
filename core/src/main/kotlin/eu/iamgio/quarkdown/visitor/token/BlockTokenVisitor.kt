@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:no-wildcard-imports")
-
 package eu.iamgio.quarkdown.visitor.token
 
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
