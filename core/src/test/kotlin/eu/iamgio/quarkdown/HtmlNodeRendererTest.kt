@@ -1,6 +1,5 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
@@ -17,7 +16,6 @@ import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListItem
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -30,6 +28,10 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.context.BaseContext
+import eu.iamgio.quarkdown.ast.context.Context
+import eu.iamgio.quarkdown.ast.context.MutableAstAttributes
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest
@@ -46,9 +48,9 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(attributes: AstAttributes = MutableAstAttributes()) = QuarkdownFlavor.rendererFactory.html(attributes)
+    private fun renderer(context: Context = MutableContext()) = QuarkdownFlavor.rendererFactory.html(context)
 
-    private fun Node.render(attributes: AstAttributes = MutableAstAttributes()) = this.accept(renderer(attributes))
+    private fun Node.render(context: Context = MutableContext()) = this.accept(renderer(context))
 
     @BeforeTest
     fun setup() {
@@ -110,15 +112,17 @@ class HtmlNodeRendererTest {
                     ),
             )
 
+        val context = BaseContext(attributes)
+
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 
         assertEquals(
             out.next(),
-            ReferenceLink(label, label, fallback).render(attributes),
+            ReferenceLink(label, label, fallback).render(context),
         )
         assertEquals(
             out.next(),
-            ReferenceLink(listOf(Text("label")), label, fallback).render(attributes),
+            ReferenceLink(listOf(Text("label")), label, fallback).render(context),
         )
         assertEquals(
             out.next(),
@@ -174,15 +178,17 @@ class HtmlNodeRendererTest {
                     ),
             )
 
+        val context = BaseContext(attributes)
+
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 
         assertEquals(
             out.next(),
-            ReferenceImage(ReferenceLink(label, label, fallback)).render(attributes),
+            ReferenceImage(ReferenceLink(label, label, fallback)).render(context),
         )
         assertEquals(
             out.next(),
-            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(attributes),
+            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(context),
         )
         assertEquals(
             out.next(),

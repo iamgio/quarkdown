@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.flavor
 
-import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -8,8 +8,8 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  */
 interface RendererFactory {
     /**
-     * @param attributes additional attributes from the parsing stage
+     * @param context additional information gathered during the parsing stage
      * @return a new HTML node renderer
      */
-    fun html(attributes: AstAttributes): NodeVisitor<CharSequence>
+    fun html(context: Context): NodeVisitor<CharSequence>
 }

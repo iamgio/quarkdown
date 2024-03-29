@@ -1,6 +1,5 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
@@ -29,7 +28,7 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.ast.resolveLinkReference
+import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.rendering.buildTag
 import eu.iamgio.quarkdown.rendering.tagBuilder
@@ -37,9 +36,9 @@ import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
- * @param attributes additional attributes of the node tree
+ * @param context additional information produced by the earlier stages of the pipeline
  */
-open class BaseHtmlNodeRenderer(private val attributes: AstAttributes) : NodeRenderer<HtmlTagBuilder>() {
+open class BaseHtmlNodeRenderer(private val context: Context) : NodeRenderer<HtmlTagBuilder>() {
     override fun createBuilder(
         name: String,
         pretty: Boolean,
@@ -187,7 +186,7 @@ open class BaseHtmlNodeRenderer(private val attributes: AstAttributes) : NodeRen
 
     override fun visit(node: ReferenceLink) =
         // The fallback node is rendered if a corresponding definition can't be found.
-        (attributes.resolveLinkReference(node) ?: node.fallback())
+        (context.resolve(node) ?: node.fallback())
             .accept(this)
 
     override fun visit(node: Image) =
@@ -199,7 +198,7 @@ open class BaseHtmlNodeRenderer(private val attributes: AstAttributes) : NodeRen
             .build()
 
     override fun visit(node: ReferenceImage) =
-        (attributes.resolveLinkReference(node.link)?.let { Image(it) } ?: node.link.fallback())
+        (context.resolve(node.link)?.let { Image(it) } ?: node.link.fallback())
             .accept(this)
 
     override fun visit(node: Text) = node.text

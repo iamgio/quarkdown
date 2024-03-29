@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
@@ -20,6 +19,7 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
@@ -50,18 +50,18 @@ import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
 /**
  * A parser for block tokens.
  * @param flavor flavor to use in order to analyze and parse sub-blocks
- * @param attributes attributes to affect during the parsing process
+ * @param context additional data to fill during the parsing process
  */
 class BlockTokenParser(
     private val flavor: MarkdownFlavor,
-    private val attributes: MutableAstAttributes,
+    private val context: MutableContext,
 ) : BlockTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this.tokenize()
-            .acceptAll(flavor.parserFactory.newParser(attributes))
+            .acceptAll(flavor.parserFactory.newParser(context))
 
     /**
      * @return [this] raw string tokenized and parsed into processed inline content,
@@ -137,7 +137,7 @@ class BlockTokenParser(
             )
 
         // Storing the link definitions for easier lookups.
-        attributes.linkDefinitions += definition
+        context.register(definition)
 
         return definition
     }

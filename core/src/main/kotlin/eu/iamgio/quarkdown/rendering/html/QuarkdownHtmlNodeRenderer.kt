@@ -1,11 +1,11 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.context.Context
 
 /**
  * A renderer for Quarkdown ([eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
- * @param attributes additional attributes of the node tree
+ * @param context additional information produced by the earlier stages of the pipeline
  */
-class QuarkdownHtmlNodeRenderer(private val attributes: AstAttributes) : BaseHtmlNodeRenderer(attributes) {
+class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context) {
     // Quarkdown nodes rendering
 }

@@ -9,7 +9,6 @@ import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -20,6 +19,7 @@ import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
@@ -46,7 +46,7 @@ class BlockParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newBlockLexer(source)
-        val parser = flavor.parserFactory.newParser(MutableAstAttributes())
+        val parser = flavor.parserFactory.newParser(MutableContext())
         return nodesIterator(lexer, parser, assertType)
     }
 

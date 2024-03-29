@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -13,6 +12,7 @@ import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
@@ -39,7 +39,7 @@ class InlineParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newInlineLexer(source)
-        val parser = flavor.parserFactory.newParser(MutableAstAttributes())
+        val parser = flavor.parserFactory.newParser(MutableContext())
         return nodesIterator(lexer, parser, assertType)
     }
 

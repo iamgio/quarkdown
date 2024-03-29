@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
         Pipeline(
             source = sourceFile.readText(),
             flavor = flavor,
-            renderer = { rendererFactory, attributes -> rendererFactory.html(attributes) },
+            renderer = { rendererFactory, context -> rendererFactory.html(context) },
             hooks = hooks,
         )
 

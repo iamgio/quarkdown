@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -16,6 +15,7 @@ import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.CodeSpanToken
 import eu.iamgio.quarkdown.lexer.CommentToken
@@ -52,11 +52,11 @@ private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
 /**
  * A parser for inline tokens.
  * @param flavor flavor to use in order to analyze and parse sub-tokens
- * @param attributes attributes to affect during the parsing process
+ * @param context additional data to fill during the parsing process
  */
 class InlineTokenParser(
     private val flavor: MarkdownFlavor,
-    private val attributes: MutableAstAttributes,
+    private val context: MutableContext,
 ) :
     InlineTokenVisitor<Node> {
     /**
@@ -64,7 +64,7 @@ class InlineTokenParser(
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this.tokenize()
-            .acceptAll(flavor.parserFactory.newParser(attributes))
+            .acceptAll(flavor.parserFactory.newParser(context))
 
     /**
      * Tokenizes and parses sub-nodes.

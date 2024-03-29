@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.pipeline
 
-import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.Document
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
+import eu.iamgio.quarkdown.ast.context.Context
+import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -23,22 +23,22 @@ class Pipeline(
      * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
      * @param renderer supplier of the renderer implementation to use, produced by the [flavor]'s [RendererFactory]
      *                 with the output attributes of the parser as an argument
-     * @param attributes initial attributes to hand to the parser, which will fill them further with useful information
-     *                   and hand them over to the renderer.
-     *                   This allows gathering information on-the-fly without additional visits of the whole tree
+     * @param context initial context data to hand to the parser, which will fill it further with useful information
+     *                and hand it over to the renderer.
+     *                This allows gathering information on-the-fly without additional visits of the whole tree
      * @param hooks optional actions to run after each stage has been completed
      */
     constructor(
         source: CharSequence,
         flavor: MarkdownFlavor,
-        renderer: (RendererFactory, AstAttributes) -> NodeVisitor<CharSequence>,
-        attributes: MutableAstAttributes = MutableAstAttributes(),
+        renderer: (RendererFactory, Context) -> NodeVisitor<CharSequence>,
+        context: MutableContext = MutableContext(),
         hooks: PipelineHooks? = null,
     ) : this(
         PipelineComponents(
             flavor.lexerFactory.newBlockLexer(source),
-            flavor.parserFactory.newParser(attributes),
-            renderer(flavor.rendererFactory, attributes),
+            flavor.parserFactory.newParser(context),
+            renderer(flavor.rendererFactory, context),
         ),
         hooks,
     )
