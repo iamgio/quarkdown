@@ -29,6 +29,7 @@ import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.context.Context
+import eu.iamgio.quarkdown.ast.context.resolveOrFallback
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.rendering.buildTag
 import eu.iamgio.quarkdown.rendering.tagBuilder
@@ -184,10 +185,8 @@ open class BaseHtmlNodeRenderer(private val context: Context) : NodeRenderer<Htm
             .optionalAttribute("title", node.title)
             .build()
 
-    override fun visit(node: ReferenceLink) =
-        // The fallback node is rendered if a corresponding definition can't be found.
-        (context.resolve(node) ?: node.fallback())
-            .accept(this)
+    // The fallback node is rendered if a corresponding definition can't be found.
+    override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
 
     override fun visit(node: Image) =
         tagBuilder("img")
@@ -197,9 +196,7 @@ open class BaseHtmlNodeRenderer(private val context: Context) : NodeRenderer<Htm
             .void(true)
             .build()
 
-    override fun visit(node: ReferenceImage) =
-        (context.resolve(node.link)?.let { Image(it) } ?: node.link.fallback())
-            .accept(this)
+    override fun visit(node: ReferenceImage) = context.resolveOrFallback(node).accept(this)
 
     override fun visit(node: Text) = node.text
 

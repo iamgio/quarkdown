@@ -1,8 +1,11 @@
 package eu.iamgio.quarkdown.ast.context
 
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.LinkNode
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 
 /**
@@ -41,3 +44,15 @@ class MutableContext(private val attributes: MutableAstAttributes = MutableAstAt
         attributes.linkDefinitions += linkDefinition
     }
 }
+
+/**
+ * @param reference reference link to lookup
+ * @return the corresponding looked up link node if it exists, its fallback node otherwise
+ */
+fun Context.resolveOrFallback(reference: ReferenceLink): Node = resolve(reference) ?: reference.fallback()
+
+/**
+ * @param reference reference image to lookup
+ * @return the corresponding looked up image node if it exists, its fallback node otherwise
+ */
+fun Context.resolveOrFallback(reference: ReferenceImage): Node = resolve(reference.link)?.let { Image(it) } ?: reference.link.fallback()
