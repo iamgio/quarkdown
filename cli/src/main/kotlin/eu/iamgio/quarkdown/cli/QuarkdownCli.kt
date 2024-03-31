@@ -1,5 +1,6 @@
-package eu.iamgio.quarkdown
+package eu.iamgio.quarkdown.cli
 
+import eu.iamgio.quarkdown.NO_SOURCE_FILE_EXIT_CODE
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.log.DebugFormatter
