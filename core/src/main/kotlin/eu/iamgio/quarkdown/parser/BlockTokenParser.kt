@@ -48,6 +48,11 @@ import eu.iamgio.quarkdown.util.trimDelimiters
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
 
 /**
+ * The position of this character in the delimiter of a table header defines its column alignment.
+ */
+private const val TABLE_ALIGNMENT_CHAR = ':'
+
+/**
  * A parser for block tokens.
  * @param flavor flavor to use in order to analyze and parse sub-blocks
  * @param context additional data to fill during the parsing process
@@ -258,17 +263,15 @@ class BlockTokenParser(
 
         // Delimiter row (defines alignment).
         splitRow(groups.next()).forEachIndexed { index, delimiter ->
-            // The position of this character in the delimiter defines the column alignment.
-            val alignmentChar = ':'
-
             columns.getOrNull(index)?.alignment =
                 when {
                     // :---:
-                    delimiter.firstOrNull() == alignmentChar && delimiter.lastOrNull() == alignmentChar -> Table.Alignment.CENTER
+                    delimiter.firstOrNull() == TABLE_ALIGNMENT_CHAR &&
+                        delimiter.lastOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.CENTER
                     // :---
-                    delimiter.firstOrNull() == alignmentChar -> Table.Alignment.LEFT
+                    delimiter.firstOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.LEFT
                     // ---:
-                    delimiter.lastOrNull() == alignmentChar -> Table.Alignment.RIGHT
+                    delimiter.lastOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.RIGHT
                     // ---
                     else -> Table.Alignment.NONE
                 }
