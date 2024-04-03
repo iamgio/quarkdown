@@ -18,4 +18,9 @@ object TemplatePlaceholders {
      * Language of the document.
      */
     const val LANGUAGE = "LANG"
+
+    /**
+     * Whether math is used and math-related scripts should be loaded.
+     */
+    const val HAS_MATH = "MATH"
 }

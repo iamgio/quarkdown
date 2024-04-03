@@ -8,10 +8,11 @@ import java.io.InputStreamReader
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
  * Placeholders in templates are wrapped by double square brackets: `\[\[CONTENT]]` is the default placeholder for content code to inject.
  * See `resources/render` for templates.
- * @param code template code
+ * @param code code of the template
  */
 class RenderWrapper(private val code: String) {
     private val placeholders: MutableMap<String, Any> = mutableMapOf()
+    private val conditionals: MutableMap<String, Boolean> = mutableMapOf()
 
     /**
      * Adds a reference to a placeholder in the template code.
@@ -26,11 +27,22 @@ class RenderWrapper(private val code: String) {
     ) = apply { placeholders[placeholder] = value }
 
     /**
+     * Adds a conditional variable that shows or removes fragments of the template code.
+     * The fragment in the template must be fenced by `[[if:NAME]]` and `[[endif:NAME]]`.
+     * @param conditional conditional name
+     * @param value whether the fragment should be shown (`true`) or hidden (`false`)
+     * @return this for concatenation
+     */
+    fun conditional(
+        conditional: String,
+        value: Boolean,
+    ) = apply { conditionals[conditional] = value }
+
+    /**
      * Adds a reference to a content placeholder in the template code.
      * This is used to inject rendered code in a template.
      * @param content value to replace in change of the `\[\[CONTENT]]` placeholder
      * @return this for concatenation
-     * @see CONTENT_PLACEHOLDER
      */
     fun content(content: CharSequence) = value(TemplatePlaceholders.CONTENT, content)
 
@@ -40,6 +52,26 @@ class RenderWrapper(private val code: String) {
     fun wrap(): CharSequence =
         buildString {
             append(code)
+
+            // Replace conditionals.
+            // Just like ifdef macros, conditionals keep or cut content depending on a boolean value.
+            // Delimiters are defined as [[if:NAME]]...[[endif:NAME]] in the template files.
+            conditionals.forEach { (placeholder, value) ->
+                // Regex to find conditional fragments.
+                val regex = "\\[\\[if:$placeholder]]((.|\\n)+?)\\[\\[endif:$placeholder]]".toRegex(RegexOption.MULTILINE)
+                // If there is a match:
+                // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
+                regex.find(this)?.let { match ->
+                    replace(
+                        match.range.first,
+                        match.range.last + 1,
+                        // First group is the whole match, second group is the inner content without the delimiters.
+                        match.groups[1]?.value?.takeIf { value } ?: "",
+                    )
+                }
+            }
+
+            // Replace placeholders (defined as [[NAME]] in the template file) with their corresponding value.
             placeholders.forEach { (placeholder, value) ->
                 replace("[[$placeholder]]", value.toString())
             }
