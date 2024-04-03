@@ -1,12 +1,15 @@
 package eu.iamgio.quarkdown.cli
 
 import eu.iamgio.quarkdown.NO_SOURCE_FILE_EXIT_CODE
+import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
+import eu.iamgio.quarkdown.rendering.wrap
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -31,7 +34,15 @@ fun main(args: Array<String>) {
                 Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
             },
             afterRendering = { rendered ->
-                Log.info(rendered)
+                // If enabled, the output code is wrapped in a template.
+                val output =
+                    if (SystemProperties.isWrapOutputEnabled) {
+                        components.renderer.wrap(rendered)
+                    } else {
+                        rendered
+                    }
+
+                Log.info(output)
             },
         )
 

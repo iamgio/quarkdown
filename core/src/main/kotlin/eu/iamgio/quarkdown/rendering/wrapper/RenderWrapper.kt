@@ -3,8 +3,6 @@ package eu.iamgio.quarkdown.rendering.wrapper
 import eu.iamgio.quarkdown.util.replace
 import java.io.InputStreamReader
 
-private const val CONTENT_PLACEHOLDER = "CONTENT"
-
 /**
  * A code wrapper that adds static content to the output code of the rendering stage, and supports injection of values via placeholder keys.
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
@@ -34,7 +32,7 @@ class RenderWrapper(private val code: String) {
      * @return this for concatenation
      * @see CONTENT_PLACEHOLDER
      */
-    fun content(content: CharSequence) = value(CONTENT_PLACEHOLDER, content)
+    fun content(content: CharSequence) = value(TemplatePlaceholders.CONTENT, content)
 
     /**
      * @return the template, with the supplied placeholders replaced with the actual values

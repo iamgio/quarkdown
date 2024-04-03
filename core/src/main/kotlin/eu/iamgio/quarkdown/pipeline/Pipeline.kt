@@ -15,7 +15,7 @@ import eu.iamgio.quarkdown.rendering.NodeRenderer
  * @param hooks optional actions to run after each stage has been completed
  */
 class Pipeline(
-    private val components: PipelineComponents,
+    val components: PipelineComponents,
     private val hooks: PipelineHooks? = null,
 ) {
     /**
@@ -49,14 +49,14 @@ class Pipeline(
     fun execute() {
         // Lexing.
         val tokens = components.lexer.tokenize()
-        hooks?.afterLexing?.invoke(tokens)
+        hooks?.afterLexing?.invoke(this, tokens)
 
         // Parsing.
         val document = Document(children = tokens.acceptAll(components.parser))
-        hooks?.afterParsing?.invoke(document)
+        hooks?.afterParsing?.invoke(this, document)
 
         // Rendering.
         val rendered = components.renderer.visit(document)
-        hooks?.afterRendering?.invoke(rendered)
+        hooks?.afterRendering?.invoke(this, rendered)
     }
 }

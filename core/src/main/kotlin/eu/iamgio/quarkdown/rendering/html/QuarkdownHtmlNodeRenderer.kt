@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
+import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
 
 /**
  * A renderer for Quarkdown ([eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
@@ -9,9 +10,10 @@ import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
  */
 class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context) {
     override fun createCodeWrapper() =
-        RenderWrapper.fromResourceName("/render/base/html-wrapper.html")
-            .value("LANG", "")
-            .value("TITLE", "") // TODO extract from context / document settings which can be affected by functions
+        RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
+            // TODO extract from context / document settings which can be affected by functions
+            .value(TemplatePlaceholders.TITLE, "en")
+            .value(TemplatePlaceholders.LANGUAGE, "")
 
     // Quarkdown nodes rendering
 }

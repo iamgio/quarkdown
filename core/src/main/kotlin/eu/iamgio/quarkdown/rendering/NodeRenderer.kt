@@ -16,3 +16,11 @@ interface NodeRenderer : NodeVisitor<CharSequence> {
      */
     fun createCodeWrapper(): RenderWrapper
 }
+
+/**
+ * Wraps rendered code in a template.
+ * @param content code to wrap
+ * @return [content], wrapped in the corresponding template for this rendering strategy
+ * @see RenderWrapper
+ */
+fun NodeRenderer.wrap(content: CharSequence) = createCodeWrapper().content(content).wrap()

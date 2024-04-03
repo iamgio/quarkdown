@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.lexer.Token
  * @see Pipeline
  */
 data class PipelineHooks(
-    val afterLexing: (List<Token>) -> Unit = {},
-    val afterParsing: (AstRoot) -> Unit = {},
-    val afterRendering: (CharSequence) -> Unit = {},
+    val afterLexing: Pipeline.(List<Token>) -> Unit = {},
+    val afterParsing: Pipeline.(AstRoot) -> Unit = {},
+    val afterRendering: Pipeline.(CharSequence) -> Unit = {},
 )

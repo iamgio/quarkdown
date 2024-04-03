@@ -10,6 +10,13 @@ object SystemProperties {
     const val PRETTY_OUTPUT = "pretty"
 
     /**
+     * When this property is present, the rendered code is wrapped in a template code.
+     * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
+     * @see eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
+     */
+    const val WRAP_OUTPUT = "wrap"
+
+    /**
      * @return the corresponding property value for [key], if it exists
      */
     operator fun get(key: String): String? = System.getProperty(key)
@@ -33,7 +40,13 @@ object SystemProperties {
 // Helpers
 
 /**
- * Whether the rendering stage should produce pretty output code
+ * Whether the rendering stage should produce pretty output code.
  */
 val SystemProperties.isPrettyOutputEnabled: Boolean
     get() = contains(PRETTY_OUTPUT)
+
+/**
+ * Whether the output code should be wrapped in a template.
+ */
+val SystemProperties.isWrapOutputEnabled: Boolean
+    get() = contains(WRAP_OUTPUT)
