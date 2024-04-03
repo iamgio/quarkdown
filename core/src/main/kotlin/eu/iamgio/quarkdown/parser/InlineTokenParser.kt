@@ -227,6 +227,8 @@ class InlineTokenParser(
     }
 
     override fun visit(token: InlineMathToken): Node {
+        context.hasMath = true
+
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return MathSpan(expression = groups.next().trim())
     }

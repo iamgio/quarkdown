@@ -13,6 +13,12 @@ import eu.iamgio.quarkdown.ast.ReferenceLink
  */
 interface Context {
     /**
+     * Whether there is at least one math block or inline.
+     * This is used to load the MathJax library in HTML rendering.
+     */
+    val hasMath: Boolean
+
+    /**
      * @param reference reference link to lookup
      * @return the corresponding link node, if it exists
      */
@@ -24,6 +30,9 @@ interface Context {
  * @param attributes attributes of the node tree, produced by the parsing stage
  */
 open class BaseContext(private val attributes: AstAttributes) : Context {
+    override val hasMath: Boolean
+        get() = attributes.hasMath
+
     override fun resolve(reference: ReferenceLink): LinkNode? {
         return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
             ?.let { Link(reference.label, it.url, it.title) }
@@ -35,6 +44,12 @@ open class BaseContext(private val attributes: AstAttributes) : Context {
  * @param attributes attributes of the node tree, which can be manipulated on demand
  */
 class MutableContext(private val attributes: MutableAstAttributes = MutableAstAttributes()) : BaseContext(attributes) {
+    override var hasMath: Boolean
+        get() = attributes.hasMath
+        set(value) {
+            attributes.hasMath = value
+        }
+
     /**
      * Registers a new [LinkDefinition], which can be later looked up
      * via [resolve] to produce a concrete link from a reference.

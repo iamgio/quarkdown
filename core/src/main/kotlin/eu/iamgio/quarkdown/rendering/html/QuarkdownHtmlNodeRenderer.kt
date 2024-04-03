@@ -19,7 +19,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             // TODO extract from context / document settings which can be affected by functions
             .value(TemplatePlaceholders.TITLE, "")
             .value(TemplatePlaceholders.LANGUAGE, "en")
-            .conditional(TemplatePlaceholders.HAS_MATH, true)
+            .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
 
     // Quarkdown node rendering
 

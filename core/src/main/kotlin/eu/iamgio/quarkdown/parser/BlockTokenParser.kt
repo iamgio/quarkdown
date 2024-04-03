@@ -97,11 +97,15 @@ class BlockTokenParser(
     }
 
     override fun visit(token: MultilineMathToken): Node {
+        context.hasMath = true
+
         val groups = token.data.groups.iterator(consumeAmount = 3)
         return Math(expression = groups.next().trim())
     }
 
     override fun visit(token: OnelineMathToken): Node {
+        context.hasMath = true
+
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Math(expression = groups.next().trim())
     }

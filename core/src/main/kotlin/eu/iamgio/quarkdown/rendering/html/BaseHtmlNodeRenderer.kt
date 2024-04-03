@@ -43,7 +43,7 @@ import eu.iamgio.quarkdown.util.toPlainText
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
-open class BaseHtmlNodeRenderer(private val context: Context) : TagNodeRenderer<HtmlTagBuilder>() {
+open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRenderer<HtmlTagBuilder>() {
     override fun createBuilder(
         name: String,
         pretty: Boolean,
