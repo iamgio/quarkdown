@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.rendering.TagBuilder
-import eu.iamgio.quarkdown.rendering.tagBuilder
+import eu.iamgio.quarkdown.rendering.tag.TagBuilder
+import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 import eu.iamgio.quarkdown.util.indent
 
 /**

@@ -16,6 +16,8 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
+import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -36,7 +38,7 @@ import eu.iamgio.quarkdown.ast.UnorderedList
 interface NodeVisitor<T> {
     fun visit(node: AstRoot): T
 
-    // Block
+    // Base block
 
     fun visit(node: Newline): T
 
@@ -66,7 +68,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: BlockText): T
 
-    // Inline
+    // Base inline
 
     fun visit(node: Comment): T
 
@@ -93,4 +95,11 @@ interface NodeVisitor<T> {
     fun visit(node: StrongEmphasis): T
 
     fun visit(node: Strikethrough): T
+
+    // Quarkdown block
+
+    fun visit(node: Math): T
+
+    // Quarkdown inline
+    fun visit(node: MathSpan): T
 }

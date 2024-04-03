@@ -1,6 +1,7 @@
-package eu.iamgio.quarkdown.rendering
+package eu.iamgio.quarkdown.rendering.tag
 
 import eu.iamgio.quarkdown.ast.CriticalContent
+import eu.iamgio.quarkdown.rendering.NodeRenderer
 
 /**
  * A converter of [eu.iamgio.quarkdown.ast.Node]s into tag-based output code,

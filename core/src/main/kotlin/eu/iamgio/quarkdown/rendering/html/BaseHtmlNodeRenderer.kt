@@ -16,6 +16,8 @@ import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListItem
+import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -30,9 +32,10 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.ast.context.resolveOrFallback
-import eu.iamgio.quarkdown.rendering.TagNodeRenderer
-import eu.iamgio.quarkdown.rendering.buildTag
-import eu.iamgio.quarkdown.rendering.tagBuilder
+import eu.iamgio.quarkdown.rendering.UnsupportedRenderException
+import eu.iamgio.quarkdown.rendering.tag.TagNodeRenderer
+import eu.iamgio.quarkdown.rendering.tag.buildTag
+import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.util.toPlainText
 
@@ -206,4 +209,10 @@ open class BaseHtmlNodeRenderer(private val context: Context) : TagNodeRenderer<
         }
 
     override fun visit(node: Strikethrough) = buildTag("del", node.children)
+
+    // Quarkdown - implemented by QuarkdownHtmlNodeRenderer
+
+    override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: MathSpan): CharSequence = throw UnsupportedRenderException(node)
 }

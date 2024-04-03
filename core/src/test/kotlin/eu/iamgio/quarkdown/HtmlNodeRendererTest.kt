@@ -16,6 +16,8 @@ import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListItem
+import eu.iamgio.quarkdown.ast.Math
+import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -41,7 +43,7 @@ import kotlin.test.assertEquals
 /**
  * HTML node rendering tests.
  */
-class HtmlTagNodeRendererTest {
+class HtmlNodeRendererTest {
     private fun readParts(path: String) =
         readSource("/rendering/$path")
             .split("\n---\n")
@@ -469,5 +471,19 @@ class HtmlTagNodeRendererTest {
                 ),
             ).render(),
         )
+    }
+
+    // Quarkdown
+
+    @Test
+    fun mathBlock() {
+        assertEquals("__QD_BLOCK_MATH__\$some expression\$__QD_BLOCK_MATH__", Math("some expression").render())
+        assertEquals("__QD_BLOCK_MATH__\$\\lim_{x\\to\\infty}x\$__QD_BLOCK_MATH__", Math("\\lim_{x\\to\\infty}x").render())
+    }
+
+    @Test
+    fun mathSpan() {
+        assertEquals("__QD_INLINE_MATH__\$some expression\$__QD_INLINE_MATH__", MathSpan("some expression").render())
+        assertEquals("__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__", MathSpan("\\lim_{x\\to\\infty}x").render())
     }
 }

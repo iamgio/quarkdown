@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.rendering
+package eu.iamgio.quarkdown.rendering.tag
 
 import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Node

@@ -143,5 +143,5 @@ data class Strikethrough(override val children: InlineContent) : NestableNode {
 data class MathSpan(
     val expression: String,
 ) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
