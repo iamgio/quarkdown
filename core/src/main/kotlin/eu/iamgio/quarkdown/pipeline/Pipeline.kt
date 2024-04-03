@@ -1,12 +1,15 @@
 package eu.iamgio.quarkdown.pipeline
 
+import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Document
 import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
+import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.rendering.NodeRenderer
+import eu.iamgio.quarkdown.rendering.wrap
 
 /**
  * A representation of the sequential set of actions to perform in order to produce an output artifact from a raw source.
@@ -58,5 +61,17 @@ class Pipeline(
         // Rendering.
         val rendered = components.renderer.visit(document)
         hooks?.afterRendering?.invoke(this, rendered)
+
+        // Post rendering.
+
+        // If enabled, the output code is wrapped in a template.
+        val output =
+            if (SystemProperties.isWrapOutputEnabled) {
+                components.renderer.wrap(rendered)
+            } else {
+                rendered
+            }
+
+        hooks?.afterPostRendering?.invoke(this, output)
     }
 }

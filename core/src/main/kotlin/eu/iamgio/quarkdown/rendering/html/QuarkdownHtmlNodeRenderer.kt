@@ -12,8 +12,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             // TODO extract from context / document settings which can be affected by functions
-            .value(TemplatePlaceholders.TITLE, "en")
-            .value(TemplatePlaceholders.LANGUAGE, "")
+            .value(TemplatePlaceholders.TITLE, "")
+            .value(TemplatePlaceholders.LANGUAGE, "en")
 
     // Quarkdown nodes rendering
 }
