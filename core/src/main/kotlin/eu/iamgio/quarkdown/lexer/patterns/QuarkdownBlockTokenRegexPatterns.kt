@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 
 /**
- * Regex patterns for [QuarkdownFlavor].
+ * Regex patterns for [eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor].
  */
 class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
     override fun interruptionRule(
@@ -43,7 +43,14 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
                 name = "OnelineMath",
                 ::OnelineMathToken,
                 regex =
-                    " {0,3}\\\$[ \\t](.+?)[ \\t]\\\$\\s*\$"
-                        .toRegex(),
+                    RegexBuilder("^ {0,3}math\\s*\$")
+                        .withReference("math", ONELINE_MATH_HELPER)
+                        .build(),
             )
 }
+
+/**
+ * Pattern of one-line fenced content between two dollar signs.
+ * The spacing between the dollar signs and the inner content must be of one unit.
+ */
+const val ONELINE_MATH_HELPER = "\\\$[ \\t](.+?)(?<![ \\t])[ \\t]\\\$"

@@ -7,4 +7,6 @@ $ Math expression $
 
     $ Not math $
 
+$ Not math  $
+
 $ Not math $ some text
