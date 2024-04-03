@@ -22,7 +22,7 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] inlines.
  */
-class BaseMarkdownInlineTokenRegexPatterns {
+open class BaseMarkdownInlineTokenRegexPatterns {
     /**
      * A backslash followed by a punctuation character.
      * @see EscapeToken

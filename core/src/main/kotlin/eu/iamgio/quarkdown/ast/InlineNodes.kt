@@ -135,3 +135,13 @@ data class StrongEmphasis(override val children: InlineContent) : NestableNode {
 data class Strikethrough(override val children: InlineContent) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
+
+/**
+ * A math (TeX) inline.
+ * @param expression expression content
+ */
+data class MathSpan(
+    val expression: String,
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = TODO("Not yet implemented")
+}

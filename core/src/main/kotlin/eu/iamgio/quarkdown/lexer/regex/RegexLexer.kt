@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
  */
 abstract class RegexLexer(
     source: CharSequence,
-    private val patterns: List<TokenRegexPattern>,
+    protected val patterns: List<TokenRegexPattern>,
 ) : AbstractLexer(source) {
     /**
      * Converts captured groups of a [Regex] match to a sequence of tokens.

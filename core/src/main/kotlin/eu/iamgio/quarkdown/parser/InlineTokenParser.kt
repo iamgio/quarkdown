@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LineBreak
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -25,6 +26,7 @@ import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EntityToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.ImageToken
+import eu.iamgio.quarkdown.lexer.InlineMathToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
@@ -222,5 +224,10 @@ class InlineTokenParser(
 
     override fun visit(token: StrikethroughToken): Node {
         return Strikethrough(emphasisContent(token))
+    }
+
+    override fun visit(token: InlineMathToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        return MathSpan(expression = groups.next().trim())
     }
 }

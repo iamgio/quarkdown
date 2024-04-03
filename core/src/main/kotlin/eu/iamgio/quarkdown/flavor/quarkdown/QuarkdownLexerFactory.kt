@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.flavor.LexerFactory
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownLexerFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.patterns.QuarkdownBlockTokenRegexPatterns
+import eu.iamgio.quarkdown.lexer.patterns.QuarkdownInlineTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 
 /**
@@ -11,6 +12,16 @@ import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
  */
 class QuarkdownLexerFactory : LexerFactory {
     private val base = BaseMarkdownLexerFactory()
+
+    /**
+     * New inline patterns introduced by this flavor.
+     */
+    private val inlineExtensions =
+        with(QuarkdownInlineTokenRegexPatterns()) {
+            listOf(
+                inlineMath,
+            )
+        }
 
     override fun newBlockLexer(source: CharSequence): Lexer =
         with(QuarkdownBlockTokenRegexPatterns()) {
@@ -39,7 +50,13 @@ class QuarkdownLexerFactory : LexerFactory {
 
     override fun newListLexer(source: CharSequence): Lexer = base.newListLexer(source)
 
-    override fun newInlineLexer(source: CharSequence) = base.newInlineLexer(source)
+    override fun newInlineLexer(source: CharSequence): Lexer =
+        base.newInlineLexer(source).updatePatterns { patterns ->
+            this.inlineExtensions + patterns
+        }
 
-    override fun newLinkLabelInlineLexer(source: CharSequence) = base.newLinkLabelInlineLexer(source)
+    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
+        base.newLinkLabelInlineLexer(source).updatePatterns { patterns ->
+            this.inlineExtensions + patterns
+        }
 }

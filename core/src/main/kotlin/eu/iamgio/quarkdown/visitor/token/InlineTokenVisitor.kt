@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.lexer.EmphasisToken
 import eu.iamgio.quarkdown.lexer.EntityToken
 import eu.iamgio.quarkdown.lexer.EscapeToken
 import eu.iamgio.quarkdown.lexer.ImageToken
+import eu.iamgio.quarkdown.lexer.InlineMathToken
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkToken
 import eu.iamgio.quarkdown.lexer.PlainTextToken
@@ -58,4 +59,8 @@ interface InlineTokenVisitor<T> {
     fun visit(token: StrongEmphasisToken): T
 
     fun visit(token: StrikethroughToken): T
+
+    // Quarkdown extensions
+
+    fun visit(token: InlineMathToken): T
 }

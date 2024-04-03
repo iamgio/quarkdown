@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.flavor.LexerFactory
-import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownInlineTokenRegexPatterns
@@ -11,7 +10,7 @@ import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
  * [BaseMarkdownFlavor] lexer factory.
  */
 class BaseMarkdownLexerFactory : LexerFactory {
-    override fun newBlockLexer(source: CharSequence): Lexer =
+    override fun newBlockLexer(source: CharSequence): StandardRegexLexer =
         with(BaseMarkdownBlockTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,
@@ -34,7 +33,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
-    override fun newListLexer(source: CharSequence): Lexer =
+    override fun newListLexer(source: CharSequence): StandardRegexLexer =
         with(BaseMarkdownBlockTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,
@@ -42,39 +41,19 @@ class BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
-    override fun newInlineLexer(source: CharSequence): Lexer =
-        with(BaseMarkdownInlineTokenRegexPatterns()) {
-            StandardRegexLexer(
-                source,
+    override fun newInlineLexer(source: CharSequence): StandardRegexLexer =
+        newLinkLabelInlineLexer(source).updatePatterns { patterns ->
+            with(BaseMarkdownInlineTokenRegexPatterns()) {
                 listOf(
-                    // anyPunctuation,
                     diamondAutolink,
-                    // blockSkip,
-                    lineBreak,
-                    codeSpan,
-                    escape,
-                    entity,
-                    comment,
-                    image,
-                    referenceImage,
                     link,
-                    // punctuation,
                     referenceLink,
                     urlAutolink,
-                    strongEmphasisAsterisk,
-                    strongEmphasisUnderscore,
-                    emphasisAsterisk,
-                    emphasisUnderscore,
-                    strongAsterisk,
-                    strongUnderscore,
-                    strikethrough,
-                    criticalContent,
-                ),
-                fillTokenType = ::PlainTextToken,
-            )
+                ) + patterns
+            }
         }
 
-    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
+    override fun newLinkLabelInlineLexer(source: CharSequence): StandardRegexLexer =
         with(BaseMarkdownInlineTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,

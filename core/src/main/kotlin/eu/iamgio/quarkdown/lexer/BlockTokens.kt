@@ -56,7 +56,8 @@ class MultilineMathToken(data: TokenData) : Token(data) {
 }
 
 /**
- * A one-line fenced block that contains a TeX expression.
+ * An isolated one-line fenced block that contains a TeX expression.
+ * If it's not isolated, then it's an [InlineMathToken].
  * This is a custom Quarkdown block.
  *
  * Example:

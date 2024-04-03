@@ -198,3 +198,18 @@ class StrongEmphasisToken(data: TokenData) : Token(data) {
 class StrikethroughToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
+
+// Quarkdown extensions
+
+/**
+ * A one-line fenced block that contains a TeX expression.
+ * If it's isolated, then it's a [OnelineMathToken].
+ * This is a custom Quarkdown block.
+ *
+ * Example:
+ * $ LaTeX expression $
+ * @see eu.iamgio.quarkdown.ast.MathSpan
+ */
+class InlineMathToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
