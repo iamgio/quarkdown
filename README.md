@@ -56,20 +56,20 @@ The project is under development. Currently supported:
 
 - Base Markdown inline
   - [x] Text
-  - [x] Link
-  - [x] Reference link
-  - [x] Autolink (+ GFM extension)
-  - [x] Image
-  - [x] Reference image
-  - [x] Comment
+  - [x] Links
+  - [x] Reference links
+  - [x] Autolinks (+ GFM extension)
+  - [x] Images
+  - [x] Reference images
+  - [x] Comments
   - [x] Emphasis
-  - [x] Code span
+  - [x] Code spans
   - [x] GFM strikethrough
 
 - Quarkdown features
   - [ ] Functions
   - [ ] Styles
-  - [x] Math (LaTeX) blocks
+  - [x] Math (LaTeX) blocks and inlines
   - [ ] Highlight
   - [ ] Subscript/superscript
 

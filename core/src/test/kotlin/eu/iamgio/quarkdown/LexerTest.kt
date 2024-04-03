@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.lexer.HeadingToken
 import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
 import eu.iamgio.quarkdown.lexer.ImageToken
+import eu.iamgio.quarkdown.lexer.InlineMathToken
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.LineBreakToken
 import eu.iamgio.quarkdown.lexer.LinkDefinitionToken
@@ -316,6 +317,8 @@ class LexerTest {
         assertIs<StrongToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
         assertIs<ReferenceLinkToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<InlineMathToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
 
         assertFalse(tokens.hasNext())

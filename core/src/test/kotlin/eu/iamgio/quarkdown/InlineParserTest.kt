@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
+import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -330,5 +331,15 @@ class InlineParserTest {
         }
 
         assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun mathSpan() {
+        val nodes = inlineIterator<MathSpan>(readSource("/parsing/inline/mathspan.md"), assertType = false)
+
+        repeat(3) {
+            assertEquals("Math expression", nodes.next().expression)
+        }
+        assertEquals("Math \$expression", nodes.next().expression)
     }
 }

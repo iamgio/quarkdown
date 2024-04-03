@@ -14,3 +14,4 @@ ent -->
 a **b  
 c**
 [a*]*
+text $ math $ text
