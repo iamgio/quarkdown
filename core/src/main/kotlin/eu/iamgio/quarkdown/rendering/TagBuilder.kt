@@ -17,7 +17,7 @@ import eu.iamgio.quarkdown.isPrettyOutputEnabled
  */
 abstract class TagBuilder(
     private val name: String,
-    private val renderer: NodeRenderer<*>,
+    private val renderer: TagNodeRenderer<*>,
     private val pretty: Boolean,
 ) {
     /**
@@ -84,7 +84,7 @@ abstract class TagBuilder(
  * @param init action to run at initialization
  * @return the new builder
  */
-fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
+fun <B : TagBuilder> TagNodeRenderer<B>.tagBuilder(
     name: String,
     pretty: Boolean = SystemProperties.isPrettyOutputEnabled,
     init: B.() -> Unit = {},
@@ -103,7 +103,7 @@ fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
  * @return the new builder
  * @see tagBuilder
  */
-fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
+fun <B : TagBuilder> TagNodeRenderer<B>.tagBuilder(
     name: String,
     content: List<Node>,
 ) = tagBuilder(name) { +content }
@@ -121,7 +121,7 @@ fun <B : TagBuilder> NodeRenderer<B>.tagBuilder(
  * @return output code of the tag
  * @see tagBuilder
  */
-fun <B : TagBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> TagNodeRenderer<B>.buildTag(
     name: String,
     init: B.() -> Unit,
 ) = tagBuilder(name, init = init).build()
@@ -137,7 +137,7 @@ fun <B : TagBuilder> NodeRenderer<B>.buildTag(
  * @return output code of the tag
  * @see buildTag
  */
-fun <B : TagBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> TagNodeRenderer<B>.buildTag(
     name: String,
     content: List<Node>,
 ) = buildTag(name) { +content }
@@ -153,7 +153,7 @@ fun <B : TagBuilder> NodeRenderer<B>.buildTag(
  * @return output code of the tag
  * @see buildTag
  */
-fun <B : TagBuilder> NodeRenderer<B>.buildTag(
+fun <B : TagBuilder> TagNodeRenderer<B>.buildTag(
     name: String,
     content: String,
 ) = buildTag(name) { +content }

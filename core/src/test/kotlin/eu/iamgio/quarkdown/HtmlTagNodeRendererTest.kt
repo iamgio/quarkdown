@@ -41,7 +41,7 @@ import kotlin.test.assertEquals
 /**
  * HTML node rendering tests.
  */
-class HtmlNodeRendererTest {
+class HtmlTagNodeRendererTest {
     private fun readParts(path: String) =
         readSource("/rendering/$path")
             .split("\n---\n")

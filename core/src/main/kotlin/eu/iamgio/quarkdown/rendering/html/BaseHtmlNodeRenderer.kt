@@ -30,16 +30,17 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.ast.context.resolveOrFallback
-import eu.iamgio.quarkdown.rendering.NodeRenderer
+import eu.iamgio.quarkdown.rendering.TagNodeRenderer
 import eu.iamgio.quarkdown.rendering.buildTag
 import eu.iamgio.quarkdown.rendering.tagBuilder
+import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
-open class BaseHtmlNodeRenderer(private val context: Context) : NodeRenderer<HtmlTagBuilder>() {
+open class BaseHtmlNodeRenderer(private val context: Context) : TagNodeRenderer<HtmlTagBuilder>() {
     override fun createBuilder(
         name: String,
         pretty: Boolean,
@@ -53,20 +54,11 @@ open class BaseHtmlNodeRenderer(private val context: Context) : NodeRenderer<Htm
             .replace("\"", "&quot;")
             .replace("\'", "&#39;")
 
+    override fun createCodeWrapper() = RenderWrapper.fromResourceName("/render/base/html-wrapper.html")
+
     // Root
 
-    override fun visit(node: AstRoot) =
-        "<!DOCTYPE html>\n" +
-            buildTag("html") {
-                tag("head") {
-                    tag("meta")
-                        .attribute("charset", "UTF-8")
-                        .void(true)
-                }
-                tag("body") {
-                    +node.children
-                }
-            }
+    override fun visit(node: AstRoot) = node.children.joinToString(separator = "") { it.accept(this) }
 
     // Block
 

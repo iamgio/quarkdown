@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.pipeline
 
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.lexer.Lexer
-import eu.iamgio.quarkdown.visitor.node.NodeVisitor
+import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 /**
@@ -15,5 +15,5 @@ import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 data class PipelineComponents(
     val lexer: Lexer,
     val parser: TokenVisitor<Node>,
-    val renderer: NodeVisitor<CharSequence>,
+    val renderer: NodeRenderer,
 )

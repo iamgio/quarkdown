@@ -1,33 +1,18 @@
 package eu.iamgio.quarkdown.rendering
 
-import eu.iamgio.quarkdown.ast.CriticalContent
+import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- * A converter of [eu.iamgio.quarkdown.ast.Node]s into tag-based output code,
- * by using a DSL-like approach provided by [TagBuilder].
+ * A rendering strategy, which converts nodes from the AST to their output code representation.
  */
-abstract class NodeRenderer<B : TagBuilder> : NodeVisitor<CharSequence> {
+interface NodeRenderer : NodeVisitor<CharSequence> {
     /**
-     * Factory method that creates a new builder.
-     * @param name name of the tag to open
-     * @param pretty whether the output code should be pretty
+     * Creates a new instance of a code wrapper for this rendering strategy.
+     * A wrapper adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
+     * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
+     * See `resources/render` for templates.
+     * @return a new instance of the corresponding wrapper
      */
-    abstract fun createBuilder(
-        name: String,
-        pretty: Boolean,
-    ): B
-
-    /**
-     * @param unescaped input to escape critical content for
-     * @return the input string with the critical content escaped into safe content
-     *         (e.g. in HTML `<` is escaped to `&lt;`).
-     * @see CriticalContent
-     */
-    abstract fun escapeCriticalContent(unescaped: String): CharSequence
-
-    /**
-     * @see escapeCriticalContent
-     */
-    override fun visit(node: CriticalContent) = escapeCriticalContent(node.text)
+    fun createCodeWrapper(): RenderWrapper
 }

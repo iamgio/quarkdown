@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.lexer.acceptAll
-import eu.iamgio.quarkdown.visitor.node.NodeVisitor
+import eu.iamgio.quarkdown.rendering.NodeRenderer
 
 /**
  * A representation of the sequential set of actions to perform in order to produce an output artifact from a raw source.
@@ -31,7 +31,7 @@ class Pipeline(
     constructor(
         source: CharSequence,
         flavor: MarkdownFlavor,
-        renderer: (RendererFactory, Context) -> NodeVisitor<CharSequence>,
+        renderer: (RendererFactory, Context) -> NodeRenderer,
         context: MutableContext = MutableContext(),
         hooks: PipelineHooks? = null,
     ) : this(

@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.lexer.regex
 
+import eu.iamgio.quarkdown.util.replace
+
 /**
  * A builder for [Regex] patterns.
  * @param baseRegex initial pattern
@@ -17,10 +19,7 @@ class RegexBuilder(baseRegex: String) {
         label: String,
         regex: String,
     ) = apply {
-        var index: Int
-        while (pattern.indexOf(label).also { index = it } >= 0) {
-            pattern.replace(index, index + label.length, regex)
-        }
+        pattern.replace(label, regex)
     }
 
     /**

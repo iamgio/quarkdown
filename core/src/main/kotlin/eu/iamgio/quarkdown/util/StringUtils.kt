@@ -30,3 +30,17 @@ fun CharSequence.indent(indent: String) =
             .filterNot { it.isEmpty() }
             .forEach { append(indent).append(it).append("\n") }
     }
+
+/**
+ * An optimized way to replace all occurrences of [oldValue] with [newValue] in a [StringBuilder].
+ * @return this builder
+ */
+fun StringBuilder.replace(
+    oldValue: String,
+    newValue: String,
+) = apply {
+    var index: Int
+    while (indexOf(oldValue).also { index = it } >= 0) {
+        replace(index, index + oldValue.length, newValue)
+    }
+}
