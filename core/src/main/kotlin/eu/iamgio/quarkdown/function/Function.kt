@@ -20,6 +20,17 @@ interface Function<T : OutputValue<*>> {
     /**
      * Function that maps the input arguments into an output value.
      * Arguments and [parameters] compliance in terms of matching types and count is not checked here.
+     * The [FunctionArgumentsLinker] allows looking up argument values by their parameter name.
      */
-    val invoke: (List<FunctionCallArgument<*>>) -> T
+    val invoke: FunctionArgumentsLinker.() -> T
 }
+
+/**
+ * A basic [Function] implementation.
+ * @see Function
+ */
+data class SimpleFunction<T : OutputValue<*>>(
+    override val name: String,
+    override val parameters: List<FunctionParameter<*>>,
+    override val invoke: FunctionArgumentsLinker.() -> T,
+) : Function<T>

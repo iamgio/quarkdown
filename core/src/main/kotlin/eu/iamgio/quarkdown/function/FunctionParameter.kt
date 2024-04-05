@@ -11,5 +11,5 @@ import kotlin.reflect.KClass
  */
 data class FunctionParameter<T>(
     val name: String,
-    val type: KClass<InputValue<T>>,
+    val type: KClass<out InputValue<T>>,
 )
