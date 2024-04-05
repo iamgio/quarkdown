@@ -1,11 +1,11 @@
 package eu.iamgio.quarkdown.function
 
-import eu.iamgio.quarkdown.function.value.InputValueType
+import eu.iamgio.quarkdown.function.value.InputValue
 
 /**
  *
  */
 data class FunctionParameter<T>(
     val name: String,
-    val type: InputValueType<T>,
+    val type: InputValue<T>,
 )
