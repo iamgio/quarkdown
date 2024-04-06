@@ -30,7 +30,7 @@ data class StringValue(override val unwrappedValue: String) : InputValue<String>
 /**
  * An immutable numeric [Value].
  */
-data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>
+data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>, OutputValue<Number>
 
 /**
  * An immutable [Node] [Value].

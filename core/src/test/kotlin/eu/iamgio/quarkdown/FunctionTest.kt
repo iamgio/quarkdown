@@ -5,6 +5,8 @@ import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
+import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import kotlin.test.Test
@@ -61,12 +63,6 @@ class FunctionTest {
     @Suppress("MemberVisibilityCanBePrivate")
     fun greetNoArgs(): StringValue = StringValue("Hello")
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetWithArgs(
-        to: String,
-        from: String,
-    ): StringValue = StringValue("Hello $to from $from")
-
     @Test
     fun `KFunction without arguments`() {
         val function = KFunctionAdapter(::greetNoArgs)
@@ -74,6 +70,12 @@ class FunctionTest {
 
         assertEquals("Hello", call.execute().unwrappedValue)
     }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun greetWithArgs(
+        to: String,
+        from: String,
+    ): StringValue = StringValue("Hello $to from $from")
 
     @Test
     fun `KFunction with arguments`() {
@@ -90,5 +92,28 @@ class FunctionTest {
             )
 
         assertEquals("Hello A from B", call.execute().unwrappedValue)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun sum(
+        a: Int,
+        b: Int,
+    ): NumberValue = NumberValue(a + b)
+
+    @Test
+    fun `KFunction with auto arguments`() {
+        val function = KFunctionAdapter(::sum)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("2")),
+                        FunctionCallArgument(DynamicInputValue("5")),
+                    ),
+            )
+
+        assertEquals(7, call.execute().unwrappedValue)
     }
 }
