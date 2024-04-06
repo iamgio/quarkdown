@@ -1,5 +1,7 @@
-package eu.iamgio.quarkdown.lexer
+package eu.iamgio.quarkdown.lexer.tokens
 
+import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 // Inline tokens

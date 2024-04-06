@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.lexer.patterns
 
-import eu.iamgio.quarkdown.lexer.FunctionCallToken
-import eu.iamgio.quarkdown.lexer.InlineMathToken
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
+import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
+import eu.iamgio.quarkdown.lexer.tokens.InlineMathToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor].

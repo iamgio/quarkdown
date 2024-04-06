@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.flavor.LexerFactory
-import eu.iamgio.quarkdown.lexer.PlainTextToken
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownInlineTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
+import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
 
 /**
  * [BaseMarkdownFlavor] lexer factory.
