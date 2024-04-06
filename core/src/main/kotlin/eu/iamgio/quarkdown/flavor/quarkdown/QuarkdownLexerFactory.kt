@@ -52,11 +52,11 @@ class QuarkdownLexerFactory : LexerFactory {
 
     override fun newInlineLexer(source: CharSequence): Lexer =
         base.newInlineLexer(source).updatePatterns { patterns ->
-            this.inlineExtensions + patterns
+            patterns + this.inlineExtensions
         }
 
     override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
         base.newLinkLabelInlineLexer(source).updatePatterns { patterns ->
-            this.inlineExtensions + patterns
+            patterns + this.inlineExtensions
         }
 }
