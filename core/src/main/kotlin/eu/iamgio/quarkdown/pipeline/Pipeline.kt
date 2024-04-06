@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.context.Context
 import eu.iamgio.quarkdown.ast.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
+import eu.iamgio.quarkdown.function.AstFunctionCallExpander
 import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.rendering.NodeRenderer
@@ -41,6 +42,7 @@ class Pipeline(
         PipelineComponents(
             flavor.lexerFactory.newBlockLexer(source),
             flavor.parserFactory.newParser(context),
+            AstFunctionCallExpander(context),
             renderer(flavor.rendererFactory, context),
         ),
         hooks,
@@ -57,6 +59,10 @@ class Pipeline(
         // Parsing.
         val document = Document(children = tokens.acceptAll(components.parser))
         hooks?.afterParsing?.invoke(this, document)
+
+        // Executes queued function calls and expands their content based on their output.
+        components.functionCallExpander.expandAll()
+        hooks?.afterExpanding?.invoke(this, document)
 
         // Rendering.
         val rendered = components.renderer.visit(document)

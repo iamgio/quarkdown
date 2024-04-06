@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.context.Context
@@ -22,6 +23,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
 
     // Quarkdown node rendering
+
+    // The function was already expanded by previous stages: its output nodes are stored in its children.
+    override fun visit(node: FunctionCallNode): CharSequence = node.children.joinToString(separator = "") { it.accept(this) }
 
     // Block
 

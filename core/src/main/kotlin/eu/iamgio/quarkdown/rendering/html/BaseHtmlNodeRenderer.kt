@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -211,6 +212,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: Strikethrough) = buildTag("del", node.children)
 
     // Quarkdown - implemented by QuarkdownHtmlNodeRenderer
+
+    override fun visit(node: FunctionCallNode): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
 

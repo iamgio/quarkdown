@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
 import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -95,6 +96,10 @@ interface NodeVisitor<T> {
     fun visit(node: StrongEmphasis): T
 
     fun visit(node: Strikethrough): T
+
+    // Quarkdown extensions
+
+    fun visit(node: FunctionCallNode): T
 
     // Quarkdown block
 

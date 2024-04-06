@@ -14,5 +14,5 @@ data class FunctionCallNode(
 ) : NestableNode {
     override val children: MutableList<Node> = mutableListOf()
 
-    override fun <T> accept(visitor: NodeVisitor<T>): T = TODO("Not yet implemented")
+    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }
