@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.FunctionCall
 import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
+import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import kotlin.test.Test
@@ -25,7 +26,7 @@ class FunctionTest {
 
         val call = FunctionCall(function, arguments = emptyList())
 
-        assertEquals("Hello", call.execute().value)
+        assertEquals("Hello", call.execute().unwrappedValue)
     }
 
     @Test
@@ -54,6 +55,40 @@ class FunctionTest {
                     ),
             )
 
-        assertEquals("Hello A from B", call.execute().value)
+        assertEquals("Hello A from B", call.execute().unwrappedValue)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun greetNoArgs(): StringValue = StringValue("Hello")
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun greetWithArgs(
+        to: String,
+        from: String,
+    ): StringValue = StringValue("Hello $to from $from")
+
+    @Test
+    fun `KFunction without arguments`() {
+        val function = KFunctionAdapter(::greetNoArgs)
+        val call = FunctionCall(function, arguments = emptyList())
+
+        assertEquals("Hello", call.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with arguments`() {
+        val function = KFunctionAdapter(::greetWithArgs)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                        FunctionCallArgument(StringValue("B")),
+                    ),
+            )
+
+        assertEquals("Hello A from B", call.execute().unwrappedValue)
     }
 }

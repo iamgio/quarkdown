@@ -9,7 +9,7 @@ sealed interface Value<T> {
     /**
      * The wrapped value.
      */
-    val value: T
+    val unwrappedValue: T
 }
 
 /**
@@ -25,21 +25,21 @@ sealed interface OutputValue<T> : Value<T>
 /**
  * An immutable string [Value].
  */
-data class StringValue(override val value: String) : InputValue<String>, OutputValue<String>
+data class StringValue(override val unwrappedValue: String) : InputValue<String>, OutputValue<String>
 
 /**
  * An immutable numeric [Value].
  */
-data class NumberValue(override val value: Number) : InputValue<Number>
+data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>
 
 /**
  * An immutable [Node] [Value].
  */
-data class NodeValue(override val value: Node) : OutputValue<Node>
+data class NodeValue(override val unwrappedValue: Node) : OutputValue<Node>
 
 /**
  * An empty [Value] with no content.
  */
 class VoidValue : OutputValue<Unit> {
-    override val value = Unit
+    override val unwrappedValue = Unit
 }

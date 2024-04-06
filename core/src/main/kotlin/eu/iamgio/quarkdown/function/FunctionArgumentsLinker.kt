@@ -17,13 +17,21 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
         }
 
     /**
+     * All arguments, in the correct order, ready for a call execution.
+     */
+    val allArgsOrdered: Collection<FunctionCallArgument<*>>
+        get() {
+            return links.values
+        }
+
+    /**
      * Stores the associations between [FunctionCallArgument]s and [FunctionParameter]s.
      */
     fun link() {
         this.links =
-            call.arguments
+            call.function.parameters
                 .withIndex()
-                .associate { (index, argument) -> call.function.parameters[index] to argument }
+                .associate { (index, parameter) -> parameter to call.arguments[index] }
     }
 
     /**
@@ -33,9 +41,10 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      * @throws NoSuchElementException if [name] does not match any parameter name
      */
     inline fun <reified T> arg(name: String): T =
+        // TODO could automatically get type from parameter.type
         this.links.entries
             .first { it.key.name == name }
             .value // Map.Entry method: returns FunctionCallArgument
             .value // FunctionCallArgument method: returns InputValue<T>
-            .value as T // InputValue<T> method: returns T
+            .unwrappedValue as T // InputValue<T> method: returns T
 }
