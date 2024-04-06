@@ -19,6 +19,7 @@ class QuarkdownLexerFactory : LexerFactory {
     private val inlineExtensions =
         with(QuarkdownInlineTokenRegexPatterns()) {
             listOf(
+                inlineFunctionCall,
                 inlineMath,
             )
         }

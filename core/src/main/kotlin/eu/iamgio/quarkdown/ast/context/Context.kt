@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.ast.context
 
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkDefinition
@@ -19,6 +20,11 @@ interface Context {
     val hasMath: Boolean
 
     /**
+     * The function calls to be expanded (executed) in the next stage of the pipeline.
+     */
+    val functionCalls: List<FunctionCallNode>
+
+    /**
      * @param reference reference link to lookup
      * @return the corresponding link node, if it exists
      */
@@ -32,6 +38,9 @@ interface Context {
 open class BaseContext(private val attributes: AstAttributes) : Context {
     override val hasMath: Boolean
         get() = attributes.hasMath
+
+    override val functionCalls: List<FunctionCallNode>
+        get() = attributes.functionCalls
 
     override fun resolve(reference: ReferenceLink): LinkNode? {
         return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
@@ -57,6 +66,14 @@ class MutableContext(private val attributes: MutableAstAttributes = MutableAstAt
      */
     fun register(linkDefinition: LinkDefinition) {
         attributes.linkDefinitions += linkDefinition
+    }
+
+    /**
+     * Enqueues a new [FunctionCallNode], which is executed in the next stage of the pipeline.
+     * @param functionCall function call to register
+     */
+    fun register(functionCall: FunctionCallNode) {
+        attributes.functionCalls += functionCall
     }
 }
 

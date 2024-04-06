@@ -27,7 +27,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
         get() =
             TokenRegexPattern(
                 name = "MultilineMath",
-                ::MultilineMathToken,
+                wrap = ::MultilineMathToken,
                 regex =
                     "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
                         .toRegex(),
@@ -41,7 +41,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
         get() =
             TokenRegexPattern(
                 name = "OnelineMath",
-                ::OnelineMathToken,
+                wrap = ::OnelineMathToken,
                 regex =
                     RegexBuilder("^ {0,3}math\\s*\$")
                         .withReference("math", ONELINE_MATH_HELPER)

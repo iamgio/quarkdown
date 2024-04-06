@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -25,6 +26,7 @@ import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.BlockTextToken
 import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.HeadingToken
 import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
@@ -325,5 +327,24 @@ class BlockTokenParser(
 
     override fun visit(token: BlockTextToken): Node {
         return BlockText()
+    }
+
+    override fun visit(token: FunctionCallToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        val name = groups.next()
+        val arguments =
+            buildList {
+                groups.forEachRemaining { add(it) }
+            }
+
+        // TODO 'body' argument
+
+        val call = FunctionCallNode(name, arguments)
+
+        // Enqueuing the function call, in order to expand it in the next stage.
+        context.register(call)
+
+        return call
     }
 }

@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.lexer.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.BlockTextToken
 import eu.iamgio.quarkdown.lexer.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.HeadingToken
 import eu.iamgio.quarkdown.lexer.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.HtmlToken
@@ -56,4 +57,8 @@ interface BlockTokenVisitor<T> {
     fun visit(token: BlockQuoteToken): T
 
     fun visit(token: BlockTextToken): T
+
+    // Quarkdown extensions
+
+    fun visit(token: FunctionCallToken): T
 }
