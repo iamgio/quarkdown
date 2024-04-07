@@ -34,3 +34,19 @@ data class SimpleFunction<T : OutputValue<*>>(
     override val parameters: List<FunctionParameter<*>>,
     override val invoke: FunctionArgumentsLinker.() -> T,
 ) : Function<T>
+
+fun Function<*>.asString() =
+    buildString {
+        append(name)
+        append("(")
+        append(
+            parameters.joinToString { parameter ->
+                buildString {
+                    if (parameter.isOptional) append("optional ")
+                    parameter.type.simpleName?.let { append(it).append(" ") }
+                    append(parameter.name)
+                }
+            },
+        )
+        append(")")
+    }

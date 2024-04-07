@@ -3,7 +3,6 @@ package eu.iamgio.quarkdown.function.reflect
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionArgumentsLinker
 import eu.iamgio.quarkdown.function.FunctionParameter
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import kotlin.reflect.KClass
@@ -32,20 +31,12 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
 
     override val invoke: FunctionArgumentsLinker.() -> T
         get() = {
-            // TODO handle mismatching types
             val args =
                 this.links.asSequence().associate { (parameter, argument) ->
                     // Corresponding KParameter.
                     val param = function.parameters[parameter.index]
 
-                    // The type of dynamic arguments is determined.
-                    val value =
-                        when (argument.value) {
-                            is DynamicInputValue -> argument.value.convertTo(parameter.type)
-                            else -> argument.value
-                        }.unwrappedValue
-
-                    param to value
+                    param to argument.value.unwrappedValue
                 }
 
             // Call KFunction.

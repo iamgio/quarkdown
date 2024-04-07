@@ -10,3 +10,5 @@ import eu.iamgio.quarkdown.function.value.InputValue
 data class FunctionCallArgument<T>(
     val value: InputValue<T>,
 )
+
+fun List<FunctionCallArgument<*>>.asString() = "(" + joinToString { it.value.unwrappedValue.toString() } + ")"

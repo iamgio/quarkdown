@@ -1,5 +1,10 @@
 package eu.iamgio.quarkdown.function
 
+import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
+import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import kotlin.reflect.full.isSubclassOf
+
 /**
  * Helper that associates [FunctionCallArgument]s to their corresponding [FunctionParameter].
  * @param call function call to link arguments for
@@ -8,24 +13,51 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
     lateinit var links: Map<FunctionParameter<*>, FunctionCallArgument<*>>
 
     /**
-     * Whether every argument suits its corresponding parameter, in terms of type and count.
-     */
-    val isCompliant: Boolean
-        get() {
-            // TODO check arguments amount (considering optional params) and types
-            return true
-        }
-
-    /**
      * Stores the associations between [FunctionCallArgument]s and [FunctionParameter]s.
+     * @throws eu.iamgio.quarkdown.function.error.FunctionCallException or subclass if there is a mismatch between arguments and parameters
      */
     fun link() {
         this.links =
-            call.function.parameters
-                .withIndex()
-                .asSequence()
-                .filter { (index, _) -> index < call.arguments.size }
-                .associate { (index, parameter) -> parameter to call.arguments[index] }
+            buildMap {
+                for ((index, argument) in call.arguments.withIndex()) {
+                    // If args count > params count.
+                    val parameter =
+                        call.function.parameters.getOrNull(index)
+                            ?: throw InvalidArgumentCountException(call)
+
+                    // The type of dynamic arguments is determined.
+                    val staticArgument =
+                        when (argument.value) {
+                            is DynamicInputValue -> {
+                                // Throw error if the conversion could not happen.
+                                val value =
+                                    argument.value.convertTo(parameter.type)
+                                        ?: throw MismatchingArgumentTypeException(call, parameter, argument)
+
+                                FunctionCallArgument(value)
+                            }
+
+                            else -> argument
+                        }
+
+                    // Type match check.
+                    if (!staticArgument.value.unwrappedValue!!::class.isSubclassOf(parameter.type) &&
+                        !staticArgument.value::class.isSubclassOf(parameter.type)
+                    ) {
+                        throw MismatchingArgumentTypeException(call, parameter, staticArgument)
+                    }
+
+                    // Add link.
+                    this[parameter] = staticArgument
+                }
+            }
+
+        call.function.parameters.forEach { parameter ->
+            // If mandatory params count > args count.
+            if (!parameter.isOptional && parameter !in this.links) {
+                throw InvalidArgumentCountException(call)
+            }
+        }
     }
 
     /**

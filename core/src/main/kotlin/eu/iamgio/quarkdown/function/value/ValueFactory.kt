@@ -8,5 +8,5 @@ object ValueFactory {
     fun string(raw: String) = StringValue(raw)
 
     @FromDynamicType(Number::class)
-    fun number(raw: String) = NumberValue(raw.toIntOrNull() ?: raw.toFloatOrNull() ?: Double.NaN)
+    fun number(raw: String) = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
 }

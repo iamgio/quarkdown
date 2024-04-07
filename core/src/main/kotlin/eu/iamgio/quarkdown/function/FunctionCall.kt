@@ -12,27 +12,15 @@ data class FunctionCall<T : OutputValue<*>>(
     val function: Function<T>,
     val arguments: List<FunctionCallArgument<*>>,
 ) {
-    // Allows linking arguments to their parameter.
-    private val linker = FunctionArgumentsLinker(this)
-
-    init {
-        linker.link()
-    }
-
-    /**
-     * Whether this is a valid function call, meaning arguments match parameter count and types.
-     */
-    val isValid: Boolean
-        get() = linker.isCompliant
-
     /**
      * Checks the call validity and calls the function.
      * @return the function output
      */
     fun execute(): T {
-        if (!isValid) {
-            // TODO error
-        }
+        // Allows linking arguments to their parameter.
+        val linker = FunctionArgumentsLinker(this)
+
+        linker.link()
         return function.invoke(linker)
     }
 }
