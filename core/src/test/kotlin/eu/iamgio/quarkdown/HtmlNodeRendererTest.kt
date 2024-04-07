@@ -18,6 +18,7 @@ import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListItem
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
@@ -30,10 +31,9 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.ast.context.BaseContext
-import eu.iamgio.quarkdown.ast.context.Context
-import eu.iamgio.quarkdown.ast.context.MutableAstAttributes
-import eu.iamgio.quarkdown.ast.context.MutableContext
+import eu.iamgio.quarkdown.context.BaseContext
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest

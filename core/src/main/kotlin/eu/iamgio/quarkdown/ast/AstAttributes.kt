@@ -1,11 +1,8 @@
-package eu.iamgio.quarkdown.ast.context
-
-import eu.iamgio.quarkdown.ast.FunctionCallNode
-import eu.iamgio.quarkdown.ast.LinkDefinition
+package eu.iamgio.quarkdown.ast
 
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [Context].
- * @see Context
+ * @see eu.iamgio.quarkdown.context.Context
  */
 interface AstAttributes {
     /**

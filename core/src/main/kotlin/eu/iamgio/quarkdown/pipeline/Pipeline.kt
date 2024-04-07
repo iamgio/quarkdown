@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.pipeline
 
 import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Document
-import eu.iamgio.quarkdown.ast.context.Context
-import eu.iamgio.quarkdown.ast.context.MutableContext
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.AstFunctionCallExpander
@@ -59,6 +59,8 @@ class Pipeline(
         // Parsing.
         val document = Document(children = tokens.acceptAll(components.parser))
         hooks?.afterParsing?.invoke(this, document)
+
+        // TODO load libraries
 
         // Executes queued function calls and expands their content based on their output.
         components.functionCallExpander.expandAll()

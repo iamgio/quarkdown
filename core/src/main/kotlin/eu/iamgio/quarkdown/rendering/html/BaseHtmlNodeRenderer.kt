@@ -31,8 +31,8 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
-import eu.iamgio.quarkdown.ast.context.Context
-import eu.iamgio.quarkdown.ast.context.resolveOrFallback
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.resolveOrFallback
 import eu.iamgio.quarkdown.rendering.UnsupportedRenderException
 import eu.iamgio.quarkdown.rendering.tag.TagNodeRenderer
 import eu.iamgio.quarkdown.rendering.tag.buildTag

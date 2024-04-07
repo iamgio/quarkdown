@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.flavor
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.context.MutableContext
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
 import eu.iamgio.quarkdown.visitor.token.InlineTokenVisitor
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor

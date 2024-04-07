@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.function
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.context.Context
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
