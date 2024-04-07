@@ -14,6 +14,7 @@ object Stdlib : LibraryExporter {
                 setOf(
                     ::test,
                     ::greet,
+                    ::sum,
                 ),
             )
 }

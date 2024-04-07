@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
-import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 
@@ -19,11 +18,6 @@ class AstFunctionCallExpander(
     private val context: Context,
     private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(),
 ) {
-    fun sum(
-        a: Int,
-        b: Int,
-    ): NumberValue = NumberValue(a + b) // TODO test
-
     /**
      * Resolves, executes and stores the result of [node]'s referenced function.
      * @param node AST function call node to expand
