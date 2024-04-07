@@ -15,6 +15,10 @@ object Stdlib : LibraryExporter {
                     ::test,
                     ::greet,
                     ::sum,
+                    ::subtract,
+                    ::multiply,
+                    ::divide,
+                    ::rem,
                 ),
             )
 }
