@@ -40,8 +40,8 @@ class Pipeline(
         source: CharSequence,
         flavor: MarkdownFlavor,
         renderer: (RendererFactory, Context) -> NodeRenderer,
+        libraries: Set<Library>,
         context: MutableContext = MutableContext(),
-        libraries: Set<Library> = emptySet(),
         hooks: PipelineHooks? = null,
     ) : this(
         PipelineComponents(

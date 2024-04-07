@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
+import eu.iamgio.quarkdown.stdlib.Stdlib
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -20,6 +21,9 @@ fun main(args: Array<String>) {
 
     // Flavor to use across the pipeline.
     val flavor: MarkdownFlavor = QuarkdownFlavor
+
+    // Libraries to load.
+    val libraries = setOf(Stdlib.library)
 
     // Actions run after each stage of the pipeline.
     val hooks =
@@ -41,6 +45,7 @@ fun main(args: Array<String>) {
             source = sourceFile.readText(),
             flavor = flavor,
             renderer = { rendererFactory, context -> rendererFactory.html(context) },
+            libraries = libraries,
             hooks = hooks,
         )
 
