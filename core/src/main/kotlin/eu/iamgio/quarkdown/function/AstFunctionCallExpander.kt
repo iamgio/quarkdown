@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.function
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
@@ -29,7 +29,14 @@ class AstFunctionCallExpander(
      * @param node AST function call node to expand
      */
     private fun expand(node: FunctionCallNode) {
-        val function = KFunctionAdapter(::sum) // TODO look up from name
+        val function = context.getFunctionByName(node.name)
+
+        if (function == null) {
+            // TODO better error handling
+            node.children += Text("Unresolved function '${node.name}'")
+            return
+        }
+
         val call =
             FunctionCall(
                 function,

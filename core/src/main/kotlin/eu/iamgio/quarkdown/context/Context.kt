@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.library.Library
 
 /**
@@ -27,6 +28,13 @@ interface Context {
      * The function calls to be expanded (executed) in the next stage of the pipeline.
      */
     val functionCalls: List<FunctionCallNode>
+
+    /**
+     * Looks up a function by name.
+     * @param name name of the function to look up, case-sensitive
+     * @return the corresponding function, if it exists
+     */
+    fun getFunctionByName(name: String): Function<*>?
 
     /**
      * @param reference reference link to lookup

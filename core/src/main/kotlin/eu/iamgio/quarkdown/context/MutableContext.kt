@@ -18,7 +18,7 @@ class MutableContext(
             attributes.hasMath = value
         }
 
-    override val libraries: Set<Library> = super.libraries.toMutableSet()
+    override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 
     /**
      * Registers a new [LinkDefinition], which can be later looked up

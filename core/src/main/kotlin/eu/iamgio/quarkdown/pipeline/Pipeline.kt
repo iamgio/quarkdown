@@ -7,6 +7,8 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.AstFunctionCallExpander
+import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.rendering.NodeRenderer
@@ -16,10 +18,12 @@ import eu.iamgio.quarkdown.rendering.wrap
  * A representation of the sequential set of actions to perform in order to produce an output artifact from a raw source.
  * Each component of the pipeline takes an input from the output of the previous one.
  * @param components strategies to use for each main stage of the pipeline
+ * @param libraries libraries to
  * @param hooks optional actions to run after each stage has been completed
  */
 class Pipeline(
-    val components: PipelineComponents,
+    private val components: PipelineComponents,
+    private val libraries: Set<Library>,
     private val hooks: PipelineHooks? = null,
 ) {
     /**
@@ -37,14 +41,17 @@ class Pipeline(
         flavor: MarkdownFlavor,
         renderer: (RendererFactory, Context) -> NodeRenderer,
         context: MutableContext = MutableContext(),
+        libraries: Set<Library> = emptySet(),
         hooks: PipelineHooks? = null,
     ) : this(
         PipelineComponents(
             flavor.lexerFactory.newBlockLexer(source),
             flavor.parserFactory.newParser(context),
+            LibraryRegistrant(context),
             AstFunctionCallExpander(context),
             renderer(flavor.rendererFactory, context),
         ),
+        libraries,
         hooks,
     )
 
@@ -52,6 +59,10 @@ class Pipeline(
      * Executes the pipeline and calls the given [hooks] after each stage.
      */
     fun execute() {
+        // Library registration.
+        components.libraryRegistrant.registerAll(this.libraries)
+        hooks?.afterRegisteringLibraries?.invoke(this, this.libraries)
+
         // Lexing.
         val tokens = components.lexer.tokenize()
         hooks?.afterLexing?.invoke(this, tokens)
@@ -59,8 +70,6 @@ class Pipeline(
         // Parsing.
         val document = Document(children = tokens.acceptAll(components.parser))
         hooks?.afterParsing?.invoke(this, document)
-
-        // TODO load libraries
 
         // Executes queued function calls and expands their content based on their output.
         components.functionCallExpander.expandAll()
