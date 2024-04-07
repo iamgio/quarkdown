@@ -5,8 +5,8 @@ import eu.iamgio.quarkdown.function.FunctionCall
 import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
+import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
-import eu.iamgio.quarkdown.function.reflect.loaders.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue

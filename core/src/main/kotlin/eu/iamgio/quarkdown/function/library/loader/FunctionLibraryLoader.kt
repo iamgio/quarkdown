@@ -1,7 +1,6 @@
-package eu.iamgio.quarkdown.function.reflect.loaders
+package eu.iamgio.quarkdown.function.library.loader
 
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.function.library.LibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.OutputValue
 import kotlin.reflect.KFunction

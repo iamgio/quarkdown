@@ -1,4 +1,6 @@
-package eu.iamgio.quarkdown.function.library
+package eu.iamgio.quarkdown.function.library.loader
+
+import eu.iamgio.quarkdown.function.library.Library
 
 /**
  * Loads libraries from a generic source.
