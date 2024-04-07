@@ -14,11 +14,15 @@ object Stdlib : LibraryExporter {
                 setOf(
                     ::test,
                     ::greet,
+                    // Math
                     ::sum,
                     ::subtract,
                     ::multiply,
                     ::divide,
                     ::rem,
+                    ::sin,
+                    ::cos,
+                    ::tan,
                 ),
             )
 }

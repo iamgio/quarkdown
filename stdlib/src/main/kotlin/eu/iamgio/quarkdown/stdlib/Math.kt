@@ -35,9 +35,24 @@ fun divide(
 ) = NumberValue(a.toFloat() / b.toFloat())
 
 /**
- * @return remainder of the arithmetic integer division of [a] and [b]
+ * @return remainder of the arithmetic floating-point division of [a] and [b]
  */
 fun rem(
     a: Number,
     b: Number,
 ) = NumberValue(a.toFloat() % b.toFloat())
+
+/**
+ * @return sine of the angle [x] given in radians.
+ */
+fun sin(x: Number) = NumberValue(kotlin.math.sin(x.toFloat()))
+
+/**
+ * @return cosine of the angle [x] given in radians.
+ */
+fun cos(x: Number) = NumberValue(kotlin.math.cos(x.toFloat()))
+
+/**
+ * @return tangent of the angle [x] given in radians.
+ */
+fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
