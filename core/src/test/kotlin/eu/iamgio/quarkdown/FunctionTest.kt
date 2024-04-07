@@ -41,8 +41,8 @@ class FunctionTest {
                 name = "greet",
                 parameters =
                     listOf(
-                        FunctionParameter("to", StringValue::class),
-                        FunctionParameter("from", StringValue::class),
+                        FunctionParameter("to", StringValue::class, index = 0),
+                        FunctionParameter("from", StringValue::class, index = 1),
                     ),
             ) {
                 val to = arg<String>("to")
@@ -95,6 +95,28 @@ class FunctionTest {
             )
 
         assertEquals("Hello A from B", call.execute().unwrappedValue)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun greetWithOptionalArgs(
+        to: String = "you",
+        from: String = "me",
+    ): StringValue = StringValue("Hello $to from $from")
+
+    @Test
+    fun `KFunction with optional arguments`() {
+        val function = KFunctionAdapter(::greetWithOptionalArgs)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                    ),
+            )
+
+        assertEquals("Hello A from me", call.execute().unwrappedValue)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

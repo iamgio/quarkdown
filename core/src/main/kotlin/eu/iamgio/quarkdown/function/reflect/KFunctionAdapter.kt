@@ -25,6 +25,8 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     name = it.name ?: "<unnamed parameter>",
                     // TODO handle cast errors
                     type = it.type.classifier as KClass<out InputValue<T>>,
+                    index = it.index,
+                    isOptional = it.isOptional,
                 )
             }
 
@@ -32,14 +34,21 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
         get() = {
             // TODO handle mismatching types
             val args =
-                this.links.map { (parameter, argument) ->
+                this.links.asSequence().associate { (parameter, argument) ->
+                    // Corresponding KParameter.
+                    val param = function.parameters[parameter.index]
+
                     // The type of dynamic arguments is determined.
-                    when (argument.value) {
-                        is DynamicInputValue -> argument.value.convertTo(parameter.type)
-                        else -> argument.value
-                    }.unwrappedValue
+                    val value =
+                        when (argument.value) {
+                            is DynamicInputValue -> argument.value.convertTo(parameter.type)
+                            else -> argument.value
+                        }.unwrappedValue
+
+                    param to value
                 }
 
-            function.call(*args.toTypedArray())
+            // Call KFunction.
+            function.callBy(args)
         }
 }

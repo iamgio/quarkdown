@@ -12,16 +12,8 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      */
     val isCompliant: Boolean
         get() {
-            // TODO check arguments amount and types
+            // TODO check arguments amount (considering optional params) and types
             return true
-        }
-
-    /**
-     * All arguments, in the correct order, ready for a call execution.
-     */
-    val allArgsOrdered: Collection<FunctionCallArgument<*>>
-        get() {
-            return links.values
         }
 
     /**
@@ -31,6 +23,8 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
         this.links =
             call.function.parameters
                 .withIndex()
+                .asSequence()
+                .filter { (index, _) -> index < call.arguments.size }
                 .associate { (index, parameter) -> parameter to call.arguments[index] }
     }
 
@@ -41,7 +35,6 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      * @throws NoSuchElementException if [name] does not match any parameter name
      */
     inline fun <reified T> arg(name: String): T =
-        // TODO could automatically get type from parameter.type
         this.links.entries
             .first { it.key.name == name }
             .value // Map.Entry method: returns FunctionCallArgument
