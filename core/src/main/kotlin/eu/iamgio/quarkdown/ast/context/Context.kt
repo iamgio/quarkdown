@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.function.library.Library
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
@@ -18,6 +19,11 @@ interface Context {
      * This is used to load the MathJax library in HTML rendering.
      */
     val hasMath: Boolean
+
+    /**
+     * Loaded libraries to look up functions from.
+     */
+    val libraries: Set<Library>
 
     /**
      * The function calls to be expanded (executed) in the next stage of the pipeline.
@@ -34,8 +40,12 @@ interface Context {
 /**
  * An immutable [Context] implementation.
  * @param attributes attributes of the node tree, produced by the parsing stage
+ * @param libraries loaded libraries to look up functions from
  */
-open class BaseContext(private val attributes: AstAttributes) : Context {
+open class BaseContext(
+    private val attributes: AstAttributes,
+    override val libraries: Set<Library> = emptySet(),
+) : Context {
     override val hasMath: Boolean
         get() = attributes.hasMath
 
@@ -52,12 +62,16 @@ open class BaseContext(private val attributes: AstAttributes) : Context {
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
  * @param attributes attributes of the node tree, which can be manipulated on demand
  */
-class MutableContext(private val attributes: MutableAstAttributes = MutableAstAttributes()) : BaseContext(attributes) {
+class MutableContext(
+    private val attributes: MutableAstAttributes = MutableAstAttributes(),
+) : BaseContext(attributes) {
     override var hasMath: Boolean
         get() = attributes.hasMath
         set(value) {
             attributes.hasMath = value
         }
+
+    override val libraries: Set<Library> = super.libraries.toMutableSet()
 
     /**
      * Registers a new [LinkDefinition], which can be later looked up

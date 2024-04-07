@@ -22,10 +22,9 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
         get() =
             function.parameters.map {
                 FunctionParameter(
-                    // TODO handle error if null
-                    it.name!!,
+                    name = it.name ?: "<unnamed parameter>",
                     // TODO handle cast errors
-                    it.type.classifier as KClass<out InputValue<T>>,
+                    type = it.type.classifier as KClass<out InputValue<T>>,
                 )
             }
 
