@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
+import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import eu.iamgio.quarkdown.stdlib.Stdlib
 import java.io.File
 import kotlin.system.exitProcess
@@ -49,5 +50,10 @@ fun main(args: Array<String>) {
             hooks = hooks,
         )
 
-    pipeline.execute()
+    try {
+        pipeline.execute()
+    } catch (e: PipelineException) {
+        e.printStackTrace()
+        exitProcess(e.code)
+    }
 }

@@ -7,6 +7,8 @@ import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * An immutable [Context] implementation.
@@ -16,6 +18,7 @@ import eu.iamgio.quarkdown.function.library.Library
 open class BaseContext(
     private val attributes: AstAttributes,
     override val libraries: Set<Library> = emptySet(),
+    override val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
 ) : Context {
     override val hasMath: Boolean
         get() = attributes.hasMath

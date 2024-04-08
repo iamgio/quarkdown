@@ -11,6 +11,8 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.acceptAll
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
+import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.rendering.wrap
 
@@ -40,8 +42,9 @@ class Pipeline(
         source: CharSequence,
         flavor: MarkdownFlavor,
         renderer: (RendererFactory, Context) -> NodeRenderer,
+        errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
         libraries: Set<Library>,
-        context: MutableContext = MutableContext(),
+        context: MutableContext = MutableContext(errorHandler = errorHandler),
         hooks: PipelineHooks? = null,
     ) : this(
         PipelineComponents(
@@ -57,6 +60,7 @@ class Pipeline(
 
     /**
      * Executes the pipeline and calls the given [hooks] after each stage.
+     * @throws PipelineException if an uncaught error occurs
      */
     fun execute() {
         // Library registration.

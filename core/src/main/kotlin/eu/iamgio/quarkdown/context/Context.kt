@@ -8,11 +8,18 @@ import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
  */
 interface Context {
+    /**
+     * The error handling strategy to use.
+     * @see eu.iamgio.quarkdown.pipeline.error
+     */
+    val errorHandler: PipelineErrorHandler
+
     /**
      * Whether there is at least one math block or inline.
      * This is used to load the MathJax library in HTML rendering.

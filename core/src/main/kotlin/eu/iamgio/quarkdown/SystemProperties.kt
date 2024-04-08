@@ -17,6 +17,12 @@ object SystemProperties {
     const val WRAP_OUTPUT = "wrap"
 
     /**
+     * When this property is present, the process is aborted whenever a soft pipeline error occurs.
+     * By default, error messages are displayed in the final document without killing the pipeline.
+     */
+    const val EXIT_ON_ERROR = "strict"
+
+    /**
      * @return the corresponding property value for [key], if it exists
      */
     operator fun get(key: String): String? = System.getProperty(key)
@@ -50,3 +56,9 @@ val SystemProperties.isPrettyOutputEnabled: Boolean
  */
 val SystemProperties.isWrapOutputEnabled: Boolean
     get() = contains(WRAP_OUTPUT)
+
+/**
+ * Whether the process should be killed whenever a soft pipeline error occurs.
+ */
+val SystemProperties.exitsOnError: Boolean
+    get() = contains(EXIT_ON_ERROR)

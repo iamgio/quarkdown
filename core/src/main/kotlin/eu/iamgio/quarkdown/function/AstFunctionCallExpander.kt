@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
-import eu.iamgio.quarkdown.log.Log
 
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
@@ -45,10 +44,9 @@ class AstFunctionCallExpander(
             node.children += outputNode
         } catch (e: InvalidFunctionCallException) {
             // If the function call is invalid.
-            val message = e.message ?: "Unknown error"
-            node.children += Text(message) // Shows error message in the final document.
-            Log.error(message)
-            // TODO rethrow if a system property is enabled, and add failing call tests
+            context.errorHandler.handle(e) { message ->
+                node.children += Text(message) // Shows error message in the final document.
+            }
         }
     }
 

@@ -4,6 +4,8 @@ import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -11,7 +13,8 @@ import eu.iamgio.quarkdown.function.library.Library
  */
 class MutableContext(
     private val attributes: MutableAstAttributes = MutableAstAttributes(),
-) : BaseContext(attributes) {
+    errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
+) : BaseContext(attributes, errorHandler = errorHandler) {
     override var hasMath: Boolean
         get() = attributes.hasMath
         set(value) {
