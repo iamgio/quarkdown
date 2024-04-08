@@ -5,6 +5,8 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
+import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
@@ -12,14 +14,22 @@ import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 /**
  * Function call tests.
  */
 class FunctionTest {
+    @BeforeTest
+    fun setup() {
+        // Throw exception on function call error.
+        SystemProperties[SystemProperties.EXIT_ON_ERROR] = ""
+    }
+
     @Test
     fun `no arguments`() {
         val function =
@@ -229,6 +239,98 @@ class FunctionTest {
         assertEquals(7, call.execute().unwrappedValue)
     }
 
+    @Test
+    fun `KFunction wrong argument count`() {
+        val function = KFunctionAdapter(::sum)
+
+        val call1 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("5")),
+                    ),
+            )
+
+        assertFailsWith<InvalidArgumentCountException> {
+            call1.execute()
+        }
+
+        val call2 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicInputValue("1")),
+                        FunctionCallArgument(DynamicInputValue("2")),
+                    ),
+            )
+
+        assertFailsWith<InvalidArgumentCountException> {
+            call2.execute()
+        }
+
+        val call3 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicInputValue("1")),
+                    ),
+            )
+
+        assertEquals(6, call3.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction wrong argument types`() {
+        val function = KFunctionAdapter(::sum)
+
+        val call1 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("a")),
+                        FunctionCallArgument(DynamicInputValue("b")),
+                    ),
+            )
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            call1.execute()
+        }
+
+        val call2 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicInputValue("abc")),
+                    ),
+            )
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            call2.execute()
+        }
+
+        val call3 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("abcde")),
+                        FunctionCallArgument(DynamicInputValue("5")),
+                    ),
+            )
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            call3.execute()
+        }
+    }
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun identity(x: Int) = NumberValue(x)
 
@@ -308,7 +410,7 @@ class FunctionTest {
     }
 
     @Test
-    fun `library from class`() {
+    fun `library loader`() {
         val library = MultiFunctionLibraryLoader("MyLib").load(setOf(::greetWithArgs, ::greetNoArgs, ::sum))
 
         assertEquals("MyLib", library.name)
