@@ -3,6 +3,21 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.function.value.NumberValue
 
 /**
+ * `Math` stdlib module exporter.
+ */
+val Math =
+    setOf(
+        ::sum,
+        ::subtract,
+        ::multiply,
+        ::divide,
+        ::rem,
+        ::sin,
+        ::cos,
+        ::tan,
+    )
+
+/**
  * @return arithmetic floating-point sum of [a] and [b]
  */
 fun sum(

@@ -11,18 +11,7 @@ object Stdlib : LibraryExporter {
     override val library: Library
         get() =
             MultiFunctionLibraryLoader(name = "stdlib").load(
-                setOf(
-                    ::test,
-                    ::greet,
-                    // Math
-                    ::sum,
-                    ::subtract,
-                    ::multiply,
-                    ::divide,
-                    ::rem,
-                    ::sin,
-                    ::cos,
-                    ::tan,
-                ),
+                Text +
+                    Math,
             )
 }
