@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.function.expression
 
-import eu.iamgio.quarkdown.function.value.InputValue
+import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 
 /**
  * An [Expression] composed by multiple sub-expressions.
@@ -15,25 +15,6 @@ import eu.iamgio.quarkdown.function.value.InputValue
  *
  * @param expressions sub-expressions
  */
-data class ComposedExpression(private val expressions: List<Expression>) : Expression {
-    override fun eval(): InputValue<*> {
-        if (expressions.isEmpty()) {
-            throw IllegalStateException("Composed expression has no sub-expressions")
-        }
-
-        // Create a single expression out of multiple ones
-        // by appending them to each other.
-        var expression = expressions.first()
-        expressions.asSequence().drop(1).forEach {
-            expression = expression.append(it)
-        }
-
-        // The value of the built expression.
-        return expression.eval()
-    }
-
-    /**
-     * @throws UnsupportedOperationException no way a composed expression could be appended to another expression
-     */
-    override fun append(other: Expression): Expression = throw UnsupportedOperationException()
+data class ComposedExpression(val expressions: List<Expression>) : Expression {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }

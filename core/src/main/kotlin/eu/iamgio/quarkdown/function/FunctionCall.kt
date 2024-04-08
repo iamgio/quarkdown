@@ -1,9 +1,8 @@
 package eu.iamgio.quarkdown.function
 
 import eu.iamgio.quarkdown.function.expression.Expression
-import eu.iamgio.quarkdown.function.value.InputValue
+import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.StringValue
 
 /**
  * A call to a declared [Function].
@@ -28,21 +27,5 @@ data class FunctionCall<T : OutputValue<*>>(
         return function.invoke(linker)
     }
 
-    /**
-     * When used as an input value for another function call, the output type of this function call
-     * must be an [InputValue].
-     */
-    override fun eval(): InputValue<*> =
-        this.execute().let {
-            when (it) {
-                is InputValue<*> -> it
-                else -> {
-                    // TODO error: not-input output value cannot be used as expression
-                    StringValue("TODO")
-                }
-            }
-        }
-
-    override fun append(other: Expression): Expression =
-        StringValue(this.eval().unwrappedValue.toString() + other.eval().unwrappedValue.toString())
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }

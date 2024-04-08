@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.function.value
 
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.function.expression.Expression
+import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 
 /**
@@ -18,9 +19,7 @@ sealed interface Value<T> {
  * An immutable value wrapper that is used in function parameters and function call arguments.
  * When used as an [Expression], its evaluated value is the same as its static wrapped value
  */
-sealed interface InputValue<T> : Value<T>, Expression {
-    override fun eval(): InputValue<*> = this
-}
+sealed interface InputValue<T> : Value<T>, Expression
 
 /**
  * An immutable value wrapper that is used in function outputs.
@@ -33,18 +32,18 @@ sealed interface OutputValue<T> : Value<T> {
  * An immutable string [Value].
  */
 data class StringValue(override val unwrappedValue: String) : InputValue<String>, OutputValue<String> {
-    override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
-    override fun append(other: Expression): Expression = StringValue(this.unwrappedValue + other.eval().toString())
+    override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
 }
 
 /**
  * An immutable numeric [Value].
  */
 data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>, OutputValue<Number> {
-    override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
-    override fun append(other: Expression): Expression = TODO("Not yet implemented")
+    override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
 }
 
 /**

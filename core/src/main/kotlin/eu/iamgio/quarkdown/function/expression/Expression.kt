@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.function.expression
 
+import eu.iamgio.quarkdown.function.expression.visitor.AppendExpressionVisitor
+import eu.iamgio.quarkdown.function.expression.visitor.EvalExpressionVisitor
+import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 import eu.iamgio.quarkdown.function.value.InputValue
 
 /**
@@ -8,15 +11,24 @@ import eu.iamgio.quarkdown.function.value.InputValue
  */
 interface Expression {
     /**
-     * @return this expression, evaluated into a single static value
-     *         which can be chained as an input for another function
+     * Accepts a visitor.
+     * @param T output type of the visitor
+     * @return output of the visit operation
      */
-    fun eval(): InputValue<*>
-
-    /**
-     * Chains two expressions together, which is used in [ComposedExpression]s.
-     * @param other expression to append
-     * @return an expression that contains this expression and [other], in order
-     */
-    fun append(other: Expression): Expression // TODO change to visitor
+    fun <T> accept(visitor: ExpressionVisitor<T>): T
 }
+
+/**
+ * @return this expression, evaluated into a single static value
+ *         which can be chained as an input for another function
+ * @see EvalExpressionVisitor
+ */
+fun Expression.eval(): InputValue<*> = this.accept(EvalExpressionVisitor())
+
+/**
+ * Chains two expressions together, which is used in [ComposedExpression]s.
+ * @param other expression to append
+ * @return an expression that contains this expression and [other], in order
+ * @see AppendExpressionVisitor
+ */
+fun Expression.append(other: Expression): Expression = this.accept(AppendExpressionVisitor(other))
