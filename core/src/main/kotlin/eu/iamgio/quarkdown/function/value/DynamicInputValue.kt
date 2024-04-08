@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.function.expression.Expression
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
@@ -26,6 +27,11 @@ data class DynamicInputValue(override val unwrappedValue: String) : InputValue<S
 
         throw IllegalArgumentException("Cannot convert DynamicInputValue to type $type")
     }
+
+    /**
+     * @throws UnsupportedOperationException `append` must be called after the input type has been defined.
+     */
+    override fun append(other: Expression): Expression = throw UnsupportedOperationException()
 }
 
 /**

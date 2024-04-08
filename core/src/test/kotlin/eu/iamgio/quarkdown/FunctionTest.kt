@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.function.FunctionCall
 import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
+import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
@@ -61,6 +62,92 @@ class FunctionTest {
             )
 
         assertEquals("Hello A from B", call.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `with nested call arguments`() {
+        val functionPerson =
+            SimpleFunction(
+                name = "person",
+                parameters = emptyList(),
+            ) {
+                ValueFactory.string("A")
+            }
+
+        val functionGreet =
+            SimpleFunction(
+                name = "greet",
+                parameters =
+                    listOf(
+                        FunctionParameter("to", StringValue::class, index = 0),
+                        FunctionParameter("from", StringValue::class, index = 1),
+                    ),
+            ) {
+                val to = arg<String>("to")
+                val from = arg<String>("from")
+                ValueFactory.string("Hello $to from $from")
+            }
+
+        val callPerson =
+            FunctionCall(
+                functionPerson,
+                arguments = emptyList(),
+            )
+
+        val callGreet =
+            FunctionCall(
+                functionGreet,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(callPerson),
+                        FunctionCallArgument(StringValue("B")),
+                    ),
+            )
+
+        assertEquals("Hello A from B", callGreet.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `with composed arguments`() {
+        val functionPerson =
+            SimpleFunction(
+                name = "person",
+                parameters = emptyList(),
+            ) {
+                ValueFactory.string("A")
+            }
+
+        val functionGreet =
+            SimpleFunction(
+                name = "greet",
+                parameters =
+                    listOf(
+                        FunctionParameter("to", StringValue::class, index = 0),
+                        FunctionParameter("from", StringValue::class, index = 1),
+                    ),
+            ) {
+                val to = arg<String>("to")
+                val from = arg<String>("from")
+                ValueFactory.string("Hello $to from $from")
+            }
+
+        val callPerson =
+            FunctionCall(
+                functionPerson,
+                arguments = emptyList(),
+            )
+
+        val callGreet =
+            FunctionCall(
+                functionGreet,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(ComposedExpression(listOf(callPerson, StringValue("B")))),
+                        FunctionCallArgument(StringValue("B")),
+                    ),
+            )
+
+        assertEquals("Hello AB from B", callGreet.execute().unwrappedValue)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -140,6 +227,84 @@ class FunctionTest {
             )
 
         assertEquals(7, call.execute().unwrappedValue)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun identity(x: Int) = NumberValue(x)
+
+    @Test
+    fun `KFunction with nested call arguments`() {
+        val functionSum = KFunctionAdapter(::sum)
+        val functionIdentity = KFunctionAdapter(::identity)
+
+        val callIdentity =
+            FunctionCall(
+                functionIdentity,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("2")),
+                    ),
+            )
+
+        val callSum =
+            FunctionCall(
+                functionSum,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(NumberValue(3)),
+                        FunctionCallArgument(callIdentity),
+                    ),
+            )
+
+        assertEquals(5, callSum.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with composed arguments`() {
+        val functionGreetWithArgs = KFunctionAdapter(::greetWithArgs)
+        val functionGreetWithoutArgs = KFunctionAdapter(::greetNoArgs)
+
+        val callWithoutArgs =
+            FunctionCall(
+                functionGreetWithoutArgs,
+                arguments = emptyList(),
+            )
+
+        val callWithArgs =
+            FunctionCall(
+                functionGreetWithArgs,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(ComposedExpression(listOf(callWithoutArgs, StringValue(" dear")))),
+                        FunctionCallArgument(StringValue("B")),
+                    ),
+            )
+
+        assertEquals("Hello Hello dear from B", callWithArgs.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with dynamic composed arguments`() {
+        val functionGreetWithArgs = KFunctionAdapter(::greetWithArgs)
+        val functionGreetWithoutArgs = KFunctionAdapter(::greetNoArgs)
+
+        val callWithoutArgs =
+            FunctionCall(
+                functionGreetWithoutArgs,
+                arguments = emptyList(),
+            )
+
+        val callWithArgs =
+            FunctionCall(
+                functionGreetWithArgs,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(ComposedExpression(listOf(callWithoutArgs, DynamicInputValue(" dear")))),
+                        FunctionCallArgument(DynamicInputValue("B")),
+                    ),
+            )
+
+        assertEquals("Hello Hello dear from B", callWithArgs.execute().unwrappedValue)
     }
 
     @Test

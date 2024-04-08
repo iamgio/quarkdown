@@ -10,11 +10,12 @@ import kotlin.reflect.full.isSubclassOf
  * @param call function call to link arguments for
  */
 class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
-    lateinit var links: Map<FunctionParameter<*>, FunctionCallArgument<*>>
+    lateinit var links: Map<FunctionParameter<*>, FunctionCallArgument>
 
     /**
      * Stores the associations between [FunctionCallArgument]s and [FunctionParameter]s.
-     * @throws eu.iamgio.quarkdown.function.error.FunctionCallException or subclass if there is a mismatch between arguments and parameters
+     * @throws eu.iamgio.quarkdown.function.error.InvalidFunctionCallException or subclass
+     *         if there is a mismatch between arguments and parameters
      */
     fun link() {
         this.links =
@@ -27,11 +28,11 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
 
                     // The type of dynamic arguments is determined.
                     val staticArgument =
-                        when (argument.value) {
+                        when (argument.expression) {
                             is DynamicInputValue -> {
                                 // Throw error if the conversion could not happen.
                                 val value =
-                                    argument.value.convertTo(parameter.type)
+                                    argument.expression.convertTo(parameter.type)
                                         ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
                                 FunctionCallArgument(value)
