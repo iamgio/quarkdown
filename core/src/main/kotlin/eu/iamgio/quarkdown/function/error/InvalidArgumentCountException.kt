@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.function.error
 
-import eu.iamgio.quarkdown.function.FunctionCall
+import eu.iamgio.quarkdown.function.call.FunctionCall
 
 /**
  * An exception thrown if the amount of arguments and mandatory parameters of a function call does not match.

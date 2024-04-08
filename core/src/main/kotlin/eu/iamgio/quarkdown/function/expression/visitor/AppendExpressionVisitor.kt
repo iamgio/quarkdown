@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.function.expression.visitor
 
-import eu.iamgio.quarkdown.function.FunctionCall
+import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval

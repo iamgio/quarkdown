@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.RendererFactory
-import eu.iamgio.quarkdown.function.AstFunctionCallExpander
+import eu.iamgio.quarkdown.function.call.AstFunctionCallExpander
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.isWrapOutputEnabled

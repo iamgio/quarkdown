@@ -1,8 +1,9 @@
 package eu.iamgio.quarkdown.function.error
 
 import eu.iamgio.quarkdown.BAD_FUNCTION_CALL_EXIT_CODE
-import eu.iamgio.quarkdown.function.FunctionCall
 import eu.iamgio.quarkdown.function.asString
+import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.asString
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
 /**

@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.function
+package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node

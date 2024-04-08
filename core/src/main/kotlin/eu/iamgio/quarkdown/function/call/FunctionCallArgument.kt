@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.function
+package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval

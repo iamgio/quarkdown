@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.function.Function
-import eu.iamgio.quarkdown.function.FunctionCall
-import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
+import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter

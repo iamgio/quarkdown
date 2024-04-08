@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.function.error
 
-import eu.iamgio.quarkdown.function.FunctionCall
-import eu.iamgio.quarkdown.function.FunctionCallArgument
 import eu.iamgio.quarkdown.function.FunctionParameter
+import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 
 /**
  * An exception thrown if a parameter-argument pair of a function call has incompatible types.

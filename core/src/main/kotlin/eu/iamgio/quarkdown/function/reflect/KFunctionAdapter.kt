@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.function.Function
-import eu.iamgio.quarkdown.function.FunctionArgumentsLinker
 import eu.iamgio.quarkdown.function.FunctionParameter
+import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import kotlin.reflect.KClass

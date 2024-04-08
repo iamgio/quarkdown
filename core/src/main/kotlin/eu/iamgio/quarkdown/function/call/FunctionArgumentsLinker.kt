@@ -1,5 +1,6 @@
-package eu.iamgio.quarkdown.function
+package eu.iamgio.quarkdown.function.call
 
+import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
