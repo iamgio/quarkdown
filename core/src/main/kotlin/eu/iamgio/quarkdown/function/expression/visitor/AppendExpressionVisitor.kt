@@ -1,10 +1,14 @@
 package eu.iamgio.quarkdown.function.expression.visitor
 
+import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 
@@ -38,6 +42,18 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             value.unwrappedValue.toString() +
                 other.eval().unwrappedValue.toString(),
         )
+
+    override fun visit(value: MarkdownContentValue): Expression {
+        val nodes = mutableListOf<Node>(value.unwrappedValue)
+        // Append node to the sub-AST.
+        nodes +=
+            when (other) {
+                is MarkdownContentValue -> other.unwrappedValue
+                else -> Text(other.toString())
+            }
+
+        return MarkdownContentValue(MarkdownContent(nodes))
+    }
 
     override fun visit(value: DynamicInputValue): Expression =
         DynamicInputValue(

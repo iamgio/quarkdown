@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
@@ -44,6 +45,13 @@ data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
+}
+
+/**
+ * A sub-AST that contains Markdown nodes. This is usually accepted in 'body' parameters.
+ */
+data class MarkdownContentValue(override val unwrappedValue: MarkdownContent) : InputValue<MarkdownContent> {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }
 
 /**
