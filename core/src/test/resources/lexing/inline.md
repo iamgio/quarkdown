@@ -14,4 +14,4 @@ ent -->
 a **b  
 c**
 [a*]*
-text $ math $ text
+text $ math $ text .function {arg1} {arg2} x

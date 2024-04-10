@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.lexer.tokens.EmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.EntityToken
 import eu.iamgio.quarkdown.lexer.tokens.EscapeToken
 import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
 import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
@@ -146,6 +147,14 @@ class LexerTest {
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<TableToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<UnorderedListToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
+
+        assertFalse(tokens.hasNext())
     }
 
     @Test
@@ -276,6 +285,31 @@ class LexerTest {
     }
 
     @Test
+    fun inlineFunction() {
+        val tokens = inlineLex(readSource("/lexing/inlinefunction.md"))
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+
+        assertFalse(tokens.hasNext())
+    }
+
+    @Test
     fun inline() {
         val tokens = inlineLex(readSource("/lexing/inline.md"))
 
@@ -319,6 +353,8 @@ class LexerTest {
         assertIs<ReferenceLinkToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
         assertIs<InlineMathToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
 
         assertFalse(tokens.hasNext())

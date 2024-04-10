@@ -46,6 +46,14 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
                         .withReference("math", ONELINE_MATH_HELPER)
                         .build(),
             )
+
+    /**
+     * An isolated function call.
+     * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces
+     * and an optional body, indented by 4 spaces like a list item body.
+     */
+    val functionCall
+        get() = FunctionCallPatterns().blockFunctionCall
 }
 
 /**

@@ -60,3 +60,16 @@ multiline"
 | foo | bar |
 |-----|-----|
 | abc | def |
+
+.blockfunction {arg1} {arg2}
+
+Paragraph
+.inlinefunction {arg1}
+
+- A
+- B
+.blockfunction {arg1} {arg2} {arg3}
+
+.inlinefunction {arg1} {arg2} text
+
+text .inlinefunction text

@@ -29,6 +29,7 @@ class QuarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
+                    functionCall,
                     blockQuote,
                     blockCode,
                     linkDefinition,

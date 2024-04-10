@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.tokens.InlineMathToken
 
 /**
@@ -13,16 +12,7 @@ class QuarkdownInlineTokenRegexPatterns : BaseMarkdownInlineTokenRegexPatterns()
      * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces.
      */
     val inlineFunctionCall
-        get() =
-            TokenRegexPattern(
-                name = "InlineFunctionCall",
-                wrap = ::FunctionCallToken,
-                // Repeating groups can't be captured, hence a capped repeated patterns is used.
-                regex =
-                    RegexBuilder("\\.(\\w+)" + "arg".repeat(FUNCTION_MAX_ARG_COUNT))
-                        .withReference("arg", "$FUNCTION_ARGUMENT_HELPER?")
-                        .build(),
-            )
+        get() = FunctionCallPatterns().inlineFunctionCall
 
     /**
      * Fenced content within spaced dollar signs on the same line.
@@ -39,7 +29,3 @@ class QuarkdownInlineTokenRegexPatterns : BaseMarkdownInlineTokenRegexPatterns()
                         .build(),
             )
 }
-
-private const val FUNCTION_MAX_ARG_COUNT = 10
-
-private const val FUNCTION_ARGUMENT_HELPER = "(?:\\s*\\{(.+?)})"
