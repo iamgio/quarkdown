@@ -15,7 +15,7 @@ import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
  * @param context context to retrieve the queued to-be-expanded function calls from
  * @param outputMapper producer of an AST output [Node] from the function call output
  */
-class AstFunctionCallExpander(
+class FunctionCallNodeExpander(
     private val context: Context,
     private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(),
 ) {

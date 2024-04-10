@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.pipeline
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.function.call.AstFunctionCallExpander
+import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.rendering.NodeRenderer
@@ -20,6 +20,6 @@ data class PipelineComponents(
     val lexer: Lexer,
     val parser: TokenVisitor<Node>,
     val libraryRegistrant: LibraryRegistrant,
-    val functionCallExpander: AstFunctionCallExpander,
+    val functionCallExpander: FunctionCallNodeExpander,
     val renderer: NodeRenderer,
 )
