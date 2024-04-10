@@ -188,7 +188,7 @@ class BlockParserTest {
     fun onelineMath() {
         val nodes = blocksIterator<Math>(readSource("/parsing/math_oneline.md"), assertType = false)
 
-        repeat(3) {
+        repeat(2) {
             assertEquals("Math expression", nodes.next().expression)
         }
     }

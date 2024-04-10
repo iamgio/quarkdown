@@ -1,7 +1,7 @@
 $ Math expression $
 
 A paragraph
-$ Math expression $
+$ Not math: this is inline math $
 
   $ Math expression $
 

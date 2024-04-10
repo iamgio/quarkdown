@@ -13,9 +13,8 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
         includeList: Boolean,
         includeTable: Boolean,
     ): Regex {
-        return RegexBuilder("mmath|omath|" + super.interruptionRule(includeList, includeTable).pattern)
+        return RegexBuilder("mmath|" + super.interruptionRule(includeList, includeTable).pattern)
             .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
-            .withReference("omath", onelineMath.regex.pattern)
             .build()
     }
 
