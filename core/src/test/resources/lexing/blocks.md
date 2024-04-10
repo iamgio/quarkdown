@@ -73,3 +73,9 @@ Paragraph
 .inlinefunction {arg1} {arg2} text
 
 text .inlinefunction text
+
+.blockfunction {arg1}
+  body
+  body
+  body
+end

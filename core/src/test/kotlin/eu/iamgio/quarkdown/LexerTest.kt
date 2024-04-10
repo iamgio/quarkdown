@@ -153,6 +153,8 @@ class LexerTest {
         assertIs<FunctionCallToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<ParagraphToken>(tokens.next())
 
         assertFalse(tokens.hasNext())
     }

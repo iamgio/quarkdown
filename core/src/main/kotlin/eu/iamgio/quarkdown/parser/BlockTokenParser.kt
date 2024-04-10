@@ -202,21 +202,15 @@ class BlockTokenParser(
         ).also(::updateListItemsOwnership)
     }
 
-    override fun visit(token: ListItemToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val marker = groups.next() // Bullet/number
-        groups.next() // Consume
-        val task = groups.next() // Optional GFM task
-
-        val content = token.data.text.removePrefix(marker).removePrefix(task)
-        val lines = content.lineSequence()
-
-        if (lines.none()) {
-            return BaseListItem(children = emptyList())
-        }
-
+    /**
+     * Like [String.trimIndent], but each line requires at least [minIndent] whitespaces trimmed.
+     */
+    private fun trimMinIndent(
+        lines: Sequence<String>,
+        minIndent: Int,
+    ): String {
         // Gets the amount of indentation to trim from the content.
-        var indent = marker.trim().length
+        var indent = minIndent
         for (char in lines.first()) {
             if (char.isWhitespace()) {
                 indent++
@@ -230,6 +224,25 @@ class BlockTokenParser(
             lines.joinToString(separator = "\n") {
                 it.replaceFirst("^ {1,$indent}".toRegex(), "")
             }
+
+        return trimmedContent
+    }
+
+    override fun visit(token: ListItemToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val marker = groups.next() // Bullet/number
+        groups.next() // Consume
+        val task = groups.next() // Optional GFM task
+
+        val content = token.data.text.removePrefix(marker).removePrefix(task)
+        val lines = content.lineSequence()
+
+        if (lines.none()) {
+            return BaseListItem(children = emptyList())
+        }
+
+        //
+        val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length)
 
         // Parsed content.
         val children = flavor.lexerFactory.newBlockLexer(source = trimmedContent).tokenizeAndParse()
@@ -359,9 +372,25 @@ class BlockTokenParser(
         val arguments =
             buildList {
                 groups.forEachRemaining { arg ->
-                    val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
-                    val expression = ComposedExpression(components.map { nodeToExpression(it) })
-                    this += FunctionCallArgument(expression)
+                    // Whether this is a 'body' argument.
+                    // A body argument is always the last one, it goes on a new line and each line is indented.
+                    val isBody = !groups.hasNext() && arg.firstOrNull()?.isWhitespace() == true
+
+                    if (isBody) {
+                        // A body argument is treated as plain text, thus nested function calls are not executed by default.
+                        // They are executed if the argument is used as Markdown content from the referenced function,
+                        // that runs recursive lexing & parsing on the arg content, triggering function calls.
+
+                        // Remove indentation at the beginning of each line.
+                        this += FunctionCallArgument(DynamicInputValue(arg.trimIndent()), isBody = true)
+                    } else {
+                        // Regular argument wrapped in braces.
+                        // The content of the argument is tokenized to distinguish static values (string/number/...)
+                        // from nested function calls, which are also expressions.
+                        val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
+                        val expression = ComposedExpression(components.map { nodeToExpression(it) })
+                        this += FunctionCallArgument(expression)
+                    }
                 }
             }
 
