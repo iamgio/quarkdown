@@ -66,7 +66,7 @@ fun rem(
 /**
  * @return the value of pi
  */
-fun pi() = PI
+fun pi() = NumberValue(PI)
 
 /**
  * @return sine of the angle [x] given in radians.
