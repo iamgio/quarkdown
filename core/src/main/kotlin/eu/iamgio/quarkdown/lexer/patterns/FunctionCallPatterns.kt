@@ -47,4 +47,4 @@ private const val FUNCTION_MAX_ARG_COUNT = 10
 /**
  * Regular argument pattern of a function call (not body arguments).
  */
-private const val FUNCTION_ARGUMENT_HELPER = "(?:\\s*\\{(.+?)})?"
+private const val FUNCTION_ARGUMENT_HELPER = "(?:\\s*\\{(.+?)})?" // TODO allow args in nested function calls (match balanced parentheses)
