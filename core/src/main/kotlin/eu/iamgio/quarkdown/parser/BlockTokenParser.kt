@@ -19,9 +19,14 @@ import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.function.call.FunctionCallArgument
+import eu.iamgio.quarkdown.function.expression.ComposedExpression
+import eu.iamgio.quarkdown.function.expression.Expression
+import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -330,12 +335,34 @@ class BlockTokenParser(
     }
 
     override fun visit(token: FunctionCallToken): Node {
+        // TODO move to FunctionCallParser
+
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
         val name = groups.next()
+
+        /**
+         * @param node to convert
+         * @return an expression that matches the node type
+         */
+        fun nodeToExpression(node: Node): Expression =
+            when (node) {
+                is Text -> DynamicInputValue(node.text) // The actual type is determined later
+                is FunctionCallNode ->
+                    // TODO better error handling: show in node's text like in FunctionCallNodeExpander
+                    context.resolve(node)
+                        ?: throw IllegalStateException("Unresolved function '${node.name}'")
+
+                else -> throw IllegalArgumentException("Unexpected node $node in function call $name")
+            }
+
         val arguments =
             buildList {
-                groups.forEachRemaining { add(it) }
+                groups.forEachRemaining { arg ->
+                    val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
+                    val expression = ComposedExpression(components.map { nodeToExpression(it) })
+                    this += FunctionCallArgument(expression)
+                }
             }
 
         // TODO 'body' argument

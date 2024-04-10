@@ -29,21 +29,24 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
 
                     // The type of dynamic arguments is determined.
                     val staticArgument =
-                        when (argument.expression) {
+                        when (val value = argument.value) {
+                            // The value is dynamic and must be converted to a static type.
                             is DynamicInputValue -> {
-                                // Throw error if the conversion could not happen.
-                                val value =
-                                    argument.expression.convertTo(parameter.type)
+                                // The dynamic value is converted into the expected parameter type.
+                                // Throws error if the conversion could not happen.
+                                val staticValue =
+                                    value.convertTo(parameter.type)
                                         ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
-                                FunctionCallArgument(value)
+                                FunctionCallArgument(staticValue)
                             }
 
                             else -> argument
                         }
 
                     // Type match check.
-                    if (!staticArgument.value.unwrappedValue!!::class.isSubclassOf(parameter.type) &&
+                    if (
+                        !staticArgument.value.unwrappedValue!!::class.isSubclassOf(parameter.type) &&
                         !staticArgument.value::class.isSubclassOf(parameter.type)
                     ) {
                         throw MismatchingArgumentTypeException(call, parameter, staticArgument)

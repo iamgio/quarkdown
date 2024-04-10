@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -10,7 +11,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  */
 data class FunctionCallNode(
     val name: String,
-    val arguments: List<String>,
+    val arguments: List<FunctionCallArgument>,
 ) : NestableNode {
     override val children: MutableList<Node> = mutableListOf()
 

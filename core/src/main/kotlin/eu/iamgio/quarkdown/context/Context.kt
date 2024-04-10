@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.function.Function
+import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
@@ -48,6 +49,13 @@ interface Context {
      * @return the corresponding link node, if it exists
      */
     fun resolve(reference: ReferenceLink): LinkNode?
+
+    /**
+     * @param call function call node to get a function call from
+     * @return a new function call that [call] references to, with [call]'s arguments,
+     * or `null` if [call] references to an unknown function
+     */
+    fun resolve(call: FunctionCallNode): FunctionCall<*>?
 }
 
 /**

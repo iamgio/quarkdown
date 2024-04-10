@@ -30,21 +30,20 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     override fun visit(value: StringValue): Expression =
         StringValue(
             value.unwrappedValue +
-                other.eval().toString(),
+                other.eval().unwrappedValue.toString(),
         )
 
     override fun visit(value: NumberValue): Expression =
         StringValue(
             value.unwrappedValue.toString() +
-                other.eval().toString(),
+                other.eval().unwrappedValue.toString(),
         )
 
-    /**
-     * @throws UnsupportedOperationException `append` must be called after the input type has been defined.
-     */
-    override fun visit(value: DynamicInputValue): Expression {
-        throw UnsupportedOperationException()
-    }
+    override fun visit(value: DynamicInputValue): Expression =
+        DynamicInputValue(
+            value.unwrappedValue +
+                other.eval().unwrappedValue.toString(),
+        )
 
     override fun visit(expression: FunctionCall<*>): Expression =
         StringValue(

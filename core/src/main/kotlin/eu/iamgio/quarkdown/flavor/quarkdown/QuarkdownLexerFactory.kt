@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.patterns.QuarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.patterns.QuarkdownInlineTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
+import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
 
 /**
  * [QuarkdownFlavor] lexer factory.
@@ -60,5 +61,16 @@ class QuarkdownLexerFactory : LexerFactory {
     override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
         base.newLinkLabelInlineLexer(source).updatePatterns { patterns ->
             patterns + this.inlineExtensions
+        }
+
+    override fun newFunctionArgumentLexer(source: CharSequence): Lexer =
+        with(QuarkdownInlineTokenRegexPatterns()) {
+            // A function call argument contains textual content (string/number/...)
+            // and possibly other nested function calls.
+            StandardRegexLexer(
+                source,
+                listOf(inlineFunctionCall),
+                fillTokenType = ::PlainTextToken,
+            )
         }
 }

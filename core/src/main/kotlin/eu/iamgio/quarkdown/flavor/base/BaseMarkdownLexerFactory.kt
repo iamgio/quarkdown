@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.flavor.base
 
 import eu.iamgio.quarkdown.flavor.LexerFactory
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownBlockTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.patterns.BaseMarkdownInlineTokenRegexPatterns
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
@@ -77,4 +78,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                 fillTokenType = ::PlainTextToken,
             )
         }
+
+    // Functions aren't supported by this flavor
+    override fun newFunctionArgumentLexer(source: CharSequence): Lexer = StandardRegexLexer(source, patterns = emptyList())
 }

@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.function.Function
+import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
@@ -35,5 +36,13 @@ open class BaseContext(
     override fun resolve(reference: ReferenceLink): LinkNode? {
         return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
             ?.let { Link(reference.label, it.url, it.title) }
+    }
+
+    override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
+        val function = getFunctionByName(call.name)
+
+        return function?.let {
+            FunctionCall(it, call.arguments)
+        }
     }
 }

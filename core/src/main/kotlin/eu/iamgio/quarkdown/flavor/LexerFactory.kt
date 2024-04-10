@@ -30,4 +30,11 @@ interface LexerFactory {
      *         (e.g. nested links are not allowed)
      */
     fun newLinkLabelInlineLexer(source: CharSequence): Lexer
+
+    /**
+     * @param source raw input
+     * @return a new [Lexer] instance that tokenizes inline content within an argument of a function call,
+     *         to distinguish text from other nested function call
+     */
+    fun newFunctionArgumentLexer(source: CharSequence): Lexer
 }
