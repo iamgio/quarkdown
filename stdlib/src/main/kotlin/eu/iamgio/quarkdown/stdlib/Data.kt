@@ -20,15 +20,15 @@ val Data =
 fun csv(path: String): NodeValue {
     val columns = mutableMapOf<String, MutableList<String>>()
 
-    // TODO handle errors
-
     // CSV is read row-by-row, while the Table is built by columns.
     csvReader().open(path) {
-        readAllWithHeaderAsSequence().forEach { row ->
-            row.forEach { (header, content) ->
-                columns[header] = columns.getOrDefault(header, mutableListOf()).apply { add(content.trim()) }
+        readAllWithHeaderAsSequence()
+            .flatMap { it.entries }
+            .forEach { (header, content) ->
+                val cells = columns.getOrDefault(header, mutableListOf())
+                cells += content.trim()
+                columns[header] = cells
             }
-        }
     }
 
     val table =
