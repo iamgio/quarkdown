@@ -4,9 +4,9 @@ import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
+import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
@@ -23,19 +23,13 @@ class FunctionCallNodeExpander(
      * @param node AST function call node to expand
      */
     private fun expand(node: FunctionCallNode) {
-        val call: FunctionCall<*>? = context.resolve(node)
-
-        if (call == null) {
-            // TODO better error handling
-            node.children += Text("Unresolved function '${node.name}'")
-            return
-        }
+        val call: UncheckedFunctionCall<*> = UncheckedFunctionCall(node.name, context.resolve(node))
 
         try {
             // The result of the function is converted into a node to be appended to the AST.
             val outputNode = call.execute().accept(this.outputMapper)
             node.children += outputNode
-        } catch (e: InvalidFunctionCallException) {
+        } catch (e: PipelineException) {
             // If the function call is invalid.
             context.errorHandler.handle(e) { message ->
                 node.children += Text(message) // Shows error message in the final document.

@@ -16,6 +16,11 @@ const val COMPILE_ERROR_EXIT_CODE = 65
 const val BAD_FUNCTION_CALL_EXIT_CODE = 66
 
 /**
+ * Exit code when a Quarkdown function can't be resolved.
+ */
+const val UNRESOLVED_REFERENCE_EXIT_CODE = 67
+
+/**
  * Exit code when a runtime error occurs.
  */
 const val RUNTIME_ERROR_EXIT_CODE = 70
