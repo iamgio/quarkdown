@@ -364,7 +364,7 @@ class BlockTokenParser(
         fun nodeToExpression(node: Node): Expression =
             when (node) {
                 is Text -> DynamicInputValue(node.text) // The actual type is determined later.
-                is FunctionCallNode -> UncheckedFunctionCall(name, context.resolve(node)) // Existance will is checked later.
+                is FunctionCallNode -> UncheckedFunctionCall(name, context.resolve(node)) // Existance is checked later.
 
                 else -> throw IllegalArgumentException("Unexpected node $node in function call $name")
             }
