@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import kotlin.reflect.KFunction
 
 /**
- * Creates a library from a single Kotlin functions.
+ * Creates a library from a single Kotlin function.
  * @see KFunctionAdapter
  */
 class FunctionLibraryLoader : LibraryLoader<KFunction<OutputValue<*>>> {
