@@ -3,8 +3,10 @@ package eu.iamgio.quarkdown.function.reflect
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
+import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 
@@ -39,7 +41,13 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     param to argument.value.unwrappedValue
                 }
 
-            // Call KFunction.
-            function.callBy(args)
+            // Call the KFunction.
+            try {
+                function.callBy(args)
+            } catch (e: InvocationTargetException) {
+                // Exceptions thrown within the called function are converted to Quarkdown exceptions
+                // and handled accordingly by the pipeline's function expander component.
+                throw FunctionRuntimeException(e.targetException)
+            }
         }
 }
