@@ -23,7 +23,7 @@ class FunctionCallNodeExpander(
      * @param node AST function call node to expand
      */
     private fun expand(node: FunctionCallNode) {
-        val call: UncheckedFunctionCall<*> = UncheckedFunctionCall(node.name, context.resolve(node))
+        val call: UncheckedFunctionCall<*> = context.resolveUnchecked(node)
 
         try {
             // The result of the function is converted into a node to be appended to the AST.

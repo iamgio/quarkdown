@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
@@ -56,6 +57,15 @@ interface Context {
      * or `null` if [call] references to an unknown function
      */
     fun resolve(call: FunctionCallNode): FunctionCall<*>?
+
+    /**
+     * @param call function call node to get a function call from
+     * @return an [UncheckedFunctionCall] that wraps the referenced function call if it has been resolved.
+     * Calling `execute()` on an [UncheckedFunctionCall] whose function wasn't resolved throws an exception
+     * @see UncheckedFunctionCall
+     * @see resolve
+     */
+    fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> = UncheckedFunctionCall(call.name, resolve(call))
 }
 
 /**
