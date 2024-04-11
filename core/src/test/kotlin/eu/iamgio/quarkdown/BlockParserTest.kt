@@ -713,5 +713,10 @@ class BlockParserTest {
             assertEquals(1, arguments.size)
             assertEquals("arg1}", arguments[0].value.unwrappedValue)
         }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(0, arguments.size)
+        }
     }
 }

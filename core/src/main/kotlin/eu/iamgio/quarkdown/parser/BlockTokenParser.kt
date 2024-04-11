@@ -18,9 +18,9 @@ import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
-import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
@@ -362,7 +362,7 @@ class BlockTokenParser(
          */
         fun nodeToExpression(node: Node): Expression =
             when (node) {
-                is Text -> DynamicInputValue(node.text) // The actual type is determined later.
+                is PlainTextNode -> DynamicInputValue(node.text) // The actual type is determined later.
                 is FunctionCallNode -> context.resolveUnchecked(node) // Existance is checked later.
 
                 else -> throw IllegalArgumentException("Unexpected node $node in function call $name")

@@ -69,7 +69,10 @@ class QuarkdownLexerFactory : LexerFactory {
             // and possibly other nested function calls.
             StandardRegexLexer(
                 source,
-                listOf(inlineFunctionCall),
+                listOf(
+                    escape,
+                    inlineFunctionCall,
+                ),
                 fillTokenType = ::PlainTextToken,
             )
         }
