@@ -18,7 +18,7 @@ class FunctionCallPatterns {
                 wrap = ::FunctionCallToken,
                 // Repeating groups can't be captured, hence a capped repeated patterns is used.
                 regex =
-                    RegexBuilder("\\.(\\w+)args")
+                    RegexBuilder("(?<=\\s|^)\\.(\\w+)args")
                         .withReference("args", FUNCTION_ARGUMENT_HELPER.repeat(FUNCTION_MAX_ARG_COUNT))
                         .build(),
             )
