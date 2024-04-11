@@ -6,7 +6,7 @@ import kotlin.test.BeforeTest
  * Tests for functions called from a Quarkdown source.
  * For independent function call tests see [StandaloneFunctionTest].
  */
-class FunctionTest {
+class FunctionNodeExpansionTest {
     @BeforeTest
     fun setup() {
         // Throw exception on function call error.

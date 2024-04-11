@@ -22,7 +22,7 @@ import kotlin.test.assertIs
 
 /**
  * Function call tests.
- * For tests of function calls from Quarkdown sources see [FunctionTest].
+ * For tests of function calls from Quarkdown sources see [FunctionNodeExpansionTest].
  */
 class StandaloneFunctionTest {
     @BeforeTest

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
@@ -689,5 +690,28 @@ class BlockParserTest {
     @Test
     fun orderedList() {
         list<OrderedList>(readSource("/parsing/orderedlist.md"))
+    }
+
+    @Test
+    fun functionCall() {
+        val nodes = blocksIterator<FunctionCallNode>(readSource("/parsing/functioncall.md"))
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(0, arguments.size)
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(2, arguments.size)
+            assertEquals("arg1", arguments[0].value.unwrappedValue)
+            assertEquals("arg2", arguments[1].value.unwrappedValue)
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(1, arguments.size)
+            assertEquals("arg1}", arguments[0].value.unwrappedValue)
+        }
     }
 }
