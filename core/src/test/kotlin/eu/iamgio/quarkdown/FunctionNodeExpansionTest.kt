@@ -65,6 +65,31 @@ class FunctionNodeExpansionTest {
     }
 
     @Test
+    fun `sum expansion, failing`() {
+        val node =
+            FunctionCallNode(
+                "sum",
+                listOf(
+                    FunctionCallArgument(DynamicInputValue("2")),
+                    FunctionCallArgument(DynamicInputValue("a")),
+                ),
+            )
+
+        context.register(node)
+
+        assertTrue(node.children.isEmpty())
+
+        expander.expandAll()
+
+        assertEquals(1, node.children.size)
+
+        with(node.children.first()) {
+            assertIs<Text>(this)
+            assertTrue("sum(" in text) // Error message
+        }
+    }
+
+    @Test
     fun `resource content expansion, failing`() {
         val node =
             FunctionCallNode(
