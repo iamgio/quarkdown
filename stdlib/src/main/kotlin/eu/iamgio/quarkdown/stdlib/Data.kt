@@ -25,9 +25,8 @@ fun csv(path: String): NodeValue {
         readAllWithHeaderAsSequence()
             .flatMap { it.entries }
             .forEach { (header, content) ->
-                val cells = columns[header] ?: mutableListOf()
+                val cells = columns.computeIfAbsent(header) { mutableListOf() }
                 cells += content
-                columns[header] = cells
             }
     }
 
