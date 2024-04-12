@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -490,11 +491,19 @@ class HtmlNodeRendererTest {
 
     @Test
     fun aligned() {
-        val out = readParts("block/aligned.html")
+        val out = readParts("quarkdown/aligned.html")
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
 
         assertEquals(out.next(), Aligned(Aligned.Alignment.LEFT, listOf(paragraph)).render())
         assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
         assertEquals(out.next(), Aligned(Aligned.Alignment.RIGHT, listOf(paragraph)).render())
+    }
+
+    @Test
+    fun clipped() {
+        val out = readParts("quarkdown/clipped.html")
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+
+        assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph)).render())
     }
 }

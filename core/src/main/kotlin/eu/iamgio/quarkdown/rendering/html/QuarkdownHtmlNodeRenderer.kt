@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
@@ -46,6 +47,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
 
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
+
+    override fun visit(node: Clipped) = div("clip-" + node.clip.name.lowercase(), node.children)
 
     // Inline
 

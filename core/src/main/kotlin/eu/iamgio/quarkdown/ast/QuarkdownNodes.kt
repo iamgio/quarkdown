@@ -24,3 +24,21 @@ data class Aligned(
         RIGHT,
     }
 }
+
+/**
+ * A block whose content is clipped in a path.
+ * @param clip type of the clip path
+ */
+data class Clipped(
+    val clip: Clip,
+    override val children: List<Node>,
+) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    /**
+     * Possible clip types of a [Clipped] block.
+     */
+    enum class Clip {
+        CIRCLE,
+    }
+}
