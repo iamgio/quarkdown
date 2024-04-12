@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -32,24 +33,27 @@ import eu.iamgio.quarkdown.function.value.StringValue
  * @see ComposedExpression
  */
 class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor<Expression> {
-    override fun visit(value: StringValue): Expression =
-        StringValue(
-            value.unwrappedValue +
-                other.eval().unwrappedValue.toString(),
-        )
+    /**
+     * @return string result of the concatenation between [this] and [other]
+     */
+    private fun InputValue<*>.concatenate(): String = this.unwrappedValue.toString() + other.eval().unwrappedValue.toString()
 
-    override fun visit(value: NumberValue): Expression =
-        StringValue(
-            value.unwrappedValue.toString() +
-                other.eval().unwrappedValue.toString(),
-        )
+    // "abc" "def"        -> "abcdef"
+    // "abc" .sum {2} {3} -> "abc5"
+    override fun visit(value: StringValue) = StringValue(value.concatenate())
 
-    override fun visit(value: EnumValue): Expression =
-        StringValue(
-            value.unwrappedValue.toString() +
-                other.eval().unwrappedValue.toString(),
-        )
+    // 15 "abc" -> "15abc"
+    // 15 8     -> "158"
+    override fun visit(value: NumberValue) = StringValue(value.concatenate())
 
+    // CENTER "abc"  -> "CENTERabc"
+    // CENTER CENTER -> "CENTERCENTER"
+    // CENTER 15     -> "CENTER15"
+    override fun visit(value: EnumValue) = StringValue(value.concatenate())
+
+    // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
+    // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
+    // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
     override fun visit(value: MarkdownContentValue): Expression {
         val nodes = mutableListOf<Node>(value.unwrappedValue)
         // Append node to the sub-AST.
@@ -62,21 +66,15 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         return MarkdownContentValue(MarkdownContent(nodes))
     }
 
-    override fun visit(value: DynamicInputValue): Expression =
-        DynamicInputValue(
-            value.unwrappedValue +
-                other.eval().unwrappedValue.toString(),
-        )
+    // Like visit(StringValue)
+    override fun visit(value: DynamicInputValue): Expression = DynamicInputValue(value.concatenate())
 
-    override fun visit(expression: FunctionCall<*>): Expression =
-        StringValue(
-            expression.eval().unwrappedValue.toString() +
-                other.eval().unwrappedValue.toString(),
-        )
+    // .sum {2} {3} "abc"             -> "5abc"
+    // .sum {2} {3} .subtract {8} {1} -> "57"
+    override fun visit(expression: FunctionCall<*>): Expression = StringValue(expression.eval().concatenate())
 
     /**
-     * @throws UnsupportedOperationException there is no way a composed expression
-     *         could be appended to another expression
+     * @throws UnsupportedOperationException there is no way a composed expression could be appended to another expression
      */
     override fun visit(expression: ComposedExpression): Expression {
         throw UnsupportedOperationException()
