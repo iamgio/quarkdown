@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.visitor.node
 
+import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
@@ -105,6 +106,9 @@ interface NodeVisitor<T> {
 
     fun visit(node: Math): T
 
+    fun visit(node: Aligned): T
+
     // Quarkdown inline
+
     fun visit(node: MathSpan): T
 }

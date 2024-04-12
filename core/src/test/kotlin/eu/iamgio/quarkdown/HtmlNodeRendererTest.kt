@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
@@ -485,5 +486,15 @@ class HtmlNodeRendererTest {
     fun mathSpan() {
         assertEquals("__QD_INLINE_MATH__\$some expression\$__QD_INLINE_MATH__", MathSpan("some expression").render())
         assertEquals("__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__", MathSpan("\\lim_{x\\to\\infty}x").render())
+    }
+
+    @Test
+    fun aligned() {
+        val out = readParts("block/aligned.html")
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+
+        assertEquals(out.next(), Aligned(Aligned.Alignment.LEFT, listOf(paragraph)).render())
+        assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
+        assertEquals(out.next(), Aligned(Aligned.Alignment.RIGHT, listOf(paragraph)).render())
     }
 }

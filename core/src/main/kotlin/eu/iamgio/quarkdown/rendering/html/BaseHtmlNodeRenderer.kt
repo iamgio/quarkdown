@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
@@ -216,6 +217,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: FunctionCallNode): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: Aligned): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MathSpan): CharSequence = throw UnsupportedRenderException(node)
 }
