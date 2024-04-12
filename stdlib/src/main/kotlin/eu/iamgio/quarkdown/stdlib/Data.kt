@@ -25,8 +25,8 @@ fun csv(path: String): NodeValue {
         readAllWithHeaderAsSequence()
             .flatMap { it.entries }
             .forEach { (header, content) ->
-                val cells = columns.getOrDefault(header, mutableListOf())
-                cells += content.trim()
+                val cells = columns[header] ?: mutableListOf()
+                cells += content
                 columns[header] = cells
             }
     }
@@ -36,8 +36,8 @@ fun csv(path: String): NodeValue {
             columns.map { (header, cells) ->
                 Table.Column(
                     Table.Alignment.NONE,
-                    Table.Cell(listOf(Text(header))),
-                    cells.map { cell -> Table.Cell(listOf(Text(cell))) },
+                    Table.Cell(listOf(Text(header.trim()))),
+                    cells.map { cell -> Table.Cell(listOf(Text(cell.trim()))) },
                 )
             },
         )
