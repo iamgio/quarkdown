@@ -79,6 +79,5 @@ fun Context.resolveOrFallback(reference: ReferenceLink): Node = resolve(referenc
  * @return the corresponding looked up image node if it exists, its fallback node otherwise
  */
 fun Context.resolveOrFallback(reference: ReferenceImage): Node =
-    resolve(reference.link)?.let { Image(it, null, null) }
+    resolve(reference.link)?.let { Image(it, reference.width, reference.height) }
         ?: reference.link.fallback()
-// TODO refimg size

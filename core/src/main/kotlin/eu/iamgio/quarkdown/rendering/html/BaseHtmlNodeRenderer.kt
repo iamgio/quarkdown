@@ -191,6 +191,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
             .attribute("src", node.link.url)
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
+            .optionalAttribute("width", node.width)
+            .optionalAttribute("height", node.height)
             .void(true)
             .build()
 

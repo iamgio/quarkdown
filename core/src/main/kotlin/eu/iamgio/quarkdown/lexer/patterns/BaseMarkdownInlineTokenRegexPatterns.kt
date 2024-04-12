@@ -201,9 +201,11 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineReferenceImage",
                 wrap = ::ReferenceImageToken,
                 regex =
-                    RegexBuilder("!link")
+                    RegexBuilder("!(?:\\(imgsize\\))?link")
+                        .withReference("imgsize", "(?<refimgwidth>\\d+|_)x(?<refimgheight>\\d+|_)")
                         .withReference("link", referenceLink.regex.pattern)
                         .build(),
+                groupNames = listOf("refimgwidth", "refimgheight"),
             )
 
     /*val text

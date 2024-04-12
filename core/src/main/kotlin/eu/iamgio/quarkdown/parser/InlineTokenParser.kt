@@ -183,7 +183,15 @@ class InlineTokenParser(
 
     override fun visit(token: ReferenceImageToken): Node {
         val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
-        return ReferenceImage(link)
+
+        val width = token.data.namedGroups["refimgwidth"]
+        val height = token.data.namedGroups["refimgheight"]
+
+        return ReferenceImage(
+            link,
+            width = width?.toIntOrNull(),
+            height = height?.toIntOrNull(),
+        )
     }
 
     override fun visit(token: CodeSpanToken): Node {

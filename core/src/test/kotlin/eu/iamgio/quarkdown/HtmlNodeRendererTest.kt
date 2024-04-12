@@ -196,15 +196,35 @@ class HtmlNodeRendererTest {
 
         assertEquals(
             out.next(),
-            ReferenceImage(ReferenceLink(label, label, fallback)).render(context),
+            ReferenceImage(
+                ReferenceLink(label, label, fallback),
+                width = null,
+                height = null,
+            ).render(context),
         )
         assertEquals(
             out.next(),
-            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(context),
+            ReferenceImage(
+                ReferenceLink(
+                    listOf(Text("label")),
+                    label,
+                    fallback,
+                ),
+                width = null,
+                height = null,
+            ).render(context),
         )
         assertEquals(
             out.next(),
-            ReferenceImage(ReferenceLink(listOf(Text("label")), label, fallback)).render(),
+            ReferenceImage(
+                ReferenceLink(
+                    listOf(Text("label")),
+                    label,
+                    fallback,
+                ),
+                width = null,
+                height = null,
+            ).render(),
         )
     }
 
@@ -488,13 +508,19 @@ class HtmlNodeRendererTest {
     @Test
     fun mathBlock() {
         assertEquals("__QD_BLOCK_MATH__\$some expression\$__QD_BLOCK_MATH__", Math("some expression").render())
-        assertEquals("__QD_BLOCK_MATH__\$\\lim_{x\\to\\infty}x\$__QD_BLOCK_MATH__", Math("\\lim_{x\\to\\infty}x").render())
+        assertEquals(
+            "__QD_BLOCK_MATH__\$\\lim_{x\\to\\infty}x\$__QD_BLOCK_MATH__",
+            Math("\\lim_{x\\to\\infty}x").render(),
+        )
     }
 
     @Test
     fun mathSpan() {
         assertEquals("__QD_INLINE_MATH__\$some expression\$__QD_INLINE_MATH__", MathSpan("some expression").render())
-        assertEquals("__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__", MathSpan("\\lim_{x\\to\\infty}x").render())
+        assertEquals(
+            "__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__",
+            MathSpan("\\lim_{x\\to\\infty}x").render(),
+        )
     }
 
     @Test
