@@ -69,9 +69,13 @@ data class ReferenceLink(
 /**
  * An image.
  * @param link the link the image points to
+ * @param width optional width constraint
+ * @param height optional height constraint
  */
 data class Image(
     val link: LinkNode,
+    val width: Int?,
+    val height: Int?,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

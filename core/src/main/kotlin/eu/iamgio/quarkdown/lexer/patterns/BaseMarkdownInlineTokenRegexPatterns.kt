@@ -172,6 +172,8 @@ open class BaseMarkdownInlineTokenRegexPatterns {
 
     /**
      * An image, same as a link preceeded by a `!`.
+     * As an extension, Quarkdown introduces an optional `(WxH)` to be added at the end which specifies
+     * the image size, where W and H can be integers or `_` (auto).
      * @see ImageToken
      * @see link
      */
@@ -181,9 +183,11 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineImage",
                 wrap = ::ImageToken,
                 regex =
-                    RegexBuilder("!link")
+                    RegexBuilder("!(?:\\(imgsize\\))?link")
+                        .withReference("imgsize", "(?<imgwidth>\\d+|_)x(?<imgheight>\\d+|_)")
                         .withReference("link", link.regex.pattern)
                         .build(),
+                groupNames = listOf("imgwidth", "imgheight"),
             )
 
     /**

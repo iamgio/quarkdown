@@ -16,4 +16,5 @@ data class TokenRegexPattern(
     val name: String,
     val wrap: (TokenData) -> Token,
     val regex: Regex,
+    val groupNames: List<String> = emptyList(),
 )

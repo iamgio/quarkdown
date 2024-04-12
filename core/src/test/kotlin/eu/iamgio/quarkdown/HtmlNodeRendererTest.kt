@@ -142,24 +142,32 @@ class HtmlNodeRendererTest {
             out.next(),
             Image(
                 Link(label = listOf(), url = "/url", title = null),
+                width = null,
+                height = null,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
                 Link(label = listOf(), url = "/url", title = "Title"),
+                width = null,
+                height = null,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
                 Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
+                width = null,
+                height = null,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
                 Link(label = listOf(Strong(listOf(Text("Foo"))), CodeSpan(" bar")), url = "/url", title = "Title"),
+                width = null,
+                height = null,
             ).render(),
         )
     }

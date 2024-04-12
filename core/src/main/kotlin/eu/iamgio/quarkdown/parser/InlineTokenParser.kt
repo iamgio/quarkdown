@@ -170,7 +170,15 @@ class InlineTokenParser(
 
     override fun visit(token: ImageToken): Node {
         val link = visit(LinkToken(token.data)) as Link
-        return Image(link)
+
+        val width = token.data.namedGroups["imgwidth"]
+        val height = token.data.namedGroups["imgheight"]
+
+        return Image(
+            link,
+            width = width?.toIntOrNull(),
+            height = height?.toIntOrNull(),
+        )
     }
 
     override fun visit(token: ReferenceImageToken): Node {

@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
+import eu.iamgio.quarkdown.util.filterNotNullValues
 
 /**
  * A [Lexer] that identifies tokens by matching [Regex] patterns.
@@ -28,6 +29,13 @@ abstract class RegexLexer(
                 val group = result.groups[pattern.name] ?: return@forEach
                 val range = group.range
 
+                // Groups with a name, defined by the pattern.
+                val namedGroups =
+                    pattern.groupNames.asSequence()
+                        .map { it to result.groups[it] }
+                        .filterNotNullValues()
+                        .toMap()
+
                 // The token data.
                 val data =
                     TokenData(
@@ -36,7 +44,10 @@ abstract class RegexLexer(
                         groups =
                             result.groups.asSequence()
                                 .filterNotNull()
+                                // Named groups don't appear in regular groups
+                                .filterNot { it in namedGroups.values }
                                 .map { it.value },
+                        namedGroups = namedGroups.mapValues { (name, group) -> group.value },
                     )
 
                 // Text tokens are substrings that were not captured by any pattern.
