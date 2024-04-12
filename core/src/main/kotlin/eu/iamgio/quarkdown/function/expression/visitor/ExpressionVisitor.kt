@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -19,6 +20,8 @@ interface ExpressionVisitor<T> {
     fun visit(value: StringValue): T
 
     fun visit(value: NumberValue): T
+
+    fun visit(value: EnumValue): T
 
     fun visit(value: MarkdownContentValue): T
 

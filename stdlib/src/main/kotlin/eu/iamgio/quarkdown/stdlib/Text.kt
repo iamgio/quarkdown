@@ -44,9 +44,8 @@ fun center(body: MarkdownContent) =
  * @return the new clipped block
  */
 fun clip(
-    clip: String,
+    clip: Clipped.Clip,
     body: MarkdownContent,
-) = // TODO support enum parameters to use Clipped.Clip enum
-    NodeValue(
-        Clipped(Clipped.Clip.CIRCLE, body.children),
-    )
+) = NodeValue(
+    Clipped(clip, body.children),
+)

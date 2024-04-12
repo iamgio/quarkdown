@@ -1,9 +1,12 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.functions
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -15,7 +18,18 @@ data class DynamicInputValue(override val unwrappedValue: String) : InputValue<S
      * @param type type of the value to convert this automatic value to
      * @return a new typed [InputValue], automatically determined from [type], or `null` if it could not be converted
      */
+    @Suppress("UNCHECKED_CAST")
     fun convertTo(type: KClass<out InputValue<*>>): InputValue<*>? {
+        // Special treatment for enum values.
+        if (type.isSubclassOf(Enum::class)) {
+            // Enum.values() function lookup.
+            val valuesFunction = type.functions.first { it.name == "values" } as KFunction<Array<Enum<*>>>
+            val values = valuesFunction.call()
+
+            return ValueFactory.enum(unwrappedValue, values)
+                ?: throw NoSuchElementFunctionException(element = unwrappedValue, values)
+        }
+
         // Gets ValueFactory methods annotated with @FromDynamicType(X::class),
         // and the one with a matching type is invoked.
         for (function in ValueFactory::class.declaredFunctions) {

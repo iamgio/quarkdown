@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
@@ -7,6 +8,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
+import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
@@ -408,6 +410,43 @@ class StandaloneFunctionTest {
             )
 
         assertEquals("Hello Hello dear from B", callWithArgs.execute().unwrappedValue)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+
+    @Test
+    fun `KFunction with enum`() {
+        val function = KFunctionAdapter(::echoEnum)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("center")),
+                    ),
+            )
+
+        assertEquals("CENTER", call.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with invalid enum`() {
+        val function = KFunctionAdapter(::echoEnum)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("something")),
+                    ),
+            )
+
+        assertFailsWith<NoSuchElementFunctionException> {
+            call.execute()
+        }
     }
 
     @Test

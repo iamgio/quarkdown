@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.append
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
@@ -19,6 +20,8 @@ class EvalExpressionVisitor : ExpressionVisitor<InputValue<*>> {
     override fun visit(value: StringValue) = value
 
     override fun visit(value: NumberValue) = value
+
+    override fun visit(value: EnumValue) = value
 
     override fun visit(value: MarkdownContentValue) = value
 

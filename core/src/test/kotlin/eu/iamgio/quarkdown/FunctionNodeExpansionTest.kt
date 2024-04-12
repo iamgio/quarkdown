@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.MutableContext
@@ -31,13 +32,16 @@ class FunctionNodeExpansionTest {
     ) = NumberValue(a.toFloat() + b.toFloat())
 
     @Suppress("MemberVisibilityCanBePrivate")
+    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+
+    @Suppress("MemberVisibilityCanBePrivate")
     fun resourceContent(path: String) = StringValue(javaClass.getResourceAsStream("/function/$path")!!.reader().readText())
 
     @BeforeTest
     fun setup() {
         context = MutableContext()
 
-        val library = MultiFunctionLibraryLoader("lib").load(setOf(::sum, ::resourceContent))
+        val library = MultiFunctionLibraryLoader("lib").load(setOf(::sum, ::echoEnum, ::resourceContent))
 
         LibraryRegistrant(context).registerAll(listOf(library))
         expander = FunctionCallNodeExpander(context)
@@ -131,5 +135,29 @@ class FunctionNodeExpansionTest {
 
         assertEquals(1, node.children.size)
         assertEquals(Text("Hello Quarkdown!"), node.children.first())
+    }
+
+    @Test
+    fun `enum lookup, failing`() {
+        val node =
+            FunctionCallNode(
+                "echoEnum",
+                listOf(
+                    FunctionCallArgument(DynamicInputValue("non-existant-value")),
+                ),
+            )
+
+        context.register(node)
+
+        assertTrue(node.children.isEmpty())
+
+        expander.expandAll()
+
+        assertEquals(1, node.children.size)
+
+        with(node.children.first()) {
+            assertIs<Text>(this)
+            assertTrue("No such element" in text)
+        }
     }
 }

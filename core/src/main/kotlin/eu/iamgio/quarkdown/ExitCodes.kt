@@ -21,6 +21,12 @@ const val BAD_FUNCTION_CALL_EXIT_CODE = 66
 const val UNRESOLVED_REFERENCE_EXIT_CODE = 67
 
 /**
+ * Exit code when an element (e.g. an enum value from a Quarkdown function argument)
+ * does not exist in a look-up table.
+ */
+const val NO_SUCH_ELEMENT_EXIT_CODE = 68
+
+/**
  * Exit code when a runtime error occurs.
  */
 const val RUNTIME_ERROR_EXIT_CODE = 70

@@ -9,4 +9,10 @@ object ValueFactory {
 
     @FromDynamicType(Number::class)
     fun number(raw: String) = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
+
+    @FromDynamicType(Enum::class)
+    fun enum(
+        raw: String,
+        values: Array<Enum<*>>,
+    ): EnumValue? = values.find { it.name.equals(raw, ignoreCase = true) }?.let { EnumValue(it) }
 }
