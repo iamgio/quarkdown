@@ -145,24 +145,57 @@ class InlineParserTest {
     fun image() {
         val nodes = inlineIterator<Image>(readSource("/parsing/inline/image.md"))
 
-        with(nodes.next().link) {
-            with(label.first()) {
+        with(nodes.next()) {
+            with(link.label.first()) {
                 assertIs<Text>(this)
                 assertEquals("foo", text)
             }
-            assertEquals("/img", url)
-            assertNull(title)
+            assertEquals("/img", link.url)
+            assertNull(link.title)
+
+            assertNull(width)
+            assertNull(height)
         }
 
         repeat(2) {
-            with(nodes.next().link) {
-                with(label.first()) {
+            with(nodes.next()) {
+                with(link.label.first()) {
                     assertIs<Text>(this)
                     assertEquals("foo", text)
                 }
-                assertEquals("/img", url)
-                assertEquals(title, "Title")
+                assertEquals("/img", link.url)
+                assertEquals(link.title, "Title")
+
+                assertNull(width)
+                assertNull(height)
             }
+        }
+
+        with(nodes.next()) {
+            with(link.label.first()) {
+                assertIs<Text>(this)
+                assertEquals("foo", text)
+            }
+            assertEquals("/img", link.url)
+            assertEquals(link.title, "Title")
+
+            assertEquals(150, width)
+            assertEquals(100, height)
+        }
+
+        with(nodes.next()) {
+            assertEquals(150, width)
+            assertNull(height)
+        }
+
+        with(nodes.next()) {
+            assertNull(width)
+            assertEquals(100, height)
+        }
+
+        with(nodes.next()) {
+            assertNull(width)
+            assertNull(height)
         }
     }
 
@@ -170,22 +203,50 @@ class InlineParserTest {
     fun referenceImage() {
         val nodes = inlineIterator<ReferenceImage>(readSource("/parsing/inline/refimage.md"))
 
-        with(nodes.next().link) {
-            with(label.first()) {
+        with(nodes.next()) {
+            with(link.label.first()) {
                 assertIs<Text>(this)
                 assertEquals("label", text)
             }
-            assertEquals(Text("ref"), reference.first())
+            assertEquals(Text("ref"), link.reference.first())
+
+            assertNull(width)
+            assertNull(height)
         }
 
         repeat(2) {
-            with(nodes.next().link) {
-                with(label.first()) {
+            with(nodes.next()) {
+                with(link.label.first()) {
                     assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
-                assertEquals(Text("ref"), reference.first())
+                assertEquals(Text("ref"), link.reference.first())
+
+                assertNull(width)
+                assertNull(height)
             }
+        }
+
+        with(nodes.next()) {
+            with(link.label.first()) {
+                assertIs<Text>(this)
+                assertEquals("ref", text)
+            }
+            assertEquals(Text("ref"), link.reference.first())
+
+            assertEquals(150, width)
+            assertEquals(100, height)
+        }
+
+        with(nodes.next()) {
+            with(link.label.first()) {
+                assertIs<Text>(this)
+                assertEquals("ref", text)
+            }
+            assertEquals(Text("ref"), link.reference.first())
+
+            assertEquals(150, width)
+            assertNull(height)
         }
     }
 

@@ -170,6 +170,14 @@ class HtmlNodeRendererTest {
                 height = null,
             ).render(),
         )
+        assertEquals(
+            out.next(),
+            Image(
+                Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
+                width = 150,
+                height = 100,
+            ).render(),
+        )
     }
 
     @Test
@@ -212,6 +220,18 @@ class HtmlNodeRendererTest {
                 ),
                 width = null,
                 height = null,
+            ).render(context),
+        )
+        assertEquals(
+            out.next(),
+            ReferenceImage(
+                ReferenceLink(
+                    listOf(Text("label")),
+                    label,
+                    fallback,
+                ),
+                width = 150,
+                height = 100,
             ).render(context),
         )
         assertEquals(
