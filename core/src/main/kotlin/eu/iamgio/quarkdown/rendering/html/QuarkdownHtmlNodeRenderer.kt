@@ -45,7 +45,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
 
-    override fun visit(node: Aligned) = div("align-" + node.alignment.name.lowercase(), node.children)
+    override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
     // Inline
 
