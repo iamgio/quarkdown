@@ -15,6 +15,7 @@ val Text =
         ::test,
         ::greet,
         ::bold,
+        ::align,
         ::center,
         ::clip,
     )
@@ -29,14 +30,25 @@ fun bold(body: MarkdownContent) =
     )
 
 /**
- * Centers content within its parent.
+ * Aligns content within its parent.
+ * @param alignment content alignment anchor
  * @param body content to center
  * @return the new aligned block
  */
-fun center(body: MarkdownContent) =
-    NodeValue(
-        Aligned(Aligned.Alignment.CENTER, body.children),
-    )
+fun align(
+    alignment: Aligned.Alignment,
+    body: MarkdownContent,
+) = NodeValue(
+    Aligned(alignment, body.children),
+)
+
+/**
+ * Centers content within its parent.
+ * @param body content to center
+ * @return the new aligned block
+ * @see align
+ */
+fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
 
 /**
  * Applies a clipping path to its content.
