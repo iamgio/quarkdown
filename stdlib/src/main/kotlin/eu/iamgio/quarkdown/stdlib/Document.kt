@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
-import eu.iamgio.quarkdown.function.call.injection.Injected
 import eu.iamgio.quarkdown.function.reflect.FunctionName
+import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue

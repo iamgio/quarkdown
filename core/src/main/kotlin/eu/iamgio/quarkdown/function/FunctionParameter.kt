@@ -11,7 +11,6 @@ import kotlin.reflect.KClass
  * @param isOptional whether the corresponding argument in a function call can be omitted
  * @param isInjected whether the corresponding argument in a function call is automatically injected
  *                   and is not to be supplied by the caller.
- *                   A parameter is marked as injected if it's annotated with `@Injected`
  * @param T input type of the parameter
  */
 data class FunctionParameter<T>(
@@ -19,5 +18,7 @@ data class FunctionParameter<T>(
     val type: KClass<out InputValue<T>>,
     val index: Int,
     val isOptional: Boolean = false,
+    // When a function parameter is loaded from a KFunction via KFunctionAdapter,
+    // a parameter is injected if it's annotated with `@Injected`
     val isInjected: Boolean = false,
 )

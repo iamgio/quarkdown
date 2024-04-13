@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.function.FunctionParameter
-import eu.iamgio.quarkdown.function.call.injection.Injected
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
+import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import kotlin.reflect.full.isSubclassOf
 
@@ -24,6 +24,7 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      */
     private fun generateRegularLinks(): Links =
         buildMap {
+            // Injected parameters are handled in generateInjectedLinks.
             val regularParameters = call.function.parameters.filterNot { it.isInjected }
 
             call.arguments.forEachIndexed { index, argument ->
@@ -68,9 +69,11 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      */
     private fun generateInjectedLinks(): Links =
         buildMap {
+            // Non-injected parameters are handled in generateRegularLinks.
             val injectedParameters = call.function.parameters.filter { it.isInjected }
+
             injectedParameters.forEach { parameter ->
-                val value = Injected.valueFromType(parameter.type, call)
+                val value = InjectedValue.fromType(parameter.type, call)
                 this[parameter] = FunctionCallArgument(value)
             }
         }

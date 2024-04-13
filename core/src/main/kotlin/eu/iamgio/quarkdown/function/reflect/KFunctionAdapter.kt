@@ -3,7 +3,6 @@ package eu.iamgio.quarkdown.function.reflect
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
-import eu.iamgio.quarkdown.function.call.injection.Injected
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
