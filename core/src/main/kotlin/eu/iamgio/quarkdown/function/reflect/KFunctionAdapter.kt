@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 
 /**
@@ -17,8 +18,12 @@ import kotlin.reflect.full.hasAnnotation
  * @param function Kotlin function to adapt
  */
 class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) : Function<T> {
+    /**
+     * If the [FunctionName] annotation is present on [function], the Quarkdown function name is set from there.
+     * Otherwise, it is [function]'s original name.
+     */
     override val name: String
-        get() = function.name
+        get() = function.findAnnotation<FunctionName>()?.name ?: function.name
 
     @Suppress("UNCHECKED_CAST")
     override val parameters: List<FunctionParameter<*>>

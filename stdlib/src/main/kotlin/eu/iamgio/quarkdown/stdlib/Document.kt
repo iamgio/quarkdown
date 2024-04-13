@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.call.injection.Injected
+import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
@@ -44,6 +45,7 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
  * @param name (optional) name to assign to the document
  * @return the current document name if [name] is `null`
  */
+@FunctionName("docname")
 fun docName(
     @Injected context: Context,
     name: String? = null,
@@ -60,6 +62,7 @@ fun docName(
  * @param author (optional) author to assign to the document
  * @return the current document author if [author] is `null`
  */
+@FunctionName("docauthor")
 fun docAuthor(
     @Injected context: Context,
     author: String? = null,
