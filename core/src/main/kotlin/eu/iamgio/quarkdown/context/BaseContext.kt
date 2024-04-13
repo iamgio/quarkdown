@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
@@ -21,6 +22,8 @@ open class BaseContext(
     override val libraries: Set<Library> = emptySet(),
     override val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
 ) : Context {
+    override val documentInfo = DocumentInfo()
+
     override val hasMath: Boolean
         get() = attributes.hasMath
 

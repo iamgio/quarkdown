@@ -22,7 +22,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             // TODO extract from context / document settings which can be affected by functions
-            .value(TemplatePlaceholders.TITLE, "")
+            .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en")
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
 
