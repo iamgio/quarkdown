@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.StringValue
 
 /**
@@ -50,6 +51,8 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // CENTER CENTER -> "CENTERCENTER"
     // CENTER 15     -> "CENTER15"
     override fun visit(value: EnumValue) = StringValue(value.concatenate())
+
+    override fun visit(value: ObjectValue<*>) = StringValue(value.concatenate())
 
     // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))

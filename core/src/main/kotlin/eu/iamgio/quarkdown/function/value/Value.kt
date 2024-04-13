@@ -55,6 +55,13 @@ data class EnumValue(override val unwrappedValue: Enum<*>) : InputValue<Enum<*>>
 }
 
 /**
+ * A [Value] that wraps an element from a static enum class.
+ */
+data class ObjectValue<T>(override val unwrappedValue: T) : InputValue<T> {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
+}
+
+/**
  * A sub-AST that contains Markdown nodes. This is usually accepted in 'body' parameters.
  */
 data class MarkdownContentValue(override val unwrappedValue: MarkdownContent) : InputValue<MarkdownContent> {
@@ -71,7 +78,7 @@ data class NodeValue(override val unwrappedValue: Node) : OutputValue<Node> {
 /**
  * An empty [Value] with no content.
  */
-class VoidValue : OutputValue<Unit> {
+object VoidValue : OutputValue<Unit> {
     override val unwrappedValue = Unit
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)

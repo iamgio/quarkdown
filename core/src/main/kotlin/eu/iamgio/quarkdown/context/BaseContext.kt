@@ -45,7 +45,7 @@ open class BaseContext(
         val function = getFunctionByName(call.name)
 
         return function?.let {
-            FunctionCall(it, call.arguments)
+            FunctionCall(it, call.arguments, context = this)
         }
     }
 }

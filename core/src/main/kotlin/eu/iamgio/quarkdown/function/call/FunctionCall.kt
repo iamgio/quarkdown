@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.function.call
 
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
@@ -10,11 +11,14 @@ import eu.iamgio.quarkdown.function.value.OutputValue
  * This is an [Expression] as its output can be used as an input for another function call.
  * @param function referenced function to call
  * @param arguments arguments of the call
+ * @param context optional context this call lies in.
+ *                This value can be injected to library functions that demand it via the `@Injected` annotation
  * @param T expected output type of the function
  */
 data class FunctionCall<T : OutputValue<*>>(
     val function: Function<T>,
     val arguments: List<FunctionCallArgument>,
+    val context: Context? = null,
 ) : Expression {
     /**
      * Checks the call validity and calls the function.
@@ -23,8 +27,8 @@ data class FunctionCall<T : OutputValue<*>>(
     fun execute(): T {
         // Allows linking arguments to their parameter.
         val linker = FunctionArgumentsLinker(this)
-
         linker.link()
+
         return function.invoke(linker)
     }
 

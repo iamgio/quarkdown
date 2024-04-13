@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.StringValue
 
 /**
@@ -22,6 +23,8 @@ class EvalExpressionVisitor : ExpressionVisitor<InputValue<*>> {
     override fun visit(value: NumberValue) = value
 
     override fun visit(value: EnumValue) = value
+
+    override fun visit(value: ObjectValue<*>) = value
 
     override fun visit(value: MarkdownContentValue) = value
 

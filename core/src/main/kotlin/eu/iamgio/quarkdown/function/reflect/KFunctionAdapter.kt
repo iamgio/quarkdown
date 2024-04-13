@@ -3,12 +3,14 @@ package eu.iamgio.quarkdown.function.reflect
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
+import eu.iamgio.quarkdown.function.call.injection.Injected
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
+import kotlin.reflect.full.hasAnnotation
 
 /**
  * A Quarkdown [Function] adapted from a regular Kotlin [KFunction].
@@ -28,6 +30,7 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     type = it.type.classifier as KClass<out InputValue<T>>,
                     index = it.index,
                     isOptional = it.isOptional,
+                    isInjected = it.hasAnnotation<Injected>(),
                 )
             }
 
