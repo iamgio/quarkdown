@@ -12,7 +12,7 @@ import kotlin.math.floor
 
 /**
  * Producer of a [Node] output, ready to append to the AST, from a generic function output.
- * @see eu.iamgio.quarkdown.function.AstFunctionCallExpander
+ * @see eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
  */
 class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     override fun visit(value: StringValue) = Text(value.unwrappedValue)

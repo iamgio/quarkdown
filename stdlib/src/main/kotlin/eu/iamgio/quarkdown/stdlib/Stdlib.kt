@@ -11,7 +11,8 @@ object Stdlib : LibraryExporter {
     override val library: Library
         get() =
             MultiFunctionLibraryLoader(name = "stdlib").load(
-                Text +
+                Document +
+                    Text +
                     Math +
                     Data,
             )
