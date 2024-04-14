@@ -12,6 +12,7 @@ object Stdlib : LibraryExporter {
         get() =
             MultiFunctionLibraryLoader(name = "stdlib").load(
                 Document +
+                    Layout +
                     Text +
                     Math +
                     Flow +
