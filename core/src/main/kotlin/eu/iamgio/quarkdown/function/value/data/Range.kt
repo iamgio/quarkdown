@@ -38,5 +38,5 @@ data class Range(val start: Int?, val end: Int?) {
  *         If any of the bounds is `null`, it is replaced by the list's start or end index respectively
  */
 fun <T> List<T>.subList(range: Range): List<T> {
-    return subList(range.start ?: 0, range.start ?: (this.size - 1))
+    return subList(range.start ?: 0, range.end ?: (this.size - 1))
 }
