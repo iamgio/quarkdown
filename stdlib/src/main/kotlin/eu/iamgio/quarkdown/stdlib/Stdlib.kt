@@ -14,6 +14,7 @@ object Stdlib : LibraryExporter {
                 Document +
                     Text +
                     Math +
+                    Flow +
                     Data,
             )
 }
