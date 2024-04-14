@@ -10,11 +10,11 @@ object SystemProperties {
     const val PRETTY_OUTPUT = "pretty"
 
     /**
-     * When this property is present, the rendered code is wrapped in a template code.
+     * When this property is present, the rendered code isn't wrapped in a template code.
      * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
      * @see eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
      */
-    const val WRAP_OUTPUT = "wrap"
+    const val DONT_WRAP_OUTPUT = "nowrap"
 
     /**
      * When this property is present, the process is aborted whenever a soft pipeline error occurs.
@@ -55,7 +55,7 @@ val SystemProperties.isPrettyOutputEnabled: Boolean
  * Whether the output code should be wrapped in a template.
  */
 val SystemProperties.isWrapOutputEnabled: Boolean
-    get() = contains(WRAP_OUTPUT)
+    get() = !contains(DONT_WRAP_OUTPUT)
 
 /**
  * Whether the process should be killed whenever a soft pipeline error occurs.
