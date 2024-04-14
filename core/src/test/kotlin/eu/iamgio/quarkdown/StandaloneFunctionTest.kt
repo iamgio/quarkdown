@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
@@ -11,16 +13,19 @@ import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
+import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.VoidValue
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 /**
  * Function call tests.
@@ -445,6 +450,64 @@ class StandaloneFunctionTest {
             )
 
         assertFailsWith<NoSuchElementFunctionException> {
+            call.execute()
+        }
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun setDocumentName(
+        @Injected context: Context,
+        name: String,
+    ): VoidValue {
+        context.documentInfo.name = name
+        return VoidValue
+    }
+
+    @Test
+    fun `KFunction with injected context`() {
+        val function = KFunctionAdapter(::setDocumentName)
+
+        val context = MutableContext()
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicInputValue("New name")),
+                    ),
+                context,
+            )
+
+        assertNull(context.documentInfo.name)
+
+        call.execute()
+
+        assertEquals("New name", context.documentInfo.name)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun invalidInjection(
+        @Injected x: String,
+    ) = StringValue(x)
+
+    @Test
+    fun `KFunction with invalid injection`() {
+        val function = KFunctionAdapter(::invalidInjection)
+
+        val context = MutableContext()
+
+        val call =
+            FunctionCall(
+                function,
+                arguments = emptyList(),
+                context,
+            )
+
+        assertNull(context.documentInfo.name)
+
+        // String isn't an injectable type.
+        assertFailsWith<IllegalArgumentException> {
             call.execute()
         }
     }
