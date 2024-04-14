@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InputValue
@@ -47,11 +48,23 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // 15 8     -> "158"
     override fun visit(value: NumberValue) = StringValue(value.concatenate())
 
+    // true false -> false
+    // false true -> false
+    // true true  -> true
+    // true "abc" -> "trueabc"
+    override fun visit(value: BooleanValue): Expression =
+        when (other) {
+            // Logic AND between values.
+            is BooleanValue -> BooleanValue(value.unwrappedValue && other.unwrappedValue)
+            else -> StringValue(value.concatenate())
+        }
+
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
     // CENTER 15     -> "CENTER15"
     override fun visit(value: EnumValue) = StringValue(value.concatenate())
 
+    // obj "abc" -> "objabc"
     override fun visit(value: ObjectValue<*>) = StringValue(value.concatenate())
 
     // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))

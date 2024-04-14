@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.function.value.output
 
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -12,6 +13,8 @@ interface OutputValueVisitor<T> {
     fun visit(value: StringValue): T
 
     fun visit(value: NumberValue): T
+
+    fun visit(value: BooleanValue): T
 
     fun visit(value: NodeValue): T
 

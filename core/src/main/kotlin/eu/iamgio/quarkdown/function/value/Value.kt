@@ -48,6 +48,15 @@ data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>
 }
 
 /**
+ * An immutable boolean [Value].
+ */
+data class BooleanValue(override val unwrappedValue: Boolean) : InputValue<Boolean>, OutputValue<Boolean> {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
+
+    override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
+}
+
+/**
  * A [Value] that wraps an element from a static enum class.
  */
 data class EnumValue(override val unwrappedValue: Enum<*>) : InputValue<Enum<*>> {

@@ -2,7 +2,9 @@ package eu.iamgio.quarkdown.function.value.output
 
 import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -25,6 +27,9 @@ class NodeOutputValueVisitor : OutputValueVisitor<Node> {
                 else -> Text(it.toString()) // 5.2 -> 5.2
             }
         }
+
+    // TODO create CheckBox node (TaskListItem creates an unwanted <li> tag)
+    override fun visit(value: BooleanValue) = TaskListItem(isChecked = value.unwrappedValue, children = emptyList())
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 

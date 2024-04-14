@@ -20,7 +20,21 @@ object ValueFactory {
      * @return a new number value that wraps [raw]'s integer (if possible) or float value, or `null` if [raw] is not numeric
      */
     @FromDynamicType(Number::class)
-    fun number(raw: String) = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
+    fun number(raw: String): NumberValue? = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
+
+    /**
+     * @param raw raw value to convert to a boolean value.
+     *            `true`,`yes` -> `true`,
+     *            `false`,`no` -> `false`
+     * @return a new boolean value that wraps [raw]'s boolean value, or `null` if [raw] does not represent a boolean
+     */
+    @FromDynamicType(Boolean::class)
+    fun boolean(raw: String): BooleanValue? =
+        when (raw.lowercase()) {
+            "true", "yes" -> BooleanValue(true)
+            "false", "no" -> BooleanValue(false)
+            else -> null
+        }
 
     /**
      * @param raw raw value to convert to a range value.
