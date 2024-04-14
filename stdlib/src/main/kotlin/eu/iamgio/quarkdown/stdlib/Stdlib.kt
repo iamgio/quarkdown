@@ -16,6 +16,7 @@ object Stdlib : LibraryExporter {
                     Text +
                     Math +
                     Flow +
-                    Data,
+                    Data +
+                    Library,
             )
 }
