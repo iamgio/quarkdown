@@ -2,10 +2,12 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Clipped
+import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * `Text` stdlib module exporter.
@@ -15,6 +17,7 @@ val Text =
         ::test,
         ::greet,
         ::bold,
+        ::code,
         ::align,
         ::center,
         ::clip,
@@ -28,6 +31,20 @@ fun bold(body: MarkdownContent) =
     NodeValue(
         Strong(body.children),
     )
+
+/**
+ * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
+ * this function accepts Markdown content as its body, hence it can be used - for example -
+ * in combination with [fileContent] to load code from file.
+ * @param language optional language of the code
+ * @param body code content
+ */
+fun code(
+    language: String? = null,
+    body: MarkdownContent,
+) = NodeValue(
+    Code(body.children.toPlainText(), language),
+)
 
 /**
  * Aligns content within its parent.
