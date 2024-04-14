@@ -34,10 +34,11 @@ class FunctionCallPatterns {
                 name = "FunctionCall",
                 wrap = ::FunctionCallToken,
                 regex =
-                    RegexBuilder("^ {0,3}call(body)")
+                    RegexBuilder("^ {0,3}call(?<barg>body)")
                         .withReference("call", inlineFunctionCall.regex.pattern)
                         .withReference("body", "(?:\\s*^ {2,}.+)*")
                         .build(),
+                groupNames = listOf("barg"),
             )
 }
 
