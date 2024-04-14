@@ -45,9 +45,9 @@ abstract class RegexLexer(
                             result.groups.asSequence()
                                 .filterNotNull()
                                 // Named groups don't appear in regular groups
-                                .filterNot { it in namedGroups.values }
+                                .filterNot { namedGroups.containsValue(it) }
                                 .map { it.value },
-                        namedGroups = namedGroups.mapValues { (name, group) -> group.value },
+                        namedGroups = namedGroups.mapValues { (_, group) -> group.value },
                     )
 
                 // Text tokens are substrings that were not captured by any pattern.
@@ -64,6 +64,7 @@ abstract class RegexLexer(
     override fun tokenize(): List<Token> =
         buildList {
             val regex: Regex = patterns.groupify()
+
             // Append an empty line to the tokenized source to prevent issues with some expressions.
             val match: Sequence<MatchResult> = regex.findAll("$source\n")
 
