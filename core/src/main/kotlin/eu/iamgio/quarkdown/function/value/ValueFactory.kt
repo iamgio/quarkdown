@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.util.iterator
+
 /**
  * Factory of [Value] wrappers from raw string data.
  * @see DynamicInputValue.convertTo
@@ -20,6 +23,31 @@ object ValueFactory {
     fun number(raw: String) = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
 
     /**
+     * @param raw raw value to convert to a range value.
+     *            The format is `x..y`, where `x` and `y` are integers that specify start and end of the range.
+     *            Both start and end can be omitted to represent an open/infinite value on that end.
+     * @return a new range value that wraps the parsed content of [raw].
+     *         If the input is invalid, an infinite range is returned
+     */
+    @FromDynamicType(Range::class)
+    fun range(raw: String): ObjectValue<Range> {
+        // Matches 'x..y', where both x and y are optional integers.
+        val regex = "(\\d+)?..(\\d+)?".toRegex()
+        val groups =
+            regex.find(raw)?.groupValues
+                ?.asSequence()
+                ?.iterator(consumeAmount = 1)
+
+        // Start of the range. If null (= not present), the range is open on the left end.
+        val start = groups?.next()
+        // End of the range. If null (= not present), the range is open on the right end.
+        val end = groups?.next()
+
+        val range = Range(start?.toIntOrNull(), end?.toIntOrNull())
+        return ObjectValue(range)
+    }
+
+    /**
      * @param raw raw value to convert to an enum value
      * @param values enum values pool to pick the output value from
      * @return the value whose name matches (ignoring case) with [raw], or `null` if no match is found
@@ -28,5 +56,7 @@ object ValueFactory {
     fun enum(
         raw: String,
         values: Array<Enum<*>>,
-    ): EnumValue? = values.find { it.name.equals(raw, ignoreCase = true) }?.let { EnumValue(it) }
+    ): EnumValue? =
+        values.find { it.name.equals(raw, ignoreCase = true) }
+            ?.let { EnumValue(it) }
 }

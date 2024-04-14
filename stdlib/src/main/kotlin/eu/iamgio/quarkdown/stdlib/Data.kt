@@ -6,6 +6,8 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.data.subList
 import java.io.File
 
 /**
@@ -20,11 +22,26 @@ val Data =
 
 /**
  * @param path path of the file (with extension)
+ * @param lineRange range of lines to extract from the file.
+ *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
  */
 @FunctionName("filecontent")
-fun fileContent(path: String): StringValue {
-    return StringValue(File(path).readText())
+fun fileContent(
+    path: String,
+    lineRange: Range = Range.INFINITE,
+): StringValue {
+    val file = File(path)
+
+    // If the range is infinite on both ends, the whole file is read.
+    if (lineRange.isInfinite) {
+        return StringValue(file.readText())
+    }
+
+    // Lines from the file in the given range.
+    val lines = file.readLines().subList(lineRange)
+
+    return StringValue(lines.joinToString(System.lineSeparator()))
 }
 
 /**
