@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
@@ -28,13 +30,31 @@ class FunctionCallNodeExpander(
         try {
             // The result of the function is converted into a node to be appended to the AST.
             val outputNode = call.execute().accept(this.outputMapper)
-            node.children += outputNode
+            appendOutput(node, outputNode)
         } catch (e: PipelineException) {
             // If the function call is invalid.
             context.errorHandler.handle(e) { message ->
-                node.children += Text(message) // Shows error message in the final document.
+                appendOutput(node, Text(message)) // Shows error message in the final document.
             }
         }
+    }
+
+    /**
+     * Adds [output] to [call]'s content in the AST.
+     * If [call] is a block function call and [output] is inline, [output] is wrapped in a paragraph.
+     * @param call function call node
+     * @param output output node to append
+     */
+    private fun appendOutput(
+        call: FunctionCallNode,
+        output: Node,
+    ) {
+        call.children +=
+            when {
+                // The output is wrapped in a paragraph if the function call is a block and the output is inline.
+                call.isBlock && output is PlainTextNode -> Paragraph(listOf(output))
+                else -> output
+            }
     }
 
     /**

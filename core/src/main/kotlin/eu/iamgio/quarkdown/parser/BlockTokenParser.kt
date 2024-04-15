@@ -401,7 +401,7 @@ class BlockTokenParser(
             arguments += FunctionCallArgument(value, isBody = true)
         }
 
-        val call = FunctionCallNode(name, arguments)
+        val call = FunctionCallNode(name, arguments, token.isBlock)
 
         // Enqueuing the function call, in order to expand it in the next stage.
         context.register(call)

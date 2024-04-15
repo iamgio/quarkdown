@@ -14,8 +14,9 @@ import eu.iamgio.quarkdown.visitor.token.TokenVisitor
  *     body
  * ```
  * The `body` argument is supported only when used as a block.
+ * @param isBlock whether the function call is a block (opposite: inline)
  * @see eu.iamgio.quarkdown.ast.FunctionCallNode
  */
-class FunctionCallToken(data: TokenData) : Token(data) {
+class FunctionCallToken(data: TokenData, val isBlock: Boolean) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }

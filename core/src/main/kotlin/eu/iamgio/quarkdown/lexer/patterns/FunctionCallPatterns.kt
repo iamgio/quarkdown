@@ -15,7 +15,7 @@ class FunctionCallPatterns {
         get() =
             TokenRegexPattern(
                 name = "InlineFunctionCall",
-                wrap = ::FunctionCallToken,
+                wrap = { FunctionCallToken(it, isBlock = false) },
                 // Repeating groups can't be captured, hence a capped repeated patterns is used.
                 regex =
                     RegexBuilder("(?<=\\s|^)\\.(\\w+)args")
@@ -32,7 +32,7 @@ class FunctionCallPatterns {
         get() =
             TokenRegexPattern(
                 name = "FunctionCall",
-                wrap = ::FunctionCallToken,
+                wrap = { FunctionCallToken(it, isBlock = true) },
                 regex =
                     RegexBuilder("^ {0,3}call(?<barg>body)")
                         .withReference("call", inlineFunctionCall.regex.pattern)
