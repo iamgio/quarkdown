@@ -1,7 +1,9 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -11,6 +13,7 @@ import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -39,6 +42,9 @@ class FunctionNodeExpansionTest {
     fun myFunction(x: String) = StringValue(x)
 
     @Suppress("MemberVisibilityCanBePrivate")
+    fun echoBoolean(value: Boolean) = BooleanValue(value)
+
+    @Suppress("MemberVisibilityCanBePrivate")
     fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -62,6 +68,7 @@ class FunctionNodeExpansionTest {
                 setOf(
                     ::sum,
                     ::myFunction,
+                    ::echoBoolean,
                     ::echoEnum,
                     ::resourceContent,
                     ::setAndEchoDocumentName,
@@ -81,6 +88,7 @@ class FunctionNodeExpansionTest {
                     FunctionCallArgument(DynamicInputValue("2")),
                     FunctionCallArgument(DynamicInputValue("3")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -102,6 +110,7 @@ class FunctionNodeExpansionTest {
                     FunctionCallArgument(DynamicInputValue("2")),
                     FunctionCallArgument(DynamicInputValue("a")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -126,6 +135,7 @@ class FunctionNodeExpansionTest {
                 listOf(
                     FunctionCallArgument(DynamicInputValue("abc")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -146,6 +156,7 @@ class FunctionNodeExpansionTest {
                 listOf(
                     FunctionCallArgument(DynamicInputValue("abc")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -171,6 +182,7 @@ class FunctionNodeExpansionTest {
                 listOf(
                     FunctionCallArgument(DynamicInputValue("non-existant-resource")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -188,13 +200,14 @@ class FunctionNodeExpansionTest {
     }
 
     @Test
-    fun `resource content expansion`() {
+    fun `resource content expansion as inline`() {
         val node =
             FunctionCallNode(
                 "resourceContent",
                 listOf(
                     FunctionCallArgument(DynamicInputValue("hello.txt")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -208,6 +221,49 @@ class FunctionNodeExpansionTest {
     }
 
     @Test
+    fun `resource content expansion as block`() {
+        val node =
+            FunctionCallNode(
+                "resourceContent",
+                listOf(
+                    FunctionCallArgument(DynamicInputValue("hello.txt")),
+                ),
+                isBlock = true,
+            )
+
+        context.register(node)
+
+        assertTrue(node.children.isEmpty())
+
+        expander.expandAll()
+
+        assertEquals(1, node.children.size)
+        // The function call is block, so the output is wrapped in a paragraph.
+        assertEquals(Paragraph(listOf(Text("Hello Quarkdown!"))), node.children.first())
+    }
+
+    @Test
+    fun `boolean expansion`() {
+        val node =
+            FunctionCallNode(
+                "echoBoolean",
+                listOf(
+                    FunctionCallArgument(DynamicInputValue("yes")),
+                ),
+                isBlock = false,
+            )
+
+        context.register(node)
+
+        assertTrue(node.children.isEmpty())
+
+        expander.expandAll()
+
+        assertEquals(1, node.children.size)
+        assertEquals(CheckBox(isChecked = true), node.children.first())
+    }
+
+    @Test
     fun `enum lookup, failing`() {
         val node =
             FunctionCallNode(
@@ -215,6 +271,7 @@ class FunctionNodeExpansionTest {
                 listOf(
                     FunctionCallArgument(DynamicInputValue("non-existant-value")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
@@ -239,6 +296,7 @@ class FunctionNodeExpansionTest {
                 listOf(
                     FunctionCallArgument(DynamicInputValue("New name")),
                 ),
+                isBlock = false,
             )
 
         context.register(node)
