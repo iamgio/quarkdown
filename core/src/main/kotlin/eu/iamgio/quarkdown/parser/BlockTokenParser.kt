@@ -354,6 +354,7 @@ class BlockTokenParser(
 
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
+        // Function name.
         val name = groups.next()
 
         /**
@@ -368,37 +369,37 @@ class BlockTokenParser(
                 else -> throw IllegalArgumentException("Unexpected node $node in function call $name")
             }
 
-        val arguments =
-            buildList {
-                // Regular arguments.
-                groups.forEachRemaining { arg ->
-                    // Regular argument wrapped in braces.
-                    // The content of the argument is tokenized to distinguish static values (string/number/...)
-                    // from nested function calls, which are also expressions.
-                    val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
-                    if (components.isNotEmpty()) {
-                        val expression = ComposedExpression(components.map { nodeToExpression(it) })
-                        this += FunctionCallArgument(expression)
-                    }
-                }
+        // Function arguments.
+        val arguments = mutableListOf<FunctionCallArgument>()
 
-                // Body argument.
-                // A body argument is always the last one, it goes on a new line and each line is indented.
-                token.data.namedGroups["barg"]?.takeUnless { it.isBlank() }?.let { body ->
-                    // A body argument is treated as plain text, thus nested function calls are not executed by default.
-                    // They are executed if the argument is used as Markdown content from the referenced function,
-                    // that runs recursive lexing & parsing on the arg content, triggering function calls.
-
-                    // Remove indentation at the beginning of each line and parse as an AST.
-                    val nodes =
-                        flavor.lexerFactory
-                            .newBlockLexer(body.trimIndent())
-                            .tokenizeAndParse()
-
-                    val value = MarkdownContentValue(MarkdownContent(nodes))
-                    this += FunctionCallArgument(value, isBody = true)
-                }
+        // Regular function arguments.
+        groups.forEachRemaining { arg ->
+            // Regular argument wrapped in braces.
+            // The content of the argument is tokenized to distinguish static values (string/number/...)
+            // from nested function calls, which are also expressions.
+            val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
+            if (components.isNotEmpty()) {
+                val expression = ComposedExpression(components.map { nodeToExpression(it) })
+                arguments += FunctionCallArgument(expression)
             }
+        }
+
+        // Body function argument.
+        // A body argument is always the last one, it goes on a new line and each line is indented.
+        token.data.namedGroups["barg"]?.takeUnless { it.isBlank() }?.let { body ->
+            // A body argument is treated as plain text, thus nested function calls are not executed by default.
+            // They are executed if the argument is used as Markdown content from the referenced function,
+            // that runs recursive lexing & parsing on the arg content, triggering function calls.
+
+            // Remove indentation at the beginning of each line and parse as an AST.
+            val nodes =
+                flavor.lexerFactory
+                    .newBlockLexer(body.trimIndent())
+                    .tokenizeAndParse()
+
+            val value = MarkdownContentValue(MarkdownContent(nodes))
+            arguments += FunctionCallArgument(value, isBody = true)
+        }
 
         val call = FunctionCallNode(name, arguments)
 
