@@ -2,7 +2,9 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -12,6 +14,7 @@ import eu.iamgio.quarkdown.util.toPlainText
 val Text =
     setOf(
         ::code,
+        ::loremIpsum,
     )
 
 /**
@@ -27,3 +30,13 @@ fun code(
 ) = NodeValue(
     Code(body.children.toPlainText(), language),
 )
+
+/**
+ * @return a fixed Lorem Ipsum text.
+ */
+@FunctionName("loremipsum")
+fun loremIpsum() =
+    StringValue(
+        object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
+            .reader().readText(),
+    )
