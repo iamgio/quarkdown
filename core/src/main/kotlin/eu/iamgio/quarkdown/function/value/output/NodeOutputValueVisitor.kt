@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.function.value.output
 
 import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -28,8 +28,7 @@ class NodeOutputValueVisitor : OutputValueVisitor<Node> {
             }
         }
 
-    // TODO create CheckBox node (TaskListItem creates an unwanted <li> tag)
-    override fun visit(value: BooleanValue) = TaskListItem(isChecked = value.unwrappedValue, children = emptyList())
+    override fun visit(value: BooleanValue) = CheckBox(isChecked = value.unwrappedValue)
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 

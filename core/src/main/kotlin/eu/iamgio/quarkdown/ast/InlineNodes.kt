@@ -94,6 +94,17 @@ data class ReferenceImage(
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
+/**
+ * An immutable checkbox that is either checked or unchecked.
+ * @param isChecked whether the checkbox is checked
+ * @see TaskListItem
+ */
+data class CheckBox(
+    val isChecked: Boolean,
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+}
+
 // Emphasis
 
 /**

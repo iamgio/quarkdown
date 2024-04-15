@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
@@ -86,6 +87,8 @@ interface NodeVisitor<T> {
     fun visit(node: Image): T
 
     fun visit(node: ReferenceImage): T
+
+    fun visit(node: CheckBox): T
 
     fun visit(node: Text): T
 

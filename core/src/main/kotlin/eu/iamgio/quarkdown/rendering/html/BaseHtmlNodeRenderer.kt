@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
@@ -121,12 +122,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
 
     override fun visit(node: TaskListItem) =
         buildTag("li") {
-            // GFM 5.3 extension
-            tag("input")
-                .attribute("disabled", "")
-                .attribute("type", "checkbox")
-                .optionalAttribute("checked", "".takeIf { node.isChecked })
-                .void(true)
+            // GFM 5.3 extension.
+            +visit(CheckBox(node.isChecked))
 
             appendListItemContent(node)
         }
@@ -197,6 +194,14 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
             .build()
 
     override fun visit(node: ReferenceImage) = context.resolveOrFallback(node).accept(this)
+
+    override fun visit(node: CheckBox) =
+        tagBuilder("input") {}
+            .attribute("disabled", "")
+            .attribute("type", "checkbox")
+            .optionalAttribute("checked", "".takeIf { node.isChecked })
+            .void(true)
+            .build()
 
     override fun visit(node: Text) = node.text
 

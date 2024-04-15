@@ -135,6 +135,7 @@ data class BaseListItem(
  * An item of a [ListBlock] that includes a task, with a checked/unchecked value.
  * @param isChecked whether the task is checked
  * @param children content
+ * @see CheckBox
  */
 data class TaskListItem(
     val isChecked: Boolean,
