@@ -1,6 +1,5 @@
 package eu.iamgio.quarkdown.function
 
-import eu.iamgio.quarkdown.function.value.InputValue
 import kotlin.reflect.KClass
 
 /**
@@ -13,9 +12,9 @@ import kotlin.reflect.KClass
  *                   and is not to be supplied by the caller.
  * @param T input type of the parameter
  */
-data class FunctionParameter<T>(
+data class FunctionParameter<T : Any>(
     val name: String,
-    val type: KClass<out InputValue<T>>,
+    val type: KClass<T>,
     val index: Int,
     val isOptional: Boolean = false,
     // When a function parameter is loaded from a KFunction via KFunctionAdapter,

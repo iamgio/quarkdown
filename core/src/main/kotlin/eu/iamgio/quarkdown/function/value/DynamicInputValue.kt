@@ -16,13 +16,14 @@ import kotlin.reflect.full.isSubclassOf
  */
 data class DynamicInputValue(override val unwrappedValue: String) : InputValue<String> {
     /**
-     * @param type type of the value to convert this automatic value to
+     * @param type target type to convert this dynamic value to.
+     * This type is unwrapped (e.g. if [type] is `String`, the output is of type `StringValue`)
      * @param call function call that contains this value, used to extract its context
      * @return a new typed [InputValue], automatically determined from [type], or `null` if it could not be converted
      */
     @Suppress("UNCHECKED_CAST")
     fun convertTo(
-        type: KClass<out InputValue<*>>,
+        type: KClass<*>,
         call: FunctionCall<*>,
     ): InputValue<*>? {
         // Special treatment for enum values.
@@ -55,9 +56,6 @@ data class DynamicInputValue(override val unwrappedValue: String) : InputValue<S
         }
 
         throw IllegalArgumentException("Cannot convert DynamicInputValue to type $type")
-    }
-
-    private fun getValueFactoryMethodResult(function: KFunction<*>) {
     }
 
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)

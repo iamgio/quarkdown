@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 /**
  * Utility for injected argument values.
@@ -22,8 +23,8 @@ object InjectedValue {
         type: KClass<*>,
         call: FunctionCall<*>,
     ): InputValue<*> =
-        when (type) {
-            Context::class -> ObjectValue(call.context)
+        when {
+            type.isSubclassOf(Context::class) -> ObjectValue(call.context)
             else -> throw IllegalArgumentException("Cannot inject a value to type $type")
         }
 }

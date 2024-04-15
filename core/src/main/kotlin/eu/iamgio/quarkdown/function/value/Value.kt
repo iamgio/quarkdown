@@ -75,6 +75,11 @@ data class ObjectValue<T>(override val unwrappedValue: T) : InputValue<T> {
  */
 data class MarkdownContentValue(override val unwrappedValue: MarkdownContent) : InputValue<MarkdownContent> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
+
+    /**
+     * @return this content as a [NodeValue], suitable for function outputs
+     */
+    fun asNodeValue(): NodeValue = NodeValue(unwrappedValue)
 }
 
 /**
