@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown
 
 /**
  * Exit code when a source file was not supplied.
+ * @depecated REPL mode is now used in the `cli` module if no source file is supplied. Keeping this for possible future uses.
  */
 const val NO_SOURCE_FILE_EXIT_CODE = 64
 

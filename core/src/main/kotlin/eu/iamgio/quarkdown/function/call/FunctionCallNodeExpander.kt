@@ -25,6 +25,11 @@ class FunctionCallNodeExpander(
      * @param node AST function call node to expand
      */
     private fun expand(node: FunctionCallNode) {
+        if (node.children.isNotEmpty()) {
+            // The function call has already been expanded: do nothing.
+            return
+        }
+
         val call: UncheckedFunctionCall<*> = context.resolveUnchecked(node)
 
         try {
