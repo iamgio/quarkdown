@@ -52,9 +52,9 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(context: Context = MutableContext()) = QuarkdownFlavor.rendererFactory.html(context)
+    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)) = QuarkdownFlavor.rendererFactory.html(context)
 
-    private fun Node.render(context: Context = MutableContext()) = this.accept(renderer(context))
+    private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
 
     @BeforeTest
     fun setup() {
@@ -116,7 +116,7 @@ class HtmlNodeRendererTest {
                     ),
             )
 
-        val context = BaseContext(attributes)
+        val context = BaseContext(attributes, QuarkdownFlavor)
 
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 
@@ -198,7 +198,7 @@ class HtmlNodeRendererTest {
                     ),
             )
 
-        val context = BaseContext(attributes)
+        val context = BaseContext(attributes, QuarkdownFlavor)
 
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 

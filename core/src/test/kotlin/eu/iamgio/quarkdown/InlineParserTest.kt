@@ -40,7 +40,7 @@ class InlineParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val lexer = flavor.lexerFactory.newInlineLexer(source)
-        val parser = flavor.parserFactory.newParser(MutableContext())
+        val parser = flavor.parserFactory.newParser(MutableContext(flavor))
         return nodesIterator(lexer, parser, assertType)
     }
 

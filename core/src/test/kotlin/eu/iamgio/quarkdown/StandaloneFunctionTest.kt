@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
@@ -467,7 +468,7 @@ class StandaloneFunctionTest {
     fun `KFunction with injected context`() {
         val function = KFunctionAdapter(::setDocumentName)
 
-        val context = MutableContext()
+        val context = MutableContext(QuarkdownFlavor)
 
         val call =
             FunctionCall(
@@ -495,7 +496,7 @@ class StandaloneFunctionTest {
     fun `KFunction with invalid injection`() {
         val function = KFunctionAdapter(::invalidInjection)
 
-        val context = MutableContext()
+        val context = MutableContext(QuarkdownFlavor)
 
         val call =
             FunctionCall(

@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.log
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.lexer.Token
 
 /**
@@ -83,4 +84,13 @@ object DebugFormatter {
                 }
             }
         }
+
+    /**
+     * Pretty-formats a list of libraries.
+     * @param libraries libraries to format
+     * @return formatted string
+     */
+    fun formatLibraries(libraries: Iterable<Library>): String {
+        return libraries.joinToString { "${it.name} (${it.functions.size} functions)" }
+    }
 }

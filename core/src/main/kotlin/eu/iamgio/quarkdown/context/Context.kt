@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
@@ -18,12 +19,17 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
  */
 interface Context {
     /**
+     * The Markdown flavor in use.
+     */
+    val flavor: MarkdownFlavor
+
+    /**
      * Mutable information about the final document that is being created.
      */
     val documentInfo: DocumentInfo
 
     /**
-     * The error handling strategy to use across the pipeline.
+     * The error handling strategy to use.
      * @see eu.iamgio.quarkdown.pipeline.error
      */
     val errorHandler: PipelineErrorHandler

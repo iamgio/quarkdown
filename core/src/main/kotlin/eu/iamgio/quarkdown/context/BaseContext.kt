@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Link
 import eu.iamgio.quarkdown.ast.LinkNode
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
@@ -15,10 +16,13 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 /**
  * An immutable [Context] implementation.
  * @param attributes attributes of the node tree, produced by the parsing stage
+ * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
+ * @param errorHandler the error handling strategy to use
  */
 open class BaseContext(
     private val attributes: AstAttributes,
+    override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
     override val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
 ) : Context {

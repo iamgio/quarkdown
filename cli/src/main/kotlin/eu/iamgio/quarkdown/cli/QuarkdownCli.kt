@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.cli
 
 import eu.iamgio.quarkdown.NO_SOURCE_FILE_EXIT_CODE
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.log.DebugFormatter
@@ -29,6 +30,9 @@ fun main(args: Array<String>) {
     // Actions run after each stage of the pipeline.
     val hooks =
         PipelineHooks(
+            afterRegisteringLibraries = { libs ->
+                Log.debug { "Libraries: " + DebugFormatter.formatLibraries(libs) }
+            },
             afterLexing = { tokens ->
                 Log.debug { "Tokens:\n" + DebugFormatter.formatTokens(tokens) }
             },
@@ -43,15 +47,15 @@ fun main(args: Array<String>) {
     // Pipeline initialization.
     val pipeline =
         Pipeline(
-            source = sourceFile.readText(),
-            flavor = flavor,
-            renderer = { rendererFactory, context -> rendererFactory.html(context) },
+            context = MutableContext(flavor),
             libraries = libraries,
+            renderer = { rendererFactory, context -> rendererFactory.html(context) },
             hooks = hooks,
         )
 
     try {
-        pipeline.execute()
+        val source = sourceFile.readText()
+        pipeline.execute(source)
     } catch (e: PipelineException) {
         e.printStackTrace()
         exitProcess(e.code)

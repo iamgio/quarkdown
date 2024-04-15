@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
@@ -61,7 +62,7 @@ class FunctionNodeExpansionTest {
 
     @BeforeTest
     fun setup() {
-        context = MutableContext()
+        context = MutableContext(QuarkdownFlavor)
 
         val library =
             MultiFunctionLibraryLoader("lib").load(
