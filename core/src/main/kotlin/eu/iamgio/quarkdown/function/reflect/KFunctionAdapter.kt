@@ -30,7 +30,6 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
             function.parameters.map {
                 FunctionParameter(
                     name = it.name ?: "<unnamed parameter>",
-                    // TODO handle cast errors
                     type = it.type.classifier as KClass<out InputValue<T>>,
                     index = it.index,
                     isOptional = it.isOptional,

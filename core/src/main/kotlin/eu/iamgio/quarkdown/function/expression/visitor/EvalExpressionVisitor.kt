@@ -38,10 +38,7 @@ class EvalExpressionVisitor : ExpressionVisitor<InputValue<*>> {
     override fun visit(expression: FunctionCall<*>): InputValue<*> =
         when (val result = expression.execute()) {
             is InputValue<*> -> result
-            else -> {
-                // TODO error: not-input output value cannot be used as expression
-                StringValue("TODO")
-            }
+            else -> throw IllegalStateException(expression.function.name + "'s output is not a suitable input value")
         }
 
     override fun visit(expression: ComposedExpression): InputValue<*> {
