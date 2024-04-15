@@ -34,6 +34,7 @@ class Pipeline(
 ) {
     init {
         registerLibraries()
+        Pipelines.attach(context, this)
     }
 
     /**
@@ -50,7 +51,7 @@ class Pipeline(
      * @param source the source code to tokenize
      * @see eu.iamgio.quarkdown.lexer.Lexer
      */
-    private fun tokenize(source: CharSequence): List<Token> {
+    fun tokenize(source: CharSequence): List<Token> {
         val lexer = context.flavor.lexerFactory.newBlockLexer(source)
         return lexer.tokenize().also {
             hooks?.afterLexing?.invoke(this, it)
@@ -63,7 +64,7 @@ class Pipeline(
      * @see eu.iamgio.quarkdown.parser.BlockTokenParser
      * @see eu.iamgio.quarkdown.parser.InlineTokenParser
      */
-    private fun parse(tokens: List<Token>): Document {
+    fun parse(tokens: List<Token>): Document {
         val parser = context.flavor.parserFactory.newParser(context)
         return Document(children = tokens.acceptAll(parser)).also {
             hooks?.afterParsing?.invoke(this, it)
@@ -73,7 +74,7 @@ class Pipeline(
     /**
      * Executes queued function calls and expands their content based on their output.
      */
-    private fun expandFunctionCalls(document: Document) {
+    fun expandFunctionCalls(document: Document) {
         FunctionCallNodeExpander(context).expandAll()
         hooks?.afterExpanding?.invoke(this, document)
     }

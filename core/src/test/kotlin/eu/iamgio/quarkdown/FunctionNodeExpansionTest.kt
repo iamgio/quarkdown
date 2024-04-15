@@ -1,9 +1,12 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -16,8 +19,10 @@ import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.pipeline.Pipeline
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -60,9 +65,19 @@ class FunctionNodeExpansionTest {
         return StringValue(context.documentInfo.name!!)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun makeQuote(body: MarkdownContent) =
+        NodeValue(
+            BlockQuote(body.children),
+        )
+
     @BeforeTest
     fun setup() {
         context = MutableContext(QuarkdownFlavor)
+
+        // Initialization attaches the pipeline to the context.
+        // This is used to parse Markdown content in arguments.
+        Pipeline(context, libraries = emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
 
         val library =
             MultiFunctionLibraryLoader("lib").load(
@@ -73,6 +88,7 @@ class FunctionNodeExpansionTest {
                     ::echoEnum,
                     ::resourceContent,
                     ::setAndEchoDocumentName,
+                    ::makeQuote,
                 ),
             )
 
@@ -310,5 +326,35 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
         assertEquals("New name", context.documentInfo.name)
         assertEquals(Text("New name"), node.children.first())
+    }
+
+    @Test
+    fun `markdown argument`() {
+        val node =
+            FunctionCallNode(
+                "makeQuote",
+                listOf(
+                    FunctionCallArgument(DynamicInputValue("Hello **world**")),
+                ),
+                isBlock = false,
+            )
+
+        context.register(node)
+
+        assertTrue(node.children.isEmpty())
+
+        expander.expandAll()
+
+        assertEquals(1, node.children.size)
+        assertEquals(
+            BlockQuote(
+                listOf(
+                    Paragraph(
+                        listOf(Text("Hello "), Strong(listOf(Text("world")))),
+                    ),
+                ),
+            ),
+            node.children.first(),
+        )
     }
 }

@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
 import eu.iamgio.quarkdown.ast.ListItem
-import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
@@ -28,7 +27,6 @@ import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.DynamicInputValue
-import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -391,13 +389,9 @@ class BlockTokenParser(
             // They are executed if the argument is used as Markdown content from the referenced function,
             // that runs recursive lexing & parsing on the arg content, triggering function calls.
 
-            // Remove indentation at the beginning of each line and parse as an AST.
-            val nodes =
-                flavor.lexerFactory
-                    .newBlockLexer(body.trimIndent())
-                    .tokenizeAndParse()
+            // Remove indentation at the beginning of each line.
+            val value = DynamicInputValue(body.trimIndent())
 
-            val value = MarkdownContentValue(MarkdownContent(nodes))
             arguments += FunctionCallArgument(value, isBody = true)
         }
 

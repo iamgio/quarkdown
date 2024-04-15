@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
@@ -13,11 +14,11 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
  * and maps its result to a visible output in the final document.
- * @param context context to retrieve the queued to-be-expanded function calls from
+ * @param context context to retrieve and handle the queued to-be-expanded function calls from
  * @param outputMapper producer of an AST output [Node] from the function call output
  */
 class FunctionCallNodeExpander(
-    private val context: Context,
+    private val context: MutableContext,
     private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(),
 ) {
     /**
@@ -63,9 +64,12 @@ class FunctionCallNodeExpander(
     }
 
     /**
-     * Expands all unexpanded function calls present in [context].
+     * Expands all unexpanded function calls present in [context], and empties queued function calls in [context].
+     * This is performed on a copy of [Context.functionCalls] to avoid `ConcurrentModificationException`.
+     * Hence, if a function call is added during the expansion, [expandAll] must be called again.
      */
     fun expandAll() {
-        context.functionCalls.forEach { expand(it) }
+        val calls = context.dequeueAllFunctionCalls()
+        calls.forEach { expand(it) }
     }
 }

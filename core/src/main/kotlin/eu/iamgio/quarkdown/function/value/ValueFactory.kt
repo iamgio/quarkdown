@@ -1,6 +1,9 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.util.iterator
 
 /**
@@ -73,4 +76,27 @@ object ValueFactory {
     ): EnumValue? =
         values.find { it.name.equals(raw, ignoreCase = true) }
             ?.let { EnumValue(it) }
+
+    /**
+     * @param raw string input to parse into an AST
+     * @param context context to retrieve the pipeline from, which allows tokenization and parsing of the input
+     * @return a new value that wraps the root of the produced AST
+     */
+    @FromDynamicType(MarkdownContent::class, requiresContext = true)
+    fun markdown(
+        raw: String,
+        context: Context,
+    ): MarkdownContentValue {
+        // Retrieving the pipeline linked to the context.
+        val pipeline =
+            Pipelines.getAttachedPipeline(context)
+                ?: throw IllegalStateException("Context does not have an attached pipeline")
+
+        // Convert string input to parsed AST.
+        val root = pipeline.parse(pipeline.tokenize(raw))
+        // In case the AST contains nested function calls, they are immediately expanded.
+        pipeline.expandFunctionCalls(root)
+
+        return MarkdownContentValue(root)
+    }
 }

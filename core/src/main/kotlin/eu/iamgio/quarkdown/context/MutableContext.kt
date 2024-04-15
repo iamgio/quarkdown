@@ -43,4 +43,13 @@ class MutableContext(
     fun register(functionCall: FunctionCallNode) {
         attributes.functionCalls += functionCall
     }
+
+    /**
+     * Returns a copy of the queue containing registered function calls and clears the original one.
+     * @return all the registered function call nodes until now
+     */
+    fun dequeueAllFunctionCalls(): List<FunctionCallNode> =
+        attributes.functionCalls.toList().also {
+            attributes.functionCalls.clear()
+        }
 }

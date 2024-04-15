@@ -9,14 +9,12 @@ import eu.iamgio.quarkdown.ast.HorizontalRule
 import eu.iamgio.quarkdown.ast.Html
 import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.ListBlock
-import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
@@ -25,7 +23,6 @@ import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -728,77 +725,42 @@ class BlockParserTest {
             assertEquals("function", name)
             assertEquals(1, arguments.size)
             assertTrue(arguments.first().isBody)
-            with(arguments.first().value) {
-                assertIs<MarkdownContentValue>(this)
-                assertEquals(
-                    MarkdownContent(
-                        listOf(
-                            Paragraph(listOf(Text("body content"))),
-                        ),
-                    ),
-                    this.unwrappedValue,
-                )
-            }
+
+            assertEquals(
+                "body content",
+                arguments.first().value.unwrappedValue,
+            )
         }
 
         with(nodes.next()) {
             assertEquals("function", name)
             assertEquals(1, arguments.size)
             assertTrue(arguments.first().isBody)
-            with(arguments.first().value) {
-                assertIs<MarkdownContentValue>(this)
-                assertEquals(
-                    MarkdownContent(
-                        listOf(
-                            Paragraph(
-                                listOf(
-                                    Text("body content\nbody "),
-                                    Strong(listOf(Text("content"))),
-                                ),
-                            ),
-                        ),
-                    ),
-                    this.unwrappedValue,
-                )
-            }
+
+            assertEquals(
+                "body content\nbody **content**",
+                arguments.first().value.unwrappedValue,
+            )
         }
 
         with(nodes.next()) {
             assertEquals("function", name)
             assertEquals(1, arguments.size)
             assertTrue(arguments.first().isBody)
-            with(arguments.first().value) {
-                assertIs<MarkdownContentValue>(this)
-                assertEquals(
-                    MarkdownContent(
-                        listOf(
-                            Paragraph(listOf(Text("body content\nbody content"))),
-                        ),
-                    ),
-                    this.unwrappedValue,
-                )
-            }
+            assertEquals(
+                "  body content\nbody content",
+                arguments.first().value.unwrappedValue,
+            )
         }
 
         with(nodes.next()) {
             assertEquals("function", name)
             assertEquals(1, arguments.size)
             assertTrue(arguments.first().isBody)
-            with(arguments.first().value) {
-                assertIs<MarkdownContentValue>(this)
-                assertEquals(
-                    MarkdownContent(
-                        listOf(
-                            Paragraph(listOf(Text("body content"))),
-                            Newline(),
-                            Paragraph(listOf(Text("body content"))),
-                            Newline(),
-                            Paragraph(listOf(Text("body content"))),
-                        ),
-                    ).toString(),
-                    this.unwrappedValue.toString(),
-                )
-            }
+            assertEquals(
+                "body content\n\nbody content\n\nbody content",
+                arguments.first().value.unwrappedValue,
+            )
         }
 
         with(nodes.next()) {
@@ -820,21 +782,10 @@ class BlockParserTest {
             }
             with(args.next()) {
                 assertTrue(this.isBody)
-                with(value) {
-                    assertIs<MarkdownContentValue>(this)
-                    assertEquals(
-                        MarkdownContent(
-                            listOf(
-                                Paragraph(listOf(Text("body content"))),
-                                Newline(),
-                                Paragraph(listOf(Text("body content"))),
-                                Newline(),
-                                Paragraph(listOf(Text("body content"))),
-                            ),
-                        ).toString(),
-                        this.unwrappedValue.toString(),
-                    )
-                }
+                assertEquals(
+                    "body content\n\n  body content\n\nbody content",
+                    value.unwrappedValue,
+                )
             }
         }
     }
