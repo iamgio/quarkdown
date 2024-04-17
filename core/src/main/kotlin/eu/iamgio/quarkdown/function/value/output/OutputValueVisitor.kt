@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.value.output
 
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -19,4 +20,6 @@ interface OutputValueVisitor<T> {
     fun visit(value: NodeValue): T
 
     fun visit(value: VoidValue): T
+
+    fun visit(value: DynamicValue): T
 }

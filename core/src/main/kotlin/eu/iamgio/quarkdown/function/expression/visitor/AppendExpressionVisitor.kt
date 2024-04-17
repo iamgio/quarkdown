@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
@@ -83,7 +83,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     }
 
     // Like visit(StringValue)
-    override fun visit(value: DynamicInputValue): Expression = DynamicInputValue(value.concatenate())
+    override fun visit(value: DynamicValue): Expression = DynamicValue(value.concatenate())
 
     // .sum {2} {3} "abc"             -> "5abc"
     // .sum {2} {3} .subtract {8} {1} -> "57"

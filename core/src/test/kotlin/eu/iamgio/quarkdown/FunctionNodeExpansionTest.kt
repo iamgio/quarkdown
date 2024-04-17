@@ -18,7 +18,7 @@ import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -102,8 +102,8 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "sum",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("2")),
-                    FunctionCallArgument(DynamicInputValue("3")),
+                    FunctionCallArgument(DynamicValue("2")),
+                    FunctionCallArgument(DynamicValue("3")),
                 ),
                 isBlock = false,
             )
@@ -124,8 +124,8 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "sum",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("2")),
-                    FunctionCallArgument(DynamicInputValue("a")),
+                    FunctionCallArgument(DynamicValue("2")),
+                    FunctionCallArgument(DynamicValue("a")),
                 ),
                 isBlock = false,
             )
@@ -150,7 +150,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "customfunction",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("abc")),
+                    FunctionCallArgument(DynamicValue("abc")),
                 ),
                 isBlock = false,
             )
@@ -171,7 +171,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "myFunction",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("abc")),
+                    FunctionCallArgument(DynamicValue("abc")),
                 ),
                 isBlock = false,
             )
@@ -197,7 +197,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "resourceContent",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("non-existant-resource")),
+                    FunctionCallArgument(DynamicValue("non-existant-resource")),
                 ),
                 isBlock = false,
             )
@@ -222,7 +222,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "resourceContent",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("hello.txt")),
+                    FunctionCallArgument(DynamicValue("hello.txt")),
                 ),
                 isBlock = false,
             )
@@ -243,7 +243,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "resourceContent",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("hello.txt")),
+                    FunctionCallArgument(DynamicValue("hello.txt")),
                 ),
                 isBlock = true,
             )
@@ -265,7 +265,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "echoBoolean",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("yes")),
+                    FunctionCallArgument(DynamicValue("yes")),
                 ),
                 isBlock = false,
             )
@@ -286,7 +286,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "echoEnum",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("non-existant-value")),
+                    FunctionCallArgument(DynamicValue("non-existant-value")),
                 ),
                 isBlock = false,
             )
@@ -311,7 +311,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "setAndEchoDocumentName",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("New name")),
+                    FunctionCallArgument(DynamicValue("New name")),
                 ),
                 isBlock = false,
             )
@@ -334,7 +334,7 @@ class FunctionNodeExpansionTest {
             FunctionCallNode(
                 "makeQuote",
                 listOf(
-                    FunctionCallArgument(DynamicInputValue("Hello **world**")),
+                    FunctionCallArgument(DynamicValue("Hello **world**")),
                 ),
                 isBlock = false,
             )

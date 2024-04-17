@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -36,7 +36,7 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
                 val staticArgument =
                     when (val value = argument.value) {
                         // The value is dynamic and must be converted to a static type.
-                        is DynamicInputValue -> {
+                        is DynamicValue -> {
                             // The dynamic value is converted into the expected parameter type.
                             // Throws error if the conversion could not happen.
                             val staticValue =

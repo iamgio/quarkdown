@@ -26,7 +26,7 @@ import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -361,7 +361,7 @@ class BlockTokenParser(
          */
         fun nodeToExpression(node: Node): Expression =
             when (node) {
-                is PlainTextNode -> DynamicInputValue(node.text) // The actual type is determined later.
+                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
                 is FunctionCallNode -> context.resolveUnchecked(node) // Existance is checked later.
 
                 else -> throw IllegalArgumentException("Unexpected node $node in function call $name")
@@ -390,7 +390,7 @@ class BlockTokenParser(
             // that runs recursive lexing & parsing on the arg content, triggering function calls.
 
             // Remove indentation at the beginning of each line.
-            val value = DynamicInputValue(body.trimIndent())
+            val value = DynamicValue(body.trimIndent())
 
             arguments += FunctionCallArgument(value, isBody = true)
         }

@@ -19,7 +19,7 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
  */
 class FunctionCallNodeExpander(
     private val context: MutableContext,
-    private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(),
+    private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(context),
 ) {
     /**
      * Resolves, executes and stores the result of [node]'s referenced function.

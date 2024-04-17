@@ -7,9 +7,9 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.util.replace
 
@@ -54,6 +54,7 @@ fun ifNot(
  * defined as `{{0}}`, `{{1}}`, etc.
  * The amount of parameters (thus of expected arguments) is determined by the highest number among the placeholders.
  * Upon invocation, the placeholders are replaced with the string representation of the actual arguments.
+ * The return type of the function is dynamic, hence it can be used as an input of various types for other function calls.
  * @param name name of the function
  * @param body content of the function
  */
@@ -62,19 +63,20 @@ fun function(
     name: String,
     body: String,
 ): VoidValue {
-    // Matches '{{0}}', '{{1}}', etc.
+    // Matches '{{1}}', '{{2}}', etc.
     // These are the spots that will be replaced with actual arguments.
     val replacementsRegex = "(?<!\\\\)\\{\\{(\\d+)}}".toRegex()
     val matches = replacementsRegex.findAll(body)
 
     // The amount of parameters is the highest replacement number found (the number is captured in groupValues[1]).
+    // e.g. if the body contains {{1}} and {{2}}, the function will have 2 parameters.
     val paramCount =
         matches.sortedByDescending { it.groupValues[1].toInt() }.firstOrNull()
             ?.groupValues?.get(1)?.toInt() ?: 0
 
     // Function parameters.
     val params =
-        (0..paramCount).map {
+        (0 until paramCount).map {
             FunctionParameter(name = "param$it", type = String::class, index = it)
         }
 
@@ -84,14 +86,16 @@ fun function(
             val content = StringBuilder(body)
 
             // Upon invocation, replaces the placeholders with actual arguments.
+            // Argument 0 replaces {{1}} and so on.
             this.links.forEach { (parameter, argument) ->
-                val replacement = "{{${parameter.index}}}"
+                val replacement = "{{${parameter.index + 1}}}"
                 val value = argument.value.unwrappedValue.toString() // Only string replacements are supported.
                 content.replace(replacement, value)
             }
 
             // The final content is parsed as Markdown and returned.
-            ValueFactory.markdown(content.toString(), context).asNodeValue()
+            // ValueFactory.markdown(content.toString(), context).asNodeValue()
+            DynamicValue(content.toString())
         }
 
     // The function is registered and ready to be called.

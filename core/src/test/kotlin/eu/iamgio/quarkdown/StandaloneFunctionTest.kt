@@ -16,7 +16,7 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
-import eu.iamgio.quarkdown.function.value.DynamicInputValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -240,8 +240,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("2")),
-                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicValue("2")),
+                        FunctionCallArgument(DynamicValue("5")),
                     ),
             )
 
@@ -257,7 +257,7 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicValue("5")),
                     ),
             )
 
@@ -270,9 +270,9 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("5")),
-                        FunctionCallArgument(DynamicInputValue("1")),
-                        FunctionCallArgument(DynamicInputValue("2")),
+                        FunctionCallArgument(DynamicValue("5")),
+                        FunctionCallArgument(DynamicValue("1")),
+                        FunctionCallArgument(DynamicValue("2")),
                     ),
             )
 
@@ -285,8 +285,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("5")),
-                        FunctionCallArgument(DynamicInputValue("1")),
+                        FunctionCallArgument(DynamicValue("5")),
+                        FunctionCallArgument(DynamicValue("1")),
                     ),
             )
 
@@ -302,8 +302,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("a")),
-                        FunctionCallArgument(DynamicInputValue("b")),
+                        FunctionCallArgument(DynamicValue("a")),
+                        FunctionCallArgument(DynamicValue("b")),
                     ),
             )
 
@@ -316,8 +316,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("5")),
-                        FunctionCallArgument(DynamicInputValue("abc")),
+                        FunctionCallArgument(DynamicValue("5")),
+                        FunctionCallArgument(DynamicValue("abc")),
                     ),
             )
 
@@ -330,8 +330,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("abcde")),
-                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicValue("abcde")),
+                        FunctionCallArgument(DynamicValue("5")),
                     ),
             )
 
@@ -353,7 +353,7 @@ class StandaloneFunctionTest {
                 functionIdentity,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("2")),
+                        FunctionCallArgument(DynamicValue("2")),
                     ),
             )
 
@@ -410,8 +410,8 @@ class StandaloneFunctionTest {
                 functionGreetWithArgs,
                 arguments =
                     listOf(
-                        FunctionCallArgument(ComposedExpression(listOf(callWithoutArgs, DynamicInputValue(" dear")))),
-                        FunctionCallArgument(DynamicInputValue("B")),
+                        FunctionCallArgument(ComposedExpression(listOf(callWithoutArgs, DynamicValue(" dear")))),
+                        FunctionCallArgument(DynamicValue("B")),
                     ),
             )
 
@@ -430,7 +430,7 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("center")),
+                        FunctionCallArgument(DynamicValue("center")),
                     ),
             )
 
@@ -446,7 +446,7 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("something")),
+                        FunctionCallArgument(DynamicValue("something")),
                     ),
             )
 
@@ -475,7 +475,7 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("New name")),
+                        FunctionCallArgument(DynamicValue("New name")),
                     ),
                 context,
             )
@@ -542,8 +542,8 @@ class StandaloneFunctionTest {
                 function,
                 arguments =
                     listOf(
-                        FunctionCallArgument(DynamicInputValue("2")),
-                        FunctionCallArgument(DynamicInputValue("5")),
+                        FunctionCallArgument(DynamicValue("2")),
+                        FunctionCallArgument(DynamicValue("5")),
                     ),
             )
 

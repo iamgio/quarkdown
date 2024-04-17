@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.util.iterator
 
 /**
  * Factory of [Value] wrappers from raw string data.
- * @see DynamicInputValue.convertTo
+ * @see DynamicValue.convertTo
  */
 object ValueFactory {
     /**
