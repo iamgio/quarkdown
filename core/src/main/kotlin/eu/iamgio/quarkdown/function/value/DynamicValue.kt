@@ -45,19 +45,21 @@ data class DynamicValue(override val unwrappedValue: String) : InputValue<String
         // and the one with a matching type is invoked.
         for (function in ValueFactory::class.declaredFunctions) {
             val from = function.findAnnotation<FromDynamicType>() ?: continue
-            if (type.isSubclassOf(from.unwrappedType)) { // The factory method is suitable.
-                return when {
-                    // Fetch the context from the function call if it's required.
-                    from.requiresContext -> {
-                        val context =
-                            call.context
-                                ?: throw IllegalStateException("Call to ${call.function.name} does not have an attached context")
-                        function.call(ValueFactory, unwrappedValue, context)
-                    }
+            if (!type.isSubclassOf(from.unwrappedType)) continue
 
-                    else -> function.call(ValueFactory, unwrappedValue)
-                } as InputValue<*>?
-            }
+            // The factory method is suitable. Invoking it.
+
+            return when {
+                // Fetch the context from the function call if it's required.
+                from.requiresContext -> {
+                    val context =
+                        call.context
+                            ?: throw IllegalStateException("Call to ${call.function.name} does not have an attached context")
+                    function.call(ValueFactory, unwrappedValue, context)
+                }
+
+                else -> function.call(ValueFactory, unwrappedValue)
+            } as InputValue<*>?
         }
 
         throw IllegalArgumentException("Cannot convert DynamicInputValue to type $type")
