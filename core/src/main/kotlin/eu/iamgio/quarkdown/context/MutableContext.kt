@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
@@ -16,7 +15,7 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
  */
 class MutableContext(
     flavor: MarkdownFlavor,
-    errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
+    errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
     private val attributes: MutableAstAttributes = MutableAstAttributes(),
 ) : BaseContext(attributes, errorHandler = errorHandler, flavor = flavor) {
     override var hasMath: Boolean
