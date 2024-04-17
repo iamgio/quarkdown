@@ -73,11 +73,11 @@ interface Context {
     /**
      * @param call function call node to get a function call from
      * @return an [UncheckedFunctionCall] that wraps the referenced function call if it has been resolved.
-     * Calling `execute()` on an [UncheckedFunctionCall] whose function wasn't resolved throws an exception
+     * Calling `execute()` on an [UncheckedFunctionCall] whose function isn't resolved throws an exception
      * @see UncheckedFunctionCall
      * @see resolve
      */
-    fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> = UncheckedFunctionCall(call.name, resolve(call))
+    fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 }
 
 /**

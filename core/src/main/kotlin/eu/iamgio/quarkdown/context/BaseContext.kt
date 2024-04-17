@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
@@ -51,5 +52,9 @@ open class BaseContext(
         return function?.let {
             FunctionCall(it, call.arguments, context = this)
         }
+    }
+
+    override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> {
+        return UncheckedFunctionCall(call.name) { resolve(call) }
     }
 }
