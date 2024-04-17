@@ -373,9 +373,10 @@ class BlockTokenParser(
         // Regular function arguments.
         groups.forEachRemaining { arg ->
             // Regular argument wrapped in braces.
+            val argContent = arg.trimDelimiters()
             // The content of the argument is tokenized to distinguish static values (string/number/...)
             // from nested function calls, which are also expressions.
-            val components = flavor.lexerFactory.newFunctionArgumentLexer(arg).tokenizeAndParse()
+            val components = flavor.lexerFactory.newFunctionArgumentLexer(argContent).tokenizeAndParse()
             if (components.isNotEmpty()) {
                 val expression = ComposedExpression(components.map { nodeToExpression(it) })
                 arguments += FunctionCallArgument(expression)

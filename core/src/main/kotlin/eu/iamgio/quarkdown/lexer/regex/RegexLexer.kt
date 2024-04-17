@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
+import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
 import eu.iamgio.quarkdown.util.filterNotNullValues
 
 /**
@@ -17,60 +18,94 @@ abstract class RegexLexer(
     source: CharSequence,
     protected val patterns: List<TokenRegexPattern>,
 ) : AbstractLexer(source) {
+    override var currentIndex: Int = 0
+        protected set
+
     /**
-     * Converts captured groups of a [Regex] match to a sequence of tokens.
+     * Converts captured groups of a [Regex] match to a sequence of tokens, and appends it to [this] list.
      * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
-     * @return stream of matched tokens
+     * @return whether the tokenization process (regex matching) should be restarted from the current index.
+     * This happens when a matched patterns require a [WalkerLexer] to scan further content.
      */
-    private fun extractMatchingTokens(result: MatchResult): List<Token> =
-        buildList {
-            patterns.forEach { pattern ->
-                val group = result.groups[pattern.name] ?: return@forEach
-                val range = group.range
+    private fun MutableList<Token>.extractMatchingTokens(result: MatchResult): Boolean {
+        patterns.forEach { pattern ->
+            val group = result.groups[pattern.name] ?: return@forEach
+            val range = group.range
 
-                // Groups with a name, defined by the pattern.
-                val namedGroups =
-                    pattern.groupNames.asSequence()
-                        .map { it to result.groups[it] }
-                        .filterNotNullValues()
-                        .toMap()
+            // Groups with a name, defined by the pattern.
+            val namedGroups =
+                pattern.groupNames.asSequence()
+                    .map { it to result.groups[it] }
+                    .filterNotNullValues()
+                    .toMap()
 
-                // The token data.
-                val data =
-                    TokenData(
-                        text = group.value,
-                        position = range,
-                        groups =
-                            result.groups.asSequence()
-                                .filterNotNull()
-                                // Named groups don't appear in regular groups
-                                .filterNot { namedGroups.containsValue(it) }
-                                .map { it.value },
-                        namedGroups = namedGroups.mapValues { (_, group) -> group.value },
-                    )
+            var groups =
+                result.groups.asSequence()
+                    .filterNotNull()
+                    // Named groups don't appear in regular groups
+                    .filterNot { namedGroups.containsValue(it) }
+                    .map { it.value }
 
-                // Text tokens are substrings that were not captured by any pattern.
-                // These uncaptured groups are scanned and converted to tokens.
-                pushFillToken(untilIndex = range.first)
+            // Text tokens are substrings that were not captured by any pattern.
+            // These uncaptured groups are scanned and converted to tokens.
+            pushFillToken(untilIndex = range.first)
 
-                // Lets the corresponding Token subclass wrap the data.
-                this += pattern.wrap(data)
+            // End of the match
+            currentIndex = range.last + 1
 
-                currentIndex = range.last + 1
+            // In case the pattern requires additional information that can't be supplied by regex,
+            // its WalkerLexer implementation is retrieved and starts scanning from this position.
+            // Its produced tokens are stored into the main token's groups.
+            pattern.walker?.invoke(source.substring(currentIndex))?.let { walker ->
+                // Results are stored in the groups of the main token.
+                val walkedGroups = walker.tokenize().map { it.data.text }
+                groups += walkedGroups
+                // The matching process is continued from the walker's end position.
+                currentIndex += walker.currentIndex
+            }
+
+            // The token data.
+            val data =
+                TokenData(
+                    text = group.value,
+                    position = range,
+                    groups = groups,
+                    namedGroups = namedGroups.mapValues { (_, group) -> group.value },
+                )
+
+            // Lets the corresponding Token subclass wrap the data.
+            this += pattern.wrap(data)
+
+            // If the pattern has used a walker to scan content, the regex tokenization process must be restarted,
+            // and it will start matching regexes again from currentIndex.
+            if (pattern.walker != null) {
+                return true
             }
         }
+
+        return false
+    }
 
     override fun tokenize(): List<Token> =
         buildList {
             val regex: Regex = patterns.groupify()
 
-            // Append an empty line to the tokenized source to prevent issues with some expressions.
-            val match: Sequence<MatchResult> = regex.findAll("$source\n")
+            fun extract() {
+                // Append an empty line to the tokenized source to prevent issues with some expressions.
+                val match: Sequence<MatchResult> = regex.findAll("$source\n", currentIndex)
 
-            match.forEach { result ->
-                addAll(extractMatchingTokens(result))
+                match.forEach { result ->
+                    // If a restart is required, the matching process is restarted from the current index.
+                    val shouldRestart = extractMatchingTokens(result)
+                    if (shouldRestart) {
+                        extract()
+                        return
+                    }
+                }
             }
+
+            extract()
 
             // Add a token to fill the gap between the last token and the EOF.
             pushFillToken(untilIndex = source.length)

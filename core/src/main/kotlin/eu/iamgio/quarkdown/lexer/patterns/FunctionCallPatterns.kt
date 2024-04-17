@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.lexer.patterns
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
+import eu.iamgio.quarkdown.lexer.walker.FunctionCallArgumentsWalkerLexer
 
 /**
  * Patterns for block and inline function calls.
@@ -16,11 +17,12 @@ class FunctionCallPatterns {
             TokenRegexPattern(
                 name = "InlineFunctionCall",
                 wrap = { FunctionCallToken(it, isBlock = false) },
-                // Repeating groups can't be captured, hence a capped repeated patterns is used.
+                // The name of the function prefixed by a dot.
                 regex =
-                    RegexBuilder("(?<=\\s|^)\\.(\\w+)args")
-                        .withReference("args", FUNCTION_ARGUMENT_HELPER.repeat(FUNCTION_MAX_ARG_COUNT))
-                        .build(),
+                    "(?<=\\s|^)\\.(\\w+)"
+                        .toRegex(),
+                // Arguments are scanned by the walker lexer.
+                walker = ::FunctionCallArgumentsWalkerLexer,
             )
 
     /**
@@ -34,21 +36,10 @@ class FunctionCallPatterns {
                 name = "FunctionCall",
                 wrap = { FunctionCallToken(it, isBlock = true) },
                 regex =
-                    RegexBuilder("^ {0,3}call(?<barg>body)")
+                    RegexBuilder("^ {0,3}call")
                         .withReference("call", inlineFunctionCall.regex.pattern)
-                        .withReference("body", "(?:\\s*^ {2,}.+)*")
                         .build(),
-                groupNames = listOf("barg"),
+                // Arguments are scanned by the walker lexer.
+                walker = ::FunctionCallArgumentsWalkerLexer,
             )
 }
-
-/**
- * Max amount of arguments supported.
- */
-private const val FUNCTION_MAX_ARG_COUNT = 10
-
-/**
- * Regular argument pattern of a function call (not body arguments).
- */
-private const val FUNCTION_ARGUMENT_HELPER = "(?:\\s*\\{\\s*(.+?)\\s*(?<!\\\\)})?"
-// TODO allow args in nested function calls (match balanced parentheses)

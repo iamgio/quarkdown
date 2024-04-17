@@ -8,7 +8,7 @@ abstract class AbstractLexer(override val source: CharSequence) : Lexer {
     /**
      * Index of the latest scanned character within [source].
      */
-    protected var currentIndex = 0
+    abstract val currentIndex: Int
 
     /**
      * Adds a token to fill the gap between the last matched index and [untilIndex], if there is any.
