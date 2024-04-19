@@ -385,7 +385,7 @@ class BlockTokenParser(
 
         // Body function argument.
         // A body argument is always the last one, it goes on a new line and each line is indented.
-        token.data.namedGroups["barg"]?.takeUnless { it.isBlank() }?.let { body ->
+        token.data.namedGroups["bodyarg"]?.takeUnless { it.isBlank() }?.let { body ->
             // A body argument is treated as plain text, thus nested function calls are not executed by default.
             // They are executed if the argument is used as Markdown content from the referenced function,
             // that runs recursive lexing & parsing on the arg content, triggering function calls.

@@ -40,27 +40,50 @@ abstract class RegexLexer(
                     .filterNotNullValues()
                     .toMap()
 
-            var groups =
+            val groups =
                 result.groups.asSequence()
                     .filterNotNull()
                     // Named groups don't appear in regular groups
                     .filterNot { namedGroups.containsValue(it) }
                     .map { it.value }
+                    .toMutableList()
 
-            // Text tokens are substrings that were not captured by any pattern.
+            val namedGroupsValues =
+                namedGroups
+                    .mapValues { (_, group) -> group.value }
+                    .toMutableMap()
+
+            // Fill-tokens are substrings that were not captured by any pattern.
             // These uncaptured groups are scanned and converted to tokens.
             pushFillToken(untilIndex = range.first)
 
             // End of the match
             currentIndex = range.last + 1
 
+            // Text of the token.
+            val text = StringBuilder(group.value)
+
             // In case the pattern requires additional information that can't be supplied by regex,
             // its WalkerLexer implementation is retrieved and starts scanning from this position.
             // Its produced tokens are stored into the main token's groups.
             pattern.walker?.invoke(source.substring(currentIndex))?.let { walker ->
-                // Results are stored in the groups of the main token.
-                val walkedGroups = walker.tokenize().map { it.data.text }
-                groups += walkedGroups
+                // Results are stored as tokens.
+                val walkedTokens = walker.tokenize()
+
+                walkedTokens.forEach { token ->
+                    // Text of the group.
+                    val groupText = token.data.text
+                    text.append(groupText)
+
+                    // Named tokens are saved as named groups.
+                    // Other tokens are saved as regular groups.
+                    if (token is NamedToken) {
+                        namedGroupsValues[token.name] = groupText
+                    } else {
+                        groups += groupText
+                    }
+                }
+
                 // The matching process is continued from the walker's end position.
                 currentIndex += walker.currentIndex
             }
@@ -68,10 +91,10 @@ abstract class RegexLexer(
             // The token data.
             val data =
                 TokenData(
-                    text = group.value,
+                    text = text.toString(),
                     position = range,
-                    groups = groups,
-                    namedGroups = namedGroups.mapValues { (_, group) -> group.value },
+                    groups = groups.asSequence(),
+                    namedGroups = namedGroupsValues,
                 )
 
             // Lets the corresponding Token subclass wrap the data.

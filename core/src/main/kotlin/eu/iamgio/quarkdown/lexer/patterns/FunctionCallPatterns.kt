@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.lexer.walker.FunctionCallArgumentsWalkerLexer
 class FunctionCallPatterns {
     /**
      * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces.
+     * Arguments are scanned by [FunctionCallArgumentsWalkerLexer].
      */
     val inlineFunctionCall
         get() =
@@ -22,13 +23,14 @@ class FunctionCallPatterns {
                     "(?<=\\s|^)\\.(\\w+)"
                         .toRegex(),
                 // Arguments are scanned by the walker lexer.
-                walker = ::FunctionCallArgumentsWalkerLexer,
+                walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = false) },
             )
 
     /**
      * An isolated function call.
      * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces
      * and an optional body, indented by 4 spaces like a list item body.
+     * Arguments are scanned by [FunctionCallArgumentsWalkerLexer].
      */
     val blockFunctionCall
         get() =
@@ -40,6 +42,6 @@ class FunctionCallPatterns {
                         .withReference("call", inlineFunctionCall.regex.pattern)
                         .build(),
                 // Arguments are scanned by the walker lexer.
-                walker = ::FunctionCallArgumentsWalkerLexer,
+                walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = true) },
             )
 }
