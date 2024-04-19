@@ -15,7 +15,10 @@ val Text =
     setOf(
         ::code,
         ::loremIpsum,
+        ::greet,
     )
+
+fun greet(name: String) = StringValue("Hello, $name!")
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,

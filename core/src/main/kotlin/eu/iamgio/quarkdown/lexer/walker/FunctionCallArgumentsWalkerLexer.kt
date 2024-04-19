@@ -72,7 +72,6 @@ class FunctionCallArgumentsWalkerLexer(
             reader.read()
 
             if (char == '\n') {
-                println("newline")
                 if (!hasEnoughIndentation()) {
                     // End of the body argument.
                     break

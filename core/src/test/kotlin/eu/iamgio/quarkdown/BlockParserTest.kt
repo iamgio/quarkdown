@@ -788,5 +788,57 @@ class BlockParserTest {
                 )
             }
         }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(2, arguments.size)
+
+            val args = arguments.iterator()
+            with(args.next()) {
+                assertEquals("{{arg1}}", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+            with(args.next()) {
+                assertEquals("{arg2}", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(2, arguments.size)
+
+            val args = arguments.iterator()
+            with(args.next()) {
+                assertEquals("arg{1}", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+            with(args.next()) {
+                assertEquals("arg2", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(3, arguments.size)
+
+            val args = arguments.iterator()
+            with(args.next()) {
+                assertEquals("arg{1} arg", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+            with(args.next()) {
+                assertEquals("{ arg2 }", value.unwrappedValue)
+                assertFalse(this.isBody)
+            }
+            with(args.next()) {
+                assertTrue(this.isBody)
+                assertEquals(
+                    "body content",
+                    value.unwrappedValue,
+                )
+            }
+        }
     }
 }

@@ -33,3 +33,10 @@ not body
 
     body content
 not body
+
+.function {{{arg1}}} {{arg2}}
+
+.function {arg{1}} {arg2}}
+
+.function {arg{1} arg} { { arg2 } }
+    body content
