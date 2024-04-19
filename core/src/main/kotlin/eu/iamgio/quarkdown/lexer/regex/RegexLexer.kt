@@ -40,6 +40,8 @@ abstract class RegexLexer(
                     .filterNotNullValues()
                     .toMap()
 
+            // Regular groups that are not named.
+            // They don't contain values from namedGroups
             val groups =
                 result.groups.asSequence()
                     .filterNotNull()
@@ -48,6 +50,8 @@ abstract class RegexLexer(
                     .map { it.value }
                     .toMutableList()
 
+            // namedGroups as Map<String, String>, which can be affected by
+            // the output of the walker lexer (see below).
             val namedGroupsValues =
                 namedGroups
                     .mapValues { (_, group) -> group.value }
