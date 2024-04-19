@@ -9,9 +9,9 @@ The base Markdown parsing is CommonMark-compliant, along with several GFM extens
 
 This is an example of what Quarkdown aims to look like:
 ```markdown
-.docname [Quarkdown]
-.docauthor [iamgio]
-.aspectratio [4:3]
+.docname {Quarkdown}
+.docauthor {iamgio}
+.aspectratio {4:3}
 
 .tableofcontents    <-- Generates a table of contents page
                         that contains "Hello Quarkdown"
@@ -21,7 +21,7 @@ This is an example of what Quarkdown aims to look like:
 
 ## An overview
 
-.box [Box title]
+.box {Box title}
     This is some text within a box.
     1. And this
     2. is a
@@ -67,7 +67,7 @@ The project is under development. Currently supported:
   - [x] GFM strikethrough
 
 - Quarkdown features
-  - [ ] Functions
+  - [x] Functions
   - [ ] Styles
   - [x] Math (LaTeX) blocks and inlines
   - [ ] Highlight
