@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * `Layout` stdlib module exporter.
@@ -27,9 +27,7 @@ val Layout =
 fun align(
     alignment: Aligned.Alignment,
     body: MarkdownContent,
-) = NodeValue(
-    Aligned(alignment, body.children),
-)
+) = Aligned(alignment, body.children).wrappedAsValue()
 
 /**
  * Centers content within its parent.
@@ -47,9 +45,7 @@ fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
 fun clip(
     clip: Clipped.Clip,
     body: MarkdownContent,
-) = NodeValue(
-    Clipped(clip, body.children),
-)
+) = Clipped(clip, body.children).wrappedAsValue()
 
 /**
  * Inserts content in a box.
@@ -60,6 +56,4 @@ fun clip(
 fun box(
     title: MarkdownContent? = null,
     body: MarkdownContent,
-) = NodeValue(
-    Box(title?.children, body.children),
-)
+) = Box(title?.children, body.children).wrappedAsValue()

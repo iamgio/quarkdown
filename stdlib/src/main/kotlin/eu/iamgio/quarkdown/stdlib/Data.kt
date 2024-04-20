@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.data.subList
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import java.io.File
 
 /**
@@ -41,7 +42,7 @@ fun fileContent(
     // Lines from the file in the given range.
     val lines = file.readLines().subList(lineRange)
 
-    return StringValue(lines.joinToString(System.lineSeparator()))
+    return lines.joinToString(System.lineSeparator()).wrappedAsValue()
 }
 
 /**
@@ -72,5 +73,5 @@ fun csv(path: String): NodeValue {
             },
         )
 
-    return NodeValue(table)
+    return table.wrappedAsValue()
 }

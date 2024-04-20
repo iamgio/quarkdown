@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * `Library` stdlib module exporter.
@@ -23,7 +24,9 @@ val Library =
 fun libraryExists(
     @Injected context: Context,
     name: String,
-) = BooleanValue(context.libraries.any { it.name.equals(name, ignoreCase = true) })
+): BooleanValue =
+    context.libraries.any { it.name.equals(name, ignoreCase = true) }
+        .wrappedAsValue()
 
 /**
  * @param name name of the function, case-insensitive
@@ -33,4 +36,4 @@ fun libraryExists(
 fun functionExists(
     @Injected context: Context,
     name: String,
-) = BooleanValue(context.getFunctionByName(name) != null)
+): BooleanValue = (context.getFunctionByName(name) != null).wrappedAsValue()

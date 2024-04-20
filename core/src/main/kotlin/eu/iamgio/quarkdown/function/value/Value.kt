@@ -39,6 +39,11 @@ data class StringValue(override val unwrappedValue: String) : InputValue<String>
 }
 
 /**
+ * @return [this] string wrapped into a [StringValue]
+ */
+fun String.wrappedAsValue() = StringValue(this)
+
+/**
  * An immutable numeric [Value].
  */
 data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>, OutputValue<Number> {
@@ -46,6 +51,11 @@ data class NumberValue(override val unwrappedValue: Number) : InputValue<Number>
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
 }
+
+/**
+ * @return [this] number wrapped into a [NumberValue]
+ */
+fun Number.wrappedAsValue() = NumberValue(this)
 
 /**
  * An immutable boolean [Value].
@@ -57,11 +67,21 @@ data class BooleanValue(override val unwrappedValue: Boolean) : InputValue<Boole
 }
 
 /**
+ * @return [this] boolean wrapped into a [BooleanValue]
+ */
+fun Boolean.wrappedAsValue() = BooleanValue(this)
+
+/**
  * A [Value] that wraps an element from a static enum class.
  */
 data class EnumValue(override val unwrappedValue: Enum<*>) : InputValue<Enum<*>> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }
+
+/**
+ * @return [this] enum wrapped into an [EnumValue]
+ */
+fun Enum<*>.wrappedAsValue() = EnumValue(this)
 
 /**
  * A [Value] that wraps an element from a static enum class.
@@ -83,11 +103,21 @@ data class MarkdownContentValue(override val unwrappedValue: MarkdownContent) : 
 }
 
 /**
+ * @return [this] Markdown content wrapped into a [MarkdownContentValue]
+ */
+fun MarkdownContent.wrappedAsValue() = MarkdownContentValue(this)
+
+/**
  * An immutable [Node] [Value].
  */
 data class NodeValue(override val unwrappedValue: Node) : OutputValue<Node> {
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
 }
+
+/**
+ * @return [this] node wrapped into a [NodeValue]
+ */
+fun Node.wrappedAsValue() = NodeValue(this)
 
 /**
  * An empty [Value] with no content.

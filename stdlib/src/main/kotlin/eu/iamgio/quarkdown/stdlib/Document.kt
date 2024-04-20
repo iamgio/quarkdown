@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * `Document` stdlib module exporter.
@@ -32,7 +33,7 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
     set: DocumentInfo.(T) -> Unit,
 ): OutputValue<*> {
     if (value == null) {
-        return StringValue(get(this.documentInfo))
+        return get(this.documentInfo).wrappedAsValue()
     }
 
     set(this.documentInfo, value)

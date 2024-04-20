@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.NodeValue
-import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -20,7 +20,7 @@ val Text =
         ::greet,
     )
 
-fun greet(name: String) = StringValue("Hello, $name!")
+fun greet(name: String) = "Hello, $name!".wrappedAsValue()
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
@@ -35,9 +35,7 @@ fun code(
     body: MarkdownContent,
 ): NodeValue {
     context.hasCode = true // Allows code highlighting.
-    return NodeValue(
-        Code(body.children.toPlainText(), language),
-    )
+    return Code(body.children.toPlainText(), language).wrappedAsValue()
 }
 
 /**
@@ -45,7 +43,7 @@ fun code(
  */
 @FunctionName("loremipsum")
 fun loremIpsum() =
-    StringValue(
-        object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
-            .reader().readText(),
-    )
+    object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
+        .reader()
+        .readText()
+        .wrappedAsValue()
