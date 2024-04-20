@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
@@ -229,6 +230,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: Aligned): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Clipped): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: Box): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MathSpan): CharSequence = throw UnsupportedRenderException(node)
 }

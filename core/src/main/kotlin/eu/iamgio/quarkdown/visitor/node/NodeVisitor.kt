@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
@@ -113,6 +114,8 @@ interface NodeVisitor<T> {
     fun visit(node: Aligned): T
 
     fun visit(node: Clipped): T
+
+    fun visit(node: Box): T
 
     // Quarkdown inline
 

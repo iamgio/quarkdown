@@ -42,3 +42,15 @@ data class Clipped(
         CIRCLE,
     }
 }
+
+/**
+ * A generic box that contains content.
+ * @param title box title. If `null`, the box is untitled.
+ * @param children content of the box
+ */
+data class Box(
+    val title: InlineContent?,
+    override val children: List<Node>,
+) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}

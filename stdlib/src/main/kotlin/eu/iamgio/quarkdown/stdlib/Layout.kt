@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -14,6 +15,7 @@ val Layout =
         ::align,
         ::center,
         ::clip,
+        ::box,
     )
 
 /**
@@ -47,4 +49,17 @@ fun clip(
     body: MarkdownContent,
 ) = NodeValue(
     Clipped(clip, body.children),
+)
+
+/**
+ * Inserts content in a box.
+ * @param title box title. The box is untitled if it is `null`
+ * @param body box content
+ * @return the new box node
+ */
+fun box(
+    title: MarkdownContent? = null,
+    body: MarkdownContent,
+) = NodeValue(
+    Box(title?.children, body.children),
 )

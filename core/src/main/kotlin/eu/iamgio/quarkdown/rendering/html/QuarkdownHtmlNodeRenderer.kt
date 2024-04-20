@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.Aligned
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Math
@@ -27,14 +28,22 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
 
     /**
+     * A `<div class="styleClass">...</div>` tag.
+     */
+    private fun div(
+        styleClass: String,
+        init: HtmlTagBuilder.() -> Unit,
+    ) = tagBuilder("div", init = init)
+        .attribute("class", styleClass)
+        .build()
+
+    /**
      * A `<div class="styleClass">children</div>` tag.
      */
     private fun div(
         styleClass: String,
         children: List<Node>,
-    ) = tagBuilder("div", children)
-        .attribute("class", styleClass)
-        .build()
+    ) = div(styleClass) { +children }
 
     // Quarkdown node rendering
 
@@ -49,6 +58,18 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
     override fun visit(node: Clipped) = div("clip-" + node.clip.name.lowercase(), node.children)
+
+    override fun visit(node: Box) =
+        div("box") {
+            if (node.title != null) {
+                tag("header") {
+                    tag("h5") {
+                        +node.title
+                    }
+                }
+            }
+            +node.children
+        }
 
     // Inline
 

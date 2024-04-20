@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
@@ -559,5 +560,35 @@ class HtmlNodeRendererTest {
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
 
         assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph)).render())
+    }
+
+    @Test
+    fun box() {
+        val out = readParts("quarkdown/box.html")
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+
+        assertEquals(
+            out.next(),
+            Box(
+                title = listOf(Text("Title")),
+                listOf(paragraph),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Box(
+                title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
+                listOf(paragraph),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Box(
+                title = null,
+                listOf(paragraph),
+            ).render(),
+        )
     }
 }
