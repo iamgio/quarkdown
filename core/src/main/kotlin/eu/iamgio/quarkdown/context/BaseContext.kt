@@ -28,6 +28,9 @@ open class BaseContext(
 ) : Context {
     override val documentInfo = DocumentInfo()
 
+    override val hasCode: Boolean
+        get() = attributes.hasCode
+
     override val hasMath: Boolean
         get() = attributes.hasMath
 

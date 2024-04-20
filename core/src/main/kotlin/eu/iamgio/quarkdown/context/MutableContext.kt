@@ -18,11 +18,8 @@ class MutableContext(
     errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
     private val attributes: MutableAstAttributes = MutableAstAttributes(),
 ) : BaseContext(attributes, errorHandler = errorHandler, flavor = flavor) {
-    override var hasMath: Boolean
-        get() = attributes.hasMath
-        set(value) {
-            attributes.hasMath = value
-        }
+    override var hasCode: Boolean by attributes::hasCode
+    override var hasMath: Boolean by attributes::hasMath
 
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 

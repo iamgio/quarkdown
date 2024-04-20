@@ -88,6 +88,8 @@ class BlockTokenParser(
     }
 
     override fun visit(token: BlockCodeToken): Node {
+        context.hasCode = true // Allows code highlighting.
+
         return Code(
             language = null,
             // Remove first indentation
@@ -96,6 +98,8 @@ class BlockTokenParser(
     }
 
     override fun visit(token: FencesCodeToken): Node {
+        context.hasCode = true // Allows code highlighting.
+
         val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),

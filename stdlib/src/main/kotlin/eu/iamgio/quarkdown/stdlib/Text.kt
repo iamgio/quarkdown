@@ -2,7 +2,9 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.FunctionName
+import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.util.toPlainText
@@ -28,11 +30,15 @@ fun greet(name: String) = StringValue("Hello, $name!")
  * @param body code content
  */
 fun code(
+    @Injected context: MutableContext,
     language: String? = null,
     body: MarkdownContent,
-) = NodeValue(
-    Code(body.children.toPlainText(), language),
-)
+): NodeValue {
+    context.hasCode = true // Allows code highlighting.
+    return NodeValue(
+        Code(body.children.toPlainText(), language),
+    )
+}
 
 /**
  * @return a fixed Lorem Ipsum text.

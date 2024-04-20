@@ -35,6 +35,12 @@ interface Context {
     val errorHandler: PipelineErrorHandler
 
     /**
+     * Whether there is at least one code block.
+     * This is used to load the HighlightJS library in HTML rendering.
+     */
+    val hasCode: Boolean
+
+    /**
      * Whether there is at least one math block or inline.
      * This is used to load the MathJax library in HTML rendering.
      */

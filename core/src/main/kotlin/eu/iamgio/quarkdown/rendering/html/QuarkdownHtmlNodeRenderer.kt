@@ -22,9 +22,9 @@ private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
 class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context) {
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
-            // TODO extract from context / document settings which can be affected by functions
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
-            .value(TemplatePlaceholders.LANGUAGE, "en")
+            .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
+            .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
 
     /**
