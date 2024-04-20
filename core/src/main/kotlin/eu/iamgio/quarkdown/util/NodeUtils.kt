@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.PlainTextNode
+import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -23,6 +24,7 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
                 it is CriticalContent && renderer != null -> builder.append(renderer.visit(it))
                 it is PlainTextNode -> builder.append(it.text)
                 it is NestableNode -> visit(it.children)
+                it is TextNode -> visit(it.text)
             }
         }
     }
