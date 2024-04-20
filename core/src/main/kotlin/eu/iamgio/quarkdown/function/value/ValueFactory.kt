@@ -60,7 +60,14 @@ object ValueFactory {
         // End of the range. If null (= not present), the range is open on the right end.
         val end = groups?.next()
 
-        val range = Range(start?.toIntOrNull(), end?.toIntOrNull())
+        // Indexes start from 1:
+        // 2..5 maps to Range(1, 4)
+        val range =
+            Range(
+                start?.toIntOrNull()?.minus(1),
+                end?.toIntOrNull()?.minus(1),
+            )
+
         return ObjectValue(range)
     }
 
