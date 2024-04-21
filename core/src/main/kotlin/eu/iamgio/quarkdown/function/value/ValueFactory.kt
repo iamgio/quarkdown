@@ -2,13 +2,15 @@ package eu.iamgio.quarkdown.function.value
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.util.iterator
 
 /**
  * Factory of [Value] wrappers from raw string data.
- * @see DynamicValue.convertTo
+ * @see eu.iamgio.quarkdown.function.reflect.FromDynamicType
+ * @see eu.iamgio.quarkdown.function.reflect.DynamicValueConverter.convertTo
  */
 object ValueFactory {
     /**
