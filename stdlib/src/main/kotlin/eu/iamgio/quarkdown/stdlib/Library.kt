@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
@@ -17,6 +16,7 @@ val Library: Module =
     setOf(
         ::libraryExists,
         ::functionExists,
+        ::libraries,
         ::libraryFunctions,
     )
 
@@ -52,6 +52,17 @@ fun functionExists(
 ) = BooleanValue(context.getFunctionByName(name) != null)
 
 /**
+ * @return an unordered collection of the loaded libraries' names
+ */
+fun libraries(
+    @Injected context: Context,
+) = UnorderedCollectionValue(
+    context.libraries.asSequence()
+        .map { it.name.wrappedAsValue() }
+        .toSet(),
+)
+
+/**
  * @param libraryName name of the library, case-insensitive
  * @return unordered set of functions exposed by the library
  */
@@ -59,10 +70,9 @@ fun functionExists(
 fun libraryFunctions(
     @Injected context: Context,
     libraryName: String,
-): UnorderedCollectionValue<StringValue> =
-    UnorderedCollectionValue(
-        findLibrary(context, libraryName)?.functions?.asSequence()
-            ?.map { it.name.wrappedAsValue() }
-            ?.toSet()
-            ?: emptySet(),
-    )
+) = UnorderedCollectionValue(
+    findLibrary(context, libraryName)?.functions?.asSequence()
+        ?.map { it.name.wrappedAsValue() }
+        ?.toSet()
+        ?: emptySet(),
+)
