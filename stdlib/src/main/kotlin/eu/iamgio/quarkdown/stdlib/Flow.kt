@@ -9,12 +9,7 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.value.DynamicValue
-import eu.iamgio.quarkdown.function.value.NodeValue
-import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
-import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.*
 import eu.iamgio.quarkdown.util.replace
 
 /**
@@ -55,8 +50,9 @@ fun ifNot(
 
 /**
  * Repeats content for each element of an iterable collection.
- * The current element can be accessed via the `{{1}}` placeholder.
+ * The current element can be accessed via the `{{<name>}}` placeholder, which defaults at `{{1}}`.
  * @param iterable collection to iterate
+ * @param name placeholder to access the current element
  * @param body content, output of each iteration
  * @return a new node that contains [body] repeated for each element
  */
@@ -64,11 +60,12 @@ fun ifNot(
 fun forEach(
     @Injected context: Context,
     iterable: Iterable<Value<*>>,
+    name: String = "1",
     body: String,
 ): NodeValue {
     val nodes = mutableListOf<Node>()
     iterable.forEach {
-        val content = body.replace("{{1}}", it.unwrappedValue.toString())
+        val content = body.replace("{{$name}}", it.unwrappedValue.toString())
         nodes.addAll(ValueFactory.markdown(content, context).unwrappedValue.children)
     }
     return NodeValue(MarkdownContent(nodes))
