@@ -46,6 +46,11 @@ fun StringBuilder.replace(
 }
 
 /**
- * @return [this] string with line separators replaced with `\n`
+ * @return [this] string with line separators replaced with `\n`,
+ *         or the string itself if `\n` is already the line separator
  */
-fun String.normalizeLineSeparators(): String = replace(System.lineSeparator(), "\n")
+fun CharSequence.normalizeLineSeparators(): CharSequence =
+    when (val separator = System.lineSeparator()) {
+        "\n" -> this
+        else -> this.toString().replace(separator, "\n")
+    }

@@ -18,8 +18,8 @@ import eu.iamgio.quarkdown.util.normalizeLineSeparators
 abstract class RegexLexer(
     source: CharSequence,
     protected val patterns: List<TokenRegexPattern>,
-    // Line separators are replaced with \n to ensure consistent results.
-) : AbstractLexer(source.toString().normalizeLineSeparators()) {
+    // Line separators are set to \n to ensure consistent results.
+) : AbstractLexer(source.normalizeLineSeparators()) {
     override var currentIndex: Int = 0
         protected set
 
