@@ -7,16 +7,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
-import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.DynamicValue
-import eu.iamgio.quarkdown.function.value.EnumValue
-import eu.iamgio.quarkdown.function.value.InputValue
-import eu.iamgio.quarkdown.function.value.MarkdownContentValue
-import eu.iamgio.quarkdown.function.value.NumberValue
-import eu.iamgio.quarkdown.function.value.ObjectValue
-import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
-import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
+import eu.iamgio.quarkdown.function.value.*
 
 /**
  * An [ExpressionVisitor] that describes the way two expressions are joined together.
@@ -61,13 +52,11 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             else -> StringValue(value.concatenate())
         }
 
-    override fun visit(value: OrderedCollectionValue<*>): Expression {
-        TODO("Not yet implemented")
-    }
+    // [a, b, c] "abc" -> "[a, b, c]abc"
+    override fun visit(value: OrderedCollectionValue<*>): Expression = StringValue(value.concatenate())
 
-    override fun visit(value: UnorderedCollectionValue<*>): Expression {
-        TODO("Not yet implemented")
-    }
+    // [a, b, c] "abc" -> "[a, b, c]abc"
+    override fun visit(value: UnorderedCollectionValue<*>): Expression = StringValue(value.concatenate())
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
