@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.ListValue
+import eu.iamgio.quarkdown.function.value.SetValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
@@ -53,12 +53,16 @@ fun functionExists(
 
 /**
  * @param libraryName name of the library, case-insensitive
- * @return list of functions exposed by the library
+ * @return unordered set of functions exposed by the library
  */
 @FunctionName("libfunctions")
 fun libraryFunctions(
     @Injected context: Context,
     libraryName: String,
-): ListValue<StringValue> =
-    (findLibrary(context, libraryName)?.functions?.map { it.name.wrappedAsValue() } ?: emptyList())
-        .wrappedAsValue()
+): SetValue<StringValue> =
+    SetValue(
+        findLibrary(context, libraryName)?.functions?.asSequence()
+            ?.map { it.name.wrappedAsValue() }
+            ?.toSet()
+            ?: emptySet(),
+    )
