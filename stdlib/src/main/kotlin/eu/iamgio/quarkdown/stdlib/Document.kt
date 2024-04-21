@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.function.value.wrappedAsValue
  * This module handles document information and details.
  * @see eu.iamgio.quarkdown.document.DocumentInfo
  */
-val Document =
+val Document: Module =
     setOf(
         ::docName,
         ::docAuthor,

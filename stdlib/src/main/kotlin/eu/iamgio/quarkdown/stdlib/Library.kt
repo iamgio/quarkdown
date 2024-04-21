@@ -5,17 +5,15 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.BooleanValue
-import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
-import kotlin.reflect.KFunction
 
 /**
  * `Library` stdlib module exporter.
  * This module handles loaded libraries and their functions.
  */
-val Library: Set<KFunction<OutputValue<*>>> =
+val Library: Module =
     setOf(
         ::libraryExists,
         ::functionExists,

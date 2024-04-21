@@ -21,7 +21,7 @@ import eu.iamgio.quarkdown.util.replace
  * `Flow` stdlib module exporter.
  * This module handles the control flow and other statements.
  */
-val Flow =
+val Flow: Module =
     setOf(
         ::`if`,
         ::ifNot,

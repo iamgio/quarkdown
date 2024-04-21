@@ -6,7 +6,7 @@ import kotlin.math.PI
 /**
  * `Math` stdlib module exporter.
  */
-val Math =
+val Math: Module =
     setOf(
         ::sum,
         ::subtract,

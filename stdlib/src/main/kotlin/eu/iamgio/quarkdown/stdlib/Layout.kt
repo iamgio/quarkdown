@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.function.value.wrappedAsValue
  * `Layout` stdlib module exporter.
  * This module handles position and shape of an element.
  */
-val Layout =
+val Layout: Module =
     setOf(
         ::align,
         ::center,

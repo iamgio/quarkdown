@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.util.toPlainText
  * `Text` stdlib module exporter.
  * This module handles text formatting and manipulation.
  */
-val Text =
+val Text: Module =
     setOf(
         ::code,
         ::loremIpsum,

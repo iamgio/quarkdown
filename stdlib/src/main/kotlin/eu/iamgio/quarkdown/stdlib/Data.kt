@@ -15,7 +15,7 @@ import java.io.File
  * `Data` stdlib module exporter.
  * This module handles content fetched from external resources.
  */
-val Data =
+val Data: Module =
     setOf(
         ::fileContent,
         ::csv,
