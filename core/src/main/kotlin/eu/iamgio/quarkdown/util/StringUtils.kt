@@ -44,3 +44,8 @@ fun StringBuilder.replace(
         replace(index, index + oldValue.length, newValue)
     }
 }
+
+/**
+ * @return [this] string with line separators replaced with `\n`
+ */
+fun String.normalizeLineSeparators(): String = replace(System.lineSeparator(), "\n")

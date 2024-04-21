@@ -1,43 +1,11 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.Aligned
-import eu.iamgio.quarkdown.ast.BaseListItem
-import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.Box
-import eu.iamgio.quarkdown.ast.Clipped
-import eu.iamgio.quarkdown.ast.Code
-import eu.iamgio.quarkdown.ast.CodeSpan
-import eu.iamgio.quarkdown.ast.Comment
-import eu.iamgio.quarkdown.ast.CriticalContent
-import eu.iamgio.quarkdown.ast.Emphasis
-import eu.iamgio.quarkdown.ast.Heading
-import eu.iamgio.quarkdown.ast.HorizontalRule
-import eu.iamgio.quarkdown.ast.Html
-import eu.iamgio.quarkdown.ast.Image
-import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.LineBreak
-import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.LinkDefinition
-import eu.iamgio.quarkdown.ast.ListItem
-import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.MathSpan
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.OrderedList
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.ReferenceImage
-import eu.iamgio.quarkdown.ast.ReferenceLink
-import eu.iamgio.quarkdown.ast.Strikethrough
-import eu.iamgio.quarkdown.ast.Strong
-import eu.iamgio.quarkdown.ast.StrongEmphasis
-import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.ast.TaskListItem
-import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.*
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -49,6 +17,7 @@ import kotlin.test.assertEquals
 class HtmlNodeRendererTest {
     private fun readParts(path: String) =
         readSource("/rendering/$path")
+            .normalizeLineSeparators()
             .split("\n---\n")
             .map { it.trim() }
             .iterator()

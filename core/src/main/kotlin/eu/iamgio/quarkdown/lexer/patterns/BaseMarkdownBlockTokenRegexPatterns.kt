@@ -2,21 +2,7 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
-import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
-import eu.iamgio.quarkdown.lexer.tokens.BlockTextToken
-import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
-import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
-import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
-import eu.iamgio.quarkdown.lexer.tokens.LinkDefinitionToken
-import eu.iamgio.quarkdown.lexer.tokens.ListItemToken
-import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
-import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
-import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
-import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
-import eu.iamgio.quarkdown.lexer.tokens.TableToken
-import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.tokens.*
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] blocks.
@@ -126,7 +112,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "HorizontalRule",
                 wrap = ::HorizontalRuleToken,
                 regex =
-                    "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\n+|$)"
+                    "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\R+|$)"
                         .toRegex(),
             )
 
@@ -240,7 +226,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "SetextHeading",
                 wrap = ::SetextHeadingToken,
                 regex =
-                    RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\n|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
+                    RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\R|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
                         .withReference("bullet", BULLET_HELPER)
                         .build(),
             )

@@ -8,46 +8,9 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
-import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
-import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
-import eu.iamgio.quarkdown.lexer.tokens.CommentToken
-import eu.iamgio.quarkdown.lexer.tokens.DiamondAutolinkToken
-import eu.iamgio.quarkdown.lexer.tokens.EmphasisToken
-import eu.iamgio.quarkdown.lexer.tokens.EntityToken
-import eu.iamgio.quarkdown.lexer.tokens.EscapeToken
-import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
-import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
-import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
-import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
-import eu.iamgio.quarkdown.lexer.tokens.ImageToken
-import eu.iamgio.quarkdown.lexer.tokens.InlineMathToken
-import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
-import eu.iamgio.quarkdown.lexer.tokens.LinkDefinitionToken
-import eu.iamgio.quarkdown.lexer.tokens.LinkToken
-import eu.iamgio.quarkdown.lexer.tokens.MultilineMathToken
-import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
-import eu.iamgio.quarkdown.lexer.tokens.OnelineMathToken
-import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
-import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
-import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
-import eu.iamgio.quarkdown.lexer.tokens.ReferenceImageToken
-import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
-import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
-import eu.iamgio.quarkdown.lexer.tokens.StrongToken
-import eu.iamgio.quarkdown.lexer.tokens.TableToken
-import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
-import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
+import eu.iamgio.quarkdown.lexer.tokens.*
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertIs
-import kotlin.test.assertIsNot
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 /**
  * Tokenization tests.
@@ -161,7 +124,7 @@ class LexerTest {
 
     @Test
     fun emphasis() {
-        val sources = readSource("/lexing/emphasis.md").split("\n---\n").iterator()
+        val sources = readSource("/lexing/emphasis.md").split("${System.lineSeparator()}---${System.lineSeparator()}").iterator()
 
         repeat(2) {
             with(inlineLex(sources.next())) {

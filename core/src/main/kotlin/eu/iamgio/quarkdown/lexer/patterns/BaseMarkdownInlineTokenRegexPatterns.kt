@@ -2,22 +2,7 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
-import eu.iamgio.quarkdown.lexer.tokens.CommentToken
-import eu.iamgio.quarkdown.lexer.tokens.CriticalContentToken
-import eu.iamgio.quarkdown.lexer.tokens.DiamondAutolinkToken
-import eu.iamgio.quarkdown.lexer.tokens.EmphasisToken
-import eu.iamgio.quarkdown.lexer.tokens.EntityToken
-import eu.iamgio.quarkdown.lexer.tokens.EscapeToken
-import eu.iamgio.quarkdown.lexer.tokens.ImageToken
-import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
-import eu.iamgio.quarkdown.lexer.tokens.LinkToken
-import eu.iamgio.quarkdown.lexer.tokens.ReferenceImageToken
-import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
-import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
-import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
-import eu.iamgio.quarkdown.lexer.tokens.StrongToken
-import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
+import eu.iamgio.quarkdown.lexer.tokens.*
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] inlines.
@@ -89,7 +74,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 name = "InlineLineBreak",
                 wrap = ::LineBreakToken,
                 regex =
-                    "( {2,}|\\\\)\\n(?!\\s*\$)"
+                    "( {2,}|\\\\)\\R(?!\\s*\$)"
                         .toRegex(),
             )
 
@@ -363,7 +348,7 @@ private fun delimiteredPattern(
             "(start(?![\\spunct])|(?<=^|[\\spunct])start(?!\\s))"
         } +
         // Content
-        "(?!start)((.|\n)+?)" +
+        "(?!start)((.|\\R)+?)" +
         // End delimiter
         if (strict) {
             // If strict, the start delimiter must also not be left-flanking

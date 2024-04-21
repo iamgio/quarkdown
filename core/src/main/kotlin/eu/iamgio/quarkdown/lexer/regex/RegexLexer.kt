@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
 import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
 import eu.iamgio.quarkdown.util.filterNotNullValues
+import eu.iamgio.quarkdown.util.normalizeLineSeparators
 
 /**
  * A [Lexer] that identifies tokens by matching [Regex] patterns.
@@ -17,7 +18,8 @@ import eu.iamgio.quarkdown.util.filterNotNullValues
 abstract class RegexLexer(
     source: CharSequence,
     protected val patterns: List<TokenRegexPattern>,
-) : AbstractLexer(source) {
+    // Line separators are replaced with \n to ensure consistent results.
+) : AbstractLexer(source.toString().normalizeLineSeparators()) {
     override var currentIndex: Int = 0
         protected set
 
