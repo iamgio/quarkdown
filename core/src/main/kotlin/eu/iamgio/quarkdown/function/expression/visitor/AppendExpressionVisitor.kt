@@ -14,7 +14,9 @@ import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 
 /**
  * An [ExpressionVisitor] that describes the way two expressions are joined together.
@@ -58,6 +60,14 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             is BooleanValue -> BooleanValue(value.unwrappedValue && other.unwrappedValue)
             else -> StringValue(value.concatenate())
         }
+
+    override fun visit(value: OrderedCollectionValue<*>): Expression {
+        TODO("Not yet implemented")
+    }
+
+    override fun visit(value: UnorderedCollectionValue<*>): Expression {
+        TODO("Not yet implemented")
+    }
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"

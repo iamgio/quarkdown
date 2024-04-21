@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
@@ -10,6 +12,8 @@ import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.util.replace
 
@@ -21,6 +25,7 @@ val Flow =
     setOf(
         ::`if`,
         ::ifNot,
+        ::forEach,
         ::function,
     )
 
@@ -47,6 +52,27 @@ fun ifNot(
     condition: Boolean,
     body: MarkdownContent,
 ): OutputValue<*> = `if`(!condition, body)
+
+/**
+ * Repeats content for each element of an iterable collection.
+ * The current element can be accessed via the `{{1}}` placeholder.
+ * @param iterable collection to iterate
+ * @param body content, output of each iteration
+ * @return a new node that contains [body] repeated for each element
+ */
+@FunctionName("foreach")
+fun forEach(
+    @Injected context: Context,
+    iterable: Iterable<Value<*>>,
+    body: String,
+): NodeValue {
+    val nodes = mutableListOf<Node>()
+    iterable.forEach {
+        val content = body.replace("{{1}}", it.unwrappedValue.toString())
+        nodes.addAll(ValueFactory.markdown(content, context).unwrappedValue.children)
+    }
+    return NodeValue(MarkdownContent(nodes))
+}
 
 /**
  * Defines a custom function that can be called later in the document.

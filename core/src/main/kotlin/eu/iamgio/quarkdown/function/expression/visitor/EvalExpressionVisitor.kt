@@ -11,7 +11,9 @@ import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 
 /**
  * An [ExpressionVisitor] that evaluates an expression into a single static value,
@@ -24,6 +26,10 @@ class EvalExpressionVisitor : ExpressionVisitor<InputValue<*>> {
     override fun visit(value: NumberValue) = value
 
     override fun visit(value: BooleanValue) = value
+
+    override fun visit(value: OrderedCollectionValue<*>) = value
+
+    override fun visit(value: UnorderedCollectionValue<*>) = value
 
     override fun visit(value: EnumValue) = value
 

@@ -9,7 +9,9 @@ import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 
 /**
  * A visitor for different kinds of [Expression].
@@ -24,6 +26,10 @@ interface ExpressionVisitor<T> {
     fun visit(value: NumberValue): T
 
     fun visit(value: BooleanValue): T
+
+    fun visit(value: OrderedCollectionValue<*>): T
+
+    fun visit(value: UnorderedCollectionValue<*>): T
 
     fun visit(value: EnumValue): T
 
