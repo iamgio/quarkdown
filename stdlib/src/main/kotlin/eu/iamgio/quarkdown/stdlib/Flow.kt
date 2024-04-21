@@ -9,7 +9,12 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.value.*
+import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.util.replace
 
 /**
@@ -50,9 +55,9 @@ fun ifNot(
 
 /**
  * Repeats content for each element of an iterable collection.
- * The current element can be accessed via the `{{<name>}}` placeholder, which defaults at `{{1}}`.
+ * The current element can be accessed via the `<<name>>` placeholder, which defaults to `<<1>>`.
  * @param iterable collection to iterate
- * @param name placeholder to access the current element
+ * @param name placeholder to access the current element (wrapped in double angle brackets)
  * @param body content, output of each iteration
  * @return a new node that contains [body] repeated for each element
  */
@@ -65,7 +70,7 @@ fun forEach(
 ): NodeValue {
     val nodes = mutableListOf<Node>()
     iterable.forEach {
-        val content = body.replace("{{$name}}", it.unwrappedValue.toString())
+        val content = body.replace("<<$name>>", it.unwrappedValue.toString())
         nodes.addAll(ValueFactory.markdown(content, context).unwrappedValue.children)
     }
     return NodeValue(MarkdownContent(nodes))
@@ -74,7 +79,12 @@ fun forEach(
 /**
  * Defines a custom function that can be called later in the document.
  * The function can have placeholders that will be replaced with actual arguments upon invocation,
- * defined as `{{0}}`, `{{1}}`, etc.
+ * defined as `<<1>>`, `<<2>>`, and so on, always starting from 1.
+ *
+ * Unwanted results may be produced if:
+ * - `<<0>>` is referenced
+ * - References are not in a continuous ascending sequence (e.g. `<<3>>` is referenced but `<<2>>` is not).
+ *
  * The amount of parameters (thus of expected arguments) is determined by the highest number among the placeholders.
  * Upon invocation, the placeholders are replaced with the string representation of the actual arguments.
  * The return type of the function is dynamic, hence it can be used as an input of various types for other function calls.
@@ -86,13 +96,13 @@ fun function(
     name: String,
     body: String,
 ): VoidValue {
-    // Matches '{{1}}', '{{2}}', etc.
+    // Matches '<<1>>', '<<2>>', etc.
     // These are the spots that will be replaced with actual arguments.
-    val replacementsRegex = "(?<!\\\\)\\{\\{(\\d+)}}".toRegex()
+    val replacementsRegex = "(?<!\\\\)<<(\\d+)>>".toRegex()
     val matches = replacementsRegex.findAll(body)
 
     // The amount of parameters is the highest replacement number found (the number is captured in groupValues[1]).
-    // e.g. if the body contains {{1}} and {{2}}, the function will have 2 parameters.
+    // e.g. if the body contains <<1>> and <<2>>, the function will have 2 parameters.
     val paramCount =
         matches.sortedByDescending { it.groupValues[1].toInt() }.firstOrNull()
             ?.groupValues?.get(1)?.toInt() ?: 0
@@ -111,7 +121,7 @@ fun function(
             // Upon invocation, replaces the placeholders with actual arguments.
             // Argument 0 replaces {{1}} and so on.
             this.links.forEach { (parameter, argument) ->
-                val replacement = "{{${parameter.index + 1}}}"
+                val replacement = "<<${parameter.index + 1}>>"
                 val value = argument.value.unwrappedValue.toString() // Only string replacements are supported.
                 content.replace(replacement, value)
             }
