@@ -28,8 +28,18 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
         buildMap {
             call.arguments.forEachIndexed { index, argument ->
                 // Corresponding parameter.
+                val parameter =
+                    when {
+                        // A body parameter is always the last one in the function signature.
+                        argument.isBody -> parameters.lastOrNull()
+                        // Non-body parameters follow the index.
+                        else -> parameters.getOrNull(index)
+                    }
+
                 // Error if args count > params count.
-                val parameter = parameters.getOrNull(index) ?: throw InvalidArgumentCountException(call)
+                if (parameter == null) {
+                    throw InvalidArgumentCountException(call)
+                }
 
                 // The type of dynamic arguments is determined.
                 val staticArgument =

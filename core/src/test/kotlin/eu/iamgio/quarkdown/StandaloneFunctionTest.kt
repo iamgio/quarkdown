@@ -226,6 +226,45 @@ class StandaloneFunctionTest {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
+    fun greetWithOptionalArgsInTheMiddle(
+        to: String = "you",
+        from: String = "me",
+        content: String,
+    ): StringValue = StringValue("Hello $to from $from: $content")
+
+    @Test
+    fun `KFunction with optional arguments in the middle`() {
+        val function = KFunctionAdapter(::greetWithOptionalArgsInTheMiddle)
+
+        val call =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                        FunctionCallArgument(StringValue("hi!"), isBody = true),
+                    ),
+            )
+
+        assertEquals("Hello A from me: hi!", call.execute().unwrappedValue)
+
+        val invalidCall =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                        // Not marking the argument as body will associate it to the second parameter instead.
+                        FunctionCallArgument(StringValue("hi!")),
+                    ),
+            )
+
+        assertFailsWith<InvalidArgumentCountException> {
+            invalidCall.execute()
+        }
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
     fun sum(
         a: Int,
         b: Int,
