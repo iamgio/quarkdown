@@ -78,14 +78,9 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      * @see FunctionParameter.isInjected
      */
     private fun generateInjectedLinks(parameters: List<FunctionParameter<*>>): Links =
-        buildMap {
-            // Non-injected parameters are handled in generateRegularLinks.
-            val injectedParameters = call.function.parameters.filter { it.isInjected }
-
-            injectedParameters.forEach { parameter ->
-                val value = InjectedValue.fromType(parameter.type, call)
-                this[parameter] = FunctionCallArgument(value)
-            }
+        parameters.associateWith {
+            val value = InjectedValue.fromType(it.type, call)
+            FunctionCallArgument(value)
         }
 
     /**
