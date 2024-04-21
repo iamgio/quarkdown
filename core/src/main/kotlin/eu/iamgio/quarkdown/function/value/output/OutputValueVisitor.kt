@@ -2,11 +2,11 @@ package eu.iamgio.quarkdown.function.value.output
 
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
-import eu.iamgio.quarkdown.function.value.ListValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
-import eu.iamgio.quarkdown.function.value.SetValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.VoidValue
 
 /**
@@ -19,9 +19,9 @@ interface OutputValueVisitor<T> {
 
     fun visit(value: BooleanValue): T
 
-    fun visit(value: ListValue<*>): T
+    fun visit(value: OrderedCollectionValue<*>): T
 
-    fun visit(value: SetValue<*>): T
+    fun visit(value: UnorderedCollectionValue<*>): T
 
     fun visit(value: NodeValue): T
 

@@ -12,11 +12,11 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.IterableValue
-import eu.iamgio.quarkdown.function.value.ListValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
-import eu.iamgio.quarkdown.function.value.SetValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import kotlin.math.ceil
@@ -41,7 +41,7 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
     override fun visit(value: BooleanValue) = CheckBox(isChecked = value.unwrappedValue)
 
     private fun createListItems(value: IterableValue<*>): List<ListItem> =
-        value.unwrappedValue.map {
+        value.map {
             BaseListItem(
                 listOf(
                     // Each item is represented by its own Node output.
@@ -50,14 +50,14 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
             )
         }
 
-    override fun visit(value: ListValue<*>) =
+    override fun visit(value: OrderedCollectionValue<*>) =
         OrderedList(
             startIndex = 1,
             isLoose = false,
             children = createListItems(value),
         )
 
-    override fun visit(value: SetValue<*>) =
+    override fun visit(value: UnorderedCollectionValue<*>) =
         UnorderedList(
             isLoose = false,
             children = createListItems(value),
