@@ -9,6 +9,8 @@ import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.InjectedValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -49,18 +51,25 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
                         else -> throw UnnamedArgumentAfterNamedException(call)
                     } ?: throw InvalidArgumentCountException(call) // Error if args count > params count.
 
+                val value = argument.value
                 // The type of dynamic arguments is determined.
                 val staticArgument =
-                    when (val value = argument.value) {
+                    when {
                         // The value is dynamic and must be converted to a static type.
-                        is DynamicValue -> {
+                        value is DynamicValue -> {
                             // The dynamic value is converted into the expected parameter type.
                             // Throws error if the conversion could not happen.
                             val staticValue =
                                 DynamicValueConverter(value).convertTo(parameter.type, call)
                                     ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
-                            FunctionCallArgument(staticValue)
+                            argument.copy(expression = staticValue)
+                        }
+
+                        // If the expected type is a string but the argument isn't,
+                        // it is automatically converted to a string.
+                        value !is StringValue && parameter.type == String::class -> {
+                            argument.copy(expression = ValueFactory.string(value.unwrappedValue.toString()))
                         }
 
                         else -> argument
