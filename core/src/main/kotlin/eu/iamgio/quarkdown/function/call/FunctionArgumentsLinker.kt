@@ -3,6 +3,8 @@ package eu.iamgio.quarkdown.function.call
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
+import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
+import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.InjectedValue
@@ -27,20 +29,25 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
      */
     private fun generateRegularLinks(parameters: List<FunctionParameter<*>>): Links =
         buildMap {
+            var encounteredNamedArgument = false
+
             call.arguments.forEachIndexed { index, argument ->
                 // Corresponding parameter.
                 val parameter =
                     when {
                         // A body parameter is always the last one in the function signature.
                         argument.isBody -> parameters.lastOrNull()
-                        // Non-body parameters follow the index.
-                        else -> parameters.getOrNull(index)
-                    }
-
-                // Error if args count > params count.
-                if (parameter == null) {
-                    throw InvalidArgumentCountException(call)
-                }
+                        // A non-body parameter that refers to a parameter by its name.
+                        argument.isNamed -> {
+                            encounteredNamedArgument = true
+                            parameters.find { it.name == argument.name }
+                                ?: throw UnresolvedParameterException(argument, call)
+                        }
+                        // Non-body, unnamed parameters follow the index and cannot appear after a named argument has been encountered.
+                        !encounteredNamedArgument -> parameters.getOrNull(index)
+                        // Unnamed arguments cannot appear after a named one.
+                        else -> throw UnnamedArgumentAfterNamedException(call)
+                    } ?: throw InvalidArgumentCountException(call) // Error if args count > params count.
 
                 // The type of dynamic arguments is determined.
                 val staticArgument =

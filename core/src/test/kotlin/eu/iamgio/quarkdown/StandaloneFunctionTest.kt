@@ -12,6 +12,8 @@ import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
+import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
+import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.Injected
@@ -203,6 +205,77 @@ class StandaloneFunctionTest {
         assertEquals("Hello A from B", call.execute().unwrappedValue)
     }
 
+    @Test
+    fun `KFunction with named arguments`() {
+        val function = KFunctionAdapter(::greetWithArgs)
+
+        val call1 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A"), name = "to"),
+                        FunctionCallArgument(StringValue("B"), name = "from"),
+                    ),
+            )
+
+        assertEquals("Hello A from B", call1.execute().unwrappedValue)
+
+        val call2 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A"), name = "from"),
+                        FunctionCallArgument(StringValue("B"), name = "to"),
+                    ),
+            )
+
+        assertEquals("Hello B from A", call2.execute().unwrappedValue)
+
+        val call3 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                        FunctionCallArgument(StringValue("B"), name = "from"),
+                    ),
+            )
+
+        assertEquals("Hello A from B", call3.execute().unwrappedValue)
+
+        val call4 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A"), name = "to"),
+                        FunctionCallArgument(StringValue("B")),
+                    ),
+            )
+
+        // Unnamed arguments cannot appear after a named argument.
+        assertFailsWith<UnnamedArgumentAfterNamedException> {
+            call4.execute()
+        }
+
+        val call5 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A")),
+                        FunctionCallArgument(StringValue("B"), name = "other"),
+                    ),
+            )
+
+        // Named reference to an unknown parameter.
+        assertFailsWith<UnresolvedParameterException> {
+            call5.execute()
+        }
+    }
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun greetWithOptionalArgs(
         to: String = "you",
@@ -223,6 +296,17 @@ class StandaloneFunctionTest {
             )
 
         assertEquals("Hello A from me", call.execute().unwrappedValue)
+
+        val callNamed =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(StringValue("A"), name = "from"),
+                    ),
+            )
+
+        assertEquals("Hello you from A", callNamed.execute().unwrappedValue)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
