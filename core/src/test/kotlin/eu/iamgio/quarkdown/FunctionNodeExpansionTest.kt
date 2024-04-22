@@ -15,8 +15,8 @@ import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
-import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -44,7 +44,7 @@ class FunctionNodeExpansionTest {
         b: Number,
     ) = NumberValue(a.toFloat() + b.toFloat())
 
-    @FunctionName("customfunction")
+    @Name("customfunction")
     fun myFunction(x: String) = StringValue(x)
 
     @Suppress("MemberVisibilityCanBePrivate")

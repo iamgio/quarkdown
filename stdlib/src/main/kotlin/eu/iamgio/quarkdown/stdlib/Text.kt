@@ -3,8 +3,8 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
@@ -41,7 +41,7 @@ fun code(
 /**
  * @return a fixed Lorem Ipsum text.
  */
-@FunctionName("loremipsum")
+@Name("loremipsum")
 fun loremIpsum() =
     object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
         .reader()

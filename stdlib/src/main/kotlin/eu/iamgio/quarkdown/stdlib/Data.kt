@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.function.reflect.FunctionName
+import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Range
@@ -27,7 +27,7 @@ val Data: Module =
  *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
  */
-@FunctionName("filecontent")
+@Name("filecontent")
 fun fileContent(
     path: String,
     lineRange: Range = Range.INFINITE,

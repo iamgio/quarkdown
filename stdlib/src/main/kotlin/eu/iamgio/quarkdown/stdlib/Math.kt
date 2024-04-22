@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NumberValue
 import kotlin.math.PI
 
@@ -33,7 +34,7 @@ fun sum(
  * @return arithmetic floating-point subtraction of [a] and [b]
  */
 fun subtract(
-    a: Number,
+    @Name("from") a: Number,
     b: Number,
 ) = NumberValue(a.toFloat() - b.toFloat())
 
@@ -42,7 +43,7 @@ fun subtract(
  */
 fun multiply(
     a: Number,
-    b: Number,
+    @Name("by") b: Number,
 ) = NumberValue(a.toFloat() * b.toFloat())
 
 /**
@@ -50,7 +51,7 @@ fun multiply(
  */
 fun divide(
     a: Number,
-    b: Number,
+    @Name("by") b: Number,
 ) = NumberValue(a.toFloat() / b.toFloat())
 
 /**

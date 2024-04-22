@@ -7,8 +7,8 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.function.reflect.FunctionName
 import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -33,7 +33,7 @@ val Flow: Module =
  * @param condition whether the content should be added to the document
  * @return [body] if [condition] is `true`, otherwise nothing
  */
-@FunctionName("if")
+@Name("if")
 fun `if`(
     condition: Boolean,
     body: MarkdownContent,
@@ -47,7 +47,7 @@ fun `if`(
  * @param condition whether the content should be added to the document
  * @return [body] if [condition] is `false`, otherwise nothing
  */
-@FunctionName("ifnot")
+@Name("ifnot")
 fun ifNot(
     condition: Boolean,
     body: MarkdownContent,
@@ -61,7 +61,7 @@ fun ifNot(
  * @param body content, output of each iteration
  * @return a new node that contains [body] repeated for each element
  */
-@FunctionName("foreach")
+@Name("foreach")
 fun forEach(
     @Injected context: Context,
     iterable: Iterable<Value<*>>,

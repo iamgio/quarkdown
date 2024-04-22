@@ -18,18 +18,19 @@ import kotlin.reflect.full.hasAnnotation
  */
 class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) : Function<T> {
     /**
-     * If the [FunctionName] annotation is present on [function], the Quarkdown function name is set from there.
+     * If the [Name] annotation is present on [function], the Quarkdown function name is set from there.
      * Otherwise, it is [function]'s original name.
      */
     override val name: String
-        get() = function.findAnnotation<FunctionName>()?.name ?: function.name
+        get() = function.findAnnotation<Name>()?.name ?: function.name
 
     @Suppress("UNCHECKED_CAST")
     override val parameters: List<FunctionParameter<*>>
         get() =
             function.parameters.map {
                 FunctionParameter(
-                    name = it.name ?: "<unnamed parameter>",
+                    // If @Name is present, a custom name is set.
+                    name = it.findAnnotation<Name>()?.name ?: it.name ?: "<unnamed parameter>",
                     type = it.type.classifier as KClass<out InputValue<T>>,
                     index = it.index,
                     isOptional = it.isOptional,
