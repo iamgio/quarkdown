@@ -374,8 +374,18 @@ class BlockTokenParser(
         // Function arguments.
         val arguments = mutableListOf<FunctionCallArgument>()
 
+        // The name of the next argument. `null` means the next argument is unnamed.
+        var argName: String? = null
+
         // Regular function arguments.
         groups.forEachRemaining { arg ->
+            // If this group contains the name of a named argument,
+            // it is applied to the very next argument.
+            if (arg.firstOrNull() != '{' && arg.lastOrNull() != '}') {
+                argName = arg
+                return@forEachRemaining
+            }
+
             // Regular argument wrapped in braces.
             val argContent = arg.trimDelimiters().trim()
             // The content of the argument is tokenized to distinguish static values (string/number/...)
@@ -383,7 +393,8 @@ class BlockTokenParser(
             val components = flavor.lexerFactory.newFunctionArgumentLexer(argContent).tokenizeAndParse()
             if (components.isNotEmpty()) {
                 val expression = ComposedExpression(components.map { nodeToExpression(it) })
-                arguments += FunctionCallArgument(expression)
+                arguments += FunctionCallArgument(expression, argName)
+                argName = null // The name of the next named argument is reset.
             }
         }
 

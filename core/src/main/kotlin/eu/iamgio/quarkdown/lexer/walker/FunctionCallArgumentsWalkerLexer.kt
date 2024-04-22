@@ -15,6 +15,11 @@ private const val ARG_DELIMITER_OPEN = '{'
 private const val ARG_DELIMITER_CLOSE = '}'
 
 /**
+ * End of named argument's name.
+ */
+private const val NAMED_ARG_DELIMITER_CLOSE = ':'
+
+/**
  * Minimum amount of spaces required by the body argument.
  */
 private const val MIN_BODY_INDENTATION = 2
@@ -22,6 +27,8 @@ private const val MIN_BODY_INDENTATION = 2
 /**
  * A character-by-character lexer that tokenizes arguments of a function call,
  * in a way that preserves a balanced amount of brackets on both sides.
+ * Arguments are wrapped in brackets: `{arg}`, can be nested in balanced brackets: `{arg {x} arg}`,
+ * they are separated by zero or more whitespaces, and can also be named: `name:{arg}` (with no whitespaces in-between).
  * @param source source code to be tokenized, sliced right after the function name
  * @param allowsBody whether the function call allows a body argument
  */
@@ -84,6 +91,32 @@ class FunctionCallArgumentsWalkerLexer(
         return NamedToken("bodyarg", super.createTokenDataFromBuffer())
     }
 
+    /**
+     * @return a token containing the name of the argument which is about to be read, or `null` if there is none.
+     */
+    private fun readArgName(): Token? {
+        buffer.clear()
+
+        while (true) {
+            val char = reader.peek() ?: break
+
+            // A name cannot contain spaces.
+            if (char.isWhitespace()) break
+
+            reader.read()
+
+            // End of the name.
+            if (char == NAMED_ARG_DELIMITER_CLOSE && reader.peek() == ARG_DELIMITER_OPEN) {
+                return PlainTextToken(super.createTokenDataFromBuffer())
+            }
+
+            buffer.append(char)
+        }
+
+        buffer.clear()
+        return null
+    }
+
     override fun tokenize(): List<Token> =
         buildList {
             // The current depth inside nested arguments.
@@ -140,10 +173,21 @@ class FunctionCallArgumentsWalkerLexer(
                         }
                     }
 
-                    // Any other character outside of delimiters:
-                    // end of the function call.
+                    // Any other character outside of delimiters.
+                    // It could be a named argument (e.g. name:{arg}),
+                    // but if it's not, the lexer stops.
                     depth == 0 -> {
-                        break
+                        val startIndex = reader.index
+                        val argName = readArgName()
+                        if (argName != null) {
+                            this += argName
+                            continue
+                        } else {
+                            // The text outside the delimiters does not represent a named argument:
+                            // end of the function call.
+                            reader.index = startIndex // Rollback
+                            break
+                        }
                     }
                 }
 

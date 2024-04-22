@@ -9,9 +9,10 @@ import java.io.Reader
 class SourceReader(private val reader: Reader) {
     /**
      * The current character index the reader is at.
+     * Changing it externally does **not** change the next read location,
+     * as this only acts as a counter.
      */
     var index = 0
-        private set
 
     /**
      * @param source source string to generate the reader for
