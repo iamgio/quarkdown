@@ -56,6 +56,7 @@ object ValueFactory {
      *         If the input is invalid, an infinite range is returned
      */
     @FromDynamicType(Range::class)
+    @FromDynamicType(Iterable::class)
     fun range(raw: String): ObjectValue<Range> {
         // Matches 'x..y', where both x and y are optional integers.
         val regex = "(\\d+)?..(\\d+)?".toRegex()

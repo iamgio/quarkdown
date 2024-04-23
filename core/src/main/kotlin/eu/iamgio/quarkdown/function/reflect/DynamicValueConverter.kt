@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.function.value.ValueFactory
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.findAnnotations
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.isSubclassOf
 
@@ -45,8 +45,8 @@ class DynamicValueConverter(private val value: DynamicValue) {
         // Gets ValueFactory methods annotated with @FromDynamicType(X::class),
         // and the one with a matching type is invoked.
         for (function in ValueFactory::class.declaredFunctions) {
-            val from = function.findAnnotation<FromDynamicType>() ?: continue
-            if (!type.isSubclassOf(from.unwrappedType)) continue
+            val annotations = function.findAnnotations<FromDynamicType>()
+            val from = annotations.find { type.isSubclassOf(it.unwrappedType) } ?: continue
 
             // The factory method is suitable. Invoking it.
 
@@ -74,4 +74,5 @@ class DynamicValueConverter(private val value: DynamicValue) {
  * @see ValueFactory
  */
 @Target(AnnotationTarget.FUNCTION)
+@Repeatable
 annotation class FromDynamicType(val unwrappedType: KClass<*>, val requiresContext: Boolean = false)

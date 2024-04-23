@@ -1,11 +1,13 @@
 package eu.iamgio.quarkdown.function.value.data
 
+import eu.iamgio.quarkdown.function.value.NumberValue
+
 /**
- * Represents a range of numbers.
+ * Represents a range of numbers, which can also be iterated through.
  * @property start start of the range (inclusive). If `null`, the range is infinite on the left end
  * @property end end of the range (inclusive). If `null`, the range is infinite on the right end
  */
-data class Range(val start: Int?, val end: Int?) {
+data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
     /**
      * @return whether the range is infinite, i.e. both [start] and [end] are `null`
      */
@@ -21,6 +23,16 @@ data class Range(val start: Int?, val end: Int?) {
         lowerBound: Int,
         upperBound: Int,
     ) = IntRange(start ?: lowerBound, end ?: upperBound)
+
+    /**
+     * @return a new iterator for this range.
+     * If this is open on the left end, it starts from 0.
+     * If this is open on the right end, it ends at [Int.MAX_VALUE].
+     */
+    override fun iterator(): Iterator<NumberValue> =
+        toIntRange(lowerBound = 0, upperBound = Int.MAX_VALUE).asSequence()
+            .map(::NumberValue)
+            .iterator()
 
     override fun toString() = "${start ?: ""}..${end ?: ""}"
 
