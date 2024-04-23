@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.function.expression
 import eu.iamgio.quarkdown.function.expression.visitor.AppendExpressionVisitor
 import eu.iamgio.quarkdown.function.expression.visitor.EvalExpressionVisitor
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
-import eu.iamgio.quarkdown.function.value.InputValue
+import eu.iamgio.quarkdown.function.value.Value
 
 /**
  * An expression that can be evaluated into a single static value.
@@ -23,7 +23,7 @@ interface Expression {
  *         which can be chained as an input for another function
  * @see EvalExpressionVisitor
  */
-fun Expression.eval(): InputValue<*> = this.accept(EvalExpressionVisitor())
+fun Expression.eval(): Value<*> = this.accept(EvalExpressionVisitor())
 
 /**
  * Chains two expressions together, which is used in [ComposedExpression]s.

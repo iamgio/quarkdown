@@ -1,7 +1,12 @@
 package eu.iamgio.quarkdown.function.value
 
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.function.expression.ComposedExpression
+import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
@@ -124,19 +129,48 @@ object ValueFactory {
     /**
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
+     * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
+     */
+    fun expression(
+        raw: String,
+        context: Context,
+    ): Expression? {
+        // The content of the argument is tokenized to distinguish static values (string/number/...)
+        // from nested function calls, which are also expressions.
+        val components =
+            this.markdown(
+                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
+                context,
+            ).unwrappedValue.children
+
+        if (components.isEmpty()) return null
+
+        /**
+         * @param node to convert
+         * @return an expression that matches the node type
+         */
+        fun nodeToExpression(node: Node): Expression =
+            when (node) {
+                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
+                is FunctionCallNode -> context.resolveUnchecked(node) // Function existance is checked later.
+
+                else -> throw IllegalArgumentException("Unexpected node $node in expression $raw")
+            }
+
+        // Nodes are mapped to expressions.
+        return ComposedExpression(expressions = components.map { nodeToExpression(it) })
+    }
+
+    /**
+     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
+     * @param context context to retrieve the pipeline from
      * @return the result of the expression wrapped in a new [DynamicValue] (in the previous example: `DynamicValue("2 + 2 is 4")`)
      */
     fun dynamic(
         raw: String,
         context: Context,
-    ): DynamicValue {
-        // Markdown parsing automatically expands function calls.
-        val markdown =
-            this.markdown(
-                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
-                context,
-            )
-        // TODO allow returning nodes and other complex data
-        return DynamicValue(markdown.unwrappedValue.children.toPlainText())
-    }
+    ) = // This approach currently gets the text from the Markdown output.
+        // A much better approach would be DynamicValue(this.expression(raw, context)?.eval().toString()),
+        // but for some reason it is much slower. Requires attention.
+        DynamicValue(this.markdown(raw, context).unwrappedValue.children.toPlainText())
 }

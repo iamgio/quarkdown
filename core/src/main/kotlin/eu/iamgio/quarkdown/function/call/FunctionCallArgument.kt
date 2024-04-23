@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
-import eu.iamgio.quarkdown.function.value.InputValue
+import eu.iamgio.quarkdown.function.value.Value
 
 /**
  * An argument of a [FunctionCall].
@@ -18,7 +18,7 @@ data class FunctionCallArgument(
     /**
      * The lazily evaluated output value of [expression].
      */
-    val value: InputValue<*> by lazy { expression.eval() }
+    val value: Value<*> by lazy { expression.eval() }
 
     /**
      * Whether this is a named argument.

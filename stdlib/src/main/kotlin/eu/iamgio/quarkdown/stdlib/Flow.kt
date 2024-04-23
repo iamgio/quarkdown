@@ -39,7 +39,7 @@ fun `if`(
     body: String,
 ): OutputValue<*> =
     when (condition) {
-        true -> ValueFactory.markdown(body, context).asNodeValue()
+        true -> ValueFactory.dynamic(body, context)
         false -> VoidValue
     }
 
@@ -127,7 +127,7 @@ fun function(
                 content.replace(replacement, value)
             }
 
-            // The final content is evaluated and returned.
+            // The final content is tokenized, evaluated and returned.
             ValueFactory.dynamic(content.toString(), context)
         }
 

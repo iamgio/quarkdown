@@ -17,16 +17,14 @@ import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
-import eu.iamgio.quarkdown.function.expression.ComposedExpression
-import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -359,18 +357,6 @@ class BlockTokenParser(
         // Function name.
         val name = groups.next()
 
-        /**
-         * @param node to convert
-         * @return an expression that matches the node type
-         */
-        fun nodeToExpression(node: Node): Expression =
-            when (node) {
-                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
-                is FunctionCallNode -> context.resolveUnchecked(node) // Existance is checked later.
-
-                else -> throw IllegalArgumentException("Unexpected node $node in function call $name")
-            }
-
         // Function arguments.
         val arguments = mutableListOf<FunctionCallArgument>()
 
@@ -386,18 +372,12 @@ class BlockTokenParser(
                 return@forEachRemaining
             }
 
-            // Regular argument wrapped in braces.
+            // Regular argument wrapped in brackets, which are stripped off.
             val argContent = arg.trimDelimiters().trim()
-            // The content of the argument is tokenized to distinguish static values (string/number/...)
-            // from nested function calls, which are also expressions.
-            // An argument is supposed to feature inline content only, hence block functions are not allowed.
-            val components =
-                flavor.lexerFactory.newExpressionLexer(argContent, allowBlockFunctionCalls = false)
-                    .tokenizeAndParse()
 
-            if (components.isNotEmpty()) {
-                val expression = ComposedExpression(components.map { nodeToExpression(it) })
-                arguments += FunctionCallArgument(expression, argName)
+            // An expression from the raw string is created.
+            ValueFactory.expression(argContent, context)?.let {
+                arguments += FunctionCallArgument(it, argName)
                 argName = null // The name of the next named argument is reset.
             }
         }
