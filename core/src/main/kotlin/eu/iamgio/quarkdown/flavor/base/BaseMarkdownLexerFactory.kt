@@ -80,5 +80,8 @@ class BaseMarkdownLexerFactory : LexerFactory {
         }
 
     // Functions aren't supported by this flavor
-    override fun newFunctionArgumentLexer(source: CharSequence): Lexer = StandardRegexLexer(source, patterns = emptyList())
+    override fun newExpressionLexer(
+        source: CharSequence,
+        allowBlockFunctionCalls: Boolean,
+    ): Lexer = StandardRegexLexer(source, patterns = emptyList())
 }

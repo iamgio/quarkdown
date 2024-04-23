@@ -4,8 +4,10 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.util.iterator
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * Factory of [Value] wrappers from raw string data.
@@ -87,13 +89,12 @@ object ValueFactory {
             ?.let { EnumValue(it) }
 
     /**
-     * @param raw string input to parse into an AST
-     * @param context context to retrieve the pipeline from, which allows tokenization and parsing of the input
+     * @param lexer lexer to use to tokenize content
+     * @param context context to retrieve the pipeline from, which allows parsing and function expansion
      * @return a new value that wraps the root of the produced AST
      */
-    @FromDynamicType(MarkdownContent::class, requiresContext = true)
     fun markdown(
-        raw: String,
+        lexer: Lexer,
         context: Context,
     ): MarkdownContentValue {
         // Retrieving the pipeline linked to the context.
@@ -102,10 +103,40 @@ object ValueFactory {
                 ?: throw IllegalStateException("Context does not have an attached pipeline")
 
         // Convert string input to parsed AST.
-        val root = pipeline.parse(pipeline.tokenize(raw))
+        val root = pipeline.parse(lexer.tokenize())
         // In case the AST contains nested function calls, they are immediately expanded.
         pipeline.expandFunctionCalls(root)
 
         return MarkdownContentValue(root)
+    }
+
+    /**
+     * @param raw string input to parse into an AST
+     * @param context context to retrieve the pipeline from, which allows tokenization and parsing of the input
+     * @return a new value that wraps the root of the produced AST
+     */
+    @FromDynamicType(MarkdownContent::class, requiresContext = true)
+    fun markdown(
+        raw: String,
+        context: Context,
+    ): MarkdownContentValue = this.markdown(context.flavor.lexerFactory.newBlockLexer(raw), context)
+
+    /**
+     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
+     * @param context context to retrieve the pipeline from
+     * @return the result of the expression wrapped in a new [DynamicValue] (in the previous example: `DynamicValue("2 + 2 is 4")`)
+     */
+    fun dynamic(
+        raw: String,
+        context: Context,
+    ): DynamicValue {
+        // Markdown parsing automatically expands function calls.
+        val markdown =
+            this.markdown(
+                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
+                context,
+            )
+        // TODO allow returning nodes and other complex data
+        return DynamicValue(markdown.unwrappedValue.children.toPlainText())
     }
 }

@@ -33,8 +33,11 @@ interface LexerFactory {
 
     /**
      * @param source raw input
-     * @return a new [Lexer] instance that tokenizes inline content within an argument of a function call,
-     *         to distinguish text from other nested function call
+     * @param allowBlockFunctionCalls whether block function calls are tokenized too
+     * @return a new [Lexer] instance that distinguishes text (static values) from function calls
      */
-    fun newFunctionArgumentLexer(source: CharSequence): Lexer
+    fun newExpressionLexer(
+        source: CharSequence,
+        allowBlockFunctionCalls: Boolean,
+    ): Lexer
 }

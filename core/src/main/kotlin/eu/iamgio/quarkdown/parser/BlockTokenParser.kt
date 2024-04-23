@@ -390,7 +390,11 @@ class BlockTokenParser(
             val argContent = arg.trimDelimiters().trim()
             // The content of the argument is tokenized to distinguish static values (string/number/...)
             // from nested function calls, which are also expressions.
-            val components = flavor.lexerFactory.newFunctionArgumentLexer(argContent).tokenizeAndParse()
+            // An argument is supposed to feature inline content only, hence block functions are not allowed.
+            val components =
+                flavor.lexerFactory.newExpressionLexer(argContent, allowBlockFunctionCalls = false)
+                    .tokenizeAndParse()
+
             if (components.isNotEmpty()) {
                 val expression = ComposedExpression(components.map { nodeToExpression(it) })
                 arguments += FunctionCallArgument(expression, argName)

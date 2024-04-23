@@ -9,7 +9,6 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -35,11 +34,12 @@ val Flow: Module =
  */
 @Name("if")
 fun `if`(
+    @Injected context: Context,
     condition: Boolean,
-    body: MarkdownContent,
+    body: String,
 ): OutputValue<*> =
     when (condition) {
-        true -> NodeValue(body)
+        true -> ValueFactory.markdown(body, context).asNodeValue()
         false -> VoidValue
     }
 
@@ -49,9 +49,10 @@ fun `if`(
  */
 @Name("ifnot")
 fun ifNot(
+    @Injected context: Context,
     condition: Boolean,
-    body: MarkdownContent,
-): OutputValue<*> = `if`(!condition, body)
+    body: String,
+): OutputValue<*> = `if`(context, !condition, body)
 
 /**
  * Repeats content for each element of an iterable collection.
@@ -119,16 +120,15 @@ fun function(
             val content = StringBuilder(body)
 
             // Upon invocation, replaces the placeholders with actual arguments.
-            // Argument 0 replaces {{1}} and so on.
+            // Argument 0 replaces <<1>> and so on.
             this.links.forEach { (parameter, argument) ->
                 val replacement = "<<${parameter.index + 1}>>"
                 val value = argument.value.unwrappedValue.toString() // Only string replacements are supported.
                 content.replace(replacement, value)
             }
 
-            // The final content is parsed as Markdown and returned.
-            // ValueFactory.markdown(content.toString(), context).asNodeValue()
-            DynamicValue(content.toString())
+            // The final content is evaluated and returned.
+            ValueFactory.dynamic(content.toString(), context)
         }
 
     // The function is registered and ready to be called.

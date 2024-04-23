@@ -63,16 +63,27 @@ class QuarkdownLexerFactory : LexerFactory {
             patterns + this.inlineExtensions
         }
 
-    override fun newFunctionArgumentLexer(source: CharSequence): Lexer =
+    override fun newExpressionLexer(
+        source: CharSequence,
+        allowBlockFunctionCalls: Boolean,
+    ): Lexer =
         with(QuarkdownInlineTokenRegexPatterns()) {
             // A function call argument contains textual content (string/number/...)
             // and possibly other nested function calls.
             StandardRegexLexer(
                 source,
-                listOf(
-                    escape,
-                    inlineFunctionCall,
-                ),
+                if (allowBlockFunctionCalls) {
+                    listOf(
+                        escape,
+                        QuarkdownBlockTokenRegexPatterns().functionCall,
+                        inlineFunctionCall,
+                    )
+                } else {
+                    listOf(
+                        escape,
+                        inlineFunctionCall,
+                    )
+                },
                 fillTokenType = ::PlainTextToken,
             )
         }
