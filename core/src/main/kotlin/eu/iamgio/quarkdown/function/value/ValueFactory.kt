@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.value
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainTextNode
@@ -113,19 +114,30 @@ object ValueFactory {
         // In case the AST contains nested function calls, they are immediately expanded.
         pipeline.expandFunctionCalls(root)
 
-        return MarkdownContentValue(root)
+        return MarkdownContentValue(MarkdownContent(root.children))
     }
 
     /**
-     * @param raw string input to parse into an AST
+     * @param raw string input to parse into a sub-AST
      * @param context context to retrieve the pipeline from, which allows tokenization and parsing of the input
-     * @return a new value that wraps the root of the produced AST
+     * @return a new value that wraps the root of the produced AST, containing both block and inline content
      */
     @FromDynamicType(MarkdownContent::class, requiresContext = true)
-    fun markdown(
+    fun blockMarkdown(
         raw: String,
         context: Context,
     ): MarkdownContentValue = this.markdown(context.flavor.lexerFactory.newBlockLexer(raw), context)
+
+    /**
+     * @param raw string input to parse into a sub-AST
+     * @param context context to retrieve the pipeline from, which allows tokenization and parsing of the input
+     * @return a new value that wraps the root of the produced AST, containing inline content only
+     */
+    @FromDynamicType(InlineMarkdownContent::class, requiresContext = true)
+    fun inlineMarkdown(
+        raw: String,
+        context: Context,
+    ): InlineMarkdownContentValue = this.markdown(context.flavor.lexerFactory.newInlineLexer(raw), context).asInline()
 
     /**
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)

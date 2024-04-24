@@ -12,6 +12,3 @@ data class AstRoot(
 }
 
 typealias Document = AstRoot
-
-// Used in function libraries (e.g. stdlib).
-typealias MarkdownContent = AstRoot

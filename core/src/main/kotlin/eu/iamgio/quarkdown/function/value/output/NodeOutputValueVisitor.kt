@@ -69,6 +69,6 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
     // Dynamic output (e.g. produced by the stdlib function `.function`) is treated as Markdown by default.
     override fun visit(value: DynamicValue) =
         this.visit(
-            ValueFactory.markdown(value.unwrappedValue, context).asNodeValue(),
+            ValueFactory.blockMarkdown(value.unwrappedValue, context).asNodeValue(),
         )
 }

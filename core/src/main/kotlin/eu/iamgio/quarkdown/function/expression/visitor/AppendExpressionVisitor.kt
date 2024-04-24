@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
+import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -87,11 +88,8 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // obj "abc" -> "objabc"
     override fun visit(value: ObjectValue<*>) = StringValue(value.concatenate())
 
-    // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
-    // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
-    // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
-    override fun visit(value: MarkdownContentValue): Expression {
-        val nodes = mutableListOf<Node>(value.unwrappedValue)
+    private fun concatenateAsNodes(root: Node): List<Node> {
+        val nodes = mutableListOf(root)
         // Append node to the sub-AST.
         nodes +=
             when (other) {
@@ -99,7 +97,21 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
                 else -> Text(other.toString())
             }
 
-        return MarkdownContentValue(MarkdownContent(nodes))
+        return nodes
+    }
+
+    // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
+    // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
+    // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
+    override fun visit(value: MarkdownContentValue): Expression {
+        return MarkdownContentValue(MarkdownContent(concatenateAsNodes(value.unwrappedValue)))
+    }
+
+    // InlineMarkdownContent(Text("abc")) Text("def") -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
+    // InlineMarkdownContent(Text("abc")) "def"       -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
+    // InlineMarkdownContent(Text("abc")) 15          -> InlineMarkdownContent(Text("abc"), Text("15"))
+    override fun visit(value: InlineMarkdownContentValue): Expression {
+        return MarkdownContentValue(MarkdownContent(concatenateAsNodes(value.unwrappedValue)))
     }
 
     // Like visit(StringValue)

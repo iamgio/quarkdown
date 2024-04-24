@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.function.reflect.Name
@@ -80,8 +81,8 @@ fun table(columns: Iterable<ObjectValue<Table.Column>>) =
  */
 @Name("tablecolumn")
 fun tableColumn(
-    header: MarkdownContent,
-    cell: MarkdownContent,
+    header: InlineMarkdownContent,
+    cell: InlineMarkdownContent,
 ): ObjectValue<Table.Column> {
     // TODO support multiple cells
     val column =
