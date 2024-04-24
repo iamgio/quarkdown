@@ -162,6 +162,21 @@ object ValueFactory {
         return ComposedExpression(expressions = components.map { nodeToExpression(it) })
     }
 
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : OutputValue<*>> iterable(
+        raw: String,
+        context: Context,
+    ): IterableValue<T> {
+        val value = this.expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
+        if (value is IterableValue<*>) {
+            val first = value.unwrappedValue.firstOrNull()
+            if (first == null || first is T) {
+                return value as IterableValue<T>
+            }
+        }
+        throw IllegalStateException("$raw does not represent an iterable of type ${T::class.simpleName} (found: $value)")
+    }
+
     /**
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from

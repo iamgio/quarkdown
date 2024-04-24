@@ -6,10 +6,8 @@ import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -73,8 +71,7 @@ fun table(
     @Injected context: Context,
     @Name("columns") rawColumns: String,
 ): NodeValue {
-    // TODO handle cast
-    val columns = ValueFactory.expression(rawColumns, context)?.eval() as IterableValue<ObjectValue<Table.Column>>
+    val columns = ValueFactory.iterable<ObjectValue<Table.Column>>(rawColumns, context)
     return Table(columns.unwrappedValue.map { it.unwrappedValue }).wrappedAsValue()
 }
 
