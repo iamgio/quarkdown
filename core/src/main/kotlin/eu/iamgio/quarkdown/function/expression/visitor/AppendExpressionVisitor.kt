@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.VoidValue
 
 /**
  * An [ExpressionVisitor] that describes the way two expressions are joined together.
@@ -40,7 +41,14 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     /**
      * @return string result of the concatenation between [this] and [other]
      */
-    private fun Value<*>.concatenate(): String = this.unwrappedValue.toString() + other.eval().unwrappedValue.toString()
+    private fun Value<*>.concatenate(): String {
+        fun stringify(value: Value<*>) =
+            when (value) {
+                is VoidValue -> ""
+                else -> value.unwrappedValue.toString()
+            }
+        return stringify(this) + stringify(other.eval())
+    }
 
     // "abc" "def"        -> "abcdef"
     // "abc" .sum {2} {3} -> "abc5"

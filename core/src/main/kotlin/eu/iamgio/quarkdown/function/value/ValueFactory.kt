@@ -7,12 +7,12 @@ import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
+import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.util.iterator
-import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * Factory of [Value] wrappers from raw string data.
@@ -170,8 +170,5 @@ object ValueFactory {
     fun dynamic(
         raw: String,
         context: Context,
-    ) = // This approach currently gets the text from the Markdown output.
-        // A much better approach would be DynamicValue(this.expression(raw, context)?.eval().toString()),
-        // but for some reason it is much slower. Requires attention.
-        DynamicValue(this.markdown(raw, context).unwrappedValue.children.toPlainText())
+    ) = DynamicValue(this.expression(raw, context)?.eval()?.unwrappedValue.toString())
 }

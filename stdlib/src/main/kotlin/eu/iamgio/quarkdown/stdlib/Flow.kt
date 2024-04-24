@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
+import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
@@ -30,7 +31,7 @@ val Flow: Module =
 
 /**
  * @param condition whether the content should be added to the document
- * @return [body] if [condition] is `true`, otherwise nothing
+ * @return the evaluation of [body] if [condition] is `true`, otherwise nothing
  */
 @Name("if")
 fun `if`(
@@ -39,7 +40,7 @@ fun `if`(
     body: String,
 ): OutputValue<*> =
     when (condition) {
-        true -> ValueFactory.dynamic(body, context)
+        true -> ValueFactory.expression(body, context)?.eval() as OutputValue<*>
         false -> VoidValue
     }
 
