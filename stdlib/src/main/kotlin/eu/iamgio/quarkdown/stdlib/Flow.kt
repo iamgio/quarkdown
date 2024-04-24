@@ -8,7 +8,8 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
+import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -59,7 +60,7 @@ fun ifNot(
  * @param iterable collection to iterate
  * @param name placeholder to access the current element (wrapped in double angle brackets)
  * @param body content, output of each iteration
- * @return a list that contains the output of each iteration
+ * @return a collection that contains the output of each iteration
  */
 @Name("foreach")
 fun forEach(
@@ -67,14 +68,14 @@ fun forEach(
     iterable: Iterable<Value<*>>,
     name: String = "1",
     body: String,
-): OrderedCollectionValue<OutputValue<*>> {
+): IterableValue<OutputValue<*>> {
     val values =
         iterable.map {
             val content = body.replace("<<$name>>", it.unwrappedValue.toString())
             ValueFactory.expression(content, context)?.eval() as OutputValue<*>
         }
 
-    return OrderedCollectionValue(values)
+    return GeneralCollectionValue(values)
 }
 
 /**
