@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -74,6 +75,9 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
 
     // [a, b, c] "abc" -> "[a, b, c]abc"
     override fun visit(value: UnorderedCollectionValue<*>): Expression = StringValue(value.concatenate())
+
+    // [a, b, c] "abc" -> "[a, b, c]abc"
+    override fun visit(value: GeneralCollectionValue<*>): Expression = StringValue(value.concatenate())
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"

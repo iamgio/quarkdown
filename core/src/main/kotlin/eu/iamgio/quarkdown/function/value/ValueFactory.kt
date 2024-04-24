@@ -54,9 +54,9 @@ object ValueFactory {
      *            Both start and end can be omitted to represent an open/infinite value on that end.
      * @return a new range value that wraps the parsed content of [raw].
      *         If the input is invalid, an infinite range is returned
+     * @see iterable
      */
     @FromDynamicType(Range::class)
-    @FromDynamicType(Iterable::class)
     fun range(raw: String): ObjectValue<Range> {
         // Matches 'x..y', where both x and y are optional integers.
         val regex = "(\\d+)?..(\\d+)?".toRegex()
@@ -162,19 +162,29 @@ object ValueFactory {
         return ComposedExpression(expressions = components.map { nodeToExpression(it) })
     }
 
+    /**
+     * @param raw string input to parse the expression from
+     * @param context context to retrieve the pipeline from
+     * @return a new [IterableValue] from the raw expression. It can also be a [Range].
+     * @see range
+     */
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified T : OutputValue<*>> iterable(
+    @FromDynamicType(Iterable::class, requiresContext = true)
+    fun <T : OutputValue<*>> iterable(
         raw: String,
         context: Context,
     ): IterableValue<T> {
-        val value = this.expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
-        if (value is IterableValue<*>) {
-            val first = value.unwrappedValue.firstOrNull()
-            if (first == null || first is T) {
-                return value as IterableValue<T>
-            }
+        // A range is a suitable numeric iterable value.
+        val range = this.range(raw)
+        if (!range.unwrappedValue.isInfinite) {
+            return range.unwrappedValue.toCollection() as IterableValue<T>
         }
-        throw IllegalStateException("$raw does not represent an iterable of type ${T::class.simpleName} (found: $value)")
+
+        // The expression is evaluated into an iterable.
+        val value = this.expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
+
+        return value as? IterableValue<T>
+            ?: throw IllegalStateException("$raw is not a suitable iterable (found: $value)")
     }
 
     /**

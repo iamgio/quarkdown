@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.ListItem
+import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.Text
@@ -11,6 +12,7 @@ import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
@@ -56,6 +58,9 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
             isLoose = false,
             children = createListItems(value),
         )
+
+    // A general collection is just converted to a group of nodes.
+    override fun visit(value: GeneralCollectionValue<*>) = MarkdownContent(children = value.map { it.accept(this) })
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 

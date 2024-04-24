@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -30,6 +31,8 @@ class EvalExpressionVisitor : ExpressionVisitor<Value<*>> {
     override fun visit(value: OrderedCollectionValue<*>) = value
 
     override fun visit(value: UnorderedCollectionValue<*>) = value
+
+    override fun visit(value: GeneralCollectionValue<*>) = value
 
     override fun visit(value: EnumValue) = value
 

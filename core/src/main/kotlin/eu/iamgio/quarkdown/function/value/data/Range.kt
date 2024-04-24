@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.function.value.data
 
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
+import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 
 /**
@@ -23,6 +25,8 @@ data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
         lowerBound: Int,
         upperBound: Int,
     ) = IntRange(start ?: lowerBound, end ?: upperBound)
+
+    fun toCollection(): IterableValue<NumberValue> = GeneralCollectionValue(this)
 
     /**
      * @return a new iterator for this range.

@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -30,6 +31,8 @@ interface ExpressionVisitor<T> {
     fun visit(value: OrderedCollectionValue<*>): T
 
     fun visit(value: UnorderedCollectionValue<*>): T
+
+    fun visit(value: GeneralCollectionValue<*>): T
 
     fun visit(value: EnumValue): T
 

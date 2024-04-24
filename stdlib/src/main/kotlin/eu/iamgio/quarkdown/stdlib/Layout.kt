@@ -5,12 +5,8 @@ import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -67,19 +63,27 @@ fun box(
     body: MarkdownContent,
 ) = Box(title?.children, body.children).wrappedAsValue()
 
-fun table(
-    @Injected context: Context,
-    @Name("columns") rawColumns: String,
-): NodeValue {
-    val columns = ValueFactory.iterable<ObjectValue<Table.Column>>(rawColumns, context)
-    return Table(columns.unwrappedValue.map { it.unwrappedValue }).wrappedAsValue()
-}
+/**
+ * Creates a table out of a collection of columns.
+ * @param columns columns to build the table out of
+ * @return a new table node
+ */
+fun table(columns: Iterable<ObjectValue<Table.Column>>) =
+    Table(columns.map { it.unwrappedValue })
+        .wrappedAsValue()
 
+/**
+ * Creates a new table column.
+ * @param header column header
+ * @param cell column content cell
+ * @see table
+ */
 @Name("tablecolumn")
 fun tableColumn(
     header: MarkdownContent,
     cell: MarkdownContent,
 ): ObjectValue<Table.Column> {
+    // TODO support multiple cells
     val column =
         Table.Column(
             alignment = Table.Alignment.NONE,
