@@ -1,7 +1,5 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
@@ -10,7 +8,7 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -61,7 +59,7 @@ fun ifNot(
  * @param iterable collection to iterate
  * @param name placeholder to access the current element (wrapped in double angle brackets)
  * @param body content, output of each iteration
- * @return a new node that contains [body] repeated for each element
+ * @return a list that contains the output of each iteration
  */
 @Name("foreach")
 fun forEach(
@@ -69,13 +67,14 @@ fun forEach(
     iterable: Iterable<Value<*>>,
     name: String = "1",
     body: String,
-): NodeValue {
-    val nodes = mutableListOf<Node>()
-    iterable.forEach {
-        val content = body.replace("<<$name>>", it.unwrappedValue.toString())
-        nodes.addAll(ValueFactory.markdown(content, context).unwrappedValue.children)
-    }
-    return NodeValue(MarkdownContent(nodes))
+): OrderedCollectionValue<OutputValue<*>> {
+    val values =
+        iterable.map {
+            val content = body.replace("<<$name>>", it.unwrappedValue.toString())
+            ValueFactory.expression(content, context)?.eval() as OutputValue<*>
+        }
+
+    return OrderedCollectionValue(values)
 }
 
 /**

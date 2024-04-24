@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
@@ -30,6 +31,8 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
     override fun visit(value: NumberValue) = Text(value.unwrappedValue.toString())
 
     override fun visit(value: BooleanValue) = CheckBox(isChecked = value.unwrappedValue)
+
+    override fun visit(value: ObjectValue<*>) = Text(value.unwrappedValue.toString())
 
     private fun createListItems(value: IterableValue<*>): List<ListItem> =
         value.map {

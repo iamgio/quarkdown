@@ -4,6 +4,15 @@ import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.Table
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.function.expression.eval
+import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.value.IterableValue
+import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -16,6 +25,8 @@ val Layout: Module =
         ::center,
         ::clip,
         ::box,
+        ::table,
+        ::tableColumn,
     )
 
 /**
@@ -57,3 +68,26 @@ fun box(
     title: MarkdownContent? = null,
     body: MarkdownContent,
 ) = Box(title?.children, body.children).wrappedAsValue()
+
+fun table(
+    @Injected context: Context,
+    @Name("columns") rawColumns: String,
+): NodeValue {
+    // TODO handle cast
+    val columns = ValueFactory.expression(rawColumns, context)?.eval() as IterableValue<ObjectValue<Table.Column>>
+    return Table(columns.unwrappedValue.map { it.unwrappedValue }).wrappedAsValue()
+}
+
+@Name("tablecolumn")
+fun tableColumn(
+    header: MarkdownContent,
+    cell: MarkdownContent,
+): ObjectValue<Table.Column> {
+    val column =
+        Table.Column(
+            alignment = Table.Alignment.NONE,
+            header = Table.Cell(header.children),
+            cells = listOf(Table.Cell(cell.children)),
+        )
+    return ObjectValue(column)
+}
