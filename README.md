@@ -52,7 +52,7 @@ The following snippet is a valid Quarkdown source that calculates and displays t
 
 .table
     .foreach {..8}
-        .tablecolumn {$ F_<<1>> $} {.fib {<<1>>}}
+        .tablecolumn { $ F_<<1>> $ } { .fib {<<1>>} }
 ```
 
 Output:
