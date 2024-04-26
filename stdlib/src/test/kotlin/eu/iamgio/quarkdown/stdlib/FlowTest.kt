@@ -9,12 +9,16 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 
@@ -108,5 +112,69 @@ class FlowTest {
 
         val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, "Hello Quarkdown")
         assertEquals("Hello Quarkdown", control3.unwrappedValue)
+    }
+
+    @Test
+    fun `loop flow`() {
+        val loop1 =
+            forEach(
+                context,
+                listOf(
+                    StringValue("Hello"),
+                    StringValue("Quarkdown"),
+                ),
+                body = "**<<1>>**",
+            )
+
+        assertEquals(
+            listOf(
+                DynamicValue("**Hello**"),
+                DynamicValue("**Quarkdown**"),
+            ),
+            loop1.unwrappedValue,
+        )
+
+        val loop2 =
+            forEach(
+                context,
+                Range(start = 2, end = 4),
+                name = "n",
+                body = "N: <<n>>",
+            )
+
+        assertEquals(
+            listOf(
+                DynamicValue("N: 2"),
+                DynamicValue("N: 3"),
+                DynamicValue("N: 4"),
+            ),
+            loop2.unwrappedValue,
+        )
+
+        val loop3 =
+            forEach(
+                context,
+                ValueFactory.range("..4").unwrappedValue,
+                body = "N: <<1>>",
+            )
+
+        assertEquals(
+            listOf(
+                DynamicValue("N: 0"),
+                DynamicValue("N: 1"),
+                DynamicValue("N: 2"),
+                DynamicValue("N: 3"),
+            ),
+            loop3.unwrappedValue,
+        )
+
+        // Iterating ranges with indefinite right end is not allowed.
+        assertFails {
+            forEach(
+                context,
+                ValueFactory.range("1..").unwrappedValue,
+                body = "N: <<1>>",
+            )
+        }
     }
 }
