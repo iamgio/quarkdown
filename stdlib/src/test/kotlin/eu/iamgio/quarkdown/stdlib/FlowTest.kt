@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import kotlin.test.BeforeTest
@@ -95,5 +96,17 @@ class FlowTest {
                     ),
             ),
         )
+    }
+
+    @Test
+    fun `control flow`() {
+        val control1 = `if`(context, isLower(2, 4).unwrappedValue, "Hello Quarkdown")
+        assertEquals("Hello Quarkdown", control1.unwrappedValue)
+
+        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, "Hello Quarkdown")
+        assertEquals(VoidValue, control2)
+
+        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, "Hello Quarkdown")
+        assertEquals("Hello Quarkdown", control3.unwrappedValue)
     }
 }
