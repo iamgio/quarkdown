@@ -3,11 +3,13 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
-import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -21,7 +23,6 @@ val Layout: Module =
         ::clip,
         ::box,
         ::table,
-        ::tableColumn,
     )
 
 /**
@@ -66,30 +67,30 @@ fun box(
 
 /**
  * Creates a table out of a collection of columns.
- * @param columns columns to build the table out of
- * @return a new table node
+ *
+ * The following example joins 5 columns:
+ * ```
+ * .table
+ *     .foreach {1..5}
+ *         | Header <<1>> |
+ *         |--------------|
+ *         |  Cell <<1>>  |
+ * ```
+ *
+ * @param subTables independent tables (as Markdown sources) that will be parsed and joined together into a single table
+ * @return a new [Table] node
  */
-fun table(columns: Iterable<ObjectValue<Table.Column>>) =
-    Table(columns.map { it.unwrappedValue })
-        .wrappedAsValue()
+fun table(
+    @Injected context: Context,
+    subTables: Iterable<Value<String>>,
+): NodeValue {
+    val columns =
+        subTables.asSequence()
+            .map { it.unwrappedValue }
+            .map { ValueFactory.blockMarkdown(it, context).unwrappedValue }
+            .map { it.children.first() }
+            .filterIsInstance<Table>()
+            .flatMap { it.columns }
 
-/**
- * Creates a new table column.
- * @param header column header
- * @param cell column content cell
- * @see table
- */
-@Name("tablecolumn")
-fun tableColumn(
-    header: InlineMarkdownContent,
-    cell: InlineMarkdownContent,
-): ObjectValue<Table.Column> {
-    // TODO support multiple cells
-    val column =
-        Table.Column(
-            alignment = Table.Alignment.NONE,
-            header = Table.Cell(header.children),
-            cells = listOf(Table.Cell(cell.children)),
-        )
-    return ObjectValue(column)
+    return Table(columns.toList()).wrappedAsValue()
 }
