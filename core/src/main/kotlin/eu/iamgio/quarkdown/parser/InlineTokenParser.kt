@@ -17,7 +17,6 @@ import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -53,34 +52,35 @@ private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
 
 /**
  * A parser for inline tokens.
- * @param flavor flavor to use in order to analyze and parse sub-tokens
  * @param context additional data to fill during the parsing process
  */
-class InlineTokenParser(
-    private val flavor: MarkdownFlavor,
-    private val context: MutableContext,
-) :
-    InlineTokenVisitor<Node> {
+class InlineTokenParser(private val context: MutableContext) : InlineTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this.tokenize()
-            .acceptAll(flavor.parserFactory.newParser(context))
+            .acceptAll(context.flavor.parserFactory.newParser(context))
 
     /**
      * Tokenizes and parses sub-nodes.
-     * @param source source to tokenize using the default inline lexer from this [flavor]
+     * @param source source to tokenize using the default inline lexer from this flavor
      * @return parsed nodes
      */
-    private fun parseSubContent(source: CharSequence) = flavor.lexerFactory.newInlineLexer(source).tokenizeAndParse()
+    private fun parseSubContent(source: CharSequence) =
+        context.flavor.lexerFactory
+            .newInlineLexer(source)
+            .tokenizeAndParse()
 
     /**
      * Tokenizes and parses sub-nodes within a link label.
-     * @param source source to tokenize using the link label inline lexer from this [flavor]
+     * @param source source to tokenize using the link label inline lexer from this flavor
      * @return parsed nodes
      */
-    private fun parseLinkLabelSubContent(source: CharSequence) = flavor.lexerFactory.newLinkLabelInlineLexer(source).tokenizeAndParse()
+    private fun parseLinkLabelSubContent(source: CharSequence) =
+        context.flavor.lexerFactory
+            .newLinkLabelInlineLexer(source)
+            .tokenizeAndParse()
 
     override fun visit(token: EscapeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)

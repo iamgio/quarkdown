@@ -21,7 +21,6 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -59,26 +58,22 @@ private const val TABLE_ALIGNMENT_CHAR = ':'
 
 /**
  * A parser for block tokens.
- * @param flavor flavor to use in order to analyze and parse sub-blocks
  * @param context additional data to fill during the parsing process
  */
-class BlockTokenParser(
-    private val flavor: MarkdownFlavor,
-    private val context: MutableContext,
-) : BlockTokenVisitor<Node> {
+class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this.tokenize()
-            .acceptAll(flavor.parserFactory.newParser(context))
+            .acceptAll(context.flavor.parserFactory.newParser(context))
 
     /**
      * @return [this] raw string tokenized and parsed into processed inline content,
      *                based on this [flavor]'s specifics
      */
     private fun String.toInline(): InlineContent =
-        flavor.lexerFactory.newInlineLexer(this)
+        context.flavor.lexerFactory.newInlineLexer(this)
             .tokenizeAndParse()
 
     override fun visit(token: NewlineToken): Node {
@@ -165,7 +160,7 @@ class BlockTokenParser(
      * @param token list token to extract the items from
      */
     private fun extractListItems(token: Token) =
-        flavor.lexerFactory.newListLexer(source = token.data.text)
+        context.flavor.lexerFactory.newListLexer(source = token.data.text)
             .tokenizeAndParse()
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
@@ -247,7 +242,10 @@ class BlockTokenParser(
         val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length)
 
         // Parsed content.
-        val children = flavor.lexerFactory.newBlockLexer(source = trimmedContent).tokenizeAndParse()
+        val children =
+            context.flavor.lexerFactory
+                .newBlockLexer(source = trimmedContent)
+                .tokenizeAndParse()
 
         return when {
             // GFM task list item.
@@ -341,7 +339,10 @@ class BlockTokenParser(
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
         return BlockQuote(
-            children = flavor.lexerFactory.newBlockLexer(source = text).tokenizeAndParse(),
+            children =
+                context.flavor.lexerFactory
+                    .newBlockLexer(source = text)
+                    .tokenizeAndParse(),
         )
     }
 

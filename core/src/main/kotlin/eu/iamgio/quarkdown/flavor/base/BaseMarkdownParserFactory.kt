@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.parser.InlineTokenParser
  * [BaseMarkdownFlavor] parser factory.
  */
 class BaseMarkdownParserFactory : ParserFactory {
-    override fun newBlockParser(context: MutableContext) = BlockTokenParser(BaseMarkdownFlavor, context)
+    override fun newBlockParser(context: MutableContext) = BlockTokenParser(context)
 
-    override fun newInlineParser(context: MutableContext) = InlineTokenParser(BaseMarkdownFlavor, context)
+    override fun newInlineParser(context: MutableContext) = InlineTokenParser(context)
 }
