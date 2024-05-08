@@ -27,13 +27,12 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
-            .value(TemplatePlaceholders.THEME, context.documentInfo.theme ?: "")
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
             .conditional(
-                TemplatePlaceholders.THEME,
+                TemplatePlaceholders.HAS_THEME,
                 context.documentInfo.theme != null,
-            ) // Set the theme only if it is set.
+            ) // The theme CSS is applied only if a theme is set.
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> {
         val base = super.generateResources(rendered).toMutableSet()
