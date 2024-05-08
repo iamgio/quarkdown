@@ -26,6 +26,7 @@ val Flow: Module =
         ::ifNot,
         ::forEach,
         ::function,
+        ::variable,
     )
 
 /**
@@ -136,4 +137,22 @@ fun function(
     context.libraries += Library(name, setOf(function))
 
     return VoidValue
+}
+
+/**
+ * Defines a new variable or overwrites an existing one.
+ * Variables can be referenced just like functions, via `.variablename`.
+ * @param name name of the variable
+ * @param value value to assign
+ */
+@Name("var")
+fun variable(
+    @Injected context: MutableContext,
+    name: String,
+    value: String,
+): VoidValue {
+    // Deletes previous values.
+    context.libraries.removeIf { it.name == name }
+
+    return function(context, name, value)
 }
