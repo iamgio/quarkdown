@@ -27,17 +27,30 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
+            .value(TemplatePlaceholders.THEME, context.documentInfo.theme ?: "")
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
+            .conditional(
+                TemplatePlaceholders.THEME,
+                context.documentInfo.theme != null,
+            ) // Set the theme only if it is set.
 
-    override fun generateResources(rendered: CharSequence): Set<OutputResource> =
-        // A CSS theme file is added to the output resources.
-        super.generateResources(rendered) +
-            LazyOutputArtifact.internal(
-                resource = "/render/quarkdown/theme.css",
-                name = "theme",
-                type = ArtifactType.CSS,
-            )
+    override fun generateResources(rendered: CharSequence): Set<OutputResource> {
+        val base = super.generateResources(rendered).toMutableSet()
+
+        // A CSS theme file is added to the output resources
+        // if a theme is set.
+        context.documentInfo.theme?.let {
+            base +=
+                LazyOutputArtifact.internal(
+                    resource = "/render/quarkdown/theme/$it.css",
+                    name = "theme",
+                    type = ArtifactType.CSS,
+                )
+        }
+
+        return base
+    }
 
     /**
      * A `<div class="styleClass">...</div>` tag.

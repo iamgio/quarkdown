@@ -28,6 +28,11 @@ const val UNRESOLVED_REFERENCE_EXIT_CODE = 67
 const val NO_SUCH_ELEMENT_EXIT_CODE = 68
 
 /**
+ * Exit code when a I/O error occurs.
+ */
+const val IO_ERROR_EXIT_CODE = 69
+
+/**
  * Exit code when a runtime error occurs.
  */
 const val RUNTIME_ERROR_EXIT_CODE = 70

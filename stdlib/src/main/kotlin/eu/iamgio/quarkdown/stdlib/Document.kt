@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
 
 /**
  * `Document` stdlib module exporter.
@@ -18,6 +19,7 @@ val Document: Module =
     setOf(
         ::docName,
         ::docAuthor,
+        ::theme,
     )
 
 /**
@@ -72,4 +74,30 @@ fun docAuthor(
         author,
         get = { this.author ?: "" },
         set = { this.author = it },
+    )
+
+/**
+ * If [theme] is not `null`, it sets the document theme to its value.
+ * If it's `null`, the current document theme is returned.
+ * @param theme (optional) theme to assign to the document
+ * @return the current document theme if [theme] is `null`
+ * @throws IOPipelineException if the theme isn't resolved
+ */
+@Name("theme")
+fun theme(
+    @Injected context: Context,
+    theme: String? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        theme,
+        get = { this.theme ?: "" },
+        set = {
+            val new = it.lowercase()
+
+            // Existance check.
+            javaClass.getResource("/render/quarkdown/theme/$new.css")
+                ?: throw IOPipelineException("Theme $new not found")
+
+            this.theme = new
+        },
     )

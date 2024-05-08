@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.pipeline.output
 
+import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
+
 /**
  * Represents an [OutputResource] that contains text data.
  * When visited by a [FileResourceExporter], this resource is exported to a file
@@ -42,7 +44,11 @@ data class LazyOutputArtifact(
             type: ArtifactType,
         ) = LazyOutputArtifact(
             name,
-            content = { LazyOutputArtifact::class.java.getResource(resource)!!.readText() },
+            content = {
+                LazyOutputArtifact::class.java.getResource(resource)
+                    ?.readText()
+                    ?: throw IOPipelineException("Resource $resource not found")
+            },
             type,
         )
     }
