@@ -1,9 +1,16 @@
 package eu.iamgio.quarkdown
 
+import java.io.File
+
 /**
  * System properties wrapper, used to define properties that affect execution.
  */
 object SystemProperties {
+    /**
+     * Property that defines the location of the output directory.
+     */
+    const val OUTPUT_PATH = "out"
+
     /**
      * When this property is present, the rendering stage produces pretty output code.
      */
@@ -44,6 +51,12 @@ object SystemProperties {
 }
 
 // Helpers
+
+/**
+ * The output directory, if set.
+ */
+val SystemProperties.outputDirectory: File?
+    get() = this[OUTPUT_PATH]?.let(::File)
 
 /**
  * Whether the rendering stage should produce pretty output code.

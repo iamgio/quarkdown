@@ -12,6 +12,8 @@ import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.rendering.wrap
 
@@ -83,10 +85,13 @@ class Pipeline(
      * Converts the AST to code for a target language.
      * If enabled by settings, the output code is wrapped in a template.
      * @param document root of the AST to render
+     * @param renderer the renderer to use
      * @see eu.iamgio.quarkdown.rendering.NodeRenderer
      */
-    private fun render(document: Document): CharSequence {
-        val renderer = this.renderer(context.flavor.rendererFactory, context)
+    private fun render(
+        document: Document,
+        renderer: NodeRenderer,
+    ): CharSequence {
         val rendered = renderer.visit(document)
 
         hooks?.afterRendering?.invoke(this, rendered)
@@ -110,10 +115,18 @@ class Pipeline(
      * @param source the source code to process and execute the stages onto
      * @throws PipelineException if an uncaught error occurs
      */
-    fun execute(source: CharSequence) {
+    fun execute(source: CharSequence): OutputResource {
         val tokens = tokenize(source)
         val document = parse(tokens)
         expandFunctionCalls(document)
-        render(document)
+
+        val renderer = this.renderer(context.flavor.rendererFactory, context)
+        val rendered = render(document, renderer)
+
+        val resources = renderer.generateResources(rendered)
+        return OutputResourceGroup(
+            name = context.documentInfo.name ?: "Untitled Quarkdown Document",
+            resources,
+        )
     }
 }

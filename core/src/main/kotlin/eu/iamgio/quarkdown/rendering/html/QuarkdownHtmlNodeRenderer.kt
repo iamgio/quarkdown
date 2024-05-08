@@ -8,6 +8,9 @@ import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.pipeline.output.ArtifactType
+import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
@@ -26,6 +29,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
+
+    override fun generateResources(rendered: CharSequence): Set<OutputResource> =
+        // A CSS theme file is added to the output resources.
+        super.generateResources(rendered) +
+            LazyOutputArtifact.internal(
+                resource = "/render/quarkdown/theme.css",
+                name = "theme",
+                type = ArtifactType.CSS,
+            )
 
     /**
      * A `<div class="styleClass">...</div>` tag.

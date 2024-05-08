@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering
 
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
@@ -15,6 +16,8 @@ interface NodeRenderer : NodeVisitor<CharSequence> {
      * @return a new instance of the corresponding wrapper
      */
     fun createCodeWrapper(): RenderWrapper
+
+    fun generateResources(rendered: CharSequence): Set<OutputResource>
 }
 
 /**
