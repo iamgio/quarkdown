@@ -2,3 +2,11 @@ body {
     margin: 16px;
     font-family: Arial, sans-serif;
 }
+
+table, td, th {
+    border: 1px black solid;
+}
+
+td, th {
+    padding: 8px;
+}
