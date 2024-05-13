@@ -1,12 +1,16 @@
 package eu.iamgio.quarkdown.test
 
+import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import eu.iamgio.quarkdown.stdlib.Stdlib
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 private const val DATA_FOLDER = "src/test/resources/data"
 
@@ -15,6 +19,11 @@ private const val DATA_FOLDER = "src/test/resources/data"
  * [Stdlib] is used as a library.
  */
 class FullPipelineTest {
+    @BeforeTest
+    fun setup() {
+        SystemProperties[SystemProperties.EXIT_ON_ERROR] = ""
+    }
+
     /**
      * Executes a Quarkdown source.
      * @param hook action run after rendering
@@ -152,6 +161,37 @@ class FullPipelineTest {
     }
 
     @Test
+    fun `flow functions`() {
+        execute(".if { .islower {2} than:{3} }\n  **Text**") {
+            assertEquals("<p><strong>Text</strong></p>", it)
+        }
+
+        execute(".if { .islower {3} than:{2} }\n  **Text**") {
+            assertEquals("", it)
+        }
+
+        execute(".ifnot { .islower {3} than:{2} }\n  **Text**") {
+            assertEquals("<p><strong>Text</strong></p>", it)
+        }
+
+        execute(".foreach {..3}\n  **N:** <<1>>") {
+            assertEquals("<p><strong>N:</strong> 0</p><p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p>", it)
+        }
+
+        execute(".function {hello}\n  `Hello`!\n\n.hello") {
+            assertEquals("<p><code>Hello</code>!</p>", it)
+        }
+
+        execute(".function {hello}\n  `Hello` <<1>>!\n\n.hello {world}") {
+            assertEquals("<p><code>Hello</code> world!</p>", it)
+        }
+
+        assertFailsWith<InvalidArgumentCountException> {
+            execute(".function {hello}\n  `Hello` <<1>>!\n\n.hello") {}
+        }
+    }
+
+    @Test
     fun fibonacci() {
         // Iterative Fibonacci sequence calculation.
         val iterative =
@@ -164,6 +204,24 @@ class FullPipelineTest {
                     | $ F_<<1>> $ |
                     |:-------------:|
                     |      .t1      |
+                    .var {tmp} {.sum {.t1} {.t2}}
+                    .var {t1} {.t2}
+                    .var {t2} {.tmp}
+            """.trimIndent()
+
+        val alternativeIterative =
+            """
+            .var {t1} {0}
+            .var {t2} {1}
+            
+            .function {column}
+                |  $ F_<<1>> $  |
+                |:-------------:|
+                |      .t1      |
+            
+            .table
+                .foreach {..4}
+                    .column {<<1>>}
                     .var {tmp} {.sum {.t1} {.t2}}
                     .var {t1} {.t2}
                     .var {t2} {.tmp}
@@ -200,6 +258,10 @@ class FullPipelineTest {
                 "<td align=\"center\">2</td></tr></tbody></table>"
 
         execute(iterative) {
+            assertEquals(out, it)
+        }
+
+        execute(alternativeIterative) {
             assertEquals(out, it)
         }
 
