@@ -98,11 +98,13 @@ object ValueFactory {
     /**
      * @param lexer lexer to use to tokenize content
      * @param context context to retrieve the pipeline from, which allows parsing and function expansion
+     * @param expandFunctionCalls whether enqueued function calls should be expanded instantly
      * @return a new value that wraps the root of the produced AST
      */
     fun markdown(
         lexer: Lexer,
         context: Context,
+        expandFunctionCalls: Boolean,
     ): MarkdownContentValue {
         // Retrieving the pipeline linked to the context.
         val pipeline =
@@ -111,8 +113,12 @@ object ValueFactory {
 
         // Convert string input to parsed AST.
         val root = pipeline.parse(lexer.tokenize())
-        // In case the AST contains nested function calls, they are immediately expanded.
-        pipeline.expandFunctionCalls(root)
+
+        if (expandFunctionCalls) {
+            // In case the AST contains nested function calls, they are immediately expanded.
+            // If expandF
+            pipeline.expandFunctionCalls(root)
+        }
 
         return MarkdownContentValue(MarkdownContent(root.children))
     }
@@ -126,7 +132,12 @@ object ValueFactory {
     fun blockMarkdown(
         raw: String,
         context: Context,
-    ): MarkdownContentValue = this.markdown(context.flavor.lexerFactory.newBlockLexer(raw), context)
+    ): MarkdownContentValue =
+        this.markdown(
+            context.flavor.lexerFactory.newBlockLexer(raw),
+            context,
+            expandFunctionCalls = true,
+        )
 
     /**
      * @param raw string input to parse into a sub-AST
@@ -137,9 +148,15 @@ object ValueFactory {
     fun inlineMarkdown(
         raw: String,
         context: Context,
-    ): InlineMarkdownContentValue = this.markdown(context.flavor.lexerFactory.newInlineLexer(raw), context).asInline()
+    ): InlineMarkdownContentValue =
+        this.markdown(
+            context.flavor.lexerFactory.newInlineLexer(raw),
+            context,
+            expandFunctionCalls = true,
+        ).asInline()
 
     /**
+     * Evaluates a
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
      * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
@@ -154,6 +171,7 @@ object ValueFactory {
             this.markdown(
                 lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
                 context,
+                expandFunctionCalls = false,
             ).unwrappedValue.children
 
         if (components.isEmpty()) return null
