@@ -8,6 +8,8 @@ import eu.iamgio.quarkdown.stdlib.Stdlib
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+private const val DATA_FOLDER = "src/test/resources/data"
+
 /**
  * Tests that cover the whole pipeline from lexing to rendering, including function call expansion.
  * [Stdlib] is used as a library.
@@ -138,6 +140,71 @@ class FullPipelineTest {
         // TODO add space after $ in the output (= avoid trimming text)
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
             assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__2</p>", it)
+        }
+
+        execute("***result***: .sum {3} {.multiply {4} {2}}") {
+            assertEquals("<p><em><strong>result</strong></em>: 11</p>", it)
+        }
+
+        execute(".code\n    .filecontent {$DATA_FOLDER/code.txt}") {
+            assertEquals("<pre><code>Line 1\nLine 2\n\nLine 3</code></pre>", it)
+        }
+    }
+
+    @Test
+    fun fibonacci() {
+        // Iterative Fibonacci sequence calculation.
+        val iterative =
+            """
+            .var {t1} {0}
+            .var {t2} {1}
+            
+            .table
+                .foreach {..4}
+                    | $ F_<<1>> $ |
+                    |:-------------:|
+                    |      .t1      |
+                    .var {tmp} {.sum {.t1} {.t2}}
+                    .var {t1} {.t2}
+                    .var {t2} {.tmp}
+            """.trimIndent()
+
+        // Recursive Fibonacci sequence calculation.
+        val recursive =
+            """
+            .function {fib}
+                .if { .islower {<<1>>} than:{2} }
+                    <<1>>
+                .ifnot { .islower {<<1>>} than:{2} }
+                    .sum {
+                        .fib { .subtract {<<1>>} {1} }
+                    } {
+                        .fib { .subtract {<<1>>} {2} }
+                    }
+              
+            .table
+                .foreach {..4}
+                    | $ F_<<1>> $  |
+                    |:------------:|
+                    | .fib {<<1>>} |
+            """.trimIndent()
+
+        val out =
+            "<table><thead><tr>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_0\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_1\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_2\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_3\$__QD_INLINE_MATH__</th></tr></thead><tbody><tr>" +
+                "<td align=\"center\">0</td><td align=\"center\">1</td>" +
+                "<td align=\"center\">1</td>" +
+                "<td align=\"center\">2</td></tr></tbody></table>"
+
+        execute(iterative) {
+            assertEquals(out, it)
+        }
+
+        execute(recursive) {
+            assertEquals(out, it)
         }
     }
 }
