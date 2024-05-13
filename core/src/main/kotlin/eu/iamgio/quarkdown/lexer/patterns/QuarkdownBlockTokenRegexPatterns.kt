@@ -19,9 +19,6 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             .build()
     }
 
-    // Add <<< (like horizontal rule) for page break
-    // .page-break { page-break-before: always; }
-
     /**
      * Three or more `<` characters not followed by any other character.
      * Indicates a page break.
