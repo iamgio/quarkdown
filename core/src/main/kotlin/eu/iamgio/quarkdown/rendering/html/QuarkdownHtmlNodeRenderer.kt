@@ -29,6 +29,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
             .value(TemplatePlaceholders.PAPER_SIZE, "A4") // TODO set
             .conditional(TemplatePlaceholders.IS_PAPER, true) // TODO set
+            .conditional(TemplatePlaceholders.IS_TYPELESS, false) // TODO set
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
             .conditional(

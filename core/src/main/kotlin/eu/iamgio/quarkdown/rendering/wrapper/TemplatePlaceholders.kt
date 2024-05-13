@@ -43,4 +43,9 @@ object TemplatePlaceholders {
      * Size of the document, if it is a paper.
      */
     const val PAPER_SIZE = "PAPERSIZE"
+
+    /**
+     * Whether the document does not have a type (e.g. paper)
+     */
+    const val IS_TYPELESS = "TYPELESS"
 }
