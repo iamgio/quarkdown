@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
+import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
@@ -203,6 +204,12 @@ class BlockParserTest {
     fun horizontalRule() {
         val nodes = blocksIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
         assertEquals(6, nodes.asSequence().count())
+    }
+
+    @Test
+    fun pageBreak() {
+        val nodes = blocksIterator<PageBreak>(readSource("/parsing/pagebreak.md"), assertType = false)
+        assertEquals(2, nodes.asSequence().count())
     }
 
     @Test

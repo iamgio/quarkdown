@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.MultilineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.OnelineMathToken
+import eu.iamgio.quarkdown.lexer.tokens.PageBreakToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor].
@@ -17,6 +18,23 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
             .build()
     }
+
+    // Add <<< (like horizontal rule) for page break
+    // .page-break { page-break-before: always; }
+
+    /**
+     * Three or more `<` characters not followed by any other character.
+     * Indicates a page break.
+     */
+    val pageBreak
+        get() =
+            TokenRegexPattern(
+                name = "PageBreak",
+                wrap = ::PageBreakToken,
+                regex =
+                    "^ {0,3}<{3,}(?=\\s*\$)"
+                        .toRegex(),
+            )
 
     /**
      * Fenced content within triple dollar signs.

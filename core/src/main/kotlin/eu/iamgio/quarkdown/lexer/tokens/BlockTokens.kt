@@ -71,6 +71,7 @@ class OnelineMathToken(data: TokenData) : Token(data) {
 }
 
 /**
+ * A thematic break.
  * Examples:
  * ```
  * ---
@@ -81,6 +82,20 @@ class OnelineMathToken(data: TokenData) : Token(data) {
  * @see eu.iamgio.quarkdown.ast.HorizontalRule
  */
 class HorizontalRuleToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * A page break.
+ * This is a custom Quarkdown block.
+ *
+ * Example:
+ * ```
+ * <<<
+ * ```
+ * @see eu.iamgio.quarkdown.ast.HorizontalRule
+ */
+class PageBreakToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
