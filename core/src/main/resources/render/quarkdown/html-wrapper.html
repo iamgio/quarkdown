@@ -59,6 +59,23 @@
             clip-path: circle();
         }
     </style>
+    [[if:PAPER]]
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
+    <style>
+        @page {
+            size: [[PAPERSIZE]]
+        }
+
+        .sheet {
+            word-break: break-all
+        }
+    </style>
+    <script>
+        window.onload = () => {
+            document.body.className = '[[PAPERSIZE]]';
+        }
+    </script>
+    [[endif:PAPER]]
 </head>
 <body>
 [[CONTENT]]

@@ -33,4 +33,14 @@ object TemplatePlaceholders {
      * Whether math is used and math-related scripts should be loaded.
      */
     const val HAS_MATH = "MATH"
+
+    /**
+     * Whether this document is a paper.
+     */
+    const val IS_PAPER = "PAPER"
+
+    /**
+     * Size of the document, if it is a paper.
+     */
+    const val PAPER_SIZE = "PAPERSIZE"
 }
