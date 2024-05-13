@@ -38,24 +38,39 @@ CommonMark/GFM Markdown is (almost) 100% supported. Along with it, Quarkdown's f
 _Block function calls_, opposite to _inline function calls_, also support a _body_ argument,
 which is some nested and indented Quarkdown content. 
 
-The following snippet is a valid Quarkdown source that calculates and displays the first 8 numbers of the Fibonacci sequence:
-```markdown
-.function {fib}
-    .if { .islower {<<1>>} than:{2} }
-        <<1>>
-    .ifnot { .islower {<<1>>} than:{2} }
-        .sum {
-            .fib { .subtract {<<1>>} {1} }
-        } {
-            .fib { .subtract {<<1>>} {2} }
-        }
+The following snippets are valid Quarkdown sources that calculate and display the first 8 numbers of the Fibonacci sequence:
+- Iterative:
+  ```markdown
+  .var {t1} {0}
+  .var {t2} {1}
 
-.table
-    .foreach {..7}
-        | $ F_<<1>> $  |
-        |:------------:|
-        | .fib {<<1>>} |
-```
+  .table
+      .foreach {..8}
+          | $ F_{<<1>>} $ |
+          |:-------------:|
+          |      .t1      |
+          .var {tmp} {.sum {.t1} {.t2}}
+          .var {t1} {.t2}
+          .var {t2} {.tmp}
+  ```
+- Recursive:
+  ```markdown
+  .function {fib}
+      .if { .islower {<<1>>} than:{2} }
+          <<1>>
+      .ifnot { .islower {<<1>>} than:{2} }
+          .sum {
+              .fib { .subtract {<<1>>} {1} }
+          } {
+              .fib { .subtract {<<1>>} {2} }
+          }
+  
+  .table
+      .foreach {..7}
+          | $ F_<<1>> $  |
+          |:------------:|
+          | .fib {<<1>>} |
+  ```
 
 Output:
 
