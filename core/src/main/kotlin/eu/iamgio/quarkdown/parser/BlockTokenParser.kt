@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
+import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
@@ -41,6 +42,7 @@ import eu.iamgio.quarkdown.lexer.tokens.MultilineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
 import eu.iamgio.quarkdown.lexer.tokens.OnelineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
+import eu.iamgio.quarkdown.lexer.tokens.PageBreakToken
 import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
 import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
@@ -350,9 +352,11 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         return BlockText()
     }
 
-    override fun visit(token: FunctionCallToken): Node {
-        // Move to FunctionCallParser?
+    override fun visit(token: PageBreakToken): Node {
+        return PageBreak()
+    }
 
+    override fun visit(token: FunctionCallToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
         // Function name.

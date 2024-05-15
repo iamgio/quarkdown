@@ -25,6 +25,7 @@ import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
+import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -108,6 +109,8 @@ interface NodeVisitor<T> {
     fun visit(node: FunctionCallNode): T
 
     // Quarkdown block
+
+    fun visit(node: PageBreak): T
 
     fun visit(node: Math): T
 

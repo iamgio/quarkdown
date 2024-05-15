@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
@@ -78,6 +79,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: FunctionCallNode): CharSequence = node.children.joinToString(separator = "") { it.accept(this) }
 
     // Block
+
+    // An empty div that acts as a page break.
+    override fun visit(node: PageBreak) = div("page-break") {}
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE

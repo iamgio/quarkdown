@@ -39,6 +39,7 @@ class QuarkdownLexerFactory : LexerFactory {
                     onelineMath,
                     heading,
                     horizontalRule,
+                    pageBreak,
                     setextHeading,
                     table,
                     html,

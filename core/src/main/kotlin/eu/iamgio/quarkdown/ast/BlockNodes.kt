@@ -211,6 +211,15 @@ data class BlockQuote(
 }
 
 /**
+ * A forced page break.
+ */
+class PageBreak : Node {
+    override fun toString() = "PageBreak"
+
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}
+
+/**
  * Anything else (should not happen).
  */
 class BlockText : Node {

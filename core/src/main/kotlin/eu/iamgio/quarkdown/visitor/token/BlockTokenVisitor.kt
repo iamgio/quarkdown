@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.lexer.tokens.MultilineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
 import eu.iamgio.quarkdown.lexer.tokens.OnelineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
+import eu.iamgio.quarkdown.lexer.tokens.PageBreakToken
 import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
 import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
@@ -29,10 +30,6 @@ interface BlockTokenVisitor<T> {
     fun visit(token: BlockCodeToken): T
 
     fun visit(token: FencesCodeToken): T
-
-    fun visit(token: MultilineMathToken): T
-
-    fun visit(token: OnelineMathToken): T
 
     fun visit(token: HorizontalRuleToken): T
 
@@ -59,6 +56,12 @@ interface BlockTokenVisitor<T> {
     fun visit(token: BlockTextToken): T
 
     // Quarkdown extensions
+
+    fun visit(token: PageBreakToken): T
+
+    fun visit(token: MultilineMathToken): T
+
+    fun visit(token: OnelineMathToken): T
 
     fun visit(token: FunctionCallToken): T
 }
