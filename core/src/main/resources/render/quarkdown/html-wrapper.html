@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="[[LANG]]">
 <head>
     <meta charset="UTF-8">
@@ -64,6 +65,10 @@
 
         .page-break {
             break-before: always;
+        }
+
+        @page {
+            [[if:PAGEMARGIN]] margin: [[PAGEMARGIN]]; [[endif:PAGEMARGIN]]
         }
     </style>
 </head>

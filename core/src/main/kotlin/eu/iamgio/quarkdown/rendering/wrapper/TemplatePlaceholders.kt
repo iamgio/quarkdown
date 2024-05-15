@@ -40,7 +40,12 @@ object TemplatePlaceholders {
     const val IS_PAGED = "PAGED"
 
     /**
-     * Size of the document, if it is a paper.
+     * Size of the document.
      */
     const val PAGE_SIZE = "PAGESIZE"
+
+    /**
+     * Margin of each page.
+     */
+    const val PAGE_MARGIN = "PAGEMARGIN"
 }

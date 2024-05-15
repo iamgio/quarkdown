@@ -6,6 +6,8 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.Size
+import eu.iamgio.quarkdown.document.SizeUnit
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
@@ -80,6 +82,29 @@ object ValueFactory {
             )
 
         return ObjectValue(range)
+    }
+
+    /**
+     * @param raw raw value to convert to a size value.
+     *            The format is `Xunit`, where `X` is a number (integer or floating point)
+     *            and `unit` is one of the following: `px`, `pt`, `cm`, `mm`, `in`. If not specified, `px` is assumed.
+     * @return a new size value that wraps the parsed content of [raw].
+     * @throws IllegalArgumentException if the value is an invalid size
+     */
+    @FromDynamicType(Size::class)
+    fun size(raw: String): ObjectValue<Size> {
+        // Matches value and unit, e.g. 10px, 12.5cm, 3in.
+        val regex = "(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?".toRegex()
+        val groups = regex.find(raw)?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
+
+        // The value, which is required.
+        val value = groups?.next()?.toDoubleOrNull() ?: throw IllegalArgumentException("Invalid size: $raw")
+
+        // The unit, which is optional and defaults to pixels.
+        val rawUnit = groups.next()
+        val unit = SizeUnit.values().find { it.name.equals(rawUnit, ignoreCase = true) } ?: SizeUnit.PX
+
+        return ObjectValue(Size(value, unit))
     }
 
     /**
