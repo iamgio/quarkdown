@@ -6,9 +6,9 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.document.Size
-import eu.iamgio.quarkdown.document.SizeUnit
-import eu.iamgio.quarkdown.document.Sizes
+import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.page.SizeUnit
+import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval

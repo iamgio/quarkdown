@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document
+package eu.iamgio.quarkdown.document.page
 
 /**
  * A numeric size with a unit, which represents a generic size (e.g. margin, length, font size).

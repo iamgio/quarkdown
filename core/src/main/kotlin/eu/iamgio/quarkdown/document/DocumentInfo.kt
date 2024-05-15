@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.document
 
+import eu.iamgio.quarkdown.document.page.PageFormatInfo
+
 /**
  * Mutable information about the final artifact.
  * This data is mutated by library functions `.docname`, `.docauthor`, etc.

@@ -3,8 +3,8 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
-import eu.iamgio.quarkdown.document.PageFormatInfo
-import eu.iamgio.quarkdown.document.Sizes
+import eu.iamgio.quarkdown.document.page.PageFormatInfo
+import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.OutputValue

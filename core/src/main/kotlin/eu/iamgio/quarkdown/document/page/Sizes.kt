@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document
+package eu.iamgio.quarkdown.document.page
 
 /**
  * A collection of generic top, right, bottom and left [Size]s.

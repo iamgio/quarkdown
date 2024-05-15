@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document
+package eu.iamgio.quarkdown.document.page
 
 /**
  * Information about the format of all pages of a paged document.
