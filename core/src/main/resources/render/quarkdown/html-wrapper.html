@@ -25,9 +25,9 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     [[endif:MATH]]
-    [[if:PAPER]]
+    [[if:PAGED]]
     <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
-    [[endif:PAPER]]
+    [[endif:PAGED]]
 
     <style>
         hr {
@@ -63,7 +63,7 @@
         }
 
         .page-break {
-            page-break-before: always;
+            break-before: always;
         }
     </style>
 </head>

@@ -35,17 +35,12 @@ object TemplatePlaceholders {
     const val HAS_MATH = "MATH"
 
     /**
-     * Whether this document is a paper.
+     * Whether this document is grouped in pages.
      */
-    const val IS_PAPER = "PAPER"
+    const val IS_PAGED = "PAGED"
 
     /**
      * Size of the document, if it is a paper.
      */
-    const val PAPER_SIZE = "PAPERSIZE"
-
-    /**
-     * Whether the document does not have a type (e.g. paper)
-     */
-    const val IS_TYPELESS = "TYPELESS"
+    const val PAGE_SIZE = "PAGESIZE"
 }

@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
@@ -28,9 +29,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
-            .value(TemplatePlaceholders.PAPER_SIZE, "A4") // TODO set
-            .conditional(TemplatePlaceholders.IS_PAPER, true) // TODO set
-            .conditional(TemplatePlaceholders.IS_TYPELESS, false) // TODO set
+            .value(TemplatePlaceholders.PAGE_SIZE, "A4") // TODO set
+            .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
             .conditional(
