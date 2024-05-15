@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -17,6 +18,7 @@ import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
  */
 val Document: Module =
     setOf(
+        ::docType,
         ::docName,
         ::docAuthor,
         ::theme,
@@ -41,6 +43,24 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
     set(this.documentInfo, value)
     return VoidValue
 }
+
+/**
+ * If [type] is not `null`, it sets the document type to its value.
+ * The document type affects its final output style.
+ * If it's `null`, the name of the current document type is returned.
+ * @param type (optional) type to assign to the document
+ * @return the lowercase name of the current document type if [type] is `null`
+ */
+@Name("doctype")
+fun docType(
+    @Injected context: Context,
+    type: DocumentType? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        type,
+        get = { this.type.name.lowercase() },
+        set = { this.type = it },
+    )
 
 /**
  * If [name] is not `null`, it sets the document name to its value.
