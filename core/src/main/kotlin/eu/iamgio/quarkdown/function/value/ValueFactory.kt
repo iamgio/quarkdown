@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.Size
 import eu.iamgio.quarkdown.document.SizeUnit
+import eu.iamgio.quarkdown.document.Sizes
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
@@ -105,6 +106,41 @@ object ValueFactory {
         val unit = SizeUnit.values().find { it.name.equals(rawUnit, ignoreCase = true) } ?: SizeUnit.PX
 
         return ObjectValue(Size(value, unit))
+    }
+
+    /**
+     * @param raw raw value to convert to a collection of sizes.
+     * @see size for the treatment of each size
+     * @throws IllegalArgumentException if the raw value contains a different amount of sizes than 1, 2 or 4,
+     *                                  of if any of those values is an invalid size
+     */
+    @FromDynamicType(Sizes::class)
+    fun sizes(raw: String): ObjectValue<Sizes> {
+        val parts = raw.split("\\s+".toRegex())
+        val iterator = parts.iterator()
+
+        return ObjectValue(
+            when (parts.size) {
+                // Single size: all sides are the same.
+                1 -> Sizes(all = size(iterator.next()).unwrappedValue)
+                // Two sizes: vertical and horizontal.
+                2 ->
+                    Sizes(
+                        vertical = size(iterator.next()).unwrappedValue,
+                        horizontal = size(iterator.next()).unwrappedValue,
+                    )
+                // Four sizes: top, right, bottom, left.
+                4 ->
+                    Sizes(
+                        top = size(iterator.next()).unwrappedValue,
+                        right = size(iterator.next()).unwrappedValue,
+                        bottom = size(iterator.next()).unwrappedValue,
+                        left = size(iterator.next()).unwrappedValue,
+                    )
+
+                else -> throw IllegalArgumentException("Invalid top-right-bottom-left sizes: $raw")
+            },
+        )
     }
 
     /**

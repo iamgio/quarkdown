@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.PageFormatInfo
-import eu.iamgio.quarkdown.document.Size
+import eu.iamgio.quarkdown.document.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -128,7 +128,7 @@ fun theme(
 @Name("pageformat")
 fun pageFormat(
     @Injected context: Context,
-    margin: Size? = null,
+    margin: Sizes? = null,
 ): VoidValue {
     context.documentInfo.pageFormat =
         PageFormatInfo(

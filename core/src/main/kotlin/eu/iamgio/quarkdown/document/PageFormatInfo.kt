@@ -5,5 +5,5 @@ package eu.iamgio.quarkdown.document
  * @param margin blank space around the content of each page
  */
 data class PageFormatInfo(
-    val margin: Size? = null,
+    val margin: Sizes? = null,
 )
