@@ -58,7 +58,7 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)) = QuarkdownFlavor.rendererFactory.html(context)
+    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)) = QuarkdownFlavor.rendererFactory.html(context).nodeRenderer
 
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
 

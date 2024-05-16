@@ -120,7 +120,7 @@ fun theme(
             val new = it.lowercase()
 
             // Existance check.
-            javaClass.getResource("/render/quarkdown/theme/$new.css")
+            javaClass.getResource("/render/theme/$new.css")
                 ?: throw IOPipelineException("Theme $new not found")
 
             this.theme = new

@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
-import eu.iamgio.quarkdown.rendering.NodeRenderer
+import eu.iamgio.quarkdown.rendering.RenderingComponents
 import eu.iamgio.quarkdown.rendering.wrap
 
 /**
@@ -31,7 +31,7 @@ import eu.iamgio.quarkdown.rendering.wrap
 class Pipeline(
     private val context: MutableContext,
     private val libraries: Set<Library>,
-    private val renderer: (RendererFactory, Context) -> NodeRenderer,
+    private val renderer: (RendererFactory, Context) -> RenderingComponents,
     private val hooks: PipelineHooks? = null,
 ) {
     init {
@@ -85,21 +85,21 @@ class Pipeline(
      * Converts the AST to code for a target language.
      * If enabled by settings, the output code is wrapped in a template.
      * @param document root of the AST to render
-     * @param renderer the renderer to use
+     * @param components node renderer and post-renderer to use
      * @see eu.iamgio.quarkdown.rendering.NodeRenderer
      */
     private fun render(
         document: Document,
-        renderer: NodeRenderer,
+        components: RenderingComponents,
     ): CharSequence {
-        val rendered = renderer.visit(document)
+        val rendered = components.nodeRenderer.visit(document)
 
         hooks?.afterRendering?.invoke(this, rendered)
 
         // If enabled, the output code is wrapped in a template.
         val wrapped =
             if (SystemProperties.isWrapOutputEnabled) {
-                renderer.wrap(rendered)
+                components.postRenderer.wrap(rendered)
             } else {
                 rendered
             }
@@ -123,7 +123,7 @@ class Pipeline(
         val renderer = this.renderer(context.flavor.rendererFactory, context)
         val rendered = render(document, renderer)
 
-        val resources = renderer.generateResources(rendered)
+        val resources = renderer.postRenderer.generateResources(rendered)
         return OutputResourceGroup(
             name = context.documentInfo.name ?: "Untitled Quarkdown Document",
             resources,

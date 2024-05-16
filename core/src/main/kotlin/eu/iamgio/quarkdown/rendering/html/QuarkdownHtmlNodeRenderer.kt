@@ -9,13 +9,7 @@ import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.document.DocumentType
-import eu.iamgio.quarkdown.pipeline.output.ArtifactType
-import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
-import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
-import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
 
 private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
 private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
@@ -25,40 +19,6 @@ private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
  * @param context additional information produced by the earlier stages of the pipeline
  */
 class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context) {
-    override fun createCodeWrapper() =
-        RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
-            .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
-            .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
-            .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
-            .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
-            .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
-            .conditional(
-                TemplatePlaceholders.HAS_THEME,
-                context.documentInfo.theme != null,
-            ) // The theme CSS is applied only if a theme is set.
-            // Page format
-            .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
-            .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
-            .value(TemplatePlaceholders.PAGE_HEIGHT, context.documentInfo.pageFormat.pageHeight.toString())
-            .optionalValue(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS)
-
-    override fun generateResources(rendered: CharSequence): Set<OutputResource> {
-        val base = super.generateResources(rendered).toMutableSet()
-
-        // A CSS theme file is added to the output resources
-        // if a theme is set.
-        context.documentInfo.theme?.let {
-            base +=
-                LazyOutputArtifact.internal(
-                    resource = "/render/quarkdown/theme/$it.css",
-                    name = "theme",
-                    type = ArtifactType.CSS,
-                )
-        }
-
-        return base
-    }
-
     /**
      * A `<div class="styleClass">...</div>` tag.
      */

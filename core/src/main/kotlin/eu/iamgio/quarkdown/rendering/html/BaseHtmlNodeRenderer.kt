@@ -38,14 +38,10 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.resolveOrFallback
-import eu.iamgio.quarkdown.pipeline.output.ArtifactType
-import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
-import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.rendering.UnsupportedRenderException
 import eu.iamgio.quarkdown.rendering.tag.TagNodeRenderer
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -65,17 +61,6 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
             .replace(">", "&gt;")
             .replace("\"", "&quot;")
             .replace("\'", "&#39;")
-
-    override fun createCodeWrapper() = RenderWrapper.fromResourceName("/render/base/html-wrapper.html")
-
-    override fun generateResources(rendered: CharSequence): Set<OutputResource> =
-        setOf(
-            OutputArtifact(
-                name = context.documentInfo.name ?: "index",
-                content = rendered,
-                type = ArtifactType.HTML,
-            ),
-        )
 
     // Root
 
