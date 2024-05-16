@@ -139,13 +139,13 @@ fun theme(
 @Name("pageformat")
 fun pageFormat(
     @Injected context: Context,
-    format: PageSizeFormat? = null,
+    @Name("size") format: PageSizeFormat? = null,
     width: Size? = null,
     height: Size? = null,
     margin: Sizes? = null,
 ): VoidValue {
     if (format != null && (width != null || height != null)) {
-        throw IllegalArgumentException("Specifying a page format overrides manual width and height")
+        throw IllegalArgumentException("Specifying a page size format overrides manual width and height")
     }
 
     context.documentInfo.pageFormat =
