@@ -95,7 +95,7 @@ object ValueFactory {
     @FromDynamicType(Size::class)
     fun size(raw: String): ObjectValue<Size> {
         // Matches value and unit, e.g. 10px, 12.5cm, 3in.
-        val regex = "(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?".toRegex()
+        val regex = "^(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?$".toRegex()
         val groups = regex.find(raw)?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
 
         // The value, which is required.
