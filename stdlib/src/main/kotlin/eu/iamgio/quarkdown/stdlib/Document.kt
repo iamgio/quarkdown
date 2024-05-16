@@ -4,6 +4,8 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageFormatInfo
+import eu.iamgio.quarkdown.document.page.PageSizeFormat
+import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
@@ -125,13 +127,31 @@ fun theme(
         },
     )
 
+/**
+ * Sets the format of the document.
+ * If a value is `null`, the default value supplied by the underlying renderer is used.
+ * @param format standard size format of each page (overrides [width] and [height])
+ * @param width width of each page
+ * @param height height of each page
+ * @param margin blank space around the content of each page
+ * @throws IllegalArgumentException if both [format] and either [width] or [height] are not `null`
+ */
 @Name("pageformat")
 fun pageFormat(
     @Injected context: Context,
+    format: PageSizeFormat? = null,
+    width: Size? = null,
+    height: Size? = null,
     margin: Sizes? = null,
 ): VoidValue {
+    if (format != null && (width != null || height != null)) {
+        throw IllegalArgumentException("Specifying a page format overrides manual width and height")
+    }
+
     context.documentInfo.pageFormat =
         PageFormatInfo(
+            pageWidth = format?.width ?: width,
+            pageHeight = format?.height ?: height,
             margin,
         )
 

@@ -29,7 +29,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         RenderWrapper.fromResourceName("/render/quarkdown/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
-            .value(TemplatePlaceholders.PAGE_SIZE, "A4") // TODO set
             .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
@@ -38,6 +37,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 context.documentInfo.theme != null,
             ) // The theme CSS is applied only if a theme is set.
             // Page format
+            .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
+            .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
+            .value(TemplatePlaceholders.PAGE_HEIGHT, context.documentInfo.pageFormat.pageHeight.toString())
             .optionalValue(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS)
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> {
