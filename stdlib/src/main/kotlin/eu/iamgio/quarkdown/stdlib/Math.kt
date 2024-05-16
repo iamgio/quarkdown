@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import kotlin.math.PI
 
@@ -18,6 +19,7 @@ val Math: Module =
         ::sin,
         ::cos,
         ::tan,
+        ::isEven,
     )
 
 // Basic operations
@@ -83,3 +85,11 @@ fun cos(x: Number) = NumberValue(kotlin.math.cos(x.toFloat()))
  * @return tangent of the angle [x] given in radians.
  */
 fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
+
+// Misc
+
+/**
+ * @return whether the integer value of [x] is an even number
+ */
+@Name("iseven")
+fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
