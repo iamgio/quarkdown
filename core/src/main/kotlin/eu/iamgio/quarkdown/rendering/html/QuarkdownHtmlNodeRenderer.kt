@@ -38,8 +38,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 context.documentInfo.theme != null,
             ) // The theme CSS is applied only if a theme is set.
             // Page format
-            .conditional(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin != null)
-            .value(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS ?: "")
+            .optionalValue(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS)
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> {
         val base = super.generateResources(rendered).toMutableSet()

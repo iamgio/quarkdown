@@ -39,6 +39,20 @@ class RenderWrapper(private val code: String) {
     ) = apply { conditionals[conditional] = value }
 
     /**
+     * Adds both a [conditional] to check if [value] is not `null`,
+     * and a [value] to replace the placeholder with the non-`null` value.
+     * @param placeholder both placeholder to replace and name of the conditional
+     * @param value value to replace in change of the placeholder
+     * @return this for concatenation
+     * @see conditional
+     * @see value
+     */
+    fun optionalValue(
+        placeholder: String,
+        value: Any?,
+    ) = conditional(placeholder, value != null).value(placeholder, value ?: "")
+
+    /**
      * Adds a reference to a content placeholder in the template code.
      * This is used to inject rendered code in a template.
      * @param content value to replace in change of the `\[\[CONTENT]]` placeholder
