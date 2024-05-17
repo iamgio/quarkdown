@@ -67,6 +67,12 @@
             break-before: always;
         }
 
+        [[if:MATH]]
+        mjx-container {
+            margin: 0 0.3em
+        }
+        [[endif:MATH]]
+
         @page {
             [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
 
