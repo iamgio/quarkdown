@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
+import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -44,6 +45,8 @@ interface ExpressionVisitor<T> {
     fun visit(value: InlineMarkdownContentValue): T
 
     fun visit(value: DynamicValue): T
+
+    fun visit(value: LambdaValue): T
 
     fun visit(expression: FunctionCall<*>): T
 

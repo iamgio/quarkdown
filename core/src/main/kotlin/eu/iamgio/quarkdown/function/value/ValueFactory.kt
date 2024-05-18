@@ -13,6 +13,8 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
+import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.Lambda1
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.pipeline.Pipelines
@@ -217,7 +219,7 @@ object ValueFactory {
         ).asInline()
 
     /**
-     * Evaluates a
+     * Evaluates an expression from a raw string input.
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
      * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
@@ -277,6 +279,20 @@ object ValueFactory {
         return value as? IterableValue<T>
             ?: throw IllegalStateException("$raw is not a suitable iterable (found: $value)")
     }
+
+    /**
+     * Converts a raw string input to a lambda value.
+     * TODO lambda example
+     * @param raw string input to parse the lambda from
+     * @return a new [LambdaValue] from the raw input
+     */
+    @FromDynamicType(Lambda::class)
+    fun lambda(raw: String) =
+        LambdaValue(
+            Lambda1 {
+                DynamicValue(raw.replace("<<1>>", it.unwrappedValue.toString()))
+            },
+        )
 
     /**
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)

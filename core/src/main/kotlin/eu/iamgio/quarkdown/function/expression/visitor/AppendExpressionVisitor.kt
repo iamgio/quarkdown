@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
+import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
@@ -116,6 +117,9 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
 
     // Like visit(StringValue)
     override fun visit(value: DynamicValue): Expression = DynamicValue(value.concatenate())
+
+    // TODO append lambda
+    override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
 
     // .sum {2} {3} "abc"             -> "5abc"
     // .sum {2} {3} .subtract {8} {1} -> "57"

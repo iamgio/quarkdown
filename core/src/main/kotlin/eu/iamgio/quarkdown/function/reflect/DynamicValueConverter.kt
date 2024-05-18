@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.function.reflect
 
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
 import eu.iamgio.quarkdown.function.value.DynamicValue
@@ -22,13 +23,13 @@ class DynamicValueConverter(private val value: DynamicValue) {
     /**
      * @param type target type to convert this dynamic value to.
      * This type is unwrapped (e.g. if [type] is `String`, the output is of type `StringValue`)
-     * @param call function call that contains this value, used to extract its context
+     * @param context context to evaluate the value for
      * @return a new typed [InputValue], automatically determined from [type], or `null` if it could not be converted
      */
     @Suppress("UNCHECKED_CAST")
     fun convertTo(
         type: KClass<*>,
-        call: FunctionCall<*>,
+        context: Context?,
     ): InputValue<*>? {
         val raw = value.unwrappedValue
 
@@ -53,9 +54,9 @@ class DynamicValueConverter(private val value: DynamicValue) {
             return when {
                 // Fetch the context from the function call if it's required.
                 from.requiresContext -> {
-                    val context =
-                        call.context
-                            ?: throw IllegalStateException("Call to ${call.function.name} does not have an attached context")
+                    if (context == null) {
+                        throw IllegalStateException("Function call does not have an attached context")
+                    }
                     function.call(ValueFactory, raw, context)
                 }
 
@@ -63,9 +64,23 @@ class DynamicValueConverter(private val value: DynamicValue) {
             } as InputValue<*>?
         }
 
-        throw IllegalArgumentException("Cannot convert DynamicInputValue to type $type")
+        throw IllegalArgumentException("Cannot convert DynamicValue to type $type")
     }
 }
+
+/**
+ * Converts a [DynamicValue] to a specific [Value] type.
+ * @param context context to evaluate the value for
+ * @param T **unwrapped** type to convert this dynamic value to.
+ * This type must appear in a [FromDynamicType] annotation on a [ValueFactory] method
+ * @param V **wrapped** value type (which wraps [T]) to convert this dynamic value to
+ * @return an instance of [V] from [this] dynamic value
+ * @throws IllegalArgumentException if the dynamic value could not be converted to the specified type
+ */
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T, V : Value<T>> DynamicValue.toType(context: Context): V =
+    DynamicValueConverter(this).convertTo(T::class, context) as? V
+        ?: throw IllegalArgumentException("Cannot convert DynamicValue to type ${T::class}")
 
 /**
  * When a [ValueFactory] method is marked with this annotation, it is a candidate for type conversion from a [DynamicValue].

@@ -60,7 +60,7 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
                             // The dynamic value is converted into the expected parameter type.
                             // Throws error if the conversion could not happen.
                             val staticValue =
-                                DynamicValueConverter(value).convertTo(parameter.type, call)
+                                DynamicValueConverter(value).convertTo(parameter.type, call.context)
                                     ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
                             argument.copy(expression = staticValue)
