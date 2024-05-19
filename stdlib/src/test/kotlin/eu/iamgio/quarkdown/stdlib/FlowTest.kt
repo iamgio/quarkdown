@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -104,13 +105,13 @@ class FlowTest {
 
     @Test
     fun `control flow`() {
-        val control1 = `if`(context, isLower(2, 4).unwrappedValue, "Hello Quarkdown")
+        val control1 = `if`(context, isLower(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
         assertEquals("Hello Quarkdown", control1.unwrappedValue)
 
-        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, "Hello Quarkdown")
+        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
         assertEquals(VoidValue, control2)
 
-        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, "Hello Quarkdown")
+        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
         assertEquals("Hello Quarkdown", control3.unwrappedValue)
     }
 

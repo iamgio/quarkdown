@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.util.replace
 
 /**
@@ -31,28 +32,30 @@ val Flow: Module =
 
 /**
  * @param condition whether the content should be added to the document
+ * @param body content to append if [condition] is verified
  * @return the evaluation of [body] if [condition] is `true`, otherwise nothing
  */
 @Name("if")
 fun `if`(
     @Injected context: Context,
     condition: Boolean,
-    body: String,
+    body: Lambda,
 ): OutputValue<*> =
     when (condition) {
-        true -> ValueFactory.expression(body, context)?.eval() as OutputValue<*>
+        true -> body.invokeDynamic(context)
         false -> VoidValue
     }
 
 /**
  * @param condition whether the content should be added to the document
+ * @param body content to append if [condition] is not verified
  * @return [body] if [condition] is `false`, otherwise nothing
  */
 @Name("ifnot")
 fun ifNot(
     @Injected context: Context,
     condition: Boolean,
-    body: String,
+    body: Lambda,
 ): OutputValue<*> = `if`(context, !condition, body)
 
 /**

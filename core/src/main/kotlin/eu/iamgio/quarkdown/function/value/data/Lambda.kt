@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
 
@@ -18,6 +19,20 @@ class Lambda(val action: (Array<out Value<*>>) -> String) {
      * Invokes the lambda action with given arguments.
      * @param context context this lambda lies in
      * @param values arguments of the lambda action
+     * @return the result of the lambda action, as an undetermined, thus dynamically-typed, value
+     */
+    fun invokeDynamic(
+        context: Context,
+        vararg values: Value<*>,
+    ): OutputValue<*> {
+        return ValueFactory.expression(action(values), context)?.eval() as? OutputValue<*>
+            ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
+    }
+
+    /**
+     * Invokes the lambda action with given arguments and converts it to a static type.
+     * @param context context this lambda lies in
+     * @param values arguments of the lambda action
      * @param T **unwrapped** type to convert the resulting dynamic value to.
      * This type must appear in a [FromDynamicType] annotation on a [ValueFactory] method
      * @param V **wrapped** value type (which wraps [T]) to convert the resulting dynamic value to
@@ -27,13 +42,13 @@ class Lambda(val action: (Array<out Value<*>>) -> String) {
         context: Context,
         vararg values: Value<*>,
     ): V {
-        val result = ValueFactory.expression(action(values), context)?.eval()
+        val result = invokeDynamic(context, *values)
 
         return if (result is DynamicValue) {
             DynamicValueConverter(result).convertTo(T::class, context)
         } else {
             result
         } as? V
-            ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result?.let { it::class }}")
+            ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result::class}")
     }
 }
