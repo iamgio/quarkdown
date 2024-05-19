@@ -1,7 +1,7 @@
 # Quarkdown
 
 Quarkdown is a work-in-progress markup language to create documents with the minimalism and straightforwardness of Markdown,
-while allowing full control over the structure and style of the document that LaTeX provides.
+while allowing full control over the structure and style of the document that LaTeX provides via a Turing complete, dynamically typed scripting engine.
 
 The base Markdown parsing is CommonMark-compliant, along with several GFM extensions.
 
@@ -56,13 +56,14 @@ The following snippets are valid Quarkdown sources that calculate and display th
 - Recursive:
   ```markdown
   .function {fib}
-      .if { .islower {<<1>>} than:{2} }
-          <<1>>
-      .ifnot { .islower {<<1>>} than:{2} }
+      num:
+      .if { .islower {<<num>>} than:{2} }
+          <<num>>
+      .ifnot { .islower {<<num>>} than:{2} }
           .sum {
-              .fib { .subtract {<<1>>} {1} }
+              .fib { .subtract {<<num>>} {1} }
           } {
-              .fib { .subtract {<<1>>} {2} }
+              .fib { .subtract {<<num>>} {2} }
           }
   
   .table
