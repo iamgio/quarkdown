@@ -313,14 +313,20 @@ object ValueFactory {
         return LambdaValue(
             Lambda { arguments ->
                 // Check if the amount of arguments matches the amount of expected parameters.
-                if (arguments.size != parameters.size) {
+                // In case parameters are not present, placeholders are automatically set to
+                // <<1>>, <<2>>, etc., similarly to Kotlin's 'it' argument.
+                if (arguments.size != parameters.size && parameters.isNotEmpty()) {
                     throw InvalidLambdaArgumentCountException(parameters.size, arguments.size)
                 }
 
                 val builder = StringBuilder(body)
                 // Placeholder replacement.
-                parameters.forEachIndexed { index, parameter ->
-                    builder.replace("<<$parameter>>", arguments[index].unwrappedValue.toString())
+                arguments.forEachIndexed { index, argument ->
+                    // If no parameters are present, placeholders are automatically set to <<1>>, <<2>>, etc.
+                    // Otherwise, the placeholder is set to the parameter name.
+                    val placeholder = parameters.getOrNull(index) ?: (index + 1).toString()
+                    // Replace the placeholder with the actual argument value.
+                    builder.replace("<<$placeholder>>", argument.unwrappedValue.toString())
                 }
                 builder.toString()
             },
