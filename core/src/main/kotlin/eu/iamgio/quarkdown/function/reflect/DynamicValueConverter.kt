@@ -69,20 +69,6 @@ class DynamicValueConverter(private val value: DynamicValue) {
 }
 
 /**
- * Converts a [DynamicValue] to a specific [Value] type.
- * @param context context to evaluate the value for
- * @param T **unwrapped** type to convert this dynamic value to.
- * This type must appear in a [FromDynamicType] annotation on a [ValueFactory] method
- * @param V **wrapped** value type (which wraps [T]) to convert this dynamic value to
- * @return an instance of [V] from [this] dynamic value
- * @throws IllegalArgumentException if the dynamic value could not be converted to the specified type
- */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T, V : Value<T>> DynamicValue.toType(context: Context): V =
-    DynamicValueConverter(this).convertTo(T::class, context) as? V
-        ?: throw IllegalArgumentException("Cannot convert DynamicValue to type ${T::class}")
-
-/**
  * When a [ValueFactory] method is marked with this annotation, it is a candidate for type conversion from a [DynamicValue].
  * @param unwrappedType when an object matches this type, the function is suitable for invocation
  * @param requiresContext whether the factory method requires the [FunctionCall]'s context as an argument

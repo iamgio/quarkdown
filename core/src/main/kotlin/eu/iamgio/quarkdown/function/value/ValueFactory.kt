@@ -9,16 +9,17 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.data.Lambda
-import eu.iamgio.quarkdown.function.value.data.Lambda1
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.util.iterator
+import eu.iamgio.quarkdown.util.replace
 
 /**
  * Factory of [Value] wrappers from raw string data.
@@ -282,17 +283,49 @@ object ValueFactory {
 
     /**
      * Converts a raw string input to a lambda value.
-     * TODO lambda example
+     * Lambda example: `param1 param2 => Hello, <<param1>> and <<param2>>!`
      * @param raw string input to parse the lambda from
      * @return a new [LambdaValue] from the raw input
      */
     @FromDynamicType(Lambda::class)
-    fun lambda(raw: String) =
-        LambdaValue(
-            Lambda1 {
-                DynamicValue(raw.replace("<<1>>", it.unwrappedValue.toString()))
+    fun lambda(raw: String): LambdaValue {
+        // The header is the part before the delimiter.
+        // The header contains the sequence of lambda parameters.
+        // If no header is present, the lambda has no parameters.
+        val headerDelimiter = "=>"
+        // Matches a sequence of words separated by spaces or tabs, followed by the delimiter.
+        val headerRegex = "^\\s*(\\w+[ \\t]+)*(?=$headerDelimiter)".toRegex()
+        val header = headerRegex.find(raw)?.value ?: ""
+        val parameters = header.trim().split("\\s+".toRegex()).filter { it.isNotBlank() }
+
+        // The body is the part after the delimiter,
+        // which is the actual content of the lambda.
+        // The body may contain placeholders wrapped in <<>> that will be replaced with actual arguments upon invocation.
+        val body =
+            if (header.isEmpty()) {
+                raw
+            } else {
+                // Strip the header and delimiter.
+                raw.substring(raw.indexOf(headerDelimiter) + headerDelimiter.length)
+                    .trimStart()
+            }
+
+        return LambdaValue(
+            Lambda { arguments ->
+                // Check if the amount of arguments matches the amount of expected parameters.
+                if (arguments.size != parameters.size) {
+                    throw InvalidLambdaArgumentCountException(parameters.size, arguments.size)
+                }
+
+                val builder = StringBuilder(body)
+                // Placeholder replacement.
+                parameters.forEachIndexed { index, parameter ->
+                    builder.replace("<<$parameter>>", arguments[index].unwrappedValue.toString())
+                }
+                builder.toString()
             },
         )
+    }
 
     /**
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
