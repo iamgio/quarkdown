@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
+import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -20,6 +21,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 
@@ -54,7 +56,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc1",
-            body = "Hello Quarkdown",
+            body = Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" },
         )
 
         assertEquals(
@@ -65,7 +67,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc2",
-            body = "- Hello **Quarkdown**\n- Hello",
+            body = ValueFactory.lambda("- Hello **Quarkdown**\n- Hello").unwrappedValue,
         )
 
         call("myfunc2", arguments = emptyList()).let {
@@ -87,7 +89,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc3",
-            body = "Hello **<<1>>** from _<<2>>_",
+            body = ValueFactory.lambda("to from: Hello **<<to>>** from _<<from>>_").unwrappedValue,
         )
 
         assertEquals(
@@ -105,14 +107,18 @@ class FlowTest {
 
     @Test
     fun `control flow`() {
-        val control1 = `if`(context, isLower(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
+        val control1 = `if`(context, isLower(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
         assertEquals("Hello Quarkdown", control1.unwrappedValue)
 
-        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
+        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
         assertEquals(VoidValue, control2)
 
-        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, Lambda { "Hello Quarkdown" })
+        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
         assertEquals("Hello Quarkdown", control3.unwrappedValue)
+
+        assertFailsWith<InvalidLambdaArgumentCountException> {
+            `if`(context, isLower(2, 4).unwrappedValue, Lambda(explicitParameters = listOf("a")) { "Hello Quarkdown" })
+        }
     }
 
     @Test
@@ -124,7 +130,7 @@ class FlowTest {
                     StringValue("Hello"),
                     StringValue("Quarkdown"),
                 ),
-                body = Lambda { "**${it.first().unwrappedValue}**" },
+                body = Lambda(explicitParameters = emptyList()) { "**${it.first().unwrappedValue}**" },
             )
 
         assertEquals(

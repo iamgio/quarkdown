@@ -182,12 +182,12 @@ class FullPipelineTest {
             assertEquals("<p><code>Hello</code>!</p>", it)
         }
 
-        execute(".function {hello}\n  `Hello` <<1>>!\n\n.hello {world}") {
+        execute(".function {hello}\n   target:\n  `Hello` <<target>>!\n\n.hello {world}") {
             assertEquals("<p><code>Hello</code> world!</p>", it)
         }
 
         assertFailsWith<InvalidArgumentCountException> {
-            execute(".function {hello}\n  `Hello` <<1>>!\n\n.hello") {}
+            execute(".function {hello}\n   target:\n  `Hello` <<target>>!\n\n.hello") {}
         }
     }
 
@@ -215,7 +215,8 @@ class FullPipelineTest {
             .var {t2} {1}
             
             .function {column}
-                |  $ F_<<1>> $  |
+                n:
+                |  $ F_<<n>> $  |
                 |:-------------:|
                 |      .t1      |
             
@@ -231,13 +232,14 @@ class FullPipelineTest {
         val recursive =
             """
             .function {fib}
-                .if { .islower {<<1>>} than:{2} }
-                    <<1>>
-                .ifnot { .islower {<<1>>} than:{2} }
+                n:
+                .if { .islower {<<n>>} than:{2} }
+                    <<n>>
+                .ifnot { .islower {<<n>>} than:{2} }
                     .sum {
-                        .fib { .subtract {<<1>>} {1} }
+                        .fib { .subtract {<<n>>} {1} }
                     } {
-                        .fib { .subtract {<<1>>} {2} }
+                        .fib { .subtract {<<n>>} {2} }
                     }
               
             .table

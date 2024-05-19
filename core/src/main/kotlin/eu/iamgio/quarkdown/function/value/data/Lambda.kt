@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.value.data
 
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
@@ -14,18 +15,26 @@ import eu.iamgio.quarkdown.function.value.ValueFactory
  * The return type is dynamic (a snippet of raw Quarkdown code is returned), hence it is evaluated and converted to a static type.
  * @param action action to perform, which takes a variable sequence of [Value]s as arguments and returns a Quarkdown code snippet.
  */
-class Lambda(val action: (Array<out Value<*>>) -> String) {
+class Lambda(val explicitParameters: List<String>, val action: (Array<out Value<*>>) -> String) {
     /**
      * Invokes the lambda action with given arguments.
      * @param context context this lambda lies in
-     * @param values arguments of the lambda action
+     * @param arguments arguments of the lambda action
      * @return the result of the lambda action, as an undetermined, thus dynamically-typed, value
      */
     fun invokeDynamic(
         context: Context,
-        vararg values: Value<*>,
+        vararg arguments: Value<*>,
     ): OutputValue<*> {
-        return ValueFactory.expression(action(values), context)?.eval() as? OutputValue<*>
+        // Check if the amount of arguments matches the amount of expected parameters.
+        // In case parameters are not present, placeholders are automatically set to
+        // <<1>>, <<2>>, etc., similarly to Kotlin's 'it' argument.
+        // This replacement is handled by ValueFactory.lambda
+        if (arguments.size != explicitParameters.size && explicitParameters.isNotEmpty()) {
+            throw InvalidLambdaArgumentCountException(explicitParameters.size, arguments.size)
+        }
+
+        return ValueFactory.expression(action(arguments), context)?.eval() as? OutputValue<*>
             ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
     }
 

@@ -9,7 +9,6 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
-import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
@@ -311,13 +310,9 @@ object ValueFactory {
             }
 
         return LambdaValue(
-            Lambda { arguments ->
-                // Check if the amount of arguments matches the amount of expected parameters.
-                // In case parameters are not present, placeholders are automatically set to
-                // <<1>>, <<2>>, etc., similarly to Kotlin's 'it' argument.
-                if (arguments.size != parameters.size && parameters.isNotEmpty()) {
-                    throw InvalidLambdaArgumentCountException(parameters.size, arguments.size)
-                }
+            Lambda(explicitParameters = parameters) { arguments ->
+                // Parameters-arguments count match is checked by Lambda#invoke.
+                // Here we assume they match is correct.
 
                 val builder = StringBuilder(body)
                 // Placeholder replacement.
