@@ -2,14 +2,10 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
-import eu.iamgio.quarkdown.function.reflect.toType
 import eu.iamgio.quarkdown.function.value.NodeValue
-import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.data.Lambda1
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
 
@@ -21,13 +17,7 @@ val Text: Module =
     setOf(
         ::code,
         ::loremIpsum,
-        ::greet,
     )
-
-fun greet(
-    @Injected context: Context,
-    x: Lambda1,
-): StringValue = x("Gio".wrappedAsValue()).toType<String, StringValue>(context)
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,

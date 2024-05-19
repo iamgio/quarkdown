@@ -4,7 +4,6 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
-import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
@@ -62,7 +61,6 @@ fun ifNot(
  * Repeats content for each element of an iterable collection.
  * The current element can be accessed via the `<<name>>` placeholder, which defaults to `<<1>>`.
  * @param iterable collection to iterate
- * @param name placeholder to access the current element (wrapped in double angle brackets)
  * @param body content, output of each iteration
  * @return a collection that contains the output of each iteration
  */
@@ -70,13 +68,11 @@ fun ifNot(
 fun forEach(
     @Injected context: Context,
     iterable: Iterable<Value<*>>,
-    name: String = "1",
-    body: String,
+    body: Lambda,
 ): IterableValue<OutputValue<*>> {
     val values =
         iterable.map {
-            val content = body.replace("<<$name>>", it.unwrappedValue.toString())
-            ValueFactory.expression(content, context)?.eval() as OutputValue<*>
+            body.invokeDynamic(context, it)
         }
 
     return GeneralCollectionValue(values)

@@ -124,7 +124,7 @@ class FlowTest {
                     StringValue("Hello"),
                     StringValue("Quarkdown"),
                 ),
-                body = "**<<1>>**",
+                body = Lambda { "**${it.first().unwrappedValue}**" },
             )
 
         assertEquals(
@@ -139,8 +139,7 @@ class FlowTest {
             forEach(
                 context,
                 Range(start = 2, end = 4),
-                name = "n",
-                body = "N: <<n>>",
+                body = ValueFactory.lambda("n: \nN: <<n>>").unwrappedValue, // Explicit lambda placeholder
             )
 
         assertEquals(
@@ -156,7 +155,7 @@ class FlowTest {
             forEach(
                 context,
                 ValueFactory.range("..4").unwrappedValue,
-                body = "N: <<1>>",
+                body = ValueFactory.lambda("N\\: <<1>>").unwrappedValue,
             )
 
         assertEquals(
@@ -174,7 +173,7 @@ class FlowTest {
             forEach(
                 context,
                 ValueFactory.range("1..").unwrappedValue,
-                body = "N: <<1>>",
+                body = ValueFactory.lambda("N\\: <<1>>").unwrappedValue,
             )
         }
     }
