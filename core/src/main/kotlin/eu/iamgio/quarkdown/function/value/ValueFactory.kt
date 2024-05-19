@@ -292,9 +292,9 @@ object ValueFactory {
         // The header is the part before the delimiter.
         // The header contains the sequence of lambda parameters.
         // If no header is present, the lambda has no parameters.
-        val headerDelimiter = "=>"
+        val headerDelimiter = ":"
         // Matches a sequence of words separated by spaces or tabs, followed by the delimiter.
-        val headerRegex = "^\\s*(\\w+[ \\t]+)*(?=$headerDelimiter)".toRegex()
+        val headerRegex = "^\\s*(\\w+[ \\t]*)*(?=$headerDelimiter)".toRegex()
         val header = headerRegex.find(raw)?.value ?: ""
         val parameters = header.trim().split("\\s+".toRegex()).filter { it.isNotBlank() }
 
