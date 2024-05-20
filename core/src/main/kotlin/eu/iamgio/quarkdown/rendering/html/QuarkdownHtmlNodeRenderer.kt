@@ -8,7 +8,9 @@ import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
+import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 
 private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
@@ -64,6 +66,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 }
             }
             +node.children
+        }
+
+    override fun visit(node: PageCounterInitializer) =
+        buildTag("script") {
+            val property = "--page-margin-${node.position.asCSS}-content"
+            val content = node.text("\"counter(page)\"", "\"counter(pages)\"")
+            +"document.documentElement.style.setProperty('$property', '\"$content\"');"
         }
 
     // Inline

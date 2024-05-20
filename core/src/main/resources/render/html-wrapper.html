@@ -40,13 +40,13 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .align-left {
             text-align: left;
             justify-content: left;
             align-items: start;
         }
-        
+
         .align-center {
             text-align: center;
             justify-content: center;
@@ -78,6 +78,73 @@
 
             [[if:PAGEMARGIN]] margin: [[PAGEMARGIN]]; [[endif:PAGEMARGIN]]
 
+            @top-left-corner {
+                content: var(--page-margin-top-left-corner-content)
+            }
+
+            @top-left {
+                content: var(--page-margin-top-left-content)
+            }
+
+            @top-center {
+                content: var(--page-margin-top-center-content)
+            }
+
+            @top-right {
+                content: var(--page-margin-top-right-content)
+            }
+
+            @top-right-corner {
+                content: var(--page-margin-top-right-corner-content)
+            }
+
+            @top-right-corner {
+                content: var(--page-margin-top-right-corner-content)
+            }
+
+            @right-top {
+                content: var(--page-margin-right-top-content)
+            }
+
+            @right-middle {
+                content: var(--page-margin-right-middle-content)
+            }
+
+            @right-bottom {
+                content: var(--page-margin-right-bottom-content)
+            }
+
+            @bottom-right-corner {
+                content: var(--page-margin-bottom-right-corner-content)
+            }
+
+            @bottom-right {
+                content: var(--page-margin-bottom-right-content)
+            }
+
+            @bottom-center {
+                content: var(--page-margin-bottom-center-content)
+            }
+
+            @bottom-left {
+                content: var(--page-margin-bottom-left-content)
+            }
+
+            @bottom-left-corner {
+                content: var(--page-margin-bottom-left-corner-content)
+            }
+
+            @left-bottom {
+                content: var(--page-margin-left-bottom-content)
+            }
+
+            @left-middle {
+                content: var(--page-margin-left-middle-content)
+            }
+
+            @left-top {
+                content: var(--page-margin-left-top-content)
+            }
         }
     </style>
 </head>

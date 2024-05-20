@@ -15,5 +15,5 @@ data class DocumentInfo(
     var name: String? = null,
     var author: String? = null,
     var theme: String? = null,
-    var pageFormat: PageFormatInfo = PageFormatInfo(),
+    val pageFormat: PageFormatInfo = PageFormatInfo(),
 )

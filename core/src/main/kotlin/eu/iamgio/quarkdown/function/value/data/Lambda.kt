@@ -15,7 +15,7 @@ import eu.iamgio.quarkdown.function.value.ValueFactory
  * The return type is dynamic (a snippet of raw Quarkdown code is returned), hence it is evaluated and converted to a static type.
  * @param action action to perform, which takes a variable sequence of [Value]s as arguments and returns a Quarkdown code snippet.
  */
-class Lambda(val explicitParameters: List<String>, val action: (Array<out Value<*>>) -> String) {
+class Lambda(val explicitParameters: List<String> = emptyList(), val action: (Array<out Value<*>>) -> String) {
     /**
      * Invokes the lambda action with given arguments.
      * @param context context this lambda lies in

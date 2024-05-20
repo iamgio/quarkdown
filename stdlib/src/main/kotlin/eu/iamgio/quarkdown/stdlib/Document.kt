@@ -1,17 +1,20 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
-import eu.iamgio.quarkdown.document.page.PageFormatInfo
+import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
 
@@ -27,6 +30,7 @@ val Document: Module =
         ::docAuthor,
         ::theme,
         ::pageFormat,
+        ::pageCounter,
     )
 
 /**
@@ -148,12 +152,39 @@ fun pageFormat(
         throw IllegalArgumentException("Specifying a page size format overrides manual width and height")
     }
 
-    context.documentInfo.pageFormat =
-        PageFormatInfo(
-            pageWidth = format?.width ?: width,
-            pageHeight = format?.height ?: height,
-            margin,
-        )
+    with(context.documentInfo.pageFormat) {
+        this.pageWidth = format?.width ?: width
+        this.pageHeight = format?.height ?: height
+        this.margin = margin
+    }
 
     return VoidValue
 }
+
+/**
+ * Sets the global page counter for a paged document.
+ * @param position position of the counter within the page
+ * @param text action that returns the text of the counter.
+ *             Accepts two arguments: index of the current page and total amount of pages.
+ *             Markdown content is not supported
+ * @return a wrapped [PageCounterInitializer] node
+ */
+@Name("pagecounter")
+fun pageCounter(
+    @Injected context: Context,
+    position: PageMarginPosition = PageMarginPosition.BOTTOM_CENTER,
+    text: Lambda =
+        Lambda { (current, total) ->
+            "$current / $total"
+        },
+): NodeValue =
+    PageCounterInitializer(
+        text = { current, total ->
+            text.invoke<String, StringValue>(
+                context,
+                StringValue(current),
+                StringValue(total),
+            ).unwrappedValue
+        },
+        position,
+    ).wrappedAsValue()

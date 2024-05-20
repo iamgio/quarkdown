@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 // Nodes that aren't parsed from the source Markdown input,
@@ -72,5 +73,20 @@ data class Box(
     val title: InlineContent?,
     override val children: List<Node>,
 ) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * A non-visible node that triggers a property in paged documents that allows displaying a page counter on each page.
+ * @param text action that returns the text of the counter.
+ *             Arguments: index of the current page and total amount of pages.
+ *             These are strings instead of numbers since the arguments can be placeholders.
+ *             e.g. when using PagedJS for HTML rendering, CSS properties `counter(page)` and `counter(pages)` are used.
+ * @param position position of the counter within the page
+ */
+data class PageCounterInitializer(
+    val text: (String, String) -> String,
+    val position: PageMarginPosition,
+) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
