@@ -1,9 +1,11 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
 import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
+import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 import kotlin.test.assertIs
 
@@ -41,4 +43,11 @@ inline fun <reified T : Node> nodesIterator(
         }
         .filterIsInstance<T>()
         .iterator()
+}
+
+/**
+ * Attaches a mock pipeline to a context for tests only, which does not support rendering.
+ */
+fun MutableContext.attachMockPipeline() {
+    Pipeline(this, libraries = emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
 }

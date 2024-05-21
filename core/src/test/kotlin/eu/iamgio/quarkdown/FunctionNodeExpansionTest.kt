@@ -22,7 +22,6 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.pipeline.Pipeline
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -77,7 +76,7 @@ class FunctionNodeExpansionTest {
 
         // Initialization attaches the pipeline to the context.
         // This is used to parse Markdown content in arguments.
-        Pipeline(context, libraries = emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
+        context.attachMockPipeline()
 
         val library =
             MultiFunctionLibraryLoader("lib").load(

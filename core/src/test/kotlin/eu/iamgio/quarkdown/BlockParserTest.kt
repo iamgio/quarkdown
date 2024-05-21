@@ -24,7 +24,6 @@ import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.pipeline.Pipeline
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -49,8 +48,7 @@ class BlockParserTest {
         flavor: MarkdownFlavor = QuarkdownFlavor,
     ): Iterator<T> {
         val context = MutableContext(flavor)
-        // Attaches a mock pipeline to the context.
-        Pipeline(context, libraries = emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
+        context.attachMockPipeline()
 
         val lexer = flavor.lexerFactory.newBlockLexer(source)
         val parser = flavor.parserFactory.newParser(context)

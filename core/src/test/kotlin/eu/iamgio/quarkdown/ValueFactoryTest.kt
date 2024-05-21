@@ -1,9 +1,13 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -11,6 +15,8 @@ import eu.iamgio.quarkdown.function.value.data.Range
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNull
 
 /**
@@ -110,6 +116,47 @@ class ValueFactoryTest {
         assertEquals(SizeUnit.CM, ValueFactory.enum("CM", values)!!.unwrappedValue)
         assertEquals(SizeUnit.MM, ValueFactory.enum("mM", values)!!.unwrappedValue)
         assertNull(ValueFactory.enum("abc", values))
+    }
+
+    @Test
+    fun lambda() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.attachMockPipeline()
+
+        // No arguments.
+        with(ValueFactory.lambda("hello")) {
+            assertIs<LambdaValue>(this)
+            assertEquals("hello", unwrappedValue.invoke<String, StringValue>(context).unwrappedValue)
+        }
+
+        // Two implicit arguments.
+        assertEquals(
+            "hello world from iamgio",
+            ValueFactory.lambda("hello <<1>> from <<2>>").unwrappedValue.invoke<String, StringValue>(
+                context,
+                StringValue("world"),
+                StringValue("iamgio"),
+            ).unwrappedValue,
+        )
+
+        // Two explicit arguments.
+        assertEquals(
+            "hello world from iamgio",
+            ValueFactory.lambda("to from: hello <<to>> from <<from>>").unwrappedValue.invoke<String, StringValue>(
+                context,
+                StringValue("world"),
+                StringValue("iamgio"),
+            ).unwrappedValue,
+        )
+
+        // Mixing explicit and implicit arguments are not allowed.
+        assertFailsWith<InvalidLambdaArgumentCountException> {
+            ValueFactory.lambda("to: hello <<to>> from <<2>>").unwrappedValue.invoke<String, StringValue>(
+                context,
+                StringValue("world"),
+                StringValue("iamgio"),
+            ).unwrappedValue
+        }
     }
 
     // TODO others that require context
