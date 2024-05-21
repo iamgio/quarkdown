@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
@@ -30,6 +31,7 @@ val Document: Module =
         ::docAuthor,
         ::theme,
         ::pageFormat,
+        ::pageMarginContent,
         ::pageCounter,
     )
 
@@ -160,6 +162,23 @@ fun pageFormat(
 
     return VoidValue
 }
+
+/**
+ * Displays text content on each page of a paged document.
+ * @param position position of the content within the page
+ * @param text text content to be displayed on each page
+ * @return a wrapped [PageMarginContentInitializer] node
+ */
+@Name("pagemargincontent")
+fun pageMarginContent(
+    @Injected context: Context,
+    position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
+    text: Lambda,
+): NodeValue =
+    PageMarginContentInitializer(
+        text.invoke<String, StringValue>(context).unwrappedValue,
+        position,
+    ).wrappedAsValue()
 
 /**
  * Sets the global page counter for a paged document.

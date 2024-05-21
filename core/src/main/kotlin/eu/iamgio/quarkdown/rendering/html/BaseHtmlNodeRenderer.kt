@@ -27,6 +27,7 @@ import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -233,6 +234,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: Clipped): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Box): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageCounterInitializer): CharSequence = throw UnsupportedRenderException(node)
 

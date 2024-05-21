@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -68,15 +69,25 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +node.children
         }
 
-    override fun visit(node: PageCounterInitializer) =
-        buildTag("script") {
-            val property = "--page-margin-${node.position.asCSS}-content"
-            val content = node.text("\"counter(page)\"", "\"counter(pages)\"")
-            +"document.documentElement.style.setProperty('$property', '\"$content\"');"
-        }
-
     // Inline
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: MathSpan) = INLINE_MATH_FENCE + "$" + node.expression + "$" + INLINE_MATH_FENCE
+
+    // Invisible nodes
+
+    override fun visit(node: PageMarginContentInitializer) =
+        buildTag("script") {
+            val property = "--page-margin-${node.position.asCSS}-content"
+            val content = node.text
+            +"document.documentElement.style.setProperty('$property', '\"$content\"');"
+        }
+
+    override fun visit(node: PageCounterInitializer) =
+        visit(
+            PageMarginContentInitializer(
+                text = node.text("\"counter(page)\"", "\"counter(pages)\""),
+                position = node.position,
+            ),
+        )
 }

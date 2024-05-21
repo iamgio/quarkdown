@@ -27,6 +27,7 @@ import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
@@ -121,9 +122,13 @@ interface NodeVisitor<T> {
 
     fun visit(node: Box): T
 
-    fun visit(node: PageCounterInitializer): T
-
     // Quarkdown inline
 
     fun visit(node: MathSpan): T
+
+    // Quarkdown invisible nodes
+
+    fun visit(node: PageMarginContentInitializer): T
+
+    fun visit(node: PageCounterInitializer): T
 }
