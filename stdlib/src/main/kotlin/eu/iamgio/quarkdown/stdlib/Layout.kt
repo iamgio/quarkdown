@@ -72,9 +72,9 @@ fun box(
  * ```
  * .table
  *     .foreach {1..5}
- *         | Header <<1>> |
- *         |--------------|
- *         |  Cell <<1>>  |
+ *         | Header .1 |
+ *         |-----------|
+ *         |  Cell .1  |
  * ```
  *
  * @param subTables independent tables (as Markdown sources) that will be parsed and joined together into a single table

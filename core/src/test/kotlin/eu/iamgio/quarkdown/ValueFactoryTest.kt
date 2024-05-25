@@ -124,7 +124,7 @@ class ValueFactoryTest {
         context.attachMockPipeline()
 
         // No arguments.
-        with(ValueFactory.lambda("hello")) {
+        with(ValueFactory.lambda("hello", context)) {
             assertIs<LambdaValue>(this)
             assertEquals("hello", unwrappedValue.invoke<String, StringValue>(context).unwrappedValue)
         }
@@ -132,7 +132,7 @@ class ValueFactoryTest {
         // Two implicit arguments.
         assertEquals(
             "hello world from iamgio",
-            ValueFactory.lambda("hello <<1>> from <<2>>").unwrappedValue.invoke<String, StringValue>(
+            ValueFactory.lambda("hello .1 from .2", context).unwrappedValue.invoke<String, StringValue>(
                 context,
                 StringValue("world"),
                 StringValue("iamgio"),
@@ -142,7 +142,10 @@ class ValueFactoryTest {
         // Two explicit arguments.
         assertEquals(
             "hello world from iamgio",
-            ValueFactory.lambda("to from: hello <<to>> from <<from>>").unwrappedValue.invoke<String, StringValue>(
+            ValueFactory.lambda(
+                "to from: hello .to from .from",
+                context,
+            ).unwrappedValue.invoke<String, StringValue>(
                 context,
                 StringValue("world"),
                 StringValue("iamgio"),
@@ -151,7 +154,7 @@ class ValueFactoryTest {
 
         // Mixing explicit and implicit arguments are not allowed.
         assertFailsWith<InvalidLambdaArgumentCountException> {
-            ValueFactory.lambda("to: hello <<to>> from <<2>>").unwrappedValue.invoke<String, StringValue>(
+            ValueFactory.lambda("to: hello .to from .2", context).unwrappedValue.invoke<String, StringValue>(
                 context,
                 StringValue("world"),
                 StringValue("iamgio"),

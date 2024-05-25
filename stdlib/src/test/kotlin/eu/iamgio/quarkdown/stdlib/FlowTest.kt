@@ -56,7 +56,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc1",
-            body = Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" },
+            body = Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
         )
 
         assertEquals(
@@ -67,7 +67,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc2",
-            body = ValueFactory.lambda("- Hello **Quarkdown**\n- Hello").unwrappedValue,
+            body = ValueFactory.lambda("- Hello **Quarkdown**\n- Hello", context).unwrappedValue,
         )
 
         call("myfunc2", arguments = emptyList()).let {
@@ -89,7 +89,7 @@ class FlowTest {
         function(
             context,
             name = "myfunc3",
-            body = ValueFactory.lambda("to from: Hello **<<to>>** from _<<from>>_").unwrappedValue,
+            body = ValueFactory.lambda("to from: Hello **.to** from _.from_", context).unwrappedValue,
         )
 
         assertEquals(
@@ -107,17 +107,32 @@ class FlowTest {
 
     @Test
     fun `control flow`() {
-        val control1 = `if`(context, isLower(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
+        val control1 =
+            `if`(
+                isLower(2, 4).unwrappedValue,
+                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+            )
         assertEquals("Hello Quarkdown", control1.unwrappedValue)
 
-        val control2 = `if`(context, isGreater(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
+        val control2 =
+            `if`(
+                isGreater(2, 4).unwrappedValue,
+                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+            )
         assertEquals(VoidValue, control2)
 
-        val control3 = ifNot(context, isGreater(2, 4).unwrappedValue, Lambda(explicitParameters = emptyList()) { "Hello Quarkdown" })
+        val control3 =
+            ifNot(
+                isGreater(2, 4).unwrappedValue,
+                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+            )
         assertEquals("Hello Quarkdown", control3.unwrappedValue)
 
         assertFailsWith<InvalidLambdaArgumentCountException> {
-            `if`(context, isLower(2, 4).unwrappedValue, Lambda(explicitParameters = listOf("a")) { "Hello Quarkdown" })
+            `if`(
+                isLower(2, 4).unwrappedValue,
+                Lambda(context, explicitParameters = listOf("a")) { "Hello Quarkdown" },
+            )
         }
     }
 
@@ -125,12 +140,11 @@ class FlowTest {
     fun `loop flow`() {
         val loop1 =
             forEach(
-                context,
                 listOf(
                     StringValue("Hello"),
                     StringValue("Quarkdown"),
                 ),
-                body = Lambda(explicitParameters = emptyList()) { "**${it.first().unwrappedValue}**" },
+                body = Lambda(context, explicitParameters = emptyList()) { "**${it.first().unwrappedValue}**" },
             )
 
         assertEquals(
@@ -143,9 +157,8 @@ class FlowTest {
 
         val loop2 =
             forEach(
-                context,
                 Range(start = 2, end = 4),
-                body = ValueFactory.lambda("n: \nN: <<n>>").unwrappedValue, // Explicit lambda placeholder
+                body = ValueFactory.lambda("n: \nN: .n", context).unwrappedValue, // Explicit lambda placeholder
             )
 
         assertEquals(
@@ -159,9 +172,8 @@ class FlowTest {
 
         val loop3 =
             forEach(
-                context,
                 ValueFactory.range("..4").unwrappedValue,
-                body = ValueFactory.lambda("N\\: <<1>>").unwrappedValue,
+                body = ValueFactory.lambda("N\\: .1", context).unwrappedValue,
             )
 
         assertEquals(
@@ -177,9 +189,8 @@ class FlowTest {
         // Iterating ranges with indefinite right end is not allowed.
         assertFails {
             forEach(
-                context,
                 ValueFactory.range("1..").unwrappedValue,
-                body = ValueFactory.lambda("N\\: <<1>>").unwrappedValue,
+                body = ValueFactory.lambda("N\\: .1", context).unwrappedValue,
             )
         }
     }

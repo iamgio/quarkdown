@@ -46,7 +46,7 @@ The following snippets are valid Quarkdown sources that calculate and display th
 
   .table
       .foreach {..8}
-          | $ F_{<<1>>} $ |
+          | $ F_{.1} $ |
           |:-------------:|
           |      .t1      |
           .var {tmp} {.sum {.t1} {.t2}}
@@ -57,20 +57,20 @@ The following snippets are valid Quarkdown sources that calculate and display th
   ```markdown
   .function {fib}
       num:
-      .if { .islower {<<num>>} than:{2} }
-          <<num>>
-      .ifnot { .islower {<<num>>} than:{2} }
+      .if { .islower {.num} than:{2} }
+          .num
+      .ifnot { .islower {.num} than:{2} }
           .sum {
-              .fib { .subtract {<<num>>} {1} }
+              .fib { .subtract {.num} {1} }
           } {
-              .fib { .subtract {<<num>>} {2} }
+              .fib { .subtract {.num} {2} }
           }
   
   .table
       .foreach {..7}
-          | $ F_<<1>> $  |
+          | $ F_.1 $  |
           |:------------:|
-          | .fib {<<1>>} |
+          | .fib {.1} |
   ```
 
 Output:

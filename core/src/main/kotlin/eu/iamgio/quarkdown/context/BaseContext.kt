@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
@@ -58,5 +59,16 @@ open class BaseContext(
 
     override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> {
         return UncheckedFunctionCall(call.name) { resolve(call) }
+    }
+
+    override fun fork(): MutableContext {
+        val fork = MutableContext(flavor, errorHandler, libraries, attributes.toMutable())
+
+        // Attach the same pipeline (if it exists) to the fork.
+        Pipelines.getAttachedPipeline(this)?.let {
+            Pipelines.attach(fork, it)
+        }
+
+        return fork
     }
 }

@@ -1,6 +1,5 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
@@ -35,12 +34,11 @@ val Flow: Module =
  */
 @Name("if")
 fun `if`(
-    @Injected context: Context,
     condition: Boolean,
     body: Lambda,
 ): OutputValue<*> =
     when (condition) {
-        true -> body.invokeDynamic(context)
+        true -> body.invokeDynamic()
         false -> VoidValue
     }
 
@@ -51,27 +49,25 @@ fun `if`(
  */
 @Name("ifnot")
 fun ifNot(
-    @Injected context: Context,
     condition: Boolean,
     body: Lambda,
-): OutputValue<*> = `if`(context, !condition, body)
+): OutputValue<*> = `if`(!condition, body)
 
 /**
  * Repeats content for each element of an iterable collection.
- * The current element can be accessed via the `<<name>>` placeholder, which defaults to `<<1>>`.
+ * The current element can be accessed via the lambda argument.
  * @param iterable collection to iterate
  * @param body content, output of each iteration. Accepts 1 parameter (the current element).
  * @return a collection that contains the output of each iteration
  */
 @Name("foreach")
 fun forEach(
-    @Injected context: Context,
     iterable: Iterable<Value<*>>,
     body: Lambda,
 ): IterableValue<OutputValue<*>> {
     val values =
         iterable.map {
-            body.invokeDynamic(context, it)
+            body.invokeDynamic(it)
         }
 
     return GeneralCollectionValue(values)
@@ -79,16 +75,17 @@ fun forEach(
 
 /**
  * Defines a custom function that can be called later in the document.
- * The function can have placeholders that will be replaced with actual arguments upon invocation,
- * defined as `<<1>>`, `<<2>>`, and so on, always starting from 1.
- *
- * Unwanted results may be produced if:
- * - `<<0>>` is referenced
- * - References are not in a continuous ascending sequence (e.g. `<<3>>` is referenced but `<<2>>` is not).
- *
- * The amount of parameters (thus of expected arguments) is determined by the highest number among the placeholders.
- * Upon invocation, the placeholders are replaced with the string representation of the actual arguments.
+ * The amount of parameters (thus of expected arguments) is determined by the amount of **explicit** lambda parameters.
+ * Arguments can be accessed as a function call with their names.
  * The return type of the function is dynamic, hence it can be used as an input of various types for other function calls.
+ *
+ * Example:
+ * ```
+ * .function {greet}
+ *     from to:
+ *     **Hello .to** from .from
+ * ```
+ *
  * @param name name of the function
  * @param body content of the function. Function parameters must be **explicit** lambda parameters
  */
@@ -107,7 +104,7 @@ fun function(
     val function =
         SimpleFunction(name, parameters) {
             val args = this.links.values.map { it.value }.toTypedArray()
-            val result = body.invokeDynamic(context, *args)
+            val result = body.invokeDynamic(*args)
             // The final content is evaluated and returned as a dynamic, hence it can be used as any type.
             ValueFactory.dynamic(result.unwrappedValue.toString(), context)
         }
@@ -136,7 +133,7 @@ fun variable(
     return function(
         context,
         name,
-        Lambda(explicitParameters = emptyList()) {
+        Lambda(context, explicitParameters = emptyList()) {
             value
         },
     )

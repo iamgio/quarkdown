@@ -17,8 +17,8 @@ import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.pipeline.Pipelines
+import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
-import eu.iamgio.quarkdown.util.replace
 
 /**
  * Factory of [Value] wrappers from raw string data.
@@ -172,7 +172,7 @@ object ValueFactory {
         // Retrieving the pipeline linked to the context.
         val pipeline =
             Pipelines.getAttachedPipeline(context)
-                ?: throw IllegalStateException("Context does not have an attached pipeline")
+                ?: throw UnattachedPipelineException()
 
         // Convert string input to parsed AST.
         val root = pipeline.parse(lexer.tokenize())
@@ -282,12 +282,15 @@ object ValueFactory {
 
     /**
      * Converts a raw string input to a lambda value.
-     * Lambda example: `param1 param2 => Hello, <<param1>> and <<param2>>!`
+     * Lambda example: `param1 param2 => Hello, .param1 and .param2!`
      * @param raw string input to parse the lambda from
      * @return a new [LambdaValue] from the raw input
      */
-    @FromDynamicType(Lambda::class)
-    fun lambda(raw: String): LambdaValue {
+    @FromDynamicType(Lambda::class, requiresContext = true)
+    fun lambda(
+        raw: String,
+        context: Context,
+    ): LambdaValue {
         // The header is the part before the delimiter.
         // The header contains the sequence of lambda parameters.
         // If no header is present, the lambda has no parameters.
@@ -310,20 +313,10 @@ object ValueFactory {
             }
 
         return LambdaValue(
-            Lambda(explicitParameters = parameters) { arguments ->
+            Lambda(context, explicitParameters = parameters) {
                 // Parameters-arguments count match is checked by Lambda#invoke.
                 // Here we assume they match is correct.
-
-                val builder = StringBuilder(body)
-                // Placeholder replacement.
-                arguments.forEachIndexed { index, argument ->
-                    // If no parameters are present, placeholders are automatically set to <<1>>, <<2>>, etc.
-                    // Otherwise, the placeholder is set to the parameter name.
-                    val placeholder = parameters.getOrNull(index) ?: (index + 1).toString()
-                    // Replace the placeholder with the actual argument value.
-                    builder.replace("<<$placeholder>>", argument.unwrappedValue.toString())
-                }
-                builder.toString()
+                body
             },
         )
     }

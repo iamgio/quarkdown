@@ -174,7 +174,7 @@ class FullPipelineTest {
             assertEquals("<p><strong>Text</strong></p>", it)
         }
 
-        execute(".foreach {..3}\n  **N:** <<1>>") {
+        execute(".foreach {..3}\n  **N:** .1") {
             assertEquals("<p><strong>N:</strong> 0</p><p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p>", it)
         }
 
@@ -182,12 +182,12 @@ class FullPipelineTest {
             assertEquals("<p><code>Hello</code>!</p>", it)
         }
 
-        execute(".function {hello}\n   target:\n  `Hello` <<target>>!\n\n.hello {world}") {
+        execute(".function {hello}\n   target:\n  `Hello` .target!\n\n.hello {world}") {
             assertEquals("<p><code>Hello</code> world!</p>", it)
         }
 
         assertFailsWith<InvalidArgumentCountException> {
-            execute(".function {hello}\n   target:\n  `Hello` <<target>>!\n\n.hello") {}
+            execute(".function {hello}\n   target:\n  `Hello` .target!\n\n.hello") {}
         }
     }
 
@@ -216,13 +216,13 @@ class FullPipelineTest {
             
             .function {column}
                 n:
-                |  $ F_<<n>> $  |
+                |  $ F_{.n} $  |
                 |:-------------:|
                 |      .t1      |
             
             .table
                 .foreach {..4}
-                    .column {<<1>>}
+                    .column {.1}
                     .var {tmp} {.sum {.t1} {.t2}}
                     .var {t1} {.t2}
                     .var {t2} {.tmp}
@@ -233,20 +233,20 @@ class FullPipelineTest {
             """
             .function {fib}
                 n:
-                .if { .islower {<<n>>} than:{2} }
+                .if { .islower {.n} than:{2} }
                     <<n>>
-                .ifnot { .islower {<<n>>} than:{2} }
+                .ifnot { .islower {.n} than:{2} }
                     .sum {
-                        .fib { .subtract {<<n>>} {1} }
+                        .fib { .subtract {.n} {1} }
                     } {
-                        .fib { .subtract {<<n>>} {2} }
+                        .fib { .subtract {.n} {2} }
                     }
               
             .table
                 .foreach {..4}
-                    | $ F_<<1>> $  |
+                    | $ F_{.1} $  |
                     |:------------:|
-                    | .fib {<<1>>} |
+                    | .fib {.1} |
             """.trimIndent()
 
         val out =

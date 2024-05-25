@@ -193,7 +193,7 @@ fun pageCounter(
     @Injected context: Context,
     position: PageMarginPosition = PageMarginPosition.BOTTOM_CENTER,
     text: Lambda =
-        Lambda { (current, total) ->
+        Lambda(context) { (current, total) ->
             "$current / $total"
         },
 ): NodeValue =

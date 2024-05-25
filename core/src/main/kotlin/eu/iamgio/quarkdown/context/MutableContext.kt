@@ -16,8 +16,9 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 class MutableContext(
     flavor: MarkdownFlavor,
     errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
+    libraries: Set<Library> = emptySet(),
     private val attributes: MutableAstAttributes = MutableAstAttributes(),
-) : BaseContext(attributes, errorHandler = errorHandler, flavor = flavor) {
+) : BaseContext(attributes, flavor, libraries, errorHandler) {
     override var hasCode: Boolean by attributes::hasCode
     override var hasMath: Boolean by attributes::hasMath
 

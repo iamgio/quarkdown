@@ -84,6 +84,11 @@ interface Context {
      * @see resolve
      */
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
+
+    /**
+     * @return a new mutable copy of this context
+     */
+    fun fork(): MutableContext
 }
 
 /**

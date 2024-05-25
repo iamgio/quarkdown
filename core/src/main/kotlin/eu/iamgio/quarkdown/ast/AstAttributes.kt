@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
 /**
- * Additional information about the node tree, produced by the parsing stage and stored in a [Context].
+ * Additional information about the node tree, produced by the parsing stage and stored in a [eu.iamgio.quarkdown.context.Context].
  * @see eu.iamgio.quarkdown.context.Context
  */
 interface AstAttributes {
@@ -24,6 +24,11 @@ interface AstAttributes {
      * Whether there is at least one math block or inline.
      */
     val hasMath: Boolean
+
+    /**
+     * @return a new copied mutable instance of these attributes
+     */
+    fun toMutable(): MutableAstAttributes
 }
 
 /**
@@ -41,4 +46,6 @@ data class MutableAstAttributes(
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,
     override var hasMath: Boolean = false,
-) : AstAttributes
+) : AstAttributes {
+    override fun toMutable(): MutableAstAttributes = this.copy()
+}
