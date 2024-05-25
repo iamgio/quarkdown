@@ -63,10 +63,14 @@ class Pipeline(
     /**
      * Parses a list of tokens into an Abstract Syntax Tree.
      * @param tokens tokens to parse
+     * @param context context to use for parsing. If not provided, the pipeline's context is used.
      * @see eu.iamgio.quarkdown.parser.BlockTokenParser
      * @see eu.iamgio.quarkdown.parser.InlineTokenParser
      */
-    fun parse(tokens: List<Token>): Document {
+    fun parse(
+        tokens: List<Token>,
+        context: MutableContext = this.context,
+    ): Document {
         val parser = context.flavor.parserFactory.newParser(context)
         return Document(children = tokens.acceptAll(parser)).also {
             hooks?.afterParsing?.invoke(this, it)

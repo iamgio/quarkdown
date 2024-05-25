@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.function.value.data
 
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.expression.eval
@@ -13,6 +12,8 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
 
+private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
+
 /**
  * An action block with a variable parameter count.
  * The return type is dynamic (a snippet of raw Quarkdown code is returned), hence it is evaluated and converted to a static type.
@@ -21,40 +22,26 @@ import eu.iamgio.quarkdown.function.value.ValueFactory
  * @param action action to perform, which takes a variable sequence of [Value]s as arguments and returns a Quarkdown code snippet.
  */
 class Lambda(
-    parentContext: Context,
+    val parentContext: Context,
     val explicitParameters: List<String> = emptyList(),
     val action: (Array<out Value<*>>) -> String,
 ) {
     /**
-     * Context of the lambda block, which is a copy of the parent context.
-     * Upon invocation, the context is filled with the arguments information,
-     * whose values can be retrieved as function calls.
-     */
-    private val context: MutableContext by lazy { parentContext.fork() }
-
-    /**
-     * Whether the context has been loaded with the argument values.
-     */
-    private var contextLoaded: Boolean = false
-
-    /**
      * Registers the arguments in the context, which can be accessed as function calls.
      * @param arguments arguments of the lambda action
      */
-    private fun registerContextData(vararg arguments: Value<*>) {
-        context.libraries +=
-            Library(
-                "lambda-parameters",
-                functions =
-                    arguments.mapIndexed { index, argument ->
-                        val parameterName = explicitParameters.getOrNull(index) ?: (index + 1).toString()
-                        SimpleFunction(
-                            parameterName,
-                            parameters = emptyList(),
-                        ) { argument as OutputValue<*> }
-                    }.toSet(),
-            )
-    }
+    private fun createLambdaParametersLibrary(vararg arguments: Value<*>) =
+        Library(
+            LAMBDA_LIBRARY_NAME,
+            functions =
+                arguments.mapIndexed { index, argument ->
+                    val parameterName = explicitParameters.getOrNull(index) ?: (index + 1).toString()
+                    SimpleFunction(
+                        parameterName,
+                        parameters = emptyList(),
+                    ) { argument as OutputValue<*> }
+                }.toSet(),
+        )
 
     /**
      * Invokes the lambda action with given arguments.
@@ -70,11 +57,13 @@ class Lambda(
             throw InvalidLambdaArgumentCountException(explicitParameters.size, arguments.size)
         }
 
+        // Create a new independent context, copy of the parent one, to execute the lambda block in.
+        // Upon invocation, the context is filled with the arguments information,
+        // whose values can be retrieved as function calls.
+        val context = parentContext.fork()
+
         // Register the arguments in the context, which can be accessed as function calls.
-        if (!contextLoaded) {
-            registerContextData(*arguments)
-            contextLoaded = true
-        }
+        context.libraries += createLambdaParametersLibrary(*arguments)
 
         return ValueFactory.expression(action(arguments), context)?.eval() as? OutputValue<*>
             ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
@@ -88,15 +77,12 @@ class Lambda(
      * @param V **wrapped** value type (which wraps [T]) to convert the resulting dynamic value to
      * @return the result of the lambda action, as a statically typed value
      */
-    inline fun <reified T, reified V : Value<T>> invoke(
-        context: Context,
-        vararg values: Value<*>,
-    ): V {
+    inline fun <reified T, reified V : Value<T>> invoke(vararg values: Value<*>): V {
         // Invoke the lambda action and convert the result to a static type.
         val result = invokeDynamic(*values)
 
         return if (result is DynamicValue) {
-            DynamicValueConverter(result).convertTo(T::class, context)
+            DynamicValueConverter(result).convertTo(T::class, parentContext)
         } else {
             result
         } as? V

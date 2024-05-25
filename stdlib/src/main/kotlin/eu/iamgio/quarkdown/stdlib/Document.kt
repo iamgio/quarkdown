@@ -176,7 +176,7 @@ fun pageMarginContent(
     text: Lambda,
 ): NodeValue =
     PageMarginContentInitializer(
-        text.invoke<String, StringValue>(context).unwrappedValue,
+        text.invoke<String, StringValue>().unwrappedValue,
         position,
     ).wrappedAsValue()
 
@@ -200,7 +200,6 @@ fun pageCounter(
     PageCounterInitializer(
         text = { current, total ->
             text.invoke<String, StringValue>(
-                context,
                 StringValue(current),
                 StringValue(total),
             ).unwrappedValue

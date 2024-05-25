@@ -201,7 +201,7 @@ class FullPipelineTest {
             
             .table
                 .foreach {..4}
-                    | $ F_<<1>> $ |
+                    | $ F_{.1} $ |
                     |:-------------:|
                     |      .t1      |
                     .var {tmp} {.sum {.t1} {.t2}}
@@ -251,10 +251,10 @@ class FullPipelineTest {
 
         val out =
             "<table><thead><tr>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_0\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_1\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_2\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_3\$__QD_INLINE_MATH__</th></tr></thead><tbody><tr>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{0}\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{1}\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{2}\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{3}\$__QD_INLINE_MATH__</th></tr></thead><tbody><tr>" +
                 "<td align=\"center\">0</td><td align=\"center\">1</td>" +
                 "<td align=\"center\">1</td>" +
                 "<td align=\"center\">2</td></tr></tbody></table>"

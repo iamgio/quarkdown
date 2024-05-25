@@ -126,14 +126,13 @@ class ValueFactoryTest {
         // No arguments.
         with(ValueFactory.lambda("hello", context)) {
             assertIs<LambdaValue>(this)
-            assertEquals("hello", unwrappedValue.invoke<String, StringValue>(context).unwrappedValue)
+            assertEquals("hello", unwrappedValue.invoke<String, StringValue>().unwrappedValue)
         }
 
         // Two implicit arguments.
         assertEquals(
             "hello world from iamgio",
             ValueFactory.lambda("hello .1 from .2", context).unwrappedValue.invoke<String, StringValue>(
-                context,
                 StringValue("world"),
                 StringValue("iamgio"),
             ).unwrappedValue,
@@ -146,16 +145,14 @@ class ValueFactoryTest {
                 "to from: hello .to from .from",
                 context,
             ).unwrappedValue.invoke<String, StringValue>(
-                context,
                 StringValue("world"),
                 StringValue("iamgio"),
             ).unwrappedValue,
         )
 
-        // Mixing explicit and implicit arguments are not allowed.
+        // Mixing explicit and implicit arguments is not allowed.
         assertFailsWith<InvalidLambdaArgumentCountException> {
             ValueFactory.lambda("to: hello .to from .2", context).unwrappedValue.invoke<String, StringValue>(
-                context,
                 StringValue("world"),
                 StringValue("iamgio"),
             ).unwrappedValue

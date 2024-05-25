@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
@@ -175,7 +176,7 @@ object ValueFactory {
                 ?: throw UnattachedPipelineException()
 
         // Convert string input to parsed AST.
-        val root = pipeline.parse(lexer.tokenize())
+        val root = pipeline.parse(lexer.tokenize(), context as MutableContext)
 
         if (expandFunctionCalls) {
             // In case the AST contains nested function calls, they are immediately expanded.

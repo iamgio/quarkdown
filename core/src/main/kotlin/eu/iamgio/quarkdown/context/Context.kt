@@ -61,7 +61,11 @@ interface Context {
      * @param name name of the function to look up, case-sensitive
      * @return the corresponding function, if it exists
      */
-    fun getFunctionByName(name: String): Function<*>?
+    fun getFunctionByName(name: String): Function<*>? {
+        return libraries.asSequence()
+            .flatMap { it.functions }
+            .find { it.name == name }
+    }
 
     /**
      * @param reference reference link to lookup
