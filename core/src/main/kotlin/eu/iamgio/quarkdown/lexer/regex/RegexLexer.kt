@@ -47,7 +47,7 @@ abstract class RegexLexer(
             val groups =
                 result.groups.asSequence()
                     .filterNotNull()
-                    // Named groups don't appear in regular groups
+                    // Named groups don't appear in regular groups.
                     .filterNot { namedGroups.containsValue(it) }
                     .map { it.value }
                     .toMutableList()
@@ -68,6 +68,8 @@ abstract class RegexLexer(
 
             // Text of the token.
             val text = StringBuilder(group.value)
+
+            var hasWalked = false
 
             // In case the pattern requires additional information that can't be supplied by regex,
             // its WalkerLexer implementation is retrieved and starts scanning from this position.
@@ -92,6 +94,7 @@ abstract class RegexLexer(
 
                 // The matching process is continued from the walker's end position.
                 currentIndex += walker.currentIndex
+                hasWalked = walker.currentIndex > 0
             }
 
             // The token data.
@@ -108,7 +111,7 @@ abstract class RegexLexer(
 
             // If the pattern has used a walker to scan content, the regex tokenization process must be restarted,
             // and it will start matching regexes again from currentIndex.
-            if (pattern.walker != null) {
+            if (hasWalked) {
                 return true
             }
         }

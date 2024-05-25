@@ -194,5 +194,11 @@ class FunctionCallArgumentsWalkerLexer(
                 // Read the next character.
                 reader.read()
             }
+        }.also {
+            // If the lexer has not produced any tokens, the result is discarded
+            // and the lexing operation is not affected by this walking.
+            if (it.isEmpty()) {
+                reader.index = 0
+            }
         }
 }
