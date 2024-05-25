@@ -21,7 +21,7 @@ class FunctionCallPatterns {
                 wrap = { FunctionCallToken(it, isBlock = false) },
                 // The name of the function prefixed by a dot.
                 regex =
-                    "(?<=^|[\\s\\W_])\\.([a-zA-Z0-9]+)"
+                    "(?<=^|\\s|[^a-zA-Z0-9.\\\\])\\.([a-zA-Z0-9]+)"
                         .toRegex(),
                 // Arguments are scanned by the walker lexer.
                 walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = false) },
