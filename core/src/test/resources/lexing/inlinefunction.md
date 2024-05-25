@@ -19,7 +19,7 @@ text text text
 
 text text . func {arg1}
 
-.__function__ {arg1} {arg2}
+.__notfunction__ {arg1} {arg2}
 
 text .fun {arg1}
 {arg2}

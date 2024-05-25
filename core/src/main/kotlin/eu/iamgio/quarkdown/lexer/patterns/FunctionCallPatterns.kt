@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.lexer.walker.FunctionCallArgumentsWalkerLexer
 class FunctionCallPatterns {
     /**
      * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces.
+     * Can be preceeded by the beginning of the line, a whitespace or a symbol.
      * Arguments are scanned by [FunctionCallArgumentsWalkerLexer].
      */
     val inlineFunctionCall
@@ -20,7 +21,7 @@ class FunctionCallPatterns {
                 wrap = { FunctionCallToken(it, isBlock = false) },
                 // The name of the function prefixed by a dot.
                 regex =
-                    "(?<=\\s|^)\\.(\\w+)"
+                    "(?<=^|[\\s\\W_])\\.([a-zA-Z0-9]+)"
                         .toRegex(),
                 // Arguments are scanned by the walker lexer.
                 walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = false) },

@@ -303,7 +303,7 @@ class LexerTest {
         assertIs<PlainTextToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
-        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<StrongToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
