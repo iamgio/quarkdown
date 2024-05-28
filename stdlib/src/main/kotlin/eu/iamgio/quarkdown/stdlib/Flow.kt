@@ -74,6 +74,12 @@ fun forEach(
 }
 
 /**
+ * Custom functions (via [function]) and variables (via [variable]) are saved in a [Library]
+ * whose name begins by this string.
+ */
+private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
+
+/**
  * Defines a custom function that can be called later in the document.
  * The amount of parameters (thus of expected arguments) is determined by the amount of **explicit** lambda parameters.
  * Arguments can be accessed as a function call with their names.
@@ -110,7 +116,7 @@ fun function(
         }
 
     // The function is registered and ready to be called.
-    context.libraries += Library(name, setOf(function))
+    context.libraries += Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name, setOf(function))
 
     return VoidValue
 }
@@ -128,7 +134,7 @@ fun variable(
     value: String,
 ): VoidValue {
     // Deletes previous values.
-    context.libraries.removeIf { it.name == name }
+    context.libraries.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
 
     return function(
         context,
