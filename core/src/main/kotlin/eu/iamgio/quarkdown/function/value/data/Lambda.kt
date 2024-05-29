@@ -39,7 +39,10 @@ class Lambda(
                     SimpleFunction(
                         parameterName,
                         parameters = emptyList(),
-                    ) { argument as OutputValue<*> }
+                    ) {
+                        // TODO avoid toString, use dynamic object value
+                        DynamicValue(argument.unwrappedValue.toString())
+                    }
                 }.toSet(),
         )
 
