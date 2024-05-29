@@ -237,7 +237,7 @@ class FullPipelineTest {
             .function {fib}
                 n:
                 .if { .islower {.n} than:{2} }
-                    <<n>>
+                    .n
                 .ifnot { .islower {.n} than:{2} }
                     .sum {
                         .fib { .subtract {.n} {1} }

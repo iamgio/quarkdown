@@ -1,34 +1,36 @@
 package eu.iamgio.quarkdown.context
 
+import eu.iamgio.quarkdown.function.Function
+
 /**
- *
+ * A context that is the result of a fork from an original parent [Context].
+ * Several properties are inherited from it.
+ * @param parent context this scope was forked from
  */
 class ScopeContext(val parent: Context) : MutableContext(
     flavor = parent.flavor,
     errorHandler = parent.errorHandler,
-    libraries = parent.libraries,
+    libraries = emptySet(),
 ) {
-    val depth: Int
-        get() = ((parent as? ScopeContext)?.depth ?: 0) + 1
-
-    val root: Context
-        get() = (parent as? ScopeContext)?.root ?: parent
+    /**
+     * If no matching function is found among this [ScopeContext]'s own [libraries],
+     * [parent]'s libraries are scanned.
+     * @see Context.getFunctionByName
+     */
+    override fun getFunctionByName(name: String): Function<*>? = super.getFunctionByName(name) ?: parent.getFunctionByName(name)
 
     /**
-     * @return the last context (including this one) that matches the [predicate],
+     * @param predicate condition to match
+     * @return the last context (upwards, towards the root, starting from this context) that matches the [predicate],
      *         or `null` if no parent in the scope tree matches the given condition
      */
     fun lastParentOrNull(predicate: (Context) -> Boolean): Context? =
         when {
+            // This is the last context to match the condition.
             predicate(this) && !predicate(parent) -> this
+            // The root context matches the condition.
             parent !is ScopeContext && predicate(parent) -> parent
+            // Scan the parent context.
             else -> (parent as? ScopeContext)?.lastParentOrNull(predicate)
         }
 }
-
-val Context.depth: Int
-    get() =
-        when (this) {
-            is ScopeContext -> depth
-            else -> 0
-        }

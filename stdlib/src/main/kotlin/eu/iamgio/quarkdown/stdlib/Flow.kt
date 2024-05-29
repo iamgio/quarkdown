@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.ScopeContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
@@ -133,12 +134,22 @@ fun variable(
     name: String,
     value: String,
 ): VoidValue {
-    // fun MutableSet<Library>.remove(name: String) = this.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
+    /**
+     * @return whether a variable called [name] was removed from [this] set of libraries.
+     */
+    fun MutableSet<Library>.remove(name: String) = this.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
 
     // Deletes previous values. If any is found, this is an update rather than a declaration.
+    val targetContext =
+        // Scan contexts upwards until the root.
+        // The last one to contain a matching variable name is the owner of the variable.
+        (context as? ScopeContext)?.lastParentOrNull {
+            it is MutableContext && it.libraries.remove(name)
+        } as? MutableContext ?: context // No match = new variable.
 
+    // A variable is just a constant function.
     return function(
-        context,
+        targetContext,
         name,
         Lambda(context, explicitParameters = emptyList()) {
             value

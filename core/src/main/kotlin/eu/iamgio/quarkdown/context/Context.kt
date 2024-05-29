@@ -61,11 +61,7 @@ interface Context {
      * @param name name of the function to look up, case-sensitive
      * @return the corresponding function, if it exists
      */
-    fun getFunctionByName(name: String): Function<*>? {
-        return libraries.asSequence()
-            .flatMap { it.functions }
-            .find { it.name == name }
-    }
+    fun getFunctionByName(name: String): Function<*>?
 
     /**
      * @param reference reference link to lookup
@@ -90,7 +86,7 @@ interface Context {
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 
     /**
-     * @return a new scope, forked from this context
+     * @return a new scope context, forked from this context
      */
     fun fork(): ScopeContext
 }
