@@ -156,7 +156,10 @@ class FullPipelineTest {
         }
 
         execute(".code\n    .filecontent {$DATA_FOLDER/code.txt}") {
-            assertEquals("<pre><code>Line 1\nLine 2\n\nLine 3</code></pre>", it)
+            assertEquals(
+                "<pre><code>Line 1${System.lineSeparator()}Line 2${System.lineSeparator()}${System.lineSeparator()}Line 3</code></pre>",
+                it,
+            )
         }
     }
 
