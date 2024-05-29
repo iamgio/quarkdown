@@ -90,9 +90,9 @@ interface Context {
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 
     /**
-     * @return a new mutable copy of this context
+     * @return a new scope, forked from this context
      */
-    fun fork(): MutableContext
+    fun fork(): ScopeContext
 }
 
 /**

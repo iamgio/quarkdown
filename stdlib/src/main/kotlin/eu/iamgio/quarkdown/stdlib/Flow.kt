@@ -133,8 +133,9 @@ fun variable(
     name: String,
     value: String,
 ): VoidValue {
-    // Deletes previous values.
-    context.libraries.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
+    // fun MutableSet<Library>.remove(name: String) = this.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
+
+    // Deletes previous values. If any is found, this is an update rather than a declaration.
 
     return function(
         context,

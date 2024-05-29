@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
  * @param errorHandler the error handling strategy to use
  * @param attributes attributes of the node tree, which can be manipulated on demand
  */
-class MutableContext(
+open class MutableContext(
     flavor: MarkdownFlavor,
     errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
     libraries: Set<Library> = emptySet(),

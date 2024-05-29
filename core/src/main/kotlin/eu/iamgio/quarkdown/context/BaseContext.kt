@@ -54,8 +54,8 @@ open class BaseContext(
         return UncheckedFunctionCall(call.name) { resolve(call) }
     }
 
-    override fun fork(): MutableContext {
-        val fork = MutableContext(flavor, errorHandler, libraries)
+    override fun fork(): ScopeContext {
+        val fork = ScopeContext(parent = this)
 
         // Attach the same pipeline (if it exists) to the fork.
         Pipelines.getAttachedPipeline(this)?.let {
