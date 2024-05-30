@@ -68,7 +68,7 @@ The following snippets are valid Quarkdown sources that calculate and display th
   
   .table
       .foreach {..7}
-          | $ F_.1 $  |
+          | $ F_{.1} $  |
           |:------------:|
           | .fib {.1} |
   ```
