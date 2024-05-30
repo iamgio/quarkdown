@@ -195,6 +195,24 @@ class FullPipelineTest {
     }
 
     @Test
+    fun `type inference`() {
+        execute(
+            """
+            .function {x}
+                arg:
+                .if {.arg}
+                    Hi
+                .ifnot {.arg}
+                    Hello
+
+            .x {no}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hello</p>", it)
+        }
+    }
+
+    @Test
     fun fibonacci() {
         // Iterative Fibonacci sequence calculation.
         val iterative =
