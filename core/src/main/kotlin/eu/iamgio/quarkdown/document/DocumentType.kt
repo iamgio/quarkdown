@@ -14,4 +14,9 @@ enum class DocumentType {
      * A document that is split into pages of mostly text content: books, articles, papers, etc.
      */
     PAGED,
+
+    /**
+     * A slides-based document for presentations.
+     */
+    SLIDES,
 }

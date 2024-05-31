@@ -29,6 +29,12 @@
     [[if:PAGED]]
     <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
     [[endif:PAGED]]
+    [[if:SLIDES]]
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.css"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    [[endif:SLIDES]]
 
     <style>
         hr {
@@ -153,5 +159,8 @@
 [[if:CODE]]
 <script>hljs.highlightAll();</script>
 [[endif:CODE]]
+[[if:SLIDES]]
+<script src="slides.js"></script>
+[[endif:SLIDES]]
 </body>
 </html>

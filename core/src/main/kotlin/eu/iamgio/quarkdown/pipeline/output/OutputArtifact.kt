@@ -60,4 +60,5 @@ data class LazyOutputArtifact(
 enum class ArtifactType {
     HTML,
     CSS,
+    JS,
 }

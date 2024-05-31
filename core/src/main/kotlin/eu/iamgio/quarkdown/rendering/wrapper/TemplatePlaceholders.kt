@@ -40,6 +40,11 @@ object TemplatePlaceholders {
     const val IS_PAGED = "PAGED"
 
     /**
+     * Whether this document is a presentation.
+     */
+    const val IS_SLIDES = "SLIDES"
+
+    /**
      * Whether the document has a fixed size.
      */
     const val HAS_PAGE_SIZE = "PAGESIZE"

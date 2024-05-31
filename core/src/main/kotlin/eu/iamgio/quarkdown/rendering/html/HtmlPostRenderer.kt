@@ -21,7 +21,10 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
+            // "Paged" document rendering via PagesJS.
             .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
+            // "Slides" document rendering via RevealJS.
+            .conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
             .conditional(
@@ -51,6 +54,15 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                         resource = "/render/theme/$it.css",
                         name = "theme",
                         type = ArtifactType.CSS,
+                    )
+            }
+
+            if (context.documentInfo.type == DocumentType.SLIDES) {
+                this +=
+                    LazyOutputArtifact.internal(
+                        resource = "/render/script/slides.js",
+                        name = "slides",
+                        type = ArtifactType.JS,
                     )
             }
         }
