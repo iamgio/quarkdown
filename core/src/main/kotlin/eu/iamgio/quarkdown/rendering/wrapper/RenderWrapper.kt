@@ -29,6 +29,7 @@ class RenderWrapper(private val code: String) {
     /**
      * Adds a conditional variable that shows or removes fragments of the template code.
      * The fragment in the template must be fenced by `[[if:NAME]]` and `[[endif:NAME]]`.
+     * An inverted (_not_) placeholder is also injected and can be accessed via `[[if:!NAME]]`.
      * @param conditional conditional name
      * @param value whether the fragment should be shown (`true`) or hidden (`false`)
      * @return this for concatenation
@@ -36,7 +37,10 @@ class RenderWrapper(private val code: String) {
     fun conditional(
         conditional: String,
         value: Boolean,
-    ) = apply { conditionals[conditional] = value }
+    ) = apply {
+        conditionals[conditional] = value
+        conditionals["!$conditional"] = !value // inverted conditional ("not")
+    }
 
     /**
      * Adds both a [conditional] to check if [value] is not `null`,

@@ -155,12 +155,19 @@
     </style>
 </head>
 <body>
+[[if:SLIDES]]
+<div class="reveal">
+    <div class="slides">
+        [[CONTENT]]
+    </div>
+</div>
+<script src="slides.js"></script>
+[[endif:SLIDES]]
+[[if:!SLIDES]]
 [[CONTENT]]
+[[endif:!SLIDES]]
 [[if:CODE]]
 <script>hljs.highlightAll();</script>
 [[endif:CODE]]
-[[if:SLIDES]]
-<script src="slides.js"></script>
-[[endif:SLIDES]]
 </body>
 </html>
