@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
+import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -78,6 +79,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: PageMarginContentInitializer) =
         buildTag("script") {
+            // Inject a CSS property used by the HTML wrapper.
             val property = "--page-margin-${node.position.asCSS}-content"
             val content = node.text
             +"document.documentElement.style.setProperty('$property', '\"$content\"');"
@@ -90,4 +92,18 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 position = node.position,
             ),
         )
+
+    override fun visit(node: SlidesConfigurationInitializer): CharSequence =
+        buildTag("script") {
+            // Inject properties that are read by the slides.js script after the document is loaded.
+            +buildString {
+                node.showControls?.let {
+                    append("const slides_showControls = $it;")
+                }
+                node.transition?.let {
+                    append("const slides_transitionStyle = '${it.style.name.lowercase()}';")
+                    append("const slides_transitionSpeed = '${it.speed.name.lowercase()}';")
+                }
+            }
+        }
 }

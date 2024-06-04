@@ -31,6 +31,7 @@ import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -131,4 +132,6 @@ interface NodeVisitor<T> {
     fun visit(node: PageMarginContentInitializer): T
 
     fun visit(node: PageCounterInitializer): T
+
+    fun visit(node: SlidesConfigurationInitializer): T
 }

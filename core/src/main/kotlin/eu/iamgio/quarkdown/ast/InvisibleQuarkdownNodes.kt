@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
+import eu.iamgio.quarkdown.document.slides.Transition
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 // Nodes introduced by Quarkdown whose rendering does not correspond to a visible output element.
@@ -28,6 +29,18 @@ data class PageMarginContentInitializer(
 data class PageCounterInitializer(
     val text: (String, String) -> String,
     val position: PageMarginPosition,
+) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * A non-visible node that injects properties that affect the global configuration for slides documents.
+ * @param showControls whether navigation controls should be shown
+ * @param transition global transition between slides
+ */
+data class SlidesConfigurationInitializer(
+    val showControls: Boolean?,
+    val transition: Transition?,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

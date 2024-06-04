@@ -20,7 +20,7 @@
 //         </section>
 //     </div>
 // </div>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const slidesDiv = document.querySelector('.reveal .slides');
     if (!slidesDiv) return;
 
@@ -48,6 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
     slidesDiv.innerHTML = '';
     sections.forEach(section => slidesDiv.appendChild(section));
 
+    // Used to check if a property was injected (see below).
+    const undef = 'undefined';
+
     // Initialize RevealJS with the updated DOM.
-    Reveal.initialize()
+    // slides_X properties are optionally set by the SlidesSettingsInitializer invisible node.
+    Reveal.initialize({
+        controls: typeof slides_showControls !== undef ? slides_showControls : true,
+        transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
+        transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
+    })
 });

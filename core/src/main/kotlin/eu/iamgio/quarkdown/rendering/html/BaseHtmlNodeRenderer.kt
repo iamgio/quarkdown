@@ -31,6 +31,7 @@ import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -238,6 +239,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageCounterInitializer): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: SlidesConfigurationInitializer): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MathSpan): CharSequence = throw UnsupportedRenderException(node)
 }
