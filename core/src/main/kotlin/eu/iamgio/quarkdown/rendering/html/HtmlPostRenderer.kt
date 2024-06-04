@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
@@ -49,14 +50,17 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
 
             // A CSS theme resource is added to the output resources if a theme is set.
             context.documentInfo.theme?.let {
+                // Theme components (color scheme and layout format) are joined together into a single theme.css file.
                 this +=
-                    LazyOutputArtifact.internal(
-                        resource = "/render/theme/$it.css",
+                    LazyOutputArtifact.join(
+                        // Get the single resources for each theme component.
+                        retrieveThemeComponentsArtifacts(it),
                         name = "theme",
                         type = ArtifactType.CSS,
                     )
             }
 
+            // A slides document requires additional scripts.
             if (context.documentInfo.type == DocumentType.SLIDES) {
                 this +=
                     LazyOutputArtifact.internal(
@@ -65,5 +69,27 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                         type = ArtifactType.JS,
                     )
             }
+        }
+
+    /**
+     * @param theme theme to get the artifacts for
+     * @return an ordered list that contains an output artifact for each non-null theme component of [theme]
+     *         (e.g. color scheme, layout format, ...)
+     */
+    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme) =
+        buildList {
+            /**
+             * @return a new output artifact from an internal resource
+             */
+            fun artifact(resourceName: String) =
+                LazyOutputArtifact.internal(
+                    resource = "/render/theme/$resourceName.css",
+                    // The name is not used here, as this artifact will be concatenated to others in generateResources.
+                    name = "",
+                    type = ArtifactType.CSS,
+                )
+
+            theme.color?.let { this += artifact("color/$it") }
+            theme.layout?.let { this += artifact("layout/$it") }
         }
 }

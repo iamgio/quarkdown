@@ -51,6 +51,24 @@ data class LazyOutputArtifact(
             },
             type,
         )
+
+        /**
+         * Creates a [LazyOutputArtifact] whose content is the concatenation of multiple [LazyOutputArtifact]s.
+         * @param artifacts resources to concatenate
+         * @param name name of the concatenated output resource
+         * @param type type of the concatenated output resource
+         */
+        fun join(
+            artifacts: List<LazyOutputArtifact>,
+            name: String,
+            type: ArtifactType,
+        ) = LazyOutputArtifact(
+            name,
+            content = {
+                artifacts.joinToString(separator = System.lineSeparator()) { it.content() }
+            },
+            type,
+        )
     }
 }
 

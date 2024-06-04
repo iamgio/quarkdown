@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
@@ -108,30 +109,33 @@ fun docAuthor(
     )
 
 /**
- * If [theme] is not `null`, it sets the document theme to its value.
- * If it's `null`, the current document theme is returned.
- * @param theme (optional) theme to assign to the document
- * @return the current document theme if [theme] is `null`
- * @throws IOPipelineException if the theme isn't resolved
+ * Sets the global document theme.
+ * @param color (optional) color scheme to assign (searched in `resources/render/theme/color`)
+ * @param layout (optional) layout format to assign (searched in `resources/render/theme/layout`)
+ * @throws IOPipelineException if any of the theme components isn't resolved
  */
-@Name("theme")
 fun theme(
     @Injected context: Context,
-    theme: String? = null,
-): OutputValue<*> =
-    context.modifyOrEchoDocumentInfo(
-        theme,
-        get = { this.theme ?: "" },
-        set = {
-            val new = it.lowercase()
+    color: String? = null,
+    layout: String? = null,
+): VoidValue {
+    /**
+     * @throws IOPipelineException if [theme] is not a valid theme
+     */
+    fun checkExistance(theme: String) {
+        object {}.javaClass.getResource("/render/theme/${theme.lowercase()}.css")
+            ?: throw IOPipelineException("Theme $theme not found")
+    }
 
-            // Existance check.
-            javaClass.getResource("/render/theme/$new.css")
-                ?: throw IOPipelineException("Theme $new not found")
+    // Update global theme.
+    context.documentInfo.theme =
+        DocumentTheme(
+            color = color?.lowercase()?.also { checkExistance("color/$it") },
+            layout = layout?.lowercase()?.also { checkExistance("layout/$it") },
+        )
 
-            this.theme = new
-        },
-    )
+    return VoidValue
+}
 
 /**
  * Sets the format of the document.
@@ -171,7 +175,6 @@ fun pageFormat(
  */
 @Name("pagemargincontent")
 fun pageMarginContent(
-    @Injected context: Context,
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
     text: Lambda,
 ): NodeValue =
