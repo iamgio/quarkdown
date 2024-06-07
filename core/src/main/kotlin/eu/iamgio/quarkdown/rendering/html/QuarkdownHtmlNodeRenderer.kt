@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -55,6 +56,12 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
 
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
+
+    override fun visit(node: Stacked) =
+        tagBuilder("div", node.children)
+            .attribute("class", "stack stack-" + node.orientation.name.lowercase())
+            .attribute("style", "gap: ${node.gap}")
+            .build()
 
     override fun visit(node: Clipped) = div("clip-" + node.clip.name.lowercase(), node.children)
 

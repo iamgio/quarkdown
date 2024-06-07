@@ -32,6 +32,7 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -231,6 +232,8 @@ open class BaseHtmlNodeRenderer(protected val context: Context) : TagNodeRendere
     override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Aligned): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: Stacked): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Clipped): CharSequence = throw UnsupportedRenderException(node)
 

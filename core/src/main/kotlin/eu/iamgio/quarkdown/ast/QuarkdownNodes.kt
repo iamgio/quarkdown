@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 // Nodes that aren't parsed from the source Markdown input,
@@ -42,6 +43,27 @@ data class Aligned(
         LEFT,
         CENTER,
         RIGHT,
+    }
+}
+
+/**
+ * A block that contains nodes stacked along a certain [orientation].
+ * @param orientation orientation of the stack
+ * @param gap space between nodes
+ */
+data class Stacked(
+    val orientation: Orientation,
+    val gap: Size,
+    override val children: List<Node>,
+) : NestableNode {
+    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    /**
+     * Possible orientation types of a [Stacked] block.
+     */
+    enum class Orientation {
+        HORIZONTAL,
+        VERTICAL,
     }
 }
 

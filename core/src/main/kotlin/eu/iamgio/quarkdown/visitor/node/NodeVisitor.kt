@@ -32,6 +32,7 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
 import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -118,6 +119,8 @@ interface NodeVisitor<T> {
     fun visit(node: Math): T
 
     fun visit(node: Aligned): T
+
+    fun visit(node: Stacked): T
 
     fun visit(node: Clipped): T
 

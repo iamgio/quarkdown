@@ -4,8 +4,11 @@ import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -20,6 +23,9 @@ val Layout: Module =
     setOf(
         ::align,
         ::center,
+        ::stack,
+        ::row,
+        ::column,
         ::clip,
         ::box,
         ::table,
@@ -43,6 +49,53 @@ fun align(
  * @see align
  */
 fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
+
+/**
+ * Default gap between stacked contents.
+ * @see stack
+ * @see row
+ * @see column
+ */
+private val DEFAULT_STACK_GAP = Size(12.0, SizeUnit.PX)
+
+/**
+ * Stacks content along an axis.
+ * @param orientation orientation of the stack
+ * @param gap blank space between children
+ * @param body content to stack
+ * @return the new stacked block
+ * @see row
+ * @see column
+ */
+fun stack(
+    orientation: Stacked.Orientation,
+    gap: Size = DEFAULT_STACK_GAP,
+    body: MarkdownContent,
+) = Stacked(orientation, gap, body.children).wrappedAsValue()
+
+/**
+ * Stacks content horizontally.
+ * @param gap blank space between children
+ * @param body content to stack
+ * @return the new stacked block
+ * @see stack
+ */
+fun row(
+    gap: Size = DEFAULT_STACK_GAP,
+    body: MarkdownContent,
+) = stack(Stacked.Orientation.HORIZONTAL, gap, body)
+
+/**
+ * Stacks content vertically.
+ * @param gap blank space between children
+ * @param body content to stack
+ * @return the new stacked block
+ * @see stack
+ */
+fun column(
+    gap: Size = DEFAULT_STACK_GAP,
+    body: MarkdownContent,
+) = stack(Stacked.Orientation.VERTICAL, gap, body)
 
 /**
  * Applies a clipping path to its content.
