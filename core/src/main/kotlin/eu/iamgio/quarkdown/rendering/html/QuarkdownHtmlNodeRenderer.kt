@@ -90,7 +90,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         div("box") {
             if (node.title != null) {
                 tag("header") {
-                    tag("h5") {
+                    tag("h4") {
                         +node.title
                     }
                 }
@@ -98,13 +98,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +node.children
 
             // Box style.
-            attribute(
+            optionalAttribute(
                 "style",
                 buildString {
-                    node.padding?.let { append("padding: $it;") }
-                    node.backgroundColor?.let { append("background-color: ${it.asCSS};") }
-                    node.foregroundColor?.let { append("color: ${it.asCSS};") }
-                },
+                    node.padding?.let { append("padding: $it; ") }
+                    node.backgroundColor?.let { append("background-color: ${it.asCSS}; ") }
+                    node.foregroundColor?.let { append("color: ${it.asCSS}; ") }
+                }.takeUnless { it.isEmpty() },
             )
         }
 

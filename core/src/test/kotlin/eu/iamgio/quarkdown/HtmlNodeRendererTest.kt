@@ -40,7 +40,10 @@ import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest
@@ -581,6 +584,9 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title")),
+                padding = null,
+                backgroundColor = null,
+                foregroundColor = null,
                 listOf(paragraph),
             ).render(),
         )
@@ -589,6 +595,9 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
+                padding = null,
+                backgroundColor = null,
+                foregroundColor = null,
                 listOf(paragraph),
             ).render(),
         )
@@ -597,6 +606,20 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = null,
+                padding = Size(4.0, SizeUnit.CM),
+                backgroundColor = null,
+                foregroundColor = null,
+                listOf(paragraph),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Box(
+                title = listOf(Text("Title")),
+                padding = Size(3.0, SizeUnit.IN),
+                backgroundColor = Color(255, 0, 120),
+                foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
             ).render(),
         )

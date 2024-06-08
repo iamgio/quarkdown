@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.MarkdownContent
@@ -138,8 +139,8 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
 
         with(node.children.first()) {
-            assertIs<Text>(this)
-            assertTrue("sum(" in text) // Error message
+            assertIs<Box>(this) // Error box
+            assertTrue("sum(" in (this.children.first() as Text).text) // Error message
         }
     }
 
@@ -184,9 +185,8 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
 
         with(node.children.first()) {
-            assertIs<Text>(this)
-            println(text)
-            assertTrue("reference" in text) // Unresolved reference error.
+            assertIs<Box>(this) // Error box
+            assertTrue("reference" in (this.children.first() as Text).text) // Unresolved reference error message
         }
     }
 
@@ -210,8 +210,8 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
 
         with(node.children.first()) {
-            assertIs<Text>(this)
-            assertTrue("error" in text)
+            assertIs<Box>(this) // Error box
+            assertTrue("error" in (this.children.first() as Text).text) // Error message
         }
     }
 
@@ -299,8 +299,8 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
 
         with(node.children.first()) {
-            assertIs<Text>(this)
-            assertTrue("No such element" in text)
+            assertIs<Box>(this) // Error box
+            assertTrue("No such element" in (this.children.first() as Text).text) // Error message
         }
     }
 
