@@ -54,3 +54,9 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
         "\n" -> this
         else -> this.toString().replace(separator, "\n")
     }
+
+/**
+ * Returns this enum entry's name as a CSS property.
+ */
+val Enum<*>.asCSS: String
+    get() = name.lowercase().replace("_", "-")

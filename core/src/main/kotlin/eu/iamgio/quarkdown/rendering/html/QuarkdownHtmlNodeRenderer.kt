@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
+import eu.iamgio.quarkdown.util.asCSS
 
 private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
 private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
@@ -57,11 +58,28 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
-    override fun visit(node: Stacked) =
-        tagBuilder("div", node.children)
+    override fun visit(node: Stacked): CharSequence {
+        // CSS value for main axis alignment.
+        val cssMainAxisAlignment =
+            when (node.mainAxisAlignment) {
+                Stacked.MainAxisAlignment.START -> "flex-start"
+                Stacked.MainAxisAlignment.END -> "flex-end"
+                else -> node.mainAxisAlignment.asCSS
+            }
+
+        // CSS value for cross axis alignment.
+        val cssCrossAxisAlignment =
+            when (node.crossAxisAlignment) {
+                Stacked.CrossAxisAlignment.START -> "flex-start"
+                Stacked.CrossAxisAlignment.END -> "flex-end"
+                else -> node.crossAxisAlignment.asCSS
+            }
+
+        return tagBuilder("div", node.children)
             .attribute("class", "stack stack-" + node.orientation.name.lowercase())
-            .attribute("style", "gap: ${node.gap}")
+            .attribute("style", "justify-content: $cssMainAxisAlignment; align-items: $cssCrossAxisAlignment; gap: ${node.gap}")
             .build()
+    }
 
     override fun visit(node: Clipped) = div("clip-" + node.clip.name.lowercase(), node.children)
 

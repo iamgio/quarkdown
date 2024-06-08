@@ -49,10 +49,14 @@ data class Aligned(
 /**
  * A block that contains nodes stacked along a certain [orientation].
  * @param orientation orientation of the stack
+ * @param mainAxisAlignment content alignment along the main axis
+ * @param crossAxisAlignment content alignment along the cross axis
  * @param gap space between nodes
  */
 data class Stacked(
     val orientation: Orientation,
+    val mainAxisAlignment: MainAxisAlignment,
+    val crossAxisAlignment: CrossAxisAlignment,
     val gap: Size,
     override val children: List<Node>,
 ) : NestableNode {
@@ -64,6 +68,28 @@ data class Stacked(
     enum class Orientation {
         HORIZONTAL,
         VERTICAL,
+    }
+
+    /**
+     * Possible alignment types along the main axis of a [Stacked] block.
+     */
+    enum class MainAxisAlignment {
+        START,
+        CENTER,
+        END,
+        SPACE_BETWEEN,
+        SPACE_AROUND,
+        SPACE_EVENLY,
+    }
+
+    /**
+     * Possible alignment types along the cross axis of a [Stacked] block.
+     */
+    enum class CrossAxisAlignment {
+        START,
+        CENTER,
+        END,
+        STRETCH,
     }
 }
 

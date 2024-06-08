@@ -22,11 +22,4 @@ enum class PageMarginPosition {
     LEFT_BOTTOM,
     LEFT_MIDDLE,
     LEFT_TOP,
-    ;
-
-    /**
-     * Returns the position as a named CS property.
-     */
-    val asCSS: String
-        get() = name.lowercase().replace("_", "-")
 }
