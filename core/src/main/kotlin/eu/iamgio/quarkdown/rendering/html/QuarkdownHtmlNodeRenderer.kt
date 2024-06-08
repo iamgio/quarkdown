@@ -101,6 +101,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             attribute(
                 "style",
                 buildString {
+                    node.padding?.let { append("padding: $it;") }
                     node.backgroundColor?.let { append("background-color: ${it.asCSS};") }
                     node.foregroundColor?.let { append("color: ${it.asCSS};") }
                 },

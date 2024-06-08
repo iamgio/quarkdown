@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
@@ -115,12 +116,14 @@ data class Clipped(
 /**
  * A generic box that contains content.
  * @param title box title. If `null`, the box is untitled.
+ * @param padding padding of the box. If `null`, the box uses the default value.
  * @param backgroundColor background color of the box. If `null`, the box uses the default value.
  * @param foregroundColor foreground color of the box. If `null`, the box uses the default value.
  * @param children content of the box
  */
 data class Box(
     val title: InlineContent?,
+    val padding: Size?,
     val backgroundColor: Color?,
     val foregroundColor: Color?,
     override val children: List<Node>,
@@ -136,6 +139,7 @@ data class Box(
         fun error(message: String) =
             Box(
                 title = listOf(Text("Error")),
+                padding = Size(8.0, SizeUnit.PX),
                 backgroundColor = Color(224, 67, 64),
                 foregroundColor = Color(255, 255, 255),
                 children = listOf(Text(message)),
