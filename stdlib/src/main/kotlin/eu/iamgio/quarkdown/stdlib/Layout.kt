@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.misc.Color
 
 /**
  * `Layout` stdlib module exporter.
@@ -123,13 +124,17 @@ fun clip(
 /**
  * Inserts content in a box.
  * @param title box title. The box is untitled if it is `null`
+ * @param backgroundColor background color. If `null`, the box uses the default color.
+ * @param foregroundColor foreground (text) color. If `null`, the box uses the default color.
  * @param body box content
  * @return the new box node
  */
 fun box(
     title: MarkdownContent? = null,
+    @Name("background") backgroundColor: Color? = null,
+    @Name("foreground") foregroundColor: Color? = null,
     body: MarkdownContent,
-) = Box(title?.children, body.children).wrappedAsValue()
+) = Box(title?.children, backgroundColor, foregroundColor, body.children).wrappedAsValue()
 
 /**
  * Creates a table out of a collection of columns.

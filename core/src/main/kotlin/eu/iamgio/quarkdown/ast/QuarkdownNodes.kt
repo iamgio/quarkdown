@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 // Nodes that aren't parsed from the source Markdown input,
@@ -114,10 +115,14 @@ data class Clipped(
 /**
  * A generic box that contains content.
  * @param title box title. If `null`, the box is untitled.
+ * @param backgroundColor background color of the box. If `null`, the box uses the default value.
+ * @param foregroundColor foreground color of the box. If `null`, the box uses the default value.
  * @param children content of the box
  */
 data class Box(
     val title: InlineContent?,
+    val backgroundColor: Color?,
+    val foregroundColor: Color?,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

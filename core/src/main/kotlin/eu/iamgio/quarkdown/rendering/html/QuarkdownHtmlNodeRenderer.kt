@@ -77,7 +77,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         return tagBuilder("div", node.children)
             .attribute("class", "stack stack-" + node.orientation.name.lowercase())
-            .attribute("style", "justify-content: $cssMainAxisAlignment; align-items: $cssCrossAxisAlignment; gap: ${node.gap}")
+            .attribute(
+                "style",
+                "justify-content: $cssMainAxisAlignment; align-items: $cssCrossAxisAlignment; gap: ${node.gap}",
+            )
             .build()
     }
 
@@ -93,6 +96,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 }
             }
             +node.children
+
+            // Box style.
+            attribute(
+                "style",
+                buildString {
+                    node.backgroundColor?.let { append("background-color: ${it.asCSS};") }
+                    node.foregroundColor?.let { append("color: ${it.asCSS};") }
+                },
+            )
         }
 
     // Inline
