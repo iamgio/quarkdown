@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.function.call
 
+import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.PlainTextNode
-import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
@@ -40,7 +40,7 @@ class FunctionCallNodeExpander(
         } catch (e: PipelineException) {
             // If the function call is invalid.
             context.errorHandler.handle(e) { message ->
-                appendOutput(node, Text(message)) // Shows error message in the final document.
+                appendOutput(node, Box.error(message)) // Shows an error message box in the final document.
             }
         }
     }

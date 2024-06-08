@@ -126,4 +126,19 @@ data class Box(
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    companion object {
+        /**
+         * A custom box that shows an error message.
+         * @param message error message to display
+         * @return a custom box containing the error message
+         */
+        fun error(message: String) =
+            Box(
+                title = listOf(Text("Error")),
+                backgroundColor = Color(224, 67, 64),
+                foregroundColor = Color(255, 255, 255),
+                children = listOf(Text(message)),
+            )
+    }
 }
