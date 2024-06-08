@@ -235,7 +235,7 @@ class FullPipelineTest {
             .var {t1} {0}
             .var {t2} {1}
             
-            .function {column}
+            .function {tablecolumn}
                 n:
                 |  $ F_{.n} $  |
                 |:-------------:|
@@ -243,7 +243,7 @@ class FullPipelineTest {
             
             .table
                 .foreach {..4}
-                    .column {.1}
+                    .tablecolumn {.1}
                     .var {tmp} {.sum {.t1} {.t2}}
                     .var {t1} {.t2}
                     .var {t2} {.tmp}

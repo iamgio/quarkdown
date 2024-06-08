@@ -149,14 +149,14 @@ object ValueFactory {
     /**
      * @param raw raw value to convert to an enum value
      * @param values enum values pool to pick the output value from
-     * @return the value whose name matches (ignoring case) with [raw], or `null` if no match is found
+     * @return the value whose name matches (ignoring case and with `_`s removed) with [raw], or `null` if no match is found
      */
     @FromDynamicType(Enum::class)
     fun enum(
         raw: String,
         values: Array<Enum<*>>,
     ): EnumValue? =
-        values.find { it.name.equals(raw, ignoreCase = true) }
+        values.find { it.name.replace("_", "").equals(raw, ignoreCase = true) }
             ?.let { EnumValue(it) }
 
     /**
