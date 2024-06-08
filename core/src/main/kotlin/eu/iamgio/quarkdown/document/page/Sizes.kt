@@ -1,9 +1,11 @@
 package eu.iamgio.quarkdown.document.page
 
+import eu.iamgio.quarkdown.rendering.html.CssRepresentable
+
 /**
  * A collection of generic top, right, bottom and left [Size]s.
  */
-data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Size) {
+data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Size) : CssRepresentable {
     /**
      * Creates a [Sizes] object with the same [Size] for all sides.
      */
@@ -17,6 +19,6 @@ data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Siz
     /**
      * This size collection as a CSS value string.
      */
-    val asCSS: String
+    override val asCSS: String
         get() = "$top $right $bottom $left"
 }
