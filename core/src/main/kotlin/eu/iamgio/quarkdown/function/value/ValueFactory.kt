@@ -14,9 +14,11 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
+import eu.iamgio.quarkdown.function.reflect.ReflectionUtils
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
@@ -144,6 +146,28 @@ object ValueFactory {
                 else -> throw IllegalArgumentException("Invalid top-right-bottom-left sizes: $raw")
             },
         )
+    }
+
+    /**
+     * @param raw raw value to convert to a color value, case-insensitive.
+     *            Can be a hex value starting by `#` (e.g. `#FF0000`) or a color name (e.g. `red`).
+     * @return a new color value that wraps the parsed content of [raw]
+     * @throws IllegalArgumentException if the value is an invalid color
+     */
+    @FromDynamicType(Color::class)
+    fun color(raw: String): ObjectValue<Color> {
+        // Hexadecimal representation (e.g. #FF0000).
+        if (raw.startsWith("#")) {
+            return ObjectValue(Color.fromHex(raw))
+        }
+
+        // Name representation (e.g. red, GREEN, bLuE).
+        val awtColor = ReflectionUtils.getConstantByName<java.awt.Color>(raw)
+        if (awtColor != null) {
+            return ObjectValue(Color.fromAWT(awtColor))
+        }
+
+        throw IllegalArgumentException("Invalid color: $raw")
     }
 
     /**

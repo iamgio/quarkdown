@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.misc.Color
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -105,6 +106,16 @@ class ValueFactoryTest {
         )
 
         assertFails { ValueFactory.sizes("10px 12px 8px") }
+    }
+
+    @Test
+    fun color() {
+        assertEquals(Color(255, 0, 0), ValueFactory.color("#FF0000").unwrappedValue)
+        assertEquals(Color(255, 0, 0), ValueFactory.color("red").unwrappedValue)
+        assertEquals(Color(0, 0, 0), ValueFactory.color("#000000").unwrappedValue)
+        assertEquals(Color(0, 0, 0), ValueFactory.color("BLACK").unwrappedValue)
+        assertEquals(Color(145, 168, 50), ValueFactory.color("#91a832").unwrappedValue)
+        assertFails { ValueFactory.color("abc") }
     }
 
     @Test
