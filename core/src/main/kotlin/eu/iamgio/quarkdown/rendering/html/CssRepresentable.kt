@@ -9,3 +9,9 @@ interface CssRepresentable {
      */
     val asCSS: String
 }
+
+/**
+ * Returns this enum entry's name as a CSS property.
+ */
+val Enum<*>.asCSS: String
+    get() = name.lowercase().replace("_", "-")

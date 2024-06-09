@@ -15,7 +15,6 @@ import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
-import eu.iamgio.quarkdown.util.asCSS
 
 private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
 private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
