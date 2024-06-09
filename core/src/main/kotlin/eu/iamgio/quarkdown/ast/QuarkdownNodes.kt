@@ -3,6 +3,8 @@ package eu.iamgio.quarkdown.ast
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 // Nodes that aren't parsed from the source Markdown input,
@@ -67,31 +69,40 @@ data class Stacked(
     /**
      * Possible orientation types of a [Stacked] block.
      */
-    enum class Orientation {
+    enum class Orientation : RenderRepresentable {
         HORIZONTAL,
         VERTICAL,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
     }
 
     /**
      * Possible alignment types along the main axis of a [Stacked] block.
      */
-    enum class MainAxisAlignment {
+    enum class MainAxisAlignment : RenderRepresentable {
         START,
         CENTER,
         END,
         SPACE_BETWEEN,
         SPACE_AROUND,
         SPACE_EVENLY,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
     }
 
     /**
      * Possible alignment types along the cross axis of a [Stacked] block.
      */
-    enum class CrossAxisAlignment {
+    enum class CrossAxisAlignment : RenderRepresentable {
         START,
         CENTER,
         END,
         STRETCH,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
     }
 }
 
@@ -108,8 +119,11 @@ data class Clipped(
     /**
      * Possible clip types of a [Clipped] block.
      */
-    enum class Clip {
+    enum class Clip : RenderRepresentable {
         CIRCLE,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
     }
 }
 

@@ -1,9 +1,12 @@
 package eu.iamgio.quarkdown.document.page
 
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
+
 /**
  * Position of a margin box on a page.
  */
-enum class PageMarginPosition {
+enum class PageMarginPosition : RenderRepresentable {
     // See: https://pagedjs.org/documentation/7-generated-content-in-margin-boxes/
     // Ordered by position, clockwise from the top left corner.
     TOP_LEFT_CORNER,
@@ -22,4 +25,7 @@ enum class PageMarginPosition {
     LEFT_BOTTOM,
     LEFT_MIDDLE,
     LEFT_TOP,
+    ;
+
+    override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
 }

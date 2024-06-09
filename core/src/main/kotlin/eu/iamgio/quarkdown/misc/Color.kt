@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.misc
 
-import eu.iamgio.quarkdown.rendering.html.CssRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 
 /**
  * A color with red, green, blue and alpha components.
@@ -14,9 +15,8 @@ data class Color(
     val green: Int,
     val blue: Int,
     val alpha: Double = 1.0,
-) : CssRepresentable {
-    override val asCSS: String
-        get() = "rgba($red, $green, $blue, $alpha)"
+) : RenderRepresentable {
+    override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
 
     companion object {
         /**

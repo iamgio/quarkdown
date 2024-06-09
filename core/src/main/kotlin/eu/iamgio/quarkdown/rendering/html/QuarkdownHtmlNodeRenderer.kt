@@ -58,36 +58,20 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
     override fun visit(node: Stacked): CharSequence {
-        // CSS value for main axis alignment.
-        val cssMainAxisAlignment =
-            when (node.mainAxisAlignment) {
-                Stacked.MainAxisAlignment.START -> "flex-start"
-                Stacked.MainAxisAlignment.END -> "flex-end"
-                else -> node.mainAxisAlignment.asCSS
-            }
-
-        // CSS value for cross axis alignment.
-        val cssCrossAxisAlignment =
-            when (node.crossAxisAlignment) {
-                Stacked.CrossAxisAlignment.START -> "flex-start"
-                Stacked.CrossAxisAlignment.END -> "flex-end"
-                else -> node.crossAxisAlignment.asCSS
-            }
-
         return tagBuilder("div", node.children)
-            .attribute("class", "stack stack-" + node.orientation.name.lowercase())
+            .attribute("class", "stack stack-" + node.orientation.asCSS)
             .attribute(
                 "style",
                 CssBuilder()
-                    .entry("justify-content", cssMainAxisAlignment)
-                    .entry("align-items", cssCrossAxisAlignment)
+                    .entry("justify-content", node.mainAxisAlignment.asCSS)
+                    .entry("align-items", node.crossAxisAlignment.asCSS)
                     .entry("gap", node.gap)
                     .build(),
             )
             .build()
     }
 
-    override fun visit(node: Clipped) = div("clip-" + node.clip.name.lowercase(), node.children)
+    override fun visit(node: Clipped) = div("clip-" + node.clip.asCSS, node.children)
 
     override fun visit(node: Box) =
         div("box") {
@@ -143,8 +127,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     append("const slides_showControls = $it;")
                 }
                 node.transition?.let {
-                    append("const slides_transitionStyle = '${it.style.name.lowercase()}';")
-                    append("const slides_transitionSpeed = '${it.speed.name.lowercase()}';")
+                    append("const slides_transitionStyle = '${it.style.asCSS}';")
+                    append("const slides_transitionSpeed = '${it.speed.asCSS}';")
                 }
             }
         }

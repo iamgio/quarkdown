@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+
 /**
  * A builder of inline CSS rules.
  */
@@ -30,7 +32,7 @@ class CssBuilder {
      */
     fun entry(
         key: String,
-        value: CssRepresentable?,
+        value: RenderRepresentable?,
     ) = entry(key, value?.asCSS)
 
     /**

@@ -1,11 +1,12 @@
 package eu.iamgio.quarkdown.document.page
 
-import eu.iamgio.quarkdown.rendering.html.CssRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 
 /**
  * A collection of generic top, right, bottom and left [Size]s.
  */
-data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Size) : CssRepresentable {
+data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Size) : RenderRepresentable {
     /**
      * Creates a [Sizes] object with the same [Size] for all sides.
      */
@@ -16,9 +17,5 @@ data class Sizes(val top: Size, val right: Size, val bottom: Size, val left: Siz
      */
     constructor(vertical: Size, horizontal: Size) : this(vertical, horizontal, vertical, horizontal)
 
-    /**
-     * This size collection as a CSS value string.
-     */
-    override val asCSS: String
-        get() = "$top $right $bottom $left"
+    override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
 }
