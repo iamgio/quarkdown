@@ -277,7 +277,7 @@ object ValueFactory {
             }
 
         // Nodes are mapped to expressions.
-        return ComposedExpression(expressions = components.map { nodeToExpression(it) })
+        return ComposedExpression(expressions = components.map(::nodeToExpression))
     }
 
     /**
