@@ -7,11 +7,11 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
 
@@ -104,16 +104,17 @@ fun function(
     // Function parameters.
     val parameters =
         body.explicitParameters.mapIndexed { index, parameter ->
-            FunctionParameter(name = parameter, type = String::class, index)
+            FunctionParameter(name = parameter, type = DynamicValue::class, index)
         }
 
     // The custom function itself.
     val function =
         SimpleFunction(name, parameters) {
             val args = this.links.values.map { it.value }.toTypedArray()
+
+            // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
             val result = body.invokeDynamic(*args)
-            // The final content is evaluated and returned as a dynamic, hence it can be used as any type.
-            ValueFactory.dynamic(result.unwrappedValue.toString(), context)
+            DynamicValue(result.unwrappedValue)
         }
 
     // The function is registered and ready to be called.

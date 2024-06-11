@@ -345,14 +345,4 @@ object ValueFactory {
             },
         )
     }
-
-    /**
-     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
-     * @param context context to retrieve the pipeline from
-     * @return the result of the expression wrapped in a new [DynamicValue] (in the previous example: `DynamicValue("2 + 2 is 4")`)
-     */
-    fun dynamic(
-        raw: String,
-        context: Context,
-    ) = DynamicValue(this.expression(raw, context)?.eval()?.unwrappedValue.toString())
 }

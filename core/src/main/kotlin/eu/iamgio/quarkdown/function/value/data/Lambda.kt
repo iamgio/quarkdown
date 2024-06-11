@@ -40,8 +40,8 @@ class Lambda(
                         parameterName,
                         parameters = emptyList(),
                     ) {
-                        // TODO avoid toString, use dynamic object value
-                        DynamicValue(argument.unwrappedValue.toString())
+                        // Value associated to the lambda argument.
+                        DynamicValue(argument.unwrappedValue)
                     }
                 }.toSet(),
         )

@@ -31,7 +31,13 @@ class DynamicValueConverter(private val value: DynamicValue) {
         type: KClass<*>,
         context: Context?,
     ): InputValue<*>? {
-        val raw = value.unwrappedValue
+        val raw = value.unwrappedValue ?: return null
+
+        // If the target type is dynamic, do nothing.
+        // For instance, custom functions defined from a Quarkdown function have dynamic-type parameters.
+        if (type.isSubclassOf(DynamicValue::class)) {
+            return value
+        }
 
         // Special treatment for enum values.
         if (type.isSubclassOf(Enum::class)) {
@@ -39,7 +45,7 @@ class DynamicValueConverter(private val value: DynamicValue) {
             val valuesFunction = type.functions.first { it.name == "values" } as KFunction<Array<Enum<*>>>
             val values = valuesFunction.call()
 
-            return ValueFactory.enum(raw, values)
+            return ValueFactory.enum(raw.toString(), values)
                 ?: throw NoSuchElementFunctionException(element = raw, values)
         }
 

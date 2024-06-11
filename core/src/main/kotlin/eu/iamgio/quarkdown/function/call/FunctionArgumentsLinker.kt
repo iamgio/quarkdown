@@ -55,6 +55,12 @@ class FunctionArgumentsLinker(private val call: FunctionCall<*>) {
                 // The type of dynamic arguments is determined.
                 val staticArgument =
                     when {
+                        // If the expected type is dynamic, the argument is wrapped into a dynamic value.
+                        // For instance, custom functions defined from a Quarkdown function have dynamic-type parameters.
+                        parameter.type == DynamicValue::class -> {
+                            argument.copy(expression = DynamicValue(value.unwrappedValue))
+                        }
+
                         // The value is dynamic and must be converted to a static type.
                         value is DynamicValue -> {
                             // The dynamic value is converted into the expected parameter type.

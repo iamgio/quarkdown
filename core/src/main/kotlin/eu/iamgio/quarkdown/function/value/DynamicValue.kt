@@ -9,10 +9,11 @@ import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
  * that does not have a specific type yet.
  * - It is also used as an [OutputValue] by functions such as the stdlib `.function`, which
  * returns general content that can be used as any type, depending on the needs.
- * @param unwrappedValue raw, unprocessed representation of the wrapped value
+ * @param unwrappedValue either a raw/unprocessed representation of the wrapped value (e.g. the number 5 saved as the string "5")
+ *                       or simply an opaque wrapper for a generic value (e.g. a `Node`)
  * @see eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
  */
-data class DynamicValue(override val unwrappedValue: String) : InputValue<String>, OutputValue<String> {
+data class DynamicValue(override val unwrappedValue: Any?) : InputValue<Any?>, OutputValue<Any?> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
