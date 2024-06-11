@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.context
 
+import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
 
 /**
@@ -12,6 +13,9 @@ class ScopeContext(val parent: Context) : MutableContext(
     errorHandler = parent.errorHandler,
     libraries = emptySet(),
 ) {
+    override val documentInfo: DocumentInfo
+        get() = parent.documentInfo
+
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],
      * [parent]'s libraries are scanned.
