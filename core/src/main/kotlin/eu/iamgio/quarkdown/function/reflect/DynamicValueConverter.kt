@@ -63,10 +63,10 @@ class DynamicValueConverter(private val value: DynamicValue) {
                     if (context == null) {
                         throw IllegalStateException("Function call does not have an attached context")
                     }
-                    function.call(ValueFactory, raw, context)
+                    function.call(ValueFactory, raw.toString(), context)
                 }
 
-                else -> function.call(ValueFactory, raw)
+                else -> function.call(ValueFactory, raw.toString())
             } as InputValue<*>?
         }
 
