@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
  * and maps its result to a visible output in the final document.
- * @param context context to retrieve and handle the queued to-be-expanded function calls from
+ * @param context root context to dequeue to-be-expanded function calls from
  * @param outputMapper producer of an AST output [Node] from the function call output
  */
 class FunctionCallNodeExpander(
@@ -31,7 +31,10 @@ class FunctionCallNodeExpander(
             return
         }
 
-        val call: UncheckedFunctionCall<*> = context.resolveUnchecked(node)
+        // The function call node is used to retrieve its corresponding function call.
+        // By resolving it from the node's context instead of the root one,
+        // we make sure to call it from the correct scope, hence providing the needed environment.
+        val call: UncheckedFunctionCall<*> = node.context.resolveUnchecked(node)
 
         try {
             // The result of the function is converted into a node to be appended to the AST.

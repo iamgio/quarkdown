@@ -100,6 +100,7 @@ class FunctionNodeExpansionTest {
     fun `sum expansion`() {
         val node =
             FunctionCallNode(
+                context,
                 "sum",
                 listOf(
                     FunctionCallArgument(DynamicValue("2")),
@@ -122,6 +123,7 @@ class FunctionNodeExpansionTest {
     fun `sum expansion, failing`() {
         val node =
             FunctionCallNode(
+                context,
                 "sum",
                 listOf(
                     FunctionCallArgument(DynamicValue("2")),
@@ -148,6 +150,7 @@ class FunctionNodeExpansionTest {
     fun `custom function name`() {
         val node =
             FunctionCallNode(
+                context,
                 "customfunction",
                 listOf(
                     FunctionCallArgument(DynamicValue("abc")),
@@ -169,6 +172,7 @@ class FunctionNodeExpansionTest {
     fun `custom function name, failing`() {
         val node =
             FunctionCallNode(
+                context,
                 "myFunction",
                 listOf(
                     FunctionCallArgument(DynamicValue("abc")),
@@ -194,6 +198,7 @@ class FunctionNodeExpansionTest {
     fun `resource content expansion, failing`() {
         val node =
             FunctionCallNode(
+                context,
                 "resourceContent",
                 listOf(
                     FunctionCallArgument(DynamicValue("non-existant-resource")),
@@ -219,6 +224,7 @@ class FunctionNodeExpansionTest {
     fun `resource content expansion as inline`() {
         val node =
             FunctionCallNode(
+                context,
                 "resourceContent",
                 listOf(
                     FunctionCallArgument(DynamicValue("hello.txt")),
@@ -240,6 +246,7 @@ class FunctionNodeExpansionTest {
     fun `resource content expansion as block`() {
         val node =
             FunctionCallNode(
+                context,
                 "resourceContent",
                 listOf(
                     FunctionCallArgument(DynamicValue("hello.txt")),
@@ -262,6 +269,7 @@ class FunctionNodeExpansionTest {
     fun `boolean expansion`() {
         val node =
             FunctionCallNode(
+                context,
                 "echoBoolean",
                 listOf(
                     FunctionCallArgument(DynamicValue("yes")),
@@ -283,6 +291,7 @@ class FunctionNodeExpansionTest {
     fun `enum lookup, failing`() {
         val node =
             FunctionCallNode(
+                context,
                 "echoEnum",
                 listOf(
                     FunctionCallArgument(DynamicValue("non-existant-value")),
@@ -308,6 +317,7 @@ class FunctionNodeExpansionTest {
     fun `context injection`() {
         val node =
             FunctionCallNode(
+                context,
                 "setAndEchoDocumentName",
                 listOf(
                     FunctionCallArgument(DynamicValue("New name")),
@@ -331,6 +341,7 @@ class FunctionNodeExpansionTest {
     fun `markdown argument`() {
         val node =
             FunctionCallNode(
+                context,
                 "makeQuote",
                 listOf(
                     FunctionCallArgument(DynamicValue("Hello **world**")),
