@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.context
 
+import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
 
@@ -22,6 +23,19 @@ class ScopeContext(val parent: Context) : MutableContext(
      * @see Context.getFunctionByName
      */
     override fun getFunctionByName(name: String): Function<*>? = super.getFunctionByName(name) ?: parent.getFunctionByName(name)
+
+    /**
+     * Enqueues a function call to the [parent]'s queue if it is a [MutableContext],
+     * or to this context otherwise.
+     * This lets the registration go up the context tree so that it can be expanded
+     * from the root context in the next stage of the pipeline.
+     * @param functionCall function call to register
+     * @see MutableContext.register
+     */
+    override fun register(functionCall: FunctionCallNode) {
+        (parent as? MutableContext)?.register(functionCall)
+            ?: super.register(functionCall)
+    }
 
     /**
      * @param predicate condition to match

@@ -29,7 +29,7 @@ open class MutableContext(
      * via [resolve] to produce a concrete link from a reference.
      * @param linkDefinition definition to register
      */
-    fun register(linkDefinition: LinkDefinition) {
+    open fun register(linkDefinition: LinkDefinition) {
         attributes.linkDefinitions += linkDefinition
     }
 
@@ -37,7 +37,7 @@ open class MutableContext(
      * Enqueues a new [FunctionCallNode], which is executed in the next stage of the pipeline.
      * @param functionCall function call to register
      */
-    fun register(functionCall: FunctionCallNode) {
+    open fun register(functionCall: FunctionCallNode) {
         attributes.functionCalls += functionCall
     }
 
