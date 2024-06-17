@@ -213,6 +213,88 @@ class FullPipelineTest {
     }
 
     @Test
+    fun stacks() {
+        execute(
+            """
+            .row
+                Hello 1
+                Hello 2
+                
+                Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"stack stack-horizontal\" style=\"justify-content: flex-start; align-items: center; gap: 12.0px;\">" +
+                    "<p>Hello 1\nHello 2</p><p>Hello 3</p>" +
+                    "</div>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .column alignment:{spacebetween} cross:{start} gap:{1cm}
+                Hello 1
+                
+                ## Hello 2
+                
+                    Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"stack stack-vertical\" style=\"justify-content: space-between; align-items: flex-start; gap: 1.0cm;\">" +
+                    "<p>Hello 1</p>" +
+                    "<h2>Hello 2</h2>" +
+                    "<pre><code>Hello 3</code></pre>" +
+                    "</div>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .row alignment:{center} cross:{center} gap:{200px}
+                .column cross:{end}
+                    # Quarkdown
+                    A cool language
+
+                .column gap:{1cm}
+                    .clip {circle}
+                        ![](img1.png)
+
+                    .clip {circle}
+                        ![](img2.png)
+
+                    .clip {circle}
+                        ![](img3.png)
+
+                **[GitHub](https://github.com/iamgio/quarkdown)**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"stack stack-horizontal\" style=\"justify-content: center; align-items: center; gap: 200.0px;\">" +
+                    "<div class=\"stack stack-vertical\" style=\"justify-content: flex-start; align-items: flex-end; gap: 12.0px;\">" +
+                    "<h1>Quarkdown</h1><p>A cool language</p>" +
+                    "</div>" +
+                    "<div class=\"stack stack-vertical\" style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\">" +
+                    "<div class=\"clip-circle\">" +
+                    "<p><img src=\"img1.png\" alt=\"\" /></p>" +
+                    "</div>" +
+                    "<div class=\"clip-circle\">" +
+                    "<p><img src=\"img2.png\" alt=\"\" /></p>" +
+                    "</div>" +
+                    "<div class=\"clip-circle\">" +
+                    "<p><img src=\"img3.png\" alt=\"\" /></p>" +
+                    "</div>" +
+                    "</div>" +
+                    "<p><strong><a href=\"https://github.com/iamgio/quarkdown\">GitHub</a></strong></p>" +
+                    "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun fibonacci() {
         // Iterative Fibonacci sequence calculation.
         val iterative =
