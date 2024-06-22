@@ -199,8 +199,6 @@ class FunctionCallArgumentsWalkerLexer(
             // and the lexing operation is not affected by this walking.
             if (it.isEmpty()) {
                 reader.index = 0
-            } /*else {
-                reader.index--
-            }*/
+            }
         }
 }
