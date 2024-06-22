@@ -374,4 +374,46 @@ class FullPipelineTest {
             assertEquals(out, it)
         }
     }
+
+    @Test
+    fun `layout builder`() {
+        val layoutFunction =
+            """
+            .function {mylayout}
+                name number:
+                # Hello, .name!
+                
+                .number $ \times $ .number is .multiply {.number} by:{.number}
+                
+                ### End
+                
+            """.trimIndent()
+
+        execute(
+            "$layoutFunction\n.mylayout {world} {3}",
+        ) {
+            assertEquals(
+                "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>",
+                it,
+            )
+        }
+
+        execute(
+            layoutFunction +
+                """
+                    
+                .foreach {..4}
+                    n:
+                    .mylayout {world} {.n}
+                """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Hello, world!</h1><p>0__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__0 is 0</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>1__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__1 is 1</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>2__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__2 is 4</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>",
+                it,
+            )
+        }
+    }
 }
