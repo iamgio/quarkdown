@@ -185,7 +185,7 @@ class FunctionCallArgumentsWalkerLexer(
                         } else {
                             // The text outside the delimiters does not represent a named argument:
                             // end of the function call.
-                            reader.index = startIndex // Rollback
+                            reader.index = startIndex - 1 // Rollback
                             break
                         }
                     }
@@ -199,6 +199,8 @@ class FunctionCallArgumentsWalkerLexer(
             // and the lexing operation is not affected by this walking.
             if (it.isEmpty()) {
                 reader.index = 0
-            }
+            } /*else {
+                reader.index--
+            }*/
         }
 }
