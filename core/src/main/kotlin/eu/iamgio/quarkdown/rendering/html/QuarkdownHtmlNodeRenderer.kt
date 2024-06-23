@@ -58,17 +58,18 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
     override fun visit(node: Stacked): CharSequence {
-        return tagBuilder("div", node.children)
-            .attribute("class", "stack stack-" + node.orientation.asCSS)
-            .style {
+        return div("stack stack-${node.orientation.asCSS}") {
+            +node.children
+
+            style {
                 "justify-content" value node.mainAxisAlignment
                 "align-items" value node.crossAxisAlignment
                 "gap" value node.gap
             }
-            .build()
+        }
     }
 
-    override fun visit(node: Clipped) = div("clip-" + node.clip.asCSS, node.children)
+    override fun visit(node: Clipped) = div("clip-${node.clip.asCSS}", node.children)
 
     override fun visit(node: Box) =
         div("box") {
