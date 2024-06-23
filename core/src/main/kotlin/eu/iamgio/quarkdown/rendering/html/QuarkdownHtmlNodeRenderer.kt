@@ -75,11 +75,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         div("box") {
             if (node.title != null) {
                 tag("header") {
-                    tag("h4") {
-                        +node.title
-                    }
+                    tag("h4", node.title)
                 }
             }
+
             +node.children
 
             // Box style.
