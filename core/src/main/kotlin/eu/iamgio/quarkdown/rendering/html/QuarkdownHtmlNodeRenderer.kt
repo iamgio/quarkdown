@@ -62,11 +62,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             .attribute("class", "stack stack-" + node.orientation.asCSS)
             .attribute(
                 "style",
-                CssBuilder()
-                    .entry("justify-content", node.mainAxisAlignment.asCSS)
-                    .entry("align-items", node.crossAxisAlignment.asCSS)
-                    .entry("gap", node.gap)
-                    .build(),
+                css {
+                    "justify-content" value node.mainAxisAlignment
+                    "align-items" value node.crossAxisAlignment
+                    "gap" value node.gap
+                },
             )
             .build()
     }
@@ -87,12 +87,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             // Box style.
             optionalAttribute(
                 "style",
-                CssBuilder()
-                    .entry("padding", node.padding)
-                    .entry("background-color", node.backgroundColor)
-                    .entry("color", node.foregroundColor)
-                    .build()
-                    .takeUnless { it.isEmpty() },
+                css {
+                    "padding" value node.padding
+                    "background-color" value node.backgroundColor
+                    "color" value node.foregroundColor
+                }.takeUnless { it.isEmpty() },
             )
         }
 

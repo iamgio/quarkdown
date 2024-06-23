@@ -17,7 +17,7 @@ class CssBuilder {
      * @param value CSS entry value
      * @return this for concatenation
      */
-    fun entry(
+    private fun entry(
         key: String,
         value: String?,
     ) = apply {
@@ -30,13 +30,31 @@ class CssBuilder {
      * @param value CSS entry value
      * @return this for concatenation
      */
-    fun entry(
+    private fun entry(
         key: String,
         value: RenderRepresentable?,
     ) = entry(key, value?.asCSS)
+
+    /**
+     * Shorthand syntactic sugar for [entry].
+     * @see entry
+     */
+    infix fun String.value(value: RenderRepresentable?) = entry(this, value)
 
     /**
      * @return a string representation of the CSS entries contained within this builder
      */
     fun build() = entries.entries.joinToString(separator = " ") { "${it.key}: ${it.value};" }
 }
+
+/**
+ * Example usage:
+ * ```
+ * val css = css {
+ *   "color" value Color(255, 0, 0)
+ *   "font-size" value Size(16, SizeUnit.PX)
+ * }
+ * ```
+ * @return a string representation of CSS entries contained within the builder.
+ */
+fun css(init: CssBuilder.() -> Unit): String = CssBuilder().apply(init).build()
