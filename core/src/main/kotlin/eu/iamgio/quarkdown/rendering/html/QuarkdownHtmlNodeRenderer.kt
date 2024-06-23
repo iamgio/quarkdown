@@ -60,14 +60,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Stacked): CharSequence {
         return tagBuilder("div", node.children)
             .attribute("class", "stack stack-" + node.orientation.asCSS)
-            .attribute(
-                "style",
-                css {
-                    "justify-content" value node.mainAxisAlignment
-                    "align-items" value node.crossAxisAlignment
-                    "gap" value node.gap
-                },
-            )
+            .style {
+                "justify-content" value node.mainAxisAlignment
+                "align-items" value node.crossAxisAlignment
+                "gap" value node.gap
+            }
             .build()
     }
 
@@ -85,14 +82,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +node.children
 
             // Box style.
-            optionalAttribute(
-                "style",
-                css {
-                    "padding" value node.padding
-                    "background-color" value node.backgroundColor
-                    "color" value node.foregroundColor
-                }.takeUnless { it.isEmpty() },
-            )
+            style {
+                "padding" value node.padding
+                "background-color" value node.backgroundColor
+                "color" value node.foregroundColor
+            }
         }
 
     // Inline

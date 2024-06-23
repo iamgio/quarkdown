@@ -76,6 +76,14 @@ class HtmlTagBuilder(
     fun void(isVoid: Boolean) = apply { this.isVoid = isVoid }
 
     /**
+     * Applies a CSS style via the `style` attribute to this tag.
+     * The attribute is _not_ added if the generated CSS string is empty.
+     * @param init CSS builder initialization
+     * @see css
+     */
+    fun style(init: CssBuilder.() -> Unit) = optionalAttribute("style", css(init).takeUnless { it.isEmpty() })
+
+    /**
      * @return this builder and its nested content into stringified HTML code.
      */
     override fun build(): String =
