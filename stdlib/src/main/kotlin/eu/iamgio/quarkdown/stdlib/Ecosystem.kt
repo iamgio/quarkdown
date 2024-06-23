@@ -28,11 +28,17 @@ fun include(
     @Injected context: Context,
     path: String,
 ): OutputValue<*> {
+    // Read file content
     val raw = File(path).readText()
+
+    // Evaluate the Quarkdown source.
+    // This automatically converts the source into a value (e.g. a node, a string, a number, etc.)
+    // and fills the current context with new declarations (e.g. variables, functions, link definitions, etc.)
     val result =
         ValueFactory.expression(raw, context)?.eval()
             ?: throw FunctionRuntimeException("Cannot include sub-file $path: the Quarkdown source could not be evaluated")
 
+    // The value must be an output value in order to comply with the function rules.
     return result as? OutputValue<*>
         ?: throw FunctionRuntimeException(
             "Cannot include sub-file $path: the evaluation of the Quarkdown source is not a suitable output value " +
