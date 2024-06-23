@@ -224,7 +224,7 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div class=\"stack stack-horizontal\" style=\"justify-content: flex-start; align-items: center; gap: 12.0px;\">" +
+                "<div class=\"stack stack-horizontal\" style=\"justify-content: flex-start; align-items: center;\">" +
                     "<p>Hello 1\nHello 2</p><p>Hello 3</p>" +
                     "</div>",
                 it,
@@ -273,7 +273,7 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 "<div class=\"stack stack-horizontal\" style=\"justify-content: center; align-items: center; gap: 200.0px;\">" +
-                    "<div class=\"stack stack-vertical\" style=\"justify-content: flex-start; align-items: flex-end; gap: 12.0px;\">" +
+                    "<div class=\"stack stack-vertical\" style=\"justify-content: flex-start; align-items: flex-end;\">" +
                     "<h1>Quarkdown</h1><p>A cool language</p>" +
                     "</div>" +
                     "<div class=\"stack stack-vertical\" style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\">" +

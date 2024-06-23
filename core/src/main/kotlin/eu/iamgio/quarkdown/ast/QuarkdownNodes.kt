@@ -61,7 +61,7 @@ data class Stacked(
     val orientation: Orientation,
     val mainAxisAlignment: MainAxisAlignment,
     val crossAxisAlignment: CrossAxisAlignment,
-    val gap: Size,
+    val gap: Size?,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

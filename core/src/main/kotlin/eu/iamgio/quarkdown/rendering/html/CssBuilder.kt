@@ -12,7 +12,7 @@ class CssBuilder {
     private val entries = mutableMapOf<String, String>()
 
     /**
-     * Pushes a key-value CSS entry.
+     * Pushes a key-value CSS entry as long as [value] is not `null`.
      * @param key CSS entry key
      * @param value CSS entry value
      * @return this for concatenation

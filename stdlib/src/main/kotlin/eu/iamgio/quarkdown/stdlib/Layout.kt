@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -53,19 +52,11 @@ fun align(
 fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
 
 /**
- * Default gap between stacked contents.
- * @see stack
- * @see row
- * @see column
- */
-private val DEFAULT_STACK_GAP = Size(12.0, SizeUnit.PX)
-
-/**
  * Stacks content along an axis.
  * @param orientation orientation of the stack
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
- * @param gap blank space between children
+ * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new stacked block
  * @see row
@@ -75,7 +66,7 @@ fun stack(
     orientation: Stacked.Orientation,
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size = DEFAULT_STACK_GAP,
+    gap: Size? = null,
     body: MarkdownContent,
 ) = Stacked(orientation, mainAxisAlignment, crossAxisAlignment, gap, body.children).wrappedAsValue()
 
@@ -83,7 +74,7 @@ fun stack(
  * Stacks content horizontally.
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
- * @param gap blank space between children
+ * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new stacked block
  * @see stack
@@ -91,7 +82,7 @@ fun stack(
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size = DEFAULT_STACK_GAP,
+    gap: Size? = null,
     body: MarkdownContent,
 ) = stack(Stacked.Orientation.HORIZONTAL, mainAxisAlignment, crossAxisAlignment, gap, body)
 
@@ -99,7 +90,7 @@ fun row(
  * Stacks content vertically.
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
- * @param gap blank space between children
+ * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new stacked block
  * @see stack
@@ -107,7 +98,7 @@ fun row(
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size = DEFAULT_STACK_GAP,
+    gap: Size? = null,
     body: MarkdownContent,
 ) = stack(Stacked.Orientation.VERTICAL, mainAxisAlignment, crossAxisAlignment, gap, body)
 
