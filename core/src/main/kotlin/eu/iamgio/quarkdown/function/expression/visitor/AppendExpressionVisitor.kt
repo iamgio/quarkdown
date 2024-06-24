@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
+import eu.iamgio.quarkdown.function.expression.append
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
@@ -17,6 +18,7 @@ import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -72,14 +74,23 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             else -> StringValue(value.concatenate())
         }
 
-    // [a, b, c] "abc" -> "[a, b, c]abc"
-    override fun visit(value: OrderedCollectionValue<*>): Expression = StringValue(value.concatenate())
+    // [a, b, c] "abc" -> [a, b, c, "abc"]
+    override fun visit(value: OrderedCollectionValue<*>): Expression =
+        OrderedCollectionValue(
+            value.unwrappedValue + (other.eval() as OutputValue<*>),
+        )
 
-    // [a, b, c] "abc" -> "[a, b, c]abc"
-    override fun visit(value: UnorderedCollectionValue<*>): Expression = StringValue(value.concatenate())
+    // [a, b, c] "abc" -> [a, b, c, "abc"]
+    override fun visit(value: UnorderedCollectionValue<*>): Expression =
+        UnorderedCollectionValue(
+            value.unwrappedValue + (other.eval() as OutputValue<*>),
+        )
 
-    // [a, b, c] "abc" -> "[a, b, c]abc"
-    override fun visit(value: GeneralCollectionValue<*>): Expression = StringValue(value.concatenate())
+    // [a, b, c] "abc" -> [a, b, c, "abc"]
+    override fun visit(value: GeneralCollectionValue<*>): Expression =
+        GeneralCollectionValue(
+            value.unwrappedValue + (other.eval() as OutputValue<*>),
+        )
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
@@ -121,9 +132,12 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // TODO append lambda
     override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
 
-    // .sum {2} {3} "abc"             -> "5abc"
-    // .sum {2} {3} .subtract {8} {1} -> "57"
-    override fun visit(expression: FunctionCall<*>): Expression = StringValue(expression.eval().concatenate())
+    // Appends the result of the evaluation.
+    override fun visit(expression: FunctionCall<*>): Expression =
+        when (val result = expression.eval()) {
+            is Expression -> result.append(other)
+            else -> StringValue(result.concatenate())
+        }
 
     /**
      * @throws UnsupportedOperationException there is no way a composed expression could be appended to another expression

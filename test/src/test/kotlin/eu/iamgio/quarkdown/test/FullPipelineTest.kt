@@ -181,6 +181,38 @@ class FullPipelineTest {
             assertEquals("<p><strong>N:</strong> 0</p><p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p>", it)
         }
 
+        execute(
+            """
+            # Title
+            .foreach {..2}
+                n:
+                Hi .n
+            """.trimIndent(),
+        ) {
+            assertEquals("<h1>Title</h1><p>Hi 0</p><p>Hi 1</p>", it)
+        }
+
+        execute(
+            """
+            .foreach {..2}
+                .foreach {..2}
+                    .foreach {..2}
+                        ## Title 2
+                    # Title 1
+            
+                Some text
+            ### Title 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                (
+                    "<h2>Title 2</h2><h2>Title 2</h2><h1>Title 1</h1>".repeat(2) +
+                        "<p>Some text</p>"
+                ).repeat(2) + "<h3>Title 3</h3>",
+                it,
+            )
+        }
+
         execute(".function {hello}\n  `Hello`!\n\n.hello") {
             assertEquals("<p><code>Hello</code>!</p>", it)
         }
