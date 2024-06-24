@@ -195,6 +195,17 @@ class FullPipelineTest {
         execute(
             """
             .foreach {..2}
+                # Hello
+                .foreach {..1}
+                    **Hi**!
+            """.trimIndent(),
+        ) {
+            assertEquals("<h1>Hello</h1><p><strong>Hi</strong>!</p><h1>Hello</h1><p><strong>Hi</strong>!</p>", it)
+        }
+
+        execute(
+            """
+            .foreach {..2}
                 .foreach {..2}
                     .foreach {..2}
                         ## Title 2

@@ -18,6 +18,7 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
@@ -66,10 +67,16 @@ class NodeOutputValueVisitor(private val context: Context) : OutputValueVisitor<
 
     override fun visit(value: VoidValue) = BlockText()
 
-    // Dynamic output (e.g. produced by the stdlib function `.function`) is treated as Markdown by default.
-    override fun visit(value: DynamicValue) =
-        when (val raw = value.unwrappedValue) {
-            is Node -> raw
-            else -> this.visit(ValueFactory.blockMarkdown(raw.toString(), context).asNodeValue())
+    // Dynamic output (e.g. produced by the stdlib function `.function`) is treated:
+    // - If it is a suitable output value: its content is visited again with this visitor.
+    // - If it is a collection: its items are wrapped in a GeneralCollectionValue and visited.
+    // - Otherwise: its string content is parsed as Markdown.
+    @Suppress("UNCHECKED_CAST")
+    override fun visit(value: DynamicValue): Node {
+        return when (value.unwrappedValue) {
+            is OutputValue<*> -> value.unwrappedValue.accept(this)
+            is Iterable<*> -> GeneralCollectionValue(value.unwrappedValue as Iterable<OutputValue<*>>).accept(this)
+            else -> this.visit(ValueFactory.blockMarkdown(value.unwrappedValue.toString(), context).asNodeValue())
         }
+    }
 }

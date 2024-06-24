@@ -13,6 +13,8 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
+import eu.iamgio.quarkdown.function.value.InputValue
+import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
@@ -46,22 +48,32 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     /**
      * @return string result of the concatenation between [this] and [other]
      */
-    private fun Value<*>.concatenate(): String {
+    private fun Value<*>.concatenate(): InputValue<*> {
+        val otherEval = other.eval() // Evaluate the next expression.
+
+        // If the other value is a collection, add the current value to it as the first element.
+        if (otherEval is IterableValue<*> && this is OutputValue<*>) {
+            return GeneralCollectionValue(listOf(this, *otherEval.unwrappedValue.toList().toTypedArray()))
+        }
+
+        // Concatenate the string representation of the two values.
+
         fun stringify(value: Value<*>) =
             when (value) {
                 is VoidValue -> ""
                 else -> value.unwrappedValue.toString()
             }
-        return stringify(this) + stringify(other.eval())
+
+        return StringValue(stringify(this) + stringify(otherEval))
     }
 
     // "abc" "def"        -> "abcdef"
     // "abc" .sum {2} {3} -> "abc5"
-    override fun visit(value: StringValue) = StringValue(value.concatenate())
+    override fun visit(value: StringValue) = value.concatenate()
 
     // 15 "abc" -> "15abc"
     // 15 8     -> "158"
-    override fun visit(value: NumberValue) = StringValue(value.concatenate())
+    override fun visit(value: NumberValue) = value.concatenate()
 
     // true false -> false
     // false true -> false
@@ -71,7 +83,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         when (other) {
             // Logic AND between values.
             is BooleanValue -> BooleanValue(value.unwrappedValue && other.unwrappedValue)
-            else -> StringValue(value.concatenate())
+            else -> value.concatenate()
         }
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
@@ -95,10 +107,10 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
     // CENTER 15     -> "CENTER15"
-    override fun visit(value: EnumValue) = StringValue(value.concatenate())
+    override fun visit(value: EnumValue) = value.concatenate()
 
     // obj "abc" -> "objabc"
-    override fun visit(value: ObjectValue<*>) = StringValue(value.concatenate())
+    override fun visit(value: ObjectValue<*>) = value.concatenate()
 
     private fun concatenateAsNodes(root: Node): List<Node> {
         val nodes = mutableListOf(root)
@@ -127,7 +139,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     }
 
     // Like visit(StringValue)
-    override fun visit(value: DynamicValue): Expression = DynamicValue(value.concatenate())
+    override fun visit(value: DynamicValue): Expression = DynamicValue(value.concatenate().unwrappedValue)
 
     // TODO append lambda
     override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
@@ -136,7 +148,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     override fun visit(expression: FunctionCall<*>): Expression =
         when (val result = expression.eval()) {
             is Expression -> result.append(other)
-            else -> StringValue(result.concatenate())
+            else -> result.concatenate()
         }
 
     /**
