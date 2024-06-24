@@ -235,6 +235,20 @@ class FullPipelineTest {
         assertFailsWith<InvalidArgumentCountException> {
             execute(".function {hello}\n   target:\n  `Hello` .target!\n\n.hello") {}
         }
+
+        execute(
+            """
+            .if {yes}
+                .function {hello}
+                    name:
+                    Hello, *.name*!
+                
+                # .hello {world}
+                .hello {iamgio}
+            """.trimIndent(),
+        ) {
+            assertEquals("<h1>Hello, <em>world</em>!</h1><p>Hello, <em>iamgio</em>!</p>", it)
+        }
     }
 
     @Test
@@ -249,6 +263,18 @@ class FullPipelineTest {
                     Hello
 
             .x {no}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hello</p>", it)
+        }
+
+        execute(
+            """
+            .var {x} {no}
+            .if {.x}
+                Hi
+            .ifnot {.x}
+                Hello
             """.trimIndent(),
         ) {
             assertEquals("<p>Hello</p>", it)

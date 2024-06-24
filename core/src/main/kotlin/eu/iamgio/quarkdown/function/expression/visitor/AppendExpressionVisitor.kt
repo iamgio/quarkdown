@@ -41,6 +41,22 @@ import eu.iamgio.quarkdown.function.value.VoidValue
  * These two values are then joined together by this [AppendExpressionVisitor], producing:
  * `StringValue(three plus two is 5)`
  *
+ * The same principle applies to 'block expressions':
+ * ```
+ * .if {...}
+ *     Item 1
+ *     .foreach {2..4}
+ *         n:
+ *         Item .n
+ *     Item 5
+ * ```
+ * The previous example contains a body composed of multiple expressions:
+ * - `StringValue(Item 1)`;
+ * - `FunctionCall(foreach)` which returns an `IterableValue` of 3 elements;
+ * - `StringValue(Item 5)`.
+ * After appending these values, the resulting expression is an `IterableValue` (a [GeneralCollectionValue] in particular)
+ * which contains: `Item 1`, `Item 2`, `Item 3`, `Item 4`, `Item 5`.
+ *
  * @param other expression to append to the visited expression
  * @see ComposedExpression
  */
@@ -50,6 +66,10 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
      */
     private fun Value<*>.concatenate(): InputValue<*> {
         val otherEval = other.eval() // Evaluate the next expression.
+
+        // Void values are ignored.
+        if (this is VoidValue) return otherEval as InputValue<*>
+        if (otherEval is VoidValue) return this as InputValue<*>
 
         // If the other value is a collection, add the current value to it as the first element.
         if (otherEval is IterableValue<*> && this is OutputValue<*>) {
