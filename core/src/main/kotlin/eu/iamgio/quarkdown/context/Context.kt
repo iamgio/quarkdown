@@ -23,6 +23,12 @@ interface Context {
      */
     val flavor: MarkdownFlavor
 
+    /**
+     * The pipeline this context is attached to, if it exists.
+     * A context can have up to 1 attached pipeline.
+     * @see eu.iamgio.quarkdown.pipeline.Pipelines.getAttachedPipeline
+     * @see eu.iamgio.quarkdown.pipeline.Pipelines.attach
+     */
     val attachedPipeline: Pipeline?
 
     /**
