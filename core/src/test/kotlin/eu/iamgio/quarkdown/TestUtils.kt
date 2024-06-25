@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
 import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
+import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 import kotlin.test.assertIs
 
@@ -48,12 +49,12 @@ inline fun <reified T : Node> nodesIterator(
 
 /**
  * Attaches a mock pipeline to a context for tests only, which does not support rendering.
+ * @param options options of the pipeline
  */
-fun MutableContext.attachMockPipeline() {
+fun MutableContext.attachMockPipeline(options: PipelineOptions = MutablePipelineOptions()) =
     Pipeline(
         this,
-        MutablePipelineOptions(),
+        options,
         libraries = emptySet(),
         renderer = { _, _ -> throw UnsupportedOperationException() },
     )
-}

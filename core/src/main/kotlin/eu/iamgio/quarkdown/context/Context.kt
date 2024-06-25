@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.Pipeline
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
@@ -21,6 +22,8 @@ interface Context {
      * The Markdown flavor in use.
      */
     val flavor: MarkdownFlavor
+
+    val attachedPipeline: Pipeline?
 
     /**
      * Mutable information about the final document that is being created.

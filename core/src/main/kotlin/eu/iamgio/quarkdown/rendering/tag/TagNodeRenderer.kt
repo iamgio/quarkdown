@@ -1,13 +1,15 @@
 package eu.iamgio.quarkdown.rendering.tag
 
 import eu.iamgio.quarkdown.ast.CriticalContent
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 
 /**
  * A converter of [eu.iamgio.quarkdown.ast.Node]s into tag-based output code,
  * by using a DSL-like approach provided by [TagBuilder].
+ * @param context rendering context
  */
-abstract class TagNodeRenderer<B : TagBuilder> : NodeRenderer {
+abstract class TagNodeRenderer<B : TagBuilder>(val context: Context) : NodeRenderer {
     /**
      * Factory method that creates a new builder.
      * @param name name of the tag to open

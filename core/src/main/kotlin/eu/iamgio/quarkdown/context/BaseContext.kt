@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.Pipelines
 
 /**
@@ -25,6 +26,9 @@ open class BaseContext(
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
 ) : Context {
+    override val attachedPipeline: Pipeline?
+        get() = Pipelines.getAttachedPipeline(this)
+
     override val documentInfo = DocumentInfo()
 
     override val hasCode: Boolean
@@ -63,7 +67,7 @@ open class BaseContext(
         val fork = ScopeContext(parent = this)
 
         // Attach the same pipeline (if it exists) to the fork.
-        Pipelines.getAttachedPipeline(this)?.let {
+        this.attachedPipeline?.let {
             Pipelines.attach(fork, it)
         }
 

@@ -44,9 +44,11 @@ import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.pipeline.Pipelines
+import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
+import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import eu.iamgio.quarkdown.util.toPlainText
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -61,15 +63,20 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)) = QuarkdownFlavor.rendererFactory.html(context).nodeRenderer
+    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)): NodeRenderer {
+        if (context.attachedPipeline == null) {
+            // Attach a mock pipeline to the context, allowing to render pretty output
+            // (since its value is retrieved from the attached pipeline)
+            Pipelines.attach(
+                context,
+                MutableContext(context.flavor).attachMockPipeline(MutablePipelineOptions(prettyOutput = true)),
+            )
+        }
+
+        return QuarkdownFlavor.rendererFactory.html(context).nodeRenderer
+    }
 
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
-
-    @BeforeTest
-    fun setup() {
-        // Enable pretty output.
-        SystemProperties[SystemProperties.PRETTY_OUTPUT] = ""
-    }
 
     // Inline
     @Test

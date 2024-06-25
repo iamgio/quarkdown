@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown
 /**
  * System properties wrapper, used to define properties that affect execution.
  */
+@Deprecated("To be replaced by commands.")
 object SystemProperties {
     /**
      * Property that defines the location of the output directory.
@@ -47,11 +48,3 @@ object SystemProperties {
      */
     fun contains(key: String): Boolean = this[key] != null
 }
-
-// Helpers
-
-/**
- * Whether the rendering stage should produce pretty output code.
- */
-val SystemProperties.isPrettyOutputEnabled: Boolean
-    get() = contains(PRETTY_OUTPUT)

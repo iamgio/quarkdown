@@ -23,7 +23,6 @@ import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -35,12 +34,6 @@ import kotlin.test.assertNull
  * For tests of function calls from Quarkdown sources see [FunctionNodeExpansionTest].
  */
 class StandaloneFunctionTest {
-    @BeforeTest
-    fun setup() {
-        // Throw exception on function call error.
-        SystemProperties[SystemProperties.EXIT_ON_ERROR] = ""
-    }
-
     @Test
     fun `no arguments`() {
         val function =

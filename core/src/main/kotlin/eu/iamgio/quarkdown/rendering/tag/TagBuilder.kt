@@ -1,8 +1,6 @@
 package eu.iamgio.quarkdown.rendering.tag
 
-import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.isPrettyOutputEnabled
 
 /**
  * A builder of a generic output code wrapped within tags (of any kind) which can be unlimitedly nested.
@@ -80,13 +78,14 @@ abstract class TagBuilder(
  * ```
  *
  * @param name tag name
- * @param pretty whether the output code should be pretty
+ * @param pretty whether the output code should be pretty.
+ *               Defaults to the corresponding attached pipeline option if there is one, or `false` otherwise.
  * @param init action to run at initialization
  * @return the new builder
  */
 fun <B : TagBuilder> TagNodeRenderer<B>.tagBuilder(
     name: String,
-    pretty: Boolean = SystemProperties.isPrettyOutputEnabled,
+    pretty: Boolean = context.attachedPipeline?.options?.prettyOutput ?: false,
     init: B.() -> Unit = {},
 ) = createBuilder(name, pretty).also(init)
 

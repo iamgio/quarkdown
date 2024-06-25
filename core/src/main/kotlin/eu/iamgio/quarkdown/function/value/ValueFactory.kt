@@ -19,7 +19,6 @@ import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.misc.Color
-import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
 
@@ -195,9 +194,7 @@ object ValueFactory {
         expandFunctionCalls: Boolean,
     ): MarkdownContentValue {
         // Retrieving the pipeline linked to the context.
-        val pipeline =
-            Pipelines.getAttachedPipeline(context)
-                ?: throw UnattachedPipelineException()
+        val pipeline = context.attachedPipeline ?: throw UnattachedPipelineException()
 
         // Convert string input to parsed AST.
         val root = pipeline.parse(lexer.tokenize(), context as MutableContext)
