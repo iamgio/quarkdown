@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
+import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
 import eu.iamgio.quarkdown.stdlib.Stdlib
 
 /**
@@ -17,7 +18,10 @@ object PipelineInitialization {
      * @param flavor flavor to use across the pipeline
      * @return the new pipeline
      */
-    fun init(flavor: MarkdownFlavor): Pipeline {
+    fun init(
+        flavor: MarkdownFlavor,
+        options: PipelineOptions,
+    ): Pipeline {
         // Libraries to load.
         val libraries = setOf(Stdlib.library)
 
@@ -41,6 +45,7 @@ object PipelineInitialization {
         // The pipeline.
         return Pipeline(
             context = MutableContext(flavor),
+            options = options,
             libraries = libraries,
             renderer = { rendererFactory, context -> rendererFactory.html(context) },
             hooks = hooks,

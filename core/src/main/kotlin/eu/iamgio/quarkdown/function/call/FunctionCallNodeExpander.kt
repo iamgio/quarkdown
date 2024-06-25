@@ -9,16 +9,19 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
  * and maps its result to a visible output in the final document.
  * @param context root context to dequeue to-be-expanded function calls from
+ * @param errorHandler strategy to handle errors that may occur during the execution of a function call
  * @param outputMapper producer of an AST output [Node] from the function call output
  */
 class FunctionCallNodeExpander(
     private val context: MutableContext,
+    private val errorHandler: PipelineErrorHandler,
     private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(context),
 ) {
     /**
@@ -42,7 +45,7 @@ class FunctionCallNodeExpander(
             appendOutput(node, outputNode)
         } catch (e: PipelineException) {
             // If the function call is invalid.
-            context.errorHandler.handle(e) { message ->
+            errorHandler.handle(e) { message ->
                 appendOutput(node, Box.error(message)) // Shows an error message box in the final document.
             }
         }

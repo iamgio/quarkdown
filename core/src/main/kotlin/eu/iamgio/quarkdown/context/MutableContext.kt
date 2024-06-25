@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.LinkDefinition
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -15,10 +14,9 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
  */
 open class MutableContext(
     flavor: MarkdownFlavor,
-    errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
     libraries: Set<Library> = emptySet(),
     private val attributes: MutableAstAttributes = MutableAstAttributes(),
-) : BaseContext(attributes, flavor, libraries, errorHandler) {
+) : BaseContext(attributes, flavor, libraries) {
     override var hasCode: Boolean by attributes::hasCode
     override var hasMath: Boolean by attributes::hasMath
 

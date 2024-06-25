@@ -1,8 +1,5 @@
 package eu.iamgio.quarkdown.pipeline.error
 
-import eu.iamgio.quarkdown.SystemProperties
-import eu.iamgio.quarkdown.exitsOnError
-
 /**
  * Strategy used to handle errors that may occur across the pipeline.
  */
@@ -18,12 +15,4 @@ interface PipelineErrorHandler {
         error: PipelineException,
         action: (String) -> Unit,
     )
-
-    companion object {
-        fun fromSystemProperties() =
-            when {
-                SystemProperties.exitsOnError -> StrictPipelineErrorHandler()
-                else -> BasePipelineErrorHandler()
-            }
-    }
 }

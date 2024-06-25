@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.outputDirectory
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
+import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
 import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter
 import java.io.File
 import kotlin.system.exitProcess
@@ -16,9 +17,12 @@ fun main(args: Array<String>) {
     // Flavor to use across the pipeline.
     val flavor: MarkdownFlavor = QuarkdownFlavor
 
+    // Settings that affect different behaviors of the pipeline.
+    val options = MutablePipelineOptions(exitOnError = true)
+
     // The pipeline that contains all the stages to go through,
     // from the source input to the final output.
-    val pipeline = PipelineInitialization.init(flavor)
+    val pipeline = PipelineInitialization.init(flavor, options)
 
     // Type of execution to launch.
     val execution: PipelineExecutionStrategy =

@@ -1,6 +1,5 @@
 package eu.iamgio.quarkdown.pipeline
 
-import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.ast.Document
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -8,10 +7,10 @@ import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
-import eu.iamgio.quarkdown.isWrapOutputEnabled
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
+import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.rendering.RenderingComponents
@@ -30,6 +29,7 @@ import eu.iamgio.quarkdown.rendering.wrap
  */
 class Pipeline(
     private val context: MutableContext,
+    val options: PipelineOptions,
     private val libraries: Set<Library>,
     private val renderer: (RendererFactory, Context) -> RenderingComponents,
     private val hooks: PipelineHooks? = null,
@@ -81,7 +81,7 @@ class Pipeline(
      * Executes queued function calls and expands their content based on their output.
      */
     fun expandFunctionCalls(document: Document) {
-        FunctionCallNodeExpander(context).expandAll()
+        FunctionCallNodeExpander(context, options.errorHandler).expandAll()
         hooks?.afterExpanding?.invoke(this, document)
     }
 
@@ -102,7 +102,7 @@ class Pipeline(
 
         // If enabled, the output code is wrapped in a template.
         val wrapped =
-            if (SystemProperties.isWrapOutputEnabled) {
+            if (options.wrapOutput) {
                 components.postRenderer.wrap(rendered)
             } else {
                 rendered

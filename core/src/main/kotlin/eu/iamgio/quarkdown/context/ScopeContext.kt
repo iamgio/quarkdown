@@ -11,7 +11,6 @@ import eu.iamgio.quarkdown.function.Function
  */
 class ScopeContext(val parent: Context) : MutableContext(
     flavor = parent.flavor,
-    errorHandler = parent.errorHandler,
     libraries = emptySet(),
 ) {
     override val documentInfo: DocumentInfo

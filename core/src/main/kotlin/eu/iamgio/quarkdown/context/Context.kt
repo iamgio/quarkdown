@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
@@ -27,12 +26,6 @@ interface Context {
      * Mutable information about the final document that is being created.
      */
     val documentInfo: DocumentInfo
-
-    /**
-     * The error handling strategy to use.
-     * @see eu.iamgio.quarkdown.pipeline.error
-     */
-    val errorHandler: PipelineErrorHandler
 
     /**
      * Whether there is at least one code block.

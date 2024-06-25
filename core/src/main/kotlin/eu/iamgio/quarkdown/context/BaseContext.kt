@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.pipeline.Pipelines
-import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 
 /**
  * An immutable [Context] implementation.
@@ -25,7 +24,6 @@ open class BaseContext(
     private val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
-    override val errorHandler: PipelineErrorHandler = PipelineErrorHandler.fromSystemProperties(),
 ) : Context {
     override val documentInfo = DocumentInfo()
 

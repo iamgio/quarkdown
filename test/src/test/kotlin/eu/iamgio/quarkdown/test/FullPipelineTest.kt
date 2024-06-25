@@ -1,13 +1,12 @@
 package eu.iamgio.quarkdown.test
 
-import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
+import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
 import eu.iamgio.quarkdown.stdlib.Stdlib
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -19,11 +18,6 @@ private const val DATA_FOLDER = "src/test/resources/data"
  * [Stdlib] is used as a library.
  */
 class FullPipelineTest {
-    @BeforeTest
-    fun setup() {
-        SystemProperties[SystemProperties.EXIT_ON_ERROR] = ""
-    }
-
     /**
      * Executes a Quarkdown source.
      * @param hook action run after rendering
@@ -40,6 +34,7 @@ class FullPipelineTest {
         val pipeline =
             Pipeline(
                 MutableContext(QuarkdownFlavor),
+                MutablePipelineOptions(exitOnError = true),
                 libraries = setOf(Stdlib.library),
                 renderer = { rendererFactory, context -> rendererFactory.html(context) },
                 hooks,

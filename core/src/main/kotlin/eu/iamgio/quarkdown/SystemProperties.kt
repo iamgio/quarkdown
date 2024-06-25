@@ -63,15 +63,3 @@ val SystemProperties.outputDirectory: File?
  */
 val SystemProperties.isPrettyOutputEnabled: Boolean
     get() = contains(PRETTY_OUTPUT)
-
-/**
- * Whether the output code should be wrapped in a template.
- */
-val SystemProperties.isWrapOutputEnabled: Boolean
-    get() = !contains(DONT_WRAP_OUTPUT)
-
-/**
- * Whether the process should be killed whenever a soft pipeline error occurs.
- */
-val SystemProperties.exitsOnError: Boolean
-    get() = contains(EXIT_ON_ERROR)
