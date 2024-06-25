@@ -1,12 +1,10 @@
 package eu.iamgio.quarkdown.cli
 
-import eu.iamgio.quarkdown.SystemProperties
 import eu.iamgio.quarkdown.cli.exec.FileExecutionStrategy
 import eu.iamgio.quarkdown.cli.exec.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.exec.ReplExecutionStrategy
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.outputDirectory
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
 import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter
@@ -40,7 +38,7 @@ fun main(args: Array<String>) {
         val resource = execution.execute(pipeline)
 
         // Exports the generated resources to file if enabled by system properties.
-        SystemProperties.outputDirectory?.let { directory ->
+        pipeline.options.outputDirectory?.let { directory ->
             resource?.accept(FileResourceExporter(location = directory))
         }
     } catch (e: PipelineException) {
