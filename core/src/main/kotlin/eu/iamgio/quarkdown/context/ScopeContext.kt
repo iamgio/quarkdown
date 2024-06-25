@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.context
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
+import eu.iamgio.quarkdown.pipeline.Pipeline
 
 /**
  * A context that is the result of a fork from an original parent [Context].
@@ -13,6 +14,9 @@ class ScopeContext(val parent: Context) : MutableContext(
     flavor = parent.flavor,
     libraries = emptySet(),
 ) {
+    override val attachedPipeline: Pipeline?
+        get() = parent.attachedPipeline
+
     override val documentInfo: DocumentInfo
         get() = parent.documentInfo
 

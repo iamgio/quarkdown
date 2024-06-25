@@ -88,7 +88,7 @@ interface Context {
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 
     /**
-     * @return a new scope context, forked from this context
+     * @return a new scope context, forked from this context, with the same base inherited properties
      */
     fun fork(): ScopeContext
 }
