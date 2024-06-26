@@ -29,7 +29,7 @@ class QuarkdownCommand : CliktCommand() {
      * Optional output directory.
      * If not set, output files are not generated.
      */
-    private val output: File? by option("-o", "--out", help = "Output directory").file(
+    private val outputDirectory: File? by option("-o", "--out", help = "Output directory").file(
         mustExist = false,
         canBeFile = false,
         canBeDir = true,
@@ -54,9 +54,14 @@ class QuarkdownCommand : CliktCommand() {
     private val strict: Boolean by option("--strict", help = "Exit on error").flag()
 
     override fun run() {
-        val options =
+        val cliOptions =
+            CliOptions(
+                source,
+                outputDirectory,
+            )
+
+        val pipelineOptions =
             PipelineOptions(
-                outputDirectory = output,
                 prettyOutput = prettyOutput,
                 wrapOutput = !noWrap,
                 errorHandler =
@@ -67,6 +72,6 @@ class QuarkdownCommand : CliktCommand() {
             )
 
         // Executes the Quarkdown pipeline.
-        runQuarkdown(source, options)
+        runQuarkdown(cliOptions, pipelineOptions)
     }
 }
