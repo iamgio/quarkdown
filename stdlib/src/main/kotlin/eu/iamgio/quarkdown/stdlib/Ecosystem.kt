@@ -6,7 +6,6 @@ import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
-import java.io.File
 
 /**
  * `Ecosystem` stdlib module exporter.
@@ -29,19 +28,20 @@ fun include(
     path: String,
 ): OutputValue<*> {
     // Read file content
-    val raw = File(path).readText()
+    val file = file(context, path)
+    val raw = file.readText()
 
     // Evaluate the Quarkdown source.
     // This automatically converts the source into a value (e.g. a node, a string, a number, etc.)
     // and fills the current context with new declarations (e.g. variables, functions, link definitions, etc.)
     val result =
         ValueFactory.expression(raw, context)?.eval()
-            ?: throw FunctionRuntimeException("Cannot include sub-file $path: the Quarkdown source could not be evaluated")
+            ?: throw FunctionRuntimeException("Cannot include sub-file $file: the Quarkdown source could not be evaluated")
 
     // The value must be an output value in order to comply with the function rules.
     return result as? OutputValue<*>
         ?: throw FunctionRuntimeException(
-            "Cannot include sub-file $path: the evaluation of the Quarkdown source is not a suitable output value " +
+            "Cannot include sub-file $file: the evaluation of the Quarkdown source is not a suitable output value " +
                 "(${result::class.simpleName} found)",
         )
 }

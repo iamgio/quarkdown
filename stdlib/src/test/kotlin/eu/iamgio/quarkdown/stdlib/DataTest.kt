@@ -1,7 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.context.BaseContext
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,35 +18,37 @@ private val LINE_SEPARATOR = System.lineSeparator()
  * [Data] module tests.
  */
 class DataTest {
+    private val context = BaseContext(MutableAstAttributes(), QuarkdownFlavor, emptySet())
+
     @Test
     fun `file contents`() {
         val path = "$DATA_FOLDER/test.txt"
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4${LINE_SEPARATOR}Line 5",
-            fileContent(path).unwrappedValue,
+            fileContent(context, path).unwrappedValue,
         )
 
         assertEquals(
             "Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4",
-            fileContent(path, Range(1, 3)).unwrappedValue,
+            fileContent(context, path, Range(1, 3)).unwrappedValue,
         )
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2",
-            fileContent(path, Range(null, 1)).unwrappedValue,
+            fileContent(context, path, Range(null, 1)).unwrappedValue,
         )
 
         assertEquals(
             "Line 4${LINE_SEPARATOR}Line 5",
-            fileContent(path, Range(3, null)).unwrappedValue,
+            fileContent(context, path, Range(3, null)).unwrappedValue,
         )
     }
 
     @Test
     fun `csv table`() {
         val path = "$DATA_FOLDER/people.csv"
-        val table = csv(path)
+        val table = csv(context, path)
 
         assertIs<Table>(table.unwrappedValue)
 

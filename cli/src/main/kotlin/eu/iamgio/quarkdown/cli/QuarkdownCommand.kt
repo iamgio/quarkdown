@@ -64,6 +64,7 @@ class QuarkdownCommand : CliktCommand() {
             PipelineOptions(
                 prettyOutput = prettyOutput,
                 wrapOutput = !noWrap,
+                workingDirectory = source?.parentFile,
                 errorHandler =
                     when {
                         strict -> StrictPipelineErrorHandler()
