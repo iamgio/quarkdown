@@ -17,7 +17,7 @@ import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.Pipeline
-import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,7 +35,7 @@ class FlowTest {
     @BeforeTest
     fun setup() {
         // Mock attached pipeline to parse nested Markdown.
-        Pipeline(context, MutablePipelineOptions(), emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
+        Pipeline(context, PipelineOptions(), emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
     }
 
     private fun call(

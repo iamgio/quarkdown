@@ -44,8 +44,8 @@ import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.Pipelines
-import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import eu.iamgio.quarkdown.util.toPlainText
@@ -69,7 +69,7 @@ class HtmlNodeRendererTest {
             // (since its value is retrieved from the attached pipeline)
             Pipelines.attach(
                 context,
-                MutableContext(context.flavor).attachMockPipeline(MutablePipelineOptions(prettyOutput = true)),
+                MutableContext(context.flavor).attachMockPipeline(PipelineOptions(prettyOutput = true)),
             )
         }
 

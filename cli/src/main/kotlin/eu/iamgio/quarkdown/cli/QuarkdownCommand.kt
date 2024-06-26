@@ -6,7 +6,9 @@ import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
-import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
+import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
+import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import java.io.File
 
 /**
@@ -53,11 +55,15 @@ class QuarkdownCommand : CliktCommand() {
 
     override fun run() {
         val options =
-            MutablePipelineOptions(
-                outputPath = output?.absolutePath,
+            PipelineOptions(
+                outputDirectory = output,
                 prettyOutput = prettyOutput,
                 wrapOutput = !noWrap,
-                exitOnError = strict,
+                errorHandler =
+                    when {
+                        strict -> StrictPipelineErrorHandler()
+                        else -> BasePipelineErrorHandler()
+                    },
             )
 
         // Executes the Quarkdown pipeline.

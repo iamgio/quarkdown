@@ -6,8 +6,8 @@ import eu.iamgio.quarkdown.cli.exec.ReplExecutionStrategy
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pipeline.Pipeline
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
-import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter
 import java.io.File
 import kotlin.system.exitProcess

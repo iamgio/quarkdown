@@ -5,7 +5,8 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
-import eu.iamgio.quarkdown.pipeline.options.MutablePipelineOptions
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
+import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,7 @@ class FullPipelineTest {
         val pipeline =
             Pipeline(
                 MutableContext(QuarkdownFlavor),
-                MutablePipelineOptions(exitOnError = true),
+                PipelineOptions(errorHandler = StrictPipelineErrorHandler()),
                 libraries = setOf(Stdlib.library),
                 renderer = { rendererFactory, context -> rendererFactory.html(context) },
                 hooks,

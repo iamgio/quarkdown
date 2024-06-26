@@ -10,7 +10,6 @@ import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
-import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.rendering.RenderingComponents

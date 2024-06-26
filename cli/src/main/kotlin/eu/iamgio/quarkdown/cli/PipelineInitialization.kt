@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
-import eu.iamgio.quarkdown.pipeline.options.PipelineOptions
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.stdlib.Stdlib
 
 /**
