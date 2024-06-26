@@ -1,11 +1,14 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.context.BaseContext
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.pipeline.Pipeline
+import eu.iamgio.quarkdown.pipeline.PipelineOptions
+import java.io.File
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -18,11 +21,18 @@ private val LINE_SEPARATOR = System.lineSeparator()
  * [Data] module tests.
  */
 class DataTest {
-    private val context = BaseContext(MutableAstAttributes(), QuarkdownFlavor, emptySet())
+    private val context = MutableContext(QuarkdownFlavor)
+
+    @BeforeTest
+    fun setup() {
+        // Attach a mock pipeline to the context, in order to set a working directory for the function calls to use.
+        val options = PipelineOptions(workingDirectory = File(DATA_FOLDER))
+        Pipeline(context, options, emptySet(), { _, _ -> throw UnsupportedOperationException() })
+    }
 
     @Test
     fun `file contents`() {
-        val path = "$DATA_FOLDER/test.txt"
+        val path = "test.txt"
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4${LINE_SEPARATOR}Line 5",
@@ -47,7 +57,7 @@ class DataTest {
 
     @Test
     fun `csv table`() {
-        val path = "$DATA_FOLDER/people.csv"
+        val path = "people.csv"
         val table = csv(context, path)
 
         assertIs<Table>(table.unwrappedValue)
