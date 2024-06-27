@@ -552,7 +552,7 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Main</h1><h1>Included</h2><p>Hello, Gio!</p><h3>Hello, world!</h3>",
+                "<h1>Main</h1><h1>Included</h1><p>Hello, Gio!</p><h3>Hello, world!</h3>",
                 it,
             )
         }

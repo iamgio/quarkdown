@@ -29,7 +29,7 @@ fun include(
 ): OutputValue<*> {
     // Read file content
     val file = file(context, path)
-    val raw = file.readText()
+    val raw = "\n" + file.readText()
 
     // Evaluate the Quarkdown source.
     // This automatically converts the source into a value (e.g. a node, a string, a number, etc.)
