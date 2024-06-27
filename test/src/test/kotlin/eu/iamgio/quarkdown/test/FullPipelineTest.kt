@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -35,7 +36,10 @@ class FullPipelineTest {
         val pipeline =
             Pipeline(
                 MutableContext(QuarkdownFlavor),
-                PipelineOptions(errorHandler = StrictPipelineErrorHandler()),
+                PipelineOptions(
+                    errorHandler = StrictPipelineErrorHandler(),
+                    workingDirectory = File(DATA_FOLDER),
+                ),
                 libraries = setOf(Stdlib.library),
                 renderer = { rendererFactory, context -> rendererFactory.html(context) },
                 hooks,
@@ -151,7 +155,7 @@ class FullPipelineTest {
             assertEquals("<p><em><strong>result</strong></em>: 11</p>", it)
         }
 
-        execute(".code\n    .filecontent {$DATA_FOLDER/code.txt}") {
+        execute(".code\n    .filecontent {code.txt}") {
             assertEquals(
                 "<pre><code>Line 1${System.lineSeparator()}Line 2${System.lineSeparator()}${System.lineSeparator()}Line 3</code></pre>",
                 it,
@@ -482,6 +486,73 @@ class FullPipelineTest {
                     "<h1>Hello, world!</h1><p>2__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__2 is 4</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>4__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__4 is 16</p><h3>End</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `include source`() {
+        execute(
+            """
+            .include {include/include-1.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Title</h1><p>Some <em>text</em>.</p>",
+                it,
+            )
+        }
+
+        // Import functions from another source.
+        execute(
+            """
+            .include {include/include-2.md}
+            .hello {world}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello, world!</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            # Main
+            .include {include/include-3.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Main</h1><h2>Included</h2><pre><code>code\ncode</code></pre>",
+                it,
+            )
+        }
+
+        // Sharing functions with included files.
+        execute(
+            """
+            .function {hello}
+                x:
+                Hello, .x!
+            .include {include/include-4.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h3>Hello, world!</h3>",
+                it,
+            )
+        }
+
+        // Transitive inclusion of files.
+        execute(
+            """
+            # Main
+            .include {include/include-5.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Main</h1><h1>Included</h2><p>Hello, Gio!</p><h3>Hello, world!</h3>",
                 it,
             )
         }
