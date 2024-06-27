@@ -30,6 +30,8 @@ fun include(
     // Read file content
     val file = file(context, path)
     val raw = "\n" + file.readText()
+    // The initial line break is a workaround for an issue that may cause blocks at the beginning of the file
+    // to be not recognized as blocks - which happens in transitive inclusions (aka a nested .include called from an included file).
 
     // Evaluate the Quarkdown source.
     // This automatically converts the source into a value (e.g. a node, a string, a number, etc.)

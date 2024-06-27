@@ -556,5 +556,17 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        // Included file used as a value.
+        execute(
+            """
+            .sum {.include {include/include-6.md}} {3}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>8</p>",
+                it,
+            )
+        }
     }
 }
