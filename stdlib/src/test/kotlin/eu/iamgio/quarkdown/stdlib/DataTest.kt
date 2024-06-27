@@ -41,17 +41,17 @@ class DataTest {
 
         assertEquals(
             "Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4",
-            fileContent(context, path, Range(1, 3)).unwrappedValue,
+            fileContent(context, path, Range(2, 4)).unwrappedValue,
         )
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2",
-            fileContent(context, path, Range(null, 1)).unwrappedValue,
+            fileContent(context, path, Range(null, 2)).unwrappedValue,
         )
 
         assertEquals(
             "Line 4${LINE_SEPARATOR}Line 5",
-            fileContent(context, path, Range(3, null)).unwrappedValue,
+            fileContent(context, path, Range(4, null)).unwrappedValue,
         )
     }
 

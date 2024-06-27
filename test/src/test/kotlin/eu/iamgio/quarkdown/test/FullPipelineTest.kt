@@ -174,7 +174,7 @@ class FullPipelineTest {
         }
 
         execute(".foreach {..3}\n  **N:** .1") {
-            assertEquals("<p><strong>N:</strong> 0</p><p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p>", it)
+            assertEquals("<p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p><p><strong>N:</strong> 3</p>", it)
         }
 
         execute(
@@ -185,7 +185,7 @@ class FullPipelineTest {
                 Hi .n
             """.trimIndent(),
         ) {
-            assertEquals("<h1>Title</h1><p>Hi 0</p><p>Hi 1</p>", it)
+            assertEquals("<h1>Title</h1><p>Hi 1</p><p>Hi 2</p>", it)
         }
 
         execute(
@@ -368,7 +368,7 @@ class FullPipelineTest {
             .var {t2} {1}
             
             .table
-                .foreach {..4}
+                .foreach {0..4}
                     | $ F_{.1} $ |
                     |:-------------:|
                     |      .t1      |
@@ -389,7 +389,7 @@ class FullPipelineTest {
                 |      .t1      |
             
             .table
-                .foreach {..4}
+                .foreach {0..4}
                     .tablecolumn {.1}
                     .var {tmp} {.sum {.t1} {.t2}}
                     .var {t1} {.t2}
@@ -411,7 +411,7 @@ class FullPipelineTest {
                     }
               
             .table
-                .foreach {..4}
+                .foreach {0..4}
                     | $ F_{.1} $  |
                     |:------------:|
                     | .fib {.1} |
@@ -422,10 +422,15 @@ class FullPipelineTest {
                 "<th align=\"center\">__QD_INLINE_MATH__\$F_{0}\$__QD_INLINE_MATH__</th>" +
                 "<th align=\"center\">__QD_INLINE_MATH__\$F_{1}\$__QD_INLINE_MATH__</th>" +
                 "<th align=\"center\">__QD_INLINE_MATH__\$F_{2}\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{3}\$__QD_INLINE_MATH__</th></tr></thead><tbody><tr>" +
-                "<td align=\"center\">0</td><td align=\"center\">1</td>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{3}\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\">__QD_INLINE_MATH__\$F_{4}\$__QD_INLINE_MATH__</th>" +
+                "</tr></thead><tbody><tr>" +
+                "<td align=\"center\">0</td>" +
                 "<td align=\"center\">1</td>" +
-                "<td align=\"center\">2</td></tr></tbody></table>"
+                "<td align=\"center\">1</td>" +
+                "<td align=\"center\">2</td>" +
+                "<td align=\"center\">3</td>" +
+                "</tr></tbody></table>"
 
         execute(iterative) {
             assertEquals(out, it)
@@ -473,10 +478,10 @@ class FullPipelineTest {
                 """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Hello, world!</h1><p>0__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__0 is 0</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>1__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__1 is 1</p><h3>End</h3>" +
+                "<h1>Hello, world!</h1><p>1__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__1 is 1</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>2__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__2 is 4</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>",
+                    "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>4__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__4 is 16</p><h3>End</h3>",
                 it,
             )
         }

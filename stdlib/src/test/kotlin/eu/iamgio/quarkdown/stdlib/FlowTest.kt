@@ -179,10 +179,10 @@ class FlowTest {
 
         assertEquals(
             listOf(
-                DynamicValue("N: 0"),
                 DynamicValue("N: 1"),
                 DynamicValue("N: 2"),
                 DynamicValue("N: 3"),
+                DynamicValue("N: 4"),
             ),
             loop3.unwrappedValue,
         )

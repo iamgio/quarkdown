@@ -48,10 +48,9 @@ class ValueFactoryTest {
 
     @Test
     fun range() {
-        // TODO x..y should actually map to Range(x, y) instead of Range(x - 1, y - 1)
-        assertEquals(Range(0, 8), ValueFactory.range("1..9").unwrappedValue)
-        assertEquals(Range(null, 10), ValueFactory.range("..11").unwrappedValue)
-        assertEquals(Range(13, null), ValueFactory.range("14..").unwrappedValue)
+        assertEquals(Range(1, 9), ValueFactory.range("1..9").unwrappedValue)
+        assertEquals(Range(null, 11), ValueFactory.range("..11").unwrappedValue)
+        assertEquals(Range(14, null), ValueFactory.range("14..").unwrappedValue)
         assertEquals(Range(null, null), ValueFactory.range("..").unwrappedValue)
     }
 

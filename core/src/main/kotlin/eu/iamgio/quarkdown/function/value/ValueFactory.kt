@@ -82,8 +82,8 @@ object ValueFactory {
         // 2..5 maps to Range(1, 4)
         val range =
             Range(
-                start?.toIntOrNull()?.minus(1),
-                end?.toIntOrNull()?.minus(1),
+                start?.toIntOrNull(),
+                end?.toIntOrNull(),
             )
 
         return ObjectValue(range)
