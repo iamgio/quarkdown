@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize RevealJS with the updated DOM.
     // slides_X properties are optionally set by the SlidesSettingsInitializer invisible node.
     Reveal.initialize({
+        center: typeof slides_center !== undef ? slides_center : true,
         controls: typeof slides_showControls !== undef ? slides_showControls : true,
         transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
         transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',

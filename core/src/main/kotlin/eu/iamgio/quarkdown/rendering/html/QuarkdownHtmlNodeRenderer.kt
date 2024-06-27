@@ -116,6 +116,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         buildTag("script") {
             // Inject properties that are read by the slides.js script after the document is loaded.
             +buildString {
+                node.centerVertically?.let {
+                    append("const slides_center = $it;")
+                }
                 node.showControls?.let {
                     append("const slides_showControls = $it;")
                 }
