@@ -76,14 +76,20 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             if (node.title != null) {
                 tag("header") {
                     tag("h4", node.title)
+
+                    style { "padding" value node.padding }
                 }
             }
 
-            +div("box-content", node.children)
+            // Box actual content.
+            +div("box-content") {
+                +node.children
 
-            // Box style.
+                style { "padding" value node.padding }
+            }
+
+            // Box style. Padding is applied separately to the header and the content.
             style {
-                "padding" value node.padding
                 "background-color" value node.backgroundColor
                 "color" value node.foregroundColor
             }
