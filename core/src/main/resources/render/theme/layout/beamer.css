@@ -38,6 +38,10 @@ p {
     line-height: 1.3;
 }
 
+ol, ul {
+    line-height: 1.5;
+}
+
 table {
     margin: auto;
     border-collapse: collapse;
@@ -57,4 +61,27 @@ table td {
 
 table tr:last-child td {
     border-bottom: none;
+}
+
+.box {
+    margin: 12px;
+    border-radius: 8px;
+}
+
+.box > header {
+    padding: 12px;
+    border-radius: 8px 8px 0 0;
+}
+
+.box > header p {
+    margin: 0;
+}
+
+.box > .box-content {
+    padding: 0 12px 12px 12px;
+    margin-top: 12px;
+}
+
+.box > .box-content ul {
+    padding-left: 4px;
 }

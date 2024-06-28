@@ -13,3 +13,15 @@ h1 {
     background-color: var(--secondary);
     color: var(--primary) !important;
 }
+
+.box {
+    background-color: rgb(234, 233, 247);
+}
+
+.box > header {
+    background-color: rgb(213, 213, 241);
+}
+
+.box > header > h4 {
+    color: rgb(83, 81, 152) !important;
+}
