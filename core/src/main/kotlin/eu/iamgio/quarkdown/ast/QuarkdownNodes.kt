@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
@@ -153,7 +152,7 @@ data class Box(
         fun error(message: String) =
             Box(
                 title = listOf(Text("Error")),
-                padding = Size(8.0, SizeUnit.PX),
+                padding = null,
                 backgroundColor = Color(224, 67, 64),
                 foregroundColor = Color(255, 255, 255),
                 children = listOf(Text(message)),
