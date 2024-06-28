@@ -155,7 +155,7 @@ data class Box(
                 padding = null,
                 backgroundColor = Color(224, 67, 64),
                 foregroundColor = Color(255, 255, 255),
-                children = listOf(Text(message)),
+                children = listOf(CodeSpan(message)),
             )
     }
 }
