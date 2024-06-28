@@ -1,0 +1,60 @@
+/* LaTeX Beamer layout theme */
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
+:root {
+    --reveal-center-vertically: false;
+    --r-main-font-size: 1em;
+}
+
+.reveal .slides > section {
+    text-align: start;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Fira Sans", sans-serif;
+    text-transform: none !important;
+}
+
+h1 {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 1.77em;
+    padding: 12px;
+}
+
+h2 {
+    font-size: 1.30em;
+}
+
+h3 {
+    font-size: .95em;
+}
+
+h4 {
+    font-size: .75em;
+}
+
+p {
+    line-height: 1.3;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table th {
+    font-weight: bold;
+}
+
+table th,
+table td {
+    text-align: left;
+    padding: 0.2em 0.5em 0.2em 0.5em;
+    border-bottom: 1px solid;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}

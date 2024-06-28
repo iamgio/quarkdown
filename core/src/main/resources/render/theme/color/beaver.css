@@ -1,0 +1,15 @@
+/* Beamer's Beaver color theme */
+
+:root {
+    --primary: rgb(187, 39, 26);
+    --primary-darker: rgb(149, 29, 18);
+    --secondary: rgb(236, 236, 236);
+
+    --r-background-color: white;
+    --r-link-color: var(--primary);
+}
+
+h1 {
+    background-color: var(--secondary);
+    color: var(--primary) !important;
+}
