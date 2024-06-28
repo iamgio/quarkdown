@@ -79,7 +79,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 }
             }
 
-            +node.children
+            +div("box-content", node.children)
 
             // Box style.
             style {
