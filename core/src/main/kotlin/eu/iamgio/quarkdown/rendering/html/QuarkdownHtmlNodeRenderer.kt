@@ -77,7 +77,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 tag("header") {
                     tag("h4", node.title)
 
-                    style { "padding" value node.padding }
+                    style {
+                        "color" value node.foregroundColor // Must be repeated to force override.
+                        "padding" value node.padding
+                    }
                 }
             }
 

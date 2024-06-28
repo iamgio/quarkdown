@@ -19,9 +19,10 @@ h1 {
 }
 
 .box > header {
-    background-color: rgb(213, 213, 241);
+    color: rgb(83, 81, 152);
+    background-color: color-mix(in srgb, currentColor 7%, transparent);
 }
 
 .box > header > h4 {
-    color: rgb(83, 81, 152) !important;
+    color: inherit;
 }

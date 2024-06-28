@@ -78,8 +78,15 @@ table tr:last-child td {
 }
 
 .box > .box-content {
-    padding: 0 12px 12px 12px;
-    margin-top: 12px;
+    padding: 12px;
+}
+
+.box:has(> header) > .box-content {
+    margin-top: 0;
+}
+
+.box > .box-content p {
+    margin: 8px 0;
 }
 
 .box > .box-content ul {
