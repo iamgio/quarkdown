@@ -73,10 +73,17 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         if (this is NodeValue) {
             return visit(GeneralCollectionValue(listOf(this)))
         }
+        if (otherEval is NodeValue && this is OutputValue<*>) {
+            return visit(GeneralCollectionValue(listOf(this)))
+        }
 
         // If the other value is a collection, add the current value to it as the first element.
         if (otherEval is IterableValue<*> && this is OutputValue<*>) {
             return GeneralCollectionValue(listOf(this, *otherEval.unwrappedValue.toList().toTypedArray()))
+        }
+
+        if (this is GeneralCollectionValue<*>) {
+            return GeneralCollectionValue(this.unwrappedValue + otherEval.unwrappedValue as OutputValue<*>)
         }
 
         // Concatenate the string representation of the two values.
@@ -149,8 +156,13 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         return GeneralCollectionValue(listOf(value.asNodeValue(), other.eval() as OutputValue<*>))
     }
 
-    // Like visit(StringValue)
-    override fun visit(value: DynamicValue): Expression = DynamicValue(value.concatenate().unwrappedValue)
+    // DynamicValue(15) "abc"        -> "15abc"
+    // DynamicValue("abc") [1, 2, 3] -> ["abc", 1, 2, 3]
+    override fun visit(value: DynamicValue): Expression =
+        when (val result = value.concatenate()) {
+            is IterableValue<*> -> result
+            else -> DynamicValue(result.unwrappedValue)
+        }
 
     // TODO append lambda
     override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
