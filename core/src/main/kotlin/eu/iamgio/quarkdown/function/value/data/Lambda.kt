@@ -68,8 +68,14 @@ class Lambda(
         // Register the arguments in the context, which can be accessed as function calls.
         context.libraries += createLambdaParametersLibrary(*arguments)
 
-        return ValueFactory.expression(action(arguments), context)?.eval() as? OutputValue<*>
-            ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
+        val output =
+            ValueFactory.expression(action(arguments), context)?.eval()
+                ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
+
+        return when (output) {
+            is OutputValue<*> -> output
+            else -> DynamicValue(output)
+        }
     }
 
     /**

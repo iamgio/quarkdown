@@ -1,8 +1,5 @@
 package eu.iamgio.quarkdown.function.expression.visitor
 
-import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
@@ -17,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
+import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
@@ -71,6 +69,11 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         if (this is VoidValue) return otherEval as InputValue<*>
         if (otherEval is VoidValue) return this as InputValue<*>
 
+        // A NodeValue, which is only an OutputValue and not an InputValue, is appended to a lazy collection of values.
+        if (this is NodeValue) {
+            return visit(GeneralCollectionValue(listOf(this)))
+        }
+
         // If the other value is a collection, add the current value to it as the first element.
         if (otherEval is IterableValue<*> && this is OutputValue<*>) {
             return GeneralCollectionValue(listOf(this, *otherEval.unwrappedValue.toList().toTypedArray()))
@@ -119,7 +122,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         )
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
-    override fun visit(value: GeneralCollectionValue<*>): Expression =
+    override fun visit(value: GeneralCollectionValue<*>): GeneralCollectionValue<*> =
         GeneralCollectionValue(
             value.unwrappedValue + (other.eval() as OutputValue<*>),
         )
@@ -132,30 +135,18 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // obj "abc" -> "objabc"
     override fun visit(value: ObjectValue<*>) = value.concatenate()
 
-    private fun concatenateAsNodes(root: Node): List<Node> {
-        val nodes = mutableListOf(root)
-        // Append node to the sub-AST.
-        nodes +=
-            when (other) {
-                is MarkdownContentValue -> other.unwrappedValue
-                else -> Text(other.toString())
-            }
-
-        return nodes
-    }
-
     // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
     override fun visit(value: MarkdownContentValue): Expression {
-        return MarkdownContentValue(MarkdownContent(concatenateAsNodes(value.unwrappedValue)))
+        return GeneralCollectionValue(listOf(value.asNodeValue(), other.eval() as OutputValue<*>))
     }
 
     // InlineMarkdownContent(Text("abc")) Text("def") -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) "def"       -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) 15          -> InlineMarkdownContent(Text("abc"), Text("15"))
     override fun visit(value: InlineMarkdownContentValue): Expression {
-        return MarkdownContentValue(MarkdownContent(concatenateAsNodes(value.unwrappedValue)))
+        return GeneralCollectionValue(listOf(value.asNodeValue(), other.eval() as OutputValue<*>))
     }
 
     // Like visit(StringValue)
