@@ -70,10 +70,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         if (otherEval is VoidValue) return this as InputValue<*>
 
         // A NodeValue, which is only an OutputValue and not an InputValue, is appended to a lazy collection of values.
-        if (this is NodeValue) {
-            return visit(GeneralCollectionValue(listOf(this)))
-        }
-        if (otherEval is NodeValue && this is OutputValue<*>) {
+        if (this is OutputValue<*> && (this is NodeValue || otherEval is NodeValue)) {
             return visit(GeneralCollectionValue(listOf(this)))
         }
 
