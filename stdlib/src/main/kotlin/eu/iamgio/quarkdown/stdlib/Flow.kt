@@ -113,8 +113,7 @@ fun function(
             val args = this.links.values.map { it.value }.toTypedArray()
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
-            val result = body.invokeDynamic(*args)
-            DynamicValue(result.unwrappedValue)
+            body.invokeDynamic(*args)
         }
 
     // The function is registered and ready to be called.

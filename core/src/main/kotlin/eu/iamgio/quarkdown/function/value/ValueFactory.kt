@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.function.error.internal.InvalidExpressionEvalException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
@@ -341,5 +342,32 @@ object ValueFactory {
                 body
             },
         )
+    }
+
+    /**
+     * Evaluates an expression from a raw string input.
+     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
+     * @param context context to retrieve the pipeline from
+     * @param fallback value to return if the expression is invalid or an error occurs during the evaluation.
+     * A common example of an invalid expression evaluation is when a [NodeValue] is present in a [ComposedExpression], hence the expected output is a pure Markdown output node.
+     * The fallback function defaults to returning a block-Markdown content node.
+     * @return the result of the evaluation of the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`),
+     *         or the result of the fallback function if the expression is invalid
+     */
+    fun eval(
+        raw: String,
+        context: Context,
+        fallback: () -> OutputValue<*> = { blockMarkdown(raw, context).asNodeValue() },
+    ): OutputValue<*> {
+        val expression = expression(raw, context) ?: return fallback()
+
+        return try {
+            expression.eval().let {
+                it as? OutputValue<*>
+                    ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
+            }
+        } catch (e: InvalidExpressionEvalException) {
+            fallback()
+        }
     }
 }

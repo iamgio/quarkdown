@@ -3,7 +3,6 @@ package eu.iamgio.quarkdown.function.value.data
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
-import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
@@ -68,14 +67,8 @@ class Lambda(
         // Register the arguments in the context, which can be accessed as function calls.
         context.libraries += createLambdaParametersLibrary(*arguments)
 
-        val output =
-            ValueFactory.expression(action(arguments), context)?.eval()
-                ?: throw IllegalArgumentException("Cannot invoke dynamically-typed lambda: null result")
-
-        return when (output) {
-            is OutputValue<*> -> output
-            else -> DynamicValue(output)
-        }
+        // The result of the lambda action is evaluated.
+        return ValueFactory.eval(action(arguments), context)
     }
 
     /**

@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.expression.visitor
 
 import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.error.internal.InvalidExpressionEvalException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.append
@@ -61,6 +62,7 @@ import eu.iamgio.quarkdown.function.value.VoidValue
 class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor<Expression> {
     /**
      * @return string result of the concatenation between [this] and [other]
+     * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.ValueFactory.eval])
      */
     private fun Value<*>.concatenate(): InputValue<*> {
         val otherEval = other.eval() // Evaluate the next expression.
@@ -69,9 +71,12 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         if (this is VoidValue) return otherEval as InputValue<*>
         if (otherEval is VoidValue) return this as InputValue<*>
 
-        // A NodeValue, which is only an OutputValue and not an InputValue, is appended to a lazy collection of values.
-        if (this is OutputValue<*> && (this is NodeValue || otherEval is NodeValue)) {
-            return visit(GeneralCollectionValue(listOf(this)))
+        // Whenever a NodeValue appears in a composed expression, it means the expected output is strictly meant to be
+        // a pure Markdown output node. Therefore, the thrown error is caught at eval-time and the expression
+        // is re-processed as Markdown content.
+        // See ValueFactory.eval for more information.
+        if (this is NodeValue || otherEval is NodeValue) {
+            throw InvalidExpressionEvalException()
         }
 
         // If the other value is a collection, add the current value to it as the first element.
