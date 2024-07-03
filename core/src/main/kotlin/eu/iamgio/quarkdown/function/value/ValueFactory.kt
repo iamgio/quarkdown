@@ -242,43 +242,6 @@ object ValueFactory {
         ).asInline()
 
     /**
-     * Evaluates an expression from a raw string input.
-     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
-     * @param context context to retrieve the pipeline from
-     * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
-     */
-    fun expression(
-        raw: String,
-        context: Context,
-    ): Expression? {
-        // The content of the argument is tokenized to distinguish static values (string/number/...)
-        // from nested function calls, which are also expressions.
-        val components =
-            this.markdown(
-                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
-                context,
-                expandFunctionCalls = false,
-            ).unwrappedValue.children
-
-        if (components.isEmpty()) return null
-
-        /**
-         * @param node to convert
-         * @return an expression that matches the node type
-         */
-        fun nodeToExpression(node: Node): Expression =
-            when (node) {
-                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
-                is FunctionCallNode -> context.resolveUnchecked(node) // Function existance is checked later.
-
-                else -> throw IllegalArgumentException("Unexpected node $node in expression $raw")
-            }
-
-        // Nodes are mapped to expressions.
-        return ComposedExpression(expressions = components.map(::nodeToExpression))
-    }
-
-    /**
      * @param raw string input to parse the expression from
      * @param context context to retrieve the pipeline from
      * @return a new [IterableValue] from the raw expression. It can also be a [Range].
@@ -342,6 +305,43 @@ object ValueFactory {
                 body
             },
         )
+    }
+
+    /**
+     * Evaluates an expression from a raw string input.
+     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
+     * @param context context to retrieve the pipeline from
+     * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
+     */
+    fun expression(
+        raw: String,
+        context: Context,
+    ): Expression? {
+        // The content of the argument is tokenized to distinguish static values (string/number/...)
+        // from nested function calls, which are also expressions.
+        val components =
+            this.markdown(
+                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
+                context,
+                expandFunctionCalls = false,
+            ).unwrappedValue.children
+
+        if (components.isEmpty()) return null
+
+        /**
+         * @param node to convert
+         * @return an expression that matches the node type
+         */
+        fun nodeToExpression(node: Node): Expression =
+            when (node) {
+                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
+                is FunctionCallNode -> context.resolveUnchecked(node) // Function existance is checked later.
+
+                else -> throw IllegalArgumentException("Unexpected node $node in expression $raw")
+            }
+
+        // Nodes are mapped to expressions.
+        return ComposedExpression(expressions = components.map(::nodeToExpression))
     }
 
     /**
