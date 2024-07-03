@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.BlockText
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.ScopeContext
 import eu.iamgio.quarkdown.function.FunctionParameter
@@ -10,10 +11,12 @@ import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
+import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * `Flow` stdlib module exporter.
@@ -26,6 +29,7 @@ val Flow: Module =
         ::forEach,
         ::function,
         ::variable,
+        ::node,
     )
 
 /**
@@ -156,3 +160,11 @@ fun variable(
         },
     )
 }
+
+/**
+ * Creates a null invisible node that forces the expression it lies in to be evaluated as Markdown content.
+ * This is a workaround that can be used at the beginning of lambda blocks (e.g. in a `.function`, `.if` or `.foreach` call)
+ * in case the visible output does not match the expected one.
+ * @return an invisible mock node
+ */
+fun node(): NodeValue = BlockText().wrappedAsValue()
