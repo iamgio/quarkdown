@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const slidesDiv = document.querySelector('.reveal .slides');
     if (!slidesDiv) return;
 
+    // A page margin content initializer is an element that will be copied into each section,
+    // and is placed on one of the page margins.
+    const pageMarginInitializers = document.querySelectorAll('.page-margin-content');
+
     const children = Array.from(slidesDiv.childNodes);
     let sections = [];
     let currentSection = document.createElement('section');
@@ -46,7 +50,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear out the original slides div and add the new sections.
     slidesDiv.innerHTML = '';
-    sections.forEach(section => slidesDiv.appendChild(section));
+    sections.forEach(section => {
+        slidesDiv.appendChild(section);
+    });
+
+    // Copy the content of each global page margin initializer to the background of each section.
+    Reveal.addEventListener('ready', function (event) {
+        // <div class="page-margin-content-initializer page-margin-bottom-center">Hello</div>
+        // will be copied to each section as:
+        // <div class="page-margin-content page-margin-bottom-center">Hello</div>
+        pageMarginInitializers.forEach(pageMarginInitializer => {
+            const pageMargin = document.createElement('div');
+            pageMargin.className = pageMarginInitializer.className;
+            pageMargin.innerHTML = pageMarginInitializer.innerHTML;
+
+            // append pageMargin to each element with the class .slide-background
+            const slideBackgrounds = document.querySelectorAll('.slide-background');
+            slideBackgrounds.forEach(slideBackground => {
+                slideBackground.appendChild(pageMargin.cloneNode(true));
+            });
+
+            // Remove the initializer from the document.
+            pageMarginInitializer.remove();
+        });
+    })
 
     // Used to check if a property was injected (see below).
     const undef = 'undefined';

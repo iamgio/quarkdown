@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 
@@ -106,11 +107,20 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Invisible nodes
 
     override fun visit(node: PageMarginContentInitializer) =
-        buildTag("script") {
-            // Inject a CSS property used by the HTML wrapper.
-            val property = "--page-margin-${node.position.asCSS}-content"
-            val content = node.text
-            +"document.documentElement.style.setProperty('$property', '\"$content\"');"
+        if (context.documentInfo.type == DocumentType.PAGED) {
+            // Paged documents support only plain text content.
+            buildTag("script") {
+                // Inject a CSS property used by the HTML wrapper.
+                val property = "--page-margin-${node.position.asCSS}-content"
+                val content = node.text
+                +"document.documentElement.style.setProperty('$property', '\"$content\"');"
+            }
+        } else {
+            // HTML content.
+            // In slides, these elements are copied to each slide through the slides.js script.
+            div("page-margin-content page-margin-${node.position.asCSS}") {
+                +node.text // TODO support html content instead of plain text
+            }
         }
 
     override fun visit(node: PageCounterInitializer) =

@@ -92,6 +92,16 @@
         }
         [[endif:MATH]]
 
+        .page-margin-content {
+            position: absolute;
+        }
+
+        .page-margin-bottom-center {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         @page {
             [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
 
