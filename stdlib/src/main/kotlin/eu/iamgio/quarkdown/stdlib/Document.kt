@@ -35,6 +35,7 @@ val Document: Module =
         ::theme,
         ::pageFormat,
         ::pageMarginContent,
+        ::footer,
         ::pageCounter,
     )
 
@@ -170,7 +171,7 @@ fun pageFormat(
 }
 
 /**
- * Displays text content on each page of a paged document.
+ * Displays text content on each page of a document.
  * @param position position of the content within the page
  * @param content content to be displayed on each page
  * @return a wrapped [PageMarginContentInitializer] node
@@ -184,6 +185,18 @@ fun pageMarginContent(
         content.children,
         position,
     ).wrappedAsValue()
+
+/**
+ * Displays text content on the bottom center of each page of a document.
+ * Shortcut for [pageMarginContent] with [PageMarginPosition.BOTTOM_CENTER] as its position.
+ * @see pageMarginContent
+ * @return a wrapped [PageMarginContentInitializer] node with its position set to bottom center
+ */
+fun footer(content: MarkdownContent): NodeValue =
+    pageMarginContent(
+        PageMarginPosition.BOTTOM_CENTER,
+        content,
+    )
 
 /**
  * Sets the global page counter for a paged document.
