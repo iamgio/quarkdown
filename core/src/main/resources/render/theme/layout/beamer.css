@@ -92,3 +92,18 @@ table tr:last-child td {
 .box > .box-content ul {
     padding-left: 4px;
 }
+
+/* Footer */
+
+.page-margin-bottom-center {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.page-margin-bottom-center > * {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 0 !important;
+    text-align: center;
+}

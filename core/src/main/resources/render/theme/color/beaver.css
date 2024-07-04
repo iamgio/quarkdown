@@ -4,6 +4,7 @@
     --primary: rgb(187, 39, 26);
     --primary-darker: rgb(149, 29, 18);
     --secondary: rgb(236, 236, 236);
+    --tertiary: rgb(216, 216, 216);
 
     --r-background-color: white;
     --r-link-color: var(--primary);
@@ -25,4 +26,18 @@ h1 {
 
 .box > header > h4 {
     color: inherit;
+}
+
+.page-margin-bottom-center > * {
+    background-color: var(--tertiary);
+    color: var(--primary);
+}
+
+.page-margin-bottom-center > *:first-child {
+    background-color: var(--primary);
+    color: white;
+}
+
+.page-margin-bottom-center > *:nth-child(even) {
+    background-color: var(--secondary);
 }
