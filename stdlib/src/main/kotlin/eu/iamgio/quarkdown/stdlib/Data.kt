@@ -63,7 +63,7 @@ internal fun file(
 fun fileContent(
     @Injected context: Context,
     path: String,
-    lineRange: Range = Range.INFINITE,
+    @Name("lines") lineRange: Range = Range.INFINITE,
 ): StringValue {
     val file = file(context, path)
 
