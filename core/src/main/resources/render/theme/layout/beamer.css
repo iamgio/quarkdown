@@ -63,6 +63,10 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+.reveal pre {
+    width: 100% !important;
+}
+
 .box {
     margin: 12px;
     border-radius: 8px;
