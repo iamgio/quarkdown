@@ -96,10 +96,68 @@
             position: absolute;
         }
 
+        .page-margin-top-left-corner, .page-margin-top-left {
+            top: 0;
+            left: 0;
+        }
+
+        .page-margin-top-center {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .page-margin-top-right-corner, .page-margin-top-right {
+            top: 0;
+            right: 0;
+        }
+
+        .page-margin-right-top {
+            top: 0;
+            right: 0;
+            transform: rotate(90deg) translateX(50%);
+        }
+
+        .page-margin-right-middle {
+            top: 50%;
+            right: 0;
+            transform: rotate(90deg) translateX(-50%);
+        }
+
+        .page-margin-right-bottom {
+            bottom: 0;
+            right: 0;
+            transform: rotate(90deg) translateX(-50%);
+        }
+
+        .page-margin-bottom-right-corner, .page-margin-bottom-right {
+            bottom: 0;
+            right: 0;
+            transform: translateX(-50%);
+        }
+
         .page-margin-bottom-center {
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+        }
+
+        .page-margin-bottom-left-corner, .page-margin-bottom-left {
+            bottom: 0;
+            left: 0;
+            transform: translateX(50%);
+        }
+
+        .page-margin-left-middle {
+            top: 50%;
+            left: 0;
+            transform: rotate(-90deg) translateY(-50%);
+        }
+
+        .page-margin-left-top {
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg) translateX(-50%);
         }
 
         @page {
@@ -121,10 +179,6 @@
 
             @top-right {
                 content: var(--page-margin-top-right-content)
-            }
-
-            @top-right-corner {
-                content: var(--page-margin-top-right-corner-content)
             }
 
             @top-right-corner {
