@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
+import eu.iamgio.quarkdown.util.toPlainText
 
 private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
 private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
@@ -112,21 +113,19 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             buildTag("script") {
                 // Inject a CSS property used by the HTML wrapper.
                 val property = "--page-margin-${node.position.asCSS}-content"
-                val content = node.text
+                val content = node.children.toPlainText(renderer = this@QuarkdownHtmlNodeRenderer)
                 +"document.documentElement.style.setProperty('$property', '\"$content\"');"
             }
         } else {
             // HTML content.
             // In slides, these elements are copied to each slide through the slides.js script.
-            div("page-margin-content page-margin-${node.position.asCSS}") {
-                +node.text // TODO support html content instead of plain text
-            }
+            div("page-margin-content page-margin-${node.position.asCSS}", node.children)
         }
 
     override fun visit(node: PageCounterInitializer) =
         visit(
             PageMarginContentInitializer(
-                text = node.text("\"counter(page)\"", "\"counter(pages)\""),
+                children = node.content("\"counter(page)\"", "\"counter(pages)\""),
                 position = node.position,
             ),
         )

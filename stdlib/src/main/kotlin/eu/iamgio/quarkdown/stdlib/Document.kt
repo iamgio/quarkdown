@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
@@ -12,6 +13,7 @@ import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -170,16 +172,16 @@ fun pageFormat(
 /**
  * Displays text content on each page of a paged document.
  * @param position position of the content within the page
- * @param text text content to be displayed on each page
+ * @param content content to be displayed on each page
  * @return a wrapped [PageMarginContentInitializer] node
  */
 @Name("pagemargincontent")
 fun pageMarginContent(
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
-    text: Lambda,
+    content: MarkdownContent,
 ): NodeValue =
     PageMarginContentInitializer(
-        text.invoke<String, StringValue>().unwrappedValue,
+        content.children,
         position,
     ).wrappedAsValue()
 
@@ -187,8 +189,7 @@ fun pageMarginContent(
  * Sets the global page counter for a paged document.
  * @param position position of the counter within the page
  * @param text action that returns the text of the counter.
- *             Accepts two arguments: index of the current page and total amount of pages.
- *             Markdown content is not supported
+ *             Accepts two arguments: index of the current page and total amount of pages
  * @return a wrapped [PageCounterInitializer] node
  */
 @Name("pagecounter")
@@ -201,11 +202,11 @@ fun pageCounter(
         },
 ): NodeValue =
     PageCounterInitializer(
-        text = { current, total ->
-            text.invoke<String, StringValue>(
+        content = { current, total ->
+            text.invoke<MarkdownContent, MarkdownContentValue>(
                 StringValue(current),
                 StringValue(total),
-            ).unwrappedValue
+            ).unwrappedValue.children
         },
         position,
     ).wrappedAsValue()
