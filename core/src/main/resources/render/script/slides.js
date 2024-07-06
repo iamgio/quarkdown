@@ -50,9 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear out the original slides div and add the new sections.
     slidesDiv.innerHTML = '';
-    sections.forEach(section => {
-        slidesDiv.appendChild(section);
-    });
+    sections.forEach(section => slidesDiv.appendChild(section));
 
     // Copy the content of each global page margin initializer to the background of each section.
     Reveal.addEventListener('ready', function (event) {
@@ -73,7 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Remove the initializer from the document.
             pageMarginInitializer.remove();
         });
+
+        updateTotalSlideNumberElements()
+        updateCurrentSlideNumberElements(event.indexh);
     })
+
+    Reveal.addEventListener('slidechanged', event => updateCurrentSlideNumberElements(event.indexh));
 
     // Used to check if a property was injected (see below).
     const undef = 'undefined';
@@ -88,3 +91,18 @@ document.addEventListener('DOMContentLoaded', function () {
         transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
     })
 });
+
+function updateTotalSlideNumberElements() {
+    // Inject the total amount of slides into .total-page-number elements.
+    const amount = document.querySelectorAll('.reveal .slides > section').length;
+    document.querySelectorAll('.total-page-number').forEach(total => {
+        total.innerText = amount;
+    });
+}
+
+function updateCurrentSlideNumberElements(index) {
+    // Inject the current slide number into .current-page-number elements every time.
+    document.querySelectorAll('.current-page-number').forEach(current => {
+        current.innerText = index + 1;
+    });
+}

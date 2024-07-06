@@ -125,7 +125,29 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: PageCounterInitializer) =
         visit(
             PageMarginContentInitializer(
-                children = node.content("\"counter(page)\"", "\"counter(pages)\""),
+                children =
+                    when (context.documentInfo.type) {
+                        DocumentType.PAGED ->
+                            // Handled by PagedJS' CSS content property.
+                            node.content(
+                                "\"counter(page)\"",
+                                "\"counter(pages)\"",
+                            )
+
+                        DocumentType.SLIDES ->
+                            node.content(
+                                // Get the data-index attribute from the section this element is in.
+                                tagBuilder("span")
+                                    .attribute("class", "current-page-number")
+                                    .build(),
+                                // Get the total amount of slides.
+                                tagBuilder("span")
+                                    .attribute("class", "total-page-number")
+                                    .build(),
+                            )
+
+                        else -> node.content("-", "-") // Placeholder for document types that don't support page counters.
+                    },
                 position = node.position,
             ),
         )
