@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -98,6 +99,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             style {
                 "background-color" value node.backgroundColor
                 "color" value node.foregroundColor
+            }
+        }
+
+    override fun visit(node: Whitespace) =
+        buildTag("span") {
+            style {
+                "width" value node.width
+                "height" value node.height
             }
         }
 

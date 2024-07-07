@@ -41,6 +41,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.
@@ -126,6 +127,8 @@ interface NodeVisitor<T> {
     fun visit(node: Clipped): T
 
     fun visit(node: Box): T
+
+    fun visit(node: Whitespace): T
 
     // Quarkdown inline
 
