@@ -1,7 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
@@ -15,9 +18,33 @@ import eu.iamgio.quarkdown.util.toPlainText
  */
 val Text: Module =
     setOf(
+        ::text,
         ::code,
         ::loremIpsum,
     )
+
+/**
+ * Creates an inline text node with specified formatting and transformation.
+ * @param size font size, or default if not specified
+ * @param weight font weight, or default if not specified
+ * @param style font style, or default if not specified
+ * @param decoration text decoration, or default if not specified
+ * @param case text case, or default if not specified
+ * @param variant font variant, or default if not specified
+ */
+fun text(
+    size: TextTransformData.Size? = null,
+    weight: TextTransformData.Weight? = null,
+    style: TextTransformData.Style? = null,
+    decoration: TextTransformData.Decoration? = null,
+    case: TextTransformData.Case? = null,
+    variant: TextTransformData.Variant? = null,
+    content: InlineMarkdownContent,
+): NodeValue =
+    TextTransform(
+        TextTransformData(size, weight, style, decoration, case, variant),
+        content.children,
+    ).wrappedAsValue()
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,

@@ -40,6 +40,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.
@@ -129,6 +130,8 @@ interface NodeVisitor<T> {
     // Quarkdown inline
 
     fun visit(node: MathSpan): T
+
+    fun visit(node: TextTransform): T
 
     // Quarkdown invisible nodes
 

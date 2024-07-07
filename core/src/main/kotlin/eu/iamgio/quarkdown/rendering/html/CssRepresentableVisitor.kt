@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes
@@ -50,6 +51,25 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(transition: Transition.Style) = transition.kebabCaseName
 
     override fun visit(speed: Transition.Speed) = speed.kebabCaseName
+
+    override fun visit(size: TextTransformData.Size) =
+        when (size) {
+            TextTransformData.Size.TINY -> "0.5em"
+            TextTransformData.Size.SMALL -> "0.75em"
+            TextTransformData.Size.NORMAL -> "1em"
+            TextTransformData.Size.MEDIUM -> "1.5em"
+            TextTransformData.Size.LARGE -> "2em"
+        }
+
+    override fun visit(weight: TextTransformData.Weight) = weight.kebabCaseName
+
+    override fun visit(style: TextTransformData.Style) = style.kebabCaseName
+
+    override fun visit(decoration: TextTransformData.Decoration) = decoration.kebabCaseName
+
+    override fun visit(case: TextTransformData.Case) = case.kebabCaseName
+
+    override fun visit(variant: TextTransformData.Variant) = variant.kebabCaseName
 }
 
 /**

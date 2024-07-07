@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -104,6 +105,19 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: MathSpan) = INLINE_MATH_FENCE + "$" + node.expression + "$" + INLINE_MATH_FENCE
+
+    override fun visit(node: TextTransform) =
+        buildTag("span") {
+            +node.children
+            style {
+                "font-size" value node.data.size
+                "font-weight" value node.data.weight
+                "font-style" value node.data.style
+                "font-variant" value node.data.variant
+                "text-decoration" value node.data.decoration
+                "text-transform" value node.data.case
+            }
+        }
 
     // Invisible nodes
 
