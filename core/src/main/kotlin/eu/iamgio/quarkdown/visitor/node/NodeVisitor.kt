@@ -1,13 +1,10 @@
 package eu.iamgio.quarkdown.visitor.node
 
-import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.BlockText
-import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.CheckBox
-import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -26,13 +23,9 @@ import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Newline
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
-import eu.iamgio.quarkdown.ast.PageCounterInitializer
-import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.ReferenceImage
 import eu.iamgio.quarkdown.ast.ReferenceLink
-import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
-import eu.iamgio.quarkdown.ast.Stacked
 import eu.iamgio.quarkdown.ast.Strikethrough
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.StrongEmphasis
@@ -40,6 +33,13 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.quarkdown.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.Box
+import eu.iamgio.quarkdown.ast.quarkdown.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 
 /**
  * A visitor for [eu.iamgio.quarkdown.ast.Node]s.

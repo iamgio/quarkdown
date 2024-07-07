@@ -2,11 +2,8 @@
 
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.Box
-import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.Comment
@@ -37,6 +34,9 @@ import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.UnorderedList
+import eu.iamgio.quarkdown.ast.quarkdown.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.Box
+import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext

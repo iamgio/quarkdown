@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.rendering.representable
 
-import eu.iamgio.quarkdown.ast.Clipped
-import eu.iamgio.quarkdown.ast.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes

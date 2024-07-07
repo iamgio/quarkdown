@@ -1,17 +1,17 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.ast.Aligned
-import eu.iamgio.quarkdown.ast.Box
-import eu.iamgio.quarkdown.ast.Clipped
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.PageBreak
-import eu.iamgio.quarkdown.ast.PageCounterInitializer
-import eu.iamgio.quarkdown.ast.PageMarginContentInitializer
-import eu.iamgio.quarkdown.ast.SlidesConfigurationInitializer
-import eu.iamgio.quarkdown.ast.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.Box
+import eu.iamgio.quarkdown.ast.quarkdown.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag

@@ -1,8 +1,6 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.Aligned
 import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.Box
 import eu.iamgio.quarkdown.ast.CheckBox
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.MarkdownContent
@@ -10,6 +8,8 @@ import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.quarkdown.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.Box
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
