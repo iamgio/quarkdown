@@ -67,6 +67,7 @@ table tr:last-child td {
 }
 
 .box {
+    width: 100%;
     margin: 12px;
     border-radius: 8px;
 }
