@@ -23,6 +23,7 @@ object Stdlib : LibraryExporter {
                     Text +
                     Math +
                     Logical +
+                    Logger +
                     Flow +
                     Data +
                     Library +
