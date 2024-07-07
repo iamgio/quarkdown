@@ -10,13 +10,20 @@
     --r-link-color: var(--primary);
 }
 
-h1 {
-    background-color: var(--secondary);
+h1, h2 {
     color: var(--primary) !important;
+}
+
+h1:not(.box h1) {
+    background-color: var(--secondary);
 }
 
 .box {
     background-color: rgb(234, 233, 247);
+}
+
+.box:has(.box-content h1) {
+    background-color: var(--secondary);
 }
 
 .box > header {
