@@ -1,155 +1,149 @@
 # Quarkdown
 
-Quarkdown is a work-in-progress markup language to create documents with the minimalism and straightforwardness of Markdown,
-while allowing full control over the structure and style of the document that LaTeX provides via a Turing complete, dynamically typed scripting engine.
+Quarkdown is a Markdown parser and renderer that extends the capabilities of CommonMark and GFM with its own *Quarkdown
+flavor*.
 
-The base Markdown parsing is CommonMark-compliant, along with several GFM extensions.
+The standout feature the flavor introduces is its support for  **functions**, allowing users to access an
+extensive [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib), use conditional statements and loops,
+define new functions and variables - all within Markdown.
 
-## Overview
+This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
+to achieve with vanilla Markdown.
 
-### Basics
-CommonMark/GFM Markdown is (almost) 100% supported. Along with it, Quarkdown's flavor introduces the following:
+## Comparison
 
-- Math span  
-  `$ \LaTeX expression $`
+|                       |      Markdown      |       LaTeX        |     Quarkdown      |
+|-----------------------|:------------------:|:------------------:|:------------------:|
+| Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
+| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
+| Scripting             |        :x:         |        :x:         | :white_check_mark: |
 
-- Math block
-  ```
-  $$$
-  \LaTeX expression
-  $$$
-  ```
-  
-- Image size specification:  
-  - `!(150x100)[label](/url.png)` (manual width and height)
-  - `!(150x_)[label](/url.png)` (manual width, automatic height, keeps the aspect ratio)
-  - `!(_x100)[label](/url.png)` (automatic width, manual height, keeps the aspect ratio)
+<table>
+  <thead>
+    <tr>
+      <th>LaTeX</th>
+      <th>Quarkdown</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
 
+```latex
+\section{Section}
+\subsection{Subsection}
+\begin{enumerate}
+    \item \textbf{First} item
+    \item \textbf{Second} item
+\end{itemize}
+\begin{center}
+    This text is \textit{centered}.
+\end{center}
+```
 
-- Functions:
-  - `.func`
-  - `.func {arg1} {arg2}`
-  - ```
-    .func {arg1} {arg2}
-        This is some nested body content.
-    ```
+</td>
+<td>
 
-### Scripting
-_Block function calls_, opposite to _inline function calls_, also support a _body_ argument,
-which is some nested and indented Quarkdown content. 
-
-The following snippets are valid Quarkdown sources that calculate and display the first 8 numbers of the Fibonacci sequence:
-- Iterative:
-  ```markdown
-  .var {t1} {0}
-  .var {t2} {1}
-
-  .table
-      .foreach {..8}
-          | $ F_{.1} $ |
-          |:-------------:|
-          |      .t1      |
-          .var {tmp} {.sum {.t1} {.t2}}
-          .var {t1} {.t2}
-          .var {t2} {.tmp}
-  ```
-- Recursive:
-  ```markdown
-  .function {fib}
-      num:
-      .if { .islower {.num} than:{2} }
-          .num
-      .ifnot { .islower {.num} than:{2} }
-          .sum {
-              .fib { .subtract {.num} {1} }
-          } {
-              .fib { .subtract {.num} {2} }
-          }
-  
-  .table
-      .foreach {..7}
-          | $ F_{.1} $  |
-          |:------------:|
-          | .fib {.1} |
-  ```
-
-Output:
-
-| $F_0$ | $F_1$ | $F_2$ | $F_3$ | $F_4$ | $F_5$ | $F_6$ | $F_7$ |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |
-
-## Goals
-
-This is an example of what Quarkdown aims to look like:
 ```markdown
-.docname {Quarkdown}
-.docauthor {iamgio}
-.aspectratio {4:3}
+# Section
 
-.tableofcontents    <-- Generates a table of contents page
-                        that contains "Hello Quarkdown"
-                        and "Extended Markdown"
+## Subsection
 
-# Hello Quarkdown
-
-## An overview
-
-.box {Box title}
-    This is some text within a box.
-    1. And this
-    2. is a
-    3. Markdown list
+1. **First** item
+2. **Second** item
 
 .center
-    This content is **centered**!
-    ![An image](img.png)
+    This text is _centered_.
+```
 
-# Extended Markdown
+</td>
+</tr>
+</tbody>
+</table>
 
-Quarkdown's custom Markdown flavor introduces new blocks as well!
+## Targets
 
-$ This is a LaTeX expression $
+HTML is currently the only supported rendering target. LaTeX rendering is a future goal.
+
+- **HTML**
+  - :white_check_mark: Plain output (default)
+  - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
+  - :white_check_mark: Paged (book) (via [paged.js](https://revealjs.com))
+
+The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
+- `.doctype {slides}`
+- `.doctype {paged}`
+
+> [!NOTE]
+> Make sure to set the output directory in order to save the output to file.    
+> This can be done by setting the command line argument `--out <dir>` or `-o <dir>`. 
+
+## Scripting
+
+<details>
+<summary><strong>Iterative Fibonacci</strong></summary>
 
 ```
+.var {t1} {0}
+.var {t2} {1}
+
+.table
+    .foreach {0..8}
+        n:
+        | $ F_{.n} $ |
+        |:----------:|
+        |    .t1     |
+        .var {tmp} {.sum {.t1} {.t2}}
+        .var {t1} {.t2}
+        .var {t2} {.tmp}
+```
+
+| $F_0$ | $F_1$ | $F_2$ | $F_3$ | $F_4$ | $F_5$ | $F_6$ | $F_7$ | $F_8$ |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
+
+</details>
+
+<details>
+<summary><strong>Recursive Fibonacci</strong></summary>
+
+> The recursive approach is significantly slower than the iterative one.
+
+```
+.function {fib}
+    n:
+    .if { .islower {.n} than:{2} }
+        .n
+    .ifnot { .islower {.n} than:{2} }
+        .sum {
+            .fib { .subtract {.n} {1} }
+        } {
+            .fib { .subtract {.n} {2} }
+        }
+  
+.table
+    .foreach {0..8}
+        | $ F_{.1} $ |
+        |:----------:|
+        | .fib {.1}  |
+```
+
+| $F_0$ | $F_1$ | $F_2$ | $F_3$ | $F_4$ | $F_5$ | $F_6$ | $F_7$ | $F_8$ |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
+
+</details>
 
 ## Status
 
-The project is under development. Currently supported:
+The project is under active development.
 
-- Base Markdown blocks
-  - [x] Paragraphs
-  - [x] Headings
-  - [x] Code
-  - [x] Quotes
-  - [x] Lists (+ GFM tasks)
-  - [x] Horizontal lines
-  - [x] Link references
-  - [x] GFM tables
-  - [ ] GFM footnotes
+#### Future plans
 
-- Base Markdown inline
-  - [x] Text
-  - [x] Links
-  - [x] Reference links
-  - [x] Autolinks (+ GFM extension)
-  - [x] Images
-  - [x] Reference images
-  - [x] Comments
-  - [x] Emphasis
-  - [x] Code spans
-  - [x] GFM strikethrough
-
-- Quarkdown features
-  - [x] Functions
-  - [ ] Styles
-  - [x] Math (LaTeX) blocks and inlines
-  - [ ] Highlight
-  - [ ] Subscript/superscript
-
-- Rendering
-  - [x] HTML
-  - [ ] LaTeX
-  
-- Misc
-  - GUI (with dynamic hot reload)
+- Wiki, getting started guides and tutorials
+- New themes
+- Contribution guidelines
+- Auto-generated stdlib documentation ([Dokka](https://github.com/Kotlin/dokka) custom plugin)
+- External libraries support
+- LaTeX rendering
+- GUI editor / IDE plugin
