@@ -68,7 +68,7 @@ HTML is currently the only supported rendering target. LaTeX rendering is a futu
 - **HTML**
   - :white_check_mark: Plain output (default)
   - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (book) (via [paged.js](https://revealjs.com))
+  - :white_check_mark: Paged (book) (via [paged.js](https://pagedjs.org))
 
 The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
 - `.doctype {slides}`
