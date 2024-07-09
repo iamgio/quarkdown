@@ -160,6 +160,13 @@
             transform: rotate(-90deg) translateX(-50%);
         }
 
+        .reveal {
+            [[if:PAGESIZE]]
+            width: [[PAGEWIDTH]];
+            height: [[PAGEHEIGHT]];
+            [[endif:PAGESIZE]]
+        }
+
         @page {
             [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
 

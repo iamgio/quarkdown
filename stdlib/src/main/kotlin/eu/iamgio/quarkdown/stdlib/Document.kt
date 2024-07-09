@@ -146,7 +146,7 @@ fun theme(
  * @param format standard size format of each page (overrides [width] and [height])
  * @param width width of each page
  * @param height height of each page
- * @param margin blank space around the content of each page
+ * @param margin blank space around the content of each page. Only supported in paged mode.
  * @throws IllegalArgumentException if both [format] and either [width] or [height] are not `null`
  */
 @Name("pageformat")
