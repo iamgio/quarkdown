@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
+import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
 import eu.iamgio.quarkdown.document.page.Size
 import eu.iamgio.quarkdown.document.page.Sizes
@@ -143,27 +144,33 @@ fun theme(
 /**
  * Sets the format of the document.
  * If a value is `null`, the default value supplied by the underlying renderer is used.
- * @param format standard size format of each page (overrides [width] and [height])
+ * If neither [format] nor [width] or [height] are `null`, the latter override the former.
+ * If both [format] and [width] or [height] are `null`, the default value is used.
+ * @param format standard size format of each page (overridden by [width] and [height])
+ * @param orientation orientation of each page.
+ *                    If not specified, the preferred orientation of the document type is used.
+ *                    Does not take effect if [format] is not specified.
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Only supported in paged mode.
- * @throws IllegalArgumentException if both [format] and either [width] or [height] are not `null`
  */
 @Name("pageformat")
 fun pageFormat(
     @Injected context: Context,
     @Name("size") format: PageSizeFormat? = null,
+    orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
     width: Size? = null,
     height: Size? = null,
     margin: Sizes? = null,
 ): VoidValue {
-    if (format != null && (width != null || height != null)) {
-        throw IllegalArgumentException("Specifying a page size format overrides manual width and height")
-    }
-
     with(context.documentInfo.pageFormat) {
-        this.pageWidth = format?.width ?: width
-        this.pageHeight = format?.height ?: height
+        // If, for instance, the document is landscape and the given format is portrait,
+        // the format is converted to landscape.
+        val formatBounds = format?.getBounds(orientation)
+
+        // Width and/or height override the format size if both are not null.
+        this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
+        this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
         this.margin = margin
     }
 

@@ -2,28 +2,42 @@ package eu.iamgio.quarkdown.document.page
 
 /**
  * Standard page sizes.
- * @param width width of the page
- * @param height height of the page
+ * @param bounds size the page
  */
-enum class PageSizeFormat(val width: Size, val height: Size) {
-    A0(841.0.mm, 1189.0.mm),
-    A1(594.0.mm, 841.0.mm),
-    A2(420.0.mm, 594.0.mm),
-    A3(297.0.mm, 420.0.mm),
-    A4(210.0.mm, 297.0.mm),
-    A5(148.0.mm, 210.0.mm),
-    A6(105.0.mm, 148.0.mm),
-    A7(74.0.mm, 105.0.mm),
-    A8(52.0.mm, 74.0.mm),
-    A9(37.0.mm, 52.0.mm),
-    A10(26.0.mm, 37.0.mm),
-    B0(1000.0.mm, 1414.0.mm),
-    B1(707.0.mm, 1000.0.mm),
-    B2(500.0.mm, 707.0.mm),
-    B3(353.0.mm, 500.0.mm),
-    B4(250.0.mm, 353.0.mm),
-    B5(176.0.mm, 250.0.mm),
-    LETTER(8.5.inch, 11.0.inch),
-    LEGAL(8.5.inch, 14.0.inch),
-    LEDGER(11.0.inch, 17.0.inch),
+enum class PageSizeFormat(private val bounds: BoundingBox) {
+    A0(841.0.mm by 1189.0.mm),
+    A1(594.0.mm by 841.0.mm),
+    A2(420.0.mm by 594.0.mm),
+    A3(297.0.mm by 420.0.mm),
+    A4(210.0.mm by 297.0.mm),
+    A5(148.0.mm by 210.0.mm),
+    A6(105.0.mm by 148.0.mm),
+    A7(74.0.mm by 105.0.mm),
+    A8(52.0.mm by 74.0.mm),
+    A9(37.0.mm by 52.0.mm),
+    A10(26.0.mm by 37.0.mm),
+    B0(1000.0.mm by 1414.0.mm),
+    B1(707.0.mm by 1000.0.mm),
+    B2(500.0.mm by 707.0.mm),
+    B3(353.0.mm by 500.0.mm),
+    B4(250.0.mm by 353.0.mm),
+    B5(176.0.mm by 250.0.mm),
+    LETTER(8.5.inch by 11.0.inch),
+    LEGAL(8.5.inch by 14.0.inch),
+    LEDGER(11.0.inch by 17.0.inch),
+    ;
+
+    /**
+     * Base orientation of the format.
+     */
+    private val orientation: PageOrientation
+        // Assuming width and height are declared with the same size unit.
+        get() = if (bounds.width.value > bounds.height.value) PageOrientation.LANDSCAPE else PageOrientation.PORTRAIT
+
+    /**
+     * @param orientation orientation of the page
+     * @return the bounds of the format for the given orientation
+     * If, for instance, the document is landscape and the given format is portrait, the format is converted to landscape.
+     */
+    fun getBounds(orientation: PageOrientation): BoundingBox = if (this.orientation == orientation) bounds else bounds.rotated
 }
