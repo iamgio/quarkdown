@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
 import eu.iamgio.quarkdown.function.error.internal.InvalidExpressionEvalException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
@@ -108,7 +107,7 @@ object ValueFactory {
 
         // The unit, which is optional and defaults to pixels.
         val rawUnit = groups.next()
-        val unit = SizeUnit.values().find { it.name.equals(rawUnit, ignoreCase = true) } ?: SizeUnit.PX
+        val unit = Size.Unit.values().find { it.name.equals(rawUnit, ignoreCase = true) } ?: Size.Unit.PX
 
         return ObjectValue(Size(value, unit))
     }

@@ -6,38 +6,62 @@ import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 /**
  * A numeric size with a unit, which represents a generic size (e.g. margin, length, font size).
  */
-data class Size(val value: Double, val unit: SizeUnit) : RenderRepresentable {
+data class Size(val value: Double, val unit: Unit) : RenderRepresentable {
     override fun toString() = "$value${unit.name.lowercase()}"
 
     override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
+
+    /**
+     * Unit of a [Size].
+     */
+    enum class Unit {
+        /**
+         * Pixels.
+         */
+        PX,
+
+        /**
+         * Points.
+         */
+        PT,
+
+        /**
+         * Centimeters.
+         */
+        CM,
+
+        /**
+         * Millimeters.
+         */
+        MM,
+
+        /**
+         * Inches.
+         */
+        IN,
+    }
 }
 
 /**
- * Unit of a [Size].
+ * Represents a size expressed in pixels.
  */
-enum class SizeUnit {
-    /**
-     * Pixels.
-     */
-    PX,
+val Double.px: Size
+    get() = Size(this, Size.Unit.PX)
 
-    /**
-     * Points.
-     */
-    PT,
+/**
+ * Represents a size expressed in centimeters.
+ */
+val Double.cm: Size
+    get() = Size(this, Size.Unit.CM)
 
-    /**
-     * Centimeters.
-     */
-    CM,
+/**
+ * Represents a size expressed in millimeters.
+ */
+val Double.mm: Size
+    get() = Size(this, Size.Unit.MM)
 
-    /**
-     * Millimeters.
-     */
-    MM,
-
-    /**
-     * Inches.
-     */
-    IN,
-}
+/**
+ * Represents a size expressed in inches.
+ */
+val Double.inch: Size
+    get() = Size(this, Size.Unit.IN)

@@ -2,8 +2,10 @@ package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.SizeUnit
 import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.document.page.cm
+import eu.iamgio.quarkdown.document.page.mm
+import eu.iamgio.quarkdown.document.page.px
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.BooleanValue
@@ -56,12 +58,13 @@ class ValueFactoryTest {
 
     @Test
     fun size() {
-        assertEquals(Size(10.0, SizeUnit.PX), ValueFactory.size("10px").unwrappedValue)
-        assertEquals(Size(8.0, SizeUnit.PT), ValueFactory.size("8pt").unwrappedValue)
-        assertEquals(Size(16.2, SizeUnit.CM), ValueFactory.size("16.2cm").unwrappedValue)
-        assertEquals(Size(1.4, SizeUnit.MM), ValueFactory.size("1.4mm").unwrappedValue)
-        assertEquals(Size(8.2, SizeUnit.IN), ValueFactory.size("8.2in").unwrappedValue)
-        assertEquals(Size(32.95, SizeUnit.PX), ValueFactory.size("32.95").unwrappedValue)
+        assertEquals(Size(10.0, Size.Unit.PX), ValueFactory.size("10px").unwrappedValue)
+        assertEquals(Size(8.0, Size.Unit.PT), ValueFactory.size("8pt").unwrappedValue)
+        assertEquals(Size(16.2, Size.Unit.CM), ValueFactory.size("16.2cm").unwrappedValue)
+        assertEquals(Size(1.4, Size.Unit.MM), ValueFactory.size("1.4mm").unwrappedValue)
+        assertEquals(Size(8.2, Size.Unit.IN), ValueFactory.size("8.2in").unwrappedValue)
+        assertEquals(Size(32.95, Size.Unit.PX), ValueFactory.size("32.95").unwrappedValue)
+        assertEquals(32.95.px, ValueFactory.size("32.95").unwrappedValue)
         assertFails { ValueFactory.size("px") }
         assertFails { ValueFactory.size("abc") }
         assertFails { ValueFactory.size("10.10.2cm") }
@@ -72,34 +75,34 @@ class ValueFactoryTest {
     fun sizes() {
         assertEquals(
             Sizes(
-                Size(10.0, SizeUnit.PX),
-                Size(10.0, SizeUnit.PX),
-                Size(10.0, SizeUnit.PX),
-                Size(10.0, SizeUnit.PX),
+                Size(10.0, Size.Unit.PX),
+                Size(10.0, Size.Unit.PX),
+                Size(10.0, Size.Unit.PX),
+                Size(10.0, Size.Unit.PX),
             ),
             ValueFactory.sizes("10px").unwrappedValue,
         )
         assertEquals(
-            Sizes(all = Size(10.0, SizeUnit.PX)),
+            Sizes(all = Size(10.0, Size.Unit.PX)),
             ValueFactory.sizes("10px").unwrappedValue,
         )
         assertEquals(
-            Sizes(all = Size(13.2, SizeUnit.CM)),
+            Sizes(all = Size(13.2, Size.Unit.CM)),
             ValueFactory.sizes("13.2cm").unwrappedValue,
         )
         assertEquals(
             Sizes(
-                Size(9.2, SizeUnit.CM),
-                Size(3.8, SizeUnit.MM),
-                Size(9.2, SizeUnit.CM),
-                Size(3.8, SizeUnit.MM),
+                9.2.cm,
+                3.8.mm,
+                9.2.cm,
+                3.8.mm,
             ),
             ValueFactory.sizes("9.2cm 3.8mm").unwrappedValue,
         )
         assertEquals(
             Sizes(
-                vertical = Size(9.2, SizeUnit.CM),
-                horizontal = Size(3.8, SizeUnit.MM),
+                vertical = Size(9.2, Size.Unit.CM),
+                horizontal = Size(3.8, Size.Unit.MM),
             ),
             ValueFactory.sizes("9.2cm 3.8mm").unwrappedValue,
         )
@@ -120,11 +123,11 @@ class ValueFactoryTest {
     @Test
     fun enum() {
         @Suppress("UNCHECKED_CAST")
-        val values = SizeUnit.values() as Array<Enum<*>>
+        val values = Size.Unit.values() as Array<Enum<*>>
 
-        assertEquals(SizeUnit.PX, ValueFactory.enum("px", values)!!.unwrappedValue)
-        assertEquals(SizeUnit.CM, ValueFactory.enum("CM", values)!!.unwrappedValue)
-        assertEquals(SizeUnit.MM, ValueFactory.enum("mM", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.PX, ValueFactory.enum("px", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.CM, ValueFactory.enum("CM", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.MM, ValueFactory.enum("mM", values)!!.unwrappedValue)
         assertNull(ValueFactory.enum("abc", values))
     }
 

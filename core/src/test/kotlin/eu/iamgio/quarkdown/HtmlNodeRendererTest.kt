@@ -40,8 +40,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.SizeUnit
+import eu.iamgio.quarkdown.document.page.cm
+import eu.iamgio.quarkdown.document.page.inch
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
@@ -613,7 +613,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = null,
-                padding = Size(4.0, SizeUnit.CM),
+                padding = 4.0.cm,
                 backgroundColor = null,
                 foregroundColor = null,
                 listOf(paragraph),
@@ -624,7 +624,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title")),
-                padding = Size(3.0, SizeUnit.IN),
+                padding = 3.0.inch,
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
