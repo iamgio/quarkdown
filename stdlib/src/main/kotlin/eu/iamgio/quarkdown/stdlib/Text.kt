@@ -26,6 +26,7 @@ val Text: Module =
 
 /**
  * Creates an inline text node with specified formatting and transformation.
+ * @param content inline content to transform
  * @param size font size, or default if not specified
  * @param weight font weight, or default if not specified
  * @param style font style, or default if not specified
@@ -35,6 +36,7 @@ val Text: Module =
  * @param color text color, or default if not specified
  */
 fun text(
+    content: InlineMarkdownContent,
     size: TextTransformData.Size? = null,
     weight: TextTransformData.Weight? = null,
     style: TextTransformData.Style? = null,
@@ -42,7 +44,6 @@ fun text(
     case: TextTransformData.Case? = null,
     variant: TextTransformData.Variant? = null,
     color: Color? = null,
-    content: InlineMarkdownContent,
 ): NodeValue =
     TextTransform(
         TextTransformData(size, weight, style, decoration, case, variant, color),
