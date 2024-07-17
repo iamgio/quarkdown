@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
@@ -47,6 +48,18 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     ) = div(styleClass) { +children }
 
     // Quarkdown node rendering
+
+    // The Quarkdown flavor renders an image title as a figure caption, if present.
+    override fun visit(node: Image): String {
+        val imgTag = super.visit(node)
+
+        return node.link.title?.let { title ->
+            buildTag("figure") {
+                +imgTag
+                +buildTag("figcaption", title)
+            }
+        } ?: imgTag
+    }
 
     // The function was already expanded by previous stages: its output nodes are stored in its children.
     override fun visit(node: FunctionCallNode): CharSequence = node.children.joinToString(separator = "") { it.accept(this) }

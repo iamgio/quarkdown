@@ -42,6 +42,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.page.cm
 import eu.iamgio.quarkdown.document.page.inch
+import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
@@ -73,7 +74,7 @@ class HtmlNodeRendererTest {
             )
         }
 
-        return QuarkdownFlavor.rendererFactory.html(context).nodeRenderer
+        return context.flavor.rendererFactory.html(context).nodeRenderer
     }
 
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
@@ -162,6 +163,14 @@ class HtmlNodeRendererTest {
                 height = null,
             ).render(),
         )
+        assertEquals(
+            out.next(),
+            Image(
+                Link(label = listOf(), url = "/url", title = "Title"),
+                width = null,
+                height = null,
+            ).render(MutableContext(BaseMarkdownFlavor)),
+        ) // The figcaption appears only with the Quarkdown rendering!
         assertEquals(
             out.next(),
             Image(
