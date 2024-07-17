@@ -125,6 +125,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "font-variant" value node.data.variant
                 "text-decoration" value node.data.decoration
                 "text-transform" value node.data.case
+                "color" value node.data.color
             }
         }
 

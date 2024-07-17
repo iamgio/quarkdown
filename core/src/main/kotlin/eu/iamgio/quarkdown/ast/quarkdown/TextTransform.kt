@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.ast.quarkdown
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
@@ -15,6 +16,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param decoration text decoration
  * @param case text case
  * @param variant font variant
+ * @param color text color
  */
 class TextTransformData(
     val size: Size? = null,
@@ -23,6 +25,7 @@ class TextTransformData(
     val decoration: Decoration? = null,
     val case: Case? = null,
     val variant: Variant? = null,
+    val color: Color? = null,
 ) {
     enum class Size : RenderRepresentable {
         TINY,

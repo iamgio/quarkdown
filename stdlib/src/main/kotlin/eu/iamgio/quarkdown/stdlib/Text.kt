@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -31,6 +32,7 @@ val Text: Module =
  * @param decoration text decoration, or default if not specified
  * @param case text case, or default if not specified
  * @param variant font variant, or default if not specified
+ * @param color text color, or default if not specified
  */
 fun text(
     size: TextTransformData.Size? = null,
@@ -39,10 +41,11 @@ fun text(
     decoration: TextTransformData.Decoration? = null,
     case: TextTransformData.Case? = null,
     variant: TextTransformData.Variant? = null,
+    color: Color? = null,
     content: InlineMarkdownContent,
 ): NodeValue =
     TextTransform(
-        TextTransformData(size, weight, style, decoration, case, variant),
+        TextTransformData(size, weight, style, decoration, case, variant, color),
         content.children,
     ).wrappedAsValue()
 
