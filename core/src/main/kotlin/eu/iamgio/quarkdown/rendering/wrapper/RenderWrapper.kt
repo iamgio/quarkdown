@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.rendering.wrapper
 
 import eu.iamgio.quarkdown.util.replace
-import java.io.InputStreamReader
 
 /**
  * A code wrapper that adds static content to the output code of the rendering stage, and supports injection of values via placeholder keys.
@@ -76,7 +75,8 @@ class RenderWrapper(private val code: String) {
             // Delimiters are defined as [[if:NAME]]...[[endif:NAME]] in the template files.
             conditionals.forEach { (placeholder, value) ->
                 // Regex to find conditional fragments.
-                val regex = "\\[\\[if:$placeholder]]((.|\\R)+?)\\[\\[endif:$placeholder]]\\R?".toRegex(RegexOption.MULTILINE)
+                val regex =
+                    "\\[\\[if:$placeholder]]((.|\\R)+?)\\[\\[endif:$placeholder]]\\R?".toRegex(RegexOption.MULTILINE)
                 // If there is a match:
                 // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
                 regex.findAll(this).forEach { match ->
@@ -103,10 +103,10 @@ class RenderWrapper(private val code: String) {
          */
         fun fromResourceName(name: String) =
             RenderWrapper(
-                InputStreamReader(
-                    Companion::class.java.getResourceAsStream(name)
-                        ?: throw IllegalStateException("Cannot find wrapper resource $name."),
-                ).readText(),
+                Companion::class.java.getResourceAsStream(name)
+                    ?.reader()
+                    ?.readText()
+                    ?: throw IllegalStateException("Cannot find wrapper resource $name."),
             )
     }
 }
