@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
@@ -127,6 +128,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: MathSpan) = INLINE_MATH_FENCE + "$" + node.expression + "$" + INLINE_MATH_FENCE
+
+    override fun visit(node: SlidesFragment): CharSequence =
+        tagBuilder("p", node.children)
+            .attribute("class", "fragment")
+            .build()
 
     override fun visit(node: TextTransform) =
         buildTag("span") {

@@ -15,14 +15,14 @@ interface Node {
 }
 
 /**
- * A node that may contain nested tokens.
+ * A node that may contain nested nodes as children.
  */
 interface NestableNode : Node {
     val children: List<Node>
 }
 
 /**
- * A node that may contain text.
+ * A node that may contain inline content.
  */
 interface TextNode : Node {
     /**

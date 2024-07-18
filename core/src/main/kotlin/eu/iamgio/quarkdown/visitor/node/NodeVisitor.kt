@@ -39,6 +39,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
@@ -135,6 +136,8 @@ interface NodeVisitor<T> {
     fun visit(node: MathSpan): T
 
     fun visit(node: TextTransform): T
+
+    fun visit(node: SlidesFragment): T
 
     // Quarkdown invisible nodes
 
