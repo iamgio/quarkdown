@@ -283,6 +283,13 @@ class HtmlNodeRendererTest {
 
         assertEquals(out.next(), CodeSpan("Foo bar").render())
         assertEquals(out.next(), CodeSpan("<a href=\"#\">").render())
+        assertEquals(
+            out.next(),
+            CodeSpan(
+                "#FFFF00",
+                CodeSpan.ColorContent(Color.fromHex("#FFFF00")!!),
+            ).render(),
+        )
     }
 
     @Test

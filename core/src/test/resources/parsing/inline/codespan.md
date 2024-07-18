@@ -15,3 +15,5 @@ foo
 bar  
 baz
 ``
+
+`#FF00FF`

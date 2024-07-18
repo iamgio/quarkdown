@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.misc.Color
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -261,6 +262,12 @@ class InlineParserTest {
         assertEquals(" a", nodes.next().text)
         assertEquals("b", nodes.next().text)
         assertEquals("foo bar   baz", nodes.next().text)
+
+        // Color content.
+        with(nodes.next()) {
+            assertEquals("#FF00FF", text)
+            assertEquals(CodeSpan.ColorContent(Color(255, 0, 255)), content)
+        }
     }
 
     @Test
