@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.quarkdown.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
@@ -51,6 +52,14 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(transition: Transition.Style) = transition.kebabCaseName
 
     override fun visit(speed: Transition.Speed) = speed.kebabCaseName
+
+    override fun visit(behavior: SlidesFragment.Behavior) =
+        when (behavior) {
+            SlidesFragment.Behavior.SHOW -> "fade-in"
+            SlidesFragment.Behavior.HIDE -> "fade-out"
+            SlidesFragment.Behavior.SEMI_HIDE -> "semi-fade-out"
+            SlidesFragment.Behavior.SHOW_HIDE -> "fade-in-then-out"
+        }
 
     override fun visit(size: TextTransformData.Size) =
         when (size) {

@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.representable
 
 import eu.iamgio.quarkdown.ast.quarkdown.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
@@ -34,6 +35,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(transition: Transition.Style): T
 
     fun visit(speed: Transition.Speed): T
+
+    fun visit(behavior: SlidesFragment.Behavior): T
 
     fun visit(size: TextTransformData.Size): T
 

@@ -131,7 +131,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: SlidesFragment): CharSequence =
         tagBuilder("p", node.children)
-            .attribute("class", "fragment")
+            .attribute("class", "fragment ${node.behavior.asCSS}")
             .build()
 
     override fun visit(node: TextTransform) =

@@ -43,7 +43,11 @@ fun setSlidesConfiguration(
  * Creates an element that, when used in a `slides` document,
  * shows its content when the user attempts to go to the next slide.
  * Multiple fragments in the same slide are shown in order on distinct user interactions.
+ * @param behavior visibility type of the fragment and how it reacts to user interactions
  * @param content content to show
  * @return the fragment node
  */
-fun fragment(content: InlineMarkdownContent) = SlidesFragment(content.children).wrappedAsValue()
+fun fragment(
+    behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
+    content: InlineMarkdownContent,
+) = SlidesFragment(behavior, content.children).wrappedAsValue()
