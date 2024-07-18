@@ -35,6 +35,10 @@ h1:not(.box h1) {
     color: inherit;
 }
 
+.color-preview {
+    border-color: var(--secondary) !important;
+}
+
 .page-margin-bottom-center > * {
     background-color: var(--tertiary);
     color: var(--primary);

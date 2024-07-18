@@ -38,6 +38,7 @@ import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
+import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.trimDelimiters
@@ -196,20 +197,31 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
 
     override fun visit(token: CodeSpanToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 3)
-        val text = groups.next().replace("\n", " ")
+        val rawText = groups.next().replace("\n", " ")
 
         // If the text start and ends by a space, and does contain non-space characters,
         // the leading and trailing spaces are trimmed (according to CommonMark).
-        val hasNonSpaceChars = text.any { it != ' ' }
-        val hasSpaceCharsOnBothEnds = text.firstOrNull() == ' ' && text.lastOrNull() == ' '
+        val hasNonSpaceChars = rawText.any { it != ' ' }
+        val hasSpaceCharsOnBothEnds = rawText.firstOrNull() == ' ' && rawText.lastOrNull() == ' '
 
-        return CodeSpan(
+        // Trimmed final text.
+        val text =
             if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
-                text.trimDelimiters()
+                rawText.trimDelimiters()
             } else {
-                text
-            },
-        )
+                rawText
+            }
+
+        // Additional content brought by the code span.
+        val content: CodeSpan.ContentInfo? =
+            when {
+                // Hexadecimal color.
+                text.firstOrNull() == '#' -> Color.fromHex(text)?.let(CodeSpan::ColorContent)
+                // No content.
+                else -> null
+            }
+
+        return CodeSpan(text, content)
     }
 
     override fun visit(token: PlainTextToken): Node {

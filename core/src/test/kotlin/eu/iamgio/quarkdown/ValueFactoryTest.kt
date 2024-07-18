@@ -118,6 +118,7 @@ class ValueFactoryTest {
         assertEquals(Color(0, 0, 0), ValueFactory.color("BLACK").unwrappedValue)
         assertEquals(Color(145, 168, 50), ValueFactory.color("#91a832").unwrappedValue)
         assertFails { ValueFactory.color("abc") }
+        assertFails { ValueFactory.color("#hello") }
     }
 
     @Test

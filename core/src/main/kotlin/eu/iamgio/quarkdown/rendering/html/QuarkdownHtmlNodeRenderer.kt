@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Math
@@ -60,6 +61,28 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 +buildTag("figcaption", title)
             }
         } ?: imgTag
+    }
+
+    override fun visit(node: CodeSpan): String {
+        val codeTag = super.visit(node)
+        if (node.content == null) return codeTag
+
+        // If additional content is linked to this code span, wrap it.
+        return buildTag("span") {
+            attribute("class", "codespan-content-wrapper")
+
+            +codeTag
+
+            when (node.content) {
+                is CodeSpan.ColorContent -> {
+                    // If the code contains a color code, show the color preview.
+                    +buildTag("span") {
+                        style { "background-color" value node.content.color }
+                        attribute("class", "color-preview")
+                    }
+                }
+            }
+        }
     }
 
     // The function was already expanded by previous stages: its output nodes are stored in its children.

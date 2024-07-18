@@ -156,8 +156,11 @@ object ValueFactory {
     @FromDynamicType(Color::class)
     fun color(raw: String): ObjectValue<Color> {
         // Hexadecimal representation (e.g. #FF0000).
-        if (raw.startsWith("#")) {
-            return ObjectValue(Color.fromHex(raw))
+        if (raw.firstOrNull() == '#') {
+            val decoded = Color.fromHex(raw)
+            if (decoded != null) {
+                return ObjectValue(decoded)
+            }
         }
 
         // Name representation (e.g. red, GREEN, bLuE).

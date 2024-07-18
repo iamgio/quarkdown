@@ -23,13 +23,17 @@ data class Color(
          * @param hex hexadecimal color code
          * @return a [Color] from a hex color code
          */
-        fun fromHex(hex: String): Color {
+        fun fromHex(hex: String): Color? {
             val hexValue = hex.removePrefix("#")
-            return Color(
-                red = hexValue.substring(0, 2).toInt(16),
-                green = hexValue.substring(2, 4).toInt(16),
-                blue = hexValue.substring(4, 6).toInt(16),
-            )
+            return try {
+                Color(
+                    red = hexValue.substring(0, 2).toInt(16),
+                    green = hexValue.substring(2, 4).toInt(16),
+                    blue = hexValue.substring(4, 6).toInt(16),
+                )
+            } catch (e: NumberFormatException) {
+                null
+            }
         }
 
         /**

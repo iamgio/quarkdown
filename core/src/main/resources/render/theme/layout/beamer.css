@@ -97,6 +97,14 @@ table tr:last-child td {
     padding-left: 4px;
 }
 
+.color-preview {
+    width: 0.5em;
+    height: 0.5em;
+    margin: 0 0.2em;
+    border-radius: 100%;
+    border: 0.1em solid;
+}
+
 /* Footer */
 
 .page-margin-bottom-center {
