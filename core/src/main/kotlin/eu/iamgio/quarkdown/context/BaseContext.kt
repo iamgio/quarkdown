@@ -19,7 +19,6 @@ import eu.iamgio.quarkdown.pipeline.Pipelines
  * @param attributes attributes of the node tree, produced by the parsing stage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
- * @param errorHandler the error handling strategy to use
  */
 open class BaseContext(
     private val attributes: AstAttributes,
@@ -30,6 +29,8 @@ open class BaseContext(
         get() = Pipelines.getAttachedPipeline(this)
 
     override val documentInfo = DocumentInfo()
+
+    override val options: ContextOptions = MutableContextOptions()
 
     override val hasCode: Boolean
         get() = attributes.hasCode

@@ -37,6 +37,12 @@ interface Context {
     val documentInfo: DocumentInfo
 
     /**
+     * Global properties that affect several behaviors
+     * and that can be altered through function calls.
+     */
+    val options: ContextOptions
+
+    /**
      * Whether there is at least one code block.
      * This is used to load the HighlightJS library in HTML rendering.
      */

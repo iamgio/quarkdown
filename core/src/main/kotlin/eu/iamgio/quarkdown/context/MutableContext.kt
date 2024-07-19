@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.function.library.Library
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
- * @param errorHandler the error handling strategy to use
+ * @param libraries loaded libraries to look up functions from
  * @param attributes attributes of the node tree, which can be manipulated on demand
  */
 open class MutableContext(
@@ -21,6 +21,8 @@ open class MutableContext(
     override var hasMath: Boolean by attributes::hasMath
 
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
+
+    override val options: MutableContextOptions = MutableContextOptions()
 
     /**
      * Registers a new [LinkDefinition], which can be later looked up

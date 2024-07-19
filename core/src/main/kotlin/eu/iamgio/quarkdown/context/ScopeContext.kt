@@ -20,6 +20,9 @@ class ScopeContext(val parent: Context) : MutableContext(
     override val documentInfo: DocumentInfo
         get() = parent.documentInfo
 
+    override val options: MutableContextOptions
+        get() = (parent.options as? MutableContextOptions) ?: MutableContextOptions()
+
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],
      * [parent]'s libraries are scanned.

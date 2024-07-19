@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
@@ -38,6 +39,7 @@ val Document: Module =
         ::pageMarginContent,
         ::footer,
         ::pageCounter,
+        ::autoPageBreak,
     )
 
 /**
@@ -234,3 +236,23 @@ fun pageCounter(
         },
         position,
     ).wrappedAsValue()
+
+/**
+ * Sets a new automatic page break threshold when a heading is found:
+ * if a heading's depth value (the amount of leading `#`s) is equals or less than [depth],
+ * a page break is forced before the heading.
+ * @param depth heading depth to force page breaks for (positive only). `0` disables automatic page breaks.
+ * @throws IllegalArgumentException if [depth] is a negative value
+ */
+@Name("autopagebreak")
+fun autoPageBreak(
+    @Injected context: MutableContext,
+    depth: Int,
+): VoidValue {
+    if (depth < 0) {
+        throw IllegalArgumentException("Heading depth cannot be negative.")
+    }
+
+    context.options.autoPageBreakHeadingDepth = depth
+    return VoidValue
+}

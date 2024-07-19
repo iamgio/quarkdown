@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
@@ -18,6 +19,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -50,6 +52,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     ) = div(styleClass) { +children }
 
     // Quarkdown node rendering
+
+    override fun visit(node: Heading): String {
+        val headingTag = super.visit(node)
+        return if (context.options.shouldAutoPageBreak(node)) {
+            visit(PageBreak()) + headingTag
+        } else {
+            headingTag
+        }
+    }
 
     // The Quarkdown flavor renders an image title as a figure caption, if present.
     override fun visit(node: Image): String {
