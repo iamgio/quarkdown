@@ -54,7 +54,7 @@ class FullPipelineTest {
             assertEquals("<p>Hello, world!</p>", it)
         }
 
-        execute("# Title\n Hello, world!\n## Subtitle\nHello, world!") {
+        execute(".noautopagebreak\n# Title\n Hello, world!\n## Subtitle\nHello, world!") {
             assertEquals(
                 "<h1>Title</h1><p>Hello, world!</p><h2>Subtitle</h2><p>Hello, world!</p>",
                 it,
@@ -183,24 +183,24 @@ class FullPipelineTest {
 
         execute(
             """
-            # Title
+            ## Title
             .foreach {..2}
                 n:
                 Hi .n
             """.trimIndent(),
         ) {
-            assertEquals("<h1>Title</h1><p>Hi 1</p><p>Hi 2</p>", it)
+            assertEquals("<h2>Title</h2><p>Hi 1</p><p>Hi 2</p>", it)
         }
 
         execute(
             """
             .foreach {..2}
-                # Hello
+                ## Hello
                 .foreach {..1}
                     **Hi**!
             """.trimIndent(),
         ) {
-            assertEquals("<h1>Hello</h1><p><strong>Hi</strong>!</p><h1>Hello</h1><p><strong>Hi</strong>!</p>", it)
+            assertEquals("<h2>Hello</h2><p><strong>Hi</strong>!</p><h2>Hello</h2><p><strong>Hi</strong>!</p>", it)
         }
 
         execute(
@@ -217,7 +217,7 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 (
-                    "<h2>Title 2</h2><h2>Title 2</h2><h1>Title 1</h1>".repeat(2) +
+                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\"></div><h1>Title 1</h1>".repeat(2) +
                         "<p>Some text</p>"
                 ).repeat(2) + "<h3>Title 3</h3>",
                 it,
@@ -243,11 +243,11 @@ class FullPipelineTest {
                     name:
                     Hello, *.name*!
                 
-                # .hello {world}
+                #### .hello {world}
                 .hello {iamgio}
             """.trimIndent(),
         ) {
-            assertEquals("<h1>Hello, <em>world</em>!</h1><p>Hello, <em>iamgio</em>!</p>", it)
+            assertEquals("<h4>Hello, <em>world</em>!</h4><p>Hello, <em>iamgio</em>!</p>", it)
         }
     }
 
@@ -324,7 +324,7 @@ class FullPipelineTest {
             """
             .row alignment:{center} cross:{center} gap:{200px}
                 .column cross:{end}
-                    # Quarkdown
+                    ## Quarkdown
                     A cool language
 
                 .column gap:{1cm}
@@ -343,7 +343,7 @@ class FullPipelineTest {
             assertEquals(
                 "<div style=\"justify-content: center; align-items: center; gap: 200.0px;\" class=\"stack stack-horizontal\">" +
                     "<div style=\"justify-content: flex-start; align-items: flex-end;\" class=\"stack stack-vertical\">" +
-                    "<h1>Quarkdown</h1><p>A cool language</p>" +
+                    "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
                     "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-vertical\">" +
                     "<div class=\"clip-circle\">" +
@@ -453,6 +453,8 @@ class FullPipelineTest {
     fun `layout builder`() {
         val layoutFunction =
             """
+            .noautopagebreak
+            
             .function {mylayout}
                 name number:
                 # Hello, .name!
@@ -495,6 +497,7 @@ class FullPipelineTest {
     fun `include source`() {
         execute(
             """
+            .noautopagebreak
             .include {include/include-1.md}
             """.trimIndent(),
         ) {
@@ -519,6 +522,7 @@ class FullPipelineTest {
 
         execute(
             """
+            .noautopagebreak
             # Main
             .include {include/include-3.md}
             """.trimIndent(),
@@ -547,6 +551,7 @@ class FullPipelineTest {
         // Transitive inclusion of files.
         execute(
             """
+            .noautopagebreak
             # Main
             .include {include/include-5.md}
             """.trimIndent(),

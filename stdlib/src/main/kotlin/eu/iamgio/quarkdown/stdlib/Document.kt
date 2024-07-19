@@ -40,6 +40,7 @@ val Document: Module =
         ::footer,
         ::pageCounter,
         ::autoPageBreak,
+        ::disableAutoPageBreak,
     )
 
 /**
@@ -241,8 +242,9 @@ fun pageCounter(
  * Sets a new automatic page break threshold when a heading is found:
  * if a heading's depth value (the amount of leading `#`s) is equals or less than [depth],
  * a page break is forced before the heading.
- * @param depth heading depth to force page breaks for (positive only). `0` disables automatic page breaks.
+ * @param depth heading depth to force page breaks for (positive only).
  * @throws IllegalArgumentException if [depth] is a negative value
+ * @see disableAutoPageBreak
  */
 @Name("autopagebreak")
 fun autoPageBreak(
@@ -256,3 +258,12 @@ fun autoPageBreak(
     context.options.autoPageBreakHeadingDepth = depth
     return VoidValue
 }
+
+/**
+ * Disables automatic page breaks when a heading is found.
+ * @see autoPageBreak
+ */
+@Name("noautopagebreak")
+fun disableAutoPageBreak(
+    @Injected context: MutableContext,
+) = autoPageBreak(context, 0)

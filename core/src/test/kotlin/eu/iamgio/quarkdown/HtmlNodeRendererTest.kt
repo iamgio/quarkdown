@@ -40,6 +40,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.MutableContextOptions
 import eu.iamgio.quarkdown.document.page.cm
 import eu.iamgio.quarkdown.document.page.inch
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
@@ -375,10 +376,20 @@ class HtmlNodeRendererTest {
     fun heading() {
         val out = readParts("block/heading.html")
 
-        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render())
-        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render())
-        assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render())
-        assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render())
+        val noPageBreak = MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 0))
+
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noPageBreak))
+        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noPageBreak))
+        assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noPageBreak))
+        assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noPageBreak))
+
+        // Force page break on depth <= 2
+        val autoPageBreak = MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 2))
+
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(autoPageBreak))
+        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(autoPageBreak))
+        assertEquals(out.next(), Heading(3, listOf(Text("Foo bar"))).render(autoPageBreak))
+        assertEquals(out.next(), Heading(4, listOf(Text("Foo bar"))).render(autoPageBreak))
     }
 
     private fun listItems() =
