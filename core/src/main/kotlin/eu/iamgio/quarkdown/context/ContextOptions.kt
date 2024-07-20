@@ -17,7 +17,7 @@ interface ContextOptions {
  * @return whether the [heading] node should force a page break
  * @see ContextOptions.autoPageBreakHeadingDepth
  */
-fun ContextOptions.shouldAutoPageBreak(heading: Heading) = heading.depth <= this.autoPageBreakHeadingDepth
+fun Context.shouldAutoPageBreak(heading: Heading) = heading.depth <= this.options.autoPageBreakHeadingDepth
 
 /**
  * Mutable [ContextOptions] implementation.

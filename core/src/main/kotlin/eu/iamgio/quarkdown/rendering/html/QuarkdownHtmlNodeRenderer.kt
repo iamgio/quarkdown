@@ -53,49 +53,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Quarkdown node rendering
 
-    override fun visit(node: Heading): String {
-        val headingTag = super.visit(node)
-        return if (context.options.shouldAutoPageBreak(node)) {
-            visit(PageBreak()) + headingTag
-        } else {
-            headingTag
-        }
-    }
-
-    // The Quarkdown flavor renders an image title as a figure caption, if present.
-    override fun visit(node: Image): String {
-        val imgTag = super.visit(node)
-
-        return node.link.title?.let { title ->
-            buildTag("figure") {
-                +imgTag
-                +buildTag("figcaption", title)
-            }
-        } ?: imgTag
-    }
-
-    override fun visit(node: CodeSpan): String {
-        val codeTag = super.visit(node)
-        if (node.content == null) return codeTag
-
-        // If additional content is linked to this code span, wrap it.
-        return buildTag("span") {
-            attribute("class", "codespan-content-wrapper")
-
-            +codeTag
-
-            when (node.content) {
-                is CodeSpan.ColorContent -> {
-                    // If the code contains a color code, show the color preview.
-                    +buildTag("span") {
-                        style { "background-color" value node.content.color }
-                        attribute("class", "color-preview")
-                    }
-                }
-            }
-        }
-    }
-
     // The function was already expanded by previous stages: its output nodes are stored in its children.
     override fun visit(node: FunctionCallNode): CharSequence = node.children.joinToString(separator = "") { it.accept(this) }
 
@@ -245,4 +202,51 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 }
             }
         }
+
+    // Additional behavior of base nodes
+
+    // A heading could force an automatic page break if suitable.
+    override fun visit(node: Heading): String {
+        val headingTag = super.visit(node)
+        return if (context.shouldAutoPageBreak(node)) {
+            visit(PageBreak()) + headingTag
+        } else {
+            headingTag
+        }
+    }
+
+    // The Quarkdown flavor renders an image title as a figure caption, if present.
+    override fun visit(node: Image): String {
+        val imgTag = super.visit(node)
+
+        return node.link.title?.let { title ->
+            buildTag("figure") {
+                +imgTag
+                +buildTag("figcaption", title)
+            }
+        } ?: imgTag
+    }
+
+    // A code span can contain additional content, such as a color preview.
+    override fun visit(node: CodeSpan): String {
+        val codeTag = super.visit(node)
+        if (node.content == null) return codeTag
+
+        // If additional content is linked to this code span, wrap it.
+        return buildTag("span") {
+            attribute("class", "codespan-content-wrapper")
+
+            +codeTag
+
+            when (node.content) {
+                is CodeSpan.ColorContent -> {
+                    // If the code contains a color code, show the color preview.
+                    +buildTag("span") {
+                        style { "background-color" value node.content.color }
+                        attribute("class", "color-preview")
+                    }
+                }
+            }
+        }
+    }
 }
