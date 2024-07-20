@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // A page margin content initializer is an element that will be copied into each section,
     // and is placed on one of the page margins.
     const pageMarginInitializers = document.querySelectorAll('.page-margin-content');
+    pageMarginInitializers.forEach(initializer => initializer.remove());
 
     const children = Array.from(slidesDiv.childNodes);
     let sections = [];
@@ -50,7 +51,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear out the original slides div and add the new sections.
     slidesDiv.innerHTML = '';
-    sections.forEach(section => slidesDiv.appendChild(section));
+    sections.forEach(section => {
+        // Empty slides are ignored.
+        if (section.childElementCount > 0) {
+            slidesDiv.appendChild(section);
+        }
+    });
 
     // Copy the content of each global page margin initializer to the background of each section.
     Reveal.addEventListener('ready', function (event) {
@@ -62,19 +68,16 @@ document.addEventListener('DOMContentLoaded', function () {
             pageMargin.className = pageMarginInitializer.className;
             pageMargin.innerHTML = pageMarginInitializer.innerHTML;
 
-            // append pageMargin to each element with the class .slide-background
+            // Append the page margin to each slide background.
             const slideBackgrounds = document.querySelectorAll('.slide-background');
             slideBackgrounds.forEach(slideBackground => {
                 slideBackground.appendChild(pageMargin.cloneNode(true));
             });
-
-            // Remove the initializer from the document.
-            pageMarginInitializer.remove();
         });
 
         updateTotalSlideNumberElements()
         updateCurrentSlideNumberElements(event.indexh);
-    })
+    });
 
     Reveal.addEventListener('slidechanged', event => updateCurrentSlideNumberElements(event.indexh));
 
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
         controls: typeof slides_showControls !== undef ? slides_showControls : true,
         transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
         transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
-    })
+    });
 });
 
 function updateTotalSlideNumberElements() {
