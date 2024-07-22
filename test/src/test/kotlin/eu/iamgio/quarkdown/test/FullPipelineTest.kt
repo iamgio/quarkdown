@@ -148,7 +148,7 @@ class FullPipelineTest {
 
         // TODO add space after $ in the output (= avoid trimming text)
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
-            assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__2</p>", it)
+            assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
         }
 
         execute("***result***: .sum {3} {.multiply {4} {2}}") {
@@ -469,7 +469,7 @@ class FullPipelineTest {
             "$layoutFunction\n.mylayout {world} {3}",
         ) {
             assertEquals(
-                "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>",
+                "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>",
                 it,
             )
         }
@@ -484,10 +484,10 @@ class FullPipelineTest {
                 """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Hello, world!</h1><p>1__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__1 is 1</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>2__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__2 is 4</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>3__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__3 is 9</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>4__QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__4 is 16</p><h3>End</h3>",
+                "<h1>Hello, world!</h1><p>1 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 1 is 1</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>2 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 2 is 4</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>4 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 4 is 16</p><h3>End</h3>",
                 it,
             )
         }
