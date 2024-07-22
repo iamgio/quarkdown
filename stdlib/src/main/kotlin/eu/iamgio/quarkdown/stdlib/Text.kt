@@ -55,15 +55,17 @@ fun text(
  * this function accepts Markdown content as its body, hence it can be used - for example -
  * in combination with [fileContent] to load code from file.
  * @param language optional language of the code
+ * @param showLineNumbers whether to show line numbers
  * @param body code content
  */
 fun code(
     @Injected context: MutableContext,
     @Name("lang") language: String? = null,
+    @Name("linenumbers") showLineNumbers: Boolean = true,
     body: MarkdownContent,
 ): NodeValue {
     context.hasCode = true // Allows code highlighting.
-    return Code(body.children.toPlainText(), language).wrappedAsValue()
+    return Code(body.children.toPlainText(), language, showLineNumbers).wrappedAsValue()
 }
 
 /**

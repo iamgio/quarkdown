@@ -86,7 +86,4 @@ nb-configuration.xml
 ## Miscellaneous
 ##############################
 *.log
-core/src/test/resources/lexing/test.md
-core/src/test/resources/test.md
-core/src/test/resources/test-*.md
-core/src/test/resources/out.html
+/core/src/test/resources/_test/
