@@ -85,14 +85,22 @@ class HtmlTagBuilder(
     fun style(init: CssBuilder.() -> Unit) = optionalAttribute("style", css(init).takeUnless { it.isEmpty() })
 
     /**
+     * Applies a single class name via the `class` attribute to this tag.
+     * @param className class name. The attribute is not applied if it's `null`
+     * @return this for concatenation
+     * @see optionalAttribute
+     */
+    fun `class`(className: String?) = optionalAttribute("class", className)
+
+    /**
      * Applies a sequence of class names via the `class` attribute to this tag.
-     * @param classes class names. `null` elements are ignored. The attribute is not applied if all elements are `null`
+     * @param classNames class names. `null` elements are ignored. The attribute is not applied if all elements are `null`
      * @return this for concatenation
      */
-    fun classes(vararg classes: String?) =
+    fun classes(vararg classNames: String?) =
         optionalAttribute(
             "class",
-            classes.asSequence().filterNotNull().joinToString(separator = " ").takeIf { it.isNotEmpty() },
+            classNames.asSequence().filterNotNull().joinToString(separator = " ").takeIf { it.isNotEmpty() },
         )
 
     /**

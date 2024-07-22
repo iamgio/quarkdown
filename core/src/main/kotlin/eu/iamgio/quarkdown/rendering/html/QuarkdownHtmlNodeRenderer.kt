@@ -40,7 +40,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         styleClass: String,
         init: HtmlTagBuilder.() -> Unit,
     ) = tagBuilder("div", init = init)
-        .attribute("class", styleClass)
+        .`class`(styleClass)
         .build()
 
     /**
@@ -122,7 +122,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: SlidesFragment): CharSequence =
         tagBuilder("p", node.children)
-            .attribute("class", "fragment ${node.behavior.asCSS}")
+            .classes("fragment", node.behavior.asCSS)
             .build()
 
     override fun visit(node: TextTransform) =
@@ -170,13 +170,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
                         DocumentType.SLIDES ->
                             node.content(
-                                // Get the data-index attribute from the section this element is in.
+                                // Get the current slide index.
                                 tagBuilder("span")
-                                    .attribute("class", "current-page-number")
+                                    .`class`("current-page-number")
                                     .build(),
                                 // Get the total amount of slides.
                                 tagBuilder("span")
-                                    .attribute("class", "total-page-number")
+                                    .`class`("total-page-number")
                                     .build(),
                             )
 
@@ -234,7 +234,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         // If additional content is linked to this code span, wrap it.
         return buildTag("span") {
-            attribute("class", "codespan-content-wrapper")
+            `class`("codespan-content-wrapper")
 
             +codeTag
 
@@ -243,7 +243,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     // If the code contains a color code, show the color preview.
                     +buildTag("span") {
                         style { "background-color" value node.content.color }
-                        attribute("class", "color-preview")
+                        `class`("color-preview")
                     }
                 }
             }
