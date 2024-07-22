@@ -405,7 +405,7 @@ class InlineParserTest {
     fun mathSpan() {
         val nodes = inlineIterator<MathSpan>(readSource("/parsing/inline/mathspan.md"), assertType = false)
 
-        repeat(3) {
+        repeat(7) {
             assertEquals("Math expression", nodes.next().expression)
         }
         assertEquals("Math \$expression", nodes.next().expression)
