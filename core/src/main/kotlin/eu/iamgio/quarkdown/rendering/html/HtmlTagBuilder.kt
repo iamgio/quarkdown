@@ -79,9 +79,21 @@ class HtmlTagBuilder(
      * Applies a CSS style via the `style` attribute to this tag.
      * The attribute is _not_ added if the generated CSS string is empty.
      * @param init CSS builder initialization
+     * @return this for concatenation
      * @see css
      */
     fun style(init: CssBuilder.() -> Unit) = optionalAttribute("style", css(init).takeUnless { it.isEmpty() })
+
+    /**
+     * Applies a sequence of class names via the `class` attribute to this tag.
+     * @param classes class names. `null` elements are ignored. The attribute is not applied if all elements are `null`
+     * @return this for concatenation
+     */
+    fun classes(vararg classes: String?) =
+        optionalAttribute(
+            "class",
+            classes.asSequence().filterNotNull().joinToString(separator = " ").takeIf { it.isNotEmpty() },
+        )
 
     /**
      * @return this builder and its nested content into stringified HTML code.

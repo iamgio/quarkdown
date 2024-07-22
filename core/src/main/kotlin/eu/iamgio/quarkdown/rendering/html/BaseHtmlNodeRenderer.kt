@@ -82,12 +82,13 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
             tag("code") {
                 +escapeCriticalContent(node.content)
 
-                if (!node.showLineNumbers) {
-                    // Prevents line numbers to show.
-                    attribute("class", "nohljsln") // TODO doesnt work with tag, but does with buildTag
-                }
+                classes(
+                    // Sets the code language.
+                    node.language?.let { "language-$it" },
+                    // Disables line numbers.
+                    "nohljsln".takeUnless { node.showLineNumbers },
+                )
             }
-                .optionalAttribute("class", node.language?.let { "language-$it" })
         }
 
     override fun visit(node: HorizontalRule) =
