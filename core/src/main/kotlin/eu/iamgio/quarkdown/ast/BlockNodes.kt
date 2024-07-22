@@ -15,10 +15,12 @@ class Newline : Node {
  * A code block.
  * @param content code content
  * @param language optional syntax language
+ * @param showLineNumbers whether to show line numbers
  */
 data class Code(
     val content: String,
     val language: String?,
+    val showLineNumbers: Boolean,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

@@ -81,6 +81,11 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
         buildTag("pre") {
             tag("code") {
                 +escapeCriticalContent(node.content)
+
+                if (!node.showLineNumbers) {
+                    // Prevents line numbers to show.
+                    attribute("class", "nohljsln") // TODO doesnt work with tag, but does with buildTag
+                }
             }
                 .optionalAttribute("class", node.language?.let { "language-$it" })
         }

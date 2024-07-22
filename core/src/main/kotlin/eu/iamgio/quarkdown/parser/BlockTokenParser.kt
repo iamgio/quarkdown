@@ -87,6 +87,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         return Code(
             language = null,
+            showLineNumbers = true,
             // Remove first indentation
             content = token.data.text.replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "").trim(),
         )
@@ -98,6 +99,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),
+            showLineNumbers = true,
             content = groups.next().trim(),
         )
     }
