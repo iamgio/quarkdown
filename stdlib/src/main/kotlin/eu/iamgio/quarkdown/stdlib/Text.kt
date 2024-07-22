@@ -59,7 +59,7 @@ fun text(
  */
 fun code(
     @Injected context: MutableContext,
-    language: String? = null,
+    @Name("lang") language: String? = null,
     body: MarkdownContent,
 ): NodeValue {
     context.hasCode = true // Allows code highlighting.
