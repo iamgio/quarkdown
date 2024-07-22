@@ -356,10 +356,11 @@ class HtmlNodeRendererTest {
     fun code() {
         val out = readParts("block/code.html")
 
-        assertEquals(out.next(), Code("Code", language = null).render())
-        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null).render())
-        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java").render())
-        assertEquals(out.next(), Code("<a href=\"#\">", language = "html").render())
+        assertEquals(out.next(), Code("Code", language = null, showLineNumbers = true).render())
+        assertEquals(out.next(), Code("Code", language = null, showLineNumbers = false).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null, showLineNumbers = true).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", showLineNumbers = false).render())
+        assertEquals(out.next(), Code("<a href=\"#\">", language = "html", showLineNumbers = true).render())
     }
 
     @Test
