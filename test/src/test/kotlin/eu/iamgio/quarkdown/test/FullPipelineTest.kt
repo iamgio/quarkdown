@@ -346,13 +346,13 @@ class FullPipelineTest {
                     "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
                     "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-vertical\">" +
-                    "<div class=\"clip-circle\">" +
+                    "<div class=\"clip clip-circle\">" +
                     "<p><img src=\"img1.png\" alt=\"\" /></p>" +
                     "</div>" +
-                    "<div class=\"clip-circle\">" +
+                    "<div class=\"clip clip-circle\">" +
                     "<p><img src=\"img2.png\" alt=\"\" /></p>" +
                     "</div>" +
-                    "<div class=\"clip-circle\">" +
+                    "<div class=\"clip clip-circle\">" +
                     "<p><img src=\"img3.png\" alt=\"\" /></p>" +
                     "</div>" +
                     "</div>" +

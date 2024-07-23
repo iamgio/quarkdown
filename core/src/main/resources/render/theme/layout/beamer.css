@@ -66,6 +66,19 @@ table tr:last-child td {
     width: 100% !important;
 }
 
+.reveal img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.stack > p, .clip > p {
+    margin: 0;
+}
+
+.clip img {
+    margin: 0 !important;
+}
+
 .box {
     width: 100%;
     margin: 12px;

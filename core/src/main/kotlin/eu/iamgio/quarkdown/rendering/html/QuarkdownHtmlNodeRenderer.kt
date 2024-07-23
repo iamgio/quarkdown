@@ -78,7 +78,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         }
     }
 
-    override fun visit(node: Clipped) = div("clip-${node.clip.asCSS}", node.children)
+    override fun visit(node: Clipped) = div("clip clip-${node.clip.asCSS}", node.children)
 
     override fun visit(node: Box) =
         div("box") {
