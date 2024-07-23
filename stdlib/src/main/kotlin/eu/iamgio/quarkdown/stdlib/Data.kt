@@ -21,7 +21,7 @@ import kotlin.io.path.Path
  */
 val Data: Module =
     setOf(
-        ::fileContent,
+        ::read,
         ::csv,
     )
 
@@ -59,8 +59,7 @@ internal fun file(
  *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
  */
-@Name("filecontent")
-fun fileContent(
+fun read(
     @Injected context: Context,
     path: String,
     @Name("lines") lineRange: Range = Range.INFINITE,

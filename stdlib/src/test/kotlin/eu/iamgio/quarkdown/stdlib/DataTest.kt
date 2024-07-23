@@ -36,22 +36,22 @@ class DataTest {
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4${LINE_SEPARATOR}Line 5",
-            fileContent(context, path).unwrappedValue,
+            read(context, path).unwrappedValue,
         )
 
         assertEquals(
             "Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4",
-            fileContent(context, path, Range(2, 4)).unwrappedValue,
+            read(context, path, Range(2, 4)).unwrappedValue,
         )
 
         assertEquals(
             "Line 1${LINE_SEPARATOR}Line 2",
-            fileContent(context, path, Range(null, 2)).unwrappedValue,
+            read(context, path, Range(null, 2)).unwrappedValue,
         )
 
         assertEquals(
             "Line 4${LINE_SEPARATOR}Line 5",
-            fileContent(context, path, Range(4, null)).unwrappedValue,
+            read(context, path, Range(4, null)).unwrappedValue,
         )
     }
 

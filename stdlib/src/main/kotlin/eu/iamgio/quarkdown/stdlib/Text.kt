@@ -53,7 +53,7 @@ fun text(
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
  * this function accepts Markdown content as its body, hence it can be used - for example -
- * in combination with [fileContent] to load code from file.
+ * in combination with [read] to load code from file.
  * @param language optional language of the code
  * @param showLineNumbers whether to show line numbers
  * @param body code content

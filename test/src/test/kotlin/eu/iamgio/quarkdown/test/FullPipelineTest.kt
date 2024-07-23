@@ -155,7 +155,7 @@ class FullPipelineTest {
             assertEquals("<p><em><strong>result</strong></em>: 11</p>", it)
         }
 
-        execute(".code\n    .filecontent {code.txt}") {
+        execute(".code\n    .read {code.txt}") {
             assertEquals(
                 "<pre><code>Line 1${System.lineSeparator()}Line 2${System.lineSeparator()}${System.lineSeparator()}Line 3</code></pre>",
                 it,
