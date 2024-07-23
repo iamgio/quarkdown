@@ -121,7 +121,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: MathSpan) = INLINE_MATH_FENCE + "$" + node.expression + "$" + INLINE_MATH_FENCE
 
     override fun visit(node: SlidesFragment): CharSequence =
-        tagBuilder("p", node.children)
+        tagBuilder("div", node.children)
             .classes("fragment", node.behavior.asCSS)
             .build()
 

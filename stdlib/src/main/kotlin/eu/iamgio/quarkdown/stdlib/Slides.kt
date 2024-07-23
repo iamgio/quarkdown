@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.InlineMarkdownContent
+import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.document.slides.Transition
@@ -44,10 +44,10 @@ fun setSlidesConfiguration(
  * shows its content when the user attempts to go to the next slide.
  * Multiple fragments in the same slide are shown in order on distinct user interactions.
  * @param behavior visibility type of the fragment and how it reacts to user interactions
- * @param content content to show
+ * @param content content to show/hide
  * @return the fragment node
  */
 fun fragment(
     behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
-    content: InlineMarkdownContent,
+    content: MarkdownContent,
 ) = SlidesFragment(behavior, content.children).wrappedAsValue()
