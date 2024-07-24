@@ -1,4 +1,10 @@
-# Quarkdown
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/8f705eb8-8405-4e02-8e84-50eaaba7f5df">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
+    <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
+  </picture>
+</p>
 
 Quarkdown is a Markdown parser and renderer that extends the capabilities of CommonMark and GFM with its own *Quarkdown
 flavor*.
