@@ -79,14 +79,16 @@ class RenderWrapper(private val code: String) {
                     "\\[\\[if:$placeholder]]((.|\\R)+?)\\[\\[endif:$placeholder]]\\R?".toRegex(RegexOption.MULTILINE)
                 // If there is a match:
                 // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
-                regex.findAll(this).forEach { match ->
-                    replace(
-                        match.range.first,
-                        match.range.last + 1,
-                        // First group is the whole match, second group is the inner content without the delimiters.
-                        match.groups[1]?.value?.takeIf { value } ?: "",
-                    )
-                }
+                regex.findAll(this)
+                    .sortedByDescending { it.range.first } // Iterate backwards to avoid index mismatches after replacing.
+                    .forEach { match ->
+                        replace(
+                            match.range.first,
+                            match.range.last + 1,
+                            // First group is the whole match, second group is the inner content without the delimiters.
+                            match.groups[1]?.value?.takeIf { value } ?: "",
+                        )
+                    }
             }
 
             // Replace placeholders (defined as [[NAME]] in the template file) with their corresponding value.
