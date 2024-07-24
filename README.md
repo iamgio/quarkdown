@@ -4,8 +4,11 @@
     <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
-
-  [![CodeFactor](https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main)](https://www.codefactor.io/repository/github/iamgio/quarkdown/overview/main)
+  <br>
+  <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main">
+  <img alt="Status: development" src="https://img.shields.io/badge/status-development-blue">
+  <br>&nbsp;
+  <hr>
 </p>
 
 Quarkdown is a Markdown parser and renderer that extends the capabilities of CommonMark and GFM with its own *Quarkdown
