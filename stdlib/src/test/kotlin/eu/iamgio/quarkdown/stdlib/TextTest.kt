@@ -21,7 +21,7 @@ class TextTest {
                 MutableContext(QuarkdownFlavor),
                 language = "kotlin",
                 showLineNumbers = false,
-                MarkdownContent(listOf(Text("fun foo() = 1"))),
+                body = MarkdownContent(listOf(Text("fun foo() = 1"))),
             )
 
         val node = code.unwrappedValue

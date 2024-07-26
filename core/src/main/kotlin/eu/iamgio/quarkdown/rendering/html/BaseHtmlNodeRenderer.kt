@@ -87,7 +87,13 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
                     node.language?.let { "language-$it" },
                     // Disables line numbers.
                     "nohljsln".takeUnless { node.showLineNumbers },
+                    // Focuses certain lines.
+                    "focus-lines".takeIf { node.focusedLines != null },
                 )
+
+                // Focus range.
+                optionalAttribute("data-focus-start", node.focusedLines?.start)
+                optionalAttribute("data-focus-end", node.focusedLines?.end)
             }
         }
 

@@ -62,6 +62,10 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+code.focus-lines .hljs-ln-line:not(.focused) {
+    opacity: 0.6;
+}
+
 .reveal pre {
     width: 100% !important;
 }

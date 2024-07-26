@@ -45,6 +45,7 @@ import eu.iamgio.quarkdown.document.page.cm
 import eu.iamgio.quarkdown.document.page.inch
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.Pipelines
@@ -361,6 +362,9 @@ class HtmlNodeRendererTest {
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null, showLineNumbers = true).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", showLineNumbers = false).render())
         assertEquals(out.next(), Code("<a href=\"#\">", language = "html", showLineNumbers = true).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(1, 2)).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(2, null)).render())
+        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(null, 1)).render())
     }
 
     @Test

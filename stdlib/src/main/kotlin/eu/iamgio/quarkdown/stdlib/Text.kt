@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.util.toPlainText
@@ -56,16 +57,24 @@ fun text(
  * in combination with [read] to load code from file.
  * @param language optional language of the code
  * @param showLineNumbers whether to show line numbers
+ * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
+ * Note: HTML rendering requires [showLineNumbers] to be enabled.
  * @param body code content
  */
 fun code(
     @Injected context: MutableContext,
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
+    @Name("focus") focusedLines: Range? = null,
     body: MarkdownContent,
 ): NodeValue {
     context.hasCode = true // Allows code highlighting.
-    return Code(body.children.toPlainText(), language, showLineNumbers).wrappedAsValue()
+    return Code(
+        body.children.toPlainText(),
+        language,
+        showLineNumbers,
+        focusedLines,
+    ).wrappedAsValue()
 }
 
 /**
