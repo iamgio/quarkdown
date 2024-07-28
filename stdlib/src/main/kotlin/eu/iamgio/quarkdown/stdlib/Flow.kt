@@ -29,6 +29,7 @@ val Flow: Module =
         ::forEach,
         ::function,
         ::variable,
+        ::let,
         ::node,
     )
 
@@ -160,6 +161,22 @@ fun variable(
         },
     )
 }
+
+/**
+ * Defines a temporary variable that can be used in the lambda body.
+ * Example:
+ * ```
+ * .let {world}
+ *     Hello, **.1**!
+ * ```
+ * @param value value to use as a temporary variable
+ * @param body content to evaluate with the temporary variable. Accepts 1 parameter ([value] itself)
+ * @return the evaluation of [body] with [value] as a parameter
+ */
+fun let(
+    value: DynamicValue,
+    body: Lambda,
+): OutputValue<*> = body.invokeDynamic(value)
 
 /**
  * Creates a null invisible node that forces the expression it lies in to be evaluated as Markdown content.

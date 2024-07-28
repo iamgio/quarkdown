@@ -46,7 +46,14 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     // Corresponding KParameter.
                     val param = function.parameters[parameter.index]
 
-                    param to argument.value.unwrappedValue
+                    // The argument is unwrapped unless the value class specifies not to.
+                    // An example of a disabled unwrapping is DynamicValue, which is used to pass dynamically typed values as-is.
+                    val arg =
+                        argument.value.let {
+                            if (it::class.hasAnnotation<NoAutoArgumentUnwrapping>()) it else it.unwrappedValue
+                        }
+
+                    param to arg
                 }
 
             // Call the KFunction.

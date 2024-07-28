@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.value
 
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
+import eu.iamgio.quarkdown.function.reflect.NoAutoArgumentUnwrapping
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 
 /**
@@ -13,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
  *                       or simply an opaque wrapper for a generic value (e.g. a `Node`)
  * @see eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
  */
+@NoAutoArgumentUnwrapping
 data class DynamicValue(override val unwrappedValue: Any?) : InputValue<Any?>, OutputValue<Any?> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 

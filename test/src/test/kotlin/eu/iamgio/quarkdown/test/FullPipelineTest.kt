@@ -249,6 +249,50 @@ class FullPipelineTest {
         ) {
             assertEquals("<h4>Hello, <em>world</em>!</h4><p>Hello, <em>iamgio</em>!</p>", it)
         }
+
+        execute(
+            """
+            .let {world}
+                Hello, **.1**!
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hello, <strong>world</strong>!</p>", it)
+        }
+
+        execute(
+            """
+            .foreach {..3}
+                .let {.1}
+                    x:
+                    .sum {3} {.x}
+            """.trimIndent(),
+        ) {
+            assertEquals("456", it)
+        }
+
+        execute(
+            """
+            .foreach {..3}
+                .node
+                .let {.1}
+                    x:
+                    .sum {3} {.x}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>4</p><p>5</p><p>6</p>", it)
+        }
+
+        execute(
+            """
+            .let {code.txt}
+                file:
+                .let {.read {.file} {..2}}
+                    .code
+                        .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<pre><code>Line 1\nLine 2</code></pre>", it)
+        }
     }
 
     @Test
