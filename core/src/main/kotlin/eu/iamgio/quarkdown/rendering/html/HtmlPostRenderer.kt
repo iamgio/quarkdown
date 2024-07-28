@@ -28,10 +28,6 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             .conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
             .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
             .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
-            .conditional(
-                TemplatePlaceholders.HAS_THEME,
-                context.documentInfo.theme != null,
-            ) // The theme CSS is applied only if a theme is set.
             // Page format
             .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
             .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
@@ -48,17 +44,15 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     type = ArtifactType.HTML,
                 )
 
-            // A CSS theme resource is added to the output resources if a theme is set.
-            context.documentInfo.theme?.let {
-                // Theme components (color scheme and layout format) are joined together into a single theme.css file.
-                this +=
-                    LazyOutputArtifact.join(
-                        // Get the single resources for each theme component.
-                        retrieveThemeComponentsArtifacts(it),
-                        name = "theme",
-                        type = ArtifactType.CSS,
-                    )
-            }
+            // A CSS theme resource is added to the output resources.
+            // Theme components (global style, color scheme and layout format) are joined together into a single theme.css file.
+            this +=
+                LazyOutputArtifact.join(
+                    // Get the single resources for each theme component.
+                    retrieveThemeComponentsArtifacts(context.documentInfo.theme),
+                    name = "theme",
+                    type = ArtifactType.CSS,
+                )
 
             // A slides document requires additional scripts.
             if (context.documentInfo.type == DocumentType.SLIDES) {
@@ -76,7 +70,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
      * @return an ordered list that contains an output artifact for each non-null theme component of [theme]
      *         (e.g. color scheme, layout format, ...)
      */
-    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme) =
+    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?) =
         buildList {
             /**
              * @return a new output artifact from an internal resource
@@ -89,7 +83,8 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     type = ArtifactType.CSS,
                 )
 
-            theme.color?.let { this += artifact("color/$it") }
-            theme.layout?.let { this += artifact("layout/$it") }
+            this += artifact("global")
+            theme?.color?.let { this += artifact("color/$it") }
+            theme?.layout?.let { this += artifact("layout/$it") }
         }
 }

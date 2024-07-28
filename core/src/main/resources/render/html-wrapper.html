@@ -14,9 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.css"></link>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.css"></link>
     [[endif:SLIDES]]
-    [[if:THEME]]
     <link rel="stylesheet" href="theme.css">
-    [[endif:THEME]]
     [[if:CODE]]
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -39,158 +37,32 @@
     [[endif:MATH]]
 
     <style>
-        hr {
-            width: 100%;
-        }
-
-        figure {
-            text-align: center;
-        }
-
-        .align {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .align-left {
-            text-align: left;
-            justify-content: left;
-            align-items: start;
-        }
-
-        .align-center {
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .align-right {
-            text-align: right;
-            justify-content: right;
-            align-items: end;
-        }
-
-        .stack {
-            display: flex;
-        }
-
-        .stack-horizontal {
-            flex-direction: row;
-        }
-
-        .stack-vertical {
-            flex-direction: column;
-        }
-
-        .clip-circle {
-            clip-path: circle();
-        }
-
         .page-break {
             break-before: always;
         }
 
-        .codespan-content-wrapper {
-            display: inline-flex;
-            align-items: center;
-        }
-
-        [[if:MATH
-
-        ]
-        ]
+        [[if:MATH]]
         mjx-container {
             margin: 0 0.3em
         }
-
-        [[endif:MATH
-
-        ]
-        ]
-
-        .page-margin-content {
-            position: absolute;
-        }
-
-        .page-margin-top-left-corner, .page-margin-top-left {
-            top: 0;
-            left: 0;
-        }
-
-        .page-margin-top-center {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .page-margin-top-right-corner, .page-margin-top-right {
-            top: 0;
-            right: 0;
-        }
-
-        .page-margin-right-top {
-            top: 0;
-            right: 0;
-            transform: rotate(90deg) translateX(50%);
-        }
-
-        .page-margin-right-middle {
-            top: 50%;
-            right: 0;
-            transform: rotate(90deg) translateX(-50%);
-        }
-
-        .page-margin-right-bottom {
-            bottom: 0;
-            right: 0;
-            transform: rotate(90deg) translateX(-50%);
-        }
-
-        .page-margin-bottom-right-corner, .page-margin-bottom-right {
-            bottom: 0;
-            right: 0;
-            transform: translateX(-50%);
-        }
-
-        .page-margin-bottom-center {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .page-margin-bottom-left-corner, .page-margin-bottom-left {
-            bottom: 0;
-            left: 0;
-            transform: translateX(50%);
-        }
-
-        .page-margin-left-middle {
-            top: 50%;
-            left: 0;
-            transform: rotate(-90deg) translateY(-50%);
-        }
-
-        .page-margin-left-top {
-            top: 0;
-            left: 0;
-            transform: rotate(-90deg) translateX(-50%);
-        }
+        [[endif:MATH]]
 
         .reveal {
-        [ [ if: PAGESIZE ] ] width: [ [ PAGEWIDTH ] ];
+            [[if:PAGESIZE]]
+            width: [[PAGEWIDTH]];
             height: [[PAGEHEIGHT]];
-        [ [ endif: PAGESIZE ] ]
+            [[endif:PAGESIZE]]
+            
         }
 
         @page {
-        [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
+            [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
 
-        [[if:PAGEMARGIN]] margin: [[PAGEMARGIN]]; [[endif:PAGEMARGIN]]
+            [[if:PAGEMARGIN]] margin: [[PAGEMARGIN]]; [[endif:PAGEMARGIN]]
 
-        @top-left-corner {
-            content: var(--page-margin-top-left-corner-content)
-        }
+            @top-left-corner {
+                content: var(--page-margin-top-left-corner-content)
+            }
 
             @top-left {
                 content: var(--page-margin-top-left-content)

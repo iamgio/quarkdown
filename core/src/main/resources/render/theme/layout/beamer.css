@@ -13,7 +13,6 @@
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Fira Sans", sans-serif;
-    text-transform: none !important;
 }
 
 h1 {
@@ -64,23 +63,6 @@ table tr:last-child td {
 
 code.focus-lines .hljs-ln-line:not(.focused) {
     opacity: 0.6;
-}
-
-.reveal pre {
-    width: 100% !important;
-}
-
-.reveal img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-}
-
-.stack > p, .clip > p {
-    margin: 0;
-}
-
-.clip img {
-    margin: 0 !important;
 }
 
 .box {

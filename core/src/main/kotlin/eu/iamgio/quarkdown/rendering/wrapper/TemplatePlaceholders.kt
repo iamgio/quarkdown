@@ -20,11 +20,6 @@ object TemplatePlaceholders {
     const val LANGUAGE = "LANG"
 
     /**
-     * Whether the document uses a theme.
-     */
-    const val HAS_THEME = "THEME"
-
-    /**
      * Whether block codes are used and highlighting-related scripts should be loaded.
      */
     const val HAS_CODE = "CODE"
