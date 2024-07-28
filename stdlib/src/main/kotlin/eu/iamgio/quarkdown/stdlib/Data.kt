@@ -72,9 +72,17 @@ fun read(
     }
 
     // Lines from the file in the given range.
-    val lines = file.readLines().subList(lineRange)
+    val lines = file.readLines()
 
-    return lines.joinToString(System.lineSeparator()).wrappedAsValue()
+    // Check if the range is in bounds.
+    val bounds = Range(1, lines.size)
+    if (lineRange !in bounds) {
+        throw FunctionRuntimeException("Invalid range $lineRange in bounds $bounds")
+    }
+
+    return lines.subList(lineRange)
+        .joinToString(System.lineSeparator())
+        .wrappedAsValue()
 }
 
 /**

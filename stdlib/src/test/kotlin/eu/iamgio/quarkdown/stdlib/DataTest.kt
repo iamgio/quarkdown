@@ -11,6 +11,7 @@ import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertIs
 
 private const val DATA_FOLDER = "src/test/resources/data"
@@ -53,6 +54,12 @@ class DataTest {
             "Line 4${LINE_SEPARATOR}Line 5",
             read(context, path, Range(4, null)).unwrappedValue,
         )
+
+        // Out of bounds ranges.
+        assertFails { read(context, path, Range(1, 8)) }
+        assertFails { read(context, path, Range(0, 3)) }
+        assertFails { read(context, path, Range(null, 9)) }
+        assertFails { read(context, path, Range(9, null)) }
     }
 
     @Test

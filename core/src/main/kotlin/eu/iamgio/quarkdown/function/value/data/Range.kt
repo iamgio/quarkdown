@@ -53,6 +53,30 @@ data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
             .iterator()
     }
 
+    /**
+     * @param bounds range to check if this range is in. Both its `start` and `end` values must be non-null
+     * @param lowerBound lower bound of [bounds] to use if [start] is `null`
+     * @param upperBound upper bound of [bounds] to use if [end] is `null`
+     * @return whether this range is contained within [bounds]
+     */
+    fun isIn(
+        bounds: Range,
+        lowerBound: Int = bounds.start!!,
+        upperBound: Int = bounds.end!!,
+    ): Boolean {
+        val start = start ?: lowerBound
+        val end = end ?: upperBound
+        return start >= bounds.start!! && end <= bounds.end!!
+    }
+
+    /**
+     * Checks if this range (bounds) contains another range.
+     * Both [start] and [end] of the bounds range must be non-null.
+     * @param range range to check if this range contains
+     * @return whether this range contains [range].
+     */
+    operator fun contains(range: Range) = range.isIn(this)
+
     override fun toString() = "${start ?: ""}..${end ?: ""}"
 
     companion object {
