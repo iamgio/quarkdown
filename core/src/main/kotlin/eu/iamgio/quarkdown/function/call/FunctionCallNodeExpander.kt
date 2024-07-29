@@ -15,16 +15,16 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
  * and maps its result to a visible output in the final document.
  * @param context root context to dequeue to-be-expanded function calls from
  * @param errorHandler strategy to handle errors that may occur during the execution of a function call
- * @param outputMapper producer of an AST output [Node] from the function call output
+ * @param outputMapperFactory producer of an AST output [Node] from the function call output
  */
 class FunctionCallNodeExpander(
     private val context: MutableContext,
     private val errorHandler: PipelineErrorHandler,
-    private val outputMapper: OutputValueVisitorFactory<Node> = NodeOutputValueVisitorFactory(context),
+    private val outputMapperFactory: OutputValueVisitorFactory<Node> = NodeOutputValueVisitorFactory(context),
 ) {
     // Output-to-node mappers, for block and inline function calls respectively.
-    private val blockMapper = outputMapper.block()
-    private val inlineMapper = outputMapper.inline()
+    private val blockMapper = outputMapperFactory.block()
+    private val inlineMapper = outputMapperFactory.inline()
 
     /**
      * Resolves, executes and stores the result of [node]'s referenced function.
