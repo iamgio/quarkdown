@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 
 /**
  * An immutable [Value] that contains other values of the same type. The kind of ordering is not relevant.
- * When exporting to a node via [eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor],
+ * When exporting to a node via [eu.iamgio.quarkdown.function.value.output.node.NodeOutputValueVisitor],
  * this collection is simply converted to a group of nodes.
  * @param T the element type of the list
  */

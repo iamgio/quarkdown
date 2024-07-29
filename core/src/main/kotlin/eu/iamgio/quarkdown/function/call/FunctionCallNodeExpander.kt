@@ -2,13 +2,11 @@ package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.quarkdown.Box
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
-import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
+import eu.iamgio.quarkdown.function.value.output.OutputValueVisitorFactory
+import eu.iamgio.quarkdown.function.value.output.node.NodeOutputValueVisitorFactory
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
@@ -22,8 +20,12 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
 class FunctionCallNodeExpander(
     private val context: MutableContext,
     private val errorHandler: PipelineErrorHandler,
-    private val outputMapper: OutputValueVisitor<Node> = NodeOutputValueVisitor(context),
+    private val outputMapper: OutputValueVisitorFactory<Node> = NodeOutputValueVisitorFactory(context),
 ) {
+    // Output-to-node mappers, for block and inline function calls respectively.
+    private val blockMapper = outputMapper.block()
+    private val inlineMapper = outputMapper.inline()
+
     /**
      * Resolves, executes and stores the result of [node]'s referenced function.
      * @param node AST function call node to expand
@@ -41,7 +43,9 @@ class FunctionCallNodeExpander(
 
         try {
             // The result of the function is converted into a node to be appended to the AST.
-            val outputNode = call.execute().accept(this.outputMapper)
+            // The value-to-node mapper used depends on whether the function call is block or inline.
+            val mapper = if (node.isBlock) blockMapper else inlineMapper
+            val outputNode = call.execute().accept(mapper)
             appendOutput(node, outputNode)
         } catch (e: PipelineException) {
             // If the function call is invalid.
@@ -53,7 +57,6 @@ class FunctionCallNodeExpander(
 
     /**
      * Adds [output] to [call]'s content in the AST.
-     * If [call] is a block function call and [output] is inline, [output] is wrapped in a paragraph.
      * @param call function call node
      * @param output output node to append
      */
@@ -61,12 +64,7 @@ class FunctionCallNodeExpander(
         call: FunctionCallNode,
         output: Node,
     ) {
-        call.children +=
-            when {
-                // The output is wrapped in a paragraph if the function call is a block and the output is inline.
-                call.isBlock && output is PlainTextNode -> Paragraph(listOf(output))
-                else -> output
-            }
+        call.children += output
     }
 
     /**

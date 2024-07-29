@@ -164,6 +164,31 @@ class FullPipelineTest {
     }
 
     @Test
+    fun `node mapping`() {
+        // Function is a block
+        execute(
+            """
+            ## Title
+            
+            .libexists {stdlib}
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2>Title</h2><p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>", it)
+        }
+
+        // Function is inline
+        execute(
+            """
+            ## Title
+            
+            Text .libexists {stdlib}
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2>Title</h2><p>Text <input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>", it)
+        }
+    }
+
+    @Test
     fun `flow functions`() {
         execute(".if { .islower {2} than:{3} }\n  **Text**") {
             assertEquals("<p><strong>Text</strong></p>", it)
@@ -195,12 +220,12 @@ class FullPipelineTest {
         execute(
             """
             .foreach {..2}
-                ## Hello
+                ## Hello .1
                 .foreach {..1}
                     **Hi**!
             """.trimIndent(),
         ) {
-            assertEquals("<h2>Hello</h2><p><strong>Hi</strong>!</p><h2>Hello</h2><p><strong>Hi</strong>!</p>", it)
+            assertEquals("<h2>Hello 1</h2><p><strong>Hi</strong>!</p><h2>Hello 2</h2><p><strong>Hi</strong>!</p>", it)
         }
 
         execute(
@@ -262,18 +287,6 @@ class FullPipelineTest {
         execute(
             """
             .foreach {..3}
-                .let {.1}
-                    x:
-                    .sum {3} {.x}
-            """.trimIndent(),
-        ) {
-            assertEquals("456", it)
-        }
-
-        execute(
-            """
-            .foreach {..3}
-                .node
                 .let {.1}
                     x:
                     .sum {3} {.x}

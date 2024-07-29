@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.BaseListItem
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
@@ -15,7 +16,8 @@ import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
-import eu.iamgio.quarkdown.function.value.output.NodeOutputValueVisitor
+import eu.iamgio.quarkdown.function.value.output.node.BlockNodeOutputValueVisitor
+import eu.iamgio.quarkdown.function.value.output.node.InlineNodeOutputValueVisitor
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import kotlin.test.BeforeTest
@@ -75,12 +77,17 @@ class FlowTest {
             assertIs<DynamicValue>(it)
             assertEquals("- Hello **Quarkdown**\n- Hello", it.unwrappedValue)
 
-            // Node conversion
-            val node = NodeOutputValueVisitor(context).visit(it)
-            assertIs<MarkdownContent>(node)
-            assertEquals(1, node.children.size)
+            // Block node conversion
+            val blockNode = BlockNodeOutputValueVisitor(context).visit(it)
+            assertIs<MarkdownContent>(blockNode)
+            assertEquals(1, blockNode.children.size)
 
-            val list = node.children.first()
+            // Inline node conversion
+            val inlineNode = InlineNodeOutputValueVisitor(context).visit(it)
+            assertIs<InlineMarkdownContent>(inlineNode)
+            assertEquals(3, inlineNode.children.size)
+
+            val list = blockNode.children.first()
             assertIs<UnorderedList>(list)
             assertEquals(2, list.children.size)
             assertIs<BaseListItem>(list.children[0])
