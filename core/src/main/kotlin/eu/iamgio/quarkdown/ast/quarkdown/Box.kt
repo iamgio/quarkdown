@@ -30,15 +30,18 @@ data class Box(
         /**
          * A custom box that shows an error message.
          * @param message error message to display
+         * @param title additional error title
          * @return a custom box containing the error message
          */
-        fun error(message: String) =
-            Box(
-                title = listOf(Text("Error")),
-                padding = null,
-                backgroundColor = Color(224, 67, 64),
-                foregroundColor = Color(255, 255, 255),
-                children = listOf(CodeSpan(message)),
-            )
+        fun error(
+            message: String,
+            title: String? = null,
+        ) = Box(
+            title = listOf(Text("Error" + if (title != null) ": $title" else "")),
+            padding = null,
+            backgroundColor = Color(224, 67, 64),
+            foregroundColor = Color(255, 255, 255),
+            children = listOf(CodeSpan(message)),
+        )
     }
 }
