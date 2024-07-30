@@ -314,8 +314,8 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                     cellCount = index
                 }
                 // Fill missing cells.
-                ((cellCount + 1) until columns.size).forEach {
-                    columns[it].cells += Table.Cell(emptyList())
+                for (remainingRow in cellCount + 1 until columns.size) {
+                    columns[remainingRow].cells += Table.Cell(emptyList())
                 }
             }
 
