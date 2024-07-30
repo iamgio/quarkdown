@@ -5,7 +5,7 @@
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
-  <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main">
+  <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <img alt="Status: development" src="https://img.shields.io/badge/status-development-blue">
   <br>&nbsp;
   <hr>
