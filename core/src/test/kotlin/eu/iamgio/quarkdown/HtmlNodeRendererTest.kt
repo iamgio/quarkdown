@@ -277,6 +277,7 @@ class HtmlNodeRendererTest {
 
     @Test
     fun text() {
+        assertEquals("Foo bar", Text("Foo bar").render())
     }
 
     @Test
