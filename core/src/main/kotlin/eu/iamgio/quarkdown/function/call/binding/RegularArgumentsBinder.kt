@@ -19,10 +19,19 @@ import kotlin.reflect.full.isSubclassOf
  * @see InjectedArgumentsBinder for the injected argument subset
  */
 class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinder {
+    // As soon as a named argument is encountered, all following arguments must be named too.
     private var encounteredNamedArgument = false
 
-    // todo add documentation
-
+    /**
+     * Binds an argument to its corresponding parameter.
+     * @param argument argument to bind
+     * @param argumentIndex index of the argument in the call
+     * @param parameters available parameters of the called function
+     * @return the parameter bound to the given argument
+     * @throws InvalidArgumentCountException if the number of arguments exceeds the number of parameters
+     * @throws UnresolvedParameterException if the argument is named and refers to a non-existent parameter
+     * @throws UnnamedArgumentAfterNamedException if an unnamed argument appears after a named one
+     */
     private fun findParameter(
         argument: FunctionCallArgument,
         argumentIndex: Int,
@@ -43,6 +52,14 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
             else -> throw UnnamedArgumentAfterNamedException(call)
         } ?: throw InvalidArgumentCountException(call) // Error if args count > params count.
 
+    /**
+     * Converts an argument to the expected type of its corresponding parameter.
+     * If it's a dynamic value, it is converted to a static type via a [ValueFactory].
+     * @param parameter parameter bound to the argument
+     * @param argument argument to convert, which can be dynamic or static
+     * @return a new argument, which holds [argument]'s value converted to the expected type
+     * @throws MismatchingArgumentTypeException if the value cannot be converted to the expected type
+     */
     private fun getStaticallyTypedArgument(
         parameter: FunctionParameter<*>,
         argument: FunctionCallArgument,
@@ -79,6 +96,12 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
         }
     }
 
+    /**
+     * Ensures the type of the argument matches the expected type of the parameter.
+     * @param parameter parameter bound to the argument
+     * @param argument argument to check
+     * @throws MismatchingArgumentTypeException if the argument type does not match the parameter type
+     */
     private fun checkTypeMatch(
         parameter: FunctionParameter<*>,
         argument: FunctionCallArgument,
@@ -90,19 +113,17 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
     }
 
     override fun createBindings(parameters: List<FunctionParameter<*>>) =
-        buildMap {
-            call.arguments.forEachIndexed { index, argument ->
-                // Corresponding parameter.
-                val parameter = findParameter(argument, index, parameters)
+        call.arguments.mapIndexed { index, argument ->
+            // Corresponding parameter.
+            val parameter = findParameter(argument, index, parameters)
 
-                // The type of dynamic arguments is determined.
-                val staticArgument = getStaticallyTypedArgument(parameter, argument)
+            // The type of dynamic arguments is determined.
+            val staticArgument = getStaticallyTypedArgument(parameter, argument)
 
-                // Type match check.
-                checkTypeMatch(parameter, staticArgument)
+            // Type match check.
+            checkTypeMatch(parameter, staticArgument)
 
-                // Add link.
-                this[parameter] = staticArgument
-            }
-        }
+            // Push binding.
+            parameter to staticArgument
+        }.toMap()
 }
