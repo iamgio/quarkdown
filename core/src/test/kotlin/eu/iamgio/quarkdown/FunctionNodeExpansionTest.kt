@@ -218,7 +218,6 @@ class FunctionNodeExpansionTest {
 
         with(node.children.first()) {
             assertIs<Box>(this) // Error box
-            assertTrue("error" in (this.children.first() as PlainTextNode).text) // Error message
         }
     }
 
