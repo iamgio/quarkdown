@@ -53,17 +53,17 @@ class FunctionCallArgumentsWalkerLexer(
             if (char == '\n' || char == '\t') {
                 return true
             }
-            // Space indentation is accepted if it is at least two spaces.
-            if (char == ' ') {
-                whitespaces++
-                if (whitespaces >= MIN_BODY_INDENTATION) {
-                    return true
-                }
-                reader.read()
-                continue
-            }
+
             // Any other character is not part of the indentation.
-            break
+            if (char != ' ') break
+
+            // Space indentation is accepted if it is at least two spaces.
+            whitespaces++
+            if (whitespaces >= MIN_BODY_INDENTATION) {
+                return true
+            }
+
+            reader.read()
         }
 
         return false
