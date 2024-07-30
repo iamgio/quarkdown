@@ -4,7 +4,6 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -30,7 +29,7 @@ val Data: Module =
  * @param requireExistance whether the corresponding file must exist
  * @return a [File] instance of the file located in [path].
  *         If the path is relative, the location is determined by the working directory of the pipeline.
- * @throws FunctionRuntimeException if the file does not exist and [requireExistance] is `true`
+ * @throws IllegalArgumentException if the file does not exist and [requireExistance] is `true`
  */
 internal fun file(
     context: Context,
@@ -47,7 +46,7 @@ internal fun file(
         }
 
     if (requireExistance && !file.exists()) {
-        throw FunctionRuntimeException("File $file does not exist.")
+        throw IllegalArgumentException("File $file does not exist.")
     }
 
     return file
@@ -58,6 +57,7 @@ internal fun file(
  * @param lineRange range of lines to extract from the file.
  *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
+ * @throws IllegalArgumentException if [lineRange] is out of bounds
  */
 fun read(
     @Injected context: Context,
@@ -77,7 +77,7 @@ fun read(
     // Check if the range is in bounds.
     val bounds = Range(1, lines.size)
     if (lineRange !in bounds) {
-        throw FunctionRuntimeException("Invalid range $lineRange in bounds $bounds")
+        throw IllegalArgumentException("Invalid range $lineRange in bounds $bounds")
     }
 
     return lines.subList(lineRange)

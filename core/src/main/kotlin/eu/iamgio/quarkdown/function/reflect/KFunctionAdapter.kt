@@ -63,7 +63,7 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                 // Exceptions thrown within the called function are converted to Quarkdown exceptions
                 // and handled accordingly by the pipeline's function expander component.
                 Log.debug("(expected, received): " + args.map { it.key.type to it.value })
-                throw FunctionRuntimeException(e.targetException)
+                throw FunctionRuntimeException(this, e.targetException)
             }
         }
 }

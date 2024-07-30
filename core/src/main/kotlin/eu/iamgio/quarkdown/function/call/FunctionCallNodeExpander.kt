@@ -50,7 +50,7 @@ class FunctionCallNodeExpander(
         } catch (e: PipelineException) {
             // If the function call is invalid.
             errorHandler.handle(e) { message ->
-                appendOutput(node, Box.error(message, title = call.name)) // Shows an error message box in the final document.
+                appendOutput(node, Box.error(message)) // Shows an error message box in the final document.
             }
         }
     }
