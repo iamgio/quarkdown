@@ -99,7 +99,7 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
     /**
      * Ensures the type of the argument matches the expected type of the parameter.
      * @param parameter parameter bound to the argument
-     * @param argument argument to check
+     * @param argument statically typed argument to check
      * @throws MismatchingArgumentTypeException if the argument type does not match the parameter type
      */
     private fun checkTypeMatch(
