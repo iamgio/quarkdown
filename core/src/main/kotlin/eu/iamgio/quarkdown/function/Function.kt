@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function
 
-import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
+import eu.iamgio.quarkdown.function.call.FunctionCall
+import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.value.OutputValue
 
 /**
@@ -21,9 +22,9 @@ interface Function<T : OutputValue<*>> {
     /**
      * Function that maps the input arguments into an output value.
      * Arguments and [parameters] compliance in terms of matching types and count is not checked here.
-     * The [FunctionArgumentsLinker] allows looking up argument values by their parameter name.
+     * The [ArgumentBindings] allow looking up argument values by their parameter.
      */
-    val invoke: FunctionArgumentsLinker.() -> T
+    val invoke: (ArgumentBindings) -> T
 }
 
 /**
@@ -33,7 +34,7 @@ interface Function<T : OutputValue<*>> {
 data class SimpleFunction<T : OutputValue<*>>(
     override val name: String,
     override val parameters: List<FunctionParameter<*>>,
-    override val invoke: FunctionArgumentsLinker.() -> T,
+    override val invoke: (ArgumentBindings) -> T,
 ) : Function<T>
 
 fun Function<*>.asString() =

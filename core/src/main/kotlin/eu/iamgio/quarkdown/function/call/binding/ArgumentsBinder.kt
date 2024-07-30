@@ -11,6 +11,8 @@ typealias ArgumentBindings = Map<FunctionParameter<*>, FunctionCallArgument>
 
 /**
  * Builder of parameter-argument pairs of a function call.
+ * Allows binding each argument to its corresponding parameter,
+ * and may throw an exception if some cannot be paired.
  * @see InjectedArgumentsBinder
  * @see InjectedArgumentsBinder
  * @see AllArgumentsBinder

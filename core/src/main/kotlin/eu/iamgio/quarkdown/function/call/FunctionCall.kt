@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.Function
+import eu.iamgio.quarkdown.function.call.binding.AllArgumentsBinder
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.visitor.ExpressionVisitor
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -25,11 +26,9 @@ data class FunctionCall<T : OutputValue<*>>(
      * @return the function output
      */
     fun execute(): T {
-        // Allows linking arguments to their parameter.
-        val linker = FunctionArgumentsLinker(this)
-        linker.link()
-
-        return function.invoke(linker)
+        // Allows binding each argument to its parameter.
+        val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
+        return function.invoke(bindings)
     }
 
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)

@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
-import eu.iamgio.quarkdown.function.call.FunctionArgumentsLinker
+import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -39,10 +39,10 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                 )
             }
 
-    override val invoke: FunctionArgumentsLinker.() -> T
-        get() = {
+    override val invoke: (ArgumentBindings) -> T
+        get() = { bindings ->
             val args =
-                this.links.asSequence().associate { (parameter, argument) ->
+                bindings.asSequence().associate { (parameter, argument) ->
                     // Corresponding KParameter.
                     val param = function.parameters[parameter.index]
 

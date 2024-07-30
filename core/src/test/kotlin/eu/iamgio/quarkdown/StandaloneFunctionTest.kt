@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
+import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
@@ -34,6 +35,19 @@ import kotlin.test.assertNull
  * For tests of function calls from Quarkdown sources see [FunctionNodeExpansionTest].
  */
 class StandaloneFunctionTest {
+    /**
+     * @param name name of the parameter to get the corresponding argument value for
+     * @param T type of the value
+     * @return the value of the argument by the given name
+     * @throws NoSuchElementException if [name] does not match any parameter name
+     */
+    private inline fun <reified T> ArgumentBindings.arg(name: String): T =
+        this.entries
+            .first { it.key.name == name }
+            .value // Map.Entry method: returns FunctionCallArgument
+            .value // FunctionCallArgument method: returns InputValue<T>
+            .unwrappedValue as T // InputValue<T> method: returns T
+
     @Test
     fun `no arguments`() {
         val function =
@@ -59,9 +73,9 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) {
-                val to = arg<String>("to")
-                val from = arg<String>("from")
+            ) { bindings ->
+                val to = bindings.arg<String>("to")
+                val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
             }
 
@@ -96,9 +110,9 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) {
-                val to = arg<String>("to")
-                val from = arg<String>("from")
+            ) { bindings ->
+                val to = bindings.arg<String>("to")
+                val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
             }
 
@@ -139,9 +153,9 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) {
-                val to = arg<String>("to")
-                val from = arg<String>("from")
+            ) { bindings ->
+                val to = bindings.arg<String>("to")
+                val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
             }
 

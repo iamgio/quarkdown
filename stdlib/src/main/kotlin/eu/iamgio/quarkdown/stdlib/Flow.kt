@@ -114,8 +114,8 @@ fun function(
 
     // The custom function itself.
     val function =
-        SimpleFunction(name, parameters) {
-            val args = this.links.values.map { it.value }.toTypedArray()
+        SimpleFunction(name, parameters) { bindings ->
+            val args = bindings.values.map { it.value }.toTypedArray()
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
             body.invokeDynamic(*args)
