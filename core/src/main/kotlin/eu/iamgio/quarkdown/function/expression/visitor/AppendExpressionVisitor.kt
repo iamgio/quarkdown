@@ -121,19 +121,19 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: OrderedCollectionValue<*>): Expression =
         OrderedCollectionValue(
-            value.unwrappedValue + (other.eval() as OutputValue<*>),
+            value.unwrappedValue + other.eval() as OutputValue<*>,
         )
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: UnorderedCollectionValue<*>): Expression =
         UnorderedCollectionValue(
-            value.unwrappedValue + (other.eval() as OutputValue<*>),
+            value.unwrappedValue + other.eval() as OutputValue<*>,
         )
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: GeneralCollectionValue<*>): GeneralCollectionValue<*> =
         GeneralCollectionValue(
-            value.unwrappedValue + (other.eval() as OutputValue<*>),
+            value.unwrappedValue + other.eval() as OutputValue<*>,
         )
 
     // CENTER "abc"  -> "CENTERabc"

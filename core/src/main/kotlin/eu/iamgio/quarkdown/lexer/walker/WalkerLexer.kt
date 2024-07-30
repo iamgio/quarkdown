@@ -23,7 +23,7 @@ abstract class WalkerLexer(source: CharSequence, protected val reader: SourceRea
     fun createTokenDataFromBuffer(): TokenData =
         TokenData(
             text = buffer.toString(),
-            position = (currentIndex - buffer.length) until currentIndex,
+            position = currentIndex - buffer.length until currentIndex,
         ).also { buffer.clear() }
 
     override val currentIndex: Int

@@ -21,7 +21,7 @@ class ScopeContext(val parent: Context) : MutableContext(
         get() = parent.documentInfo
 
     override val options: MutableContextOptions
-        get() = (parent.options as? MutableContextOptions) ?: MutableContextOptions()
+        get() = parent.options as? MutableContextOptions ?: MutableContextOptions()
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],
