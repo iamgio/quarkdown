@@ -274,7 +274,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
          */
         fun splitRow(row: String): Sequence<String> =
             row.split("(?<!\\\\)\\|".toRegex()).asSequence()
-                .filterNot { it.isBlank() }
+                .filter { it.isNotEmpty() }
                 .map { it.trim() }
 
         /**

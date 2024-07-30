@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
 import eu.iamgio.quarkdown.ast.Text
@@ -361,6 +362,32 @@ class BlockParserTest {
                 assertEquals(2, cells.size)
                 assertTrue(cells[0].text.isEmpty())
                 assertEquals(Text("baz"), cells[1].text.first())
+            }
+
+            assertFalse(hasNext())
+        }
+
+        with(nodes.next().columns.iterator()) {
+            with(next()) {
+                assertEquals(Table.Alignment.LEFT, alignment)
+                assertTrue(header.text.isEmpty())
+                assertEquals(2, cells.size)
+                assertEquals(Strong(listOf(Text("C"))), cells[0].text.first())
+                assertEquals(Strong(listOf(Text("D"))), cells[1].text.first())
+            }
+            with(next()) {
+                assertEquals(Table.Alignment.NONE, alignment)
+                assertEquals(Text("A"), header.text.first())
+                assertEquals(2, cells.size)
+                assertEquals(Text("AC"), cells[0].text.first())
+                assertEquals(Text("AD"), cells[1].text.first())
+            }
+            with(next()) {
+                assertEquals(Table.Alignment.RIGHT, alignment)
+                assertEquals(Text("B"), header.text.first())
+                assertEquals(2, cells.size)
+                assertEquals(Text("BC"), cells[0].text.first())
+                assertEquals(Text("BD"), cells[1].text.first())
             }
 
             assertFalse(hasNext())
