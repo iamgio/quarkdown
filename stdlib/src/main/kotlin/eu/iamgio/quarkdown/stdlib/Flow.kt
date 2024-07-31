@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -27,6 +28,7 @@ val Flow: Module =
         ::`if`,
         ::ifNot,
         ::forEach,
+        ::repeat,
         ::function,
         ::variable,
         ::let,
@@ -78,6 +80,19 @@ fun forEach(
 
     return GeneralCollectionValue(values)
 }
+
+/**
+ * Repeats content `N` times.
+ * The current index (starting from 1) can be accessed via the lambda argument.
+ * This is shorthand for `foreach {..N} {body}`.
+ * @param times amount of times to repeat the content
+ * @param body content, output of each iteration. Accepts 1 parameter (the current element).
+ * @return a collection that contains the output of each iteration
+ */
+fun repeat(
+    times: Int,
+    body: Lambda,
+): IterableValue<OutputValue<*>> = forEach(Range(1, times), body)
 
 /**
  * Custom functions (via [function]) and variables (via [variable]) are saved in a [Library]

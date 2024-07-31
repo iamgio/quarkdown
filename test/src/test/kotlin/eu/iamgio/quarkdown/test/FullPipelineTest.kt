@@ -230,6 +230,17 @@ class FullPipelineTest {
 
         execute(
             """
+            .repeat {2}
+                ## Hello .1
+                .repeat {1}
+                    **Hi**!
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2>Hello 1</h2><p><strong>Hi</strong>!</p><h2>Hello 2</h2><p><strong>Hi</strong>!</p>", it)
+        }
+
+        execute(
+            """
             .foreach {..2}
                 .foreach {..2}
                     .foreach {..2}
@@ -535,7 +546,7 @@ class FullPipelineTest {
             layoutFunction +
                 """
                     
-                .foreach {..4}
+                .repeat {4}
                     n:
                     .mylayout {world} {.n}
                 """.trimIndent(),
