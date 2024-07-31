@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.quarkdown.Aligned
@@ -135,7 +136,7 @@ fun clip(
  * @return the new box node
  */
 fun box(
-    title: MarkdownContent? = null,
+    title: InlineMarkdownContent? = null,
     padding: Size? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("foreground") foregroundColor: Color? = null,
