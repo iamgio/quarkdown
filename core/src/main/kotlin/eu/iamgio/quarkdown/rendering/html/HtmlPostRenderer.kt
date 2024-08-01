@@ -13,7 +13,8 @@ import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
 
 /**
  * A [PostRenderer] that injects content into an HTML template, which supports out of the box:
- * - PagedJS for page-based rendering (e.g. books) with page customization;
+ * - RevealJS for slides rendering;
+ * - PagedJS for page-based rendering (e.g. books);
  * - MathJax for math rendering;
  * - HighlightJS for code highlighting.
  */
