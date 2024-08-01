@@ -1,5 +1,10 @@
 package eu.iamgio.quarkdown.document.page
 
+import eu.iamgio.quarkdown.document.size.BoundingBox
+import eu.iamgio.quarkdown.document.size.by
+import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.mm
+
 /**
  * Standard page sizes.
  * @param bounds size the page

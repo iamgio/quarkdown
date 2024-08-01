@@ -41,8 +41,8 @@ import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
-import eu.iamgio.quarkdown.document.page.cm
-import eu.iamgio.quarkdown.document.page.inch
+import eu.iamgio.quarkdown.document.size.cm
+import eu.iamgio.quarkdown.document.size.inch
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range

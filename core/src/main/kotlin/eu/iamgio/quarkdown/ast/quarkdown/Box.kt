@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 

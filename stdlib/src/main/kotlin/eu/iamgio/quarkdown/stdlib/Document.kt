@@ -12,8 +12,8 @@ import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
-import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue

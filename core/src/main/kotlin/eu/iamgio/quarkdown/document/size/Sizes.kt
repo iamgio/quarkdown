@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document.page
+package eu.iamgio.quarkdown.document.size
 
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor

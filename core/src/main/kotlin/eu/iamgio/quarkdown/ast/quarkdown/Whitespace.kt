@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.ast.quarkdown
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**

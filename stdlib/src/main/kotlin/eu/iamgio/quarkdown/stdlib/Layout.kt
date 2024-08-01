@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.document.page.Size
+import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue

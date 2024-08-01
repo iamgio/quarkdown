@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.document.page
 
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
+
 /**
  * Mutable information about the format of all pages of a paged document.
  * When any of the fields is `null`, the default value supplied by the underlying renderer is used.

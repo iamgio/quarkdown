@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document.page
+package eu.iamgio.quarkdown.document.size
 
 /**
  * A generic bounding box with a width and a height.

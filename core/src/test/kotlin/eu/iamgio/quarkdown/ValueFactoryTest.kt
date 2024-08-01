@@ -1,11 +1,11 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.Sizes
-import eu.iamgio.quarkdown.document.page.cm
-import eu.iamgio.quarkdown.document.page.mm
-import eu.iamgio.quarkdown.document.page.px
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
+import eu.iamgio.quarkdown.document.size.cm
+import eu.iamgio.quarkdown.document.size.mm
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.BooleanValue

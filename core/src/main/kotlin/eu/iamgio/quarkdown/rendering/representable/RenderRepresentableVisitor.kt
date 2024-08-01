@@ -5,8 +5,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
-import eu.iamgio.quarkdown.document.page.Size
-import eu.iamgio.quarkdown.document.page.Sizes
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.slides.Transition
 import eu.iamgio.quarkdown.misc.Color
 
