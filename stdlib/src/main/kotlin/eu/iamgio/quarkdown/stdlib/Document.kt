@@ -118,23 +118,26 @@ fun docAuthor(
     )
 
 /**
- * If [localeTag] is not `null`, it sets the document locale to its value.
+ * If [locale] is not `null`, it sets the document locale to its value.
  * If it's `null`, the localized name of the current document locale is returned.
- * @param localeTag (optional) well-formed, case-insensitive, locale tag to assign to the document. Example: `en-US`, `it`, `fr-CA`
- * @return the localized name of the current document locale if [localeTag] is `null`
+ * @param locale (optional) case-insensitive,
+ *               either a locale tag (e.g. `en`, `en-US`, `it`, `fr-CA`)
+ *               or an English name of a locale (e.g. `English`, `English (United States)`, `Italian`, `French (Canada)`)
+ *               to assign to the document
+ * @return the localized name of the current document locale if [locale] is `null`
  * @throws IllegalArgumentException if the locale tag is not invalid or not found
  */
 @Name("doclang")
 fun docLanguage(
     @Injected context: Context,
-    @Name("locale") localeTag: String? = null,
+    locale: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
-        localeTag,
+        locale,
         get = { this.locale?.localizedName ?: "" },
         set = {
             this.locale =
-                LocaleLoader.SYSTEM.fromTag(it)
+                LocaleLoader.SYSTEM.find(it)
                     ?: throw IllegalArgumentException("Locale $it not found")
         },
     )

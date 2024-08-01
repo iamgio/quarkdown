@@ -17,6 +17,9 @@ class MiscTest {
 
         with(retriever.fromTag("en")) {
             assertNotNull(this)
+            assertEquals(this, retriever.fromName("English"))
+            assertEquals(this, retriever.find("English"))
+            assertEquals(this, retriever.find("eNgLiSh"))
             assertEquals("en", code)
             assertEquals("en", tag)
             assertEquals("English", localizedName)
@@ -24,8 +27,11 @@ class MiscTest {
             assertNull(localizedCountryName)
         }
 
-        with(retriever.fromTag("it")) {
+        with(retriever.find("it")) {
             assertNotNull(this)
+            assertEquals(this, retriever.fromName("Italian"))
+            assertEquals(this, retriever.find("Italian"))
+            assertEquals(this, retriever.find("iTaLiAn"))
             assertEquals("it", code)
             assertEquals("it", tag)
             assertEquals("italiano", localizedName)
@@ -33,8 +39,10 @@ class MiscTest {
             assertNull(localizedCountryName)
         }
 
-        with(retriever.fromTag("en-US")) {
+        with(retriever.find("en-US")) {
             assertNotNull(this)
+            assertEquals(this, retriever.find("English (United States)"))
+            assertEquals(this, retriever.find("En-us"))
             assertEquals("en", code)
             assertEquals("en-US", tag)
             assertEquals("English (United States)", localizedName)
@@ -42,17 +50,9 @@ class MiscTest {
             assertEquals("United States", localizedCountryName)
         }
 
-        with(retriever.fromTag("En-us")) {
+        with(retriever.find("fr-CA")) {
             assertNotNull(this)
-            assertEquals("en", code)
-            assertEquals("en-US", tag)
-            assertEquals("English (United States)", localizedName)
-            assertEquals("US", countryCode)
-            assertEquals("United States", localizedCountryName)
-        }
-
-        with(retriever.fromTag("fr-CA")) {
-            assertNotNull(this)
+            assertEquals(this, retriever.find("French (Canada)"))
             assertEquals("fr", code)
             assertEquals("fr-CA", tag)
             assertEquals("français (Canada)", localizedName)
@@ -61,6 +61,8 @@ class MiscTest {
         }
 
         assertNull(retriever.fromTag("nonexistent"))
+        assertNull(retriever.fromName("nonexistent"))
+        assertNull(retriever.find("nonexistent"))
 
         assertTrue(retriever.all.iterator().hasNext())
     }

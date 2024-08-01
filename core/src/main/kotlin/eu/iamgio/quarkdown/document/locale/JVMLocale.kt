@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.document.locale
 /**
  * [Locale] implementation using [java.util.Locale].
  */
-internal class JVMLocale(private val jvmLocale: java.util.Locale) : Locale {
+internal data class JVMLocale(private val jvmLocale: java.util.Locale) : Locale {
     override val code: String
         get() = jvmLocale.language
 
