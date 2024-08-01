@@ -21,7 +21,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
-            .value(TemplatePlaceholders.LANGUAGE, "en") // TODO set language
+            .optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
             // "Paged" document rendering via PagesJS.
             .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.

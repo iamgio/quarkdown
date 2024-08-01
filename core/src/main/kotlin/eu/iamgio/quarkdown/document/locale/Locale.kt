@@ -26,4 +26,10 @@ interface Locale {
      * For instance, `United States` for `en-US` and `Italia` for `it`.
      */
     val localizedCountryName: String?
+
+    /**
+     * Tag of the locale.
+     * For instance, `en-US` for US English and `it` for Italian.
+     */
+    val tag: String
 }

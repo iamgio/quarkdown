@@ -18,6 +18,7 @@ class MiscTest {
         with(retriever.fromTag("en")) {
             assertNotNull(this)
             assertEquals("en", code)
+            assertEquals("en", tag)
             assertEquals("English", localizedName)
             assertNull(countryCode)
             assertNull(localizedCountryName)
@@ -26,6 +27,7 @@ class MiscTest {
         with(retriever.fromTag("it")) {
             assertNotNull(this)
             assertEquals("it", code)
+            assertEquals("it", tag)
             assertEquals("italiano", localizedName)
             assertNull(countryCode)
             assertNull(localizedCountryName)
@@ -34,7 +36,17 @@ class MiscTest {
         with(retriever.fromTag("en-US")) {
             assertNotNull(this)
             assertEquals("en", code)
-            assertEquals("English", localizedName)
+            assertEquals("en-US", tag)
+            assertEquals("English (United States)", localizedName)
+            assertEquals("US", countryCode)
+            assertEquals("United States", localizedCountryName)
+        }
+
+        with(retriever.fromTag("En-us")) {
+            assertNotNull(this)
+            assertEquals("en", code)
+            assertEquals("en-US", tag)
+            assertEquals("English (United States)", localizedName)
             assertEquals("US", countryCode)
             assertEquals("United States", localizedCountryName)
         }
@@ -42,7 +54,8 @@ class MiscTest {
         with(retriever.fromTag("fr-CA")) {
             assertNotNull(this)
             assertEquals("fr", code)
-            assertEquals("français", localizedName)
+            assertEquals("fr-CA", tag)
+            assertEquals("français (Canada)", localizedName)
             assertEquals("CA", countryCode)
             assertEquals("Canada", localizedCountryName)
         }

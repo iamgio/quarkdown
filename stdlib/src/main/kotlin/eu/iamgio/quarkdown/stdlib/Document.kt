@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.locale.LocaleLoader
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
@@ -34,6 +35,7 @@ val Document: Module =
         ::docType,
         ::docName,
         ::docAuthor,
+        ::docLanguage,
         ::theme,
         ::pageFormat,
         ::pageMarginContent,
@@ -113,6 +115,28 @@ fun docAuthor(
         author,
         get = { this.author ?: "" },
         set = { this.author = it },
+    )
+
+/**
+ * If [localeTag] is not `null`, it sets the document locale to its value.
+ * If it's `null`, the localized name of the current document locale is returned.
+ * @param localeTag (optional) well-formed, case-insensitive, locale tag to assign to the document. Example: `en-US`, `it`, `fr-CA`
+ * @return the localized name of the current document locale if [localeTag] is `null`
+ * @throws IllegalArgumentException if the locale tag is not invalid or not found
+ */
+@Name("doclang")
+fun docLanguage(
+    @Injected context: Context,
+    @Name("locale") localeTag: String? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        localeTag,
+        get = { this.locale?.localizedName ?: "" },
+        set = {
+            this.locale =
+                LocaleLoader.SYSTEM.fromTag(it)
+                    ?: throw IllegalArgumentException("Locale $it not found")
+        },
     )
 
 /**

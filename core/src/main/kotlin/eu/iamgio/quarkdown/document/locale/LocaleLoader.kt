@@ -15,4 +15,11 @@ interface LocaleLoader {
      * @return [Locale] with the given tag, or `null` if not found
      */
     fun fromTag(tag: String): Locale?
+
+    companion object {
+        /**
+         * Default system [LocaleLoader] implementation.
+         */
+        val SYSTEM: LocaleLoader = JVMLocaleLoader
+    }
 }

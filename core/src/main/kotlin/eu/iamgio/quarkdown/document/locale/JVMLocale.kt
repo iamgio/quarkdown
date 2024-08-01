@@ -11,8 +11,11 @@ internal class JVMLocale(private val jvmLocale: java.util.Locale) : Locale {
         get() = jvmLocale.country.takeIf { it.isNotBlank() }
 
     override val localizedName: String
-        get() = jvmLocale.getDisplayLanguage(jvmLocale)
+        get() = jvmLocale.getDisplayName(jvmLocale)
 
     override val localizedCountryName: String?
         get() = jvmLocale.getDisplayCountry(jvmLocale).takeIf { it.isNotBlank() }
+
+    override val tag: String
+        get() = jvmLocale.toLanguageTag()
 }
