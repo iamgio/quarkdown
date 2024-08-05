@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.test
 
+import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
@@ -14,6 +15,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
@@ -46,11 +48,22 @@ class FullPipelineTest {
                     workingDirectory = File(DATA_FOLDER),
                 ),
                 libraries = setOf(Stdlib.library),
-                renderer = { rendererFactory, context -> rendererFactory.html(context) },
+                renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },
                 hooks,
             )
 
         pipeline.execute(source)
+    }
+
+    @Test
+    fun document() {
+        execute("") {
+            assertEquals("", it)
+            assertIs<AstRoot>(attributes.root)
+            assertFalse(attributes.hasCode)
+            assertFalse(attributes.hasMath)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
     }
 
     @Test
