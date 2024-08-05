@@ -11,7 +11,7 @@ import kotlin.reflect.full.isSubclassOf
 /**
  * Utility for injected argument values.
  * @see FunctionParameter.isInjected
- * @see FunctionArgumentsLinker.generateInjectedLinks
+ * @see eu.iamgio.quarkdown.function.call.binding.InjectedArgumentsBinder
  */
 object InjectedValue {
     /**
