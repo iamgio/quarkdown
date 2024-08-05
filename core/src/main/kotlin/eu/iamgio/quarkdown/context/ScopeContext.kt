@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.context
 
 import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -22,6 +23,9 @@ class ScopeContext(val parent: Context) : MutableContext(
 
     override val options: MutableContextOptions
         get() = parent.options as? MutableContextOptions ?: MutableContextOptions()
+
+    override val attributes: MutableAstAttributes
+        get() = parent.attributes as? MutableAstAttributes ?: parent.attributes.toMutable()
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],

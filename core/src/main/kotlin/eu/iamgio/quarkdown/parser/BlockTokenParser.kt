@@ -83,7 +83,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: BlockCodeToken): Node {
-        context.hasCode = true // Allows code highlighting.
+        context.attributes.hasCode = true // Allows code highlighting.
 
         return Code(
             language = null,
@@ -93,7 +93,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: FencesCodeToken): Node {
-        context.hasCode = true // Allows code highlighting.
+        context.attributes.hasCode = true // Allows code highlighting.
 
         val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
@@ -103,14 +103,14 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: MultilineMathToken): Node {
-        context.hasMath = true
+        context.attributes.hasMath = true
 
         val groups = token.data.groups.iterator(consumeAmount = 3)
         return Math(expression = groups.next().trim())
     }
 
     override fun visit(token: OnelineMathToken): Node {
-        context.hasMath = true
+        context.attributes.hasMath = true
 
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Math(expression = groups.next().trim())

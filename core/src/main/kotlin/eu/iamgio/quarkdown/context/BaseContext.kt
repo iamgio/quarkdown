@@ -21,7 +21,7 @@ import eu.iamgio.quarkdown.pipeline.Pipelines
  * @param libraries loaded libraries to look up functions from
  */
 open class BaseContext(
-    private val attributes: AstAttributes,
+    override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
 ) : Context {
@@ -31,15 +31,6 @@ open class BaseContext(
     override val documentInfo = DocumentInfo()
 
     override val options: ContextOptions = MutableContextOptions()
-
-    override val hasCode: Boolean
-        get() = attributes.hasCode
-
-    override val hasMath: Boolean
-        get() = attributes.hasMath
-
-    override val functionCalls: List<FunctionCallNode>
-        get() = attributes.functionCalls
 
     override fun getFunctionByName(name: String): Function<*>? {
         return libraries.asSequence()

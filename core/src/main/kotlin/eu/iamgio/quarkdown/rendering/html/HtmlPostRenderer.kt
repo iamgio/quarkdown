@@ -27,8 +27,8 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.
             .conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
-            .conditional(TemplatePlaceholders.HAS_CODE, context.hasCode) // HighlightJS is initialized only if needed.
-            .conditional(TemplatePlaceholders.HAS_MATH, context.hasMath) // MathJax is initialized only if needed.
+            .conditional(TemplatePlaceholders.HAS_CODE, context.attributes.hasCode) // HighlightJS is initialized only if needed.
+            .conditional(TemplatePlaceholders.HAS_MATH, context.attributes.hasMath) // MathJax is initialized only if needed.
             // Page format
             .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
             .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())

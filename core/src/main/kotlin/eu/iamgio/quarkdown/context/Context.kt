@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.context
 
+import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.LinkNode
@@ -43,26 +44,14 @@ interface Context {
     val options: ContextOptions
 
     /**
-     * Whether there is at least one code block.
-     * This is used to load the HighlightJS library in HTML rendering.
+     * Information about the node tree that is being processed by the [attachedPipeline].
      */
-    val hasCode: Boolean
-
-    /**
-     * Whether there is at least one math block or inline.
-     * This is used to load the MathJax library in HTML rendering.
-     */
-    val hasMath: Boolean
+    val attributes: AstAttributes
 
     /**
      * Loaded libraries to look up functions from.
      */
     val libraries: Set<Library>
-
-    /**
-     * The function calls to be expanded (executed) in the next stage of the pipeline.
-     */
-    val functionCalls: List<FunctionCallNode>
 
     /**
      * Looks up a function by name.

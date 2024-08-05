@@ -15,12 +15,9 @@ import eu.iamgio.quarkdown.function.library.Library
 open class MutableContext(
     flavor: MarkdownFlavor,
     libraries: Set<Library> = emptySet(),
-    private val attributes: MutableAstAttributes = MutableAstAttributes(),
+    override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
 ) : BaseContext(attributes, flavor, libraries) {
-    override var hasCode: Boolean by attributes::hasCode
-    override var hasMath: Boolean by attributes::hasMath
-
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 
     /**

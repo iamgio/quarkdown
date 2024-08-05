@@ -68,7 +68,7 @@ fun code(
     @Name("focus") focusedLines: Range? = null,
     body: MarkdownContent,
 ): NodeValue {
-    context.hasCode = true // Allows code highlighting.
+    context.attributes.hasCode = true // Allows code highlighting.
     return Code(
         body.children.toPlainText(),
         language,

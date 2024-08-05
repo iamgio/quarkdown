@@ -121,6 +121,8 @@ class Pipeline(
     fun execute(source: CharSequence): OutputResource {
         val tokens = tokenize(source)
         val document = parse(tokens)
+        context.attributes.root = document
+
         expandFunctionCalls(document)
 
         val renderer = this.renderer(context.flavor.rendererFactory, context)
