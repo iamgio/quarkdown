@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.test
 
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
@@ -12,6 +13,8 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
 
@@ -22,20 +25,22 @@ private const val DATA_FOLDER = "src/test/resources/data"
 class FullPipelineTest {
     /**
      * Executes a Quarkdown source.
-     * @param hook action run after rendering
+     * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
      */
     private fun execute(
         source: String,
-        hook: (CharSequence) -> Unit,
+        hook: Context.(CharSequence) -> Unit,
     ) {
+        val context = MutableContext(QuarkdownFlavor)
+
         val hooks =
             PipelineHooks(
-                afterRendering = { hook(it) },
+                afterRendering = { hook(context, it) },
             )
 
         val pipeline =
             Pipeline(
-                MutableContext(QuarkdownFlavor),
+                context,
                 PipelineOptions(
                     errorHandler = StrictPipelineErrorHandler(),
                     workingDirectory = File(DATA_FOLDER),
@@ -98,14 +103,17 @@ class FullPipelineTest {
     fun code() {
         execute("`println(\"Hello, world!\")`") {
             assertEquals("<p><code>println(&quot;Hello, world!&quot;)</code></p>", it)
+            assertFalse(attributes.hasCode)
         }
 
         execute("```\nprintln(\"Hello, world!\")\n```") {
             assertEquals("<pre><code>println(&quot;Hello, world!&quot;)</code></pre>", it)
+            assertTrue(attributes.hasCode)
         }
 
         execute("```kotlin\nprintln(\"Hello, world!\")\n```") {
             assertEquals("<pre><code class=\"language-kotlin\">println(&quot;Hello, world!&quot;)</code></pre>", it)
+            assertTrue(attributes.hasCode)
         }
 
         execute("```kotlin\nfun hello() {\n    println(\"Hello, world!\")\n}\n```") {
@@ -113,6 +121,7 @@ class FullPipelineTest {
                 "<pre><code class=\"language-kotlin\">fun hello() {\n    println(&quot;Hello, world!&quot;)\n}</code></pre>",
                 it,
             )
+            assertTrue(attributes.hasCode)
         }
     }
 
@@ -149,10 +158,12 @@ class FullPipelineTest {
         // TODO add space after $ in the output (= avoid trimming text)
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
             assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
+            assertTrue(attributes.hasMath)
         }
 
         execute("***result***: .sum {3} {.multiply {4} {2}}") {
             assertEquals("<p><em><strong>result</strong></em>: 11</p>", it)
+            assertFalse(attributes.hasMath)
         }
 
         execute(".code\n    .read {code.txt}") {
@@ -160,6 +171,7 @@ class FullPipelineTest {
                 "<pre><code>Line 1${System.lineSeparator()}Line 2${System.lineSeparator()}${System.lineSeparator()}Line 3</code></pre>",
                 it,
             )
+            assertTrue(attributes.hasCode)
         }
     }
 
