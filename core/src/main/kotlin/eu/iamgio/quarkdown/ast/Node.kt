@@ -22,13 +22,16 @@ interface NestableNode : Node {
 }
 
 /**
- * A node that may contain inline content.
+ * A node that may contain inline content as its children.
  */
-interface TextNode : Node {
+interface TextNode : NestableNode {
     /**
      * The text of the node as processed inline content.
      */
     val text: InlineContent
+
+    override val children: List<Node>
+        get() = text
 }
 
 /**

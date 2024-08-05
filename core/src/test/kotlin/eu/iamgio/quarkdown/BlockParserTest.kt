@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.PlainTextNode
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Table
 import eu.iamgio.quarkdown.ast.TaskListItem
@@ -58,8 +59,8 @@ class BlockParserTest {
 
     private val TextNode.rawText: String
         get() {
-            if (text.size == 1) {
-                (text.first() as? Text)?.let {
+            if (children.size == 1) {
+                (children.first() as? PlainTextNode)?.let {
                     return it.text
                 }
             }

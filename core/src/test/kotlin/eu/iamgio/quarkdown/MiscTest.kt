@@ -1,6 +1,14 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.BlockQuote
+import eu.iamgio.quarkdown.ast.Code
+import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.Strong
+import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
+import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import kotlin.test.Test
@@ -11,6 +19,46 @@ import kotlin.test.assertNull
  * Tests for miscellaneous classes.
  */
 class MiscTest {
+    @Test
+    fun treeVisit() {
+        val node =
+            AstRoot(
+                listOf(
+                    BlockQuote(
+                        listOf(
+                            Paragraph(listOf(Text("abc"))),
+                        ),
+                    ),
+                    Paragraph(
+                        listOf(
+                            Strong(listOf(Text("abc"))),
+                            Text("def"),
+                            Emphasis(listOf(Text("ghi"))),
+                        ),
+                    ),
+                    Code("Hello, world!", language = "java"),
+                ),
+            )
+
+        with(node.flattenedChildren().map { it::class.simpleName }.toList()) {
+            assertEquals(
+                listOf(
+                    "BlockQuote",
+                    "Paragraph",
+                    "Text",
+                    "Paragraph",
+                    "Strong",
+                    "Text",
+                    "Text",
+                    "Emphasis",
+                    "Text",
+                    "Code",
+                ),
+                this,
+            )
+        }
+    }
+
     @Test
     fun locale() {
         val retriever = JVMLocaleLoader
