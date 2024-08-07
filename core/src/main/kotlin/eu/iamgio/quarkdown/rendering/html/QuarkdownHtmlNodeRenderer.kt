@@ -24,6 +24,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.enableAutomaticIdentifiers
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -240,7 +241,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Heading): String {
         val headingTag =
             tagBuilder("h${node.depth}", node.text)
-                .attribute("id", HtmlIdentifierProvider.of(renderer = this).getId(node))
+                .optionalAttribute(
+                    "id",
+                    // Generate an automatic identifier if allowed by settings.
+                    HtmlIdentifierProvider.of(renderer = this)
+                        .takeIf { context.enableAutomaticIdentifiers }
+                        ?.getId(node),
+                )
                 .build()
 
         return if (context.shouldAutoPageBreak(node)) {

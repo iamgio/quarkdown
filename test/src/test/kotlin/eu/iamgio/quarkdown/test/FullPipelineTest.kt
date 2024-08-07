@@ -44,6 +44,7 @@ class FullPipelineTest {
             Pipeline(
                 context,
                 PipelineOptions(
+                    enableAutomaticIdentifiers = false,
                     errorHandler = StrictPipelineErrorHandler(),
                     workingDirectory = File(DATA_FOLDER),
                 ),
