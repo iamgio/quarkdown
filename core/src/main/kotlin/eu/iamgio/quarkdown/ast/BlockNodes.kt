@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.ast.id.Identifiable
+import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
@@ -49,13 +51,16 @@ class HorizontalRule : Node {
 
 /**
  * A heading defined via prefix symbols.
+ * A heading is identifiable, as it can be looked up in the document and can be referenced.
  * @param depth importance (`depth=1` for H1, `depth=6` for H6)
  */
 data class Heading(
     val depth: Int,
     override val text: InlineContent,
-) : TextNode {
+) : TextNode, Identifiable {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
 }
 
 /**

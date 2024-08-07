@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
+import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.Box
 import eu.iamgio.quarkdown.ast.quarkdown.Clipped
@@ -119,6 +120,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
+    // A table of contents is rendered as an ordered list.
     private fun tableOfContentsItemsToList(items: List<TableOfContents.Item>) =
         OrderedList(
             startIndex = 1,
@@ -135,11 +137,12 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         buildTag("a") {
             +node.text
 
-            // TODO link to node.target
-
             if (node.children.isNotEmpty()) {
                 +visit(tableOfContentsItemsToList(node.subItems))
             }
+
+            // Link to the target anchor (e.g. a heading).
+            attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
         }
 
     // Inline
@@ -232,9 +235,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Additional behavior of base nodes
 
-    // A heading could force an automatic page break if suitable.
+    // On top of the default behavior, an anchor ID is set,
+    // and it could force an automatic page break if suitable.
     override fun visit(node: Heading): String {
-        val headingTag = super.visit(node)
+        val headingTag =
+            tagBuilder("h${node.depth}", node.text)
+                .attribute("id", HtmlIdentifierProvider.of(renderer = this).getId(node))
+                .build()
+
         return if (context.shouldAutoPageBreak(node)) {
             visit(PageBreak()) + headingTag
         } else {

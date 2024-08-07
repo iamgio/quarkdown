@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.TextNode
+import eu.iamgio.quarkdown.ast.id.Identifiable
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.util.findAll
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
@@ -18,12 +19,12 @@ data class TableOfContents(val items: List<Item>) : Node {
     /**
      * An item in the table of contents, usually associated to a section of the document.
      * @param text text of the item
-     * @param target node the item links to
+     * @param target element the item links to
      * @param subItems nested items
      */
     data class Item(
         override val text: InlineContent,
-        val target: Node,
+        val target: Identifiable,
         val subItems: List<Item> = emptyList(),
     ) : TextNode {
         /**
