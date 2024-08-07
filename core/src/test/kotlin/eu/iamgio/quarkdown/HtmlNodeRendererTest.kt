@@ -363,9 +363,18 @@ class HtmlNodeRendererTest {
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null, showLineNumbers = true).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", showLineNumbers = false).render())
         assertEquals(out.next(), Code("<a href=\"#\">", language = "html", showLineNumbers = true).render())
-        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(1, 2)).render())
-        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(2, null)).render())
-        assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(null, 1)).render())
+        assertEquals(
+            out.next(),
+            Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(1, 2)).render(),
+        )
+        assertEquals(
+            out.next(),
+            Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(2, null)).render(),
+        )
+        assertEquals(
+            out.next(),
+            Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(null, 1)).render(),
+        )
     }
 
     @Test
@@ -382,15 +391,31 @@ class HtmlNodeRendererTest {
     fun heading() {
         val out = readParts("block/heading.html")
 
-        val noPageBreak = MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 0))
+        // No automatic ID, no automatic page break.
+        val noIdNoPageBreak =
+            MutableContext(
+                QuarkdownFlavor,
+                options = MutableContextOptions(autoPageBreakHeadingDepth = 0, enableAutomaticIdentifiers = false),
+            )
 
-        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noPageBreak))
-        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noPageBreak))
-        assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noPageBreak))
-        assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noPageBreak))
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
+        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
+        assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noIdNoPageBreak))
+        assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noIdNoPageBreak))
 
-        // Force page break on depth <= 2
-        val autoPageBreak = MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 2))
+        // Automatic ID, no automatic page break.
+        val idNoPageBreak =
+            MutableContext(
+                QuarkdownFlavor,
+                options = MutableContextOptions(autoPageBreakHeadingDepth = 0),
+            )
+
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(idNoPageBreak))
+        assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(idNoPageBreak))
+
+        // Automatic ID, force page break on depth <= 2
+        val autoPageBreak =
+            MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 2))
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(autoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(autoPageBreak))

@@ -4,7 +4,6 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.toPlainText
-import java.net.URLEncoder
 
 /**
  * Provides identifiers for elements suitable for HTML rendering.
@@ -13,14 +12,14 @@ import java.net.URLEncoder
  */
 class HtmlIdentifierProvider private constructor(private val renderer: NodeRenderer) : IdentifierProvider<String> {
     /**
-     * Converts [this] string to a URI-like string.
-     * Example: "Hello, World!" -> "hello-world%21"
+     * Converts [this] string to a URI-like string removing special characters and replacing spaces with dashes.
+     * Example: "Hello, World!" -> "hello-world"
      * @return URI-like string
      */
     private fun String.toURIString() =
         this.lowercase()
             .replace(" ", "-")
-            .let { URLEncoder.encode(it, Charsets.UTF_8.name())!! }
+            .replace("[^a-z0-9-]".toRegex(), "")
 
     override fun visit(heading: Heading) = heading.text.toPlainText(renderer).toURIString()
 

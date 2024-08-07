@@ -8,8 +8,13 @@ import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
+import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
 import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -59,6 +64,14 @@ class MiscTest {
                 this,
             )
         }
+    }
+
+    @Test
+    fun identifiers() {
+        val provider = HtmlIdentifierProvider.of(QuarkdownHtmlNodeRenderer(MutableContext(QuarkdownFlavor)))
+        assertEquals("abc", provider.getId(Heading(1, listOf(Text("Abc")))))
+        assertEquals("abc-def", provider.getId(Heading(1, listOf(Strong(listOf(Text("Abc Def")))))))
+        assertEquals("hello-world", provider.getId(Heading(1, listOf(Text("Hello, World!")))))
     }
 
     @Test
