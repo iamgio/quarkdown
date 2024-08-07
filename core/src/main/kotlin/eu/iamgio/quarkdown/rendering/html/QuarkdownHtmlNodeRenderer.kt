@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.BaseListItem
 import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Heading
@@ -8,6 +9,7 @@ import eu.iamgio.quarkdown.ast.Image
 import eu.iamgio.quarkdown.ast.Math
 import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.OrderedList
 import eu.iamgio.quarkdown.ast.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.Box
@@ -17,6 +19,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -113,6 +116,29 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             style {
                 "width" value node.width
                 "height" value node.height
+            }
+        }
+
+    private fun tableOfContentsItemsToList(items: List<TableOfContents.Item>) =
+        OrderedList(
+            startIndex = 1,
+            isLoose = true,
+            children = items.map { BaseListItem(listOf(it)) },
+        )
+
+    override fun visit(node: TableOfContents) =
+        div("table-of-contents") {
+            +visit(tableOfContentsItemsToList(node.items))
+        }
+
+    override fun visit(node: TableOfContents.Item) =
+        buildTag("a") {
+            +node.text
+
+            // TODO link to node.target
+
+            if (node.children.isNotEmpty()) {
+                +visit(tableOfContentsItemsToList(node.subItems))
             }
         }
 

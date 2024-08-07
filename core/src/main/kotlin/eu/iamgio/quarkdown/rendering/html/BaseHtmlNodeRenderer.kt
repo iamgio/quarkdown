@@ -41,6 +41,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -255,6 +256,10 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
     override fun visit(node: Box): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Whitespace): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: TableOfContents): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: TableOfContents.Item): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 

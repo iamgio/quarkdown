@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Text
 import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentInfo
@@ -43,6 +44,7 @@ val Document: Module =
         ::pageCounter,
         ::autoPageBreak,
         ::disableAutoPageBreak,
+        ::tableOfContents,
     )
 
 /**
@@ -294,3 +296,14 @@ fun autoPageBreak(
 fun disableAutoPageBreak(
     @Injected context: MutableContext,
 ) = autoPageBreak(context, 0)
+
+/**
+ * Generates a table of contents for the document.
+ * @param maxDepth maximum depth of the table of contents
+ * @return a wrapped [TableOfContents] node
+ */
+@Name("tableofcontents")
+fun tableOfContents(
+    @Injected context: Context,
+    @Name("maxdepth") maxDepth: Int = 3,
+): NodeValue = TableOfContents.generate(context, maxDepth).wrappedAsValue()

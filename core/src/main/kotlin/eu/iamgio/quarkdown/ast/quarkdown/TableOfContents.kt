@@ -3,24 +3,37 @@ package eu.iamgio.quarkdown.ast.quarkdown
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.util.findAll
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- *
+ * A summary of the document's structure. Each item links to a section.
+ * @param items root sections in the document
  */
-data class TableOfContents(val items: List<Item>)/* : Node*/ {
-    // override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+data class TableOfContents(val items: List<Item>) : Node {
+    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 
+    /**
+     * An item in the table of contents, usually associated to a section of the document.
+     * @param text text of the item
+     * @param target node the item links to
+     * @param subItems nested items
+     */
     data class Item(
-        // override
-        val text: InlineContent,
+        override val text: InlineContent,
         val target: Node,
         val subItems: List<Item> = emptyList(),
-    ) /*: TextNode*/ {
+    ) : TextNode {
+        /**
+         * Shorthand constructor for creating an item from a heading.
+         * @param heading heading to create the item from
+         * @param subItems nested items
+         */
         constructor(heading: Heading, subItems: List<Item> = emptyList()) : this(heading.text, heading, subItems)
 
-        // override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+        override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
     }
 
     companion object {
@@ -29,19 +42,23 @@ data class TableOfContents(val items: List<Item>)/* : Node*/ {
          *
          * Example:
          *
+         * ```
          * H1 ABC
          * H2 DEF
          * H2 GHI
          * H3 JKL
          * H2 MNO
          * H1 PQR
+         * ```
          * Should generate:
+         * ```
          * - ABC
          *   - DEF
          *   - GHI
          *     - JKL
          *   - MNO
          * - PQR
+         * ```
          *
          * @param headings flat sequence of headings
          * @param maxDepth maximum depth of headings to include in the table of contents
@@ -81,20 +98,20 @@ data class TableOfContents(val items: List<Item>)/* : Node*/ {
 
             return TableOfContents(result)
         }
-    }
 
-    /**
-     * Generates a table of contents from the headings present in [context]'s document.
-     * @see generate
-     */
-    fun generate(
-        context: Context,
-        maxDepth: Int,
-    ): TableOfContents {
-        val headings =
-            context.attributes.root?.findAll<Heading>()
-                ?: return TableOfContents(emptyList())
+        /**
+         * Generates a table of contents from the headings present in [context]'s document.
+         * @see generate
+         */
+        fun generate(
+            context: Context,
+            maxDepth: Int,
+        ): TableOfContents {
+            val headings =
+                context.attributes.root?.findAll<Heading>()
+                    ?: return TableOfContents(emptyList())
 
-        return generate(headings, maxDepth)
+            return generate(headings, maxDepth)
+        }
     }
 }
