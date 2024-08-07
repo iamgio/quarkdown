@@ -3,52 +3,98 @@ package eu.iamgio.quarkdown.ast.quarkdown
 import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.TextNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.util.findAll
-import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  *
  */
-data class TableOfContents(val items: List<Item>) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+data class TableOfContents(val items: List<Item>)/* : Node*/ {
+    // override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 
     data class Item(
-        override val text: InlineContent,
+        // override
+        val text: InlineContent,
         val target: Node,
         val subItems: List<Item> = emptyList(),
-    ) : TextNode {
+    ) /*: TextNode*/ {
         constructor(heading: Heading, subItems: List<Item> = emptyList()) : this(heading.text, heading, subItems)
 
-        override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+        // override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
     }
 
     companion object {
+        /**
+         * Generates a table of contents from a flat sequence of headings, based on their depth.
+         *
+         * Example:
+         *
+         * H1 ABC
+         * H2 DEF
+         * H2 GHI
+         * H3 JKL
+         * H2 MNO
+         * H1 PQR
+         * Should generate:
+         * - ABC
+         *   - DEF
+         *   - GHI
+         *     - JKL
+         *   - MNO
+         * - PQR
+         *
+         * @param headings flat sequence of headings
+         * @param maxDepth maximum depth of headings to include in the table of contents
+         * @return the generated table of contents
+         */
         fun generate(
-            context: Context,
-            headingDepthThreshold: Int,
+            headings: Sequence<Heading>,
+            maxDepth: Int,
         ): TableOfContents {
-            val headings =
-                context.attributes.root?.findAll<Heading>()
-                    ?.filter { it.depth <= headingDepthThreshold }
-                    ?: return TableOfContents(emptyList())
+            /**
+             * Helper function to add a heading into the correct place in the hierarchy.
+             * @param hierarchy the current hierarchy
+             * @param item the item to add
+             * @param depth depth of the item to add
+             */
+            fun addItemToHierarchy(
+                hierarchy: List<Item>,
+                item: Item,
+                depth: Int,
+            ): List<Item> {
+                if (depth == 1 || hierarchy.isEmpty()) {
+                    return hierarchy + item
+                }
 
-            // H1 ABC
-            // H2 DEF
-            // H2 GHI
-            // H3 JKL
-            // H2 MNO
-            // H1 PQR
-            // Must generate:
-            // - ABC
-            //   - DEF
-            //   - GHI
-            //     - JKL
-            //   - MNO
-            // - PQR
+                val parent = hierarchy.last()
+                val newSubItems = addItemToHierarchy(parent.subItems, item, depth - 1)
+                return hierarchy.dropLast(1) + parent.copy(subItems = newSubItems)
+            }
 
-            TODO()
+            // Fold through headings to build the hierarchy via an accumulator.
+            val result =
+                headings
+                    .filter { it.depth <= maxDepth }
+                    .fold(emptyList<Item>()) { accumulator, heading ->
+                        addItemToHierarchy(accumulator, Item(heading), heading.depth)
+                    }
+
+            return TableOfContents(result)
         }
+    }
+
+    /**
+     * Generates a table of contents from the headings present in [context]'s document.
+     * @see generate
+     */
+    fun generate(
+        context: Context,
+        maxDepth: Int,
+    ): TableOfContents {
+        val headings =
+            context.attributes.root?.findAll<Heading>()
+                ?: return TableOfContents(emptyList())
+
+        return generate(headings, maxDepth)
     }
 }

@@ -4,9 +4,11 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.BlockQuote
 import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.Emphasis
+import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.Paragraph
 import eu.iamgio.quarkdown.ast.Strong
 import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
@@ -57,6 +59,80 @@ class MiscTest {
                 this,
             )
         }
+    }
+
+    @Test
+    fun tableOfContents() {
+        val headings1 =
+            sequenceOf(
+                Heading(1, listOf(Text("ABC"))),
+                Heading(2, listOf(Text("DEF"))),
+                Heading(2, listOf(Text("GHI"))),
+                Heading(3, listOf(Text("JKL"))),
+                Heading(2, listOf(Text("MNO"))),
+                Heading(1, listOf(Text("PQR"))),
+            )
+
+        TableOfContents.generate(headings1, maxDepth = 3).let { toc ->
+            assertEquals(2, toc.items.size)
+            assertEquals(3, toc.items[0].subItems.size)
+            assertEquals(1, toc.items[0].subItems[1].subItems.size)
+
+            assertEquals(Text("ABC"), toc.items[0].text.first())
+            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+            assertEquals(Text("JKL"), toc.items[0].subItems[1].subItems[0].text.first())
+            assertEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
+            assertEquals(Text("PQR"), toc.items[1].text.first())
+        }
+
+        TableOfContents.generate(headings1, maxDepth = 2).let { toc ->
+            assertEquals(2, toc.items.size)
+
+            assertEquals(Text("ABC"), toc.items[0].text.first())
+            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+            assertTrue(toc.items[0].subItems[1].subItems.isEmpty())
+            assertEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
+            assertEquals(Text("PQR"), toc.items[1].text.first())
+        }
+
+        val headings2 =
+            sequenceOf(
+                Heading(1, listOf(Text("ABC"))),
+                Heading(3, listOf(Text("DEF"))),
+                Heading(2, listOf(Text("GHI"))),
+            )
+
+        TableOfContents.generate(headings2, maxDepth = 3).let { toc ->
+            assertEquals(1, toc.items.size)
+            assertEquals(2, toc.items[0].subItems.size)
+
+            assertEquals(Text("ABC"), toc.items[0].text.first())
+            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+        }
+
+        /*
+        val headings3 =
+            sequenceOf(
+                Heading(2, listOf(Text("ABC"))),
+                Heading(3, listOf(Text("DEF"))),
+                Heading(2, listOf(Text("GHI"))),
+                Heading(1, listOf(Text("JKL"))),
+            )
+
+        TableOfContents.generate(headings3, maxDepth = 3).let { toc ->
+            println(toc.items[0].subItems)
+            assertEquals(3, toc.items.size)
+            assertEquals(1, toc.items[0].subItems.size)
+
+            assertEquals(Text("ABC"), toc.items[0].text.first())
+            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertEquals(Text("GHI"), toc.items[1].text.first())
+            assertEquals(Text("JKL"), toc.items[1].text.first())
+        }
+         */
     }
 
     @Test
