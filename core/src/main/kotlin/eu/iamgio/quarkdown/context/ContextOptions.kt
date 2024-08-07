@@ -11,6 +11,14 @@ interface ContextOptions {
      * When a [Heading] node has a depth equals or less than this value, a page break is forced.
      */
     val autoPageBreakHeadingDepth: Int
+
+    /**
+     * Whether automatic identifiers should be generated for elements
+     * that do not have an explicit one.
+     * For example, a heading element (`# Hello world`) automatically generates
+     * an identifier (`hello-world`) that can be referenced by other elements.
+     */
+    val enableAutomaticIdentifiers: Boolean
 }
 
 /**
@@ -24,4 +32,5 @@ fun Context.shouldAutoPageBreak(heading: Heading) = heading.depth <= this.option
  */
 data class MutableContextOptions(
     override var autoPageBreakHeadingDepth: Int = 1,
+    override var enableAutomaticIdentifiers: Boolean = true,
 ) : ContextOptions

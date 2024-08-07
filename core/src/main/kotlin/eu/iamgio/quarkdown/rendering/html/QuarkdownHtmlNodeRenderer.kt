@@ -24,7 +24,6 @@ import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
 import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
 import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.context.enableAutomaticIdentifiers
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -245,7 +244,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     "id",
                     // Generate an automatic identifier if allowed by settings.
                     HtmlIdentifierProvider.of(renderer = this)
-                        .takeIf { context.enableAutomaticIdentifiers }
+                        .takeIf { context.options.enableAutomaticIdentifiers }
                         ?.getId(node),
                 )
                 .build()

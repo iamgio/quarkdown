@@ -89,15 +89,6 @@ interface Context {
 }
 
 /**
- * Whether automatic identifiers should be generated for elements that do not have an explicit one.
- * For example, a heading element (`# Hello world`) automatically generates
- * an identifier (`hello-world`) that can be referenced by other elements.
- * @see eu.iamgio.quarkdown.pipeline.PipelineOptions.enableAutomaticIdentifiers
- */
-val Context.enableAutomaticIdentifiers: Boolean
-    get() = attachedPipeline?.options?.enableAutomaticIdentifiers ?: true
-
-/**
  * @param reference reference link to lookup
  * @return the corresponding looked up link node if it exists, its fallback node otherwise
  */

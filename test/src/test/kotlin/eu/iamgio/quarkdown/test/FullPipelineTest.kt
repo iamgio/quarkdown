@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.test
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.MutableContextOptions
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -33,7 +34,11 @@ class FullPipelineTest {
         source: String,
         hook: Context.(CharSequence) -> Unit,
     ) {
-        val context = MutableContext(QuarkdownFlavor)
+        val context =
+            MutableContext(
+                QuarkdownFlavor,
+                options = MutableContextOptions(enableAutomaticIdentifiers = false),
+            )
 
         val hooks =
             PipelineHooks(
@@ -44,7 +49,6 @@ class FullPipelineTest {
             Pipeline(
                 context,
                 PipelineOptions(
-                    enableAutomaticIdentifiers = false,
                     errorHandler = StrictPipelineErrorHandler(),
                     workingDirectory = File(DATA_FOLDER),
                 ),
