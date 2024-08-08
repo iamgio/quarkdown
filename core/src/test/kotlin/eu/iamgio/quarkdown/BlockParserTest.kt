@@ -136,14 +136,21 @@ class BlockParserTest {
         repeat(3) {
             with(nodes.next()) {
                 assertEquals("Title 1", rawText)
+                assertNull(customId)
                 assertEquals(1, depth)
             }
         }
         repeat(3) {
             with(nodes.next()) {
                 assertEquals("Title 2", rawText)
+                assertNull(customId)
                 assertEquals(2, depth)
             }
+        }
+        with(nodes.next()) {
+            assertEquals("Title with ID", rawText)
+            assertEquals("my-id", customId)
+            assertEquals(1, depth)
         }
     }
 

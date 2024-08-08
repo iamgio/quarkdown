@@ -120,18 +120,30 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         return HorizontalRule()
     }
 
-    override fun visit(token: HeadingToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        val depth = groups.next().length // Amount of # characters.
-        var text = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
-
-        // Custom ID: trailing {#custom-id}.
+    /**
+     * Splits a heading text and its custom ID from a raw text.
+     * `# Heading {#custom-id}` -> `Heading`, `custom-id`
+     * @param text heading text
+     * @return a pair of the heading text and its custom ID
+     */
+    private fun splitHeadingTextAndId(text: String): Pair<String, String?> {
         val customIdMatch = "\\s+\\{#([^}]+)}\$".toRegex().find(text)
         val customId = customIdMatch?.groupValues?.get(1) // {#custom-id} -> custom-id
 
         // Trim the custom ID from the text.
-        customIdMatch?.let { text = text.removeSuffix(it.value) }
+        val trimmedText = customIdMatch?.let { text.removeSuffix(it.value) } ?: text
+
+        return trimmedText to customId
+    }
+
+    override fun visit(token: HeadingToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        val depth = groups.next().length // Amount of # characters.
+
+        val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
+        // # Heading {#custom-id} -> Heading, custom-id
+        val (text, customId) = splitHeadingTextAndId(rawText)
 
         return Heading(
             depth,
@@ -142,14 +154,20 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: SetextHeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        val rawText = groups.next().trim()
+        // # Heading {#custom-id} -> Heading, custom-id
+        val (text, customId) = splitHeadingTextAndId(rawText)
+
         return Heading(
-            text = groups.next().trim().toInline(),
+            text = text.toInline(),
             depth =
                 when (groups.next().firstOrNull()) {
                     '=' -> 1
                     '-' -> 2
                     else -> throw IllegalStateException("Invalid setext heading characters") // Should not happen
                 },
+            customId = customId,
         )
     }
 
