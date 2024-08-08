@@ -139,3 +139,9 @@ h1, h2, h3, h4, h5, h6 {
 .stack > p, .clip > p {
     margin: 0;
 }
+
+.table-of-contents li a::after {
+    /* TOC page counter on supported targets */
+    content: target-counter(attr(href), page);
+    float: right;
+}

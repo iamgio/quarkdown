@@ -133,17 +133,22 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +visit(tableOfContentsItemsToList(node.items))
         }
 
-    override fun visit(node: TableOfContents.Item) =
-        buildTag("a") {
-            +node.text
+    override fun visit(node: TableOfContents.Item): CharSequence {
+        val link =
+            buildTag("a") {
+                +node.text
 
-            if (node.children.isNotEmpty()) {
-                +visit(tableOfContentsItemsToList(node.subItems))
+                // Link to the target anchor (e.g. a heading).
+                attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
             }
 
-            // Link to the target anchor (e.g. a heading).
-            attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
+        // Recursively render sub-items.
+        return if (node.subItems.isNotEmpty()) {
+            link + visit(tableOfContentsItemsToList(node.subItems))
+        } else {
+            link
         }
+    }
 
     // Inline
 
