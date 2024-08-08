@@ -122,7 +122,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     /**
      * Splits a heading text and its custom ID from a raw text.
-     * `# Heading {#custom-id}` -> `Heading`, `custom-id`
+     * `Heading {#custom-id}` -> `Heading`, `custom-id`
      * @param text heading text
      * @return a pair of the heading text and its custom ID
      */
@@ -142,7 +142,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         val depth = groups.next().length // Amount of # characters.
 
         val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
-        // # Heading {#custom-id} -> Heading, custom-id
+        // Heading {#custom-id} -> Heading, custom-id
         val (text, customId) = splitHeadingTextAndId(rawText)
 
         return Heading(
@@ -156,7 +156,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
         val rawText = groups.next().trim()
-        // # Heading {#custom-id} -> Heading, custom-id
+        // Heading {#custom-id} -> Heading, custom-id
         val (text, customId) = splitHeadingTextAndId(rawText)
 
         return Heading(
