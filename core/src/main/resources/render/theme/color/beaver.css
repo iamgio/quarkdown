@@ -6,8 +6,8 @@
     --secondary: rgb(236, 236, 236);
     --tertiary: rgb(216, 216, 216);
 
-    --r-background-color: white;
-    --r-link-color: var(--primary);
+    --qd-background-color: white;
+    --qd-link-color: var(--primary);
 }
 
 h1, h2 {

@@ -4,7 +4,6 @@
 
 :root {
     --reveal-center-vertically: false;
-    --r-main-font-size: 1em;
 }
 
 .reveal .slides > section {
