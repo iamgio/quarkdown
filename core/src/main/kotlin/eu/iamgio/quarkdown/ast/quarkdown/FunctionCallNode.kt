@@ -1,5 +1,7 @@
-package eu.iamgio.quarkdown.ast
+package eu.iamgio.quarkdown.ast.quarkdown
 
+import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor

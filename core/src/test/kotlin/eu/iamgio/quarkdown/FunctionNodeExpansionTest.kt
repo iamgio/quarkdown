@@ -1,15 +1,15 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.CheckBox
-import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.PlainTextNode
-import eu.iamgio.quarkdown.ast.Strong
-import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.ast.quarkdown.Aligned
-import eu.iamgio.quarkdown.ast.quarkdown.Box
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
+import eu.iamgio.quarkdown.ast.base.block.Paragraph
+import eu.iamgio.quarkdown.ast.base.inline.CheckBox
+import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
+import eu.iamgio.quarkdown.ast.base.inline.Strong
+import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor

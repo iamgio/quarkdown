@@ -1,15 +1,15 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.BlockQuote
-import eu.iamgio.quarkdown.ast.Code
-import eu.iamgio.quarkdown.ast.Emphasis
-import eu.iamgio.quarkdown.ast.Heading
-import eu.iamgio.quarkdown.ast.Paragraph
-import eu.iamgio.quarkdown.ast.Strong
-import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
+import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.ast.base.block.Paragraph
+import eu.iamgio.quarkdown.ast.base.inline.Emphasis
+import eu.iamgio.quarkdown.ast.base.inline.Strong
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
-import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor

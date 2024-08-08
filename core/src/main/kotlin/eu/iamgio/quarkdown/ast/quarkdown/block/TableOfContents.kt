@@ -1,9 +1,9 @@
-package eu.iamgio.quarkdown.ast.quarkdown
+package eu.iamgio.quarkdown.ast.quarkdown.block
 
-import eu.iamgio.quarkdown.ast.Heading
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.TextNode
+import eu.iamgio.quarkdown.ast.base.TextNode
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.id.Identifiable
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.util.findAll

@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.toPlainText

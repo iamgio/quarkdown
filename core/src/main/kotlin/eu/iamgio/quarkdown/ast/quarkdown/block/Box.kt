@@ -1,10 +1,10 @@
-package eu.iamgio.quarkdown.ast.quarkdown
+package eu.iamgio.quarkdown.ast.quarkdown.block
 
-import eu.iamgio.quarkdown.ast.CodeSpan
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor

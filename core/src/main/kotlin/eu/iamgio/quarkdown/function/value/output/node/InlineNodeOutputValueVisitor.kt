@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.function.value.output.node
 
-import eu.iamgio.quarkdown.ast.CheckBox
-import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.base.inline.CheckBox
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NumberValue

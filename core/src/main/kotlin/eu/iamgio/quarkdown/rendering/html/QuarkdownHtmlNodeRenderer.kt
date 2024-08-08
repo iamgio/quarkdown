@@ -1,28 +1,28 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.BaseListItem
-import eu.iamgio.quarkdown.ast.CodeSpan
-import eu.iamgio.quarkdown.ast.FunctionCallNode
-import eu.iamgio.quarkdown.ast.Heading
-import eu.iamgio.quarkdown.ast.Image
-import eu.iamgio.quarkdown.ast.Math
-import eu.iamgio.quarkdown.ast.MathSpan
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.OrderedList
-import eu.iamgio.quarkdown.ast.PageBreak
+import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.ast.base.block.OrderedList
+import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
+import eu.iamgio.quarkdown.ast.base.inline.Image
 import eu.iamgio.quarkdown.ast.id.getId
-import eu.iamgio.quarkdown.ast.quarkdown.Aligned
-import eu.iamgio.quarkdown.ast.quarkdown.Box
-import eu.iamgio.quarkdown.ast.quarkdown.Clipped
-import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
-import eu.iamgio.quarkdown.ast.quarkdown.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
-import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
-import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Box
+import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Math
+import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
+import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
+import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.document.DocumentType
@@ -192,7 +192,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 children =
                     when (context.documentInfo.type) {
                         DocumentType.PAGED ->
-                            // Handled by PagedJS' CSS content property.
+                            // Handled by PagedJS CSS content property.
                             node.content(
                                 "\"counter(page)\"",
                                 "\"counter(pages)\"",

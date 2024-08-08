@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.BlockText
+import eu.iamgio.quarkdown.ast.base.block.BlockText
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.ScopeContext
 import eu.iamgio.quarkdown.function.FunctionParameter

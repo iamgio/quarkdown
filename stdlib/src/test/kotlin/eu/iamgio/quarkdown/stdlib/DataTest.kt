@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range

@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.ast.id
 
-import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.base.block.Heading
 
 /**
  * An element that can be identified by a unique identifier, referenced and located by other elements in a document.

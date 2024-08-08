@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.function.value.output.node
 
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.Paragraph
+import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NumberValue

@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.ast
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- * The AST root.
+ * The root of a node tree.
  */
 data class AstRoot(
     override val children: List<Node>,

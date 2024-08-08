@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.quarkdown.SlidesConfigurationInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
+import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.document.slides.Transition
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue

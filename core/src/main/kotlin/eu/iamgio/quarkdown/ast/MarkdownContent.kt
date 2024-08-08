@@ -2,8 +2,7 @@ package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
-// Nodes that aren't parsed from the source Markdown input,
-// but rather returned from and/or handled by Quarkdown functions.
+// Utility nodes that are used as input in Quarkdown functions to expect Markdown data as an argument.
 
 /**
  * A generic group of block nodes used as input for Quarkdown functions.

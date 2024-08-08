@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.quarkdown.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor

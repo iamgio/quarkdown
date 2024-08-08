@@ -2,12 +2,12 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.ast.quarkdown.Aligned
-import eu.iamgio.quarkdown.ast.quarkdown.Box
-import eu.iamgio.quarkdown.ast.quarkdown.Clipped
-import eu.iamgio.quarkdown.ast.quarkdown.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.Whitespace
+import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Box
+import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.function.reflect.Injected

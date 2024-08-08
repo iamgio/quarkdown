@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.context
 
 import eu.iamgio.quarkdown.ast.AstAttributes
-import eu.iamgio.quarkdown.ast.FunctionCallNode
-import eu.iamgio.quarkdown.ast.Link
-import eu.iamgio.quarkdown.ast.LinkNode
-import eu.iamgio.quarkdown.ast.ReferenceLink
+import eu.iamgio.quarkdown.ast.base.LinkNode
+import eu.iamgio.quarkdown.ast.base.inline.Link
+import eu.iamgio.quarkdown.ast.base.inline.ReferenceLink
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.Function

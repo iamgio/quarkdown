@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.rendering.tag
 
-import eu.iamgio.quarkdown.ast.CriticalContent
+import eu.iamgio.quarkdown.ast.base.inline.CriticalContent
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 

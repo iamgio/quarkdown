@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.ast
 
+import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [eu.iamgio.quarkdown.context.Context].
  * @see eu.iamgio.quarkdown.context.Context

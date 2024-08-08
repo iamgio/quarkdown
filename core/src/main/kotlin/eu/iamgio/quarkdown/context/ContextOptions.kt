@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.context
 
-import eu.iamgio.quarkdown.ast.Heading
+import eu.iamgio.quarkdown.ast.base.block.Heading
 
 /**
  * Read-only properties that affect several behaviors,

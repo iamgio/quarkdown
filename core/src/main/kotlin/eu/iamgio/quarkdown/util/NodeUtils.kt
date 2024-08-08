@@ -1,11 +1,11 @@
 package eu.iamgio.quarkdown.util
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.CriticalContent
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.PlainTextNode
+import eu.iamgio.quarkdown.ast.base.inline.CriticalContent
+import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**

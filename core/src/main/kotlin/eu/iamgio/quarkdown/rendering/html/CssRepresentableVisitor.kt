@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.rendering.html
 
-import eu.iamgio.quarkdown.ast.quarkdown.Clipped
-import eu.iamgio.quarkdown.ast.quarkdown.SlidesFragment
-import eu.iamgio.quarkdown.ast.quarkdown.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
+import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
+import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes

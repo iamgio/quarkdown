@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.context
 
-import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.MutableAstAttributes
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.pipeline.Pipeline

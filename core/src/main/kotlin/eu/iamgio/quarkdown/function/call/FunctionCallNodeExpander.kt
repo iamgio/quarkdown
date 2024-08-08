@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.function.call
 
-import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.quarkdown.Box
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitorFactory

@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.Code
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.quarkdown.TextTransform
-import eu.iamgio.quarkdown.ast.quarkdown.TextTransformData
+import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name

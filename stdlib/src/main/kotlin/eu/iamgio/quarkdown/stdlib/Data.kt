@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.stdlib
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import eu.iamgio.quarkdown.ast.Table
-import eu.iamgio.quarkdown.ast.Text
+import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name

@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.function.value
 
-import eu.iamgio.quarkdown.ast.FunctionCallNode
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.PlainTextNode
+import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.size.Size

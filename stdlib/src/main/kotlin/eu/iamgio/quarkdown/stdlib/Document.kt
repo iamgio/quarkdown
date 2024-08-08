@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.Text
-import eu.iamgio.quarkdown.ast.quarkdown.PageCounterInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.PageMarginContentInitializer
-import eu.iamgio.quarkdown.ast.quarkdown.TableOfContents
+import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentInfo

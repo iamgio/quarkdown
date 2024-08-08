@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.function.value.output
 
-import eu.iamgio.quarkdown.ast.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.function.value.OutputValue
 
 /**

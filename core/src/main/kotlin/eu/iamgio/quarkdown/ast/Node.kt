@@ -20,38 +20,3 @@ interface Node {
 interface NestableNode : Node {
     val children: List<Node>
 }
-
-/**
- * A node that may contain inline content as its children.
- */
-interface TextNode : NestableNode {
-    /**
-     * The text of the node as processed inline content.
-     */
-    val text: InlineContent
-
-    override val children: List<Node>
-        get() = text
-}
-
-/**
- * A general link node.
- * @see Link
- * @see LinkDefinition
- */
-interface LinkNode : Node {
-    /**
-     * Inline content of the displayed label.
-     */
-    val label: InlineContent
-
-    /**
-     * URL this link points to.
-     */
-    val url: String
-
-    /**
-     * Optional title.
-     */
-    val title: String?
-}
