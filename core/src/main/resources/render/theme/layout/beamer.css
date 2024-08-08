@@ -1,17 +1,19 @@
 /* LaTeX Beamer layout theme */
 
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
 :root {
     --reveal-center-vertically: false;
 }
 
-.reveal .slides > section {
-    text-align: start;
+body {
+    --qd-main-font: "Source Sans Pro", sans-serif;
+    --qd-heading-font: "Fira Sans", sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Fira Sans", sans-serif;
+.reveal .slides > section {
+    text-align: start;
 }
 
 h1 {

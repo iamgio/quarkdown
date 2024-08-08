@@ -1,15 +1,26 @@
 :root {
+    /* Quarkdown properties */
     --qd-background-color: inherit;
+    --qd-main-color: inherit;
     --qd-link-color: inherit;
+    --qd-main-font: inherit;
     --qd-main-font-size: 1em;
+    --qd-heading-font: inherit;
 
+    /* Reveal properties are inherited */
     --r-background-color: var(--qd-background-color);
+    --r-main-color: var(--qd-main-color);
     --r-link-color: var(--qd-link-color);
+    --r-main-font: var(--qd-main-font);
     --r-main-font-size: var(--qd-main-font-size);
+    --r-heading-font: var(--qd-heading-font);
 }
 
 body {
     background-color: var(--qd-background-color);
+    color: var(--qd-main-color);
+    font-family: var(--qd-main-font);
+    font-size: var(--qd-main-font-size);
 }
 
 hr {
@@ -21,6 +32,7 @@ figure {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    font-family: var(--qd-heading-font);
     text-transform: none !important;
 }
 
@@ -156,6 +168,10 @@ a {
 
 .stack > p, .clip > p {
     margin: 0;
+}
+
+.table-of-contents li a {
+    text-decoration: none;
 }
 
 .table-of-contents li a::after {
