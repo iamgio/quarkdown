@@ -21,7 +21,7 @@ class HtmlIdentifierProvider private constructor(private val renderer: NodeRende
             .replace(" ", "-")
             .replace("[^a-z0-9-]".toRegex(), "")
 
-    override fun visit(heading: Heading) = heading.text.toPlainText(renderer).toURIString()
+    override fun visit(heading: Heading) = heading.customId ?: heading.text.toPlainText(renderer).toURIString()
 
     companion object {
         /**

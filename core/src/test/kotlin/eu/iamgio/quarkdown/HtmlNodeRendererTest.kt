@@ -400,6 +400,7 @@ class HtmlNodeRendererTest {
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
+        assertEquals(out.next(), Heading(3, listOf(Text("Foo bar")), customId = "my-id").render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noIdNoPageBreak))
 
@@ -411,6 +412,7 @@ class HtmlNodeRendererTest {
             )
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(idNoPageBreak))
+        assertEquals(out.next(), Heading(1, listOf(Text("Foo bar")), customId = "custom-id").render(idNoPageBreak))
         assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(idNoPageBreak))
 
         // Automatic ID, force page break on depth <= 2

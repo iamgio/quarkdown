@@ -244,7 +244,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     "id",
                     // Generate an automatic identifier if allowed by settings.
                     HtmlIdentifierProvider.of(renderer = this)
-                        .takeIf { context.options.enableAutomaticIdentifiers }
+                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
                 )
                 .build()

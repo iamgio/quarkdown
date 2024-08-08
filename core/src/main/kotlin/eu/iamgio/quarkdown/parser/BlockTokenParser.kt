@@ -122,9 +122,21 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: HeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        val depth = groups.next().length // Amount of # characters.
+        var text = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
+
+        // Custom ID: trailing {#custom-id}.
+        val customIdMatch = "\\s+\\{#([^}]+)}\$".toRegex().find(text)
+        val customId = customIdMatch?.groupValues?.get(1) // {#custom-id} -> custom-id
+
+        // Trim the custom ID from the text.
+        customIdMatch?.let { text = text.removeSuffix(it.value) }
+
         return Heading(
-            depth = groups.next().length,
-            text = groups.next().trim().takeUntilLastOccurrence(" #").toInline(),
+            depth,
+            text.toInline(),
+            customId,
         )
     }
 

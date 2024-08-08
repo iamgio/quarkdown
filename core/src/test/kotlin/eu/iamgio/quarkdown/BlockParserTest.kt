@@ -30,6 +30,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -93,23 +94,38 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("Title", rawText)
+            assertNull(customId)
             assertEquals(1, depth)
         }
         with(nodes.next()) {
             assertEquals("Title", rawText)
+            assertNull(customId)
             assertEquals(2, depth)
         }
         with(nodes.next()) {
             assertEquals("Title", rawText)
+            assertNull(customId)
             assertEquals(3, depth)
         }
         with(nodes.next()) {
             assertTrue(text.isEmpty())
+            assertNull(customId)
             assertEquals(1, depth)
         }
         with(nodes.next()) {
             assertEquals("Title with closing sequence", rawText)
+            assertNull(customId)
             assertEquals(2, depth)
+        }
+        with(nodes.next()) {
+            assertEquals("Title with custom ID", rawText)
+            assertEquals("custom-id", customId)
+            assertEquals(1, depth)
+        }
+        with(nodes.next()) {
+            assertEquals("Title with custom ID", rawText)
+            assertEquals("id", customId)
+            assertEquals(3, depth)
         }
     }
 
