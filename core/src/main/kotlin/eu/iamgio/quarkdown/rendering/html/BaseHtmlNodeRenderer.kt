@@ -159,7 +159,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
 
             node.columns.forEach { column ->
                 // Value to assign to the 'align' attribute for each cell of this column.
-                val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.name?.lowercase()
+                val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.asCSS
 
                 // Header cell.
                 headerRow.tag("th", column.header.text)

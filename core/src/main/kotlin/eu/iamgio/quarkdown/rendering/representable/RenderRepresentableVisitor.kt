@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.representable
 
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
@@ -21,6 +22,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(size: Size): T
 
     fun visit(sizes: Sizes): T
+
+    fun visit(alignment: Table.Alignment): T
 
     fun visit(orientation: Stacked.Orientation): T
 

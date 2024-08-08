@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
@@ -28,6 +29,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(size: Size) = size.toString()
 
     override fun visit(sizes: Sizes) = with(sizes) { "$top $right $bottom $left" }
+
+    override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
 
     override fun visit(orientation: Stacked.Orientation) = orientation.kebabCaseName
 

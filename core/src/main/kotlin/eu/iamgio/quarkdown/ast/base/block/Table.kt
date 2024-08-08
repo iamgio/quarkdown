@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.ast.base.block
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -28,11 +30,14 @@ data class Table(
     /**
      * Text alignment of a [Column].
      */
-    enum class Alignment {
+    enum class Alignment : RenderRepresentable {
         LEFT,
         CENTER,
         RIGHT,
         NONE,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
