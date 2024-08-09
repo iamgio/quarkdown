@@ -11,6 +11,12 @@ import eu.iamgio.quarkdown.rendering.NodeRenderer
  */
 abstract class TagNodeRenderer<B : TagBuilder>(val context: Context) : NodeRenderer {
     /**
+     * Whether the output code should be pretty.
+     */
+    val pretty: Boolean
+        get() = context.attachedPipeline?.options?.prettyOutput ?: false
+
+    /**
      * Factory method that creates a new builder.
      * @param name name of the tag to open
      * @param pretty whether the output code should be pretty

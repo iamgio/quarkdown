@@ -27,6 +27,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitialize
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 import eu.iamgio.quarkdown.util.toPlainText
@@ -130,10 +131,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         )
 
     override fun visit(node: TableOfContents) =
-        Heading(1, listOf(Text("Table of Contents"))).accept(this).toString() +
-            div("table-of-contents") {
-                +visit(tableOfContentsItemsToList(node.items))
+        buildMultiTag {
+            // Title
+            +Heading(1, listOf(Text("Table of Contents")), customId = "table-of-contents") // TODO localize
+            // Content
+            +div("table-of-contents") {
+                +tableOfContentsItemsToList(node.items)
             }
+        }
 
     override fun visit(node: TableOfContents.Item): CharSequence {
         val link =
@@ -144,11 +149,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
             }
 
-        // Recursively render sub-items.
-        return if (node.subItems.isNotEmpty()) {
-            link + tableOfContentsItemsToList(node.subItems).accept(this)
-        } else {
-            link
+        return buildMultiTag {
+            +link
+
+            // Recursively render sub-items.
+            if (node.subItems.isNotEmpty()) {
+                +tableOfContentsItemsToList(node.subItems)
+            }
         }
     }
 
@@ -256,10 +263,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 )
                 .build()
 
-        return if (context.shouldAutoPageBreak(node)) {
-            visit(PageBreak()) + headingTag
-        } else {
-            headingTag
+        return buildMultiTag {
+            if (context.shouldAutoPageBreak(node)) {
+                +PageBreak()
+            }
+            +headingTag
         }
     }
 

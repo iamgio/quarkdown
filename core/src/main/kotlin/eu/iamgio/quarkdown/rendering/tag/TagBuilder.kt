@@ -68,7 +68,9 @@ abstract class TagBuilder(
 
 /**
  * Creates a generic builder.
- * Example:
+ *
+ * Example usage:
+ *
  * ```
  * tagBuilder("name") {
  *     +content
@@ -85,7 +87,7 @@ abstract class TagBuilder(
  */
 fun <B : TagBuilder> TagNodeRenderer<B>.tagBuilder(
     name: String,
-    pretty: Boolean = context.attachedPipeline?.options?.prettyOutput ?: false,
+    pretty: Boolean = this.pretty,
     init: B.() -> Unit = {},
 ) = createBuilder(name, pretty).also(init)
 
