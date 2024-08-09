@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Karla');
+
+body {
+    --qd-main-font: "Lato", sans-serif;
+    --qd-heading-font: "Karla", sans-serif;
+}
+
+h1 {
+    font-size: 3.5em !important;
+}
+
+h2 {
+    font-size: 2.75em !important;
+}
+
+h3 {
+    font-size: 2.25em !important;
+}
+
+h4 {
+    font-size: 1.75em !important;
+}
+
+h5 {
+    font-size: 1.5em !important;
+}
+
+h6 {
+    font-size: 1.25em !important;
+}
+
+ol, ul {
+    line-height: 1.5;
+}
+
+table {
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 0.5em 1em !important;
+}
+
+table td, table th {
+    border: 1px solid;
+}
+
+/* Only internal table borders */
+
+table tr:first-child th {
+    border-top: 0;
+}
+
+table tr:last-child td {
+    border-bottom: 0;
+}
+
+table tr td:first-child,
+table tr th:first-child {
+    border-left: 0;
+}
+
+table tr td:last-child,
+table tr th:last-child {
+    border-right: 0;
+}
+

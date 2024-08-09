@@ -1,0 +1,9 @@
+:root {
+    --qd-background-color: #242528;
+    --qd-main-color: #C9C9D7;
+    --qd-link-color: #5FC7C7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--qd-main-color) !important;
+}
