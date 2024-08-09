@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
@@ -129,9 +130,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         )
 
     override fun visit(node: TableOfContents) =
-        div("table-of-contents") {
-            +visit(tableOfContentsItemsToList(node.items))
-        }
+        Heading(1, listOf(Text("Table of Contents"))).accept(this).toString() +
+            div("table-of-contents") {
+                +visit(tableOfContentsItemsToList(node.items))
+            }
 
     override fun visit(node: TableOfContents.Item): CharSequence {
         val link =
@@ -144,7 +146,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         // Recursively render sub-items.
         return if (node.subItems.isNotEmpty()) {
-            link + visit(tableOfContentsItemsToList(node.subItems))
+            link + tableOfContentsItemsToList(node.subItems).accept(this)
         } else {
             link
         }
