@@ -3,12 +3,13 @@ package eu.iamgio.quarkdown.cli
 import eu.iamgio.quarkdown.cli.exec.FileExecutionStrategy
 import eu.iamgio.quarkdown.cli.exec.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.exec.ReplExecutionStrategy
+import eu.iamgio.quarkdown.cli.util.cleanDirectory
+import eu.iamgio.quarkdown.cli.util.saveTo
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
-import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter
 import kotlin.system.exitProcess
 
 /**
@@ -30,16 +31,23 @@ fun runQuarkdown(
     // Type of execution to launch.
     // If a source file is set, execute the content of a single file.
     // Otherwise, run in REPL mode. Note: context is shared across executions.
-    val execution: PipelineExecutionStrategy = cliOptions.source?.let(::FileExecutionStrategy) ?: ReplExecutionStrategy()
+    val execution: PipelineExecutionStrategy =
+        cliOptions.source?.let(::FileExecutionStrategy) ?: ReplExecutionStrategy()
+
+    // Output directory to save the generated resources in.
+    val directory = cliOptions.outputDirectory
 
     try {
+        // Cleans the output directory if enabled in options.
+        if (cliOptions.clean) {
+            directory?.cleanDirectory()
+        }
+
         // Pipeline execution and output resource retrieving.
         val resource = execution.execute(pipeline)
 
         // Exports the generated resources to file if enabled in options.
-        cliOptions.outputDirectory?.let { directory ->
-            resource?.accept(FileResourceExporter(location = directory))
-        }
+        directory?.let { resource?.saveTo(it) }
     } catch (e: PipelineException) {
         e.printStackTrace()
         exitProcess(e.code)

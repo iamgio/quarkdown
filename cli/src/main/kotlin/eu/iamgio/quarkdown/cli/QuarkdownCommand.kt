@@ -53,11 +53,17 @@ class QuarkdownCommand : CliktCommand() {
      */
     private val strict: Boolean by option("--strict", help = "Exit on error").flag()
 
+    /**
+     * When enabled, the output directory is cleaned before generating new files.
+     */
+    private val clean: Boolean by option("--clean", help = "Clean output directory").flag()
+
     override fun run() {
         val cliOptions =
             CliOptions(
                 source,
                 outputDirectory,
+                clean,
             )
 
         val pipelineOptions =
