@@ -72,6 +72,8 @@ table tr th:last-child {
 .box {
     width: 100%;
     border-radius: 8px;
+    margin-top: 32px;
+    margin-bottom: 32px;
 }
 
 .box > header {
