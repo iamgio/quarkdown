@@ -289,7 +289,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         // The code is wrapped to allow additional content.
         return buildTag("span") {
-            `class`("codespan-content-wrapper")
+            `class`("codespan-content")
 
             +codeTag
 

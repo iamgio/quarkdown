@@ -284,15 +284,21 @@ class HtmlNodeRendererTest {
     fun codeSpan() {
         val out = readParts("inline/codespan.html")
 
-        assertEquals(out.next(), CodeSpan("Foo bar").render())
-        assertEquals(out.next(), CodeSpan("<a href=\"#\">").render())
-        assertEquals(
-            out.next(),
+        // The Quarkdown rendering wraps the content in a span which allows additional content, such as color.
+        val base = MutableContext(BaseMarkdownFlavor)
+        val quarkdown = MutableContext(QuarkdownFlavor)
+
+        val spanWithColor =
             CodeSpan(
                 "#FFFF00",
                 CodeSpan.ColorContent(Color.fromHex("#FFFF00")!!),
-            ).render(),
-        )
+            )
+
+        assertEquals(out.next(), CodeSpan("Foo bar").render(base))
+        assertEquals(out.next(), CodeSpan("<a href=\"#\">").render(base))
+        assertEquals(out.next(), spanWithColor.render(quarkdown))
+        assertEquals(out.next(), spanWithColor.render(base))
+        assertEquals(out.next(), CodeSpan("Foo bar").render(quarkdown))
     }
 
     @Test

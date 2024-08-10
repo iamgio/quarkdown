@@ -120,7 +120,21 @@ class FullPipelineTest {
     @Test
     fun code() {
         execute("`println(\"Hello, world!\")`") {
-            assertEquals("<p><code>println(&quot;Hello, world!&quot;)</code></p>", it)
+            assertEquals("<p><span class=\"codespan-content\"><code>println(&quot;Hello, world!&quot;)</code></span></p>", it)
+            assertFalse(attributes.hasCode)
+        }
+
+        // Color preview
+        execute("`#FF0000`") {
+            assertEquals(
+                "<p>" +
+                    "<span class=\"codespan-content\">" +
+                    "<code>#FF0000</code>" +
+                    "<span style=\"background-color: rgba(255, 0, 0, 1.0);\" class=\"color-preview\"></span>" +
+                    "</span>" +
+                    "</p>",
+                it,
+            )
             assertFalse(attributes.hasCode)
         }
 
@@ -290,12 +304,12 @@ class FullPipelineTest {
             )
         }
 
-        execute(".function {hello}\n  `Hello`!\n\n.hello") {
-            assertEquals("<p><code>Hello</code>!</p>", it)
+        execute(".function {hello}\n  *Hello*!\n\n.hello") {
+            assertEquals("<p><em>Hello</em>!</p>", it)
         }
 
-        execute(".function {hello}\n   target:\n  `Hello` .target!\n\n.hello {world}") {
-            assertEquals("<p><code>Hello</code> world!</p>", it)
+        execute(".function {hello}\n   target:\n  **Hello** .target!\n\n.hello {world}") {
+            assertEquals("<p><strong>Hello</strong> world!</p>", it)
         }
 
         assertFailsWith<InvalidArgumentCountException> {

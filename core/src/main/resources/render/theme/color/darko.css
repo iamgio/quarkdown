@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
     color: inherit;
 }
 
-.codespan-content-wrapper:not(.box .codespan-content-wrapper) {
+.codespan-content:not(.box .codespan-content) {
     background-color: var(--primary);
 }
 

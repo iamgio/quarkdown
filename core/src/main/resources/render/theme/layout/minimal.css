@@ -98,7 +98,7 @@ p code {
     font-size: 1.2em;
 }
 
-.codespan-content-wrapper {
+.codespan-content {
     padding: 0.1em 0.6em;
     border-radius: 8px;
 }

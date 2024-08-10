@@ -84,7 +84,7 @@ a {
     clip-path: circle();
 }
 
-.codespan-content-wrapper {
+.codespan-content {
     display: inline-flex;
     align-items: center;
 }
