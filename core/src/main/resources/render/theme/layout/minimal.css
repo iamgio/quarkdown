@@ -69,3 +69,67 @@ table tr th:last-child {
     border-right: 0;
 }
 
+.box {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.box > header {
+    font-size: 0.75em;
+    padding: 12px;
+    border-radius: 8px 8px 0 0;
+}
+
+.box > header p {
+    margin: 0;
+}
+
+.box > .box-content {
+    padding: 12px;
+}
+
+.box > .box-content p {
+    margin: 8px 0;
+}
+
+p code {
+    font-size: 1.2em;
+}
+
+.codespan-content-wrapper {
+    padding: 0.1em 0.6em;
+    border-radius: 8px;
+}
+
+.color-preview {
+    width: 0.5em;
+    height: 0.5em;
+    margin-left: 0.4em;
+    border-radius: 3px;
+    border: 0.1em solid color-mix(in srgb, currentColor 60%, transparent);
+}
+
+/* Footer */
+
+.page-margin-bottom-center {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.page-margin-bottom-center > * {
+    width: 100%;
+    padding: 16px;
+    margin: 0 !important;
+    text-align: center;
+    border-top: 2px solid;
+    border-color: inherit;
+}
+
+.page-margin-bottom-center > *:first-child {
+    margin-left: 64px !important;
+}
+
+.page-margin-bottom-center > *:last-child {
+    margin-right: 64px !important;
+}

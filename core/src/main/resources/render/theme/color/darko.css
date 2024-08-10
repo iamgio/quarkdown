@@ -1,4 +1,6 @@
 :root {
+    --primary: #224A51;
+
     --qd-background-color: #242528;
     --qd-main-color: #C9C9D7;
     --qd-link-color: #5FC7C7;
@@ -6,4 +8,26 @@
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--qd-main-color) !important;
+}
+
+.box {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    background-color: var(--primary);
+}
+
+.box > header {
+    background-color: rgba(23, 53, 56, 0.35);
+}
+
+.box > header > h4 {
+    color: inherit;
+}
+
+.codespan-content-wrapper:not(.box .codespan-content-wrapper) {
+    background-color: var(--primary);
+}
+
+.page-margin-bottom-center {
+    border-color: var(--qd-link-color);
 }
