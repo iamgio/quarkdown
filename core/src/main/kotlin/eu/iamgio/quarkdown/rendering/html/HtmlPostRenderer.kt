@@ -71,11 +71,8 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
      * @return a set that contains an output artifact for each non-null theme component of [theme]
      *         (e.g. color scheme, layout format, ...)
      */
-    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?) =
+    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?): Set<OutputResource> =
         buildSet {
-            // Names of the theme components will be later imported in the theme.css file to link components.
-            val names = mutableListOf<String>()
-
             /**
              * @param resourceName name of the resource
              * @param resourcePath path of the resource starting from the theme folder, without extension
@@ -89,7 +86,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                 // The name is not used here, as this artifact will be concatenated to others in generateResources.
                 name = resourceName,
                 type = ArtifactType.CSS,
-            ).also { names += resourceName }
+            )
 
             // Pushing theme components.
             this += artifact("global")
@@ -102,8 +99,8 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                 OutputArtifact(
                     name = "theme",
                     content =
-                        names.joinToString(separator = "\n") {
-                            "@import url('$it.css');"
+                        joinToString(separator = "\n") {
+                            "@import url('${it.name}.css');"
                         },
                     type = ArtifactType.CSS,
                 )
