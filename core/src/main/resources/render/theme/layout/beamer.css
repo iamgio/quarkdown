@@ -64,7 +64,6 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 }
 
 .box {
-    width: 100%;
     margin: 12px;
     border-radius: 8px;
 }
@@ -74,20 +73,8 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     border-radius: 8px 8px 0 0;
 }
 
-.box > header p {
-    margin: 0;
-}
-
-.box > .box-content {
-    padding: 12px;
-}
-
 .box:has(> header) > .box-content {
     margin-top: 0;
-}
-
-.box > .box-content p {
-    margin: 8px 0;
 }
 
 .box > .box-content ul {
@@ -95,8 +82,6 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 }
 
 .color-preview {
-    width: 0.5em;
-    height: 0.5em;
     margin: 0 0.2em;
     border-radius: 100%;
     border: 0.1em solid;

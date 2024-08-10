@@ -70,7 +70,6 @@ table tr th:last-child {
 }
 
 .box {
-    width: 100%;
     border-radius: 8px;
     margin-top: 32px;
     margin-bottom: 32px;
@@ -80,18 +79,6 @@ table tr th:last-child {
     font-size: 0.75em;
     padding: 12px;
     border-radius: 8px 8px 0 0;
-}
-
-.box > header p {
-    margin: 0;
-}
-
-.box > .box-content {
-    padding: 12px;
-}
-
-.box > .box-content p {
-    margin: 8px 0;
 }
 
 p code {
@@ -104,8 +91,6 @@ p code {
 }
 
 .color-preview {
-    width: 0.5em;
-    height: 0.5em;
     margin-left: 0.4em;
     border-radius: 3px;
     border: 0.1em solid color-mix(in srgb, currentColor 60%, transparent);

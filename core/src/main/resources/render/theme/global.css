@@ -89,6 +89,27 @@ a {
     align-items: center;
 }
 
+.color-preview {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+.box {
+    width: 100%;
+}
+
+.box > header p {
+    margin: 0;
+}
+
+.box > .box-content {
+    padding: 12px;
+}
+
+.box > .box-content p {
+    margin: 8px 0;
+}
+
 .page-margin-content {
     position: absolute;
 }
