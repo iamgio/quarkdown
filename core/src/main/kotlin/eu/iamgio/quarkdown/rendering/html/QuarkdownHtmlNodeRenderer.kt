@@ -286,15 +286,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // A code span can contain additional content, such as a color preview.
     override fun visit(node: CodeSpan): String {
         val codeTag = super.visit(node)
-        if (node.content == null) return codeTag
 
-        // If additional content is linked to this code span, wrap it.
+        // The code is wrapped to allow additional content.
         return buildTag("span") {
             `class`("codespan-content-wrapper")
 
             +codeTag
 
             when (node.content) {
+                null -> {} // No additional content.
                 is CodeSpan.ColorContent -> {
                     // If the code contains a color code, show the color preview.
                     +buildTag("span") {
