@@ -43,9 +43,6 @@ table {
 
 table th, table td {
     padding: 0.5em 1em !important;
-}
-
-table td, table th {
     border: 1px solid;
 }
 
