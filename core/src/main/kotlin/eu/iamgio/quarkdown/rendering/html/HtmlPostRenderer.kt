@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.rendering.PostRenderer
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
@@ -46,13 +47,12 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                 )
 
             // A CSS theme resource is added to the output resources.
-            // Theme components (global style, color scheme and layout format) are joined together into a single theme.css file.
+            // Theme components (global style, color scheme and layout format) are stored in a single group (directory)
+            // and linked via @import statements in a theme.css file.
             this +=
-                LazyOutputArtifact.join(
-                    // Get the single resources for each theme component.
-                    retrieveThemeComponentsArtifacts(context.documentInfo.theme),
+                OutputResourceGroup(
                     name = "theme",
-                    type = ArtifactType.CSS,
+                    resources = retrieveThemeComponentsArtifacts(context.documentInfo.theme),
                 )
 
             // A slides document requires additional scripts.
@@ -68,24 +68,44 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
 
     /**
      * @param theme theme to get the artifacts for
-     * @return an ordered list that contains an output artifact for each non-null theme component of [theme]
+     * @return a set that contains an output artifact for each non-null theme component of [theme]
      *         (e.g. color scheme, layout format, ...)
      */
     private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?) =
-        buildList {
+        buildSet {
+            // Names of the theme components will be later imported in the theme.css file to link components.
+            val names = mutableListOf<String>()
+
             /**
+             * @param resourceName name of the resource
+             * @param resourcePath path of the resource starting from the theme folder, without extension
              * @return a new output artifact from an internal resource
              */
-            fun artifact(resourceName: String) =
-                LazyOutputArtifact.internal(
-                    resource = "/render/theme/$resourceName.css",
-                    // The name is not used here, as this artifact will be concatenated to others in generateResources.
-                    name = "",
+            fun artifact(
+                resourceName: String,
+                resourcePath: String = resourceName,
+            ) = LazyOutputArtifact.internal(
+                resource = "/render/theme/$resourcePath.css",
+                // The name is not used here, as this artifact will be concatenated to others in generateResources.
+                name = resourceName,
+                type = ArtifactType.CSS,
+            ).also { names += resourceName }
+
+            // Pushing theme components.
+            this += artifact("global")
+            theme?.layout?.let { this += artifact(it, "layout/$it") }
+            theme?.color?.let { this += artifact(it, "color/$it") }
+
+            // A theme.css file contains only @import statements for each theme component
+            // in order to link them into a single file that can be easily included in the main HTML file.
+            this +=
+                OutputArtifact(
+                    name = "theme",
+                    content =
+                        names.joinToString(separator = "\n") {
+                            "@import url('$it.css');"
+                        },
                     type = ArtifactType.CSS,
                 )
-
-            this += artifact("global")
-            theme?.color?.let { this += artifact("color/$it") }
-            theme?.layout?.let { this += artifact("layout/$it") }
         }
 }

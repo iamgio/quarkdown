@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
-@import url('https://fonts.googleapis.com/css?family=Karla');
+@import url('https://fonts.googleapis.com/css?family=Inter');
 
-body {
+:root {
     --qd-main-font: "Lato", sans-serif;
-    --qd-heading-font: "Karla", sans-serif;
+    --qd-heading-font: "Inter", sans-serif;
 }
 
 h1 {

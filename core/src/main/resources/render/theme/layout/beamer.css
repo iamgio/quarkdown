@@ -5,9 +5,6 @@
 
 :root {
     --reveal-center-vertically: false;
-}
-
-body {
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
 }
