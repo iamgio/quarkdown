@@ -66,11 +66,11 @@ table tr th:last-child {
 }
 
 .box {
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .box > header {
-    font-size: 0.7em;
+    font-size: 0.6em;
     padding: 12px;
     border-radius: 8px 8px 0 0;
 }

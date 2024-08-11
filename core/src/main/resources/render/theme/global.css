@@ -1,5 +1,5 @@
 :root {
-    /* Quarkdown properties */
+    /* Quarkdown exposed properties */
     --qd-background-color: inherit;
     --qd-main-color: inherit;
     --qd-link-color: inherit;
@@ -7,8 +7,10 @@
     --qd-main-font-size: 1em;
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
+    --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
+    --qd-box-heading-font: var(--qd-main-font);
 
-    /* Reveal properties are inherited */
+    /* Reveal properties */
     --r-background-color: var(--qd-background-color);
     --r-main-color: var(--qd-main-color);
     --r-link-color: var(--qd-link-color);
@@ -118,12 +120,16 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 
 .box {
     width: 100%;
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
+    margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
+    margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
 }
 
 .box > header p {
     margin: 0;
+}
+
+.box > header h4 {
+    font-family: var(--qd-box-heading-font);
 }
 
 .box > .box-content {

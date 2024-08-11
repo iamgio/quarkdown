@@ -8,6 +8,7 @@
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
     --qd-block-margin: 32px;
+    --qd-box-margin-multiplier: 1.2;
 }
 
 .reveal .slides > section {
