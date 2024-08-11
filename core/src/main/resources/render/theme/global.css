@@ -55,6 +55,11 @@ a {
     color: var(--qd-link-color);
 }
 
+pre {
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
+}
+
 pre code {
     max-height: none !important;
 }
