@@ -7,6 +7,7 @@
     --reveal-center-vertically: false;
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
+    --qd-block-margin: 32px;
 }
 
 .reveal .slides > section {
@@ -39,7 +40,6 @@ ol, ul {
 }
 
 table {
-    margin: auto;
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -59,12 +59,7 @@ table tr:last-child td {
     border-bottom: none;
 }
 
-code.focus-lines .hljs-ln-line:not(.focused) {
-    opacity: 0.4;
-}
-
 .box {
-    margin: 12px;
     border-radius: 8px;
 }
 

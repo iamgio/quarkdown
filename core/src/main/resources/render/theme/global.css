@@ -6,6 +6,7 @@
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-heading-font: inherit;
+    --qd-block-margin: 32px;
 
     /* Reveal properties are inherited */
     --r-background-color: var(--qd-background-color);
@@ -14,6 +15,7 @@
     --r-main-font: var(--qd-main-font);
     --r-main-font-size: var(--qd-main-font-size);
     --r-heading-font: var(--qd-heading-font);
+    --r-block-margin: var(--qd-block-margin);
 }
 
 body {
@@ -25,19 +27,34 @@ body {
 
 hr {
     width: 100%;
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
 }
 
 figure {
     text-align: center;
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--qd-heading-font);
     text-transform: none !important;
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
+}
+
+table {
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
 }
 
 a {
     color: var(--qd-link-color);
+}
+
+code.focus-lines .hljs-ln-line:not(.focused) {
+    opacity: 0.4;
 }
 
 .align {
@@ -68,6 +85,11 @@ a {
     display: flex;
 }
 
+.stack:not(.stack .stack) {
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
+}
+
 .stack-horizontal {
     flex-direction: row;
 }
@@ -96,6 +118,8 @@ a {
 
 .box {
     width: 100%;
+    margin-top: var(--qd-block-margin);
+    margin-bottom: var(--qd-block-margin);
 }
 
 .box > header p {

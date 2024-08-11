@@ -4,8 +4,7 @@
 :root {
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
-
-    --r-block-margin: 36px;
+    --qd-block-margin: 1.8em;
 }
 
 h1 {
@@ -37,8 +36,6 @@ ol, ul {
 }
 
 table {
-    margin-top: 32px !important;
-    margin-bottom: 32px !important;
     border-spacing: 0;
     border-collapse: collapse;
 }
@@ -70,8 +67,6 @@ table tr th:last-child {
 
 .box {
     border-radius: 8px;
-    margin-top: 32px;
-    margin-bottom: 32px;
 }
 
 .box > header {
