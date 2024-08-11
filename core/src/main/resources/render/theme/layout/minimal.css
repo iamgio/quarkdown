@@ -4,6 +4,8 @@
 :root {
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
+
+    --r-block-margin: 36px;
 }
 
 h1 {
@@ -73,7 +75,7 @@ table tr th:last-child {
 }
 
 .box > header {
-    font-size: 0.75em;
+    font-size: 0.7em;
     padding: 12px;
     border-radius: 8px 8px 0 0;
 }
