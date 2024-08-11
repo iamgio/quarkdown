@@ -9,4 +9,13 @@ interface LibraryExporter {
      * The library to export and hand to the pipeline.
      */
     val library: Library
+
+    companion object {
+        /**
+         * Loads libraries from the given exporters.
+         * @param exporters library exporters
+         * @return set of exported libraries from the given exporters
+         */
+        fun exportAll(vararg exporters: LibraryExporter): Set<Library> = exporters.map { it.library }.toSet()
+    }
 }

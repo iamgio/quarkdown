@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.cli
 
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.log.DebugFormatter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -23,7 +25,7 @@ object PipelineInitialization {
         options: PipelineOptions,
     ): Pipeline {
         // Libraries to load.
-        val libraries = setOf(Stdlib.library)
+        val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
 
         // Actions run after each stage of the pipeline.
         val hooks =
