@@ -1,5 +1,7 @@
 /* Beamer's Beaver color theme */
 
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css');
+
 :root {
     --primary: rgb(187, 39, 26);
     --primary-darker: rgb(149, 29, 18);
