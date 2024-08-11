@@ -29,33 +29,24 @@ body {
 
 hr {
     width: 100%;
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
 }
 
 figure {
     text-align: center;
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--qd-heading-font);
     text-transform: none !important;
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
-}
-
-table {
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
 }
 
 a {
     color: var(--qd-link-color);
 }
 
-pre {
+h1, h2, h3, h4, h5, h6,
+table, pre, figure, blockquote,
+ul, ol, hr, .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
 }
@@ -94,11 +85,6 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 
 .stack {
     display: flex;
-}
-
-.stack:not(.stack .stack) {
-    margin-top: var(--qd-block-margin);
-    margin-bottom: var(--qd-block-margin);
 }
 
 .stack-horizontal {
