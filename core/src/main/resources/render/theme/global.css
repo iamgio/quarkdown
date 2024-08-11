@@ -55,6 +55,10 @@ a {
     color: var(--qd-link-color);
 }
 
+pre code {
+    max-height: none !important;
+}
+
 code.focus-lines .hljs-ln-line:not(.focused) {
     opacity: 0.4;
 }
