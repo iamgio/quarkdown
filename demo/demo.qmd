@@ -1,0 +1,60 @@
+.docname {Quarkdown demo}
+.docauthor {iamgio}
+.doctype {slides}
+.theme {darko} layout:{minimal}
+
+.footer
+    .docauthor
+
+    **.docname**
+
+    [GitHub](https://github.com/iamgio/quarkdown)
+
+# Quarkdown
+
+Markdown with superpowers
+
+# Versatile
+
+.function {poweredby}
+    credits:
+    .text size:{tiny} variant:{smallcaps}
+        powered by .credits
+
+Export your Quarkdown source as:
+- .fragment
+      beautiful slides for your next presentation, just like this one  
+      .poweredby {[reveal.js](https://revealjs.com/)}
+- .fragment
+      a distinguished book  
+      .poweredby {[paged.js](https://pagedjs.org/)}
+- .fragment
+      a plain HTML document
+
+# Same foundations…
+
+Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
+so that you will feel at home typing code you're comfortable typing.
+
+<!-- Shows the source code of a Quarkdown snippet AND its rendered result -->
+.function {sourceresult}
+    source:
+    .fragment
+        ---
+
+        .code {markdown}
+            .source
+        
+    .fragment
+        #### ↓
+        
+        .source
+
+.sourceresult
+    ### Diving into _Quarkdown_
+    
+    Somebody once said:
+    > Write once, run anywhere.
+    
+# …brand-new everything
+
