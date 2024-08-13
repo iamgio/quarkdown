@@ -66,6 +66,12 @@ table tr th:last-child {
     border-right: 0;
 }
 
+blockquote {
+    background-color: transparent;
+    border-left: 0.5em solid;
+    padding: 0;
+}
+
 .box {
     border-radius: 10px;
 }
