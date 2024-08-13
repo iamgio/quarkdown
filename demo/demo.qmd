@@ -74,3 +74,27 @@ so that you will feel at home typing code you're comfortable typing.
     
 # …brand-new everything
 
+Go ahead to discover Quarkdown's capabilities.
+
+# Functions
+
+Call any function from the extensive [standard library](https://github.com/iamgio/quarkdown/tree/main/stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib)
+from your Markdown code.
+
+```
+.somefunction {argument1} {argument2}
+    Body argument
+```
+
+# I/O
+
+.sourceresult
+    The contructor of the class `Point` is as follows:
+
+    .code {java}
+        .read {code/Point.java} lines:{5..8}
+
+# Math
+
+.sourceresult
+    If we try to find the **surface** of a circle of **radius 8**, we'll find out it's .multiply {.pow {8} to:{2}} by:{.pi}
