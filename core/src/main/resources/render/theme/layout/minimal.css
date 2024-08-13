@@ -4,6 +4,7 @@
 :root {
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
+    --qd-code-font-size: 1.5em;
     --qd-block-margin: 1.8em;
 }
 
