@@ -16,20 +16,36 @@ Markdown with superpowers
 
 # Versatile
 
+**One source code, many use cases.**
+Export your Quarkdown project as:
+
 .function {poweredby}
     credits:
     .text size:{tiny} variant:{smallcaps}
         powered by .credits
 
-Export your Quarkdown source as:
 - .fragment
-      beautiful slides for your next presentation, just like this one  
+      beautiful slides for your next presentation, just like this one.  
       .poweredby {[reveal.js](https://revealjs.com/)}
 - .fragment
-      a distinguished book  
+      a distinguished book.  
       .poweredby {[paged.js](https://pagedjs.org/)}
 - .fragment
-      a plain HTML document
+      a plain document.
+
+.fragment
+    *…in just one line, within your code!*
+
+    .row gap:{5mm}
+        ```
+        .doctype {slides}
+        ```
+        ```
+        .doctype {paged}
+        ```
+        ```
+        .doctype {plain}
+        ```
 
 # Same foundations…
 
