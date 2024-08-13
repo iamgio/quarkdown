@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
-import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
@@ -9,10 +8,10 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.misc.Color
-import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * `Text` stdlib module exporter.
@@ -53,24 +52,41 @@ fun text(
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
- * this function accepts Markdown content as its body, hence it can be used - for example -
- * in combination with [read] to load code from file.
+ * this function accepts function calls within its [code] argument,
+ * hence it can be used - for example - in combination with [read] to load code from file.
+ *
+ * Examples:
+ *
+ * Load from file:
+ * ```
+ * .code {kotlin} focus:{2..5}
+ *     .read {snippet.kt}
+ * ```
+ *
+ * Load dynamically:
+ * ```
+ * .function {mycode} {mylang}
+ *     source:
+ *         code {mylang}
+ *             .source
+ * ```
+ *
  * @param language optional language of the code
  * @param showLineNumbers whether to show line numbers
  * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
  * Note: HTML rendering requires [showLineNumbers] to be enabled.
- * @param body code content
+ * @param code code content
  */
 fun code(
     @Injected context: MutableContext,
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
-    body: MarkdownContent,
+    code: EvaluableString,
 ): NodeValue {
     context.attributes.hasCode = true // Allows code highlighting.
     return Code(
-        body.children.toPlainText(),
+        code.content,
         language,
         showLineNumbers,
         focusedLines,

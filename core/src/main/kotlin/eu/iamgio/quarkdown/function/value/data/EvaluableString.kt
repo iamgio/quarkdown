@@ -1,0 +1,14 @@
+package eu.iamgio.quarkdown.function.value.data
+
+import eu.iamgio.quarkdown.function.value.ValueFactory
+
+/**
+ * A [String] wrapper that, when used as a function parameter, lets [ValueFactory.evaluableString] evaluate the raw content.
+ * This allows function calls and other scripting techniques to be used executed within the string itself,
+ * which would otherwise be natively unsupported unless the [String] argument is inlined (not used as a block argument).
+ * Inline string evaluation is handled directly by the parser [eu.iamgio.quarkdown.parser.BlockTokenParser]).
+ * This is used for example in the `.code` stdlib function.
+ * @param content unwrapped string content, already evaluated
+ * @see ValueFactory.evaluableString
+ */
+data class EvaluableString(val content: String)

@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -21,7 +21,7 @@ class TextTest {
                 MutableContext(QuarkdownFlavor),
                 language = "kotlin",
                 showLineNumbers = false,
-                body = MarkdownContent(listOf(Text("fun foo() = 1"))),
+                code = EvaluableString("fun foo() = 1"),
             )
 
         val node = code.unwrappedValue

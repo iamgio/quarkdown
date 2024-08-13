@@ -359,7 +359,7 @@ class FullPipelineTest {
                         .1
             """.trimIndent(),
         ) {
-            assertEquals("<pre><code>Line 1\nLine 2</code></pre>", it)
+            assertEquals("<pre><code>Line 1${System.lineSeparator()}Line 2</code></pre>", it)
         }
     }
 

@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.reflect.ReflectionUtils
+import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
@@ -184,6 +185,25 @@ object ValueFactory {
     ): EnumValue? =
         values.find { it.name.replace("_", "").equals(raw, ignoreCase = true) }
             ?.let { EnumValue(it) }
+
+    /**
+     * Generates an [EvaluableString].
+     * Contrary to [String], an [EvaluableString] natively supports function calls and scripting evaluation.
+     * @param raw raw value to convert to a string expression
+     * @param context context to evaluate the raw value in
+     * @return a new string expression value that wraps the evaluated content of [raw]
+     * @see eval for the evaluation process
+     */
+    @FromDynamicType(EvaluableString::class, requiresContext = true)
+    fun evaluableString(
+        raw: String,
+        context: Context,
+    ): ObjectValue<EvaluableString> =
+        ObjectValue(
+            EvaluableString(
+                eval(raw, context).unwrappedValue.toString(),
+            ),
+        )
 
     /**
      * @param lexer lexer to use to tokenize content
