@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
         controls: typeof slides_showControls !== undef ? slides_showControls : true,
         transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
         transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
+        hash: true,
     });
 });
 
