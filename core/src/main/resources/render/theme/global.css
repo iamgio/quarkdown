@@ -5,6 +5,7 @@
     --qd-link-color: inherit;
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
+    --qd-code-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
@@ -52,6 +53,7 @@ ul, ol, hr, .stack:not(.stack .stack) {
 }
 
 pre code {
+    font-size: var(--qd-code-font-size);
     max-height: none !important;
 }
 
