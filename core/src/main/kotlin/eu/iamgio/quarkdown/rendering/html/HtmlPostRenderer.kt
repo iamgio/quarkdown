@@ -41,7 +41,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             // The main HTML resource.
             this +=
                 OutputArtifact(
-                    name = context.documentInfo.name ?: "index",
+                    name = "index",
                     content = rendered,
                     type = ArtifactType.HTML,
                 )
