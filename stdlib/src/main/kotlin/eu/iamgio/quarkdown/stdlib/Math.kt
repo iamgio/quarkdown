@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import kotlin.math.PI
+import kotlin.math.pow
 
 /**
  * `Math` stdlib module exporter.
@@ -15,6 +16,7 @@ val Math: Module =
         ::multiply,
         ::divide,
         ::rem,
+        ::pow,
         ::pi,
         ::sin,
         ::cos,
@@ -63,6 +65,16 @@ fun rem(
     a: Number,
     b: Number,
 ) = NumberValue(a.toFloat() % b.toFloat())
+
+/**
+ * @param base base number
+ * @param exponent exponent number. If it is a floating-point number, it will be truncated to an integer
+ * @return [base] raised to the power of [exponent]
+ */
+fun pow(
+    base: Number,
+    @Name("to") exponent: Number,
+) = NumberValue(base.toFloat().pow(exponent.toInt()))
 
 // Trigonometry
 
