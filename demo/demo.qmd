@@ -2,6 +2,7 @@
 .docauthor {iamgio}
 .doctype {slides}
 .theme {darko} layout:{minimal}
+.autopagebreak depth:{2}
 
 .footer
     .docauthor
@@ -86,15 +87,72 @@ from your Markdown code.
     Body argument
 ```
 
-# I/O
+<!-- Like .sourceresult, but with no animations. -->
+.function {simplesourceresult}
+    source:
+    ---
+    .code {markdown}
+        .source
+    #### ↓ 
+    .source
 
-.sourceresult
+## Full layout control 
+
+.simplesourceresult
+    .row alignment:{center} gap:{1cm}
+        !(150x150)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png)
+        
+        .column cross:{start}
+            .text size:{large} variant:{smallcaps}
+                **Quarkdown is on GitHub!**
+    
+            https://github.com/iamgio/quarkdown
+
+## File data: code
+
+.simplesourceresult
     The contructor of the class `Point` is as follows:
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
 
-# Math
+## File data: CSV
 
-.sourceresult
-    If we try to find the **surface** of a circle of **radius 8**, we'll find out it's .multiply {.pow {8} to:{2}} by:{.pi}
+.simplesourceresult
+    .csv {csv/people.csv}
+
+## File data: multi-file project
+
+.simplesourceresult
+    .include {sources/other.qmd}
+
+## Math
+
+.simplesourceresult
+    If we try to calculate the **surface** of a circle of **radius 8**,
+    we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
+
+## Document customization
+
+```markdown
+.docname {Quarkdown demo}
+.docauthor {iamgio}
+.doctype {slides}
+.theme {darko} layout:{minimal}
+.slides transition:{zoom} speed:{fast}
+
+.footer
+    .docauthor
+
+    **.docname**
+
+    [GitHub](https://github.com/iamgio/quarkdown)
+```
+
+## Intuitive error handling
+
+.simplesourceresult
+    .sum {3} {x}
+
+    .row alignment:{right}
+        Hello, world!
