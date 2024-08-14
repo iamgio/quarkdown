@@ -132,6 +132,22 @@ from your Markdown code.
     If we try to calculate the **surface** of a circle of **radius 8**,
     we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
 
+## Scripting
+
+.simplesourceresult
+    .var {t1} {0}
+    .var {t2} {1}
+
+    .table
+        .foreach {0..6}
+            n:
+            | $ F_{.n} $ |
+            |:----------:|
+            |    .t1     |
+            .var {tmp} {.sum {.t1} {.t2}}
+            .var {t1} {.t2}
+            .var {t2} {.tmp}
+
 ## Document customization
 
 ```markdown
