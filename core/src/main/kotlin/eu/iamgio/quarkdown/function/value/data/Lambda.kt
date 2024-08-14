@@ -18,12 +18,13 @@ private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
  * The return type is dynamic (a snippet of raw Quarkdown code is returned), hence it is evaluated and converted to a static type.
  * @param parentContext context this lambda lies in
  * @param explicitParameters named parameters of the lambda. If not present, parameter names are automatically set to .1, .2, etc.
- * @param action action to perform, which takes a variable sequence of [Value]s as arguments and returns a Quarkdown code snippet.
+ * @param action action to perform, which takes a variable sequence of [Value]s and this lambda's own forked context as arguments
+ *        and returns the output of the lambda.
  */
 class Lambda(
     val parentContext: Context,
     val explicitParameters: List<String> = emptyList(),
-    val action: (Array<out Value<*>>) -> String,
+    val action: (Array<out Value<*>>, Context) -> OutputValue<*>,
 ) {
     /**
      * Registers the arguments in the context, which can be accessed as function calls.
@@ -67,8 +68,8 @@ class Lambda(
         // Register the arguments in the context, which can be accessed as function calls.
         context.libraries += createLambdaParametersLibrary(*arguments)
 
-        // The result of the lambda action is evaluated.
-        return ValueFactory.eval(action(arguments), context)
+        // The result of the lambda action is processed.
+        return action(arguments, context)
     }
 
     /**

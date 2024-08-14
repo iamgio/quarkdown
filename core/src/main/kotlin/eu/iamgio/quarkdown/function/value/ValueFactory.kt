@@ -321,10 +321,13 @@ object ValueFactory {
             }
 
         return LambdaValue(
-            Lambda(context, explicitParameters = parameters) {
-                // Parameters-arguments count match is checked by Lambda#invoke.
+            Lambda(context, explicitParameters = parameters) { _, newContext ->
+                // The body (as a raw code snippet) is evaluated in the context of the lambda
+                // which is a fork of the original one.
+                // Parameters-arguments count match is checked later.
                 // Here we assume they match is correct.
-                body
+                // Check Lambda#invokeDynamic for more details.
+                eval(body, newContext)
             },
         )
     }

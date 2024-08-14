@@ -18,6 +18,7 @@ import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.output.node.BlockNodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.node.InlineNodeOutputValueVisitor
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import kotlin.test.BeforeTest
@@ -59,11 +60,11 @@ class FlowTest {
         function(
             context,
             name = "myfunc1",
-            body = Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+            body = Lambda(context, explicitParameters = emptyList()) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
         )
 
         assertEquals(
-            DynamicValue("Hello Quarkdown"),
+            StringValue("Hello Quarkdown"),
             call("myfunc1", arguments = emptyList()),
         )
 
@@ -118,28 +119,28 @@ class FlowTest {
         val control1 =
             `if`(
                 isLower(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+                Lambda(context, explicitParameters = emptyList()) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         assertEquals("Hello Quarkdown", control1.unwrappedValue)
 
         val control2 =
             `if`(
                 isGreater(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+                Lambda(context, explicitParameters = emptyList()) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         assertEquals(VoidValue, control2)
 
         val control3 =
             ifNot(
                 isGreater(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = emptyList()) { "Hello Quarkdown" },
+                Lambda(context, explicitParameters = emptyList()) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         assertEquals("Hello Quarkdown", control3.unwrappedValue)
 
         assertFailsWith<InvalidLambdaArgumentCountException> {
             `if`(
                 isLower(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = listOf("a")) { "Hello Quarkdown" },
+                Lambda(context, explicitParameters = listOf("a")) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         }
     }
@@ -152,13 +153,16 @@ class FlowTest {
                     StringValue("Hello"),
                     StringValue("Quarkdown"),
                 ),
-                body = Lambda(context, explicitParameters = emptyList()) { "**${it.first().unwrappedValue}**" },
+                body =
+                    Lambda(context, explicitParameters = emptyList()) { args, _ ->
+                        "**${args.first().unwrappedValue}**".wrappedAsValue()
+                    },
             )
 
         assertEquals(
             listOf(
-                DynamicValue("**Hello**"),
-                DynamicValue("**Quarkdown**"),
+                StringValue("**Hello**"),
+                StringValue("**Quarkdown**"),
             ),
             loop1.unwrappedValue,
         )
@@ -166,7 +170,8 @@ class FlowTest {
         val loop2 =
             forEach(
                 Range(start = 2, end = 4),
-                body = ValueFactory.lambda("n: \nN: .n", context).unwrappedValue, // Explicit lambda placeholder
+                // Explicit lambda placeholder
+                body = ValueFactory.lambda("n: \nN: .n", context).unwrappedValue,
             )
 
         assertEquals(

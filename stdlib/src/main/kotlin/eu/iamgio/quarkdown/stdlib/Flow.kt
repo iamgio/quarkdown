@@ -152,7 +152,7 @@ fun function(
 fun variable(
     @Injected context: MutableContext,
     name: String,
-    value: String,
+    value: DynamicValue,
 ): VoidValue {
     /**
      * @return whether a variable called [name] was removed from [this] set of libraries.
@@ -171,7 +171,7 @@ fun variable(
     return function(
         targetContext,
         name,
-        Lambda(context, explicitParameters = emptyList()) {
+        Lambda(context, explicitParameters = emptyList()) { _, _ ->
             value
         },
     )
