@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.function.call
 
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.binding.AllArgumentsBinder
 import eu.iamgio.quarkdown.function.expression.Expression
@@ -30,6 +31,12 @@ data class FunctionCall<T : OutputValue<*>>(
      * @return the function output
      */
     fun execute(): T {
+        // In case this call is evaluated in a context,
+        // remove it from the execution queue to avoid multiple executions.
+        if (context is MutableContext && sourceNode != null) {
+            context.removeFunctionCall(sourceNode)
+        }
+
         // Allows binding each argument to its parameter.
         val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
         return function.invoke(bindings)

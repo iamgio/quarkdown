@@ -60,13 +60,13 @@ import eu.iamgio.quarkdown.function.value.VoidValue
  * @see ComposedExpression
  */
 class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor<Expression> {
+    private val otherEval = other.eval() // Evaluate the next expression.
+
     /**
      * @return string result of the concatenation between [this] and [other]
      * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.ValueFactory.eval])
      */
     private fun Value<*>.concatenate(): InputValue<*> {
-        val otherEval = other.eval() // Evaluate the next expression.
-
         // Void values are ignored.
         if (this is VoidValue) return otherEval as InputValue<*>
         if (otherEval is VoidValue) return this as InputValue<*>
@@ -121,19 +121,19 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: OrderedCollectionValue<*>): Expression =
         OrderedCollectionValue(
-            value.unwrappedValue + other.eval() as OutputValue<*>,
+            value.unwrappedValue + otherEval as OutputValue<*>,
         )
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: UnorderedCollectionValue<*>): Expression =
         UnorderedCollectionValue(
-            value.unwrappedValue + other.eval() as OutputValue<*>,
+            value.unwrappedValue + otherEval as OutputValue<*>,
         )
 
     // [a, b, c] "abc" -> [a, b, c, "abc"]
     override fun visit(value: GeneralCollectionValue<*>): GeneralCollectionValue<*> =
         GeneralCollectionValue(
-            value.unwrappedValue + other.eval() as OutputValue<*>,
+            value.unwrappedValue + otherEval as OutputValue<*>,
         )
 
     // CENTER "abc"  -> "CENTERabc"
@@ -148,14 +148,14 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
     override fun visit(value: MarkdownContentValue): Expression {
-        return GeneralCollectionValue(listOf(value.asNodeValue(), other.eval() as OutputValue<*>))
+        return GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
     }
 
     // InlineMarkdownContent(Text("abc")) Text("def") -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) "def"       -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) 15          -> InlineMarkdownContent(Text("abc"), Text("15"))
     override fun visit(value: InlineMarkdownContentValue): Expression {
-        return GeneralCollectionValue(listOf(value.asNodeValue(), other.eval() as OutputValue<*>))
+        return GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
     }
 
     // DynamicValue(15) "abc"        -> "15abc"

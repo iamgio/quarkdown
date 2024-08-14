@@ -38,6 +38,14 @@ open class MutableContext(
     }
 
     /**
+     * Removes a [FunctionCallNode] from the execution queue.
+     * @param functionCall function call to remove
+     */
+    fun removeFunctionCall(functionCall: FunctionCallNode) {
+        attributes.functionCalls -= functionCall
+    }
+
+    /**
      * Returns a copy of the queue containing registered function calls and clears the original one.
      * @return all the registered function call nodes until now
      */
