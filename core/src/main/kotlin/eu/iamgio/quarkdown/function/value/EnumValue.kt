@@ -13,3 +13,9 @@ data class EnumValue(override val unwrappedValue: Enum<*>) : InputValue<Enum<*>>
  * @return [this] enum wrapped into an [EnumValue]
  */
 fun Enum<*>.wrappedAsValue() = EnumValue(this)
+
+/**
+ * @return this enum's name in Quarkdown format (lowercase, no underscores). i.e. `SPACE_AROUND` -> `spacearound`
+ */
+val Enum<*>.quarkdownName: String
+    get() = name.lowercase().replace("_", "")

@@ -183,7 +183,7 @@ object ValueFactory {
         raw: String,
         values: Array<Enum<*>>,
     ): EnumValue? =
-        values.find { it.name.replace("_", "").equals(raw, ignoreCase = true) }
+        values.find { it.quarkdownName.equals(raw, ignoreCase = true) }
             ?.let { EnumValue(it) }
 
     /**

@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.error
 
 import eu.iamgio.quarkdown.NO_SUCH_ELEMENT_EXIT_CODE
+import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
 /**
@@ -9,5 +10,5 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
  */
 class NoSuchElementFunctionException(element: Any, values: Iterable<*>) :
     PipelineException("No such element '$element' among values $values", NO_SUCH_ELEMENT_EXIT_CODE) {
-    constructor(element: Any, values: Array<Enum<*>>) : this(element, values.map { it.name.lowercase() })
+    constructor(element: Any, values: Array<Enum<*>>) : this(element, values.map { it.quarkdownName })
 }
