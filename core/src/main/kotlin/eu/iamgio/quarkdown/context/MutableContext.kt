@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
+import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 
 /**
@@ -37,13 +38,13 @@ open class MutableContext(
         attributes.functionCalls += functionCall
     }
 
-    /**
-     * Removes a [FunctionCallNode] from the execution queue.
-     * @param functionCall function call to remove
-     */
-    fun removeFunctionCall(functionCall: FunctionCallNode) {
-        attributes.functionCalls -= functionCall
-    }
+    // This override makes sure the same function call is dequeued from the execution queue
+    // after its execution is completed, so that it won't be accidentally executed again.
+    // A double execution may happen if it's in the execution queue AND another function evaluates it.
+    override fun resolve(call: FunctionCallNode): FunctionCall<*>? =
+        super.resolve(call)?.also {
+            it.onComplete = { attributes.functionCalls.remove(call) }
+        }
 
     /**
      * Returns a copy of the queue containing registered function calls and clears the original one.
