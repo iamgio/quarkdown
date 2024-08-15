@@ -32,6 +32,10 @@ hr {
     background-color: var(--primary);
 }
 
+.table-of-contents ol ol {
+    border-color: rgba(255, 255, 255, .1);
+}
+
 .page-margin-bottom-center {
     border-color: var(--qd-link-color);
 }

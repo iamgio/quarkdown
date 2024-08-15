@@ -218,6 +218,14 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     margin: 0;
 }
 
+.table-of-contents {
+    text-align: start;
+}
+
+h1#table-of-contents {
+    text-align: start;
+}
+
 .table-of-contents li a {
     text-decoration: none;
 }

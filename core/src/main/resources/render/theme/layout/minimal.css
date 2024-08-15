@@ -97,6 +97,27 @@ p code {
     border: 0.1em solid color-mix(in srgb, currentColor 60%, transparent);
 }
 
+/* Table of contents */
+
+.table-of-contents, h1#table-of-contents {
+    margin-left: 44px;
+}
+
+.table-of-contents ol {
+    list-style-type: none;
+}
+
+.table-of-contents ol ol {
+    border-left: 2px solid;
+    border-radius: 2px;
+    margin-left: 1px;
+    padding: 0 28px;
+}
+
+.table-of-contents li {
+    margin: 4px 0;
+}
+
 /* Footer */
 
 .page-margin-bottom-center {
