@@ -32,7 +32,12 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
 
-    override fun visit(orientation: Stacked.Orientation) = orientation.kebabCaseName
+    override fun visit(stackLayout: Stacked.Layout) =
+        when (stackLayout) {
+            is Stacked.Column -> "column"
+            is Stacked.Row -> "row"
+            is Stacked.Grid -> "grid"
+        }
 
     override fun visit(alignment: Stacked.MainAxisAlignment) =
         when (alignment) {

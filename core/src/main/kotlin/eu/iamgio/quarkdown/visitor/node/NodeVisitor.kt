@@ -33,7 +33,6 @@ import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
-import eu.iamgio.quarkdown.ast.quarkdown.block.Grid
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -126,8 +125,6 @@ interface NodeVisitor<T> {
     fun visit(node: Aligned): T
 
     fun visit(node: Stacked): T
-
-    fun visit(node: Grid): T
 
     fun visit(node: Clipped): T
 

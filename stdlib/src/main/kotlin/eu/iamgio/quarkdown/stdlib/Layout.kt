@@ -6,7 +6,6 @@ import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
-import eu.iamgio.quarkdown.ast.quarkdown.block.Grid
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -27,7 +26,6 @@ val Layout: Module =
     setOf(
         ::align,
         ::center,
-        ::stack,
         ::row,
         ::column,
         ::grid,
@@ -57,8 +55,8 @@ fun align(
 fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
 
 /**
- * Stacks content along an axis.
- * @param orientation orientation of the stack
+ * Stacks content together, according to the specified type.
+ * @param layout stack type
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
@@ -67,13 +65,13 @@ fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
  * @see row
  * @see column
  */
-fun stack(
-    orientation: Stacked.Orientation,
-    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
-    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
+private fun stack(
+    layout: Stacked.Layout,
+    mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
+    crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     gap: Size? = null,
     body: MarkdownContent,
-) = Stacked(orientation, mainAxisAlignment, crossAxisAlignment, gap, body.children).wrappedAsValue()
+) = Stacked(layout, mainAxisAlignment, crossAxisAlignment, gap, body.children).wrappedAsValue()
 
 /**
  * Stacks content horizontally.
@@ -82,14 +80,13 @@ fun stack(
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new stacked block
- * @see stack
  */
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     gap: Size? = null,
     body: MarkdownContent,
-) = stack(Stacked.Orientation.HORIZONTAL, mainAxisAlignment, crossAxisAlignment, gap, body)
+) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, gap, body)
 
 /**
  * Stacks content vertically.
@@ -98,29 +95,33 @@ fun row(
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new stacked block
- * @see stack
  */
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     gap: Size? = null,
     body: MarkdownContent,
-) = stack(Stacked.Orientation.VERTICAL, mainAxisAlignment, crossAxisAlignment, gap, body)
+) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, body)
 
 /**
  * Stacks content in a grid layout.
  * Each child is placed in a cell in a row, and a row ends when its cell count reaches [columnCount].
  * @param columnCount number of columns. Must be greater than 0
+ * @param mainAxisAlignment content alignment along the main axis
+ * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between rows and columns. If omitted, the default value is used
- * @return the new grid block
+ * @param body content to stack
+ * @return the new stacked block
  */
 fun grid(
     @Name("columns") columnCount: Int,
+    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.CENTER,
+    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     gap: Size? = null,
     body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
-    else -> Grid(columnCount, gap, body.children).wrappedAsValue()
+    else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, gap, body)
 }
 
 /**

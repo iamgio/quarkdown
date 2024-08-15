@@ -50,7 +50,7 @@ a {
 h1, h2, h3, h4, h5, h6,
 table, pre, figure, blockquote,
 ul, ol, hr,
-.stack:not(.stack .stack), .grid {
+.stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
 }
@@ -92,20 +92,22 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     align-items: end;
 }
 
-.stack {
+.stack-row {
     display: flex;
-}
-
-.stack-horizontal {
     flex-direction: row;
 }
 
-.stack-vertical {
+.stack-column {
+    display: flex;
     flex-direction: column;
 }
 
-.grid {
+.stack-grid {
     display: grid;
+}
+
+.stack-grid > * {
+    margin: 0 !important;
 }
 
 .clip img {

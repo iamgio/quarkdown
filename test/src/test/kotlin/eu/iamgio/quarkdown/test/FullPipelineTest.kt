@@ -408,7 +408,7 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: flex-start; align-items: center;\" class=\"stack stack-horizontal\">" +
+                "<div style=\"justify-content: flex-start; align-items: center;\" class=\"stack stack-row\">" +
                     "<p>Hello 1\nHello 2</p><p>Hello 3</p>" +
                     "</div>",
                 it,
@@ -426,7 +426,7 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: space-between; align-items: flex-start; gap: 1.0cm;\" class=\"stack stack-vertical\">" +
+                "<div style=\"justify-content: space-between; align-items: flex-start; gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<p>Hello 1</p>" +
                     "<h2>Hello 2</h2>" +
                     "<pre><code>Hello 3</code></pre>" +
@@ -456,11 +456,11 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: center; align-items: center; gap: 200.0px;\" class=\"stack stack-horizontal\">" +
-                    "<div style=\"justify-content: flex-start; align-items: flex-end;\" class=\"stack stack-vertical\">" +
+                "<div style=\"justify-content: center; align-items: center; gap: 200.0px;\" class=\"stack stack-row\">" +
+                    "<div style=\"justify-content: flex-start; align-items: flex-end;\" class=\"stack stack-column\">" +
                     "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
-                    "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-vertical\">" +
+                    "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<div class=\"clip clip-circle\">" +
                     "<p><img src=\"img1.png\" alt=\"\" /></p>" +
                     "</div>" +

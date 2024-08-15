@@ -172,8 +172,8 @@ from your Markdown code.
 
 ---
 
-.grid columns:{2}
-    **Metadata:**
+.grid columns:{2} gap:{1cm}
+    **Metadata**
 
     ```markdown
     .docname {Quarkdown demo}
@@ -182,7 +182,7 @@ from your Markdown code.
     .doclang {english}
     ```
 
-    **Layout and aesthetics:**
+    **Layout and aesthetics**
 
     ```markdown
     .theme {darko} layout:{minimal}
@@ -190,7 +190,7 @@ from your Markdown code.
     .slides transition:{zoom} speed:{fast}
     ```
 
-    **Fixed content on each page:**
+    **Fixed content on each page**
 
     ```markdown
     .footer

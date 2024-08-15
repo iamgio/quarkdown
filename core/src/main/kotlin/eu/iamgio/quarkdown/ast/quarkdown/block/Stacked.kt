@@ -8,14 +8,14 @@ import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- * A block that contains nodes stacked along a certain [orientation].
- * @param orientation orientation of the stack
+ * A block that contains nodes grouped together according to the given [layout].
+ * @param layout the way nodes are placed together
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap space between nodes
  */
 data class Stacked(
-    val orientation: Orientation,
+    val layout: Layout,
     val mainAxisAlignment: MainAxisAlignment,
     val crossAxisAlignment: CrossAxisAlignment,
     val gap: Size?,
@@ -24,14 +24,33 @@ data class Stacked(
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
-     * Possible orientation types of a [Stacked] block.
+     * Defines a way nodes of a [Stacked] block are placed together.
+     * @see Column
+     * @see Row
+     * @see Grid
      */
-    enum class Orientation : RenderRepresentable {
-        HORIZONTAL,
-        VERTICAL,
-        ;
+    sealed interface Layout : RenderRepresentable
 
-        override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
+    /**
+     * A layout that stacks nodes vertically.
+     */
+    object Column : Layout {
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
+
+    /**
+     * A layout that stacks nodes horizontally.
+     */
+    object Row : Layout {
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
+
+    /**
+     * A layout that stacks nodes in a grid.
+     * @param columnCount number of columns
+     */
+    class Grid(val columnCount: Int) : Layout {
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 
     /**

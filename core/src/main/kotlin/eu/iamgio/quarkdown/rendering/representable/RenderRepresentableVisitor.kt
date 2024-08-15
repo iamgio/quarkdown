@@ -25,7 +25,7 @@ interface RenderRepresentableVisitor<T> {
 
     fun visit(alignment: Table.Alignment): T
 
-    fun visit(orientation: Stacked.Orientation): T
+    fun visit(stackLayout: Stacked.Layout): T
 
     fun visit(alignment: Stacked.MainAxisAlignment): T
 
