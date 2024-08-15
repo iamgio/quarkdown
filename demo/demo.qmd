@@ -11,9 +11,11 @@
 
     [GitHub](https://github.com/iamgio/quarkdown)
 
-# Quarkdown
 
-Markdown with superpowers
+.column
+    !(_x100)[Quarkdown logo](https://iamgio.eu/quarkdown/img/logo-light.svg)
+
+    Markdown with superpowers
 
 # Versatile
 
@@ -251,5 +253,17 @@ On top of functions, the Quarkdown flavor introduces new features to the standar
 
 .simplesourceresult
     The color magenta's hexadecimal representation is `#FF00FF`.
+
+# It's a wrap
+
+You've seen the **key features** of Quarkdown — the door to making stunning documents is now open.  
+
+The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!  
+.text size:{small} content:{Just note that while `slides` documents are already stable and usable, `paged` ones are not yet.}
+
+.box
+    The **source code** of this presentation is available [**here**](https://github.com/iamgio/quarkdown/tree/main/demo).
+
+Future plans include tutorials, wikis and docs. But for now, happy coding!
 
 .tableofcontents maxdepth:{2}
