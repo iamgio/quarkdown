@@ -29,7 +29,7 @@ hr {
 }
 
 .codespan-content:not(.box .codespan-content) {
-    background-color: var(--primary);
+    background-color: rgba(34, 74, 81, .4);
 }
 
 .table-of-contents ol ol {
