@@ -83,6 +83,14 @@ figure figcaption {
     font-style: italic;
 }
 
+.reveal p {
+    line-height: 1.8;
+}
+
+.reveal p::first-line {
+    line-height: 1 !important;
+}
+
 .box {
     border-radius: 10px;
 }
