@@ -159,7 +159,7 @@ from your Markdown code.
     .var {t2} {1}
 
     .table
-        .foreach {0..6}
+        .foreach {0..8}
             n:
             | $ F_{.n} $ |
             |:----------:|
@@ -194,5 +194,39 @@ from your Markdown code.
 
     .row alignment:{right}
         Hello, world!
+
+# Enhanced base Markdown
+
+On top of functions, the Quarkdown flavor introduces new features to the standard Markdown syntax.
+
+## Image size
+
+.var {sizedimages}
+    <!-- 300px width, auto height -->
+    !(300x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    <!-- 80px height, auto width -->
+    !(_x80)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    <!-- 200px width, 100px height -->
+    !(200x100)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+
+---
+
+.code {markdown}
+    .sizedimages
+
+#### ↓
+
+.row alignment:{center}
+    .sizedimages
+
+## Labeled image
+
+.simplesourceresult
+    !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
+
+## Color preview
+
+.simplesourceresult
+    The color magenta's hexadecimal representation is `#FF00FF`.
 
 .tableofcontents maxdepth:{2}

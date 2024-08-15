@@ -74,6 +74,15 @@ blockquote {
     padding: 0;
 }
 
+figure img {
+    margin-bottom: 0.5em !important;
+}
+
+figure figcaption {
+    font-size: 0.8em;
+    font-style: italic;
+}
+
 .box {
     border-radius: 10px;
 }
