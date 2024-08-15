@@ -213,7 +213,8 @@ from your Markdown code.
 
 # Enhanced base Markdown
 
-On top of functions, the Quarkdown flavor introduces new features to the standard Markdown syntax.
+**Not just functions.**  
+The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 ## TeX formulas
 
