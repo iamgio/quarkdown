@@ -82,10 +82,24 @@ Go ahead to discover Quarkdown's capabilities.
 Call any function from the extensive [standard library](https://github.com/iamgio/quarkdown/tree/main/stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib)
 from your Markdown code.
 
-```
+```markdown
 .somefunction {argument1} {argument2}
     Body argument
 ```
+
+.fragment
+    Or define your own:
+    ```markdown
+    .function {greet}
+        to from:
+        **Hello, .to** from .from!
+
+    .greet {world} from:{Giorgio}
+    ```
+
+.fragment
+    .text size:{small}
+        **Hello, world** from Giorgio!
 
 <!-- Like .sourceresult, but with no animations. -->
 .function {simplesourceresult}
@@ -108,6 +122,17 @@ from your Markdown code.
     
             https://github.com/iamgio/quarkdown
 
+## Multi-file project
+
+.simplesourceresult
+    .include {sources/other.qmd}
+
+.whitespace height:{1cm}
+
+.fragment
+    > Functions declared in included files are imported as well.  
+    > Use it to your advantage to make awesome libraries!
+
 ## File data: code
 
 .simplesourceresult
@@ -120,11 +145,6 @@ from your Markdown code.
 
 .simplesourceresult
     .csv {csv/people.csv}
-
-## File data: multi-file project
-
-.simplesourceresult
-    .include {sources/other.qmd}
 
 ## Math
 
@@ -149,6 +169,8 @@ from your Markdown code.
             .var {t2} {.tmp}
 
 ## Document customization
+
+---
 
 ```markdown
 .docname {Quarkdown demo}
