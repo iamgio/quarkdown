@@ -120,7 +120,10 @@ class FullPipelineTest {
     @Test
     fun code() {
         execute("`println(\"Hello, world!\")`") {
-            assertEquals("<p><span class=\"codespan-content\"><code>println(&quot;Hello, world!&quot;)</code></span></p>", it)
+            assertEquals(
+                "<p><span class=\"codespan-content\"><code>println(&quot;Hello, world!&quot;)</code></span></p>",
+                it,
+            )
             assertFalse(attributes.hasCode)
         }
 
@@ -493,6 +496,25 @@ class FullPipelineTest {
                     .var {t2} {.tmp}
             """.trimIndent()
 
+        val iterativeInFunction =
+            """
+            .function {fib}
+                n:
+                .var {t1} {0}
+                .var {t2} {1}
+                
+                .table
+                    .repeat {.n}
+                        | $ F_{.subtract {.1} {1}} $ |
+                        |:--------------------------:|
+                        |             .t1            |
+                        .var {tmp} {.sum {.t1} {.t2}}
+                        .var {t1} {.t2}
+                        .var {t2} {.tmp}
+
+            .fib {5}
+            """.trimIndent()
+
         val alternativeIterative =
             """
             .var {t1} {0}
@@ -549,6 +571,10 @@ class FullPipelineTest {
                 "</tr></tbody></table>"
 
         execute(iterative) {
+            assertEquals(out, it)
+        }
+
+        execute(iterativeInFunction) {
             assertEquals(out, it)
         }
 
