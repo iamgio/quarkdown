@@ -1,10 +1,10 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.inline.CheckBox
-import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
@@ -25,6 +25,7 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
+import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -144,7 +145,7 @@ class FunctionNodeExpansionTest {
 
         with(node.children.first()) {
             assertIs<Box>(this) // Error box
-            assertTrue("sum(" in (this.children.first() as PlainTextNode).text) // Error message
+            assertTrue("sum(" in (this.children.first() as TextNode).text.toPlainText()) // Error message
         }
     }
 
@@ -192,7 +193,7 @@ class FunctionNodeExpansionTest {
 
         with(node.children.first()) {
             assertIs<Box>(this) // Error box
-            assertTrue("reference" in (this.children.first() as PlainTextNode).text) // Unresolved reference error message
+            assertTrue("reference" in (this.children.first() as TextNode).text.toPlainText()) // Unresolved reference error message
         }
     }
 
@@ -310,7 +311,7 @@ class FunctionNodeExpansionTest {
 
         with(node.children.first()) {
             assertIs<Box>(this) // Error box
-            assertTrue("No such element" in (this.children.first() as PlainTextNode).text) // Error message
+            assertTrue("No such element" in (this.children.first() as TextNode).text.toPlainText()) // Error message
         }
     }
 
