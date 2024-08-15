@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.ast.quarkdown.block
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.document.size.Size
@@ -41,7 +42,7 @@ data class Box(
             padding = null,
             backgroundColor = Color(224, 67, 64),
             foregroundColor = Color(255, 255, 255),
-            children = listOf(CodeSpan(message)),
+            children = listOf(Paragraph(listOf(CodeSpan(message)))),
         )
     }
 }

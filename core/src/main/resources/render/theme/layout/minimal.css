@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import url('https://fonts.googleapis.com/css?family=Inter');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
 
 :root {
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
-    --qd-code-font-size: 1.5em;
+    --qd-code-font: "Noto Sans Mono", monospace;
+    --qd-code-font-size: 1.3em;
     --qd-block-margin: 1.8em;
 }
 
@@ -83,7 +85,12 @@ blockquote {
 }
 
 p code {
-    font-size: 1.2em;
+    font-size: 0.9em;
+}
+
+/* TODO change to '.error-box code' once box types are implemented */
+.box-content code {
+    font-size: 0.7em;
 }
 
 .codespan-content {

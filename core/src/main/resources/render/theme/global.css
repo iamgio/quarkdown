@@ -5,6 +5,7 @@
     --qd-link-color: inherit;
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
+    --qd-font: monospace;
     --qd-code-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
@@ -17,6 +18,7 @@
     --r-link-color: var(--qd-link-color);
     --r-main-font: var(--qd-main-font);
     --r-main-font-size: var(--qd-main-font-size);
+    --r-code-font: var(--qd-code-font);
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
 }
@@ -50,6 +52,10 @@ table, pre, figure, blockquote,
 ul, ol, hr, .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
+}
+
+code {
+    font-family: var(--qd-font);
 }
 
 pre code {
