@@ -55,8 +55,8 @@ Export your Quarkdown project as:
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
 
-<!-- Shows the source code of a Quarkdown snippet AND its rendered result -->
-.function {sourceresult}
+<!-- Shows the source code of a Quarkdown snippet AND its rendered result with an animation -->
+.function {animatedsourceresult}
     source:
     .fragment
         ---
@@ -69,7 +69,7 @@ so that you'll feel at home typing code you're comfortable typing.
         
         .source
 
-.sourceresult
+.animatedsourceresult
     ### Diving into _Quarkdown_
     
     Somebody once said:
@@ -103,8 +103,8 @@ from your Markdown code.
     .text size:{small}
         **Hello, world** from Giorgio!
 
-<!-- Like .sourceresult, but with no animations. -->
-.function {simplesourceresult}
+<!-- Like .animatedsourceresult, but with no animations. -->
+.function {sourceresult}
     source:
     ---
     .code {markdown}
@@ -114,7 +114,7 @@ from your Markdown code.
 
 ## Full layout control 
 
-.simplesourceresult
+.sourceresult
     .row alignment:{center} gap:{1cm}
         !(150x150)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png)
         
@@ -126,7 +126,7 @@ from your Markdown code.
 
 ## Multi-file project
 
-.simplesourceresult
+.sourceresult
     .include {sources/other.qmd}
 
 .whitespace height:{1cm}
@@ -137,7 +137,7 @@ from your Markdown code.
 
 ## File data: code
 
-.simplesourceresult
+.sourceresult
     The contructor of the class `Point` is as follows:
 
     .code {java}
@@ -145,18 +145,18 @@ from your Markdown code.
 
 ## File data: CSV
 
-.simplesourceresult
+.sourceresult
     .csv {csv/people.csv}
 
 ## Math
 
-.simplesourceresult
+.sourceresult
     If we try to calculate the **surface** of a circle of **radius 8**,
     we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
 
 ## Scripting
 
-.simplesourceresult
+.sourceresult
     .var {t1} {0}
     .var {t2} {1}
 
@@ -205,7 +205,7 @@ from your Markdown code.
 
 ## Intuitive error handling
 
-.simplesourceresult
+.sourceresult
     .sum {3} {x}
 
     .row alignment:{right}
@@ -218,7 +218,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 ## TeX formulas
 
-.simplesourceresult
+.sourceresult
     Given that $ \vec v(t) $ and $ \vec a(t) $ are, respectively, velocity and acceleration at time $ t $:
 
     $ \int^{\vec v}_{\vec v_o} d\vec v(t) = \int^t_0 \vec a(t)dt $
@@ -247,12 +247,12 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 ## Labeled image
 
-.simplesourceresult
+.sourceresult
     !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
 
 ## Color preview
 
-.simplesourceresult
+.sourceresult
     The color magenta's hexadecimal representation is `#FF00FF`.
 
 # It's a wrap
