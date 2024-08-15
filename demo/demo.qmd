@@ -53,7 +53,7 @@ Export your Quarkdown project as:
 # Same foundations…
 
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
-so that you will feel at home typing code you're comfortable typing.
+so that you'll feel at home typing code you're comfortable typing.
 
 <!-- Shows the source code of a Quarkdown snippet AND its rendered result -->
 .function {sourceresult}
