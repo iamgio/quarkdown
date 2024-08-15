@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Grid
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -29,6 +30,7 @@ val Layout: Module =
         ::stack,
         ::row,
         ::column,
+        ::grid,
         ::whitespace,
         ::clip,
         ::box,
@@ -104,6 +106,22 @@ fun column(
     gap: Size? = null,
     body: MarkdownContent,
 ) = stack(Stacked.Orientation.VERTICAL, mainAxisAlignment, crossAxisAlignment, gap, body)
+
+/**
+ * Stacks content in a grid layout.
+ * Each child is placed in a cell in a row, and a row ends when its cell count reaches [columnCount].
+ * @param columnCount number of columns. Must be greater than 0
+ * @param gap blank space between rows and columns. If omitted, the default value is used
+ * @return the new grid block
+ */
+fun grid(
+    @Name("columns") columnCount: Int,
+    gap: Size? = null,
+    body: MarkdownContent,
+) = when {
+    columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
+    else -> Grid(columnCount, gap, body.children).wrappedAsValue()
+}
 
 /**
  * An empty square that adds whitespace to the layout.

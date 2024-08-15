@@ -39,6 +39,12 @@ class CssBuilder {
      * Shorthand syntactic sugar for [entry].
      * @see entry
      */
+    infix fun String.value(value: String?) = entry(this, value)
+
+    /**
+     * Shorthand syntactic sugar for [entry].
+     * @see entry
+     */
     infix fun String.value(value: RenderRepresentable?) = entry(this, value)
 
     /**

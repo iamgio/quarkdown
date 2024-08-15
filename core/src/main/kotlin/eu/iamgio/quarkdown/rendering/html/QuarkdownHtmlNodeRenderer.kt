@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Grid
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -73,8 +74,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 
-    override fun visit(node: Stacked): CharSequence {
-        return div("stack stack-${node.orientation.asCSS}") {
+    override fun visit(node: Stacked) =
+        div("stack stack-${node.orientation.asCSS}") {
             +node.children
 
             style {
@@ -83,7 +84,17 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "gap" value node.gap
             }
         }
-    }
+
+    override fun visit(node: Grid) =
+        div("grid") {
+            +node.children
+
+            style {
+                // The amount of 'auto' matches the amount of columns/rows.
+                "grid-template-columns" value "auto ".repeat(node.columnCount).trimEnd()
+                "gap" value node.gap
+            }
+        }
 
     override fun visit(node: Clipped) = div("clip clip-${node.clip.asCSS}", node.children)
 

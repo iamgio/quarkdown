@@ -172,7 +172,7 @@ from your Markdown code.
 
 ---
 
-.row alignment:{spacebetween} gap:{2cm}
+.grid columns:{2}
     **Metadata:**
 
     ```markdown
@@ -182,28 +182,24 @@ from your Markdown code.
     .doclang {english}
     ```
 
-.fragment
-    .row alignment:{spacebetween} gap:{2cm}
-        **Layout and aesthetics:**
+    **Layout and aesthetics:**
 
-        ```markdown
-        .theme {darko} layout:{minimal}
-        .pageformat {A4} orientation:{landscape}
-        .slides transition:{zoom} speed:{fast}
-        ```
+    ```markdown
+    .theme {darko} layout:{minimal}
+    .pageformat {A4} orientation:{landscape}
+    .slides transition:{zoom} speed:{fast}
+    ```
 
-.fragment
-    .row alignment:{spacebetween} gap:{2cm}
-        **Fixed content on each page:**
+    **Fixed content on each page:**
 
-        ```markdown
-        .footer
-            .docauthor
-            
-            **.docname**
-            
-            [GitHub](https://github.com/iamgio/quarkdown)
-        ```
+    ```markdown
+    .footer
+        .docauthor
+        
+        **.docname**
+        
+        [GitHub](https://github.com/iamgio/quarkdown)
+    ```
 
 ## Intuitive error handling
 

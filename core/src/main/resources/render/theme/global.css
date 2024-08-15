@@ -49,7 +49,8 @@ a {
 
 h1, h2, h3, h4, h5, h6,
 table, pre, figure, blockquote,
-ul, ol, hr, .stack:not(.stack .stack) {
+ul, ol, hr,
+.stack:not(.stack .stack), .grid {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
 }
@@ -101,6 +102,10 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 
 .stack-vertical {
     flex-direction: column;
+}
+
+.grid {
+    display: grid;
 }
 
 .clip img {
