@@ -111,8 +111,10 @@ p code {
 }
 
 .codespan-content {
-    padding: 0.1em 0.6em;
+    margin: 0 0.2em;
+    padding: 0.3em 0.6em;
     border-radius: 8px;
+    line-height: normal;
 }
 
 .color-preview {
