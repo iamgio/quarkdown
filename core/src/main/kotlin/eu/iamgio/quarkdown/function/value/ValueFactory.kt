@@ -392,6 +392,10 @@ object ValueFactory {
                     ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
             }
         } catch (e: InvalidExpressionEvalException) {
+            // All enqueued function calls are invalidated and discarded.
+            (context as? MutableContext)?.dequeueAllFunctionCalls()
+            // The fallback function is called to provide a default value.
+            // The default behavior is Markdown parsing.
             fallback()
         }
     }

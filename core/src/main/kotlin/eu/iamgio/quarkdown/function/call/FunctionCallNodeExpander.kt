@@ -3,7 +3,6 @@ package eu.iamgio.quarkdown.function.call
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
-import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitorFactory
 import eu.iamgio.quarkdown.function.value.output.node.NodeOutputValueVisitorFactory
@@ -69,7 +68,7 @@ class FunctionCallNodeExpander(
 
     /**
      * Expands all unexpanded function calls present in [context], and empties queued function calls in [context].
-     * This is performed on a copy of [Context.functionCalls] to avoid `ConcurrentModificationException`.
+     * This is performed on a copy of the context's execution queue to avoid `ConcurrentModificationException`.
      * Hence, if a function call is added during the expansion, [expandAll] must be called again.
      */
     fun expandAll() {
