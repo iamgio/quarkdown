@@ -71,7 +71,7 @@ so that you will feel at home typing code you're comfortable typing.
     ### Diving into _Quarkdown_
     
     Somebody once said:
-    > Write once, run anywhere.
+    > Write once, run **anywhere**.
     
 # …brand-new everything
 
@@ -172,20 +172,38 @@ from your Markdown code.
 
 ---
 
-```markdown
-.docname {Quarkdown demo}
-.docauthor {iamgio}
-.doctype {slides}
-.theme {darko} layout:{minimal}
-.slides transition:{zoom} speed:{fast}
+.row alignment:{spacebetween} gap:{2cm}
+    **Metadata:**
 
-.footer
-    .docauthor
+    ```markdown
+    .docname {Quarkdown demo}
+    .docauthor {iamgio}
+    .doctype {slides}
+    .doclang {english}
+    ```
 
-    **.docname**
+.fragment
+    .row alignment:{spacebetween} gap:{2cm}
+        **Layout and aesthetics:**
 
-    [GitHub](https://github.com/iamgio/quarkdown)
-```
+        ```markdown
+        .theme {darko} layout:{minimal}
+        .pageformat {A4} orientation:{landscape}
+        .slides transition:{zoom} speed:{fast}
+        ```
+
+.fragment
+    .row alignment:{spacebetween} gap:{2cm}
+        **Fixed content on each page:**
+
+        ```markdown
+        .footer
+            .docauthor
+            
+            **.docname**
+            
+            [GitHub](https://github.com/iamgio/quarkdown)
+        ```
 
 ## Intuitive error handling
 
