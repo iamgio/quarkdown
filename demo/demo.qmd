@@ -227,8 +227,8 @@ On top of functions, the Quarkdown flavor introduces new features to the standar
 ## Image size
 
 .var {sizedimages}
-    <!-- 300px width, auto height -->
-    !(300x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    <!-- 200px width, auto height -->
+    !(200x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
     <!-- 80px height, auto width -->
     !(_x80)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
     <!-- 200px width, 100px height -->
@@ -241,7 +241,7 @@ On top of functions, the Quarkdown flavor introduces new features to the standar
 
 #### ↓
 
-.row alignment:{center}
+.row alignment:{center} gap:{1cm}
     .sizedimages
 
 ## Labeled image
