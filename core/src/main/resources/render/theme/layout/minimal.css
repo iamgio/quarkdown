@@ -105,8 +105,7 @@ p code {
     font-size: 0.9em;
 }
 
-/* TODO change to '.error-box code' once box types are implemented */
-.box-content code {
+.error-box code {
     font-size: 0.7em;
 }
 

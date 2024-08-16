@@ -657,6 +657,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title")),
+                type = Box.Type.CALLOUT,
                 padding = null,
                 backgroundColor = null,
                 foregroundColor = null,
@@ -668,6 +669,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
+                type = Box.Type.CALLOUT,
                 padding = null,
                 backgroundColor = null,
                 foregroundColor = null,
@@ -679,6 +681,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = null,
+                type = Box.Type.ERROR,
                 padding = 4.0.cm,
                 backgroundColor = null,
                 foregroundColor = null,
@@ -690,6 +693,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title")),
+                type = Box.Type.ERROR,
                 padding = 3.0.inch,
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),

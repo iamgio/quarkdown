@@ -16,7 +16,7 @@ hr {
     opacity: 0.5;
 }
 
-.box {
+.box.callout-box {
     background-color: var(--primary);
 }
 

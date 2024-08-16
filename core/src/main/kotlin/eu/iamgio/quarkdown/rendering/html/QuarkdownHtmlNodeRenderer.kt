@@ -44,7 +44,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
      * A `<div class="styleClass">...</div>` tag.
      */
     private fun div(
-        styleClass: String,
+        styleClass: String? = null,
         init: HtmlTagBuilder.() -> Unit,
     ) = tagBuilder("div", init = init)
         .`class`(styleClass)
@@ -92,7 +92,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Clipped) = div("clip clip-${node.clip.asCSS}", node.children)
 
     override fun visit(node: Box) =
-        div("box") {
+        div {
+            classes("box", node.type.asCSS)
+
             if (node.title != null) {
                 tag("header") {
                     tag("h4", node.title)

@@ -148,6 +148,7 @@ fun clip(
 /**
  * Inserts content in a box.
  * @param title box title. If unset, the box is untitled
+ * @param type box type. If unset, it defaults to a callout box
  * @param padding padding around the box. If unset, the box uses the default padding
  * @param backgroundColor background color. If unset, the box uses the default color
  * @param foregroundColor foreground (text) color. If unset, the box uses the default color
@@ -156,11 +157,12 @@ fun clip(
  */
 fun box(
     title: InlineMarkdownContent? = null,
+    type: Box.Type = Box.Type.CALLOUT,
     padding: Size? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("foreground") foregroundColor: Color? = null,
     body: MarkdownContent,
-) = Box(title?.children, padding, backgroundColor, foregroundColor, body.children).wrappedAsValue()
+) = Box(title?.children, type, padding, backgroundColor, foregroundColor, body.children).wrappedAsValue()
 
 /**
  * Creates a table out of a collection of columns.

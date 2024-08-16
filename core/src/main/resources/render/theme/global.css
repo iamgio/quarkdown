@@ -178,6 +178,11 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     margin: 8px 0;
 }
 
+.box.error-box {
+    background-color: rgb(224, 67, 64);
+    color: white;
+}
+
 .page-margin-content {
     position: absolute;
 }

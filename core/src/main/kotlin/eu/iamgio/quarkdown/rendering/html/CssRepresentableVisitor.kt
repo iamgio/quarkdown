@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
@@ -54,6 +55,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
         }
 
     override fun visit(clip: Clipped.Clip) = clip.kebabCaseName
+
+    override fun visit(boxType: Box.Type): String = "${boxType.kebabCaseName}-box"
 
     override fun visit(position: PageMarginPosition) = position.kebabCaseName
 
