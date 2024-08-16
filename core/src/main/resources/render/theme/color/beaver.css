@@ -20,14 +20,6 @@ h1:not(.box h1) {
     background-color: var(--secondary);
 }
 
-.box.callout-box {
-    background-color: rgb(234, 233, 247);
-}
-
-.box.callout-box:has(.box-content h1) {
-    background-color: var(--secondary);
-}
-
 .box > header {
     background-color: color-mix(in srgb, currentColor 7%, transparent);
 }
@@ -37,7 +29,12 @@ h1:not(.box h1) {
 }
 
 .box.callout-box {
+    background-color: rgb(234, 233, 247);
     color: rgb(83, 81, 152);
+}
+
+.box.callout-box:has(.box-content h1) {
+    background-color: var(--secondary);
 }
 
 .box.error-box {
