@@ -2,11 +2,14 @@
 
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
 
 :root {
     --reveal-center-vertically: false;
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
+    --qd-code-font: "Noto Sans Mono", monospace;
+    --qd-code-font-size: 1.1em;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.2;
 }
@@ -58,6 +61,10 @@ table td {
 
 table tr:last-child td {
     border-bottom: none;
+}
+
+pre code {
+    line-height: 1.5;
 }
 
 .box {
