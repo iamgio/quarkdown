@@ -37,7 +37,7 @@ Export your Quarkdown project as:
       a plain document.
 
 .fragment
-    *…in just one line, within your code!*
+    *…in just one line, within your code.*
 
     .row gap:{5mm}
         ```
