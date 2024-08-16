@@ -21,6 +21,15 @@ define new functions and variables - all within Markdown.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
+---
+
+<h3 align="center">Check out the demo presentation [here](https://iamgio.eu/quarkdown/demo)</h3>
+<p align="center">
+Built with Quarkdown itself — [source code](demo/demo.qmd)
+</p>
+
+---
+
 ## Comparison
 
 |                       |      Markdown      |       LaTeX        |     Quarkdown      |
