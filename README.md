@@ -25,7 +25,7 @@ to achieve with vanilla Markdown.
 
 ---
 
-<h3 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo">here</a></h3>
+<h2 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo">here</a></h3>
 <p align="center">
 Built with Quarkdown itself — <a href="demo/demo.qmd"><strong>source code</strong></a>
 </p>
