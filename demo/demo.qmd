@@ -219,9 +219,9 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 ## TeX formulas
 
 .sourceresult
-    Given that $ \vec v(t) $ and $ \vec a(t) $ are, respectively, velocity and acceleration at time $ t $:
-
-    $ \int^{\vec v}_{\vec v_o} d\vec v(t) = \int^t_0 \vec a(t)dt $
+    Let $ F(u) $ be the ***Fourier Transform*** of the function $ f(x) $:
+    
+    $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
 .poweredby {[MathJax](https://www.mathjax.org/)}
 
