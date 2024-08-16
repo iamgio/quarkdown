@@ -118,6 +118,34 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     clip-path: circle();
 }
 
+.size-tiny {
+    font-size: 0.5em;
+}
+
+.size-small {
+    font-size: 0.75em;
+}
+
+.size-normal {
+    font-size: 1em;
+}
+
+.size-medium {
+    font-size: 1.25em;
+}
+
+.size-larger {
+    font-size: 1.5em;
+}
+
+.size-large {
+    font-size: 2em;
+}
+
+.size-huge {
+    font-size: 3em;
+}
+
 .codespan-content {
     display: inline-flex;
     align-items: center;

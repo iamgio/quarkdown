@@ -32,7 +32,9 @@ class TextTransformData(
         SMALL,
         NORMAL,
         MEDIUM,
+        LARGER,
         LARGE,
+        HUGE,
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)

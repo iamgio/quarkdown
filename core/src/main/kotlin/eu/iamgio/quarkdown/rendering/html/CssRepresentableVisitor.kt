@@ -69,14 +69,7 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
             SlidesFragment.Behavior.SHOW_HIDE -> "fade-in-then-out"
         }
 
-    override fun visit(size: TextTransformData.Size) =
-        when (size) {
-            TextTransformData.Size.TINY -> "0.5em"
-            TextTransformData.Size.SMALL -> "0.75em"
-            TextTransformData.Size.NORMAL -> "1em"
-            TextTransformData.Size.MEDIUM -> "1.5em"
-            TextTransformData.Size.LARGE -> "2em"
-        }
+    override fun visit(size: TextTransformData.Size) = "size-${size.kebabCaseName}"
 
     override fun visit(weight: TextTransformData.Weight) = weight.kebabCaseName
 

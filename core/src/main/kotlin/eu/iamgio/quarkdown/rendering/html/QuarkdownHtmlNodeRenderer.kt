@@ -176,8 +176,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: TextTransform) =
         buildTag("span") {
             +node.children
+
+            `class`(node.data.size?.asCSS) // e.g. 'size-small' class
+
             style {
-                "font-size" value node.data.size
                 "font-weight" value node.data.weight
                 "font-style" value node.data.style
                 "font-variant" value node.data.variant
