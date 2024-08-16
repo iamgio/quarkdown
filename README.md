@@ -16,7 +16,7 @@ flavor*.
 
 The standout feature the flavor introduces is its support for  **functions**, allowing users to access an
 extensive [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib), use conditional statements and loops,
-define new functions and variables - all within Markdown.
+define new functions and variables — all within Markdown.
 
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
@@ -27,7 +27,7 @@ to achieve with vanilla Markdown.
 
 <h3 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo">here</a></h3>
 <p align="center">
-Built with Quarkdown itself — <a href="demo/demo.qmd"><strong>source code</strong></a>)
+Built with Quarkdown itself — <a href="demo/demo.qmd"><strong>source code</strong></a>
 </p>
 
 ---
@@ -92,7 +92,7 @@ HTML is currently the only supported rendering target. LaTeX rendering is a futu
 - **HTML**
   - :white_check_mark: Plain output (default)
   - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (book) (via [paged.js](https://pagedjs.org))
+  - :warning: Paged (book) (via [paged.js](https://pagedjs.org)) — currently unstable
 
 The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
 - `.doctype {slides}`
