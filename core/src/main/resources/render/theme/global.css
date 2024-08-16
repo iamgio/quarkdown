@@ -11,6 +11,7 @@
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
     --qd-box-heading-font: var(--qd-main-font);
+    --qd-line-height: 1.5;
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -48,11 +49,20 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6,
-table, pre, figure, blockquote,
+p, table, pre, figure, blockquote,
 ul, ol, hr,
 .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
+}
+
+.reveal p {
+    line-height: var(--qd-line-height);
+}
+
+.reveal p::first-line {
+    /* Line height is set only after the first line */
+    line-height: 1 !important;
 }
 
 code {

@@ -8,6 +8,7 @@
     --qd-code-font: "Noto Sans Mono", monospace;
     --qd-code-font-size: 1.3em;
     --qd-block-margin: 1.8em;
+    --qd-line-height: 1.8;
 }
 
 h1 {
@@ -81,14 +82,6 @@ figure img {
 figure figcaption {
     font-size: 0.8em;
     font-style: italic;
-}
-
-.reveal p {
-    line-height: 1.8;
-}
-
-.reveal p::first-line {
-    line-height: 1 !important;
 }
 
 .box {
