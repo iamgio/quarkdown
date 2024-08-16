@@ -5,7 +5,7 @@
     --qd-link-color: inherit;
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
-    --qd-font: monospace;
+    --qd-code-font: monospace;
     --qd-code-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
