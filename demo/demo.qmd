@@ -223,7 +223,7 @@ from your Markdown code.
 .sourceresult
     .sum {3} {x}
 
-    .row alignment:{right}
+    .grid columns:{3} alignment:{right}
         Hello, world!
 
 # Enhanced base Markdown
