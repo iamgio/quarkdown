@@ -68,3 +68,15 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+    - name: Build with Gradle
+      run: ./gradlew clean distZip
+
+    - name: Echo output files
+      run: ls -d "$PWD/build/"*
+
+    - name: Distribute artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: quarkdown
+        path: build/distributions/quarkdown.zip
