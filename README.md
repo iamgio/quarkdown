@@ -11,6 +11,8 @@
   <hr>
 </p>
 
+<br>
+
 Quarkdown is a Markdown parser and renderer that extends the capabilities of Markdown, bringing support for **functions** and many other syntax extensions.
 
 > This is a function call:
@@ -18,6 +20,8 @@ Quarkdown is a Markdown parser and renderer that extends the capabilities of Mar
 > .somefunction {arg1} {arg2}
 >     Body argument
 > ```
+
+<br>
 
 **Possibilities are unlimited** thanks to an ever-expanding [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
 which offers layout builders, I/O, math, conditional statements and loops.
@@ -32,6 +36,8 @@ which offers layout builders, I/O, math, conditional statements and loops.
 >	.greet {world} from:{iamgio}
 > ```
 > Result: **Hello, world** from iamgio!
+
+<br>
 
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
