@@ -15,6 +15,8 @@
 
 Quarkdown is a Markdown parser and renderer that extends the capabilities of Markdown, bringing support for **functions** and many other syntax extensions.
 
+<br>
+
 > This is a function call:
 > ```
 > .somefunction {arg1} {arg2}
@@ -26,14 +28,35 @@ Quarkdown is a Markdown parser and renderer that extends the capabilities of Mar
 **Possibilities are unlimited** thanks to an ever-expanding [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
 which offers layout builders, I/O, math, conditional statements and loops.
 
+<br>
+
+> ```markdown
+> .row alignment:{spacebetween} gap:{1cm}
+>     .repeat {8}
+>         n:
+>         .if {.iseven {.n}}
+>             **.n** is even
+> ```
+> Result:
+> <div style="width: 100%; justify-content: space-between; align-items: center; gap: 1.0cm; display: inline-flex; flex-direction: row">
+>   <p><strong>2</strong> is even</p>
+>   <p><strong>4</strong> is even</p>
+>   <p><strong>6</strong> is even</p>
+>   <p><strong>8</strong> is even</p>
+> </div>
+
+<br>
+
 **Not enough?** You can still define your own functions and variables — all within Markdown.
+
+<br>
 
 > ```
 > .function {greet}
->	    to from:
->	    **Hello, .to** from .from!
->	 
->	.greet {world} from:{iamgio}
+>     to from:
+>     **Hello, .to** from .from!
+>
+> .greet {world} from:{iamgio}
 > ```
 > Result: **Hello, world** from iamgio!
 
