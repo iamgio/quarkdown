@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.8.21"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("com.gradleup.shadow") version "8.3.0"
+    application
 }
 
 group = "eu.iamgio.quarkdown"
@@ -22,6 +23,10 @@ dependencies {
     }
 }
 
+application {
+    mainClass.set("eu.iamgio.quarkdown.cli.QuarkdownCliKt")
+}
+
 tasks.build {
     dependsOn("shadowJar")
 }
@@ -32,6 +37,10 @@ tasks.jar {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.distZip {
+    archiveVersion.set("")
 }
 
 tasks.wrapper {
