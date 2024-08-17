@@ -31,19 +31,17 @@ which offers layout builders, I/O, math, conditional statements and loops.
 <br>
 
 > ```markdown
-> .row alignment:{spacebetween} gap:{1cm}
+> .grid columns:{2} gap:{1cm}
 >     .repeat {8}
 >         n:
 >         .if {.iseven {.n}}
 >             **.n** is even
 > ```
 > Result:
-> <div style="width: 100%; justify-content: space-between; align-items: center; gap: 1.0cm; display: inline-flex; flex-direction: row">
->   <p><strong>2</strong> is even</p>
->   <p><strong>4</strong> is even</p>
->   <p><strong>6</strong> is even</p>
->   <p><strong>8</strong> is even</p>
-> </div>
+> 
+> **2** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **4** is even
+>
+> **6** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **8** is even
 
 <br>
 
