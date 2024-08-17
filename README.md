@@ -11,12 +11,27 @@
   <hr>
 </p>
 
-Quarkdown is a Markdown parser and renderer that extends the capabilities of CommonMark and GFM with its own *Quarkdown
-flavor*.
+Quarkdown is a Markdown parser and renderer that extends the capabilities of Markdown, bringing support for **functions** and many other syntax extensions.
 
-The standout feature the flavor introduces is its support for  **functions**, allowing users to access an
-extensive [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib), use conditional statements and loops,
-define new functions and variables — all within Markdown.
+> This is a function call:
+> ```
+> .somefunction {arg1} {arg2}
+>     Body argument
+> ```
+
+**Possibilities are unlimited** thanks to an ever-expanding [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
+which offers layout builders, I/O, math, conditional statements and loops.
+
+**Not enough?** You can still define your own functions and variables — all within Markdown.
+
+> ```
+> .function {greet}
+>	    to from:
+>	    **Hello, .to** from .from!
+>	 
+>	.greet {world} from:{iamgio}
+> ```
+> Result: **Hello, world** from iamgio!
 
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
@@ -28,6 +43,8 @@ to achieve with vanilla Markdown.
 <h2 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo" target="_blank">here</a></h3>
 <p align="center">
 Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>source code</strong></a>
+<br><br>
+<em>(Desktop view is suggested)</em>
 </p>
 
 ---
