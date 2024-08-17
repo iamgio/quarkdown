@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.util
 
+import java.net.MalformedURLException
+import java.net.URL
+
 /**
  * @return a sliced copy of this string from start to the last occurrence of [string] if it exists,
  *         this string otherwise
@@ -53,4 +56,14 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
     when (val separator = System.lineSeparator()) {
         "\n" -> this
         else -> this.toString().replace(separator, "\n")
+    }
+
+/**
+ * @return a URL from [this] string if it's a valid URL, or `null` otherwise
+ */
+fun String.toURLOrNull(): URL? =
+    try {
+        URL(this)
+    } catch (e: MalformedURLException) {
+        null
     }

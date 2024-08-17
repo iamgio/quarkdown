@@ -13,12 +13,17 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.media.LocalMedia
+import eu.iamgio.quarkdown.media.Media
+import eu.iamgio.quarkdown.media.RemoteMedia
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
 import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
 import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import kotlin.test.Test
+import kotlin.test.assertFails
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -202,5 +207,13 @@ class MiscTest {
         assertNull(retriever.find("nonexistent"))
 
         assertTrue(retriever.all.iterator().hasNext())
+    }
+
+    @Test
+    fun media() {
+        assertIs<LocalMedia>(Media.of("src/main/resources/render/html-wrapper.html"))
+        assertIs<RemoteMedia>(Media.of("https://example.com/image.jpg"))
+        assertFails { Media.of("nonexistent") }
+        assertFails { Media.of("src") } // Directory
     }
 }
