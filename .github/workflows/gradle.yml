@@ -37,18 +37,16 @@ jobs:
       run: ./gradlew test
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew clean build distZip
 
-    # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-    # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-    #
-    # - name: Setup Gradle
-    #   uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-    #   with:
-    #     gradle-version: '8.5'
-    #
-    # - name: Build with Gradle 8.5
-    #   run: gradle build
+    - name: Echo output files
+      run: ls -d "$PWD/build/"*
+
+    - name: Distribute artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quarkdown
+        path: build/distributions/quarkdown.zip
 
   dependency-submission:
 
@@ -68,15 +66,3 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-
-    - name: Build with Gradle
-      run: ./gradlew clean distZip
-
-    - name: Echo output files
-      run: ls -d "$PWD/build/"*
-
-    - name: Distribute artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: quarkdown
-        path: build/distributions/quarkdown.zip
