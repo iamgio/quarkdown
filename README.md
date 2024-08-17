@@ -142,9 +142,9 @@ The desired document type can be set by calling the `.doctype` function within t
 - `.doctype {slides}`
 - `.doctype {paged}`
 
-> [!NOTE]
-> Make sure to set the output directory in order to save the output to file.    
-> This can be done by setting the command line argument `--out <dir>` or `-o <dir>`. 
+> [!TIP]
+> If not set via the command line argument `--out <dir>` or `-o <dir>`,
+> output files are saved into the `output` directory by default.
 
 ## Scripting
 

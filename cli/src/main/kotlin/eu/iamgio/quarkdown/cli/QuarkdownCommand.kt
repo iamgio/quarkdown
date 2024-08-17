@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.optional
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
@@ -10,6 +11,12 @@ import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import java.io.File
+
+/**
+ * Name of the default directory to save output files in.
+ * It can be overridden by the user.
+ */
+const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
  * Main command of the Quarkdown CLI, that processes and executes a Quarkdown source file.
@@ -27,13 +34,13 @@ class QuarkdownCommand : CliktCommand() {
 
     /**
      * Optional output directory.
-     * If not set, output files are not generated.
+     * If not set, the output is saved in [DEFAULT_OUTPUT_DIRECTORY].
      */
     private val outputDirectory: File? by option("-o", "--out", help = "Output directory").file(
         mustExist = false,
         canBeFile = false,
         canBeDir = true,
-    )
+    ).default(File(DEFAULT_OUTPUT_DIRECTORY))
 
     /**
      * When enabled, the rendering stage produces pretty output code.
