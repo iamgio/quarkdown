@@ -1,0 +1,83 @@
+# "Everything is an object"
+
+.box {Riferimenti ad oggetti}
+    - Nessun meccanismo per accedere ai dati per valore o puntatore!
+    - Le variabili conterranno dei riferimenti agli oggetti veri e propri, sno quindi dei nomi "locali" utilizzabili per denotare l'oggetto
+
+.code {java}
+    .read {code/1.java}
+
+# Variabili, oggetti, e valori primitivi
+
+.box {Concetti base}
+    - Variabile: un contenitore con nome (come in C), usabile per denotare un oggetto
+    - Valore primitivo: p.e. un numero, anche assegnabile ad una variabile
+
+.code {java}
+    .read {code/2.java}
+
+# "(Almost) Everything is an object"
+
+.box {Tipi primitivi: tipi speciali usati per valori atomici}
+    - Assomigliano molto a quelli del C, ma hanno dimensioni fissate
+    - I `boolean` possono valere `true` o `false`
+    - Altre classi di libreria (`BigDecimal`, `BigInteger`) gestiscono numeri di dimensione/precisione arbitraria
+
+| Primitive type | Size    | Minimum       | Maximum                |
+|----------------|---------|---------------|------------------------|
+| **boolean**    | —       | —             | —                      |
+| **char**       | 16 bits | Unicode $ 0 $ | Unicode $ 2^{16} - 1 $ |
+| **byte**       | 8 bits  | $ -128 $      | $ +127 $               |
+| **short**      | 16 bits | $ -2^{15} $   | $ +2^{15} - 1 $        |
+| **int**        | 32 bits | $ -2^{31} $   | $ +2^{31} - 1 $        |
+| **long**       | 64 bits | $ -2^{63} $   | $ +2^{63} - 1 $        |
+| **float**      | 32 bits | IEEE754       | IEEE754                |
+| **double**     | 64 bits | IEEE754       | IEEE754                |
+
+# Una prima classificazione dei tipi
+
+TODO img
+
+# Variabili e tipi
+
+.code {java}
+    .read {code/3.java} lines:{..11}
+
+# Costrutto `var`: "local variable type inference"
+
+.box {Costrutto `var` (da Java 10)}
+    - usabile nelle variabili locali (a funzioni/metodi) per avere maggiore precisione
+    - il compilatore capisce (inferisce) il tipo della variabile dall'espressione assegnata
+    - non abusarne, e comunque noi non lo useremo molto all' inizio del corso
+
+.code {java}
+    .read {code/3.java} lines:{15..}
+
+# Oggetti e memoria
+
+.box {Gestione della memoria - entriamo nella JVM solo temporaneamente }
+    - tutti gli oggetti sono allocati nella memoria *heap*
+    - le variabili sono allocate nello stack, nei rispettivi record di attivazione
+    - le variabili di tipi primitivi contengono direttamente il valore
+    - le variabili che contengono oggetti in realtà hanno un riferimento verso lo heap
+    - nota: ancora non sappiamo cosa contiene un oggetto
+
+.box {Situazione relativa al codice della slide precedente}
+    - le variabili `i`, `b`, `d`, `other` contengono valori
+    - tutte le altre contengono un riferimento ad un oggetto, nello heap
+    - solo `p` e `q` "(si) riferiscono (al)lo stesso oggetto"
+    - `on` contiene un riferimento speciale, **`null`**
+
+# Visibilità, ossia "scope", delle variabili
+
+.box {Definita una variabile, dove sarà visibile?}
+    - Regole molto simili a quelle del C
+    - Variabili dentro un blocco non sono visibili fuori
+    - Differenza rispetto al C: variabili non inizializzate non sono utilizzabili!
+
+.box {Tempo di vita degli oggetti}
+    - Finita l'esecuzione delle istruzioni relative allo scope di una variabile, l'oggetto continua ad esistere
+    - Verrà deallocato automaticamente dal sistema se non viene più usato
+        - se, direttamente o indirettamente, nessuna variabile lo può raggiungere
+        - un componente della JVM, il ***garbage collector***, è preposto a questo compito
+        - ne vedremo il funzionamento a breve...

@@ -16,11 +16,4 @@
     - Stampe a video
     - Primo semplice programma Java
 
-# "Everything is an object"
-
-.box {Riferimenti ad oggetti}
-    - Nessun meccanismo per accedere ai dati per valore o puntatore!
-    - Le variabili conterranno dei riferimenti agli oggetti veri e propri, sno quindi dei nomi "locali" utilizzabili per denotare l'oggetto
-
-.code {java}
-    .read {code/1.java}
+.include {sections/elements.qmd}
