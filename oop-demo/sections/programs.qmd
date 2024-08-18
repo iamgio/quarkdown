@@ -1,0 +1,116 @@
+# Programmi Java
+
+.box {Elementi costitutivi dei programmi Java}
+    - librerie di classi del Java Development Kit
+    - librerie esterne (nostre o di altri)
+    - un insieme di classi che costituiscono l'applicazione
+    - almeno una di tali classi ha un metodo speciale **`main`**
+    - un `main` è il punto d'accesso di un programma
+
+.box {Il main}
+    Il `main` deve avere la seguente dichiarazione:
+    ```java
+    public static void main(String[] args) { ... }
+    ```
+    tre concetti che spiegheremo in dettaglio nel prosieguo:
+    - `public` indica il fatto che debba essere visibile "a tutti"
+    - `static` indica che non è un metodo dell'oggetto, ma della classe
+    - `String[]` indica il tipo "array di stringhe"
+
+# Package e librerie Java: organizzazione
+
+.box {Librerie di Java}
+    - Documentazione auto-generata, consultabile offline, o online:  
+      https://docs.oracle.com/en/java/javase/17/docs/api/  
+      (google search "javadoc 17")
+    - contano 4000+ classi, raggruppate in 200+ package (e 50+ moduli)
+
+.box {Package}
+    - un `package` è un contenitore di classi con uno scopo comune, di alto livello
+    - tipicamente un package contiene qualche decina di classi
+    - i package sono organizzati ad albero, con notazione `nome1.nome2.nome3`
+    - package principali: `java.lang`, `java.util`, `java.io`
+
+# Moduli
+
+.box {Moduli (Java 9+)}
+    - un modulo definisce un frammento di codice "autonomo":
+        - testabile, distribuibile, con chiara interfaccia e dipendenze da altri
+    - p.e., `java.base`, `java.desktop`, `java.sql`, `java.xml`
+    - librerie esterne compatibili con Java 9+ sono distribuite in uno o più moduli
+    - un modulo è costituito internamente da uno o più package
+    - p.e., `java.base` contiene i package principali che useremo
+
+.box {Impatto sulla programmazione "base"}
+    - il concetto di modulo **non impatta** i sorgenti, ma solo il "project management":
+      per il momento non ce ne occuperemo perché il JDK fornisce "di default" accesso
+      a tutti i moduli che ci servono (`java.*`)
+
+    - il concetto di package **invece impatta** i sorgenti: il nome completo di una classe dipende
+      dal package in cui si trova
+
+# Package, moduli e librerie Java: uso
+
+.box {Importare una classe di "libreria"}
+    - per usare le classi di una libreria prima le si importa
+
+    - lo si fa con la clausola `import`, da usare all'inizio del sorgente
+        - importo la singola classe: `import java.util.Date`;
+        - importo l'intero package: `import java.util.*`;
+        - importazione di default: `import java.lang.*`;
+
+    - senza importazioni, ogni classe andrebbe sempre qualificata indicandone
+      anche il package completo:  
+      `java.util.Date obj = new java.util.Date();`
+    - importare evita quindi solo di dover indicare ogni volta il package
+
+.box {Classi (e funzionalità) "deprecate"}
+    - dichiarate come "scadute", ossia preferibilmente "da non usare più" (legacy)
+    - noi le utilizzeremo a volte per scopi didattici, solo a inizio corso
+    - p.e. `java.util.Date`
+
+# Stampe su schermo
+
+.box {La procedura di stampa `System.out.println`}
+    - `System` è una classe nel package `java.lang`
+    - `out` è un suo campo statico, che rappresenta lo standard output
+    - `println` è un metodo che accetta una stringa e la stampa
+    - l'operatore `+` concatena stringhe a valori
+
+.code {java}
+    .read {code/9.java}
+
+# "Hello world" Java Program
+
+.code {java}
+    .read {code/10.java}
+
+.box {Compilazione ed esecuzione}
+    - con un editor di testo di scrive la classe in un file `Hello.java`
+    - si compila la classe col comando: `javac Hello.java`
+    - se non ci sono errori, viene generato il **bytecode** `Hello.class`
+    - si esegua il programma con: `java Hello`
+    - la JVM cerca la classe `Hello`, e ne esegue il `main`
+
+# Librerie, oggetti, e stampe
+
+.code {java}
+    .read {code/11.java}
+
+# Classi, e classi clienti
+
+.code {java}
+    .read {code/8.java} lines:{..19}
+
+.code {java}
+    .read {code/12.java}
+
+.box
+    - si compilano separatamente, o con: `javac *.java`
+    - si esegue a partire dalla classe col `main`: `java UsePoint3D`
+
+# Preview del prossimo laboratorio
+
+.box {Obiettivi}
+    - familiarizzare con la compilazione da linea di comando in java
+    - fare qualche esercizio con la costruzione e uso di classi
