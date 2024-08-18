@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.media.ResolvableMedia
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -36,6 +37,14 @@ open class MutableContext(
      */
     open fun register(functionCall: FunctionCallNode) {
         attributes.functionCalls += functionCall
+    }
+
+    /**
+     * Registers referenceable external media, such as an image.
+     * @param path local path or remote URL to the media
+     */
+    fun registerMedia(path: String) {
+        attributes.media += ResolvableMedia(path)
     }
 
     // This override makes sure the same function call is dequeued from the execution queue

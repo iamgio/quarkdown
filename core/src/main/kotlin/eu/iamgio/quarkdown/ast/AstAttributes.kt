@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.ast
 
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.media.Media
 
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [eu.iamgio.quarkdown.context.Context].
@@ -22,6 +23,11 @@ interface AstAttributes {
      * The function calls to be later executed.
      */
     val functionCalls: List<FunctionCallNode>
+
+    /**
+     * The external media referenced in the tree (e.g. images).
+     */
+    val media: Set<Media>
 
     /**
      * Whether there is at least one code block.
@@ -56,6 +62,7 @@ data class MutableAstAttributes(
     override var root: NestableNode? = null,
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
+    override val media: MutableSet<Media> = mutableSetOf(),
     override var hasCode: Boolean = false,
     override var hasMath: Boolean = false,
 ) : AstAttributes {

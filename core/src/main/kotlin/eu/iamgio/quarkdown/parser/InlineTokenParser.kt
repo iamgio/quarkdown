@@ -175,6 +175,10 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         val width = token.data.namedGroups["imgwidth"]
         val height = token.data.namedGroups["imgheight"]
 
+        // The media is registered to allow further operations.
+        // For example, a local media may need to be copied to the output files.
+        context.registerMedia(link.url)
+
         return Image(
             link,
             width = width?.toIntOrNull(),
@@ -187,6 +191,8 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
 
         val width = token.data.namedGroups["refimgwidth"]
         val height = token.data.namedGroups["refimgheight"]
+
+        // TODO register media
 
         return ReferenceImage(
             link,
