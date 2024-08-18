@@ -1,0 +1,131 @@
+# Costruire classi
+
+.box {Premesse}
+    - la classe è l'unità fondamentale di programmazione OO
+    - progettare e costruire classi correttamente sarà l'obiettivo del corso
+    - incominciamo descrivendo la loro struttura generale
+    - daremo via via linee guida sempre più precise
+
+.box {Cos'è una classe}
+    - è un template (stampino) per generare oggetti di una certa forma
+    - ne definisce tipo, struttura in memoria e comportamento
+
+.box {Classe vs. oggetto}
+    - classe: è una descrizione (parte di programma)
+    - oggetto: è una entità a tempo di esecuzione, è **istanza** di una classe
+
+# Struttura di una classe
+
+.box {Nome della classe}
+    è anche il nome del tipo
+
+.box {Membri della classe}
+    **Campi** (in inglese, *fields*)
+    - descrivono la struttura/stato dell'oggetto in memoria
+
+    **Metodi** (in inglese, *methods*)
+    - descrivono i messaggi accettati e il comportamento corrispondente
+    
+    (altri elementi che vedremo...)
+
+# Classi: un po' di codice
+
+.column alignment:{center}
+    Costruzione classi
+    
+    .code {java}
+        .read {code/4.java} lines:{..7}
+
+    Uso
+
+    .code {java}
+        .read {code/4.java} lines:{9..}
+
+# Campi
+
+.box {Elementi costitutivi dei campi}
+    - i campi di una classe assomigliano ai membri di una struct del C
+    - ognuno è una sorta di variabile (nome + tipo)  
+      (per i campi non è usabile il costrutto `var`)
+    - ve ne possono essere 0, 1, molti
+    - lo stato di un oggetto è l'attuale valore associato ai campi
+    - potrebbero essere valori primitivi, o altri oggetti
+
+.box {Valore di un campo}
+    - impostabile al momento della sua dichiarazione
+    - se non inizializzato vale:
+        - `0` per i tipi numerici
+        - `false` per i booleani
+        - `null` per le classi
+    - accessibile da codice cliente con notazione **`obj.field`**
+
+# Campi: un esempio "toy" (giocattolo)
+
+.column alignment:{center}
+    Classe
+
+    .code {java}
+        .read {code/5.java} lines:{..5}
+
+    Uso
+
+    .code {java}
+        .read {code/5.java} lines:{7..}
+
+# Campi: un esempio realistico, `Point3D`
+
+.column alignment:{center}
+    Classe
+
+    .code {java}
+        .read {code/6.java} lines:{..5}
+
+    Uso
+
+    .code {java}
+        .read {code/6.java} lines:{7..}
+
+# Metodi
+
+.box {Elementi costitutivi dei metodi}
+    - i metodi di una classe assomigliano a funzioni (del C)
+    - ognuno ha una **intestazione** (signature) e un **corpo** (body)
+        - a sua volta l'intestazione ha il nome, tipo di ritorno, argomenti
+    - di metodi ve ne possono essere 0, 1, molti
+    - definiscono il comportamento dell'oggetto
+
+.box {Significato di un metodo}
+    - codice cliente richiama un metodo con notazione **`obj.meth(args)`**
+    - ciò corrisponde a inviargli un messaggio
+    - `obj` è chiamato il *receiver* del messaggio (o della invocazione)
+    - il comportamento conseguente è dato dall'esecuzione del corpo
+    - il corpo può leggere/scrivere il valore dei campi
+
+# Metodi: esempio toy
+
+.column alignment:{center}
+    Classe
+
+    .code {java}
+        .read {code/7.java} lines:{..11}
+
+    Uso
+
+    .code {java}
+        .read {code/7.java} lines:{13..18}
+
+# La variabile speciale `this`
+
+.box {`this`}
+    - dentro ad un metodo si può accedere agli argomenti o ai campi
+    - per rendere meno ambigua la sintassi, Java fornisce una variabile speciale denotata con `this`,
+      che contiene il riferimento all'oggetto che sta gestendo il messaggio corrente
+    - per motivi di leggibilità, è opportuno usarla sempre in questo corso
+
+.code {java}
+    .read {code/7.java} lines:{20..}
+
+# Metodi: altro esempio Point3D
+
+.code {java}
+    .read {code/8.java}
