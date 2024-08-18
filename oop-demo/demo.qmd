@@ -1,0 +1,26 @@
+.include {setup.qmd}
+.include {title.qmd}
+
+# Outline
+
+.box {Goal della lezione}
+    - Illustrare i concetti base del paradigma object-oriented
+    - Mostrare un primo semplice programma Java
+    - Fornire una panoramica di alcuni meccanismi Java
+
+.box {Argomenti}
+    - Oggetti e riferimenti
+    - Tipi primitivi
+    - Classi, metodi e campi
+    - Accenno a package e librerie
+    - Stampe a video
+    - Primo semplice programma Java
+
+# "Everything is an object"
+
+.box {Riferimenti ad oggetti}
+    - Nessun meccanismo per accedere ai dati per valore o puntatore!
+    - Le variabili conterranno dei riferimenti agli oggetti veri e propri, sno quindi dei nomi "locali" utilizzabili per denotare l'oggetto
+
+.code {java}
+    .read {code/1.java}

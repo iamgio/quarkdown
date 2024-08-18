@@ -1,0 +1,13 @@
+.center
+    .box
+        # .docname
+    
+    Mirko Viroli  
+    `mirko.viroli@unibo.it`
+    
+    .text size:{small}
+        C.D.L Ingegneria e Scienze Informatiche  
+        .text variant:{smallcaps} content:{Alma Mater Studiorum} -
+        Università di Bologna, Cesena
+    
+    a.a. 2022/2023

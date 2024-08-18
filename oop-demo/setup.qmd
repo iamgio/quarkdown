@@ -1,0 +1,14 @@
+.docname {Oggetti e classi}
+.docauthor {Mirko Viroli}
+.doctype {slides}
+.theme {beaver} layout:{beamer}
+
+.footer
+    Mirko Viroli (Università di Bologna)
+
+    .docname
+
+    a.a. 2022/2023
+
+.pagecounter {topcenter}
+    .1 / .2
