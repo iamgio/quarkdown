@@ -32,7 +32,7 @@ h1:not(.box h1) {
     background-color: rgb(234, 233, 247);
 }
 
-.box.callout-box > header {
+.box.callout-box > header, .box.callout-box .box-content li::marker {
     color: rgb(83, 81, 152);
 }
 
