@@ -30,6 +30,9 @@ h1:not(.box h1) {
 
 .box.callout-box {
     background-color: rgb(234, 233, 247);
+}
+
+.box.callout-box > header {
     color: rgb(83, 81, 152);
 }
 
