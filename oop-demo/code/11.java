@@ -2,7 +2,7 @@ import java.util.Date;
 import java.util.Random;
 // java.lang.System needs no import
 
-class PrintingObjects{
+class PrintingObjects {
     public static void main(String[] args){
         Date d = new Date();
         System.out.println("Current date: " + d);
