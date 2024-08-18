@@ -6,7 +6,8 @@
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
     --qd-code-font: "Noto Sans Mono", monospace;
-    --qd-code-font-size: 1.3em;
+    --qd-code-block-font-size: 1.3em;
+    --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
 }
@@ -92,10 +93,6 @@ figure figcaption {
     font-size: 0.6em;
     padding: 12px;
     border-radius: 8px 8px 0 0;
-}
-
-p code {
-    font-size: 0.9em;
 }
 
 .error-box code {
