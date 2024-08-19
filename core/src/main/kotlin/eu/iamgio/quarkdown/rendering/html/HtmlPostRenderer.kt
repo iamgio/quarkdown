@@ -61,7 +61,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     LazyOutputArtifact.internal(
                         resource = "/render/script/slides.js",
                         name = "slides",
-                        type = ArtifactType.JS,
+                        type = ArtifactType.JAVASCRIPT,
                     )
             }
         }
