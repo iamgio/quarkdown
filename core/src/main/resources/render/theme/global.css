@@ -6,7 +6,8 @@
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-code-font: monospace;
-    --qd-code-font-size: var(--qd-main-font-size);
+    --qd-code-block-font-size: var(--qd-main-font-size);
+    --qd-code-span-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
@@ -66,11 +67,15 @@ ul, ol, hr,
 }
 
 code {
-    font-family: var(--qd-font);
+    font-family: var(--qd-code-font);
+}
+
+code:not(pre code) {
+    font-size: var(--qd-code-span-font-size);
 }
 
 pre code {
-    font-size: var(--qd-code-font-size);
+    font-size: var(--qd-code-block-font-size);
     max-height: none !important;
 }
 

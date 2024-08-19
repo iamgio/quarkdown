@@ -9,7 +9,8 @@
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
     --qd-code-font: "Noto Sans Mono", monospace;
-    --qd-code-font-size: 1.1em;
+    --qd-code-block-font-size: 1.25em;
+    --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.2;
 }
@@ -82,6 +83,10 @@ pre code {
 
 .box > .box-content ul {
     padding-left: 4px;
+}
+
+.codespan-content {
+    margin: 0 0.2em;
 }
 
 .color-preview {
