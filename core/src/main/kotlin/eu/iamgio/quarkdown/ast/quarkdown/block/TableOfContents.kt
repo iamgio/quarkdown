@@ -69,6 +69,9 @@ data class TableOfContents(val items: List<Item>) : Node {
             headings: Sequence<Heading>,
             maxDepth: Int,
         ): TableOfContents {
+            // The minimum depth among the headings.
+            val minDepth = headings.minOf { it.depth }
+
             /**
              * Helper function to add a heading into the correct place in the hierarchy.
              * @param hierarchy the current hierarchy
@@ -80,7 +83,7 @@ data class TableOfContents(val items: List<Item>) : Node {
                 item: Item,
                 depth: Int,
             ): List<Item> {
-                if (depth == 1 || hierarchy.isEmpty()) {
+                if (depth == minDepth || hierarchy.isEmpty()) {
                     return hierarchy + item
                 }
 
