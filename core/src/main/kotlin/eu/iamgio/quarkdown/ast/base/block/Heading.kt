@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.ast.base.block
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.base.TextNode
+import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.Identifiable
 import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
@@ -23,17 +24,23 @@ data class Heading(
 
     /**
      * @return whether this heading is a marker
-     * @see MARKER_HEADING_DEPTH
+     * @see marker
      */
     val isMarker: Boolean
         get() = depth == MARKER_HEADING_DEPTH
 
     companion object {
         /**
-         * When a [Heading] has this depth value, it is considered an invisible referenceable mark,
-         * that can be useful, for example, when using a [eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents].
+         * When a [Heading] has this depth value, it is considered an invisible referenceable mark.
          * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by a Quarkdown function.
          */
-        const val MARKER_HEADING_DEPTH = 0
+        private const val MARKER_HEADING_DEPTH = 0
+
+        /**
+         * Creates an invisible [Heading] that acts as a marker that can be referenced by other elements in the document.
+         * A useful use case would be, for example, in combination with a [eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents].
+         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by a Quarkdown function.
+         */
+        fun marker(name: String) = Heading(MARKER_HEADING_DEPTH, listOf(Text(name)))
     }
 }

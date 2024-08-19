@@ -300,13 +300,14 @@ fun disableAutoPageBreak(
 ) = autoPageBreak(context, 0)
 
 /**
- * Creates an invisible marker that can be used as a reference a specific point in the document,
- * and can be particularly useful when using a table of contents.
+ * Creates an invisible marker that points to a specific location in the document,
+ * and can be referenced by other elements as would happen with a regular heading.
+ * It can be particularly useful when using a table of contents.
  * @param name name of the marker
  * @return a wrapped [Heading] marker node
  * @see tableOfContents
  */
-fun marker(name: String) = Heading(Heading.MARKER_HEADING_DEPTH, listOf(Text(name))).wrappedAsValue()
+fun marker(name: String) = Heading.marker(name).wrappedAsValue()
 
 /**
  * Generates a table of contents for the document.
