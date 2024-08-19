@@ -13,10 +13,7 @@
     --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.2;
-}
-
-.reveal .slides > section {
-    text-align: start;
+    --qd-slides-horizontal-alignment: start;
 }
 
 h1 {
