@@ -203,6 +203,10 @@ code.focus-lines .hljs-ln-line:not(.focused) {
     color: white;
 }
 
+.marker {
+    display: none;
+}
+
 .page-margin-content {
     position: absolute;
 }

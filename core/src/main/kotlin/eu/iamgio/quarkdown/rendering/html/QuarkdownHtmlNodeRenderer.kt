@@ -260,22 +260,30 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // On top of the default behavior, an anchor ID is set,
     // and it could force an automatic page break if suitable.
     override fun visit(node: Heading): String {
-        val headingTag =
-            tagBuilder("h${node.depth}", node.text)
-                .optionalAttribute(
-                    "id",
-                    // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider.of(renderer = this)
-                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
-                        ?.getId(node),
-                )
+        val tagBuilder =
+            when {
+                // When a heading has a depth of 0 (achievable only via functions), it is an invisible marker with an ID.
+                node.isMarker -> tagBuilder("div") { `class`("marker") }
+                // Regular headings.
+                else -> tagBuilder("h${node.depth}", node.text)
+            }
+
+        // The heading tag itself.
+        val tag =
+            tagBuilder.optionalAttribute(
+                "id",
+                // Generate an automatic identifier if allowed by settings.
+                HtmlIdentifierProvider.of(renderer = this)
+                    .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
+                    ?.getId(node),
+            )
                 .build()
 
         return buildMultiTag {
             if (context.shouldAutoPageBreak(node)) {
                 +PageBreak()
             }
-            +headingTag
+            +tag
         }
     }
 

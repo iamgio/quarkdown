@@ -20,4 +20,20 @@ data class Heading(
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
+
+    /**
+     * @return whether this heading is a marker
+     * @see MARKER_HEADING_DEPTH
+     */
+    val isMarker: Boolean
+        get() = depth == MARKER_HEADING_DEPTH
+
+    companion object {
+        /**
+         * When a [Heading] has this depth value, it is considered an invisible referenceable mark,
+         * that can be useful, for example, when using a [eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents].
+         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by a Quarkdown function.
+         */
+        const val MARKER_HEADING_DEPTH = 0
+    }
 }
