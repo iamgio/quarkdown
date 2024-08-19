@@ -36,7 +36,7 @@
 
 # Una prima classificazione dei tipi
 
-TODO img
+!(_x300)[Java Types](https://iamgio.eu/quarkdown/oop-demo/img/java-types.jpg)
 
 # Variabili e tipi
 
