@@ -1,12 +1,8 @@
 package eu.iamgio.quarkdown.pipeline
 
 import eu.iamgio.quarkdown.ast.Document
-import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.context.hooks.CodePresenceHook
-import eu.iamgio.quarkdown.context.hooks.LinkDefinitionRegistrationHook
-import eu.iamgio.quarkdown.context.hooks.MathPresenceHook
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.Library
@@ -89,13 +85,11 @@ class Pipeline(
     }
 
     /**
-     * Perform one full visit of [document]'s AST.
+     * Perform one full traversal of [document]'s AST.
      */
     private fun visitTree(document: Document) {
-        ObservableAstIterator()
-            .attach(LinkDefinitionRegistrationHook(context))
-            .attach(CodePresenceHook(context))
-            .attach(MathPresenceHook(context))
+        context.flavor.treeIteratorFactory
+            .default(context)
             .run(document)
 
         hooks?.afterTreeVisiting?.invoke(this)
