@@ -9,3 +9,9 @@
     .docname
 
     a.a. 2022/2023
+
+<!-- A little table of contents that opens a chapter and displays all chapters -->
+.function {chapter}
+    name:
+    .tableofcontents maxdepth:{0}
+    .marker {.name}
