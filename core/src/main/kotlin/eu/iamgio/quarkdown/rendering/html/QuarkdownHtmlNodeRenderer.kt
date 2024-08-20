@@ -146,20 +146,16 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         title = null,
                     )
 
-                // Recursive sub-items.
-                if (item.subItems.isNotEmpty()) {
-                    this += tableOfContentsItemsToList(item.subItems, maxDepth)
-                }
+                // Recursively include sub-items.
+                item.subItems.filter { it.depth <= maxDepth }
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { this += tableOfContentsItemsToList(it, maxDepth) }
             }
 
         return OrderedList(
             startIndex = 1,
             isLoose = true,
-            children =
-                items.asSequence()
-                    .filter { it.depth <= maxDepth }
-                    .map { BaseListItem(getTableOfContentsItemContent(it)) }
-                    .toList(),
+            children = items.map { BaseListItem(getTableOfContentsItemContent(it)) },
         )
     }
 
