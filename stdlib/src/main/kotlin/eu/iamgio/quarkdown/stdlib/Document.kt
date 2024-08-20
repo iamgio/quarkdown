@@ -1,12 +1,14 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
@@ -44,6 +46,7 @@ val Document: Module =
         ::pageCounter,
         ::autoPageBreak,
         ::disableAutoPageBreak,
+        ::marker,
         ::tableOfContents,
     )
 
@@ -298,12 +301,21 @@ fun disableAutoPageBreak(
 ) = autoPageBreak(context, 0)
 
 /**
+ * Creates an invisible marker that points to a specific location in the document,
+ * and can be referenced by other elements as would happen with a regular heading.
+ * It can be particularly useful when using a table of contents.
+ * @param name name of the marker
+ * @return a wrapped [Heading] marker node
+ * @see tableOfContents
+ */
+fun marker(name: String) = Heading.marker(name).wrappedAsValue()
+
+/**
  * Generates a table of contents for the document.
  * @param maxDepth maximum depth of the table of contents
  * @return a wrapped [TableOfContents] node
  */
 @Name("tableofcontents")
 fun tableOfContents(
-    @Injected context: Context,
     @Name("maxdepth") maxDepth: Int = 3,
-): NodeValue = TableOfContents.generate(context, maxDepth).wrappedAsValue()
+): NodeValue = TableOfContentsView(maxDepth).wrappedAsValue()

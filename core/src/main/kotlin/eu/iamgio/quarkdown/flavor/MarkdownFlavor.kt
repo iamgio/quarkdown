@@ -17,6 +17,11 @@ interface MarkdownFlavor {
     val parserFactory: ParserFactory
 
     /**
+     * The supplier of new tree iterator instances to traverse the node tree.
+     */
+    val treeIteratorFactory: TreeIteratorFactory
+
+    /**
      * The supplier of new renderer instances to convert processed nodes to output content.
      */
     val rendererFactory: RendererFactory

@@ -93,6 +93,49 @@ class FullPipelineTest {
     }
 
     @Test
+    fun links() {
+        execute("This is a link: [link](https://example.com 'title')") {
+            assertEquals("<p>This is a link: <a href=\"https://example.com\" title=\"title\">link</a></p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
+
+        execute(
+            """
+            [Link definition]: https://example.com
+            **This is a link**: [link][Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><strong>This is a link</strong>: <a href=\"https://example.com\">link</a></p>",
+                it,
+            )
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            [Link definition]: https://example.com
+            ## _This is a link_: [Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2><em>This is a link</em>: <a href=\"https://example.com\">Link definition</a></h2>",
+                it,
+            )
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            This link doesn't exist: [link][Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>This link doesn&#39;t exist: [link][Link definition]</p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
+    }
+
+    @Test
     fun lists() {
         execute("- Item 1\n- Item 2\n  - Item 2.1\n  - Item 2.2\n- Item 3") {
             assertEquals(
