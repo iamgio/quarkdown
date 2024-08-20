@@ -28,16 +28,19 @@ private const val DATA_FOLDER = "src/test/resources/data"
 class FullPipelineTest {
     /**
      * Executes a Quarkdown source.
+     * @param source Quarkdown source to execute
      * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
+     * @param options execution options
      */
     private fun execute(
         source: String,
+        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
         hook: Context.(CharSequence) -> Unit,
     ) {
         val context =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(enableAutomaticIdentifiers = false),
+                options = options,
             )
 
         val hooks =
@@ -669,6 +672,55 @@ class FullPipelineTest {
                     "<h1>Hello, world!</h1><p>2 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 2 is 4</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>4 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 4 is 16</p><h3>End</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents`() {
+        execute(
+            """
+            .tableofcontents title:{_TOC_}
+            
+            # ABC
+            
+            Hi
+            
+            ## _ABC/1_
+            
+            Hello
+            
+            # DEF
+            
+            DEF/1
+            ---
+            
+            Hi there
+            
+            ### DEF/2
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a>" +
+                    "<ol><li><a href=\"#abc1\"><em>ABC/1</em></a></li></ol></li>" +
+                    "<li><a href=\"#def\">DEF</a>" +
+                    "<ol><li><a href=\"#def1\">DEF/1</a>" +
+                    "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
+                    "</ol></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"def1\">DEF/1</h2>" +
+                    "<p>Hi there</p>" +
+                    "<h3 id=\"def2\">DEF/2</h3>",
                 it,
             )
         }
