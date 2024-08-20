@@ -168,7 +168,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         return buildMultiTag {
             // Title
-            +Heading(1, listOf(Text("Table of Contents")), customId = "table-of-contents") // TODO localize
+            +Heading(
+                depth = 1,
+                text = node.title ?: listOf(Text("Table of Contents")),
+                customId = "table-of-contents",
+            ) // In the future, the default title should be localized.
             // Content
             +div("table-of-contents") {
                 +tableOfContentsItemsToList(tableOfContents.items, maxDepth = node.maxDepth)

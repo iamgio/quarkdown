@@ -313,10 +313,12 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 
 /**
  * Generates a table of contents for the document.
+ * @param title title of the table of contents. If unset, the default title is used
  * @param maxDepth maximum depth of the table of contents
  * @return a wrapped [TableOfContents] node
  */
 @Name("tableofcontents")
 fun tableOfContents(
+    title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
-): NodeValue = TableOfContentsView(maxDepth).wrappedAsValue()
+): NodeValue = TableOfContentsView(title?.children, maxDepth).wrappedAsValue()
