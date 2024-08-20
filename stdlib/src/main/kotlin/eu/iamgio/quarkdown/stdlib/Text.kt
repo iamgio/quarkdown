@@ -4,8 +4,6 @@ import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
-import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
@@ -78,13 +76,11 @@ fun text(
  * @param code code content
  */
 fun code(
-    @Injected context: MutableContext,
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
     code: EvaluableString,
 ): NodeValue {
-    context.attributes.hasCode = true // Allows code highlighting.
     return Code(
         code.content,
         language,

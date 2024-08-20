@@ -1,8 +1,11 @@
 package eu.iamgio.quarkdown.pipeline
 
 import eu.iamgio.quarkdown.ast.Document
+import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.hooks.CodePresenceHook
+import eu.iamgio.quarkdown.context.hooks.MathPresenceHook
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.Library
@@ -85,6 +88,18 @@ class Pipeline(
     }
 
     /**
+     * Perform one full visit of [document]'s AST.
+     */
+    private fun visitTree(document: Document) {
+        ObservableAstIterator()
+            .attach(CodePresenceHook(context))
+            .attach(MathPresenceHook(context))
+            .run(document)
+
+        hooks?.afterTreeVisiting?.invoke(this)
+    }
+
+    /**
      * Converts the AST to code for a target language.
      * If enabled by settings, the output code is wrapped in a template.
      * @param document root of the AST to render
@@ -124,6 +139,8 @@ class Pipeline(
         context.attributes.root = document
 
         expandFunctionCalls(document)
+
+        visitTree(document)
 
         val renderer = this.renderer(context.flavor.rendererFactory, context)
         val rendered = render(document, renderer)
