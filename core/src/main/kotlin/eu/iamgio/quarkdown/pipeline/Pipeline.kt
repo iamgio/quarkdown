@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.hooks.CodePresenceHook
+import eu.iamgio.quarkdown.context.hooks.LinkDefinitionRegistrationHook
 import eu.iamgio.quarkdown.context.hooks.MathPresenceHook
 import eu.iamgio.quarkdown.flavor.RendererFactory
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
@@ -92,6 +93,7 @@ class Pipeline(
      */
     private fun visitTree(document: Document) {
         ObservableAstIterator()
+            .attach(LinkDefinitionRegistrationHook(context))
             .attach(CodePresenceHook(context))
             .attach(MathPresenceHook(context))
             .run(document)

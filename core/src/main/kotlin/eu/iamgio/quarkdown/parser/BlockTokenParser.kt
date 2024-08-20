@@ -165,18 +165,13 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: LinkDefinitionToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        val definition =
-            LinkDefinition(
-                label = groups.next().trim().toInline(),
-                url = groups.next().trim(),
-                // Remove first and last character
-                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
-            )
 
-        // Storing the link definitions for easier lookups.
-        context.register(definition)
-
-        return definition
+        return LinkDefinition(
+            label = groups.next().trim().toInline(),
+            url = groups.next().trim(),
+            // Remove first and last character
+            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+        )
     }
 
     /**
