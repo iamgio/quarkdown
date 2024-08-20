@@ -724,6 +724,36 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .tableofcontents title:{***TOC***} maxdepth:{0}
+            
+            .marker {*Marker 1*}
+            
+            # ABC
+            
+            .marker {*Marker 2*}
+            
+            ## DEF
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
+                    "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
+                    "</ol></div>" +
+                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-1\"></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-2\"></div>" +
+                    "<h2 id=\"def\">DEF</h2>",
+                it,
+            )
+        }
     }
 
     @Test
