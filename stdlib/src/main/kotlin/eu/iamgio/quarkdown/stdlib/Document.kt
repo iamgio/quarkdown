@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.Text
@@ -308,7 +309,7 @@ fun disableAutoPageBreak(
  * @return a wrapped [Heading] marker node
  * @see tableOfContents
  */
-fun marker(name: String) = Heading.marker(name).wrappedAsValue()
+fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
 
 /**
  * Generates a table of contents for the document.
