@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.ast.base.block
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.Identifiable
 import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
@@ -38,9 +37,9 @@ data class Heading(
 
         /**
          * Creates an invisible [Heading] that acts as a marker that can be referenced by other elements in the document.
-         * A useful use case would be, for example, in combination with a [eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents].
-         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by a Quarkdown function.
+         * A useful use case would be, for example, in combination with a [eu.iamgio.quarkdown.context.toc.TableOfContents].
+         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by the Quarkdown function `.marker`.
          */
-        fun marker(name: String) = Heading(MARKER_HEADING_DEPTH, listOf(Text(name)))
+        fun marker(name: InlineContent) = Heading(MARKER_HEADING_DEPTH, name)
     }
 }
