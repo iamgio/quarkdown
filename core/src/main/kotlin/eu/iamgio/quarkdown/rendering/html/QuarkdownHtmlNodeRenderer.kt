@@ -274,7 +274,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         val tagBuilder =
             when {
                 // When a heading has a depth of 0 (achievable only via functions), it is an invisible marker with an ID.
-                node.isMarker -> tagBuilder("div") { `class`("marker") }
+                node.isMarker ->
+                    tagBuilder("div") {
+                        `class`("marker")
+                        hidden()
+                    }
                 // Regular headings.
                 else -> tagBuilder("h${node.depth}", node.text)
             }
