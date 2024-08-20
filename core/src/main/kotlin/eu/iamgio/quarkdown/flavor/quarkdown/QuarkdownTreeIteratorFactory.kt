@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.flavor.quarkdown
 
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.hooks.TableOfContentsGeneratorHook
 import eu.iamgio.quarkdown.flavor.TreeIteratorFactory
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownTreeIteratorFactory
 
@@ -9,5 +10,8 @@ import eu.iamgio.quarkdown.flavor.base.BaseMarkdownTreeIteratorFactory
  * [QuarkdownFlavor] tree iterator factory.
  */
 class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
-    override fun default(context: MutableContext): ObservableAstIterator = BaseMarkdownTreeIteratorFactory().default(context)
+    override fun default(context: MutableContext): ObservableAstIterator =
+        BaseMarkdownTreeIteratorFactory()
+            .default(context)
+            .attach(TableOfContentsGeneratorHook(context))
 }

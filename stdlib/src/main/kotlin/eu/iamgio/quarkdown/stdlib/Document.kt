@@ -3,11 +3,12 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
@@ -316,6 +317,5 @@ fun marker(name: String) = Heading.marker(name).wrappedAsValue()
  */
 @Name("tableofcontents")
 fun tableOfContents(
-    @Injected context: Context,
     @Name("maxdepth") maxDepth: Int = 3,
-): NodeValue = TableOfContents.generate(context, maxDepth).wrappedAsValue()
+): NodeValue = TableOfContentsView(maxDepth).wrappedAsValue()

@@ -1,40 +1,40 @@
-package eu.iamgio.quarkdown.ast.quarkdown.block
+package eu.iamgio.quarkdown.context.toc
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.id.Identifiable
-import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.util.findAll
-import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A summary of the document's structure. Each item links to a section.
  * @param items root sections in the document
  */
-data class TableOfContents(val items: List<Item>) : Node {
-    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
-
+data class TableOfContents(val items: List<Item>) {
     /**
      * An item in the table of contents, usually associated to a section of the document.
      * @param text text of the item
      * @param target element the item links to
+     * @param depth depth of the item.
+     *              This does not necessarily correspond to the depth of this item in the stack of items,
+     *              but rather represents the importance of the item.
      * @param subItems nested items
      */
     data class Item(
-        override val text: InlineContent,
+        val text: InlineContent,
         val target: Identifiable,
+        val depth: Int,
         val subItems: List<Item> = emptyList(),
-    ) : TextNode {
+    ) {
         /**
          * Shorthand constructor for creating an item from a heading.
          * @param heading heading to create the item from
          * @param subItems nested items
          */
-        constructor(heading: Heading, subItems: List<Item> = emptyList()) : this(heading.text, heading, subItems)
-
-        override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+        constructor(heading: Heading, subItems: List<Item> = emptyList()) : this(
+            heading.text,
+            heading,
+            heading.depth,
+            subItems,
+        )
     }
 
     companion object {
@@ -62,15 +62,13 @@ data class TableOfContents(val items: List<Item>) : Node {
          * ```
          *
          * @param headings flat sequence of headings
-         * @param maxDepth maximum depth of headings to include in the table of contents
          * @return the generated table of contents
          */
-        fun generate(
-            headings: Sequence<Heading>,
-            maxDepth: Int,
-        ): TableOfContents {
+        fun generate(headings: Sequence<Heading>): TableOfContents {
             // The minimum depth among the headings.
-            val minDepth = headings.minOf { it.depth }
+            val minDepth =
+                headings.minOfOrNull { it.depth }
+                    ?: return TableOfContents(emptyList()) // No headings.
 
             /**
              * Helper function to add a heading into the correct place in the hierarchy.
@@ -95,27 +93,11 @@ data class TableOfContents(val items: List<Item>) : Node {
             // Fold through headings to build the hierarchy via an accumulator.
             val result =
                 headings
-                    .filter { it.depth <= maxDepth }
                     .fold(emptyList<Item>()) { accumulator, heading ->
                         addItemToHierarchy(accumulator, Item(heading), heading.depth)
                     }
 
             return TableOfContents(result)
-        }
-
-        /**
-         * Generates a table of contents from the headings present in [context]'s document.
-         * @see generate
-         */
-        fun generate(
-            context: Context,
-            maxDepth: Int,
-        ): TableOfContents {
-            val headings =
-                context.attributes.root?.findAll<Heading>()
-                    ?: return TableOfContents(emptyList())
-
-            return generate(headings, maxDepth)
         }
     }
 }

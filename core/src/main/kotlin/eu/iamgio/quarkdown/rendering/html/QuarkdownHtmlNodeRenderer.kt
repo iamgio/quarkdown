@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
+import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
@@ -17,7 +18,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
@@ -26,6 +27,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -128,39 +130,48 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    // A table of contents is rendered as an ordered list.
-    private fun tableOfContentsItemsToList(items: List<TableOfContents.Item>) =
-        OrderedList(
+    // Converts TOC items to a renderable OrderedList.
+    private fun tableOfContentsItemsToList(
+        items: List<TableOfContents.Item>,
+        maxDepth: Int,
+    ): OrderedList {
+        // Gets the content of an inner TOC item.
+        fun getTableOfContentsItemContent(item: TableOfContents.Item) =
+            buildList {
+                // A link to the target heading.
+                this +=
+                    Link(
+                        item.text,
+                        url = "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target),
+                        title = null,
+                    )
+
+                // Recursive sub-items.
+                if (item.subItems.isNotEmpty()) {
+                    this += tableOfContentsItemsToList(item.subItems, maxDepth)
+                }
+            }
+
+        return OrderedList(
             startIndex = 1,
             isLoose = true,
-            children = items.map { BaseListItem(listOf(it)) },
+            children =
+                items.asSequence()
+                    .filter { it.depth <= maxDepth }
+                    .map { BaseListItem(getTableOfContentsItemContent(it)) }
+                    .toList(),
         )
+    }
 
-    override fun visit(node: TableOfContents) =
-        buildMultiTag {
+    override fun visit(node: TableOfContentsView): CharSequence {
+        val tableOfContents = context.attributes.tableOfContents ?: return ""
+
+        return buildMultiTag {
             // Title
             +Heading(1, listOf(Text("Table of Contents")), customId = "table-of-contents") // TODO localize
             // Content
             +div("table-of-contents") {
-                +tableOfContentsItemsToList(node.items)
-            }
-        }
-
-    override fun visit(node: TableOfContents.Item): CharSequence {
-        val link =
-            buildTag("a") {
-                +node.text
-
-                // Link to the target anchor (e.g. a heading).
-                attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
-            }
-
-        return buildMultiTag {
-            +link
-
-            // Recursively render sub-items.
-            if (node.subItems.isNotEmpty()) {
-                +tableOfContentsItemsToList(node.subItems)
+                +tableOfContentsItemsToList(tableOfContents.items, maxDepth = node.maxDepth)
             }
         }
     }

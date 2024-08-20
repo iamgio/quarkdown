@@ -9,8 +9,8 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
@@ -86,7 +86,7 @@ class MiscTest {
                 Heading(1, listOf(Text("PQR"))),
             )
 
-        TableOfContents.generate(headings1, maxDepth = 3).let { toc ->
+        TableOfContents.generate(headings1).let { toc ->
             assertEquals(2, toc.items.size)
             assertEquals(3, toc.items[0].subItems.size)
             assertEquals(1, toc.items[0].subItems[1].subItems.size)
@@ -99,17 +99,6 @@ class MiscTest {
             assertEquals(Text("PQR"), toc.items[1].text.first())
         }
 
-        TableOfContents.generate(headings1, maxDepth = 2).let { toc ->
-            assertEquals(2, toc.items.size)
-
-            assertEquals(Text("ABC"), toc.items[0].text.first())
-            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
-            assertTrue(toc.items[0].subItems[1].subItems.isEmpty())
-            assertEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
-            assertEquals(Text("PQR"), toc.items[1].text.first())
-        }
-
         val headings2 =
             sequenceOf(
                 Heading(1, listOf(Text("ABC"))),
@@ -117,7 +106,7 @@ class MiscTest {
                 Heading(2, listOf(Text("GHI"))),
             )
 
-        TableOfContents.generate(headings2, maxDepth = 3).let { toc ->
+        TableOfContents.generate(headings2).let { toc ->
             assertEquals(1, toc.items.size)
             assertEquals(2, toc.items[0].subItems.size)
 

@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.util.flattenedChildren
 
 /**
- * An iterator that runs through the nodes of an AST,
+ * An iterator that performs a DFS traversal through the nodes of an AST,
  * allowing the registration of observers that will be notified when a node of a certain type is visited.
  */
 class ObservableAstIterator : AstIterator {
@@ -13,6 +13,11 @@ class ObservableAstIterator : AstIterator {
      * Hooks that will be called when a node of a certain type is visited.
      */
     val hooks: MutableList<(Node) -> Unit> = mutableListOf()
+
+    /**
+     * Hooks that will be called when the traversal finishes.
+     */
+    private val onFinishedHooks: MutableList<() -> Unit> = mutableListOf()
 
     /**
      * Registers a hook that will be called when a node of type [T] is visited.
@@ -24,6 +29,14 @@ class ObservableAstIterator : AstIterator {
             hooks.add {
                 if (it is T) hook(it)
             }
+        }
+
+    /**
+     * Registers a hook that will be called when the tree traversal fully finishes.
+     */
+    fun onFinished(hook: () -> Unit): ObservableAstIterator =
+        apply {
+            onFinishedHooks.add(hook)
         }
 
     /**
@@ -41,5 +54,7 @@ class ObservableAstIterator : AstIterator {
         root.flattenedChildren().forEach { node ->
             hooks.forEach { hook -> hook(node) }
         }
+
+        onFinishedHooks.forEach { it() }
     }
 }
