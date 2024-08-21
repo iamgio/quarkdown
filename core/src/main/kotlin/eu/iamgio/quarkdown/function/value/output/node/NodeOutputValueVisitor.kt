@@ -27,10 +27,11 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     private fun createListItems(value: IterableValue<*>): List<ListItem> =
         value.map {
             BaseListItem(
-                listOf(
-                    // Each item is represented by its own Node output.
-                    it.accept(this),
-                ),
+                children =
+                    listOf(
+                        // Each item is represented by its own Node output.
+                        it.accept(this),
+                    ),
             )
         }
 

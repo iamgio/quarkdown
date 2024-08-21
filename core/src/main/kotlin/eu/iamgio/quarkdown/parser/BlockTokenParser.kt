@@ -273,7 +273,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 TaskListItem(isChecked, children)
             }
             // Regular list item.
-            else -> BaseListItem(children)
+            else -> BaseListItem(children = children)
         }
     }
 
