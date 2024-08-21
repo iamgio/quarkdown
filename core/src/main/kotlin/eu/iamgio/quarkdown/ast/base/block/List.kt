@@ -51,10 +51,15 @@ interface ListItem : NestableNode {
 }
 
 /**
- * An item of a [ListBlock].
+ * A simple item of a [ListBlock].
+ * @param isFocused (Quarkdown extension) whether the item is focused.
+ *                  When at least one item is focused, the other items are rendered so that
+ *                  the focused items are more visible.
+ *                  This property has an effect only when using a Quarkdown renderer.
  * @param children content
  */
 data class BaseListItem(
+    val isFocused: Boolean = false,
     override val children: List<Node>,
 ) : ListItem {
     override var owner: ListBlock? = null

@@ -118,7 +118,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
      * Appends the base content of a [ListItem] to an [HtmlTagBuilder],
      * following the loose/tight rendering rules (CommonMark 5.3).
      */
-    private fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
+    protected fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
         // Loose lists (or items not linked to a list for some reason) are rendered as-is.
         if (node.owner?.isLoose != false) {
             +node.children

@@ -155,7 +155,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         return OrderedList(
             startIndex = 1,
             isLoose = true,
-            children = items.map { BaseListItem(getTableOfContentsItemContent(it)) },
+            children =
+                items.map {
+                    BaseListItem(
+                        isFocused = false,
+                        children = getTableOfContentsItemContent(it),
+                    )
+                },
         )
     }
 
@@ -336,4 +342,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
     }
+
+    // Quarkdown introduces focusable list items.
+    override fun visit(node: BaseListItem) =
+        buildTag("li") {
+            appendListItemContent(node)
+
+            if (node.isFocused) {
+                `class`("focused")
+            }
+        }
 }
