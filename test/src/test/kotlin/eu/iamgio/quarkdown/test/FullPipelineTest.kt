@@ -216,6 +216,16 @@ class FullPipelineTest {
             )
         }
 
+        execute("| Header 1 | Header 2 |\n|----------|----------|\n| $ X $ | $ Y $ |") {
+            assertEquals(
+                "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>__QD_INLINE_MATH__\$X\$__QD_INLINE_MATH__</td>" +
+                    "<td>__QD_INLINE_MATH__\$Y\$__QD_INLINE_MATH__</td></tr></tbody></table>",
+                it,
+            )
+            assertTrue(attributes.hasMath) // Ensures the tree traversal visits table cells too.
+        }
+
         execute("| Header 1 | Header 2 | Header 3 |\n|:---------|:--------:|---------:|\n| Cell 1   | Cell 2   | Cell 3   |") {
             assertEquals(
                 "<table><thead><tr><th align=\"left\">Header 1</th><th align=\"center\">Header 2</th>" +
