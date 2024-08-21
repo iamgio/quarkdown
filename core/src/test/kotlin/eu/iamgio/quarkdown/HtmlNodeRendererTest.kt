@@ -457,12 +457,21 @@ class HtmlNodeRendererTest {
                         Paragraph(listOf(Text("C2"))),
                     ),
             ),
+            BaseListItem(
+                isFocused = true,
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("D1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("D2"))),
+                    ),
+            ),
             TaskListItem(
                 isChecked = true,
                 listOf(
-                    Paragraph(listOf(Text("D1"))),
+                    Paragraph(listOf(Text("E1"))),
                     HorizontalRule(),
-                    Paragraph(listOf(Text("D2"))),
+                    Paragraph(listOf(Text("E2"))),
                 ),
             ),
         )
