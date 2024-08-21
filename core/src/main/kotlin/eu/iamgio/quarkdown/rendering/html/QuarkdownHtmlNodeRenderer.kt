@@ -133,7 +133,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Converts TOC items to a renderable OrderedList.
     private fun tableOfContentsItemsToList(
         items: List<TableOfContents.Item>,
-        maxDepth: Int,
+        view: TableOfContentsView,
     ): OrderedList {
         // Gets the content of an inner TOC item.
         fun getTableOfContentsItemContent(item: TableOfContents.Item) =
@@ -147,9 +147,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     )
 
                 // Recursively include sub-items.
-                item.subItems.filter { it.depth <= maxDepth }
+                item.subItems.filter { it.depth <= view.maxDepth }
                     .takeIf { it.isNotEmpty() }
-                    ?.let { this += tableOfContentsItemsToList(it, maxDepth) }
+                    ?.let { this += tableOfContentsItemsToList(it, view) }
             }
 
         return OrderedList(
@@ -158,7 +158,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             children =
                 items.map {
                     BaseListItem(
-                        isFocused = false,
+                        // When at least one item is focused, the other items are less visible.
+                        // This effect is handled by CSS (global.css).
+                        isFocused = view.hasFocus(it),
                         children = getTableOfContentsItemContent(it),
                     )
                 },
@@ -177,7 +179,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             ) // In the future, the default title should be localized.
             // Content
             +div("table-of-contents") {
-                +tableOfContentsItemsToList(tableOfContents.items, maxDepth = node.maxDepth)
+                +tableOfContentsItemsToList(tableOfContents.items, node)
             }
         }
     }
