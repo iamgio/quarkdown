@@ -725,6 +725,7 @@ class FullPipelineTest {
             )
         }
 
+        // Markers
         execute(
             """
             .tableofcontents title:{***TOC***} maxdepth:{0}
@@ -751,6 +752,38 @@ class FullPipelineTest {
                     "<h1 id=\"abc\">ABC</h1>" +
                     "<div class=\"marker\" data-hidden=\"true\" id=\"marker-2\"></div>" +
                     "<h2 id=\"def\">DEF</h2>",
+                it,
+            )
+        }
+
+        // Focus
+        execute(
+            """
+            .tableofcontents title:{TOC} focus:{DEF}
+            
+            # ABC
+            
+            ## X
+            
+            # DEF
+            
+            ## Y
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\">TOC</h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
+                    "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h2 id=\"x\">X</h2>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"y\">Y</h2>",
                 it,
             )
         }
