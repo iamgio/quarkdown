@@ -7,7 +7,10 @@
   <br>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <img alt="Status: development" src="https://img.shields.io/badge/status-development-blue">
-  <br>&nbsp;
+  <br>
+  <br>
+  <strong>Download</strong> the latest build <strong><a href="https://github.com/iamgio/quarkdown/releases">here</a></strong>&nbsp;
+  <br>
   <hr>
 </p>
 
@@ -27,23 +30,6 @@ Quarkdown is a Markdown parser and renderer that extends the capabilities of Mar
 
 **Possibilities are unlimited** thanks to an ever-expanding [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
 which offers layout builders, I/O, math, conditional statements and loops.
-
-<br>
-
-> ```markdown
-> .grid columns:{2} gap:{1cm}
->     .repeat {8}
->         n:
->         .if {.iseven {.n}}
->             **.n** is even
-> ```
-> Result:
-> 
-> **2** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **4** is even
->
-> **6** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **8** is even
-
-<br>
 
 **Not enough?** You can still define your own functions and variables — all within Markdown.
 
@@ -77,6 +63,38 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 ---
 
 &nbsp;
+
+## Installation
+
+Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
+If you'd rather keep it minimal, `gradlew build` produces only the JAR file.
+
+The `bin` directory contains the executable scripts. Optionally, add it to your `PATH` to access Quarkdown more easily.
+
+Java 17 or higher is required.
+
+## Getting started
+
+Running the program with no command-line arguments runs it in REPL mode. This is great for familiarizing yourself with Quarkdown, but it's probably not what you're looking for.
+
+Running `quarkdown path-to-file.qmd` will compile the given file, save the output to file and log its content.  
+If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
+
+> [!NOTE]
+> The `qmd` extension is conventionally the standard one, but any can be used.
+
+**Options:**
+
+- **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
+
+- **`--pretty`**: produces pretty output code. This is useful for debugging or to read the output code more easily,
+  but it should be disabled in production as the results might be visually affected.
+
+- **`--clean`**: deletes the content of the output directory before producing new files. Destructive operation.
+
+- **`--strict`**: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
+
+- **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
 ## Comparison
 
