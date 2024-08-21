@@ -48,6 +48,15 @@ jobs:
         name: quarkdown
         path: build/distributions/quarkdown.zip
 
+    - name: Create devbuild release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: latest
+        prerelease: true
+        title: Development build
+        files: build/distributions/quarkdown.zip
+
   dependency-submission:
 
     runs-on: ubuntu-latest
