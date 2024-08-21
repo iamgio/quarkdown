@@ -64,6 +64,84 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 
 &nbsp;
 
+## Comparison
+
+|                       |      Markdown      |       LaTeX        |     Quarkdown      |
+|-----------------------|:------------------:|:------------------:|:------------------:|
+| Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
+| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
+| Scripting             |        :x:         |        :x:         | :white_check_mark: |
+
+<table>
+  <thead>
+    <tr>
+      <th>LaTeX</th>
+      <th>Quarkdown</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+
+```latex
+\tableofcontents
+
+\section{Section}
+
+\subsection{Subsection}
+
+\begin{enumerate}
+    \item \textbf{First} item
+    \item \textbf{Second} item
+\end{itemize}
+
+\begin{center}
+    This text is \textit{centered}.
+\end{center}
+
+\begin{figure}[!h]
+    \centering
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img1.png}
+    \end{subfigure}
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img2.png}
+    \end{subfigure}
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img3.png}
+    \end{subfigure}
+\end{figure}
+```
+
+</td>
+<td>
+
+```markdown
+.tableofcontents
+
+# Section
+
+## Subsection
+
+1. **First** item
+2. **Second** item
+
+.center
+    This text is _centered_.
+
+.row alignment:{spacebetween}
+    ![Image 1](img1.png)
+
+    ![Image 2](img2.png)
+    
+    ![Image 3](img3.png)
+```
+
+</td>
+</tr>
+</tbody>
+</table>
+
 ## Installation
 
 Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
@@ -96,57 +174,6 @@ If the project is composed by multiple source files, the target file must be the
 
 - **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-## Comparison
-
-|                       |      Markdown      |       LaTeX        |     Quarkdown      |
-|-----------------------|:------------------:|:------------------:|:------------------:|
-| Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
-| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
-| Scripting             |        :x:         |        :x:         | :white_check_mark: |
-
-<table>
-  <thead>
-    <tr>
-      <th>LaTeX</th>
-      <th>Quarkdown</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-
-```latex
-\section{Section}
-\subsection{Subsection}
-\begin{enumerate}
-    \item \textbf{First} item
-    \item \textbf{Second} item
-\end{itemize}
-\begin{center}
-    This text is \textit{centered}.
-\end{center}
-```
-
-</td>
-<td>
-
-```markdown
-# Section
-
-## Subsection
-
-1. **First** item
-2. **Second** item
-
-.center
-    This text is _centered_.
-```
-
-</td>
-</tr>
-</tbody>
-</table>
-
 ## Targets
 
 HTML is currently the only supported rendering target. LaTeX rendering is a future goal.
@@ -159,10 +186,6 @@ HTML is currently the only supported rendering target. LaTeX rendering is a futu
 The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
 - `.doctype {slides}`
 - `.doctype {paged}`
-
-> [!TIP]
-> If not set via the command line argument `--out <dir>` or `-o <dir>`,
-> output files are saved into the `output` directory by default.
 
 ## Scripting
 
