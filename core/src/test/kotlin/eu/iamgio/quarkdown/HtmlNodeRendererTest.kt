@@ -434,25 +434,28 @@ class HtmlNodeRendererTest {
     private fun listItems() =
         listOf(
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("A1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("A2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("A1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("A2"))),
+                    ),
             ),
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("B1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("B2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("B1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("B2"))),
+                    ),
             ),
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("C1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("C2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("C1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("C2"))),
+                    ),
             ),
             TaskListItem(
                 isChecked = true,
