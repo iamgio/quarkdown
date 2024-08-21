@@ -9,6 +9,8 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
+import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
+import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
@@ -19,6 +21,7 @@ import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import kotlin.test.Test
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -64,6 +67,32 @@ class MiscTest {
                 this,
             )
         }
+
+        // Iterator
+
+        val blockQuoteHook =
+            object : AstIteratorHook {
+                override fun attach(iterator: ObservableAstIterator) {
+                    iterator.on<BlockQuote> {
+                        assertIs<Paragraph>(it.children.first())
+                    }
+                }
+            }
+
+        var finished = false
+
+        ObservableAstIterator()
+            .on<Strong> { assertEquals(Text("abc"), it.children.first()) }
+            .on<Emphasis> { assertEquals(Text("ghi"), it.children.first()) }
+            .attach(blockQuoteHook)
+            .on<Code> {
+                assertEquals("Hello, world!", it.content)
+                assertEquals("java", it.language)
+            }
+            .onFinished { finished = true }
+            .run(node)
+
+        assertTrue(finished)
     }
 
     @Test
