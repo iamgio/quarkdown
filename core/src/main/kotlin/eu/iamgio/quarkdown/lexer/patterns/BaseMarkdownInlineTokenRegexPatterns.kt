@@ -156,7 +156,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             )
 
     /**
-     * An image, same as a link preceeded by a `!`.
+     * An image, same as a link preceded by a `!`.
      * As an extension, Quarkdown introduces an optional `(WxH)` to be added at the end which specifies
      * the image size, where W and H can be integers or `_` (auto).
      * @see ImageToken
@@ -176,7 +176,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             )
 
     /**
-     * An image that references a link definition, same as a reference link preceeded by a `!`.
+     * An image that references a link definition, same as a reference link preceded by a `!`.
      * @see ReferenceImageToken
      * @see referenceLink
      */
