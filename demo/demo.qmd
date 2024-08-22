@@ -138,7 +138,7 @@ from your Markdown code.
 ## File data: code
 
 .sourceresult
-    The contructor of the class `Point` is as follows:
+    The constructor of the class `Point` is as follows:
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
