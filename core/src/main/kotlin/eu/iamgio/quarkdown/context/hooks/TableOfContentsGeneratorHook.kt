@@ -12,10 +12,7 @@ import eu.iamgio.quarkdown.context.toc.TableOfContents
  */
 class TableOfContentsGeneratorHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        val headings = mutableListOf<Heading>()
-
-        // Collecting headings.
-        iterator.on<Heading> { headings += it }
+        val headings = iterator.collectAll<Heading>()
 
         // Generation.
         iterator.onFinished {

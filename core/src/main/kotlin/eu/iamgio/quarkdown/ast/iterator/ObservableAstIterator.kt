@@ -22,6 +22,7 @@ class ObservableAstIterator : AstIterator {
     /**
      * Registers a hook that will be called when a node of type [T] is visited.
      * @param hook action to be called, with the visited node as parameter
+     * @param T desired node type
      * @return this for concatenation
      */
     inline fun <reified T : Node> on(noinline hook: (T) -> Unit): ObservableAstIterator =
@@ -37,6 +38,16 @@ class ObservableAstIterator : AstIterator {
     fun onFinished(hook: () -> Unit): ObservableAstIterator =
         apply {
             onFinishedHooks.add(hook)
+        }
+
+    /**
+     * Collects all the visited nodes of type [T] into a collection.
+     * @param T node type
+     * @return an ordered list (DFS order) containing all the visited nodes of type [T] in the tree
+     */
+    inline fun <reified T : Node> collectAll(): List<T> =
+        mutableListOf<T>().apply {
+            on<T>(::add)
         }
 
     /**
