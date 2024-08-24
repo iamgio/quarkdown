@@ -90,7 +90,7 @@ class Pipeline(
     private fun visitTree(document: Document) {
         context.flavor.treeIteratorFactory
             .default(context)
-            .run(document)
+            .traverse(document)
 
         hooks?.afterTreeVisiting?.invoke(this)
     }

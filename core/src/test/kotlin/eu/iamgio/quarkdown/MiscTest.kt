@@ -90,7 +90,7 @@ class MiscTest {
                 assertEquals("java", it.language)
             }
             .onFinished { finished = true }
-            .run(node)
+            .traverse(node)
 
         assertTrue(finished)
     }

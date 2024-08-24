@@ -61,7 +61,7 @@ class ObservableAstIterator : AstIterator {
             hook.attach(this)
         }
 
-    override fun run(root: NestableNode) {
+    override fun traverse(root: NestableNode) {
         root.flattenedChildren().forEach { node ->
             hooks.forEach { hook -> hook(node) }
         }

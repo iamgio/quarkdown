@@ -7,7 +7,8 @@ import eu.iamgio.quarkdown.ast.NestableNode
  */
 interface AstIterator {
     /**
-     * Runs the iterator from the given root node
+     * Runs the iterator from the given root node,
+     * traversing the node tree and visiting each node.
      */
-    fun run(root: NestableNode)
+    fun traverse(root: NestableNode)
 }
