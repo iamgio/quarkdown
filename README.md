@@ -70,7 +70,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 |-----------------------|:------------------:|:------------------:|:------------------:|
 | Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
 | Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
-| Scripting             |        :x:         |        :x:         | :white_check_mark: |
+| Scripting             |        :x:         |        :white_check_mark:         | :white_check_mark: |
 
 <table>
   <thead>
