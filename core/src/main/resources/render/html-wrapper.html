@@ -10,9 +10,9 @@
     [[if:SLIDES]]
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.css"></link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.css"></link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.css">
     [[endif:SLIDES]]
     <link rel="stylesheet" href="theme/theme.css">
     [[if:CODE]]
@@ -55,9 +55,8 @@
         }
 
         @page {
-            [[if:PAGESIZE]] size: [[PAGEWIDTH]] [[PAGEHEIGHT]]; [[endif:PAGESIZE]]
-
-            [[if:PAGEMARGIN]] margin: [[PAGEMARGIN]]; [[endif:PAGEMARGIN]]
+            [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
 
             @top-left-corner {
                 content: var(--page-margin-top-left-corner-content)
