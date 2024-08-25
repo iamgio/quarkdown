@@ -1,10 +1,20 @@
 package eu.iamgio.quarkdown
 
+import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.DocumentTheme
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
+import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.pipeline.output.ArtifactType
+import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
+import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
+import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * HTML post renderer tests.
@@ -217,5 +227,49 @@ class HtmlPostRendererTest {
                     it.wrap().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
                 )
             }
+    }
+
+    @Test
+    fun `resource generation`() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.documentInfo.type = DocumentType.SLIDES
+        context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
+
+        val postRenderer = HtmlPostRenderer(context)
+        val html = "<html><head></head><body></body></html>"
+
+        val resources = postRenderer.generateResources(html)
+        assertEquals(3, resources.size)
+
+        resources.filterIsInstance<OutputArtifact>().first { it.type == ArtifactType.HTML }.let {
+            assertEquals(html, it.content)
+        }
+
+        resources.filterIsInstance<LazyOutputArtifact>().first { it.type == ArtifactType.JAVASCRIPT }.let {
+            assertEquals("slides", it.name)
+            assertTrue("Reveal" in it.content())
+        }
+
+        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first()
+        assertEquals("theme", themeGroup.name)
+
+        themeGroup.resources.map { it.name }.let { themes ->
+            assertTrue("darko" in themes)
+            assertTrue("minimal" in themes)
+            assertTrue("global" in themes)
+            assertTrue("theme" in themes)
+        }
+
+        (themeGroup.resources.first { it.name == "theme" } as OutputArtifact).let {
+            assertEquals(ArtifactType.CSS, it.type)
+            assertEquals(
+                """
+                @import url('global.css');
+                @import url('minimal.css');
+                @import url('darko.css');
+                """.trimIndent(),
+                it.content,
+            )
+        }
     }
 }
