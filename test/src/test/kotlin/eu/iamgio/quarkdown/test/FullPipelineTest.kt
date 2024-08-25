@@ -4,6 +4,11 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
+import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.page.PageOrientation
+import eu.iamgio.quarkdown.document.page.PageSizeFormat
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -17,6 +22,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
@@ -71,6 +77,43 @@ class FullPipelineTest {
             assertFalse(attributes.hasCode)
             assertFalse(attributes.hasMath)
             assertTrue(attributes.linkDefinitions.isEmpty())
+            assertEquals(DocumentType.PLAIN, documentInfo.type)
+            assertNull(documentInfo.name)
+            assertNull(documentInfo.author)
+            assertNull(documentInfo.locale)
+        }
+
+        execute(
+            """
+            .docname {My Quarkdown document}
+            .docauthor {iamgio}
+            .doctype {slides}
+            .doclang {english}
+            .theme {darko} layout:{minimal}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px}
+            .slides transition:{zoom} speed:{fast}
+            .autopagebreak depth:{3}
+            """.trimIndent(),
+        ) {
+            assertEquals("My Quarkdown document", documentInfo.name)
+            assertEquals("iamgio", documentInfo.author)
+            assertEquals("en", documentInfo.locale?.tag)
+            assertEquals(DocumentType.SLIDES, documentInfo.type)
+            assertEquals("darko", documentInfo.theme?.color)
+            assertEquals("minimal", documentInfo.theme?.layout)
+
+            PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
+                assertEquals(bounds.width, documentInfo.pageFormat.pageWidth)
+                assertEquals(bounds.height, documentInfo.pageFormat.pageHeight)
+            }
+
+            assertEquals(
+                Sizes(
+                    vertical = Size(3.0, Size.Unit.CM),
+                    horizontal = Size(2.0, Size.Unit.PX),
+                ),
+                documentInfo.pageFormat.margin,
+            )
         }
     }
 
