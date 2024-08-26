@@ -2,8 +2,11 @@ package eu.iamgio.quarkdown.media.storage
 
 import eu.iamgio.quarkdown.media.Media
 import eu.iamgio.quarkdown.media.ResolvableMedia
+import eu.iamgio.quarkdown.media.export.MediaOutputResourceConverter
 import eu.iamgio.quarkdown.media.storage.name.MediaNameProviderStrategy
 import eu.iamgio.quarkdown.media.storage.name.SanitizedMediaNameProvider
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import java.io.File
 
 /**
@@ -24,6 +27,18 @@ class MutableMediaStorage(
         get() = bindings.values.toSet()
 
     override fun resolve(path: String): StoredMedia? = bindings[path]
+
+    override fun toResource(): OutputResource {
+        val subResources =
+            this.all.asSequence()
+                .map {
+                    val converter = MediaOutputResourceConverter(it.name)
+                    it.media.accept(converter)
+                }
+                .toSet()
+
+        return OutputResourceGroup(name = "media", subResources)
+    }
 
     /**
      * Binds a media to a path.

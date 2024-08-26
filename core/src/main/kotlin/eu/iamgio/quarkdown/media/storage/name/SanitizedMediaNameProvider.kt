@@ -7,7 +7,8 @@ import eu.iamgio.quarkdown.media.RemoteMedia
  *
  */
 class SanitizedMediaNameProvider : MediaNameProviderStrategy {
-    private fun String.sanitize() = this.replace("\\W".toRegex(), "-")
+    // Must preserve the file extension
+    private fun String.sanitize() = replace("[^a-zA-Z0-9\\-_.]".toRegex(), "-").trim()
 
     override fun visit(media: LocalMedia) = media.file.absolutePath.sanitize()
 

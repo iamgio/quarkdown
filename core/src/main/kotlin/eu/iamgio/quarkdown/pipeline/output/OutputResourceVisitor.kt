@@ -7,5 +7,7 @@ package eu.iamgio.quarkdown.pipeline.output
 interface OutputResourceVisitor<T> {
     fun visit(artifact: OutputArtifact): T
 
+    fun visit(artifact: BinaryOutputArtifact): T
+
     fun visit(group: OutputResourceGroup): T
 }

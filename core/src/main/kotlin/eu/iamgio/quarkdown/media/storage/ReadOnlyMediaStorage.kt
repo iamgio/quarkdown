@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.media.storage
 
 import eu.iamgio.quarkdown.media.Media
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
 
 /**
  * A storage of [Media] that can only be read.
@@ -23,4 +24,13 @@ interface ReadOnlyMediaStorage {
      * @return the matching media, if any is found
      */
     fun resolve(path: String): StoredMedia?
+
+    /**
+     * Converts this storage to an [OutputResource].
+     * This is used to export all media to the output directory.
+     * Ideally, this method returns an [eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup]
+     * which contains all media inside of it.
+     * @return an exportable resource containing all media
+     */
+    fun toResource(): OutputResource
 }
