@@ -4,6 +4,9 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.NoAutoArgumentUnwrapping
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.log.Log

@@ -17,8 +17,8 @@ import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
-import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue

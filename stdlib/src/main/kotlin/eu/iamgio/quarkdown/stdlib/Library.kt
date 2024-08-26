@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue

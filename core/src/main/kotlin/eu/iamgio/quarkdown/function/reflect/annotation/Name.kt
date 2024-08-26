@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.function.reflect
+package eu.iamgio.quarkdown.function.reflect.annotation
 
 /**
  * If a library member is annotated with this, a custom name is set instead of its original name.

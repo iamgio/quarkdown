@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 
 /**
