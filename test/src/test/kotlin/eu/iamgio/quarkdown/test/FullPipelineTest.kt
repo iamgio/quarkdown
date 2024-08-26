@@ -136,6 +136,13 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute("This is a .text content:{small text} size:{tiny} variant:{smallcaps}") {
+            assertEquals(
+                "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
+                it,
+            )
+        }
     }
 
     @Test
@@ -725,6 +732,23 @@ class FullPipelineTest {
                     "<h1>Hello, world!</h1><p>2 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 2 is 4</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>4 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 4 is 16</p><h3>End</h3>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {poweredby}
+                credits:
+                .text size:{small} variant:{smallcaps}
+                    powered by .credits
+            
+            This **exciting feature**, .poweredby {[Quarkdown](https://github.com/iamgio/quarkdown)}, looks great!
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>This <strong>exciting feature</strong>, <span class=\"size-small\" style=\"font-variant: small-caps;\">" +
+                    "powered by <a href=\"https://github.com/iamgio/quarkdown\">Quarkdown</a></span>, looks great!</p>",
                 it,
             )
         }

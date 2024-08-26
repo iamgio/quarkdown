@@ -37,6 +37,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -710,6 +712,47 @@ class HtmlNodeRendererTest {
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `text transform`() {
+        val out = readParts("quarkdown/texttransform.html")
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.LARGE,
+                    style = TextTransformData.Style.ITALIC,
+                    decoration = TextTransformData.Decoration.UNDERLINE,
+                ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.TINY,
+                    weight = TextTransformData.Weight.BOLD,
+                    decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                    variant = TextTransformData.Variant.SMALL_CAPS,
+                ),
+                listOf(Emphasis(listOf(Text("Foo"))), Text("bar")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    weight = TextTransformData.Weight.BOLD,
+                    color = Color(255, 0, 0),
+                ),
+                listOf(Text("Foo")),
             ).render(),
         )
     }
