@@ -4,6 +4,11 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
+import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.page.PageOrientation
+import eu.iamgio.quarkdown.document.page.PageSizeFormat
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -17,6 +22,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
@@ -28,16 +34,19 @@ private const val DATA_FOLDER = "src/test/resources/data"
 class FullPipelineTest {
     /**
      * Executes a Quarkdown source.
+     * @param source Quarkdown source to execute
      * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
+     * @param options execution options
      */
     private fun execute(
         source: String,
+        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
         hook: Context.(CharSequence) -> Unit,
     ) {
         val context =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(enableAutomaticIdentifiers = false),
+                options = options,
             )
 
         val hooks =
@@ -68,6 +77,43 @@ class FullPipelineTest {
             assertFalse(attributes.hasCode)
             assertFalse(attributes.hasMath)
             assertTrue(attributes.linkDefinitions.isEmpty())
+            assertEquals(DocumentType.PLAIN, documentInfo.type)
+            assertNull(documentInfo.name)
+            assertNull(documentInfo.author)
+            assertNull(documentInfo.locale)
+        }
+
+        execute(
+            """
+            .docname {My Quarkdown document}
+            .docauthor {iamgio}
+            .doctype {slides}
+            .doclang {english}
+            .theme {darko} layout:{minimal}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px}
+            .slides transition:{zoom} speed:{fast}
+            .autopagebreak depth:{3}
+            """.trimIndent(),
+        ) {
+            assertEquals("My Quarkdown document", documentInfo.name)
+            assertEquals("iamgio", documentInfo.author)
+            assertEquals("en", documentInfo.locale?.tag)
+            assertEquals(DocumentType.SLIDES, documentInfo.type)
+            assertEquals("darko", documentInfo.theme?.color)
+            assertEquals("minimal", documentInfo.theme?.layout)
+
+            PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
+                assertEquals(bounds.width, documentInfo.pageFormat.pageWidth)
+                assertEquals(bounds.height, documentInfo.pageFormat.pageHeight)
+            }
+
+            assertEquals(
+                Sizes(
+                    vertical = Size(3.0, Size.Unit.CM),
+                    horizontal = Size(2.0, Size.Unit.PX),
+                ),
+                documentInfo.pageFormat.margin,
+            )
         }
     }
 
@@ -89,6 +135,56 @@ class FullPipelineTest {
                 "<p>Hello, <strong>world</strong>! <a href=\"https://example.com\" title=\"title\"><em>link</em></a></p>",
                 it,
             )
+        }
+
+        execute("This is a .text content:{small text} size:{tiny} variant:{smallcaps}") {
+            assertEquals(
+                "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun links() {
+        execute("This is a link: [link](https://example.com 'title')") {
+            assertEquals("<p>This is a link: <a href=\"https://example.com\" title=\"title\">link</a></p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
+
+        execute(
+            """
+            [Link definition]: https://example.com
+            **This is a link**: [link][Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><strong>This is a link</strong>: <a href=\"https://example.com\">link</a></p>",
+                it,
+            )
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            [Link definition]: https://example.com
+            ## _This is a link_: [Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2><em>This is a link</em>: <a href=\"https://example.com\">Link definition</a></h2>",
+                it,
+            )
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            This link doesn't exist: [link][Link definition]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>This link doesn&#39;t exist: [link][Link definition]</p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
         }
     }
 
@@ -168,6 +264,16 @@ class FullPipelineTest {
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>",
                 it,
             )
+        }
+
+        execute("| Header 1 | Header 2 |\n|----------|----------|\n| $ X $ | $ Y $ |") {
+            assertEquals(
+                "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>__QD_INLINE_MATH__\$X\$__QD_INLINE_MATH__</td>" +
+                    "<td>__QD_INLINE_MATH__\$Y\$__QD_INLINE_MATH__</td></tr></tbody></table>",
+                it,
+            )
+            assertTrue(attributes.hasMath) // Ensures the tree traversal visits table cells too.
         }
 
         execute("| Header 1 | Header 2 | Header 3 |\n|:---------|:--------:|---------:|\n| Cell 1   | Cell 2   | Cell 3   |") {
@@ -626,6 +732,135 @@ class FullPipelineTest {
                     "<h1>Hello, world!</h1><p>2 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 2 is 4</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>" +
                     "<h1>Hello, world!</h1><p>4 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 4 is 16</p><h3>End</h3>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {poweredby}
+                credits:
+                .text size:{small} variant:{smallcaps}
+                    powered by .credits
+            
+            This **exciting feature**, .poweredby {[Quarkdown](https://github.com/iamgio/quarkdown)}, looks great!
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>This <strong>exciting feature</strong>, <span class=\"size-small\" style=\"font-variant: small-caps;\">" +
+                    "powered by <a href=\"https://github.com/iamgio/quarkdown\">Quarkdown</a></span>, looks great!</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents`() {
+        execute(
+            """
+            .tableofcontents title:{_TOC_}
+            
+            # ABC
+            
+            Hi
+            
+            ## _ABC/1_
+            
+            Hello
+            
+            # DEF
+            
+            DEF/1
+            ---
+            
+            Hi there
+            
+            ### DEF/2
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a>" +
+                    "<ol><li><a href=\"#abc1\"><em>ABC/1</em></a></li></ol></li>" +
+                    "<li><a href=\"#def\">DEF</a>" +
+                    "<ol><li><a href=\"#def1\">DEF/1</a>" +
+                    "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
+                    "</ol></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"def1\">DEF/1</h2>" +
+                    "<p>Hi there</p>" +
+                    "<h3 id=\"def2\">DEF/2</h3>",
+                it,
+            )
+        }
+
+        // Markers
+        execute(
+            """
+            .tableofcontents title:{***TOC***} maxdepth:{0}
+            
+            .marker {*Marker 1*}
+            
+            # ABC
+            
+            .marker {*Marker 2*}
+            
+            ## DEF
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
+                    "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
+                    "</ol></div>" +
+                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-1\"></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-2\"></div>" +
+                    "<h2 id=\"def\">DEF</h2>",
+                it,
+            )
+        }
+
+        // Focus
+        execute(
+            """
+            .tableofcontents title:{TOC} focus:{DEF}
+            
+            # ABC
+            
+            ## X
+            
+            # DEF
+            
+            ## Y
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"table-of-contents\">TOC</h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
+                    "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h2 id=\"x\">X</h2>" +
+                    "<div class=\"page-break\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"y\">Y</h2>",
                 it,
             )
         }

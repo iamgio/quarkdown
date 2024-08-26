@@ -10,8 +10,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.size.Size
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory

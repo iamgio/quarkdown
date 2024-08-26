@@ -9,13 +9,15 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
+import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.media.LocalMedia
-import eu.iamgio.quarkdown.media.Media
 import eu.iamgio.quarkdown.media.RemoteMedia
+import eu.iamgio.quarkdown.media.ResolvableMedia
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
 import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
 import eu.iamgio.quarkdown.util.flattenedChildren
@@ -69,6 +71,32 @@ class MiscTest {
                 this,
             )
         }
+
+        // Iterator
+
+        val blockQuoteHook =
+            object : AstIteratorHook {
+                override fun attach(iterator: ObservableAstIterator) {
+                    iterator.on<BlockQuote> {
+                        assertIs<Paragraph>(it.children.first())
+                    }
+                }
+            }
+
+        var finished = false
+
+        ObservableAstIterator()
+            .on<Strong> { assertEquals(Text("abc"), it.children.first()) }
+            .on<Emphasis> { assertEquals(Text("ghi"), it.children.first()) }
+            .attach(blockQuoteHook)
+            .on<Code> {
+                assertEquals("Hello, world!", it.content)
+                assertEquals("java", it.language)
+            }
+            .onFinished { finished = true }
+            .traverse(node)
+
+        assertTrue(finished)
     }
 
     @Test
@@ -91,7 +119,7 @@ class MiscTest {
                 Heading(1, listOf(Text("PQR"))),
             )
 
-        TableOfContents.generate(headings1, maxDepth = 3).let { toc ->
+        TableOfContents.generate(headings1).let { toc ->
             assertEquals(2, toc.items.size)
             assertEquals(3, toc.items[0].subItems.size)
             assertEquals(1, toc.items[0].subItems[1].subItems.size)
@@ -104,17 +132,6 @@ class MiscTest {
             assertEquals(Text("PQR"), toc.items[1].text.first())
         }
 
-        TableOfContents.generate(headings1, maxDepth = 2).let { toc ->
-            assertEquals(2, toc.items.size)
-
-            assertEquals(Text("ABC"), toc.items[0].text.first())
-            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
-            assertTrue(toc.items[0].subItems[1].subItems.isEmpty())
-            assertEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
-            assertEquals(Text("PQR"), toc.items[1].text.first())
-        }
-
         val headings2 =
             sequenceOf(
                 Heading(1, listOf(Text("ABC"))),
@@ -122,7 +139,7 @@ class MiscTest {
                 Heading(2, listOf(Text("GHI"))),
             )
 
-        TableOfContents.generate(headings2, maxDepth = 3).let { toc ->
+        TableOfContents.generate(headings2).let { toc ->
             assertEquals(1, toc.items.size)
             assertEquals(2, toc.items[0].subItems.size)
 
@@ -211,9 +228,9 @@ class MiscTest {
 
     @Test
     fun media() {
-        assertIs<LocalMedia>(Media.of("src/main/resources/render/html-wrapper.html"))
-        assertIs<RemoteMedia>(Media.of("https://example.com/image.jpg"))
-        assertFails { Media.of("nonexistent") }
-        assertFails { Media.of("src") } // Directory
+        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html").resolve())
+        assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").resolve())
+        assertFails { ResolvableMedia("nonexistent").resolve() }
+        assertFails { ResolvableMedia("src").resolve() } // Directory
     }
 }

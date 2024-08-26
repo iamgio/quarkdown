@@ -85,6 +85,17 @@ class Pipeline(
     }
 
     /**
+     * Perform one full traversal of [document]'s AST.
+     */
+    private fun visitTree(document: Document) {
+        context.flavor.treeIteratorFactory
+            .default(context)
+            .traverse(document)
+
+        hooks?.afterTreeVisiting?.invoke(this)
+    }
+
+    /**
      * Converts the AST to code for a target language.
      * If enabled by settings, the output code is wrapped in a template.
      * @param document root of the AST to render
@@ -124,6 +135,8 @@ class Pipeline(
         context.attributes.root = document
 
         expandFunctionCalls(document)
+
+        visitTree(document)
 
         val renderer = this.renderer(context.flavor.rendererFactory, context)
         val rendered = render(document, renderer)

@@ -13,6 +13,7 @@
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
     --qd-box-heading-font: var(--qd-main-font);
     --qd-line-height: 1.5;
+    --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -25,6 +26,10 @@
     --r-block-margin: var(--qd-block-margin);
 }
 
+.reveal .slides > :is(section, .pdf-page) {
+    text-align: var(--qd-slides-horizontal-alignment);
+}
+
 body {
     background-color: var(--qd-background-color);
     color: var(--qd-main-color);
@@ -34,6 +39,13 @@ body {
 
 hr {
     width: 100%;
+}
+
+/* A divider in a row is vertical instead of horizontal */
+.stack-row > hr {
+    display: list-item;
+    width: auto;
+    margin: 0 var(--qd-block-margin);
 }
 
 figure {
@@ -79,7 +91,9 @@ pre code {
     max-height: none !important;
 }
 
-code.focus-lines .hljs-ln-line:not(.focused) {
+/* When an element is marked as focused, other siblings are less visible */
+code.focus-lines .hljs-ln-line:not(.focused),
+:is(ol, ul):has(> .focused) li:not(.focused) {
     opacity: 0.4;
 }
 
@@ -196,6 +210,10 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
+}
+
+.marker {
+    display: none;
 }
 
 .page-margin-content {

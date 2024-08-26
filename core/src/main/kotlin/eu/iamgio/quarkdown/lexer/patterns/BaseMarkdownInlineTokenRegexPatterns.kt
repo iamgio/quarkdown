@@ -2,7 +2,22 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.*
+import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
+import eu.iamgio.quarkdown.lexer.tokens.CommentToken
+import eu.iamgio.quarkdown.lexer.tokens.CriticalContentToken
+import eu.iamgio.quarkdown.lexer.tokens.DiamondAutolinkToken
+import eu.iamgio.quarkdown.lexer.tokens.EmphasisToken
+import eu.iamgio.quarkdown.lexer.tokens.EntityToken
+import eu.iamgio.quarkdown.lexer.tokens.EscapeToken
+import eu.iamgio.quarkdown.lexer.tokens.ImageToken
+import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
+import eu.iamgio.quarkdown.lexer.tokens.LinkToken
+import eu.iamgio.quarkdown.lexer.tokens.ReferenceImageToken
+import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
+import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.tokens.StrongToken
+import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] inlines.
@@ -156,7 +171,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             )
 
     /**
-     * An image, same as a link preceeded by a `!`.
+     * An image, same as a link preceded by a `!`.
      * As an extension, Quarkdown introduces an optional `(WxH)` to be added at the end which specifies
      * the image size, where W and H can be integers or `_` (auto).
      * @see ImageToken
@@ -176,7 +191,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             )
 
     /**
-     * An image that references a link definition, same as a reference link preceeded by a `!`.
+     * An image that references a link definition, same as a reference link preceded by a `!`.
      * @see ReferenceImageToken
      * @see referenceLink
      */

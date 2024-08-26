@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
+import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
@@ -17,7 +18,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
@@ -26,6 +27,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
@@ -128,39 +130,56 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    // A table of contents is rendered as an ordered list.
-    private fun tableOfContentsItemsToList(items: List<TableOfContents.Item>) =
-        OrderedList(
+    // Converts TOC items to a renderable OrderedList.
+    private fun tableOfContentsItemsToList(
+        items: List<TableOfContents.Item>,
+        view: TableOfContentsView,
+    ): OrderedList {
+        // Gets the content of an inner TOC item.
+        fun getTableOfContentsItemContent(item: TableOfContents.Item) =
+            buildList {
+                // A link to the target heading.
+                this +=
+                    Link(
+                        item.text,
+                        url = "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target),
+                        title = null,
+                    )
+
+                // Recursively include sub-items.
+                item.subItems.filter { it.depth <= view.maxDepth }
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { this += tableOfContentsItemsToList(it, view) }
+            }
+
+        return OrderedList(
             startIndex = 1,
             isLoose = true,
-            children = items.map { BaseListItem(listOf(it)) },
+            children =
+                items.map {
+                    BaseListItem(
+                        // When at least one item is focused, the other items are less visible.
+                        // This effect is handled by CSS (global.css).
+                        isFocused = view.hasFocus(it),
+                        children = getTableOfContentsItemContent(it),
+                    )
+                },
         )
+    }
 
-    override fun visit(node: TableOfContents) =
-        buildMultiTag {
-            // Title
-            +Heading(1, listOf(Text("Table of Contents")), customId = "table-of-contents") // TODO localize
-            // Content
-            +div("table-of-contents") {
-                +tableOfContentsItemsToList(node.items)
-            }
-        }
-
-    override fun visit(node: TableOfContents.Item): CharSequence {
-        val link =
-            buildTag("a") {
-                +node.text
-
-                // Link to the target anchor (e.g. a heading).
-                attribute("href", "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(node.target))
-            }
+    override fun visit(node: TableOfContentsView): CharSequence {
+        val tableOfContents = context.attributes.tableOfContents ?: return ""
 
         return buildMultiTag {
-            +link
-
-            // Recursively render sub-items.
-            if (node.subItems.isNotEmpty()) {
-                +tableOfContentsItemsToList(node.subItems)
+            // Title
+            +Heading(
+                depth = 1,
+                text = node.title ?: listOf(Text("Table of Contents")),
+                customId = "table-of-contents",
+            ) // In the future, the default title should be localized.
+            // Content
+            +div("table-of-contents") {
+                +tableOfContentsItemsToList(tableOfContents.items, node)
             }
         }
     }
@@ -260,22 +279,34 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // On top of the default behavior, an anchor ID is set,
     // and it could force an automatic page break if suitable.
     override fun visit(node: Heading): String {
-        val headingTag =
-            tagBuilder("h${node.depth}", node.text)
-                .optionalAttribute(
-                    "id",
-                    // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider.of(renderer = this)
-                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
-                        ?.getId(node),
-                )
+        val tagBuilder =
+            when {
+                // When a heading has a depth of 0 (achievable only via functions), it is an invisible marker with an ID.
+                node.isMarker ->
+                    tagBuilder("div") {
+                        `class`("marker")
+                        hidden()
+                    }
+                // Regular headings.
+                else -> tagBuilder("h${node.depth}", node.text)
+            }
+
+        // The heading tag itself.
+        val tag =
+            tagBuilder.optionalAttribute(
+                "id",
+                // Generate an automatic identifier if allowed by settings.
+                HtmlIdentifierProvider.of(renderer = this)
+                    .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
+                    ?.getId(node),
+            )
                 .build()
 
         return buildMultiTag {
             if (context.shouldAutoPageBreak(node)) {
                 +PageBreak()
             }
-            +headingTag
+            +tag
         }
     }
 
@@ -313,4 +344,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
     }
+
+    // Quarkdown introduces focusable list items.
+    override fun visit(node: BaseListItem) =
+        buildTag("li") {
+            appendListItemContent(node)
+
+            if (node.isFocused) {
+                `class`("focused")
+            }
+        }
 }

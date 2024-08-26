@@ -83,8 +83,6 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: BlockCodeToken): Node {
-        context.attributes.hasCode = true // Allows code highlighting.
-
         return Code(
             language = null,
             // Remove first indentation
@@ -93,8 +91,6 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: FencesCodeToken): Node {
-        context.attributes.hasCode = true // Allows code highlighting.
-
         val groups = token.data.groups.iterator(consumeAmount = 4)
         return Code(
             language = groups.next().takeIf { it.isNotBlank() }?.trim(),
@@ -103,15 +99,11 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: MultilineMathToken): Node {
-        context.attributes.hasMath = true
-
         val groups = token.data.groups.iterator(consumeAmount = 3)
         return Math(expression = groups.next().trim())
     }
 
     override fun visit(token: OnelineMathToken): Node {
-        context.attributes.hasMath = true
-
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Math(expression = groups.next().trim())
     }
@@ -173,18 +165,13 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: LinkDefinitionToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        val definition =
-            LinkDefinition(
-                label = groups.next().trim().toInline(),
-                url = groups.next().trim(),
-                // Remove first and last character
-                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
-            )
 
-        // Storing the link definitions for easier lookups.
-        context.register(definition)
-
-        return definition
+        return LinkDefinition(
+            label = groups.next().trim().toInline(),
+            url = groups.next().trim(),
+            // Remove first and last character
+            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+        )
     }
 
     /**
@@ -286,7 +273,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 TaskListItem(isChecked, children)
             }
             // Regular list item.
-            else -> BaseListItem(children)
+            else -> BaseListItem(children = children)
         }
     }
 

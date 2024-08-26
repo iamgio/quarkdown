@@ -78,7 +78,13 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(style: TextTransformData.Style) = style.kebabCaseName
 
-    override fun visit(decoration: TextTransformData.Decoration) = decoration.kebabCaseName
+    override fun visit(decoration: TextTransformData.Decoration) =
+        when (decoration) {
+            TextTransformData.Decoration.STRIKETHROUGH -> "line-through"
+            TextTransformData.Decoration.UNDEROVERLINE -> "underline overline"
+            TextTransformData.Decoration.ALL -> "underline overline line-through"
+            else -> decoration.kebabCaseName
+        }
 
     override fun visit(case: TextTransformData.Case) = case.kebabCaseName
 

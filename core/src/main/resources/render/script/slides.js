@@ -51,12 +51,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear out the original slides div and add the new sections.
     slidesDiv.innerHTML = '';
+    // Elements that are not part of a section yet and will be added to the next one.
+    let queuedElements = [];
+
     sections.forEach(section => {
         // Empty slides are ignored.
-        if (section.childElementCount > 0) {
+        if (isBlank(section)) {
+            // If the section is blank and NOT empty,
+            // meaning all its children are hidden (e.g. a marker produced by the .marker function),
+            // they are added to the queued elements in order to be added to the next section
+            // and not produce an empty slide.
+            queuedElements.push(...section.children);
+        } else {
+            // If there are any queued elements, they are added to the beginning of the new section.
+            if (queuedElements.length > 0) {
+                queuedElements.forEach(element => section.prepend(element));
+                queuedElements = [];
+            }
             slidesDiv.appendChild(section);
         }
     });
+
+    // If there are any queued elements left, they are added to the last visible section.
+    if (queuedElements.length > 0 && sections.length > 0) {
+        queuedElements.forEach(element => slidesDiv.lastChild.appendChild(element));
+        queuedElements = [];
+    }
 
     // Copy the content of each global page margin initializer to the background of each section.
     Reveal.addEventListener('ready', function (event) {
@@ -109,4 +129,14 @@ function updateCurrentSlideNumberElements(index) {
     document.querySelectorAll('.current-page-number').forEach(current => {
         current.innerText = index + 1;
     });
+}
+
+// Whether an element is not visible in the document.
+function isHidden(element) {
+    return element.hasAttribute('data-hidden');
+}
+
+// Whether a slide has no visible content.
+function isBlank(slide) {
+    return slide.childNodes.length === 0 || Array.from(slide.children).every(isHidden);
 }

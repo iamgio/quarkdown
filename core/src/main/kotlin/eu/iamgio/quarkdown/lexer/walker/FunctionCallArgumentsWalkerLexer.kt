@@ -123,6 +123,10 @@ class FunctionCallArgumentsWalkerLexer(
             // depth=0 {depth=1 {depth=2} depth=1} depth=0
             var depth = 0
 
+            // Index to roll back to when the scanned content is not part of the function call anymore.
+            // After this sub-lexer is finished, the main lexing resumes from this index.
+            var rollbackIndex = 0
+
             while (true) {
                 // Current character being read.
                 val char = reader.peek() ?: break
@@ -139,6 +143,7 @@ class FunctionCallArgumentsWalkerLexer(
                     }
                     continue
                 }
+
                 // If an argument delimiter is escaped, it is trated as a regular character.
                 // If the escaped character is not an argument delimiter, its behavior is delegated to the parser.
                 if (char == '\\') {
@@ -161,6 +166,11 @@ class FunctionCallArgumentsWalkerLexer(
                     }
 
                     char == ARG_DELIMITER_CLOSE -> {
+                        // Content after the argument keeps being scanned.
+                        // In case there is no next argument, the lexer stops
+                        // and the lexing resumes from this index, which is the end of the function call.
+                        rollbackIndex = reader.index + 1
+
                         if (depth == 0) {
                             // {Argument}} <-- the last '}' is not part of the argument.
                             break
@@ -177,7 +187,7 @@ class FunctionCallArgumentsWalkerLexer(
                     // It could be a named argument (e.g. name:{arg}),
                     // but if it's not, the lexer stops.
                     depth == 0 -> {
-                        val startIndex = reader.index
+                        // val startIndex = reader.index
                         val argName = readArgName()
                         if (argName != null) {
                             this += argName
@@ -185,7 +195,7 @@ class FunctionCallArgumentsWalkerLexer(
                         } else {
                             // The text outside the delimiters does not represent a named argument:
                             // end of the function call.
-                            reader.index = startIndex - 1 // Rollback
+                            reader.index = rollbackIndex // Rollback: the main lexing resumes from this index.
                             break
                         }
                     }

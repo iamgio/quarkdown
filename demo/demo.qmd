@@ -138,7 +138,7 @@ from your Markdown code.
 ## File data: code
 
 .sourceresult
-    The contructor of the class `Point` is as follows:
+    The constructor of the class `Point` is as follows:
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
@@ -151,8 +151,10 @@ from your Markdown code.
 ## Math
 
 .sourceresult
-    If we try to calculate the **surface** of a circle of **radius 8**,
-    we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
+    .var {radius} {8}
+
+    If we try to calculate the **surface** of a circle of **radius .radius**,
+    we'll find out it's **.multiply {.pow {.radius} to:{2}} by:{.pi}**
 
 ## Scripting {#scripting-basic}
 

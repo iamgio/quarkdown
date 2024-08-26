@@ -76,7 +76,14 @@ class RenderWrapper(private val code: String) {
             conditionals.forEach { (placeholder, value) ->
                 // Regex to find conditional fragments.
                 val regex =
-                    "\\[\\[if:$placeholder]]((.|\\R)+?)\\[\\[endif:$placeholder]]\\R?".toRegex(RegexOption.MULTILINE)
+                    (
+                        "\\[\\[if:$placeholder]]" + // Start
+                            "(?:\\R\\s*)?" + // Trim start
+                            "((.|\\R)+?)" + // Content
+                            "(?:\\R\\s*)?" + // Trim end
+                            "\\[\\[endif:$placeholder]]" // End
+                    )
+                        .toRegex(RegexOption.MULTILINE)
                 // If there is a match:
                 // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
                 regex.findAll(this)

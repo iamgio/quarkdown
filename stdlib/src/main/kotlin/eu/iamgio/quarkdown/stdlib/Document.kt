@@ -1,12 +1,15 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
@@ -16,8 +19,8 @@ import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -44,6 +47,7 @@ val Document: Module =
         ::pageCounter,
         ::autoPageBreak,
         ::disableAutoPageBreak,
+        ::marker,
         ::tableOfContents,
     )
 
@@ -298,12 +302,31 @@ fun disableAutoPageBreak(
 ) = autoPageBreak(context, 0)
 
 /**
+ * Creates an invisible marker that points to a specific location in the document,
+ * and can be referenced by other elements as would happen with a regular heading.
+ * It can be particularly useful when using a table of contents.
+ * @param name name of the marker
+ * @return a wrapped [Heading] marker node
+ * @see tableOfContents
+ */
+fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
+
+/**
  * Generates a table of contents for the document.
+ * @param title title of the table of contents. If unset, the default title is used
  * @param maxDepth maximum depth of the table of contents
+ * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
+ *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  * @return a wrapped [TableOfContents] node
  */
 @Name("tableofcontents")
 fun tableOfContents(
-    @Injected context: Context,
+    title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
-): NodeValue = TableOfContents.generate(context, maxDepth).wrappedAsValue()
+    @Name("focus") focusedItem: InlineMarkdownContent? = null,
+): NodeValue =
+    TableOfContentsView(
+        title?.children,
+        maxDepth,
+        focusedItem?.children,
+    ).wrappedAsValue()

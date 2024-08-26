@@ -17,7 +17,7 @@ data class ResolvableMedia(val path: String) : Media {
      * @return [LocalMedia] if the path is a file, [RemoteMedia] if the path is a URL
      * @throws IllegalArgumentException if the path cannot be resolved or if it is a directory
      */
-    private fun resolve(): Media {
+    fun resolve(): Media {
         // If the path is a URL, it is remote.
         path.toURLOrNull()?.let { return RemoteMedia(it) }
 

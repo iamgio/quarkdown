@@ -37,7 +37,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
@@ -132,9 +132,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: Whitespace): T
 
-    fun visit(node: TableOfContents): T
-
-    fun visit(node: TableOfContents.Item): T
+    fun visit(node: TableOfContentsView): T
 
     // Quarkdown inline
 

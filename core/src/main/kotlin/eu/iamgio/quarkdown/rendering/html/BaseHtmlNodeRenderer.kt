@@ -37,7 +37,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContents
+import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
@@ -118,7 +118,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
      * Appends the base content of a [ListItem] to an [HtmlTagBuilder],
      * following the loose/tight rendering rules (CommonMark 5.3).
      */
-    private fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
+    protected fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
         // Loose lists (or items not linked to a list for some reason) are rendered as-is.
         if (node.owner?.isLoose != false) {
             +node.children
@@ -257,9 +257,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
 
     override fun visit(node: Whitespace): CharSequence = throw UnsupportedRenderException(node)
 
-    override fun visit(node: TableOfContents): CharSequence = throw UnsupportedRenderException(node)
-
-    override fun visit(node: TableOfContents.Item): CharSequence = throw UnsupportedRenderException(node)
+    override fun visit(node: TableOfContentsView): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 
