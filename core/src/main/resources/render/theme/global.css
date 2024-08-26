@@ -41,6 +41,13 @@ hr {
     width: 100%;
 }
 
+/* A divider in a row is vertical instead of horizontal */
+.stack-row > hr {
+    display: list-item;
+    width: auto;
+    margin: 0 var(--qd-block-margin);
+}
+
 figure {
     text-align: center;
 }
