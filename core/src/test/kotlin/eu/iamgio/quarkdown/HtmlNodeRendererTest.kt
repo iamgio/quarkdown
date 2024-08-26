@@ -726,7 +726,7 @@ class HtmlNodeRendererTest {
                 TextTransformData(
                     size = TextTransformData.Size.LARGE,
                     style = TextTransformData.Style.ITALIC,
-                    decoration = TextTransformData.Decoration.UNDERLINE,
+                    decoration = TextTransformData.Decoration.STRIKETHROUGH,
                 ),
                 listOf(Text("Foo")),
             ).render(),
@@ -738,7 +738,7 @@ class HtmlNodeRendererTest {
                 TextTransformData(
                     size = TextTransformData.Size.TINY,
                     weight = TextTransformData.Weight.BOLD,
-                    decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                    decoration = TextTransformData.Decoration.UNDEROVERLINE,
                     variant = TextTransformData.Variant.SMALL_CAPS,
                 ),
                 listOf(Emphasis(listOf(Text("Foo"))), Text("bar")),
@@ -750,8 +750,17 @@ class HtmlNodeRendererTest {
             TextTransform(
                 TextTransformData(
                     weight = TextTransformData.Weight.BOLD,
+                    decoration = TextTransformData.Decoration.ALL,
                     color = Color(255, 0, 0),
                 ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(),
                 listOf(Text("Foo")),
             ).render(),
         )

@@ -81,6 +81,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(decoration: TextTransformData.Decoration) =
         when (decoration) {
             TextTransformData.Decoration.STRIKETHROUGH -> "line-through"
+            TextTransformData.Decoration.UNDEROVERLINE -> "underline overline"
+            TextTransformData.Decoration.ALL -> "underline overline line-through"
             else -> decoration.kebabCaseName
         }
 

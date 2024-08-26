@@ -59,7 +59,10 @@ class TextTransformData(
     enum class Decoration : RenderRepresentable {
         NONE,
         UNDERLINE,
+        OVERLINE,
+        UNDEROVERLINE,
         STRIKETHROUGH,
+        ALL,
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
