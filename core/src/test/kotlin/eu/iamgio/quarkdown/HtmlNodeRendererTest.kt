@@ -749,7 +749,7 @@ class HtmlNodeRendererTest {
             out.next(),
             TextTransform(
                 TextTransformData(
-                    weight = TextTransformData.Weight.BOLD,
+                    case = TextTransformData.Case.CAPITALIZE,
                     decoration = TextTransformData.Decoration.ALL,
                     color = Color(255, 0, 0),
                 ),
