@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.media.ResolvableMedia
+import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -19,6 +20,7 @@ open class MutableContext(
     libraries: Set<Library> = emptySet(),
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
+    override val mediaStorage: MutableMediaStorage = MutableMediaStorage(),
 ) : BaseContext(attributes, flavor, libraries) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 

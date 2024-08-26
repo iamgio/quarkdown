@@ -16,6 +16,8 @@ import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.media.LocalMedia
+import eu.iamgio.quarkdown.media.Media
+import eu.iamgio.quarkdown.media.MediaVisitor
 import eu.iamgio.quarkdown.media.RemoteMedia
 import eu.iamgio.quarkdown.media.ResolvableMedia
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
@@ -228,9 +230,17 @@ class MiscTest {
 
     @Test
     fun media() {
-        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html").resolve())
-        assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").resolve())
-        assertFails { ResolvableMedia("nonexistent").resolve() }
-        assertFails { ResolvableMedia("src").resolve() } // Directory
+        // A visitor that, when called on a ResolvableMedia, returns the media itself after it has been resolved.
+        val selfVisitor =
+            object : MediaVisitor<Media> {
+                override fun visit(media: LocalMedia) = media
+
+                override fun visit(media: RemoteMedia) = media
+            }
+
+        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html").accept(selfVisitor))
+        assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").accept(selfVisitor))
+        assertFails { ResolvableMedia("nonexistent").accept(selfVisitor) }
+        assertFails { ResolvableMedia("src").accept(selfVisitor) } // Directory
     }
 }

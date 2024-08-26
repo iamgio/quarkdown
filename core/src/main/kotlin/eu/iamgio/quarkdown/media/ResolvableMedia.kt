@@ -6,8 +6,12 @@ import java.io.File
 /**
  * A generic media that is yet to be resolved to a [Media] subclass.
  * @param path path to the media, either a file or a URL
+ * @param workingDirectory directory to resolve the media from, in case the path is relative
  */
-data class ResolvableMedia(val path: String) : Media {
+data class ResolvableMedia(
+    private val path: String,
+    private val workingDirectory: File? = null,
+) : Media {
     /**
      * The resolved media as a [LocalMedia] or [RemoteMedia].
      */
@@ -17,11 +21,11 @@ data class ResolvableMedia(val path: String) : Media {
      * @return [LocalMedia] if the path is a file, [RemoteMedia] if the path is a URL
      * @throws IllegalArgumentException if the path cannot be resolved or if it is a directory
      */
-    fun resolve(): Media {
+    private fun resolve(): Media {
         // If the path is a URL, it is remote.
         path.toURLOrNull()?.let { return RemoteMedia(it) }
 
-        val file = File(path)
+        val file = workingDirectory?.let { File(it, path) } ?: File(path)
 
         if (!file.exists()) throw IllegalArgumentException("Media path cannot be resolved: $path")
         if (file.isDirectory) throw IllegalArgumentException("Media is a directory: $path")

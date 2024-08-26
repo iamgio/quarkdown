@@ -11,6 +11,8 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
+import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.Pipelines
 
@@ -24,6 +26,7 @@ open class BaseContext(
     override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
+    override val mediaStorage: ReadOnlyMediaStorage = MutableMediaStorage(),
 ) : Context {
     override val attachedPipeline: Pipeline?
         get() = Pipelines.getAttachedPipeline(this)
