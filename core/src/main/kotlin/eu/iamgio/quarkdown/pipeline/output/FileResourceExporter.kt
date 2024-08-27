@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.pipeline.output
 
+import eu.iamgio.quarkdown.util.sanitize
 import java.io.File
 
 /**
@@ -14,7 +15,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
     private val OutputResource.fileName: String
         get() =
             name.replace("\\s+".toRegex(), "-")
-                .replace("[^a-zA-Z0-9-]".toRegex(), "")
+                .sanitize(replacement = "")
 
     /**
      * File extension relative to the [ArtifactType] of this resource.
@@ -25,7 +26,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
                 ArtifactType.HTML -> "html"
                 ArtifactType.CSS -> "css"
                 ArtifactType.JAVASCRIPT -> "js"
-                ArtifactType.AUTO -> name.substringAfterLast(".", missingDelimiterValue = "") // Extension, if present.
+                ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
             }
 
     /**

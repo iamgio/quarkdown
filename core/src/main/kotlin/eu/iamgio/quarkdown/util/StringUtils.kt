@@ -49,6 +49,13 @@ fun StringBuilder.replace(
 }
 
 /**
+ * @return [this] string with all non-alphanumeric characters,
+ *         except for `-`, `_`, and `.`, replaced with [replacement]
+ * @param replacement character to replace invalid characters with
+ */
+fun String.sanitize(replacement: String) = this.replace("[^a-zA-Z0-9\\-_.]".toRegex(), replacement)
+
+/**
  * @return [this] string with line separators replaced with `\n`,
  *         or the string itself if `\n` is already the line separator
  */
