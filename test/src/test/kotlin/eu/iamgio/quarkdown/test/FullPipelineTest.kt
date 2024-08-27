@@ -35,12 +35,15 @@ class FullPipelineTest {
     /**
      * Executes a Quarkdown source.
      * @param source Quarkdown source to execute
-     * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
      * @param options execution options
+     * @param enableMediaStorage whether the media storage system should be enabled.
+     * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
+     * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
      */
     private fun execute(
         source: String,
-        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false, enableMediaStorage = false),
+        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
+        enableMediaStorage: Boolean = false,
         hook: Context.(CharSequence) -> Unit,
     ) {
         val context =
@@ -60,6 +63,7 @@ class FullPipelineTest {
                 PipelineOptions(
                     errorHandler = StrictPipelineErrorHandler(),
                     workingDirectory = File(DATA_FOLDER),
+                    enableMediaStorage = enableMediaStorage,
                 ),
                 libraries = setOf(Stdlib.library),
                 renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },

@@ -147,6 +147,9 @@ class Pipeline(
         // These options must be set before traversing the tree, as media is stored during it.
         context.options.mergeMediaStorageOptions(renderer.postRenderer.preferredMediaStorageOptions)
 
+        // The user can further force override the media storage options.
+        context.options.mergeMediaStorageOptions(options.mediaStorageOptionsOverrides)
+
         expandFunctionCalls(document)
 
         visitTree(document)

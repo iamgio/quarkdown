@@ -16,7 +16,7 @@ class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
             .default(context)
             .attach(TableOfContentsGeneratorHook(context))
             .apply {
-                if (context.options.enableMediaStorage) {
+                if (context.attachedPipeline?.options?.enableMediaStorage == true) {
                     attach(MediaStorerHook(context))
                 }
             }

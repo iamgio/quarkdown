@@ -20,18 +20,6 @@ interface ContextOptions : MediaStorageOptions {
      * an identifier (`hello-world`) that can be referenced by other elements.
      */
     val enableAutomaticIdentifiers: Boolean
-
-    /**
-     * Whether media storage should be enabled.
-     * If enabled, media objects referenced in the document are copied to the output directory
-     * and those elements that use them (e.g. images) automatically reference the new local path.
-     *
-     * This doesn't take effect (= disabled) with the base Markdown flavor,
-     * as the media architecture is defined by Quarkdown through a [eu.iamgio.quarkdown.context.hooks.MediaStorerHook].
-     *
-     * If this is disabled, [enableRemoteMediaStorage] and [enableLocalMediaStorage] values are ignored.
-     */
-    val enableMediaStorage: Boolean
 }
 
 /**
@@ -46,7 +34,6 @@ fun Context.shouldAutoPageBreak(heading: Heading) = !heading.isMarker && heading
 data class MutableContextOptions(
     override var autoPageBreakHeadingDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
-    override var enableMediaStorage: Boolean = true,
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,
 ) : ContextOptions {
