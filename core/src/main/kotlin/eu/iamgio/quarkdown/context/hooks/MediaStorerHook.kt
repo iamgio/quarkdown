@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.context.hooks
 
+import eu.iamgio.quarkdown.ast.base.LinkNode
 import eu.iamgio.quarkdown.ast.base.inline.Image
+import eu.iamgio.quarkdown.ast.base.inline.ReferenceImage
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
@@ -14,11 +16,24 @@ import java.io.File
  * @param storage media storage
  * @param workingDirectory directory from which media are resolved, in case they use relative paths
  */
-class MediaStorerHook(private val storage: MutableMediaStorage, private val workingDirectory: File?) : AstIteratorHook {
-    constructor(context: MutableContext) : this(context.mediaStorage, context.attachedPipeline?.options?.workingDirectory)
+class MediaStorerHook(
+    private val storage: MutableMediaStorage,
+    private val workingDirectory: File?,
+) : AstIteratorHook {
+    constructor(context: MutableContext) : this(
+        context.mediaStorage,
+        context.attachedPipeline?.options?.workingDirectory,
+    )
 
     override fun attach(iterator: ObservableAstIterator) {
-        iterator.on<Image> { storage.register(it.link.url, workingDirectory) }
-        // TODO reference image as well
+        // Registers the media, wrapped in a link, to the media storage.
+        fun register(link: LinkNode) = storage.register(link.url, workingDirectory)
+
+        // Images are instantly registered.
+        iterator.on<Image> { register(it.link) }
+
+        // Reference images are registered upon resolution,
+        // i.e. when a definition that matches the reference is found.
+        iterator.on<ReferenceImage> { it.link.onResolve.add(::register) }
     }
 }

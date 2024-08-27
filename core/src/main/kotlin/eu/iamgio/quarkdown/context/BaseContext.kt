@@ -45,6 +45,9 @@ open class BaseContext(
     override fun resolve(reference: ReferenceLink): LinkNode? {
         return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
             ?.let { Link(reference.label, it.url, it.title) }
+            ?.also { link ->
+                reference.onResolve.forEach { action -> action(link) }
+            }
     }
 
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {

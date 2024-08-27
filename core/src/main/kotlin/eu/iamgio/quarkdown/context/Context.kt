@@ -71,6 +71,8 @@ interface Context {
     fun getFunctionByName(name: String): Function<*>?
 
     /**
+     * Tries to resolve a reference link to an actual link.
+     * If the resolution succeeds, [ReferenceLink.onResolve] callbacks are executed.
      * @param reference reference link to lookup
      * @return the corresponding link node, if it exists
      */

@@ -25,11 +25,14 @@ data class Link(
  * @param label inline content of the displayed label
  * @param reference label of the [LinkDefinition] this link points to
  * @param fallback supplier of the node to show instead of [label] in case the reference is invalid
+ * @param onResolve actions to perform when the reference is resolved
+ * @see eu.iamgio.quarkdown.context.resolveOrFallback
  */
 data class ReferenceLink(
     val label: InlineContent,
     val reference: InlineContent,
     val fallback: () -> Node,
+    val onResolve: MutableList<(resolved: LinkNode) -> Unit> = mutableListOf(),
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

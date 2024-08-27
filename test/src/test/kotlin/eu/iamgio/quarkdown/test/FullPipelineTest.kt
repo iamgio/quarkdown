@@ -193,6 +193,52 @@ class FullPipelineTest {
     }
 
     @Test
+    fun images() {
+        execute("![Alt text](https://example.com/image.png)") {
+            assertEquals("<p><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+        }
+
+        execute("![Alt text](https://example.com/image.png 'Title')") {
+            assertEquals(
+                "<p><figure>" +
+                    "<img src=\"https://example.com/image.png\" alt=\"Alt text\" title=\"Title\" />" +
+                    "<figcaption>Title</figcaption>" +
+                    "</figure></p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            [Alt text]: https://example.com/image.png
+            ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            [Alt text]: https://example.com/image.png
+            ## ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></h2>", it)
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            This image doesn't exist: ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>This image doesn&#39;t exist: ![Alt text][Alt text]</p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
+    }
+
+    @Test
     fun lists() {
         execute("- Item 1\n- Item 2\n  - Item 2.1\n  - Item 2.2\n- Item 3") {
             assertEquals(
@@ -300,7 +346,6 @@ class FullPipelineTest {
             assertEquals("<p>18</p>", it)
         }
 
-        // TODO add space after $ in the output (= avoid trimming text)
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
             assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
             assertTrue(attributes.hasMath)
@@ -1021,6 +1066,21 @@ class FullPipelineTest {
             )
 
             assertEquals(1, mediaStorage.all.size)
+        }
+
+        execute(
+            """
+            [Banner]: https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg
+            ![Banner]
+            """.trimIndent(),
+            options = MutableContextOptions(enableRemoteMediaStorage = true),
+            enableMediaStorage = true,
+        ) {
+            assertEquals(
+                "<p><img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
+                    "alt=\"Banner\" /></p>",
+                it,
+            )
         }
     }
 }
