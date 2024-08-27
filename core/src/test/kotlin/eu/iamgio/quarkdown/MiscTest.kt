@@ -15,18 +15,12 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.media.LocalMedia
-import eu.iamgio.quarkdown.media.Media
-import eu.iamgio.quarkdown.media.MediaVisitor
-import eu.iamgio.quarkdown.media.RemoteMedia
-import eu.iamgio.quarkdown.media.ResolvableMedia
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
 import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
 import eu.iamgio.quarkdown.util.flattenedChildren
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import kotlin.test.Test
-import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -226,21 +220,5 @@ class MiscTest {
         assertNull(retriever.find("nonexistent"))
 
         assertTrue(retriever.all.iterator().hasNext())
-    }
-
-    @Test
-    fun media() {
-        // A visitor that, when called on a ResolvableMedia, returns the media itself after it has been resolved.
-        val selfVisitor =
-            object : MediaVisitor<Media> {
-                override fun visit(media: LocalMedia) = media
-
-                override fun visit(media: RemoteMedia) = media
-            }
-
-        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html").accept(selfVisitor))
-        assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").accept(selfVisitor))
-        assertFails { ResolvableMedia("nonexistent").accept(selfVisitor) }
-        assertFails { ResolvableMedia("src").accept(selfVisitor) } // Directory
     }
 }
