@@ -16,12 +16,12 @@ class SanitizedMediaNameProvider : MediaNameProviderStrategy {
 
     override fun visit(media: LocalMedia) =
         buildString {
-            append(media.file.nameWithoutExtension.sanitize())
+            append(media.file.nameWithoutExtension)
             append("-")
             append(Base64.UrlSafe.encode(media.file.canonicalPath.toByteArray()))
             append(".")
             append(media.file.extension)
-        }
+        }.sanitize()
 
     override fun visit(media: RemoteMedia) = media.url.toExternalForm().sanitize()
 }
