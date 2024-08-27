@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering
 
+import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 
@@ -9,6 +10,16 @@ import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
  * Additionally, the post-renderer provides the output resources that can be saved to file.
  */
 interface PostRenderer {
+    /**
+     * Rules that determine the default behavior of the media storage.
+     * For example, HTML requires local media to be accessible from the file system,
+     * hence it's preferred to copy local media to the output directory;
+     * it's not necessary to store remote media locally.
+     * On the other hand, for example, LaTeX rendering (not yet supported) would require
+     * all media to be stored locally, as it does not support remote media.
+     */
+    val preferredMediaStorageOptions: MediaStorageOptions
+
     /**
      * Creates a new instance of a code wrapper for this rendering strategy.
      * A wrapper adds static content to the output code, and supports injection of values via placeholder keys, like a template file.

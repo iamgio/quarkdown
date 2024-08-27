@@ -3,6 +3,8 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
+import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
@@ -20,6 +22,9 @@ import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
  * - HighlightJS for code highlighting.
  */
 class HtmlPostRenderer(private val context: Context) : PostRenderer {
+    // HTML requires local media to be resolved from the file system.
+    override val preferredMediaStorageOptions: MediaStorageOptions = ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
+
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")

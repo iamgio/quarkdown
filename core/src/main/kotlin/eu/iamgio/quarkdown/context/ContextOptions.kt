@@ -48,5 +48,15 @@ data class MutableContextOptions(
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableMediaStorage: Boolean = true,
     override var enableRemoteMediaStorage: Boolean = false,
-    override var enableLocalMediaStorage: Boolean = true,
-) : ContextOptions
+    override var enableLocalMediaStorage: Boolean = false,
+) : ContextOptions {
+    /**
+     * Mutates this instance by merging the current media storage rules with the given [options].
+     * An option is overridden and merged only if its value from [options] is set, i.e. not `null`.
+     * @param options options to merge this instance with
+     */
+    fun mergeMediaStorageOptions(options: MediaStorageOptions) {
+        options.enableRemoteMediaStorage?.let { enableRemoteMediaStorage = it }
+        options.enableLocalMediaStorage?.let { enableLocalMediaStorage = it }
+    }
+}
