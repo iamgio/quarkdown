@@ -53,7 +53,7 @@ fun StringBuilder.replace(
  *         except for `-`, `_`, and `.`, replaced with [replacement]
  * @param replacement character to replace invalid characters with
  */
-fun String.sanitize(replacement: String) = this.replace("[^a-zA-Z0-9\\-_.]".toRegex(), replacement)
+fun String.sanitize(replacement: String) = this.replace("[^a-zA-Z0-9\\-_.]+".toRegex(), replacement)
 
 /**
  * @return [this] string with line separators replaced with `\n`,
