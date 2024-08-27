@@ -10,6 +10,11 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import java.io.File
 
 /**
+ * Name of the subdirectory in the output directory where media is stored.
+ */
+private const val MEDIA_SUBDIRECTORY_NAME = "media"
+
+/**
  * A media storage that can be modified with new entries.
  * @param nameProvider strategy used to generate media names.
  *                     The name of a media is defines the file name in the output directory,
@@ -28,6 +33,11 @@ class MutableMediaStorage(
 
     override fun resolve(path: String): StoredMedia? = bindings[path]
 
+    override fun resolveMediaLocationOrFallback(path: String): String =
+        resolve(path)?.name
+            ?.let { "$MEDIA_SUBDIRECTORY_NAME/$it" }
+            ?: path
+
     override fun toResource(): OutputResource {
         val subResources =
             this.all.asSequence()
@@ -37,7 +47,7 @@ class MutableMediaStorage(
                 }
                 .toSet()
 
-        return OutputResourceGroup(name = "media", subResources)
+        return OutputResourceGroup(name = MEDIA_SUBDIRECTORY_NAME, subResources)
     }
 
     /**

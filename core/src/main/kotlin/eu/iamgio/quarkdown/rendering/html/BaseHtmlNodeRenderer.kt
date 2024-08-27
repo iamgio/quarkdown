@@ -204,7 +204,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
 
     override fun visit(node: Image) =
         tagBuilder("img")
-            .attribute("src", node.link.url)
+            .attribute("src", context.mediaStorage.resolveMediaLocationOrFallback(node.link.url))
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .optionalAttribute("width", node.width)

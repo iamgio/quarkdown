@@ -26,6 +26,14 @@ interface ReadOnlyMediaStorage {
     fun resolve(path: String): StoredMedia?
 
     /**
+     * Retrieves the media location of a media file, starting from the output directory.
+     * If the media file is not found in the local storage, a fallback location is returned, which is usually the original path.
+     * @param path path of the media to resolve, either a local path or a URL
+     * @return the resolved media location, or the fallback location if the media is not found
+     */
+    fun resolveMediaLocationOrFallback(path: String): String
+
+    /**
      * Converts this storage to an [OutputResource].
      * This is used to export all media to the output directory.
      * Ideally, this method returns an [eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup]
