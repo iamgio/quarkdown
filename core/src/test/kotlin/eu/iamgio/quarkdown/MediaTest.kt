@@ -223,6 +223,31 @@ class MediaTest {
             )
 
         assertTrue(localImage.accept(renderer).startsWith("<img src=\"media/icon-"))
+
+        MutableContext(QuarkdownFlavor).let { localOnlyContext ->
+            localOnlyContext.options.enableLocalMediaStorage = true
+            localOnlyContext.options.enableRemoteMediaStorage = false
+
+            localOnlyContext.mediaStorage.register("https://iamgio.eu/quarkdown/img/logo-light.svg", workingDirectory = null)
+
+            val localOnlyRenderer = QuarkdownHtmlNodeRenderer(localOnlyContext)
+
+            assertEquals(
+                "<img src=\"https://iamgio.eu/quarkdown/img/logo-light.svg\" alt=\"\" />",
+                remoteImage.accept(localOnlyRenderer),
+            )
+
+            // Not yet registered.
+
+            assertEquals(
+                "<img src=\"media/icon.png\" alt=\"\" />",
+                localImage.accept(localOnlyRenderer),
+            )
+
+            localOnlyContext.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
+
+            assertTrue(localImage.accept(localOnlyRenderer).startsWith("<img src=\"media/icon-"))
+        }
     }
 
     @Test
