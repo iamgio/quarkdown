@@ -173,7 +173,7 @@ If the project is composed by multiple source files, the target file must be the
 
 - **`--strict`**: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
 
-- **`--no-media-storage`**: disables the media storage (further information coming soon).
+- **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/Media-storage)
 
 - **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
