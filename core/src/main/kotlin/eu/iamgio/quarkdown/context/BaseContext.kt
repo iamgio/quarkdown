@@ -26,7 +26,6 @@ open class BaseContext(
     override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
-    override val mediaStorage: ReadOnlyMediaStorage = MutableMediaStorage(),
 ) : Context {
     override val attachedPipeline: Pipeline?
         get() = Pipelines.getAttachedPipeline(this)
@@ -34,6 +33,8 @@ open class BaseContext(
     override val documentInfo = DocumentInfo()
 
     override val options: ContextOptions = MutableContextOptions()
+
+    override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
     override fun getFunctionByName(name: String): Function<*>? {
         return libraries.asSequence()

@@ -1,12 +1,13 @@
 package eu.iamgio.quarkdown.context
 
 import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
 
 /**
- * Read-only properties that affect several behaviors,
+ * Read-only properties that affect several behaviors of the document generation process,
  * and that can be altered through function calls through its [MutableContextOptions] implementation.
  */
-interface ContextOptions {
+interface ContextOptions : MediaStorageOptions {
     /**
      * When a [Heading] node has a depth equals or less than this value, a page break is forced.
      */
@@ -42,4 +43,6 @@ data class MutableContextOptions(
     override var autoPageBreakHeadingDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableMediaStorage: Boolean = true,
+    override var enableRemoteMediaStorage: Boolean = true,
+    override var enableLocalMediaStorage: Boolean = false,
 ) : ContextOptions

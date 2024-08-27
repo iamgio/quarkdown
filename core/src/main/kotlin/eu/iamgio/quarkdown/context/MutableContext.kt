@@ -20,9 +20,11 @@ open class MutableContext(
     libraries: Set<Library> = emptySet(),
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
-    override val mediaStorage: MutableMediaStorage = MutableMediaStorage(),
 ) : BaseContext(attributes, flavor, libraries) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
+
+    override val mediaStorage: MutableMediaStorage
+        get() = super.mediaStorage as MutableMediaStorage
 
     /**
      * Registers a new [LinkDefinition], which can be later looked up
