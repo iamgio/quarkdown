@@ -40,7 +40,7 @@ class FullPipelineTest {
      */
     private fun execute(
         source: String,
-        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
+        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false, enableMediaStorage = false),
         hook: Context.(CharSequence) -> Unit,
     ) {
         val context =
