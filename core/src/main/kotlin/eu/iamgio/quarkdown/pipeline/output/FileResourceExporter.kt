@@ -55,6 +55,12 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
      */
     override fun visit(group: OutputResourceGroup): File {
         val directory = File(location, group.fileName)
+
+        // The directory is not created if it has no content.
+        if (group.resources.isEmpty()) {
+            return directory
+        }
+
         directory.mkdirs()
 
         // Saves the subfiles in the new directory.

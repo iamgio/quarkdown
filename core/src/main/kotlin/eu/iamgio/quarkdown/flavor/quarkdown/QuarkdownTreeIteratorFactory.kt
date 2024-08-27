@@ -14,6 +14,10 @@ class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
     override fun default(context: MutableContext): ObservableAstIterator =
         BaseMarkdownTreeIteratorFactory()
             .default(context)
-            .attach(MediaStorerHook(context))
             .attach(TableOfContentsGeneratorHook(context))
+            .apply {
+                if (context.options.enableMediaStorage) {
+                    attach(MediaStorerHook(context))
+                }
+            }
 }
