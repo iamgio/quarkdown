@@ -25,7 +25,11 @@ interface ContextOptions : MediaStorageOptions {
      * Whether media storage should be enabled.
      * If enabled, media objects referenced in the document are copied to the output directory
      * and those elements that use them (e.g. images) automatically reference the new local path.
-     * This doesn't take effect (= disabled) with the base Markdown flavor, as the media architecture is defined by Quarkdown.
+     *
+     * This doesn't take effect (= disabled) with the base Markdown flavor,
+     * as the media architecture is defined by Quarkdown through a [eu.iamgio.quarkdown.context.hooks.MediaStorerHook].
+     *
+     * If this is disabled, [enableRemoteMediaStorage] and [enableLocalMediaStorage] values are ignored.
      */
     val enableMediaStorage: Boolean
 }
