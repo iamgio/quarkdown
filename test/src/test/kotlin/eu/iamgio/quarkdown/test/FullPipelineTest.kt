@@ -1015,7 +1015,7 @@ class FullPipelineTest {
             """.trimIndent(),
             enableMediaStorage = true,
         ) {
-            assertEquals("<p>This is the Quarkdown logo: <img src=\"media/icon", it.toString().substringBefore("-"))
+            assertEquals("<p>This is the Quarkdown logo: <img src=\"media/icon", it.toString().substringBefore("@"))
             // The file name is "media/icon-[encoded].png"
             assertEquals("\" alt=\"Quarkdown\" />.</p>", it.toString().substringAfter(".png"))
         }
@@ -1062,7 +1062,7 @@ class FullPipelineTest {
                 "<p>" +
                     "<img src=\"https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg\" " +
                     "alt=\"Banner\" /><br /><img src=\"media/",
-                it.toString().substringBefore("icon-"),
+                it.toString().substringBefore("icon@"),
             )
 
             assertEquals(1, mediaStorage.all.size)

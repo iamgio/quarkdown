@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.pipeline.output
 
-import eu.iamgio.quarkdown.util.sanitize
+import eu.iamgio.quarkdown.util.sanitizeFileName
 import java.io.File
 
 /**
@@ -15,7 +15,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
     private val OutputResource.fileName: String
         get() =
             name.replace("\\s+".toRegex(), "-")
-                .sanitize(replacement = "")
+                .sanitizeFileName(replacement = "")
 
     /**
      * File extension relative to the [ArtifactType] of this resource.
@@ -23,17 +23,17 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
     private val TypedOutputResource.fileExtension: String
         get() =
             when (type) {
-                ArtifactType.HTML -> "html"
-                ArtifactType.CSS -> "css"
-                ArtifactType.JAVASCRIPT -> "js"
+                ArtifactType.HTML -> ".html"
+                ArtifactType.CSS -> ".css"
+                ArtifactType.JAVASCRIPT -> ".js"
                 ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
             }
 
     /**
-     * Full name of the file, including the extension, relative to the [ArtifactType] of this resource.
+     * Full name of the file, including the extension relative to the [ArtifactType] of this resource.
      */
     private val TypedOutputResource.fullFileName: String
-        get() = "$fileName.$fileExtension"
+        get() = fileName + fileExtension
 
     /**
      * Saves an [OutputArtifact] to a file with text content.
@@ -45,7 +45,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
         }
 
     override fun visit(artifact: BinaryOutputArtifact) =
-        File(location, artifact.fullFileName).also {
+        File(location, artifact.fileName).also {
             it.writeBytes(artifact.content)
         }
 

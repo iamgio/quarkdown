@@ -66,7 +66,7 @@ class MediaTest {
         assertEquals(1, localOnlyStorage.all.size)
 
         val stored = localOnlyStorage.all.first()
-        assertTrue(stored.name.startsWith("icon-"))
+        assertTrue(stored.name.startsWith("icon@"))
         assertTrue(stored.name.endsWith(".png"))
 
         localOnlyStorage.resolve("media/icon.png")?.let { resolved ->
@@ -82,7 +82,7 @@ class MediaTest {
         }
 
         localOnlyStorage.resolve("media/banner.png")?.let { resolved ->
-            assertTrue(resolved.name.startsWith("banner-"))
+            assertTrue(resolved.name.startsWith("banner@"))
             assertTrue(resolved.name.endsWith(".png"))
         }
 
@@ -113,7 +113,7 @@ class MediaTest {
         }
 
         localAndRemoteStorage.resolve("media/banner.png")?.let { resolved ->
-            assertTrue(resolved.name.startsWith("banner-"))
+            assertTrue(resolved.name.startsWith("banner@"))
             assertTrue(resolved.name.endsWith(".png"))
         }
     }
@@ -175,7 +175,7 @@ class MediaTest {
         assertEquals(2, storage.all.size)
 
         storage.resolve("media/icon.png")?.let { resolved ->
-            assertTrue(resolved.name.startsWith("icon-"))
+            assertTrue(resolved.name.startsWith("icon@"))
             assertTrue(resolved.name.endsWith(".png"))
         }
 
@@ -222,7 +222,7 @@ class MediaTest {
                 height = null,
             )
 
-        assertTrue(localImage.accept(renderer).startsWith("<img src=\"media/icon-"))
+        assertTrue(localImage.accept(renderer).startsWith("<img src=\"media/icon@"))
 
         MutableContext(QuarkdownFlavor).let { localOnlyContext ->
             localOnlyContext.options.enableLocalMediaStorage = true
@@ -246,7 +246,7 @@ class MediaTest {
 
             localOnlyContext.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
 
-            assertTrue(localImage.accept(localOnlyRenderer).startsWith("<img src=\"media/icon-"))
+            assertTrue(localImage.accept(localOnlyRenderer).startsWith("<img src=\"media/icon@"))
         }
     }
 
@@ -270,7 +270,7 @@ class MediaTest {
         assertIs<OutputResourceGroup>(resource)
         assertEquals(3, resource.resources.size)
 
-        resource.resources.first { it.name.startsWith("icon-") }.let { icon ->
+        resource.resources.first { it.name.startsWith("icon@") }.let { icon ->
             assertIs<BinaryOutputArtifact>(icon)
             assertEquals(storage.resolve("media/icon.png")?.name, icon.name)
             assertTrue(File("src/test/resources/media/icon.png").readBytes().contentEquals(icon.content))
