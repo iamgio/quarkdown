@@ -27,6 +27,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertIs
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -116,6 +117,15 @@ class MediaTest {
             assertTrue(resolved.name.startsWith("banner@"))
             assertTrue(resolved.name.endsWith(".png"))
         }
+
+        localAndRemoteStorage.register("media/path1/logo.png", workingDirectory = File("src/test/resources"))
+        localAndRemoteStorage.register("media/path2/logo.png", workingDirectory = File("src/test/resources"))
+
+        assertEquals(5, localAndRemoteStorage.all.size)
+        assertNotEquals(
+            localAndRemoteStorage.resolve("media/path1/logo.png")!!.name,
+            localAndRemoteStorage.resolve("media/path2/logo.png")!!.name,
+        )
     }
 
     @Test
@@ -207,7 +217,10 @@ class MediaTest {
                 height = null,
             )
 
-        assertEquals("<img src=\"media/https-iamgio.eu-quarkdown-img-logo-light.svg\" alt=\"\" />", remoteImage.accept(renderer))
+        assertEquals(
+            "<img src=\"media/https-iamgio.eu-quarkdown-img-logo-light.svg\" alt=\"\" />",
+            remoteImage.accept(renderer),
+        )
 
         context.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
 
@@ -228,7 +241,10 @@ class MediaTest {
             localOnlyContext.options.enableLocalMediaStorage = true
             localOnlyContext.options.enableRemoteMediaStorage = false
 
-            localOnlyContext.mediaStorage.register("https://iamgio.eu/quarkdown/img/logo-light.svg", workingDirectory = null)
+            localOnlyContext.mediaStorage.register(
+                "https://iamgio.eu/quarkdown/img/logo-light.svg",
+                workingDirectory = null,
+            )
 
             val localOnlyRenderer = QuarkdownHtmlNodeRenderer(localOnlyContext)
 
@@ -278,7 +294,9 @@ class MediaTest {
 
         resource.resources.first { it.name == "https-iamgio.eu-quarkdown-img-tbanner-light.png" }.let { banner ->
             assertIs<BinaryOutputArtifact>(banner)
-            assertTrue(URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().contentEquals(banner.content))
+            assertTrue(
+                URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().contentEquals(banner.content),
+            )
         }
     }
 }
