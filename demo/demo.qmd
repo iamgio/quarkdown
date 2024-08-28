@@ -13,7 +13,7 @@
 
 
 .column
-    !(_x100)[Quarkdown logo](https://iamgio.eu/quarkdown/img/logo-light.svg)
+    !(_x100)[Quarkdown logo](img/banner.svg)
 
     Markdown with superpowers
 
@@ -116,7 +116,7 @@ from your Markdown code.
 
 .sourceresult
     .row alignment:{center} gap:{1cm}
-        !(150x150)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png)
+        !(150x150)[Quarkdown](img/icon.png)
         
         .column cross:{start}
             .text size:{large} variant:{smallcaps}
@@ -246,11 +246,11 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .var {sizedimages}
     <!-- 200px width, auto height -->
-    !(200x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(200x_)[Quarkdown](img/banner.png)
     <!-- 80px height, auto width -->
-    !(_x80)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(_x80)[Quarkdown](img/banner.png)
     <!-- 200px width, 100px height -->
-    !(200x100)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(200x100)[Quarkdown](img/banner.png)
 
 ---
 
