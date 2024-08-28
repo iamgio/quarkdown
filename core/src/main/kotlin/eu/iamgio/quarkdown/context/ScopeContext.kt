@@ -29,7 +29,7 @@ class ScopeContext(val parent: Context) : MutableContext(
         get() = parent.attributes as? MutableAstAttributes ?: parent.attributes.toMutable()
 
     override val mediaStorage: MutableMediaStorage
-        get() = (parent.mediaStorage as? MutableMediaStorage) ?: MutableMediaStorage(options)
+        get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],
