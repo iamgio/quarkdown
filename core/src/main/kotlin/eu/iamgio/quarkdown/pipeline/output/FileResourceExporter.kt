@@ -20,7 +20,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
     /**
      * File extension relative to the [ArtifactType] of this resource.
      */
-    private val TypedOutputResource.fileExtension: String
+    private val OutputArtifact<*>.fileExtension: String
         get() =
             when (type) {
                 ArtifactType.HTML -> ".html"
@@ -32,14 +32,14 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
     /**
      * Full name of the file, including the extension relative to the [ArtifactType] of this resource.
      */
-    private val TypedOutputResource.fullFileName: String
+    private val OutputArtifact<*>.fullFileName: String
         get() = fileName + fileExtension
 
     /**
      * Saves an [OutputArtifact] to a file with text content.
      * @return the file itself
      */
-    override fun visit(artifact: OutputArtifact) =
+    override fun visit(artifact: TextOutputArtifact) =
         File(location, artifact.fullFileName).also {
             it.writeText(artifact.content.toString())
         }

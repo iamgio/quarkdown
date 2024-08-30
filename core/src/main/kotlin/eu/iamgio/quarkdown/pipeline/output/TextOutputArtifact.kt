@@ -1,15 +1,15 @@
 package eu.iamgio.quarkdown.pipeline.output
 
 /**
- * Represents an [OutputResource] that contains binary data.
+ * Represents an [OutputResource] that contains text data.
  * @param name name of the resource (without file extensions)
- * @param content binary content of the resource
+ * @param content content of the resource
  * @param type type of content the resource contains
  */
-class BinaryOutputArtifact(
+data class TextOutputArtifact(
     override val name: String,
-    override val content: ByteArray,
+    override val content: CharSequence,
     override val type: ArtifactType,
-) : OutputArtifact<ByteArray> {
+) : OutputArtifact<CharSequence> {
     override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(this)
 }

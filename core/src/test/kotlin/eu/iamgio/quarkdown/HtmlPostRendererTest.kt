@@ -7,8 +7,8 @@ import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
-import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
+import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
@@ -241,7 +241,7 @@ class HtmlPostRendererTest {
         val resources = postRenderer.generateResources(html)
         assertEquals(3, resources.size)
 
-        resources.filterIsInstance<OutputArtifact>().first { it.type == ArtifactType.HTML }.let {
+        resources.filterIsInstance<TextOutputArtifact>().first { it.type == ArtifactType.HTML }.let {
             assertEquals(html, it.content)
         }
 
@@ -260,7 +260,7 @@ class HtmlPostRendererTest {
             assertTrue("theme" in themes)
         }
 
-        (themeGroup.resources.first { it.name == "theme" } as OutputArtifact).let {
+        (themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact).let {
             assertEquals(ArtifactType.CSS, it.type)
             assertEquals(
                 """

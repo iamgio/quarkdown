@@ -10,10 +10,10 @@ import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
  */
 data class LazyOutputArtifact(
     override val name: String,
-    val content: () -> CharSequence,
-    val type: ArtifactType,
-) : OutputResource {
-    override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(OutputArtifact(name, content(), type))
+    override val content: () -> CharSequence,
+    override val type: ArtifactType,
+) : OutputArtifact<() -> CharSequence> {
+    override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(TextOutputArtifact(name, content(), type))
 
     companion object {
         /**
