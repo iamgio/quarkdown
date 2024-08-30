@@ -247,7 +247,7 @@ class HtmlPostRendererTest {
 
         resources.filterIsInstance<LazyOutputArtifact>().first { it.type == ArtifactType.JAVASCRIPT }.let {
             assertEquals("slides", it.name)
-            assertTrue("Reveal" in it.content())
+            assertTrue("Reveal" in String(it.content()))
         }
 
         val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first()

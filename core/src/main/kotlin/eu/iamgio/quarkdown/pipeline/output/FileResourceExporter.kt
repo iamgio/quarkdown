@@ -45,7 +45,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
         }
 
     override fun visit(artifact: BinaryOutputArtifact) =
-        File(location, artifact.fileName).also {
+        File(location, artifact.fullFileName).also {
             it.writeBytes(artifact.content)
         }
 
