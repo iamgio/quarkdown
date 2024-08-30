@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.pipeline.output
 
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
+import kotlin.reflect.KClass
 
 /**
  * Represents a [BinaryOutputArtifact] whose content is lazily loaded on demand (via [accept]).
@@ -22,15 +23,17 @@ data class LazyOutputArtifact(
          * @param resource path to the internal resource
          * @param name name of the resource (without file extensions)
          * @param type type of content the resource contains
+         * @param referenceClass reference classpath to use to retrieve the internal resource
          */
         fun internal(
             resource: String,
             name: String,
             type: ArtifactType,
+            referenceClass: KClass<*> = LazyOutputArtifact::class,
         ) = LazyOutputArtifact(
             name,
             content = {
-                LazyOutputArtifact::class.java.getResource(resource)
+                referenceClass.java.getResource(resource)
                     ?.readBytes()
                     ?: throw IOPipelineException("Resource $resource not found")
             },
