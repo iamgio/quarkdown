@@ -30,7 +30,7 @@ import kotlin.test.assertNull
  */
 class MiscTest {
     @Test
-    fun treeVisit() {
+    fun `tree visit`() {
         val node =
             AstRoot(
                 listOf(
@@ -104,7 +104,7 @@ class MiscTest {
     }
 
     @Test
-    fun tableOfContents() {
+    fun `table of contents`() {
         val headings1 =
             sequenceOf(
                 Heading(1, listOf(Text("ABC"))),
