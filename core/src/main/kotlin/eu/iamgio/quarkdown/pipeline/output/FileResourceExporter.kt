@@ -13,9 +13,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
      * with symbols removed and spaces replaced with dashes.
      */
     private val OutputResource.fileName: String
-        get() =
-            name.replace("\\s+".toRegex(), "-")
-                .sanitizeFileName(replacement = "")
+        get() = name.sanitizeFileName(replacement = "-")
 
     /**
      * File extension relative to the [ArtifactType] of this resource.
