@@ -49,6 +49,11 @@ body:has(.pagedjs_page) {
     background-color: lightgray;
 }
 
+/* Space between pages */
+.pagedjs_page {
+    margin-bottom: 3mm;
+}
+
 hr {
     width: 100%;
 }
