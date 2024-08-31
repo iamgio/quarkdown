@@ -10,6 +10,8 @@
     --qd-code-span-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
+    --qd-paged-heading-margin: 40px 0 20px 0; /* Margin of headings in paged documents */
+    --qd-slides-heading-margin: 0 0 20px 0; /* Margin of headings in slides documents */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
     --qd-box-heading-font: var(--qd-main-font);
     --qd-line-height: 1.5;
@@ -24,6 +26,7 @@
     --r-code-font: var(--qd-code-font);
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
+    --r-heading-margin: var(--qd-slides-heading-margin);
 }
 
 .reveal .slides > :is(section, .pdf-page) {
@@ -60,11 +63,6 @@ figure {
     text-align: center;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--qd-heading-font);
-    text-transform: none !important;
-}
-
 a {
     color: var(--qd-link-color);
 }
@@ -75,6 +73,12 @@ ul, ol, hr,
 .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--qd-heading-font);
+    margin: var(--qd-paged-heading-margin);
+    text-transform: none !important;
 }
 
 .reveal p {
@@ -211,6 +215,7 @@ code.focus-lines .hljs-ln-line:not(.focused),
 
 .box > header h4 {
     font-family: var(--qd-box-heading-font);
+    margin: 0;
 }
 
 .box > .box-content {
