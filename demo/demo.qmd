@@ -13,7 +13,7 @@
 
 
 .column
-    !(_x100)[Quarkdown logo](https://iamgio.eu/quarkdown/img/logo-light.svg)
+    !(_x100)[Quarkdown logo](img/banner.svg)
 
     Markdown with superpowers
 
@@ -116,7 +116,7 @@ from your Markdown code.
 
 .sourceresult
     .row alignment:{center} gap:{1cm}
-        !(150x150)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png)
+        !(150x150)[Quarkdown](img/icon.png)
         
         .column cross:{start}
             .text size:{large} variant:{smallcaps}
@@ -138,7 +138,7 @@ from your Markdown code.
 ## File data: code
 
 .sourceresult
-    The contructor of the class `Point` is as follows:
+    The constructor of the class `Point` is as follows:
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
@@ -151,8 +151,10 @@ from your Markdown code.
 ## Math
 
 .sourceresult
-    If we try to calculate the **surface** of a circle of **radius 8**,
-    we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
+    .var {radius} {8}
+
+    If we try to calculate the **surface** of a circle of **radius .radius**,
+    we'll find out it's **.multiply {.pow {.radius} to:{2}} by:{.pi}**
 
 ## Scripting {#scripting-basic}
 
@@ -244,11 +246,11 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .var {sizedimages}
     <!-- 200px width, auto height -->
-    !(200x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(200x_)[Quarkdown](img/banner.png)
     <!-- 80px height, auto width -->
-    !(_x80)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(_x80)[Quarkdown](img/banner.png)
     <!-- 200px width, 100px height -->
-    !(200x100)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(200x100)[Quarkdown](img/banner.png)
 
 ---
 

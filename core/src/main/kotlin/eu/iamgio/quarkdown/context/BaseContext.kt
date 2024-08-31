@@ -11,6 +11,8 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
+import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.Pipelines
 
@@ -32,6 +34,8 @@ open class BaseContext(
 
     override val options: ContextOptions = MutableContextOptions()
 
+    override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
+
     override fun getFunctionByName(name: String): Function<*>? {
         return libraries.asSequence()
             .flatMap { it.functions }
@@ -41,6 +45,9 @@ open class BaseContext(
     override fun resolve(reference: ReferenceLink): LinkNode? {
         return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
             ?.let { Link(reference.label, it.url, it.title) }
+            ?.also { link ->
+                reference.onResolve.forEach { action -> action(link) }
+            }
     }
 
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {

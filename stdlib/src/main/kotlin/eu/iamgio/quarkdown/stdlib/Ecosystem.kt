@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
-import eu.iamgio.quarkdown.function.reflect.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
 

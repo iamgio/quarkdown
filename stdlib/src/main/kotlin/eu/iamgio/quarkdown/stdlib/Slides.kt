@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.document.slides.Transition
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 

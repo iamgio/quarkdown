@@ -10,6 +10,8 @@
     --qd-code-span-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
+    --qd-paged-heading-margin: 40px 0 20px 0; /* Margin of headings in paged documents */
+    --qd-slides-heading-margin: 0 0 20px 0; /* Margin of headings in slides documents */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
     --qd-box-heading-font: var(--qd-main-font);
     --qd-line-height: 1.5;
@@ -24,6 +26,7 @@
     --r-code-font: var(--qd-code-font);
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
+    --r-heading-margin: var(--qd-slides-heading-margin);
 }
 
 .reveal .slides > :is(section, .pdf-page) {
@@ -31,23 +34,33 @@
 }
 
 body {
-    background-color: var(--qd-background-color);
     color: var(--qd-main-color);
     font-family: var(--qd-main-font);
     font-size: var(--qd-main-font-size);
+}
+
+body:not(:has(.pagedjs_page)), .pagedjs_page {
+    background-color: var(--qd-background-color);
+}
+
+/* Paged viewport */
+body:has(.pagedjs_page) {
+    background-color: lightgray;
 }
 
 hr {
     width: 100%;
 }
 
-figure {
-    text-align: center;
+/* A divider in a row is vertical instead of horizontal */
+.stack-row > hr {
+    display: list-item;
+    width: auto;
+    margin: 0 var(--qd-block-margin);
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--qd-heading-font);
-    text-transform: none !important;
+figure {
+    text-align: center;
 }
 
 a {
@@ -62,13 +75,25 @@ ul, ol, hr,
     margin-bottom: var(--qd-block-margin);
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--qd-heading-font);
+    margin: var(--qd-paged-heading-margin);
+    text-transform: none !important;
+}
+
 .reveal p {
     line-height: var(--qd-line-height);
 }
 
+/* Line height is set only after the first line */
 .reveal p::first-line {
-    /* Line height is set only after the first line */
     line-height: 1 !important;
+}
+
+/* Reset the margin of the first element in a page */
+.pagedjs_page_content > div > *:first-child,
+.pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
+    margin-top: 0 !important;
 }
 
 code {
@@ -84,7 +109,9 @@ pre code {
     max-height: none !important;
 }
 
-code.focus-lines .hljs-ln-line:not(.focused) {
+/* When an element is marked as focused, other siblings are less visible */
+code.focus-lines .hljs-ln-line:not(.focused),
+:is(ol, ul):has(> .focused) li:not(.focused) {
     opacity: 0.4;
 }
 
@@ -188,6 +215,7 @@ code.focus-lines .hljs-ln-line:not(.focused) {
 
 .box > header h4 {
     font-family: var(--qd-box-heading-font);
+    margin: 0;
 }
 
 .box > .box-content {

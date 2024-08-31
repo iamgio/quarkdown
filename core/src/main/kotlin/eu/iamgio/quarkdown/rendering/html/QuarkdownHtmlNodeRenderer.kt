@@ -68,7 +68,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Block
 
     // An empty div that acts as a page break.
-    override fun visit(node: PageBreak) = div("page-break") {}
+    override fun visit(node: PageBreak) =
+        tagBuilder("div")
+            .`class`("page-break")
+            .hidden()
+            .build()
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
@@ -133,7 +137,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Converts TOC items to a renderable OrderedList.
     private fun tableOfContentsItemsToList(
         items: List<TableOfContents.Item>,
-        maxDepth: Int,
+        view: TableOfContentsView,
     ): OrderedList {
         // Gets the content of an inner TOC item.
         fun getTableOfContentsItemContent(item: TableOfContents.Item) =
@@ -146,20 +150,24 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         title = null,
                     )
 
-                // Recursive sub-items.
-                if (item.subItems.isNotEmpty()) {
-                    this += tableOfContentsItemsToList(item.subItems, maxDepth)
-                }
+                // Recursively include sub-items.
+                item.subItems.filter { it.depth <= view.maxDepth }
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { this += tableOfContentsItemsToList(it, view) }
             }
 
         return OrderedList(
             startIndex = 1,
             isLoose = true,
             children =
-                items.asSequence()
-                    .filter { it.depth <= maxDepth }
-                    .map { BaseListItem(getTableOfContentsItemContent(it)) }
-                    .toList(),
+                items.map {
+                    BaseListItem(
+                        // When at least one item is focused, the other items are less visible.
+                        // This effect is handled by CSS (global.css).
+                        isFocused = view.hasFocus(it),
+                        children = getTableOfContentsItemContent(it),
+                    )
+                },
         )
     }
 
@@ -175,7 +183,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             ) // In the future, the default title should be localized.
             // Content
             +div("table-of-contents") {
-                +tableOfContentsItemsToList(tableOfContents.items, maxDepth = node.maxDepth)
+                +tableOfContentsItemsToList(tableOfContents.items, node)
             }
         }
     }
@@ -340,4 +348,14 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
     }
+
+    // Quarkdown introduces focusable list items.
+    override fun visit(node: BaseListItem) =
+        buildTag("li") {
+            appendListItemContent(node)
+
+            if (node.isFocused) {
+                `class`("focused")
+            }
+        }
 }

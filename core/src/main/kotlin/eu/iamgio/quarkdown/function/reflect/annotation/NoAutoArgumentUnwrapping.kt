@@ -1,5 +1,6 @@
-package eu.iamgio.quarkdown.function.reflect
+package eu.iamgio.quarkdown.function.reflect.annotation
 
+import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
 import eu.iamgio.quarkdown.function.value.Value
 
 /**

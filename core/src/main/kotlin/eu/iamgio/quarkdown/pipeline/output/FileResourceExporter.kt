@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.pipeline.output
 
+import eu.iamgio.quarkdown.util.sanitizeFileName
 import java.io.File
 
 /**
@@ -12,28 +13,38 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
      * with symbols removed and spaces replaced with dashes.
      */
     private val OutputResource.fileName: String
-        get() =
-            name.replace("\\s+".toRegex(), "-")
-                .replace("[^a-zA-Z0-9-]".toRegex(), "")
+        get() = name.sanitizeFileName(replacement = "-")
 
     /**
      * File extension relative to the [ArtifactType] of this resource.
      */
-    private val OutputArtifact.fileExtension: String
+    private val OutputArtifact<*>.fileExtension: String
         get() =
             when (type) {
-                ArtifactType.HTML -> "html"
-                ArtifactType.CSS -> "css"
-                ArtifactType.JAVASCRIPT -> "js"
+                ArtifactType.HTML -> ".html"
+                ArtifactType.CSS -> ".css"
+                ArtifactType.JAVASCRIPT -> ".js"
+                ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
             }
+
+    /**
+     * Full name of the file, including the extension relative to the [ArtifactType] of this resource.
+     */
+    private val OutputArtifact<*>.fullFileName: String
+        get() = fileName + fileExtension
 
     /**
      * Saves an [OutputArtifact] to a file with text content.
      * @return the file itself
      */
-    override fun visit(artifact: OutputArtifact) =
-        File(location, artifact.fileName + "." + artifact.fileExtension).also {
+    override fun visit(artifact: TextOutputArtifact) =
+        File(location, artifact.fullFileName).also {
             it.writeText(artifact.content.toString())
+        }
+
+    override fun visit(artifact: BinaryOutputArtifact) =
+        File(location, artifact.fullFileName).also {
+            it.writeBytes(artifact.content)
         }
 
     /**
@@ -42,6 +53,12 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
      */
     override fun visit(group: OutputResourceGroup): File {
         val directory = File(location, group.fileName)
+
+        // The directory is not created if it has no content.
+        if (group.resources.isEmpty()) {
+            return directory
+        }
+
         directory.mkdirs()
 
         // Saves the subfiles in the new directory.

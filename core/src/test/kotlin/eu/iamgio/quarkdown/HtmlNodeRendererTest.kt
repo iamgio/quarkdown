@@ -37,6 +37,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -390,7 +392,7 @@ class HtmlNodeRendererTest {
 
     @Test
     fun pageBreak() {
-        assertEquals("<div class=\"page-break\">\n</div>", PageBreak().render())
+        assertEquals("<div class=\"page-break\" data-hidden=\"\">\n</div>", PageBreak().render())
     }
 
     @Test
@@ -434,32 +436,44 @@ class HtmlNodeRendererTest {
     private fun listItems() =
         listOf(
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("A1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("A2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("A1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("A2"))),
+                    ),
             ),
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("B1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("B2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("B1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("B2"))),
+                    ),
             ),
             BaseListItem(
-                listOf(
-                    Paragraph(listOf(Text("C1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("C2"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("C1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("C2"))),
+                    ),
+            ),
+            BaseListItem(
+                isFocused = true,
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("D1"))),
+                        HorizontalRule(),
+                        Paragraph(listOf(Text("D2"))),
+                    ),
             ),
             TaskListItem(
                 isChecked = true,
                 listOf(
-                    Paragraph(listOf(Text("D1"))),
+                    Paragraph(listOf(Text("E1"))),
                     HorizontalRule(),
-                    Paragraph(listOf(Text("D2"))),
+                    Paragraph(listOf(Text("E2"))),
                 ),
             ),
         )
@@ -698,6 +712,56 @@ class HtmlNodeRendererTest {
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `text transform`() {
+        val out = readParts("quarkdown/texttransform.html")
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.LARGE,
+                    style = TextTransformData.Style.ITALIC,
+                    decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.TINY,
+                    weight = TextTransformData.Weight.BOLD,
+                    decoration = TextTransformData.Decoration.UNDEROVERLINE,
+                    variant = TextTransformData.Variant.SMALL_CAPS,
+                ),
+                listOf(Emphasis(listOf(Text("Foo"))), Text("bar")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    case = TextTransformData.Case.CAPITALIZE,
+                    decoration = TextTransformData.Decoration.ALL,
+                    color = Color(255, 0, 0),
+                ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(),
+                listOf(Text("Foo")),
             ).render(),
         )
     }

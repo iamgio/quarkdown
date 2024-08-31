@@ -4,6 +4,11 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
+import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.page.PageOrientation
+import eu.iamgio.quarkdown.document.page.PageSizeFormat
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -17,6 +22,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
@@ -28,16 +34,22 @@ private const val DATA_FOLDER = "src/test/resources/data"
 class FullPipelineTest {
     /**
      * Executes a Quarkdown source.
+     * @param source Quarkdown source to execute
+     * @param options execution options
+     * @param enableMediaStorage whether the media storage system should be enabled.
+     * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
      * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
      */
     private fun execute(
         source: String,
+        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
+        enableMediaStorage: Boolean = false,
         hook: Context.(CharSequence) -> Unit,
     ) {
         val context =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(enableAutomaticIdentifiers = false),
+                options = options,
             )
 
         val hooks =
@@ -51,6 +63,7 @@ class FullPipelineTest {
                 PipelineOptions(
                     errorHandler = StrictPipelineErrorHandler(),
                     workingDirectory = File(DATA_FOLDER),
+                    enableMediaStorage = enableMediaStorage,
                 ),
                 libraries = setOf(Stdlib.library),
                 renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },
@@ -68,6 +81,43 @@ class FullPipelineTest {
             assertFalse(attributes.hasCode)
             assertFalse(attributes.hasMath)
             assertTrue(attributes.linkDefinitions.isEmpty())
+            assertEquals(DocumentType.PLAIN, documentInfo.type)
+            assertNull(documentInfo.name)
+            assertNull(documentInfo.author)
+            assertNull(documentInfo.locale)
+        }
+
+        execute(
+            """
+            .docname {My Quarkdown document}
+            .docauthor {iamgio}
+            .doctype {slides}
+            .doclang {english}
+            .theme {darko} layout:{minimal}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px}
+            .slides transition:{zoom} speed:{fast}
+            .autopagebreak depth:{3}
+            """.trimIndent(),
+        ) {
+            assertEquals("My Quarkdown document", documentInfo.name)
+            assertEquals("iamgio", documentInfo.author)
+            assertEquals("en", documentInfo.locale?.tag)
+            assertEquals(DocumentType.SLIDES, documentInfo.type)
+            assertEquals("darko", documentInfo.theme?.color)
+            assertEquals("minimal", documentInfo.theme?.layout)
+
+            PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
+                assertEquals(bounds.width, documentInfo.pageFormat.pageWidth)
+                assertEquals(bounds.height, documentInfo.pageFormat.pageHeight)
+            }
+
+            assertEquals(
+                Sizes(
+                    vertical = Size(3.0, Size.Unit.CM),
+                    horizontal = Size(2.0, Size.Unit.PX),
+                ),
+                documentInfo.pageFormat.margin,
+            )
         }
     }
 
@@ -87,6 +137,13 @@ class FullPipelineTest {
         execute("Hello, **world**! [_link_](https://example.com \"title\")") {
             assertEquals(
                 "<p>Hello, <strong>world</strong>! <a href=\"https://example.com\" title=\"title\"><em>link</em></a></p>",
+                it,
+            )
+        }
+
+        execute("This is a .text content:{small text} size:{tiny} variant:{smallcaps}") {
+            assertEquals(
+                "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
                 it,
             )
         }
@@ -131,6 +188,52 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>This link doesn&#39;t exist: [link][Link definition]</p>", it)
+            assertTrue(attributes.linkDefinitions.isEmpty())
+        }
+    }
+
+    @Test
+    fun images() {
+        execute("![Alt text](https://example.com/image.png)") {
+            assertEquals("<p><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+        }
+
+        execute("![Alt text](https://example.com/image.png 'Title')") {
+            assertEquals(
+                "<p><figure>" +
+                    "<img src=\"https://example.com/image.png\" alt=\"Alt text\" title=\"Title\" />" +
+                    "<figcaption>Title</figcaption>" +
+                    "</figure></p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            [Alt text]: https://example.com/image.png
+            ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            [Alt text]: https://example.com/image.png
+            ## ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></h2>", it)
+            assertEquals(1, attributes.linkDefinitions.size)
+        }
+
+        execute(
+            """
+            This image doesn't exist: ![Alt text][Alt text]
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>This image doesn&#39;t exist: ![Alt text][Alt text]</p>", it)
             assertTrue(attributes.linkDefinitions.isEmpty())
         }
     }
@@ -213,6 +316,16 @@ class FullPipelineTest {
             )
         }
 
+        execute("| Header 1 | Header 2 |\n|----------|----------|\n| $ X $ | $ Y $ |") {
+            assertEquals(
+                "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>__QD_INLINE_MATH__\$X\$__QD_INLINE_MATH__</td>" +
+                    "<td>__QD_INLINE_MATH__\$Y\$__QD_INLINE_MATH__</td></tr></tbody></table>",
+                it,
+            )
+            assertTrue(attributes.hasMath) // Ensures the tree traversal visits table cells too.
+        }
+
         execute("| Header 1 | Header 2 | Header 3 |\n|:---------|:--------:|---------:|\n| Cell 1   | Cell 2   | Cell 3   |") {
             assertEquals(
                 "<table><thead><tr><th align=\"left\">Header 1</th><th align=\"center\">Header 2</th>" +
@@ -233,7 +346,6 @@ class FullPipelineTest {
             assertEquals("<p>18</p>", it)
         }
 
-        // TODO add space after $ in the output (= avoid trimming text)
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
             assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
             assertTrue(attributes.hasMath)
@@ -343,7 +455,7 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 (
-                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\"></div><h1>Title 1</h1>".repeat(2) +
+                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\" data-hidden=\"\"></div><h1>Title 1</h1>".repeat(2) +
                         "<p>Some text</p>"
                 ).repeat(2) + "<h3>Title 3</h3>",
                 it,
@@ -672,6 +784,135 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .function {poweredby}
+                credits:
+                .text size:{small} variant:{smallcaps}
+                    powered by .credits
+            
+            This **exciting feature**, .poweredby {[Quarkdown](https://github.com/iamgio/quarkdown)}, looks great!
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>This <strong>exciting feature</strong>, <span class=\"size-small\" style=\"font-variant: small-caps;\">" +
+                    "powered by <a href=\"https://github.com/iamgio/quarkdown\">Quarkdown</a></span>, looks great!</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents`() {
+        execute(
+            """
+            .tableofcontents title:{_TOC_}
+            
+            # ABC
+            
+            Hi
+            
+            ## _ABC/1_
+            
+            Hello
+            
+            # DEF
+            
+            DEF/1
+            ---
+            
+            Hi there
+            
+            ### DEF/2
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a>" +
+                    "<ol><li><a href=\"#abc1\"><em>ABC/1</em></a></li></ol></li>" +
+                    "<li><a href=\"#def\">DEF</a>" +
+                    "<ol><li><a href=\"#def1\">DEF/1</a>" +
+                    "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
+                    "</ol></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"def1\">DEF/1</h2>" +
+                    "<p>Hi there</p>" +
+                    "<h3 id=\"def2\">DEF/2</h3>",
+                it,
+            )
+        }
+
+        // Markers
+        execute(
+            """
+            .tableofcontents title:{***TOC***} maxdepth:{0}
+            
+            .marker {*Marker 1*}
+            
+            # ABC
+            
+            .marker {*Marker 2*}
+            
+            ## DEF
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
+                    "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
+                    "</ol></div>" +
+                    "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<div class=\"marker\" data-hidden=\"\" id=\"marker-2\"></div>" +
+                    "<h2 id=\"def\">DEF</h2>",
+                it,
+            )
+        }
+
+        // Focus
+        execute(
+            """
+            .tableofcontents title:{TOC} focus:{DEF}
+            
+            # ABC
+            
+            ## X
+            
+            # DEF
+            
+            ## Y
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\">TOC</h1>" +
+                    "<div class=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
+                    "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
+                    "</ol></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h2 id=\"x\">X</h2>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"y\">Y</h2>",
+                it,
+            )
+        }
     }
 
     @Test
@@ -751,6 +992,93 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 "<p>8</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `media storage`() {
+        execute(
+            """
+            This is the Quarkdown logo: ![Quarkdown](img/icon.png).                                 
+            """.trimIndent(),
+            enableMediaStorage = false,
+        ) {
+            assertEquals("<p>This is the Quarkdown logo: <img src=\"img/icon.png\" alt=\"Quarkdown\" />.</p>", it)
+            assertEquals(0, mediaStorage.all.size)
+        }
+
+        execute(
+            """
+            This is the Quarkdown logo: ![Quarkdown](img/icon.png).                                 
+            """.trimIndent(),
+            enableMediaStorage = true,
+        ) {
+            assertEquals("<p>This is the Quarkdown logo: <img src=\"media/icon", it.toString().substringBefore("@"))
+            // The file name is "media/icon-[encoded].png"
+            assertEquals("\" alt=\"Quarkdown\" />.</p>", it.toString().substringAfter(".png"))
+        }
+
+        execute(
+            """
+            .center
+                ![Icon](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-light.svg "The Quarkdown icon")
+                
+                ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)
+            """.trimIndent(),
+            options = MutableContextOptions(enableRemoteMediaStorage = true),
+            enableMediaStorage = true,
+        ) {
+            assertEquals(
+                "<div class=\"align align-center\">" +
+                    "<p>" +
+                    "<figure>" +
+                    "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg\" " +
+                    "alt=\"Icon\" title=\"The Quarkdown icon\" />" +
+                    "<figcaption>The Quarkdown icon</figcaption>" +
+                    "</figure>" +
+                    "</p>" +
+                    "<p>" +
+                    "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
+                    "alt=\"Banner\" />" +
+                    "</p>" +
+                    "</div>",
+                it,
+            )
+
+            assertEquals(2, mediaStorage.all.size)
+        }
+
+        execute(
+            """
+            ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)  
+            ![Quarkdown](img/icon.png)
+            """.trimIndent(),
+            options = MutableContextOptions(enableRemoteMediaStorage = false),
+            enableMediaStorage = true,
+        ) {
+            assertEquals(
+                "<p>" +
+                    "<img src=\"https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg\" " +
+                    "alt=\"Banner\" /><br /><img src=\"media/",
+                it.toString().substringBefore("icon@"),
+            )
+
+            assertEquals(1, mediaStorage.all.size)
+        }
+
+        execute(
+            """
+            [Banner]: https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg
+            ![Banner]
+            """.trimIndent(),
+            options = MutableContextOptions(enableRemoteMediaStorage = true),
+            enableMediaStorage = true,
+        ) {
+            assertEquals(
+                "<p><img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
+                    "alt=\"Banner\" /></p>",
                 it,
             )
         }

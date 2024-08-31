@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.Function
+import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 
 /**
@@ -26,6 +27,9 @@ class ScopeContext(val parent: Context) : MutableContext(
 
     override val attributes: MutableAstAttributes
         get() = parent.attributes as? MutableAstAttributes ?: parent.attributes.toMutable()
+
+    override val mediaStorage: MutableMediaStorage
+        get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],

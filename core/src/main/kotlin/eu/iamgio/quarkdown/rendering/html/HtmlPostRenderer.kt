@@ -3,11 +3,13 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
+import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
-import eu.iamgio.quarkdown.pipeline.output.OutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
+import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.PostRenderer
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
@@ -20,6 +22,9 @@ import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
  * - HighlightJS for code highlighting.
  */
 class HtmlPostRenderer(private val context: Context) : PostRenderer {
+    // HTML requires local media to be resolved from the file system.
+    override val preferredMediaStorageOptions: MediaStorageOptions = ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
+
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
@@ -40,7 +45,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
         buildSet {
             // The main HTML resource.
             this +=
-                OutputArtifact(
+                TextOutputArtifact(
                     name = "index",
                     content = rendered,
                     type = ArtifactType.HTML,
@@ -96,7 +101,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             // A theme.css file contains only @import statements for each theme component
             // in order to link them into a single file that can be easily included in the main HTML file.
             this +=
-                OutputArtifact(
+                TextOutputArtifact(
                     name = "theme",
                     content =
                         joinToString(separator = "\n") {

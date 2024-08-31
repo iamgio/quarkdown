@@ -6,8 +6,8 @@ import eu.iamgio.quarkdown.context.ScopeContext
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue

@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 
 /**
@@ -54,6 +55,15 @@ interface Context {
     val libraries: Set<Library>
 
     /**
+     * Media storage that contains all the media files that are referenced within the document.
+     * For example, if an image node references a local image file "image.png",
+     * the local file needs to be exported to the output directory in order for a browser to look it up.
+     * This storage is used to keep track of all the media files that may need to be exported.
+     * @see eu.iamgio.quarkdown.context.hooks.MediaStorerHook
+     */
+    val mediaStorage: ReadOnlyMediaStorage
+
+    /**
      * Looks up a function by name.
      * @param name name of the function to look up, case-sensitive
      * @return the corresponding function, if it exists
@@ -61,6 +71,8 @@ interface Context {
     fun getFunctionByName(name: String): Function<*>?
 
     /**
+     * Tries to resolve a reference link to an actual link.
+     * If the resolution succeeds, [ReferenceLink.onResolve] callbacks are executed.
      * @param reference reference link to lookup
      * @return the corresponding link node, if it exists
      */

@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Range

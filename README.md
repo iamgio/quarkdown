@@ -1,13 +1,17 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/8f705eb8-8405-4e02-8e84-50eaaba7f5df">
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-dark.svg">
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
+  <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <img alt="Status: development" src="https://img.shields.io/badge/status-development-blue">
-  <br>&nbsp;
+  <br>
+  <br>
+  <strong>Download</strong> the latest build <strong><a href="https://github.com/iamgio/quarkdown/releases">here</a></strong>&nbsp;
+  <br>
   <hr>
 </p>
 
@@ -27,23 +31,6 @@ Quarkdown is a Markdown parser and renderer that extends the capabilities of Mar
 
 **Possibilities are unlimited** thanks to an ever-expanding [standard library](stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
 which offers layout builders, I/O, math, conditional statements and loops.
-
-<br>
-
-> ```markdown
-> .grid columns:{2} gap:{1cm}
->     .repeat {8}
->         n:
->         .if {.iseven {.n}}
->             **.n** is even
-> ```
-> Result:
-> 
-> **2** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **4** is even
->
-> **6** is even &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **8** is even
-
-<br>
 
 **Not enough?** You can still define your own functions and variables — all within Markdown.
 
@@ -84,7 +71,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 |-----------------------|:------------------:|:------------------:|:------------------:|
 | Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
 | Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
-| Scripting             |        :x:         |        :x:         | :white_check_mark: |
+| Scripting             |        :x:         |      Partial       | :white_check_mark: |
 
 <table>
   <thead>
@@ -98,21 +85,41 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
       <td>
 
 ```latex
+\tableofcontents
+
 \section{Section}
+
 \subsection{Subsection}
+
 \begin{enumerate}
     \item \textbf{First} item
     \item \textbf{Second} item
 \end{itemize}
+
 \begin{center}
     This text is \textit{centered}.
 \end{center}
+
+\begin{figure}[!h]
+    \centering
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img1.png}
+    \end{subfigure}
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img2.png}
+    \end{subfigure}
+    \begin{subfigure}[b]
+        \includegraphics[width=0.3\linewidth]{img3.png}
+    \end{subfigure}
+\end{figure}
 ```
 
 </td>
 <td>
 
 ```markdown
+.tableofcontents
+
 # Section
 
 ## Subsection
@@ -122,12 +129,53 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 
 .center
     This text is _centered_.
+
+.row alignment:{spacebetween}
+    ![Image 1](img1.png)
+
+    ![Image 2](img2.png)
+    
+    ![Image 3](img3.png)
 ```
 
 </td>
 </tr>
 </tbody>
 </table>
+
+## Installation
+
+Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
+If you'd rather keep it minimal, `gradlew build` produces only the JAR file.
+
+The `bin` directory contains the executable scripts. Optionally, add it to your `PATH` to access Quarkdown more easily.
+
+Java 17 or higher is required.
+
+## Getting started
+
+Running the program with no command-line arguments runs it in REPL mode. This is great for familiarizing yourself with Quarkdown, but it's probably not what you're looking for.
+
+Running `quarkdown path-to-file.qmd` will compile the given file, save the output to file and log its content.  
+If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
+
+> [!NOTE]
+> The `qmd` extension is conventionally the standard one, but any can be used.
+
+**Options:**
+
+- **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
+
+- **`--pretty`**: produces pretty output code. This is useful for debugging or to read the output code more easily,
+  but it should be disabled in production as the results might be visually affected.
+
+- **`--clean`**: deletes the content of the output directory before producing new files. Destructive operation.
+
+- **`--strict`**: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
+
+- **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/Media-storage)
+
+- **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
 ## Targets
 
@@ -141,10 +189,6 @@ HTML is currently the only supported rendering target. LaTeX rendering is a futu
 The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
 - `.doctype {slides}`
 - `.doctype {paged}`
-
-> [!TIP]
-> If not set via the command line argument `--out <dir>` or `-o <dir>`,
-> output files are saved into the `output` directory by default.
 
 ## Scripting
 

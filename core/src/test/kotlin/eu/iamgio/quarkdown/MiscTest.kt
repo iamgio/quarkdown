@@ -9,25 +9,36 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.id.getId
+import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
+import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.pipeline.output.ArtifactType
+import eu.iamgio.quarkdown.pipeline.output.BinaryOutputArtifact
+import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter
+import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
+import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
 import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
 import eu.iamgio.quarkdown.util.flattenedChildren
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import java.nio.file.Files
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * Tests for miscellaneous classes.
  */
 class MiscTest {
     @Test
-    fun treeVisit() {
+    fun `tree visit`() {
         val node =
             AstRoot(
                 listOf(
@@ -64,6 +75,32 @@ class MiscTest {
                 this,
             )
         }
+
+        // Iterator
+
+        val blockQuoteHook =
+            object : AstIteratorHook {
+                override fun attach(iterator: ObservableAstIterator) {
+                    iterator.on<BlockQuote> {
+                        assertIs<Paragraph>(it.children.first())
+                    }
+                }
+            }
+
+        var finished = false
+
+        ObservableAstIterator()
+            .on<Strong> { assertEquals(Text("abc"), it.children.first()) }
+            .on<Emphasis> { assertEquals(Text("ghi"), it.children.first()) }
+            .attach(blockQuoteHook)
+            .on<Code> {
+                assertEquals("Hello, world!", it.content)
+                assertEquals("java", it.language)
+            }
+            .onFinished { finished = true }
+            .traverse(node)
+
+        assertTrue(finished)
     }
 
     @Test
@@ -75,7 +112,7 @@ class MiscTest {
     }
 
     @Test
-    fun tableOfContents() {
+    fun `table of contents`() {
         val headings1 =
             sequenceOf(
                 Heading(1, listOf(Text("ABC"))),
@@ -191,5 +228,94 @@ class MiscTest {
         assertNull(retriever.find("nonexistent"))
 
         assertTrue(retriever.all.iterator().hasNext())
+    }
+
+    @Test
+    fun `resource export`() {
+        val dir = Files.createTempDirectory("quarkdown-resource-test")
+        val exporter = FileResourceExporter(dir.toFile())
+
+        with("Hello, world!".repeat(1000)) {
+            assertEquals(
+                this,
+                TextOutputArtifact("Artifact 1", this, ArtifactType.HTML)
+                    .accept(exporter)
+                    .also { assertEquals("Artifact-1.html", it.name) }
+                    .readText(),
+            )
+            assertContentEquals(
+                this.toByteArray(),
+                BinaryOutputArtifact("a/rt*fact::2", this.toByteArray(), ArtifactType.JAVASCRIPT)
+                    .accept(exporter)
+                    .also { assertEquals("a-rt-fact-2.js", it.name) }
+                    .readBytes(),
+            )
+        }
+
+        with("Quarkdown".repeat(1000)) {
+            LazyOutputArtifact("artifact3", { this.toByteArray() }, ArtifactType.CSS)
+                .accept(exporter)
+                .also { assertEquals("artifact3.css", it.name) }
+                .let { file ->
+                    assertEquals(this, file.readText())
+                    assertContentEquals(this.toByteArray(), file.readBytes())
+                }
+        }
+
+        LazyOutputArtifact.internal(
+            resource = "/media/icon.png",
+            name = "artif@ct 4.png",
+            type = ArtifactType.AUTO,
+            referenceClass = this::class,
+        ).run {
+            assertContentEquals(
+                this::class.java.getResourceAsStream("/media/icon.png")!!.readBytes(),
+                this.accept(exporter)
+                    .also { assertEquals("artif@ct-4.png", it.name) }
+                    .readBytes(),
+            )
+        }
+
+        val group =
+            OutputResourceGroup(
+                "Group 1",
+                setOf(
+                    TextOutputArtifact("Artifact 5", "Hello, world!", ArtifactType.HTML),
+                    BinaryOutputArtifact("arti-fact6", "Quarkdown".toByteArray(), ArtifactType.JAVASCRIPT),
+                    LazyOutputArtifact("artifact7", { "Quarkdown".toByteArray() }, ArtifactType.CSS),
+                    OutputResourceGroup(
+                        "Group 2",
+                        setOf(
+                            TextOutputArtifact("Artifact 8", "Hello, world!", ArtifactType.HTML),
+                            BinaryOutputArtifact("art*fact/9", "Quarkdown".toByteArray(), ArtifactType.JAVASCRIPT),
+                        ),
+                    ),
+                    LazyOutputArtifact.internal(
+                        referenceClass = this::class,
+                        resource = "/media/banner.png",
+                        name = "artif@ct 10.png",
+                        type = ArtifactType.AUTO,
+                    ),
+                    BinaryOutputArtifact("artifact11", "Hello world".repeat(100).toByteArray(), ArtifactType.JAVASCRIPT),
+                ),
+            )
+
+        val groupFile = group.accept(exporter)
+
+        assertTrue(groupFile.isDirectory)
+        val files = groupFile.listFiles()!!
+        assertEquals(6, files.size)
+
+        assertEquals(1, files.count { it.extension == "html" })
+        assertEquals(2, files.count { it.extension == "js" })
+        assertEquals(1, files.count { it.extension == "css" })
+        assertEquals(1, files.count { it.extension == "png" })
+
+        val subGroup = files.single { it.isDirectory }
+        subGroup.listFiles()!!.let { subFiles ->
+            assertEquals(2, subFiles.size)
+            assertEquals(1, subFiles.count { it.extension == "html" })
+            assertEquals(1, subFiles.count { it.extension == "js" })
+        }
     }
 }

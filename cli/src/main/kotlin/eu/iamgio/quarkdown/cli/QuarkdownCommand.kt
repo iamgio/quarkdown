@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
@@ -65,6 +66,12 @@ class QuarkdownCommand : CliktCommand() {
      */
     private val clean: Boolean by option("--clean", help = "Clean output directory").flag()
 
+    /**
+     * When enabled, the program does not store any media (e.g. images) into the output directory `media` directory
+     * and nodes that reference those media objects are not updated to reflect the new local path.
+     */
+    private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
+
     override fun run() {
         val cliOptions =
             CliOptions(
@@ -78,6 +85,8 @@ class QuarkdownCommand : CliktCommand() {
                 prettyOutput = prettyOutput,
                 wrapOutput = !noWrap,
                 workingDirectory = source?.parentFile,
+                enableMediaStorage = !noMediaStorage,
+                mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
                 errorHandler =
                     when {
                         strict -> StrictPipelineErrorHandler()
