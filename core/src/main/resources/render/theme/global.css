@@ -263,6 +263,40 @@ code.focus-lines .hljs-ln-line:not(.focused),
     display: none;
 }
 
+.reveal pre {
+    width: 100% !important;
+}
+
+.reveal img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.stack > p, .clip > p {
+    margin: 0;
+}
+
+.table-of-contents {
+    text-align: start;
+}
+
+h1#table-of-contents {
+    text-align: start;
+}
+
+.table-of-contents li a {
+    text-decoration: none;
+}
+
+.table-of-contents li a::after {
+    /* TOC page counter on supported targets */
+    content: target-counter(attr(href), page);
+    float: right;
+}
+
+/* Fixed page margins */
+
+/* For non-paged documents */
 .page-margin-content {
     position: absolute;
 }
@@ -331,33 +365,86 @@ code.focus-lines .hljs-ln-line:not(.focused),
     transform: rotate(-90deg) translateX(-50%);
 }
 
-.reveal pre {
-    width: 100% !important;
-}
+/* For paged documents */
+@page {
+    --page-margin-top-left-corner-content: "";
+    --page-margin-top-left-content: "";
+    --page-margin-top-center-content: "";
+    --page-margin-top-right-content: "";
+    --page-margin-top-right-corner-content: "";
+    --page-margin-right-top-content: "";
+    --page-margin-right-middle-content: "";
+    --page-margin-right-bottom-content: "";
+    --page-margin-bottom-right-corner-content: "";
+    --page-margin-bottom-right-content: "";
+    --page-margin-bottom-center-content: "";
+    --page-margin-bottom-left-content: "";
+    --page-margin-bottom-left-corner-content: "";
+    --page-margin-left-bottom-content: "";
+    --page-margin-left-middle-content: "";
+    --page-margin-left-top-content: "";
 
-.reveal img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-}
+    @top-left-corner {
+        content: var(--page-margin-top-left-corner-content);
+    }
 
-.stack > p, .clip > p {
-    margin: 0;
-}
+    @top-left {
+        content: var(--page-margin-top-left-content);
+    }
 
-.table-of-contents {
-    text-align: start;
-}
+    @top-center {
+        content: var(--page-margin-top-center-content);
+    }
 
-h1#table-of-contents {
-    text-align: start;
-}
+    @top-right {
+        content: var(--page-margin-top-right-content);
+    }
 
-.table-of-contents li a {
-    text-decoration: none;
-}
+    @top-right-corner {
+        content: var(--page-margin-top-right-corner-content);
+    }
 
-.table-of-contents li a::after {
-    /* TOC page counter on supported targets */
-    content: target-counter(attr(href), page);
-    float: right;
+    @right-top {
+        content: var(--page-margin-right-top-content);
+    }
+
+    @right-middle {
+        content: var(--page-margin-right-middle-content);
+    }
+
+    @right-bottom {
+        content: var(--page-margin-right-bottom-content);
+    }
+
+    @bottom-right-corner {
+        content: var(--page-margin-bottom-right-corner-content);
+    }
+
+    @bottom-right {
+        content: var(--page-margin-bottom-right-content);
+    }
+
+    @bottom-center {
+        content: var(--page-margin-bottom-center-content);
+    }
+
+    @bottom-left {
+        content: var(--page-margin-bottom-left-content);
+    }
+
+    @bottom-left-corner {
+        content: var(--page-margin-bottom-left-corner-content);
+    }
+
+    @left-bottom {
+        content: var(--page-margin-left-bottom-content);
+    }
+
+    @left-middle {
+        content: var(--page-margin-left-middle-content);
+    }
+
+    @left-top {
+        content: var(--page-margin-left-top-content);
+    }
 }
