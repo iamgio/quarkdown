@@ -240,6 +240,20 @@ code.focus-lines .hljs-ln-line:not(.focused),
     margin-bottom: 8px;
 }
 
+/* Lists have different spacing depending on the target */
+.box > .box-content :is(ul, ol) {
+    padding-left: 18px;
+}
+
+.pagedjs_page .box > .box-content :is(ul, ol) {
+    padding-left: 24px;
+}
+
+.reveal .box > .box-content :is(ul, ol) {
+    padding-left: 4px;
+}
+/* End of the target-based styling */
+
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
