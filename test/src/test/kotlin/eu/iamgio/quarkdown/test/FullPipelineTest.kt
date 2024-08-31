@@ -455,7 +455,7 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 (
-                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\"></div><h1>Title 1</h1>".repeat(2) +
+                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\" data-hidden=\"\"></div><h1>Title 1</h1>".repeat(2) +
                         "<p>Some text</p>"
                 ).repeat(2) + "<h3>Title 3</h3>",
                 it,
@@ -829,7 +829,7 @@ class FullPipelineTest {
             MutableContextOptions(),
         ) {
             assertEquals(
-                "<div class=\"page-break\"></div>" +
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
                     "<div class=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a>" +
@@ -839,10 +839,10 @@ class FullPipelineTest {
                     "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
                     "</ol></li></ol></li>" +
                     "</ol></div>" +
-                    "<div class=\"page-break\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
                     "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
-                    "<div class=\"page-break\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"def\">DEF</h1>" +
                     "<h2 id=\"def1\">DEF/1</h2>" +
                     "<p>Hi there</p>" +
@@ -867,16 +867,16 @@ class FullPipelineTest {
             MutableContextOptions(),
         ) {
             assertEquals(
-                "<div class=\"page-break\"></div>" +
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
                     "<div class=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
                     "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
                     "</ol></div>" +
-                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-1\"></div>" +
-                    "<div class=\"page-break\"></div>" +
+                    "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1>" +
-                    "<div class=\"marker\" data-hidden=\"true\" id=\"marker-2\"></div>" +
+                    "<div class=\"marker\" data-hidden=\"\" id=\"marker-2\"></div>" +
                     "<h2 id=\"def\">DEF</h2>",
                 it,
             )
@@ -898,16 +898,16 @@ class FullPipelineTest {
             MutableContextOptions(),
         ) {
             assertEquals(
-                "<div class=\"page-break\"></div>" +
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\">TOC</h1>" +
                     "<div class=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
                     "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></div>" +
-                    "<div class=\"page-break\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1>" +
                     "<h2 id=\"x\">X</h2>" +
-                    "<div class=\"page-break\"></div>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"def\">DEF</h1>" +
                     "<h2 id=\"y\">Y</h2>",
                 it,

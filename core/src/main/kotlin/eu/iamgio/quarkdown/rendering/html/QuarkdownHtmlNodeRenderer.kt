@@ -68,7 +68,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     // Block
 
     // An empty div that acts as a page break.
-    override fun visit(node: PageBreak) = div("page-break") {}
+    override fun visit(node: PageBreak) =
+        tagBuilder("div")
+            .`class`("page-break")
+            .hidden()
+            .build()
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE

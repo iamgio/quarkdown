@@ -106,9 +106,10 @@ class HtmlTagBuilder(
     /**
      * Adds a `data-hidden` attribute to this tag as a flag that this is a hidden element.
      * A page that has either zero elements or only hidden elements is considered blank.
+     * This attribute is usually read by external stylesheets and scripts.
      * @return this for concatenation
      */
-    fun hidden() = attribute("data-hidden", true)
+    fun hidden() = attribute("data-hidden", "")
 
     /**
      * @return this builder and its nested content into stringified HTML code.

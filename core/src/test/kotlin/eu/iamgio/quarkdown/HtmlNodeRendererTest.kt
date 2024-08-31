@@ -392,7 +392,7 @@ class HtmlNodeRendererTest {
 
     @Test
     fun pageBreak() {
-        assertEquals("<div class=\"page-break\">\n</div>", PageBreak().render())
+        assertEquals("<div class=\"page-break\" data-hidden=\"\">\n</div>", PageBreak().render())
     }
 
     @Test
