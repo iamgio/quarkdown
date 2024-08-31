@@ -6,7 +6,8 @@
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-code-font: monospace;
-    --qd-code-block-font-size: var(--qd-main-font-size);
+    --qd-code-block-font-size: var(--qd-main-font-size); /* Font size of code blocks in non-slides documents */
+    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-code-span-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
@@ -107,6 +108,10 @@ code:not(pre code) {
 pre code {
     font-size: var(--qd-code-block-font-size);
     max-height: none !important;
+}
+
+.reveal pre code {
+    font-size: var(--qd-slides-code-block-font-size);
 }
 
 /* Line numbers are displayed in a table, so no borders by default */
