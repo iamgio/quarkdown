@@ -6,11 +6,12 @@
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-code-font: monospace;
-    --qd-code-block-font-size: var(--qd-main-font-size);
+    --qd-code-block-font-size: var(--qd-main-font-size); /* Font size of code blocks in non-slides documents */
+    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-code-span-font-size: var(--qd-main-font-size);
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
-    --qd-paged-heading-margin: 40px 0 20px 0; /* Margin of headings in paged documents */
+    --qd-heading-margin: 40px 0 20px 0; /* Margin of headings in non-slides documents */
     --qd-slides-heading-margin: 0 0 20px 0; /* Margin of headings in slides documents */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
     --qd-box-heading-font: var(--qd-main-font);
@@ -68,7 +69,7 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6,
-p, table, pre, figure, blockquote,
+p, table:not(code table), pre, figure, blockquote,
 ul, ol, hr,
 .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
@@ -77,7 +78,7 @@ ul, ol, hr,
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--qd-heading-font);
-    margin: var(--qd-paged-heading-margin);
+    margin: var(--qd-heading-margin);
     text-transform: none !important;
 }
 
@@ -107,6 +108,15 @@ code:not(pre code) {
 pre code {
     font-size: var(--qd-code-block-font-size);
     max-height: none !important;
+}
+
+.reveal pre code {
+    font-size: var(--qd-slides-code-block-font-size);
+}
+
+/* Line numbers are displayed in a table, so no borders by default */
+code table :is(td, th) {
+    border: 0;
 }
 
 /* When an element is marked as focused, other siblings are less visible */
