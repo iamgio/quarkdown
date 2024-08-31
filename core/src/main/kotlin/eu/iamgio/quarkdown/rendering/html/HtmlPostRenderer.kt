@@ -23,7 +23,8 @@ import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
  */
 class HtmlPostRenderer(private val context: Context) : PostRenderer {
     // HTML requires local media to be resolved from the file system.
-    override val preferredMediaStorageOptions: MediaStorageOptions = ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
+    override val preferredMediaStorageOptions: MediaStorageOptions =
+        ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
@@ -33,8 +34,14 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.
             .conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
-            .conditional(TemplatePlaceholders.HAS_CODE, context.attributes.hasCode) // HighlightJS is initialized only if needed.
-            .conditional(TemplatePlaceholders.HAS_MATH, context.attributes.hasMath) // MathJax is initialized only if needed.
+            .conditional(
+                TemplatePlaceholders.HAS_CODE,
+                context.attributes.hasCode,
+            ) // HighlightJS is initialized only if needed.
+            .conditional(
+                TemplatePlaceholders.HAS_MATH,
+                context.attributes.hasMath,
+            ) // MathJax is initialized only if needed.
             // Page format
             .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
             .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
@@ -51,7 +58,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     type = ArtifactType.HTML,
                 )
 
-            // A CSS theme resource is added to the output resources.
+            // A group of CSS theme resources is added to the output resources.
             // Theme components (global style, color scheme and layout format) are stored in a single group (directory)
             // and linked via @import statements in a theme.css file.
             this +=
@@ -60,15 +67,13 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     resources = retrieveThemeComponentsArtifacts(context.documentInfo.theme),
                 )
 
-            // A slides document requires additional scripts.
-            if (context.documentInfo.type == DocumentType.SLIDES) {
-                this +=
-                    LazyOutputArtifact.internal(
-                        resource = "/render/script/slides.js",
-                        name = "slides",
-                        type = ArtifactType.JAVASCRIPT,
-                    )
-            }
+            // A group of JS script resources is added to the output resources.
+            // Only the strictly required scripts are included, depending on the document's characteristics.
+            this +=
+                OutputResourceGroup(
+                    name = "script",
+                    resources = retrieveScriptComponentsArtifacts(),
+                )
         }
 
     /**
@@ -109,5 +114,36 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                         },
                     type = ArtifactType.CSS,
                 )
+        }
+
+    /**
+     * @return a set that contains an output artifact for each required script component
+     */
+    private fun retrieveScriptComponentsArtifacts(): Set<OutputResource> =
+        buildSet {
+            /**
+             * Appends a new output artifact to the set if [condition] is true.
+             * @param resourceName name of the resource
+             * @param resourcePath path of the resource starting from the theme folder, without extension
+             */
+            fun pushArtifact(
+                resourceName: String,
+                resourcePath: String = resourceName,
+                condition: Boolean = true,
+            ) {
+                if (!condition) return
+                this +=
+                    LazyOutputArtifact.internal(
+                        resource = "/render/script/$resourcePath.js",
+                        // The name is not used here, as this artifact will be concatenated to others in generateResources.
+                        name = resourceName,
+                        type = ArtifactType.JAVASCRIPT,
+                    )
+            }
+
+            pushArtifact("script")
+            pushArtifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
+            pushArtifact("math", condition = context.attributes.hasMath)
+            pushArtifact("code", condition = context.attributes.hasCode)
         }
 }
