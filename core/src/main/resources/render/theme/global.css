@@ -31,10 +31,18 @@
 }
 
 body {
-    background-color: var(--qd-background-color);
     color: var(--qd-main-color);
     font-family: var(--qd-main-font);
     font-size: var(--qd-main-font-size);
+}
+
+body:not(:has(.pagedjs_page)), .pagedjs_page {
+    background-color: var(--qd-background-color);
+}
+
+/* Paged viewport */
+body:has(.pagedjs_page) {
+    background-color: lightgray;
 }
 
 hr {
