@@ -232,8 +232,12 @@ code.focus-lines .hljs-ln-line:not(.focused),
     padding: 12px;
 }
 
-.box > .box-content p {
-    margin: 8px 0;
+.box > .box-content > *:first-child {
+    margin-top: 8px;
+}
+
+.box > .box-content > *:last-child {
+    margin-bottom: 8px;
 }
 
 .box.error-box {
