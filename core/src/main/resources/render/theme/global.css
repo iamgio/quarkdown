@@ -6,9 +6,9 @@
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-code-font: monospace;
-    --qd-code-block-font-size: var(--qd-main-font-size); /* Font size of code blocks in non-slides documents */
-    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-code-span-font-size: var(--qd-main-font-size);
+    --qd-code-block-font-size: var(--qd-code-span-font-size); /* Font size of code blocks in non-slides documents */
+    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
     --qd-heading-margin: 40px 0 20px 0; /* Margin of headings in non-slides documents */
