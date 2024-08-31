@@ -19,17 +19,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
     [[endif:CODE]]
+    <script>
+        let executionQueue = [];
+        function executeQueue() {
+            executionQueue.forEach((fn) => fn());
+        }
+    </script>
     [[if:MATH]]
     <script>
-        MathJax = {
-            tex: {
-                displayMath: [['__QD_BLOCK_MATH__$', '$__QD_BLOCK_MATH__']],
-                inlineMath: [['__QD_INLINE_MATH__$', '$__QD_INLINE_MATH__']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
+        executionQueue.push(() =>
+            MathJax = {
+                tex: {
+                    displayMath: [['__QD_BLOCK_MATH__$', '$__QD_BLOCK_MATH__']],
+                    inlineMath: [['__QD_INLINE_MATH__$', '$__QD_INLINE_MATH__']]
+                },
+                svg: {
+                    fontCache: 'global'
+                }
+            });
     </script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -51,7 +58,7 @@
             width: [[PAGEWIDTH]];
             height: [[PAGEHEIGHT]];
             [[endif:PAGESIZE]]
-            
+
         }
 
         @page {
@@ -138,8 +145,10 @@
 [[endif:!SLIDES]]
 [[if:CODE]]
 <script>
-    hljs.highlightAll();
-    hljs.initLineNumbersOnLoad();
+    executionQueue.push(() => {
+        hljs.initLineNumbersOnLoad();
+        hljs.highlightAll();
+    });
 
     // Focuses on specific lines in selected code blocks.
     function focusCodeLines() {
@@ -162,5 +171,19 @@
     });
 </script>
 [[endif:CODE]]
+[[if:PAGED]]
+<script>
+    class PagedExecutionHandler extends Paged.Handler {
+        afterPreview(pages) {
+            executeQueue();
+        }
+    }
+
+    Paged.registerHandlers(PagedExecutionHandler);
+</script>
+[[endif:PAGED]]
+[[if:!PAGED]]
+<script>executeQueue();</script>
+[[endif:!PAGED]]
 </body>
 </html>
