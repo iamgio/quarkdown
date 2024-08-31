@@ -68,7 +68,7 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6,
-p, table, pre, figure, blockquote,
+p, table:not(code table), pre, figure, blockquote,
 ul, ol, hr,
 .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
@@ -107,6 +107,11 @@ code:not(pre code) {
 pre code {
     font-size: var(--qd-code-block-font-size);
     max-height: none !important;
+}
+
+/* Line numbers are displayed in a table, so no borders by default */
+code table :is(td, th) {
+    border: 0;
 }
 
 /* When an element is marked as focused, other siblings are less visible */
