@@ -81,9 +81,15 @@ ul, ol, hr,
     line-height: var(--qd-line-height);
 }
 
+/* Line height is set only after the first line */
 .reveal p::first-line {
-    /* Line height is set only after the first line */
     line-height: 1 !important;
+}
+
+/* Reset the margin of the first element in a page */
+.pagedjs_page_content > div > *:first-child,
+.pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
+    margin-top: 0 !important;
 }
 
 code {
