@@ -78,7 +78,15 @@ pre code {
     margin-top: 0;
 }
 
-.box > .box-content ul {
+.box > .box-content :is(ul, ol) {
+    padding-left: 18px;
+}
+
+.pagedjs_page .box > .box-content :is(ul, ol) {
+    padding-left: 24px;
+}
+
+.reveal .box > .box-content :is(ul, ol) {
     padding-left: 4px;
 }
 
