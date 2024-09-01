@@ -148,22 +148,23 @@ class MediaTest {
                         ),
                     ),
                     BlockQuote(
-                        listOf(
-                            Heading(
-                                depth = 1,
-                                listOf(
-                                    Image(
-                                        Link(
-                                            label = listOf(Text("label")),
-                                            url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                                            title = null,
+                        children =
+                            listOf(
+                                Heading(
+                                    depth = 1,
+                                    listOf(
+                                        Image(
+                                            Link(
+                                                label = listOf(Text("label")),
+                                                url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
+                                                title = null,
+                                            ),
+                                            width = null,
+                                            height = null,
                                         ),
-                                        width = null,
-                                        height = null,
                                     ),
                                 ),
                             ),
-                        ),
                     ),
                 ),
             )

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
@@ -313,6 +314,17 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +tag
         }
     }
+
+    // On top of the default behavior, a blockquote can have an attribution.
+    override fun visit(node: BlockQuote) =
+        buildTag("blockquote") {
+            +node.children
+            node.attribution?.let {
+                +tagBuilder("p", it)
+                    .`class`("attribution")
+                    .build()
+            }
+        }
 
     // The Quarkdown flavor renders an image title as a figure caption, if present.
     override fun visit(node: Image): String {

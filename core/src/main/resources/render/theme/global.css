@@ -70,6 +70,11 @@ blockquote {
     margin: 0;
 }
 
+blockquote .attribution {
+    display: block !important;
+    margin-top: 0 !important;
+}
+
 hr {
     width: 100%;
 }

@@ -67,6 +67,15 @@ blockquote {
     opacity: 0.7;
 }
 
+blockquote .attribution {
+    opacity: 0.6;
+    text-align: end;
+}
+
+blockquote .attribution::before {
+    content: "— ";
+}
+
 pre code {
     line-height: 1.5;
 }

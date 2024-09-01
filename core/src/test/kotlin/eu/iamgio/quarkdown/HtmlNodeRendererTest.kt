@@ -559,10 +559,23 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             BlockQuote(
-                listOf(
-                    Paragraph(listOf(Text("Foo bar"))),
-                    Paragraph(listOf(Text("Baz bim"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("Foo bar"))),
+                        Paragraph(listOf(Text("Baz bim"))),
+                    ),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            BlockQuote(
+                attribution = listOf(Text("William Shakespeare")),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("To be, or not to be."))),
+                        Paragraph(listOf(Text("That is the question."))),
+                    ),
             ).render(),
         )
     }

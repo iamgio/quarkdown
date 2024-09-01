@@ -43,9 +43,10 @@ class MiscTest {
             AstRoot(
                 listOf(
                     BlockQuote(
-                        listOf(
-                            Paragraph(listOf(Text("abc"))),
-                        ),
+                        children =
+                            listOf(
+                                Paragraph(listOf(Text("abc"))),
+                            ),
                     ),
                     Paragraph(
                         listOf(
@@ -296,7 +297,11 @@ class MiscTest {
                         name = "artif@ct 10.png",
                         type = ArtifactType.AUTO,
                     ),
-                    BinaryOutputArtifact("artifact11", "Hello world".repeat(100).toByteArray(), ArtifactType.JAVASCRIPT),
+                    BinaryOutputArtifact(
+                        "artifact11",
+                        "Hello world".repeat(100).toByteArray(),
+                        ArtifactType.JAVASCRIPT,
+                    ),
                 ),
             )
 

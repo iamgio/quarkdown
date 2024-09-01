@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.block.TaskListItem
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
@@ -26,6 +27,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -60,10 +62,8 @@ class BlockParserTest {
 
     private val TextNode.rawText: String
         get() {
-            if (children.size == 1) {
-                (children.first() as? PlainTextNode)?.let {
-                    return it.text
-                }
+            (children.singleOrNull() as? PlainTextNode)?.let {
+                return it.text
             }
             throw IllegalStateException("rawText requires a single PlainText node")
         }
@@ -271,6 +271,27 @@ class BlockParserTest {
         }
 
         assertIs<OrderedList>(nodes.next().children.first())
+
+        with(nodes.next()) {
+            assertEquals("To be, or not to be, that is the question.", rawText(this))
+            assertEquals(Text("William Shakespeare, Hamlet"), attribution!!.single())
+        }
+
+        with(nodes.next()) {
+            assertEquals("Shopping list", rawText(this))
+            assertIs<UnorderedList>(children[1])
+            assertNull(attribution)
+        }
+
+        with(nodes.next()) {
+            assertEquals(1, children.size)
+            children.first().let { inner ->
+                assertIs<BlockQuote>(inner)
+                assertEquals("You miss 100% of the shots you don't take.", inner.children.toPlainText())
+                assertEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
+            }
+            assertEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())
+        }
 
         assertFalse(nodes.hasNext())
     }
