@@ -30,7 +30,7 @@ function isPaged() {
 function setupQueueExecution() {
     if (isPaged()) {
         class PagedExecutionHandler extends Paged.Handler {
-            afterPreview(pages) {
+            afterPreview() {
                 executeQueue();
             }
         }

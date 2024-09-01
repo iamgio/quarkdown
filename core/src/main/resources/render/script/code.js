@@ -22,5 +22,5 @@ function focusCodeLines() {
 }
 
 hljs.addPlugin({
-    'after:highlight': (result) => window.setTimeout(focusCodeLines, 1)
+    'after:highlight': () => window.setTimeout(focusCodeLines, 1)
 });
