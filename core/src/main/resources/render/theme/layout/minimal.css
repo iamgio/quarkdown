@@ -72,9 +72,9 @@ table tr th:last-child {
 }
 
 blockquote {
-    background-color: transparent;
-    border-left: 0.5em solid;
-    padding: 0;
+    font-style: italic;
+    border-left: 0.4em solid;
+    padding: 4px 1em;
 }
 
 figure img {

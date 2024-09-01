@@ -54,10 +54,6 @@ body:has(.pagedjs_page) {
     margin-bottom: 3mm;
 }
 
-hr {
-    width: 100%;
-}
-
 /* A divider in a row is vertical instead of horizontal */
 .stack-row > hr {
     display: list-item;
@@ -67,6 +63,15 @@ hr {
 
 figure {
     text-align: center;
+}
+
+blockquote {
+    display: block;
+    margin: 0;
+}
+
+hr {
+    width: 100%;
 }
 
 a {

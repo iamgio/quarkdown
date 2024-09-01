@@ -61,6 +61,11 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+blockquote {
+    font-style: italic;
+    opacity: 0.7;
+}
+
 pre code {
     line-height: 1.5;
 }

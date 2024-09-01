@@ -12,6 +12,10 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--qd-main-color) !important;
 }
 
+blockquote {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
 hr {
     opacity: 0.5;
 }
