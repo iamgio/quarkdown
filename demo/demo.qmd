@@ -242,6 +242,12 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .poweredby {[MathJax](https://www.mathjax.org/)}
 
+## Quotation source
+
+.sourceresult
+    > To be, or not to be, that is the question.
+    > - William Shakespeare, Hamlet
+
 ## Image size
 
 .var {sizedimages}
