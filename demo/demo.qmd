@@ -268,7 +268,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 .row alignment:{center} gap:{1cm}
     .sizedimages
 
-## Labeled image
+## Labeled figure
 
 .sourceresult
     !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
