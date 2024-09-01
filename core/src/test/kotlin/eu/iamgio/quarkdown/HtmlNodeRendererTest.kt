@@ -696,7 +696,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
-                type = Box.Type.CALLOUT,
+                type = Box.Type.WARNING,
                 padding = null,
                 backgroundColor = null,
                 foregroundColor = null,

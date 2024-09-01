@@ -41,6 +41,11 @@ data class Box(
         CALLOUT,
 
         /**
+         * A warning.
+         */
+        WARNING,
+
+        /**
          * An error.
          */
         ERROR,

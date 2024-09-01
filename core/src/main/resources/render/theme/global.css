@@ -2,6 +2,7 @@
     /* Quarkdown exposed properties */
     --qd-background-color: inherit;
     --qd-main-color: inherit;
+    --qd-heading-color: var(--qd-main-color);
     --qd-link-color: inherit;
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
@@ -21,6 +22,7 @@
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
     --r-main-color: var(--qd-main-color);
+    --r-heading-color: var(--qd-heading-color);
     --r-link-color: var(--qd-link-color);
     --r-main-font: var(--qd-main-font);
     --r-main-font-size: var(--qd-main-font-size);
@@ -92,6 +94,7 @@ ul, ol, hr,
 }
 
 h1, h2, h3, h4, h5, h6 {
+    color: var(--qd-heading-color);
     font-family: var(--qd-heading-font);
     margin: var(--qd-heading-margin);
     text-transform: none !important;
@@ -272,6 +275,15 @@ code.focus-lines .hljs-ln-line:not(.focused),
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
+}
+
+.box.warning-box {
+    background-color: rgb(244, 206, 94);
+    color: #333;
+}
+
+.box.warning-box > header {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .marker {
