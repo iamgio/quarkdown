@@ -10,13 +10,15 @@
     --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
+
+    --page-margin-bottom-center-content: counter(page);
+
     --border-width-thick: 2px;
     --border-width-thin: 1px;
     --table-border-color: black;
 }
 
 @page {
-    --page-margin-bottom-center-content: counter(page);
     margin: 0.85in;
 }
 

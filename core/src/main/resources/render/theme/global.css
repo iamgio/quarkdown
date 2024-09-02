@@ -30,6 +30,24 @@
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
     --r-heading-margin: var(--qd-slides-heading-margin);
+
+    /* Overridable paged margin content */
+    --page-margin-top-left-corner-content: "";
+    --page-margin-top-left-content: "";
+    --page-margin-top-center-content: "";
+    --page-margin-top-right-content: "";
+    --page-margin-top-right-corner-content: "";
+    --page-margin-right-top-content: "";
+    --page-margin-right-middle-content: "";
+    --page-margin-right-bottom-content: "";
+    --page-margin-bottom-right-corner-content: "";
+    --page-margin-bottom-right-content: "";
+    --page-margin-bottom-center-content: "";
+    --page-margin-bottom-left-content: "";
+    --page-margin-bottom-left-corner-content: "";
+    --page-margin-left-bottom-content: "";
+    --page-margin-left-middle-content: "";
+    --page-margin-left-top-content: "";
 }
 
 .reveal .slides > :is(section, .pdf-page) {
@@ -398,23 +416,6 @@ h1#table-of-contents {
 
 /* For paged documents */
 @page {
-    --page-margin-top-left-corner-content: "";
-    --page-margin-top-left-content: "";
-    --page-margin-top-center-content: "";
-    --page-margin-top-right-content: "";
-    --page-margin-top-right-corner-content: "";
-    --page-margin-right-top-content: "";
-    --page-margin-right-middle-content: "";
-    --page-margin-right-bottom-content: "";
-    --page-margin-bottom-right-corner-content: "";
-    --page-margin-bottom-right-content: "";
-    --page-margin-bottom-center-content: "";
-    --page-margin-bottom-left-content: "";
-    --page-margin-bottom-left-corner-content: "";
-    --page-margin-left-bottom-content: "";
-    --page-margin-left-middle-content: "";
-    --page-margin-left-top-content: "";
-
     @top-left-corner {
         content: var(--page-margin-top-left-corner-content);
     }
