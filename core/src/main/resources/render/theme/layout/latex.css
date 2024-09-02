@@ -9,8 +9,10 @@
     --qd-heading-margin: 1.4em 0 1em 0;
     --qd-code-font: "Latin Modern Mono", monospace;
     --qd-code-span-font-size: 0.93em;
+    --qd-slides-code-block-font-size: 1.35em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
+    --qd-slides-horizontal-alignment: start;
 
     --page-margin-bottom-center-content: counter(page);
 
@@ -93,6 +95,11 @@ h6 {
 }
 
 /* Table */
+
+pre table {
+    --border-width-thick: 0;
+    --border-width-thin: 0;
+}
 
 table {
     margin-left: auto;
