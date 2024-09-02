@@ -71,9 +71,12 @@ body:has(.pagedjs_page) {
     background-color: lightgray;
 }
 
-/* Space between pages */
-.pagedjs_page {
-    margin-bottom: 3mm;
+/* Pages area */
+.pagedjs_pages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3mm;
 }
 
 /* A divider in a row is vertical instead of horizontal */
