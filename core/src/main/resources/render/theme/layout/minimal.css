@@ -126,7 +126,7 @@ nav ol {
 nav ol ol {
     border-left: 2px solid;
     border-radius: 2px;
-    margin-left: 1px;
+    margin-left: 1px !important;
     padding: 0 28px;
 }
 
