@@ -268,11 +268,13 @@ code.focus-lines .hljs-ln-line:not(.focused),
     padding: 12px;
 }
 
-.box > .box-content > *:first-child {
+.box > .box-content > *:first-child,
+.box > .box-content li:first-child > p:first-child {
     margin-top: 8px;
 }
 
-.box > .box-content > *:last-child {
+.box > .box-content > *:last-child,
+.box > .box-content li:last-child > p:last-child {
     margin-bottom: 8px;
 }
 
