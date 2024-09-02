@@ -79,6 +79,10 @@ body:has(.pagedjs_page) {
     gap: 3mm;
 }
 
+.pagedjs_page {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+}
+
 /* A divider in a row is vertical instead of horizontal */
 .stack-row > hr {
     display: list-item;
