@@ -77,14 +77,6 @@ blockquote {
     padding: 4px 1em;
 }
 
-blockquote .attribution {
-    opacity: 0.6;
-}
-
-blockquote .attribution::before {
-    content: "— ";
-}
-
 figure img {
     margin-bottom: 0.5em !important;
 }

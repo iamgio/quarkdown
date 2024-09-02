@@ -19,6 +19,7 @@
     --qd-callout-box-header-color: var(--qd-main-color); /* Color of the header of callout box headers. This is just a referenceable value and is not used in this global theme */
     --qd-line-height: 1.5;
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
+    --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -92,8 +93,13 @@ blockquote {
 }
 
 blockquote .attribution {
+    opacity: 0.6;
     display: block !important;
     margin-top: 0 !important;
+}
+
+blockquote .attribution::before {
+    content: var(--qd-quote-attribution-prefix);
 }
 
 hr {

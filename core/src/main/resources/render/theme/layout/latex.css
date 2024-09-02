@@ -132,7 +132,27 @@ td {
     line-height: 1.1;
 }
 
-/* Misc */
+/* Quotes */
+
+blockquote {
+    padding: 4px 1.5em;
+    border-left: 2px solid;
+    font-style: italic;
+}
+
+blockquote > :first-child {
+    margin-top: 10px;
+}
+
+blockquote > :last-child {
+    margin-bottom: 10px;
+}
+
+blockquote .attribution {
+    text-align: end;
+}
+
+/* Box */
 
 .box {
     border-left: 2px solid;

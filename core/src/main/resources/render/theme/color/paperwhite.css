@@ -9,7 +9,8 @@
 }
 
 blockquote {
-    background-color: rgba(0, 0, 0, 0.05) !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(0, 0, 0, 0.2);
 }
 
 pre code {
