@@ -153,4 +153,26 @@ td {
     background-color: transparent !important;
 }
 
-/* TODO codespan, toc, ... */
+/* Table of contents */
+
+h1#table-of-contents {
+    text-align: start !important;
+}
+
+.table-of-contents ol {
+    margin: 0;
+}
+
+.table-of-contents > ol > li {
+    margin: 20px 0;
+}
+
+.table-of-contents > ol > li > a {
+    font-weight: bold;
+}
+
+.table-of-contents li {
+    margin-top: 6px;
+}
+
+/* TODO codespan, ... */
