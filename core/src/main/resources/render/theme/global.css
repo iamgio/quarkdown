@@ -125,12 +125,12 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: none !important;
 }
 
-.reveal p {
+p, .reveal p {
     line-height: var(--qd-line-height);
 }
 
 /* Line height is set only after the first line */
-.reveal p::first-line {
+:is(p, .reveal p)::first-line {
     line-height: 1 !important;
 }
 
