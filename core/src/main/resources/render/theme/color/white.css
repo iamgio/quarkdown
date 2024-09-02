@@ -1,0 +1,28 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/grayscale.css');
+
+:root {
+    --primary: rgb(220, 220, 220);
+    --qd-background-color: hsl(210, 20%, 98%);
+    --qd-main-color: hsl(0, 5%, 10%);
+    --qd-link-color: midnightblue;
+}
+
+blockquote {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+pre code {
+    background-color: transparent !important;
+}
+
+.box.callout-box {
+    border-color: var(--primary)
+}
+
+.box.callout-box > header {
+    background-color: var(--primary);
+}
+
+.table-of-contents ol ol {
+    border-color: var(--qd-main-color)
+}
