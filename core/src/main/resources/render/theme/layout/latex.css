@@ -144,6 +144,10 @@ td {
     border-radius: 6px 6px 0 0;
 }
 
+.box.callout-box {
+    border-color: var(--qd-callout-box-header-color);
+}
+
 .box.callout-box:has(> header) {
     border-radius: 8px 8px 8px 0;
 }
@@ -152,9 +156,8 @@ td {
     border-radius: 0;
 }
 
-.box.callout-box > header {
-    background-image: linear-gradient(to right, var(--primary), transparent);
-    background-color: transparent !important;
+.box.callout-box > .box-content {
+    background-color: var(--qd-background-color) !important;
 }
 
 /* Code span */

@@ -10,6 +10,7 @@
 
     --qd-background-color: white;
     --qd-link-color: var(--primary);
+    --qd-callout-box-header-color: color-mix(in srgb, currentColor 7%, transparent);
 }
 
 h1, h2 {
@@ -21,7 +22,7 @@ h1:not(.box h1) {
 }
 
 .box > header {
-    background-color: color-mix(in srgb, currentColor 7%, transparent);
+    background-color: var(--qd-callout-box-header-color);
 }
 
 .box > header > h4 {

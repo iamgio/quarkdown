@@ -6,6 +6,7 @@
     --qd-background-color: #242528;
     --qd-main-color: #C9C9D7;
     --qd-link-color: #5FC7C7;
+    --qd-callout-box-header-color: var(--primary);
 }
 
 blockquote {

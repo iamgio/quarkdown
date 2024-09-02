@@ -5,6 +5,7 @@
     --qd-background-color: hsl(210, 20%, 98%);
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: mediumblue;
+    --qd-callout-box-header-color: var(--primary);
 }
 
 blockquote {
@@ -15,14 +16,10 @@ pre code {
     background-color: transparent !important;
 }
 
-.box.callout-box {
-    border-color: var(--primary)
-}
-
 .box.callout-box > header {
-    background-color: var(--primary);
+    background-image: linear-gradient(to right, var(--primary), transparent);
 }
 
 nav ol ol {
-    border-color: var(--qd-main-color)
+    border-color: var(--qd-main-color);
 }
