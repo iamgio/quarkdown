@@ -65,6 +65,17 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 
 &nbsp;
 
+## Targets
+
+- **HTML**
+  - :white_check_mark: Plain output (default)
+  - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
+  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org))
+
+The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
+- `.doctype {slides}`
+- `.doctype {paged}`
+
 ## Comparison
 
 |                       |      Markdown      |       LaTeX        |     Quarkdown      |
@@ -177,18 +188,32 @@ If the project is composed by multiple source files, the target file must be the
 
 - **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-## Targets
+## Themes
 
-HTML is currently the only supported rendering target. LaTeX rendering is a future goal.
+Themes are split in two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout.    
+Combining them can create a document that truly stands out.
 
-- **HTML**
-  - :white_check_mark: Plain output (default)
-  - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (book) (via [paged.js](https://pagedjs.org))
+A theme can be set via the `.theme {colortheme} layout:{layouttheme}` function.
 
-The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
-- `.doctype {slides}`
-- `.doctype {paged}`
+#### Layout themes
+- `minimal`
+- `latex`
+- `beamer`
+- `plain`
+
+#### Color themes
+- `darko`
+- `paperwhite`
+- `beaver`
+- `plain`
+
+Some suggested combinations are:
+- `minimal+darko` (used by the demo presentation)
+- `latex+paperwhite` (LaTeX look, great for `paged` documents)
+- `beamer+beaver` (Beamer look).
+
+> [Theme contributions](core/src/main/resources/render/theme) are welcome!  
+> Please make sure they work well with all the three document types before submitting.
 
 ## Scripting
 
