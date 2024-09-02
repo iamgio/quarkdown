@@ -135,8 +135,7 @@ td {
 /* Misc */
 
 .box {
-    border-width: 0 0 0 2px;
-    border-style: solid;
+    border-left: 2px solid;
     border-radius: 8px;
 }
 
@@ -145,8 +144,12 @@ td {
     border-radius: 6px 6px 0 0;
 }
 
-.box.callout-box {
+.box.callout-box:has(> header) {
     border-radius: 8px 8px 8px 0;
+}
+
+.box.callout-box:not(:has(> header)) {
+    border-radius: 0;
 }
 
 .box.callout-box > header {
@@ -186,7 +189,3 @@ nav > ol > li > a {
 nav li {
     margin-top: 7px;
 }
-
-/* TODO nested numbering */
-
-/* TODO codespan, ... */
