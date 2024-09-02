@@ -1,13 +1,14 @@
 /* Inspired by latex-css https://github.com/vincentdoerig/latex-css */
 
 @import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
+@import url('https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-mono.css');
 
 :root {
     --qd-main-font: "Computer Modern Serif", sans-serif;
     --qd-main-font-size: 1rem;
     --qd-heading-margin: 1.4em 0 1em 0;
-    --qd-code-font: "Computer Modern Mono", monospace;
-    --qd-code-span-font-size: 0.9em;
+    --qd-code-font: "Latin Modern Mono", monospace;
+    --qd-code-span-font-size: 0.93em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
 
@@ -153,6 +154,17 @@ td {
     background-color: transparent !important;
 }
 
+/* Code span */
+
+.codespan-content {
+    border-radius: 8px;
+}
+
+.color-preview {
+    margin: 2px 0.3em 0 0.4em;
+    border-radius: 3px;
+}
+
 /* Table of contents */
 
 h1#table-of-contents {
@@ -172,7 +184,9 @@ nav > ol > li > a {
 }
 
 nav li {
-    margin-top: 6px;
+    margin-top: 7px;
 }
+
+/* TODO nested numbering */
 
 /* TODO codespan, ... */
