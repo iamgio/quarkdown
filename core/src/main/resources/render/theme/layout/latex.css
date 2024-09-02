@@ -144,6 +144,10 @@ td {
     border-radius: 6px 6px 0 0;
 }
 
+.box > .box-content, .box > header {
+    padding-left: 16px;
+}
+
 .box.callout-box {
     border-color: var(--qd-callout-box-header-color);
 }
