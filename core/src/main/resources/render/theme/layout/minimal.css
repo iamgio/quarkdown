@@ -72,9 +72,17 @@ table tr th:last-child {
 }
 
 blockquote {
-    background-color: transparent;
-    border-left: 0.5em solid;
-    padding: 0;
+    font-style: italic;
+    border-left: 0.4em solid;
+    padding: 4px 1em;
+}
+
+blockquote .attribution {
+    opacity: 0.6;
+}
+
+blockquote .attribution::before {
+    content: "— ";
 }
 
 figure img {
@@ -115,22 +123,22 @@ figure figcaption {
 
 /* Table of contents */
 
-.table-of-contents, h1#table-of-contents {
+nav, h1#table-of-contents {
     margin-left: 44px;
 }
 
-.table-of-contents ol {
-    list-style-type: none;
+nav ol {
+    list-style-type: none !important;
 }
 
-.table-of-contents ol ol {
+nav ol ol {
     border-left: 2px solid;
     border-radius: 2px;
     margin-left: 1px;
     padding: 0 28px;
 }
 
-.table-of-contents li {
+nav li {
     margin: 4px 0;
 }
 

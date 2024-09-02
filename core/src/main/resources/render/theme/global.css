@@ -2,13 +2,14 @@
     /* Quarkdown exposed properties */
     --qd-background-color: inherit;
     --qd-main-color: inherit;
+    --qd-heading-color: var(--qd-main-color);
     --qd-link-color: inherit;
     --qd-main-font: inherit;
     --qd-main-font-size: 1em;
     --qd-code-font: monospace;
-    --qd-code-block-font-size: var(--qd-main-font-size); /* Font size of code blocks in non-slides documents */
-    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-code-span-font-size: var(--qd-main-font-size);
+    --qd-code-block-font-size: var(--qd-code-span-font-size); /* Font size of code blocks in non-slides documents */
+    --qd-slides-code-block-font-size: var(--qd-code-block-font-size); /* Font size of code blocks in slides documents */
     --qd-heading-font: inherit;
     --qd-block-margin: 32px;
     --qd-heading-margin: 40px 0 20px 0; /* Margin of headings in non-slides documents */
@@ -21,6 +22,7 @@
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
     --r-main-color: var(--qd-main-color);
+    --r-heading-color: var(--qd-heading-color);
     --r-link-color: var(--qd-link-color);
     --r-main-font: var(--qd-main-font);
     --r-main-font-size: var(--qd-main-font-size);
@@ -28,6 +30,24 @@
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
     --r-heading-margin: var(--qd-slides-heading-margin);
+
+    /* Overridable paged margin content */
+    --page-margin-top-left-corner-content: "";
+    --page-margin-top-left-content: "";
+    --page-margin-top-center-content: "";
+    --page-margin-top-right-content: "";
+    --page-margin-top-right-corner-content: "";
+    --page-margin-right-top-content: "";
+    --page-margin-right-middle-content: "";
+    --page-margin-right-bottom-content: "";
+    --page-margin-bottom-right-corner-content: "";
+    --page-margin-bottom-right-content: "";
+    --page-margin-bottom-center-content: "";
+    --page-margin-bottom-left-content: "";
+    --page-margin-bottom-left-corner-content: "";
+    --page-margin-left-bottom-content: "";
+    --page-margin-left-middle-content: "";
+    --page-margin-left-top-content: "";
 }
 
 .reveal .slides > :is(section, .pdf-page) {
@@ -49,8 +69,9 @@ body:has(.pagedjs_page) {
     background-color: lightgray;
 }
 
-hr {
-    width: 100%;
+/* Space between pages */
+.pagedjs_page {
+    margin-bottom: 3mm;
 }
 
 /* A divider in a row is vertical instead of horizontal */
@@ -62,6 +83,20 @@ hr {
 
 figure {
     text-align: center;
+}
+
+blockquote {
+    display: block;
+    margin: 0;
+}
+
+blockquote .attribution {
+    display: block !important;
+    margin-top: 0 !important;
+}
+
+hr {
+    width: 100%;
 }
 
 a {
@@ -77,6 +112,7 @@ ul, ol, hr,
 }
 
 h1, h2, h3, h4, h5, h6 {
+    color: var(--qd-heading-color);
     font-family: var(--qd-heading-font);
     margin: var(--qd-heading-margin);
     text-transform: none !important;
@@ -240,15 +276,78 @@ code.focus-lines .hljs-ln-line:not(.focused),
     margin-bottom: 8px;
 }
 
+/* Lists have different spacing depending on the target */
+.box > .box-content :is(ul, ol) {
+    padding-left: 18px;
+}
+
+.pagedjs_page .box > .box-content :is(ul, ol) {
+    padding-left: 24px;
+}
+
+.reveal .box > .box-content :is(ul, ol) {
+    padding-left: 4px;
+}
+/* End of the target-based styling */
+
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
+}
+
+.box.error-box > header > h4 {
+    color: white;
+}
+
+.box.warning-box {
+    background-color: rgb(244, 206, 94);
+    color: #333;
+}
+
+.box:is(.warning-box, .error-box) > header {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .marker {
     display: none;
 }
 
+.reveal pre {
+    width: 100% !important;
+}
+
+.reveal img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.stack > p, .clip > p {
+    margin: 0;
+}
+
+/* Table of contents */
+
+nav {
+    text-align: start;
+}
+
+h1#table-of-contents {
+    text-align: start;
+}
+
+nav li a {
+    text-decoration: none;
+}
+
+nav li a::after {
+    /* TOC page counter on supported targets */
+    content: target-counter(attr(href), page);
+    float: right;
+}
+
+/* Fixed page margins */
+
+/* For non-paged documents */
 .page-margin-content {
     position: absolute;
 }
@@ -317,33 +416,69 @@ code.focus-lines .hljs-ln-line:not(.focused),
     transform: rotate(-90deg) translateX(-50%);
 }
 
-.reveal pre {
-    width: 100% !important;
-}
+/* For paged documents */
+@page {
+    @top-left-corner {
+        content: var(--page-margin-top-left-corner-content);
+    }
 
-.reveal img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-}
+    @top-left {
+        content: var(--page-margin-top-left-content);
+    }
 
-.stack > p, .clip > p {
-    margin: 0;
-}
+    @top-center {
+        content: var(--page-margin-top-center-content);
+    }
 
-.table-of-contents {
-    text-align: start;
-}
+    @top-right {
+        content: var(--page-margin-top-right-content);
+    }
 
-h1#table-of-contents {
-    text-align: start;
-}
+    @top-right-corner {
+        content: var(--page-margin-top-right-corner-content);
+    }
 
-.table-of-contents li a {
-    text-decoration: none;
-}
+    @right-top {
+        content: var(--page-margin-right-top-content);
+    }
 
-.table-of-contents li a::after {
-    /* TOC page counter on supported targets */
-    content: target-counter(attr(href), page);
-    float: right;
+    @right-middle {
+        content: var(--page-margin-right-middle-content);
+    }
+
+    @right-bottom {
+        content: var(--page-margin-right-bottom-content);
+    }
+
+    @bottom-right-corner {
+        content: var(--page-margin-bottom-right-corner-content);
+    }
+
+    @bottom-right {
+        content: var(--page-margin-bottom-right-content);
+    }
+
+    @bottom-center {
+        content: var(--page-margin-bottom-center-content);
+    }
+
+    @bottom-left {
+        content: var(--page-margin-bottom-left-content);
+    }
+
+    @bottom-left-corner {
+        content: var(--page-margin-bottom-left-corner-content);
+    }
+
+    @left-bottom {
+        content: var(--page-margin-left-bottom-content);
+    }
+
+    @left-middle {
+        content: var(--page-margin-left-middle-content);
+    }
+
+    @left-top {
+        content: var(--page-margin-left-top-content);
+    }
 }

@@ -9,28 +9,29 @@
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
     --qd-code-font: "Noto Sans Mono", monospace;
-    --qd-slides-code-block-font-size: 1.25em;
     --qd-code-span-font-size: 0.9em;
+    --qd-code-block-font-size: 0.75em;
+    --qd-slides-code-block-font-size: 1.25em;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.2;
     --qd-slides-horizontal-alignment: start;
 }
 
 h1 {
-    font-size: 1.77em;
+    font-size: 2em;
     padding: 12px;
 }
 
 h2 {
-    font-size: 1.30em;
+    font-size: 1.5em;
 }
 
 h3 {
-    font-size: .95em;
+    font-size: 1.25em;
 }
 
 h4 {
-    font-size: .75em;
+    font-size: 1em;
 }
 
 p {
@@ -61,6 +62,20 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+blockquote {
+    font-style: italic;
+    opacity: 0.7;
+}
+
+blockquote .attribution {
+    opacity: 0.6;
+    text-align: end;
+}
+
+blockquote .attribution::before {
+    content: "— ";
+}
+
 pre code {
     line-height: 1.5;
 }
@@ -76,10 +91,6 @@ pre code {
 
 .box:has(> header) > .box-content {
     margin-top: 0;
-}
-
-.box > .box-content ul {
-    padding-left: 4px;
 }
 
 .codespan-content {

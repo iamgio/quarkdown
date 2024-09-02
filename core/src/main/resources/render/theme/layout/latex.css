@@ -1,0 +1,178 @@
+/* Inspired by latex-css https://github.com/vincentdoerig/latex-css */
+
+@import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
+
+:root {
+    --qd-main-font: "Computer Modern Serif", sans-serif;
+    --qd-main-font-size: 1rem;
+    --qd-heading-margin: 1.4em 0 1em 0;
+    --qd-code-font: "Computer Modern Mono", monospace;
+    --qd-code-span-font-size: 0.9em;
+    --qd-block-margin: 1.8em;
+    --qd-line-height: 1.8;
+
+    --page-margin-bottom-center-content: counter(page);
+
+    --border-width-thick: 2px;
+    --border-width-thin: 1px;
+    --table-border-color: black;
+}
+
+@page {
+    margin: 0.85in;
+}
+
+/* Headings */
+
+h1:first-child, *[data-hidden]:first-child ~ h1 {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 3.25rem;
+    margin-bottom: 1.625rem;
+}
+
+h2 {
+    font-size: 1.7rem;
+    line-height: 2rem;
+    margin-top: 3rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}
+
+h5 {
+    font-size: 1rem;
+    margin-top: 1.8rem;
+}
+
+h6 {
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: normal;
+    margin-top: 2.5rem;
+}
+
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.625rem;
+}
+
+h1 + h2 {
+    margin-top: 1.625rem;
+}
+
+h2 + h3,
+h3 + h4,
+h4 + h5 {
+    margin-top: 0.8rem;
+}
+
+h5 + h6 {
+    margin-top: -0.8rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 0.8rem;
+}
+
+/* Table */
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: auto;
+    max-width: 100%;
+    border-top: var(--border-width-thick) solid;
+    border-bottom: var(--border-width-thick) solid;
+}
+
+/* add bottom border on column table headings  */
+table tr > th[scope='col'] {
+    border-bottom: var(--border-width-thin) solid;
+}
+
+/* add right border on row table headings  */
+table tr > th[scope='row'] {
+    border-right: var(--border-width-thin) solid;
+}
+
+table > tbody > tr:first-child > td,
+table > tbody > tr:first-child > th {
+    border-top: var(--border-width-thin) solid;
+}
+
+table > tbody > tr:last-child > td,
+table > tbody > tr:last-child > th {
+    border-bottom: var(--border-width-thin) solid;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 0.5rem;
+    line-height: 1.1;
+}
+
+/* Misc */
+
+.box {
+    border-width: 0 0 0 2px;
+    border-style: solid;
+    border-radius: 8px;
+}
+
+.box > header {
+    padding: 12px;
+    border-radius: 6px 6px 0 0;
+}
+
+.box.callout-box {
+    border-radius: 8px 8px 8px 0;
+}
+
+.box.callout-box > header {
+    background-image: linear-gradient(to right, var(--primary), transparent);
+    background-color: transparent !important;
+}
+
+/* Table of contents */
+
+h1#table-of-contents {
+    text-align: start !important;
+}
+
+nav ol {
+    margin: 0;
+}
+
+nav > ol > li {
+    margin: 20px 0;
+}
+
+nav > ol > li > a {
+    font-weight: bold;
+}
+
+nav li {
+    margin-top: 6px;
+}
+
+/* TODO codespan, ... */

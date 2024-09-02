@@ -242,6 +242,12 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .poweredby {[MathJax](https://www.mathjax.org/)}
 
+## Quotation source
+
+.sourceresult
+    > To be, or not to be, that is the question.
+    > - William Shakespeare, Hamlet
+
 ## Image size
 
 .var {sizedimages}
@@ -262,7 +268,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 .row alignment:{center} gap:{1cm}
     .sizedimages
 
-## Labeled image
+## Labeled figure
 
 .sourceresult
     !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
@@ -275,9 +281,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 # It's a wrap
 
 You've seen the **key features** of Quarkdown — the door to making stunning documents is now open.  
-
-The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!  
-.text size:{small} content:{Just note that while `slides` documents are already stable and usable, `paged` ones are not yet.}
+The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!
 
 .box
     The **source code** of this presentation is available [**here**](https://github.com/iamgio/quarkdown/tree/main/demo).

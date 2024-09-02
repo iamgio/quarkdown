@@ -559,10 +559,23 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             BlockQuote(
-                listOf(
-                    Paragraph(listOf(Text("Foo bar"))),
-                    Paragraph(listOf(Text("Baz bim"))),
-                ),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("Foo bar"))),
+                        Paragraph(listOf(Text("Baz bim"))),
+                    ),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            BlockQuote(
+                attribution = listOf(Text("William Shakespeare")),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("To be, or not to be."))),
+                        Paragraph(listOf(Text("That is the question."))),
+                    ),
             ).render(),
         )
     }
@@ -683,7 +696,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
-                type = Box.Type.CALLOUT,
+                type = Box.Type.WARNING,
                 padding = null,
                 backgroundColor = null,
                 foregroundColor = null,

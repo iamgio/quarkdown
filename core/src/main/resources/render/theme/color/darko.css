@@ -8,8 +8,8 @@
     --qd-link-color: #5FC7C7;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: var(--qd-main-color) !important;
+blockquote {
+    background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 hr {
@@ -32,7 +32,7 @@ hr {
     background-color: rgba(34, 74, 81, .4);
 }
 
-.table-of-contents ol ol {
+nav ol ol {
     border-color: rgba(255, 255, 255, .1);
 }
 

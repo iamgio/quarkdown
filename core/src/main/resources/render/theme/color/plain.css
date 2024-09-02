@@ -1,11 +1,7 @@
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --qd-background-color: white;
 }
 
 table, td, th {
-    border: 1px black solid;
-}
-
-td, th {
-    padding: 8px;
+    border-color: black;
 }

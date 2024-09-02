@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.BlockText
@@ -357,11 +358,26 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         // Remove leading >
         val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
+        var children =
+            context.flavor.lexerFactory
+                .newBlockLexer(source = text)
+                .tokenizeAndParse()
+
+        // If the last child is a single-item unordered list, then it's not part of the blockquote,
+        // but rather its content is the attribution of the citation.
+        // Example:
+        // > To be, or not to be, that is the question.
+        // > - William Shakespeare
+        val attribution: InlineContent? =
+            (children.lastOrNull() as? UnorderedList)
+                ?.children?.singleOrNull()?.let { it as? ListItem } // Only lists with one item are considered.
+                ?.children?.firstOrNull()?.let { it as? TextNode } // Usually a paragraph.
+                ?.text // The text of the attribution, as inline content.
+                ?.also { children = children.dropLast(1) } // If found, the attribution is not part of the children.
+
         return BlockQuote(
-            children =
-                context.flavor.lexerFactory
-                    .newBlockLexer(source = text)
-                    .tokenizeAndParse(),
+            attribution,
+            children,
         )
     }
 

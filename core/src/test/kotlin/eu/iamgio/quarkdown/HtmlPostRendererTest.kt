@@ -6,7 +6,6 @@ import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
-import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
@@ -234,6 +233,8 @@ class HtmlPostRendererTest {
         val context = MutableContext(QuarkdownFlavor)
         context.documentInfo.type = DocumentType.SLIDES
         context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
+        context.attributes.hasMath = true
+        context.attributes.hasCode = false
 
         val postRenderer = HtmlPostRenderer(context)
         val html = "<html><head></head><body></body></html>"
@@ -245,13 +246,7 @@ class HtmlPostRendererTest {
             assertEquals(html, it.content)
         }
 
-        resources.filterIsInstance<LazyOutputArtifact>().first { it.type == ArtifactType.JAVASCRIPT }.let {
-            assertEquals("slides", it.name)
-            assertTrue("Reveal" in String(it.content()))
-        }
-
-        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first()
-        assertEquals("theme", themeGroup.name)
+        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
 
         themeGroup.resources.map { it.name }.let { themes ->
             assertTrue("darko" in themes)
@@ -270,6 +265,15 @@ class HtmlPostRendererTest {
                 """.trimIndent(),
                 it.content,
             )
+        }
+
+        val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
+
+        scriptGroup.resources.map { it.name }.let { scripts ->
+            assertTrue("script" in scripts)
+            assertTrue("slides" in scripts)
+            assertTrue("math" in scripts)
+            assertTrue("code" !in scripts)
         }
     }
 }
