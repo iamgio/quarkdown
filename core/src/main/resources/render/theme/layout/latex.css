@@ -142,7 +142,7 @@ td {
 /* Quotes */
 
 blockquote {
-    padding: 4px 1.5em;
+    padding: 4px 1.5em !important;
     border-left: 2px solid;
     font-style: italic;
 }
