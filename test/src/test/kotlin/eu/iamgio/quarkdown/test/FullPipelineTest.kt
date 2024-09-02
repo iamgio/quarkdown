@@ -831,14 +831,14 @@ class FullPipelineTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
-                    "<div class=\"table-of-contents\"><ol>" +
+                    "<nav><ol>" +
                     "<li><a href=\"#abc\">ABC</a>" +
                     "<ol><li><a href=\"#abc1\"><em>ABC/1</em></a></li></ol></li>" +
                     "<li><a href=\"#def\">DEF</a>" +
                     "<ol><li><a href=\"#def1\">DEF/1</a>" +
                     "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
                     "</ol></li></ol></li>" +
-                    "</ol></div>" +
+                    "</ol></nav>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
                     "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
@@ -869,10 +869,10 @@ class FullPipelineTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
-                    "<div class=\"table-of-contents\"><ol>" +
+                    "<nav><ol>" +
                     "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
                     "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
-                    "</ol></div>" +
+                    "</ol></nav>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1>" +
@@ -900,10 +900,10 @@ class FullPipelineTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\">TOC</h1>" +
-                    "<div class=\"table-of-contents\"><ol>" +
+                    "<nav><ol>" +
                     "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
                     "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
-                    "</ol></div>" +
+                    "</ol></nav>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"abc\">ABC</h1>" +
                     "<h2 id=\"x\">X</h2>" +

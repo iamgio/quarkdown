@@ -23,6 +23,6 @@ pre code {
     background-color: var(--primary);
 }
 
-.table-of-contents ol ol {
+nav ol ol {
     border-color: var(--qd-main-color)
 }

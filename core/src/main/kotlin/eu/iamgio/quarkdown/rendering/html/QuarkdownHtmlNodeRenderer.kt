@@ -183,7 +183,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 customId = "table-of-contents",
             ) // In the future, the default title should be localized.
             // Content
-            +div("table-of-contents") {
+            +buildTag("nav") {
                 +tableOfContentsItemsToList(tableOfContents.items, node)
             }
         }

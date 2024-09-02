@@ -159,19 +159,19 @@ h1#table-of-contents {
     text-align: start !important;
 }
 
-.table-of-contents ol {
+nav ol {
     margin: 0;
 }
 
-.table-of-contents > ol > li {
+nav > ol > li {
     margin: 20px 0;
 }
 
-.table-of-contents > ol > li > a {
+nav > ol > li > a {
     font-weight: bold;
 }
 
-.table-of-contents li {
+nav li {
     margin-top: 6px;
 }
 

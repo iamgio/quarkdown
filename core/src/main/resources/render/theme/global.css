@@ -325,7 +325,9 @@ code.focus-lines .hljs-ln-line:not(.focused),
     margin: 0;
 }
 
-.table-of-contents {
+/* Table of contents */
+
+nav {
     text-align: start;
 }
 
@@ -333,11 +335,11 @@ h1#table-of-contents {
     text-align: start;
 }
 
-.table-of-contents li a {
+nav li a {
     text-decoration: none;
 }
 
-.table-of-contents li a::after {
+nav li a::after {
     /* TOC page counter on supported targets */
     content: target-counter(attr(href), page);
     float: right;
