@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>[[TITLE]]</title>
+    <script src="script/script.js"></script>
     [[if:PAGED]]
     <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <script src="script/paged.js"></script>
     [[endif:PAGED]]
     [[if:SLIDES]]
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,7 +17,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.css">
     [[endif:SLIDES]]
     <link rel="stylesheet" href="theme/theme.css">
-    <script src="script/script.js"></script>
     <script>
         [[if:SLIDES]]
         docType = SLIDES;

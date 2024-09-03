@@ -143,6 +143,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
 
             pushArtifact("script")
             pushArtifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
+            pushArtifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
             pushArtifact("math", condition = context.attributes.hasMath)
             pushArtifact("code", condition = context.attributes.hasCode)
         }
