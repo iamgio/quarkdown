@@ -29,13 +29,7 @@ function isPaged() {
 // Sets up the execution of the queue based on the document type.
 function setupQueueExecution() {
     if (isPaged()) {
-        class PagedExecutionHandler extends Paged.Handler {
-            afterPreview() {
-                executeQueue();
-            }
-        }
-
-        Paged.registerHandlers(PagedExecutionHandler);
+        setupPagedHandler();
         return;
     }
 

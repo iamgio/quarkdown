@@ -1,7 +1,32 @@
+// A page margin content initializer is an element that will be copied into each page,
+// and is placed on one of the page margins.
+let pageMarginInitializers;
+
+function setupPagedHandler() {
+    class PagedExecutionHandler extends Paged.Handler {
+        beforeParsed(content) {
+            // Load page margin content initializers.
+            pageMarginInitializers = content.querySelectorAll('.page-margin-content');
+            // Initializers are removed from the content before paged.js is launched
+            // in order to avoid blank pages.
+            pageMarginInitializers.forEach(initializer => initializer.remove());
+        }
+
+        afterPreview() {
+            executeQueue();
+        }
+    }
+
+    Paged.registerHandlers(PagedExecutionHandler);
+}
+
+// Copies the content of each page margin content initializer to each page.
 function setupPageMargins() {
-    // A page margin content initializer is an element that will be copied into each section,
-    // and is placed on one of the page margins.
-    const pageMarginInitializers = document.querySelectorAll('.page-margin-content');
+    if (!pageMarginInitializers) {
+        console.error('pageMarginInitializers not set');
+        return;
+    }
+
     // <div class="page-margin-content-initializer page-margin-bottom-center">Hello</div>
     // will be copied to each page as:
     // <div class="pagedjs_margin-content">Hello</div>
@@ -15,13 +40,10 @@ function setupPageMargins() {
         // the margin class will be "pagedjs_margin-bottom-center".
         const pageMargins = document.querySelectorAll('.pagedjs_margin-' + initializer.className.split('page-margin-').pop());
         pageMargins.forEach(pageMargin => {
-            console.log(pageMargin);
             pageMargin.classList.add('hasContent');
             // Append the content.
             pageMargin.querySelector('.pagedjs_margin-content').appendChild(marginContent.cloneNode(true));
         });
-
-        initializer.remove();
     });
 }
 
