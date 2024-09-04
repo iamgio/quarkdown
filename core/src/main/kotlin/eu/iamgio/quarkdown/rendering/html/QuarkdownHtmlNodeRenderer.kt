@@ -29,7 +29,6 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitialize
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.context.toc.TableOfContents
-import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -225,28 +224,16 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         visit(
             PageMarginContentInitializer(
                 children =
-                    when (context.documentInfo.type) {
-                        DocumentType.PAGED ->
-                            // Handled by PagedJS CSS content property.
-                            node.content(
-                                "\"counter(page)\"",
-                                "\"counter(pages)\"",
-                            )
-
-                        DocumentType.SLIDES ->
-                            node.content(
-                                // Get the current slide index.
-                                tagBuilder("span")
-                                    .`class`("current-page-number")
-                                    .build(),
-                                // Get the total amount of slides.
-                                tagBuilder("span")
-                                    .`class`("total-page-number")
-                                    .build(),
-                            )
-
-                        else -> node.content("-", "-") // Placeholder for document types that don't support page counters.
-                    },
+                    node.content(
+                        // The current page number.
+                        tagBuilder("span")
+                            .`class`("current-page-number")
+                            .build(),
+                        // The total amount of pages.
+                        tagBuilder("span")
+                            .`class`("total-page-number")
+                            .build(),
+                    ),
                 position = node.position,
             ),
         )

@@ -362,6 +362,10 @@ nav li a::after {
     float: right;
 }
 
+span.current-page-number, span.total-page-number {
+    display: inline !important;
+}
+
 /* Fixed page margins */
 
 /* For non-paged documents */

@@ -50,4 +50,23 @@ function setupPageMargins() {
     });
 }
 
+// Updates the content of .current-page-number and .total-page-number elements.
+function updatePageNumberElements() {
+    const pages = document.querySelectorAll('.pagedjs_page')
+    // Inject the total amount of pages into .total-page-number elements.
+    const amount = pages.length;
+    document.querySelectorAll('.total-page-number').forEach(total => {
+        total.innerText = amount;
+    });
+
+    pages.forEach(page => {
+        // Inject the current page number into .current-page-number elements.
+        const number = page.getAttribute('data-page-number');
+        page.querySelectorAll('.current-page-number').forEach(pageNumber => {
+            pageNumber.innerText = number;
+        });
+    });
+}
+
 executionQueue.push(setupPageMargins);
+executionQueue.push(updatePageNumberElements);
