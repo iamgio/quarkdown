@@ -38,8 +38,11 @@ class FunctionCallPatterns {
             TokenRegexPattern(
                 name = "FunctionCall",
                 wrap = { FunctionCallToken(it, isBlock = true) },
+                // The current operation to make sure the function call is not followed by other non-function content
+                // is just checking if the line ends with an argument end character (}).
+                // This works in most cases, but it should be improved soon with some better check.
                 regex =
-                    RegexBuilder("^ {0,3}call")
+                    RegexBuilder("^ {0,3}call(?=(?:.*})?\\s*\$)")
                         .withReference("call", inlineFunctionCall.regex.pattern)
                         .build(),
                 // Arguments are scanned by the walker lexer.

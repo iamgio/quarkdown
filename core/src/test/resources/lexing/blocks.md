@@ -70,6 +70,8 @@ Paragraph
 
 - A
 - B
+.inlinefunction {arg1} {arg2} {arg3}
+
 .blockfunction {arg1} {arg2} {arg3}
 
 .inlinefunction {arg1} {arg2} text
