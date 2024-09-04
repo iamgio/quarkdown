@@ -365,8 +365,12 @@ nav li a::after {
 /* Fixed page margins */
 
 /* For non-paged documents */
-.page-margin-content {
+.page-margin-content:not(.pagedjs_page .page-margin-content) {
     position: absolute;
+}
+
+.pagedjs_margin-left-top, .pagedjs_margin-right-top {
+    display: block;
 }
 
 .page-margin-top-left-corner, .page-margin-top-left {
@@ -388,19 +392,22 @@ nav li a::after {
 .page-margin-right-top {
     top: 0;
     right: 0;
-    transform: rotate(90deg) translateX(50%);
+    rotate: 90deg;
+    transform: translateX(50%);
 }
 
 .page-margin-right-middle {
     top: 50%;
     right: 0;
-    transform: rotate(90deg) translateX(-50%);
+    rotate: 90deg;
+    transform: translateX(-50%);
 }
 
 .page-margin-right-bottom {
     bottom: 0;
     right: 0;
-    transform: rotate(90deg) translateX(-50%);
+    rotate: 90deg;
+    transform: translateX(-50%);
 }
 
 .page-margin-bottom-right-corner, .page-margin-bottom-right {
@@ -421,16 +428,30 @@ nav li a::after {
     transform: translateX(50%);
 }
 
+.page-margin-left-bottom {
+    bottom: 0;
+    left: 0;
+    rotate: -90deg;
+    transform: translateY(-50%);
+}
+
 .page-margin-left-middle {
     top: 50%;
     left: 0;
-    transform: rotate(-90deg) translateY(-50%);
+    rotate: -90deg;
+    transform: translateY(-50%);
 }
 
 .page-margin-left-top {
     top: 0;
     left: 0;
-    transform: rotate(-90deg) translateX(-50%);
+    rotate: -90deg;
+    transform: translateX(-50%);
+}
+
+.pagedjs_page .page-margin-content {
+    /* Removes translations from the margin content of paged documents */
+    transform: none;
 }
 
 /* For paged documents */
