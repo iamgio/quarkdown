@@ -40,9 +40,12 @@ function setupPageMargins() {
         // the margin class will be "pagedjs_margin-bottom-center".
         const pageMargins = document.querySelectorAll('.pagedjs_margin-' + initializer.className.split('page-margin-').pop());
         pageMargins.forEach(pageMargin => {
-            pageMargin.classList.add('hasContent');
+            pageMargin.classList.add('hasContent'); // Required by paged.js to show the content.
+
             // Append the content.
-            pageMargin.querySelector('.pagedjs_margin-content').appendChild(marginContent.cloneNode(true));
+            const container = pageMargin.querySelector('.pagedjs_margin-content');
+            container.classList.add(...initializer.classList); // Copy the classes, allows for styling.
+            container.innerHTML = initializer.innerHTML; // Copy the content of the initializer to each page.
         });
     });
 }
