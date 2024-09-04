@@ -3,9 +3,8 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
-import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -25,7 +24,6 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
-import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
 
@@ -44,7 +42,8 @@ val Document: Module =
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
-        ::pageCounter,
+        ::currentPage,
+        ::totalPages,
         ::autoPageBreak,
         ::disableAutoPageBreak,
         ::marker,
@@ -242,34 +241,22 @@ fun footer(content: MarkdownContent): NodeValue =
     )
 
 /**
- * Sets the global page counter for a paged document.
- * @param position position of the counter within the page
- * @param text action that returns the text of the counter.
- *             Accepts two arguments: index of the current page and total amount of pages.
- *             Markdown content is not supported.
- * @return a wrapped [PageCounterInitializer] node
+ * Displays the index (beginning from 1) of the page this element lies in.
+ * In case the current document type does not support page counting (e.g. plain document),
+ * a placeholder is used.
+ * @return a [PageCounter] node
  */
-@Name("pagecounter")
-fun pageCounter(
-    @Injected context: Context,
-    position: PageMarginPosition = PageMarginPosition.BOTTOM_CENTER,
-    text: Lambda =
-        Lambda(context) { (current, total), _ ->
-            "$current / $total".wrappedAsValue()
-        },
-): NodeValue =
-    PageCounterInitializer(
-        content = { current, total ->
-            val textValue =
-                text.invoke<String, StringValue>(
-                    StringValue(current),
-                    StringValue(total),
-                ).unwrappedValue
+@Name("currentpage")
+fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
 
-            listOf(Text(textValue))
-        },
-        position,
-    ).wrappedAsValue()
+/**
+ * Displays the total amount of pages in the document.
+ * In case the current document type does not support page counting (e.g. plain document),
+ * a placeholder is used.
+ * @return a [PageCounter] node
+ */
+@Name("totalpages")
+fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 
 /**
  * Sets a new automatic page break threshold when a heading is found:

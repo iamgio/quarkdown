@@ -21,9 +21,9 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
-import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
@@ -220,23 +220,19 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         // In slides and paged documents, these elements are copied to each page through the slides.js or paged.js script.
         div("page-margin-content page-margin-${node.position.asCSS}", node.children)
 
-    override fun visit(node: PageCounterInitializer) =
-        visit(
-            PageMarginContentInitializer(
-                children =
-                    node.content(
-                        // The current page number.
-                        tagBuilder("span")
-                            .`class`("current-page-number")
-                            .build(),
-                        // The total amount of pages.
-                        tagBuilder("span")
-                            .`class`("total-page-number")
-                            .build(),
-                    ),
-                position = node.position,
-            ),
-        )
+    override fun visit(node: PageCounter) =
+        // The current or total page number.
+        // The actual number is filled by a script at runtime
+        // (either slides.js or paged.js, depending on the document type).
+        buildTag("span") {
+            +"-" // The default placeholder in case it is not filled by a script (e.g. plain documents).
+            `class`(
+                when (node.target) {
+                    PageCounter.Target.CURRENT -> "current-page-number"
+                    PageCounter.Target.TOTAL -> "total-page-number"
+                },
+            )
+        }
 
     override fun visit(node: SlidesConfigurationInitializer): CharSequence =
         buildTag("script") {
