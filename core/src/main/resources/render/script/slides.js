@@ -93,13 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
             slideBackgrounds.forEach(slideBackground => {
                 slideBackground.appendChild(pageMargin.cloneNode(true));
             });
+
+            updateSlideNumberElements();
         });
-
-        updateTotalSlideNumberElements()
-        updateCurrentSlideNumberElements(event.indexh);
     });
-
-    Reveal.addEventListener('slidechanged', event => updateCurrentSlideNumberElements(event.indexh));
 
     // Used to check if a property was injected (see below).
     const undef = 'undefined';
@@ -116,18 +113,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function updateTotalSlideNumberElements() {
-    // Inject the total amount of slides into .total-page-number elements.
-    const amount = document.querySelectorAll('.reveal .slides > section').length;
-    document.querySelectorAll('.total-page-number').forEach(total => {
-        total.innerText = amount;
-    });
-}
+// Sets the current and total slide number to the elements with the classes .current-page-number and .total-page-number
+function updateSlideNumberElements() {
+    const slides = document.querySelectorAll('.reveal .slides > :is(section, div)');
 
-function updateCurrentSlideNumberElements(index) {
-    // Inject the current slide number into .current-page-number elements every time.
+    // Inject the total amount of slides into .total-page-number elements.
+    document.querySelectorAll('.total-page-number').forEach(total => {
+        total.innerText = slides.length;
+    });
+
+    // Inject the current slide number into .current-page-number elements.
+    // This approach allows for a static evaluation of the number, without relying on Reveal's dynamic events.
     document.querySelectorAll('.current-page-number').forEach(current => {
-        current.innerText = index + 1;
+        // The page counter can be either in a slide or a background.
+        const container = current.closest('.reveal > :is(.slides, .backgrounds)');
+        const ownSlide = current.closest('.reveal > :is(.slides, .backgrounds) > :is(section, div)');
+
+        current.innerText = Array.from(container.children).indexOf(ownSlide) + 1;
     });
 }
 
