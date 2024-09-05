@@ -218,7 +218,7 @@ fun pageFormat(
  * @param content content to be displayed on each page
  * @return a wrapped [PageMarginContentInitializer] node
  */
-@Name("pagemargincontent")
+@Name("pagemargin")
 fun pageMarginContent(
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
     content: MarkdownContent,
