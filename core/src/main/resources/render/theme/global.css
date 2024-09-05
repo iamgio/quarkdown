@@ -307,6 +307,8 @@ code.focus-lines .hljs-ln-line:not(.focused),
 
 /* End of the target-based styling */
 
+/* Box types */
+
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
@@ -332,6 +334,31 @@ code.focus-lines .hljs-ln-line:not(.focused),
     color: rgb(25, 60, 102);
 }
 
+/* Box icons */
+
+.box > header > h4::before {
+    font-family: 'boxicons', monospace;
+    font-weight: normal;
+    float: left;
+    width: 18px;
+    margin-right: 6px;
+}
+
+.box:is(.warning-box, .tip-box) > header > h4 {
+    margin-right: 24px; /* 18px icon + 6px margin, used to realign text to the center */
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Align icons */
+}
+
+.box.warning-box > header > h4::before {
+    content: "\eac5"; /* 'error' (triangle) icon */
+}
+
+.box.tip-box > header > h4::before {
+    content: "\ecf7"; /* 'bulb' icon */
+}
+
 .box:is(.warning-box, .error-box) > header {
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -339,6 +366,8 @@ code.focus-lines .hljs-ln-line:not(.focused),
 .box.tip-box > header {
     background-color: rgba(25, 60, 102, 0.1);
 }
+
+/* End of box styling */
 
 .marker {
     display: none;
