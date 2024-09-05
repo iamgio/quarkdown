@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -123,6 +124,16 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "background-color" value node.backgroundColor
                 "color" value node.foregroundColor
             }
+        }
+
+    override fun visit(node: Collapse) =
+        buildTag("details") {
+            if (node.isOpen) {
+                attribute("open", "")
+            }
+
+            tag("summary") { +node.title }
+            +node.children
         }
 
     override fun visit(node: Whitespace) =

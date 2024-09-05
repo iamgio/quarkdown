@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -32,6 +33,7 @@ val Layout: Module =
         ::whitespace,
         ::clip,
         ::box,
+        ::collapse,
         ::table,
     )
 
@@ -163,6 +165,18 @@ fun box(
     @Name("foreground") foregroundColor: Color? = null,
     body: MarkdownContent,
 ) = Box(title?.children, type, padding, backgroundColor, foregroundColor, body.children).wrappedAsValue()
+
+/**
+ * Inserts content in a collapsible block, whose content can be hidden or shown by interacting with it.
+ * @param title title of the block
+ * @param open whether the block is open at the beginning
+ * @return the new [Collapse] node
+ */
+fun collapse(
+    title: InlineMarkdownContent,
+    open: Boolean = false,
+    body: MarkdownContent,
+) = Collapse(title.children, open, body.children).wrappedAsValue()
 
 /**
  * Creates a table out of a collection of columns.

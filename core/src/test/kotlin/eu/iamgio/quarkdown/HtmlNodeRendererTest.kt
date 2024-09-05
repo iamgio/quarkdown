@@ -34,6 +34,7 @@ import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
@@ -725,6 +726,29 @@ class HtmlNodeRendererTest {
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun collapse() {
+        val out = readParts("quarkdown/collapse.html")
+
+        assertEquals(
+            out.next(),
+            Collapse(
+                title = listOf(Emphasis(listOf(Text("Hello")))),
+                isOpen = false,
+                children = listOf(Strong(listOf(Text("world")))),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Collapse(
+                title = listOf(Text("Hello")),
+                isOpen = true,
+                children = listOf(BlockQuote(children = listOf(Paragraph(listOf(Text("world")))))),
             ).render(),
         )
     }
