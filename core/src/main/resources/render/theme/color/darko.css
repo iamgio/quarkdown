@@ -29,6 +29,19 @@ hr {
     color: inherit;
 }
 
+.box.tip-box {
+    background-color: rgb(52, 79, 117);
+    color: white;
+}
+
+.box.tip-box > header {
+    background-color: rgb(10, 17, 26, 0.15);
+}
+
+.box.tip-box > header > h4 {
+    color: rgb(194, 236, 250);
+}
+
 .codespan-content:not(.box .codespan-content) {
     background-color: rgba(34, 74, 81, .4);
 }

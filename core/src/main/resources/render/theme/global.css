@@ -312,17 +312,32 @@ code.focus-lines .hljs-ln-line:not(.focused),
     color: white;
 }
 
+.box.warning-box {
+    background-color: rgb(244, 206, 94);
+}
+
+.box.tip-box {
+    background-color: rgb(173, 216, 230);
+}
+
 .box.error-box > header > h4 {
     color: white;
 }
 
-.box.warning-box {
-    background-color: rgb(244, 206, 94);
+.box:is(.warning-box, .tip-box) {
     color: #333;
+}
+
+.box.tip-box > header > h4 {
+    color: rgb(25, 60, 102);
 }
 
 .box:is(.warning-box, .error-box) > header {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.box.tip-box > header {
+    background-color: rgba(25, 60, 102, 0.1);
 }
 
 .marker {

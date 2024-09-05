@@ -41,6 +41,11 @@ data class Box(
         CALLOUT,
 
         /**
+         * A tip.
+         */
+        TIP,
+
+        /**
          * A warning.
          */
         WARNING,
