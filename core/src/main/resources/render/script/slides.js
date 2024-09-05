@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Copy the content of each global page margin initializer to the background of each section.
-    Reveal.addEventListener('ready', function (event) {
+    Reveal.addEventListener('ready', function () {
         // <div class="page-margin-content-initializer page-margin-bottom-center">Hello</div>
         // will be copied to each section as:
         // <div class="page-margin-content page-margin-bottom-center">Hello</div>
