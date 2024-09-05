@@ -14,8 +14,6 @@
     --qd-line-height: 1.5;
     --qd-slides-horizontal-alignment: start;
 
-    --page-margin-bottom-center-content: counter(page);
-
     --border-width-thick: 2px;
     --border-width-thin: 1px;
     --table-border-color: black;
