@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.inline.CriticalContent
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -68,7 +69,7 @@ inline fun <reified T : Node> NestableNode.findAll(): Sequence<T> = flattenedChi
 /**
  * Converts processed [InlineContent] to its plain text representation.
  * For example, the Markdown input `foo **bar `baz`**` has `foo bar baz` as its plain text.
- * @param renderer optional renderer to use to render critical content
+ * @param renderer optional renderer to use to render critical content and text symbols
  * @return plain text of the inline content
  * @see PlainTextNode
  */
@@ -79,6 +80,7 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
     AstRoot(this).flattenedChildren().forEach {
         when {
             it is CriticalContent && renderer != null -> builder.append(renderer.visit(it))
+            it is TextSymbol && renderer != null -> builder.append(renderer.visit(it))
             it is PlainTextNode -> builder.append(it.text)
         }
     }

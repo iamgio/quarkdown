@@ -184,10 +184,10 @@ class FullPipelineTest {
 
         execute(
             """
-            This link doesn't exist: [link][Link definition]
+            This link does not exist: [link][Link definition]
             """.trimIndent(),
         ) {
-            assertEquals("<p>This link doesn&#39;t exist: [link][Link definition]</p>", it)
+            assertEquals("<p>This link does not exist: [link][Link definition]</p>", it)
             assertTrue(attributes.linkDefinitions.isEmpty())
         }
     }
@@ -230,10 +230,10 @@ class FullPipelineTest {
 
         execute(
             """
-            This image doesn't exist: ![Alt text][Alt text]
+            This image does not exist: ![Alt text][Alt text]
             """.trimIndent(),
         ) {
-            assertEquals("<p>This image doesn&#39;t exist: ![Alt text][Alt text]</p>", it)
+            assertEquals("<p>This image does not exist: ![Alt text][Alt text]</p>", it)
             assertTrue(attributes.linkDefinitions.isEmpty())
         }
     }

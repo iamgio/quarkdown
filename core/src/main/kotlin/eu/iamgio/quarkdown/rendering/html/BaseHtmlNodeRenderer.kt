@@ -41,6 +41,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -52,6 +53,7 @@ import eu.iamgio.quarkdown.rendering.tag.TagNodeRenderer
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 import eu.iamgio.quarkdown.util.toPlainText
+import org.apache.commons.text.StringEscapeUtils
 
 /**
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
@@ -224,6 +226,8 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
             .build()
 
     override fun visit(node: Text) = node.text
+
+    override fun visit(node: TextSymbol) = StringEscapeUtils.escapeHtml4(node.text)!! // e.g. © -> &copy;
 
     override fun visit(node: CodeSpan) = buildTag("code", escapeCriticalContent(node.text))
 

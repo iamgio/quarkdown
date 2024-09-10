@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.lexer.tokens
 
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.patterns.TextSymbolReplacement
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 // Inline tokens
@@ -146,6 +147,16 @@ class PlainTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
+/**
+ * A sequence of characters that is replaced with a symbol (e.g. `(C)` -> ©).
+ * This is a Quarkdown extension.
+ * @param symbol symbol type
+ * @see eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
+ */
+class TextSymbolToken(data: TokenData, val symbol: TextSymbolReplacement) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
 // Emphasis
 
 /**
@@ -206,7 +217,7 @@ class StrikethroughToken(data: TokenData) : Token(data) {
 /**
  * A one-line fenced block that contains a TeX expression.
  * If it's isolated, then it's a [OnelineMathToken].
- * This is a custom Quarkdown block.
+ * This is a Quarkdown extension.
  *
  * Example:
  * $ LaTeX expression $

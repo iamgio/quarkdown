@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
+import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 
 /**
@@ -29,6 +30,8 @@ interface InlineTokenVisitor<T> {
     fun visit(token: EntityToken): T
 
     fun visit(token: CriticalContentToken): T
+
+    fun visit(token: TextSymbolToken): T
 
     fun visit(token: CommentToken): T
 

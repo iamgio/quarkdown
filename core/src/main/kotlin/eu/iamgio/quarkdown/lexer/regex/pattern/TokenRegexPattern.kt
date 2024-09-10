@@ -16,9 +16,9 @@ import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
  * @param walker if present, upon being captured, produces a [WalkerLexer] that scans the given [CharSequence] source
  */
 data class TokenRegexPattern(
-    val name: String,
+    override val name: String,
     val wrap: (TokenData) -> Token,
-    val regex: Regex,
+    override val regex: Regex,
     val groupNames: List<String> = emptyList(),
     val walker: ((CharSequence) -> WalkerLexer)? = null,
-)
+) : NamedRegexPattern

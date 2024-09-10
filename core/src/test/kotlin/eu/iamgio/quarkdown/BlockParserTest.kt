@@ -287,7 +287,7 @@ class BlockParserTest {
             assertEquals(1, children.size)
             children.first().let { inner ->
                 assertIs<BlockQuote>(inner)
-                assertEquals("You miss 100% of the shots you don't take.", inner.children.toPlainText())
+                assertEquals("You miss 100% of the shots you don’t take.", inner.children.toPlainText())
                 assertEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
             }
             assertEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())

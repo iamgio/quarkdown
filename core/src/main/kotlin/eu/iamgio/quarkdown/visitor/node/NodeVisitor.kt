@@ -41,6 +41,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -102,6 +103,8 @@ interface NodeVisitor<T> {
     fun visit(node: CheckBox): T
 
     fun visit(node: Text): T
+
+    fun visit(node: TextSymbol): T
 
     fun visit(node: CodeSpan): T
 

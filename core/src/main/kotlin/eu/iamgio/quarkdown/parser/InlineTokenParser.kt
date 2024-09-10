@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
@@ -37,6 +38,7 @@ import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
+import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 import eu.iamgio.quarkdown.misc.Color
 import eu.iamgio.quarkdown.util.iterator
@@ -122,6 +124,12 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
 
     override fun visit(token: CriticalContentToken): Node {
         return CriticalContent(token.data.text)
+    }
+
+    override fun visit(token: TextSymbolToken): Node {
+        // The symbol is then treated separately from text in the renderer.
+        // e.g. the HTML renderer converts the symbol to its corresponding HTML entity (© -> &copy;).
+        return TextSymbol(token.symbol.result)
     }
 
     override fun visit(token: CommentToken): Node {
