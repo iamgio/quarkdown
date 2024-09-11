@@ -81,28 +81,28 @@ enum class TextSymbolReplacement(val result: String, val regex: Regex) {
      *
      * Must not be preceded by a word and must be followed by a word character.
      */
-    TYPOGRAPHIC_LEFT_APOSTROPHE("‘", "(?<=\\s|^)'\\w".toRegex()),
+    TYPOGRAPHIC_LEFT_APOSTROPHE("‘", "(?<=\\s|^)'(?=\\w)".toRegex()),
 
     /**
      * `'` -> `’`
      *
-     * Must be preceded by a word character.
+     * Must not be preceded by a whitespace.
      */
-    TYPOGRAPHIC_RIGHT_APOSTROPHE("’", "(?<=\\w)'".toRegex()),
+    TYPOGRAPHIC_RIGHT_APOSTROPHE("’", "(?<!\\s)'".toRegex()),
 
     /**
      * `"` -> `“`
      *
-     * Must not be preceded by a word and must be followed by a word character.
+     * Must not be preceded by a word character and must be followed by a word character.
      */
-    TYPOGRAPHIC_LEFT_QUOTATION_MARK("“", "(?<=\\s|^)\"(?=\\w)".toRegex()),
+    TYPOGRAPHIC_LEFT_QUOTATION_MARK("“", "(?<!\\w)\"(?=\\w)".toRegex()),
 
     /**
      * `"` -> `”`
      *
-     * Must be preceded by a word character and not followed by a word character.
+     * Must not be preceded by a whitespace and not followed by a word character.
      */
-    TYPOGRAPHIC_RIGHT_QUOTATION_MARK("”", "(?<=\\w)\"(?!\\w)".toRegex()),
+    TYPOGRAPHIC_RIGHT_QUOTATION_MARK("”", "(?<!\\s)\"(?!\\w)".toRegex()),
     ;
 
     /**
