@@ -37,7 +37,7 @@ Export your Quarkdown project as:
       a plain document.
 
 .fragment
-    *…in just one line, within your code.*
+    *...in just one line, within your code.*
 
     .row gap:{5mm}
         ```
@@ -50,7 +50,7 @@ Export your Quarkdown project as:
         .doctype {plain}
         ```
 
-# Same foundations…
+# Same foundations...
 
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
@@ -75,7 +75,7 @@ so that you'll feel at home typing code you're comfortable typing.
     Somebody once said:
     > Write once, run **anywhere**.
     
-# …brand-new everything
+# ...brand-new everything
 
 Go ahead to discover Quarkdown's capabilities.
 
@@ -280,7 +280,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 # It's a wrap
 
-You've seen the **key features** of Quarkdown — the door to making stunning documents is now open.  
+You've seen the **key features** of Quarkdown - the door to making stunning documents is now open.  
 The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!
 
 .box
