@@ -38,6 +38,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.context.BaseContext
@@ -281,6 +282,7 @@ class HtmlNodeRendererTest {
     @Test
     fun text() {
         assertEquals("Foo bar", Text("Foo bar").render())
+        assertEquals("&copy;", TextSymbol('©').render())
     }
 
     @Test

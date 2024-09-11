@@ -127,6 +127,23 @@ class FullPipelineTest {
             assertEquals("<p>Hello, world!</p>", it)
         }
 
+        execute(
+            """
+            > This is a **"quote"** with 'text *replacement*'.  
+            > This is a feature of Quarkdown - the Turing complete Markdown - by iamgio (C) 2024.
+            > => Quarkdown != other Markdown flavors... <-
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<blockquote><p>" +
+                    "This is a <strong>&ldquo;quote&rdquo;</strong> with &lsquo;text <em>replacement</em>&rsquo;.<br />" +
+                    "This is a feature of Quarkdown &mdash; the Turing complete Markdown &mdash; by iamgio &copy; 2024.\n" +
+                    "&rArr; Quarkdown &ne; other Markdown flavors&hellip; &larr;" +
+                    "</p></blockquote>",
+                it,
+            )
+        }
+
         execute(".noautopagebreak\n# Title\n Hello, world!\n## Subtitle\nHello, world!") {
             assertEquals(
                 "<h1>Title</h1><p>Hello, world!</p><h2>Subtitle</h2><p>Hello, world!</p>",
@@ -455,7 +472,9 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 (
-                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\" data-hidden=\"\"></div><h1>Title 1</h1>".repeat(2) +
+                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\" data-hidden=\"\"></div><h1>Title 1</h1>".repeat(
+                        2,
+                    ) +
                         "<p>Some text</p>"
                 ).repeat(2) + "<h3>Title 3</h3>",
                 it,

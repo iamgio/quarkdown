@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.patterns.TextSymbolReplacement
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
@@ -39,6 +40,7 @@ import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
+import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 import eu.iamgio.quarkdown.lexer.walker.SourceReader
@@ -362,6 +364,63 @@ class LexerTest {
         assertIs<PlainTextToken>(tokens.next())
 
         assertFalse(tokens.hasNext())
+    }
+
+    @Test
+    fun textReplacement() {
+        val tokens = inlineLex(readSource("/lexing/textreplacement.md"))
+
+        fun assertSymbolEquals(symbol: TextSymbolReplacement) =
+            with(tokens.next()) {
+                assertIs<TextSymbolToken>(this)
+                assertEquals(symbol, this.symbol)
+            }
+
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.ELLIPSIS)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.COPYRIGHT)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.EM_DASH)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.EM_DASH)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.DOUBLE_RIGHT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.NOT_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.SINGLE_RIGHT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.LESS_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.GREATER_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.SINGLE_LEFT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.ELLIPSIS)
+        assertIs<PlainTextToken>(tokens.next()) // Soft line break
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TRADEMARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
     }
 
     @Test
