@@ -102,7 +102,7 @@ enum class TextSymbolReplacement(val result: String, val regex: Regex) {
      *
      * Must be preceded by a word character and not followed by a word character.
      */
-    TYPOGRAPHIC_RIGHT_QUOTATION_MARK("”", "(?<=\\w)\"(?=\\s|$)".toRegex()),
+    TYPOGRAPHIC_RIGHT_QUOTATION_MARK("”", "(?<=\\w)\"(?!\\w)".toRegex()),
     ;
 
     /**
