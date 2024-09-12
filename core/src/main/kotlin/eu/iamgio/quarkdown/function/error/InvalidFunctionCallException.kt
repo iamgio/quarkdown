@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
  * @param call the invalid call
  * @param reason optional additional reason the call failed for
  */
-open class InvalidFunctionCallException(call: FunctionCall<*>, reason: String? = null) :
+open class InvalidFunctionCallException(val call: FunctionCall<*>, reason: String? = null) :
     PipelineException(
         "Cannot call function ${call.function.asString()} with arguments ${call.arguments.asString()}" +
             (reason?.let { ": $it" } ?: ""),

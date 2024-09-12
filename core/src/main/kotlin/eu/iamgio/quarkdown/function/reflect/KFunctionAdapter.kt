@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.reflect.annotation.NoAutoArgumentUnwrapping
@@ -66,7 +67,17 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                 // Exceptions thrown within the called function are converted to Quarkdown exceptions
                 // and handled accordingly by the pipeline's function expander component.
                 Log.debug("(expected, received): " + args.map { it.key.type to it.value })
-                throw FunctionRuntimeException(this, e.targetException)
+
+                // If the exception comes from a nested function call, the source function is retrieved.
+                // Otherwise, this function becomes the source.
+                val sourceFunction =
+                    when (val exception = e.targetException) {
+                        is FunctionRuntimeException -> exception.source
+                        is InvalidFunctionCallException -> exception.call.function
+                        else -> this
+                    }
+
+                throw FunctionRuntimeException(sourceFunction, e.targetException)
             }
         }
 }
