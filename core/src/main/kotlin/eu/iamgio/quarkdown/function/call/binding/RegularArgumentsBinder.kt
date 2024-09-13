@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
@@ -11,6 +12,7 @@ import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -80,7 +82,14 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
                 // The dynamic value is converted into the expected parameter type.
                 // Throws error if the conversion could not happen.
                 val staticValue =
-                    DynamicValueConverter(value).convertTo(parameter.type, call.context)
+                    try {
+                        DynamicValueConverter(value).convertTo(parameter.type, call.context)
+                    } catch (e: PipelineException) {
+                        // In case the conversion fails, the error is wrapped so that it can refer to this function call as a source.
+                        throw InvalidFunctionCallException(call, e.message, includeArguments = false)
+                    }
+                        // convertTo returns null if the called ValueFactory method returns null.
+                        // This means the supplied value cannot be converted to the expected type.
                         ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
                 argument.copy(expression = staticValue)

@@ -11,8 +11,9 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
-import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
+import eu.iamgio.quarkdown.function.error.NoSuchElementException
 import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
@@ -580,7 +581,7 @@ class StandaloneFunctionTest {
                     ),
             )
 
-        assertFailsWith<NoSuchElementFunctionException> {
+        assertFailsWith<InvalidFunctionCallException> {
             call.execute()
         }
     }

@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.call.FunctionCall
-import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
+import eu.iamgio.quarkdown.function.error.NoSuchElementException
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -25,6 +25,8 @@ class DynamicValueConverter(private val value: DynamicValue) {
      * This type is unwrapped (e.g. if [type] is `String`, the output is of type `StringValue`)
      * @param context context to evaluate the value for
      * @return a new typed [InputValue], automatically determined from [type], or `null` if it could not be converted
+     * @throws IllegalArgumentException if the value could not be converted to the target type or if [context] is required and it's `null`
+     * @throws NoSuchElementException if the value could not be converted to an enum entry
      */
     @Suppress("UNCHECKED_CAST")
     fun convertTo(
@@ -46,7 +48,7 @@ class DynamicValueConverter(private val value: DynamicValue) {
             val values = valuesFunction.call()
 
             return ValueFactory.enum(raw.toString(), values)
-                ?: throw NoSuchElementFunctionException(element = raw, values)
+                ?: throw NoSuchElementException(element = raw, values)
         }
 
         // Gets ValueFactory methods annotated with @FromDynamicType(X::class),
