@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.function.error
 
 import eu.iamgio.quarkdown.RUNTIME_ERROR_EXIT_CODE
 import eu.iamgio.quarkdown.function.Function
-import eu.iamgio.quarkdown.pipeline.error.PipelineException
 
 /**
  * An exception thrown when an error occurs inside a called function.
@@ -10,9 +9,9 @@ import eu.iamgio.quarkdown.pipeline.error.PipelineException
  * @param message error message
  */
 class FunctionRuntimeException(
-    val source: Function<*>,
+    source: Function<*>,
     message: String,
-) : PipelineException(message, RUNTIME_ERROR_EXIT_CODE) {
+) : FunctionException(message, RUNTIME_ERROR_EXIT_CODE, source) {
     /**
      * @param source function that threw the error
      * @param throwable the error cause
