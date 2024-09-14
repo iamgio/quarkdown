@@ -11,13 +11,19 @@ import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
+import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
+import eu.iamgio.quarkdown.function.error.UnresolvedReferenceException
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
+import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
+import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
 import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
@@ -36,6 +42,7 @@ class FullPipelineTest {
      * Executes a Quarkdown source.
      * @param source Quarkdown source to execute
      * @param options execution options
+     * @param errorHandler error handler to use
      * @param enableMediaStorage whether the media storage system should be enabled.
      * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
      * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
@@ -43,6 +50,7 @@ class FullPipelineTest {
     private fun execute(
         source: String,
         options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
+        errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
         enableMediaStorage: Boolean = false,
         hook: Context.(CharSequence) -> Unit,
     ) {
@@ -61,7 +69,7 @@ class FullPipelineTest {
             Pipeline(
                 context,
                 PipelineOptions(
-                    errorHandler = StrictPipelineErrorHandler(),
+                    errorHandler = errorHandler,
                     workingDirectory = File(DATA_FOLDER),
                     enableMediaStorage = enableMediaStorage,
                 ),
@@ -1099,6 +1107,66 @@ class FullPipelineTest {
                 "<p><img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
                     "alt=\"Banner\" /></p>",
                 it,
+            )
+        }
+    }
+
+    @Test
+    fun errors() {
+        assertFailsWith<UnresolvedReferenceException> {
+            execute(".nonexistant") {}
+        }
+
+        assertFailsWith<InvalidArgumentCountException> {
+            execute(".sum {2}") {}
+        }
+
+        assertFailsWith<InvalidArgumentCountException> {
+            execute(".sum {2} {5} {9}") {}
+        }
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            execute(".sum {a} {3}") {}
+        }
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            execute(".if {hello}\n\t.sum {2} {3} {1}") {}
+        }
+
+        assertFailsWith<InvalidFunctionCallException> {
+            execute(".row alignment:{center} cross:{hello}\n\tHi") {}
+        }
+
+        // Non-strict error handling.
+
+        execute(".sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
+            assertTrue(
+                Regex(
+                    "<div class=\"box error-box\">" +
+                        "<header><h4>Error: sum</h4></header>" +
+                        "<div class=\"box-content\"><p><span class=\"codespan-content\"><code>" +
+                        "Cannot call function sum\\(Number a, Number b\\) .+?" +
+                        "</code></span></p></div></div>",
+                ).matches(it),
+            )
+        }
+
+        execute(".if {yes}\n\t.sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
+            assertContains(it, "<h4>Error: sum</h4>")
+        }
+
+        execute(".if {yes}\n\t.row\n\t\t.sum {2} {1} {5}", errorHandler = BasePipelineErrorHandler()) {
+            assertContains(it, "<h4>Error: sum</h4>")
+        }
+
+        execute(".if {yes}\n\t.column alignment:{x}\n\t\tHi", errorHandler = BasePipelineErrorHandler()) {
+            assertTrue(
+                Regex(
+                    ".+?<header><h4>Error: column</h4></header>" +
+                        ".+?<code>" +
+                        "Cannot call function column.+?No such element &#39;x&#39; among values \\[.+?]" +
+                        "</code>.+",
+                ).matches(it),
             )
         }
     }
