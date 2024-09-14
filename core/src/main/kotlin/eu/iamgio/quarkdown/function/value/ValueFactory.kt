@@ -19,8 +19,6 @@ import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.misc.color.Color
-import eu.iamgio.quarkdown.misc.color.decoder.ColorNameDecoder
-import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
 import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
@@ -158,15 +156,7 @@ object ValueFactory {
      */
     @FromDynamicType(Color::class)
     fun color(raw: String): ObjectValue<Color> {
-        val decoders =
-            arrayOf(
-                // #FF0000
-                HexColorDecoder,
-                // red
-                ColorNameDecoder,
-            )
-
-        return Color.decode(raw, *decoders)?.let(::ObjectValue)
+        return Color.decode(raw)?.let(::ObjectValue)
             ?: throw IllegalArgumentException("Invalid color: $raw")
     }
 

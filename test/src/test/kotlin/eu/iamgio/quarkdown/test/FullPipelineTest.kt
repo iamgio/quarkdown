@@ -312,6 +312,19 @@ class FullPipelineTest {
             assertFalse(attributes.hasCode)
         }
 
+        execute("`rgba(200, 100, 50, 0.5)`") {
+            assertEquals(
+                "<p>" +
+                    "<span class=\"codespan-content\">" +
+                    "<code>rgba(200, 100, 50, 0.5)</code>" +
+                    "<span style=\"background-color: rgba(200, 100, 50, 0.5);\" class=\"color-preview\"></span>" +
+                    "</span>" +
+                    "</p>",
+                it,
+            )
+            assertFalse(attributes.hasCode)
+        }
+
         execute("```\nprintln(\"Hello, world!\")\n```") {
             assertEquals("<pre><code>println(&quot;Hello, world!&quot;)</code></pre>", it)
             assertTrue(attributes.hasCode)

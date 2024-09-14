@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.misc.color.Color
 /**
  * A strategy to decode a [Color] from a raw string.
  */
-interface ColorDecoder {
+sealed interface ColorDecoder {
     /**
      * Decodes a [Color] from a raw string.
      * @param raw raw string
@@ -17,10 +17,10 @@ interface ColorDecoder {
 /**
  * Decodes a [Color] from a raw string using the first decoder that successfully decodes it.
  * @param raw raw string
- * @param decoders ordered list of decoders
+ * @param decoders ordered list of decoders. Defaults to all decoders.
  * @return a successfully decoded [Color], or `null` if no decoder can decode it
  */
 fun Color.Companion.decode(
     raw: String,
-    vararg decoders: ColorDecoder,
+    vararg decoders: ColorDecoder = arrayOf(HexColorDecoder, RgbColorDecoder, RgbaColorDecoder, ColorNameDecoder),
 ): Color? = decoders.firstNotNullOfOrNull { it.decode(raw) }

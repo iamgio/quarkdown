@@ -21,5 +21,8 @@ data class Color(
     /**
      * @see eu.iamgio.quarkdown.misc.color.decoder.decode
      */
-    companion object
+    companion object {
+        const val MAX_RGB = 255
+        const val MAX_ALPHA = 1.0
+    }
 }

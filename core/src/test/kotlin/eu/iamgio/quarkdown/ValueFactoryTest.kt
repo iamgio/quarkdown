@@ -117,8 +117,14 @@ class ValueFactoryTest {
         assertEquals(Color(0, 0, 0), ValueFactory.color("#000000").unwrappedValue)
         assertEquals(Color(0, 0, 0), ValueFactory.color("BLACK").unwrappedValue)
         assertEquals(Color(145, 168, 50), ValueFactory.color("#91a832").unwrappedValue)
+        assertEquals(Color(145, 168, 50), ValueFactory.color("rgb(145, 168, 50)").unwrappedValue)
+        assertEquals(Color(120, 111, 93), ValueFactory.color("rgb(120,111,93)").unwrappedValue)
+        assertEquals(Color(120, 111, 93, 0.5), ValueFactory.color("rgba(120, 111, 93, 0.5)").unwrappedValue)
         assertFails { ValueFactory.color("abc") }
         assertFails { ValueFactory.color("#hello") }
+        assertFails { ValueFactory.color("rgb(300, 200, 200)") }
+        assertFails { ValueFactory.color("rgb(300, 200, 200, 0.8)") }
+        assertFails { ValueFactory.color("rgba(100, 200, 200, 1.5)") }
     }
 
     @Test
