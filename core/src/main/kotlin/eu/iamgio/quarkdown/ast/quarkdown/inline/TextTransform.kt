@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.ast.quarkdown.inline
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor

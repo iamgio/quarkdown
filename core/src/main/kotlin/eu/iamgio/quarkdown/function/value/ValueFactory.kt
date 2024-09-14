@@ -14,12 +14,14 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
-import eu.iamgio.quarkdown.function.reflect.ReflectionUtils
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.lexer.Lexer
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
+import eu.iamgio.quarkdown.misc.color.decoder.ColorNameDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
 
@@ -156,21 +158,16 @@ object ValueFactory {
      */
     @FromDynamicType(Color::class)
     fun color(raw: String): ObjectValue<Color> {
-        // Hexadecimal representation (e.g. #FF0000).
-        if (raw.firstOrNull() == '#') {
-            val decoded = Color.fromHex(raw)
-            if (decoded != null) {
-                return ObjectValue(decoded)
-            }
-        }
+        val decoders =
+            listOf(
+                // #FF0000
+                HexColorDecoder,
+                // red
+                ColorNameDecoder,
+            )
 
-        // Name representation (e.g. red, GREEN, bLuE).
-        val awtColor = ReflectionUtils.getConstantByName<java.awt.Color>(raw)
-        if (awtColor != null) {
-            return ObjectValue(Color.fromAWT(awtColor))
-        }
-
-        throw IllegalArgumentException("Invalid color: $raw")
+        return Color.decode(raw, decoders)?.let(::ObjectValue)
+            ?: throw IllegalArgumentException("Invalid color: $raw")
     }
 
     /**

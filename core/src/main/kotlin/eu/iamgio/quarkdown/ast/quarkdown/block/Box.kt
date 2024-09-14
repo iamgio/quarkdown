@@ -7,7 +7,7 @@ import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.document.size.Size
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor

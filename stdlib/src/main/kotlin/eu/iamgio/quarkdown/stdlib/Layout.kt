@@ -17,7 +17,7 @@ import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 
 /**
  * `Layout` stdlib module exporter.

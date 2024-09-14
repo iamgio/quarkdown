@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.ast.base.inline
 
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**

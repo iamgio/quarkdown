@@ -50,7 +50,8 @@ import eu.iamgio.quarkdown.document.size.inch
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
+import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.rendering.NodeRenderer
@@ -296,7 +297,7 @@ class HtmlNodeRendererTest {
         val spanWithColor =
             CodeSpan(
                 "#FFFF00",
-                CodeSpan.ColorContent(Color.fromHex("#FFFF00")!!),
+                CodeSpan.ColorContent(HexColorDecoder.decode("#FFFF00")!!),
             )
 
         assertEquals(out.next(), CodeSpan("Foo bar").render(base))

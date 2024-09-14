@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.slides.Transition
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 
