@@ -159,14 +159,14 @@ object ValueFactory {
     @FromDynamicType(Color::class)
     fun color(raw: String): ObjectValue<Color> {
         val decoders =
-            listOf(
+            arrayOf(
                 // #FF0000
                 HexColorDecoder,
                 // red
                 ColorNameDecoder,
             )
 
-        return Color.decode(raw, decoders)?.let(::ObjectValue)
+        return Color.decode(raw, *decoders)?.let(::ObjectValue)
             ?: throw IllegalArgumentException("Invalid color: $raw")
     }
 

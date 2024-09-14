@@ -40,7 +40,9 @@ import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
 import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.trimDelimiters
@@ -221,13 +223,10 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
             }
 
         // Additional content brought by the code span.
+        // If null, no additional content is present.
         val content: CodeSpan.ContentInfo? =
-            when {
-                // Hexadecimal color.
-                text.firstOrNull() == '#' -> HexColorDecoder.decode(text)?.let(CodeSpan::ColorContent)
-                // No content.
-                else -> null
-            }
+            // Color decoding.
+            Color.decode(text, HexColorDecoder)?.let(CodeSpan::ColorContent)
 
         return CodeSpan(text, content)
     }

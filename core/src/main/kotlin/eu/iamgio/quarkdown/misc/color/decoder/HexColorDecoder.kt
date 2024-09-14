@@ -7,7 +7,9 @@ import eu.iamgio.quarkdown.misc.color.Color
  */
 object HexColorDecoder : ColorDecoder {
     override fun decode(raw: String): Color? {
-        val hex = raw.removePrefix("#")
+        if (raw.firstOrNull() != '#') return null
+        val hex = raw.drop(1) // The '#' character is skipped.
+
         return try {
             Color(
                 red = hex.substring(0, 2).toInt(16),

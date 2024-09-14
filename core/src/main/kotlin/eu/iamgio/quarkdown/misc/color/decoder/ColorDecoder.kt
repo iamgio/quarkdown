@@ -22,5 +22,5 @@ interface ColorDecoder {
  */
 fun Color.Companion.decode(
     raw: String,
-    decoders: List<ColorDecoder>,
+    vararg decoders: ColorDecoder,
 ): Color? = decoders.firstNotNullOfOrNull { it.decode(raw) }
