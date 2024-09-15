@@ -20,6 +20,7 @@
     --qd-line-height: 1.5;
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
     --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
+    --qd-error-message-collapsed-text-color: rgb(240, 246, 77); /* Color of expandible text in error messages */
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -245,6 +246,15 @@ code.focus-lines .hljs-ln-line:not(.focused),
     height: 0.5em;
 }
 
+.collapsible-text[data-collapsed="true"] {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.collapsible-text[data-collapsed="true"] {
+    cursor: pointer;
+}
+
 .box {
     width: 100%;
     margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
@@ -294,6 +304,10 @@ code.focus-lines .hljs-ln-line:not(.focused),
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
+}
+
+.box.error-box > .box-content .collapsible-text[data-collapsed="true"] {
+    color: var(--qd-error-message-collapsed-text-color);
 }
 
 .box.warning-box {
