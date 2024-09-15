@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
-import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.UnresolvedReferenceException
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
@@ -1138,11 +1137,11 @@ class FullPipelineTest {
             execute(".sum {2} {5} {9}") {}
         }
 
-        assertFailsWith<MismatchingArgumentTypeException> {
+        assertFailsWith<InvalidFunctionCallException> {
             execute(".sum {a} {3}") {}
         }
 
-        assertFailsWith<MismatchingArgumentTypeException> {
+        assertFailsWith<InvalidFunctionCallException> {
             execute(".if {hello}\n\t.sum {2} {3} {1}") {}
         }
 

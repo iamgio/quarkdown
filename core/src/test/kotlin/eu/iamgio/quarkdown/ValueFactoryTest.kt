@@ -35,8 +35,8 @@ class ValueFactoryTest {
     fun number() {
         assertEquals(NumberValue(42), ValueFactory.number("42"))
         assertEquals(16.3F, ValueFactory.number("16.3")?.unwrappedValue)
-        assertNull(ValueFactory.number("num"))
-        assertNull(ValueFactory.number("16.3.2"))
+        assertFails { ValueFactory.number("num") }
+        assertFails { ValueFactory.number("16.3.2") }
     }
 
     @Test
@@ -45,7 +45,7 @@ class ValueFactoryTest {
         assertEquals(BooleanValue(false), ValueFactory.boolean("no"))
         assertEquals(BooleanValue(true), ValueFactory.boolean("true"))
         assertEquals(BooleanValue(true), ValueFactory.boolean("yes"))
-        assertNull(ValueFactory.boolean("y"))
+        assertFails { ValueFactory.boolean("y") }
     }
 
     @Test
