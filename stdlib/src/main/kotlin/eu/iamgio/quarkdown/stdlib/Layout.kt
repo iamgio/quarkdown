@@ -15,7 +15,7 @@ import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.misc.color.Color
 

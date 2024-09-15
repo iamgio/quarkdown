@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.function.value
+package eu.iamgio.quarkdown.function.value.factory
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
@@ -14,9 +14,22 @@ import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
+import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
+import eu.iamgio.quarkdown.function.value.IterableValue
+import eu.iamgio.quarkdown.function.value.LambdaValue
+import eu.iamgio.quarkdown.function.value.MarkdownContentValue
+import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.decode
@@ -38,10 +51,13 @@ object ValueFactory {
 
     /**
      * @param raw raw value to convert to a number value
-     * @return a new number value that wraps [raw]'s integer (if possible) or float value, or `null` if [raw] is not numeric
+     * @return a new number value that wraps [raw]'s integer (if possible) or float value
+     * @throws IllegalRawValueException if [raw] is not a valid numeric value
      */
     @FromDynamicType(Number::class)
-    fun number(raw: String): NumberValue? = (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
+    fun number(raw: String): NumberValue =
+        (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
+            ?: throw IllegalRawValueException("Not a numeric value", raw)
 
     /**
      * @param raw raw value to convert to a boolean value.
@@ -50,11 +66,11 @@ object ValueFactory {
      * @return a new boolean value that wraps [raw]'s boolean value, or `null` if [raw] does not represent a boolean
      */
     @FromDynamicType(Boolean::class)
-    fun boolean(raw: String): BooleanValue? =
+    fun boolean(raw: String): BooleanValue =
         when (raw.lowercase()) {
             "true", "yes" -> BooleanValue(true)
             "false", "no" -> BooleanValue(false)
-            else -> null
+            else -> throw IllegalRawValueException("Not a valid boolean value", raw)
         }
 
     /**
@@ -95,7 +111,7 @@ object ValueFactory {
      *            The format is `Xunit`, where `X` is a number (integer or floating point)
      *            and `unit` is one of the following: `px`, `pt`, `cm`, `mm`, `in`. If not specified, `px` is assumed.
      * @return a new size value that wraps the parsed content of [raw].
-     * @throws IllegalArgumentException if the value is an invalid size
+     * @throws IllegalRawValueException if the value is an invalid size
      */
     @FromDynamicType(Size::class)
     fun size(raw: String): ObjectValue<Size> {
@@ -104,11 +120,11 @@ object ValueFactory {
         val groups = regex.find(raw)?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
 
         // The value, which is required.
-        val value = groups?.next()?.toDoubleOrNull() ?: throw IllegalArgumentException("Invalid size: $raw")
+        val value = groups?.next()?.toDoubleOrNull() ?: throw IllegalRawValueException("Invalid size", raw)
 
         // The unit, which is optional and defaults to pixels.
         val rawUnit = groups.next()
-        val unit = Size.Unit.values().find { it.name.equals(rawUnit, ignoreCase = true) } ?: Size.Unit.PX
+        val unit = Size.Unit.entries.find { it.name.equals(rawUnit, ignoreCase = true) } ?: Size.Unit.PX
 
         return ObjectValue(Size(value, unit))
     }
@@ -116,7 +132,7 @@ object ValueFactory {
     /**
      * @param raw raw value to convert to a collection of sizes.
      * @see size for the treatment of each size
-     * @throws IllegalArgumentException if the raw value contains a different amount of sizes than 1, 2 or 4,
+     * @throws IllegalRawValueException if the raw value contains a different amount of sizes than 1, 2 or 4,
      *                                  of if any of those values is an invalid size
      */
     @FromDynamicType(Sizes::class)
@@ -143,7 +159,7 @@ object ValueFactory {
                         left = size(iterator.next()).unwrappedValue,
                     )
 
-                else -> throw IllegalArgumentException("Invalid top-right-bottom-left sizes: $raw")
+                else -> throw IllegalRawValueException("Invalid top-right-bottom-left sizes", raw)
             },
         )
     }
@@ -152,12 +168,12 @@ object ValueFactory {
      * @param raw raw value to convert to a color value, case-insensitive.
      *            Can be a hex value starting by `#` (e.g. `#FF0000`) or a color name (e.g. `red`).
      * @return a new color value that wraps the parsed content of [raw]
-     * @throws IllegalArgumentException if the value is an invalid color
+     * @throws IllegalRawValueException if the value is an invalid color
      */
     @FromDynamicType(Color::class)
     fun color(raw: String): ObjectValue<Color> {
         return Color.decode(raw)?.let(::ObjectValue)
-            ?: throw IllegalArgumentException("Invalid color: $raw")
+            ?: throw IllegalRawValueException("Not a valid color", raw)
     }
 
     /**
@@ -228,7 +244,7 @@ object ValueFactory {
         raw: String,
         context: Context,
     ): MarkdownContentValue =
-        this.markdown(
+        markdown(
             context.flavor.lexerFactory.newBlockLexer(raw),
             context,
             expandFunctionCalls = true,
@@ -244,7 +260,7 @@ object ValueFactory {
         raw: String,
         context: Context,
     ): InlineMarkdownContentValue =
-        this.markdown(
+        markdown(
             context.flavor.lexerFactory.newInlineLexer(raw),
             context,
             expandFunctionCalls = true,
@@ -254,6 +270,7 @@ object ValueFactory {
      * @param raw string input to parse the expression from
      * @param context context to retrieve the pipeline from
      * @return a new [IterableValue] from the raw expression. It can also be a [Range].
+     * @throws IllegalRawValueException if [raw] cannot be converted to an iterable
      * @see range
      */
     @Suppress("UNCHECKED_CAST")
@@ -263,16 +280,16 @@ object ValueFactory {
         context: Context,
     ): IterableValue<T> {
         // A range is a suitable numeric iterable value.
-        val range = this.range(raw)
+        val range = range(raw)
         if (!range.unwrappedValue.isInfinite) {
             return range.unwrappedValue.toCollection() as IterableValue<T>
         }
 
         // The expression is evaluated into an iterable.
-        val value = this.expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
+        val value = expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
         return value as? IterableValue<T>
-            ?: throw IllegalStateException("$raw is not a suitable iterable (found: $value)")
+            ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
     }
 
     /**
@@ -332,7 +349,7 @@ object ValueFactory {
         // The content of the argument is tokenized to distinguish static values (string/number/...)
         // from nested function calls, which are also expressions.
         val components =
-            this.markdown(
+            markdown(
                 lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
                 context,
                 expandFunctionCalls = false,

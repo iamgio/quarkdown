@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.function.value.data
 
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
 /**
  * A [String] wrapper that, when used as a function parameter, lets [ValueFactory.evaluableString] evaluate the raw content.

@@ -6,7 +6,8 @@ import eu.iamgio.quarkdown.function.error.NoSuchElementException
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
+import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
@@ -59,17 +60,21 @@ class DynamicValueConverter(private val value: DynamicValue) {
 
             // The factory method is suitable. Invoking it.
 
-            return when {
-                // Fetch the context from the function call if it's required.
-                from.requiresContext -> {
-                    if (context == null) {
-                        throw IllegalStateException("Function call does not have an attached context")
+            return try {
+                when {
+                    // Fetch the context from the function call if it's required.
+                    from.requiresContext -> {
+                        if (context == null) {
+                            throw IllegalStateException("Function call does not have an attached context")
+                        }
+                        function.call(ValueFactory, raw.toString(), context)
                     }
-                    function.call(ValueFactory, raw.toString(), context)
-                }
 
-                else -> function.call(ValueFactory, raw.toString())
-            } as InputValue<*>?
+                    else -> function.call(ValueFactory, raw.toString())
+                } as InputValue<*>?
+            } catch (e: InvocationTargetException) {
+                throw e.cause ?: e
+            }
         }
 
         throw IllegalArgumentException("Cannot convert DynamicValue to type $type")

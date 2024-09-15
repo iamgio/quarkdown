@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
 private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
 

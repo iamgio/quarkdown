@@ -64,7 +64,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
 
     /**
      * @return string result of the concatenation between [this] and [other]
-     * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.ValueFactory.eval])
+     * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.factory.ValueFactory.eval])
      */
     private fun Value<*>.concatenate(): InputValue<*> {
         // Void values are ignored.

@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
 /**
  * `Ecosystem` stdlib module exporter.

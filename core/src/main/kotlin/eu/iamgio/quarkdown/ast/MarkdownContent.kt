@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A generic group of block nodes used as input for Quarkdown functions.
- * @see eu.iamgio.quarkdown.function.value.ValueFactory.blockMarkdown
+ * @see eu.iamgio.quarkdown.function.value.factory.ValueFactory.blockMarkdown
  */
 data class MarkdownContent(
     override val children: List<Node>,
@@ -16,7 +16,7 @@ data class MarkdownContent(
 
 /**
  * A generic group of inline nodes used as input for Quarkdown functions.
- * @see eu.iamgio.quarkdown.function.value.ValueFactory.inlineMarkdown
+ * @see eu.iamgio.quarkdown.function.value.factory.ValueFactory.inlineMarkdown
  */
 data class InlineMarkdownContent(
     override val children: InlineContent,
