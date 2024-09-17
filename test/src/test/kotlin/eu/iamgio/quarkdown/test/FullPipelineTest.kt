@@ -1152,14 +1152,21 @@ class FullPipelineTest {
         // Non-strict error handling.
 
         execute(".sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
-            assertTrue(
-                Regex(
-                    "<div class=\"box error-box\">" +
-                        "<header><h4>Error: sum</h4></header>" +
-                        "<div class=\"box-content\"><p><span class=\"codespan-content\"><code>" +
-                        "Cannot call function sum\\(Number a, Number b\\) .+?" +
-                        "</code></span></p></div></div>",
-                ).matches(it),
+            assertEquals(
+                "<div class=\"box error-box\">" +
+                    "<header><h4>Error: sum</h4></header>" +
+                    "<div class=\"box-content\"><p>" +
+                    "Cannot call function sum" +
+                    "<span class=\"inline-collapse\" data-full-text=\"(Number a, Number b)\" data-collapsed-text=\"(...)\" data-collapsed=\"false\">" +
+                    "(Number a, Number b)" +
+                    "</span>" +
+                    " with arguments " +
+                    "<span class=\"inline-collapse\" data-full-text=\"(a, 3)\" data-collapsed-text=\"(...)\" data-collapsed=\"false\">" +
+                    "(a, 3)" +
+                    "</span>: <br />" +
+                    "<em>Not a numeric value: a</em>" +
+                    "</p></div></div>",
+                it,
             )
         }
 
@@ -1175,9 +1182,9 @@ class FullPipelineTest {
             assertTrue(
                 Regex(
                     ".+?<header><h4>Error: column</h4></header>" +
-                        ".+?<code>" +
-                        "Cannot call function column.+?No such element &#39;x&#39; among values \\[.+?]" +
-                        "</code>.+",
+                        ".+?<p>" +
+                        "Cannot call function column.+?No such element 'x' among values \\[.+?]" +
+                        "</p>.+",
                 ).matches(it),
             )
         }
