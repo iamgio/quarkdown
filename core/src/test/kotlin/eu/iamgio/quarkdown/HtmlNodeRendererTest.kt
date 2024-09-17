@@ -89,7 +89,7 @@ class HtmlNodeRendererTest {
     // Inline
     @Test
     fun comment() {
-        assertEquals("", Comment().render())
+        assertEquals("", Comment.render())
     }
 
     @Test
@@ -391,7 +391,7 @@ class HtmlNodeRendererTest {
 
     @Test
     fun horizontalRule() {
-        assertEquals("<hr />", HorizontalRule().render())
+        assertEquals("<hr />", HorizontalRule.render())
     }
 
     @Test
@@ -443,7 +443,7 @@ class HtmlNodeRendererTest {
                 children =
                     listOf(
                         Paragraph(listOf(Text("A1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("A2"))),
                     ),
             ),
@@ -451,7 +451,7 @@ class HtmlNodeRendererTest {
                 children =
                     listOf(
                         Paragraph(listOf(Text("B1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("B2"))),
                     ),
             ),
@@ -459,7 +459,7 @@ class HtmlNodeRendererTest {
                 children =
                     listOf(
                         Paragraph(listOf(Text("C1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("C2"))),
                     ),
             ),
@@ -468,7 +468,7 @@ class HtmlNodeRendererTest {
                 children =
                     listOf(
                         Paragraph(listOf(Text("D1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("D2"))),
                     ),
             ),
@@ -476,7 +476,7 @@ class HtmlNodeRendererTest {
                 isChecked = true,
                 listOf(
                     Paragraph(listOf(Text("E1"))),
-                    HorizontalRule(),
+                    HorizontalRule,
                     Paragraph(listOf(Text("E2"))),
                 ),
             ),

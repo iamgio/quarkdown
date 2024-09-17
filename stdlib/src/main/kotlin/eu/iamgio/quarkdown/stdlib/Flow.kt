@@ -199,4 +199,4 @@ fun let(
  * in case the visible output does not match the expected one.
  * @return an invisible mock node
  */
-fun node(): NodeValue = BlockText().wrappedAsValue()
+fun node(): NodeValue = BlockText.wrappedAsValue()

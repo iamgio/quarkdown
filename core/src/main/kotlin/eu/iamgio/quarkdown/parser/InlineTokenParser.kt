@@ -138,7 +138,7 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
 
     override fun visit(token: CommentToken): Node {
         // Content is ignored.
-        return Comment()
+        return Comment
     }
 
     override fun visit(token: LineBreakToken): Node {

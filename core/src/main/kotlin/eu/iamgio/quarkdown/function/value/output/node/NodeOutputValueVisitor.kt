@@ -53,7 +53,7 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 
-    override fun visit(value: VoidValue) = BlockText()
+    override fun visit(value: VoidValue) = BlockText
 
     // Dynamic output (e.g. produced by the stdlib function `.function`) is treated:
     // - If it is a suitable output value: its content is visited again with this visitor.

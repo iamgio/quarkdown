@@ -1157,7 +1157,7 @@ class FullPipelineTest {
                     "<header><h4>Error: sum</h4></header>" +
                     "<div class=\"box-content\"><p>" +
                     "Cannot call function sum" +
-                    "<span class=\"inline-collapse\" data-full-text=\"(Number a, Number b)\"" +
+                    "<span class=\"inline-collapse\" data-full-text=\"(Number a, Number b)\" " +
                     "data-collapsed-text=\"(...)\" data-collapsed=\"false\">" +
                     "(Number a, Number b)" +
                     "</span>" +

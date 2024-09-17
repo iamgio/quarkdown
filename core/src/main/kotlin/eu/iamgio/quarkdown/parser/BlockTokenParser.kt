@@ -80,7 +80,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
             .tokenizeAndParse()
 
     override fun visit(token: NewlineToken): Node {
-        return Newline()
+        return Newline
     }
 
     override fun visit(token: BlockCodeToken): Node {
@@ -110,7 +110,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: HorizontalRuleToken): Node {
-        return HorizontalRule()
+        return HorizontalRule
     }
 
     /**
@@ -382,7 +382,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: BlockTextToken): Node {
-        return BlockText()
+        return BlockText
     }
 
     override fun visit(token: PageBreakToken): Node {
