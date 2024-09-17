@@ -223,7 +223,7 @@ from your Markdown code.
 ## Intuitive error handling
 
 .sourceresult
-    .sum {3} {x}
+    .divide {x} by:{.pi}
 
     .grid columns:{3} alignment:{right}
         Hello, world!
