@@ -21,6 +21,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
@@ -222,6 +223,16 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "text-transform" value node.data.case
                 "color" value node.data.color
             }
+        }
+
+    override fun visit(node: InlineCollapse) =
+        buildTag("span") {
+            // Dynamic behavior is handled by JS.
+            `class`("inline-collapse")
+            attribute("data-full-text", buildMultiTag { +node.text })
+            attribute("data-collapsed-text", buildMultiTag { +node.placeholder })
+            attribute("data-collapsed", !node.isOpen)
+            +(if (node.isOpen) node.text else node.placeholder)
         }
 
     // Invisible nodes

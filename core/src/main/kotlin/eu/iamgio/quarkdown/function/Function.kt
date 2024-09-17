@@ -37,9 +37,11 @@ data class SimpleFunction<T : OutputValue<*>>(
     override val invoke: (ArgumentBindings) -> T,
 ) : Function<T>
 
-fun Function<*>.asString() =
+fun Function<*>.signatureAsString(includeName: Boolean = true) =
     buildString {
-        append(name)
+        if (includeName) {
+            append(name)
+        }
         append("(")
         append(
             parameters.joinToString { parameter ->

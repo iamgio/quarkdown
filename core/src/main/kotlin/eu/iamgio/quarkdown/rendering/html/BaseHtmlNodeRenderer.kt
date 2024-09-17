@@ -39,6 +39,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
@@ -275,6 +276,8 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
     override fun visit(node: MathSpan): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: TextTransform): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: InlineCollapse): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: SlidesFragment): CharSequence = throw UnsupportedRenderException(node)
 }

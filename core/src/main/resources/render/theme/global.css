@@ -246,7 +246,7 @@ code.focus-lines .hljs-ln-line:not(.focused),
     height: 0.5em;
 }
 
-.collapsible-text[data-collapsed="true"] {
+.inline-collapse[data-collapsed="true"] {
     cursor: pointer;
     font-weight: bold;
 }
@@ -310,8 +310,9 @@ code.focus-lines .hljs-ln-line:not(.focused),
     font-size: 0.6em;
 }
 
-.box.error-box > .box-content .collapsible-text[data-collapsed="true"] {
+.box.error-box > .box-content .inline-collapse[data-collapsed="true"] {
     color: var(--qd-error-message-collapsed-text-color);
+    background-color: rgba(0, 0, 0, 0.09);
 }
 
 .box.warning-box {
