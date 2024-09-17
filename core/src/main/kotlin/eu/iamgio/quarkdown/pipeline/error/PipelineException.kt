@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.pipeline.error
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -11,9 +11,5 @@ import eu.iamgio.quarkdown.util.toPlainText
  *             it defines the process exit code
  */
 open class PipelineException(val richMessage: InlineContent, val code: Int) : Exception(richMessage.toPlainText()) {
-    constructor(message: String, code: Int) : this(listOf(text(message)), code)
-
-    companion object {
-        fun text(text: String) = Text(text)
-    }
+    constructor(message: String, code: Int) : this(buildInline { text(message) }, code)
 }

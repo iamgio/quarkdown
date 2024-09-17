@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.error
 
 import eu.iamgio.quarkdown.RUNTIME_ERROR_EXIT_CODE
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.function.Function
 
 /**
@@ -11,7 +12,7 @@ import eu.iamgio.quarkdown.function.Function
 class FunctionRuntimeException(
     source: Function<*>,
     message: String,
-) : FunctionException(listOf(text(message)), RUNTIME_ERROR_EXIT_CODE, source) {
+) : FunctionException(buildInline { text(message) }, RUNTIME_ERROR_EXIT_CODE, source) {
     /**
      * @param source function that threw the error
      * @param throwable the error cause

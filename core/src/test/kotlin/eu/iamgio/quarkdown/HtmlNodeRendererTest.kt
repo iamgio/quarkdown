@@ -94,7 +94,7 @@ class HtmlNodeRendererTest {
 
     @Test
     fun lineBreak() {
-        assertEquals("<br />", LineBreak().render())
+        assertEquals("<br />", LineBreak.render())
     }
 
     @Test
@@ -553,7 +553,7 @@ class HtmlNodeRendererTest {
         val out = readParts("block/paragraph.html")
 
         assertEquals(out.next(), Paragraph(listOf(Text("Foo bar"))).render())
-        assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar"))).render())
+        assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak, Text("bar"))).render())
     }
 
     @Test
@@ -664,7 +664,7 @@ class HtmlNodeRendererTest {
     @Test
     fun aligned() {
         val out = readParts("quarkdown/aligned.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(out.next(), Aligned(Aligned.Alignment.LEFT, listOf(paragraph)).render())
         assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
@@ -674,7 +674,7 @@ class HtmlNodeRendererTest {
     @Test
     fun clipped() {
         val out = readParts("quarkdown/clipped.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph)).render())
     }
@@ -682,7 +682,7 @@ class HtmlNodeRendererTest {
     @Test
     fun box() {
         val out = readParts("quarkdown/box.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(
             out.next(),

@@ -142,7 +142,7 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
     }
 
     override fun visit(token: LineBreakToken): Node {
-        return LineBreak()
+        return LineBreak
     }
 
     override fun visit(token: LinkToken): Node {
