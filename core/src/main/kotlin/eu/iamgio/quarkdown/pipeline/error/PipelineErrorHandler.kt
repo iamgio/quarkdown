@@ -10,13 +10,13 @@ interface PipelineErrorHandler {
      * Handles an exception thrown during any stage of the pipeline.
      * @param error exception to handle
      * @param sourceFunction function that threw the error, if it was thrown inside a function call
-     * @param action additional custom error handler (with the error message as an argument)
+     * @param action additional custom error handler
      * @see BasePipelineErrorHandler
      * @see StrictPipelineErrorHandler
      */
     fun handle(
         error: PipelineException,
         sourceFunction: Function<*>?,
-        action: (String) -> Unit,
+        action: () -> Unit,
     )
 }

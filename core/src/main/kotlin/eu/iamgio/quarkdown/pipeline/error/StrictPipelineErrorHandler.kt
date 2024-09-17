@@ -11,7 +11,7 @@ class StrictPipelineErrorHandler : PipelineErrorHandler {
     override fun handle(
         error: PipelineException,
         sourceFunction: Function<*>?,
-        action: (String) -> Unit,
+        action: () -> Unit,
     ) {
         Log.error("An error occurred while in strict mode (error code ${error.code})")
         sourceFunction?.let { Log.error("Originated from function: ${it.name}") }

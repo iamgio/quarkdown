@@ -10,11 +10,11 @@ class BasePipelineErrorHandler : PipelineErrorHandler {
     override fun handle(
         error: PipelineException,
         sourceFunction: Function<*>?,
-        action: (String) -> Unit,
+        action: () -> Unit,
     ) {
         val message = error.message ?: "Unknown error"
         Log.error(message)
 
-        action(message)
+        action()
     }
 }

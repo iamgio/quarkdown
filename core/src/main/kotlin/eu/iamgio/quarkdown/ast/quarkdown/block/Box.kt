@@ -4,7 +4,6 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.misc.color.Color
@@ -67,12 +66,12 @@ data class Box(
          * @return a box containing the error message
          */
         fun error(
-            message: String,
+            message: InlineContent,
             title: String? = null,
         ) = Box(
             title = listOf(Text("Error" + if (title != null) ": $title" else "")),
             type = Type.ERROR,
-            children = listOf(Paragraph(listOf(CodeSpan(message)))),
+            children = listOf(Paragraph(message)),
         )
     }
 }

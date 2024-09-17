@@ -130,7 +130,7 @@ p, .reveal p {
     margin-top: 0 !important;
 }
 
-code {
+code, .error-box > .box-content {
     font-family: var(--qd-code-font);
 }
 
@@ -304,6 +304,10 @@ code.focus-lines .hljs-ln-line:not(.focused),
 .box.error-box {
     background-color: rgb(224, 67, 64);
     color: white;
+}
+
+.box.error-box > .box-content {
+    font-size: 0.6em;
 }
 
 .box.error-box > .box-content .collapsible-text[data-collapsed="true"] {

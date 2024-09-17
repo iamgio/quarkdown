@@ -55,9 +55,10 @@ class FunctionCallNodeExpander(
             val sourceFunction = (e as? FunctionException)?.function
 
             // The error is handled by the error handler strategy.
-            errorHandler.handle(e, sourceFunction) { message ->
+            errorHandler.handle(e, sourceFunction) {
+                // Shows an error message box in the final document.
                 // If the exception is linked to a function, its name appears in the error title.
-                appendOutput(node, Box.error(message, title = sourceFunction?.name)) // Shows an error message box in the final document.
+                appendOutput(node, Box.error(e.richMessage, title = sourceFunction?.name))
             }
         }
     }
