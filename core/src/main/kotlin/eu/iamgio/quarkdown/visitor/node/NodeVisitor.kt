@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.visitor.node
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
-import eu.iamgio.quarkdown.ast.base.block.BlockText
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
@@ -83,7 +83,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: BlockQuote): T
 
-    fun visit(node: BlockText): T
+    fun visit(node: BlankNode): T
 
     // Base inline
 

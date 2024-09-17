@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.base.block.BlockText
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.ScopeContext
 import eu.iamgio.quarkdown.function.FunctionParameter
@@ -199,4 +199,4 @@ fun let(
  * in case the visible output does not match the expected one.
  * @return an invisible mock node
  */
-fun node(): NodeValue = BlockText.wrappedAsValue()
+fun node(): NodeValue = BlankNode.wrappedAsValue()

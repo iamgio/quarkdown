@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.function.value.output.node
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
-import eu.iamgio.quarkdown.ast.base.block.BlockText
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
@@ -53,7 +53,7 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 
-    override fun visit(value: VoidValue) = BlockText
+    override fun visit(value: VoidValue) = BlankNode
 
     // Dynamic output (e.g. produced by the stdlib function `.function`) is treated:
     // - If it is a suitable output value: its content is visited again with this visitor.

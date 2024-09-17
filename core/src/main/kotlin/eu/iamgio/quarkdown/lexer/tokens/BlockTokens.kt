@@ -225,7 +225,7 @@ class BlockQuoteToken(data: TokenData) : Token(data) {
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.base.block.BlockText
+ * @see eu.iamgio.quarkdown.ast.base.block.BlankNode
  */
 class BlockTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)

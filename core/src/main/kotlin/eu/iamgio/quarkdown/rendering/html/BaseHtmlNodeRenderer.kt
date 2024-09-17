@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
-import eu.iamgio.quarkdown.ast.base.block.BlockText
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
@@ -186,7 +186,7 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
 
     override fun visit(node: BlockQuote) = buildTag("blockquote", node.children)
 
-    override fun visit(node: BlockText) = "" // Fallback block, should not happen
+    override fun visit(node: BlankNode) = "" // Fallback block, should not happen
 
     // Inline
 
