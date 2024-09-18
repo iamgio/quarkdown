@@ -55,6 +55,11 @@ interface Context {
      */
     val libraries: Set<Library>
 
+    /**
+     * Tables that store key-value localization pairs for each supported locale.
+     * Each table is identified by a unique name.
+     * @see localize
+     */
     val localizationTables: LocalizationTables
 
     /**
@@ -98,13 +103,15 @@ interface Context {
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 
     /**
-     * @param tableName name of the localization table
+     * Localizes a string to this context's language (the locale set in [documentInfo]) by looking up a key in a localization table.
+     * @param tableName name of the localization table, which must exist within [localizationTables]
      * @param key localization key to look up within the table
      * @return the localized string corresponding to the key in the table, if there is any
      * @throws eu.iamgio.quarkdown.localization.LocaleNotSetException if a locale is not set within [documentInfo]
      * @throws eu.iamgio.quarkdown.localization.LocalizationTableNotFoundException if the table does not exist
      * @throws eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException if the locale does not exist in the table
      * @throws eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException if the key does not exist in the table entry for the locale
+     * @see localizationTables
      */
     fun localize(
         tableName: String,
