@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.factory.IllegalRawValueException
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.misc.color.Color
 import kotlin.test.Test
@@ -34,7 +35,7 @@ class ValueFactoryTest {
     @Test
     fun number() {
         assertEquals(NumberValue(42), ValueFactory.number("42"))
-        assertEquals(16.3F, ValueFactory.number("16.3")?.unwrappedValue)
+        assertEquals(16.3F, ValueFactory.number("16.3").unwrappedValue)
         assertFails { ValueFactory.number("num") }
         assertFails { ValueFactory.number("16.3.2") }
     }
@@ -120,17 +121,23 @@ class ValueFactoryTest {
         assertEquals(Color(145, 168, 50), ValueFactory.color("rgb(145, 168, 50)").unwrappedValue)
         assertEquals(Color(120, 111, 93), ValueFactory.color("rgb(120,111,93)").unwrappedValue)
         assertEquals(Color(120, 111, 93, 0.5), ValueFactory.color("rgba(120, 111, 93, 0.5)").unwrappedValue)
-        assertFails { ValueFactory.color("abc") }
-        assertFails { ValueFactory.color("#hello") }
-        assertFails { ValueFactory.color("rgb(300, 200, 200)") }
-        assertFails { ValueFactory.color("rgb(300, 200, 200, 0.8)") }
-        assertFails { ValueFactory.color("rgba(100, 200, 200, 1.5)") }
+        assertEquals(Color(50, 113, 168), ValueFactory.color("hsv(208, 70, 66)").unwrappedValue)
+        assertEquals(Color(50, 113, 168), ValueFactory.color("hsv(568, 70, 66)").unwrappedValue)
+        assertEquals(Color(50, 113, 168), ValueFactory.color("hsl(208, 54, 43)").unwrappedValue)
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("abc") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("#hello") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("rgb(300, 200, 200)") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("rgb(300, 200, 200, 0.8)") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("rgba(100, 200, 200, 1.5)") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("hsl(120, 105, 20)") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("hsv(120, 10,200)") }
+        assertFailsWith<IllegalRawValueException> { ValueFactory.color("hsv(20, 10, 50, 10)") }
     }
 
     @Test
     fun enum() {
         @Suppress("UNCHECKED_CAST")
-        val values = Size.Unit.values() as Array<Enum<*>>
+        val values = Size.Unit.entries.toTypedArray() as Array<Enum<*>>
 
         assertEquals(Size.Unit.PX, ValueFactory.enum("px", values)!!.unwrappedValue)
         assertEquals(Size.Unit.CM, ValueFactory.enum("CM", values)!!.unwrappedValue)

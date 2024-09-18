@@ -42,6 +42,7 @@ import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.HsvHslColorDecoder
 import eu.iamgio.quarkdown.misc.color.decoder.RgbColorDecoder
 import eu.iamgio.quarkdown.misc.color.decoder.RgbaColorDecoder
 import eu.iamgio.quarkdown.misc.color.decoder.decode
@@ -228,7 +229,8 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         // If null, no additional content is present.
         val content: CodeSpan.ContentInfo? =
             // Color decoding. Named colors are disabled due to performance reasons.
-            Color.decode(text, HexColorDecoder, RgbColorDecoder, RgbaColorDecoder)?.let(CodeSpan::ColorContent)
+            Color.decode(text, HexColorDecoder, RgbColorDecoder, RgbaColorDecoder, HsvHslColorDecoder)
+                ?.let(CodeSpan::ColorContent)
 
         return CodeSpan(text, content)
     }

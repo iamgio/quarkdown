@@ -14,7 +14,7 @@ data class Color(
     val red: Int,
     val green: Int,
     val blue: Int,
-    val alpha: Double = 1.0,
+    val alpha: Double = MAX_ALPHA,
 ) : RenderRepresentable {
     override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
 
@@ -22,7 +22,14 @@ data class Color(
      * @see eu.iamgio.quarkdown.misc.color.decoder.decode
      */
     companion object {
+        /**
+         * Maximum value for RGB components.
+         */
         const val MAX_RGB = 255
+
+        /**
+         * Maximum value for alpha component.
+         */
         const val MAX_ALPHA = 1.0
     }
 }
