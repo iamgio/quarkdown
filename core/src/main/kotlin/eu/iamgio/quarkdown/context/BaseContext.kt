@@ -11,6 +11,11 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.localization.LocaleNotSetException
+import eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationLocaleNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationTable
+import eu.iamgio.quarkdown.localization.LocalizationTableNotFoundException
 import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -33,6 +38,8 @@ open class BaseContext(
     override val documentInfo = DocumentInfo()
 
     override val options: ContextOptions = MutableContextOptions()
+
+    override val localizationTables = emptyMap<String, LocalizationTable>()
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
@@ -65,6 +72,16 @@ open class BaseContext(
 
     override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> {
         return UncheckedFunctionCall(call.name) { resolve(call) }
+    }
+
+    override fun localize(
+        tableName: String,
+        key: String,
+    ): String {
+        val locale = documentInfo.locale ?: throw LocaleNotSetException()
+        val table = localizationTables[tableName] ?: throw LocalizationTableNotFoundException(tableName)
+        val entries = table[locale] ?: throw LocalizationLocaleNotFoundException(tableName, locale)
+        return entries[key] ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
     override fun fork(): ScopeContext = ScopeContext(parent = this)

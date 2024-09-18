@@ -14,6 +14,12 @@ import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.localization.LocaleLoader
+import eu.iamgio.quarkdown.localization.LocaleNotSetException
+import eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationLocaleNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationTable
+import eu.iamgio.quarkdown.localization.LocalizationTableNotFoundException
 import eu.iamgio.quarkdown.localization.jvm.JVMLocaleLoader
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.BinaryOutputArtifact
@@ -28,6 +34,7 @@ import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -179,6 +186,8 @@ class MiscTest {
     fun locale() {
         val retriever = JVMLocaleLoader
 
+        assertEquals(retriever, LocaleLoader.SYSTEM)
+
         with(retriever.fromTag("en")) {
             assertNotNull(this)
             assertEquals(this, retriever.fromName("English"))
@@ -229,6 +238,45 @@ class MiscTest {
         assertNull(retriever.find("nonexistent"))
 
         assertTrue(retriever.all.iterator().hasNext())
+    }
+
+    @Test
+    fun localization() {
+        val loader = LocaleLoader.SYSTEM
+
+        val table: LocalizationTable =
+            mapOf(
+                loader.fromName("English")!! to
+                    mapOf(
+                        "morning" to "Good morning",
+                        "evening" to "Good evening",
+                    ),
+                loader.fromName("Italian")!! to
+                    mapOf(
+                        "morning" to "Buongiorno",
+                        "evening" to "Buonasera",
+                    ),
+            )
+
+        assertEquals("Good morning", table[loader.fromName("English")]!!["morning"])
+
+        val context = MutableContext(QuarkdownFlavor)
+        context.localizationTables["mytable"] = table
+
+        assertFailsWith<LocaleNotSetException> { context.localize("mytable", "morning") }
+
+        context.documentInfo.locale = loader.fromName("English")!!
+        assertEquals("Good morning", context.localize("mytable", "morning"))
+        assertEquals("Good evening", context.localize("mytable", "evening"))
+        assertFailsWith<LocalizationKeyNotFoundException> { context.localize("mytable", "afternoon") }
+        assertFailsWith<LocalizationTableNotFoundException> { context.localize("sometable", "morning") }
+
+        context.documentInfo.locale = loader.fromName("Italian")!!
+        assertEquals("Buongiorno", context.localize("mytable", "morning"))
+        assertEquals("Buonasera", context.localize("mytable", "evening"))
+
+        context.documentInfo.locale = loader.fromName("French")!!
+        assertFailsWith<LocalizationLocaleNotFoundException> { context.localize("mytable", "morning") }
     }
 
     @Test

@@ -22,6 +22,8 @@ open class MutableContext(
 ) : BaseContext(attributes, flavor, libraries) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 
+    override val localizationTables = super.localizationTables.toMutableMap()
+
     override val mediaStorage: MutableMediaStorage
         get() = super.mediaStorage as MutableMediaStorage
 

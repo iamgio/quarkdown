@@ -26,6 +26,7 @@ object Stdlib : LibraryExporter {
                     Logger +
                     Flow +
                     Data +
+                    Localization +
                     Library +
                     Slides +
                     Ecosystem,

@@ -28,6 +28,9 @@ class ScopeContext(val parent: Context) : MutableContext(
     override val attributes: MutableAstAttributes
         get() = parent.attributes as? MutableAstAttributes ?: parent.attributes.toMutable()
 
+    override val localizationTables
+        get() = (parent as? MutableContext)?.localizationTables ?: parent.localizationTables.toMutableMap()
+
     override val mediaStorage: MutableMediaStorage
         get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
 

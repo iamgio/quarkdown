@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.localization.LocalizationTables
 import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 
@@ -54,6 +55,8 @@ interface Context {
      */
     val libraries: Set<Library>
 
+    val localizationTables: LocalizationTables
+
     /**
      * Media storage that contains all the media files that are referenced within the document.
      * For example, if an image node references a local image file "image.png",
@@ -93,6 +96,20 @@ interface Context {
      * @see resolve
      */
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
+
+    /**
+     * @param tableName name of the localization table
+     * @param key localization key to look up within the table
+     * @return the localized string corresponding to the key in the table, if there is any
+     * @throws eu.iamgio.quarkdown.localization.LocaleNotSetException if a locale is not set within [documentInfo]
+     * @throws eu.iamgio.quarkdown.localization.LocalizationTableNotFoundException if the table does not exist
+     * @throws eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException if the locale does not exist in the table
+     * @throws eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException if the key does not exist in the table entry for the locale
+     */
+    fun localize(
+        tableName: String,
+        key: String,
+    ): String
 
     /**
      * @return a new scope context, forked from this context, with the same base inherited properties
