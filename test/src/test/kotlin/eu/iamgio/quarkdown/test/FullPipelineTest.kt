@@ -24,6 +24,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
@@ -1033,6 +1034,61 @@ class FullPipelineTest {
                 "<p>8</p>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun localization() {
+        execute(
+            """
+            .doclang {english}
+            .localization {mytable}
+                - English
+                    - morning: Good morning
+                    - evening: Good evening
+                - Italian
+                    - morning: Buongiorno
+                    - evening: Buonasera
+            
+            > .localize {mytable:morning}.
+            """.trimIndent(),
+        ) {
+            assertEquals("<blockquote><p>Good morning.</p></blockquote>", it)
+        }
+
+        execute(
+            """
+            .doclang {italian}
+            .localization {mytable}
+                - English
+                    - theorem: Theorem
+                - Italian
+                    - theorem: Teorema
+
+            .function {theorem}
+                **.localize {mytable:theorem}.**
+
+            .theorem Test
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><strong>Teorema.</strong> Test</p>", it)
+        }
+
+        assertFails {
+            execute(
+                """
+                .doclang {english}
+                .localization {mytable}
+                    - English
+                        - morning: Good morning
+                        - evening: Good evening
+                    - Italian
+                        - morning: Buongiorno
+                        - evening: Buonasera
+                
+                > .localize {mytable:afternoon}.
+                """.trimIndent(),
+            ) {}
         }
     }
 
