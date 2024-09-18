@@ -5,10 +5,13 @@ import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.localization.Locale
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.localization.LocalizationEntries
@@ -22,6 +25,7 @@ import eu.iamgio.quarkdown.util.toPlainText
 val Localization: Module =
     setOf(
         ::localization,
+        ::localize,
     )
 
 /**
@@ -50,7 +54,7 @@ fun localization(
 ): VoidValue {
     // The localization table must be an unordered list.
     val dictionaryList =
-        contents.children.singleOrNull() as? UnorderedList
+        contents.children.singleOrNull { it !is Newline } as? UnorderedList
             ?: throw IllegalArgumentException("Localization table must only contain a list.")
 
     val table: LocalizationTable =
@@ -100,6 +104,10 @@ fun localization(
                             (it as? TextNode)?.text?.toPlainText()
                                 ?: throw IllegalArgumentException("Localization table entries must be simple text nodes.")
 
+                        if (keyValueSeparator !in rawKey) {
+                            throw IllegalArgumentException("Cannot extract key-value localization pair from \"$rawKey\".")
+                        }
+
                         val (key, value) = rawKey.split(keyValueSeparator, limit = 2)
                         key to value
                     }
@@ -116,4 +124,27 @@ fun localization(
     context.localizationTables[tableName] = table
 
     return VoidValue
+}
+
+/**
+ * Localizes a key from a pre-existing localization table (defined via [localization]).
+ *
+ * Example:
+ * ```
+ * .localize("mytable:key")
+ * ```
+ *
+ * @param key key to localize, in the format `tableName:keyName`
+ * @param separator separator between the table name and the key name. Defaults to `:`
+ * @return the localized value
+ * @throws eu.iamgio.quarkdown.localization.LocalizationException if an error occurs during the lookup
+ * @see localization
+ */
+fun localize(
+    @Injected context: Context,
+    key: String,
+    separator: String = ":",
+): StringValue {
+    val (tableName, keyName) = key.split(separator, limit = 2)
+    return context.localize(tableName, keyName).wrappedAsValue()
 }
