@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.document.locale
+package eu.iamgio.quarkdown.localization
 
 /**
  * Represents a locale, which defines the document language.

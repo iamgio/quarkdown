@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.document
 
-import eu.iamgio.quarkdown.document.locale.Locale
 import eu.iamgio.quarkdown.document.page.PageFormatInfo
+import eu.iamgio.quarkdown.localization.Locale
 
 /**
  * Mutable information about the final artifact.

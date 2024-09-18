@@ -13,8 +13,8 @@ import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
-import eu.iamgio.quarkdown.document.locale.JVMLocaleLoader
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.localization.jvm.JVMLocaleLoader
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.BinaryOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.FileResourceExporter

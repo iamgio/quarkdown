@@ -12,7 +12,6 @@ import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
-import eu.iamgio.quarkdown.document.locale.LocaleLoader
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
@@ -25,6 +24,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
 
 /**

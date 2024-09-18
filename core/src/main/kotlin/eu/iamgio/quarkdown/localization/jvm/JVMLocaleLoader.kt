@@ -1,4 +1,7 @@
-package eu.iamgio.quarkdown.document.locale
+package eu.iamgio.quarkdown.localization.jvm
+
+import eu.iamgio.quarkdown.localization.Locale
+import eu.iamgio.quarkdown.localization.LocaleLoader
 
 private typealias JLocale = java.util.Locale
 

@@ -1,4 +1,6 @@
-package eu.iamgio.quarkdown.document.locale
+package eu.iamgio.quarkdown.localization.jvm
+
+import eu.iamgio.quarkdown.localization.Locale
 
 /**
  * [Locale] implementation using [java.util.Locale].
