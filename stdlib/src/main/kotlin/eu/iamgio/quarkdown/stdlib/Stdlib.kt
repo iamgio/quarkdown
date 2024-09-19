@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import kotlin.reflect.KFunction
 
 /**
@@ -30,5 +31,15 @@ object Stdlib : LibraryExporter {
                     Library +
                     Slides +
                     Ecosystem,
+            ).withHooks(
+                PipelineHooks(
+                    // Localization data is loaded before any function is called.
+                    afterRegisteringLibraries = {
+                        includeResource(
+                            this.readOnlyContext,
+                            javaClass.getResourceAsStream("/lib/localization.qmd")!!.reader(),
+                        )
+                    },
+                ),
             )
 }

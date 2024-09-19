@@ -52,6 +52,12 @@ fun localization(
     @Name("name") tableName: String,
     contents: MarkdownContent,
 ): VoidValue {
+    // Duplicate table names are not allowed.
+    // TODO fix this function called twice on inclusion
+    // if (tableName in context.localizationTables) {
+    //    throw IllegalArgumentException("Localization table \"$tableName\" is already defined.")
+    // }
+
     // The localization table must be an unordered list.
     val dictionaryList =
         contents.children.singleOrNull { it !is Newline } as? UnorderedList
@@ -114,11 +120,6 @@ fun localization(
 
             locale to entries
         }
-
-    // Duplicate table names are not allowed.
-    if (tableName in context.localizationTables) {
-        throw IllegalArgumentException("Localization table \"$tableName\" is already defined.")
-    }
 
     // The table is registered to the context.
     context.localizationTables[tableName] = table

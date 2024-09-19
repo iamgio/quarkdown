@@ -1,0 +1,7 @@
+<!-- stdlib localization table -->
+
+.localization name:{std}
+    - English
+        - warning: Warning
+    - Italian
+        - warning: Attenzione
