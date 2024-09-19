@@ -1024,16 +1024,13 @@ class FullPipelineTest {
             )
         }
 
-        // Included file used as a value.
-        execute(
-            """
-            .sum {.include {include/include-6.md}} {3}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>8</p>",
-                it,
-            )
+        // Included file cannot be used as a dynamic value.
+        assertFails {
+            execute(
+                """
+                .sum {.include {include/include-6.md}} {3}
+                """.trimIndent(),
+            ) {}
         }
     }
 
