@@ -51,7 +51,9 @@ class Pipeline(
      * @see Library.hooks
      */
     private fun invokeHooks(hook: (PipelineHooks) -> Unit) {
+        // Invoke the hook of this pipeline.
         hooks?.let { hook(it) }
+        // Invoke the hook of all the registered libraries.
         libraries.forEach { it.hooks?.let(hook) }
     }
 
@@ -168,7 +170,6 @@ class Pipeline(
         // The user can further force override the media storage options.
         context.options.mergeMediaStorageOptions(options.mediaStorageOptionsOverrides)
 
-        invokeHooks { it.beforeExpanding(this, context) }
         expandFunctionCalls(document)
 
         visitTree(document)
