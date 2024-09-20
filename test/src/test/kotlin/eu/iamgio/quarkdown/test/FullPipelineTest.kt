@@ -1087,6 +1087,16 @@ class FullPipelineTest {
                 """.trimIndent(),
             ) {}
         }
+
+        // Library's injected localization table.
+        execute(
+            """
+            .doclang {english}
+            .localize {std:warning}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Warning</p>", it)
+        }
     }
 
     @Test
