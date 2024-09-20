@@ -48,6 +48,8 @@ import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
 import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
+import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_CLOSE
+import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_OPEN
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
@@ -405,13 +407,14 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         groups.forEachRemaining { arg ->
             // If this group contains the name of a named argument,
             // it is applied to the very next argument.
-            if (arg.firstOrNull() != '{' && arg.lastOrNull() != '}') {
+            if (arg.firstOrNull() != ARG_DELIMITER_OPEN && arg.lastOrNull() != ARG_DELIMITER_CLOSE) {
                 argName = arg
                 return@forEachRemaining
             }
 
             // Regular argument wrapped in brackets, which are stripped off.
-            val argContent = arg.trimDelimiters().trim()
+            // Common indentation is also removed.
+            val argContent = arg.trimDelimiters().trimIndent().trim()
 
             // An expression from the raw string is created.
             ValueFactory.expression(argContent, context)?.let {

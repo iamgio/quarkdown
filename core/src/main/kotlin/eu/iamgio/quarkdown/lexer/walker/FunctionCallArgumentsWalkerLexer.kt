@@ -7,12 +7,12 @@ import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
 /**
  * Beginning of a function argument.
  */
-private const val ARG_DELIMITER_OPEN = '{'
+const val ARG_DELIMITER_OPEN = '{'
 
 /**
  * End of a function argument.
  */
-private const val ARG_DELIMITER_CLOSE = '}'
+const val ARG_DELIMITER_CLOSE = '}'
 
 /**
  * End of named argument's name.

@@ -384,6 +384,20 @@ class FullPipelineTest {
             assertEquals("<p>18</p>", it)
         }
 
+        execute(
+            """
+            .divide {
+              .cos {.pi}
+            } by:{
+              .sin {
+                1
+              }
+            }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>-1.1883951</p>", it)
+        }
+
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
             assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
             assertTrue(attributes.hasMath)
