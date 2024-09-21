@@ -4,6 +4,23 @@ import java.net.MalformedURLException
 import java.net.URL
 
 /**
+ * @param prefix prefix to remove
+ * @param ignoreCase whether to ignore case when searching for the prefix
+ * @return a pair of this string without [prefix] and a boolean value indicating whether the prefix was removed.
+ *         If the prefix is not present, the string is returned as is and the boolean value is `false`
+ */
+fun String.removeOptionalPrefix(
+    prefix: String,
+    ignoreCase: Boolean = false,
+): Pair<String, Boolean> {
+    return if (startsWith(prefix, ignoreCase)) {
+        substring(prefix.length) to true
+    } else {
+        this to false
+    }
+}
+
+/**
  * @return a sliced copy of this string from start to the last occurrence of [string] if it exists,
  *         this string otherwise
  */

@@ -52,6 +52,7 @@ import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_CLOSE
 import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_OPEN
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
+import eu.iamgio.quarkdown.util.removeOptionalPrefix
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 import eu.iamgio.quarkdown.util.trimDelimiters
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
@@ -358,8 +359,24 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: BlockQuoteToken): Node {
         // Remove leading >
-        val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
+        var text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
 
+        // Blockquote type, if any. e.g. Tip, note, warning.
+        val type: BlockQuote.Type? =
+            BlockQuote.Type.entries.find { type ->
+                val prefix = type.name + ": " // e.g. Tip:, Note:, Warning:
+                // If the text begins with the prefix, it's a blockquote of that type.
+                val (newText, prefixFound) = text.removeOptionalPrefix(prefix, ignoreCase = true)
+                // If the prefix was found, it is stripped off.
+                if (prefixFound) {
+                    text = newText
+                }
+
+                // If the prefix was found, the type is set.
+                prefixFound
+            }
+
+        // Content nodes.
         var children =
             context.flavor.lexerFactory
                 .newBlockLexer(source = text)
@@ -378,6 +395,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 ?.also { children = children.dropLast(1) } // If found, the attribution is not part of the children.
 
         return BlockQuote(
+            type,
             attribution,
             children,
         )

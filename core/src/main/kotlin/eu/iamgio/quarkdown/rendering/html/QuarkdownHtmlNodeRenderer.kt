@@ -29,6 +29,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
@@ -309,9 +310,22 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         }
     }
 
-    // On top of the default behavior, a blockquote can have an attribution.
+    // On top of the base behavior, a blockquote can have a type and an attribution.
     override fun visit(node: BlockQuote) =
         buildTag("blockquote") {
+            // If the quote has a type (e.g. TIP),
+            // the whole quote is marked as a 'tip' blockquote
+            // and a localized label is shown (e.g. 'Tip:' for English).
+            node.type?.asCSS?.let { type ->
+                `class`(type)
+                context.localizeOrNull(type)?.let { localized ->
+                    +buildTag("span") {
+                        `class`("quote-type-label")
+                        +"$localized: "
+                    }
+                }
+            }
+
             +node.children
             node.attribution?.let {
                 +tagBuilder("p", it)

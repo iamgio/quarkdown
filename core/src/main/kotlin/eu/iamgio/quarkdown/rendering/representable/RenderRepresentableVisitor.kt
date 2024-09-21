@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.representable
 
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
@@ -33,6 +34,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(alignment: Stacked.CrossAxisAlignment): T
 
     fun visit(clip: Clipped.Clip): T
+
+    fun visit(quoteType: BlockQuote.Type): T
 
     fun visit(boxType: Box.Type): T
 

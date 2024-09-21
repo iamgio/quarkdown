@@ -2,6 +2,12 @@
 
 .localization name:{std}
     - English
+        - note: Note
+        - tip: Tip
         - warning: Warning
+        - error: Error
     - Italian
+        - note: Nota
+        - tip: Consiglio
         - warning: Attenzione
+        - error: Errore

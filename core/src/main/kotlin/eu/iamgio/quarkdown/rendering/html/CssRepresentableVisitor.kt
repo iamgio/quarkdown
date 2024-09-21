@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
@@ -55,6 +56,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
         }
 
     override fun visit(clip: Clipped.Clip) = clip.kebabCaseName
+
+    override fun visit(quoteType: BlockQuote.Type) = quoteType.kebabCaseName
 
     override fun visit(boxType: Box.Type): String = "${boxType.kebabCaseName}-box"
 
