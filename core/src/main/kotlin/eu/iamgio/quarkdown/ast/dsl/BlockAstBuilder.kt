@@ -14,17 +14,25 @@ class BlockAstBuilder : AstBuilder() {
     /**
      * @see AstRoot
      */
-    fun root(block: BlockAstBuilder.() -> Unit) = node(AstRoot(buildBlocks(block)))
+    fun root(block: BlockAstBuilder.() -> Unit) = +AstRoot(buildBlocks(block))
 
     /**
      * @see Paragraph
      */
-    fun paragraph(block: InlineAstBuilder.() -> Unit) = node(Paragraph(buildInline(block)))
+    fun paragraph(block: InlineAstBuilder.() -> Unit) = +Paragraph(buildInline(block))
 
     /**
      * @see BlockQuote
      */
-    fun blockQuote(block: BlockAstBuilder.() -> Unit) = node(BlockQuote(children = buildBlocks(block)))
+    fun blockQuote(
+        type: BlockQuote.Type? = null,
+        attribution: (InlineAstBuilder.() -> Unit)? = null,
+        block: BlockAstBuilder.() -> Unit,
+    ) = +BlockQuote(
+        type,
+        attribution?.let(::buildInline),
+        buildBlocks(block),
+    )
 
     /**
      * @see OrderedList
@@ -34,7 +42,7 @@ class BlockAstBuilder : AstBuilder() {
         startIndex: Int = 1,
         loose: Boolean,
         block: ListAstBuilder.() -> Unit,
-    ) = node(OrderedList(startIndex, loose, ListAstBuilder().apply(block).build()))
+    ) = +OrderedList(startIndex, loose, ListAstBuilder().apply(block).build())
 
     /**
      * @see UnorderedList
@@ -43,7 +51,7 @@ class BlockAstBuilder : AstBuilder() {
     fun unorderedList(
         loose: Boolean,
         block: ListAstBuilder.() -> Unit,
-    ) = node(UnorderedList(loose, ListAstBuilder().apply(block).build()))
+    ) = +UnorderedList(loose, ListAstBuilder().apply(block).build())
 }
 
 /**

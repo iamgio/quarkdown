@@ -31,6 +31,7 @@ import eu.iamgio.quarkdown.ast.base.inline.Strikethrough
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
@@ -562,25 +563,36 @@ class HtmlNodeRendererTest {
 
         assertEquals(
             out.next(),
-            BlockQuote(
-                children =
-                    listOf(
-                        Paragraph(listOf(Text("Foo bar"))),
-                        Paragraph(listOf(Text("Baz bim"))),
-                    ),
-            ).render(),
+            buildBlock {
+                blockQuote {
+                    paragraph { text("Foo bar") }
+                    paragraph { text("Baz bim") }
+                }
+            }.render(),
         )
 
         assertEquals(
             out.next(),
-            BlockQuote(
-                attribution = listOf(Text("William Shakespeare")),
-                children =
-                    listOf(
-                        Paragraph(listOf(Text("To be, or not to be."))),
-                        Paragraph(listOf(Text("That is the question."))),
-                    ),
-            ).render(),
+            buildBlock {
+                blockQuote(attribution = { text("William Shakespeare") }) {
+                    paragraph { text("To be, or not to be.") }
+                    paragraph { text("That is the question.") }
+                }
+            }.render(),
+        )
+
+        // The 'Tip' label is not rendered here because
+        // it requires the stdlib localization table.
+        assertEquals(
+            out.next(),
+            buildBlock {
+                blockQuote(
+                    type = BlockQuote.Type.TIP,
+                    attribution = { text("Someone") },
+                ) {
+                    paragraph { text("Hi there!") }
+                }
+            }.render(),
         )
     }
 

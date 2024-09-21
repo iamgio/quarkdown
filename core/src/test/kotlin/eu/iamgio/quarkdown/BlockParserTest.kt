@@ -270,7 +270,31 @@ class BlockParserTest {
             assertEquals("Text", rawText(nodes.next()))
         }
 
-        assertIs<OrderedList>(nodes.next().children.first())
+        with(nodes.next().children.first()) {
+            assertIs<OrderedList>(this)
+            assertEquals(2, children.size)
+        }
+
+        with(nodes.next()) {
+            assertEquals("A note.", rawText(this))
+            assertEquals(BlockQuote.Type.NOTE, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("This is a tip!", rawText(this))
+            assertIs<UnorderedList>(children[1])
+            assertEquals(BlockQuote.Type.TIP, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("you should be\nmore careful.", rawText(this))
+            assertEquals(BlockQuote.Type.WARNING, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("Something: not a typed quote.", rawText(this))
+            assertNull(type)
+        }
 
         with(nodes.next()) {
             assertEquals("To be, or not to be, that is the question.", rawText(this))
@@ -291,6 +315,12 @@ class BlockParserTest {
                 assertEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
             }
             assertEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())
+        }
+
+        with(nodes.next()) {
+            assertEquals("Try Quarkdown.", rawText(this))
+            assertEquals(Text("iamgio"), attribution!!.single())
+            assertEquals(BlockQuote.Type.TIP, type)
         }
 
         assertFalse(nodes.hasNext())

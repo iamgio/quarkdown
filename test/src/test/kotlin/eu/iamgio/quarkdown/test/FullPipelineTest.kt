@@ -172,6 +172,25 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .doclang {Italian}
+            > Tip: you could try Quarkdown.  
+            > It's a cool language!
+            > - **iamgio**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<blockquote class=\"tip\">" +
+                    "<span class=\"quote-type-label\">Consiglio: </span>" +
+                    "<p>you could try Quarkdown.<br />" +
+                    "It&rsquo;s a cool language!</p>" +
+                    "<p class=\"attribution\"><strong>iamgio</strong></p>" +
+                    "</blockquote>",
+                it,
+            )
+        }
     }
 
     @Test
