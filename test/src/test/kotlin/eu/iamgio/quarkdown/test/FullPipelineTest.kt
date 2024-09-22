@@ -182,8 +182,7 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<blockquote class=\"tip\">" +
-                    "<span class=\"quote-type-label\">Consiglio: </span>" +
+                "<blockquote class=\"tip\" style=\"--quote-type-label: 'Consiglio';\">" +
                     "<p>you could try Quarkdown.<br />" +
                     "It&rsquo;s a cool language!</p>" +
                     "<p class=\"attribution\"><strong>iamgio</strong></p>" +

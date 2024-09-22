@@ -318,12 +318,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             // and a localized label is shown (e.g. 'Tip:' for English).
             node.type?.asCSS?.let { type ->
                 `class`(type)
-                context.localizeOrNull(type)?.let { localized ->
-                    +buildTag("span") {
-                        `class`("quote-type-label")
-                        +"$localized: "
-                    }
-                }
+                // The localized label is set as a CSS variable.
+                // Themes can customize label appearance and formatting.
+                style { "--quote-type-label" value context.localizeOrNull(type)?.let { "'$it'" } }
             }
 
             +node.children

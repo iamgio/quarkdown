@@ -82,6 +82,17 @@ blockquote {
     margin: 0;
 }
 
+/* Blockquotes with a type (e.g. tip, note, warning, ...) */
+blockquote[class] {
+    /* This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:' */
+    --quote-type-label: "";
+}
+
+blockquote[class] :first-child::before {
+    content: var(--quote-type-label) ": ";
+    font-weight: bold;
+}
+
 blockquote .attribution {
     opacity: 0.6;
     display: block !important;
