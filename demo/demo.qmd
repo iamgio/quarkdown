@@ -1,6 +1,7 @@
 .docname {Quarkdown demo}
 .docauthor {iamgio}
 .doctype {slides}
+.doclang {English}
 .theme {darko} layout:{minimal}
 .autopagebreak depth:{2}
 
@@ -241,6 +242,15 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
     $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
 .poweredby {[MathJax](https://www.mathjax.org/)}
+
+## Quote type
+
+.sourceresult
+    > Note: did you know Quarkdown is a flexible tool to generate modern documents?
+
+    > Tip: you might want to try it out. Feedback and suggestions are welcome!
+
+    > Warning: it's a young project and some things may change in the near future.
 
 ## Quotation source
 
