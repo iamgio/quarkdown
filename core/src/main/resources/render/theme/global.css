@@ -19,8 +19,21 @@
     --qd-callout-box-header-color: var(--qd-main-color); /* Color of the header of callout box headers. This is just a referenceable value and is not used in this global theme */
     --qd-line-height: 1.5;
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
-    --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
     --qd-error-message-collapsed-text-color: rgb(240, 246, 77); /* Color of expandible text in error messages */
+    /* Quotes */
+    --qd-quote-type-label-suffix: ": "; /* Suffix for localized quote type labels, e.g. Tip, Note, Warning, ... */
+    --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
+    --qd-quote-foreground-color: var(--qd-main-color);
+    --qd-quote-background-color: color-mix(in srgb, var(--qd-quote-foreground-color) 5%, transparent);
+    /* Tip elements */
+    --qd-tip-foreground-color: rgb(33, 102, 25);
+    --qd-tip-background-color: color-mix(in srgb, var(--qd-tip-foreground-color) 5%, transparent);
+    /* Note elements */
+    --qd-note-foreground-color: rgb(25, 60, 102);
+    --qd-note-background-color: color-mix(in srgb, var(--qd-note-foreground-color) 5%, transparent);
+    /* Warning elements */
+    --qd-warning-foreground-color: rgb(161, 76, 32);
+    --qd-warning-background-color: color-mix(in srgb, var(--qd-warning-foreground-color) 5%, transparent);
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -82,6 +95,14 @@ blockquote {
     margin: 0;
 }
 
+blockquote, .reveal blockquote {
+    color: var(--qd-quote-foreground-color);
+}
+
+:is(blockquote, .reveal blockquote):not([class]) {
+    background-color: var(--qd-quote-background-color);
+}
+
 /* Blockquotes with a type (e.g. tip, note, warning, ...) */
 blockquote[class] {
     /* This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:' */
@@ -89,8 +110,35 @@ blockquote[class] {
 }
 
 blockquote[class] :first-child::before {
-    content: var(--quote-type-label) ": ";
+    content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
     font-weight: bold;
+}
+
+blockquote.tip {
+    border-color: var(--qd-tip-foreground-color);
+    background-color: var(--qd-tip-background-color);
+}
+
+blockquote.tip :first-child::before {
+    color: var(--qd-tip-foreground-color);
+}
+
+blockquote.note {
+    border-color: var(--qd-note-foreground-color);
+    background-color: var(--qd-note-background-color);
+}
+
+blockquote.note :first-child::before {
+    color: var(--qd-note-foreground-color);
+}
+
+blockquote.warning {
+    border-color: var(--qd-warning-foreground-color);
+    background-color: var(--qd-warning-background-color);
+}
+
+blockquote.warning :first-child::before {
+    color: var(--qd-warning-foreground-color);
 }
 
 blockquote .attribution {

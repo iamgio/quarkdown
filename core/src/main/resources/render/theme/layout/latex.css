@@ -13,6 +13,7 @@
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.5;
     --qd-slides-horizontal-alignment: start;
+    --qd-quote-type-label-suffix: ". ";
 
     --border-width-thick: 2px;
     --border-width-thin: 1px;
@@ -151,6 +152,11 @@ blockquote > :first-child {
 
 blockquote > :last-child {
     margin-bottom: 10px;
+}
+
+/* Tip, note, warning, ... */
+blockquote[class] {
+    font-style: normal;
 }
 
 blockquote .attribution {

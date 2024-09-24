@@ -65,6 +65,11 @@ table tr:last-child td {
 blockquote {
     font-style: italic;
     opacity: 0.7;
+    background: none !important;
+}
+
+blockquote[class] {
+    font-style: normal;
 }
 
 blockquote .attribution {

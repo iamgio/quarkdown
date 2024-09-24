@@ -7,10 +7,9 @@
     --qd-main-color: #C9C9D7;
     --qd-link-color: #5FC7C7;
     --qd-callout-box-header-color: var(--primary);
-}
-
-blockquote {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    --qd-tip-foreground-color: #86DC93;
+    --qd-note-foreground-color: #84AAEC;
+    --qd-warning-foreground-color: #FFB86C;
 }
 
 hr {
