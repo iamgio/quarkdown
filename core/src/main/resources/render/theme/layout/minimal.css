@@ -134,6 +134,12 @@ nav li {
     margin: 4px 0;
 }
 
+.reveal nav > ol {
+    /* Resets the no-clipping workaround because this theme's ToC hides list markers. */
+    margin-left: auto;
+}
+
+
 /* Footer */
 
 .page-margin-bottom-center {

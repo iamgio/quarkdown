@@ -452,6 +452,20 @@ nav {
     text-align: start;
 }
 
+/* ToC is scrollable in slides. */
+.reveal nav {
+    overflow-y: scroll;
+    max-height: 50vh;
+}
+
+.reveal nav > ol {
+    /*
+    Content is clipped for some reason when overflow-y is enabled,
+    but this isn't needed if the list hides markers.
+    */
+    margin-left: 24px;
+}
+
 h1#table-of-contents {
     text-align: start;
 }
