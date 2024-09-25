@@ -6,8 +6,10 @@
         - tip: Tip
         - warning: Warning
         - error: Error
+        - tableofcontents: Table of Contents
     - Italian
         - note: Nota
         - tip: Consiglio
         - warning: Attenzione
         - error: Errore
+        - tableofcontents: Indice

@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
 import eu.iamgio.quarkdown.ast.base.inline.Link
-import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
@@ -187,12 +187,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
         return buildMultiTag {
-            // Title
+            // Localized title.
+            val titleText = context.localizeOrNull("tableofcontents")
+
+            // Title heading. Its content is either the node's user-set title or a default localized one.
             +Heading(
                 depth = 1,
-                text = node.title ?: listOf(Text("Table of Contents")),
+                text = node.title ?: buildInline { titleText?.let { text(it) } },
                 customId = "table-of-contents",
-            ) // In the future, the default title should be localized.
+            )
             // Content
             +buildTag("nav") {
                 +tableOfContentsItemsToList(tableOfContents.items, node)

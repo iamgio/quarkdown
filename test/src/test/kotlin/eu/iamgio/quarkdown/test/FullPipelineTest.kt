@@ -879,6 +879,67 @@ class FullPipelineTest {
     fun `table of contents`() {
         execute(
             """
+            .tableofcontents
+            
+            # ABC
+            
+            Hi
+            
+            # DEF
+            
+            Hello
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\"></h1>" +
+                    "<nav><ol>" +
+                    "<li><a href=\"#abc\">ABC</a></li>" +
+                    "<li><a href=\"#def\">DEF</a></li>" +
+                    "</ol></nav>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<p>Hello</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .doclang {english}
+            .tableofcontents
+            
+            # ABC
+            
+            Hi
+            
+            # DEF
+            
+            Hello
+            """.trimIndent(),
+            MutableContextOptions(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\">Table of Contents</h1>" + // Localized name
+                    "<nav><ol>" +
+                    "<li><a href=\"#abc\">ABC</a></li>" +
+                    "<li><a href=\"#def\">DEF</a></li>" +
+                    "</ol></nav>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<p>Hello</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
             .tableofcontents title:{_TOC_}
             
             # ABC
