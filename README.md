@@ -270,17 +270,3 @@ Some suggested combinations are:
 |   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
 
 </details>
-
-## Status
-
-The project is under active development.
-
-#### Future plans
-
-- Wiki, getting started guides and tutorials
-- New themes
-- Contribution guidelines
-- Auto-generated stdlib documentation ([Dokka](https://github.com/Kotlin/dokka) custom plugin)
-- External libraries support
-- LaTeX rendering
-- GUI editor / IDE plugin
