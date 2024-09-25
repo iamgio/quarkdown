@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
@@ -69,7 +69,10 @@ data class Box(
             message: InlineContent,
             title: String? = null,
         ) = Box(
-            title = listOf(Text("Error" + if (title != null) ": $title" else "")),
+            title =
+                buildInline {
+                    text("Error" + if (title != null) ": $title" else "")
+                },
             type = Type.ERROR,
             children = listOf(Paragraph(message)),
         )
