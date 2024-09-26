@@ -1,2 +1,61 @@
 .include {setup.qmd}
 .include {title.qmd}
+
+# Background
+
+Analisi dei più noti strumenti ***"what you see is what you mean"*** .text content:{(wysiwym)} variant:{smallcaps}:
+
+- **LaTeX**: pieno controllo, ripida curva di apprendimento
+
+- **AsciiDoc**: poco controllo, semplice e leggibile, sintassi proprietaria
+
+- **Typst**: pieno controllo, leggibile, sintassi proprietaria
+
+- **MDX**: nessun controllo, destinato all'embedding
+
+# Analisi
+
+Nasce la necessità di realizzare uno strumento che al tempo stesso:
+- adotti una sintassi standard di fatto, **semplice e leggibile**  
+- permetta il **pieno controllo** del documento
+- sia abbastanza versatile da supportare l'**esportazione in più formati**
+
+.fragment
+    &nbsp;  
+    La scelta della sintassi ricade su Markdown, estremamente popolare nel mondo dell'open source.
+
+    Markdown definisce tuttavia la formattazione del testo, ma non del layout.  
+    **Come si centra del contenuto in Markdown?** .text content:{Non è possibile} size:{small}
+
+# Quarkdown flavor
+
+Per sopperire alle lacune di Markdown, nasce l'idea di una sua estensione che introduca le **chiamate a funzione**.
+
+```
+.align {center}
+    Questo testo si trova al **centro**.
+```
+
+&nbsp;
+
+Sono messe a disposizione funzioni di layout, di I/O, matematiche e anche di scripting.
+
+Quarkdown è dunque **Turing complete**.
+
+<<<
+
+.row alignment:{spacearound}
+    .column cross:{start} gap:{5mm}
+        # Pipeline
+
+        L'architettura del software segue una pipeline sequenziale.
+
+        1. Registrazione delle librerie
+        2. Lexing
+        3. Parsing
+        4. Espansione delle chiamate
+        5. Attraversamento dell'albero
+        6. Rendering
+        7. Post-rendering
+
+    !(_x530)[Pipeline](img/uml/pipeline.svg)
