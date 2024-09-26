@@ -53,9 +53,47 @@ Quarkdown è dunque **Turing complete**.
         1. Registrazione delle librerie
         2. Lexing
         3. Parsing
-        4. Espansione delle chiamate
+        4. Espansione delle chiamate a funzione
         5. Attraversamento dell'albero
         6. Rendering
         7. Post-rendering
 
     !(_x530)[Pipeline](img/uml/pipeline.svg)
+
+# Lexing
+
+Vengono estratti i token dal codice sorgente tramite espressioni regolari.
+
+&nbsp;
+
+.row alignment:{center} cross:{start} gap:{2.5cm}
+    .column
+        #### Blocchi
+    
+        ~~~markdown
+        Hello, world!
+        > M'illumino d'immenso
+
+        ```java
+        class Point {...}
+        ```
+        ~~~
+
+        1. Paragrafo
+        2. Citazione
+        3. Blocco di codice
+
+    .column
+        #### Inline
+
+
+        ```markdown
+        Lorem **ipsum**: ![Image](img.png)
+        ```
+
+        1. Testo `Lorem `
+        2. Grassetto `ipsum`
+        3. Testo `: `
+        4. Immagine `![Image](img.png)`
+
+
