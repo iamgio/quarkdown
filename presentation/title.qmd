@@ -1,0 +1,24 @@
+![Banner](img/banner.svg)
+
+*Typesetting versatile di documenti articolati*
+
+&nbsp;
+
+---
+
+.row alignment:{center} gap:{3cm}
+    **Relatore**  
+    Prof. Mirko Viroli
+
+    **Correlatore**  
+    Prof. Gianluca Aguzzi
+
+    **Candidato**  
+    Giorgio Garofalo
+
+---
+
+&nbsp;
+
+II Sessione di Laurea  
+Anno Accademico 2023-2024

@@ -1,0 +1,14 @@
+.docname {Quarkdown: presentazione tesi}
+.docauthor {Giorgio Garofalo}
+.doctype {slides}
+.doclang {italian}
+.theme {darko} layout:{minimal}
+
+.footer
+    .docauthor
+
+    **Quarkdown**
+
+    Università di Bologna - Ingegneria e Scienze Informatiche
+
+    
