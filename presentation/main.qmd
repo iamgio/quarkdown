@@ -75,13 +75,16 @@ Vengono estratti i token dal codice sorgente tramite espressioni regolari.
         > M'illumino d'immenso
 
         ```java
-        class Point {...}
+        public class Point {...}
         ```
+
+        .csv {file.csv}
         ~~~
 
         1. Paragrafo
         2. Citazione
         3. Blocco di codice
+        4. Chiamata a funzione
 
     .column
         #### Inline
@@ -97,3 +100,18 @@ Vengono estratti i token dal codice sorgente tramite espressioni regolari.
         4. Immagine `![Image](img.png)`
 
 
+# Parsing
+
+Viene generato l'albero del documento, in cui ogni token estratto dal lexer corrisponde ad un **nodo**.  
+Vengono inoltre processati gli elementi innestati.
+
+> `Paragraph(Un **paragrafo** con del testo. ![Immagine](img.url))`  
+> !(_x250)[Nodo](img/uml/parsing-result.svg)
+
+<<<
+
+.row gap:{3cm}
+    **Il parsing avviene ricorsivamente.**  
+    Per ogni blocco viene rieseguito il processo di lexing e parsing.
+
+    !(_x550)[Recursione](img/recursion.svg)
