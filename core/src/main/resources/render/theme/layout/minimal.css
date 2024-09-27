@@ -72,7 +72,7 @@ table tr th:last-child {
 }
 
 blockquote {
-    font-style: italic;
+    font-style: normal !important;
     border-left: 0.4em solid;
     padding: 4px 1em;
 }
