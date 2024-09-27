@@ -44,7 +44,7 @@ Quarkdown è dunque **Turing complete**.
 
 # Tecnologie
 
-- Il progetto è scritto in Kotlin (JVM) con Gradle
+- Il progetto è scritto in **Kotlin** (JVM) con Gradle
 
 - L'esportazione avviene in HTML, CSS e JavaScript.
 
@@ -195,7 +195,14 @@ Nello stadio di **post-rendering** il codice prodotto viene iniettato in un temp
         !(_x200)[Latex](img/themes/latex.png "Paperwhite + Latex")
         !(_x200)[Beamer](img/themes/beamer.png "Beaver + Beamer")
         !(_x200)[Darkolatex](img/themes/darkolatex.png "Darko + Latex")
-    
+
+# Presente e futuro
+
+Il software è ampiamente utilizzabile e copre buona parte dei possibili casi d'uso.
+
+**Seppur ancora molto giovane, le potenzialità sono grandi.**  
+È previsto il supporto a lungo termine, con nuove funzionalità, temi, wiki e tutorial.  
+
 <<<
 
 ## Grazie per l'attenzione
