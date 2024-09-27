@@ -186,3 +186,6 @@ Nello stadio di **post-rendering** il codice prodotto viene iniettato in un temp
         !(_x200)[Beamer](img/themes/beamer.png "Beaver + Beamer")
         !(_x200)[Darkolatex](img/themes/darkolatex.png "Darko + Latex")
     
+<<<
+
+## Grazie per l'attenzione
