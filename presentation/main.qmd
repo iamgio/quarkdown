@@ -116,15 +116,65 @@ Vengono inoltre processati gli elementi innestati.
 
     !(_x550)[Recursione](img/recursion.svg)
 
+# Espansione delle chiamate
+
+I nodi di tipo `FunctionCall` vengono letti da una coda e per ognuno:
+1. Si risale alla funzione a cui fa riferimento in una delle librerie caricate
+2. Viene controllata la validità della funzione
+3. Viene ottenuto l'oggetto output della chiamata
+4. L'output viene convertito in un elemento visibile sul documento
+
+.row alignment:{spaceevenly}
+    .fragment
+        ```text
+        .grid columns:{2} gap:{1cm}
+            **Primo** elemento
+            
+            **Secondo** elemento
+            
+            **Terzo** elemento
+
+            **Quarto** elemento
+        ```
+
+        .grid columns:{2} gap:{1cm}
+            **Primo** elemento
+            
+            **Secondo** elemento
+            
+            **Terzo** elemento
+            
+            **Quarto** elemento
+    
+    .fragment
+        ```text
+        .var {radius} {8}
+         
+        L'area di un cerchio di **raggio .radius**
+        è **.multiply {.pow {.radius} to:{2}} by:{.pi}**
+        ```
+    
+        L'area di un cerchio di **raggio 8** è **201.06194**.
 
 # Rendering
 
 L'albero dei nodi viene percorso dalla radice, traducendo ogni nodo in un output per il linguaggio target.
 
-> !(_x200)[Nodo](img/uml/parsing-result.svg)
->
+> !(_x170)[Nodo](img/uml/parsing-result.svg)
 > ```html
 > <p>
 >   Un <strong>paragrafo</strong> con del testo. <img src="img.url" alt="Immagine" />
 > </p>
 > ```
+
+Nello stadio di **post-rendering** il codice prodotto viene iniettato in un template che adatta il contenuto a presentazioni, libri e articoli.
+
+# Demo
+
+&nbsp;
+
+.fragment
+    .text size:{medium}
+        **Questa presentazione!**
+
+    I sorgenti di questo documento sono disponibili su https://github.com/iamgio/quarkdown/tree/uni-thesis-presentation/presentation
