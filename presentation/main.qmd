@@ -112,7 +112,7 @@ Vengono inoltre processati gli elementi innestati.
     **Il parsing avviene ricorsivamente.**  
     Per ogni blocco viene rieseguito il processo di lexing e parsing.
 
-    !(_x550)[Recursione](img/recursion.svg)
+    !(_x550)[Ricorsione](img/recursion.svg)
 
 # Espansione delle chiamate
 
