@@ -42,6 +42,16 @@ Sono messe a disposizione funzioni di layout, di I/O, matematiche e anche di scr
 
 Quarkdown è dunque **Turing complete**.
 
+# Tecnologie
+
+- Il progetto è scritto in Kotlin (JVM) con Gradle
+
+- L'esportazione avviene in HTML, CSS e JavaScript.
+
+  - Le presentazioni sono gestite da [Reveal.js](https://revealjs.com)
+  
+  - Libri e articoli sono gestiti da [Paged.js](https://pagedjs.org)
+
 <<<
 
 .row alignment:{spacearound}
