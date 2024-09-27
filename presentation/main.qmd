@@ -103,7 +103,7 @@ Vengono estratti i token dal codice sorgente tramite espressioni regolari.
 Viene generato l'albero del documento, in cui ogni token estratto dal lexer corrisponde ad un **nodo**.  
 Vengono inoltre processati gli elementi innestati.
 
-> `Paragraph(Un **paragrafo** con del testo. ![Immagine](img.url))`  
+> **`ParagraphToken`** `Un **paragrafo** con del testo. ![Immagine](img.url)`  
 > !(_x250)[Nodo](img/uml/parsing-result.svg)
 
 <<<
