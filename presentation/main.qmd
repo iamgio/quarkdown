@@ -22,7 +22,7 @@ Nasce la necessità di realizzare uno strumento che al tempo stesso:
 
 .fragment
     &nbsp;  
-    La scelta della sintassi ricade su Markdown, estremamente popolare nel mondo dell'open source.
+    La scelta della sintassi ricade su **Markdown**, estremamente popolare nel mondo dell'open source.
 
     Markdown definisce tuttavia la formattazione del testo, ma non del layout.  
     **Come si centra del contenuto in Markdown?** .text content:{Non è possibile} size:{small}
@@ -64,40 +64,38 @@ Quarkdown è dunque **Turing complete**.
 
 Vengono estratti i token dal codice sorgente tramite espressioni regolari.
 
-&nbsp;
-
-.row alignment:{center} cross:{start} gap:{2.5cm}
-    .column
-        #### Blocchi
-    
-        ~~~markdown
-        Hello, world!
-        > M'illumino d'immenso
-
-        ```java
-        public class Point {...}
-        ```
-
-        .csv {file.csv}
-        ~~~
-
-        1. Paragrafo
-        2. Citazione
-        3. Blocco di codice
-        4. Chiamata a funzione
-
-    .column
-        #### Inline
-
-
-        ```markdown
-        Lorem **ipsum**: ![Image](img.png)
-        ```
-
-        1. Testo `Lorem `
-        2. Grassetto `ipsum`
-        3. Testo `: `
-        4. Immagine `![Image](img.png)`
+>.row alignment:{center} cross:{start} gap:{2.5cm}
+>    .column
+>        #### Blocchi
+>    
+>        ~~~markdown
+>        Hello, world!
+>        > M'illumino d'immenso
+>
+>        ```java
+>        public class Point {...}
+>        ```
+>
+>        .csv {file.csv}
+>        ~~~
+>
+>        1. Paragrafo
+>        2. Citazione
+>        3. Blocco di codice
+>        4. Chiamata a funzione
+>
+>    .column
+>        #### Inline
+>
+>
+>        ```markdown
+>        Lorem **ipsum**: ![Image](img.png)
+>        ```
+>
+>        1. Testo `Lorem `
+>        2. Grassetto `ipsum`
+>        3. Testo `: `
+>        4. Immagine `![Image](img.png)`
 
 
 # Parsing
@@ -178,3 +176,13 @@ Nello stadio di **post-rendering** il codice prodotto viene iniettato in un temp
         **Questa presentazione!**
 
     I sorgenti di questo documento sono disponibili su https://github.com/iamgio/quarkdown/tree/uni-thesis-presentation/presentation
+
+<<<
+
+.box {Temi}
+    .grid columns:{2} gap:{5mm}
+        !(_x200)[Darko](img/themes/darko.png "Darko + Minimal")
+        !(_x200)[Latex](img/themes/latex.png "Paperwhite + Latex")
+        !(_x200)[Beamer](img/themes/beamer.png "Beaver + Beamer")
+        !(_x200)[Darkolatex](img/themes/darkolatex.png "Darko + Latex")
+    
