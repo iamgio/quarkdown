@@ -115,3 +115,16 @@ Vengono inoltre processati gli elementi innestati.
     Per ogni blocco viene rieseguito il processo di lexing e parsing.
 
     !(_x550)[Recursione](img/recursion.svg)
+
+
+# Rendering
+
+L'albero dei nodi viene percorso dalla radice, traducendo ogni nodo in un output per il linguaggio target.
+
+> !(_x200)[Nodo](img/uml/parsing-result.svg)
+>
+> ```html
+> <p>
+>   Un <strong>paragrafo</strong> con del testo. <img src="img.url" alt="Immagine" />
+> </p>
+> ```
