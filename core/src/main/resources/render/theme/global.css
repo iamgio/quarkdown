@@ -485,6 +485,19 @@ span.current-page-number, span.total-page-number {
     display: inline !important;
 }
 
+/* Footer */
+
+.page-margin-bottom-center, .page-margin-top-center {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+:is(.page-margin-bottom-center, .page-margin-top-center) > * {
+    width: 100%;
+    text-align: center;
+}
+
 /* Fixed page margins */
 
 .page-margin-content:not(.pagedjs_page .page-margin-content) {
