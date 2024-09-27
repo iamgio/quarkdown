@@ -1,6 +1,7 @@
 ![Banner](img/banner.svg)
 
-*Typesetting versatile di documenti articolati*
+*Typesetting versatile di documenti articolati*  
+.text size:{small} content:{https://github.com/iamgio/quarkdown}
 
 &nbsp;
 
