@@ -199,6 +199,7 @@ code:not(pre code) {
 
 pre code {
     font-size: var(--qd-code-block-font-size);
+    font-style: normal !important;
     max-height: none !important;
 }
 
