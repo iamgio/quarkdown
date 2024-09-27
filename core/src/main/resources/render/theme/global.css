@@ -242,6 +242,14 @@ code.focus-lines .hljs-ln-line:not(.focused),
     align-items: end;
 }
 
+.stack > p, .clip > p {
+    margin: 0;
+}
+
+.stack > p:empty {
+    display: none;
+}
+
 .stack-row {
     display: flex;
     flex-direction: row;
@@ -441,10 +449,6 @@ code.focus-lines .hljs-ln-line:not(.focused),
 .reveal img {
     max-width: 100% !important;
     max-height: 100% !important;
-}
-
-.stack > p, .clip > p {
-    margin: 0;
 }
 
 /* Table of contents */
