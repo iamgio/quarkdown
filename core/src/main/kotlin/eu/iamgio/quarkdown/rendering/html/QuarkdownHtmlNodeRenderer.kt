@@ -144,6 +144,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "width" value node.width
                 "height" value node.height
             }
+
+            if (node.width == null && node.height == null) {
+                +"&nbsp;"
+            }
         }
 
     // Converts TOC items to a renderable OrderedList.
