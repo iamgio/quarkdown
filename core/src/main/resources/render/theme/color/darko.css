@@ -16,10 +16,6 @@ hr {
     opacity: 0.5;
 }
 
-.box.callout-box {
-    background-color: var(--primary);
-}
-
 .box > header {
     background-color: rgba(23, 53, 56, 0.35);
 }
@@ -28,16 +24,20 @@ hr {
     color: inherit;
 }
 
-.box.tip-box {
+.box.callout {
+    background-color: var(--primary);
+}
+
+.box.tip {
     background-color: rgb(52, 79, 117);
     color: white;
 }
 
-.box.tip-box > header {
+.box.tip > header {
     background-color: rgb(10, 17, 26, 0.15);
 }
 
-.box.tip-box > header > h4 {
+.box.tip > header > h4 {
     color: rgb(194, 236, 250);
 }
 

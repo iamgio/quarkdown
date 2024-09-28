@@ -179,19 +179,19 @@ blockquote .attribution {
     padding-left: 16px;
 }
 
-.box.callout-box {
+.box.box {
     border-color: var(--qd-callout-box-header-color);
 }
 
-.box.callout-box:has(> header) {
+.box.callout:has(> header) {
     border-radius: 8px 8px 8px 0;
 }
 
-.box.callout-box:not(:has(> header)) {
+.box.callout:not(:has(> header)) {
     border-radius: 0;
 }
 
-.box.callout-box > .box-content {
+.box.callout > .box-content {
     background-color: var(--qd-background-color) !important;
 }
 

@@ -191,7 +191,7 @@ p, .reveal p {
     margin-top: 0 !important;
 }
 
-code, .error-box > .box-content {
+code, .box.error > .box-content {
     font-family: var(--qd-code-font);
 }
 
@@ -371,37 +371,37 @@ code.focus-lines .hljs-ln-line:not(.focused),
 
 /* Box types */
 
-.box.error-box {
+.box.error {
     background-color: rgb(224, 67, 64);
     color: white;
 }
 
-.box.error-box > .box-content {
+.box.error > .box-content {
     font-size: 0.6em;
 }
 
-.box.error-box > .box-content .inline-collapse[data-collapsed="true"] {
+.box.error > .box-content .inline-collapse[data-collapsed="true"] {
     color: var(--qd-error-message-collapsed-text-color);
     background-color: rgba(0, 0, 0, 0.09);
 }
 
-.box.warning-box {
+.box.warning {
     background-color: rgb(244, 206, 94);
 }
 
-.box.tip-box {
+.box.tip {
     background-color: rgb(173, 216, 230);
 }
 
-.box.error-box > header > h4 {
+.box.error > header > h4 {
     color: white;
 }
 
-.box:is(.warning-box, .tip-box) {
+.box:is(.warning, .tip) {
     color: #333;
 }
 
-.box.tip-box > header > h4 {
+.box.tip > header > h4 {
     color: rgb(25, 60, 102);
 }
 
@@ -415,26 +415,26 @@ code.focus-lines .hljs-ln-line:not(.focused),
     margin-right: 6px;
 }
 
-.box:is(.warning-box, .tip-box) > header > h4 {
+.box:is(.warning, .tip) > header > h4 {
     margin-right: 24px; /* 18px icon + 6px margin, used to realign text to the center */
     display: flex;
     flex-direction: row;
     align-items: center; /* Align icons */
 }
 
-.box.warning-box > header > h4::before {
+.box.warning > header > h4::before {
     content: "\eac5"; /* 'error' (triangle) icon */
 }
 
-.box.tip-box > header > h4::before {
+.box.tip > header > h4::before {
     content: "\ecf7"; /* 'bulb' icon */
 }
 
-.box:is(.warning-box, .error-box) > header {
+.box:is(.warning, .error) > header {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.box.tip-box > header {
+.box.tip > header {
     background-color: rgba(25, 60, 102, 0.1);
 }
 

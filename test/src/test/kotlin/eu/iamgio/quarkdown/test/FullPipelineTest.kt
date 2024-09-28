@@ -670,6 +670,9 @@ class FullPipelineTest {
                 ## Hello 2
                 
                     Hello 3
+                    
+                .box {Hello 4} type:{tip}
+                    Hello 5
             """.trimIndent(),
         ) {
             assertEquals(
@@ -677,6 +680,7 @@ class FullPipelineTest {
                     "<p>Hello 1</p>" +
                     "<h2>Hello 2</h2>" +
                     "<pre><code>Hello 3</code></pre>" +
+                    "<div class=\"box tip\"><header><h4>Hello 4</h4></header><div class=\"box-content\"><p>Hello 5</p></div></div>" +
                     "</div>",
                 it,
             )
@@ -1329,7 +1333,7 @@ class FullPipelineTest {
 
         execute(".sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
             assertEquals(
-                "<div class=\"box error-box\">" +
+                "<div class=\"box error\">" +
                     "<header><h4>Error: sum</h4></header>" +
                     "<div class=\"box-content\"><p>" +
                     "Cannot call function sum" +
