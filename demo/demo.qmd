@@ -130,7 +130,7 @@ from your Markdown code.
 .sourceresult
     .include {sources/other.qmd}
 
-.whitespace height:{1cm}
+.whitespace
 
 .fragment
     > Functions declared in included files are imported as well.  
