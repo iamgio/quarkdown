@@ -20,8 +20,9 @@ Nasce la necessità di realizzare uno strumento che al tempo stesso:
 - permetta il **pieno controllo** del documento
 - sia abbastanza versatile da supportare l'**esportazione in più formati**
 
+.whitespace height:{8mm}
+
 .fragment
-    &nbsp;  
     La scelta della sintassi ricade su **Markdown**, estremamente popolare nel mondo dell'open source.
 
     Markdown definisce tuttavia la formattazione del testo, ma non del layout.  
@@ -36,7 +37,7 @@ Per sopperire alle lacune di Markdown, nasce l'idea di una sua estensione che in
     Questo testo si trova al **centro**.
 ```
 
-&nbsp;
+.whitespace
 
 Sono messe a disposizione funzioni di layout, di I/O, matematiche e anche di scripting.
 
@@ -179,7 +180,7 @@ Nello stadio di **post-rendering** il codice prodotto viene iniettato in un temp
 
 # Demo
 
-&nbsp;
+.whitespace
 
 .fragment
     .text size:{medium}
