@@ -107,11 +107,13 @@ blockquote, .reveal blockquote {
 blockquote[class] {
     /* This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:' */
     --quote-type-label: "";
+    font-style: normal;
 }
 
 blockquote[class][data-labeled] :first-child::before {
     content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
     font-weight: bold;
+    font-style: normal;
 }
 
 blockquote.tip {
