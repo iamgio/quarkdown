@@ -128,6 +128,8 @@ fun grid(
 
 /**
  * An empty square that adds whitespace to the layout.
+ * If at least one of the dimensions is set, the square will have a fixed size.
+ * If both dimensions are unset, a blank character is used, which can be useful for spacing and adding line breaks.
  * @param width width of the square. If unset, it defaults to zero
  * @param height height of the square. If unset, it defaults to zero
  * @return the new whitespace node

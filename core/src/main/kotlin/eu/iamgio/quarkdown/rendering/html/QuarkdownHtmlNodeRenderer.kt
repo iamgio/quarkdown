@@ -139,14 +139,19 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         }
 
     override fun visit(node: Whitespace) =
-        buildTag("span") {
-            style {
-                "width" value node.width
-                "height" value node.height
+        // If at least one of the dimensions is set, the square will have a fixed size.
+        // Otherwise, a blank character is rendered.
+        when {
+            node.width == null && node.height == null -> {
+                buildTag("span", "&nbsp;")
             }
-
-            if (node.width == null && node.height == null) {
-                +"&nbsp;"
+            else -> {
+                buildTag("div") {
+                    style {
+                        "width" value node.width
+                        "height" value node.height
+                    }
+                }
             }
         }
 

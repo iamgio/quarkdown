@@ -175,6 +175,26 @@ class FullPipelineTest {
 
         execute(
             """
+            Line 1
+            
+            .whitespace
+            
+            Line 2 after a long break
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Line 1</p><span>&nbsp;</span><p>Line 2 after a long break</p>", it)
+        }
+
+        execute("A .whitespace width:{1cm} B") {
+            assertEquals("<p>A <div style=\"width: 1.0cm;\"></div> B</p>", it)
+        }
+
+        execute("A .whitespace width:{1cm} height:{3mm} B") {
+            assertEquals("<p>A <div style=\"width: 1.0cm; height: 3.0mm;\"></div> B</p>", it)
+        }
+
+        execute(
+            """
             .doclang {Italian}
             > Tip: you could try Quarkdown.  
             > It's a cool language!
