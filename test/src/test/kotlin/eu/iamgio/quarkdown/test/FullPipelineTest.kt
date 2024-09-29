@@ -175,6 +175,26 @@ class FullPipelineTest {
 
         execute(
             """
+            Line 1
+            
+            .whitespace
+            
+            Line 2 after a long break
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Line 1</p><span>&nbsp;</span><p>Line 2 after a long break</p>", it)
+        }
+
+        execute("A .whitespace width:{1cm} B") {
+            assertEquals("<p>A <div style=\"width: 1.0cm;\"></div> B</p>", it)
+        }
+
+        execute("A .whitespace width:{1cm} height:{3mm} B") {
+            assertEquals("<p>A <div style=\"width: 1.0cm; height: 3.0mm;\"></div> B</p>", it)
+        }
+
+        execute(
+            """
             .doclang {Italian}
             > Tip: you could try Quarkdown.  
             > It's a cool language!
@@ -650,6 +670,9 @@ class FullPipelineTest {
                 ## Hello 2
                 
                     Hello 3
+                    
+                .box {Hello 4} type:{tip}
+                    Hello 5
             """.trimIndent(),
         ) {
             assertEquals(
@@ -657,6 +680,7 @@ class FullPipelineTest {
                     "<p>Hello 1</p>" +
                     "<h2>Hello 2</h2>" +
                     "<pre><code>Hello 3</code></pre>" +
+                    "<div class=\"box tip\"><header><h4>Hello 4</h4></header><div class=\"box-content\"><p>Hello 5</p></div></div>" +
                     "</div>",
                 it,
             )
@@ -1309,7 +1333,7 @@ class FullPipelineTest {
 
         execute(".sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
             assertEquals(
-                "<div class=\"box error-box\">" +
+                "<div class=\"box error\">" +
                     "<header><h4>Error: sum</h4></header>" +
                     "<div class=\"box-content\"><p>" +
                     "Cannot call function sum" +

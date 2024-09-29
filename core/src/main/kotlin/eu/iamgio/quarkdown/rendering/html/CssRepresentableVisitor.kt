@@ -59,7 +59,7 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(quoteType: BlockQuote.Type) = quoteType.kebabCaseName
 
-    override fun visit(boxType: Box.Type): String = "${boxType.kebabCaseName}-box"
+    override fun visit(boxType: Box.Type): String = boxType.kebabCaseName
 
     override fun visit(position: PageMarginPosition) = position.kebabCaseName
 

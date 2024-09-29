@@ -29,15 +29,15 @@ h1:not(.box h1) {
     color: inherit;
 }
 
-.box.callout-box {
+.box.callout {
     background-color: rgb(234, 233, 247);
 }
 
-.box.callout-box > header, .box.callout-box .box-content li::marker {
+.box.callout > header, .box.callout .box-content li::marker {
     color: rgb(83, 81, 152);
 }
 
-.box.callout-box:has(.box-content h1) {
+.box.callout:has(.box-content h1) {
     background-color: var(--secondary);
 }
 

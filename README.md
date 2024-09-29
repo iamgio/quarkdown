@@ -78,11 +78,11 @@ The desired document type can be set by calling the `.doctype` function within t
 
 ## Comparison
 
-|                       |      Markdown      |       LaTeX        |     Quarkdown      |
-|-----------------------|:------------------:|:------------------:|:------------------:|
-| Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: |
-| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |
-| Scripting             |        :x:         |      Partial       | :white_check_mark: |
+|                       |      Markdown      |     Quarkdown      |       LaTeX        |      AsciiDoc      |        MDX         |
+|-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| Concise and readable  | :white_check_mark: | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |
+| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
+| Scripting             |        :x:         | :white_check_mark: |      Partial       |        :x:         | :white_check_mark: |
 
 <table>
   <thead>

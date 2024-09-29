@@ -20,7 +20,7 @@ pre code {
     background-color: transparent !important;
 }
 
-.box.callout-box > header {
+.box.callout > header {
     background-image: linear-gradient(to right, var(--primary), transparent);
 }
 

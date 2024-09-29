@@ -96,7 +96,7 @@ figure figcaption {
     border-radius: 8px 8px 0 0;
 }
 
-.error-box code {
+.box.error code {
     font-size: 0.7em;
 }
 
