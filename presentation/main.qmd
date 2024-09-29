@@ -133,37 +133,35 @@ I nodi di tipo `FunctionCall` vengono letti da una coda e per ognuno:
 3. Viene ottenuto l'oggetto output della chiamata
 4. L'output viene convertito in un elemento visibile sul documento
 
-.row alignment:{spaceevenly}
+.function {sourceresult}
+    source:
+    .code {text}
+        .source
+    .source
+
+.row alignment:{spaceevenly} cross:{start}
     .fragment
-        ```text
-        .grid columns:{2} gap:{1cm}
-            **Primo** elemento
+        .sourceresult
+            .grid columns:{2} gap:{1cm}
+                *Primo* elemento
             
-            **Secondo** elemento
+                *Secondo* elemento
             
-            **Terzo** elemento
+                *Terzo* elemento
 
-            **Quarto** elemento
-        ```
-
-        .grid columns:{2} gap:{1cm}
-            **Primo** elemento
-            
-            **Secondo** elemento
-            
-            **Terzo** elemento
-            
-            **Quarto** elemento
+                *Quarto* elemento
     
     .fragment
-        ```text
-        .var {radius} {8}
+        .sourceresult
+            .function {area}
+                radius:
+                .multiply {.pow {.radius} to:{2}} by:{.pi}
+
+            .var {radius} {8}
          
-        L'area di un cerchio di **raggio .radius**
-        è **.multiply {.pow {.radius} to:{2}} by:{.pi}**
-        ```
-    
-        L'area di un cerchio di **raggio 8** è **201.06194**.
+            L'area di un cerchio di **raggio .radius**
+            è **.area {.radius}**
+
 
 # Rendering
 
