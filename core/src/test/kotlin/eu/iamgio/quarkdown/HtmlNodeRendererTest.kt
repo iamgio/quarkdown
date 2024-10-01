@@ -408,7 +408,7 @@ class HtmlNodeRendererTest {
         val noIdNoPageBreak =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(autoPageBreakHeadingDepth = 0, enableAutomaticIdentifiers = false),
+                options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 0, enableAutomaticIdentifiers = false),
             )
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
@@ -421,7 +421,7 @@ class HtmlNodeRendererTest {
         val idNoPageBreak =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(autoPageBreakHeadingDepth = 0),
+                options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 0),
             )
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(idNoPageBreak))
@@ -430,7 +430,7 @@ class HtmlNodeRendererTest {
 
         // Automatic ID, force page break on depth <= 2
         val autoPageBreak =
-            MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 2))
+            MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 2))
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(autoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(autoPageBreak))

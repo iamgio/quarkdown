@@ -3,7 +3,7 @@
 .doctype {slides}
 .doclang {English}
 .theme {darko} layout:{minimal}
-.autopagebreak depth:{2}
+.autopagebreak maxdepth:{2}
 
 .footer
     .docauthor

@@ -11,7 +11,7 @@ interface ContextOptions : MediaStorageOptions {
     /**
      * When a [Heading] node has a depth equals or less than this value, a page break is forced.
      */
-    val autoPageBreakHeadingDepth: Int
+    val autoPageBreakHeadingMaxDepth: Int
 
     /**
      * Whether automatic identifiers should be generated for elements
@@ -24,15 +24,15 @@ interface ContextOptions : MediaStorageOptions {
 
 /**
  * @return whether the [heading] node should force a page break
- * @see ContextOptions.autoPageBreakHeadingDepth
+ * @see ContextOptions.autoPageBreakHeadingMaxDepth
  */
-fun Context.shouldAutoPageBreak(heading: Heading) = !heading.isMarker && heading.depth <= this.options.autoPageBreakHeadingDepth
+fun Context.shouldAutoPageBreak(heading: Heading) = !heading.isMarker && heading.depth <= this.options.autoPageBreakHeadingMaxDepth
 
 /**
  * Mutable [ContextOptions] implementation.
  */
 data class MutableContextOptions(
-    override var autoPageBreakHeadingDepth: Int = 1,
+    override var autoPageBreakHeadingMaxDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,

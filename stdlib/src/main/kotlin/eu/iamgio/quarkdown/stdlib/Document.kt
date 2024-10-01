@@ -260,22 +260,22 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 
 /**
  * Sets a new automatic page break threshold when a heading is found:
- * if a heading's depth value (the amount of leading `#`s) is equals or less than [depth],
+ * if a heading's depth value (the amount of leading `#`s) is equals or less than [maxDepth],
  * a page break is forced before the heading.
- * @param depth heading depth to force page breaks for (positive only).
- * @throws IllegalArgumentException if [depth] is a negative value
+ * @param maxDepth heading depth to force page breaks for (positive only).
+ * @throws IllegalArgumentException if [maxDepth] is a negative value
  * @see disableAutoPageBreak
  */
 @Name("autopagebreak")
 fun autoPageBreak(
     @Injected context: MutableContext,
-    depth: Int,
+    @Name("maxdepth") maxDepth: Int,
 ): VoidValue {
-    if (depth < 0) {
+    if (maxDepth < 0) {
         throw IllegalArgumentException("Heading depth cannot be negative.")
     }
 
-    context.options.autoPageBreakHeadingDepth = depth
+    context.options.autoPageBreakHeadingMaxDepth = maxDepth
     return VoidValue
 }
 

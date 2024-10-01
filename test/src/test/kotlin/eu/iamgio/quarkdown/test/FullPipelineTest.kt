@@ -104,7 +104,7 @@ class FullPipelineTest {
             .theme {darko} layout:{minimal}
             .pageformat {A3} orientation:{landscape} margin:{3cm 2px}
             .slides transition:{zoom} speed:{fast}
-            .autopagebreak depth:{3}
+            .autopagebreak maxdepth:{3}
             """.trimIndent(),
         ) {
             assertEquals("My Quarkdown document", documentInfo.name)
@@ -209,6 +209,52 @@ class FullPipelineTest {
                     "</blockquote>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun headings() {
+        execute("# Title") {
+            assertEquals("<div class=\"page-break\" data-hidden=\"\"></div><h1>Title</h1>", it)
+        }
+
+        execute("## Ti*tl*e") {
+            assertEquals("<h2>Ti<em>tl</em>e</h2>", it)
+        }
+
+        execute("#### .sum {3} {2}") {
+            assertEquals("<h4>5</h4>", it)
+        }
+
+        execute("###### .text size:{tiny} content:{Hello, **world**}") {
+            assertEquals("<h6><span class=\"size-tiny\">Hello, <strong>world</strong></span></h6>", it)
+        }
+
+        execute(
+            """
+            .autopagebreak maxdepth:{4}
+            ## A
+            ### B
+            ##### C
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h2>A</h2>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h3>B</h3>" +
+                    "<h5>C</h5>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .noautopagebreak
+            # A
+            """.trimIndent(),
+        ) {
+            assertEquals("<h1>A</h1>", it)
         }
     }
 
