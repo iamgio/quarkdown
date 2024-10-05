@@ -71,6 +71,8 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
   - :white_check_mark: Plain output (default)
   - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
   - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org))
+  - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
+    to learn how to convert an artifact to PDF.
 
 The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
 - `.doctype {slides}`
@@ -78,11 +80,13 @@ The desired document type can be set by calling the `.doctype` function within t
 
 ## Comparison
 
-|                       |      Markdown      |     Quarkdown      |       LaTeX        |      AsciiDoc      |        MDX         |
+|                       |     Quarkdown      |      Markdown      |       LaTeX        |      AsciiDoc      |        MDX         |
 |-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
 | Concise and readable  | :white_check_mark: | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |
-| Full document control |        :x:         | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
-| Scripting             |        :x:         | :white_check_mark: |      Partial       |        :x:         | :white_check_mark: |
+| Full document control | :white_check_mark: |        :x:         | :white_check_mark: |        :x:         |        :x:         |
+| Scripting             | :white_check_mark: |        :x:         |      Partial       |        :x:         | :white_check_mark: |
+| Book/article export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
+| Presentation export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
 
 <table>
   <thead>
