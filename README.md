@@ -270,3 +270,23 @@ Some suggested combinations are:
 |   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
 
 </details>
+
+
+# Concept
+
+The logo resembles the original Markdown icon, with emphasis on Quarkdown's completeness
+and richness of features and customization options, thanks to the revolving arrow all around the sphere.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-dark.svg">
+    <img alt="Quarkdown icon" src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-dark.svg">
+  </picture>
+</p>
+
+What could be mistaken for a planet is actually a **quark** or, more specifically, a **down quark**,
+an elementary particle that is a major constituent of matter: they give life to every complex structure we know of,
+while also being one of the lightest objects in existence.
+
+This is, indeed, the concept **Quarkdown** is built upon. 
