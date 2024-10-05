@@ -21,12 +21,13 @@ data class BlockQuote(
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
-     * Specific types of quotes.
+     * Type a [BlockQuote] might have.
      */
     enum class Type : RenderRepresentable {
         TIP,
         NOTE,
         WARNING,
+        IMPORTANT,
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)

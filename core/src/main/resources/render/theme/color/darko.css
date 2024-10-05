@@ -10,6 +10,7 @@
     --qd-tip-foreground-color: #86DC93;
     --qd-note-foreground-color: #84AAEC;
     --qd-warning-foreground-color: #FFB86C;
+    --qd-important-foreground-color: #FF7373;
 }
 
 hr {

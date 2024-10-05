@@ -5,11 +5,13 @@
         - note: Note
         - tip: Tip
         - warning: Warning
+        - important: Important
         - error: Error
         - tableofcontents: Table of Contents
     - Italian
         - note: Nota
         - tip: Consiglio
         - warning: Attenzione
+        - important: Importante
         - error: Errore
         - tableofcontents: Indice

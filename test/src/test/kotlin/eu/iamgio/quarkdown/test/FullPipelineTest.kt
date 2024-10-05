@@ -199,6 +199,8 @@ class FullPipelineTest {
             > Tip: you could try Quarkdown.  
             > It's a cool language!
             > - **iamgio**
+            
+            > Important: leave a feedback!
             """.trimIndent(),
         ) {
             assertEquals(
@@ -206,6 +208,9 @@ class FullPipelineTest {
                     "<p>you could try Quarkdown.<br />" +
                     "It&rsquo;s a cool language!</p>" +
                     "<p class=\"attribution\"><strong>iamgio</strong></p>" +
+                    "</blockquote>" +
+                    "<blockquote class=\"important\" style=\"--quote-type-label: 'Importante';\" data-labeled=\"\">" +
+                    "<p>leave a feedback!</p>" +
                     "</blockquote>",
                 it,
             )

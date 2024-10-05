@@ -50,6 +50,9 @@
     /* Warning elements */
     --qd-warning-foreground-color: rgb(161, 76, 32);
     --qd-warning-background-color: color-mix(in srgb, var(--qd-warning-foreground-color) 5%, transparent);
+    /* Important elements */
+    --qd-important-foreground-color: rgb(145, 34, 34);
+    --qd-important-background-color: color-mix(in srgb, var(--qd-important-foreground-color) 5%, transparent);
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -164,6 +167,15 @@ blockquote.warning {
 
 blockquote.warning :first-child::before {
     color: var(--qd-warning-foreground-color);
+}
+
+blockquote.important {
+    border-color: var(--qd-important-foreground-color);
+    background-color: var(--qd-important-background-color);
+}
+
+blockquote.important :first-child::before {
+    color: var(--qd-important-foreground-color);
 }
 
 blockquote .attribution {
