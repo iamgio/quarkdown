@@ -32,10 +32,12 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.dsl.buildBlock
+import eu.iamgio.quarkdown.ast.dsl.buildBlocks
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
@@ -46,8 +48,10 @@ import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.size.cm
 import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
@@ -670,6 +674,37 @@ class HtmlNodeRendererTest {
         assertEquals(
             "__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__",
             MathSpan("\\lim_{x\\to\\infty}x").render(),
+        )
+    }
+
+    @Test
+    fun container() {
+        val out = readParts("quarkdown/container.html")
+        val children =
+            buildBlocks {
+                paragraph { text("Foo bar") }
+                blockQuote { paragraph { text("Baz") } }
+            }
+
+        assertEquals(out.next(), Container(children = children).render())
+
+        assertEquals(
+            out.next(),
+            Container(
+                foregroundColor = Color(100, 20, 80),
+                backgroundColor = Color(10, 20, 30),
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Container(
+                backgroundColor = Color(10, 20, 30),
+                padding = Sizes(vertical = 2.0.cm, horizontal = 3.0.cm),
+                cornerRadius = Sizes(all = 12.0.px),
+                children = children,
+            ).render(),
         )
     }
 

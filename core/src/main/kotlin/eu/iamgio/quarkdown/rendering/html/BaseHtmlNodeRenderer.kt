@@ -34,6 +34,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -252,6 +253,8 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
     override fun visit(node: PageBreak): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: Container): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Aligned): CharSequence = throw UnsupportedRenderException(node)
 

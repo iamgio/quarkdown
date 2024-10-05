@@ -255,6 +255,10 @@ code.focus-lines .hljs-ln-line:not(.focused),
     opacity: 0.4;
 }
 
+.container {
+    display: inline-block;
+}
+
 .align {
     width: 100%;
     display: flex;

@@ -16,6 +16,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -78,6 +79,18 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Math is processed by the MathJax library which requires text delimiters instead of tags.
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
+
+    override fun visit(node: Container) =
+        div("container") {
+            +node.children
+
+            style {
+                "color" value node.foregroundColor
+                "background-color" value node.backgroundColor
+                "padding" value node.padding
+                "border-radius" value node.cornerRadius
+            }
+        }
 
     override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
 

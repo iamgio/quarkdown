@@ -7,10 +7,12 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -25,6 +27,7 @@ import eu.iamgio.quarkdown.misc.color.Color
  */
 val Layout: Module =
     setOf(
+        ::container,
         ::align,
         ::center,
         ::row,
@@ -36,6 +39,30 @@ val Layout: Module =
         ::collapse,
         ::table,
     )
+
+/**
+ * A general-purpose container that groups content.
+ * Any layout rules (e.g. from [align], [row], [column], [grid]) are ignored inside this container.
+ * @param foregroundColor text color
+ * @param backgroundColor background color
+ * @param padding whitespace around the content
+ * @param cornerRadius border radius of the container
+ * @param body content to group
+ * @return the new container node
+ */
+fun container(
+    @Name("foreground") foregroundColor: Color? = null,
+    @Name("background") backgroundColor: Color? = null,
+    @Name("padding") padding: Sizes? = null,
+    @Name("radius") cornerRadius: Sizes? = null,
+    body: MarkdownContent,
+) = Container(
+    foregroundColor,
+    backgroundColor,
+    padding,
+    cornerRadius,
+    body.children,
+).wrappedAsValue()
 
 /**
  * Aligns content within its parent.
