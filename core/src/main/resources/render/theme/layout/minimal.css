@@ -74,7 +74,8 @@ table tr th:last-child {
 blockquote {
     font-style: italic;
     border-left: 0.4em solid;
-    padding: 4px 1em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 figure img {
@@ -147,6 +148,10 @@ nav li {
     margin: 0 !important;
     border-top: 2px solid;
     border-color: inherit;
+}
+
+.page-margin-bottom-center > p {
+    line-height: 1;
 }
 
 .page-margin-bottom-center > *:first-child {

@@ -112,6 +112,18 @@ body:has(.pagedjs_page) {
     margin: 0 var(--qd-block-margin);
 }
 
+/* Not loose. */
+li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Loose. */
+li:has(p) {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
 figure {
     text-align: center;
 }
@@ -123,6 +135,7 @@ blockquote {
 
 blockquote, .reveal blockquote {
     color: var(--qd-quote-foreground-color);
+    padding: var(--qd-block-margin);
 }
 
 :is(blockquote, .reveal blockquote):not([class]) {
@@ -213,11 +226,8 @@ h1, h2, h3, h4, h5, h6 {
 
 p, .reveal p {
     line-height: var(--qd-line-height);
-}
-
-/* Line height is set only after the first line */
-:is(p, .reveal p)::first-line {
-    line-height: 1 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 /* Reset the margin of the first element in a page */

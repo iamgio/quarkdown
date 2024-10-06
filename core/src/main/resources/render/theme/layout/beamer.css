@@ -66,6 +66,8 @@ blockquote {
     font-style: italic;
     opacity: 0.7;
     background: none !important;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 blockquote[class] {
