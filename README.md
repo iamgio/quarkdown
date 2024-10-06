@@ -5,9 +5,9 @@
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
-  <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
+  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Status: development" src="https://img.shields.io/badge/wiki-in_progress-darkcyan"></a>
   <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
-  <img alt="Status: development" src="https://img.shields.io/badge/status-development-blue">
+  <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
   <br>
   <strong>Download</strong> the latest build <strong><a href="https://github.com/iamgio/quarkdown/releases">here</a></strong>&nbsp;
@@ -49,6 +49,8 @@ which offers layout builders, I/O, math, conditional statements and loops.
 
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
+
+Check the [wiki](https://github.com/iamgio/quarkdown/wiki) (WIP) to learn more about the language and its features.
 
 &nbsp;
 
@@ -171,13 +173,13 @@ Java 17 or higher is required.
 
 Running the program with no command-line arguments runs it in REPL mode. This is great for familiarizing yourself with Quarkdown, but it's probably not what you're looking for.
 
-Running `quarkdown path-to-file.qmd` will compile the given file, save the output to file and log its content.  
-If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
+Running `quarkdown file.qmd` will compile the given file, save the output to file and log its content.
 
-> [!NOTE]
-> The `qmd` extension is conventionally the standard one, but any can be used.
+> If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
+>
+> - [How to include other files?](https://github.com/iamgio/quarkdown/wiki/including-other-quarkdown-files)
 
-**Options:**
+### Options
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
 
