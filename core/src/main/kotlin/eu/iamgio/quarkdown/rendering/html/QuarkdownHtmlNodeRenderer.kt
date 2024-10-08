@@ -92,9 +92,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "border-width" value node.borderWidth
                 "border-radius" value node.cornerRadius
 
-                if (node.borderColor != null || node.borderWidth != null) {
-                    "border-style" value "solid"
-                }
+                "border-style" value
+                    when {
+                        // If the border style is set, it is used.
+                        node.borderStyle != null -> node.borderStyle
+                        // If border properties are set, a normal (solid) border is used.
+                        node.borderColor != null || node.borderWidth != null -> Container.BorderStyle.NORMAL
+                        // No border style.
+                        else -> null
+                    }
             }
         }
 
@@ -164,6 +170,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             node.width == null && node.height == null -> {
                 buildTag("span", "&nbsp;")
             }
+
             else -> {
                 buildTag("div") {
                     style {

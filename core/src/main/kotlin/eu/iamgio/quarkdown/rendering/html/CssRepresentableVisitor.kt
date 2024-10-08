@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
@@ -33,6 +34,12 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(sizes: Sizes) = with(sizes) { "$top $right $bottom $left" }
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
+
+    override fun visit(borderStyle: Container.BorderStyle) =
+        when (borderStyle) {
+            Container.BorderStyle.NORMAL -> "solid"
+            else -> borderStyle.kebabCaseName
+        }
 
     override fun visit(stackLayout: Stacked.Layout) =
         when (stackLayout) {

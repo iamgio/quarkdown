@@ -43,12 +43,13 @@ val Layout: Module =
 /**
  * A general-purpose container that groups content.
  * Any layout rules (e.g. from [align], [row], [column], [grid]) are ignored inside this container.
- * @param foregroundColor text color
- * @param backgroundColor background color
- * @param borderColor border color
- * @param borderWidth border width
- * @param padding whitespace around the content
- * @param cornerRadius corner (and border) radius
+ * @param foregroundColor text color. Default if unset
+ * @param backgroundColor background color. Transparent if unset
+ * @param borderColor border color. Default if unset and [borderWidth] is set
+ * @param borderWidth border width. Default if unset and [borderColor] is set
+ * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
+ * @param padding whitespace around the content. None if unset
+ * @param cornerRadius corner (and border) radius. None if unset
  * @param body content to group
  * @return the new container node
  */
@@ -57,6 +58,7 @@ fun container(
     @Name("background") backgroundColor: Color? = null,
     @Name("border") borderColor: Color? = null,
     @Name("borderwidth") borderWidth: Sizes? = null,
+    @Name("borderstyle") borderStyle: Container.BorderStyle? = null,
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
     body: MarkdownContent,
@@ -65,6 +67,7 @@ fun container(
     backgroundColor,
     borderColor,
     borderWidth,
+    borderStyle,
     padding,
     cornerRadius,
     body.children,

@@ -717,6 +717,15 @@ class HtmlNodeRendererTest {
                 children = children,
             ).render(),
         )
+
+        assertEquals(
+            out.next(),
+            Container(
+                borderColor = Color(30, 20, 10),
+                borderStyle = Container.BorderStyle.DOTTED,
+                children = children,
+            ).render(),
+        )
     }
 
     @Test

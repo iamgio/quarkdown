@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
@@ -26,6 +27,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(sizes: Sizes): T
 
     fun visit(alignment: Table.Alignment): T
+
+    fun visit(borderStyle: Container.BorderStyle): T
 
     fun visit(stackLayout: Stacked.Layout): T
 
