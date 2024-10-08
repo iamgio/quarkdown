@@ -275,7 +275,7 @@ code.focus-lines .hljs-ln-line:not(.focused),
     flex-direction: column;
 }
 
-.align-left {
+.align-start {
     text-align: start;
     justify-content: start;
     align-items: start;
@@ -287,7 +287,7 @@ code.focus-lines .hljs-ln-line:not(.focused),
     align-items: center;
 }
 
-.align-right {
+.align-end {
     text-align: end;
     justify-content: end;
     align-items: end;
