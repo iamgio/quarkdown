@@ -149,7 +149,7 @@ blockquote[class] {
     font-style: normal;
 }
 
-blockquote[class][data-labeled] :first-child::before {
+blockquote[class][data-labeled] > :first-child::before {
     content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
     font-weight: bold;
     font-style: normal;
