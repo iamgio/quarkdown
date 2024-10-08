@@ -88,7 +88,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "color" value node.foregroundColor
                 "background-color" value node.backgroundColor
                 "padding" value node.padding
+                "border-color" value node.borderColor
+                "border-width" value node.borderWidth
                 "border-radius" value node.cornerRadius
+
+                if (node.borderColor != null || node.borderWidth != null) {
+                    "border-style" value "solid"
+                }
             }
         }
 
