@@ -261,7 +261,7 @@ code table :is(td, th) {
 
 /* When an element is marked as focused, other siblings are less visible */
 code.focus-lines .hljs-ln-line:not(.focused),
-:is(ol, ul):has(> .focused) li:not(.focused) {
+:is(ol, ul):has(.focused) > li:not(.focused, :has(.focused)) {
     opacity: 0.4;
 }
 
