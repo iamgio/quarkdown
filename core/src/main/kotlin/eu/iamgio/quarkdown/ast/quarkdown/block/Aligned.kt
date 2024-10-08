@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.ast.quarkdown.block
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
+import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -17,9 +19,12 @@ data class Aligned(
     /**
      * Possible alignment types of an [Aligned] block.
      */
-    enum class Alignment {
-        LEFT,
+    enum class Alignment : RenderRepresentable {
+        START,
         CENTER,
-        RIGHT,
+        END,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 }

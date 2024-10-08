@@ -104,7 +104,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    override fun visit(node: Aligned) = div("align align-" + node.alignment.name.lowercase(), node.children)
+    override fun visit(node: Aligned) = div("align align-${node.alignment.asCSS}", node.children)
 
     override fun visit(node: Stacked) =
         div("stack stack-${node.layout.asCSS}") {

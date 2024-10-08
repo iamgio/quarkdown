@@ -276,8 +276,8 @@ code.focus-lines .hljs-ln-line:not(.focused),
 }
 
 .align-left {
-    text-align: left;
-    justify-content: left;
+    text-align: start;
+    justify-content: start;
     align-items: start;
 }
 
@@ -288,8 +288,8 @@ code.focus-lines .hljs-ln-line:not(.focused),
 }
 
 .align-right {
-    text-align: right;
-    justify-content: right;
+    text-align: end;
+    justify-content: end;
     align-items: end;
 }
 

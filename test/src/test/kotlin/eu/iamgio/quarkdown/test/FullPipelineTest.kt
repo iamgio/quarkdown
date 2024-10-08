@@ -215,6 +215,18 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            A
+            
+            .align {end}
+                ### B
+            C
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A</p><div class=\"align align-end\"><h3>B</h3></div><p>C</p>", it)
+        }
     }
 
     @Test

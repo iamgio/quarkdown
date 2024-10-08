@@ -733,9 +733,9 @@ class HtmlNodeRendererTest {
         val out = readParts("quarkdown/aligned.html")
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
-        assertEquals(out.next(), Aligned(Aligned.Alignment.LEFT, listOf(paragraph)).render())
+        assertEquals(out.next(), Aligned(Aligned.Alignment.START, listOf(paragraph)).render())
         assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
-        assertEquals(out.next(), Aligned(Aligned.Alignment.RIGHT, listOf(paragraph)).render())
+        assertEquals(out.next(), Aligned(Aligned.Alignment.END, listOf(paragraph)).render())
     }
 
     @Test

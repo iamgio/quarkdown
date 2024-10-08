@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
@@ -34,6 +35,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(sizes: Sizes) = with(sizes) { "$top $right $bottom $left" }
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
+
+    override fun visit(alignment: Aligned.Alignment) = alignment.kebabCaseName
 
     override fun visit(borderStyle: Container.BorderStyle) =
         when (borderStyle) {
