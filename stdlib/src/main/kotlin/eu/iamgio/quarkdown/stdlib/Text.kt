@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.misc.color.Color
 
 /**
  * `Text` stdlib module exporter.
- * This module handles text formatting and manipulation.
+ * This module handles text formatting.
  */
 val Text: Module =
     setOf(

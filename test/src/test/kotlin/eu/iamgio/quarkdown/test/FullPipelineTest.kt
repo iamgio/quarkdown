@@ -193,6 +193,13 @@ class FullPipelineTest {
             assertEquals("<p>A <div style=\"width: 1.0cm; height: 3.0mm;\"></div> B</p>", it)
         }
 
+        execute("Hello, World! .uppercase {Hello, World!} .lowercase {Hello, World!} .capitalize {hello, world!}") {
+            assertEquals(
+                "<p>Hello, World! HELLO, WORLD! hello, world! Hello, world!</p>",
+                it,
+            )
+        }
+
         execute(
             """
             .doclang {Italian}
