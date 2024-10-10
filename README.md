@@ -196,27 +196,9 @@ Running `quarkdown file.qmd` will compile the given file, save the output to fil
 
 ## Themes
 
-Themes are split in two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout.    
-Combining them can create a document that truly stands out.
+Quarkdown comes with a set of themes that can give a unique look to your document.
 
-A theme can be set via the `.theme {colortheme} layout:{layouttheme}` function.
-
-#### Layout themes
-- `minimal`
-- `latex`
-- `beamer`
-- `plain`
-
-#### Color themes
-- `darko`
-- `paperwhite`
-- `beaver`
-- `plain`
-
-Some suggested combinations are:
-- `minimal+darko` (used by the demo presentation)
-- `latex+paperwhite` (LaTeX look, great for `paged` documents)
-- `beamer+beaver` (Beamer look).
+- [**How to apply a theme?**](https://github.com/iamgio/quarkdown/wiki/themes)
 
 > [Theme contributions](core/src/main/resources/render/theme) are welcome!  
 > Please make sure they work well with all the three document types before submitting.
