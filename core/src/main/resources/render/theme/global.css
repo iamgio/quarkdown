@@ -20,7 +20,8 @@
     --qd-heading-font: inherit;
 
     /* Margins */
-    --qd-block-margin: 32px;
+    --qd-block-margin: 32px; /* Margin of block elements */
+    --qd-paragraph-vertical-margin: var(--qd-block-margin); /* Vertical margin of paragraphs preceded by a paragraph */
     --qd-heading-margin: 40px 0 20px 0; /* Margin of headings in non-slides documents */
     --qd-slides-heading-margin: 0 0 20px 0; /* Margin of headings in slides documents */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
@@ -224,10 +225,23 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: none !important;
 }
 
+details summary {
+    cursor: pointer;
+    margin-bottom: var(--qd-paragraph-vertical-margin);
+}
+
 p, .reveal p {
     line-height: var(--qd-line-height);
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+}
+
+p:empty {
+    display: none;
+}
+
+p + p:not(.stack > p, .page-margin-content > p) {
+    margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
 /* Reset the margin of the first element in a page */
@@ -295,10 +309,6 @@ code.focus-lines .hljs-ln-line:not(.focused),
 
 .stack > p, .clip > p {
     margin: 0;
-}
-
-.stack > p:empty {
-    display: none;
 }
 
 .stack-row {
