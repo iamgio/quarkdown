@@ -3,6 +3,8 @@ package eu.iamgio.quarkdown.function.value.factory
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.base.block.ListBlock
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.Context
@@ -35,6 +37,7 @@ import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * Factory of [Value] wrappers from raw string data.
@@ -64,6 +67,7 @@ object ValueFactory {
      *            `true`,`yes` -> `true`,
      *            `false`,`no` -> `false`
      * @return a new boolean value that wraps [raw]'s boolean value, or `null` if [raw] does not represent a boolean
+     * @throws IllegalRawValueException if [raw] is not a valid boolean value
      */
     @FromDynamicType(Boolean::class)
     fun boolean(raw: String): BooleanValue =
@@ -77,14 +81,20 @@ object ValueFactory {
      * @param raw raw value to convert to a range value.
      *            The format is `x..y`, where `x` and `y` are integers that specify start and end of the range.
      *            Both start and end can be omitted to represent an open/infinite value on that end.
-     * @return a new range value that wraps the parsed content of [raw].
-     *         If the input is invalid, an infinite range is returned
+     * @return a new range value that wraps the parsed content of [raw]
+     * @throws IllegalRawValueException if the value is an invalid range
      * @see iterable
      */
     @FromDynamicType(Range::class)
     fun range(raw: String): ObjectValue<Range> {
         // Matches 'x..y', where both x and y are optional integers.
         val regex = "(\\d+)?..(\\d+)?".toRegex()
+
+        // If the raw value does not represent a range, an error is thrown.
+        if (!regex.matches(raw)) {
+            throw IllegalRawValueException("Invalid range", raw)
+        }
+
         val groups =
             regex.find(raw)?.groupValues
                 ?.asSequence()
@@ -267,6 +277,38 @@ object ValueFactory {
         ).asInline()
 
     /**
+     * Converts a Markdown list to an [OrderedCollectionValue] iterable.
+     * The text of each list item is stored as a [DynamicValue], hence it can be adapted to any type at invocation time.
+     * Currently, it's not supported to have nested lists or node values.
+     * Example:
+     * ```
+     * - A
+     * - B
+     * - C
+     * ```
+     * is converted to an iterable containing `A`, `B` and `C`.
+     * @param raw Markdown string input that represents a list to parse the expression from
+     * @param context context to retrieve the pipeline from
+     * @return a new [OrderedCollectionValue] from the raw expression, or `null` if the raw input is not a list
+     * @see iterable
+     */
+    private fun markdownListToIterable(
+        raw: String,
+        context: Context,
+    ): IterableValue<*>? {
+        val content = blockMarkdown(raw, context).unwrappedValue
+        val list = content.children.singleOrNull() as? ListBlock ?: return null
+
+        val items =
+            list.children.asSequence()
+                .filterIsInstance<ListItem>()
+                .map { it.children.toPlainText() }
+                .map(::DynamicValue)
+
+        return OrderedCollectionValue(items.toList())
+    }
+
+    /**
      * @param raw string input to parse the expression from
      * @param context context to retrieve the pipeline from
      * @return a new [IterableValue] from the raw expression. It can also be a [Range].
@@ -280,15 +322,18 @@ object ValueFactory {
         context: Context,
     ): IterableValue<T> {
         // A range is a suitable numeric iterable value.
-        val range = range(raw)
-        if (!range.unwrappedValue.isInfinite) {
+        try {
+            val range = range(raw)
             return range.unwrappedValue.toCollection() as IterableValue<T>
+        } catch (ignored: IllegalRawValueException) {
+            // The raw value is not a range.
         }
 
         // The expression is evaluated into an iterable.
         val value = expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
         return value as? IterableValue<T>
+            ?: markdownListToIterable(raw, context) as? IterableValue<T> // A Markdown list is a valid iterable.
             ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
     }
 

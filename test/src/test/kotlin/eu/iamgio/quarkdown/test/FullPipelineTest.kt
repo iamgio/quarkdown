@@ -714,6 +714,53 @@ class FullPipelineTest {
     }
 
     @Test
+    fun iterables() {
+        execute(
+            """
+            .var {x}
+              - A
+              - B
+              - C
+
+            .foreach {.x}
+              .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A</p><p>B</p><p>C</p>", it)
+        }
+
+        execute(
+            """
+            .var {x}
+              - A
+              - B
+              - C
+
+            .foreach {.x}
+              .lowercase {.1}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>a</p><p>b</p><p>c</p>", it)
+        }
+
+        execute(
+            """
+            .var {nums}
+              - 1
+              - 2
+              - 3
+              - 4
+
+            .foreach {.nums}
+              n:
+              .pow {.n} to:{2}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1</p><p>4</p><p>9</p><p>16</p>", it)
+        }
+    }
+
+    @Test
     fun stacks() {
         execute(
             """
