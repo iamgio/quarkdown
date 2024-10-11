@@ -166,7 +166,7 @@ class FullPipelineTest {
             )
         }
 
-        execute("This is a .text content:{small text} size:{tiny} variant:{smallcaps}") {
+        execute("This is a .text {small text} size:{tiny} variant:{smallcaps}") {
             assertEquals(
                 "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
                 it,
@@ -250,7 +250,7 @@ class FullPipelineTest {
             assertEquals("<h4>5</h4>", it)
         }
 
-        execute("###### .text size:{tiny} content:{Hello, **world**}") {
+        execute("###### .text {Hello, **world**} size:{tiny}") {
             assertEquals("<h6><span class=\"size-tiny\">Hello, <strong>world</strong></span></h6>", it)
         }
 
@@ -1002,8 +1002,7 @@ class FullPipelineTest {
             """
             .function {poweredby}
                 credits:
-                .text size:{small} variant:{smallcaps}
-                    powered by .credits
+                .text {powered by .credits} size:{small} variant:{smallcaps}
             
             This **exciting feature**, .poweredby {[Quarkdown](https://github.com/iamgio/quarkdown)}, looks great!
             """.trimIndent(),

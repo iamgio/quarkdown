@@ -25,8 +25,7 @@ Export your Quarkdown project as:
 
 .function {poweredby}
     credits:
-    .text size:{tiny} variant:{smallcaps}
-        powered by .credits
+    .text {powered by .credits} size:{tiny} variant:{smallcaps}
 
 - .fragment
       beautiful slides for your next presentation, just like this one.  
@@ -103,8 +102,7 @@ from your Markdown code.
     ```
 
 .fragment
-    .text size:{small}
-        **Hello, world** from Giorgio!
+    .text {**Hello, world** from Giorgio!} size:{small}
 
 <!-- Like .animatedsourceresult, but with no animations. -->
 .function {sourceresult}
@@ -122,8 +120,7 @@ from your Markdown code.
         !(150x150)[Quarkdown](img/icon.png)
         
         .column cross:{start}
-            .text size:{large} variant:{smallcaps}
-                **Quarkdown is on GitHub!**
+            .text {**Quarkdown is on GitHub!**} size:{large} variant:{smallcaps}
     
             https://github.com/iamgio/quarkdown
 
@@ -161,8 +158,7 @@ from your Markdown code.
 
 ## Scripting {#scripting-basic}
 
-.text size:{small}
-    Basic algorithm
+.text {Basic algorithm} size:{small}
 
 .sourceresult
     .row alignment:{spacearound}
@@ -173,8 +169,7 @@ from your Markdown code.
 
 ## Scripting {#scripting-fibonacci}
 
-.text size:{small}
-    Fibonacci sequence
+.text {Fibonacci sequence} size:{small}
 
 .sourceresult
     .var {t1} {0}
