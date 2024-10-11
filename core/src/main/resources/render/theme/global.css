@@ -240,7 +240,7 @@ p:empty {
     display: none;
 }
 
-p + p:not(.stack > p, .page-margin-content > p) {
+p + p:not(.stack > p):not(.page-margin-content > p) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
