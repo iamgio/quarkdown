@@ -101,7 +101,7 @@ pre table {
     --border-width-thin: 0;
 }
 
-table {
+table:not(pre table) {
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
@@ -132,8 +132,7 @@ table > tbody > tr:last-child > th {
     border-bottom: var(--border-width-thin) solid;
 }
 
-th,
-td {
+th, td {
     text-align: left;
     padding: 0.5rem;
     line-height: 1.1;

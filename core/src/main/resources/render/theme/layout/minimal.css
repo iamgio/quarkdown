@@ -46,7 +46,7 @@ table {
     border-collapse: collapse;
 }
 
-table th, table td {
+table:not(pre table) :is(th, td) {
     padding: 0.5em 1em !important;
     border: 1px solid;
 }

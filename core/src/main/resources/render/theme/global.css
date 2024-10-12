@@ -37,6 +37,11 @@
     */
     --qd-horizontal-alignment: var(--qd-paged-horizontal-alignment);
 
+    /* Code */
+    --qd-code-border-radius: 8px; /* Border radius of code blocks */
+    --qd-code-line-numbers-padding: 0.5em 0.8em; /* Padding of line numbers of code blocks */
+    --qd-code-line-numbers-opacity: 0.6; /* Opacity of line numbers of code blocks */
+
     /* Quotes */
     --qd-quote-type-label-suffix: ": "; /* Suffix for localized quote type labels, e.g. Tip, Note, Warning, ... */
     --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
@@ -264,11 +269,25 @@ pre code {
     max-height: none !important;
 }
 
+pre, pre code {
+    border-radius: var(--qd-code-border-radius);
+}
+
 .reveal pre code {
     font-size: var(--qd-slides-code-block-font-size);
 }
 
-/* Line numbers are displayed in a table, so no borders by default */
+/* Code block line numbers. */
+
+.hljs-ln td {
+    padding: var(--qd-code-line-numbers-padding) !important;
+}
+
+.hljs-ln-numbers {
+    opacity: var(--qd-code-line-numbers-opacity);
+}
+
+/* Line numbers are displayed in a table, so no borders by default. */
 code table :is(td, th) {
     border: 0;
 }

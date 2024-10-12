@@ -20,6 +20,15 @@ pre code {
     background-color: transparent !important;
 }
 
+pre code, .hljs-ln td {
+    /* Avoid empty space */
+    padding-left: 0 !important;
+}
+
+.reveal pre {
+    box-shadow: none;
+}
+
 .box.callout > header {
     background-image: linear-gradient(to right, var(--primary), transparent);
 }

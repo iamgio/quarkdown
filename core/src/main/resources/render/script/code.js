@@ -1,9 +1,6 @@
 executionQueue.push(() => {
     hljs.highlightAll();
-    if (!isPaged()) {
-        // Line numbers are currently unsupported in paged mode.
-        hljs.initLineNumbersOnLoad();
-    }
+    hljs.initLineNumbersOnLoad();
 });
 
 // Focuses specific lines in selected code blocks.

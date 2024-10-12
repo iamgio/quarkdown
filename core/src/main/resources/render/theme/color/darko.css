@@ -17,6 +17,15 @@ hr {
     opacity: 0.5;
 }
 
+pre {
+    --shadow-opacity: 0.08;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, var(--shadow-opacity));
+}
+
+.reveal pre {
+    --shadow-opacity: 0.1;
+}
+
 .box > header {
     background-color: rgba(23, 53, 56, 0.35);
 }
