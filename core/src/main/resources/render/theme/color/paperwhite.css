@@ -25,5 +25,5 @@ pre code {
 }
 
 nav ol ol {
-    border-color: var(--qd-main-color);
+    border-color: rgba(0, 0, 0, .2);
 }

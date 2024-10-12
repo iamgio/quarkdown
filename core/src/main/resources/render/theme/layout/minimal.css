@@ -116,12 +116,10 @@ figure figcaption {
 
 /* Table of contents */
 
-nav, h1#table-of-contents {
-    margin-left: 44px;
-}
-
 nav ol {
     list-style-type: none !important;
+    margin: 0;
+    padding-left: 12px;
 }
 
 nav ol ol {
@@ -140,6 +138,9 @@ nav li {
     margin-left: auto;
 }
 
+.reveal :is(nav, h1#table-of-contents) {
+    margin-left: 44px;
+}
 
 /* Footer */
 
