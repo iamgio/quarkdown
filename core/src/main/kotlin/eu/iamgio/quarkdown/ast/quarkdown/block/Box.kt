@@ -45,6 +45,11 @@ data class Box(
         TIP,
 
         /**
+         * A note.
+         */
+        NOTE,
+
+        /**
          * A warning.
          */
         WARNING,
