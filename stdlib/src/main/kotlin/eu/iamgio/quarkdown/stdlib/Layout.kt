@@ -1,8 +1,10 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Table
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
@@ -187,7 +189,9 @@ fun clip(
 
 /**
  * Inserts content in a box.
- * @param title box title. If unset, the box is untitled
+ * @param title box title. If unset:
+ * - If the locale ([docLanguage]) is set and supported, the title is localized according to the box [type]
+ * - Otherwise, the box is untitled
  * @param type box type. If unset, it defaults to a callout box
  * @param padding padding around the box. If unset, the box uses the default padding
  * @param backgroundColor background color. If unset, the box uses the default color
@@ -196,13 +200,30 @@ fun clip(
  * @return the new box node
  */
 fun box(
+    @Injected context: Context,
     title: InlineMarkdownContent? = null,
     type: Box.Type = Box.Type.CALLOUT,
     padding: Size? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("foreground") foregroundColor: Color? = null,
     body: MarkdownContent,
-) = Box(title?.children, type, padding, backgroundColor, foregroundColor, body.children).wrappedAsValue()
+): NodeValue {
+    // Localizes the title according to the box type,
+    // if the title is not manually set.
+    fun localizedTitle(): InlineContent? =
+        Stdlib.localizeOrNull(type.name, context)?.let {
+            buildInline { text(it) }
+        }
+
+    return Box(
+        title?.children ?: localizedTitle(),
+        type,
+        padding,
+        backgroundColor,
+        foregroundColor,
+        body.children,
+    ).wrappedAsValue()
+}
 
 /**
  * Inserts content in a collapsible block, whose content can be hidden or shown by interacting with it.

@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
+import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
@@ -16,6 +18,11 @@ typealias Module = Set<KFunction<OutputValue<*>>>
  * Exporter of Quarkdown's standard library.
  */
 object Stdlib : LibraryExporter {
+    /**
+     * The name of the localization table used by this library.
+     */
+    private const val LOCALIZATION_TABLE = "std"
+
     override val library: Library
         get() =
             MultiFunctionLibraryLoader(name = "stdlib").load(
@@ -43,4 +50,15 @@ object Stdlib : LibraryExporter {
                     },
                 ),
             )
+
+    /**
+     * Localizes a key from the stdlib table ([LOCALIZATION_TABLE]).
+     * @param key localization key
+     * @param context context to localize for
+     * @return the localized string if the [key] exists in the `std` table, `null` otherwise
+     */
+    fun localizeOrNull(
+        key: String,
+        context: Context,
+    ): String? = context.localizeOrNull(LOCALIZATION_TABLE, key.lowercase())
 }
