@@ -60,6 +60,9 @@
     --qd-important-foreground-color: rgb(145, 34, 34);
     --qd-important-background-color: color-mix(in srgb, var(--qd-important-foreground-color) 5%, transparent);
 
+    /* Boxes */
+    --qd-box-section-padding: 12px 16px; /* Padding of box sections (header and content) */
+
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
     --r-main-color: var(--qd-main-color);
@@ -418,8 +421,8 @@ code.focus-lines .hljs-ln-line:not(.focused),
     margin: 0;
 }
 
-.box > .box-content {
-    padding: 12px;
+.box > header, .box > .box-content {
+    padding: var(--qd-box-section-padding);
 }
 
 .box > .box-content > *:first-child,

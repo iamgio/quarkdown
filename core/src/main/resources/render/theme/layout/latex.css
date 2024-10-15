@@ -171,12 +171,7 @@ blockquote .attribution {
 }
 
 .box > header {
-    padding: 12px;
     border-radius: 6px 6px 0 0;
-}
-
-.box > .box-content, .box > header {
-    padding-left: 16px;
 }
 
 .box.box {
