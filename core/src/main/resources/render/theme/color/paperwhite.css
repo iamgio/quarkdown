@@ -17,7 +17,7 @@ blockquote {
 }
 
 pre code {
-    background-color: transparent !important;
+    background-color: var(--qd-background-color) !important;
 }
 
 pre code, .hljs-ln td {

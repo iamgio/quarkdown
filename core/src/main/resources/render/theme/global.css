@@ -280,6 +280,12 @@ pre, pre code {
     font-size: var(--qd-slides-code-block-font-size);
 }
 
+/* Code block copy button */
+
+.hljs-copy-button {
+    opacity: .75;
+}
+
 /* Code block line numbers. */
 
 .hljs-ln td {
