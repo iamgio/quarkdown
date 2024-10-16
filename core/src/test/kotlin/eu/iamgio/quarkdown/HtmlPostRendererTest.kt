@@ -276,4 +276,35 @@ class HtmlPostRendererTest {
             assertTrue("code" !in scripts)
         }
     }
+
+    @Test
+    fun `resource generation, default theme`() {
+        val context = MutableContext(QuarkdownFlavor)
+
+        val postRenderer = HtmlPostRenderer(context)
+        val html = "<html><head></head><body></body></html>"
+
+        val resources = postRenderer.generateResources(html)
+        assertEquals(3, resources.size)
+
+        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
+        themeGroup.resources.map { it.name }.let { themes ->
+            assertTrue("paperwhite" in themes) // Default
+            assertTrue("latex" in themes) // Default
+            assertTrue("global" in themes)
+            assertTrue("theme" in themes)
+        }
+
+        (themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact).let {
+            assertEquals(ArtifactType.CSS, it.type)
+            assertEquals(
+                """
+                @import url('global.css');
+                @import url('latex.css');
+                @import url('paperwhite.css');
+                """.trimIndent(),
+                it.content,
+            )
+        }
+    }
 }
