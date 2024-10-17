@@ -27,10 +27,6 @@
 
 /* Headings */
 
-h1:first-child, *[data-hidden]:first-child ~ h1 {
-    text-align: center;
-}
-
 h1 {
     font-size: 2.5rem;
     line-height: 3.25rem;

@@ -5,7 +5,7 @@
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
-  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Status: development" src="https://img.shields.io/badge/wiki-in_progress-darkcyan"></a>
+  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Status: development" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
   <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
@@ -50,7 +50,7 @@ which offers layout builders, I/O, math, conditional statements and loops.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
-Check the [wiki](https://github.com/iamgio/quarkdown/wiki) (WIP) to learn more about the language and its features.
+Check the [wiki](https://github.com/iamgio/quarkdown/wiki) to learn more about the language and its features.
 
 &nbsp;
 
@@ -198,7 +198,7 @@ Running `quarkdown file.qmd` will compile the given file, save the output to fil
 
 Quarkdown comes with a set of themes that can give a unique look to your document.
 
-- [**How to apply a theme?**](https://github.com/iamgio/quarkdown/wiki/themes)
+- [How to apply a theme?](https://github.com/iamgio/quarkdown/wiki/themes)
 
 > [Theme contributions](core/src/main/resources/render/theme) are welcome!  
 > Please make sure they work well with all the three document types before submitting.
@@ -262,8 +262,8 @@ Quarkdown comes with a set of themes that can give a unique look to your documen
 
 # Concept
 
-The logo resembles the original Markdown icon, with emphasis on Quarkdown's completeness
-and richness of features and customization options, thanks to the revolving arrow all around the sphere.
+The logo resembles the original [Markdown icon](https://github.com/dcurtis/markdown-mark), with focus on Quarkdown's completeness,
+richness of features and customization options, emphasized by the revolving arrow all around the sphere.
 
 <p align="center">
   <picture>

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.orDefault
 import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
@@ -13,6 +14,13 @@ import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.PostRenderer
 import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
 import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
+
+// Default theme components to use if not specified by the user.
+private val DEFAULT_THEME =
+    DocumentTheme(
+        color = "paperwhite",
+        layout = "latex",
+    )
 
 /**
  * A [PostRenderer] that injects content into an HTML template, which supports out of the box:
@@ -58,13 +66,16 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
                     type = ArtifactType.HTML,
                 )
 
+            // The user-set theme is merged with the default one
+            // to fill in the missing components with the default ones.
+            val theme = context.documentInfo.theme.orDefault(DEFAULT_THEME)
             // A group of CSS theme resources is added to the output resources.
             // Theme components (global style, color scheme and layout format) are stored in a single group (directory)
             // and linked via @import statements in a theme.css file.
             this +=
                 OutputResourceGroup(
                     name = "theme",
-                    resources = retrieveThemeComponentsArtifacts(context.documentInfo.theme),
+                    resources = retrieveThemeComponentsArtifacts(theme),
                 )
 
             // A group of JS script resources is added to the output resources.
