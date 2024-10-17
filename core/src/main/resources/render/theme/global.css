@@ -282,8 +282,19 @@ pre, pre code {
 
 /* Code block copy button */
 
+.hljs-copy-container.hljs-copy-container {
+    --hljs-theme-padding: 16px !important;
+    transform: none;
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+.hljs-copy-wrapper:hover .hljs-copy-container {
+    opacity: .8;
+}
+
 .hljs-copy-button {
-    opacity: .75;
+    cursor: pointer;
 }
 
 /* Code block line numbers. */
