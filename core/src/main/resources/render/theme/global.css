@@ -575,6 +575,14 @@ nav {
     text-align: start;
 }
 
+nav ol {
+    margin: 0 0 0 1em;
+}
+
+nav ol ol {
+    margin-left: 40px;
+}
+
 /* ToC is scrollable in slides. */
 .reveal nav {
     overflow-y: scroll;

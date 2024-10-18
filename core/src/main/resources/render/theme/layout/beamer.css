@@ -104,6 +104,50 @@ pre code {
     border: 0.1em solid;
 }
 
+/* Table of contents */
+
+nav a:not(:hover) {
+    color: var(--qd-main-color) !important;
+}
+
+/* First-level entries show their index in a circle */
+nav > ol {
+    list-style-type: none !important;
+}
+
+nav > ol > li {
+    counter-increment: li;
+    padding-bottom: 0.5em;
+}
+
+nav > ol > li::before {
+    content: counter(li);
+    background-color: var(--primary);
+    color: var(--qd-background-color);
+    border-radius: 100%;
+    margin-right: 0.8em;
+    padding: 2px 10px;
+    display: inline-block;
+}
+
+/* Not-first-level entries use a bullet */
+nav > ol ol {
+    list-style-type: disc !important;
+}
+
+nav > ol ol li::marker {
+    color: var(--primary);
+}
+
+nav > ol ol {
+    padding-left: 1.35em;
+}
+
+/* Third-level (or more) entries */
+nav > ol > li > ol ol {
+    margin-left: 0 !important;
+}
+
 /* Footer */
 
 .page-margin-bottom-center > * {
