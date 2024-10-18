@@ -3,18 +3,19 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css');
 
 :root {
-    --primary: rgb(187, 39, 26);
+    --qd-primary-color: rgb(187, 39, 26);
     --primary-darker: rgb(149, 29, 18);
     --secondary: rgb(236, 236, 236);
     --tertiary: rgb(216, 216, 216);
 
     --qd-background-color: white;
-    --qd-link-color: var(--primary);
+    --qd-link-color: var(--qd-primary-color);
     --qd-callout-box-header-color: color-mix(in srgb, currentColor 7%, transparent);
+    --qd-color-on-primary: var(--qd-background-color);
 }
 
 h1, h2 {
-    color: var(--primary) !important;
+    color: var(--qd-primary-color) !important;
 }
 
 h1:not(.box h1) {
@@ -47,11 +48,11 @@ h1:not(.box h1) {
 
 .page-margin-bottom-center > * {
     background-color: var(--tertiary);
-    color: var(--primary);
+    color: var(--qd-primary-color);
 }
 
 .page-margin-bottom-center > *:first-child {
-    background-color: var(--primary);
+    background-color: var(--qd-primary-color);
     color: white;
 }
 

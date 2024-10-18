@@ -1,16 +1,16 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css');
 
 :root {
-    --primary: #224A51;
-
+    --qd-primary-color: #224A51;
     --qd-background-color: #242528;
     --qd-main-color: #C9C9D7;
     --qd-link-color: #5FC7C7;
-    --qd-callout-box-header-color: var(--primary);
+    --qd-callout-box-header-color: var(--qd-primary-color);
     --qd-tip-foreground-color: #86DC93;
     --qd-note-foreground-color: #84AAEC;
     --qd-warning-foreground-color: #FFB86C;
     --qd-important-foreground-color: #FF7373;
+    --qd-color-on-primary: var(--qd-main-color);
 }
 
 hr {
@@ -35,7 +35,7 @@ pre {
 }
 
 .box.callout {
-    background-color: var(--primary);
+    background-color: var(--qd-primary-color);
 }
 
 .box.tip, .box.note {

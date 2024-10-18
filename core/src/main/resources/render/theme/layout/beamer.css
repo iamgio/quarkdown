@@ -113,6 +113,7 @@ nav a:not(:hover) {
 /* First-level entries show their index in a circle */
 nav > ol {
     list-style-type: none !important;
+    padding-left: 0;
 }
 
 nav > ol > li {
@@ -122,12 +123,13 @@ nav > ol > li {
 
 nav > ol > li::before {
     content: counter(li);
-    background-color: var(--primary);
-    color: var(--qd-background-color);
+    background-color: var(--qd-primary-color);
+    color: var(--qd-color-on-primary);
     border-radius: 100%;
-    margin-right: 0.8em;
+    margin-right: 1em;
     padding: 2px 10px;
     display: inline-block;
+    border: 1px solid color-mix(in srgb, var(--qd-color-on-primary) 25%, transparent);
 }
 
 /* Not-first-level entries use a bullet */
@@ -136,7 +138,12 @@ nav > ol ol {
 }
 
 nav > ol ol li::marker {
-    color: var(--primary);
+    color: var(--qd-primary-color);
+    border: 1px solid var(--qd-color-on-primary);
+}
+
+nav > ol > li > ol {
+    padding-left: 1.75em;
 }
 
 nav > ol ol {
