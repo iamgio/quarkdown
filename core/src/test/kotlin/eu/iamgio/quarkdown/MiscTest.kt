@@ -13,6 +13,11 @@ import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.numbering.DecimalNumberingSymbol
+import eu.iamgio.quarkdown.document.numbering.LowercaseAlphaNumberingSymbol
+import eu.iamgio.quarkdown.document.numbering.NumberingFixedSymbol
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
+import eu.iamgio.quarkdown.document.numbering.UppercaseAlphaNumberingSymbol
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.localization.LocaleNotSetException
@@ -277,6 +282,23 @@ class MiscTest {
 
         context.documentInfo.locale = loader.fromName("French")!!
         assertFailsWith<LocalizationLocaleNotFoundException> { context.localize("mytable", "morning") }
+    }
+
+    @Test
+    fun numbering() {
+        val format = NumberingFormat.fromString("1.a.A")
+
+        with(format.symbols.iterator()) {
+            assertIs<DecimalNumberingSymbol>(next())
+            assertEquals('.', (next() as NumberingFixedSymbol).symbol)
+            assertIs<LowercaseAlphaNumberingSymbol>(next())
+            assertEquals('.', (next() as NumberingFixedSymbol).symbol)
+            assertIs<UppercaseAlphaNumberingSymbol>(next())
+        }
+
+        assertEquals("3", DecimalNumberingSymbol().map(2))
+        assertEquals("b", LowercaseAlphaNumberingSymbol().map(1))
+        assertEquals("C", UppercaseAlphaNumberingSymbol().map(2))
     }
 
     @Test
