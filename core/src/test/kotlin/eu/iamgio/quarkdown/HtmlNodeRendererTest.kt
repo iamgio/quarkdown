@@ -3,8 +3,8 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.attributes.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code

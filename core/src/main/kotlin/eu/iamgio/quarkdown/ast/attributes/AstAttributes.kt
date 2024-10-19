@@ -1,5 +1,6 @@
-package eu.iamgio.quarkdown.ast
+package eu.iamgio.quarkdown.ast.attributes
 
+import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.toc.TableOfContents

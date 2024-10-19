@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.context
 
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
+import eu.iamgio.quarkdown.ast.attributes.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor

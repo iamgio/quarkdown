@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.context
 
-import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.attributes.AstAttributes
 import eu.iamgio.quarkdown.ast.base.LinkNode
 import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.base.inline.ReferenceLink

@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.ast.quarkdown.block
 
-import eu.iamgio.quarkdown.ast.AstAttributes
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.attributes.AstAttributes
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.util.toPlainText
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
