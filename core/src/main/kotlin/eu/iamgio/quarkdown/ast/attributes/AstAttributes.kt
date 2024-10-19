@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.ast.attributes
 
 import eu.iamgio.quarkdown.ast.NestableNode
-import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.toc.TableOfContents
@@ -16,7 +15,12 @@ interface AstAttributes {
      */
     val root: NestableNode?
 
-    val nodeAttributes: Map<Node, NodeAttributes>
+    /**
+     * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
+     * contains its location in the document, in terms of section indices.
+     * @see eu.iamgio.quarkdown.context.hooks.SectionLocationHook for the storing stage
+     */
+    val locations: Map<LocationTrackableNode, SectionLocation>
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -57,6 +61,8 @@ interface AstAttributes {
  * and carry useful information for the next stages of the pipeline.
  * Storing these attributes while parsing prevents a further visit of the final tree.
  * @param root the root node of the tree. According to the architecture, this is set right after the parsing stage
+ * @param locations the locations (in terms of section indices) of the nodes that request their location to be tracked.
+ *                  This is populated in the tree traversal stage of the pipeline
  * @param linkDefinitions the defined links, which can be referenced by other nodes
  * @param functionCalls the function calls to be later executed
  * @param hasCode whether there is at least one code block.
@@ -65,7 +71,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
-    override val nodeAttributes: MutableMap<Node, NodeAttributes> = mutableMapOf(),
+    override val locations: MutableMap<LocationTrackableNode, SectionLocation> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,

@@ -3,12 +3,14 @@ package eu.iamgio.quarkdown.ast.base.block
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.attributes.Identifiable
 import eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
+import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A heading defined via prefix symbols.
  * A heading is identifiable, as it can be looked up in the document and can be referenced.
+ * It is also location trackable, meaning its position in the document hierarchy is determined, and possibly displayed.
  * @param depth importance (`depth=1` for H1, `depth=6` for H6)
  * @param customId optional custom ID. If `null`, the ID is automatically generated
  */
@@ -16,7 +18,7 @@ class Heading(
     val depth: Int,
     override val text: InlineContent,
     val customId: String? = null,
-) : TextNode, Identifiable {
+) : TextNode, Identifiable, LocationTrackableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)

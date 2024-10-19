@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.attributes.getId
+import eu.iamgio.quarkdown.ast.attributes.getLocation
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
@@ -33,6 +34,7 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -331,13 +333,16 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
         // The heading tag itself.
         val tag =
-            tagBuilder.optionalAttribute(
-                "id",
-                // Generate an automatic identifier if allowed by settings.
-                HtmlIdentifierProvider.of(renderer = this)
-                    .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
-                    ?.getId(node),
-            )
+            tagBuilder
+                .optionalAttribute(
+                    "id",
+                    // Generate an automatic identifier if allowed by settings.
+                    HtmlIdentifierProvider.of(renderer = this)
+                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
+                        ?.getId(node),
+                )
+                // todo load from document info (with default format for each doc type), and allow disabling from settings
+                .optionalAttribute("data-location", node.getLocation(context)?.let { NumberingFormat.fromString("1.1.1.1").format(it) })
                 .build()
 
         return buildMultiTag {

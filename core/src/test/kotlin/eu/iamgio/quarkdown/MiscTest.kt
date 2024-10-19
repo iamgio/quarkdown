@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.attributes.SectionLocation
 import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
@@ -302,14 +303,16 @@ class MiscTest {
             assertIs<UppercaseAlphaNumberingSymbol>(next())
         }
 
-        assertEquals("1.1.a-A", format.format(0, 0, 0, 0))
-        assertEquals("2.2.b-B", format.format(1, 1, 1, 1))
-        assertEquals("2.1.c-A", format.format(1, 0, 2, 0))
-        assertEquals("3.2.d-P", format.format(2, 1, 3, 15))
-        assertEquals("12.20.e-A", format.format(11, 19, 4, 0))
-        assertEquals("2.1.b", format.format(1, 0, 1))
-        assertEquals("1", format.format(0))
-        assertEquals("1.2.c-D", format.format(0, 1, 2, 3, 4, 5))
+        fun location(vararg levels: Int) = SectionLocation(levels.toList())
+
+        assertEquals("1.1.a-A", format.format(location(0, 0, 0, 0)))
+        assertEquals("2.2.b-B", format.format(location(1, 1, 1, 1)))
+        assertEquals("2.1.c-A", format.format(location(1, 0, 2, 0)))
+        assertEquals("3.2.d-P", format.format(location(2, 1, 3, 15)))
+        assertEquals("12.20.e-A", format.format(location(11, 19, 4, 0)))
+        assertEquals("2.1.b", format.format(location(1, 0, 1)))
+        assertEquals("1", format.format(location(0)))
+        assertEquals("1.2.c-D", format.format(location(0, 1, 2, 3, 4, 5)))
     }
 
     @Test

@@ -1,5 +1,8 @@
 package eu.iamgio.quarkdown.document.numbering
 
+import eu.iamgio.quarkdown.ast.attributes.SectionLocation
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat.Companion.fromString
+
 /**
  * Represents a format that defines how items (e.g. headings) are numbered in a document,
  * depending on their relative position and level of nesting.
@@ -29,11 +32,11 @@ data class NumberingFormat(
      * Converts the numbering format into a string.
      * For example, the [NumberingFormat] `1.A.a` would format the levels `1, 1, 0` as `2.B.a`.
      *
-     * In case [levels] and [symbols] have different lengths, the output will be truncated to the shortest of the two:
+     * In case [SectionLocation.levels] and [symbols] have different lengths, the output will be truncated to the shortest of the two:
      * for example, `1.A.a` formats the levels `1, 1, 0, 0` as `2.B.a`, and the levels `1, 1` as `2.B`.
      *
-     * @param levels nesting levels to format.
-     * For example, when it comes to numbering headings, `1, 1, 0` corresponds to:
+     * @param location location to format.
+     * For example, when it comes to numbering headings, the level `[1, 1, 0]` correspond to:
      * ```markdown
      * # A
      * ## A.A
@@ -45,17 +48,17 @@ data class NumberingFormat(
      * ```
      * @return the formatted string
      */
-    fun format(vararg levels: Int): String {
-        val levelsIterator = levels.iterator()
+    fun format(location: SectionLocation): String {
+        val levels = location.levels.iterator()
 
         return symbols.joinToString(separator = "") { symbol ->
             // Case levels.length < symbols.length: ignore the remaining symbols.
-            if (!levelsIterator.hasNext()) return@joinToString ""
+            if (!levels.hasNext()) return@joinToString ""
 
             // Appending the corresponding symbol.
             when (symbol) {
                 // The counter maps the nesting level to a string.
-                is NumberingCounterSymbol -> symbol.map(levelsIterator.next())
+                is NumberingCounterSymbol -> symbol.map(levels.next())
                 // Fixed symbols are directly appended as-is.
                 is NumberingFixedSymbol -> symbol.value.toString()
             }
