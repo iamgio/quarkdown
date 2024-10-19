@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
@@ -10,7 +11,6 @@ import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
 import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.dsl.buildInline
-import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box

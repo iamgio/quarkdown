@@ -1,14 +1,14 @@
 package eu.iamgio.quarkdown.rendering.html
 
+import eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.id.IdentifierProvider
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * Provides identifiers for elements suitable for HTML rendering.
  * @param renderer renderer that uses this provider
- * @see eu.iamgio.quarkdown.ast.id.IdentifierProvider
+ * @see eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
  */
 class HtmlIdentifierProvider private constructor(private val renderer: NodeRenderer) : IdentifierProvider<String> {
     /**

@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
@@ -8,7 +9,6 @@ import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.id.getId
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext

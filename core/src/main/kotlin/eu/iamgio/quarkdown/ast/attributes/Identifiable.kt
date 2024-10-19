@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.ast.id
+package eu.iamgio.quarkdown.ast.attributes
 
 import eu.iamgio.quarkdown.ast.base.block.Heading
 
