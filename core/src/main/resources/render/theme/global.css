@@ -30,6 +30,7 @@
 
     /* Text */
     --qd-line-height: 1.5;
+    --qd-location-suffix: ". "; /* Suffix for element location numbering */
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
     --qd-paged-horizontal-alignment: start; /* Text alignment of paged documents */
     /*
@@ -318,6 +319,11 @@ code table :is(td, th) {
 code.focus-lines .hljs-ln-line:not(.focused),
 :is(ol, ul):has(.focused) > li:not(.focused, :has(.focused)) {
     opacity: 0.4;
+}
+
+/* Elements that contain localization data display it accordingly */
+[data-location]::before {
+    content: attr(data-location) var(--qd-location-suffix);
 }
 
 .container {
