@@ -135,6 +135,7 @@ nav > ol > li::before {
 /* Not-first-level entries use a bullet */
 nav > ol ol {
     list-style-type: disc !important;
+    padding-left: 1.35em;
 }
 
 nav > ol ol li::marker {
@@ -144,10 +145,6 @@ nav > ol ol li::marker {
 
 nav > ol > li > ol {
     padding-left: 1.75em;
-}
-
-nav > ol ol {
-    padding-left: 1.35em;
 }
 
 /* Third-level (or more) entries */
