@@ -15,10 +15,10 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  *                 For instance, if `maxDepth` is 2, only headings of level 1 and 2 will be displayed
  * @param focusedItem if not `null`, adds focus to the item of the table of contents with the same text content as this value
  */
-data class TableOfContentsView(
+class TableOfContentsView(
     val title: InlineContent?,
     val maxDepth: Int,
-    val focusedItem: InlineContent? = null,
+    private val focusedItem: InlineContent? = null,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 

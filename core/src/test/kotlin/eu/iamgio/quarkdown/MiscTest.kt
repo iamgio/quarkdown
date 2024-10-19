@@ -103,8 +103,8 @@ class MiscTest {
         var finished = false
 
         ObservableAstIterator()
-            .on<Strong> { assertEquals(Text("abc"), it.children.first()) }
-            .on<Emphasis> { assertEquals(Text("ghi"), it.children.first()) }
+            .on<Strong> { assertNodeEquals(Text("abc"), it.children.first()) }
+            .on<Emphasis> { assertNodeEquals(Text("ghi"), it.children.first()) }
             .attach(blockQuoteHook)
             .on<Code> {
                 assertEquals("Hello, world!", it.content)
@@ -141,12 +141,12 @@ class MiscTest {
             assertEquals(3, toc.items[0].subItems.size)
             assertEquals(1, toc.items[0].subItems[1].subItems.size)
 
-            assertEquals(Text("ABC"), toc.items[0].text.first())
-            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
-            assertEquals(Text("JKL"), toc.items[0].subItems[1].subItems[0].text.first())
-            assertEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
-            assertEquals(Text("PQR"), toc.items[1].text.first())
+            assertNodeEquals(Text("ABC"), toc.items[0].text.first())
+            assertNodeEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertNodeEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+            assertNodeEquals(Text("JKL"), toc.items[0].subItems[1].subItems[0].text.first())
+            assertNodeEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
+            assertNodeEquals(Text("PQR"), toc.items[1].text.first())
         }
 
         val headings2 =
@@ -160,9 +160,9 @@ class MiscTest {
             assertEquals(1, toc.items.size)
             assertEquals(2, toc.items[0].subItems.size)
 
-            assertEquals(Text("ABC"), toc.items[0].text.first())
-            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+            assertNodeEquals(Text("ABC"), toc.items[0].text.first())
+            assertNodeEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
+            assertNodeEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
         }
 
         /*

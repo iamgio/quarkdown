@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A block whose content is clipped in a path.
  * @param clip type of the clip path
  */
-data class Clipped(
+class Clipped(
     val clip: Clip,
     override val children: List<Node>,
 ) : NestableNode {

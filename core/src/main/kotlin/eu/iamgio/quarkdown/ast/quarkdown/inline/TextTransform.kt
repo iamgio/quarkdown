@@ -196,7 +196,7 @@ class TextTransformData(
  * A portion of text with a specific visual transformation.
  * @param data transformation the text undergoes
  */
-data class TextTransform(
+class TextTransform(
     val data: TextTransformData,
     override val children: List<Node>,
 ) : NestableNode {

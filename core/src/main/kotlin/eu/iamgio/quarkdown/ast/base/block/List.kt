@@ -19,7 +19,7 @@ interface ListBlock : NestableNode {
  * @param isLoose whether the list is loose
  * @param children items
  */
-data class UnorderedList(
+class UnorderedList(
     override val isLoose: Boolean,
     override val children: List<Node>,
 ) : ListBlock {
@@ -32,7 +32,7 @@ data class UnorderedList(
  * @param children items
  * @param startIndex index of the first item
  */
-data class OrderedList(
+class OrderedList(
     val startIndex: Int,
     override val isLoose: Boolean,
     override val children: List<Node>,
@@ -58,7 +58,7 @@ interface ListItem : NestableNode {
  *                  This property has an effect only when using a Quarkdown renderer.
  * @param children content
  */
-data class BaseListItem(
+class BaseListItem(
     val isFocused: Boolean = false,
     override val children: List<Node>,
 ) : ListItem {
@@ -73,7 +73,7 @@ data class BaseListItem(
  * @param children content
  * @see eu.iamgio.quarkdown.ast.base.inline.CheckBox
  */
-data class TaskListItem(
+class TaskListItem(
     val isChecked: Boolean,
     override val children: List<Node>,
 ) : ListItem {

@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param attribution additional author or source of the quote
  * @param children content
  */
-data class BlockQuote(
+class BlockQuote(
     val type: Type? = null,
     val attribution: InlineContent? = null,
     override val children: List<Node>,

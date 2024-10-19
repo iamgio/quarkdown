@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param width optional width constraint
  * @param height optional height constraint
  */
-data class Image(
+class Image(
     val link: LinkNode,
     val width: Int?,
     val height: Int?,
@@ -25,7 +25,7 @@ data class Image(
  * @param width optional width constraint
  * @param height optional height constraint
  */
-data class ReferenceImage(
+class ReferenceImage(
     val link: ReferenceLink,
     val width: Int?,
     val height: Int?,

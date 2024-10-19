@@ -119,7 +119,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("5"), node.children.first())
+        assertNodeEquals(Text("5"), node.children.first())
     }
 
     @Test
@@ -168,7 +168,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("abc"), node.children.first())
+        assertNodeEquals(Text("abc"), node.children.first())
     }
 
     @Test
@@ -241,7 +241,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("Hello Quarkdown!"), node.children.first())
+        assertNodeEquals(Text("Hello Quarkdown!"), node.children.first())
     }
 
     @Test
@@ -264,7 +264,7 @@ class FunctionNodeExpansionTest {
 
         assertEquals(1, node.children.size)
         // The function call is block, so the output is wrapped in a paragraph.
-        assertEquals(Paragraph(listOf(Text("Hello Quarkdown!"))), node.children.first())
+        assertNodeEquals(Paragraph(listOf(Text("Hello Quarkdown!"))), node.children.first())
     }
 
     @Test
@@ -286,7 +286,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(CheckBox(isChecked = true), node.children.first())
+        assertNodeEquals(CheckBox(isChecked = true), node.children.first())
     }
 
     @Test
@@ -336,7 +336,7 @@ class FunctionNodeExpansionTest {
 
         assertEquals(1, node.children.size)
         assertEquals("New name", context.documentInfo.name)
-        assertEquals(Text("New name"), node.children.first())
+        assertNodeEquals(Text("New name"), node.children.first())
     }
 
     @Test
@@ -358,7 +358,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(
+        assertNodeEquals(
             BlockQuote(
                 children =
                     listOf(

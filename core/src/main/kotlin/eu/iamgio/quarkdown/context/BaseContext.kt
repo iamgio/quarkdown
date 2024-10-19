@@ -20,6 +20,7 @@ import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.Pipelines
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * An immutable [Context] implementation.
@@ -50,7 +51,7 @@ open class BaseContext(
     }
 
     override fun resolve(reference: ReferenceLink): LinkNode? {
-        return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
+        return attributes.linkDefinitions.firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
             ?.let { Link(reference.label, it.url, it.title) }
             ?.also { link ->
                 reference.onResolve.forEach { action -> action(link) }

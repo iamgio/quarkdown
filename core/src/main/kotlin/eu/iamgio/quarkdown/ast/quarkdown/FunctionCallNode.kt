@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param arguments arguments to call the function with
  * @param isBlock whether this function call is an isolated block (opposite: inline)
  */
-data class FunctionCallNode(
+class FunctionCallNode(
     val context: Context,
     val name: String,
     val arguments: List<FunctionCallArgument>,

@@ -18,7 +18,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param padding whitespace around the content
  * @param cornerRadius border radius of the container
  */
-data class Container(
+class Container(
     val foregroundColor: Color? = null,
     val backgroundColor: Color? = null,
     val borderColor: Color? = null,

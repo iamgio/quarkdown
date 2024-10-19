@@ -20,7 +20,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param foregroundColor foreground color of the box. If `null`, the box uses the default value
  * @param children content of the box
  */
-data class Box(
+class Box(
     val title: InlineContent?,
     val type: Type,
     val padding: Size? = null,

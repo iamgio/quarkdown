@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A table.
  * @param columns columns of the table. Each column has a header and multiple cells
  */
-data class Table(
+class Table(
     val columns: List<Column>,
 ) : NestableNode {
     // Exposing all the cell contents as this table's direct children

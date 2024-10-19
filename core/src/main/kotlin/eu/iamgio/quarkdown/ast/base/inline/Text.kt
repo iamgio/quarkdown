@@ -15,7 +15,7 @@ interface PlainTextNode : Node {
  * Content (usually a single character) that requires special treatment during the rendering stage.
  * @param text wrapped text
  */
-data class CriticalContent(override val text: String) : PlainTextNode {
+class CriticalContent(override val text: String) : PlainTextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -23,6 +23,6 @@ data class CriticalContent(override val text: String) : PlainTextNode {
  * Plain inline text.
  * @param text text content.
  */
-data class Text(override val text: String) : PlainTextNode {
+class Text(override val text: String) : PlainTextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

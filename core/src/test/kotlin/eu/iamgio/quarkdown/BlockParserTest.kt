@@ -298,7 +298,7 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("To be, or not to be, that is the question.", rawText(this))
-            assertEquals(Text("William Shakespeare, Hamlet"), attribution!!.single())
+            assertNodeEquals(Text("William Shakespeare, Hamlet"), attribution!!.single())
         }
 
         with(nodes.next()) {
@@ -312,14 +312,14 @@ class BlockParserTest {
             children.first().let { inner ->
                 assertIs<BlockQuote>(inner)
                 assertEquals("You miss 100% of the shots you don’t take.", inner.children.toPlainText())
-                assertEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
+                assertNodeEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
             }
-            assertEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())
+            assertNodeEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())
         }
 
         with(nodes.next()) {
             assertEquals("Try Quarkdown.", rawText(this))
-            assertEquals(Text("iamgio"), attribution!!.single())
+            assertNodeEquals(Text("iamgio"), attribution!!.single())
             assertEquals(BlockQuote.Type.TIP, type)
         }
 
@@ -386,32 +386,32 @@ class BlockParserTest {
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("foo"), header.text.first())
+                assertNodeEquals(Text("foo"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("abc"), cells[0].text.first())
-                assertEquals(Text("ghi"), cells[1].text.first())
+                assertNodeEquals(Text("abc"), cells[0].text.first())
+                assertNodeEquals(Text("ghi"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("bar"), header.text.first())
+                assertNodeEquals(Text("bar"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("def"), cells[0].text.first())
-                assertEquals(Text("jkl"), cells[1].text.first())
+                assertNodeEquals(Text("def"), cells[0].text.first())
+                assertNodeEquals(Text("jkl"), cells[1].text.first())
             }
         }
 
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.CENTER, alignment)
-                assertEquals(Text("abc"), header.text.first())
+                assertNodeEquals(Text("abc"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(Text("bar"), cells.first().text.first())
+                assertNodeEquals(Text("bar"), cells.first().text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.RIGHT, alignment)
-                assertEquals(Text("defghi"), header.text.first())
+                assertNodeEquals(Text("defghi"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(Text("baz"), cells.first().text.first())
+                assertNodeEquals(Text("baz"), cells.first().text.first())
             }
         }
 
@@ -426,17 +426,17 @@ class BlockParserTest {
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("abc"), header.text.first())
+                assertNodeEquals(Text("abc"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("bar"), cells[0].text.first())
-                assertEquals(Text("bar"), cells[1].text.first())
+                assertNodeEquals(Text("bar"), cells[0].text.first())
+                assertNodeEquals(Text("bar"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.LEFT, alignment)
-                assertEquals(Text("def"), header.text.first())
+                assertNodeEquals(Text("def"), header.text.first())
                 assertEquals(2, cells.size)
                 assertTrue(cells[0].text.isEmpty())
-                assertEquals(Text("baz"), cells[1].text.first())
+                assertNodeEquals(Text("baz"), cells[1].text.first())
             }
 
             assertFalse(hasNext())
@@ -447,22 +447,22 @@ class BlockParserTest {
                 assertEquals(Table.Alignment.LEFT, alignment)
                 assertTrue(header.text.isEmpty())
                 assertEquals(2, cells.size)
-                assertEquals(Strong(listOf(Text("C"))), cells[0].text.first())
-                assertEquals(Strong(listOf(Text("D"))), cells[1].text.first())
+                assertNodeEquals(Strong(listOf(Text("C"))), cells[0].text.first())
+                assertNodeEquals(Strong(listOf(Text("D"))), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("A"), header.text.first())
+                assertNodeEquals(Text("A"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("AC"), cells[0].text.first())
-                assertEquals(Text("AD"), cells[1].text.first())
+                assertNodeEquals(Text("AC"), cells[0].text.first())
+                assertNodeEquals(Text("AD"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.RIGHT, alignment)
-                assertEquals(Text("B"), header.text.first())
+                assertNodeEquals(Text("B"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("BC"), cells[0].text.first())
-                assertEquals(Text("BD"), cells[1].text.first())
+                assertNodeEquals(Text("BC"), cells[0].text.first())
+                assertNodeEquals(Text("BD"), cells[1].text.first())
             }
 
             assertFalse(hasNext())

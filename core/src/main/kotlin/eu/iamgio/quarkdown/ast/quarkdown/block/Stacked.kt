@@ -14,7 +14,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap space between nodes
  */
-data class Stacked(
+class Stacked(
     val layout: Layout,
     val mainAxisAlignment: MainAxisAlignment,
     val crossAxisAlignment: CrossAxisAlignment,
@@ -34,14 +34,14 @@ data class Stacked(
     /**
      * A layout that stacks nodes vertically.
      */
-    object Column : Layout {
+    data object Column : Layout {
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 
     /**
      * A layout that stacks nodes horizontally.
      */
-    object Row : Layout {
+    data object Row : Layout {
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 
@@ -49,7 +49,7 @@ data class Stacked(
      * A layout that stacks nodes in a grid.
      * @param columnCount number of columns
      */
-    class Grid(val columnCount: Int) : Layout {
+    data class Grid(val columnCount: Int) : Layout {
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 

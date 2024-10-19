@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * An aligned block.
  * @param alignment alignment the content should have
  */
-data class Aligned(
+class Aligned(
     val alignment: Alignment,
     override val children: List<Node>,
 ) : NestableNode {

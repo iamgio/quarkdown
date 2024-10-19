@@ -6,6 +6,6 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * Any unknown node type (should not happen).
  */
-data object BlankNode : Node {
+object BlankNode : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

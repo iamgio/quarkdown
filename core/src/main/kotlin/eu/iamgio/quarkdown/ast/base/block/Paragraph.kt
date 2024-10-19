@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A general paragraph.
  * @param text text content
  */
-data class Paragraph(
+class Paragraph(
     override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

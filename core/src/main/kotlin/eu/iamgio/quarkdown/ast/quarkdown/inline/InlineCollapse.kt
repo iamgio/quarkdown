@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param placeholder content to show when the node is collapsed
  * @param isOpen whether the node is expanded at the beginning
  */
-data class InlineCollapse(
+class InlineCollapse(
     override val text: InlineContent,
     val placeholder: InlineContent,
     val isOpen: Boolean,

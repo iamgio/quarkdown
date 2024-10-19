@@ -17,7 +17,6 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 /**
  * Tests for the AST building DSL.
@@ -72,7 +71,7 @@ class AstDslTest {
                 }
             }
 
-        assertEquals(
+        assertNodeEquals(
             AstRoot(
                 listOf(
                     Paragraph(

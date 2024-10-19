@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param title title of the block
  * @param isOpen whether the block is open at the beginning
  */
-data class Collapse(
+class Collapse(
     val title: InlineContent,
     val isOpen: Boolean,
     override val children: List<Node>,

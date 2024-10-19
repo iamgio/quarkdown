@@ -12,7 +12,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param url URL this link points to
  * @param title optional title
  */
-data class Link(
+class Link(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,
@@ -28,7 +28,7 @@ data class Link(
  * @param onResolve actions to perform when the reference is resolved
  * @see eu.iamgio.quarkdown.context.resolveOrFallback
  */
-data class ReferenceLink(
+class ReferenceLink(
     val label: InlineContent,
     val reference: InlineContent,
     val fallback: () -> Node,

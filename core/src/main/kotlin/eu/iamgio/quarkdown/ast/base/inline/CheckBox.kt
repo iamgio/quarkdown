@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param isChecked whether the checkbox is checked
  * @see eu.iamgio.quarkdown.ast.base.block.TaskListItem
  */
-data class CheckBox(
+class CheckBox(
     val isChecked: Boolean,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)

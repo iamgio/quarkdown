@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast.attributes
 
 import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.toc.TableOfContents
@@ -14,6 +15,8 @@ interface AstAttributes {
      * The root node of the tree.
      */
     val root: NestableNode?
+
+    val nodeAttributes: Map<Node, NodeAttributes>
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -62,6 +65,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
+    override val nodeAttributes: MutableMap<Node, NodeAttributes> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,

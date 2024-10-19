@@ -6,6 +6,6 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * A comment whose content is ignored.
  */
-data object Comment : Node {
+object Comment : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

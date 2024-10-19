@@ -8,7 +8,20 @@ import eu.iamgio.quarkdown.lexer.tokens.PlainTextToken
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
+import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.assertIs
+
+/**
+ * Asserts that the contents of two nodes are equal.
+ * @param expected expected node
+ * @param actual actual node
+ */
+fun assertNodeEquals(
+    expected: Node,
+    actual: Node,
+) = assertThat(actual)
+    .usingRecursiveComparison()
+    .isEqualTo(expected)!!
 
 /**
  * Reads the text content of a test resource.

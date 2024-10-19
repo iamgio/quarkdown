@@ -6,6 +6,6 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * A hard line break.
  */
-data object LineBreak : Node {
+object LineBreak : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

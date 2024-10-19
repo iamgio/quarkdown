@@ -9,7 +9,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param symbol processed symbol (e.g. `©`)
  * @see eu.iamgio.quarkdown.lexer.patterns.TextSymbolReplacement
  */
-data class TextSymbol(val symbol: Char) : PlainTextNode {
+class TextSymbol(private val symbol: Char) : PlainTextNode {
     /**
      * @return [symbol] as a string
      */

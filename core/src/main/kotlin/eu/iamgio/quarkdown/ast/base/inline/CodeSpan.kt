@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param text text content
  * @param content additional content this code holds, if any
  */
-data class CodeSpan(
+class CodeSpan(
     override val text: String,
     val content: ContentInfo? = null,
 ) : PlainTextNode {
