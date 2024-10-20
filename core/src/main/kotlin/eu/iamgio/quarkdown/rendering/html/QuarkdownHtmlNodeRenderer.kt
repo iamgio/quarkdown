@@ -71,7 +71,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     private fun HtmlTagBuilder.location(node: LocationTrackableNode) =
         optionalAttribute(
             "data-location",
-            node.formatLocation(context)?.takeUnless { it.isEmpty() },
+            node.takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
+                ?.formatLocation(context)
+                ?.takeUnless { it.isEmpty() },
         )
 
     // Quarkdown node rendering
@@ -350,7 +352,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
                 )
-                // todo add .numbering, and allow disabling from settings
                 .location(node)
                 .build()
 

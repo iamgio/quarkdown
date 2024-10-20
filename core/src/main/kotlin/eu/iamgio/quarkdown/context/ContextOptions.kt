@@ -18,8 +18,16 @@ interface ContextOptions : MediaStorageOptions {
      * that do not have an explicit one.
      * For example, a heading element (`# Hello world`) automatically generates
      * an identifier (`hello-world`) that can be referenced by other elements.
+     * @see eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
      */
     val enableAutomaticIdentifiers: Boolean
+
+    /**
+     * Whether certain nodes can be aware of their location within the document
+     * in order to display it, for example in headings.
+     * @see eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
+     */
+    val enableLocationAwareness: Boolean
 }
 
 /**
@@ -34,6 +42,7 @@ fun Context.shouldAutoPageBreak(heading: Heading) = !heading.isMarker && heading
 data class MutableContextOptions(
     override var autoPageBreakHeadingMaxDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
+    override var enableLocationAwareness: Boolean = true,
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,
 ) : ContextOptions {

@@ -31,6 +31,14 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+// Default execution options.
+private val DEFAULT_OPTIONS =
+    MutableContextOptions(
+        enableAutomaticIdentifiers = false,
+        enableLocationAwareness = false,
+    )
+
+// Folder to retrieve test data from.
 private const val DATA_FOLDER = "src/test/resources/data"
 
 /**
@@ -49,7 +57,7 @@ class FullPipelineTest {
      */
     private fun execute(
         source: String,
-        options: MutableContextOptions = MutableContextOptions(enableAutomaticIdentifiers = false),
+        options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
         errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
         enableMediaStorage: Boolean = false,
         hook: Context.(CharSequence) -> Unit,
@@ -1437,7 +1445,7 @@ class FullPipelineTest {
                 
                 ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)
             """.trimIndent(),
-            options = MutableContextOptions(enableRemoteMediaStorage = true),
+            options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = true),
             enableMediaStorage = true,
         ) {
             assertEquals(
@@ -1465,7 +1473,7 @@ class FullPipelineTest {
             ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)  
             ![Quarkdown](img/icon.png)
             """.trimIndent(),
-            options = MutableContextOptions(enableRemoteMediaStorage = false),
+            options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = false),
             enableMediaStorage = true,
         ) {
             assertEquals(
@@ -1483,7 +1491,7 @@ class FullPipelineTest {
             [Banner]: https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg
             ![Banner]
             """.trimIndent(),
-            options = MutableContextOptions(enableRemoteMediaStorage = true),
+            options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = true),
             enableMediaStorage = true,
         ) {
             assertEquals(
