@@ -68,7 +68,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     /**
      * Adds a `data-location` attribute to the location-trackable node, if its location is available.
      */
-    private fun HtmlTagBuilder.location(node: LocationTrackableNode) = optionalAttribute("data-location", node.formatLocation(context))
+    private fun HtmlTagBuilder.location(node: LocationTrackableNode) =
+        optionalAttribute(
+            "data-location",
+            node.formatLocation(context)?.takeUnless { it.isEmpty() },
+        )
 
     // Quarkdown node rendering
 
