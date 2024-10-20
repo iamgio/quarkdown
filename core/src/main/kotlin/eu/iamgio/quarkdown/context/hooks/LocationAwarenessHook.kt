@@ -13,7 +13,7 @@ import eu.iamgio.quarkdown.context.MutableContext
  * @see LocationTrackableNode
  * @see AstAttributes.locations
  */
-class SectionLocationHook(private val context: MutableContext) : AstIteratorHook {
+class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         // Stores the current section location.
         // The key is the depth of the last heading found;

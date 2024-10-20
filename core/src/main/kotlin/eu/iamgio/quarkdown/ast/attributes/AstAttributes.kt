@@ -18,7 +18,7 @@ interface AstAttributes {
     /**
      * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
      * contains its location in the document, in terms of section indices.
-     * @see eu.iamgio.quarkdown.context.hooks.SectionLocationHook for the storing stage
+     * @see eu.iamgio.quarkdown.context.hooks.LocationAwarenessHook for the storing stage
      */
     val locations: Map<LocationTrackableNode, SectionLocation>
 
