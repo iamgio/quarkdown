@@ -3,8 +3,8 @@ package eu.iamgio.quarkdown.rendering.html
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
+import eu.iamgio.quarkdown.ast.attributes.formatLocation
 import eu.iamgio.quarkdown.ast.attributes.getId
-import eu.iamgio.quarkdown.ast.attributes.getLocation
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
@@ -68,11 +68,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     /**
      * Adds a `data-location` attribute to the location-trackable node, if its location is available.
      */
-    private fun HtmlTagBuilder.location(node: LocationTrackableNode) =
-        optionalAttribute(
-            "data-location",
-            node.getLocation(context)?.let { context.documentInfo.numberingFormat?.format(it) },
-        )
+    private fun HtmlTagBuilder.location(node: LocationTrackableNode) = optionalAttribute("data-location", node.formatLocation(context))
 
     // Quarkdown node rendering
 
@@ -350,7 +346,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
                 )
-                // default format for each doc type, add .numbering, and allow disabling from settings
+                // todo add .numbering, and allow disabling from settings
                 .location(node)
                 .build()
 

@@ -29,3 +29,15 @@ data class SectionLocation(val levels: List<Int>)
  * or `null` if the location for [this] node is not registered
  */
 fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = context.attributes.locations[this]
+
+/**
+ * @return the location of this node within the document handled by [context],
+ * formatted according to the document's numbering format.
+ * Returns `null` if the location for [this] node is not registered,
+ * or if the document does not have a numbering format
+ * @see getLocation
+ * @see eu.iamgio.quarkdown.document.numbering.NumberingFormat
+ * @see eu.iamgio.quarkdown.document.DocumentInfo.numberingFormatOrDefault
+ */
+fun LocationTrackableNode.formatLocation(context: Context): String? =
+    this.getLocation(context)?.let { context.documentInfo.numberingFormatOrDefault?.format(it) }
