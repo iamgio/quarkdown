@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.TaskListItem
@@ -68,6 +69,9 @@ class AstDslTest {
                             }
                         }
                     }
+                    heading(3) {
+                        text("Heading")
+                    }
                 }
             }
 
@@ -125,6 +129,7 @@ class AstDslTest {
                                 TaskListItem(isChecked = true, children = listOf(Paragraph(listOf(Text("Item 2"))))),
                             ),
                     ),
+                    Heading(3, listOf(Text("Heading"))),
                 ),
             ),
             root,

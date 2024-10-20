@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.ast.dsl
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
+import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
@@ -20,6 +21,14 @@ class BlockAstBuilder : AstBuilder() {
      * @see Paragraph
      */
     fun paragraph(block: InlineAstBuilder.() -> Unit) = +Paragraph(buildInline(block))
+
+    /**
+     * @see Heading
+     */
+    fun heading(
+        level: Int,
+        block: InlineAstBuilder.() -> Unit,
+    ) = +Heading(level, buildInline(block))
 
     /**
      * @see BlockQuote
