@@ -1099,6 +1099,148 @@ class FullPipelineTest {
     }
 
     @Test
+    fun numbering() {
+        // Numbering is disabled by default.
+        execute(
+            """
+            .noautopagebreak
+            # A
+            ## A/1
+            # B
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>A</h1>" +
+                    "<h2>A/1</h2>" +
+                    "<h1>B</h1>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .noautopagebreak
+            .numbering {1.1}
+            # A
+            # B
+            # C
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h1 data-location=\"3\">C</h1>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .noautopagebreak
+            .numbering {1.1}
+            # A
+            ## A/1
+            # B
+            # C
+            ## C/1
+            ## C/2
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h1 data-location=\"3\">C</h1>" +
+                    "<h2 data-location=\"3.1\">C/1</h2>" +
+                    "<h2 data-location=\"3.2\">C/2</h2>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .noautopagebreak
+            .numbering {A.a.1}
+            # A
+            ## A/1
+            ### A/1/1
+            ## A/2
+            # B
+            ### B/1/1
+            # C
+            ## C/1
+            ### C/1/1
+            ## C/2
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"A\">A</h1>" +
+                    "<h2 data-location=\"A.a\">A/1</h2>" +
+                    "<h3 data-location=\"A.a.1\">A/1/1</h3>" +
+                    "<h2 data-location=\"A.b\">A/2</h2>" +
+                    "<h1 data-location=\"B\">B</h1>" +
+                    "<h3 data-location=\"B.a.1\">B/1/1</h3>" +
+                    "<h1 data-location=\"C\">C</h1>" +
+                    "<h2 data-location=\"C.a\">C/1</h2>" +
+                    "<h3 data-location=\"C.a.1\">C/1/1</h3>" +
+                    "<h2 data-location=\"C.b\">C/2</h2>",
+                it,
+            )
+        }
+
+        // Default numbering set by the document type.
+        execute(
+            """
+            .doctype {paged}
+            .noautopagebreak
+            # A
+            ## A/1
+            # B
+            # C
+            ## C/1
+            ### C/1/1
+            ## C/2
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h1 data-location=\"3\">C</h1>" +
+                    "<h2 data-location=\"3.1\">C/1</h2>" +
+                    "<h3 data-location=\"3.1.1\">C/1/1</h3>" +
+                    "<h2 data-location=\"3.2\">C/2</h2>",
+                it,
+            )
+        }
+
+        // Disable default numbering.
+        execute(
+            """
+            .doctype {paged}
+            .numbering {none}
+            .noautopagebreak
+            # A
+            ## A/1
+            # B
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>A</h1>" +
+                    "<h2>A/1</h2>" +
+                    "<h1>B</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents`() {
         execute(
             """
@@ -1112,7 +1254,7 @@ class FullPipelineTest {
             
             Hello
             """.trimIndent(),
-            MutableContextOptions(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
@@ -1143,7 +1285,7 @@ class FullPipelineTest {
             
             Hello
             """.trimIndent(),
-            MutableContextOptions(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
@@ -1182,7 +1324,7 @@ class FullPipelineTest {
             
             ### DEF/2
             """.trimIndent(),
-            MutableContextOptions(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
@@ -1220,7 +1362,7 @@ class FullPipelineTest {
             
             ## DEF
             """.trimIndent(),
-            MutableContextOptions(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
@@ -1251,7 +1393,7 @@ class FullPipelineTest {
             
             ## Y
             """.trimIndent(),
-            MutableContextOptions(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
