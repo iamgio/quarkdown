@@ -39,7 +39,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter

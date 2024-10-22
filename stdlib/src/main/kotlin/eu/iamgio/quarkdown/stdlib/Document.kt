@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context

@@ -8,10 +8,8 @@ import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
-import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
@@ -23,7 +21,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.convertToListNode
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
@@ -34,7 +33,6 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitialize
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
-import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -194,43 +192,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    // Converts TOC items to a renderable OrderedList.
-    private fun tableOfContentsItemsToList(
-        items: List<TableOfContents.Item>,
-        view: TableOfContentsView,
-    ): OrderedList {
-        // Gets the content of an inner TOC item.
-        fun getTableOfContentsItemContent(item: TableOfContents.Item) =
-            buildList {
-                // A link to the target heading.
-                this +=
-                    Link(
-                        item.text,
-                        url = "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target),
-                        title = null,
-                    )
-
-                // Recursively include sub-items.
-                item.subItems.filter { it.depth <= view.maxDepth }
-                    .takeIf { it.isNotEmpty() }
-                    ?.let { this += tableOfContentsItemsToList(it, view) }
-            }
-
-        return OrderedList(
-            startIndex = 1,
-            isLoose = true,
-            children =
-                items.map {
-                    BaseListItem(
-                        // When at least one item is focused, the other items are less visible.
-                        // This effect is handled by CSS (global.css).
-                        isFocused = view.hasFocus(it),
-                        children = getTableOfContentsItemContent(it),
-                    )
-                },
-        )
-    }
-
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
@@ -244,9 +205,15 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 text = node.title ?: buildInline { titleText?.let { text(it) } },
                 customId = "table-of-contents",
             )
+
             // Content
             +buildTag("nav") {
-                +tableOfContentsItemsToList(tableOfContents.items, node)
+                +node.convertToListNode(
+                    tableOfContents.items,
+                    linkUrlMapper = { item ->
+                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                    },
+                )
             }
         }
     }

@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.ast.quarkdown.block
+package eu.iamgio.quarkdown.ast.quarkdown.block.toc
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
