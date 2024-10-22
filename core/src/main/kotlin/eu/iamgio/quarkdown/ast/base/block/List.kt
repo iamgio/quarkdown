@@ -43,11 +43,12 @@ class OrderedList(
 /**
  * An item of a [ListBlock].
  */
-interface ListItem : NestableNode {
+abstract class ListItem : NestableNode {
     /**
      * The list that owns this item.
+     * This property is set by the parser and should not be externally modified.
      */
-    var owner: ListBlock?
+    var owner: ListBlock? = null
 }
 
 /**
@@ -61,9 +62,7 @@ interface ListItem : NestableNode {
 class BaseListItem(
     val isFocused: Boolean = false,
     override val children: List<Node>,
-) : ListItem {
-    override var owner: ListBlock? = null
-
+) : ListItem() {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -76,8 +75,6 @@ class BaseListItem(
 class TaskListItem(
     val isChecked: Boolean,
     override val children: List<Node>,
-) : ListItem {
-    override var owner: ListBlock? = null
-
+) : ListItem() {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
