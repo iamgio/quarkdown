@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.context.Context
@@ -63,9 +63,7 @@ fun localization(
             ?: throw IllegalArgumentException("Localization table must only contain a list.")
 
     val table: LocalizationTable =
-        dictionaryList.children.associate { item ->
-            if (item !is BaseListItem) throw IllegalArgumentException("Localization table must only contain simple list items.")
-
+        dictionaryList.children.asSequence().filterIsInstance<ListItem>().associate { item ->
             // The locale name is the first element of each list item:
             // English <-- this is the locale name
             //   - key1: value1
@@ -94,14 +92,8 @@ fun localization(
             // Entries are parsed as a map.
             val entries: LocalizationEntries =
                 entriesList.children.asSequence()
-                    .flatMap { entryItem ->
-                        if (entryItem !is BaseListItem) {
-                            throw IllegalArgumentException(
-                                "Localization table must only contain simple list items.",
-                            )
-                        }
-                        entryItem.children
-                    }
+                    .filterIsInstance<ListItem>()
+                    .flatMap { entryItem -> entryItem.children }
                     .filterNot { it is Newline }
                     .associate {
                         // Key and value are extracted.

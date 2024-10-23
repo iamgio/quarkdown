@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.visitor.node
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
@@ -9,11 +8,11 @@ import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
@@ -72,9 +71,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: UnorderedList): T
 
-    fun visit(node: BaseListItem): T
-
-    fun visit(node: TaskListItem): T
+    fun visit(node: ListItem): T
 
     fun visit(node: Html): T
 

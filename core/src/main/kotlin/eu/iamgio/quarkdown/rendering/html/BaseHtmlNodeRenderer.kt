@@ -1,20 +1,21 @@
 package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.base.block.ListItem
+import eu.iamgio.quarkdown.ast.base.block.ListItemVariantVisitor
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
+import eu.iamgio.quarkdown.ast.base.block.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
@@ -61,7 +62,12 @@ import org.apache.commons.text.StringEscapeUtils
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
-open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuilder>(context) {
+open class BaseHtmlNodeRenderer(context: Context) :
+    TagNodeRenderer<HtmlTagBuilder>(context),
+    // Along with nodes, this component is also responsible for rendering list item variants.
+    // For instance, a checked/unchecked task of attached to a list item.
+    // These flavors directly affect the behavior of the HTML list item builder.
+    ListItemVariantVisitor<HtmlTagBuilder.() -> Unit> {
     override fun createBuilder(
         name: String,
         pretty: Boolean,
@@ -119,38 +125,29 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
 
     override fun visit(node: UnorderedList) = buildTag("ul", node.children)
 
-    /**
-     * Appends the base content of a [ListItem] to an [HtmlTagBuilder],
-     * following the loose/tight rendering rules (CommonMark 5.3).
-     */
-    protected fun HtmlTagBuilder.appendListItemContent(node: ListItem) {
-        // Loose lists (or items not linked to a list for some reason) are rendered as-is.
-        if (node.owner?.isLoose != false) {
-            +node.children
-            return
-        }
-        // Tight lists don't wrap paragraphs in <p> tags (CommonMark 5.3).
-        node.children.forEach {
-            if (it is Paragraph) {
-                +it.text
-            } else {
-                +it
+    // Appends the base content of a list item, following the loose/tight rendering rules (CommonMark 5.3).
+    override fun visit(node: ListItem) =
+        buildTag("li") {
+            // Flavors are executed on this HTML builder.
+            node.variants.forEach { it.accept(this@BaseHtmlNodeRenderer).invoke(this) }
+
+            // Loose lists (or items not linked to a list for some reason) are rendered as-is.
+            if (node.owner?.isLoose != false) {
+                +node.children
+                return@buildTag
+            }
+            // Tight lists don't wrap paragraphs in <p> tags (CommonMark 5.3).
+            node.children.forEach {
+                if (it is Paragraph) {
+                    +it.text
+                } else {
+                    +it
+                }
             }
         }
-    }
 
-    override fun visit(node: BaseListItem) =
-        buildTag("li") {
-            appendListItemContent(node)
-        }
-
-    override fun visit(node: TaskListItem) =
-        buildTag("li") {
-            // GFM 5.3 extension.
-            +visit(CheckBox(node.isChecked))
-
-            appendListItemContent(node)
-        }
+    // GFM 5.3 extension.
+    override fun visit(flavor: TaskListItemVariant): HtmlTagBuilder.() -> Unit = { +visit(CheckBox(flavor.isChecked)) }
 
     override fun visit(node: Html) = node.content
 
@@ -283,4 +280,6 @@ open class BaseHtmlNodeRenderer(context: Context) : TagNodeRenderer<HtmlTagBuild
     override fun visit(node: InlineCollapse): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: SlidesFragment): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(flavor: FocusListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(flavor::class)
 }

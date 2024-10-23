@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
@@ -91,8 +91,8 @@ class FlowTest {
             val list = blockNode.children.first()
             assertIs<UnorderedList>(list)
             assertEquals(2, list.children.size)
-            assertIs<BaseListItem>(list.children[0])
-            assertIs<BaseListItem>(list.children[1])
+            assertIs<ListItem>(list.children[0])
+            assertIs<ListItem>(list.children[1])
         }
 
         function(

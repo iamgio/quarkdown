@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.function.value.output.node
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
@@ -26,7 +25,7 @@ import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
 abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     private fun createListItems(value: IterableValue<*>): List<ListItem> =
         value.map {
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         // Each item is represented by its own Node output.

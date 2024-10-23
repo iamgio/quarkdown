@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast.quarkdown.block.toc
 
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.context.toc.TableOfContents
@@ -39,9 +40,9 @@ fun TableOfContentsView.convertToListNode(
             isLoose = true,
             children =
                 items.map {
-                    BaseListItem(
+                    ListItem(
                         // When at least one item is focused, the other items are less visible.
-                        isFocused = view.hasFocus(it),
+                        variants = listOf(FocusListItemVariant(isFocused = view.hasFocus(it))),
                         children = getTableOfContentsItemContent(it),
                     )
                 },

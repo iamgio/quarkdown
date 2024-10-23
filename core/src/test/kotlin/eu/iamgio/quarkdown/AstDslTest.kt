@@ -1,13 +1,13 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
+import eu.iamgio.quarkdown.ast.base.block.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Emphasis
@@ -63,7 +63,7 @@ class AstDslTest {
                                 text("Item 1")
                             }
                         }
-                        taskListItem(checked = true) {
+                        listItem(TaskListItemVariant(isChecked = true)) {
                             paragraph {
                                 text("Item 2")
                             }
@@ -117,16 +117,19 @@ class AstDslTest {
                         isLoose = true,
                         children =
                             listOf(
-                                BaseListItem(children = listOf(Paragraph(listOf(Text("Item 1"))))),
-                                BaseListItem(children = listOf(Paragraph(listOf(Text("Item 2"))))),
+                                ListItem(children = listOf(Paragraph(listOf(Text("Item 1"))))),
+                                ListItem(children = listOf(Paragraph(listOf(Text("Item 2"))))),
                             ),
                     ),
                     UnorderedList(
                         isLoose = false,
                         children =
                             listOf(
-                                BaseListItem(children = listOf(Paragraph(listOf(Text("Item 1"))))),
-                                TaskListItem(isChecked = true, children = listOf(Paragraph(listOf(Text("Item 2"))))),
+                                ListItem(children = listOf(Paragraph(listOf(Text("Item 1"))))),
+                                ListItem(
+                                    listOf(TaskListItemVariant(isChecked = true)),
+                                    children = listOf(Paragraph(listOf(Text("Item 2")))),
+                                ),
                             ),
                     ),
                     Heading(3, listOf(Text("Heading"))),

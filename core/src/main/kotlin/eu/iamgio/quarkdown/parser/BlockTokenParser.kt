@@ -3,7 +3,6 @@ package eu.iamgio.quarkdown.parser
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
@@ -13,11 +12,12 @@ import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.base.block.ListBlock
 import eu.iamgio.quarkdown.ast.base.block.ListItem
+import eu.iamgio.quarkdown.ast.base.block.ListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
+import eu.iamgio.quarkdown.ast.base.block.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
@@ -258,11 +258,21 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         val lines = content.lineSequence()
 
         if (lines.none()) {
-            return BaseListItem(children = emptyList())
+            return ListItem(children = emptyList())
         }
 
-        //
+        // Trims the content, removing common indentation.
         val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length)
+
+        // Additional features of this list item.
+        val variants =
+            buildList<ListItemVariant> {
+                // GFM 5.3 task list item.
+                if (task.isNotBlank()) {
+                    val isChecked = "[ ]" !in task
+                    add(TaskListItemVariant(isChecked))
+                }
+            }
 
         // Parsed content.
         val children =
@@ -270,15 +280,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 .newBlockLexer(source = trimmedContent)
                 .tokenizeAndParse()
 
-        return when {
-            // GFM task list item.
-            task.isNotBlank() -> {
-                val isChecked = "[ ]" !in task
-                TaskListItem(isChecked, children)
-            }
-            // Regular list item.
-            else -> BaseListItem(children = children)
-        }
+        return ListItem(variants, children)
     }
 
     override fun visit(token: TableToken): Node {

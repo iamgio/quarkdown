@@ -5,9 +5,9 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.attributes.MutableAstAttributes
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
@@ -16,7 +16,7 @@ import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
+import eu.iamgio.quarkdown.ast.base.block.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Comment
@@ -444,7 +444,7 @@ class HtmlNodeRendererTest {
 
     private fun listItems() =
         listOf(
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("A1"))),
@@ -452,7 +452,7 @@ class HtmlNodeRendererTest {
                         Paragraph(listOf(Text("A2"))),
                     ),
             ),
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("B1"))),
@@ -460,7 +460,7 @@ class HtmlNodeRendererTest {
                         Paragraph(listOf(Text("B2"))),
                     ),
             ),
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("C1"))),
@@ -468,8 +468,8 @@ class HtmlNodeRendererTest {
                         Paragraph(listOf(Text("C2"))),
                     ),
             ),
-            BaseListItem(
-                isFocused = true,
+            ListItem(
+                variants = listOf(FocusListItemVariant(isFocused = true)),
                 children =
                     listOf(
                         Paragraph(listOf(Text("D1"))),
@@ -477,8 +477,8 @@ class HtmlNodeRendererTest {
                         Paragraph(listOf(Text("D2"))),
                     ),
             ),
-            TaskListItem(
-                isChecked = true,
+            ListItem(
+                variants = listOf(TaskListItemVariant(isChecked = true)),
                 listOf(
                     Paragraph(listOf(Text("E1"))),
                     HorizontalRule,

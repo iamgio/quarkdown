@@ -5,8 +5,8 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.attributes.formatLocation
 import eu.iamgio.quarkdown.ast.attributes.getId
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
+import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
@@ -392,12 +392,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         }
     }
 
-    // Quarkdown introduces focusable list items.
-    override fun visit(node: BaseListItem) =
-        buildTag("li") {
-            appendListItemContent(node)
-
-            if (node.isFocused) {
+    override fun visit(flavor: FocusListItemVariant): HtmlTagBuilder.() -> Unit =
+        {
+            if (flavor.isFocused) {
                 `class`("focused")
             }
         }
