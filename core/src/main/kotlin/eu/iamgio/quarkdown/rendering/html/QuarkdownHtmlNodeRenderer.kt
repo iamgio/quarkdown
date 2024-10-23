@@ -21,6 +21,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.convertToListNode
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
@@ -392,10 +393,12 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         }
     }
 
-    override fun visit(flavor: FocusListItemVariant): HtmlTagBuilder.() -> Unit =
+    override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit =
         {
-            if (flavor.isFocused) {
+            if (variant.isFocused) {
                 `class`("focused")
             }
         }
+
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { location(variant.target) }
 }

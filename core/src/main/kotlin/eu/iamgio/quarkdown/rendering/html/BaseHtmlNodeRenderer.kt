@@ -40,6 +40,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
@@ -147,7 +148,7 @@ open class BaseHtmlNodeRenderer(context: Context) :
         }
 
     // GFM 5.3 extension.
-    override fun visit(flavor: TaskListItemVariant): HtmlTagBuilder.() -> Unit = { +visit(CheckBox(flavor.isChecked)) }
+    override fun visit(variant: TaskListItemVariant): HtmlTagBuilder.() -> Unit = { +visit(CheckBox(variant.isChecked)) }
 
     override fun visit(node: Html) = node.content
 
@@ -281,5 +282,7 @@ open class BaseHtmlNodeRenderer(context: Context) :
 
     override fun visit(node: SlidesFragment): CharSequence = throw UnsupportedRenderException(node)
 
-    override fun visit(flavor: FocusListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(flavor::class)
+    override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
+
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
 }

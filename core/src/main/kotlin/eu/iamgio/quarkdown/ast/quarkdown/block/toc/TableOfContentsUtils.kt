@@ -1,9 +1,11 @@
 package eu.iamgio.quarkdown.ast.quarkdown.block.toc
 
+import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 
 /**
@@ -39,8 +41,18 @@ fun TableOfContentsView.convertToListNode(
             children =
                 items.map {
                     ListItem(
-                        // When at least one item is focused, the other items are less visible.
-                        variants = listOf(FocusListItemVariant(isFocused = view.hasFocus(it))),
+                        variants =
+                            buildList {
+                                // When at least one item is focused, the other items are less visible.
+                                this += FocusListItemVariant(isFocused = view.hasFocus(it))
+
+                                // If the target node's location can be tracked,
+                                // the list item displays its location.
+                                // Since the targets are usually headings, thus location trackable, this is applied.
+                                if (it.target is LocationTrackableNode) {
+                                    this += LocationTargetListItemVariant(it.target)
+                                }
+                            },
                         children = getTableOfContentsItemContent(it),
                     )
                 },

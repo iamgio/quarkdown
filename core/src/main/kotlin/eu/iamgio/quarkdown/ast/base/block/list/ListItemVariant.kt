@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast.base.block.list
 
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 
 /**
  * A variant of a [ListItem] that brings additional functionalities to it.
@@ -19,7 +20,9 @@ interface ListItemVariant {
  * @param T return type of the visit operations
  */
 interface ListItemVariantVisitor<T> {
-    fun visit(flavor: TaskListItemVariant): T
+    fun visit(variant: TaskListItemVariant): T
 
-    fun visit(flavor: FocusListItemVariant): T
+    fun visit(variant: FocusListItemVariant): T
+
+    fun visit(variant: LocationTargetListItemVariant): T
 }

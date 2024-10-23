@@ -321,9 +321,14 @@ code.focus-lines .hljs-ln-line:not(.focused),
     opacity: 0.4;
 }
 
-/* Elements that contain localization data display it accordingly */
+/* Elements that contain location data display it accordingly */
 [data-location]::before {
     content: attr(data-location) var(--qd-location-suffix);
+}
+
+/* Location data in a list item replaces its marker */
+li[data-location] {
+    list-style-type: none;
 }
 
 .container {

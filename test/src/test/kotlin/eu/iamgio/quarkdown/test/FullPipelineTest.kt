@@ -1411,6 +1411,42 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        // Numbering
+        execute(
+            """
+            .numbering {1.A.a}
+            .noautopagebreak
+            .tableofcontents title:{TOC}
+            
+            # A            
+            ## A/1
+            ### A/1/1
+            ## A/2
+            # B
+            ### B/1/1
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true, enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\">TOC</h1>" +
+                    "<nav><ol>" +
+                    "<li data-location=\"1\"><a href=\"#a\">A</a>" +
+                    "<ol><li data-location=\"1.A\"><a href=\"#a1\">A/1</a>" +
+                    "<ol><li data-location=\"1.A.a\"><a href=\"#a11\">A/1/1</a></li></ol></li>" +
+                    "<li data-location=\"1.B\"><a href=\"#a2\">A/2</a></li></ol></li>" +
+                    "<li data-location=\"2\"><a href=\"#b\">B</a>" +
+                    "<ol><li data-location=\"2.A.a\"><a href=\"#b11\">B/1/1</a></li></ol></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"a\" data-location=\"1\">A</h1>" +
+                    "<h2 id=\"a1\" data-location=\"1.A\">A/1</h2>" +
+                    "<h3 id=\"a11\" data-location=\"1.A.a\">A/1/1</h3>" +
+                    "<h2 id=\"a2\" data-location=\"1.B\">A/2</h2>" +
+                    "<h1 id=\"b\" data-location=\"2\">B</h1>" +
+                    "<h3 id=\"b11\" data-location=\"2.A.a\">B/1/1</h3>",
+                it,
+            )
+        }
     }
 
     @Test
