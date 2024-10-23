@@ -1,12 +1,10 @@
 package eu.iamgio.quarkdown.ast.quarkdown.block.toc
 
-import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.inline.Link
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
 import eu.iamgio.quarkdown.context.toc.TableOfContents
-
-// Converts TOC items to a OrderedList.
 
 /**
  * Converts a table of contents to a renderable [OrderedList].

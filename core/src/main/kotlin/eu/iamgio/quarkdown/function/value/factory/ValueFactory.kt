@@ -3,8 +3,8 @@ package eu.iamgio.quarkdown.function.value.factory
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.base.block.ListBlock
-import eu.iamgio.quarkdown.ast.base.block.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.Context

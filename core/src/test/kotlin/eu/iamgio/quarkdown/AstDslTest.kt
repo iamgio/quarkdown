@@ -4,11 +4,11 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.block.TaskListItemVariant
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Image

@@ -2,9 +2,9 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected

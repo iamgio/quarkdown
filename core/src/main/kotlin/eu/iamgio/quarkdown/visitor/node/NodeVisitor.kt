@@ -8,12 +8,12 @@ import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
-import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Comment

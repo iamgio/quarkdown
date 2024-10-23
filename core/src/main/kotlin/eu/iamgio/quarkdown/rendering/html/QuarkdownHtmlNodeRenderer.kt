@@ -6,7 +6,6 @@ import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.attributes.formatLocation
 import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
-import eu.iamgio.quarkdown.ast.base.block.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Image
@@ -21,6 +20,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.convertToListNode
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse

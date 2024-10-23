@@ -4,9 +4,9 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 
 /**
  * A builder of block nodes.

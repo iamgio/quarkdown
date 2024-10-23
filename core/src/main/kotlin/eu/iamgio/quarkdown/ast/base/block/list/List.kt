@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.ast.base.block
+package eu.iamgio.quarkdown.ast.base.block.list
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node

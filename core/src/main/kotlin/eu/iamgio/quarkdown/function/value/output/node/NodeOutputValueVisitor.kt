@@ -3,9 +3,9 @@ package eu.iamgio.quarkdown.function.value.output.node
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BlankNode
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue

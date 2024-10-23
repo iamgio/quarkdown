@@ -143,7 +143,7 @@ class LinkDefinitionToken(data: TokenData) : Token(data) {
  * - A
  * - B
  * ```
- * @see eu.iamgio.quarkdown.ast.base.block.UnorderedList
+ * @see eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
  */
 class UnorderedListToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -155,7 +155,7 @@ class UnorderedListToken(data: TokenData) : Token(data) {
  * 1. First
  * 2. Second
  * ```
- * @see eu.iamgio.quarkdown.ast.base.block.OrderedList
+ * @see eu.iamgio.quarkdown.ast.base.block.list.OrderedList
  */
 class OrderedListToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -169,7 +169,7 @@ class OrderedListToken(data: TokenData) : Token(data) {
  * ```
  * 1. First
  * ```
- * @see eu.iamgio.quarkdown.ast.base.block.ListItem
+ * @see eu.iamgio.quarkdown.ast.base.block.list.ListItem
  */
 class ListItemToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)

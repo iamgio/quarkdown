@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall

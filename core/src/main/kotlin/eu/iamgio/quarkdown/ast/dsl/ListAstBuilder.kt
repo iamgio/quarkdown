@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.ast.dsl
 
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.ListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.ListItemVariant
 
 /**
  * A builder of list items.
