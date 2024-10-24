@@ -590,6 +590,7 @@ nav {
 
 nav ol {
     margin: 0 0 0 1em;
+    padding-left: 0;
 }
 
 nav ol ol {
