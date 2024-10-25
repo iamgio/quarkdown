@@ -97,11 +97,11 @@ data class NumberingFormat(
             val symbols =
                 string.map {
                     when (it) {
-                        '1' -> DecimalNumberingSymbol()
-                        'a' -> LowercaseAlphaNumberingSymbol()
-                        'A' -> UppercaseAlphaNumberingSymbol()
-                        'i' -> TODO("Roman numbering is not yet implemented")
-                        'I' -> TODO("Roman numbering is not yet implemented")
+                        '1' -> DecimalNumberingSymbol
+                        'A' -> UppercaseAlphaNumberingSymbol
+                        'a' -> LowercaseAlphaNumberingSymbol
+                        'I' -> UppercaseRomanNumberingSymbol
+                        'i' -> LowecaseRomanNumberingSymbol
                         else -> NumberingFixedSymbol(it)
                     }
                 }

@@ -189,8 +189,8 @@ fun theme(
  *     - `1` for decimal (`1, 2, 3, ...`)
  *     - `a` for lowercase latin alphabet (`a, b, c, ...`)
  *     - `A` for uppercase latin alphabet (`A, B, C, ...`)
- *     - `i` for lowercase roman numerals (`i, ii, iii, ...`) (currently unsupported)
- *     - `I` for uppercase roman numerals (`I, II, III, ...`) (currently unsupported)
+ *     - `i` for lowercase roman numerals (`i, ii, iii, ...`)
+ *     - `I` for uppercase roman numerals (`I, II, III, ...`)
  *
  *     Any other character is considered a fixed symbol.
  *

@@ -1160,6 +1160,33 @@ class FullPipelineTest {
             )
         }
 
+        // Roman numerals.
+        execute(
+            """
+            .noautopagebreak
+            .numbering {I::i}
+            # A
+            ## A/1
+            # B
+            # C
+            ## C/1
+            ## C/2
+            # D
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"I\">A</h1>" +
+                    "<h2 data-location=\"I::i\">A/1</h2>" +
+                    "<h1 data-location=\"II\">B</h1>" +
+                    "<h1 data-location=\"III\">C</h1>" +
+                    "<h2 data-location=\"III::i\">C/1</h2>" +
+                    "<h2 data-location=\"III::ii\">C/2</h2>" +
+                    "<h1 data-location=\"IV\">D</h1>",
+                it,
+            )
+        }
+
         execute(
             """
             .noautopagebreak

@@ -212,9 +212,9 @@ class MiscTest {
 
     @Test
     fun numbering() {
-        assertEquals("3", DecimalNumberingSymbol().map(2))
-        assertEquals("b", LowercaseAlphaNumberingSymbol().map(1))
-        assertEquals("C", UppercaseAlphaNumberingSymbol().map(2))
+        assertEquals("3", DecimalNumberingSymbol.map(2))
+        assertEquals("b", LowercaseAlphaNumberingSymbol.map(1))
+        assertEquals("C", UppercaseAlphaNumberingSymbol.map(2))
 
         val format = NumberingFormat.fromString("1.1.a-A")
 
@@ -230,8 +230,9 @@ class MiscTest {
 
         fun format(
             vararg levels: Int,
+            numberingFormat: NumberingFormat = format,
             allowMismatchingLength: Boolean = true,
-        ) = format.format(SectionLocation(levels.toList()), allowMismatchingLength)
+        ) = numberingFormat.format(SectionLocation(levels.toList()), allowMismatchingLength)
 
         assertEquals("1.1.a-A", format(0, 0, 0, 0))
         assertEquals("2.2.b-B", format(1, 1, 1, 1))
@@ -242,6 +243,13 @@ class MiscTest {
         assertEquals("1", format(0))
         assertEquals("1.2.c-D", format(0, 1, 2, 3, 4, 5))
         assertEquals("", format(0, 1, 2, 3, 4, 5, allowMismatchingLength = false))
+
+        val roman = NumberingFormat.fromString("I.i")
+
+        assertEquals("III", format(2, numberingFormat = roman))
+        assertEquals("I.i", format(0, 0, numberingFormat = roman))
+        assertEquals("IV.iii", format(3, 2, numberingFormat = roman))
+        assertEquals("XVII.lvii", format(16, 56, numberingFormat = roman))
     }
 
     @Test
