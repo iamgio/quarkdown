@@ -29,6 +29,15 @@ data class NumberingFormat(
     val symbols: List<NumberingSymbol>,
 ) {
     /**
+     * The size of the subset of [symbols] which are able to contribute
+     * towards the dynamic numbering.
+     * @see NumberingCounterSymbol
+     */
+    private val counterSymbolCount: Int by lazy {
+        symbols.filterIsInstance<NumberingCounterSymbol>().count()
+    }
+
+    /**
      * Converts the numbering format into a string.
      * For example, the [NumberingFormat] `1.A.a` would format the levels `1, 1, 0` as `2.B.a`.
      *
@@ -46,9 +55,19 @@ data class NumberingFormat(
      * ### B.B.A <-- This is the target level!
      * # C
      * ```
+     * @param allowMismatchingLength if `false`, the result string is empty if the current format's length
+     * is too short to cover the nesting level of [location]. If `true`, the result is truncated to the format's length.
      * @return the formatted string
      */
-    fun format(location: SectionLocation): String {
+    fun format(
+        location: SectionLocation,
+        allowMismatchingLength: Boolean,
+    ): String {
+        // For example, the format 1.1 cannot cover a 3-levels nested location.
+        if (!allowMismatchingLength && counterSymbolCount < location.levels.size) {
+            return ""
+        }
+
         val levels = location.levels.iterator()
 
         return symbols.joinToString(separator = "") { symbol ->

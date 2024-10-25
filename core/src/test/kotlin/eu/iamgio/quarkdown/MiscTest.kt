@@ -228,16 +228,20 @@ class MiscTest {
             assertIs<UppercaseAlphaNumberingSymbol>(next())
         }
 
-        fun location(vararg levels: Int) = SectionLocation(levels.toList())
+        fun format(
+            vararg levels: Int,
+            allowMismatchingLength: Boolean = true,
+        ) = format.format(SectionLocation(levels.toList()), allowMismatchingLength)
 
-        assertEquals("1.1.a-A", format.format(location(0, 0, 0, 0)))
-        assertEquals("2.2.b-B", format.format(location(1, 1, 1, 1)))
-        assertEquals("2.1.c-A", format.format(location(1, 0, 2, 0)))
-        assertEquals("3.2.d-P", format.format(location(2, 1, 3, 15)))
-        assertEquals("12.20.e-A", format.format(location(11, 19, 4, 0)))
-        assertEquals("2.1.b", format.format(location(1, 0, 1)))
-        assertEquals("1", format.format(location(0)))
-        assertEquals("1.2.c-D", format.format(location(0, 1, 2, 3, 4, 5)))
+        assertEquals("1.1.a-A", format(0, 0, 0, 0))
+        assertEquals("2.2.b-B", format(1, 1, 1, 1))
+        assertEquals("2.1.c-A", format(1, 0, 2, 0))
+        assertEquals("3.2.d-P", format(2, 1, 3, 15))
+        assertEquals("12.20.e-A", format(11, 19, 4, 0))
+        assertEquals("2.1.b", format(1, 0, 1))
+        assertEquals("1", format(0))
+        assertEquals("1.2.c-D", format(0, 1, 2, 3, 4, 5))
+        assertEquals("", format(0, 1, 2, 3, 4, 5, allowMismatchingLength = false))
     }
 
     @Test

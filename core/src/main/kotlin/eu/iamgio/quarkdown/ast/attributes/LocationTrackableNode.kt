@@ -40,4 +40,6 @@ fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = cont
  * @see eu.iamgio.quarkdown.document.DocumentInfo.numberingFormatOrDefault
  */
 fun LocationTrackableNode.formatLocation(context: Context): String? =
-    this.getLocation(context)?.let { context.documentInfo.numberingFormatOrDefault?.format(it) }
+    this.getLocation(context)?.let {
+        context.documentInfo.numberingFormatOrDefault?.format(it, allowMismatchingLength = false)
+    }

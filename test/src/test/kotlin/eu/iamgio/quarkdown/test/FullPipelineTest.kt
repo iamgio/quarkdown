@@ -1192,6 +1192,29 @@ class FullPipelineTest {
             )
         }
 
+        // Nesting levels that don't fit in the numbering format are ignored.
+        execute(
+            """
+            .noautopagebreak
+            .numbering {1.1}
+            # A
+            ## A/1
+            ### A/1/1
+            # B
+            ### B/1/1
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h3>A/1/1</h3>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h3>B/1/1</h3>",
+                it,
+            )
+        }
+
         // Default numbering set by the document type.
         execute(
             """
