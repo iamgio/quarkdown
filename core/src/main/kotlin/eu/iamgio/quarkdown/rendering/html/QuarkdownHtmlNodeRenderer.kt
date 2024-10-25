@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.ast.attributes.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
-import eu.iamgio.quarkdown.ast.base.inline.Image
 import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
@@ -16,6 +15,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -81,6 +81,13 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: FunctionCallNode): CharSequence = visit(AstRoot(node.children))
 
     // Block
+
+    override fun visit(node: ImageFigure): CharSequence {
+        return buildTag("figure") {
+            +node.image
+            node.caption?.let { +buildTag("figcaption", it) }
+        }
+    }
 
     // An empty div that acts as a page break.
     override fun visit(node: PageBreak) =
@@ -357,18 +364,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                     .build()
             }
         }
-
-    // The Quarkdown flavor renders an image title as a figure caption, if present.
-    override fun visit(node: Image): String {
-        val imgTag = super.visit(node)
-
-        return node.link.title?.let { title ->
-            buildTag("figure") {
-                +imgTag
-                +buildTag("figcaption", title)
-            }
-        } ?: imgTag
-    }
 
     // A code span can contain additional content, such as a color preview.
     override fun visit(node: CodeSpan): String {

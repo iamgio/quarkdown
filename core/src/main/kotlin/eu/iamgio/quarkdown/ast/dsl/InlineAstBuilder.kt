@@ -40,8 +40,10 @@ class InlineAstBuilder : AstBuilder() {
     fun image(
         url: String,
         title: String? = null,
+        width: Int? = null,
+        height: Int? = null,
         label: InlineAstBuilder.() -> Unit,
-    ) = +Image(Link(buildInline(label), url, title), null, null)
+    ) = +Image(Link(buildInline(label), url, title), width, height)
 
     /**
      * @see InlineCollapse

@@ -34,6 +34,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -120,6 +121,8 @@ interface NodeVisitor<T> {
     fun visit(node: FunctionCallNode): T
 
     // Quarkdown block
+
+    fun visit(node: ImageFigure): T
 
     fun visit(node: PageBreak): T
 

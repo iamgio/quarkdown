@@ -359,7 +359,7 @@ li[data-location] {
     align-items: end;
 }
 
-.stack > p, .clip > p {
+.stack > :is(p, figure), .clip > p {
     margin: 0;
 }
 

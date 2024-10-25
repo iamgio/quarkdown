@@ -21,7 +21,9 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
@@ -809,6 +811,40 @@ class BlockParserTest {
     @Test
     fun orderedList() {
         list<OrderedList>(readSource("/parsing/orderedlist.md"))
+    }
+
+    @Test
+    fun figure() {
+        val nodes = blocksIterator<ImageFigure>(readSource("/parsing/figure.md"))
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url") { text("Label") }
+                }.first(),
+                image,
+            )
+            assertNull(caption)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", "Title") { text("Label") }
+                }.first(),
+                image,
+            )
+            assertEquals("Title", caption)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 150, 100) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
     }
 
     @Test

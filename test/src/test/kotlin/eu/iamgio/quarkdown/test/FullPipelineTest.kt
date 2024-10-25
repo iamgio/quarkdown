@@ -335,16 +335,20 @@ class FullPipelineTest {
 
     @Test
     fun images() {
+        execute("Some image: ![Alt text](https://example.com/image.png)") {
+            assertEquals("<p>Some image: <img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+        }
+
         execute("![Alt text](https://example.com/image.png)") {
-            assertEquals("<p><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></p>", it)
+            assertEquals("<figure><img src=\"https://example.com/image.png\" alt=\"Alt text\" /></figure>", it)
         }
 
         execute("![Alt text](https://example.com/image.png 'Title')") {
             assertEquals(
-                "<p><figure>" +
+                "<figure>" +
                     "<img src=\"https://example.com/image.png\" alt=\"Alt text\" title=\"Title\" />" +
                     "<figcaption>Title</figcaption>" +
-                    "</figure></p>",
+                    "</figure>",
                 it,
             )
         }
@@ -838,13 +842,13 @@ class FullPipelineTest {
                     "</div>" +
                     "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<div class=\"clip clip-circle\">" +
-                    "<p><img src=\"img1.png\" alt=\"\" /></p>" +
+                    "<figure><img src=\"img1.png\" alt=\"\" /></figure>" +
                     "</div>" +
                     "<div class=\"clip clip-circle\">" +
-                    "<p><img src=\"img2.png\" alt=\"\" /></p>" +
+                    "<figure><img src=\"img2.png\" alt=\"\" /></figure>" +
                     "</div>" +
                     "<div class=\"clip clip-circle\">" +
-                    "<p><img src=\"img3.png\" alt=\"\" /></p>" +
+                    "<figure><img src=\"img3.png\" alt=\"\" /></figure>" +
                     "</div>" +
                     "</div>" +
                     "<p><strong><a href=\"https://github.com/iamgio/quarkdown\">GitHub</a></strong></p>" +
@@ -1678,17 +1682,15 @@ class FullPipelineTest {
         ) {
             assertEquals(
                 "<div class=\"align align-center\">" +
-                    "<p>" +
                     "<figure>" +
                     "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg\" " +
                     "alt=\"Icon\" title=\"The Quarkdown icon\" />" +
                     "<figcaption>The Quarkdown icon</figcaption>" +
                     "</figure>" +
-                    "</p>" +
-                    "<p>" +
+                    "<figure>" +
                     "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
                     "alt=\"Banner\" />" +
-                    "</p>" +
+                    "</figure>" +
                     "</div>",
                 it,
             )

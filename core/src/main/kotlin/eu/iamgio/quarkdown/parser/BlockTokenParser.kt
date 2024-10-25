@@ -19,7 +19,9 @@ import eu.iamgio.quarkdown.ast.base.block.list.ListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
+import eu.iamgio.quarkdown.ast.base.inline.Image
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
@@ -354,9 +356,15 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: ParagraphToken): Node {
-        return Paragraph(
-            text = token.data.text.trim().toInline(),
-        )
+        val text = token.data.text.trim().toInline()
+
+        // If the paragraph only consists of a single child, it could be a special block.
+        return when (val singleChild = text.singleOrNull()) {
+            // Single image -> a figure.
+            is Image -> ImageFigure(singleChild)
+            // Regular paragraph otherwise (most cases).
+            else -> Paragraph(text)
+        }
     }
 
     override fun visit(token: BlockQuoteToken): Node {

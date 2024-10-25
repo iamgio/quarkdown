@@ -32,11 +32,13 @@ import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import eu.iamgio.quarkdown.ast.dsl.buildBlocks
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
@@ -181,36 +183,20 @@ class HtmlNodeRendererTest {
                 Link(label = listOf(), url = "/url", title = "Title"),
                 width = null,
                 height = null,
-            ).render(MutableContext(BaseMarkdownFlavor)),
-        ) // The figcaption appears only with the Quarkdown rendering!
-        assertEquals(
-            out.next(),
-            Image(
-                Link(label = listOf(), url = "/url", title = "Title"),
-                width = null,
-                height = null,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
-                Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
-                width = null,
-                height = null,
+                Link(label = buildInline { text("Foo bar") }, url = "/url", title = null),
+                width = 150,
+                height = 100,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
-                Link(label = listOf(Strong(listOf(Text("Foo"))), CodeSpan(" bar")), url = "/url", title = "Title"),
-                width = null,
-                height = null,
-            ).render(),
-        )
-        assertEquals(
-            out.next(),
-            Image(
-                Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
+                Link(label = buildInline { text("Foo bar") }, url = "/url", title = "Title"),
                 width = 150,
                 height = 100,
             ).render(),
@@ -281,6 +267,41 @@ class HtmlNodeRendererTest {
                 ),
                 width = null,
                 height = null,
+            ).render(),
+        )
+    }
+
+    fun figure() {
+        val out = readParts("quarkdown/figure.html")
+
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = ""),
+                    width = null,
+                    height = null,
+                ),
+            ).render(),
+        )
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = "Title"),
+                    width = null,
+                    height = null,
+                ),
+            ).render(),
+        )
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = "Title"),
+                    width = 150,
+                    height = 100,
+                ),
             ).render(),
         )
     }
