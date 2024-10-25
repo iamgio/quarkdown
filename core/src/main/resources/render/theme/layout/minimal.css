@@ -11,6 +11,7 @@
     --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
+    --qd-location-suffix: "";
 }
 
 h1 {
@@ -139,6 +140,18 @@ nav li {
 
 .reveal :is(nav, h1#table-of-contents) {
     margin-left: 44px;
+}
+
+/* Location prefix of elements. */
+
+[data-location]::before {
+    opacity: .3;
+    font-weight: normal;
+    margin-right: 0.4em;
+}
+
+nav [data-location]::before {
+    opacity: .5;
 }
 
 /* Footer */
