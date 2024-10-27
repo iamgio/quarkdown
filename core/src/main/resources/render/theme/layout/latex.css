@@ -13,6 +13,7 @@
     --qd-block-margin: 1.8em;
     --qd-paragraph-vertical-margin: 1.5em;
     --qd-line-height: 1.5;
+    --qd-location-suffix: " ";
     --qd-slides-horizontal-alignment: start;
     --qd-quote-type-label-suffix: ". ";
 
@@ -198,6 +199,10 @@ blockquote .attribution {
     border-radius: 3px;
 }
 
+[data-location]::before {
+    padding-right: 0.85rem;
+}
+
 /* Table of contents */
 
 h1#table-of-contents {
@@ -205,7 +210,12 @@ h1#table-of-contents {
 }
 
 nav ol {
-    margin: 0;
+    margin: 0 !important;
+    padding: 0;
+}
+
+nav > ol ol {
+    padding-left: 2rem;
 }
 
 nav > ol > li {
