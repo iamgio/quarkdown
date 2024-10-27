@@ -91,6 +91,10 @@ h6 {
     margin-bottom: 0.8rem;
 }
 
+a {
+    text-decoration: underline;
+}
+
 /* Table */
 
 pre table {

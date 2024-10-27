@@ -219,6 +219,7 @@ hr {
 
 a {
     color: var(--qd-link-color);
+    text-decoration: none;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -613,10 +614,6 @@ nav ol ol {
 
 h1#table-of-contents {
     text-align: start;
-}
-
-nav li a {
-    text-decoration: none;
 }
 
 nav li a::after {
