@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.attributes.formatLocation
-import eu.iamgio.quarkdown.ast.attributes.getId
+import eu.iamgio.quarkdown.ast.attributes.id.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
@@ -85,7 +85,12 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: ImageFigure): CharSequence {
         return buildTag("figure") {
             +node.image
-            node.caption?.let { +buildTag("figcaption", it) }
+            node.caption?.let { caption ->
+                +buildTag("figcaption") {
+                    location(node)
+                    +caption
+                }
+            }
         }
     }
 

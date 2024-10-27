@@ -1,18 +1,7 @@
-package eu.iamgio.quarkdown.ast.attributes
+package eu.iamgio.quarkdown.ast.attributes.id
 
 import eu.iamgio.quarkdown.ast.base.block.Heading
-
-/**
- * An element that can be identified by a unique identifier, referenced and located by other elements in a document.
- */
-interface Identifiable {
-    /**
-     * Accepts an [IdentifierProvider] to generate an identifier for this element.
-     * @param visitor visitor to accept
-     * @param T output type of the provider
-     */
-    fun <T> accept(visitor: IdentifierProvider<T>): T
-}
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 
 /**
  * Provides identifiers for [Identifiable] elements.
@@ -23,6 +12,8 @@ interface Identifiable {
  */
 interface IdentifierProvider<T> {
     fun visit(heading: Heading): T
+
+    fun visit(figure: ImageFigure): T
 }
 
 /**

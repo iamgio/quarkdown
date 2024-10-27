@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.attributes.SectionLocation
-import eu.iamgio.quarkdown.ast.attributes.getId
+import eu.iamgio.quarkdown.ast.attributes.id.getId
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text

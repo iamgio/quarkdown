@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.context.toc
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.attributes.Identifiable
+import eu.iamgio.quarkdown.ast.attributes.id.Identifiable
 import eu.iamgio.quarkdown.ast.base.block.Heading
 
 /**

@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.ast.base.block
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.attributes.Identifiable
-import eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
+import eu.iamgio.quarkdown.ast.attributes.id.Identifiable
+import eu.iamgio.quarkdown.ast.attributes.id.IdentifierProvider
 import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
