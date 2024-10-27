@@ -106,6 +106,7 @@ figure figcaption {
     padding: 0.3em 0.6em;
     border-radius: 8px;
     line-height: normal;
+    background-color: color-mix(in srgb, currentColor 9%, transparent);
 }
 
 .color-preview {
