@@ -42,7 +42,7 @@
 
     /* Code */
     --qd-code-border-radius: 8px; /* Border radius of code blocks */
-    --qd-code-line-numbers-padding: 0.5em 0.8em; /* Padding of line numbers of code blocks */
+    --qd-code-line-numbers-padding: 0.3em 0.8em; /* Padding of line numbers of code blocks. Also defines code line height. */
     --qd-code-line-numbers-opacity: 0.6; /* Opacity of line numbers of code blocks */
 
     /* Quotes */
