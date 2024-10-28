@@ -8,6 +8,7 @@
         - important: Important
         - error: Error
         - tableofcontents: Table of Contents
+        - figure: Figure
     - Italian
         - note: Nota
         - tip: Consiglio
@@ -15,3 +16,4 @@
         - important: Importante
         - error: Errore
         - tableofcontents: Indice
+        - figure: Figura

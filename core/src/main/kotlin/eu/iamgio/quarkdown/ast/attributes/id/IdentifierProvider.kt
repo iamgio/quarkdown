@@ -1,7 +1,6 @@
 package eu.iamgio.quarkdown.ast.attributes.id
 
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 
 /**
  * Provides identifiers for [Identifiable] elements.
@@ -12,8 +11,6 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
  */
 interface IdentifierProvider<T> {
     fun visit(heading: Heading): T
-
-    fun visit(figure: ImageFigure): T
 }
 
 /**

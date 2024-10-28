@@ -82,17 +82,23 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Block
 
-    override fun visit(node: ImageFigure): CharSequence {
-        return buildTag("figure") {
+    override fun visit(node: ImageFigure) =
+        buildTag("figure") {
+            val label = context.attributes.labels[node] // Figure ID, e.g. 1.1, based on the current numbering format.
+            optionalAttribute("id", label?.let { "figure-$label" })
+
             +node.image
+
             node.caption?.let { caption ->
                 +buildTag("figcaption") {
-                    location(node)
                     +caption
+                    // The label is set as an attribute for styling.
+                    optionalAttribute("data-element-label", label)
+                    // Localized name of the element (e.g. Figure).
+                    optionalAttribute("data-localized-kind", context.localizeOrNull("figure"))
                 }
             }
         }
-    }
 
     // An empty div that acts as a page break.
     override fun visit(node: PageBreak) =

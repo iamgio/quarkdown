@@ -30,7 +30,8 @@
 
     /* Text */
     --qd-line-height: 1.5;
-    --qd-location-suffix: ". "; /* Suffix for element location numbering */
+    --qd-location-suffix: ". "; /* Suffix for element (e.g. headings) location numbering */
+    --qd-caption-label-suffix: ": "; /* Suffix for labels (e.g. Figure 1.1: ...) in captions */
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
     --qd-paged-horizontal-alignment: start; /* Text alignment of paged documents */
     /*
@@ -330,6 +331,14 @@ code.focus-lines .hljs-ln-line:not(.focused),
 /* Location data in a list item replaces its marker */
 li[data-location] {
     list-style-type: none;
+}
+
+/*
+Elements that reference to a label display it accordingly.
+Example: "Figure 1.1:"
+*/
+[data-element-label]::before {
+    content: attr(data-localized-kind) " " attr(data-element-label) var(--qd-caption-label-suffix);
 }
 
 .container {

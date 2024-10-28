@@ -29,13 +29,22 @@ data class NumberingFormat(
     val symbols: List<NumberingSymbol>,
 ) {
     /**
-     * The size of the subset of [symbols] which are able to contribute
-     * towards the dynamic numbering.
+     * The size of the subset of [symbols] which contribute towards the dynamic numbering.
      * @see NumberingCounterSymbol
      */
     private val counterSymbolCount: Int by lazy {
         symbols.filterIsInstance<NumberingCounterSymbol>().count()
     }
+
+    /**
+     * The accuracy of the numbering format: the number of nesting levels that the format can cover.
+     * For example:
+     * - `1` has an accuracy of 1.
+     * - `1.1` has an accuracy of 2.
+     * - `1.1.1` has an accuracy of 3.
+     */
+    val accuracy: Int
+        get() = counterSymbolCount
 
     /**
      * Converts the numbering format into a string.
@@ -61,7 +70,7 @@ data class NumberingFormat(
      */
     fun format(
         location: SectionLocation,
-        allowMismatchingLength: Boolean,
+        allowMismatchingLength: Boolean = true,
     ): String {
         // For example, the format 1.1 cannot cover a 3-levels nested location.
         if (!allowMismatchingLength && counterSymbolCount < location.levels.size) {

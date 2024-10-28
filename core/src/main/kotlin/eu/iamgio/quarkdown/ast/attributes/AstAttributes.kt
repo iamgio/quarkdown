@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.ast.attributes
 
 import eu.iamgio.quarkdown.ast.NestableNode
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.toc.TableOfContents
@@ -14,6 +15,11 @@ interface AstAttributes {
      * The root node of the tree.
      */
     val root: NestableNode?
+
+    /**
+     * Referenceable labels for nodes that specify it, such as figures.
+     */
+    val labels: Map<Node, String>
 
     /**
      * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
@@ -71,6 +77,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
+    override val labels: MutableMap<Node, String> = mutableMapOf(),
     override val locations: MutableMap<LocationTrackableNode, SectionLocation> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),

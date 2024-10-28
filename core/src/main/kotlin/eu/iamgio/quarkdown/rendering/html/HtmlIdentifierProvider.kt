@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.attributes.id.IdentifierProvider
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.rendering.NodeRenderer
 import eu.iamgio.quarkdown.util.toPlainText
 
@@ -23,8 +22,6 @@ class HtmlIdentifierProvider private constructor(private val renderer: NodeRende
             .replace("[^a-z0-9-]".toRegex(), "")
 
     override fun visit(heading: Heading) = heading.customId ?: heading.text.toPlainText(renderer).toURIString()
-
-    override fun visit(figure: ImageFigure) = throw UnsupportedOperationException("Location-based IDs are not supported by this provider.")
 
     companion object {
         /**

@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.flavor.quarkdown
 
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.hooks.LocationAwareLabelStorerHook
 import eu.iamgio.quarkdown.context.hooks.LocationAwarenessHook
 import eu.iamgio.quarkdown.context.hooks.MediaStorerHook
 import eu.iamgio.quarkdown.context.hooks.TableOfContentsGeneratorHook
@@ -16,6 +17,7 @@ class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
         BaseMarkdownTreeIteratorFactory()
             .default(context)
             .attach(LocationAwarenessHook(context))
+            .attach(LocationAwareLabelStorerHook(context))
             .attach(TableOfContentsGeneratorHook(context))
             .apply {
                 if (context.attachedPipeline?.options?.enableMediaStorage == true) {
