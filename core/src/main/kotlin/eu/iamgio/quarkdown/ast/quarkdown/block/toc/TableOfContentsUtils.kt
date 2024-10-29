@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 
 /**
  * Converts a table of contents to a renderable [OrderedList].
@@ -50,7 +51,7 @@ fun TableOfContentsView.convertToListNode(
                                 // the list item displays its location.
                                 // Since the targets are usually headings, thus location trackable, this is applied.
                                 if (it.target is LocationTrackableNode) {
-                                    this += LocationTargetListItemVariant(it.target)
+                                    this += LocationTargetListItemVariant(it.target, DocumentNumbering::headings)
                                 }
                             },
                         children = getTableOfContentsItemContent(it),

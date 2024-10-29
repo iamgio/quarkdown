@@ -412,6 +412,5 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit =
-        { location(variant.target, DocumentNumbering::headings) }
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { location(variant.target, variant.format) }
 }
