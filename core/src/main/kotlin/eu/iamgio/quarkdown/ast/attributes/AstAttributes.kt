@@ -17,16 +17,20 @@ interface AstAttributes {
     val root: NestableNode?
 
     /**
-     * Referenceable labels for nodes that specify it, such as figures.
-     */
-    val labels: Map<Node, String>
-
-    /**
      * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
      * contains its location in the document, in terms of section indices.
      * @see eu.iamgio.quarkdown.context.hooks.LocationAwarenessHook for the storing stage
      */
     val locations: Map<LocationTrackableNode, SectionLocation>
+
+    /**
+     * Labels/identifiers of nodes that are assigned it based on their position,
+     * both own (see [locations]) and relative to others of the same kind.
+     * The labels are often displayed in a caption.
+     * Examples of these nodes are figures and tables.
+     * @see eu.iamgio.quarkdown.context.hooks.LocationAwareLabelStorerHook for the storing stage
+     */
+    val positionalLabels: Map<Node, String>
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -77,7 +81,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
-    override val labels: MutableMap<Node, String> = mutableMapOf(),
+    override val positionalLabels: MutableMap<Node, String> = mutableMapOf(),
     override val locations: MutableMap<LocationTrackableNode, SectionLocation> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),

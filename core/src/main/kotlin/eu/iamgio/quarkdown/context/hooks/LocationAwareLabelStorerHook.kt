@@ -35,7 +35,7 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  * - If the numbering format for figures is `1`, the first figure will be labeled as `1`,
  *   the second as `2`, and the third as `3`.
  *
- * @see AstAttributes.labels
+ * @see AstAttributes.positionalLabels
  * @see AstAttributes.locations
  * @see LocationTrackableNode
  */
@@ -79,7 +79,7 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
             val label = location.copy(levels = trimmedLocation.levels + count)
 
             // The stringified label is stored.
-            context.attributes.labels[node] = format.format(label)
+            context.attributes.positionalLabels[node] = format.format(label)
         }
     }
 }
