@@ -12,15 +12,4 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 data class DocumentNumbering(
     val headings: NumberingFormat? = null,
     val figures: NumberingFormat? = null,
-) {
-    /**
-     * @return the format to apply to the given [node] based on its type,
-     * or `null` if the given node type does not expect a numbering format
-     */
-    fun getFormatForNode(node: Node): NumberingFormat? =
-        when (node) {
-            is Heading -> headings
-            is ImageFigure -> figures
-            else -> null
-        }
-}
+)

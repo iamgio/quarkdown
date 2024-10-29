@@ -34,6 +34,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitialize
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.context.shouldAutoPageBreak
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
@@ -66,14 +68,17 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     /**
      * Adds a `data-location` attribute to the location-trackable node, if its location is available.
+     * The location is formatted according to [format].
      */
-    private fun HtmlTagBuilder.location(node: LocationTrackableNode) =
-        optionalAttribute(
-            "data-location",
-            node.takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
-                ?.formatLocation(context)
-                ?.takeUnless { it.isEmpty() },
-        )
+    private fun HtmlTagBuilder.location(
+        node: LocationTrackableNode,
+        format: (DocumentNumbering) -> NumberingFormat?,
+    ) = optionalAttribute(
+        "data-location",
+        node.takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
+            ?.formatLocation(context, format)
+            ?.takeUnless { it.isEmpty() },
+    )
 
     // Quarkdown node rendering
 
@@ -84,7 +89,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: ImageFigure) =
         buildTag("figure") {
-            val label = context.attributes.labels[node] // Figure ID, e.g. 1.1, based on the current numbering format.
+            // Figure ID, e.g. 1.1, based on the current numbering format.
+            val label = context.attributes.positionalLabels[node]
             optionalAttribute("id", label?.let { "figure-$label" })
 
             +node.image
@@ -338,7 +344,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
                 )
-                .location(node)
+                .location(node, DocumentNumbering::headings)
                 .build()
 
         return buildMultiTag {
@@ -406,5 +412,6 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
-    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { location(variant.target) }
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit =
+        { location(variant.target, DocumentNumbering::headings) }
 }

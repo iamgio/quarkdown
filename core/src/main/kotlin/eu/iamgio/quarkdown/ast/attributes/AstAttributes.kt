@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [eu.iamgio.quarkdown.context.Context].
@@ -28,6 +29,8 @@ interface AstAttributes {
      * both own (see [locations]) and relative to others of the same kind.
      * The labels are often displayed in a caption.
      * Examples of these nodes are figures and tables.
+     * For instance, depending on the document's [NumberingFormat],
+     * an element may be labeled as `1.1`, `1.2`, `1.3`, `2.1`, etc.
      * @see eu.iamgio.quarkdown.context.hooks.LocationAwareLabelStorerHook for the storing stage
      */
     val positionalLabels: Map<Node, String>

@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.ast.attributes
 
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.context.Context
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 
 /**
  * A node that requests its location to be tracked within the document.
@@ -35,13 +37,18 @@ fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = cont
  * formatted according to the document's numbering format.
  * Returns `null` if the location for [this] node is not registered,
  * or if the document does not have a numbering format
+ * @param context context where location data is stored
+ * @param format numbering format to apply in order to stringify the location
  * @see getLocation
  * @see eu.iamgio.quarkdown.document.numbering.NumberingFormat
  * @see eu.iamgio.quarkdown.document.DocumentInfo.numberingOrDefault
  */
-fun LocationTrackableNode.formatLocation(context: Context): String? =
+fun LocationTrackableNode.formatLocation(
+    context: Context,
+    format: (DocumentNumbering) -> NumberingFormat?,
+): String? =
     this.getLocation(context)?.let {
         context.documentInfo.numberingOrDefault
-            ?.getFormatForNode(this)
+            ?.let(format)
             ?.format(it, allowMismatchingLength = false)
     }
