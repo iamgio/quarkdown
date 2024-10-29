@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageOrientation
@@ -182,7 +183,7 @@ fun theme(
  * Sets the global numbering format across the document.
  * Numbering is applied to elements that support it, such as headings and figures.
  *
- * - If [format] is `none`, numbering is disabled.
+ * - If a format is `none`, that kind of numbering is disabled.
  *
  * - Otherwise, it accepts a string where each character represents a symbol.
  *   Some characters are reserved for counting:
@@ -195,20 +196,29 @@ fun theme(
  *     Any other character is considered a fixed symbol.
  *
  * Sample numbering strings are `1.1.1`, `1.A.a`, `A.A`.
- * @param format numbering format string, or `none`
+ * @param headings numbering format string for headings (titles) and [tableOfContents] entries.
+ * @param figures numbering format string for figures
  * @return [VoidValue]
  */
 fun numbering(
     @Injected context: Context,
-    format: String,
+    headings: String? = null,
+    figures: String? = null,
 ): VoidValue {
-    context.documentInfo.numberingFormat =
+    fun parse(format: String): NumberingFormat =
         when (format) {
             // Disable numbering. Setting to null would instead trigger the default one.
             "none" -> NumberingFormat(symbols = emptyList())
             // Parse the format string.
             else -> NumberingFormat.fromString(format)
         }
+
+    context.documentInfo.numbering =
+        DocumentNumbering(
+            headings = headings?.let(::parse),
+            figures = figures?.let(::parse),
+        )
+
     return VoidValue
 }
 

@@ -41,7 +41,7 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  */
 class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        updateLabels<ImageFigure>(context.documentInfo.numberingFormatOrDefault, iterator) // TODO specific figure format
+        updateLabels<ImageFigure>(context.documentInfo.numberingOrDefault?.figures, iterator)
     }
 
     /**

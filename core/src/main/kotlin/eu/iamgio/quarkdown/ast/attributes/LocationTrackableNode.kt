@@ -37,9 +37,11 @@ fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = cont
  * or if the document does not have a numbering format
  * @see getLocation
  * @see eu.iamgio.quarkdown.document.numbering.NumberingFormat
- * @see eu.iamgio.quarkdown.document.DocumentInfo.numberingFormatOrDefault
+ * @see eu.iamgio.quarkdown.document.DocumentInfo.numberingOrDefault
  */
 fun LocationTrackableNode.formatLocation(context: Context): String? =
     this.getLocation(context)?.let {
-        context.documentInfo.numberingFormatOrDefault?.format(it, allowMismatchingLength = false)
+        context.documentInfo.numberingOrDefault
+            ?.getFormatForNode(this)
+            ?.format(it, allowMismatchingLength = false)
     }
