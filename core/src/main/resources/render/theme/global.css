@@ -341,6 +341,11 @@ Example: "Figure 1.1:"
     content: attr(data-localized-kind) " " attr(data-element-label) var(--qd-caption-label-suffix);
 }
 
+/* "Figure 1.1" instead of "Figure 1.1: " if the caption is empty */
+[data-element-label]:empty {
+    --qd-caption-label-suffix: "";
+}
+
 .container {
     display: inline-block;
 }
