@@ -41,18 +41,24 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  */
 class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        updateLabels<ImageFigure>(context.documentInfo.numberingOrDefault?.figures, iterator)
+        updateLabels<ImageFigure>(
+            context.documentInfo.numberingOrDefault?.figures,
+            iterator,
+            filter = { it.isLabelable },
+        )
     }
 
     /**
      * Updates labels of elements of type [T] based on their location in the document and the given numbering format.
      * @param format numbering format used to generate the labels for this type of element
      * @param iterator iterator to attach the hook to
+     * @param filter condition to satisfy in order to update the label of each element and increment the counter
      * @param T type of elements to update the labels of
      */
     private inline fun <reified T : LocationTrackableNode> updateLabels(
         format: NumberingFormat?,
         iterator: ObservableAstIterator,
+        crossinline filter: (T) -> Boolean = { true },
     ) {
         if (format == null) return
 
@@ -64,6 +70,8 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
         val accuracy = format.accuracy - 1
 
         iterator.on<T> { node ->
+            if (!filter(node)) return@on
+
             // A location has to be already stored for the given node (see LocationAwarenessHook)
             val location = context.attributes.locations[node] ?: return@on
 
