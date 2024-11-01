@@ -42,7 +42,7 @@ class InlineAstBuilder : AstBuilder() {
         title: String? = null,
         width: Int? = null,
         height: Int? = null,
-        label: InlineAstBuilder.() -> Unit,
+        label: InlineAstBuilder.() -> Unit = {},
     ) = +Image(Link(buildInline(label), url, title), width, height)
 
     /**

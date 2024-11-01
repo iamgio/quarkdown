@@ -1292,6 +1292,96 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .noautopagebreak
+            .numbering headings:{1.1.1} figures:{1.1}
+            
+            # A
+            
+            ![](img.png "Caption 1")
+            
+            ![](img.png "Caption 2")
+            
+            # B
+            
+            ![](img.png "Caption 3")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 1\" />" +
+                    "<figcaption data-element-label=\"1.1\">Caption 1</figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-1.2\"><img src=\"img.png\" alt=\"\" title=\"Caption 2\" />" +
+                    "<figcaption data-element-label=\"1.2\">Caption 2</figcaption>" +
+                    "</figure>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<figure id=\"figure-2.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
+                    "<figcaption data-element-label=\"2.1\">Caption 3</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .noautopagebreak
+            .numbering headings:{1} figures:{1.A.a}
+            
+            ![](img.png "Caption")
+            
+            # A
+            
+            ![](img.png "Caption")
+            
+            ## A/1
+            
+            ![](img.png "Caption")
+            
+            ### A/1/1
+            
+            ![](img.png "Caption")
+            
+            # B
+            
+            ![](img.png "Caption")
+            
+            ### B/1/1
+            
+            ![](img.png "Caption")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) { // TODO fix
+            assertEquals(
+                "<figure id=\"figure-a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"a\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<h1 data-location=\"1\">A</h1>" +
+                    "<figure id=\"figure-1.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.a\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<h2>A/1</h2>" +
+                    "<figure id=\"figure-1.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.A.a\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<h3>A/1/1</h3>" +
+                    "<figure id=\"figure-1.A.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.A.b\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<figure id=\"figure-2.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"2.a\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<h3>B/1/1</h3>" +
+                    "<figure id=\"figure-2.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"2.A.a\">Caption</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
     }
 
     @Test

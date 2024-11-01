@@ -12,7 +12,10 @@ import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.context.hooks.LocationAwareLabelStorerHook
 import eu.iamgio.quarkdown.context.hooks.LocationAwarenessHook
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.util.flattenedChildren
 import eu.iamgio.quarkdown.util.toPlainText
@@ -93,7 +96,7 @@ class TreeTraversalTest {
     }
 
     @Test
-    fun numbering() {
+    fun `heading numbering`() {
         val tree =
             buildBlock {
                 root {
@@ -136,6 +139,56 @@ class TreeTraversalTest {
             locations
                 .mapKeys { (node, _) -> (node as TextNode).text.toPlainText() }
                 .mapValues { (_, location) -> location.levels },
+        )
+    }
+
+    @Test
+    fun `figure numbering`() {
+        val tree =
+            buildBlock {
+                root {
+                    heading(1) { text("1") }
+                    figure { image("img.png", title = "Caption") }
+                    heading(2) { text("1.A") }
+                    figure { image("img.png", title = "Caption") }
+                    figure { image("img.png", title = "Caption") }
+                    heading(2) { text("1.B") }
+                    figure { image("img.png", title = "Caption") }
+                    heading(1) { text("2") }
+                    figure { image("img.png", title = "Caption") }
+                    figure { image("img.png", title = "Caption") }
+                }
+            } as AstRoot
+
+        fun getLabels(format: String): List<String> {
+            val context = MutableContext(QuarkdownFlavor)
+
+            context.documentInfo.numbering =
+                DocumentNumbering(
+                    figures = NumberingFormat.fromString(format),
+                )
+
+            ObservableAstIterator()
+                .attach(LocationAwarenessHook(context))
+                .attach(LocationAwareLabelStorerHook(context))
+                .traverse(tree)
+
+            return context.attributes.positionalLabels.values.toList()
+        }
+
+        assertEquals(
+            listOf("1.1", "1.2", "1.3", "1.4", "2.1", "2.2"),
+            getLabels("1.1"),
+        )
+
+        assertEquals(
+            listOf("1.i", "1.ii", "1.iii", "1.iv", "2.i", "2.ii"),
+            getLabels("1.i"),
+        )
+
+        assertEquals(
+            listOf("1.a", "1.A.a", "1.A.b", "1.B.a", "2.a", "2.b"),
+            getLabels("1.A.a"),
         )
     }
 }
