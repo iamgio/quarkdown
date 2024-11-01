@@ -1200,7 +1200,7 @@ class FullPipelineTest {
             ### A/1/1
             ## A/2
             # B
-            ### B/1/1
+            ### B/0/1
             # C
             ## C/1
             ### C/1/1
@@ -1214,7 +1214,7 @@ class FullPipelineTest {
                     "<h3 data-location=\"A.a.1\">A/1/1</h3>" +
                     "<h2 data-location=\"A.b\">A/2</h2>" +
                     "<h1 data-location=\"B\">B</h1>" +
-                    "<h3 data-location=\"B.a.1\">B/1/1</h3>" +
+                    "<h3 data-location=\"B.0.1\">B/0/1</h3>" +
                     "<h1 data-location=\"C\">C</h1>" +
                     "<h2 data-location=\"C.a\">C/1</h2>" +
                     "<h3 data-location=\"C.a.1\">C/1/1</h3>" +
@@ -1349,19 +1349,19 @@ class FullPipelineTest {
             
             ![](img.png "Caption")
             
-            ### B/1/1
+            ### B/0/1
             
             ![](img.png "Caption")
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
-        ) { // TODO fix
+        ) {
             assertEquals(
-                "<figure id=\"figure-a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"a\">Caption</figcaption>" +
+                "<figure id=\"figure-0.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"0.0.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<h1 data-location=\"1\">A</h1>" +
-                    "<figure id=\"figure-1.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.a\">Caption</figcaption>" +
+                    "<figure id=\"figure-1.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.0.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<h2>A/1</h2>" +
                     "<figure id=\"figure-1.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
@@ -1372,12 +1372,12 @@ class FullPipelineTest {
                     "<figcaption data-element-label=\"1.A.b\">Caption</figcaption>" +
                     "</figure>" +
                     "<h1 data-location=\"2\">B</h1>" +
-                    "<figure id=\"figure-2.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"2.a\">Caption</figcaption>" +
+                    "<figure id=\"figure-2.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"2.0.a\">Caption</figcaption>" +
                     "</figure>" +
-                    "<h3>B/1/1</h3>" +
-                    "<figure id=\"figure-2.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"2.A.a\">Caption</figcaption>" +
+                    "<h3>B/0/1</h3>" +
+                    "<figure id=\"figure-2.0.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"2.0.b\">Caption</figcaption>" +
                     "</figure>",
                 it,
             )
@@ -1568,7 +1568,7 @@ class FullPipelineTest {
             ### A/1/1
             ## A/2
             # B
-            ### B/1/1
+            ### B/0/1
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true, enableLocationAwareness = true),
         ) {
@@ -1580,14 +1580,14 @@ class FullPipelineTest {
                     "<ol><li data-location=\"1.A.a\"><a href=\"#a11\">A/1/1</a></li></ol></li>" +
                     "<li data-location=\"1.B\"><a href=\"#a2\">A/2</a></li></ol></li>" +
                     "<li data-location=\"2\"><a href=\"#b\">B</a>" +
-                    "<ol><li data-location=\"2.A.a\"><a href=\"#b11\">B/1/1</a></li></ol></li>" +
+                    "<ol><li data-location=\"2.0.a\"><a href=\"#b01\">B/0/1</a></li></ol></li>" +
                     "</ol></nav>" +
                     "<h1 id=\"a\" data-location=\"1\">A</h1>" +
                     "<h2 id=\"a1\" data-location=\"1.A\">A/1</h2>" +
                     "<h3 id=\"a11\" data-location=\"1.A.a\">A/1/1</h3>" +
                     "<h2 id=\"a2\" data-location=\"1.B\">A/2</h2>" +
                     "<h1 id=\"b\" data-location=\"2\">B</h1>" +
-                    "<h3 id=\"b11\" data-location=\"2.A.a\">B/1/1</h3>",
+                    "<h3 id=\"b01\" data-location=\"2.0.a\">B/0/1</h3>",
                 it,
             )
         }

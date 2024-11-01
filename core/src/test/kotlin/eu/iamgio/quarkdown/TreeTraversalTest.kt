@@ -107,9 +107,9 @@ class TreeTraversalTest {
                     heading(2) { text("1.B") }
                     heading(3) { text("1.B.a") }
                     heading(2) { text("1.C") }
-                    heading(4) { text("1.C.a.a") }
+                    heading(4) { text("1.C.0.a") }
                     blockQuote {
-                        heading(3) { text("1.C.b") }
+                        heading(3) { text("1.C.a") }
                     }
                     heading(1) { text("2") }
                     heading(1) { text("3") }
@@ -126,15 +126,15 @@ class TreeTraversalTest {
 
         assertEquals(
             mapOf(
-                "1" to listOf(0),
-                "1.A" to listOf(0, 0),
-                "1.B" to listOf(0, 1),
-                "1.B.a" to listOf(0, 1, 0),
-                "1.C" to listOf(0, 2),
-                "1.C.a.a" to listOf(0, 2, 0, 0),
-                "1.C.b" to listOf(0, 2, 1),
-                "2" to listOf(1),
-                "3" to listOf(2),
+                "1" to listOf(1),
+                "1.A" to listOf(1, 1),
+                "1.B" to listOf(1, 2),
+                "1.B.a" to listOf(1, 2, 1),
+                "1.C" to listOf(1, 3),
+                "1.C.0.a" to listOf(1, 3, 0, 1),
+                "1.C.a" to listOf(1, 3, 1),
+                "2" to listOf(2),
+                "3" to listOf(3),
             ),
             locations
                 .mapKeys { (node, _) -> (node as TextNode).text.toPlainText() }
@@ -147,6 +147,7 @@ class TreeTraversalTest {
         val tree =
             buildBlock {
                 root {
+                    figure { image("img.png", title = "Caption") }
                     heading(1) { text("1") }
                     figure { image("img.png", title = "Caption") }
                     heading(2) { text("1.A") }
@@ -177,17 +178,17 @@ class TreeTraversalTest {
         }
 
         assertEquals(
-            listOf("1.1", "1.2", "1.3", "1.4", "2.1", "2.2"),
+            listOf("0.1", "1.1", "1.2", "1.3", "1.4", "2.1", "2.2"),
             getLabels("1.1"),
         )
 
         assertEquals(
-            listOf("1.i", "1.ii", "1.iii", "1.iv", "2.i", "2.ii"),
+            listOf("0.i", "1.i", "1.ii", "1.iii", "1.iv", "2.i", "2.ii"),
             getLabels("1.i"),
         )
 
         assertEquals(
-            listOf("1.a", "1.A.a", "1.A.b", "1.B.a", "2.a", "2.b"),
+            listOf("0.0.a", "1.0.a", "1.A.a", "1.A.b", "1.B.a", "2.0.a", "2.0.b"),
             getLabels("1.A.a"),
         )
     }

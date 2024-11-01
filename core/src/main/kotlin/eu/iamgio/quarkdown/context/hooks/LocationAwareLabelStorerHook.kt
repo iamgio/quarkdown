@@ -91,8 +91,8 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
                 )
 
             // The number of elements encountered at the trimmed location is updated.
-            val count = countAtLocation[trimmedLocation] ?: 0
-            countAtLocation[trimmedLocation] = count + 1
+            val count = (countAtLocation[trimmedLocation] ?: 0) + 1
+            countAtLocation[trimmedLocation] = count
 
             // Given the trimmed location of the element,
             // its index is appended to it in order to form the final label of the element.

@@ -212,9 +212,9 @@ class MiscTest {
 
     @Test
     fun numbering() {
-        assertEquals("3", DecimalNumberingSymbol.map(2))
-        assertEquals("b", LowercaseAlphaNumberingSymbol.map(1))
-        assertEquals("C", UppercaseAlphaNumberingSymbol.map(2))
+        assertEquals("3", DecimalNumberingSymbol.map(3))
+        assertEquals("b", LowercaseAlphaNumberingSymbol.map(2))
+        assertEquals("C", UppercaseAlphaNumberingSymbol.map(3))
 
         val format = NumberingFormat.fromString("1.1.a-A")
 
@@ -234,22 +234,25 @@ class MiscTest {
             allowMismatchingLength: Boolean = true,
         ) = numberingFormat.format(SectionLocation(levels.toList()), allowMismatchingLength)
 
-        assertEquals("1.1.a-A", format(0, 0, 0, 0))
-        assertEquals("2.2.b-B", format(1, 1, 1, 1))
-        assertEquals("2.1.c-A", format(1, 0, 2, 0))
-        assertEquals("3.2.d-P", format(2, 1, 3, 15))
-        assertEquals("12.20.e-A", format(11, 19, 4, 0))
-        assertEquals("2.1.b", format(1, 0, 1))
-        assertEquals("1", format(0))
-        assertEquals("1.2.c-D", format(0, 1, 2, 3, 4, 5))
-        assertEquals("", format(0, 1, 2, 3, 4, 5, allowMismatchingLength = false))
+        assertEquals("1.1.a-A", format(1, 1, 1, 1))
+        assertEquals("2.2.b-B", format(2, 2, 2, 2))
+        assertEquals("2.1.c-A", format(2, 1, 3, 1))
+        assertEquals("3.2.d-P", format(3, 2, 4, 16))
+        assertEquals("12.20.e-A", format(12, 20, 5, 1))
+        assertEquals("0.0.0-0", format(0, 0, 0, 0))
+        assertEquals("2.1.b", format(2, 1, 2))
+        assertEquals("1", format(1))
+        assertEquals("1.2.c-D", format(1, 2, 3, 4, 5, 6))
+        assertEquals("", format(1, 2, 3, 4, 5, 6, allowMismatchingLength = false))
 
         val roman = NumberingFormat.fromString("I.i")
 
-        assertEquals("III", format(2, numberingFormat = roman))
-        assertEquals("I.i", format(0, 0, numberingFormat = roman))
-        assertEquals("IV.iii", format(3, 2, numberingFormat = roman))
-        assertEquals("XVII.lvii", format(16, 56, numberingFormat = roman))
+        assertEquals("III", format(3, numberingFormat = roman))
+        assertEquals("I.i", format(1, 1, numberingFormat = roman))
+        assertEquals("IV.iii", format(4, 3, numberingFormat = roman))
+        assertEquals("XVII.lvii", format(17, 57, numberingFormat = roman))
+        assertEquals("XVII.0", format(17, 0, numberingFormat = roman))
+        assertEquals("0.50000", format(0, 50000, numberingFormat = roman))
     }
 
     @Test

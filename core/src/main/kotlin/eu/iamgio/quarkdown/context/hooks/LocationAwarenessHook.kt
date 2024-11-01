@@ -20,29 +20,27 @@ class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHo
         // the value is the index of the section.
         val location = mutableMapOf<Int, Int>()
 
-        // Note: the two following hooks are executed in parallel.
+        // Note: the two following hooks are executed in 'parallel'.
 
         // When a heading is found, the current location is updated.
         // Example:
         // current location: []
-        // # A       => current location: [0]
-        // ## A.A    => current location: [0, 0]
-        // # B       => current location: [1]
-        // ## B.A    => current location: [1, 0]
-        // ### B.A.A => current location: [1, 0, 0]
-        // ### B.A.B => current location: [1, 0, 1]
-        // # C       => current location: [2]
-        // ### C.A.A => current location: [2, 0, 0]
+        // # A       => current location: [1]
+        // ## A.A    => current location: [1, 1]
+        // # B       => current location: [2]
+        // ## B.A    => current location: [2, 1]
+        // ### B.A.A => current location: [2, 1, 1]
+        // ### B.A.B => current location: [2, 1, 2]
+        // # C       => current location: [3]
+        // ### C.0.A => current location: [3, 0, 1]
         iterator.on<Heading> { heading ->
-            location[heading.depth] = location[heading.depth]?.plus(1) ?: 0
+            location[heading.depth] = (location[heading.depth] ?: 0) + 1
             location.entries.removeIf { it.key > heading.depth }
 
-            // Gap filler: e.g. if an H1 is followed by an H3, an H2 is automatically added.
-            var firstFound = false // The gaps are filled only in-between, never at the beginning.
-            for (i in 0 until heading.depth) {
-                when {
-                    location[i] != null -> firstFound = true
-                    firstFound -> location[i] = 0
+            // Gap filler: e.g. if an H1 is followed by an H3, a mock H2 with value '0' is automatically added.
+            for (i in 1 until heading.depth) {
+                if (location[i] == null) {
+                    location[i] = 0
                 }
             }
         }

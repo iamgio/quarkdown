@@ -86,7 +86,10 @@ data class NumberingFormat(
             // Appending the corresponding symbol.
             when (symbol) {
                 // The counter maps the nesting level to a string.
-                is NumberingCounterSymbol -> symbol.map(levels.next())
+                is NumberingCounterSymbol -> {
+                    val level = levels.next()
+                    if (level in symbol.supportedRange) symbol.map(level) else level.toString()
+                }
                 // Fixed symbols are directly appended as-is.
                 is NumberingFixedSymbol -> symbol.value.toString()
             }

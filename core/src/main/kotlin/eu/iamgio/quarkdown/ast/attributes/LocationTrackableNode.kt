@@ -20,7 +20,7 @@ interface LocationTrackableNode : Node
  * ## A.A
  * # B
  * ## B.A
- * Node <-- location: B.A, represented by [1, 0]
+ * Node <-- location: B.A, represented by the levels [2, 1]
  * ```
  * @param levels section indices
  */
