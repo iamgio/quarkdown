@@ -76,7 +76,19 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
             val location = context.attributes.locations[node] ?: return@on
 
             // The location of the element is trimmed to the desired accuracy.
-            val trimmedLocation = location.copy(levels = location.levels.take(accuracy))
+            val trimmedLocation =
+                SectionLocation(
+                    when {
+                        // If the location has more nested levels than the accuracy, it is trimmed.
+                        // e.g. Location: `2.1.0.1`, Accuracy: 2 -> Result: `2.1`
+                        location.levels.size > accuracy -> location.levels.take(accuracy)
+                        // If the location has less nested levels than the accuracy, it is padded with zeroes.
+                        // e.g. Location: `2.1`, Accuracy: 4 -> Result: `2.1.0.0`
+                        location.levels.size < accuracy -> location.levels + Array(accuracy - location.levels.size) { 0 }
+                        // Location levels and accuracy match.
+                        else -> location.levels
+                    },
+                )
 
             // The number of elements encountered at the trimmed location is updated.
             val count = countAtLocation[trimmedLocation] ?: 0
