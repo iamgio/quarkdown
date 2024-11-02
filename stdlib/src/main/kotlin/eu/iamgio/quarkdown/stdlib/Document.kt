@@ -204,6 +204,7 @@ fun numbering(
     @Injected context: Context,
     headings: String? = null,
     figures: String? = null,
+    tables: String? = null,
 ): VoidValue {
     fun parse(format: String): NumberingFormat =
         when (format) {
@@ -217,6 +218,7 @@ fun numbering(
         DocumentNumbering(
             headings = headings?.let(::parse),
             figures = figures?.let(::parse),
+            tables = tables?.let(::parse),
         )
 
     return VoidValue

@@ -83,7 +83,7 @@ figure img {
     margin-bottom: 0.5em !important;
 }
 
-figure figcaption {
+figure figcaption, table caption {
     font-size: 0.8em;
     font-style: italic;
 }

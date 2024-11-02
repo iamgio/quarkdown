@@ -214,6 +214,16 @@ blockquote .attribution::before {
     content: var(--qd-quote-attribution-prefix);
 }
 
+table {
+    caption-side: bottom;
+}
+
+table > caption {
+    margin-top: 1em;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
 hr {
     width: 100%;
 }

@@ -9,6 +9,7 @@
         - error: Error
         - tableofcontents: Table of Contents
         - figure: Figure
+        - table: Table
     - Italian
         - note: Nota
         - tip: Consiglio
@@ -17,3 +18,4 @@
         - error: Errore
         - tableofcontents: Indice
         - figure: Figura
+        - table: Tabella

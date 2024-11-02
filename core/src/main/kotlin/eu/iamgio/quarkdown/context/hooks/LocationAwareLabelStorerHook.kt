@@ -3,10 +3,12 @@ package eu.iamgio.quarkdown.context.hooks
 import eu.iamgio.quarkdown.ast.attributes.AstAttributes
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.attributes.SectionLocation
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 
 /**
@@ -41,25 +43,26 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  */
 class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        updateLabels<ImageFigure>(
-            context.documentInfo.numberingOrDefault?.figures,
-            iterator,
-            filter = { it.isLabelable },
-        )
+        updateLabels<ImageFigure>(DocumentNumbering::figures, iterator, filter = { it.isLabelable })
+        updateLabels<Table>(DocumentNumbering::tables, iterator)
     }
 
     /**
      * Updates labels of elements of type [T] based on their location in the document and the given numbering format.
-     * @param format numbering format used to generate the labels for this type of element
+     * @param formatSupplier numbering format used to generate the labels for this type of element,
+     * supplied by [context]'s document numbering settings
      * @param iterator iterator to attach the hook to
      * @param filter condition to satisfy in order to update the label of each element and increment the counter
      * @param T type of elements to update the labels of
      */
     private inline fun <reified T : LocationTrackableNode> updateLabels(
-        format: NumberingFormat?,
+        formatSupplier: (DocumentNumbering) -> NumberingFormat?,
         iterator: ObservableAstIterator,
         crossinline filter: (T) -> Boolean = { true },
     ) {
+        // Gets the needed numbering format from the global numbering settings.
+        val format = formatSupplier(context.documentInfo.numberingOrDefault ?: return)
+
         if (format == null) return
 
         // Stores the number of elements encountered at each location.

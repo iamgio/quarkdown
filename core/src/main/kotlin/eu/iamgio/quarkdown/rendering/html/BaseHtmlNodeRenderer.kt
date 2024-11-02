@@ -153,8 +153,11 @@ open class BaseHtmlNodeRenderer(context: Context) :
 
     override fun visit(node: Html) = node.content
 
-    override fun visit(node: Table) =
-        buildTag("table") {
+    /**
+     * Table tag builder, enhanceable by subclasses.
+     */
+    protected fun tableBuilder(node: Table): HtmlTagBuilder =
+        tagBuilder("table") {
             // Tables are stored by columns and here transposed to a row-based structure.
             val header = tag("thead")
             val headerRow = header.tag("tr")
@@ -181,6 +184,8 @@ open class BaseHtmlNodeRenderer(context: Context) :
                 }
             }
         }
+
+    override fun visit(node: Table) = tableBuilder(node).build()
 
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 

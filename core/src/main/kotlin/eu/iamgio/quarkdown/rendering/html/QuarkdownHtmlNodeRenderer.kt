@@ -2,11 +2,14 @@ package eu.iamgio.quarkdown.rendering.html
 
 import eu.iamgio.quarkdown.ast.AstRoot
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.attributes.AstAttributes
+import eu.iamgio.quarkdown.ast.attributes.CaptionableNode
 import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.ast.attributes.formatLocation
 import eu.iamgio.quarkdown.ast.attributes.id.getId
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
@@ -80,6 +83,45 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             ?.takeUnless { it.isEmpty() },
     )
 
+    /**
+     * Retrieves the location-based label of the [node], displays an optional caption preceded by the label, and also applies the label as its ID.
+     * The label is pre-formatted according to the current [NumberingFormat].
+     *
+     * At the end, thanks to injected CSS variables, the visible outcome is `<localized_kind> <label>: <caption>`.
+     *
+     * @param node node to display the caption, and apply the ID, for
+     * @param captionTagName tag name of the caption element. E.g. "figcaption" for figures, "caption" for tables
+     * @param kindLocalizationKey localization key for the kind of the element. E.g. "figure" for figures, "table" for tables.
+     * It allows localizing the kind name depending on the current locale.
+     * @param idPrefix prefix for the ID. For instance, the prefix `figure` lets the ID be `figure-X.Y`, where `X.Y` is the label.
+     * @see CaptionableNode
+     * @see AstAttributes.positionalLabels
+     */
+    private fun HtmlTagBuilder.numberedCaption(
+        node: CaptionableNode,
+        captionTagName: String,
+        kindLocalizationKey: String,
+        idPrefix: String = kindLocalizationKey,
+    ): HtmlTagBuilder {
+        // The location-based, numbering format dependent identifier of the node, e.g. 1.1.
+        val label = context.attributes.positionalLabels[node]
+
+        return this.apply {
+            // The label is set as the ID of the element.
+            label?.let { optionalAttribute("id", "$idPrefix-$it") }
+
+            node.caption?.let { caption ->
+                +buildTag(captionTagName) {
+                    +caption
+                    // The label is set as an attribute for styling.
+                    optionalAttribute("data-element-label", label)
+                    // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
+                    optionalAttribute("data-localized-kind", context.localizeOrNull(kindLocalizationKey))
+                }
+            }
+        }
+    }
+
     // Quarkdown node rendering
 
     // The function was already expanded by previous stages: its output nodes are stored in its children.
@@ -89,21 +131,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: ImageFigure) =
         buildTag("figure") {
-            // Figure ID, e.g. 1.1, based on the current numbering format.
-            val label = context.attributes.positionalLabels[node]
-            optionalAttribute("id", label?.let { "figure-$label" })
-
             +node.image
 
-            node.caption?.let { caption ->
-                +buildTag("figcaption") {
-                    +caption
-                    // The label is set as an attribute for styling.
-                    optionalAttribute("data-element-label", label)
-                    // Localized name of the element (e.g. Figure).
-                    optionalAttribute("data-localized-kind", context.localizeOrNull("figure"))
-                }
-            }
+            // Figure ID, e.g. 1.1, based on the current numbering format.
+            this.numberedCaption(node, "figcaption", kindLocalizationKey = "figure")
         }
 
     // An empty div that acts as a page break.
@@ -382,6 +413,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
+    override fun visit(node: Table) =
+        super.tableBuilder(node).apply {
+            numberedCaption(node, "caption", kindLocalizationKey = "table")
+        }.build()
+
     // A code span can contain additional content, such as a color preview.
     override fun visit(node: CodeSpan): String {
         val codeTag = super.visit(node)
@@ -404,6 +440,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
     }
+
+    // List item variants.
 
     override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit =
         {

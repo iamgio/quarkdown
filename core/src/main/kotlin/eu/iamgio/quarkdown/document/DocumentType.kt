@@ -27,6 +27,7 @@ enum class DocumentType(
         DocumentNumbering(
             headings = NumberingFormat.fromString("1.1.1"),
             figures = NumberingFormat.fromString("1.1"),
+            tables = NumberingFormat.fromString("1.1"),
         ),
     ),
 
