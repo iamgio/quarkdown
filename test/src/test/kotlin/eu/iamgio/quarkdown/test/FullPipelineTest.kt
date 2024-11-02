@@ -492,6 +492,23 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            | Header 1 | Header 2 | Header 3 |
+            |----------|:--------:|----------|
+            | Cell 1   | Cell 2   | Cell 3   |
+            'Table caption'
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th>Header 1</th><th align=\"center\">Header 2</th>" +
+                    "<th>Header 3</th></tr></thead><tbody><tr><td>Cell 1</td>" +
+                    "<td align=\"center\">Cell 2</td><td>Cell 3</td></tr></tbody>" +
+                    "<caption>Table caption</caption></table>",
+                it,
+            )
+        }
     }
 
     @Test
@@ -1111,13 +1128,15 @@ class FullPipelineTest {
             # A
             ## A/1
             # B
+            ![](img.png '')
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
                 "<h1>A</h1>" +
                     "<h2>A/1</h2>" +
-                    "<h1>B</h1>",
+                    "<h1>B</h1>" +
+                    "<figure><img src=\"img.png\" alt=\"\" title=\"\" /><figcaption></figcaption></figure>",
                 it,
             )
         }
@@ -1282,13 +1301,23 @@ class FullPipelineTest {
             # A
             ## A/1
             # B
+            
+            ![](img.png "Caption")
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            ''
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
                 "<h1>A</h1>" +
                     "<h2>A/1</h2>" +
-                    "<h1>B</h1>",
+                    "<h1>B</h1>" +
+                    "<figure><img src=\"img.png\" alt=\"\" title=\"Caption\" /><figcaption>Caption</figcaption></figure>" +
+                    "<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody><caption></caption></table>",
                 it,
             )
         }
@@ -1306,7 +1335,7 @@ class FullPipelineTest {
             
             # B
             
-            ![](img.png "Caption 3")
+            ![](img.png "")
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
@@ -1319,8 +1348,8 @@ class FullPipelineTest {
                     "<figcaption data-element-label=\"1.2\">Caption 2</figcaption>" +
                     "</figure>" +
                     "<h1 data-location=\"2\">B</h1>" +
-                    "<figure id=\"figure-2.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
-                    "<figcaption data-element-label=\"2.1\">Caption 3</figcaption>" +
+                    "<figure id=\"figure-2.1\"><img src=\"img.png\" alt=\"\" title=\"\" />" +
+                    "<figcaption data-element-label=\"2.1\"></figcaption>" +
                     "</figure>",
                 it,
             )
@@ -1329,13 +1358,18 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering headings:{1} figures:{1.A.a}
+            .numbering headings:{1} figures:{1.A.a} tables:{1.A.a}
             
             ![](img.png "Caption")
             
             # A
             
             ![](img.png "Caption")
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            'Table caption'
             
             ## A/1
             
@@ -1344,6 +1378,11 @@ class FullPipelineTest {
             ### A/1/1
             
             ![](img.png "Caption")
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            ''
             
             # B
             
@@ -1363,6 +1402,9 @@ class FullPipelineTest {
                     "<figure id=\"figure-1.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption data-element-label=\"1.0.a\">Caption</figcaption>" +
                     "</figure>" +
+                    "<table id=\"table-1.0.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption data-element-label=\"1.0.a\">Table caption</caption></table>" +
                     "<h2>A/1</h2>" +
                     "<figure id=\"figure-1.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption data-element-label=\"1.A.a\">Caption</figcaption>" +
@@ -1371,6 +1413,8 @@ class FullPipelineTest {
                     "<figure id=\"figure-1.A.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption data-element-label=\"1.A.b\">Caption</figcaption>" +
                     "</figure>" +
+                    "<table id=\"table-1.A.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody><caption data-element-label=\"1.A.a\"></caption></table>" +
                     "<h1 data-location=\"2\">B</h1>" +
                     "<figure id=\"figure-2.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption data-element-label=\"2.0.a\">Caption</figcaption>" +
@@ -1379,6 +1423,74 @@ class FullPipelineTest {
                     "<figure id=\"figure-2.0.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption data-element-label=\"2.0.b\">Caption</figcaption>" +
                     "</figure>",
+                it,
+            )
+        }
+
+        // Non-captioned elements are not counted.
+        execute(
+            """
+            .noautopagebreak
+            .numbering figures:{1.1} tables:{1.1}
+            
+            # A
+            
+            ![](img.png)
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            
+            ![](img.png "Caption")
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            'Caption'
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>A</h1>" +
+                    "<figure><img src=\"img.png\" alt=\"\" /></figure>" +
+                    "<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody></table>" +
+                    "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.1\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<table id=\"table-1.1\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption data-element-label=\"1.1\">Caption</caption></table>",
+                it,
+            )
+        }
+
+        // Localized kind names.
+        execute(
+            """
+            .noautopagebreak
+            .doclang {italian}
+            .numbering headings:{none} figures:{1.1} tables:{1.a}
+            
+            # A
+            
+            ![](img.png "Caption")
+            
+            | A | B | C |
+            |---|---|---|
+            | D | E | F |
+            (Caption)
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>A</h1>" +
+                    "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption data-element-label=\"1.1\" data-localized-kind=\"Figura\">Caption</figcaption>" +
+                    "</figure>" +
+                    "<table id=\"table-1.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption data-element-label=\"1.a\" data-localized-kind=\"Tabella\">Caption</caption></table>",
                 it,
             )
         }

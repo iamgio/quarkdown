@@ -112,7 +112,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
             node.caption?.let { caption ->
                 +buildTag(captionTagName) {
-                    +caption
+                    +escapeCriticalContent(caption)
                     // The label is set as an attribute for styling.
                     optionalAttribute("data-element-label", label)
                     // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
@@ -413,6 +413,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             }
         }
 
+    // Quarkdown introduces table captions, also numerated.
     override fun visit(node: Table) =
         super.tableBuilder(node).apply {
             numberedCaption(node, "caption", kindLocalizationKey = "table")

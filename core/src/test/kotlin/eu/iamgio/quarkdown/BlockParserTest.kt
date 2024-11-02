@@ -470,6 +470,28 @@ class BlockParserTest {
             assertFalse(hasNext())
         }
 
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("Table caption", caption)
+
+                val columns = columns.iterator()
+                with(columns.next()) {
+                    assertEquals(Table.Alignment.NONE, alignment)
+                    assertEquals(2, cells.size)
+                    assertNodeEquals(Text("G H I"), cells[0].text.first())
+                    assertNodeEquals(Text("M N O"), cells[1].text.first())
+                }
+                with(columns.next()) {
+                    assertEquals(Table.Alignment.NONE, alignment)
+                    assertEquals(2, cells.size)
+                    assertNodeEquals(Text("J K L"), cells[0].text.first())
+                    assertNodeEquals(Text("P Q R"), cells[1].text.first())
+                }
+
+                assertFalse(columns.hasNext())
+            }
+        }
+
         assertFalse(nodes.hasNext())
     }
 

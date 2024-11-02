@@ -107,10 +107,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                     RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                         .withReference("label", LABEL_HELPER)
                         .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
-                        .withReference(
-                            "title",
-                            "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)",
-                        )
+                        .withReference("title", DELIMITED_TITLE_HELPER)
                         .build(),
             )
 
@@ -330,6 +327,10 @@ private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
+
+// "This is a title", 'This is a title', (This is a title)
+internal const val DELIMITED_TITLE_HELPER =
+    "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)"
 
 private const val COMMENT_TAG_HELPER =
     "comment" +

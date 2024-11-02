@@ -18,13 +18,6 @@ class ImageFigure(val image: Image) : NestableNode, LocationTrackableNode, Capti
     override val caption: String? = image.link.title
 
     /**
-     * Whether the figure is numerable and labelable.
-     * This is true if the figure has a [caption].
-     */
-    val isLabelable: Boolean
-        get() = caption != null
-
-    /**
      * A singleton list containing [image].
      * This is needed to allow the image to be traversed by a tree iterator
      * (e.g. for media storage registration)

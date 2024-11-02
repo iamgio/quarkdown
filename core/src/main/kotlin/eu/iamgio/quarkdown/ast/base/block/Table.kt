@@ -13,10 +13,11 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A table, consisting of columns, each of which has a header and multiple cells.
  * A table is location-trackable since, if requested by the user, it may show a caption displaying its location-based label.
  * @param columns columns of the table. Each column has a header and multiple cells
+ * @param caption optional caption of the table (Quarkdown extension)
  */
 class Table(
     val columns: List<Column>,
-    override val caption: String? = "Test caption" /*null*/,
+    override val caption: String? = null,
 ) : NestableNode, LocationTrackableNode, CaptionableNode {
     // Exposing all the cell contents as this table's direct children
     // allows visiting them during a tree traversal.

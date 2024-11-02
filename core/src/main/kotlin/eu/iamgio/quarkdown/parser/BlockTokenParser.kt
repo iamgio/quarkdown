@@ -31,6 +31,7 @@ import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
+import eu.iamgio.quarkdown.lexer.patterns.DELIMITED_TITLE_HELPER
 import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.tokens.BlockTextToken
@@ -328,9 +329,24 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 }
         }
 
+        // Quarkdown extension: a table may have a caption.
+        // A caption is located at the end of the table, after a line break,
+        // wrapped by a delimiter, the same way as a link/image title.
+        // "This is a caption", 'This is a caption', (This is a caption)
+        val captionRegex = Regex("^\\s*($DELIMITED_TITLE_HELPER)\\s*$")
+        // The found caption of the table, if any.
+        var caption: String? = null
+
         // Other rows.
         groups.next().lineSequence()
             .filterNot { it.isBlank() }
+            .onEach { row ->
+                // Extract the caption if this is the caption row.
+                captionRegex.find(row)?.let { captionMatch ->
+                    caption = captionMatch.groupValues.getOrNull(1)?.trimDelimiters()
+                }
+            }
+            .filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
             .forEach { row ->
                 var cellCount = 0
                 // Push cell.
@@ -346,6 +362,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         return Table(
             columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
+            caption,
         )
     }
 

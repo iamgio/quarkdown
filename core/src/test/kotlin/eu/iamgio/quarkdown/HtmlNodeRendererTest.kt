@@ -676,6 +676,33 @@ class HtmlNodeRendererTest {
                 ),
             ).render(),
         )
+
+        assertEquals(
+            out.next(),
+            Table(
+                listOf(
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("A"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("C"))),
+                                Table.Cell(listOf(Text("E"))),
+                            ),
+                    ),
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("B"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("D"))),
+                                Table.Cell(listOf(Text("F"))),
+                            ),
+                    ),
+                ),
+                caption = "Table 'caption'.",
+            ).render(),
+        )
     }
 
     // Quarkdown

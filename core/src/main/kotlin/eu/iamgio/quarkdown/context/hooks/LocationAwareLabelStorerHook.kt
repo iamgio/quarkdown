@@ -43,8 +43,8 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  */
 class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        updateLabels<ImageFigure>(DocumentNumbering::figures, iterator, filter = { it.isLabelable })
-        updateLabels<Table>(DocumentNumbering::tables, iterator)
+        updateLabels<ImageFigure>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
+        updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
     }
 
     /**
@@ -63,7 +63,7 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
         // Gets the needed numbering format from the global numbering settings.
         val format = formatSupplier(context.documentInfo.numberingOrDefault ?: return)
 
-        if (format == null) return
+        if (format == null || format.isNonCounting) return
 
         // Stores the number of elements encountered at each location.
         val countAtLocation = mutableMapOf<SectionLocation, Int>()

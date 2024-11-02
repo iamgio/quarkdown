@@ -21,3 +21,16 @@ bar | baz
 |:------|----|---:|
 | **C** | AC | BC |
 | **D** | AD | BD |
+
+| A B C | D E F |
+|-------|-------|
+| G H I | J K L |
+| M N O | P Q R |
+"Table caption"
+
+| A B C | D E F |
+|-------|-------|
+| G H I | J K L |
+| M N O | P Q R |
+"Table caption"
+| S T U | V W X |

@@ -47,6 +47,12 @@ data class NumberingFormat(
         get() = counterSymbolCount
 
     /**
+     * Whether the format does not contain any counting symbols.
+     */
+    val isNonCounting: Boolean
+        get() = counterSymbolCount <= 0
+
+    /**
      * Converts the numbering format into a string.
      * For example, the [NumberingFormat] `1.A.a` would format the levels `1, 1, 0` as `2.B.a`.
      *
