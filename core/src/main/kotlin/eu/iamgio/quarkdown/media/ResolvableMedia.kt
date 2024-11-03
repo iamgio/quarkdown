@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.media
 
+import eu.iamgio.quarkdown.util.IOUtils
 import eu.iamgio.quarkdown.util.toURLOrNull
 import java.io.File
 
@@ -25,7 +26,7 @@ data class ResolvableMedia(
         // If the path is a URL, it is remote.
         path.toURLOrNull()?.let { return RemoteMedia(it) }
 
-        val file = workingDirectory?.let { File(it, path) } ?: File(path)
+        val file = IOUtils.resolvePath(path, workingDirectory)
 
         if (!file.exists()) throw IllegalArgumentException("Media path cannot be resolved: $path")
         if (file.isDirectory) throw IllegalArgumentException("Media is a directory: $path")

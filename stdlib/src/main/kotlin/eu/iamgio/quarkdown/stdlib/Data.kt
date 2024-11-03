@@ -11,8 +11,8 @@ import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.data.subList
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.util.IOUtils
 import java.io.File
-import kotlin.io.path.Path
 
 /**
  * `Data` stdlib module exporter.
@@ -37,13 +37,7 @@ internal fun file(
     requireExistance: Boolean = true,
 ): File {
     val workingDirectory = context.attachedPipeline?.options?.workingDirectory
-
-    val file =
-        if (workingDirectory != null && !Path(path).isAbsolute) {
-            File(workingDirectory, path)
-        } else {
-            File(path)
-        }
+    val file = IOUtils.resolvePath(path, workingDirectory)
 
     if (requireExistance && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")
