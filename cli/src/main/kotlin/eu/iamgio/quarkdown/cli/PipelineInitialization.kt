@@ -39,7 +39,7 @@ object PipelineInitialization {
                 afterParsing = { document ->
                     Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
                 },
-                afterPostRendering = { output ->
+                afterRendering = { output ->
                     Log.info(output)
                 },
             )
