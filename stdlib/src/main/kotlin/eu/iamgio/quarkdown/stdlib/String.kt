@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.util.StringCase
+import eu.iamgio.quarkdown.util.case
 
 /**
  * `String` stdlib module exporter.
@@ -19,7 +21,7 @@ val String: Module =
  * @param string string to convert
  * @return a new uppercase string
  */
-fun uppercase(string: String) = string.uppercase().wrappedAsValue()
+fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
 
 /**
  * Converts a string to lowercase.
@@ -27,7 +29,7 @@ fun uppercase(string: String) = string.uppercase().wrappedAsValue()
  * @param string string to convert
  * @return a new lowercase string
  */
-fun lowercase(string: String) = string.lowercase().wrappedAsValue()
+fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
 
 /**
  * Capitalizes the first character of a string.
@@ -35,4 +37,4 @@ fun lowercase(string: String) = string.lowercase().wrappedAsValue()
  * @param string string to capitalize
  * @return a new string with the first character capitalized
  */
-fun capitalize(string: String) = string.replaceFirstChar(Char::titlecase).wrappedAsValue()
+fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsValue()

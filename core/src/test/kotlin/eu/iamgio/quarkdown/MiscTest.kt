@@ -7,11 +7,10 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.numbering.AlphaNumberingSymbol
 import eu.iamgio.quarkdown.document.numbering.DecimalNumberingSymbol
-import eu.iamgio.quarkdown.document.numbering.LowercaseAlphaNumberingSymbol
 import eu.iamgio.quarkdown.document.numbering.NumberingFixedSymbol
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat
-import eu.iamgio.quarkdown.document.numbering.UppercaseAlphaNumberingSymbol
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.localization.LocaleNotSetException
@@ -28,6 +27,7 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlIdentifierProvider
 import eu.iamgio.quarkdown.rendering.html.QuarkdownHtmlNodeRenderer
+import eu.iamgio.quarkdown.util.StringCase
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -213,8 +213,8 @@ class MiscTest {
     @Test
     fun numbering() {
         assertEquals("3", DecimalNumberingSymbol.map(3))
-        assertEquals("b", LowercaseAlphaNumberingSymbol.map(2))
-        assertEquals("C", UppercaseAlphaNumberingSymbol.map(3))
+        assertEquals("b", AlphaNumberingSymbol(StringCase.Lower).map(2))
+        assertEquals("C", AlphaNumberingSymbol(StringCase.Upper).map(3))
 
         val format = NumberingFormat.fromString("1.1.a-A")
 
@@ -223,9 +223,18 @@ class MiscTest {
             assertEquals('.', (next() as NumberingFixedSymbol).value)
             assertIs<DecimalNumberingSymbol>(next())
             assertEquals('.', (next() as NumberingFixedSymbol).value)
-            assertIs<LowercaseAlphaNumberingSymbol>(next())
+
+            next().let {
+                assertIs<AlphaNumberingSymbol>(it)
+                assertEquals(StringCase.Lower, it.case)
+            }
+
             assertEquals('-', (next() as NumberingFixedSymbol).value)
-            assertIs<UppercaseAlphaNumberingSymbol>(next())
+
+            next().let {
+                assertIs<AlphaNumberingSymbol>(it)
+                assertEquals(StringCase.Upper, it.case)
+            }
         }
 
         fun format(

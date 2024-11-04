@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.document.numbering
 
 import eu.iamgio.quarkdown.ast.attributes.SectionLocation
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat.Companion.fromString
+import eu.iamgio.quarkdown.util.StringCase
 
 /**
  * Represents a format that defines how items (e.g. headings) are numbered in a document,
@@ -18,9 +19,9 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat.Companion.fromStri
  * In this example, the format consists of the following symbols:
  * - `1` is a [DecimalNumberingSymbol], which counts `1, 2, 3, ...`
  * - `.` is a [NumberingFixedSymbol]
- * - `A` is an [UppercaseAlphaNumberingSymbol], which counts `A, B, C, ...`
+ * - `A` is an uppercase [AlphaNumberingSymbol], which counts `A, B, C, ...`
  * - `.` is a [NumberingFixedSymbol]
- * - `a` is a [LowercaseAlphaNumberingSymbol], which counts `a, b, c, ...`
+ * - `a` is a lowercase [AlphaNumberingSymbol], which counts `a, b, c, ...`
  * A format can be imported and exported as a string via [fromString] and [format] respectively.
  * @param symbols ordered list of symbols that define the format
  * @see NumberingSymbol
@@ -116,10 +117,10 @@ data class NumberingFormat(
                 string.map {
                     when (it) {
                         '1' -> DecimalNumberingSymbol
-                        'A' -> UppercaseAlphaNumberingSymbol
-                        'a' -> LowercaseAlphaNumberingSymbol
-                        'I' -> UppercaseRomanNumberingSymbol
-                        'i' -> LowecaseRomanNumberingSymbol
+                        'A' -> AlphaNumberingSymbol(StringCase.Upper)
+                        'a' -> AlphaNumberingSymbol(StringCase.Lower)
+                        'I' -> RomanNumberingSymbol(StringCase.Upper)
+                        'i' -> RomanNumberingSymbol(StringCase.Lower)
                         else -> NumberingFixedSymbol(it)
                     }
                 }
