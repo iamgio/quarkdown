@@ -5,9 +5,9 @@ package eu.iamgio.quarkdown.document.numbering
  * For example, in the format `1.A.a`:
  * - `1` is a [DecimalNumberingSymbol], which counts `1, 2, 3, ...`
  * - `.` is a [NumberingFixedSymbol]
- * - `A` is an [UppercaseAlphaNumberingSymbol], which counts `A, B, C, ...`
+ * - `A` is an uppercase [AlphaNumberingSymbol], which counts `A, B, C, ...`
  * - `.` is a [NumberingFixedSymbol]
- * - `a` is a [LowercaseAlphaNumberingSymbol], which counts `a, b, c, ...`
+ * - `a` is a lowercase [AlphaNumberingSymbol], which counts `a, b, c, ...`
  * @see NumberingCounterSymbol
  * @see NumberingFixedSymbol
  * @see NumberingFormat
