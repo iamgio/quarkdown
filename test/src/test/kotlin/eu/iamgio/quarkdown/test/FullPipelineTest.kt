@@ -110,7 +110,7 @@ class FullPipelineTest {
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
-            .pageformat {A3} orientation:{landscape} margin:{3cm 2px}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} columns:{4}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
             """.trimIndent(),
@@ -134,6 +134,8 @@ class FullPipelineTest {
                 ),
                 documentInfo.pageFormat.margin,
             )
+
+            assertEquals(4, documentInfo.pageFormat.columnCount)
         }
     }
 

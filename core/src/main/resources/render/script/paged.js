@@ -68,5 +68,19 @@ function updatePageNumberElements() {
     });
 }
 
+// Sets the column count of each page.
+// For some unknown reason, this has to be applied after the page is rendered to avoid visual glitches.
+// For non-paged documents, the column count is applied directly via CSS instead (see global.css).
+function setColumnCount() {
+    const columnCount = getComputedStyle(document.body).getPropertyValue('--property-column-count')?.trim()
+    if (!columnCount || columnCount === '') return; // No value set.
+
+    document.querySelectorAll('.pagedjs_page_content > div').forEach(content => {
+        content.style.columnCount = columnCount;
+    });
+}
+
+// These actions are executed after the page is rendered.
 executionQueue.push(setupPageMargins);
 executionQueue.push(updatePageNumberElements);
+executionQueue.push(setColumnCount);

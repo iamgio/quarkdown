@@ -235,7 +235,9 @@ fun numbering(
  *                    Does not take effect if [format] is not specified.
  * @param width width of each page
  * @param height height of each page
- * @param margin blank space around the content of each page. Only supported in paged mode.
+ * @param margin blank space around the content of each page. Only supported in paged documents
+ * @param columns positive number of columns on each page.
+ *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  */
 @Name("pageformat")
 fun pageFormat(
@@ -245,6 +247,7 @@ fun pageFormat(
     width: Size? = null,
     height: Size? = null,
     margin: Sizes? = null,
+    columns: Int? = null,
 ): VoidValue {
     with(context.documentInfo.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
@@ -254,7 +257,9 @@ fun pageFormat(
         // Width and/or height override the format size if both are not null.
         this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
+
         this.margin = margin
+        this.columnCount = columns?.takeIf { it > 0 }
     }
 
     return VoidValue

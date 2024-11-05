@@ -58,4 +58,9 @@ object TemplatePlaceholders {
      * Margin of each page.
      */
     const val PAGE_MARGIN = "PAGEMARGIN"
+
+    /**
+     * Number of columns on each page.
+     */
+    const val COLUMN_COUNT = "COLUMNCOUNT"
 }

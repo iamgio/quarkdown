@@ -55,6 +55,7 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
             .value(TemplatePlaceholders.PAGE_HEIGHT, context.documentInfo.pageFormat.pageHeight.toString())
             .optionalValue(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS)
+            .optionalValue(TemplatePlaceholders.COLUMN_COUNT, context.documentInfo.pageFormat.columnCount?.toString())
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {

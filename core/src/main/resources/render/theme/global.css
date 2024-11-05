@@ -78,6 +78,9 @@
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
     --r-heading-margin: var(--qd-slides-heading-margin);
+
+    /* Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values. */
+    --property-column-count: unset;
 }
 
 body {
@@ -89,6 +92,11 @@ body {
 
 body:not(:has(.pagedjs_page)), .pagedjs_page {
     background-color: var(--qd-background-color);
+    column-count: var(--property-column-count);
+}
+
+body:has(.reveal) {
+    column-count: unset;
 }
 
 /* Slides viewport */
@@ -98,6 +106,7 @@ body:not(:has(.pagedjs_page)), .pagedjs_page {
 
 .reveal .slides > :is(section, .pdf-page) {
     text-align: var(--qd-slides-horizontal-alignment);
+    column-count: var(--property-column-count);
 }
 
 /* Paged viewport */
@@ -116,6 +125,11 @@ body:has(.pagedjs_page) {
 .pagedjs_page {
     text-align: var(--qd-paged-horizontal-alignment);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+}
+
+/* In a multi-column layout, these elements span across all columns. */
+.column-span-all, h1, h2, h3, nav {
+    column-span: all;
 }
 
 /* A divider in a row is vertical instead of horizontal */
@@ -233,6 +247,7 @@ a {
     text-decoration: none;
 }
 
+/* Vertical spacing. */
 h1, h2, h3, h4, h5, h6,
 p, table:not(code table), pre, figure, blockquote,
 ul, ol, hr,

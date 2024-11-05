@@ -39,6 +39,10 @@
     [[endif:MATH]]
 
     <style>
+        body {
+            [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
+        }
+
         .page-break {
             break-before: always;
         }
@@ -54,7 +58,6 @@
             width: [[PAGEWIDTH]];
             height: [[PAGEHEIGHT]];
             [[endif:PAGESIZE]]
-
         }
 
         @page {
