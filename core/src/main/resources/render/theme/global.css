@@ -128,7 +128,7 @@ body:has(.pagedjs_page) {
 }
 
 /* In a multi-column layout, these elements span across all columns. */
-.column-span-all, h1, h2, h3, nav {
+.full-column-span, h1, h2, h3, nav {
     column-span: all;
 }
 

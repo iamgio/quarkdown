@@ -18,6 +18,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
@@ -188,6 +189,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 "gap" value node.gap
             }
         }
+
+    override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
     override fun visit(node: Clipped) = div("clip clip-${node.clip.asCSS}", node.children)
 

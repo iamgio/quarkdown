@@ -34,6 +34,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
@@ -133,6 +134,8 @@ interface NodeVisitor<T> {
     fun visit(node: Aligned): T
 
     fun visit(node: Stacked): T
+
+    fun visit(node: FullColumnSpan): T
 
     fun visit(node: Clipped): T
 

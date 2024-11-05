@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -35,6 +36,7 @@ val Layout: Module =
         ::row,
         ::column,
         ::grid,
+        ::fullColumnSpan,
         ::whitespace,
         ::clip,
         ::box,
@@ -163,6 +165,15 @@ fun grid(
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
     else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, gap, body)
 }
+
+/**
+ * If the document has a multi-column layout (set via [pageFormat]), makes content span across all columns in a multi-column layout.
+ * If the document has a single-column layout, the effect is the same as [container].
+ * @param body content to span across all columns
+ * @return the new full column span node
+ */
+@Name("fullspan")
+fun fullColumnSpan(body: MarkdownContent) = FullColumnSpan(body.children).wrappedAsValue()
 
 /**
  * An empty square that adds whitespace to the layout.
