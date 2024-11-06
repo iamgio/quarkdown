@@ -282,6 +282,11 @@ p + p:not(.stack > p):not(.page-margin-content > p) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
+/* Syllables-based word break in paged documents */
+.pagedjs_page_content p {
+    hyphens: auto;
+}
+
 /* Reset the margin of the first element in a page */
 .pagedjs_page_content > div > *:first-child,
 .pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
