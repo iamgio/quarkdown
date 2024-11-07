@@ -92,11 +92,10 @@ body {
 
 body:not(:has(.pagedjs_page)), .pagedjs_page {
     background-color: var(--qd-background-color);
-    column-count: var(--property-column-count);
 }
 
-body:has(.reveal) {
-    column-count: unset;
+body:not(:has(.pagedjs_page), :has(.reveal)) {
+    column-count: var(--property-column-count);
 }
 
 /* Slides viewport */
