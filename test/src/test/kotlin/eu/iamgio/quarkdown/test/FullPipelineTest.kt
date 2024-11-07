@@ -355,6 +355,17 @@ class FullPipelineTest {
             )
         }
 
+        execute("Sized image: !(20x_)[Alt text](https://example.com/image.png)") {
+            assertEquals("<p>Sized image: <img src=\"https://example.com/image.png\" alt=\"Alt text\" style=\"width: 20.0px;\" /></p>", it)
+        }
+
+        execute("!(2in*2.1cm)[Alt text](https://example.com/image.png)") {
+            assertEquals(
+                "<figure><img src=\"https://example.com/image.png\" alt=\"Alt text\" style=\"width: 2.0in; height: 2.1cm;\" /></figure>",
+                it,
+            )
+        }
+
         execute(
             """
             [Alt text]: https://example.com/image.png

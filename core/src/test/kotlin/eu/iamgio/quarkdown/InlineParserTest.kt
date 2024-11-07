@@ -14,6 +14,10 @@ import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.size.cm
+import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.mm
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.misc.color.Color
@@ -180,23 +184,38 @@ class InlineParserTest {
             assertEquals("/img", link.url)
             assertEquals(link.title, "Title")
 
-            assertEquals(150, width)
-            assertEquals(100, height)
+            assertEquals(150.px, width)
+            assertEquals(100.px, height)
         }
 
         with(nodes.next()) {
-            assertEquals(150, width)
+            assertEquals(150.px, width)
             assertNull(height)
         }
 
         with(nodes.next()) {
             assertNull(width)
-            assertEquals(100, height)
+            assertEquals(100.px, height)
         }
 
         with(nodes.next()) {
             assertNull(width)
             assertNull(height)
+        }
+
+        with(nodes.next()) {
+            assertEquals(2.0.cm, width)
+            assertEquals(4.2.inch, height)
+        }
+
+        with(nodes.next()) {
+            assertEquals(20.0.mm, width)
+            assertEquals(3.0.cm, height)
+        }
+
+        with(nodes.next()) {
+            assertEquals(2.px, width)
+            assertEquals(3.px, height)
         }
     }
 
@@ -235,8 +254,8 @@ class InlineParserTest {
             }
             assertNodeEquals(Text("ref"), link.reference.first())
 
-            assertEquals(150, width)
-            assertEquals(100, height)
+            assertEquals(150.px, width)
+            assertEquals(100.px, height)
         }
 
         with(nodes.next()) {
@@ -246,7 +265,7 @@ class InlineParserTest {
             }
             assertNodeEquals(Text("ref"), link.reference.first())
 
-            assertEquals(150, width)
+            assertEquals(150.px, width)
             assertNull(height)
         }
     }

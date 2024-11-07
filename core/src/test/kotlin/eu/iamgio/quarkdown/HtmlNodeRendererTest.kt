@@ -190,16 +190,16 @@ class HtmlNodeRendererTest {
             out.next(),
             Image(
                 Link(label = buildInline { text("Foo bar") }, url = "/url", title = null),
-                width = 150,
-                height = 100,
+                width = 150.px,
+                height = 100.px,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
                 Link(label = buildInline { text("Foo bar") }, url = "/url", title = "Title"),
-                width = 150,
-                height = 100,
+                width = 3.2.cm,
+                height = null,
             ).render(),
         )
     }
@@ -254,8 +254,8 @@ class HtmlNodeRendererTest {
                     label,
                     fallback,
                 ),
-                width = 150,
-                height = 100,
+                width = 150.px,
+                height = 100.px,
             ).render(context),
         )
         assertEquals(
@@ -300,8 +300,8 @@ class HtmlNodeRendererTest {
             ImageFigure(
                 Image(
                     Link(label = listOf(), url = "/url", title = "Title"),
-                    width = 150,
-                    height = 100,
+                    width = 150.px,
+                    height = 100.px,
                 ),
             ).render(),
         )

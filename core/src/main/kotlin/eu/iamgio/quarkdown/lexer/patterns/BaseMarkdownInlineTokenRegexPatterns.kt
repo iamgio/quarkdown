@@ -181,7 +181,8 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::ImageToken,
                 regex =
                     RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<imgwidth>\\d+|_)x(?<imgheight>\\d+|_)")
+                        .withReference("imgsize", "(?<imgwidth>.+?)sizedivider(?<imgheight>.+?)")
+                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
                         .withReference("link", link.regex.pattern)
                         .build(),
                 groupNames = listOf("imgwidth", "imgheight"),
@@ -199,7 +200,8 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::ReferenceImageToken,
                 regex =
                     RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<refimgwidth>\\d+|_)x(?<refimgheight>\\d+|_)")
+                        .withReference("imgsize", "(?<refimgwidth>.+?)sizedivider(?<refimgheight>.+?)")
+                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
                         .withReference("link", referenceLink.regex.pattern)
                         .build(),
                 groupNames = listOf("refimgwidth", "refimgheight"),
@@ -331,6 +333,9 @@ private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
 // "This is a title", 'This is a title', (This is a title)
 internal const val DELIMITED_TITLE_HELPER =
     "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)"
+
+// Width and height separator in images.
+private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*1, 1cm*1cm, 1 1, 1cm 1cm, 1x1 but not 1cmx1cm
 
 private const val COMMENT_TAG_HELPER =
     "comment" +

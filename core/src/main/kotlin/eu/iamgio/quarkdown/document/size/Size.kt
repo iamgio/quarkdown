@@ -49,6 +49,12 @@ val Double.px: Size
     get() = Size(this, Size.Unit.PX)
 
 /**
+ * Represents a size expressed in pixels.
+ */
+val Int.px: Size
+    get() = this.toDouble().px
+
+/**
  * Represents a size expressed in centimeters.
  */
 val Double.cm: Size

@@ -217,8 +217,10 @@ open class BaseHtmlNodeRenderer(context: Context) :
             .attribute("src", context.mediaStorage.resolveMediaLocationOrFallback(node.link.url))
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
-            .optionalAttribute("width", node.width)
-            .optionalAttribute("height", node.height)
+            .style {
+                "width" value node.width
+                "height" value node.height
+            }
             .void(true)
             .build()
 

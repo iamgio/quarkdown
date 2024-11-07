@@ -18,8 +18,12 @@ import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.function.value.factory.IllegalRawValueException
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
 import eu.iamgio.quarkdown.lexer.tokens.CommentToken
@@ -182,30 +186,42 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
+    /**
+     * Given an image token, extracts its width and height, if they are set.
+     * They are stored in the named groups `width` and `height`, both prefixed by [namedGroupPrefix].
+     * @param namedGroupPrefix prefix of the named groups
+     * @param data token data to extract the size from
+     * @return pair of width and height, or `null` if they are either unset or invalid
+     */
+    private fun extractImageSize(
+        namedGroupPrefix: String,
+        data: TokenData,
+    ): Pair<Size?, Size?> {
+        val width = data.namedGroups["${namedGroupPrefix}width"]
+        val height = data.namedGroups["${namedGroupPrefix}height"]
+
+        fun toSize(raw: String?): Size? =
+            try {
+                raw?.let(ValueFactory::size)?.unwrappedValue // Parses the value.
+            } catch (e: IllegalRawValueException) {
+                null
+            }
+
+        return toSize(width) to toSize(height)
+    }
+
     override fun visit(token: ImageToken): Node {
         val link = visit(LinkToken(token.data)) as Link
+        val (width, height) = extractImageSize("img", token.data)
 
-        val width = token.data.namedGroups["imgwidth"]
-        val height = token.data.namedGroups["imgheight"]
-
-        return Image(
-            link,
-            width = width?.toIntOrNull(),
-            height = height?.toIntOrNull(),
-        )
+        return Image(link, width, height)
     }
 
     override fun visit(token: ReferenceImageToken): Node {
         val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
+        val (width, height) = extractImageSize("refimg", token.data)
 
-        val width = token.data.namedGroups["refimgwidth"]
-        val height = token.data.namedGroups["refimgheight"]
-
-        return ReferenceImage(
-            link,
-            width = width?.toIntOrNull(),
-            height = height?.toIntOrNull(),
-        )
+        return ReferenceImage(link, width, height)
     }
 
     override fun visit(token: CodeSpanToken): Node {

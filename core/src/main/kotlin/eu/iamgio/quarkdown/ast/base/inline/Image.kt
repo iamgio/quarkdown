@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.ast.base.inline
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.LinkNode
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
+import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -13,8 +14,8 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  */
 class Image(
     val link: LinkNode,
-    val width: Int?,
-    val height: Int?,
+    val width: Size?,
+    val height: Size?,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
@@ -27,8 +28,8 @@ class Image(
  */
 class ReferenceImage(
     val link: ReferenceLink,
-    val width: Int?,
-    val height: Int?,
+    val width: Size?,
+    val height: Size?,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

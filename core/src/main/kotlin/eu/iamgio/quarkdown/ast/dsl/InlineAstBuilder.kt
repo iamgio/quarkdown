@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
+import eu.iamgio.quarkdown.document.size.Size
 
 /**
  * A builder of inline nodes.
@@ -40,8 +41,8 @@ class InlineAstBuilder : AstBuilder() {
     fun image(
         url: String,
         title: String? = null,
-        width: Int? = null,
-        height: Int? = null,
+        width: Size? = null,
+        height: Size? = null,
         label: InlineAstBuilder.() -> Unit = {},
     ) = +Image(Link(buildInline(label), url, title), width, height)
 

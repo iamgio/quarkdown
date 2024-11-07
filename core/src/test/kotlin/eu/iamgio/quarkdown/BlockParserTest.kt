@@ -27,6 +27,10 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.size.cm
+import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.mm
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.util.toPlainText
@@ -862,7 +866,52 @@ class BlockParserTest {
         with(nodes.next()) {
             assertNodeEquals(
                 buildInline {
-                    image("/url", null, 150, 100) { text("Label") }
+                    image("/url", null, 150.px, 100.px) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 150.px, null) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, null, 100.px) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 1.0.cm, 2.1.inch) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 100.px, 50.0.mm) { text("Label") }
+                }.first(),
+                image,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, null, 10.px) { text("Label") }
                 }.first(),
                 image,
             )
