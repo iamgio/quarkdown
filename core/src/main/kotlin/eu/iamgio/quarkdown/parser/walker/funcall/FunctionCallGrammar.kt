@@ -23,21 +23,39 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
 
     private val whitespace by regexToken("[ \\t]+")
 
+    /**
+     * Matches a character if it is not escaped.
+     * @param string the string to match
+     * @param position the position of the character to match
+     * @param char the character to match
+     * @param onMatch optional action to perform if the character is matched
+     * @return 1 if the character is matched and not preceded by an escape character, 0 otherwise
+     */
+    private fun unescapedMatch(
+        string: CharSequence,
+        position: Int,
+        char: Char,
+        onMatch: () -> Unit = {},
+    ): Int =
+        when {
+            string[position] != char -> 0
+            string.getOrNull(position - 1) != '\\' -> {
+                onMatch()
+                1
+            }
+
+            else -> 0
+        }
+
     private val argumentBegin by token { string, position ->
-        if (string[position] == ARGUMENT_BEGIN) {
+        unescapedMatch(string, position, ARGUMENT_BEGIN) {
             inArg = true
-            1
-        } else {
-            0
         }
     }
 
     private val argumentEnd by token { string, position ->
-        if (string[position] == ARGUMENT_END) {
+        unescapedMatch(string, position, ARGUMENT_END) {
             inArg = false
-            1
-        } else {
-            0
         }
     }
 
@@ -53,9 +71,11 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
 
         var depth = 0
         for (x in position until string.length) {
-            when (string[x]) {
-                ARGUMENT_BEGIN -> depth++
-                ARGUMENT_END -> {
+            when {
+                // Unescaped argument begin character {
+                unescapedMatch(string, x, ARGUMENT_BEGIN) != 0 -> depth++
+                // Unescaped argument end character }
+                unescapedMatch(string, x, ARGUMENT_END) != 0 -> {
                     if (depth == 0) {
                         inArg = false
                         return@token x - position
