@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.lexer.regex.pattern
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
-import eu.iamgio.quarkdown.lexer.walker.WalkerLexer
+import eu.iamgio.quarkdown.parser.walker.WalkerParser
 
 /**
  * A [Regex] pattern that captures a corresponding [Node] from a raw string.
@@ -20,5 +20,5 @@ data class TokenRegexPattern(
     val wrap: (TokenData) -> Token,
     override val regex: Regex,
     val groupNames: List<String> = emptyList(),
-    val walker: ((CharSequence) -> WalkerLexer)? = null,
+    val walker: ((CharSequence) -> WalkerParser<*>)? = null,
 ) : NamedRegexPattern

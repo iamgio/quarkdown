@@ -43,7 +43,7 @@ import eu.iamgio.quarkdown.lexer.tokens.TableToken
 import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
-import eu.iamgio.quarkdown.lexer.walker.SourceReader
+import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallWalkerParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -67,17 +67,6 @@ class LexerTest {
             .tokenize().asSequence()
             .filter { it !is NewlineToken }
             .iterator()
-
-    @Test
-    fun sourceReader() {
-        val reader = SourceReader("Test")
-        assertEquals('T', reader.read())
-        assertEquals('e', reader.peek())
-        assertEquals('e', reader.read())
-        assertEquals('s', reader.read())
-        assertEquals('t', reader.read())
-        assertNull(reader.read())
-    }
 
     @Test
     fun regex() {
@@ -165,7 +154,8 @@ class LexerTest {
 
     @Test
     fun emphasis() {
-        val sources = readSource("/lexing/emphasis.md").split("${System.lineSeparator()}---${System.lineSeparator()}").iterator()
+        val sources =
+            readSource("/lexing/emphasis.md").split("${System.lineSeparator()}---${System.lineSeparator()}").iterator()
 
         repeat(2) {
             with(inlineLex(sources.next())) {
@@ -430,5 +420,172 @@ class LexerTest {
         assertTrue(tokens.filterIsInstance<MultilineMathToken>().isEmpty())
         assertTrue(tokens.filterIsInstance<OnelineMathToken>().isEmpty())
         assertFalse(tokens.filterIsInstance<BlockQuoteToken>().isEmpty())
+    }
+
+    @Test
+    fun functionCall() {
+        fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
+
+        with(walk("function")) {
+            assertEquals("function", result.name)
+            assertEquals("function".length, endIndex)
+        }
+
+        with(walk("function something")) {
+            assertEquals("function", result.name)
+            assertEquals("function".length, endIndex)
+        }
+
+        with(walk("function {x}")) {
+            assertEquals("function", result.name)
+            assertEquals("function {x}".length, endIndex)
+            with(result.arguments.single()) {
+                assertEquals("x", value)
+                assertNull(name)
+            }
+        }
+
+        with(walk("function {x} {y}")) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            assertEquals("y", result.arguments[1].value)
+        }
+
+        with(walk("function {x {a} b} {y {hello {world}}} {}")) {
+            assertEquals("function", result.name)
+            assertEquals("x {a} b", result.arguments[0].value)
+            assertEquals("y {hello {world}}", result.arguments[1].value)
+            assertEquals("", result.arguments[2].value)
+        }
+
+        with(walk("function firstname:{y} lastname:{z}")) {
+            assertEquals("function", result.name)
+            with(result.arguments[0]) {
+                assertEquals("firstname", name)
+                assertEquals("y", value)
+            }
+            with(result.arguments[1]) {
+                assertEquals("lastname", name)
+                assertEquals("z", value)
+            }
+        }
+
+        with(walk("function {x} firstname:{y} lastname:{z}")) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            with(result.arguments[1]) {
+                assertEquals("firstname", name)
+                assertEquals("y", value)
+            }
+            with(result.arguments[2]) {
+                assertEquals("lastname", name)
+                assertEquals("z", value)
+            }
+        }
+
+        with(
+            walk(
+                """
+                function {
+                    x
+                } name:{
+                    y
+                }
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            with(result.arguments[1]) {
+                assertEquals("name", name)
+                assertEquals("y", value)
+            }
+        }
+
+        with(
+            walk(
+                """
+                function {x} {y}
+                  Body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            assertEquals("y", result.arguments[1].value)
+            assertEquals("Body", result.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                function {x} {y}
+                    Body body
+                    body body
+                    body
+                      body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            assertEquals("y", result.arguments[1].value)
+            assertEquals("Body body\nbody body\nbody\n  body", result.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                function {x} {y}
+                    Body body
+                    body
+                    
+                    body
+                      body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", result.name)
+            assertEquals("x", result.arguments[0].value)
+            assertEquals("y", result.arguments[1].value)
+            assertEquals("Body body\nbody\n\nbody\n  body", result.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                foreach {1..3}
+                    Hi .sum {.1} {2} hello
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("foreach", result.name)
+            assertEquals("1..3", result.arguments[0].value)
+            assertEquals("Hi .sum {.1} {2} hello", result.bodyArgument?.value)
+        }
+
+        with(walk("function\n\n\nx")) {
+            assertEquals("function", result.name)
+            assertEquals(0, result.arguments.size)
+            assertEquals("function".length, endIndex)
+        }
+
+        with(walk("function\n\n  p\nx")) {
+            assertEquals("function", result.name)
+            assertEquals(0, result.arguments.size)
+            assertEquals("", result.bodyArgument?.value)
+        }
+
+        with(walk("function\n\nfunction")) {
+            assertEquals("function", result.name)
+            assertEquals(0, result.arguments.size)
+            assertNull(result.bodyArgument?.value)
+        }
+
+        with(walk("function\n\nfunction {arg1} {arg2}")) {
+            assertEquals("function", result.name)
+            assertEquals(0, result.arguments.size)
+            assertNull(result.bodyArgument?.value)
+        }
     }
 }

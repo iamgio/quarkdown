@@ -51,8 +51,7 @@ import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
 import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
-import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_CLOSE
-import eu.iamgio.quarkdown.lexer.walker.ARG_DELIMITER_OPEN
+import eu.iamgio.quarkdown.parser.walker.funcall.WalkedFunctionCall
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.removeOptionalPrefix
@@ -437,55 +436,39 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: FunctionCallToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        // Function name.
-        val name = groups.next()
+        val call =
+            token.data.walkerResult?.result as? WalkedFunctionCall
+                ?: throw IllegalStateException("Function call walker result not found.")
 
         // Function arguments.
-        val arguments = mutableListOf<FunctionCallArgument>()
-
-        // The name of the next argument. `null` means the next argument is unnamed.
-        var argName: String? = null
-
-        // Regular function arguments.
-        groups.forEachRemaining { arg ->
-            // If this group contains the name of a named argument,
-            // it is applied to the very next argument.
-            if (arg.firstOrNull() != ARG_DELIMITER_OPEN && arg.lastOrNull() != ARG_DELIMITER_CLOSE) {
-                argName = arg
-                return@forEachRemaining
-            }
-
-            // Regular argument wrapped in brackets, which are stripped off.
-            // Common indentation is also removed.
-            val argContent = arg.trimDelimiters().trimIndent().trim()
-
-            // An expression from the raw string is created.
-            ValueFactory.expression(argContent, context)?.let {
-                arguments += FunctionCallArgument(it, argName)
-                argName = null // The name of the next named argument is reset.
-            }
-        }
+        val arguments =
+            call.arguments.asSequence()
+                .mapNotNull { arg ->
+                    ValueFactory.expression(arg.value, context)?.let {
+                        FunctionCallArgument(
+                            expression = it,
+                            name = arg.name,
+                            isBody = arg.isBody,
+                        )
+                    }
+                }.toMutableList()
 
         // Body function argument.
         // A body argument is always the last one, it goes on a new line and each line is indented.
-        token.data.namedGroups["bodyarg"]?.takeUnless { it.isBlank() }?.let { body ->
+        call.bodyArgument?.takeUnless { it.value.isBlank() }?.value?.let { body ->
             // A body argument is treated as plain text, thus nested function calls are not executed by default.
             // They are executed if the argument is used as Markdown content from the referenced function,
             // that runs recursive lexing & parsing on the arg content, triggering function calls.
-
-            // Remove indentation at the beginning of each line.
-            val value = DynamicValue(body.trimIndent())
+            val value = DynamicValue(body)
 
             arguments += FunctionCallArgument(value, isBody = true)
         }
 
-        val call = FunctionCallNode(context, name, arguments, token.isBlock)
+        val callNode = FunctionCallNode(context, call.name, arguments, token.isBlock)
 
         // Enqueuing the function call, in order to expand it in the next stage.
-        context.register(call)
+        context.register(callNode)
 
-        return call
+        return callNode
     }
 }

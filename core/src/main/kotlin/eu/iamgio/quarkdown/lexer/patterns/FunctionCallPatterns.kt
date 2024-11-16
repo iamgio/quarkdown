@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.lexer.patterns
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
-import eu.iamgio.quarkdown.lexer.walker.FunctionCallArgumentsWalkerLexer
+import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallWalkerParser
 
 /**
  * Patterns for block and inline function calls.
@@ -21,10 +21,10 @@ class FunctionCallPatterns {
                 wrap = { FunctionCallToken(it, isBlock = false) },
                 // The name of the function prefixed by a dot.
                 regex =
-                    "(?<=^|\\s|[^a-zA-Z0-9.\\\\])\\.([a-zA-Z0-9]+)"
+                    "(?<=^|\\s|[^a-zA-Z0-9.\\\\])(?=\\.[a-zA-Z0-9])"
                         .toRegex(),
                 // Arguments are scanned by the walker lexer.
-                walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = false) },
+                walker = { FunctionCallWalkerParser(it, allowsBody = false) },
             )
 
     /**
@@ -42,10 +42,10 @@ class FunctionCallPatterns {
                 // is just checking if the line ends with an argument end character (}).
                 // This works in most cases, but it should be improved soon with some better check.
                 regex =
-                    RegexBuilder("^ {0,3}call(?=(?:.*})?\\s*\$)")
+                    RegexBuilder("^ {0,3}call") // removed: (?=(?:.*})?\s*$) TODO
                         .withReference("call", inlineFunctionCall.regex.pattern)
                         .build(),
                 // Arguments are scanned by the walker lexer.
-                walker = { FunctionCallArgumentsWalkerLexer(it, allowsBody = true) },
+                walker = { FunctionCallWalkerParser(it, allowsBody = true) },
             )
 }
