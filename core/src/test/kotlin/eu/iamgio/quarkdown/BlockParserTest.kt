@@ -924,7 +924,7 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("function", name)
-            assertEquals(0, arguments.also { println(it) }.size)
+            assertEquals(0, arguments.size)
         }
 
         with(nodes.next()) {

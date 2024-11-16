@@ -19,10 +19,6 @@ private const val ARGUMENT_END = '}'
 class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunctionCall>() {
     private var inArg = false
 
-    private val begin by literalToken(".")
-
-    private val whitespace by regexToken("[ \\t]+")
-
     /**
      * Matches a character if it is not escaped.
      * @param string the string to match
@@ -47,25 +43,6 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
             else -> 0
         }
 
-    private val argumentBegin by token { string, position ->
-        unescapedMatch(string, position, ARGUMENT_BEGIN) {
-            inArg = true
-        }
-    }
-
-    private val argumentEnd by token { string, position ->
-        unescapedMatch(string, position, ARGUMENT_END) {
-            inArg = false
-        }
-    }
-
-    private val argumentNameDelimiter by literalToken(":")
-
-    private val identifier by token { string, position ->
-        if (inArg) return@token 0
-        regexToken("[a-zA-Z]+|[0-9]+").match(string, position)
-    }
-
     private val argContent by token { string, position ->
         if (!inArg) return@token 0
 
@@ -85,6 +62,29 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
             }
         }
         0
+    }
+
+    private val begin by literalToken(".")
+
+    private val whitespace by regexToken("[ \\t]+")
+
+    private val argumentBegin by token { string, position ->
+        unescapedMatch(string, position, ARGUMENT_BEGIN) {
+            inArg = true
+        }
+    }
+
+    private val argumentEnd by token { string, position ->
+        unescapedMatch(string, position, ARGUMENT_END) {
+            inArg = false
+        }
+    }
+
+    private val argumentNameDelimiter by literalToken(":")
+
+    private val identifier by token { string, position ->
+        if (inArg) return@token 0
+        regexToken("([a-zA-Z][a-zA-Z0-9]*)|[0-9]+").match(string, position)
     }
 
     private val bodyArgContent by token { string, position ->
@@ -116,7 +116,11 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
 
     // A body argument is not wrapped in braces and must be consistently indented
     private val bodyArgumentParser =
-        bodyArgContent map { value -> WalkedArgument(null, value.text.trimIndent(), isBody = true) }
+        bodyArgContent map { value ->
+            value.text.takeUnless { it.isBlank() }?.let {
+                WalkedArgument(null, it.trimIndent(), isBody = true)
+            }
+        }
 
     override val rootParser =
         (
