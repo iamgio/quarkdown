@@ -91,18 +91,18 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
         if (!allowsBody || inArg) return@token 0
 
         var index = position
-        var foundIndent = false
 
-        string.substring(position).lineSequence()
-            .filter {
-                val hasIndent = it.startsWith("  ") || it.startsWith("\t")
-                if (hasIndent) foundIndent = true
+        for (line in string.substring(position).lineSequence()) {
+            val hasIndent = line.startsWith("  ") || line.startsWith("\t")
+            if (!hasIndent && line.isNotBlank()) break
 
-                hasIndent || (foundIndent && it.isBlank())
-            }
-            .forEach { index += it.length + 1 }
+            index += line.length + 1
+        }
 
-        index - position
+        when {
+            index == position -> 0
+            else -> index - position - 1 // Strip the last newline character
+        }
     }
 
     private val argumentParser =
@@ -120,6 +120,6 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
 
     override val rootParser =
         (
-            -begin and identifier and zeroOrMore(argumentParser) // and optional(bodyArgumentParser)
-        ) map { (id, args/*, body*/) -> WalkedFunctionCall(id.text, args, null/*body*/) }
+            -begin and identifier and zeroOrMore(argumentParser) and optional(-optional(whitespace) and bodyArgumentParser)
+        ) map { (id, args, body) -> WalkedFunctionCall(id.text, args, body) }
 }

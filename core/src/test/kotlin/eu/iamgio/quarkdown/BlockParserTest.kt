@@ -964,6 +964,17 @@ class BlockParserTest {
             assertTrue(arguments.first().isBody)
 
             assertEquals(
+                "body content",
+                arguments.first().value.unwrappedValue,
+            )
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(1, arguments.size)
+            assertTrue(arguments.first().isBody)
+
+            assertEquals(
                 "body content\nbody **content**",
                 arguments.first().value.unwrappedValue,
             )

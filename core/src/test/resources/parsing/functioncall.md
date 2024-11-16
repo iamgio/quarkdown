@@ -6,7 +6,10 @@
 
 .function \{arg1}
 
-.function 
+.function
+  body content
+
+.function   
   body content
 
 .function
