@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.lexer.patterns
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
+import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallGrammar
 import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallWalkerParser
 
 /**
@@ -21,8 +22,10 @@ class FunctionCallPatterns {
                 wrap = { FunctionCallToken(it, isBlock = false) },
                 // The name of the function prefixed by a dot.
                 regex =
-                    "(?<=^|\\s|[^a-zA-Z0-9.\\\\])(?=\\.[a-zA-Z0-9])"
-                        .toRegex(),
+                    RegexBuilder("(?<=^|\\s|[^a-zA-Z0-9.\\\\])(?=begin(name))")
+                        .withReference("begin", "\\" + FunctionCallGrammar.BEGIN)
+                        .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
+                        .build(),
                 // Arguments are scanned by the walker lexer.
                 walker = { FunctionCallWalkerParser(it, allowsBody = false) },
             )

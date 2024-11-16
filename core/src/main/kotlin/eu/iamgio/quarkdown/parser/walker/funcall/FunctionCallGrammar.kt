@@ -10,14 +10,30 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.lexer.token
 
-/**
- *
- */
-private const val ARGUMENT_BEGIN = '{'
-private const val ARGUMENT_END = '}'
-
 class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunctionCall>() {
     private var inArg = false
+
+    companion object {
+        /**
+         * The character that prefixes a function call.
+         */
+        const val BEGIN = "."
+
+        /**
+         * The pattern for an identifier (function name or argument name).
+         */
+        const val IDENTIFIER_PATTERN = "[a-zA-Z][a-zA-Z0-9]*|[0-9]+"
+
+        /**
+         * The character that begins an inline argument.
+         */
+        const val ARGUMENT_BEGIN = '{'
+
+        /**
+         * The character that ends an inline argument.
+         */
+        const val ARGUMENT_END = '}'
+    }
 
     /**
      * Matches a character if it is not escaped.
@@ -64,7 +80,7 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
         0
     }
 
-    private val begin by literalToken(".")
+    private val begin by literalToken(BEGIN)
 
     private val whitespace by regexToken("[ \\t]+")
 
@@ -84,7 +100,7 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
 
     private val identifier by token { string, position ->
         if (inArg) return@token 0
-        regexToken("([a-zA-Z][a-zA-Z0-9]*)|[0-9]+").match(string, position)
+        regexToken(IDENTIFIER_PATTERN).match(string, position)
     }
 
     private val bodyArgContent by token { string, position ->
