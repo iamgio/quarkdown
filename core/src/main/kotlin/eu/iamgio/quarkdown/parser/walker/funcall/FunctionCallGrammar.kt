@@ -106,7 +106,9 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
     private val bodyArgContent by token { string, position ->
         if (!allowsBody || inArg) return@token 0
 
-        var index = position
+        // Length of the body argument.
+        var length = 0
+        // Whether an indented line has been found.
         var found = false
 
         for (line in string.substring(position).lineSequence()) {
@@ -118,11 +120,12 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
                 }
             }
 
-            index += line.length + 1
+            length += line.length
+            if (string.getOrNull(length + position) == '\n') length++ // Include line break
         }
 
         when {
-            found -> index - position - 1 // Strip the last newline character
+            found -> length
             else -> 0
         }
     }
@@ -140,7 +143,7 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
     private val bodyArgumentParser =
         bodyArgContent map { value ->
             value.text.takeUnless { it.isBlank() }?.let {
-                WalkedArgument(null, it.trimIndent(), isBody = true)
+                WalkedArgument(null, it.trimIndent().trimEnd(), isBody = true)
             }
         }
 
