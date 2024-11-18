@@ -28,12 +28,35 @@ abstract class RegexLexer(
      * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
      * @return whether the tokenization process (regex matching) should be restarted from the current index.
-     * This happens when a matched patterns require a [WalkerLexer] to scan further content.
+     * This happens when a matched pattern require a [WalkerLexer] to scan further content.
      */
     private fun MutableList<Token>.extractMatchingTokens(result: MatchResult): Boolean {
-        patterns.forEach { pattern ->
-            val group = result.groups[pattern.name] ?: return@forEach
+        for (pattern in patterns) {
+            val group = result.groups[pattern.name] ?: continue
             val range = group.range
+
+            // Fill-tokens are substrings that were not captured by any pattern.
+            // These uncaptured groups are scanned and converted to tokens.
+            pushFillToken(untilIndex = range.first)
+
+            // End of the match
+            currentIndex = range.last + 1
+
+            // Text of the token.
+            val text = StringBuilder(group.value)
+
+            var walkerResult: WalkerParsingResult<*>? = null
+
+            // In case the pattern requires additional information that can't be supplied by regex,
+            // its WalkerLexer implementation is retrieved and starts scanning from this position.
+            // Its produced tokens are stored into the main token's groups.
+            pattern.walker?.invoke(source.substring(currentIndex))?.let { walker ->
+                // Results are stored as tokens.
+                walkerResult = walker.parse()
+
+                // The matching process is continued from the walker's end position.
+                currentIndex += walkerResult?.endIndex ?: 0
+            }
 
             // Groups with a name, defined by the pattern.
             val namedGroups =
@@ -58,29 +81,6 @@ abstract class RegexLexer(
                 namedGroups
                     .mapValues { (_, group) -> group.value }
                     .toMutableMap()
-
-            // Fill-tokens are substrings that were not captured by any pattern.
-            // These uncaptured groups are scanned and converted to tokens.
-            pushFillToken(untilIndex = range.first)
-
-            // End of the match
-            currentIndex = range.last + 1
-
-            // Text of the token.
-            val text = StringBuilder(group.value)
-
-            var walkerResult: WalkerParsingResult<*>? = null
-
-            // In case the pattern requires additional information that can't be supplied by regex,
-            // its WalkerLexer implementation is retrieved and starts scanning from this position.
-            // Its produced tokens are stored into the main token's groups.
-            pattern.walker?.invoke(source.substring(currentIndex))?.let { walker ->
-                // Results are stored as tokens.
-                walkerResult = walker.parse()
-
-                // The matching process is continued from the walker's end position.
-                currentIndex += walkerResult?.endIndex ?: 0
-            }
 
             // The token data.
             val data =

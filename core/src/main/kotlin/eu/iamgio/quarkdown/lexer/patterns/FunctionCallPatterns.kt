@@ -45,8 +45,10 @@ class FunctionCallPatterns {
                 // is just checking if the line ends with an argument end character (}).
                 // This works in most cases, but it should be improved soon with some better check.
                 regex =
-                    RegexBuilder("^ {0,3}call") // removed: (?=(?:.*})?\s*$) TODO
-                        .withReference("call", inlineFunctionCall.regex.pattern)
+                    RegexBuilder("^ {0,3}callclose)")
+                        .withReference("call", inlineFunctionCall.regex.pattern.dropLast(1))
+                        .withReference("close", "(?:.*end)?\\s*\$")
+                        .withReference("end", FunctionCallGrammar.ARGUMENT_END.toString())
                         .build(),
                 // Arguments are scanned by the walker lexer.
                 walker = { FunctionCallWalkerParser(it, allowsBody = true) },

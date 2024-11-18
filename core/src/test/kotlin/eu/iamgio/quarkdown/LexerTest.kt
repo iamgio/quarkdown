@@ -427,57 +427,57 @@ class LexerTest {
         fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
 
         with(walk(".function")) {
-            assertEquals("function", result.name)
+            assertEquals("function", value.name)
             assertEquals(".function".length, endIndex)
         }
 
         with(walk(".function something")) {
-            assertEquals("function", result.name)
+            assertEquals("function", value.name)
             assertEquals(".function".length, endIndex)
         }
 
         with(walk(".function {x}")) {
-            assertEquals("function", result.name)
+            assertEquals("function", value.name)
             assertEquals(".function {x}".length, endIndex)
-            with(result.arguments.single()) {
+            with(value.arguments.single()) {
                 assertEquals("x", value)
                 assertNull(name)
             }
         }
 
         with(walk(".function {x} {y}")) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            assertEquals("y", result.arguments[1].value)
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
         }
 
         with(walk(".function {x {a} b} {y {hello {world}}} {}")) {
-            assertEquals("function", result.name)
-            assertEquals("x {a} b", result.arguments[0].value)
-            assertEquals("y {hello {world}}", result.arguments[1].value)
-            assertEquals("", result.arguments[2].value)
+            assertEquals("function", value.name)
+            assertEquals("x {a} b", value.arguments[0].value)
+            assertEquals("y {hello {world}}", value.arguments[1].value)
+            assertEquals("", value.arguments[2].value)
         }
 
         with(walk(".function firstname:{y} lastname:{z}")) {
-            assertEquals("function", result.name)
-            with(result.arguments[0]) {
+            assertEquals("function", value.name)
+            with(value.arguments[0]) {
                 assertEquals("firstname", name)
                 assertEquals("y", value)
             }
-            with(result.arguments[1]) {
+            with(value.arguments[1]) {
                 assertEquals("lastname", name)
                 assertEquals("z", value)
             }
         }
 
         with(walk(".function {x} firstname:{y} lastname:{z}")) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            with(result.arguments[1]) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
                 assertEquals("firstname", name)
                 assertEquals("y", value)
             }
-            with(result.arguments[2]) {
+            with(value.arguments[2]) {
                 assertEquals("lastname", name)
                 assertEquals("z", value)
             }
@@ -494,9 +494,9 @@ class LexerTest {
                 """.trimIndent(),
             ),
         ) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            with(result.arguments[1]) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
                 assertEquals("name", name)
                 assertEquals("y", value)
             }
@@ -510,10 +510,10 @@ class LexerTest {
                 """.trimIndent(),
             ),
         ) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            assertEquals("y", result.arguments[1].value)
-            assertEquals("Body", result.bodyArgument?.value)
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body", value.bodyArgument?.value)
         }
 
         with(
@@ -527,10 +527,10 @@ class LexerTest {
                 """.trimIndent(),
             ),
         ) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            assertEquals("y", result.arguments[1].value)
-            assertEquals("Body body\nbody body\nbody\n  body", result.bodyArgument?.value)
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body body\nbody body\nbody\n  body", value.bodyArgument?.value)
         }
 
         with(
@@ -545,10 +545,10 @@ class LexerTest {
                 """.trimIndent(),
             ),
         ) {
-            assertEquals("function", result.name)
-            assertEquals("x", result.arguments[0].value)
-            assertEquals("y", result.arguments[1].value)
-            assertEquals("Body body\nbody\n\nbody\n  body", result.bodyArgument?.value)
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body body\nbody\n\nbody\n  body", value.bodyArgument?.value)
         }
 
         with(
@@ -559,38 +559,38 @@ class LexerTest {
                 """.trimIndent(),
             ),
         ) {
-            assertEquals("foreach", result.name)
-            assertEquals("1..3", result.arguments[0].value)
-            assertEquals("Hi .sum {.1} {2} hello", result.bodyArgument?.value)
+            assertEquals("foreach", value.name)
+            assertEquals("1..3", value.arguments[0].value)
+            assertEquals("Hi .sum {.1} {2} hello", value.bodyArgument?.value)
         }
 
         with(walk(".function\n\n\nx")) {
-            assertEquals("function", result.name)
-            assertEquals(0, result.arguments.size)
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
         }
 
         with(walk(".function\n\n  p\nx")) {
-            assertEquals("function", result.name)
-            assertEquals(0, result.arguments.size)
-            assertEquals("p", result.bodyArgument?.value?.trim())
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertEquals("p", value.bodyArgument?.value?.trim())
         }
 
         with(walk(".function\n\n  \np\nx")) {
-            assertEquals("function", result.name)
-            assertEquals(0, result.arguments.size)
-            assertNull(result.bodyArgument)
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
         }
 
         with(walk(".function\n\nfunction")) {
-            assertEquals("function", result.name)
-            assertEquals(0, result.arguments.size)
-            assertNull(result.bodyArgument)
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
         }
 
         with(walk(".function\n\nfunction {arg1} {arg2}")) {
-            assertEquals("function", result.name)
-            assertEquals(0, result.arguments.size)
-            assertNull(result.bodyArgument)
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
         }
     }
 }

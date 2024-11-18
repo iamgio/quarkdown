@@ -13,6 +13,7 @@ open class WalkerParser<T>(private val source: CharSequence, private val grammar
         val parsed = result.toParsedOrThrow()
 
         val endIndex = tokens[parsed.nextPosition]?.offset ?: source.length
-        return WalkerParsingResult(parsed.value, endIndex)
+        val remainder = source.substring(endIndex)
+        return WalkerParsingResult(parsed.value, endIndex, remainder)
     }
 }

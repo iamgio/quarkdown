@@ -437,14 +437,14 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: FunctionCallToken): Node {
         val call =
-            token.data.walkerResult?.result as? WalkedFunctionCall
+            token.data.walkerResult?.value as? WalkedFunctionCall
                 ?: throw IllegalStateException("Function call walker result not found.")
 
         // Function arguments.
         val arguments =
             call.arguments.asSequence()
                 .mapNotNull { arg ->
-                    ValueFactory.expression(arg.value, context)?.let {
+                    ValueFactory.expression(arg.value.trim(), context)?.let {
                         FunctionCallArgument(
                             expression = it,
                             name = arg.name,
