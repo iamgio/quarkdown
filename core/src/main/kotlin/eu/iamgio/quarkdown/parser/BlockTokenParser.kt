@@ -466,7 +466,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         val callNode = FunctionCallNode(context, call.name, arguments, token.isBlock)
 
-        // Enqueuing the function call, in order to expand it in the next stage.
+        // Enqueuing the function call, in order to expand it in the next stage of the pipeline.
         context.register(callNode)
 
         return callNode

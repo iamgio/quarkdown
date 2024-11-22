@@ -11,9 +11,10 @@ import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallWalkerParser
  */
 class FunctionCallPatterns {
     /**
-     * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces.
+     * Function name prefixed by '.', followed by a sequence of arguments.
      * Can be preceeded by the beginning of the line, a whitespace or a symbol.
-     * Arguments are scanned by [FunctionCallArgumentsWalkerLexer].
+     * This is a 'flag' pattern, meaning it does not capture any content,
+     * but instead detects the beginning of a function call and delegates the scanning to [FunctionCallWalkerParser].
      */
     val inlineFunctionCall
         get() =
@@ -32,9 +33,10 @@ class FunctionCallPatterns {
 
     /**
      * An isolated function call.
-     * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces
-     * and an optional body, indented by 4 spaces like a list item body.
-     * Arguments are scanned by [FunctionCallArgumentsWalkerLexer].
+     * Function name prefixed by '.', followed by a sequence of arguments
+     * and an optional body, indented by at least 2 spaces or 1 tab like a list item body.
+     * This is a 'flag' pattern, meaning it does not capture any content,
+     * but instead detects the beginning of a function call and delegates the scanning to [FunctionCallWalkerParser].
      */
     val blockFunctionCall
         get() =
