@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.regex.pattern.groupify
+import eu.iamgio.quarkdown.parser.walker.WalkerParser
 import eu.iamgio.quarkdown.parser.walker.WalkerParsingResult
 import eu.iamgio.quarkdown.util.filterNotNullValues
 import eu.iamgio.quarkdown.util.normalizeLineSeparators
@@ -28,7 +29,7 @@ abstract class RegexLexer(
      * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
      * @param result result of the [Regex] match
      * @return whether the tokenization process (regex matching) should be restarted from the current index.
-     * This happens when a matched pattern require a [WalkerLexer] to scan further content.
+     * This happens when a matched pattern produces a [WalkerParsingResult] that scans further content.
      */
     private fun MutableList<Token>.extractMatchingTokens(result: MatchResult): Boolean {
         for (pattern in patterns) {
@@ -45,18 +46,17 @@ abstract class RegexLexer(
             // Text of the token.
             val text = StringBuilder(group.value)
 
-            var walkerResult: WalkerParsingResult<*>? = null
-
             // In case the pattern requires additional information that can't be supplied by regex,
-            // its WalkerLexer implementation is retrieved and starts scanning from this position.
-            // Its produced tokens are stored into the main token's groups.
-            pattern.walker?.invoke(source.substring(currentIndex))?.let { walker ->
-                // Results are stored as tokens.
-                walkerResult = walker.parse()
-
-                // The matching process is continued from the walker's end position.
-                currentIndex += walkerResult?.endIndex ?: 0
-            }
+            // its WalkerParser is supplied and starts scanning from this position.
+            // In most cases, a pattern will not have a walker.
+            // Currently, only function calls have walkers (see parser.walker.funcall), as regex cannot handle balanced argument delimiters.
+            val walker: WalkerParser<*>? = pattern.walker?.invoke(source.substring(currentIndex))
+            // Result of the walk.
+            val walkerResult: WalkerParsingResult<*>? =
+                walker?.parse()?.also {
+                    // The matching process is continued from the walker's end position.
+                    currentIndex += it.endIndex
+                }
 
             // Groups with a name, defined by the pattern.
             val namedGroups =
