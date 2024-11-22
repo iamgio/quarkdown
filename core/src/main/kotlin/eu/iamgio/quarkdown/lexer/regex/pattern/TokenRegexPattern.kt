@@ -13,7 +13,8 @@ import eu.iamgio.quarkdown.parser.walker.WalkerParser
  * @param wrap a function that wraps a general token into its specific wrapper
  * @param regex regex pattern to match
  * @param groupNames names of the named groups that appear the regex pattern
- * @param walker if present, upon being captured, produces a [WalkerLexer] that scans the given [CharSequence] source
+ * @param walker if present, upon being captured, produces a [WalkerParser] that scans the given [CharSequence] source
+ *               in case regex does not suffice to capture complex tokens
  */
 data class TokenRegexPattern(
     override val name: String,
