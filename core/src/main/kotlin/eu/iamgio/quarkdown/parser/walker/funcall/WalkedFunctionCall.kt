@@ -13,14 +13,13 @@ import eu.iamgio.quarkdown.parser.BlockTokenParser
  */
 data class WalkedFunctionCall(
     val name: String,
-    val arguments: List<WalkedArgument>,
-    val bodyArgument: WalkedArgument?,
+    val arguments: List<WalkedFunctionArgument>,
+    val bodyArgument: WalkedFunctionArgument?,
 )
 
 /**
  * Structured data produced by [FunctionCallWalkerParser] which represents a function call argument.
  * @param name the name of the argument, if the argument is named
  * @param value the raw value of the argument
- * @param isBody whether the argument is a body argument
  */
-data class WalkedArgument(val name: String?, val value: String, val isBody: Boolean)
+data class WalkedFunctionArgument(val name: String?, val value: String)

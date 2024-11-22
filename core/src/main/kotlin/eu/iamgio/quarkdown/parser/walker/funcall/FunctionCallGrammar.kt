@@ -208,7 +208,7 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
                 // Argument content.
                 optional(argContent map { it.text.trimIndent().trim() }) and
                 -argumentEnd
-        ) map { (name, value) -> WalkedArgument(name?.text, value ?: "", isBody = false) }
+        ) map { (name, value) -> WalkedFunctionArgument(name?.text, value ?: "") }
 
     /**
      * Parses a body argument.
@@ -217,7 +217,7 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
     private val bodyArgumentParser =
         bodyArgContent map { value ->
             value.text.takeUnless { it.isBlank() }?.let {
-                WalkedArgument(null, it.trimIndent().trimEnd(), isBody = true)
+                WalkedFunctionArgument(null, it.trimIndent().trimEnd())
             }
         }
 

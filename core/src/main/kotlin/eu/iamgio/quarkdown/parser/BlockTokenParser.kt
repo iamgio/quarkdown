@@ -440,17 +440,19 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
             token.data.walkerResult?.value as? WalkedFunctionCall
                 ?: throw IllegalStateException("Function call walker result not found.")
 
+        // The syntax-only information held by the walked function call is converted to a context-aware function call node.
+
         // Function arguments.
         val arguments =
             call.arguments.asSequence()
                 .mapNotNull { arg ->
-                    ValueFactory.expression(arg.value.trim(), context)?.let {
-                        FunctionCallArgument(
-                            expression = it,
-                            name = arg.name,
-                            isBody = arg.isBody,
-                        )
-                    }
+                    // Convert the raw argument to an expression.
+                    val expression = ValueFactory.expression(arg.value.trim(), context) ?: return@mapNotNull null
+                    FunctionCallArgument(
+                        expression,
+                        name = arg.name,
+                        isBody = false,
+                    )
                 }.toMutableList()
 
         // Body function argument.
