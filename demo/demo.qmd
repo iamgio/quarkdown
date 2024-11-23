@@ -284,7 +284,10 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .sourceresult
     The color magenta's hexadecimal representation is `#FF00FF`.  
-    `rgb(255, 0, 255)` is also a valid one.
+    The following are equivalent:
+    - `rgb(255, 0, 255)`
+    - `hsl(300, 100, 50)`
+    - `hsv(300, 100, 100)`
 
 # It's a wrap
 
