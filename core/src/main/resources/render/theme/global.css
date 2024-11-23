@@ -42,8 +42,9 @@
     --qd-horizontal-alignment: var(--qd-paged-horizontal-alignment);
 
     /* Code */
+    --qd-code-line-height: var(--qd-line-height); /* Line height of code blocks */
     --qd-code-border-radius: 8px; /* Border radius of code blocks */
-    --qd-code-line-numbers-padding: 0.3em 0.8em; /* Padding of line numbers of code blocks. Also defines code line height. */
+    --qd-code-line-numbers-padding: 0 0.8em; /* Padding of line numbers of code blocks. Vertical padding also defines code line height. */
     --qd-code-line-numbers-opacity: 0.6; /* Opacity of line numbers of code blocks */
 
     /* Quotes */
@@ -302,8 +303,10 @@ code:not(pre code) {
 
 pre code {
     font-size: var(--qd-code-block-font-size);
+    line-height: var(--qd-code-line-height);
     font-style: normal !important;
     max-height: none !important;
+    overflow: hidden;
 }
 
 pre, pre code {
