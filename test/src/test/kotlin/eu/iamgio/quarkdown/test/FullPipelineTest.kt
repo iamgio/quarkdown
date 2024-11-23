@@ -1608,7 +1608,7 @@ class FullPipelineTest {
                     "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
                     "<nav><ol>" +
                     "<li><a href=\"#abc\">ABC</a>" +
-                    "<ol><li><a href=\"#abc1\"><em>ABC/1</em></a></li></ol></li>" +
+                    "<ol><li><a href=\"#abc1\">ABC/1</a></li></ol></li>" +
                     "<li><a href=\"#def\">DEF</a>" +
                     "<ol><li><a href=\"#def1\">DEF/1</a>" +
                     "<ol><li><a href=\"#def2\">DEF/2</a></li>" +
@@ -1645,8 +1645,8 @@ class FullPipelineTest {
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
                     "<nav><ol>" +
-                    "<li><a href=\"#marker-1\"><em>Marker 1</em></a></li>" +
-                    "<li><a href=\"#marker-2\"><em>Marker 2</em></a></li>" +
+                    "<li><a href=\"#marker-1\">Marker 1</a></li>" +
+                    "<li><a href=\"#marker-2\">Marker 2</a></li>" +
                     "</ol></nav>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +

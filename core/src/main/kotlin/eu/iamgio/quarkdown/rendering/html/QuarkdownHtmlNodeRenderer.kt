@@ -270,6 +270,7 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             // Content
             +buildTag("nav") {
                 +node.convertToListNode(
+                    this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
                     linkUrlMapper = { item ->
                         "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)

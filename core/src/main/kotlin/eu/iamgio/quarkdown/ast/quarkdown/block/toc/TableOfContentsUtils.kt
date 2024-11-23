@@ -8,13 +8,17 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.LocationTargetListItemVariant
 import eu.iamgio.quarkdown.context.toc.TableOfContents
 import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
+import eu.iamgio.quarkdown.util.stripRichContent
+import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * Converts a table of contents to a renderable [OrderedList].
+ * @param renderer renderer to use to render items
  * @param items ToC items [this] view should contain
  * @param linkUrlMapper function that obtains the URL to send to when a ToC item is interacted with
  */
 fun TableOfContentsView.convertToListNode(
+    renderer: NodeVisitor<CharSequence>,
     items: List<TableOfContents.Item>,
     linkUrlMapper: (TableOfContents.Item) -> String,
 ): OrderedList =
@@ -25,7 +29,7 @@ fun TableOfContentsView.convertToListNode(
                 // A link to the target heading.
                 this +=
                     Link(
-                        item.text,
+                        item.text.stripRichContent(renderer), // Rich content is ignored.
                         url = linkUrlMapper(item),
                         title = null,
                     )
@@ -33,7 +37,7 @@ fun TableOfContentsView.convertToListNode(
                 // Recursively include sub-items.
                 item.subItems.filter { it.depth <= view.maxDepth }
                     .takeIf { it.isNotEmpty() }
-                    ?.let { this += convertToListNode(it, linkUrlMapper) }
+                    ?.let { this += convertToListNode(renderer, it, linkUrlMapper) }
             }
 
         return OrderedList(

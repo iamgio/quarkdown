@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.inline.CriticalContent
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
@@ -87,3 +88,12 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
 
     return builder.toString()
 }
+
+/**
+ * Strips rich content from [this] inline content and returns a new inline content with only one [eu.iamgio.quarkdown.ast.base.inline.Text] child,
+ * which contains the plain text representation of [this] inline content.
+ * @param renderer optional renderer to use to render critical content and text symbols
+ * @return inline content with only plain text
+ * @see toPlainText
+ */
+fun InlineContent.stripRichContent(renderer: NodeVisitor<CharSequence>? = null): InlineContent = buildInline { text(toPlainText(renderer)) }
