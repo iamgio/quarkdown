@@ -260,10 +260,10 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 .var {sizedimages}
     <!-- 200px width, auto height -->
     !(200x_)[Quarkdown](img/banner.png)
-    <!-- 80px height, auto width -->
-    !(_x80)[Quarkdown](img/banner.png)
-    <!-- 200px width, 100px height -->
-    !(200x100)[Quarkdown](img/banner.png)
+    <!-- 2cm height, auto width -->
+    !(_x2cm)[Quarkdown](img/banner.png)
+    <!-- 2 inches width, 100px height -->
+    !(2in*100)[Quarkdown](img/banner.png)
 
 ---
 
