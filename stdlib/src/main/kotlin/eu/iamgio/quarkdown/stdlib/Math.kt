@@ -3,6 +3,8 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.ObjectValue
+import eu.iamgio.quarkdown.function.value.data.Range
 import kotlin.math.PI
 import kotlin.math.pow
 
@@ -22,6 +24,7 @@ val Math: Module =
         ::cos,
         ::tan,
         ::isEven,
+        ::range,
     )
 
 // Basic operations
@@ -105,3 +108,22 @@ fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
  */
 @Name("iseven")
 fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
+
+/**
+ * Creates a range of numbers, which can also be iterated through.
+ * The behavior of an open range is delegated to the consumer.
+ * For instance, using a left-open range with [forEach] will make the loop start from 1.
+ * The difference between this function and the built-in `..` operator is that the latter
+ * does not allow for dynamic evaluation, hence both ends must be literals.
+ * This function allows evaluating ends dynamically: for instance, `.range from:{1} to:{.sum {1} {2}}`.
+ * Floating-point numbers are truncated to integers.
+ * @property start start of the range (inclusive). If `null`, the range is infinite on the left end
+ * @property end end of the range (inclusive). If `null`, the range is infinite on the right end. [end] > [start]
+ */
+fun range(
+    @Name("from") start: Number? = null,
+    @Name("to") end: Number? = null,
+): ObjectValue<Range> =
+    ObjectValue(
+        Range(start?.toInt(), end?.toInt()),
+    )

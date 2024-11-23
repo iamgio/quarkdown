@@ -610,6 +610,14 @@ class FullPipelineTest {
             assertEquals("<p><strong>N:</strong> 1</p><p><strong>N:</strong> 2</p><p><strong>N:</strong> 3</p>", it)
         }
 
+        execute(".foreach {2..4}\n  **N:** .1") {
+            assertEquals("<p><strong>N:</strong> 2</p><p><strong>N:</strong> 3</p><p><strong>N:</strong> 4</p>", it)
+        }
+
+        execute(".foreach {.range from:{2} to:{4}}\n  **N:** .1") {
+            assertEquals("<p><strong>N:</strong> 2</p><p><strong>N:</strong> 3</p><p><strong>N:</strong> 4</p>", it)
+        }
+
         execute(
             """
             ## Title
@@ -623,7 +631,7 @@ class FullPipelineTest {
 
         execute(
             """
-            .foreach {..2}
+            .foreach {.range to:{.sum {1} {1}}}
                 ## Hello .1
                 .foreach {..1}
                     **Hi**!
@@ -646,7 +654,7 @@ class FullPipelineTest {
         execute(
             """
             .foreach {..2}
-                .foreach {..2}
+                .foreach {.range to:{2}}
                     .foreach {..2}
                         ## Title 2
                     # Title 1
