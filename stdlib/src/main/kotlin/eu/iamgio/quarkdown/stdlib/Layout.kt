@@ -54,6 +54,7 @@ val Layout: Module =
  * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
  * @param padding whitespace around the content. None if unset
  * @param cornerRadius corner (and border) radius. None if unset
+ * @param alignment alignment of the content. Default if unset
  * @param body content to group
  * @return the new container node
  */
@@ -65,6 +66,7 @@ fun container(
     @Name("borderstyle") borderStyle: Container.BorderStyle? = null,
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
+    alignment: Aligned.Alignment? = null,
     body: MarkdownContent,
 ) = Container(
     foregroundColor,
@@ -74,6 +76,7 @@ fun container(
     borderStyle,
     padding,
     cornerRadius,
+    alignment,
     body.children,
 ).wrappedAsValue()
 

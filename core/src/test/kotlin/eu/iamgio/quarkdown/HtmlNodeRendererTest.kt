@@ -763,6 +763,7 @@ class HtmlNodeRendererTest {
                 borderWidth = Sizes(all = 1.0.cm),
                 padding = Sizes(2.0.inch, 3.0.inch, 4.0.inch, 5.0.inch),
                 cornerRadius = Sizes(all = 6.0.px),
+                alignment = Aligned.Alignment.CENTER,
                 children = children,
             ).render(),
         )
@@ -772,6 +773,7 @@ class HtmlNodeRendererTest {
             Container(
                 borderColor = Color(30, 20, 10),
                 borderStyle = Container.BorderStyle.DOTTED,
+                alignment = Aligned.Alignment.END,
                 children = children,
             ).render(),
         )

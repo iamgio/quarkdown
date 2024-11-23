@@ -169,6 +169,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                         // No border style.
                         else -> null
                     }
+
+                "text-align" value node.alignment
             }
         }
 

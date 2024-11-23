@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param borderStyle border style
  * @param padding whitespace around the content
  * @param cornerRadius border radius of the container
+ * @param alignment alignment of the content
  */
 class Container(
     val foregroundColor: Color? = null,
@@ -26,6 +27,7 @@ class Container(
     val borderStyle: BorderStyle? = null,
     val padding: Sizes? = null,
     val cornerRadius: Sizes? = null,
+    val alignment: Aligned.Alignment? = null,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
