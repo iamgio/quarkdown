@@ -535,7 +535,7 @@ Example: "Figure 1.1:"
 }
 
 .box.error > .box-content {
-    font-size: 0.6em;
+    font-size: 0.7em;
 }
 
 .box.error > .box-content .inline-collapse[data-collapsed="true"] {
