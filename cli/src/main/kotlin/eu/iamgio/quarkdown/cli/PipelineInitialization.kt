@@ -18,16 +18,17 @@ object PipelineInitialization {
     /**
      * Initializes a [Pipeline] with the given [flavor].
      * @param flavor flavor to use across the pipeline
-     * @param libraryExporters exporters of external libraries to load (apart from the standard library)
+     * @param loadableLibraryExporters exporters of external libraries that can be loaded by the user
      * @return the new pipeline
      */
     fun init(
         flavor: MarkdownFlavor,
-        libraryExporters: Set<LibraryExporter>,
+        loadableLibraryExporters: Set<LibraryExporter>,
         options: PipelineOptions,
     ): Pipeline {
         // Libraries to load.
-        val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib, *libraryExporters.toTypedArray())
+        val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
+        val loadableLibraries: Set<Library> = LibraryExporter.exportAll(*loadableLibraryExporters.toTypedArray())
 
         // Actions run after each stage of the pipeline.
         val hooks =
@@ -48,7 +49,7 @@ object PipelineInitialization {
 
         // The pipeline.
         return Pipeline(
-            context = MutableContext(flavor),
+            context = MutableContext(flavor, loadableLibraries = loadableLibraries),
             options = options,
             libraries = libraries,
             renderer = { rendererFactory, context -> rendererFactory.html(context) },

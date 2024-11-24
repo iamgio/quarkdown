@@ -24,6 +24,7 @@ import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * An immutable [Context] implementation.
+ * This might be used in tests as a toy context, but in a concrete execution, its mutable subclass [MutableContext] is used.
  * @param attributes attributes of the node tree, produced by the parsing stage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
@@ -39,6 +40,8 @@ open class BaseContext(
     override val documentInfo = DocumentInfo()
 
     override val options: ContextOptions = MutableContextOptions()
+
+    override val loadableLibraries = emptySet<Library>()
 
     override val localizationTables = emptyMap<String, LocalizationTable>()
 

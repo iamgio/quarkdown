@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.cli.lib
 
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryExporter
-import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import eu.iamgio.quarkdown.stdlib.includeResource
 import java.io.Reader
 
@@ -14,14 +13,10 @@ import java.io.Reader
 class QmdLibraryExporter(private val name: String, private val reader: Reader) : LibraryExporter {
     override val library: Library
         get() =
-            Library(name, functions = emptySet()).withHooks(
-                PipelineHooks(
-                    afterRegisteringLibraries = {
-                        includeResource(
-                            this.readOnlyContext,
-                            reader,
-                        )
-                    },
-                ),
+            Library(
+                name,
+                functions = emptySet(),
+                // The stdlib's includeResource function is used to include the content of the .qmd file
+                onLoad = { context -> includeResource(context, reader) },
             )
 }

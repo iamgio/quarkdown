@@ -56,6 +56,13 @@ interface Context {
     val libraries: Set<Library>
 
     /**
+     * External libraries that can be loaded by the user into [libraries].
+     * These libraries are, for instance, fetched from the library directory (`--libs` option)
+     * and can be loaded via the `.include {name}` function.
+     */
+    val loadableLibraries: Set<Library>
+
+    /**
      * Tables that store key-value localization pairs for each supported locale.
      * Each table is identified by a unique name.
      * @see localize

@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 
 /**
@@ -17,10 +18,13 @@ import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
 open class MutableContext(
     flavor: MarkdownFlavor,
     libraries: Set<Library> = emptySet(),
+    loadableLibraries: Set<Library> = emptySet(),
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
 ) : BaseContext(attributes, flavor, libraries) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
+
+    override val loadableLibraries: MutableSet<Library> = (super.loadableLibraries + loadableLibraries).toMutableSet()
 
     override val localizationTables = super.localizationTables.toMutableMap()
 
@@ -51,6 +55,20 @@ open class MutableContext(
         super.resolve(call)?.also {
             it.onComplete = { attributes.functionCalls.remove(call) }
         }
+
+    /**
+     * Loads a loadable library by name and registers it in the context.
+     * After a successful load, the library is removed from [loadableLibraries] and added to [libraries],
+     * with its [Library.onLoad] action executed.
+     * @param name name of the library to load, case-sensitive
+     * @return the loaded library, if it exists
+     */
+    fun loadLibrary(name: String): Library? {
+        return loadableLibraries.find { it.name == name }?.also {
+            loadableLibraries.remove(it)
+            LibraryRegistrant(this).register(it)
+        }
+    }
 
     /**
      * Returns a copy of the queue containing registered function calls and clears the original one.
