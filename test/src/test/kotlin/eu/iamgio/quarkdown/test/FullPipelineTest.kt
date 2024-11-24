@@ -20,6 +20,7 @@ import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
+import eu.iamgio.quarkdown.test.util.LibraryUtils
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -41,6 +42,9 @@ private val DEFAULT_OPTIONS =
 // Folder to retrieve test data from.
 private const val DATA_FOLDER = "src/test/resources/data"
 
+// Folder to retrieve libraries from, relative to the data folder.
+private const val LIBRARY_DIRECTORY = "libraries"
+
 /**
  * Tests that cover the whole pipeline from lexing to rendering, including function call expansion.
  * [Stdlib] is used as a library.
@@ -50,6 +54,7 @@ class FullPipelineTest {
      * Executes a Quarkdown source.
      * @param source Quarkdown source to execute
      * @param options execution options
+     * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
      * @param errorHandler error handler to use
      * @param enableMediaStorage whether the media storage system should be enabled.
      * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
@@ -58,6 +63,7 @@ class FullPipelineTest {
     private fun execute(
         source: String,
         options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
+        loadableLibraries: Set<String> = emptySet(),
         errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
         enableMediaStorage: Boolean = false,
         hook: Context.(CharSequence) -> Unit,
@@ -66,6 +72,7 @@ class FullPipelineTest {
             MutableContext(
                 QuarkdownFlavor,
                 options = options,
+                loadableLibraries = LibraryUtils.export(loadableLibraries, File(DATA_FOLDER, "libraries")),
             )
 
         val hooks =
@@ -356,7 +363,10 @@ class FullPipelineTest {
         }
 
         execute("Sized image: !(20x_)[Alt text](https://example.com/image.png)") {
-            assertEquals("<p>Sized image: <img src=\"https://example.com/image.png\" alt=\"Alt text\" style=\"width: 20.0px;\" /></p>", it)
+            assertEquals(
+                "<p>Sized image: <img src=\"https://example.com/image.png\" alt=\"Alt text\" style=\"width: 20.0px;\" /></p>",
+                it,
+            )
         }
 
         execute("!(2in*2.1cm)[Alt text](https://example.com/image.png)") {
@@ -1801,6 +1811,45 @@ class FullPipelineTest {
                 """
                 .sum {.include {include/include-6.md}} {3}
                 """.trimIndent(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `include library`() {
+        // Load library named 'hello' from libraries/hello.qmd
+        execute(
+            """
+            .include {hello}
+            .hellofromlib {world}
+            """.trimIndent(),
+            loadableLibraries = setOf("hello"),
+        ) {
+            assertEquals(
+                "<p>Hello, <em>world</em>!</p>",
+                it,
+            )
+        }
+
+        // Not included.
+        assertFails {
+            execute(
+                """
+                .hellofromlib {world}
+                """.trimIndent(),
+                loadableLibraries = setOf("hello"),
+                errorHandler = StrictPipelineErrorHandler(),
+            ) {}
+        }
+
+        // Included but not available.
+        assertFails {
+            execute(
+                """
+                .include {hello}
+                .hellofromlib {world}
+                """.trimIndent(),
+                errorHandler = StrictPipelineErrorHandler(),
             ) {}
         }
     }

@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.cli.lib
 
+import eu.iamgio.quarkdown.stdlib.external.QmdLibraryExporter
 import java.io.File
 
 /**
