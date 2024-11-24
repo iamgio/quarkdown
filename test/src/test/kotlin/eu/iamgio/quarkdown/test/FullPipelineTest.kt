@@ -72,7 +72,7 @@ class FullPipelineTest {
             MutableContext(
                 QuarkdownFlavor,
                 options = options,
-                loadableLibraries = LibraryUtils.export(loadableLibraries, File(DATA_FOLDER, "libraries")),
+                loadableLibraries = LibraryUtils.export(loadableLibraries, File(DATA_FOLDER, LIBRARY_DIRECTORY)),
             )
 
         val hooks =
