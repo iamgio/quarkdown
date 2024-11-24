@@ -18,14 +18,16 @@ object PipelineInitialization {
     /**
      * Initializes a [Pipeline] with the given [flavor].
      * @param flavor flavor to use across the pipeline
+     * @param libraryExporters exporters of external libraries to load (apart from the standard library)
      * @return the new pipeline
      */
     fun init(
         flavor: MarkdownFlavor,
+        libraryExporters: Set<LibraryExporter>,
         options: PipelineOptions,
     ): Pipeline {
         // Libraries to load.
-        val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
+        val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib, *libraryExporters.toTypedArray())
 
         // Actions run after each stage of the pipeline.
         val hooks =

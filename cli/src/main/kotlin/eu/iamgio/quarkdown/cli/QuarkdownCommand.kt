@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
@@ -18,6 +19,12 @@ import java.io.File
  * It can be overridden by the user.
  */
 const val DEFAULT_OUTPUT_DIRECTORY = "output"
+
+/**
+ * Name of the default directory to load libraries from.
+ * It can be overridden by the user.
+ */
+val DEFAULT_LIBRARY_DIRECTORY = "lib" + File.separator + "qmd"
 
 /**
  * Main command of the Quarkdown CLI, that processes and executes a Quarkdown source file.
@@ -42,6 +49,16 @@ class QuarkdownCommand : CliktCommand() {
         canBeFile = false,
         canBeDir = true,
     ).default(File(DEFAULT_OUTPUT_DIRECTORY))
+
+    /**
+     * Optional library directory.
+     * If not set, the program looks for libraries in [DEFAULT_LIBRARY_DIRECTORY], relative to the executable JAR file location.
+     */
+    private val libraryDirectory: File? by option("-l", "--libs", help = "Library directory").file(
+        mustExist = true,
+        canBeFile = false,
+        canBeDir = true,
+    ).default(File(thisExecutableFile, DEFAULT_LIBRARY_DIRECTORY))
 
     /**
      * When enabled, the rendering stage produces pretty output code.
@@ -77,6 +94,7 @@ class QuarkdownCommand : CliktCommand() {
             CliOptions(
                 source,
                 outputDirectory,
+                libraryDirectory,
                 clean,
             )
 

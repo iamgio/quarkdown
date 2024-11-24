@@ -43,10 +43,10 @@ tasks.test {
 tasks.distZip {
     archiveVersion.set("")
 
-    // The module 'libs' contains .qmd library files that are saved in the lib/qd directory of the distribution zip.
+    // The module 'libs' contains .qmd library files that are saved in the lib/qmd directory of the distribution zip.
     val librariesModule = project(":libs")
 
-    into("${archiveBaseName.get()}/lib/qd") {
+    into("${archiveBaseName.get()}/lib/qmd") {
         from(librariesModule.file("src/main/resources")) {
             include("*.qmd")
         }
