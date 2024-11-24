@@ -185,6 +185,8 @@ In both modes, the inline output is printed to stdout at the end of each executi
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
 
+- **`-l <dir>`** or **`--libs <dir>`**: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+
 - **`--pretty`**: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
 
@@ -192,7 +194,7 @@ In both modes, the inline output is printed to stdout at the end of each executi
 
 - **`--strict`**: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
 
-- **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/Media-storage)
+- **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 
 - **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
