@@ -22,9 +22,10 @@ const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
  * Name of the default directory to load libraries from.
+ * The default value is relative to the executable JAR file location, and points to the `lib/qmd` directory of the distribution archive.
  * It can be overridden by the user.
  */
-val DEFAULT_LIBRARY_DIRECTORY = "lib" + File.separator + "qmd"
+val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qmd"
 
 /**
  * Main command of the Quarkdown CLI, that processes and executes a Quarkdown source file.
@@ -58,7 +59,7 @@ class QuarkdownCommand : CliktCommand() {
         mustExist = true,
         canBeFile = false,
         canBeDir = true,
-    ).default(File(thisExecutableFile, DEFAULT_LIBRARY_DIRECTORY))
+    ).default(File(thisExecutableFile?.parentFile, DEFAULT_LIBRARY_DIRECTORY))
 
     /**
      * When enabled, the rendering stage produces pretty output code.
