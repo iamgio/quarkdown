@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.ast.quarkdown.block
 
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
@@ -10,6 +11,8 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A general-purpose container that groups content.
+ * @param width width of the container
+ * @param height height of the container
  * @param foregroundColor text color
  * @param backgroundColor background color
  * @param borderColor border color
@@ -20,6 +23,8 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param alignment alignment of the content
  */
 class Container(
+    val width: Size? = null,
+    val height: Size? = null,
     val foregroundColor: Color? = null,
     val backgroundColor: Color? = null,
     val borderColor: Color? = null,

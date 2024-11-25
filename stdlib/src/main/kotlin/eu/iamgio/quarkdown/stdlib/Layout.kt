@@ -47,6 +47,8 @@ val Layout: Module =
 /**
  * A general-purpose container that groups content.
  * Any layout rules (e.g. from [align], [row], [column], [grid]) are ignored inside this container.
+ * @param width width of the container. No constraint if unset
+ * @param height height of the container. No constraint if unset
  * @param foregroundColor text color. Default if unset
  * @param backgroundColor background color. Transparent if unset
  * @param borderColor border color. Default if unset and [borderWidth] is set
@@ -59,6 +61,8 @@ val Layout: Module =
  * @return the new container node
  */
 fun container(
+    width: Size? = null,
+    height: Size? = null,
     @Name("foreground") foregroundColor: Color? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("border") borderColor: Color? = null,
@@ -67,8 +71,10 @@ fun container(
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
     alignment: Aligned.Alignment? = null,
-    body: MarkdownContent,
+    body: MarkdownContent? = null,
 ) = Container(
+    width,
+    height,
     foregroundColor,
     backgroundColor,
     borderColor,
@@ -77,7 +83,7 @@ fun container(
     padding,
     cornerRadius,
     alignment,
-    body.children,
+    body?.children ?: emptyList(),
 ).wrappedAsValue()
 
 /**

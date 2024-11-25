@@ -153,6 +153,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
             +node.children
 
             style {
+                "width" value node.width
+                "height" value node.height
                 "color" value node.foregroundColor
                 "background-color" value node.backgroundColor
                 "padding" value node.padding

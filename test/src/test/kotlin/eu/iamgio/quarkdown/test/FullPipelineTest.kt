@@ -1148,6 +1148,22 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .repeat {3}
+                .container width:{1cm}
+                    Item .1
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div style=\"width: 1.0cm;\" class=\"container\">" +
+                    "<p>Item 1</p></div><div style=\"width: 1.0cm;\" class=\"container\">" +
+                    "<p>Item 2</p></div><div style=\"width: 1.0cm;\" class=\"container\">" +
+                    "<p>Item 3</p></div>",
+                it,
+            )
+        }
     }
 
     @Test
