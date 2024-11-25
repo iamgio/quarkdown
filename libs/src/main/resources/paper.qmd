@@ -1,0 +1,46 @@
+.localization {paper}
+    - English
+        - abstract: Abstract
+        - definition: Definition
+        - lemma: Lemma
+        - theorem: Theorem
+        - proof: Proof
+    - Italian
+        - abstract: Sommario
+        - definition: Definizione
+        - lemma: Lemma
+        - theorem: Teorema
+        - proof: Dimostrazione
+
+.function {abstract}
+    content:
+    .center
+        **.localize {paper:abstract}**
+
+    .container padding:{3mm 1cm}
+        .content
+
+    .whitespace
+
+.function {INTERNALcontenttype}
+    type content:
+    **.localize {paper:.type}.** .content
+
+.function {definition}
+    content:
+    .INTERNALcontenttype {definition} {.content}
+
+.function {lemma}
+    content:
+    .INTERNALcontenttype {lemma} {.content}
+
+.function {theorem}
+    content:
+    .INTERNALcontenttype {theorem} {.content}
+
+.function {proof}
+    content:
+    .INTERNALcontenttype {proof} {.content}
+
+    .align {end}
+        .text {∎} size:{huge}
