@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
+import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
@@ -18,8 +19,10 @@ import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.misc.color.Color
@@ -41,6 +44,7 @@ val Layout: Module =
         ::clip,
         ::box,
         ::collapse,
+        ::numbered,
         ::table,
     )
 
@@ -256,6 +260,25 @@ fun collapse(
     open: Boolean = false,
     body: MarkdownContent,
 ) = Collapse(title.children, open, body.children).wrappedAsValue()
+
+/**
+ * Node that can be numbered depending on its location in the document
+ * and the amount of occurrences according to its [key].
+ * @param key name to group (and count) numbered nodes
+ * @param body content, with the formatted location of this element (as a string) as an argument
+ */
+fun numbered(
+    key: String,
+    body: Lambda,
+): NodeValue {
+    val node =
+        Numbered(key) { number ->
+            body.invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue())
+                .unwrappedValue
+                .children
+        }
+    return node.wrappedAsValue()
+}
 
 /**
  * Creates a table out of a collection of columns.

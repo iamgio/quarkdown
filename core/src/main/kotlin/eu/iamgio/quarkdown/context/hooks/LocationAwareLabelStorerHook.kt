@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
+import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat
@@ -45,6 +46,9 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
     override fun attach(iterator: ObservableAstIterator) {
         updateLabels<ImageFigure>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
         updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
+
+        updateLabels<Numbered>({ NumberingFormat.fromString("1.1") }, iterator)
+        // todo group by Numbered key, use dynamic format
     }
 
     /**
