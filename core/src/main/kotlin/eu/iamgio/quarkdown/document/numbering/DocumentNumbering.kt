@@ -10,9 +10,11 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
  * @param headings format for [Heading]s
  * @param figures format for [ImageFigure]s
  * @param tables format for [Table]s
+ * @param extra extra, dynamic formats for custom elements (e.g. [eu.iamgio.quarkdown.ast.quarkdown.block.Numbered])
  */
 data class DocumentNumbering(
     val headings: NumberingFormat? = null,
     val figures: NumberingFormat? = null,
     val tables: NumberingFormat? = null,
+    val extra: Map<String, NumberingFormat> = emptyMap(),
 )
