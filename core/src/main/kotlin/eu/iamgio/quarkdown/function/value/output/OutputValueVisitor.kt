@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.function.value.output
 
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -28,6 +29,8 @@ interface OutputValueVisitor<T> {
     fun visit(value: UnorderedCollectionValue<*>): T
 
     fun visit(value: GeneralCollectionValue<*>): T
+
+    fun visit(value: DictionaryValue): T
 
     fun visit(value: NodeValue): T
 

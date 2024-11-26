@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
@@ -35,6 +36,8 @@ interface ExpressionVisitor<T> {
     fun visit(value: UnorderedCollectionValue<*>): T
 
     fun visit(value: GeneralCollectionValue<*>): T
+
+    fun visit(value: DictionaryValue): T
 
     fun visit(value: EnumValue): T
 

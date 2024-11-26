@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.function.value.factory
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
 import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
@@ -17,6 +18,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
@@ -28,6 +30,7 @@ import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
@@ -335,6 +338,40 @@ object ValueFactory {
         return value as? IterableValue<T>
             ?: markdownListToIterable(raw, context) as? IterableValue<T> // A Markdown list is a valid iterable.
             ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
+    }
+
+    /**
+     * Converts a raw string input to a dictionary value.
+     * A dictionary is a collection of key-value pairs,
+     * where keys are strings and values can be of one of these two types:
+     * - A [DynamicValue], which can be adapted to any type at invocation time
+     * - Nested dictionaries.
+     *
+     * Dictionary example:
+     * ```
+     * - keyA: valueA
+     * - keyB
+     *   - keyBA: valueBA
+     *   - keyBB: valueBB
+     * - keyC: valueC
+     * ```
+     * @param raw string input to parse the dictionary from
+     * @param context context to retrieve the pipeline from
+     * @return a new [DictionaryValue] from the raw input
+     * @throws IllegalRawValueException if the raw input cannot be converted to a dictionary
+     * @see MarkdownListToDictionary
+     */
+    @FromDynamicType(Map::class, requiresContext = true)
+    fun dictionary(
+        raw: String,
+        context: Context,
+    ): DictionaryValue {
+        val content = blockMarkdown(raw, context).unwrappedValue
+        val list =
+            content.children.singleOrNull { it !is Newline } as? ListBlock
+                ?: throw IllegalRawValueException("Not a dictionary (the only element must be a Markdown list)", raw)
+
+        return MarkdownListToDictionary(list) { DynamicValue(it) }.convert()
     }
 
     /**

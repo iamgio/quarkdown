@@ -9,6 +9,8 @@ import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
@@ -184,6 +186,104 @@ class ValueFactoryTest {
                 StringValue("iamgio"),
             ).unwrappedValue
         }
+    }
+
+    @Test
+    fun dictionary() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.attachMockPipeline()
+
+        assertEquals(
+            DictionaryValue(
+                mutableMapOf(
+                    "abc" to DynamicValue("1"),
+                    "def" to DynamicValue("2"),
+                    "ghi" to DynamicValue("3"),
+                ),
+            ),
+            ValueFactory.dictionary(
+                """
+                - abc: 1
+                - def: 2
+                - ghi: 3
+                """.trimIndent(),
+                context,
+            ),
+        )
+
+        assertEquals(
+            DictionaryValue(
+                mutableMapOf(
+                    "abc" to
+                        DictionaryValue(
+                            mutableMapOf(
+                                "def" to DynamicValue("1"),
+                                "ghi" to DynamicValue("2"),
+                            ),
+                        ),
+                ),
+            ),
+            ValueFactory.dictionary(
+                """
+                - abc
+                  - def: 1
+                  - ghi: 2
+                """.trimIndent(),
+                context,
+            ),
+        )
+
+        assertEquals(
+            DictionaryValue(
+                mutableMapOf(
+                    "a" to DynamicValue("1"),
+                    "b" to
+                        DictionaryValue(
+                            mutableMapOf(
+                                "c" to DynamicValue("2"),
+                                "d" to DynamicValue("3"),
+                            ),
+                        ),
+                    "e" to DynamicValue("4"),
+                    "f" to
+                        DictionaryValue(
+                            mutableMapOf(
+                                "g" to
+                                    DictionaryValue(
+                                        mutableMapOf(
+                                            "h" to DynamicValue("5"),
+                                            "i" to
+                                                DictionaryValue(
+                                                    mutableMapOf(
+                                                        "j" to DynamicValue("6"),
+                                                    ),
+                                                ),
+                                        ),
+                                    ),
+                                "k" to DynamicValue("7"),
+                            ),
+                        ),
+                    "l" to DynamicValue("8"),
+                ),
+            ),
+            ValueFactory.dictionary(
+                """
+                - a: 1
+                - b
+                  - c: 2
+                  - d: 3
+                - e: 4
+                - f
+                    - g:
+                      - h: 5
+                      - i
+                        - j: 6
+                    - k: 7
+                - l: 8
+                """.trimIndent(),
+                context,
+            ),
+        )
     }
 
     // TODO others that require context

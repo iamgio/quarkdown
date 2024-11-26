@@ -12,6 +12,12 @@ interface ListBlock : NestableNode {
      * Whether the list is loose.
      */
     val isLoose: Boolean
+
+    /**
+     * Items of the list.
+     */
+    val items: List<ListItem>
+        get() = children.filterIsInstance<ListItem>()
 }
 
 /**

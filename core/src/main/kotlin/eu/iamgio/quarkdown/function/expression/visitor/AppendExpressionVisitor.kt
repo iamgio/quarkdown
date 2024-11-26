@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.append
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
@@ -135,6 +136,9 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         GeneralCollectionValue(
             value.unwrappedValue + otherEval as OutputValue<*>,
         )
+
+    // {a: 1, b: 2} "abc" -> "{a=1, b=2}abc"
+    override fun visit(value: DictionaryValue) = value.concatenate()
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
