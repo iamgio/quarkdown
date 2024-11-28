@@ -37,7 +37,7 @@ interface ExpressionVisitor<T> {
 
     fun visit(value: GeneralCollectionValue<*>): T
 
-    fun visit(value: DictionaryValue): T
+    fun visit(value: DictionaryValue<*>): T
 
     fun visit(value: EnumValue): T
 

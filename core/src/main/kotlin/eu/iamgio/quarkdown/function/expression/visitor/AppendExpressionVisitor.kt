@@ -138,7 +138,7 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         )
 
     // {a: 1, b: 2} "abc" -> "{a=1, b=2}abc"
-    override fun visit(value: DictionaryValue) = value.concatenate()
+    override fun visit(value: DictionaryValue<*>) = value.concatenate()
 
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"

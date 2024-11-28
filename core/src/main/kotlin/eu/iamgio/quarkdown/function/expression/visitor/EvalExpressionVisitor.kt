@@ -37,7 +37,7 @@ class EvalExpressionVisitor : ExpressionVisitor<Value<*>> {
 
     override fun visit(value: GeneralCollectionValue<*>) = value
 
-    override fun visit(value: DictionaryValue) = value
+    override fun visit(value: DictionaryValue<*>) = value
 
     override fun visit(value: EnumValue) = value
 

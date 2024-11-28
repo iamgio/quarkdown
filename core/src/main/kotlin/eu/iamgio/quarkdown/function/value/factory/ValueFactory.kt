@@ -343,17 +343,23 @@ object ValueFactory {
     /**
      * Converts a raw string input to a dictionary value.
      * A dictionary is a collection of key-value pairs,
-     * where keys are strings and values can be of one of these two types:
-     * - A [DynamicValue], which can be adapted to any type at invocation time
-     * - Nested dictionaries.
+     * where keys are strings and values of type [T] can be expressed in two ways:
+     * - Inline, in the format `- key: value`.
+     * - Nested dictionaries, in the format:
+     *   ```
+     *   - key
+     *     - value
+     *   ```
      *
-     * Dictionary example:
+     * Dictionary example, of type `DictionaryValue<DictionaryValue<StringValue>>`:
      * ```
-     * - keyA: valueA
+     * - keyA:
+     *   - keyAA: valueAA
      * - keyB
      *   - keyBA: valueBA
      *   - keyBB: valueBB
-     * - keyC: valueC
+     * - keyC:
+     *   - keyCA: valueCA
      * ```
      * @param raw string input to parse the dictionary from
      * @param context context to retrieve the pipeline from
@@ -362,16 +368,23 @@ object ValueFactory {
      * @see MarkdownListToDictionary
      */
     @FromDynamicType(Map::class, requiresContext = true)
-    fun dictionary(
+    fun <T : OutputValue<*>> dictionary(
         raw: String,
         context: Context,
-    ): DictionaryValue {
+    ): DictionaryValue<T> {
         val content = blockMarkdown(raw, context).unwrappedValue
         val list =
             content.children.singleOrNull { it !is Newline } as? ListBlock
                 ?: throw IllegalRawValueException("Not a dictionary (the only element must be a Markdown list)", raw)
 
-        return MarkdownListToDictionary(list) { DynamicValue(it) }.convert()
+        fun convert(list: ListBlock): DictionaryValue<T> =
+            MarkdownListToDictionary(
+                list,
+                inlineValueMapper = { eval(it, context) as T },
+                nestedValueMapper = { convert(it) as T },
+            ).convert()
+
+        return convert(list)
     }
 
     /**

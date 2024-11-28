@@ -52,7 +52,7 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     // A general collection is just converted to a group of nodes.
     override fun visit(value: GeneralCollectionValue<*>) = MarkdownContent(children = value.map { it.accept(this) })
 
-    override fun visit(value: DictionaryValue) = visit(StringValue(value.unwrappedValue.toString())) // TODO better representation
+    override fun visit(value: DictionaryValue<*>) = visit(StringValue(value.unwrappedValue.toString())) // TODO better representation
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 
