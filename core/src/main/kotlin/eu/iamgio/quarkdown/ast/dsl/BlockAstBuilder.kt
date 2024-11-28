@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.Image
@@ -63,6 +64,12 @@ class BlockAstBuilder : AstBuilder() {
         loose: Boolean,
         block: ListAstBuilder.() -> Unit,
     ) = +UnorderedList(loose, ListAstBuilder().apply(block).build())
+
+    /**
+     * @see Table
+     * @see TableAstBuilder
+     */
+    fun table(block: TableAstBuilder.() -> Unit) = +Table(TableAstBuilder().apply(block).columns)
 
     /**
      * @see ImageFigure

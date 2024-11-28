@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
+import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
@@ -136,6 +137,50 @@ class AstDslTest {
                 ),
             ),
             root,
+        )
+    }
+
+    @Test
+    fun table() {
+        val table =
+            buildBlock {
+                table {
+                    column({ text("Key") }) {
+                        cell { text("key1") }
+                        cell { emphasis { text("key2") } }
+                    }
+                    column({ text("Value") }, alignment = Table.Alignment.CENTER) {
+                        cell { text("true") }
+                        cell { codeSpan("false") }
+                    }
+                }
+            }
+
+        assertNodeEquals(
+            Table(
+                columns =
+                    listOf(
+                        Table.Column(
+                            alignment = Table.Alignment.NONE,
+                            header = Table.Cell(listOf(Text("Key"))),
+                            cells =
+                                listOf(
+                                    Table.Cell(listOf(Text("key1"))),
+                                    Table.Cell(listOf(Emphasis(listOf(Text("key2"))))),
+                                ),
+                        ),
+                        Table.Column(
+                            alignment = Table.Alignment.CENTER,
+                            header = Table.Cell(listOf(Text("Value"))),
+                            cells =
+                                listOf(
+                                    Table.Cell(listOf(Text("true"))),
+                                    Table.Cell(listOf(CodeSpan("false"))),
+                                ),
+                        ),
+                    ),
+            ),
+            table,
         )
     }
 }
