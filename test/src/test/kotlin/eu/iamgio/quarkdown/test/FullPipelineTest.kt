@@ -1,27 +1,17 @@
 package eu.iamgio.quarkdown.test
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.context.Context
-import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.context.MutableContextOptions
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
-import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.error.UnresolvedReferenceException
-import eu.iamgio.quarkdown.pipeline.Pipeline
-import eu.iamgio.quarkdown.pipeline.PipelineHooks
-import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
-import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
-import eu.iamgio.quarkdown.test.util.LibraryUtils
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -32,70 +22,11 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-// Default execution options.
-private val DEFAULT_OPTIONS =
-    MutableContextOptions(
-        enableAutomaticIdentifiers = false,
-        enableLocationAwareness = false,
-    )
-
-// Folder to retrieve test data from.
-private const val DATA_FOLDER = "src/test/resources/data"
-
-// Folder to retrieve libraries from, relative to the data folder.
-private const val LIBRARY_DIRECTORY = "libraries"
-
 /**
  * Tests that cover the whole pipeline from lexing to rendering, including function call expansion.
  * [Stdlib] is used as a library.
  */
 class FullPipelineTest {
-    /**
-     * Executes a Quarkdown source.
-     * @param source Quarkdown source to execute
-     * @param options execution options
-     * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
-     * @param errorHandler error handler to use
-     * @param enableMediaStorage whether the media storage system should be enabled.
-     * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
-     * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
-     */
-    private fun execute(
-        source: String,
-        options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
-        loadableLibraries: Set<String> = emptySet(),
-        errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
-        enableMediaStorage: Boolean = false,
-        hook: Context.(CharSequence) -> Unit,
-    ) {
-        val context =
-            MutableContext(
-                QuarkdownFlavor,
-                options = options,
-                loadableLibraries = LibraryUtils.export(loadableLibraries, File(DATA_FOLDER, LIBRARY_DIRECTORY)),
-            )
-
-        val hooks =
-            PipelineHooks(
-                afterRendering = { hook(context, it) },
-            )
-
-        val pipeline =
-            Pipeline(
-                context,
-                PipelineOptions(
-                    errorHandler = errorHandler,
-                    workingDirectory = File(DATA_FOLDER),
-                    enableMediaStorage = enableMediaStorage,
-                ),
-                libraries = setOf(Stdlib.library),
-                renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },
-                hooks,
-            )
-
-        pipeline.execute(source)
-    }
-
     @Test
     fun document() {
         execute("") {
@@ -1901,6 +1832,7 @@ class FullPipelineTest {
             .hellofromlib {world}
             """.trimIndent(),
             loadableLibraries = setOf("hello"),
+            useDummyLibraryDirectory = true,
         ) {
             assertEquals(
                 "<p>Hello, <em>world</em>!</p>",
@@ -1915,6 +1847,7 @@ class FullPipelineTest {
                 .hellofromlib {world}
                 """.trimIndent(),
                 loadableLibraries = setOf("hello"),
+                useDummyLibraryDirectory = true,
                 errorHandler = StrictPipelineErrorHandler(),
             ) {}
         }
@@ -1927,6 +1860,7 @@ class FullPipelineTest {
                 .hellofromlib {world}
                 """.trimIndent(),
                 errorHandler = StrictPipelineErrorHandler(),
+                useDummyLibraryDirectory = true,
             ) {}
         }
     }
