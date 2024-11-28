@@ -24,6 +24,7 @@ import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.localization.LocaleLoader
@@ -42,6 +43,7 @@ val Document: Module =
         ::docLanguage,
         ::theme,
         ::numbering,
+        ::disableNumbering,
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
@@ -196,33 +198,44 @@ fun theme(
  *     Any other character is considered a fixed symbol.
  *
  * Sample numbering strings are `1.1.1`, `1.A.a`, `A.A`.
- * @param headings numbering format string for headings (titles) and [tableOfContents] entries.
- * @param figures numbering format string for figures
- * @return [VoidValue]
+ * @param formats map of numbering formats for different element types.
+ * Built-in keys are:
+ * - `headings`, used for headings (titles) and [tableOfContents] entries;
+ * - `figures`, used for captioned images;
+ * - `tables`, used for captioned tables.
+ * Any other key can be addressed by other elements (see [numbered])
  */
 fun numbering(
     @Injected context: Context,
-    headings: String? = null,
-    figures: String? = null,
-    tables: String? = null,
+    formats: Map<String, Value<String>>,
 ): VoidValue {
-    fun parse(format: String): NumberingFormat =
-        when (format) {
+    fun parse(format: Value<String>): NumberingFormat =
+        when (val unwrapped = format.unwrappedValue) {
             // Disable numbering. Setting to null would instead trigger the default one.
             "none" -> NumberingFormat(symbols = emptyList())
             // Parse the format string.
-            else -> NumberingFormat.fromString(format)
+            else -> NumberingFormat.fromString(unwrapped)
         }
 
     context.documentInfo.numbering =
         DocumentNumbering(
-            headings = headings?.let(::parse),
-            figures = figures?.let(::parse),
-            tables = tables?.let(::parse),
+            headings = formats["headings"]?.let(::parse),
+            figures = formats["figures"]?.let(::parse),
+            tables = formats["tables"]?.let(::parse),
+            extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
 
     return VoidValue
 }
+
+/**
+ * Disables numbering across the document, in case a default numbering is set.
+ * @see numbering
+ */
+@Name("nonumbering")
+fun disableNumbering(
+    @Injected context: Context,
+) = numbering(context, emptyMap())
 
 /**
  * Sets the format of the document.

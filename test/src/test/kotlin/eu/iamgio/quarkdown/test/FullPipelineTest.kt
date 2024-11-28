@@ -1191,7 +1191,8 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering {1.1}
+            .numbering
+                - headings: 1.1
             # A
             # B
             # C
@@ -1209,7 +1210,8 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering {1.1}
+            .numbering
+               - headings: 1.1
             # A
             ## A/1
             # B
@@ -1234,7 +1236,8 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering {I::i}
+            .numbering
+                - headings: I::i
             # A
             ## A/1
             # B
@@ -1260,7 +1263,8 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering {A.a.1}
+            .numbering
+                - headings: A.a.1
             # A
             ## A/1
             ### A/1/1
@@ -1293,7 +1297,8 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering {1.1}
+            .numbering
+                - headings: 1.1
             # A
             ## A/1
             ### A/1/1
@@ -1343,7 +1348,7 @@ class FullPipelineTest {
         execute(
             """
             .doctype {paged}
-            .numbering {none}
+            .nonumbering
             .noautopagebreak
             # A
             ## A/1
@@ -1372,7 +1377,9 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering headings:{1.1.1} figures:{1.1}
+            .numbering
+                - headings: 1.1.1
+                - figures: 1.1
             
             # A
             
@@ -1405,7 +1412,10 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering headings:{1} figures:{1.A.a} tables:{1.A.a}
+            .numbering
+                - headings: 1
+                - figures: 1.A.a
+                - tables: 1.A.a
             
             ![](img.png "Caption")
             
@@ -1478,7 +1488,9 @@ class FullPipelineTest {
         execute(
             """
             .noautopagebreak
-            .numbering figures:{1.1} tables:{1.1}
+            .numbering
+                - figures: 1.1
+                - tables: 1.1
             
             # A
             
@@ -1517,7 +1529,10 @@ class FullPipelineTest {
             """
             .noautopagebreak
             .doclang {italian}
-            .numbering headings:{none} figures:{1.1} tables:{1.a}
+            .numbering
+                - headings: none
+                - figures: 1.1
+                - tables: 1.a
             
             # A
             
@@ -1718,7 +1733,8 @@ class FullPipelineTest {
         // Numbering
         execute(
             """
-            .numbering {1.A.a}
+            .numbering
+               - headings: 1.A.a
             .noautopagebreak
             .tableofcontents title:{TOC}
             
