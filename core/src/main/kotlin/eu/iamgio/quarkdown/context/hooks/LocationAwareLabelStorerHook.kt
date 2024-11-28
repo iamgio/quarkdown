@@ -48,7 +48,7 @@ class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIte
         updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
 
         // Updates the labels of Numbered nodes, which are grouped by their key.
-        // todo allow setting extra numbering via functions
+        // 'extra' numbering formats can be set via the `.numbering` function.
         context.documentInfo.numberingOrDefault?.extra?.forEach { (name, numbering) ->
             updateLabels<Numbered>({ numbering }, iterator, filter = { it.key == name })
         }

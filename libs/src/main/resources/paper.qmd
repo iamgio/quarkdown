@@ -24,7 +24,15 @@
 
 .function {INTERNALcontenttype}
     type content:
-    **.localize {paper:.type}.** .content
+    .numbered {.concatenate {.type} {s}}
+        number:
+        **.concatenate {
+            .localize {paper:.type}
+          } with:{
+            .string {" .number"}
+          } if:{
+            .isnotempty {.number}
+          }.** .content
 
 .function {definition}
     content:
