@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A general-purpose container that groups content.
  * @param width width of the container
  * @param height height of the container
+ * @param fullWidth whether the container should take up the full width of the parent. Overridden by [width]
  * @param foregroundColor text color
  * @param backgroundColor background color
  * @param borderColor border color
@@ -25,6 +26,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 class Container(
     val width: Size? = null,
     val height: Size? = null,
+    val fullWidth: Boolean = false,
     val foregroundColor: Color? = null,
     val backgroundColor: Color? = null,
     val borderColor: Color? = null,

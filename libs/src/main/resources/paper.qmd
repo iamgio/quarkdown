@@ -37,7 +37,7 @@
 
 .function {abstract}
     content:
-    .container padding:{0 1cm}
+    .container padding:{0 1cm} fullwidth:{yes}
         .align {.INTERNALpaperabstractalignment}
             **.localize {paper:abstract}**
 

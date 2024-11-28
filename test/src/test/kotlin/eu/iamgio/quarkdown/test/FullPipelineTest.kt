@@ -1088,9 +1088,9 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"width: 1.0cm;\" class=\"container\">" +
-                    "<p>Item 1</p></div><div style=\"width: 1.0cm;\" class=\"container\">" +
-                    "<p>Item 2</p></div><div style=\"width: 1.0cm;\" class=\"container\">" +
+                "<div class=\"container\" style=\"width: 1.0cm;\">" +
+                    "<p>Item 1</p></div><div class=\"container\" style=\"width: 1.0cm;\">" +
+                    "<p>Item 2</p></div><div class=\"container\" style=\"width: 1.0cm;\">" +
                     "<p>Item 3</p></div>",
                 it,
             )

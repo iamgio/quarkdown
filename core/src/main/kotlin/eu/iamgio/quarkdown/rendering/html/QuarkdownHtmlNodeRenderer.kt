@@ -150,7 +150,9 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
     override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
 
     override fun visit(node: Container) =
-        div("container") {
+        buildTag("div") {
+            classes("container", "fullwidth".takeIf { node.fullWidth })
+
             +node.children
 
             style {

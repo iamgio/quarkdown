@@ -53,6 +53,7 @@ val Layout: Module =
  * Any layout rules (e.g. from [align], [row], [column], [grid]) are ignored inside this container.
  * @param width width of the container. No constraint if unset
  * @param height height of the container. No constraint if unset
+ * @param fullWidth whether the container should take up the full width of the parent. Overridden by [width]. False if unset
  * @param foregroundColor text color. Default if unset
  * @param backgroundColor background color. Transparent if unset
  * @param borderColor border color. Default if unset and [borderWidth] is set
@@ -67,6 +68,7 @@ val Layout: Module =
 fun container(
     width: Size? = null,
     height: Size? = null,
+    @Name("fullwidth") fullWidth: Boolean = false,
     @Name("foreground") foregroundColor: Color? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("border") borderColor: Color? = null,
@@ -79,6 +81,7 @@ fun container(
 ) = Container(
     width,
     height,
+    fullWidth,
     foregroundColor,
     backgroundColor,
     borderColor,

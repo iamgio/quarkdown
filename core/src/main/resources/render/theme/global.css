@@ -382,6 +382,10 @@ Example: "Figure 1.1:"
     display: inline-block;
 }
 
+.container.fullwidth {
+    display: block;
+}
+
 .align {
     width: 100%;
     display: flex;
