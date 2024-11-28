@@ -12,6 +12,13 @@
         - theorem: Teorema
         - proof: Dimostrazione
 
+<!-- Alignment of the 'Abstract' title, relative to its body content -->
+
+.var {INTERNALpaperabstractalignment} {center}
+.function {paperabstractalignment}
+    alignment:
+    .var {INTERNALpaperabstractalignment} {.alignment}
+
 <!-- The suffix that follows the title of a block, e.g. "Definition", "Lemma", ... -->
 
 .var {INTERNALpaperblocksuffix} {\.}
@@ -30,11 +37,12 @@
 
 .function {abstract}
     content:
-    .center
-        **.localize {paper:abstract}**
+    .container padding:{0 1cm}
+        .align {.INTERNALpaperabstractalignment}
+            **.localize {paper:abstract}**
 
-    .container padding:{3mm 1cm}
-        .content
+        .container padding:{2mm 0}
+            .content
 
     .whitespace
 
@@ -42,10 +50,11 @@
 
 .function {INTERNALcontenttype}
     type content:
+    .var {localizedname} {.localize {paper:.type}}
     .numbered {.concatenate {.type} {s}}
         number:
         **.concatenate {
-            .localize {paper:.type}
+            .localizedname
           } with:{
             .string {" .number"}
           } if:{
