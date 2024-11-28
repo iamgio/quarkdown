@@ -20,4 +20,4 @@ data class DictionaryValue<T : OutputValue<*>>(
  * Generates a [DictionaryValue] from key-value pairs.
  * @param pairs key-value pairs
  */
-fun dictionaryOf(vararg pairs: Pair<String, OutputValue<*>>) = DictionaryValue(pairs.toMap().toMutableMap())
+fun dictionaryOf(vararg pairs: Pair<String, OutputValue<*>>) = DictionaryValue(mutableMapOf(*pairs))
