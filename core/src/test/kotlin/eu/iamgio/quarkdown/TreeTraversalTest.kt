@@ -9,8 +9,10 @@ import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.dsl.buildBlock
+import eu.iamgio.quarkdown.ast.dsl.buildBlocks
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
+import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.hooks.LocationAwareLabelStorerHook
 import eu.iamgio.quarkdown.context.hooks.LocationAwarenessHook
@@ -190,6 +192,50 @@ class TreeTraversalTest {
         assertEquals(
             listOf("0.0.a", "1.0.a", "1.A.a", "1.A.b", "1.B.a", "2.0.a", "2.0.b"),
             getLabels("1.A.a"),
+        )
+    }
+
+    @Test
+    fun `custom numbering`() {
+        fun numbered(key: String) =
+            Numbered(key) { location ->
+                buildBlocks { paragraph { text("Hi from $location.") } }
+            }
+
+        val tree =
+            buildBlock {
+                root {
+                    +numbered("key1")
+                    heading(1) { text("1") }
+                    +numbered("key1")
+                    +numbered("key2")
+                    heading(2) { text("1.A") }
+                    +numbered("key1")
+                    heading(1) { text("2") }
+                    +numbered("key2")
+                    +numbered("key1")
+                }
+            } as AstRoot
+
+        val context = MutableContext(QuarkdownFlavor)
+
+        context.documentInfo.numbering =
+            DocumentNumbering(
+                extra =
+                    mapOf(
+                        "key1" to NumberingFormat.fromString("1.1"),
+                        "key2" to NumberingFormat.fromString("A"),
+                    ),
+            )
+
+        ObservableAstIterator()
+            .attach(LocationAwarenessHook(context))
+            .attach(LocationAwareLabelStorerHook(context))
+            .traverse(tree)
+
+        assertEquals(
+            listOf("0.1", "1.1", "A", "1.2", "B", "2.1"),
+            context.attributes.positionalLabels.values.toList(),
         )
     }
 }

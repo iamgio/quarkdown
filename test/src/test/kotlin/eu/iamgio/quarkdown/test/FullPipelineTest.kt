@@ -1556,6 +1556,51 @@ class FullPipelineTest {
                 it,
             )
         }
+
+        // Custom elements.
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+                - key1: 1.1
+                - key2: A
+            
+            # 1
+            
+            .numbered {key1}
+                num:
+                Hello, .num!
+                
+            .numbered {key1}
+                num:
+                Hello again, .num!
+                
+            .numbered {key2}
+                num:
+                Hi, .num!
+            
+            # 2
+            
+            .numbered {key1}
+                num:
+                Hi, .num!
+                
+            .numbered {key2}
+                Hey, .1!
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>1</h1>" +
+                    "<p>Hello, 1.1!</p>" +
+                    "<p>Hello again, 1.2!</p>" +
+                    "<p>Hi, A!</p>" +
+                    "<h1>2</h1>" +
+                    "<p>Hi, 2.1!</p>" +
+                    "<p>Hey, B!</p>",
+                it,
+            )
+        }
     }
 
     @Test
