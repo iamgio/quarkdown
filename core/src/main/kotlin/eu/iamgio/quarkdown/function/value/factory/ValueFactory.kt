@@ -367,6 +367,7 @@ object ValueFactory {
      * @throws IllegalRawValueException if the raw input cannot be converted to a dictionary
      * @see MarkdownListToDictionary
      */
+    @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Map::class, requiresContext = true)
     fun <T : OutputValue<*>> dictionary(
         raw: String,

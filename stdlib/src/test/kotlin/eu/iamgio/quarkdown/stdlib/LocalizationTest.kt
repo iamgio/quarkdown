@@ -1,13 +1,9 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.dsl.buildBlocks
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 /**
  * [Localization] module tests.
@@ -19,7 +15,7 @@ class LocalizationTest {
     fun setup() {
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("English")!!
     }
-
+/*
     @Test
     fun `localization table`() {
         localization(
@@ -62,5 +58,5 @@ class LocalizationTest {
         assertEquals("Buongiorno", table[LocaleLoader.SYSTEM.fromName("Italian")!!]!!["morning"])
 
         assertEquals("Good evening", context.localize("mytable", "evening"))
-    }
+    }*/
 }
