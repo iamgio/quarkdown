@@ -12,6 +12,11 @@
         - theorem: Teorema
         - proof: Dimostrazione
 
+.var {INTERNALpaperblocksuffix} {\.}
+.function {paperblocksuffix}
+    suffix:
+    .var {INTERNALpaperblocksuffix} {.suffix} 
+
 .function {abstract}
     content:
     .center
@@ -32,7 +37,7 @@
             .string {" .number"}
           } if:{
             .isnotempty {.number}
-          }.** .content
+          }.INTERNALpaperblocksuffix** .content
 
 .function {definition}
     content:
