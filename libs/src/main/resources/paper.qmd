@@ -12,10 +12,21 @@
         - theorem: Teorema
         - proof: Dimostrazione
 
+<!-- The suffix that follows the title of a block, e.g. "Definition", "Lemma", ... -->
+
 .var {INTERNALpaperblocksuffix} {\.}
 .function {paperblocksuffix}
     suffix:
     .var {INTERNALpaperblocksuffix} {.suffix} 
+
+<!-- Content at the end of a proof block -->
+
+.var {INTERNALpaperproofend} {∎}
+.function {paperproofend}
+    end:
+    .var {INTERNALpaperproofend} {.end}
+
+<!-- An 'abstract' block -->
 
 .function {abstract}
     content:
@@ -26,6 +37,8 @@
         .content
 
     .whitespace
+
+<!-- Internal helper that builds a titled numerable block -->
 
 .function {INTERNALcontenttype}
     type content:
@@ -39,21 +52,29 @@
             .isnotempty {.number}
           }.INTERNALpaperblocksuffix** .content
 
+<-- A numerable 'definition' block -->
+
 .function {definition}
     content:
     .INTERNALcontenttype {definition} {.content}
+
+<-- A numerable 'lemma' block -->
 
 .function {lemma}
     content:
     .INTERNALcontenttype {lemma} {.content}
 
+<-- A numerable 'theorem' block -->
+
 .function {theorem}
     content:
     .INTERNALcontenttype {theorem} {.content}
+
+<-- A numerable 'proof' block -->
 
 .function {proof}
     content:
     .INTERNALcontenttype {proof} {.content}
 
     .align {end}
-        .text {∎} size:{huge}
+        .text {.INTERNALpaperproofend} size:{huge}
