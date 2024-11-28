@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
+import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
@@ -13,7 +14,6 @@ import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitor
@@ -52,7 +52,22 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     // A general collection is just converted to a group of nodes.
     override fun visit(value: GeneralCollectionValue<*>) = MarkdownContent(children = value.map { it.accept(this) })
 
-    override fun visit(value: DictionaryValue<*>) = visit(StringValue(value.unwrappedValue.toString())) // TODO better representation
+    // A dictionary is displayed as a key-value table.
+    override fun visit(value: DictionaryValue<*>) =
+        buildBlock {
+            table {
+                column({ text("Key") }) {
+                    value.unwrappedValue.keys.forEach { key ->
+                        cell { text(key) }
+                    }
+                }
+                column({ text("Value") }) {
+                    value.unwrappedValue.values.forEach { value ->
+                        cell { +value.accept(this@NodeOutputValueVisitor) }
+                    }
+                }
+            }
+        }
 
     override fun visit(value: NodeValue) = value.unwrappedValue
 
