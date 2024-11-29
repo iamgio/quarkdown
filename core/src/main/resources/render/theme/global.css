@@ -780,3 +780,10 @@ span.current-page-number, span.total-page-number {
     /* Removes translations from the margin content of paged documents */
     transform: none;
 }
+
+/* Experimental fix: Chrome export-to-PDF adds a colored strip to the bottom area. */
+@media print {
+    .pagedjs_margin, .pagedjs_margin-bottom-left-corner-holder, .pagedjs_margin-bottom-right-corner-holder {
+        background-color: var(--qd-background-color);
+    }
+}
