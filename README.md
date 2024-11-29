@@ -5,7 +5,7 @@
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
-  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Status: development" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
+  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
   <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
@@ -15,9 +15,22 @@
   <hr>
 </p>
 
+&nbsp;
+
+Quarkdown is a modern Markdown-based typetting system, designed around the key concept of **versatility**, by seamlessly compiling a project
+into a print-ready book or an interactive presentation.
+All through an incredibly powerful Turing-complete extension of Markdown, ensuring your ideas flow automatically into paper.
+
+&nbsp;
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/paged-demo.png" alt="Paper demo">
+  <p align="center"><em>Original credits: <a href="https://arxiv.org/abs/1706.03762v7">Attention Is All You Need</a></em></p>
+</p>
+
 <br>
 
-Quarkdown is a Markdown parser and renderer that extends the capabilities of Markdown, bringing support for **functions** and many other syntax extensions.
+Born as an extension of CommonMark and GFM, the Quarkdown Flavor brings **functions** to Markdown, along with many other syntax extensions.
 
 <br>
 
@@ -33,6 +46,7 @@ Quarkdown is a Markdown parser and renderer that extends the capabilities of Mar
 which offers layout builders, I/O, math, conditional statements and loops.
 
 **Not enough?** You can still define your own functions and variables — all within Markdown.
+You can even create awesome libraries for everyone to use.
 
 <br>
 
@@ -76,7 +90,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
   - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
     to learn how to convert an artifact to PDF.
 
-The desired document type can be set by calling the `.doctype` function within the Markdown source itself:
+The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-metadata) within the Markdown source itself:
 - `.doctype {slides}`
 - `.doctype {paged}`
 
@@ -165,7 +179,8 @@ The desired document type can be set by calling the `.doctype` function within t
 Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
 If you'd rather keep it minimal, `gradlew build` produces only the JAR file.
 
-The `bin` directory contains the executable scripts. Optionally, add it to your `PATH` to access Quarkdown more easily.
+- The `bin` directory contains the executable scripts. Optionally, add it to your `PATH` to access Quarkdown more easily.
+- The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
 
 Java 17 or higher is required.
 
@@ -264,7 +279,7 @@ Quarkdown comes with a set of themes that can give a unique look to your documen
 </details>
 
 
-# Concept
+## Concept
 
 The logo resembles the original [Markdown icon](https://github.com/dcurtis/markdown-mark), with focus on Quarkdown's completeness,
 richness of features and customization options, emphasized by the revolving arrow all around the sphere.
