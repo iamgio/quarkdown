@@ -7,7 +7,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":core"))
     implementation(project(":stdlib"))
-    implementation("com.github.ajalt.clikt:clikt:4.2.2")
+    implementation("com.github.ajalt.clikt:clikt:5.0.1")
 }
 
 application {
