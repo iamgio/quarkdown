@@ -13,6 +13,8 @@ import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
+import eu.iamgio.quarkdown.server.message.Reload
+import eu.iamgio.quarkdown.server.message.ServerMessage
 import kotlin.system.exitProcess
 
 /**
@@ -60,4 +62,9 @@ fun runQuarkdown(
         e.printStackTrace()
         exitProcess(e.code)
     }
+
+    // If enabled, communicates with the server to reload the requested resources, for instance in the browser.
+
+    val port = 8089 // todo get optional via --server-port
+    ServerMessage(Reload).send(port = port)
 }
