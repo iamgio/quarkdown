@@ -18,7 +18,7 @@ object Log {
     /**
      * Whether the logger is at debugging level.
      */
-    private val isDebug: Boolean
+    val isDebug: Boolean
         get() = logger.level == Level.DEBUG
 
     fun debug(message: Any) = logger.debug(message)
