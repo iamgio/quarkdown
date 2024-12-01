@@ -186,15 +186,13 @@ Java 17 or higher is required.
 
 ## Getting started
 
-Running the program with no command-line arguments runs it in REPL mode. This is great for familiarizing yourself with Quarkdown, but it's probably not what you're looking for.
-
-Running `quarkdown file.qmd` will compile the given file and save the output to file.
+**`quarkdown c file.qmd`** will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
 > - [How to include other files?](https://github.com/iamgio/quarkdown/wiki/including-other-quarkdown-files)
 
-In both modes, the inline output is printed to stdout at the end of each execution.
+If you would like to familiarize yourself with Quarkdown instead, `quarkdown repl` lets you play with an interactive REPL mode.
 
 ### Options
 
