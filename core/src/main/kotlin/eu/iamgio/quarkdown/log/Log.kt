@@ -18,7 +18,7 @@ object Log {
     /**
      * Whether the logger is at debugging level.
      */
-    val isDebug: Boolean
+    private val isDebug: Boolean
         get() = logger.level == Level.DEBUG
 
     fun debug(message: Any) = logger.debug(message)
@@ -29,6 +29,12 @@ object Log {
     fun debug(message: () -> Any) {
         if (isDebug) {
             logger.debug(message())
+        }
+    }
+
+    fun debug(throwable: Throwable) {
+        if (isDebug) {
+            throwable.printStackTrace()
         }
     }
 

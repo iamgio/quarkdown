@@ -19,7 +19,7 @@ import java.io.File
 /**
  * The default port to start the web server on.
  */
-private const val DEFAULT_PORT = 8089
+const val DEFAULT_SERVER_PORT = 8089
 
 /**
  * Command to start a web server serving a local file.
@@ -34,9 +34,9 @@ class StartWebServerCommand : CliktCommand(name = "start") {
         .required()
 
     /**
-     * Port to start the server on. If unset, the default port [DEFAULT_PORT] is used.
+     * Port to start the server on. If unset, the default port [DEFAULT_SERVER_PORT] is used.
      */
-    private val port: Int by option("-p", "--port", help = "Port to start the server on").int().default(DEFAULT_PORT)
+    private val port: Int by option("-p", "--port", help = "Port to start the server on").int().default(DEFAULT_SERVER_PORT)
 
     /**
      * Whether to open the served file in the default browser.
@@ -61,9 +61,7 @@ class StartWebServerCommand : CliktCommand(name = "start") {
                 browserLauncher.launchLocal(port)
             } catch (e: Exception) {
                 Log.error("Failed to launch URL via ${browserLauncher::class.simpleName}: ${e.message}")
-                if (Log.isDebug) {
-                    e.printStackTrace()
-                }
+                Log.debug(e)
             }
         }
 }

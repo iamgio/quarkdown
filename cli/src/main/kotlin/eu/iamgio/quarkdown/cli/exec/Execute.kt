@@ -64,7 +64,12 @@ fun runQuarkdown(
     }
 
     // If enabled, communicates with the server to reload the requested resources, for instance in the browser.
-
-    val port = 8089 // todo get optional via --server-port
-    ServerMessage(Reload).send(port = port)
+    cliOptions.serverPort?.let {
+        try {
+            ServerMessage(Reload).send(port = it)
+        } catch (e: Exception) {
+            Log.error("Could not communicate with the server on port $it: ${e.message}")
+            Log.debug(e)
+        }
+    }
 }

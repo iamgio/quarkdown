@@ -5,7 +5,9 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.clikt.parameters.types.int
 import eu.iamgio.quarkdown.cli.CliOptions
+import eu.iamgio.quarkdown.cli.DEFAULT_SERVER_PORT
 import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
@@ -99,6 +101,17 @@ abstract class ExecuteCommand(
      */
     private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
 
+    /**
+     * When enabled, the program communicates with the local server, for instance to dynamically reload the requested resources.
+     */
+    private val useServer: Boolean by option("-s", "--use-server", help = "Enable communication with the local server").flag()
+
+    /**
+     * Port to communicate with the local server on if [useServer] is enabled.
+     */
+    private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on").int()
+        .default(DEFAULT_SERVER_PORT)
+
     override fun run() {
         val cliOptions =
             CliOptions(
@@ -107,6 +120,7 @@ abstract class ExecuteCommand(
                 outputDirectory,
                 libraryDirectory,
                 clean,
+                serverPort.takeIf { useServer },
             ).let(::finalizeCliOptions)
 
         val pipelineOptions =

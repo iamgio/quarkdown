@@ -9,10 +9,12 @@ import java.io.File
  * @param outputDirectory the output directory to save resource in, if set
  * @param libraryDirectory the directory to load .qmd library files from
  * @param clean whether to clean the output directory before generating new files
+ * @param serverPort port to communicate with the local server on. If not set, no server communication is performed
  */
 data class CliOptions(
     val source: File?,
     val outputDirectory: File?,
     val libraryDirectory: File?,
     val clean: Boolean,
+    val serverPort: Int?,
 )
