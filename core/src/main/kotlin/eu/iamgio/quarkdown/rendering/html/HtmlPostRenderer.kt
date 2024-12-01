@@ -36,6 +36,9 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
 
     override fun createCodeWrapper() =
         RenderWrapper.fromResourceName("/render/html-wrapper.html")
+            // Local server port to communicate with.
+            .optionalValue(TemplatePlaceholders.SERVER_PORT, context.attachedPipeline?.options?.serverPort?.toString())
+            // Document metadata.
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
             // "Paged" document rendering via PagesJS.
@@ -158,5 +161,6 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             pushArtifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
             pushArtifact("math", condition = context.attributes.hasMath)
             pushArtifact("code", condition = context.attributes.hasCode)
+            pushArtifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
 }

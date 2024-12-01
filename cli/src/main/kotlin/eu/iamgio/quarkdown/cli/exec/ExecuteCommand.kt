@@ -120,7 +120,6 @@ abstract class ExecuteCommand(
                 outputDirectory,
                 libraryDirectory,
                 clean,
-                serverPort.takeIf { useServer },
             ).let(::finalizeCliOptions)
 
         val pipelineOptions =
@@ -129,6 +128,7 @@ abstract class ExecuteCommand(
                 wrapOutput = !noWrap,
                 workingDirectory = cliOptions.source?.parentFile,
                 enableMediaStorage = !noMediaStorage,
+                serverPort = serverPort.takeIf { useServer },
                 mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
                 errorHandler =
                     when {

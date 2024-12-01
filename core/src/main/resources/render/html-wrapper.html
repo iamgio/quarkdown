@@ -78,5 +78,9 @@
 [[if:!SLIDES]]
 [[CONTENT]]
 [[endif:!SLIDES]]
+[[if:SERVERPORT]]
+<script src="script/websockets.js"></script>
+<script>startWebSockets("localhost:[[SERVERPORT]]")</script>
+[[endif:SERVERPORT]]
 </body>
 </html>

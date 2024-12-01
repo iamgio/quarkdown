@@ -64,7 +64,7 @@ fun runQuarkdown(
     }
 
     // If enabled, communicates with the server to reload the requested resources, for instance in the browser.
-    cliOptions.serverPort?.let {
+    pipelineOptions.serverPort?.let {
         try {
             ServerMessage(Reload).send(port = it)
         } catch (e: Exception) {

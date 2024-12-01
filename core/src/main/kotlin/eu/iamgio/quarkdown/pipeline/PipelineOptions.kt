@@ -21,12 +21,22 @@ import java.io.File
  * If this is disabled, [MediaStorageOptions] are ignored.
  * @param mediaStorageOptionsOverrides rules that override the default behavior of the media storage system
  * @param errorHandler the error handler strategy to use when an error occurs in the pipeline, during the processing of a Quarkdown file
+ * @param serverPort port to communicate with the local server on. If not set, no server communication is performed. In a practical scenario,
+ *                   this is injected into JavaScript to communicate with the server, for example to enable dynamic reloading.
  */
 data class PipelineOptions(
     val prettyOutput: Boolean = false,
     val wrapOutput: Boolean = true,
     val workingDirectory: File? = null,
     val enableMediaStorage: Boolean = true,
+    val serverPort: Int? = null,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),
     val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
-)
+) {
+    /**
+     * Whether the pipeline could communicate with a server.
+     * If `false`, no server communication is performed.
+     */
+    val useServer: Boolean
+        get() = serverPort != null
+}
