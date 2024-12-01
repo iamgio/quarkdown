@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 import eu.iamgio.quarkdown.cli.exec.CompileCommand
 import eu.iamgio.quarkdown.cli.exec.ReplCommand
+import eu.iamgio.quarkdown.cli.server.StartWebServerCommand
 
 /**
  * Main command of Quarkdown CLI, which delegates to subcommands.

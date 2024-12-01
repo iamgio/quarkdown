@@ -7,8 +7,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import eu.iamgio.quarkdown.cli.CliOptions
-import eu.iamgio.quarkdown.cli.DEFAULT_SERVER_PORT
 import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
+import eu.iamgio.quarkdown.cli.server.DEFAULT_SERVER_PORT
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
