@@ -86,7 +86,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 - **HTML**
   - :white_check_mark: Plain output (default)
   - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org))
+  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org)) - *Requires a webserver. See [Server](#server) below.*
   - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
     to learn how to convert an artifact to PDF.
 
@@ -200,6 +200,10 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`-l <dir>`** or **`--libs <dir>`**: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
 
+- **`-s`** or **`--use-server`**: inject additional code to communicate to the webserver, in order to reload the browser automatically after compiling;
+
+- **`--server-port <port>`**: optional customization of the webserver's port. Defaults to `8089`.
+
 - **`--pretty`**: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
 
@@ -210,6 +214,23 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 - **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 
 - **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
+
+### Server
+
+Quarkdown's webserver allows direct communication between the compiler and the browser,
+enabling automatic content reloading. Live reloading will also be available in the near future.
+
+> [!IMPORTANT]
+> A webserver is **mandatory** in order to show *paged* documents, because of a paged.js requirement.  
+> For that purpose, you can also use other servers, such as Visual Studio Code's *Live Preview*, if you prefer.
+
+The server can be started via `quarkdown start`, with the following options:
+
+- **`-f <file>`** or **`--file <file>`**: (*mandatory*) the file the server should point to. It would preferably be the output directory of the compilation.
+
+- **`-p <port>`** or **`--port <port>`**: the webserver's port. If unset, defaults to `8089`.
+
+- **`-o`** or **`--open`**: if set, opens the target file in the default browser.
 
 ## Themes
 
