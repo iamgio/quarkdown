@@ -186,7 +186,7 @@ Java 17 or higher is required.
 
 ## Getting started
 
-**`quarkdown c file.qmd`** will compile the given file and save the output to file.
+Running `quarkdown c file.qmd` will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
