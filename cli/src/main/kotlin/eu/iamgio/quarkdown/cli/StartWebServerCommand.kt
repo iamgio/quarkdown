@@ -9,6 +9,8 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.server.LocalFileWebServer
+import eu.iamgio.quarkdown.server.browser.BrowserLauncher
+import eu.iamgio.quarkdown.server.browser.DefaultBrowserLauncher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -49,5 +51,19 @@ class StartWebServerCommand : CliktCommand(name = "start") {
             }
 
             Log.info("Started web server on port $port")
+
+            if (!open) return@runBlocking
+
+            // Open the target file in the default browser.
+
+            val browserLauncher: BrowserLauncher = DefaultBrowserLauncher()
+            try {
+                browserLauncher.launchLocal(port)
+            } catch (e: Exception) {
+                Log.error("Failed to launch URL via ${browserLauncher::class.simpleName}: ${e.message}")
+                if (Log.isDebug) {
+                    e.printStackTrace()
+                }
+            }
         }
 }
