@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.cli.exec
+package eu.iamgio.quarkdown.cli.exec.strategy
 
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline

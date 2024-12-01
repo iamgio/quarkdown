@@ -1,12 +1,12 @@
-package eu.iamgio.quarkdown.cli
+package eu.iamgio.quarkdown.cli.exec
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.arguments.argument
-import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import eu.iamgio.quarkdown.cli.CliOptions
+import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
@@ -25,21 +25,30 @@ const val DEFAULT_OUTPUT_DIRECTORY = "output"
  * The default value is relative to the executable JAR file location, and points to the `lib/qmd` directory of the distribution archive.
  * It can be overridden by the user.
  */
-val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qmd"
+val DEFAULT_LIBRARY_DIRECTORY = "" + File.separator + "lib" + File.separator + "qmd"
 
 /**
- * Main command of the Quarkdown CLI, that processes and executes a Quarkdown source file.
+ * Template for Quarkdown commands that launch a complete pipeline and produce output files.
+ * @param name name of the command
+ * @see CompileCommand
+ * @see ReplCommand
  */
-class QuarkdownCommand : CliktCommand() {
+abstract class ExecuteCommand(
+    name: String,
+) : CliktCommand(name) {
     /**
-     * Optional Quarkdown source file to process.
-     * If not set, the program runs in REPL mode.
+     * @param cliOptions options that define the behavior of the CLI (already finalized by [finalizeCliOptions])
+     * @return strategy to launch the pipeline, e.g. from file or REPL
      */
-    private val source: File? by argument(help = "Source file").file(
-        mustExist = true,
-        canBeDir = false,
-        mustBeReadable = true,
-    ).optional()
+    protected abstract fun createExecutionStrategy(cliOptions: CliOptions): PipelineExecutionStrategy
+
+    /**
+     * Finalizes the CLI options before running the pipeline by creating a new instance.
+     * The [original] options are created by [ExecuteCommand]'s (= this base class) properties.
+     * @param original original CLI options
+     * @return finalized CLI options
+     */
+    protected open fun finalizeCliOptions(original: CliOptions): CliOptions = original
 
     /**
      * Optional output directory.
@@ -93,17 +102,18 @@ class QuarkdownCommand : CliktCommand() {
     override fun run() {
         val cliOptions =
             CliOptions(
-                source,
+                // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
+                source = null,
                 outputDirectory,
                 libraryDirectory,
                 clean,
-            )
+            ).let(::finalizeCliOptions)
 
         val pipelineOptions =
             PipelineOptions(
                 prettyOutput = prettyOutput,
                 wrapOutput = !noWrap,
-                workingDirectory = source?.parentFile,
+                workingDirectory = cliOptions.source?.parentFile,
                 enableMediaStorage = !noMediaStorage,
                 mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
                 errorHandler =
@@ -114,6 +124,6 @@ class QuarkdownCommand : CliktCommand() {
             )
 
         // Executes the Quarkdown pipeline.
-        runQuarkdown(cliOptions, pipelineOptions)
+        runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
     }
 }
