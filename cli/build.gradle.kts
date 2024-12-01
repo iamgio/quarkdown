@@ -6,6 +6,7 @@ plugins {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":core"))
+    implementation(project(":server"))
     implementation(project(":stdlib"))
     implementation("com.github.ajalt.clikt:clikt:5.0.1")
 }

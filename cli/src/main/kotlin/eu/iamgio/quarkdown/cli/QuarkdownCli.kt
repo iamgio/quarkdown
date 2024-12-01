@@ -17,4 +17,5 @@ fun main(args: Array<String>) =
     QuarkdownCommand().subcommands(
         CompileCommand(),
         ReplCommand(),
+        StartWebServerCommand(),
     ).main(args)
