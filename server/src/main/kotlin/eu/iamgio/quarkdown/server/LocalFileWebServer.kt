@@ -6,14 +6,16 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.routing
-import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.pingPeriod
 import io.ktor.server.websocket.timeout
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import io.ktor.websocket.readText
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.time.Duration.Companion.seconds
 
@@ -29,17 +31,9 @@ class LocalFileWebServer(private val targetFile: File) : Server {
     override fun start(port: Int) {
         if (!targetFile.exists()) throw IllegalArgumentException("Cannot start web server from non-existing file: $targetFile")
 
-        // Connections to the server.
-        val sessions = mutableListOf<DefaultWebSocketServerSession>()
-        // Mutex to prevent concurrent modification of [sessions].
-        val mutex = Mutex()
-
-        // Sends a frame to all connected clients.
-        suspend fun sendBroadcast(frame: Frame) {
-            mutex.withLock {
-                sessions.forEach { it.send(frame) }
-            }
-        }
+        // Shared flow to broadcast messages to all connected clients.
+        val messageResponseFlow = MutableSharedFlow<String>()
+        val sharedFlow = messageResponseFlow.asSharedFlow()
 
         embeddedServer(Netty, port) {
             install(WebSockets) {
@@ -47,6 +41,7 @@ class LocalFileWebServer(private val targetFile: File) : Server {
                 timeout = 10.seconds
                 maxFrameSize = Long.MAX_VALUE
             }
+
             routing {
                 webSocket("/reload") {
                     // Reload flow:
@@ -54,10 +49,27 @@ class LocalFileWebServer(private val targetFile: File) : Server {
                     // 2. The server forwards the message to all connected clients, e.g. the browser (see websockets.js).
 
                     log.info("Reload requested")
-                    mutex.withLock { sessions += this }
 
-                    for (frame in incoming) {
-                        sendBroadcast(frame)
+                    // Forward messages to all connected clients as a broadcast.
+
+                    val job =
+                        launch {
+                            sharedFlow.collect { message ->
+                                send(Frame.Text(message))
+                            }
+                        }
+
+                    runCatching {
+                        incoming.consumeEach { frame ->
+                            if (frame is Frame.Text) {
+                                val receivedText = frame.readText()
+                                messageResponseFlow.emit(receivedText)
+                            }
+                        }
+                    }.onFailure { exception ->
+                        log.error("WebSocket error: ${exception.message}")
+                    }.also {
+                        job.cancel()
                     }
                 }
 
