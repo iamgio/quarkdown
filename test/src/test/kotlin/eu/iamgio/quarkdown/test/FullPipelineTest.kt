@@ -50,6 +50,7 @@ class FullPipelineTest {
                 - website: https://iamgio.eu
               - Giorgio
                 - website: https://github.com/iamgio
+              - Gio
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
@@ -63,6 +64,7 @@ class FullPipelineTest {
                 listOf(
                     DocumentAuthor("iamgio", mapOf("website" to "https://iamgio.eu")),
                     DocumentAuthor("Giorgio", mapOf("website" to "https://github.com/iamgio")),
+                    DocumentAuthor("Gio", mapOf()),
                 ),
                 documentInfo.authors,
             )
