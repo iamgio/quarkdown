@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.ast.base.inline
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.LinkNode
+import eu.iamgio.quarkdown.ast.base.TextNode
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
@@ -16,8 +17,11 @@ class Link(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,
-) : LinkNode {
+) : LinkNode, TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    override val text: InlineContent
+        get() = label
 }
 
 /**
