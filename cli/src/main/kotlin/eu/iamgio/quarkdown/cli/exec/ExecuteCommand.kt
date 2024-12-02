@@ -104,7 +104,11 @@ abstract class ExecuteCommand(
     /**
      * When enabled, the program communicates with the local server, for instance to dynamically reload the requested resources.
      */
-    private val useServer: Boolean by option("-s", "--use-server", help = "Enable communication with the local server").flag()
+    private val useServer: Boolean by option(
+        "-s",
+        "--use-server",
+        help = "Enable communication with the local server",
+    ).flag()
 
     /**
      * Port to communicate with the local server on if [useServer] is enabled.
@@ -138,6 +142,18 @@ abstract class ExecuteCommand(
             )
 
         // Executes the Quarkdown pipeline.
-        runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+        // If generated, the output directory is returned, which is a child of pipelineOptions.outputDirectory.
+        val directory: File? = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+
+        // If enabled, communicates with the server to reload the requested resources.
+        // If enabled and the server is not running, also starts the server
+        // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -o`).
+        if (useServer && directory != null) {
+            runServerCommunication(
+                port = serverPort,
+                targetFile = directory,
+                startServerOnFailedConnection = true,
+            )
+        }
     }
 }

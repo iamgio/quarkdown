@@ -21,7 +21,8 @@ fun File.cleanDirectory() {
 /**
  * Saves [this] resource to file in a [directory].
  * @see FileResourceExporter
+ * @return the saved file
  */
-fun OutputResource.saveTo(directory: File) {
-    accept(FileResourceExporter(location = directory))
+fun OutputResource.saveTo(directory: File): File {
+    return accept(FileResourceExporter(location = directory))
 }
