@@ -410,7 +410,7 @@ Example: "Figure 1.1:"
     align-items: end;
 }
 
-.stack > :is(p, figure), .clip > p {
+.stack > :is(p, figure), .clip > p, .container :only-child {
     margin: 0;
 }
 
