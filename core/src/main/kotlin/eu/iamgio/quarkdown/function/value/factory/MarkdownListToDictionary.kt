@@ -23,6 +23,11 @@ private const val KEY_VALUE_SEPARATOR = ":"
  * - key
  *   - value
  * ```
+ * @param nothingValueMapper function that maps an empty value to a value.
+ * This is invoked when the entry is in the format:
+ * ```
+ * - key
+ * ```
  * @param T type of values in the dictionary
  * @see DictionaryValue
  * @see ValueFactory.dictionary
@@ -31,6 +36,7 @@ class MarkdownListToDictionary<T : OutputValue<*>>(
     private val list: ListBlock,
     private val inlineValueMapper: (String) -> T,
     private val nestedValueMapper: (ListBlock) -> T,
+    private val nothingValueMapper: () -> T,
 ) {
     /**
      * @return [DictionaryValue] representation of the list
@@ -41,6 +47,7 @@ class MarkdownListToDictionary<T : OutputValue<*>>(
             list.items.asSequence()
                 .map { it.children.filterNot { child -> child is Newline } }
                 .forEach { children ->
+
                     // The first child of a list item is usually a Paragraph.
                     // - This
                     val firstChild =
@@ -57,8 +64,13 @@ class MarkdownListToDictionary<T : OutputValue<*>>(
                             // - This: that
                             null -> {
                                 val text = firstChild.text.toPlainText()
-                                val (key, value) = text.split(KEY_VALUE_SEPARATOR, limit = 2)
-                                key to inlineValueMapper(value.trimStart())
+                                val parts = text.split(KEY_VALUE_SEPARATOR, limit = 2)
+                                val key = parts.first()
+                                key to
+                                    when {
+                                        parts.size > 1 -> inlineValueMapper(parts[1].trimStart())
+                                        else -> nothingValueMapper()
+                                    }
                             }
 
                             // Nested value: the item is a nested dictionary.

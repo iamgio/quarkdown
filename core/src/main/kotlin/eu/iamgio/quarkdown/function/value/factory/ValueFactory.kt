@@ -35,6 +35,7 @@ import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.quarkdownName
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.decode
@@ -381,8 +382,11 @@ object ValueFactory {
         fun convert(list: ListBlock): DictionaryValue<T> =
             MarkdownListToDictionary(
                 list,
-                inlineValueMapper = { eval(it, context) as T },
+                // Node values are currently unsupported as dictionary values.
+                // Here we give back the raw string as a fallback in case a node is met.
+                inlineValueMapper = { eval(it, context, fallback = { it.wrappedAsValue() }) as T },
                 nestedValueMapper = { convert(it) as T },
+                nothingValueMapper = { DictionaryValue(mutableMapOf()) as T },
             ).convert()
 
         return convert(list)
