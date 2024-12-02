@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.test
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
@@ -37,14 +38,18 @@ class FullPipelineTest {
             assertTrue(attributes.linkDefinitions.isEmpty())
             assertEquals(DocumentType.PLAIN, documentInfo.type)
             assertNull(documentInfo.name)
-            assertNull(documentInfo.author)
+            assertEquals(0, documentInfo.authors.size)
             assertNull(documentInfo.locale)
         }
 
         execute(
             """
             .docname {My Quarkdown document}
-            .docauthor {iamgio}
+            .docauthors
+              - iamgio
+                - website: https://iamgio.eu
+              - Giorgio
+                - website: https://github.com/iamgio
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
@@ -54,7 +59,13 @@ class FullPipelineTest {
             """.trimIndent(),
         ) {
             assertEquals("My Quarkdown document", documentInfo.name)
-            assertEquals("iamgio", documentInfo.author)
+            assertEquals(
+                listOf(
+                    DocumentAuthor("iamgio", mapOf("website" to "https://iamgio.eu")),
+                    DocumentAuthor("Giorgio", mapOf("website" to "https://github.com/iamgio")),
+                ),
+                documentInfo.authors,
+            )
             assertEquals("en", documentInfo.locale?.tag)
             assertEquals(DocumentType.SLIDES, documentInfo.type)
             assertEquals("darko", documentInfo.theme?.color)

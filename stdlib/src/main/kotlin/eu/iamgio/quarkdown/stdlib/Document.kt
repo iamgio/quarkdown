@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
@@ -21,11 +22,13 @@ import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.dictionaryOf
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
@@ -40,6 +43,7 @@ val Document: Module =
         ::docType,
         ::docName,
         ::docAuthor,
+        ::docAuthors,
         ::docLanguage,
         ::theme,
         ::numbering,
@@ -64,11 +68,11 @@ val Document: Module =
  */
 private fun <T> Context.modifyOrEchoDocumentInfo(
     value: T?,
-    get: DocumentInfo.() -> String,
+    get: DocumentInfo.() -> OutputValue<*>,
     set: DocumentInfo.(T) -> Unit,
 ): OutputValue<*> {
     if (value == null) {
-        return get(this.documentInfo).wrappedAsValue()
+        return get(this.documentInfo)
     }
 
     set(this.documentInfo, value)
@@ -89,7 +93,7 @@ fun docType(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         type,
-        get = { this.type.name.lowercase() },
+        get = { this.type.name.lowercase().wrappedAsValue() },
         set = { this.type = it },
     )
 
@@ -106,7 +110,7 @@ fun docName(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         name,
-        get = { this.name ?: "" },
+        get = { (this.name ?: "").wrappedAsValue() },
         set = { this.name = it },
     )
 
@@ -123,8 +127,59 @@ fun docAuthor(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         author,
-        get = { this.author ?: "" },
-        set = { this.author = it },
+        get = { (this.authors.firstOrNull()?.name ?: "").wrappedAsValue() },
+        set = { this.authors += DocumentAuthor(name = it) },
+    )
+
+/**
+ * If [authors] is not `null`, it sets the document authors to its value.
+ * If it's `null`, the current document authors are returned.
+ *
+ * Set example:
+ * ```
+ * .docauthors
+ *   - John Doe
+ *     - email: johndoe@email.com
+ *     - website: https://github.com/iamgio/quarkdown
+ *   - Jane Doe
+ *     - email: janedoe@email.com
+ * ```
+ *
+ * Compared to [docAuthor], this function allows for multiple authors and additional information.
+ *
+ * @param authors (optional) authors to assign to the document.
+ * Each dictionary entry contains the author's name associated with a nested dictionary of additional information.
+ * @return the current document authors if [authors] is `null`
+ */
+@Name("docauthors")
+fun docAuthors(
+    @Injected context: Context,
+    authors: Map<String, DictionaryValue<OutputValue<String>>>? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        authors,
+        get = {
+            // List<(String, Map<String, String>)> -> Map<String, Map<String, String>>
+            dictionaryOf(
+                this.authors.map {
+                    it.name to
+                        DictionaryValue(
+                            it.info.mapValues { (_, value) -> value.wrappedAsValue() }.toMutableMap(),
+                        )
+                },
+            )
+        },
+        set = {
+            // Map<String, Map<String, String>> -> List<(String, Map<String, String>)>
+            this.authors.addAll(
+                it.map { (name, info) ->
+                    DocumentAuthor(
+                        name = name,
+                        info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
+                    )
+                },
+            )
+        },
     )
 
 /**
@@ -144,7 +199,7 @@ fun docLanguage(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         locale,
-        get = { this.locale?.localizedName ?: "" },
+        get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
         set = {
             this.locale =
                 LocaleLoader.SYSTEM.find(it)
