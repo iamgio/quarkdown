@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
+import eu.iamgio.quarkdown.function.value.AdaptableValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
@@ -99,6 +100,16 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
             // it is automatically converted to a string.
             value !is StringValue && parameter.type == String::class -> {
                 argument.copy(expression = ValueFactory.string(value.unwrappedValue.toString()))
+            }
+
+            // If the argument does not directly match the parameter type, but is adaptable,
+            // it is adapted (or at least attempted) to the expected type.
+            value is AdaptableValue<*> && !value::class.isSubclassOf(parameter.type) -> {
+                val adapted = value.adapt()
+                when {
+                    adapted::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
+                    else -> argument
+                }
             }
 
             else -> argument
