@@ -222,7 +222,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 ### Server
 
 Quarkdown's webserver allows direct communication between the compiler and the browser,
-enabling automatic content reloading. Live reloading will also be available in the near future.
+enabling automatic content reloading.
 
 > [!IMPORTANT]
 > A webserver is **mandatory** in order to show *paged* documents, because of a paged.js requirement.  
