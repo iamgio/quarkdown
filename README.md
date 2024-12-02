@@ -198,23 +198,26 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
 
-- **`-l <dir>`** or **`--libs <dir>`**: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
-
 - **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
-  If a [server](#server) is not running yet, it is started and the document is opened in the default browser;
+  If a [server](#server) is not running yet, it is started and the document is opened in the default browser.
 
-- **`--server-port <port>`**: optional customization of the webserver's port. Defaults to `8089`.
+- **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
+  *Tip: combine with `-p` to achieve live reload!*
 
-- **`--pretty`**: produces pretty output code. This is useful for debugging or to read the output code more easily,
+- `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
+
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+
+- `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
 
-- **`--clean`**: deletes the content of the output directory before producing new files. Destructive operation.
+- `--clean`: deletes the content of the output directory before producing new files. Destructive operation.
 
-- **`--strict`**: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
+- `--strict`: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
 
-- **`--no-media-storage`**: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
+- `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 
-- **`-Dloglevel=<level>`** (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
+- `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
 ### Server
 
