@@ -72,8 +72,7 @@ fun runQuarkdown(
  * Communicates with the server to reload the requested resources.
  * If the server is not running, starts it if [startServerOnFailedConnection] is `true`
  * and tries to communicate again.
- * @param port port to communicate with the server on
- * @param targetFile file to serve
+ * @param options information of the web server
  * @param startServerOnFailedConnection whether to start the server if the connection fails
  */
 fun runServerCommunication(

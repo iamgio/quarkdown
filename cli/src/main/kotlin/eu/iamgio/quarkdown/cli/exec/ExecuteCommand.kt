@@ -11,6 +11,8 @@ import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.server.DEFAULT_SERVER_PORT
 import eu.iamgio.quarkdown.cli.server.WebServerOptions
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
+import eu.iamgio.quarkdown.cli.watcher.DirectoryWatcher
+import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
@@ -109,6 +111,12 @@ abstract class ExecuteCommand(
     private val preview: Boolean by option("-p", "--preview", help = "Open or reload content after compiling").flag()
 
     /**
+     * When enabled, the program watches for file changes and automatically recompiles the source.
+     * If [preview] is enabled as well, this allows for live reloading.
+     */
+    private val watch: Boolean by option("-w", "--watch", help = "Watch for file changes").flag()
+
+    /**
      * Port to communicate with the local server on if [preview] is enabled.
      */
     private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on").int()
@@ -139,6 +147,30 @@ abstract class ExecuteCommand(
                     },
             )
 
+        // If file watching is enabled, a file change triggers the pipeline execution again.
+        if (watch) {
+            Log.info("Watching for file changes.")
+
+            cliOptions.source?.parentFile?.let { sourceDirectory ->
+                DirectoryWatcher.create(sourceDirectory) { event ->
+                    Log.info("File changed: ${event.path()}. Launching.")
+                    execute(cliOptions, pipelineOptions)
+                }.watch()
+            }
+        }
+
+        // Executes the Quarkdown pipeline.
+        execute(cliOptions, pipelineOptions)
+    }
+
+    /**
+     * Executes the Quarkdown pipeline: compiles and generates output files.
+     * If enabled, it also sends a message to the webserver.
+     */
+    private fun execute(
+        cliOptions: CliOptions,
+        pipelineOptions: PipelineOptions,
+    ) {
         // Executes the Quarkdown pipeline.
         // If generated, the output directory is returned, which is a child of pipelineOptions.outputDirectory.
         val directory: File? = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
