@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.cli.util.cleanDirectory
 import eu.iamgio.quarkdown.cli.util.saveTo
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
@@ -63,7 +64,8 @@ fun runQuarkdown(
         // Exports the generated resources to file if enabled in options.
         return directory?.let { resource?.saveTo(it) }
     } catch (e: PipelineException) {
-        e.printStackTrace()
+        val targetException = (e as? FunctionRuntimeException)?.cause ?: e
+        targetException.printStackTrace()
         exitProcess(e.code)
     }
 }

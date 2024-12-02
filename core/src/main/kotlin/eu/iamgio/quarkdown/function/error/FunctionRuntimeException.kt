@@ -7,18 +7,13 @@ import eu.iamgio.quarkdown.function.Function
 /**
  * An exception thrown when an error occurs inside a called function.
  * @param source function that threw the error
- * @param message error message
+ * @param cause the error cause
  */
 class FunctionRuntimeException(
     source: Function<*>,
-    message: String,
-) : FunctionException(buildInline { text(message) }, RUNTIME_ERROR_EXIT_CODE, source) {
-    /**
-     * @param source function that threw the error
-     * @param throwable the error cause
-     */
-    constructor(source: Function<*>, throwable: Throwable) : this(
+    override val cause: Throwable,
+) : FunctionException(
+        buildInline { text(cause.message ?: "$cause (no further information)") },
+        RUNTIME_ERROR_EXIT_CODE,
         source,
-        throwable.message ?: "$throwable (no further information)",
     )
-}
