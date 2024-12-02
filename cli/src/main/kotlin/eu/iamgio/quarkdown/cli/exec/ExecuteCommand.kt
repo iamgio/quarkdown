@@ -9,11 +9,13 @@ import com.github.ajalt.clikt.parameters.types.int
 import eu.iamgio.quarkdown.cli.CliOptions
 import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.server.DEFAULT_SERVER_PORT
+import eu.iamgio.quarkdown.cli.server.WebServerOptions
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
+import eu.iamgio.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
 /**
@@ -102,16 +104,12 @@ abstract class ExecuteCommand(
     private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
 
     /**
-     * When enabled, the program communicates with the local server, for instance to dynamically reload the requested resources.
+     * When enabled, the program communicates with the local server to dynamically reload the requested resources.
      */
-    private val useServer: Boolean by option(
-        "-s",
-        "--use-server",
-        help = "Enable communication with the local server",
-    ).flag()
+    private val preview: Boolean by option("-p", "--preview", help = "Open or reload content after compiling").flag()
 
     /**
-     * Port to communicate with the local server on if [useServer] is enabled.
+     * Port to communicate with the local server on if [preview] is enabled.
      */
     private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on").int()
         .default(DEFAULT_SERVER_PORT)
@@ -132,7 +130,7 @@ abstract class ExecuteCommand(
                 wrapOutput = !noWrap,
                 workingDirectory = cliOptions.source?.parentFile,
                 enableMediaStorage = !noMediaStorage,
-                serverPort = serverPort.takeIf { useServer },
+                serverPort = serverPort.takeIf { preview },
                 mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
                 errorHandler =
                     when {
@@ -148,11 +146,14 @@ abstract class ExecuteCommand(
         // If enabled, communicates with the server to reload the requested resources.
         // If enabled and the server is not running, also starts the server
         // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -o`).
-        if (useServer && directory != null) {
+        if (preview && directory != null) {
             runServerCommunication(
-                port = serverPort,
-                targetFile = directory,
                 startServerOnFailedConnection = true,
+                WebServerOptions(
+                    port = serverPort,
+                    targetFile = directory,
+                    browserLauncher = DefaultBrowserLauncher(),
+                ),
             )
         }
     }

@@ -200,8 +200,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`-l <dir>`** or **`--libs <dir>`**: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
 
-- **`-s`** or **`--use-server`**: enables communication with the webserver, in order to enable automatic content reloading after compiling (see [*Server*](#server) below).  
-  If a server is not running yet, it starts it and the document is opened in the default browser;
+- **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
+  If a [server](#server) is not running yet, it is started and the document is opened in the default browser;
 
 - **`--server-port <port>`**: optional customization of the webserver's port. Defaults to `8089`.
 
@@ -233,8 +233,8 @@ The server can be started via `quarkdown start`, with the following options:
 
 - **`-o`** or **`--open`**: if set, opens the target file in the default browser.
 
-> [!NOTE]
-> `quarkdown c ... -s` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -o`
+> [!TIP]
+> `quarkdown c ... --preview` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -o`
 
 ## Themes
 

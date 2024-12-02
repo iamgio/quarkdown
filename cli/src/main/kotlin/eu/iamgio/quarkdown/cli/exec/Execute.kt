@@ -15,7 +15,6 @@ import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
-import eu.iamgio.quarkdown.server.browser.DefaultBrowserLauncher
 import eu.iamgio.quarkdown.server.message.Reload
 import eu.iamgio.quarkdown.server.message.ServerMessage
 import java.io.File
@@ -78,22 +77,20 @@ fun runQuarkdown(
  * @param startServerOnFailedConnection whether to start the server if the connection fails
  */
 fun runServerCommunication(
-    port: Int,
-    targetFile: File,
     startServerOnFailedConnection: Boolean,
+    options: WebServerOptions,
 ) {
     // If enabled, communicates with the server to reload the requested resources, for instance in the browser.
     try {
-        ServerMessage(Reload).send(port = port)
+        ServerMessage(Reload).send(port = options.port)
     } catch (e: Exception) {
-        Log.error("Could not communicate with the server on port $port: ${e.message}")
+        Log.error("Could not communicate with the server on port ${options.port}: ${e.message}")
         Log.debug(e)
 
         if (startServerOnFailedConnection) {
             Log.info("Starting server...")
-            val options = WebServerOptions(port, targetFile, DefaultBrowserLauncher())
             WebServerStarter.start(options)
-            runServerCommunication(port, targetFile, startServerOnFailedConnection = false)
+            runServerCommunication(startServerOnFailedConnection = false, options)
         }
     }
 }
