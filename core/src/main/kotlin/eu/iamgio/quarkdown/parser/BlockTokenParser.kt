@@ -139,6 +139,9 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         val depth = groups.next().length // Amount of # characters.
 
+        // e.g. ###! Heading => the heading is decorative, meaning it's not part of the document structure.
+        val isDecorative = groups.next() == "!"
+
         val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
         // Heading {#custom-id} -> Heading, custom-id
         val (text, customId) = splitHeadingTextAndId(rawText)
@@ -146,6 +149,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         return Heading(
             depth,
             text.toInline(),
+            isDecorative,
             customId,
         )
     }

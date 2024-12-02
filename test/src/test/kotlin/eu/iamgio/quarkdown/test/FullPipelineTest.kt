@@ -194,6 +194,10 @@ class FullPipelineTest {
             assertEquals("<h2>Ti<em>tl</em>e</h2>", it)
         }
 
+        execute("#! Title") {
+            assertEquals("<h1>Title</h1>", it)
+        }
+
         execute("#### .sum {3} {2}") {
             assertEquals("<h4>5</h4>", it)
         }
@@ -1155,6 +1159,34 @@ class FullPipelineTest {
             assertEquals(
                 "<h1 data-location=\"1\">A</h1>" +
                     "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h1 data-location=\"3\">C</h1>" +
+                    "<h2 data-location=\"3.1\">C/1</h2>" +
+                    "<h2 data-location=\"3.2\">C/2</h2>",
+                it,
+            )
+        }
+
+        // Decorative headings are not numbered.
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+               - headings: 1.1
+            # A
+            ## A/1
+            #! Nope!
+            # B
+            # C
+            ## C/1
+            ## C/2
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h1>Nope!</h1>" +
                     "<h1 data-location=\"2\">B</h1>" +
                     "<h1 data-location=\"3\">C</h1>" +
                     "<h2 data-location=\"3.1\">C/1</h2>" +

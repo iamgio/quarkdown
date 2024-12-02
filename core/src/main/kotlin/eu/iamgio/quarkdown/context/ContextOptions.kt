@@ -18,7 +18,7 @@ interface ContextOptions : MediaStorageOptions {
      * that do not have an explicit one.
      * For example, a heading element (`# Hello world`) automatically generates
      * an identifier (`hello-world`) that can be referenced by other elements.
-     * @see eu.iamgio.quarkdown.ast.attributes.IdentifierProvider
+     * @see eu.iamgio.quarkdown.ast.attributes.id.IdentifierProvider
      */
     val enableAutomaticIdentifiers: Boolean
 
@@ -34,7 +34,10 @@ interface ContextOptions : MediaStorageOptions {
  * @return whether the [heading] node should force a page break
  * @see ContextOptions.autoPageBreakHeadingMaxDepth
  */
-fun Context.shouldAutoPageBreak(heading: Heading) = !heading.isMarker && heading.depth <= this.options.autoPageBreakHeadingMaxDepth
+fun Context.shouldAutoPageBreak(heading: Heading) =
+    !heading.isMarker &&
+        !heading.isDecorative &&
+        heading.depth <= this.options.autoPageBreakHeadingMaxDepth
 
 /**
  * Mutable [ContextOptions] implementation.

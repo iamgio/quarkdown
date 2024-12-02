@@ -2,7 +2,21 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.*
+import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.tokens.BlockTextToken
+import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
+import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
+import eu.iamgio.quarkdown.lexer.tokens.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.tokens.ListItemToken
+import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
+import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
+import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
+import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.tokens.TableToken
+import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] blocks.
@@ -98,7 +112,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "Heading",
                 wrap = ::HeadingToken,
                 regex =
-                    "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
+                    "^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*)(?:\\n+|$)"
                         .toRegex(),
             )
 

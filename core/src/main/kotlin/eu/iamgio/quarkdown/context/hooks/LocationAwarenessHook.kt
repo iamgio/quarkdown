@@ -34,6 +34,8 @@ class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHo
         // # C       => current location: [3]
         // ### C.0.A => current location: [3, 0, 1]
         iterator.on<Heading> { heading ->
+            if (!heading.canTrackLocation) return@on // 'Decorative' headings are not assigned a location and are not counted.
+
             location[heading.depth] = (location[heading.depth] ?: 0) + 1
             location.entries.removeIf { it.key > heading.depth }
 
@@ -47,6 +49,8 @@ class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHo
 
         // The current location, loaded by the previous hook, is associated with each node that requests its location to be tracked.
         iterator.on<LocationTrackableNode> { trackable ->
+            if (!trackable.canTrackLocation) return@on
+
             val locationData =
                 location.asSequence()
                     .sortedBy { it.key }

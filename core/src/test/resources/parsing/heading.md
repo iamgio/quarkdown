@@ -1,6 +1,8 @@
 # Title
 ## Title
 ### Title
+#! Decorative title
+######! Decorative title
 
 ####### Not a title
 a ## Not a title

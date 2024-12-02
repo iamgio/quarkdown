@@ -6,11 +6,17 @@ import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 
 /**
- * A node that requests its location to be tracked within the document.
+ * A node that requests its location to be tracked within the document's hierarchy.
  * By location, it is meant the section indices ([SectionLocation]) the node is located in.
  * @see SectionLocation
  */
-interface LocationTrackableNode : Node
+interface LocationTrackableNode : Node {
+    /**
+     * Whether this node should be tracked in the document's hierarchy.
+     */
+    val canTrackLocation: Boolean
+        get() = true
+}
 
 /**
  * The location of a node within the document, in terms of section indices.

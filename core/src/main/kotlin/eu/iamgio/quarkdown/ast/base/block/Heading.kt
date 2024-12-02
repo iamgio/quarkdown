@@ -12,16 +12,26 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A heading is identifiable, as it can be looked up in the document and can be referenced.
  * It is also location trackable, meaning its position in the document hierarchy is determined, and possibly displayed.
  * @param depth importance (`depth=1` for H1, `depth=6` for H6)
+ * @param isDecorative whether this heading is decorative.
+ *                     A decorative heading does not trigger automatic page breaks and is not counted in the document's hierarchy
+ *                     and is not numbered.
  * @param customId optional custom ID. If `null`, the ID is automatically generated
  */
 class Heading(
     val depth: Int,
     override val text: InlineContent,
+    val isDecorative: Boolean = false,
     val customId: String? = null,
 ) : TextNode, Identifiable, LocationTrackableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
+
+    /**
+     * Decorative headings are not assigned a location and are not counted.
+     */
+    override val canTrackLocation: Boolean
+        get() = !isDecorative
 
     /**
      * @return whether this heading is a marker
