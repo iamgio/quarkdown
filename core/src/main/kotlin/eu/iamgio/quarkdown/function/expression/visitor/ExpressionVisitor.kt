@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.PairValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 
@@ -36,6 +37,8 @@ interface ExpressionVisitor<T> {
     fun visit(value: UnorderedCollectionValue<*>): T
 
     fun visit(value: GeneralCollectionValue<*>): T
+
+    fun visit(value: PairValue<*, *>): T
 
     fun visit(value: DictionaryValue<*>): T
 

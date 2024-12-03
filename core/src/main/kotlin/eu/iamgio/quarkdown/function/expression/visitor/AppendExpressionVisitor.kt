@@ -21,6 +21,7 @@ import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.PairValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -136,6 +137,8 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         GeneralCollectionValue(
             value.unwrappedValue + otherEval as OutputValue<*>,
         )
+
+    override fun visit(value: PairValue<*, *>): Expression = visit(GeneralCollectionValue(value.unwrappedValue))
 
     // {a: 1, b: 2} "abc" -> "{a=1, b=2}abc"
     override fun visit(value: DictionaryValue<*>) = value.concatenate()

@@ -6,6 +6,7 @@ package eu.iamgio.quarkdown.function.value
  * @see OrderedCollectionValue
  * @see UnorderedCollectionValue
  * @see GeneralCollectionValue
+ * @see PairValue
  */
 interface IterableValue<T : OutputValue<*>> : InputValue<Iterable<T>>, OutputValue<Iterable<T>>, Iterable<T> {
     override val unwrappedValue: Iterable<T>
