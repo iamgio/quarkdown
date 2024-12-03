@@ -25,6 +25,7 @@ import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
+import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
@@ -44,7 +45,7 @@ import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
- * Factory of [Value] wrappers from raw string data.
+ * Factory of [Value] wrappers from raw data.
  * @see eu.iamgio.quarkdown.function.reflect.FromDynamicType
  * @see eu.iamgio.quarkdown.function.reflect.DynamicValueConverter.convertTo
  */
@@ -54,7 +55,7 @@ object ValueFactory {
      * @return a new string value that wraps [raw]
      */
     @FromDynamicType(String::class)
-    fun string(raw: String) = StringValue(raw)
+    fun string(raw: Any) = StringValue(raw.toString())
 
     /**
      * @param raw raw value to convert to a number value
@@ -62,9 +63,14 @@ object ValueFactory {
      * @throws IllegalRawValueException if [raw] is not a valid numeric value
      */
     @FromDynamicType(Number::class)
-    fun number(raw: String): NumberValue =
-        (raw.toIntOrNull() ?: raw.toFloatOrNull())?.let { NumberValue(it) }
-            ?: throw IllegalRawValueException("Not a numeric value", raw)
+    fun number(raw: Any): NumberValue =
+        when (raw) {
+            is Number -> NumberValue(raw)
+            else ->
+                raw.toString().let { it.toIntOrNull() ?: it.toFloatOrNull() }
+                    ?.let { NumberValue(it) }
+                    ?: throw IllegalRawValueException("Not a numeric value", raw)
+        }
 
     /**
      * @param raw raw value to convert to a boolean value.
@@ -74,11 +80,15 @@ object ValueFactory {
      * @throws IllegalRawValueException if [raw] is not a valid boolean value
      */
     @FromDynamicType(Boolean::class)
-    fun boolean(raw: String): BooleanValue =
-        when (raw.lowercase()) {
-            "true", "yes" -> BooleanValue(true)
-            "false", "no" -> BooleanValue(false)
-            else -> throw IllegalRawValueException("Not a valid boolean value", raw)
+    fun boolean(raw: Any): BooleanValue =
+        when (raw) {
+            is Boolean -> BooleanValue(raw)
+            else ->
+                when (raw.toString().lowercase()) {
+                    "true", "yes" -> BooleanValue(true)
+                    "false", "no" -> BooleanValue(false)
+                    else -> throw IllegalRawValueException("Not a valid boolean value", raw)
+                }
         }
 
     /**
@@ -90,17 +100,21 @@ object ValueFactory {
      * @see iterable
      */
     @FromDynamicType(Range::class)
-    fun range(raw: String): ObjectValue<Range> {
+    fun range(raw: Any): ObjectValue<Range> {
+        if (raw is Range) return ObjectValue(raw)
+
+        val rawString = raw.toString()
+
         // Matches 'x..y', where both x and y are optional integers.
         val regex = "(\\d+)?..(\\d+)?".toRegex()
 
         // If the raw value does not represent a range, an error is thrown.
-        if (!regex.matches(raw)) {
+        if (!regex.matches(rawString)) {
             throw IllegalRawValueException("Invalid range", raw)
         }
 
         val groups =
-            regex.find(raw)?.groupValues
+            regex.find(rawString)?.groupValues
                 ?.asSequence()
                 ?.iterator(consumeAmount = 1)
 
@@ -128,10 +142,12 @@ object ValueFactory {
      * @throws IllegalRawValueException if the value is an invalid size
      */
     @FromDynamicType(Size::class)
-    fun size(raw: String): ObjectValue<Size> {
+    fun size(raw: Any): ObjectValue<Size> {
+        if (raw is Size) return ObjectValue(raw)
+
         // Matches value and unit, e.g. 10px, 12.5cm, 3in.
         val regex = "^(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?$".toRegex()
-        val groups = regex.find(raw)?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
+        val groups = regex.find(raw.toString())?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
 
         // The value, which is required.
         val value = groups?.next()?.toDoubleOrNull() ?: throw IllegalRawValueException("Invalid size", raw)
@@ -150,8 +166,10 @@ object ValueFactory {
      *                                  of if any of those values is an invalid size
      */
     @FromDynamicType(Sizes::class)
-    fun sizes(raw: String): ObjectValue<Sizes> {
-        val parts = raw.split("\\s+".toRegex())
+    fun sizes(raw: Any): ObjectValue<Sizes> {
+        if (raw is Sizes) return ObjectValue(raw)
+
+        val parts = raw.toString().split("\\s+".toRegex())
         val iterator = parts.iterator()
 
         return ObjectValue(
@@ -185,8 +203,10 @@ object ValueFactory {
      * @throws IllegalRawValueException if the value is an invalid color
      */
     @FromDynamicType(Color::class)
-    fun color(raw: String): ObjectValue<Color> {
-        return Color.decode(raw)?.let(::ObjectValue)
+    fun color(raw: Any): ObjectValue<Color> {
+        if (raw is Color) return ObjectValue(raw)
+
+        return Color.decode(raw.toString())?.let(::ObjectValue)
             ?: throw IllegalRawValueException("Not a valid color", raw)
     }
 
@@ -197,11 +217,15 @@ object ValueFactory {
      */
     @FromDynamicType(Enum::class)
     fun enum(
-        raw: String,
+        raw: Any,
         values: Array<Enum<*>>,
     ): EnumValue? =
-        values.find { it.quarkdownName.equals(raw, ignoreCase = true) }
-            ?.let { EnumValue(it) }
+        when (raw) {
+            is Enum<*> -> EnumValue(raw)
+            else ->
+                values.find { it.quarkdownName.equals(raw.toString(), ignoreCase = true) }
+                    ?.let { EnumValue(it) }
+        }
 
     /**
      * Generates an [EvaluableString].
@@ -213,12 +237,12 @@ object ValueFactory {
      */
     @FromDynamicType(EvaluableString::class, requiresContext = true)
     fun evaluableString(
-        raw: String,
+        raw: Any,
         context: Context,
     ): ObjectValue<EvaluableString> =
         ObjectValue(
             EvaluableString(
-                eval(raw, context).unwrappedValue.toString(),
+                eval(raw.toString(), context).unwrappedValue.toString(),
             ),
         )
 
@@ -255,14 +279,18 @@ object ValueFactory {
      */
     @FromDynamicType(MarkdownContent::class, requiresContext = true)
     fun blockMarkdown(
-        raw: String,
+        raw: Any,
         context: Context,
     ): MarkdownContentValue =
-        markdown(
-            context.flavor.lexerFactory.newBlockLexer(raw),
-            context,
-            expandFunctionCalls = true,
-        )
+        when (raw) {
+            is MarkdownContent -> MarkdownContentValue(raw)
+            else ->
+                markdown(
+                    context.flavor.lexerFactory.newBlockLexer(raw.toString()),
+                    context,
+                    expandFunctionCalls = true,
+                )
+        }
 
     /**
      * @param raw string input to parse into a sub-AST
@@ -271,14 +299,18 @@ object ValueFactory {
      */
     @FromDynamicType(InlineMarkdownContent::class, requiresContext = true)
     fun inlineMarkdown(
-        raw: String,
+        raw: Any,
         context: Context,
     ): InlineMarkdownContentValue =
-        markdown(
-            context.flavor.lexerFactory.newInlineLexer(raw),
-            context,
-            expandFunctionCalls = true,
-        ).asInline()
+        when (raw) {
+            is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
+            else ->
+                markdown(
+                    context.flavor.lexerFactory.newInlineLexer(raw.toString()),
+                    context,
+                    expandFunctionCalls = true,
+                ).asInline()
+        }
 
     /**
      * Converts a Markdown list to an [OrderedCollectionValue] iterable.
@@ -322,9 +354,11 @@ object ValueFactory {
     @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Iterable::class, requiresContext = true)
     fun <T : OutputValue<*>> iterable(
-        raw: String,
+        raw: Any,
         context: Context,
     ): IterableValue<T> {
+        if (raw is Range) return raw.toCollection() as IterableValue<T>
+
         // A range is a suitable numeric iterable value.
         try {
             val range = range(raw)
@@ -333,11 +367,13 @@ object ValueFactory {
             // The raw value is not a range.
         }
 
+        val rawString = raw.toString()
+
         // The expression is evaluated into an iterable.
-        val value = expression(raw, context)?.eval() ?: return OrderedCollectionValue(emptyList())
+        val value = expression(rawString, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
         return value as? IterableValue<T>
-            ?: markdownListToIterable(raw, context) as? IterableValue<T> // A Markdown list is a valid iterable.
+            ?: markdownListToIterable(rawString, context) as? IterableValue<T> // A Markdown list is a valid iterable.
             ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
     }
 
@@ -371,9 +407,11 @@ object ValueFactory {
     @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Map::class, requiresContext = true)
     fun <T : OutputValue<*>> dictionary(
-        raw: String,
+        raw: Any,
         context: Context,
     ): DictionaryValue<T> {
+        (raw as? Map<String, T>)?.let { return DictionaryValue(it.toMutableMap()) }
+
         val content = blockMarkdown(raw, context).unwrappedValue
         val list =
             content.children.singleOrNull { it !is Newline } as? ListBlock
@@ -400,16 +438,20 @@ object ValueFactory {
      */
     @FromDynamicType(Lambda::class, requiresContext = true)
     fun lambda(
-        raw: String,
+        raw: Any,
         context: Context,
     ): LambdaValue {
+        if (raw is Lambda) return LambdaValue(raw)
+
+        val rawString = raw.toString()
+
         // The header is the part before the delimiter.
         // The header contains the sequence of lambda parameters.
         // If no header is present, the lambda has no parameters.
         val headerDelimiter = ":"
         // Matches a sequence of words separated by spaces or tabs, followed by the delimiter.
         val headerRegex = "^\\s*(\\w+[ \\t]*)*(?=$headerDelimiter)".toRegex()
-        val header = headerRegex.find(raw)?.value ?: ""
+        val header = headerRegex.find(rawString)?.value ?: ""
         val parameters = header.trim().split("\\s+".toRegex()).filter { it.isNotBlank() }
 
         // The body is the part after the delimiter,
@@ -417,10 +459,10 @@ object ValueFactory {
         // The body may contain placeholders wrapped in <<>> that will be replaced with actual arguments upon invocation.
         val body =
             if (header.isEmpty()) {
-                raw
+                rawString
             } else {
                 // Strip the header and delimiter.
-                raw.substring(raw.indexOf(headerDelimiter) + headerDelimiter.length)
+                rawString.substring(rawString.indexOf(headerDelimiter) + headerDelimiter.length)
                     .trimStart()
             }
 

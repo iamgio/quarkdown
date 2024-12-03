@@ -48,7 +48,7 @@ class DynamicValueConverter(private val value: DynamicValue) {
             val valuesFunction = type.functions.first { it.name == "values" } as KFunction<Array<Enum<*>>>
             val values = valuesFunction.call()
 
-            return ValueFactory.enum(raw.toString(), values)
+            return ValueFactory.enum(raw, values)
                 ?: throw NoSuchElementException(element = raw, values)
         }
 
@@ -67,10 +67,10 @@ class DynamicValueConverter(private val value: DynamicValue) {
                         if (context == null) {
                             throw IllegalStateException("Function call does not have an attached context")
                         }
-                        function.call(ValueFactory, raw.toString(), context)
+                        function.call(ValueFactory, raw, context)
                     }
 
-                    else -> function.call(ValueFactory, raw.toString())
+                    else -> function.call(ValueFactory, raw)
                 } as InputValue<*>?
             } catch (e: InvocationTargetException) {
                 throw e.cause ?: e
