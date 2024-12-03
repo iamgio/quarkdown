@@ -35,7 +35,6 @@ class WatcherTest {
         runBlocking {
             val watcher =
                 DirectoryWatcher.create(directory) {
-                    println("aaaa")
                     changed = true
                 }
 
@@ -44,11 +43,11 @@ class WatcherTest {
             }
 
             launch {
-                delay(500)
+                delay(1000)
                 affect()
-                delay(200)
+                delay(500)
                 watcher.stop()
-                delay(200)
+                delay(400)
                 assertTrue(changed)
             }
         }
