@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
+import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import kotlin.reflect.KFunction
@@ -13,6 +14,12 @@ import kotlin.reflect.KFunction
  * An exporter of a subsection of Quarkdown functions.
  */
 typealias Module = Set<KFunction<OutputValue<*>>>
+
+/**
+ * Fallback value for non-existent elements in collections, dictionaries, and more.
+ */
+val NOT_FOUND: OutputValue<*>
+    get() = BooleanValue(false)
 
 /**
  * Exporter of Quarkdown's standard library.
@@ -32,6 +39,8 @@ object Stdlib : LibraryExporter {
                     Math +
                     Logical +
                     String +
+                    Collection +
+                    Dictionary +
                     Logger +
                     Flow +
                     Data +
