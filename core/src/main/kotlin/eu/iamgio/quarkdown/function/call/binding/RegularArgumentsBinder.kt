@@ -108,6 +108,7 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
                 val adapted = value.adapt()
                 when {
                     adapted::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
+                    adapted.unwrappedValue!!::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
                     else -> argument
                 }
             }

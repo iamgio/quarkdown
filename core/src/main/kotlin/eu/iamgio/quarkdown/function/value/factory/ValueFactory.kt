@@ -21,6 +21,7 @@ import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
@@ -31,6 +32,7 @@ import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
@@ -357,7 +359,12 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): IterableValue<T> {
-        if (raw is Range) return raw.toCollection() as IterableValue<T>
+        when (raw) {
+            is Range -> return raw.toCollection() as IterableValue<T>
+            is List<*> -> return OrderedCollectionValue(raw as List<T>)
+            is Set<*> -> return UnorderedCollectionValue(raw as Set<T>)
+            is Iterable<*> -> return GeneralCollectionValue(raw as Iterable<T>)
+        }
 
         // A range is a suitable numeric iterable value.
         try {
