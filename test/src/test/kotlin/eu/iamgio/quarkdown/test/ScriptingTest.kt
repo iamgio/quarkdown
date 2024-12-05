@@ -183,32 +183,51 @@ class ScriptingTest {
 
     @Test
     fun iterables() {
-        execute(
+        val abc =
             """
-            .var {x}
+            .var {abc}
               - A
               - B
               - C
+            
+            
+            """.trimIndent()
 
-            .foreach {.x}
-              .1
-            """.trimIndent(),
+        execute(
+            abc +
+                """
+                .foreach {.abc}
+                  .1
+                """.trimIndent(),
         ) {
             assertEquals("<p>A</p><p>B</p><p>C</p>", it)
         }
 
         execute(
-            """
-            .var {x}
-              - A
-              - B
-              - C
-
-            .foreach {.x}
-              .lowercase {.1}
-            """.trimIndent(),
+            abc +
+                """
+                .foreach {.abc}
+                  .lowercase {.1}
+                """.trimIndent(),
         ) {
             assertEquals("<p>a</p><p>b</p><p>c</p>", it)
+        }
+
+        execute("$abc.getat {2} from:{.abc}") {
+            assertEquals("<p>B</p>", it)
+        }
+
+        // Out of bounds.
+        execute("$abc.getat {5} from:{.abc}") {
+            assertEquals("<p><input disabled=\"\" type=\"checkbox\" /></p>", it)
+        }
+
+        execute("$abc.first from:{.abc}") {
+            assertEquals("<p>A</p>", it)
+        }
+
+        execute("$abc.last from:{.abc}") {
+            assertEquals("<p>C</p>", it)
         }
 
         execute(
@@ -225,6 +244,97 @@ class ScriptingTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>1</p><p>4</p><p>9</p><p>16</p>", it)
+        }
+    }
+
+    @Test
+    fun pairs() {
+        execute(
+            """
+            .var {p} {.pair {1} {2}}
+            .sum {.first {.p}} {.second {.p}}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+
+        execute(
+            """
+            .foreach {.pair {1} {2}}
+              .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1</p><p>2</p>", it)
+        }
+    }
+
+    @Test
+    fun dictionaries() {
+        val authors =
+            """
+            .docauthors
+              - John
+                - from: USA
+              - Maria
+                - from: Italy
+            
+            """.trimIndent()
+
+        execute(
+            authors +
+                """
+                .var {john} {.get {John} from:{.docauthors}}
+                
+                .get {from} from:{.john}
+                """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>USA</p>",
+                it,
+            )
+        }
+
+        execute(
+            authors +
+                """
+                .foreach {.docauthors}
+                  An author is .first {.1}, from .get {from} from:{.second {.1}}
+                """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>An author is John, from USA</p>" +
+                    "<p>An author is Maria, from Italy</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .var {x}
+              - a: 1
+              - b: 2
+              - c: 3
+              
+            .get {b} from:{.x}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>2</p>", it)
+        }
+
+        execute(
+            """
+            .var {x}
+              - a:
+                - aa: 1
+                - ab: 2
+              - b:
+                - ba: 3
+                - bb: 4
+              
+            .get {ba} from:{.get {b} from:{.x}}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
         }
     }
 
