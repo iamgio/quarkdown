@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.test
+package eu.iamgio.quarkdown.test.util
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
@@ -10,7 +10,6 @@ import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
 import eu.iamgio.quarkdown.stdlib.Stdlib
-import eu.iamgio.quarkdown.test.util.LibraryUtils
 import java.io.File
 
 // Folder to retrieve test data from.

@@ -1,11 +1,12 @@
 package eu.iamgio.quarkdown.test
 
+import eu.iamgio.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 /**
- * Full-pipeline tests for the `paper` library.
+ * Tests for the `paper` library.
  */
 class PaperLibTest {
     @Test
