@@ -64,28 +64,36 @@ fun collectionGet(
  * @return first element of the collection, or [NOT_FOUND] if the collection is empty
  */
 @Name("first")
-fun collectionFirst(collection: Iterable<OutputValue<*>>) = nativeCollectionGet(0, collection)
+fun collectionFirst(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+) = nativeCollectionGet(0, collection)
 
 /**
  * @param collection collection to get the second element from
  * @return second element of the collection, or [NOT_FOUND] if the collection has less than 2 elements
  */
 @Name("second")
-fun collectionSecond(collection: Iterable<OutputValue<*>>) = nativeCollectionGet(1, collection)
+fun collectionSecond(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+) = nativeCollectionGet(1, collection)
 
 /**
  * @param collection collection to get the third element from
  * @return third element of the collection, or [NOT_FOUND] if the collection has less than 3 elements
  */
 @Name("third")
-fun collectionThird(collection: Iterable<OutputValue<*>>) = nativeCollectionGet(2, collection)
+fun collectionThird(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+) = nativeCollectionGet(2, collection)
 
 /**
  * @param collection collection to get the last element from
  * @return last element of the collection, or [NOT_FOUND] if the collection is empty
  */
 @Name("last")
-fun collectionLast(collection: Iterable<OutputValue<*>>): OutputValue<*> {
+fun collectionLast(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): OutputValue<*> {
     return collection.toList().lastOrNull() ?: NOT_FOUND
 }
 
