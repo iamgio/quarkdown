@@ -336,6 +336,29 @@ class ScriptingTest {
         ) {
             assertEquals("<p>3</p>", it)
         }
+
+        execute(
+            """            
+            .var {x}
+                .dictionary
+                    - a
+                      - aa: 1
+                      - ab: 2
+                    - b
+                      - ba: 3
+                      - bb: 4
+            
+            .foreach {.x}
+                .var {name} {.first {.1}}
+                .var {dict} {.second {.1}}
+                .var {key} {.concatenate {.name} {b}} 
+                .var {value} {.get {.key} {.dict}}
+            
+                .name, .value
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>a, 2</p><p>b, 4</p>", it)
+        }
     }
 
     @Test

@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 
 /**
@@ -9,8 +10,29 @@ import eu.iamgio.quarkdown.function.value.OutputValue
  */
 val Dictionary: Module =
     setOf(
+        ::dictionary,
         ::dictionaryGet,
     )
+
+/**
+ * Makes the initialization of a dictionary explicit, to avoid ambiguity with collection initialization.
+ * ```
+ * .var {dict}
+ *   .dictionary
+ *     - a:
+ *       - aa: 1
+ *       - ab: 2
+ *     - b:
+ *       - ba: 3
+ *       - bb: 4
+ *
+ * .foreach {.dict}
+ *   It would not iterate key-value pairs properly without the explicit `.dictionary` call.
+ * ```
+ * @param dictionary dictionary to initialize
+ * @return the dictionary
+ */
+fun dictionary(dictionary: Map<String, OutputValue<*>>): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
 
 /**
  * @param key key to get the value of

@@ -380,6 +380,7 @@ object ValueFactory {
         val value = expression(rawString, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
         return value as? IterableValue<*>
+            ?: (value as? DictionaryValue<*>)?.adapt() // A dictionary is an iterable of key-value pairs.
             ?: markdownListToIterable(rawString, context) // A Markdown list is a valid iterable.
             ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
     }
