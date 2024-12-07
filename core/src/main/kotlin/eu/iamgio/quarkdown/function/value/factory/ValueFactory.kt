@@ -355,21 +355,21 @@ object ValueFactory {
      */
     @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Iterable::class, requiresContext = true)
-    fun <T : OutputValue<*>> iterable(
+    fun iterable(
         raw: Any,
         context: Context,
-    ): IterableValue<T> {
+    ): IterableValue<*> {
         when (raw) {
-            is Range -> return raw.toCollection() as IterableValue<T>
-            is List<*> -> return OrderedCollectionValue(raw as List<T>)
-            is Set<*> -> return UnorderedCollectionValue(raw as Set<T>)
-            is Iterable<*> -> return GeneralCollectionValue(raw as Iterable<T>)
+            is Range -> return raw.toCollection()
+            is List<*> -> return OrderedCollectionValue(raw as List<OutputValue<*>>)
+            is Set<*> -> return UnorderedCollectionValue(raw as Set<OutputValue<*>>)
+            is Iterable<*> -> return GeneralCollectionValue(raw as Iterable<OutputValue<*>>)
         }
 
         // A range is a suitable numeric iterable value.
         try {
             val range = range(raw)
-            return range.unwrappedValue.toCollection() as IterableValue<T>
+            return range.unwrappedValue.toCollection()
         } catch (ignored: IllegalRawValueException) {
             // The raw value is not a range.
         }
@@ -379,15 +379,15 @@ object ValueFactory {
         // The expression is evaluated into an iterable.
         val value = expression(rawString, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
-        return value as? IterableValue<T>
-            ?: markdownListToIterable(rawString, context) as? IterableValue<T> // A Markdown list is a valid iterable.
+        return value as? IterableValue<*>
+            ?: markdownListToIterable(rawString, context) // A Markdown list is a valid iterable.
             ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
     }
 
     /**
      * Converts a raw string input to a dictionary value.
      * A dictionary is a collection of key-value pairs,
-     * where keys are strings and values of type [T] can be expressed in two ways:
+     * where keys are strings and values can be expressed in two ways:
      * - Inline, in the format `- key: value`.
      * - Nested dictionaries, in the format:
      *   ```
@@ -413,25 +413,25 @@ object ValueFactory {
      */
     @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Map::class, requiresContext = true)
-    fun <T : OutputValue<*>> dictionary(
+    fun dictionary(
         raw: Any,
         context: Context,
-    ): DictionaryValue<T> {
-        (raw as? Map<String, T>)?.let { return DictionaryValue(it.toMutableMap()) }
+    ): DictionaryValue<*> {
+        (raw as? Map<String, OutputValue<*>>)?.let { return DictionaryValue(it.toMutableMap()) }
 
         val content = blockMarkdown(raw, context).unwrappedValue
         val list =
             content.children.singleOrNull { it !is Newline } as? ListBlock
                 ?: throw IllegalRawValueException("Not a dictionary (the only element must be a Markdown list)", raw)
 
-        fun convert(list: ListBlock): DictionaryValue<T> =
+        fun convert(list: ListBlock): DictionaryValue<*> =
             MarkdownListToDictionary(
                 list,
                 // Node values are currently unsupported as dictionary values.
                 // Here we give back the raw string as a fallback in case a node is met.
-                inlineValueMapper = { eval(it, context, fallback = { it.wrappedAsValue() }) as T },
-                nestedValueMapper = { convert(it) as T },
-                nothingValueMapper = { DictionaryValue(mutableMapOf()) as T },
+                inlineValueMapper = { eval(it, context, fallback = { it.wrappedAsValue() }) },
+                nestedValueMapper = { convert(it) },
+                nothingValueMapper = { DictionaryValue(mutableMapOf()) },
             ).convert()
 
         return convert(list)
