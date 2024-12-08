@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.Destructurable
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
@@ -63,7 +64,41 @@ fun ifNot(
 
 /**
  * Repeats content for each element of an iterable collection.
- * The current element can be accessed via the lambda argument.
+ * The current element can be accessed via the lambda argument, which may be either explicit or implicit.
+ *
+ * ```
+ * .var {collection}
+ *   - A
+ *   - B
+ *   - C
+ *
+ * .foreach {.collection}
+ *   element:
+ *   The current element is **.element**
+ * ```
+ *
+ * In implicit form:
+ *
+ * ```
+ * .foreach {.collection}
+ *   The current element is **.1**
+ * ```
+ *
+ * In case the iterable is destructurable (e.g. a [dictionary]) and the lambda body has more than 1 explicit parameter,
+ * the value is destructured into components.
+ *
+ * ```
+ * .var {x}
+ *   .dictionary
+ *     - a: 1
+ *     - b: 2
+ *     - c: 3
+ *
+ * .foreach {.x}
+ *     key value:
+ *     **.key** has value **.value**
+ * ```
+ *
  * @param iterable collection to iterate
  * @param body content, output of each iteration. Accepts 1 parameter (the current element).
  * @return a collection that contains the output of each iteration
@@ -74,8 +109,19 @@ fun forEach(
     body: Lambda,
 ): IterableValue<OutputValue<*>> {
     val values =
-        iterable.map {
-            body.invokeDynamic(it)
+        iterable.map { value ->
+            when {
+                // Destructuring: if the lambda has more than 1 explicit parameter, the value is destructured.
+                // For example, a dictionary may be destructured into its key and value.
+                value is Destructurable<*> && body.explicitParameters.size > 1 -> {
+                    // The body is invoked with the first N destructured components.
+                    val destructured = value.destructured(componentCount = body.explicitParameters.size)
+                    body.invokeDynamic(*destructured.toTypedArray())
+                }
+
+                // Regular iteration with 1 parameter.
+                else -> body.invokeDynamic(value)
+            }
         }
 
     return GeneralCollectionValue(values)

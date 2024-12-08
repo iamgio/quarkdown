@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 
 /**
@@ -358,6 +359,67 @@ class ScriptingTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>a, 2</p><p>b, 4</p>", it)
+        }
+    }
+
+    @Test
+    fun destructuring() {
+        execute(
+            """
+            .var {x}
+              .dictionary 
+                - a: 1
+                - b: 2
+                - c: 3
+            
+            .foreach {.x}
+                key value:
+                **.key** has value **.value**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><strong>a</strong> has value <strong>1</strong></p>" +
+                    "<p><strong>b</strong> has value <strong>2</strong></p>" +
+                    "<p><strong>c</strong> has value <strong>3</strong></p>",
+                it,
+            )
+        }
+
+        assertFails {
+            execute(
+                """
+                .var {x}
+                  .dictionary 
+                    - a: 1
+                    - b: 2
+                    - c: 3
+                
+                .foreach {.x}
+                    key value aaa:
+                    **.key** has value **.value**
+                """.trimIndent(),
+            ) {}
+        }
+
+        execute(
+            """
+            .docauthors
+                - Giorgio
+                  - email: gio@test.com
+                  - country: Italy
+                - Mary
+                  - country: USA
+                  
+            .foreach {.docauthors}
+                name info:
+                .name's country is .get {country} {.info}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Giorgio&rsquo;s country is Italy</p>" +
+                    "<p>Mary&rsquo;s country is USA</p>",
+                it,
+            )
         }
     }
 
