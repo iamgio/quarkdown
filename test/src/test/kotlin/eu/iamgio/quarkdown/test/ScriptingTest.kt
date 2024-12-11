@@ -606,5 +606,57 @@ class ScriptingTest {
                 it,
             )
         }
+
+        execute(
+            """
+            .docauthors
+                - Llion Jones
+                  - branch: Google Research
+                  - email: llion@google.com
+                - Aidan N. Gomez
+                  - branch: University of Toronto
+                  - email: aidan@cs.toronto.edu
+                - Łukasz Kaiser
+                  - branch: Google Brain
+                  - email: lukaszkaiser@google.com
+                - Illia Polosukhin
+                  - email: illia.polosukhin@gmail.com
+                  
+            .function {author}
+                name branch email:
+                .center
+                    **.name**  
+                    .branch  
+                    .text {.email} size:{small}  
+                    .whitespace
+            
+            .grid columns:{2} alignment:{spacearound}
+                .foreach {.docauthors}
+                    name info:
+                    .author {.name} {.get {branch} from:{.info} orelse:{-}} {.get {email} from:{.info}}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div style=\"grid-template-columns: auto auto; justify-content: space-around; align-items: center;\" " +
+                    "class=\"stack stack-grid\">" +
+                    "<div class=\"align align-center\">" +
+                    "<p><strong>Llion Jones</strong><br />Google Research<br />" +
+                    "<span class=\"size-small\"><a href=\"llion@google.com\">llion@google.com</a></span><br /><span>&nbsp;</span></p>" +
+                    "</div><div class=\"align align-center\">" +
+                    "<p><strong>Aidan N. Gomez</strong>" +
+                    "<br />University of Toronto<br />" +
+                    "<span class=\"size-small\"><a href=\"aidan@cs.toronto.edu\">aidan@cs.toronto.edu</a></span><br />" +
+                    "<span>&nbsp;</span></p>" +
+                    "</div><div class=\"align align-center\"><p><strong>Łukasz Kaiser</strong>" +
+                    "<br />Google Brain<br />" +
+                    "<span class=\"size-small\"><a href=\"lukaszkaiser@google.com\">lukaszkaiser@google.com</a></span><br />" +
+                    "<span>&nbsp;</span></p></div>" +
+                    "<div class=\"align align-center\"><p><strong>Illia Polosukhin</strong>" +
+                    "<br />-<br />" +
+                    "<span class=\"size-small\"><a href=\"illia.polosukhin@gmail.com\">illia.polosukhin@gmail.com</a></span><br />" +
+                    "<span>&nbsp;</span></p></div></div>",
+                it,
+            )
+        }
     }
 }
