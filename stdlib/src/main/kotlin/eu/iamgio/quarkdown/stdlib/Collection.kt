@@ -39,11 +39,13 @@ private fun kotlinIndexToQuarkdown(index: Int) = index + INDEX_STARTS_AT
 /**
  * @param index index of the element to get (starting at 0)
  * @param collection collection to get the element from
+ * @param fallback value to return if the index is out of bounds
  * @return element at the given index, or [NOT_FOUND] if the index is out of bounds
  */
 private fun nativeCollectionGet(
     index: Int,
     collection: Iterable<OutputValue<*>>,
+    fallback: OutputValue<*> = NOT_FOUND,
 ): OutputValue<*> {
     return collection.toList().getOrNull(index) ?: NOT_FOUND
 }
@@ -51,13 +53,15 @@ private fun nativeCollectionGet(
 /**
  * @param index index of the element to get **(starting at 1)**
  * @param collection collection to get the element from
+ * @param fallback value to return if the index is out of bounds. If unset, `false` is returned.
  * @return element at the given index, or [NOT_FOUND] if the index is out of bounds
  */
 @Name("getat")
 fun collectionGet(
     index: Int,
     @Name("from") collection: Iterable<OutputValue<*>>,
-) = nativeCollectionGet(quarkdownIndexToKotlin(index), collection)
+    @Name("orelse") fallback: DynamicValue = DynamicValue(NOT_FOUND),
+) = nativeCollectionGet(quarkdownIndexToKotlin(index), collection, fallback)
 
 /**
  * @param collection collection to get the first element from

@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.DictionaryValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 
 /**
@@ -37,12 +38,14 @@ fun dictionary(dictionary: Map<String, OutputValue<*>>): DictionaryValue<*> = Di
 /**
  * @param key key to get the value of
  * @param dictionary dictionary to get the value from
+ * @param fallback value to return if the key is not present. If unset, `false` is returned.
  * @return value corresponding to the given key, or [NOT_FOUND] if the key is not present
  */
 @Name("get")
 fun dictionaryGet(
     key: String,
     @Name("from") dictionary: Map<String, OutputValue<*>>,
+    @Name("orelse") fallback: DynamicValue = DynamicValue(NOT_FOUND),
 ): OutputValue<*> {
-    return dictionary[key] ?: NOT_FOUND
+    return dictionary[key] ?: fallback
 }
