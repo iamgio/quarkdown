@@ -86,6 +86,47 @@ class DocumentTest {
     }
 
     @Test
+    fun `document metadata echo`() {
+        execute(
+            """
+            .docname {My Quarkdown document}
+            .docauthors
+              - iamgio
+                - country: Italy
+            .doctype {slides}
+            .doclang {english}
+            
+            .docname .text {.docname} size:{tiny}.
+            
+            .docauthors
+            
+            #! .docauthor
+            
+            .doctype
+            
+            .doclang
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>My Quarkdown document " +
+                    "<span class=\"size-tiny\">My Quarkdown document</span>.</p>" +
+                    "<table>" +
+                    "<thead><tr><th>Key</th><th>Value</th></tr></thead>" +
+                    "<tbody>" +
+                    "<tr><td>iamgio</td><td>" +
+                    "<table><thead><tr><th>Key</th><th>Value</th></tr></thead>" +
+                    "<tbody><tr><td>country</td><td><p>Italy</p></td></tr></tbody></table></td></tr>" +
+                    "</tbody>" +
+                    "</table>" +
+                    "<h1>iamgio</h1>" +
+                    "<p>slides</p>" +
+                    "<p>English</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun localization() {
         execute(
             """
