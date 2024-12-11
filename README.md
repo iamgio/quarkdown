@@ -69,7 +69,7 @@ Combined with live preview and :zap: fast compilation speed, Quarkdown simply ge
 &nbsp;
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/video/livepreview.gif" alt="Live preview" width="600" />
+<img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/video/livepreview.gif" alt="Live preview" />
 </p>
 
 &nbsp;
