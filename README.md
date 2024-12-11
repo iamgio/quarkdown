@@ -64,6 +64,16 @@ You can even create awesome libraries for everyone to use.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
+Combined with live preview and :zap: fast compilation speed, Quarkdown simply gets the work done.
+
+&nbsp;
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/video/livepreview.gif" alt="Live preview" width="600" />
+</p>
+
+&nbsp;
+
 Check the [wiki](https://github.com/iamgio/quarkdown/wiki) to learn more about the language and its features.
 
 &nbsp;
@@ -202,7 +212,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
   If a [server](#server) is not running yet, it is started and the document is opened in the default browser.
 
 - **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
-  *Tip: combine with `-p` to achieve live reload!*
+  *Tip: combine with `-p` to achieve live preview!*
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
