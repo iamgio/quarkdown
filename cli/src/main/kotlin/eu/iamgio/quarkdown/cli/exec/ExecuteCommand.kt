@@ -149,9 +149,9 @@ abstract class ExecuteCommand(
 
         // If file watching is enabled, a file change triggers the pipeline execution again.
         if (watch) {
-            Log.info("Watching for file changes.")
+            cliOptions.source?.absoluteFile?.parentFile?.let { sourceDirectory ->
+                Log.info("Watching for file changes in source directory: $sourceDirectory")
 
-            cliOptions.source?.parentFile?.let { sourceDirectory ->
                 DirectoryWatcher.create(sourceDirectory) { event ->
                     Log.info("File changed: ${event.path()}. Launching.")
                     execute(cliOptions, pipelineOptions)
