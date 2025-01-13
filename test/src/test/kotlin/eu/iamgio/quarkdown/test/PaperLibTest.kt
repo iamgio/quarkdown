@@ -71,7 +71,7 @@ class PaperLibTest {
                 - proofs: a
             
             .paperblocksuffix {:}
-            .paperproofend {#}
+            .proofend {#}
             
             .proof
                 This is my proof.
@@ -93,7 +93,7 @@ class PaperLibTest {
             .abstract
                 This is my abstract.
                 
-            .paperabstractalignment {end}
+            .abstractalignment {end}
             
             .abstract
                 This is my second abstract.
