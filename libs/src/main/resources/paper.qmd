@@ -15,7 +15,7 @@
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 
 .var {INTERNALpaperabstractalignment} {center}
-.function {paperabstractalignment}
+.function {abstractalignment}
     alignment:
     .var {INTERNALpaperabstractalignment} {.alignment}
 
@@ -29,7 +29,7 @@
 <!-- Content at the end of a proof block -->
 
 .var {INTERNALpaperproofend} {∎}
-.function {paperproofend}
+.function {proofend}
     end:
     .var {INTERNALpaperproofend} {.end}
 
