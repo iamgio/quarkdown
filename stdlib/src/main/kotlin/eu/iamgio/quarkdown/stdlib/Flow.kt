@@ -205,13 +205,19 @@ fun variable(
      */
     fun MutableSet<Library>.remove(name: String) = this.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
 
-    // Deletes previous values. If any is found, this is an update rather than a declaration.
-    val targetContext =
+    // Attempt to find an existing owner context that already contains the variable,
+    // in case `context` is nested and the owner is up the hierarchy.
+    // If null, either the variable is new or the owner is the root context (because `context` would not be a ScopeContext).
+    val potentialOwnerContext: MutableContext? =
         // Scan contexts upwards until the root.
         // The last one to contain a matching variable name is the owner of the variable.
         (context as? ScopeContext)?.lastParentOrNull {
             it is MutableContext && it.libraries.remove(name)
-        } as? MutableContext ?: context // No match = new variable.
+        } as? MutableContext
+
+    // If an owner has been found, that context is the target context.
+    // Otherwise, it is `context`. Any reference is also removed in case it already exists.
+    val targetContext: MutableContext = potentialOwnerContext ?: context.also { it.libraries.remove(name) }
 
     // A variable is just a constant function.
     return function(

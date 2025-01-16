@@ -70,6 +70,7 @@ class EcosystemTest {
         }
     }
 
+    @Test
     fun `transitive inclusion`() {
         execute(
             """
@@ -94,6 +95,26 @@ class EcosystemTest {
                 .sum {.include {include/include-6.md}} {3}
                 """.trimIndent(),
             ) {}
+        }
+    }
+
+    @Test
+    fun `mutate included data`() {
+        execute(
+            """
+            .include {include/include-7.md}
+            
+            .saygreeting
+            
+            .var {mygreeting} {Hello}
+            
+            .saygreeting
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hi</p><p>Hello</p>",
+                it,
+            )
         }
     }
 
