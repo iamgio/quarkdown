@@ -23,8 +23,10 @@ class EcosystemTest {
                 it,
             )
         }
+    }
 
-        // Import functions from another source.
+    @Test
+    fun `include function from source`() {
         execute(
             """
             .include {include/include-2.md}
@@ -49,8 +51,10 @@ class EcosystemTest {
                 it,
             )
         }
+    }
 
-        // Sharing functions with included files.
+    @Test
+    fun `share function with included files`() {
         execute(
             """
             .function {hello}
@@ -64,8 +68,9 @@ class EcosystemTest {
                 it,
             )
         }
+    }
 
-        // Transitive inclusion of files.
+    fun `transitive inclusion`() {
         execute(
             """
             .noautopagebreak
@@ -78,7 +83,10 @@ class EcosystemTest {
                 it,
             )
         }
+    }
 
+    @Test
+    fun `invalid usage as value`() {
         // Included file cannot be used as a dynamic value.
         assertFails {
             execute(
