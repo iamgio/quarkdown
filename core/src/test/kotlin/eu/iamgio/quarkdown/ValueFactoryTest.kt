@@ -161,30 +161,76 @@ class ValueFactoryTest {
         // Two implicit arguments.
         assertEquals(
             "hello world from iamgio",
-            ValueFactory.lambda("hello .1 from .2", context).unwrappedValue.invoke<String, StringValue>(
-                StringValue("world"),
-                StringValue("iamgio"),
-            ).unwrappedValue,
+            ValueFactory
+                .lambda("hello .1 from .2", context)
+                .unwrappedValue
+                .invoke<String, StringValue>(
+                    StringValue("world"),
+                    StringValue("iamgio"),
+                ).unwrappedValue,
         )
 
         // Two explicit arguments.
         assertEquals(
             "hello world from iamgio",
-            ValueFactory.lambda(
-                "to from: hello .to from .from",
-                context,
-            ).unwrappedValue.invoke<String, StringValue>(
-                StringValue("world"),
-                StringValue("iamgio"),
-            ).unwrappedValue,
+            ValueFactory
+                .lambda(
+                    "to from: hello .to from .from",
+                    context,
+                ).unwrappedValue
+                .invoke<String, StringValue>(
+                    StringValue("world"),
+                    StringValue("iamgio"),
+                ).unwrappedValue,
+        )
+
+        // An optional parameter, passed.
+        assertEquals(
+            "hello world from iamgio",
+            ValueFactory
+                .lambda(
+                    "to?: hello .to from iamgio",
+                    context,
+                ).unwrappedValue
+                .invoke<String, StringValue>(
+                    StringValue("world"),
+                ).unwrappedValue,
+        )
+
+        // An optional parameter, not passed.
+        assertEquals(
+            "hello none from iamgio",
+            ValueFactory
+                .lambda(
+                    "to?: hello .to from iamgio",
+                    context,
+                ).unwrappedValue
+                .invoke<String, StringValue>()
+                .unwrappedValue,
+        )
+
+        // Two optional parameter, one passed.
+        assertEquals(
+            "hello world from none",
+            ValueFactory
+                .lambda(
+                    "to from?: hello .to from .from",
+                    context,
+                ).unwrappedValue
+                .invoke<String, StringValue>(
+                    StringValue("world"),
+                ).unwrappedValue,
         )
 
         // Mixing explicit and implicit arguments is not allowed.
         assertFailsWith<InvalidLambdaArgumentCountException> {
-            ValueFactory.lambda("to: hello .to from .2", context).unwrappedValue.invoke<String, StringValue>(
-                StringValue("world"),
-                StringValue("iamgio"),
-            ).unwrappedValue
+            ValueFactory
+                .lambda("to: hello .to from .2", context)
+                .unwrappedValue
+                .invoke<String, StringValue>(
+                    StringValue("world"),
+                    StringValue("iamgio"),
+                ).unwrappedValue
         }
     }
 

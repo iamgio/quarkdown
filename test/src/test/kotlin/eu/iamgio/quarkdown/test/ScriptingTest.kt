@@ -107,6 +107,83 @@ class ScriptingTest {
 
         execute(
             """
+            .function {greet}
+                to?:
+                Hello .to
+            
+            .greet {world}
+            .greet
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello world</p>" +
+                    "<p>Hello none</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {greet}
+                to from?:
+                Hello .to from .from
+            
+            .greet {world} {John}
+            .greet {world}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello world from John</p>" +
+                    "<p>Hello world from none</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {greet}
+                to? from?:
+                Hello .to from .from
+            
+            .greet {world} {John}
+            .greet {world}
+            .greet
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello world from John</p>" +
+                    "<p>Hello world from none</p>" +
+                    "<p>Hello none from none</p>",
+                it,
+            )
+        }
+
+        assertFailsWith<InvalidArgumentCountException> {
+            execute(
+                """
+                .function {greet}
+                    to? from:
+                    Hello .to from .from
+                
+                .greet {world}
+                """.trimIndent(),
+            ) {}
+        }
+
+        assertFailsWith<InvalidArgumentCountException> {
+            execute(
+                """
+                .function {greet}
+                    to? from:
+                    Hello .to from .from
+                
+                .greet
+                """.trimIndent(),
+            ) {}
+        }
+
+        execute(
+            """
             .if {yes}
                 .function {hello}
                     name:

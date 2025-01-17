@@ -8,10 +8,16 @@ import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
 private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
+
+data class LambdaParameter(
+    val name: String,
+    val isOptional: Boolean = false,
+)
 
 /**
  * An action block with a variable parameter count.
@@ -21,44 +27,70 @@ private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
  * @param action action to perform, which takes a variable sequence of [Value]s and this lambda's own forked context as arguments
  *        and returns the output of the lambda.
  */
-class Lambda(
+open class Lambda(
     val parentContext: Context,
-    val explicitParameters: List<String> = emptyList(),
-    val action: (Array<out Value<*>>, Context) -> OutputValue<*>,
+    val explicitParameters: List<LambdaParameter> = emptyList(),
+    val action: (List<Value<*>>, Context) -> OutputValue<*>,
 ) {
     /**
      * Registers the arguments in the context, which can be accessed as function calls.
      * @param arguments arguments of the lambda action
      */
-    private fun createLambdaParametersLibrary(vararg arguments: Value<*>) =
+    private fun createLambdaParametersLibrary(arguments: List<Value<*>>) =
         Library(
             LAMBDA_LIBRARY_NAME,
             functions =
-                arguments.mapIndexed { index, argument ->
-                    val parameterName = explicitParameters.getOrNull(index) ?: (index + 1).toString()
-                    SimpleFunction(
-                        parameterName,
-                        parameters = emptyList(),
-                    ) {
-                        // Value associated to the lambda argument.
-                        DynamicValue(argument.unwrappedValue)
-                    }
-                }.toSet(),
+                arguments
+                    .mapIndexed { index, argument ->
+                        val parameterName = explicitParameters.getOrNull(index)?.name ?: (index + 1).toString()
+                        SimpleFunction(
+                            parameterName,
+                            parameters = emptyList(),
+                        ) {
+                            // Value associated to the lambda argument.
+                            DynamicValue(argument.unwrappedValue)
+                        }
+                    }.toSet(),
         )
+
+    /**
+     * Checks if the amount of arguments matches the amount of expected parameters.
+     * @param arguments arguments of the lambda action
+     */
+    private fun isArgumentCountValid(arguments: List<Value<*>>): Boolean {
+        // If no explicit parameters are present, implicit parameters are automatically set to .1, .2, etc.,
+        // hence the argument count is always valid.
+        if (explicitParameters.isEmpty()) return true
+        // If the amount of arguments matches the amount of mandatory parameters, the argument count is valid.
+        if (arguments.size in explicitParameters.count { !it.isOptional }..explicitParameters.size) return true
+
+        return false
+    }
 
     /**
      * Invokes the lambda action with given arguments.
      * @param arguments arguments of the lambda action
      * @return the result of the lambda action, as an undetermined, thus dynamically-typed, value
      */
-    fun invokeDynamic(vararg arguments: Value<*>): OutputValue<*> {
+    fun invokeDynamic(arguments: List<Value<*>>): OutputValue<*> {
         // Check if the amount of arguments matches the amount of expected parameters.
         // In case parameters are not present, placeholders are automatically set to
         // .1, .2, etc., similarly to Kotlin's 'it' argument.
         // This replacement is handled by ValueFactory.lambda
-        if (arguments.size != explicitParameters.size && explicitParameters.isNotEmpty()) {
+        if (!isArgumentCountValid(arguments)) {
             throw InvalidLambdaArgumentCountException(explicitParameters.size, arguments.size)
         }
+
+        // The actual arguments to pass to the lambda action, based on the given `arguments`.
+        val actualArguments =
+            when {
+                arguments.size < explicitParameters.size -> {
+                    // If the remaining parameters are optional, fill the remaining parameters with 'none' placeholder values.
+                    // TODO replace with NoneValue
+                    arguments + List(explicitParameters.size - arguments.size) { StringValue("none") }
+                }
+                else -> arguments
+            }
 
         // Create a new independent context, copy of the parent one, to execute the lambda block in.
         // Upon invocation, the context is filled with the arguments information,
@@ -66,11 +98,16 @@ class Lambda(
         val context = parentContext.fork()
 
         // Register the arguments in the context, which can be accessed as function calls.
-        context.libraries += createLambdaParametersLibrary(*arguments)
+        context.libraries += createLambdaParametersLibrary(actualArguments)
 
         // The result of the lambda action is processed.
-        return action(arguments, context)
+        return action(actualArguments, context)
     }
+
+    /**
+     * @see invokeDynamic
+     */
+    fun invokeDynamic(vararg arguments: Value<*>): OutputValue<*> = invokeDynamic(arguments.toList())
 
     /**
      * Invokes the lambda action with given arguments and converts it to a static type.

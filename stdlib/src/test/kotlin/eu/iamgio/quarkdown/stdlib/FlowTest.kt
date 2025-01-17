@@ -14,6 +14,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.function.value.output.node.BlockNodeOutputValueVisitor
@@ -140,7 +141,7 @@ class FlowTest {
         assertFailsWith<InvalidLambdaArgumentCountException> {
             `if`(
                 isLower(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = listOf("a")) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
+                Lambda(context, explicitParameters = listOf(LambdaParameter("a"))) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         }
     }

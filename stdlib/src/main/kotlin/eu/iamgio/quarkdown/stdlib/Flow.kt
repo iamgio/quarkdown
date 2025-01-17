@@ -116,7 +116,7 @@ fun forEach(
                 value is Destructurable<*> && body.explicitParameters.size > 1 -> {
                     // The body is invoked with the first N destructured components.
                     val destructured = value.destructured(componentCount = body.explicitParameters.size)
-                    body.invokeDynamic(*destructured.toTypedArray())
+                    body.invokeDynamic(destructured)
                 }
 
                 // Regular iteration with 1 parameter.
@@ -149,7 +149,7 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
 /**
  * Defines a custom function that can be called later in the document.
  * The amount of parameters (thus of expected arguments) is determined by the amount of **explicit** lambda parameters.
- * Arguments can be accessed as a function call with their names.
+ * Arguments can be accessed as a function call via their names.
  * The return type of the function is dynamic, hence it can be used as an input of various types for other function calls.
  *
  * Example:
@@ -157,6 +157,21 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
  * .function {greet}
  *     from to:
  *     **Hello .to** from .from
+ * ```
+ *
+ * The function defined in the previous example can be called normally, even with named arguments:
+ * ```
+ * .greet {John} {world}
+ * ```
+ * ```
+ * .greet from:{John} to:{world}
+ * ```
+ *
+ * A parameter might also be optional. In this case, if the corresponding argument is not provided, it will be `none`:
+ * ```
+ * .function {greet}
+ *    from to?:
+ *    **Hello .to** from .from
  * ```
  *
  * @param name name of the function
@@ -170,16 +185,17 @@ fun function(
     // Function parameters.
     val parameters =
         body.explicitParameters.mapIndexed { index, parameter ->
-            FunctionParameter(name = parameter, type = DynamicValue::class, index)
+            FunctionParameter(parameter.name, type = DynamicValue::class, index, parameter.isOptional)
         }
 
     // The custom function itself.
     val function =
         SimpleFunction(name, parameters) { bindings ->
-            val args = bindings.values.map { it.value }.toTypedArray()
+            // Retrieving arguments from the function call.
+            val args = bindings.values.map { it.value }
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
-            body.invokeDynamic(*args)
+            body.invokeDynamic(args)
         }
 
     // The function is registered and ready to be called.

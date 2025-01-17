@@ -36,6 +36,7 @@ import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
@@ -45,6 +46,12 @@ import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.toPlainText
+
+/**
+ * Suffix that marks a lambda parameter as optional.
+ * @see ValueFactory.lambda
+ */
+private const val LAMBDA_OPTIONAL_PARAMETER_SUFFIX = '?'
 
 /**
  * Factory of [Value] wrappers from raw data.
@@ -69,7 +76,9 @@ object ValueFactory {
         when (raw) {
             is Number -> NumberValue(raw)
             else ->
-                raw.toString().let { it.toIntOrNull() ?: it.toFloatOrNull() }
+                raw
+                    .toString()
+                    .let { it.toIntOrNull() ?: it.toFloatOrNull() }
                     ?.let { NumberValue(it) }
                     ?: throw IllegalRawValueException("Not a numeric value", raw)
         }
@@ -116,7 +125,9 @@ object ValueFactory {
         }
 
         val groups =
-            regex.find(rawString)?.groupValues
+            regex
+                .find(rawString)
+                ?.groupValues
                 ?.asSequence()
                 ?.iterator(consumeAmount = 1)
 
@@ -149,7 +160,12 @@ object ValueFactory {
 
         // Matches value and unit, e.g. 10px, 12.5cm, 3in.
         val regex = "^(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?$".toRegex()
-        val groups = regex.find(raw.toString())?.groupValues?.asSequence()?.iterator(consumeAmount = 1)
+        val groups =
+            regex
+                .find(raw.toString())
+                ?.groupValues
+                ?.asSequence()
+                ?.iterator(consumeAmount = 1)
 
         // The value, which is required.
         val value = groups?.next()?.toDoubleOrNull() ?: throw IllegalRawValueException("Invalid size", raw)
@@ -225,7 +241,8 @@ object ValueFactory {
         when (raw) {
             is Enum<*> -> EnumValue(raw)
             else ->
-                values.find { it.quarkdownName.equals(raw.toString(), ignoreCase = true) }
+                values
+                    .find { it.quarkdownName.equals(raw.toString(), ignoreCase = true) }
                     ?.let { EnumValue(it) }
         }
 
@@ -338,7 +355,8 @@ object ValueFactory {
         val list = content.children.singleOrNull() as? ListBlock ?: return null
 
         val items =
-            list.children.asSequence()
+            list.children
+                .asSequence()
                 .filterIsInstance<ListItem>()
                 .map { it.children.toPlainText() }
                 .map(::DynamicValue)
@@ -457,10 +475,27 @@ object ValueFactory {
         // The header contains the sequence of lambda parameters.
         // If no header is present, the lambda has no parameters.
         val headerDelimiter = ":"
-        // Matches a sequence of words separated by spaces or tabs, followed by the delimiter.
-        val headerRegex = "^\\s*(\\w+[ \\t]*)*(?=$headerDelimiter)".toRegex()
+        // Matches a sequence of words separated by spaces or tabs,
+        // followed by an optional '?' (makes it optional),
+        // followed by the delimiter.
+        val headerRegex = "^\\s*(\\w+\\??[ \\t]*)*(?=$headerDelimiter)".toRegex()
         val header = headerRegex.find(rawString)?.value ?: ""
-        val parameters = header.trim().split("\\s+".toRegex()).filter { it.isNotBlank() }
+
+        // The parameters are extracted from the header.
+        val parameters: List<LambdaParameter> =
+            header
+                .trim()
+                .split("\\s+".toRegex())
+                .asSequence()
+                .filter { it.isNotBlank() }
+                .map { parameterName ->
+                    // If a parameter ends with '?', it is optional.
+                    val isOptional = parameterName.endsWith(LAMBDA_OPTIONAL_PARAMETER_SUFFIX)
+                    // The '?' is stripped from the parameter name.
+                    val name = if (isOptional) parameterName.dropLast(1) else parameterName
+
+                    LambdaParameter(name, isOptional)
+                }.toList()
 
         // The body is the part after the delimiter,
         // which is the actual content of the lambda.
@@ -470,7 +505,8 @@ object ValueFactory {
                 rawString
             } else {
                 // Strip the header and delimiter.
-                rawString.substring(rawString.indexOf(headerDelimiter) + headerDelimiter.length)
+                rawString
+                    .substring(rawString.indexOf(headerDelimiter) + headerDelimiter.length)
                     .trimStart()
             }
 
