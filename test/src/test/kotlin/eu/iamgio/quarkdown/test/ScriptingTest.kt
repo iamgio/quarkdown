@@ -117,7 +117,7 @@ class ScriptingTest {
         ) {
             assertEquals(
                 "<p>Hello world</p>" +
-                    "<p>Hello none</p>",
+                    "<p>Hello None</p>",
                 it,
             )
         }
@@ -134,7 +134,7 @@ class ScriptingTest {
         ) {
             assertEquals(
                 "<p>Hello world from John</p>" +
-                    "<p>Hello world from none</p>",
+                    "<p>Hello world from None</p>",
                 it,
             )
         }
@@ -152,8 +152,8 @@ class ScriptingTest {
         ) {
             assertEquals(
                 "<p>Hello world from John</p>" +
-                    "<p>Hello world from none</p>" +
-                    "<p>Hello none from none</p>",
+                    "<p>Hello world from None</p>" +
+                    "<p>Hello None from None</p>",
                 it,
             )
         }

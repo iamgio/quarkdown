@@ -7,8 +7,8 @@ import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.OutputValue
-import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
@@ -86,8 +86,7 @@ open class Lambda(
             when {
                 arguments.size < explicitParameters.size -> {
                     // If the remaining parameters are optional, fill the remaining parameters with 'none' placeholder values.
-                    // TODO replace with NoneValue
-                    arguments + List(explicitParameters.size - arguments.size) { StringValue("none") }
+                    arguments + List(explicitParameters.size - arguments.size) { NoneValue }
                 }
                 else -> arguments
             }

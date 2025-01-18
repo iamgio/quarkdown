@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
@@ -173,8 +174,10 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             else -> DynamicValue(result.unwrappedValue)
         }
 
-    // TODO append lambda
     override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
+
+    // None "abc" -> "noneabc"
+    override fun visit(value: NoneValue) = value.concatenate()
 
     // Appends the result of the evaluation.
     override fun visit(expression: FunctionCall<*>): Expression =

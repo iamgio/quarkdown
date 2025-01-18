@@ -199,7 +199,7 @@ class ValueFactoryTest {
 
         // An optional parameter, not passed.
         assertEquals(
-            "hello none from iamgio",
+            "hello None from iamgio",
             ValueFactory
                 .lambda(
                     "to?: hello .to from iamgio",
@@ -211,7 +211,7 @@ class ValueFactoryTest {
 
         // Two optional parameter, one passed.
         assertEquals(
-            "hello world from none",
+            "hello world from None",
             ValueFactory
                 .lambda(
                     "to from?: hello .to from .from",

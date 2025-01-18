@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
@@ -53,6 +54,8 @@ class EvalExpressionVisitor : ExpressionVisitor<Value<*>> {
     override fun visit(value: DynamicValue) = value
 
     override fun visit(value: LambdaValue) = value
+
+    override fun visit(value: NoneValue) = value
 
     // When used as an input value for another function call,
     // the output type of the function call must be an InputValue.
