@@ -13,10 +13,12 @@ import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
@@ -235,12 +237,22 @@ fun variable(
     // Otherwise, it is `context`. Any reference is also removed in case it already exists.
     val targetContext: MutableContext = potentialOwnerContext ?: context.also { it.libraries.remove(name) }
 
-    // A variable is just a constant function.
+    // A variable can be seen as two functions:
+    // - A parameter-less getter that returns the value
+    // - A one-parameter setter that assigns a new value
+    // These two functions are merged into a single one that works via an optional argument, acting both as getter and setter.
     return function(
         targetContext,
         name,
-        Lambda(context, explicitParameters = emptyList()) { _, _ ->
-            value
+        Lambda(context, explicitParameters = listOf(LambdaParameter("value", isOptional = true))) { args, _ ->
+            if (args.isEmpty() || args.first() is NoneValue) {
+                // Getter
+                value
+            } else {
+                // Setter
+                val newValue = args.first().let { it as? DynamicValue ?: DynamicValue(it) } // Wrapping the value if needed.
+                variable(targetContext, name, newValue)
+            }
         },
     )
 }

@@ -198,6 +198,24 @@ class ScriptingTest {
 
         execute(
             """
+            .var {a} {0}
+            
+            .a
+            
+            .var {a} {1}
+            
+            .a
+            
+            .a {2}
+            
+            .a
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>0</p><p>1</p><p>2</p>", it)
+        }
+
+        execute(
+            """
             .let {world}
                 Hello, **.1**!
             """.trimIndent(),
@@ -514,8 +532,8 @@ class ScriptingTest {
                     |:-------------:|
                     |      .t1      |
                     .var {tmp} {.sum {.t1} {.t2}}
-                    .var {t1} {.t2}
-                    .var {t2} {.tmp}
+                    .t1 {.t2}
+                    .t2 {.tmp}
             """.trimIndent()
 
         val iterativeInFunction =
@@ -531,7 +549,7 @@ class ScriptingTest {
                         |:--------------------------:|
                         |             .t1            |
                         .var {tmp} {.sum {.t1} {.t2}}
-                        .var {t1} {.t2}
+                        .t1 {.t2}
                         .var {t2} {.tmp}
 
             .fib {5}
