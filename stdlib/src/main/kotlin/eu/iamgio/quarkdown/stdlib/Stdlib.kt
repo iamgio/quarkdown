@@ -41,6 +41,7 @@ object Stdlib : LibraryExporter {
                     String +
                     Collection +
                     Dictionary +
+                    Optionality +
                     Logger +
                     Flow +
                     Data +
