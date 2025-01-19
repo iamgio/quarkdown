@@ -66,12 +66,15 @@ private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
  * A parser for inline tokens.
  * @param context additional data to fill during the parsing process
  */
-class InlineTokenParser(private val context: MutableContext) : InlineTokenVisitor<Node> {
+class InlineTokenParser(
+    private val context: MutableContext,
+) : InlineTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
-        this.tokenize()
+        this
+            .tokenize()
             .acceptAll(context.flavor.parserFactory.newParser(context))
 
     /**
@@ -131,9 +134,7 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
-    override fun visit(token: CriticalContentToken): Node {
-        return CriticalContent(token.data.text)
-    }
+    override fun visit(token: CriticalContentToken): Node = CriticalContent(token.data.text)
 
     override fun visit(token: TextSymbolToken): Node {
         // The symbol is then treated separately from text in the renderer.
@@ -146,11 +147,9 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         return Comment
     }
 
-    override fun visit(token: LineBreakToken): Node {
-        return LineBreak
-    }
+    override fun visit(token: LineBreakToken): Node = LineBreak
 
-    override fun visit(token: LinkToken): Node {
+    override fun visit(token: LinkToken): Link {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Link(
             label = parseLinkLabelSubContent(groups.next()),
@@ -160,7 +159,7 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
-    override fun visit(token: ReferenceLinkToken): Node {
+    override fun visit(token: ReferenceLinkToken): ReferenceLink {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val label = parseLinkLabelSubContent(groups.next())
         // When the reference is collapsed, the label is the same as the reference label.
@@ -211,14 +210,14 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
     }
 
     override fun visit(token: ImageToken): Node {
-        val link = visit(LinkToken(token.data)) as Link
+        val link = visit(LinkToken(token.data))
         val (width, height) = extractImageSize("img", token.data)
 
         return Image(link, width, height)
     }
 
     override fun visit(token: ReferenceImageToken): Node {
-        val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
+        val link = visit(ReferenceLinkToken(token.data))
         val (width, height) = extractImageSize("refimg", token.data)
 
         return ReferenceImage(link, width, height)
@@ -245,15 +244,14 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         // If null, no additional content is present.
         val content: CodeSpan.ContentInfo? =
             // Color decoding. Named colors are disabled due to performance reasons.
-            Color.decode(text, HexColorDecoder, RgbColorDecoder, RgbaColorDecoder, HsvHslColorDecoder)
+            Color
+                .decode(text, HexColorDecoder, RgbColorDecoder, RgbaColorDecoder, HsvHslColorDecoder)
                 ?.let(CodeSpan::ColorContent)
 
         return CodeSpan(text, content)
     }
 
-    override fun visit(token: PlainTextToken): Node {
-        return Text(token.data.text)
-    }
+    override fun visit(token: PlainTextToken): Node = Text(token.data.text)
 
     /**
      * @param token emphasis token to parse the content for
@@ -261,25 +259,20 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
      */
     private fun emphasisContent(token: Token): InlineContent {
         // The raw string content, without the delimiters.
-        val text = token.data.groups.iterator(consumeAmount = 3).next()
+        val text =
+            token.data.groups
+                .iterator(consumeAmount = 3)
+                .next()
         return parseSubContent(text)
     }
 
-    override fun visit(token: EmphasisToken): Node {
-        return Emphasis(emphasisContent(token))
-    }
+    override fun visit(token: EmphasisToken): Node = Emphasis(emphasisContent(token))
 
-    override fun visit(token: StrongToken): Node {
-        return Strong(emphasisContent(token))
-    }
+    override fun visit(token: StrongToken): Node = Strong(emphasisContent(token))
 
-    override fun visit(token: StrongEmphasisToken): Node {
-        return StrongEmphasis(emphasisContent(token))
-    }
+    override fun visit(token: StrongEmphasisToken): Node = StrongEmphasis(emphasisContent(token))
 
-    override fun visit(token: StrikethroughToken): Node {
-        return Strikethrough(emphasisContent(token))
-    }
+    override fun visit(token: StrikethroughToken): Node = Strikethrough(emphasisContent(token))
 
     override fun visit(token: InlineMathToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
