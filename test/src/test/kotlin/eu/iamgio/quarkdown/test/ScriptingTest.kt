@@ -184,6 +184,41 @@ class ScriptingTest {
 
         execute(
             """
+            .var {a} {0}
+            
+            .isnone {.a}
+            
+            .var {b} {.none}
+            
+            .isnone {.b}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><input disabled=\"\" type=\"checkbox\" /></p>" +
+                    "<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {greet}
+                to from?:
+                Hello .to from .otherwise {.from} {.to}
+            
+            .greet {world} {John}
+            .greet {world}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello world from John</p>" +
+                    "<p>Hello world from world</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
             .if {yes}
                 .function {hello}
                     name:
