@@ -30,7 +30,9 @@ import eu.iamgio.quarkdown.parser.BlockTokenParser
  * @param allowsBody whether the function call allows an indented body argument.
  *                   Generally, this is true for block functions, false for inline functions.
  */
-class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunctionCall>() {
+class FunctionCallGrammar(
+    private val allowsBody: Boolean,
+) : Grammar<WalkedFunctionCall>() {
     /**
      * Whether the parser is currently parsing an argument.
      * While parsing an argument, the parser should not perform syntactic checks as the argument may contain any content, including Markdown.
@@ -59,6 +61,16 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
          * The character that ends an inline argument.
          */
         const val ARGUMENT_END = '}'
+
+        /**
+         * The character that delimits a named argument.
+         */
+        const val NAMED_ARGUMENT_DELIMITER = ":"
+
+        /**
+         * The character that separates chained function calls.
+         */
+        const val CHAIN_SEPARATOR = "::"
     }
 
     /**
@@ -145,10 +157,16 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
     }
 
     /**
+     * Token that matches the separator between chained function calls.
+     * e.g. `foo::bar`.
+     */
+    private val chainSeparator by literalToken(CHAIN_SEPARATOR)
+
+    /**
      * Token that matches the delimiter between an argument name and its value.
      * e.g. `name:{value}`.
      */
-    private val argumentNameDelimiter by literalToken(":")
+    private val argumentNameDelimiter by literalToken(NAMED_ARGUMENT_DELIMITER)
 
     /**
      * Token that matches an identifier (function name or argument name).
@@ -222,13 +240,13 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
         }
 
     /**
-     * Entry point. Parses the whole function call.
+     * Parses a single function call.
      * A function call consists of a function name, inline arguments and an optional body argument.
      */
-    override val rootParser =
+    private val callParser =
         (
             // Function name.
-            -begin and identifier and
+            identifier and
                 // Inline arguments.
                 zeroOrMore(argumentParser) and
                 // Body argument.
@@ -239,5 +257,20 @@ class FunctionCallGrammar(private val allowsBody: Boolean) : Grammar<WalkedFunct
                 args,
                 body,
             )
+        }
+
+    /**
+     * Entry point of the grammar.
+     * Parses the whole chain of function calls.
+     * The result is an ordered linked list of [WalkedFunctionCall]s, and the first of them is returned.
+     */
+    override val rootParser =
+        -begin and callParser and zeroOrMore(-chainSeparator and callParser) map { (first, rest) ->
+            var current = first
+            for (next in rest) {
+                current.next = next
+                current = next
+            }
+            first
         }
 }

@@ -63,8 +63,10 @@ class LexerTest {
     ) = flavor.lexerFactory.newBlockLexer(source)
 
     private fun inlineLex(source: CharSequence) =
-        QuarkdownFlavor.lexerFactory.newInlineLexer(source.trim())
-            .tokenize().asSequence()
+        QuarkdownFlavor.lexerFactory
+            .newInlineLexer(source.trim())
+            .tokenize()
+            .asSequence()
             .filter { it !is NewlineToken }
             .iterator()
 
@@ -113,7 +115,9 @@ class LexerTest {
     @Test
     fun blocks() {
         val tokens =
-            blockLexer(readSource("/lexing/blocks.md")).tokenize().asSequence()
+            blockLexer(readSource("/lexing/blocks.md"))
+                .tokenize()
+                .asSequence()
                 .filter { it !is NewlineToken }
                 .iterator()
 
@@ -591,6 +595,20 @@ class LexerTest {
             assertEquals("function", value.name)
             assertEquals(0, value.arguments.size)
             assertNull(value.bodyArgument)
+        }
+
+        with(walk(".foo::bar")) {
+            assertEquals("foo", value.name)
+            assertEquals(0, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(0, value.next!!.arguments.size)
+        }
+
+        with(walk(".foo {a} {b}::bar {c}")) {
+            assertEquals("foo", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
         }
     }
 }

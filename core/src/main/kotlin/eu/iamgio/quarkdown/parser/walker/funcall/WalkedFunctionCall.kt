@@ -15,6 +15,7 @@ data class WalkedFunctionCall(
     val name: String,
     val arguments: List<WalkedFunctionArgument>,
     val bodyArgument: WalkedFunctionArgument?,
+    var next: WalkedFunctionCall? = null
 )
 
 /**
