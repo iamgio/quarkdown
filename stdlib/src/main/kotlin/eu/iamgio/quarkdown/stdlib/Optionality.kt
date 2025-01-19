@@ -13,9 +13,15 @@ import eu.iamgio.quarkdown.function.value.wrappedAsValue
  */
 val Optionality: Module =
     setOf(
+        ::none,
         ::isNone,
         ::otherwise,
     )
+
+/**
+ * @return a value which represents nothing
+ */
+fun none() = NoneValue
 
 /**
  * @param value value to check
