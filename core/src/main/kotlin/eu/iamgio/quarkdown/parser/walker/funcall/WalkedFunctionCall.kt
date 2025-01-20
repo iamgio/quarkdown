@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.parser.BlockTokenParser
  * @param name the name of the function
  * @param arguments the function's arguments
  * @param bodyArgument the function's body argument, if any
+ * @param next the next function call in the chain, if any
  */
 data class WalkedFunctionCall(
     val name: String,

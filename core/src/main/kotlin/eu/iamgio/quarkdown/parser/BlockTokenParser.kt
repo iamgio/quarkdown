@@ -20,14 +20,10 @@ import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
 import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.Image
-import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.function.call.FunctionCallArgument
-import eu.iamgio.quarkdown.function.value.DynamicValue
-import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
@@ -445,32 +441,9 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 ?: throw IllegalStateException("Function call walker result not found.")
 
         // The syntax-only information held by the walked function call is converted to a context-aware function call node.
+        // Function chaining is also handled here, delegated to the refiner.
 
-        // Function arguments.
-        val arguments =
-            call.arguments.asSequence()
-                .mapNotNull { arg ->
-                    // Convert the raw argument to an expression.
-                    val expression = ValueFactory.expression(arg.value.trim(), context) ?: return@mapNotNull null
-                    FunctionCallArgument(
-                        expression,
-                        name = arg.name,
-                        isBody = false,
-                    )
-                }.toMutableList()
-
-        // Body function argument.
-        // A body argument is always the last one, it goes on a new line and each line is indented.
-        call.bodyArgument?.takeUnless { it.value.isBlank() }?.value?.let { body ->
-            // A body argument is treated as plain text, thus nested function calls are not executed by default.
-            // They are executed if the argument is used as Markdown content from the referenced function,
-            // that runs recursive lexing & parsing on the arg content, triggering function calls.
-            val value = DynamicValue(body)
-
-            arguments += FunctionCallArgument(value, isBody = true)
-        }
-
-        val callNode = FunctionCallNode(context, call.name, arguments, token.isBlock)
+        val callNode = FunctionCallRefiner(context, call, token.isBlock).toNode()
 
         // Enqueuing the function call, in order to expand it in the next stage of the pipeline.
         context.register(callNode)
