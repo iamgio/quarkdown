@@ -12,6 +12,7 @@ val Logical: Module =
         ::isLower,
         ::isGreater,
         ::isEqual,
+        ::not,
     )
 
 /**
@@ -56,3 +57,8 @@ fun isEqual(
     a: DynamicValue,
     @Name("to") b: DynamicValue,
 ) = BooleanValue(a == b || a.unwrappedValue == b.unwrappedValue)
+
+/**
+ * @return the negation of [value]
+ */
+fun not(value: Boolean) = BooleanValue(!value)
