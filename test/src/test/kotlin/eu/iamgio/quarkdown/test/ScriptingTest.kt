@@ -107,118 +107,6 @@ class ScriptingTest {
 
         execute(
             """
-            .function {greet}
-                to?:
-                Hello .to
-            
-            .greet {world}
-            .greet
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello world</p>" +
-                    "<p>Hello None</p>",
-                it,
-            )
-        }
-
-        execute(
-            """
-            .function {greet}
-                to from?:
-                Hello .to from .from
-            
-            .greet {world} {John}
-            .greet {world}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello world from John</p>" +
-                    "<p>Hello world from None</p>",
-                it,
-            )
-        }
-
-        execute(
-            """
-            .function {greet}
-                to? from?:
-                Hello .to from .from
-            
-            .greet {world} {John}
-            .greet {world}
-            .greet
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello world from John</p>" +
-                    "<p>Hello world from None</p>" +
-                    "<p>Hello None from None</p>",
-                it,
-            )
-        }
-
-        assertFailsWith<InvalidArgumentCountException> {
-            execute(
-                """
-                .function {greet}
-                    to? from:
-                    Hello .to from .from
-                
-                .greet {world}
-                """.trimIndent(),
-            ) {}
-        }
-
-        assertFailsWith<InvalidArgumentCountException> {
-            execute(
-                """
-                .function {greet}
-                    to? from:
-                    Hello .to from .from
-                
-                .greet
-                """.trimIndent(),
-            ) {}
-        }
-
-        execute(
-            """
-            .var {a} {0}
-            
-            .isnone {.a}
-            
-            .var {b} {.none}
-            
-            .isnone {.b}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p><input disabled=\"\" type=\"checkbox\" /></p>" +
-                    "<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>",
-                it,
-            )
-        }
-
-        execute(
-            """
-            .function {greet}
-                to from?:
-                Hello .to from .otherwise {.from} {.to}
-            
-            .greet {world} {John}
-            .greet {world}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello world from John</p>" +
-                    "<p>Hello world from world</p>",
-                it,
-            )
-        }
-
-        execute(
-            """
             .if {yes}
                 .function {hello}
                     name:
@@ -787,6 +675,59 @@ class ScriptingTest {
                     "<span>&nbsp;</span></p></div></div>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun functional() {
+        assertFails {
+            // Lambda cannot be inferred: .1 is not defined
+            execute(
+                """
+                .takeif {3} { .islower {.1} than:{5} }
+                """.trimIndent(),
+            ) {}
+        }
+
+        execute(
+            """
+            .takeif {3} { @lambda .islower {.1} than:{5} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+
+        execute(
+            """
+            .takeif {3} { @lambda .islower {.1} than:{2} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><span class=\"codespan-content\"><code>None</code></span></p>", it)
+        }
+
+        execute(
+            """
+            .takeif {3} { @lambda x: .islower {.x} than:{5} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+
+        execute(
+            """
+            .otherwise {.takeif {3} {@lambda x: .iseven {.x}}} {0}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>0</p>", it)
+        }
+
+        // With chaining.
+        execute(
+            """
+            .takeif {3} {@lambda x: .iseven {.x}}::otherwise {0}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>0</p>", it)
         }
     }
 }

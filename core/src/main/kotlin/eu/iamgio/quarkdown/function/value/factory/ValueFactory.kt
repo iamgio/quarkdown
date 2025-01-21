@@ -54,6 +54,12 @@ import eu.iamgio.quarkdown.util.toPlainText
 private const val LAMBDA_OPTIONAL_PARAMETER_SUFFIX = '?'
 
 /**
+ * Prefix that forces a generic expression to be parsed as a lambda block.
+ * @see ValueFactory.expression
+ */
+private const val EXPRESSION_FORCE_LAMBDA_PREFIX = "@lambda "
+
+/**
  * Factory of [Value] wrappers from raw data.
  * @see eu.iamgio.quarkdown.function.reflect.FromDynamicType
  * @see eu.iamgio.quarkdown.function.reflect.DynamicValueConverter.convertTo
@@ -523,7 +529,8 @@ object ValueFactory {
     }
 
     /**
-     * Evaluates an expression from a raw string input.
+     * Evaluates a dynamic expression from a raw string input.
+     * Special case: if the raw string starts with `@lambda`, the content is parsed as a [lambda] value.
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
      * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
@@ -532,6 +539,12 @@ object ValueFactory {
         raw: String,
         context: Context,
     ): Expression? {
+        // If the raw string starts with `@lambda`, the content is force-parsed as a lambda.
+        if (raw.startsWith(EXPRESSION_FORCE_LAMBDA_PREFIX)) {
+            val lambdaRaw = raw.removePrefix(EXPRESSION_FORCE_LAMBDA_PREFIX)
+            return lambda(lambdaRaw, context)
+        }
+
         // The content of the argument is tokenized to distinguish static values (string/number/...)
         // from nested function calls, which are also expressions.
         val components =
