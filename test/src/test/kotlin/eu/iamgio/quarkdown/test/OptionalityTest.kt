@@ -124,4 +124,73 @@ class OptionalityTest {
             )
         }
     }
+
+    @Test
+    fun optionality() {
+        execute(
+            """
+            .function {greet}
+              name:
+              Hi! I am .name::otherwise {unnamed}
+            
+            .greet {John}
+            
+            .greet {.none}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hi! I am John</p>" +
+                    "<p>Hi! I am unnamed</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .var {num} {5}
+            .num::takeif {@lambda x: .x::equals {5}}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>5</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {oddeven}
+              num:
+              .num::takeif {@lambda x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
+              
+            .oddeven {5}
+            
+            .oddeven {4}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Odd</p>" +
+                    "<p>Even</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .function {present}
+              x:
+              .x::ifpresent {@lambda Yes, .1 is present}::otherwise {Not present}
+            
+            .present {5}
+            
+            .present {.none}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Yes, 5 is present</p>" +
+                    "<p>Not present</p>",
+                it,
+            )
+        }
+    }
 }

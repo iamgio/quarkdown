@@ -18,6 +18,7 @@ val Optionality: Module =
         ::none,
         ::isNone,
         ::otherwise,
+        ::ifPresent,
         ::takeIf,
     )
 
@@ -51,6 +52,20 @@ fun otherwise(
 ): DynamicValue = if (isNone(value.unwrappedValue)) fallback else value
 
 /**
+ * Maps [value] to the result of [mapping].
+ * @param value value to check
+ * @param mapping lambda to execute if [value] is not [none].
+ * It should accept one argument, which is [value], and return a value.
+ * @return the result of [mapping] executed on [value] if [value] is not [none], [none] otherwise
+ * @see isNone
+ */
+@Name("ifpresent")
+fun ifPresent(
+    value: DynamicValue,
+    mapping: Lambda,
+): OutputValue<*> = if (!isNone(value.unwrappedValue)) mapping.invokeDynamic(value) else NoneValue
+
+/**
  * Keeps [value] if [condition] is true, otherwise returns [none].
  *
  * Note: this function is usually inlined. When inlining lambda arguments, an explicit `@lambda` annotation is required:
@@ -64,8 +79,8 @@ fun otherwise(
  * ```
  *
  * @param value value to check
- * @param condition condition to check
- * @return [value] if [condition] is true, [none] otherwise
+ * @param condition condition to check, which accepts one argument ([value]) and returns a boolean
+ * @return [value] if the result of [condition] is true, [none] otherwise
  */
 @Name("takeif")
 fun takeIf(
