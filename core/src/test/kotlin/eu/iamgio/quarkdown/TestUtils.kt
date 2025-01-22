@@ -30,7 +30,10 @@ fun assertNodeEquals(
  * @throws IllegalAccessError if the resource was not found
  */
 fun readSource(path: String) =
-    LexerTest::class.java.getResourceAsStream(path)?.bufferedReader()?.readText()
+    LexerTest::class.java
+        .getResourceAsStream(path)
+        ?.bufferedReader()
+        ?.readText()
         ?: throw IllegalAccessError("No resource $path")
 
 /**
@@ -45,19 +48,23 @@ inline fun <reified T : Node> nodesIterator(
     lexer: Lexer,
     parser: TokenVisitor<Node>,
     assertType: Boolean = true,
-): Iterator<T> {
-    return lexer.tokenize().asSequence()
+): Iterator<T> =
+    lexer
+        .tokenize()
+        .asSequence()
         .filterNot { it is NewlineToken }
         .filterNot { it is PlainTextToken && it.data.text.isBlank() }
-        .map { it.accept(parser) }
-        .onEach {
+        .map { it to it.accept(parser) }
+        .onEach { (token, node) ->
             if (assertType) {
-                assertIs<T>(it)
+                assertIs<T>(
+                    node,
+                    message = "From token:\n${token.data.text}\n\n",
+                )
             }
-        }
+        }.map { it.second }
         .filterIsInstance<T>()
         .iterator()
-}
 
 /**
  * Attaches a mock pipeline to a context for tests only, which does not support rendering.

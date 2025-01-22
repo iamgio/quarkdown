@@ -33,6 +33,7 @@ import eu.iamgio.quarkdown.document.size.mm
 import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -1090,5 +1091,41 @@ class BlockParserTest {
                 )
             }
         }
+    }
+
+    @Test
+    fun chainedFunctionCall() {
+        val nodes =
+            blocksIterator<FunctionCallNode>(readSource("/parsing/functioncall-chain.md"))
+
+        // .foo::bar {x}
+        with(nodes.next()) {
+            assertEquals("bar", name)
+            assertEquals(2, arguments.size)
+            arguments.first().expression.let {
+                assertIs<UncheckedFunctionCall<*>>(it)
+                assertEquals("foo", it.name)
+            }
+            assertEquals("x", arguments[1].value.unwrappedValue)
+        }
+
+        // .foo {x}::bar name:{y}
+        with(nodes.next()) {
+            assertEquals("bar", name)
+            assertEquals(2, arguments.size)
+            assertEquals("foo", (arguments.first().expression as UncheckedFunctionCall<*>).name)
+            assertEquals("y", arguments[1].value.unwrappedValue)
+            assertEquals("name", arguments[1].name)
+        }
+
+        // .foo {x}::bar {y}::baz {z}
+        with(nodes.next()) {
+            assertEquals("baz", name)
+            assertEquals(2, arguments.size)
+            assertEquals("z", arguments[1].value.unwrappedValue)
+            assertEquals("bar", (arguments.first().expression as UncheckedFunctionCall<*>).name)
+        }
+
+        assertFalse(nodes.hasNext())
     }
 }

@@ -610,5 +610,14 @@ class LexerTest {
             assertEquals("bar", value.next!!.name)
             assertEquals(1, value.next!!.arguments.size)
         }
+
+        with(walk(".foo {a} {b}::bar {c}::baz {d}")) {
+            assertEquals("foo", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+            assertEquals("baz", value.next!!.next!!.name)
+            assertEquals(1, value.next!!.next!!.arguments.size)
+        }
     }
 }
