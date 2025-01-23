@@ -539,6 +539,8 @@ object ValueFactory {
         raw: String,
         context: Context,
     ): Expression? {
+        if (raw.isEmpty()) return DynamicValue("")
+
         // If the raw string starts with `@lambda`, the content is force-parsed as a lambda.
         if (raw.startsWith(EXPRESSION_FORCE_LAMBDA_PREFIX)) {
             val lambdaRaw = raw.removePrefix(EXPRESSION_FORCE_LAMBDA_PREFIX)
