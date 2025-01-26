@@ -5,7 +5,7 @@ plugins {
 dependencies {
     testImplementation(kotlin("test"))
 
-    val ktorVersion = "3.0.1"
+    val ktorVersion = "3.0.3"
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-websockets:$ktorVersion")
