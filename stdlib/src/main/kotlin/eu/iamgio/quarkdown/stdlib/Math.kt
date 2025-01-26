@@ -23,6 +23,8 @@ val Math: Module =
         ::sin,
         ::cos,
         ::tan,
+        ::truncate,
+        ::round,
         ::isEven,
         ::range,
     )
@@ -100,6 +102,41 @@ fun cos(x: Number) = NumberValue(kotlin.math.cos(x.toFloat()))
  * @return tangent of the angle [x] given in radians.
  */
 fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
+
+// Decimals
+
+/**
+ * Truncates a floating-point number to a specified number of decimal places.
+ * @param x number to truncate
+ * @param decimals maximum number of decimal places to keep. Must be a non-negative number
+ * @return [x] truncated to [decimals] decimal places. If [decimals] is 0, the number is truncated to an integer,
+ * otherwise to a floating-point number
+ * @throws IllegalArgumentException if [decimals] is negative
+ */
+fun truncate(
+    x: Number,
+    decimals: Int,
+): NumberValue =
+    when {
+        decimals < 0 -> throw IllegalArgumentException("Decimals must be a non-negative number")
+        decimals == 0 -> x.toInt()
+        x is Int -> x
+        else -> {
+            val multiplier = 10.0.pow(decimals)
+            (x.toFloat() * multiplier).toInt() / multiplier.toFloat()
+        }
+    }.let(::NumberValue)
+
+/**
+ * Rounds a floating-point number to the nearest integer.
+ * @param x number to round
+ * @return [x] rounded to the nearest integer
+ */
+fun round(x: Number): NumberValue =
+    when (x) {
+        is Int -> x
+        else -> kotlin.math.round(x.toFloat()).toInt()
+    }.let(::NumberValue)
 
 // Misc
 
