@@ -208,6 +208,14 @@ class NodesTest {
             assertEquals("<p>This link does not exist: [link][Link definition]</p>", it)
             assertTrue(attributes.linkDefinitions.isEmpty())
         }
+
+        execute(".text {Hello} size:{tiny} url:{https://example.com}") {
+            assertEquals("<a href=\"https://example.com\"><span class=\"size-tiny\">Hello</span></a>", it)
+        }
+
+        execute(".text {Hello} size:{tiny} url:{.concatenate {https://example} {\\.com}}") {
+            assertEquals("<a href=\"https://example.com\"><span class=\"size-tiny\">Hello</span></a>", it)
+        }
     }
 
     @Test

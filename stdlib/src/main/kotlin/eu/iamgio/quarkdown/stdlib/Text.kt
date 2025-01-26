@@ -34,7 +34,7 @@ val Text: Module =
  * @param case text case, or default if not specified
  * @param variant font variant, or default if not specified
  * @param color text color, or default if not specified
- * @param isLink whether the text should be a link. If true, the text is used as the URL
+ * @param url optional URL to link the text to. If empty (but specified), the URL will match the text content.
  */
 fun text(
     text: InlineMarkdownContent,
@@ -45,7 +45,7 @@ fun text(
     case: TextTransformData.Case? = null,
     variant: TextTransformData.Variant? = null,
     color: Color? = null,
-    @Name("link") isLink: Boolean = false,
+    url: String? = null,
 ): NodeValue {
     val transform =
         TextTransform(
@@ -54,7 +54,14 @@ fun text(
         )
 
     return when {
-        isLink -> Link(listOf(transform), url = text.children.toPlainText(), title = null)
+        // If URL is specified, wrap the text in a link
+        url != null ->
+            Link(
+                listOf(transform),
+                url = url.takeIf { it.isNotBlank() } ?: text.children.toPlainText(),
+                title = null,
+            )
+
         else -> transform
     }.wrappedAsValue()
 }
@@ -91,21 +98,21 @@ fun code(
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
     code: EvaluableString,
-): NodeValue {
-    return Code(
+): NodeValue =
+    Code(
         code.content,
         language,
         showLineNumbers,
         focusedLines,
     ).wrappedAsValue()
-}
 
 /**
  * @return a fixed Lorem Ipsum text.
  */
 @Name("loremipsum")
 fun loremIpsum() =
-    object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
+    object {}::class.java
+        .getResourceAsStream("/text/lorem-ipsum.txt")!!
         .reader()
         .readText()
         .wrappedAsValue()
