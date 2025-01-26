@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.test
 
+import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -438,6 +440,67 @@ class ScriptingTest {
                     "<p>Mary&rsquo;s country is USA</p>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun math() {
+        execute(".sum {1} {2}") { assertEquals("<p>3</p>", it) }
+        execute(".sum {1} {2}::multiply by:{3}") { assertEquals("<p>9</p>", it) }
+        execute(".sum {1} {2}::subtract {1}::multiply by:{3}::divide by:{3}") { assertEquals("<p>2</p>", it) }
+
+        execute(".pi::truncate {2}") { assertEquals("<p>3.14</p>", it) }
+
+        execute(".cos {0}") { assertEquals("<p>1</p>", it) }
+        execute(".sin {0}") { assertEquals("<p>0</p>", it) }
+        execute(".tan {0}") { assertEquals("<p>0</p>", it) }
+        execute(".cos {.pi}") { assertEquals("<p>-1</p>", it) }
+        execute(".pi::multiply {2}::cos") { assertEquals("<p>1</p>", it) }
+
+        execute(
+            """
+            .var {radius} {8}
+             
+            If we try to calculate the **surface** of a circle of **radius .radius**,
+            we will find out it is **.multiply {.pow {.radius} to:{2}} by:{.pi}**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>,\n" +
+                    "we will find out it is <strong>201.06194</strong></p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .var {radius} {8}
+             
+            If we try to calculate the **surface** of a circle of **radius .radius**,
+            we will find out it is **.pow {.radius} to:{2}::multiply by:{.pi}**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>,\n" +
+                    "we will find out it is <strong>201.06194</strong></p>",
+                it,
+            )
+        }
+
+        execute(".pow {8} to:{2}::multiply by:{.pi}::round") { assertEquals("<p>201</p>", it) }
+
+        execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{2}") { assertEquals("<p>201.06</p>", it) }
+
+        execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{1}") { assertEquals("<p>201</p>", it) }
+
+        execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{0}") { assertEquals("<p>201</p>", it) }
+
+        assertFailsWith<FunctionRuntimeException> {
+            execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{-1}") {}
+        }
+
+        assertFailsWith<MismatchingArgumentTypeException> {
+            execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{1.5}") {}
         }
     }
 
