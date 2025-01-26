@@ -154,7 +154,7 @@ from your Markdown code.
     .var {radius} {8}
 
     If we try to calculate the **surface** of a circle of **radius .radius**,
-    we'll find out it's **.multiply {.pow {.radius} to:{2}} by:{.pi}**
+    we'll find out it's **.pow {.radius} to:{2}::multiply {.pi}::truncate {2}**
 
 ## Scripting {#scripting-basic}
 
@@ -164,7 +164,7 @@ from your Markdown code.
     .row alignment:{spacearound}
         .repeat {10}
             n:
-            .if {.iseven {.n}}
+            .if {.n::iseven}
                 **.n** is even
 
 ## Scripting {#scripting-fibonacci}
@@ -182,8 +182,8 @@ from your Markdown code.
             |:----------:|
             |    .t1     |
             .var {tmp} {.sum {.t1} {.t2}}
-            .var {t1} {.t2}
-            .var {t2} {.tmp}
+            .t1 {.t2}
+            .t2 {.tmp}
 
 ## Document customization
 
