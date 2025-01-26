@@ -194,7 +194,8 @@ fun function(
     val function =
         SimpleFunction(name, parameters) { bindings ->
             // Retrieving arguments from the function call.
-            val args = bindings.values.map { it.value }
+            // `None` is used as a default value if the argument for an optional parameter is not provided.
+            val args: List<Value<*>> = parameters.map { bindings[it]?.value ?: NoneValue }
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
             body.invokeDynamic(args)

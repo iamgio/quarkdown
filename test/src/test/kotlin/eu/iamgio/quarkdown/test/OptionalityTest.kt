@@ -65,6 +65,25 @@ class OptionalityTest {
             )
         }
 
+        execute(
+            """
+            .function {greet}
+                to? from:
+                Hello .to from .from
+            
+            .greet from:{John}
+            
+            .greet
+                John
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello None from John</p>" +
+                    "<p>Hello None from John</p>",
+                it,
+            )
+        }
+
         assertFailsWith<InvalidArgumentCountException> {
             execute(
                 """
@@ -91,24 +110,6 @@ class OptionalityTest {
 
         execute(
             """
-            .var {a} {0}
-            
-            .isnone {.a}
-            
-            .var {b} {.none}
-            
-            .isnone {.b}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p><input disabled=\"\" type=\"checkbox\" /></p>" +
-                    "<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>",
-                it,
-            )
-        }
-
-        execute(
-            """
             .function {greet}
                 to from?:
                 Hello .to from .from::otherwise {.to}
@@ -127,6 +128,24 @@ class OptionalityTest {
 
     @Test
     fun optionality() {
+        execute(
+            """
+            .var {a} {0}
+            
+            .isnone {.a}
+            
+            .var {b} {.none}
+            
+            .isnone {.b}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><input disabled=\"\" type=\"checkbox\" /></p>" +
+                    "<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>",
+                it,
+            )
+        }
+
         execute(
             """
             .function {greet}
