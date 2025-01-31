@@ -119,6 +119,7 @@ class ValueFactoryTest {
         assertEquals(Color(255, 0, 0), ValueFactory.color("red").unwrappedValue)
         assertEquals(Color(0, 0, 0), ValueFactory.color("#000000").unwrappedValue)
         assertEquals(Color(0, 0, 0), ValueFactory.color("BLACK").unwrappedValue)
+        assertEquals(Color(255, 99, 71), ValueFactory.color("ToMaTo").unwrappedValue)
         assertEquals(Color(145, 168, 50), ValueFactory.color("#91a832").unwrappedValue)
         assertEquals(Color(145, 168, 50), ValueFactory.color("rgb(145, 168, 50)").unwrappedValue)
         assertEquals(Color(120, 111, 93), ValueFactory.color("rgb(120,111,93)").unwrappedValue)
