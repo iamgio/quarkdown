@@ -31,6 +31,9 @@ open class MutableContext(
     override val mediaStorage: MutableMediaStorage
         get() = super.mediaStorage as MutableMediaStorage
 
+    // Prevents function calls from being enqueued.
+    private var lockFunctionCallEnqueuing = false
+
     /**
      * Registers a new [LinkDefinition], which can be later looked up
      * via [resolve] to produce a concrete link from a reference.
@@ -42,10 +45,13 @@ open class MutableContext(
 
     /**
      * Enqueues a new [FunctionCallNode], which is executed in the next stage of the pipeline.
+     * Nothing happens if enqueuing is locked via [lockFunctionCallEnqueuing].
      * @param functionCall function call to register
      */
     open fun register(functionCall: FunctionCallNode) {
-        attributes.functionCalls += functionCall
+        if (!lockFunctionCallEnqueuing) {
+            attributes.functionCalls += functionCall
+        }
     }
 
     // This override makes sure the same function call is dequeued from the execution queue
@@ -63,12 +69,11 @@ open class MutableContext(
      * @param name name of the library to load, case-sensitive
      * @return the loaded library, if it exists
      */
-    fun loadLibrary(name: String): Library? {
-        return loadableLibraries.find { it.name == name }?.also {
+    fun loadLibrary(name: String): Library? =
+        loadableLibraries.find { it.name == name }?.also {
             loadableLibraries.remove(it)
             LibraryRegistrant(this).register(it)
         }
-    }
 
     /**
      * Returns a copy of the queue containing registered function calls and clears the original one.
@@ -78,4 +83,16 @@ open class MutableContext(
         attributes.functionCalls.toList().also {
             attributes.functionCalls.clear()
         }
+
+    /**
+     * Performs an action locking the enqueuing of function calls.
+     * This causes [register] to do nothing until the action is completed.
+     * Any function call enqueued during the action is discarded and won't be expanded by the pipeline.
+     * @param block action to perform
+     * @return the result of the action
+     */
+    fun <T> lockFunctionCallEnqueuing(block: MutableContext.() -> T): T {
+        lockFunctionCallEnqueuing = true
+        return block().also { lockFunctionCallEnqueuing = false }
+    }
 }

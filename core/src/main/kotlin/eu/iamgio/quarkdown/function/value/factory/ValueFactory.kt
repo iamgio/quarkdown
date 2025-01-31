@@ -285,12 +285,17 @@ object ValueFactory {
         // Retrieving the pipeline linked to the context.
         val pipeline = context.attachedPipeline ?: throw UnattachedPipelineException()
 
+        context as MutableContext
+
         // Convert string input to parsed AST.
-        val root = pipeline.parse(lexer.tokenize(), context as MutableContext)
+
+        fun parse() = pipeline.parse(lexer.tokenize(), context)
+
+        // If function calls should not be expanded, then they are not enqueued.
+        val root = if (expandFunctionCalls) parse() else context.lockFunctionCallEnqueuing { parse() }
 
         if (expandFunctionCalls) {
             // In case the AST contains nested function calls, they are immediately expanded.
-            // If expandF
             pipeline.expandFunctionCalls(root)
         }
 
