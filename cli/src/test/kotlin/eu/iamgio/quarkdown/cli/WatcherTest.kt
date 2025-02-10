@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 /**
@@ -15,7 +16,10 @@ import kotlin.test.assertTrue
  * @see DirectoryWatcher
  */
 class WatcherTest {
-    private val directory = kotlin.io.path.createTempDirectory().toFile()
+    private val directory =
+        kotlin.io.path
+            .createTempDirectory()
+            .toFile()
     private val file = File(directory, "file.txt")
 
     @BeforeTest
@@ -28,13 +32,16 @@ class WatcherTest {
      * Watches the directory and performs an action that should trigger a change.
      * @param affect action that should trigger a change
      */
-    private fun watch(affect: () -> Unit) {
+    private fun watch(
+        exclude: File? = null,
+        affect: () -> Unit,
+    ) {
         file.createNewFile()
         var changed = false
 
         runBlocking {
             val watcher =
-                DirectoryWatcher.create(directory) {
+                DirectoryWatcher.create(directory, exclude) {
                     changed = true
                 }
 
@@ -70,4 +77,13 @@ class WatcherTest {
         watch {
             file.delete()
         }
+
+    @Test
+    fun exclude() {
+        assertFailsWith<AssertionError> {
+            watch(exclude = file) {
+                file.writeText("Hello, world!")
+            }
+        }
+    }
 }

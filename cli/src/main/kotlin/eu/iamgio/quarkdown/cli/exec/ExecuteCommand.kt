@@ -60,21 +60,23 @@ abstract class ExecuteCommand(
      * Optional output directory.
      * If not set, the output is saved in [DEFAULT_OUTPUT_DIRECTORY].
      */
-    private val outputDirectory: File? by option("-o", "--out", help = "Output directory").file(
-        mustExist = false,
-        canBeFile = false,
-        canBeDir = true,
-    ).default(File(DEFAULT_OUTPUT_DIRECTORY))
+    private val outputDirectory: File? by option("-o", "--out", help = "Output directory")
+        .file(
+            mustExist = false,
+            canBeFile = false,
+            canBeDir = true,
+        ).default(File(DEFAULT_OUTPUT_DIRECTORY))
 
     /**
      * Optional library directory.
      * If not set, the program looks for libraries in [DEFAULT_LIBRARY_DIRECTORY], relative to the executable JAR file location.
      */
-    private val libraryDirectory: File? by option("-l", "--libs", help = "Library directory").file(
-        mustExist = true,
-        canBeFile = false,
-        canBeDir = true,
-    ).default(File(thisExecutableFile?.parentFile, DEFAULT_LIBRARY_DIRECTORY))
+    private val libraryDirectory: File? by option("-l", "--libs", help = "Library directory")
+        .file(
+            mustExist = true,
+            canBeFile = false,
+            canBeDir = true,
+        ).default(File(thisExecutableFile?.parentFile, DEFAULT_LIBRARY_DIRECTORY))
 
     /**
      * When enabled, the rendering stage produces pretty output code.
@@ -119,7 +121,8 @@ abstract class ExecuteCommand(
     /**
      * Port to communicate with the local server on if [preview] is enabled.
      */
-    private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on").int()
+    private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on")
+        .int()
         .default(DEFAULT_SERVER_PORT)
 
     override fun run() {
@@ -148,15 +151,14 @@ abstract class ExecuteCommand(
             )
 
         // If file watching is enabled, a file change triggers the pipeline execution again.
-        if (watch) {
-            cliOptions.source?.absoluteFile?.parentFile?.let { sourceDirectory ->
-                Log.info("Watching for file changes in source directory: $sourceDirectory")
+        cliOptions.takeIf { watch }?.source?.absoluteFile?.parentFile?.let { sourceDirectory ->
+            Log.info("Watching for file changes in source directory: $sourceDirectory")
 
-                DirectoryWatcher.create(sourceDirectory) { event ->
+            DirectoryWatcher
+                .create(sourceDirectory, exclude = cliOptions.outputDirectory) { event ->
                     Log.info("File changed: ${event.path()}. Launching.")
                     execute(cliOptions, pipelineOptions)
                 }.watch()
-            }
         }
 
         // Executes the Quarkdown pipeline.
