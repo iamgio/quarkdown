@@ -628,7 +628,7 @@ Example: "Figure 1.1:"
     width: 100% !important;
 }
 
-.reveal img {
+.reveal img, .pagedjs_page img {
     max-width: 100% !important;
     max-height: 100% !important;
 }
