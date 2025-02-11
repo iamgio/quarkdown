@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.context.localization.localizeOrNull
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.library.LibraryExporter
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
-import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.pipeline.PipelineHooks
 import kotlin.reflect.KFunction
@@ -19,7 +19,7 @@ typealias Module = Set<KFunction<OutputValue<*>>>
  * Fallback value for non-existent elements in collections, dictionaries, and more.
  */
 val NOT_FOUND: OutputValue<*>
-    get() = BooleanValue(false)
+    get() = NoneValue
 
 /**
  * Exporter of Quarkdown's standard library.
@@ -32,34 +32,35 @@ object Stdlib : LibraryExporter {
 
     override val library: Library
         get() =
-            MultiFunctionLibraryLoader(name = "stdlib").load(
-                Document +
-                    Layout +
-                    Text +
-                    Math +
-                    Logical +
-                    String +
-                    Collection +
-                    Dictionary +
-                    Optionality +
-                    Logger +
-                    Flow +
-                    Data +
-                    Localization +
-                    Library +
-                    Slides +
-                    Ecosystem,
-            ).withHooks(
-                PipelineHooks(
-                    // Localization data is loaded before any function is called.
-                    afterRegisteringLibraries = {
-                        includeResource(
-                            this.readOnlyContext,
-                            javaClass.getResourceAsStream("/lib/localization.qmd")!!.reader(),
-                        )
-                    },
-                ),
-            )
+            MultiFunctionLibraryLoader(name = "stdlib")
+                .load(
+                    Document +
+                        Layout +
+                        Text +
+                        Math +
+                        Logical +
+                        String +
+                        Collection +
+                        Dictionary +
+                        Optionality +
+                        Logger +
+                        Flow +
+                        Data +
+                        Localization +
+                        Library +
+                        Slides +
+                        Ecosystem,
+                ).withHooks(
+                    PipelineHooks(
+                        // Localization data is loaded before any function is called.
+                        afterRegisteringLibraries = {
+                            includeResource(
+                                this.readOnlyContext,
+                                javaClass.getResourceAsStream("/lib/localization.qmd")!!.reader(),
+                            )
+                        },
+                    ),
+                )
 
     /**
      * Localizes a key from the stdlib table ([LOCALIZATION_TABLE]).

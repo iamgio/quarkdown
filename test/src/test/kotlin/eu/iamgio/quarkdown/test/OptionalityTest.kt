@@ -212,4 +212,39 @@ class OptionalityTest {
             )
         }
     }
+
+    @Test
+    fun fallback() {
+        // Dictionary.
+        execute(
+            """
+            .var {x}
+              - a: 1
+              - b: 2
+              - c: 3
+              
+            .get {b} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            
+            .get {d} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>5</p><p>No</p>", it)
+        }
+
+        // Collection.
+        execute(
+            """
+            .var {x}
+              - 10
+              - 20
+              - 30
+              
+            .getat {2} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            
+            .getat {5} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>23</p><p>No</p>", it)
+        }
+    }
 }

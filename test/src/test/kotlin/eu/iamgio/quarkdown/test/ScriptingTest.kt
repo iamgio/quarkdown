@@ -240,7 +240,7 @@ class ScriptingTest {
 
         // Out of bounds.
         execute("$abc.getat {5} from:{.abc}") {
-            assertEquals("<p><input disabled=\"\" type=\"checkbox\" /></p>", it)
+            assertEquals("<p><span class=\"codespan-content\"><code>None</code></span></p>", it)
         }
 
         execute("$abc.first from:{.abc}") {
@@ -340,6 +340,20 @@ class ScriptingTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>2</p>", it)
+        }
+
+        // Not found.
+        execute(
+            """
+            .var {x}
+              - a: 1
+              - b: 2
+              - c: 3
+              
+            .get {d} from:{.x}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><span class=\"codespan-content\"><code>None</code></span></p>", it)
         }
 
         execute(
