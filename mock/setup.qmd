@@ -1,0 +1,27 @@
+.docname {Mock document}
+.docauthor {iamgio}
+.doctype {paged}
+.doclang {English}
+.include {paper}
+
+.footer
+	Quarkdown
+	
+.pagemargin {bottomrightcorner}
+	.currentpage
+
+.center
+	#! Quarkdown Mock
+	
+	(c) 2024-2025
+
+---
+
+.abstract
+	Welcome to [Quarkdown](https://github.com/iamgio)'s mock document.
+	This comprehensive document serves as a **detailed reference** guide for all the visual elements that can be featured in a Quarkdown-generated document, and is structured to provide **clear and concise examples** of each.
+	It is designed to be a resource for the interested in creating, refining and testing their own themes. 
+
+	Whether you are looking to experiment with **color schemes, typography, or layout designs**, this mock document will provide the support you need.
+	
+.tableofcontents
