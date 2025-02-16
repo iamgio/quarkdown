@@ -205,6 +205,11 @@ class InlineParserTest {
         }
 
         with(nodes.next()) {
+            assertEquals(140.px, width)
+            assertNull(height)
+        }
+
+        with(nodes.next()) {
             assertEquals(2.0.cm, width)
             assertEquals(4.2.inch, height)
         }
@@ -224,6 +229,11 @@ class InlineParserTest {
                 assertEquals(50.percent, width)
                 assertEquals(5.percent, height)
             }
+        }
+
+        with(nodes.next()) {
+            assertEquals(70.percent, width)
+            assertNull(height)
         }
     }
 
