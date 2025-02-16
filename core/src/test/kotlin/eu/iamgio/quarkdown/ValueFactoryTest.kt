@@ -61,12 +61,13 @@ class ValueFactoryTest {
 
     @Test
     fun size() {
-        assertEquals(Size(10.0, Size.Unit.PX), ValueFactory.size("10px").unwrappedValue)
-        assertEquals(Size(8.0, Size.Unit.PT), ValueFactory.size("8pt").unwrappedValue)
-        assertEquals(Size(16.2, Size.Unit.CM), ValueFactory.size("16.2cm").unwrappedValue)
-        assertEquals(Size(1.4, Size.Unit.MM), ValueFactory.size("1.4mm").unwrappedValue)
-        assertEquals(Size(8.2, Size.Unit.IN), ValueFactory.size("8.2in").unwrappedValue)
-        assertEquals(Size(32.95, Size.Unit.PX), ValueFactory.size("32.95").unwrappedValue)
+        assertEquals(Size(10.0, Size.Unit.PIXELS), ValueFactory.size("10px").unwrappedValue)
+        assertEquals(Size(8.0, Size.Unit.POINTS), ValueFactory.size("8pt").unwrappedValue)
+        assertEquals(Size(16.2, Size.Unit.CENTIMETERS), ValueFactory.size("16.2cm").unwrappedValue)
+        assertEquals(Size(1.4, Size.Unit.MILLIMETERS), ValueFactory.size("1.4mm").unwrappedValue)
+        assertEquals(Size(8.2, Size.Unit.INCHES), ValueFactory.size("8.2in").unwrappedValue)
+        assertEquals(Size(20.2, Size.Unit.PERCENTAGE), ValueFactory.size("20.2%").unwrappedValue)
+        assertEquals(Size(32.95, Size.Unit.PIXELS), ValueFactory.size("32.95").unwrappedValue)
         assertEquals(32.95.px, ValueFactory.size("32.95").unwrappedValue)
         assertFails { ValueFactory.size("px") }
         assertFails { ValueFactory.size("abc") }
@@ -78,19 +79,19 @@ class ValueFactoryTest {
     fun sizes() {
         assertEquals(
             Sizes(
-                Size(10.0, Size.Unit.PX),
-                Size(10.0, Size.Unit.PX),
-                Size(10.0, Size.Unit.PX),
-                Size(10.0, Size.Unit.PX),
+                Size(10.0, Size.Unit.PIXELS),
+                Size(10.0, Size.Unit.PIXELS),
+                Size(10.0, Size.Unit.PIXELS),
+                Size(10.0, Size.Unit.PIXELS),
             ),
             ValueFactory.sizes("10px").unwrappedValue,
         )
         assertEquals(
-            Sizes(all = Size(10.0, Size.Unit.PX)),
+            Sizes(all = Size(10.0, Size.Unit.PIXELS)),
             ValueFactory.sizes("10px").unwrappedValue,
         )
         assertEquals(
-            Sizes(all = Size(13.2, Size.Unit.CM)),
+            Sizes(all = Size(13.2, Size.Unit.CENTIMETERS)),
             ValueFactory.sizes("13.2cm").unwrappedValue,
         )
         assertEquals(
@@ -104,10 +105,17 @@ class ValueFactoryTest {
         )
         assertEquals(
             Sizes(
-                vertical = Size(9.2, Size.Unit.CM),
-                horizontal = Size(3.8, Size.Unit.MM),
+                vertical = Size(9.2, Size.Unit.CENTIMETERS),
+                horizontal = Size(3.8, Size.Unit.MILLIMETERS),
             ),
             ValueFactory.sizes("9.2cm 3.8mm").unwrappedValue,
+        )
+        assertEquals(
+            Sizes(
+                vertical = Size(9.2, Size.Unit.PERCENTAGE),
+                horizontal = Size(20.0, Size.Unit.PERCENTAGE),
+            ),
+            ValueFactory.sizes("9.2% 20.0%").unwrappedValue,
         )
 
         assertFails { ValueFactory.sizes("10px 12px 8px") }
@@ -142,9 +150,9 @@ class ValueFactoryTest {
         @Suppress("UNCHECKED_CAST")
         val values = Size.Unit.entries.toTypedArray() as Array<Enum<*>>
 
-        assertEquals(Size.Unit.PX, ValueFactory.enum("px", values)!!.unwrappedValue)
-        assertEquals(Size.Unit.CM, ValueFactory.enum("CM", values)!!.unwrappedValue)
-        assertEquals(Size.Unit.MM, ValueFactory.enum("mM", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.PIXELS, ValueFactory.enum("pixels", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.CENTIMETERS, ValueFactory.enum("centimeters", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.MILLIMETERS, ValueFactory.enum("milliMeTers", values)!!.unwrappedValue)
         assertNull(ValueFactory.enum("abc", values))
     }
 

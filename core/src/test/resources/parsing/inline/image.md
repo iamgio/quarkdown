@@ -18,3 +18,9 @@
 !(20mm*3cm)[foo](/img)
 
 !(2px*3)[foo](/img)
+
+!(50%*5%)[foo](/img)
+
+!(50%x5%)[foo](/img)
+
+!(50% 5%)[foo](/img)

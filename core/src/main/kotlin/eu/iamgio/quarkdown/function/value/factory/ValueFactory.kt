@@ -164,8 +164,10 @@ object ValueFactory {
     fun size(raw: Any): ObjectValue<Size> {
         if (raw is Size) return ObjectValue(raw)
 
+        // All possible unit symbols.
+        val symbolsRegex = Size.Unit.entries.joinToString("|") { it.symbol }
         // Matches value and unit, e.g. 10px, 12.5cm, 3in.
-        val regex = "^(\\d+(?:\\.\\d+)?)(px|pt|cm|mm|in)?$".toRegex()
+        val regex = "^(\\d+(?:\\.\\d+)?)($symbolsRegex)?$".toRegex()
         val groups =
             regex
                 .find(raw.toString())
@@ -178,7 +180,7 @@ object ValueFactory {
 
         // The unit, which is optional and defaults to pixels.
         val rawUnit = groups.next()
-        val unit = Size.Unit.entries.find { it.name.equals(rawUnit, ignoreCase = true) } ?: Size.Unit.PX
+        val unit = Size.Unit.entries.find { it.symbol.equals(rawUnit, ignoreCase = true) } ?: Size.Unit.PIXELS
 
         return ObjectValue(Size(value, unit))
     }

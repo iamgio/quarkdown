@@ -30,9 +30,12 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(color: Color) = with(color) { "rgba($red, $green, $blue, $alpha)" }
 
-    override fun visit(size: Size) = size.toString()
+    override fun visit(size: Size) = "${size.value}${size.unit.symbol}" // e.g. 10px, 5cm, 2in
 
-    override fun visit(sizes: Sizes) = with(sizes) { "$top $right $bottom $left" }
+    override fun visit(sizes: Sizes) =
+        with(sizes) {
+            "${visit(top)} ${visit(right)} ${visit(bottom)} ${visit(left)}"
+        }
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
 

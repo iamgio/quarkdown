@@ -17,6 +17,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.size.cm
 import eu.iamgio.quarkdown.document.size.inch
 import eu.iamgio.quarkdown.document.size.mm
+import eu.iamgio.quarkdown.document.size.percent
 import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
@@ -216,6 +217,13 @@ class InlineParserTest {
         with(nodes.next()) {
             assertEquals(2.px, width)
             assertEquals(3.px, height)
+        }
+
+        repeat(3) {
+            with(nodes.next()) {
+                assertEquals(50.percent, width)
+                assertEquals(5.percent, height)
+            }
         }
     }
 

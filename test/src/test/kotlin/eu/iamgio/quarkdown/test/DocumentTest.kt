@@ -75,8 +75,8 @@ class DocumentTest {
 
             assertEquals(
                 Sizes(
-                    vertical = Size(3.0, Size.Unit.CM),
-                    horizontal = Size(2.0, Size.Unit.PX),
+                    vertical = Size(3.0, Size.Unit.CENTIMETERS),
+                    horizontal = Size(2.0, Size.Unit.PIXELS),
                 ),
                 documentInfo.pageFormat.margin,
             )

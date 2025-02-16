@@ -54,6 +54,7 @@ import eu.iamgio.quarkdown.context.MutableContextOptions
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.size.cm
 import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.percent
 import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
@@ -762,7 +763,7 @@ class HtmlNodeRendererTest {
                 fullWidth = true,
                 borderColor = Color(30, 20, 10),
                 borderWidth = Sizes(all = 1.0.cm),
-                padding = Sizes(2.0.inch, 3.0.inch, 4.0.inch, 5.0.inch),
+                padding = Sizes(2.0.inch, 3.percent, 4.0.inch, 5.0.inch),
                 cornerRadius = Sizes(all = 6.0.px),
                 alignment = Aligned.Alignment.CENTER,
                 children = children,
