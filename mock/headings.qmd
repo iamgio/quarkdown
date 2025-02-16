@@ -1,1 +1,27 @@
 # Headings
+
+#! First-level heading
+
+.loremipsum
+
+##! Second-level heading
+
+.loremipsum
+
+###! Third-level heading
+
+.loremipsum
+
+<<<
+
+####! Fourth-level heading
+
+.loremipsum
+
+#####! Fifth-level heading
+
+.loremipsum
+
+######! Sixth-level heading
+
+.loremipsum
