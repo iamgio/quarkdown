@@ -1,25 +1,26 @@
 # Boxes
 
+.var {boxtext}
+	Don't fight it, use what happens. That's what makes life fun. That you can make these decisions. That you can create the world that you want. Once you learn the technique, ohhh! Turn you loose on the world; you become a tiger.
+
 .box
-	.loremipsum
+	.boxtext
 
 .box {The quick brown fox jumps over the lazy dog}
-	.loremipsum
+	.boxtext
 	
 <<<
 
 ## Alerts
 
 .box {The quick brown fox jumps over the lazy dog} type:{tip}
-	.loremipsum
+	.boxtext
 
 .box {The quick brown fox jumps over the lazy dog} type:{note}
-	.loremipsum
-
-<<<
+	.boxtext
 
 .box {The quick brown fox jumps over the lazy dog} type:{warning}
-	.loremipsum
+	.boxtext
 
 .box {The quick brown fox jumps over the lazy dog} type:{error}
-	.loremipsum
+	.boxtext
