@@ -11,6 +11,12 @@ After running `quarkdown c file.qmd -p`, a webserver will run on port `8089`.
 It may also be changed it via `--server-port <port>`.  
 Combining `-p` with `-w` enables live content reload!
 
+## Link
+
+Did you know [Quarkdown's wiki](https://github.com/iamgio/quarkdown/wiki) is a great place to start? Check it out!
+
+<<<
+
 ## Advanced formatting
 
 .text {This} size:{large} decoration:{underoverline} is an .text {example} size:{larger} style:{italic} of .text {what you can do} decoration:{underline} with just a .text {few things} weight:{bold} decoration:{strikethrough}, a little imagination and a happy dream in your heart. .text {That easy} variant:{smallcaps}.
