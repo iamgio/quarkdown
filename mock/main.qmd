@@ -8,4 +8,5 @@
 .include {boxes.qmd}
 .include {math.qmd}
 .include {collapsibles.qmd}
+.include {errors.qmd}
 .include {separators.qmd}
