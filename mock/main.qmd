@@ -5,3 +5,4 @@
 .include {code.qmd}
 .include {textformatting.qmd}
 .include {math.qmd}
+.include {separators.qmd}
