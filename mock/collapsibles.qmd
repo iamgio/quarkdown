@@ -7,4 +7,4 @@
 
 #### Inline
 
-.textcollapse {.loremipsum} short:{A collapsible text. *Click me!*} open:{no}
+Here is an inline collapsible text, which you .textcollapse {have just opened. Congratulations} short:{can click here}!
