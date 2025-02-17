@@ -1,4 +1,10 @@
 # Collapsibles
 
+#### Block
+
 .collapse {A collapsible block. *Click me!*} open:{yes}
 	.loremipsum
+
+#### Inline
+
+.textcollapse {.loremipsum} short:{A collapsible text. *Click me!*} open:{no}
