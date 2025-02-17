@@ -7,7 +7,9 @@ We start with a ***vision*** in our **_heart_, and we put it on canvas**. If I *
 
 ## Code
 
-`You can't have light without dark.` You can't know `happiness` unless you've known `sorrow`. Let's have a nice `tree right here`.
+After running `quarkdown c file.qmd -p`, a webserver will run on port `8089`.  
+It may also be changed it via `--server-port <port>`.  
+Combining `-p` with `-w` enables live content reload!
 
 ## Advanced formatting
 
