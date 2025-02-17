@@ -43,6 +43,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
@@ -90,7 +91,9 @@ class HtmlNodeRendererTest {
             )
         }
 
-        return context.flavor.rendererFactory.html(context).nodeRenderer
+        return context.flavor.rendererFactory
+            .html(context)
+            .nodeRenderer
     }
 
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
@@ -540,9 +543,12 @@ class HtmlNodeRendererTest {
                 startIndex = 1,
                 isLoose = false,
                 listItems(),
-            )
-                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
-                .render(),
+            ).also { list ->
+                list.children
+                    .asSequence()
+                    .filterIsInstance<ListItem>()
+                    .forEach { it.owner = list }
+            }.render(),
         )
     }
 
@@ -565,9 +571,12 @@ class HtmlNodeRendererTest {
             UnorderedList(
                 isLoose = false,
                 listItems(),
-            )
-                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
-                .render(),
+            ).also { list ->
+                list.children
+                    .asSequence()
+                    .filterIsInstance<ListItem>()
+                    .forEach { it.owner = list }
+            }.render(),
         )
     }
 
@@ -880,6 +889,29 @@ class HtmlNodeRendererTest {
                 title = listOf(Text("Hello")),
                 isOpen = true,
                 children = listOf(BlockQuote(children = listOf(Paragraph(listOf(Text("world")))))),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `inline collapse`() {
+        val out = readParts("quarkdown/inlinecollapse.html")
+
+        assertEquals(
+            out.next(),
+            InlineCollapse(
+                text = buildInline { text("Foo bar") },
+                placeholder = buildInline { text("Placeholder") },
+                isOpen = false,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            InlineCollapse(
+                text = buildInline { text("Foo bar") },
+                placeholder = buildInline { text("Placeholder") },
+                isOpen = true,
             ).render(),
         )
     }

@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.document.size.Size
@@ -44,6 +45,7 @@ val Layout: Module =
         ::clip,
         ::box,
         ::collapse,
+        ::inlineCollapse,
         ::numbered,
         ::table,
     )
@@ -263,6 +265,20 @@ fun collapse(
     open: Boolean = false,
     body: MarkdownContent,
 ) = Collapse(title.children, open, body.children).wrappedAsValue()
+
+/**
+ * Inserts content in a collapsible text span, whose content can be expanded or collapsed by interacting with it.
+ * @param full content to show when the node is expanded
+ * @param short content to show when the node is collapsed
+ * @param open whether the block is open at the beginning
+ * @return the new [InlineCollapse] node
+ */
+@Name("textcollapse")
+fun inlineCollapse(
+    full: InlineMarkdownContent,
+    short: InlineMarkdownContent,
+    open: Boolean = false,
+) = InlineCollapse(full.children, short.children, open).wrappedAsValue()
 
 /**
  * Node that can be numbered depending on its location in the document
