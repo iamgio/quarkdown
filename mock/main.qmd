@@ -1,3 +1,4 @@
 .include {setup.qmd}
 .include {headings.qmd}
 .include {paragraphs.qmd}
+.include {textformatting.qmd}
