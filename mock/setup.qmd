@@ -11,9 +11,9 @@
 	.currentpage
 
 .center
-	#! .text {.docname} variant:{smallcaps}
+	#! .docname
 	
-	(c) 2024-2025
+	.docauthor (c) 2024-2025
 
 ---
 
@@ -22,6 +22,12 @@
 	This comprehensive document serves as a **detailed reference** guide for all the visual elements that can be featured in a Quarkdown-generated document, and is structured to provide **clear and concise examples** of each.
 	It is designed to be a resource for the interested in creating, refining and testing their own themes. 
 
-	Whether you are looking to experiment with **color schemes, typography, or layout designs**, this mock document will provide the support you need.
-	
+	Whether you are looking to experiment with **color schemes, typography, or layout designs**, or just taking a look at some Quarkdown snippets, this mock document will provide the support you need.
+
+.whitespace height:{5cm}
+
+- [Quarkdown on GitHub](https://github.com/iamgio/quarkdown)
+- [Quarkdown Wiki](https://github.com/iamgio/quarkdown)
+- Several quotes from this document were taken from [Bob Ross Lipsum](https://www.bobrosslipsum.com)
+
 .tableofcontents
