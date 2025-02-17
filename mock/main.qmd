@@ -3,6 +3,7 @@
 .include {paragraphs.qmd}
 .include {lists.qmd}
 .include {images.qmd}
+.include {tables.qmd}
 .include {code.qmd}
 .include {textformatting.qmd}
 .include {quotes.qmd}

@@ -2,6 +2,8 @@
 
 ![Quarkdown icon](images/icon.svg)
 
+The quick brown fox jumps over the lazy dog. This is a separator text.
+
 ![Quarkdown icon](images/icon.svg "")
 
 ![Quarkdown icon](images/icon.svg "The Quarkdown icon.")
