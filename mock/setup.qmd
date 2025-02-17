@@ -1,5 +1,5 @@
-.docname {Mock document}
-.docauthor {iamgio}
+.docname {Quarkdown Mock}
+.docauthor {Giorgio Garofalo}
 .doctype {paged}
 .doclang {English}
 .include {paper}
@@ -11,7 +11,7 @@
 	.currentpage
 
 .center
-	#! Quarkdown Mock
+	#! .text {.docname} variant:{smallcaps}
 	
 	(c) 2024-2025
 
