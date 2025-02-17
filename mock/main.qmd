@@ -7,4 +7,5 @@
 .include {quotes.qmd}
 .include {boxes.qmd}
 .include {math.qmd}
+.include {collapsibles.qmd}
 .include {separators.qmd}

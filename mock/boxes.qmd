@@ -1,0 +1,25 @@
+# Boxes
+
+.box
+	.loremipsum
+
+.box {The quick brown fox jumps over the lazy dog}
+	.loremipsum
+	
+<<<
+
+## Alerts
+
+.box {The quick brown fox jumps over the lazy dog} type:{tip}
+	.loremipsum
+
+.box {The quick brown fox jumps over the lazy dog} type:{note}
+	.loremipsum
+
+<<<
+
+.box {The quick brown fox jumps over the lazy dog} type:{warning}
+	.loremipsum
+
+.box {The quick brown fox jumps over the lazy dog} type:{error}
+	.loremipsum
