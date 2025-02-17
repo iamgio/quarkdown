@@ -2,6 +2,7 @@
 .include {headings.qmd}
 .include {paragraphs.qmd}
 .include {lists.qmd}
+.include {images.qmd}
 .include {code.qmd}
 .include {textformatting.qmd}
 .include {quotes.qmd}

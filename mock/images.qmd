@@ -1,0 +1,15 @@
+# Images
+
+![Quarkdown icon](images/icon.svg)
+
+![Quarkdown icon](images/icon.svg "")
+
+![Quarkdown icon](images/icon.svg "The Quarkdown icon.")
+
+<<<
+
+!(20%)[Quarkdown icon](images/icon.svg "20% of page width.")
+
+!(40%)[Quarkdown icon](images/icon.svg "40% of page width.")
+
+!(60%)[Quarkdown icon](images/icon.svg "60% of page width.")
