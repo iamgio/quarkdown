@@ -4,3 +4,4 @@
 .include {lists.qmd}
 .include {code.qmd}
 .include {textformatting.qmd}
+.include {math.qmd}
