@@ -1,0 +1,18 @@
+# Code
+
+#### Default
+
+.code lang:{java}
+	.read {code/Wrapper.java}
+
+#### Focus
+
+.code lang:{java} focus:{4..6}
+	.read {code/Wrapper.java}
+
+<<<
+
+#### No line numbers
+
+.code lang:{java} linenumbers:{no}
+	.read {code/Wrapper.java}
