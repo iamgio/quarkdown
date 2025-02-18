@@ -1,0 +1,22 @@
+# Alignment
+
+.function {aligncontent}
+	alignment:
+	.align {.alignment}
+		##! .alignment::capitalize
+	
+		The quick brown fox jumps over the lazy dog.
+		
+		The brown fox jumps over the lazy dog.
+		
+		The fox jumps over the dog.
+
+.aligncontent {start}
+
+---
+
+.aligncontent {center}
+
+---
+
+.aligncontent {end}

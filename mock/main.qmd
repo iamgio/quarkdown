@@ -16,4 +16,5 @@
 .include {collapsibles.qmd}
 .include {errors.qmd}
 .include {separators.qmd}
+.include {alignment.qmd}
 .include {stacks.qmd}
