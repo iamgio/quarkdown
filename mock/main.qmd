@@ -1,3 +1,6 @@
+<!-- Change here to test a different theme -->
+.theme {paperwhite} layout:{latex}
+
 .include {setup.qmd}
 .include {headings.qmd}
 .include {paragraphs.qmd}

@@ -24,7 +24,15 @@
 
 	Whether you are looking to experiment with **color schemes, typography, or layout designs**, or just taking a look at some Quarkdown snippets, this mock document will provide the support you need.
 
-.whitespace height:{5cm}
+.whitespace height:{1cm}
+
+.center
+	To compile this document, run:  
+	**`quarkdown c mock/main.qmd -p`**
+	
+	Different themes may be tested by changing the first line of `main.qmd`.
+
+.whitespace height:{4cm}
 
 - [Quarkdown on GitHub](https://github.com/iamgio/quarkdown)
 - [Quarkdown Wiki](https://github.com/iamgio/quarkdown)
