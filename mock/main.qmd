@@ -13,5 +13,4 @@
 .include {collapsibles.qmd}
 .include {errors.qmd}
 .include {separators.qmd}
-
-todo row, column, grid, container, text replacement
+.include {stacks.qmd}
