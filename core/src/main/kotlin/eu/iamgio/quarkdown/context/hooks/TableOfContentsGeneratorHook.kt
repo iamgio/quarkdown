@@ -10,9 +10,11 @@ import eu.iamgio.quarkdown.context.toc.TableOfContents
  * Hook that allows the generation of a [TableOfContents] by iterating through [Heading]s.
  * The [TableOfContents] is stored in the [context]'s [MutableContext.attributes] at the end of the traversal.
  */
-class TableOfContentsGeneratorHook(private val context: MutableContext) : AstIteratorHook {
+class TableOfContentsGeneratorHook(
+    private val context: MutableContext,
+) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        val headings = iterator.collectAll<Heading>()
+        val headings = iterator.collect<Heading> { it.canTrackLocation }
 
         // Generation.
         iterator.onFinished {

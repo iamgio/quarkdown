@@ -41,14 +41,24 @@ class ObservableAstIterator : AstIterator {
         }
 
     /**
+     * Collects the visited nodes of type [T] into a collection, as long as they satisfy a [condition].
+     * @param condition condition to be satisfied for the node to be collected
+     * @param T node type
+     * @return an ordered list (DFS order) containing all the visited nodes of type [T] in the tree
+     */
+    inline fun <reified T : Node> collect(crossinline condition: (T) -> Boolean): List<T> =
+        mutableListOf<T>().apply {
+            on<T> {
+                if (condition(it)) add(it)
+            }
+        }
+
+    /**
      * Collects all the visited nodes of type [T] into a collection.
      * @param T node type
      * @return an ordered list (DFS order) containing all the visited nodes of type [T] in the tree
      */
-    inline fun <reified T : Node> collectAll(): List<T> =
-        mutableListOf<T>().apply {
-            on<T>(::add)
-        }
+    inline fun <reified T : Node> collectAll(): List<T> = collect { true }
 
     /**
      * Attaches a hook to this iterator.
