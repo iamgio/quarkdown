@@ -433,7 +433,7 @@ Example: "Figure 1.1:"
     margin: 0 !important;
 }
 
-.clip img {
+.clip :is(img, figure) {
     margin: 0 !important;
 }
 
