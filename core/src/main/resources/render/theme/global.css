@@ -628,8 +628,12 @@ Example: "Figure 1.1:"
     display: none;
 }
 
+pre {
+    min-width: 20%;
+}
+
 .reveal pre {
-    width: 100% !important;
+    min-width: 100%;
 }
 
 .reveal img, .pagedjs_page img {
