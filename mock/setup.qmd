@@ -1,6 +1,5 @@
 .docname {Quarkdown Mock}
 .docauthor {Giorgio Garofalo}
-.doctype {paged}
 .doclang {English}
 .include {paper}
 
@@ -30,7 +29,8 @@
 	To compile this document, run:  
 	**`quarkdown c mock/main.qmd -p`**
 	
-	Different themes may be tested by changing the first line of `main.qmd`.
+	Different themes and document types may be tested  
+	by changing the first lines of `main.qmd`.
 
 .whitespace height:{4cm}
 

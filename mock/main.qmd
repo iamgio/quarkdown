@@ -1,5 +1,7 @@
 <!-- Change here to test a different theme -->
 .theme {paperwhite} layout:{latex}
+<!-- Change here to paged/slides/plain to test a different document type -->
+.doctype {paged}
 
 .include {setup.qmd}
 .include {headings.qmd}
