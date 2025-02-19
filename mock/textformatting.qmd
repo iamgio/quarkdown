@@ -1,17 +1,17 @@
 # Text formatting
 
-## Emphasis
+## *Emphasis*
 
 **You can't have light without dark.** You can't know *happiness* unless you've known **sorrow**. Let's have a ~~nice~~ *tree right here*. Now __we don't want him to get lonely__, so we'll give him a little _friend_.
 We start with a ***vision*** in our **_heart_, and ~~we put it~~ on canvas**. If I *paint something*, **I don't want to *have* to explain** what it is.
 
-## Code
+## `Code`
 
 After running **`quarkdown c file.qmd -p`**, a webserver will run on port `8089`.  
 It may also be changed it via `--server-port <port>`.  
 Combining `-p` with `-w` enables live content reload!
 
-## Link
+## [Link](https://github.com/iamgio/quarkdown/)
 
 Did you know [Quarkdown's wiki](https://github.com/iamgio/quarkdown/wiki) is a great place to start? Check it out!
 
