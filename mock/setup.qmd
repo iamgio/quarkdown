@@ -3,6 +3,11 @@
 .doclang {English}
 .include {paper}
 
+.function {conditionalpagebreak}
+	ontype:
+	.if {.doctype::equals {.ontype}}
+		<<<
+
 .footer
 	Quarkdown
 	
@@ -32,7 +37,9 @@
 	Different themes and document types may be tested  
 	by changing the first lines of `main.qmd`.
 
-.whitespace height:{4cm}
+.whitespace height:{3cm}
+
+.conditionalpagebreak ontype:{slides}
 
 - [Quarkdown on GitHub](https://github.com/iamgio/quarkdown)
 - [Quarkdown Wiki](https://github.com/iamgio/quarkdown)
