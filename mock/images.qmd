@@ -20,7 +20,20 @@ The quick brown fox jumps over the lazy dog. This is a separator text.
 
 ![Sky](images/sky.jpg "A high-resolution picture.")
 
-.clip {circle}
-	!(50%)[Sky](images/sky.jpg)	
+<<<
 
-*Photo credits: [Pixabay](https://www.pexels.com/photo/blue-skies-53594/)*
+## Clipping
+
+.center
+	.clip {circle}
+		.container alignment:{center} background:{salmon} foreground:{white} padding:{1cm}
+			.container background:{lemonchiffon}
+				###! Clipping
+	
+			in a **circle**!
+	
+	.clip {circle}
+		!(50%)[Sky](images/sky.jpg "A nice sky.")	
+	
+	*Photo credits: [Pixabay](https://www.pexels.com/photo/blue-skies-53594/)*
+

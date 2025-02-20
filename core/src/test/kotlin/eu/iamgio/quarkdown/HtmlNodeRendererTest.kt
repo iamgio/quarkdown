@@ -814,6 +814,7 @@ class HtmlNodeRendererTest {
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph)).render())
+        assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph, paragraph)).render())
     }
 
     @Test

@@ -102,15 +102,15 @@ class LayoutTest {
                     "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
                     "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-column\">" +
-                    "<div class=\"clip clip-circle\">" +
+                    "<div class=\"clip clip-circle\"><div class=\"container\">" +
                     "<figure><img src=\"img1.png\" alt=\"\" /></figure>" +
-                    "</div>" +
-                    "<div class=\"clip clip-circle\">" +
+                    "</div></div>" +
+                    "<div class=\"clip clip-circle\"><div class=\"container\">" +
                     "<figure><img src=\"img2.png\" alt=\"\" /></figure>" +
-                    "</div>" +
-                    "<div class=\"clip clip-circle\">" +
+                    "</div></div>" +
+                    "<div class=\"clip clip-circle\"><div class=\"container\">" +
                     "<figure><img src=\"img3.png\" alt=\"\" /></figure>" +
-                    "</div>" +
+                    "</div></div>" +
                     "</div>" +
                     "<p><strong><a href=\"https://github.com/iamgio/quarkdown\">GitHub</a></strong></p>" +
                     "</div>",

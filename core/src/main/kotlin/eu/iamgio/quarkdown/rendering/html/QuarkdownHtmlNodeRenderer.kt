@@ -52,7 +52,9 @@ private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
  * A renderer for Quarkdown ([eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
-class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context) {
+class QuarkdownHtmlNodeRenderer(
+    context: Context,
+) : BaseHtmlNodeRenderer(context) {
     /**
      * A `<div class="styleClass">...</div>` tag.
      */
@@ -80,7 +82,8 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
         format: (DocumentNumbering) -> NumberingFormat?,
     ) = optionalAttribute(
         "data-location",
-        node.takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
+        node
+            .takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
             ?.formatLocation(context, format)
             ?.takeUnless { it.isEmpty() },
     )
@@ -205,7 +208,10 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
-    override fun visit(node: Clipped) = div("clip clip-${node.clip.asCSS}", node.children)
+    override fun visit(node: Clipped) =
+        div("clip clip-${node.clip.asCSS}") {
+            +Container(children = node.children)
+        }
 
     override fun visit(node: Box) =
         div {
@@ -388,11 +394,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
                 .optionalAttribute(
                     "id",
                     // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider.of(renderer = this)
+                    HtmlIdentifierProvider
+                        .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
-                )
-                .location(node, DocumentNumbering::headings)
+                ).location(node, DocumentNumbering::headings)
                 .build()
 
         return buildMultiTag {
@@ -432,9 +438,11 @@ class QuarkdownHtmlNodeRenderer(context: Context) : BaseHtmlNodeRenderer(context
 
     // Quarkdown introduces table captions, also numerated.
     override fun visit(node: Table) =
-        super.tableBuilder(node).apply {
-            numberedCaption(node, "caption", kindLocalizationKey = "table")
-        }.build()
+        super
+            .tableBuilder(node)
+            .apply {
+                numberedCaption(node, "caption", kindLocalizationKey = "table")
+            }.build()
 
     // A code span can contain additional content, such as a color preview.
     override fun visit(node: CodeSpan): String {

@@ -379,6 +379,8 @@ Example: "Figure 1.1:"
     --qd-caption-label-suffix: "";
 }
 
+/* Container */
+
 .container {
     display: inline-block;
 }
@@ -386,6 +388,8 @@ Example: "Figure 1.1:"
 .container.fullwidth {
     display: block;
 }
+
+/* Alignment */
 
 .align {
     width: 100%;
@@ -411,7 +415,9 @@ Example: "Figure 1.1:"
     align-items: end;
 }
 
-.stack > :is(p, figure), .clip > p, .container :only-child {
+/* Stacks */
+
+.stack > :is(p, figure), .container:not(.clip > .container) :only-child {
     margin: 0;
 }
 
@@ -433,13 +439,25 @@ Example: "Figure 1.1:"
     margin: 0 !important;
 }
 
-.clip :is(img, figure) {
-    margin: 0 !important;
+/* Clipping */
+
+.clip {
+    --clip-path: none;
+}
+
+.clip > .container:not(:has(> figure)) {
+    clip-path: var(--clip-path);
+}
+
+.clip > .container > figure > :not(figcaption) {
+    clip-path: var(--clip-path);
 }
 
 .clip-circle {
-    clip-path: circle();
+    --clip-path: circle();
 }
+
+/* Sizes */
 
 .size-tiny {
     font-size: 0.5em;
