@@ -862,7 +862,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url") { text("Label") }
                 }.first(),
-                image,
+                child,
             )
             assertNull(caption)
         }
@@ -872,7 +872,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", "Title") { text("Label") }
                 }.first(),
-                image,
+                child,
             )
             assertEquals("Title", caption)
         }
@@ -882,7 +882,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, 150.px, 100.px) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
 
@@ -891,7 +891,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, 150.px, null) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
 
@@ -900,7 +900,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, null, 100.px) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
 
@@ -909,7 +909,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, 1.0.cm, 2.1.inch) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
 
@@ -918,7 +918,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, 100.px, 50.0.mm) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
 
@@ -927,7 +927,7 @@ class BlockParserTest {
                 buildInline {
                     image("/url", null, null, 10.px) { text("Label") }
                 }.first(),
-                image,
+                child,
             )
         }
     }

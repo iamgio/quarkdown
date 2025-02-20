@@ -136,7 +136,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: ImageFigure) =
         buildTag("figure") {
-            +node.image
+            +node.child
 
             // Figure ID, e.g. 1.1, based on the current numbering format.
             this.numberedCaption(node, "figcaption", kindLocalizationKey = "figure")
