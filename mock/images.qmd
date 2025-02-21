@@ -6,13 +6,19 @@ The quick brown fox jumps over the lazy dog. This is a separator text.
 
 ![Quarkdown icon](images/icon.svg "")
 
+.conditionalpagebreak ontype:{slides}
+
 ![Quarkdown icon](images/icon.svg "The Quarkdown icon.")
 
 <<<
 
 !(20%)[Quarkdown icon](images/icon.svg "20% of page width.")
 
+.conditionalpagebreak ontype:{slides}
+
 !(40%)[Quarkdown icon](images/icon.svg "40% of page width.")
+
+.conditionalpagebreak ontype:{slides}
 
 !(60%)[Quarkdown icon](images/icon.svg "60% of page width.")
 
@@ -33,7 +39,7 @@ The quick brown fox jumps over the lazy dog. This is a separator text.
 			in a **circle**!
 	
 	.clip {circle}
-		!(50%)[Sky](images/sky.jpg "A nice sky.")	
+		!(40%)[Sky](images/sky.jpg "A nice sky.")	
 	
 	*Photo credits: [Pixabay](https://www.pexels.com/photo/blue-skies-53594/)*
 
