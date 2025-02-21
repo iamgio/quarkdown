@@ -13,10 +13,6 @@
 
 .aligncontent {start}
 
----
-
 .aligncontent {center}
-
----
 
 .aligncontent {end}

@@ -82,6 +82,17 @@ Here positioning techniques will be used: rows, columns, grids and containers.
 
 <<<
 
+.grid columns:{2} gap:{1cm}
+	.repeat {4}
+		.container
+			##! Container .1
+		
+			.loremipsum
+
+---
+
+<<<
+
 .var {skyimg}
 	![Sky](images/sky.jpg)
 

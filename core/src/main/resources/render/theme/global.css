@@ -249,8 +249,7 @@ a {
 }
 
 /* Vertical spacing. */
-h1, h2, h3, h4, h5, h6,
-p, table:not(code table), pre, figure, blockquote,
+table:not(code table), pre, figure, blockquote,
 ul, ol, hr,
 .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
@@ -389,6 +388,10 @@ Example: "Figure 1.1:"
     display: block;
 }
 
+.container:not(.clip > .container) :only-child {
+    margin: 0;
+}
+
 /* Alignment */
 
 .align {
@@ -417,8 +420,8 @@ Example: "Figure 1.1:"
 
 /* Stacks */
 
-.stack > :is(p, figure), .container:not(.clip > .container) :only-child {
-    margin: 0;
+:is(.stack, .page-margin-content) > :is(p, h1, h2, h3, h4, h5, h6, figure) {
+    margin: 0 !important;
 }
 
 .stack-row {
