@@ -25,8 +25,7 @@
     /* Margins */
     --qd-block-margin: 32px; /* Margin of block elements */
     --qd-paragraph-vertical-margin: var(--qd-block-margin); /* Vertical margin of paragraphs preceded by a paragraph */
-    --qd-heading-margin: 40px 0 20px 0; /* Margin of headings in non-slides documents */
-    --qd-slides-heading-margin: 0 0 20px 0; /* Margin of headings in slides documents */
+    --qd-heading-margin: 40px 0 20px 0; /* Margin of headings */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
 
     /* Text */
@@ -79,7 +78,7 @@
     --r-code-font: var(--qd-code-font);
     --r-heading-font: var(--qd-heading-font);
     --r-block-margin: var(--qd-block-margin);
-    --r-heading-margin: var(--qd-slides-heading-margin);
+    --r-heading-margin: var(--qd-heading-margin);
 
     /* Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values. */
     --property-column-count: unset;
@@ -261,6 +260,10 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--qd-heading-font);
     margin: var(--qd-heading-margin);
     text-transform: none !important;
+}
+
+.reveal section > :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
 }
 
 details summary {
@@ -653,7 +656,7 @@ pre {
     min-width: 20%;
 }
 
-.reveal pre {
+.reveal pre:not(.stack > pre) {
     min-width: 100%;
 }
 

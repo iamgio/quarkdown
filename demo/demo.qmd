@@ -54,6 +54,10 @@ Export your Quarkdown project as:
 
 # Same foundations...
 
+.var {downarrow}
+    .container padding:{6px 0 16px 0}
+        .text {↓} weight:{bold} size:{large}
+
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
 
@@ -67,7 +71,7 @@ so that you'll feel at home typing code you're comfortable typing.
             .source
         
     .fragment
-        #### ↓
+        .downarrow
         
         .source
 
@@ -110,7 +114,9 @@ from your Markdown code.
     ---
     .code {markdown}
         .source
-    #### ↓ 
+
+    .downarrow
+
     .source
 
 ## Full layout control 
@@ -270,7 +276,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 .code {markdown}
     .sizedimages
 
-#### ↓
+.downarrow
 
 .row alignment:{center} gap:{1cm}
     .sizedimages
