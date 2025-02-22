@@ -19,6 +19,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param borderColor border color
  * @param borderWidth border width
  * @param borderStyle border style
+ * @param margin whitespace outside the content
  * @param padding whitespace around the content
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
@@ -32,6 +33,7 @@ class Container(
     val borderColor: Color? = null,
     val borderWidth: Sizes? = null,
     val borderStyle: BorderStyle? = null,
+    val margin: Sizes? = null,
     val padding: Sizes? = null,
     val cornerRadius: Sizes? = null,
     val alignment: Aligned.Alignment? = null,

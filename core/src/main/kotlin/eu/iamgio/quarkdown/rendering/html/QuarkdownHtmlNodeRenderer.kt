@@ -163,6 +163,7 @@ class QuarkdownHtmlNodeRenderer(
                 "height" value node.height
                 "color" value node.foregroundColor
                 "background-color" value node.backgroundColor
+                "margin" value node.margin
                 "padding" value node.padding
                 "border-color" value node.borderColor
                 "border-width" value node.borderWidth

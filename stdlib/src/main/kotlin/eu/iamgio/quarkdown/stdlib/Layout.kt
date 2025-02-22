@@ -61,6 +61,7 @@ val Layout: Module =
  * @param borderColor border color. Default if unset and [borderWidth] is set
  * @param borderWidth border width. Default if unset and [borderColor] is set
  * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
+ * @param margin whitespace outside the content. None if unset
  * @param padding whitespace around the content. None if unset
  * @param cornerRadius corner (and border) radius. None if unset
  * @param alignment alignment of the content. Default if unset
@@ -76,6 +77,7 @@ fun container(
     @Name("border") borderColor: Color? = null,
     @Name("borderwidth") borderWidth: Sizes? = null,
     @Name("borderstyle") borderStyle: Container.BorderStyle? = null,
+    @Name("margin") margin: Sizes? = null,
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
     alignment: Aligned.Alignment? = null,
@@ -89,6 +91,7 @@ fun container(
     borderColor,
     borderWidth,
     borderStyle,
+    margin,
     padding,
     cornerRadius,
     alignment,
