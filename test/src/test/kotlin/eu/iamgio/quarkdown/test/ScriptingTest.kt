@@ -170,6 +170,20 @@ class ScriptingTest {
         ) {
             assertEquals("<pre><code>Line 1${System.lineSeparator()}Line 2</code></pre>", it)
         }
+
+        execute(
+            """
+            .let {X}
+                x:
+            
+                .var {a}
+                    A
+            
+                .a
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A</p>", it)
+        }
     }
 
     @Test
