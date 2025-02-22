@@ -166,8 +166,8 @@ object ValueFactory {
 
         // All possible unit symbols.
         val symbolsRegex = Size.Unit.entries.joinToString("|") { it.symbol }
-        // Matches value and unit, e.g. 10px, 12.5cm, 3in.
-        val regex = "^(\\d+(?:\\.\\d+)?)($symbolsRegex)?$".toRegex()
+        // Matches value and unit, e.g. 10px, 12.5cm, -3in.
+        val regex = "^(-?\\d+(?:\\.\\d+)?)($symbolsRegex)?$".toRegex()
         val groups =
             regex
                 .find(raw.toString())

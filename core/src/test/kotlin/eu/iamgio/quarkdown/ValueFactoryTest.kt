@@ -64,6 +64,7 @@ class ValueFactoryTest {
         assertEquals(Size(10.0, Size.Unit.PIXELS), ValueFactory.size("10px").unwrappedValue)
         assertEquals(Size(8.0, Size.Unit.POINTS), ValueFactory.size("8pt").unwrappedValue)
         assertEquals(Size(16.2, Size.Unit.CENTIMETERS), ValueFactory.size("16.2cm").unwrappedValue)
+        assertEquals(Size(-16.2, Size.Unit.CENTIMETERS), ValueFactory.size("-16.2cm").unwrappedValue)
         assertEquals(Size(1.4, Size.Unit.MILLIMETERS), ValueFactory.size("1.4mm").unwrappedValue)
         assertEquals(Size(8.2, Size.Unit.INCHES), ValueFactory.size("8.2in").unwrappedValue)
         assertEquals(Size(20.2, Size.Unit.PERCENTAGE), ValueFactory.size("20.2%").unwrappedValue)
@@ -72,6 +73,7 @@ class ValueFactoryTest {
         assertFails { ValueFactory.size("px") }
         assertFails { ValueFactory.size("abc") }
         assertFails { ValueFactory.size("10.10.2cm") }
+        assertFails { ValueFactory.size("--10cm") }
         assertFails { ValueFactory.size("") }
     }
 
