@@ -179,6 +179,7 @@ class QuarkdownHtmlNodeRenderer(
                     }
 
                 "text-align" value node.alignment
+                "justify-items" value node.alignment
             }
         }
 
