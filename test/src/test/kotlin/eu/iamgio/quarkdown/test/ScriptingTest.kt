@@ -184,6 +184,20 @@ class ScriptingTest {
         ) {
             assertEquals("<p>A</p>", it)
         }
+
+        execute(
+            """
+            .let {X}
+                x:
+            
+                .var {a}
+                    .x
+            
+                .a
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>X</p>", it)
+        }
     }
 
     @Test

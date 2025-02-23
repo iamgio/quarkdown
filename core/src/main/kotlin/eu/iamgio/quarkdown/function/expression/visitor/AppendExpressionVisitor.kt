@@ -74,10 +74,6 @@ class AppendExpressionVisitor(
     private fun Value<*>.concatenate(): InputValue<*> {
         val otherEval = this@AppendExpressionVisitor.otherEval
 
-        // Void values are ignored.
-        if (this is VoidValue) return otherEval as InputValue<*>
-        if (otherEval is VoidValue) return this as InputValue<*>
-
         // Whenever a NodeValue appears in a composed expression, it means the expected output is strictly meant to be
         // a pure Markdown output node. Therefore, the thrown error is caught at eval-time and the expression
         // is re-processed as Markdown content.
@@ -85,6 +81,10 @@ class AppendExpressionVisitor(
         if (this is NodeValue || otherEval is NodeValue) {
             throw InvalidExpressionEvalException()
         }
+
+        // Void values are ignored.
+        if (this is VoidValue) return otherEval as InputValue<*>
+        if (otherEval is VoidValue) return this as InputValue<*>
 
         // If the other value is a collection, add the current value to it as the first element.
         if (otherEval is IterableValue<*> && this is OutputValue<*>) {

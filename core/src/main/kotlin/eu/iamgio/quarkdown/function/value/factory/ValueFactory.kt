@@ -314,8 +314,9 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): MarkdownContentValue =
-        when (raw) {
-            is MarkdownContent -> MarkdownContentValue(raw)
+        when {
+            raw is MarkdownContent -> MarkdownContentValue(raw)
+            raw is DynamicValue && raw.unwrappedValue is String -> blockMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
                     context.flavor.lexerFactory.newBlockLexer(raw.toString()),
@@ -334,8 +335,9 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): InlineMarkdownContentValue =
-        when (raw) {
-            is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
+        when {
+            raw is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
+            raw is DynamicValue && raw.unwrappedValue is String -> inlineMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
                     context.flavor.lexerFactory.newInlineLexer(raw.toString()),
@@ -538,19 +540,27 @@ object ValueFactory {
     /**
      * Evaluates a dynamic expression from a raw string input.
      * Special case: if the raw string starts with `@lambda`, the content is parsed as a [lambda] value.
-     * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
+     * @param raw either an [Expression] or a string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
-     * @return the expression (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
+     * @return if [raw] is an [Expression], it is returned, otherwise returns the expression from the string input
+     * (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
      */
     fun expression(
-        raw: String,
+        raw: Any,
         context: Context,
     ): Expression? {
-        if (raw.isEmpty()) return DynamicValue("")
+        when {
+            raw is DynamicValue && raw.unwrappedValue is String -> return expression(raw.unwrappedValue, context)
+            raw is Expression -> return raw
+        }
+
+        val rawCode = raw.toString()
+
+        if (rawCode.isEmpty()) return DynamicValue("")
 
         // If the raw string starts with `@lambda`, the content is force-parsed as a lambda.
-        if (raw.startsWith(EXPRESSION_FORCE_LAMBDA_PREFIX)) {
-            val lambdaRaw = raw.removePrefix(EXPRESSION_FORCE_LAMBDA_PREFIX)
+        if (rawCode.startsWith(EXPRESSION_FORCE_LAMBDA_PREFIX)) {
+            val lambdaRaw = rawCode.removePrefix(EXPRESSION_FORCE_LAMBDA_PREFIX)
             return lambda(lambdaRaw, context)
         }
 
@@ -558,7 +568,7 @@ object ValueFactory {
         // from nested function calls, which are also expressions.
         val components =
             markdown(
-                lexer = context.flavor.lexerFactory.newExpressionLexer(raw, allowBlockFunctionCalls = true),
+                lexer = context.flavor.lexerFactory.newExpressionLexer(rawCode, allowBlockFunctionCalls = true),
                 context,
                 expandFunctionCalls = false,
             ).unwrappedValue.children
@@ -592,7 +602,7 @@ object ValueFactory {
      *         or the result of the fallback function if the expression is invalid
      */
     fun eval(
-        raw: String,
+        raw: Any,
         context: Context,
         fallback: () -> OutputValue<*> = { blockMarkdown(raw, context).asNodeValue() },
     ): OutputValue<*> {

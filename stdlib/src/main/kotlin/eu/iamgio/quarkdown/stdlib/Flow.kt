@@ -20,6 +20,7 @@ import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -238,6 +239,9 @@ fun variable(
     // Otherwise, it is `context`. Any reference is also removed in case it already exists.
     val targetContext: MutableContext = potentialOwnerContext ?: context.also { it.libraries.remove(name) }
 
+    // In case the value contains function calls, it is evaluated to a value.
+    val evaluated: OutputValue<*> = ValueFactory.eval(value, targetContext)
+
     // A variable can be seen as two functions:
     // - A parameter-less getter that returns the value
     // - A one-parameter setter that assigns a new value
@@ -248,7 +252,7 @@ fun variable(
         Lambda(context, explicitParameters = listOf(LambdaParameter("value", isOptional = true))) { args, _ ->
             if (args.isEmpty() || args.first() is NoneValue) {
                 // Getter
-                value
+                evaluated
             } else {
                 // Setter
                 val newValue = args.first().let { it as? DynamicValue ?: DynamicValue(it) } // Wrapping the value if needed.
