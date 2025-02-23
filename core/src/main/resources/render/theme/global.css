@@ -660,6 +660,11 @@ pre {
     min-width: 100%;
 }
 
+.stack > pre {
+    width: auto;
+    margin: 0;
+}
+
 .reveal img, .pagedjs_page img {
     max-width: 100% !important;
     max-height: 100% !important;

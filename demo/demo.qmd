@@ -41,7 +41,7 @@ Export your Quarkdown project as:
 
     *...in just one line, within your code.*
 
-    .row gap:{5mm}
+    .row alignment:{center} gap:{5mm}
         ```
         .doctype {slides}
         ```
@@ -196,34 +196,35 @@ from your Markdown code.
 
 ---
 
-.grid columns:{2} gap:{1cm}
-    **Metadata**
-
-    ```markdown
-    .docname {Quarkdown demo}
-    .docauthor {iamgio}
-    .doctype {slides}
-    .doclang {english}
-    ```
-
-    **Layout and aesthetics**
-
-    ```markdown
-    .theme {darko} layout:{minimal}
-    .pageformat {A4} orientation:{landscape}
-    .slides transition:{zoom} speed:{fast}
-    ```
-
-    **Fixed content on each page**
-
-    ```markdown
-    .footer
-        .docauthor
-        
-        **.docname**
-        
-        [GitHub](https://github.com/iamgio/quarkdown)
-    ```
+.container fullwidth:{yes}
+    .grid columns:{2} gap:{1cm}
+        **Metadata**
+    
+        ```markdown
+        .docname {Quarkdown demo}
+        .docauthor {iamgio}
+        .doctype {slides}
+        .doclang {english}
+        ```
+    
+        **Layout and aesthetics**
+    
+        ```markdown
+        .theme {darko} layout:{minimal}
+        .pageformat {A4} orientation:{landscape}
+        .slides transition:{zoom} speed:{fast}
+        ```
+    
+        **Fixed content on each page**
+    
+        ```markdown
+        .footer
+            .docauthor
+            
+            **.docname**
+            
+            [GitHub](https://github.com/iamgio/quarkdown)
+        ```
 
 ## Intuitive error handling
 
