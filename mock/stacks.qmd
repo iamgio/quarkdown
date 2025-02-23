@@ -121,21 +121,3 @@ Here positioning techniques will be used: rows, columns, grids and containers.
 	
 	.clip {circle}
 		.skyimg
-
-<<<
-
-.row alignment:{spacebetween} cross:{start}
-	.code {java}
-		.read {code/Wrapper.java}
-	
-	.column
-		.repeat {3}
-			##! Title
-			
-			---
-		There it is. In nature, dead trees are just as normal as live trees. Just a happy little shadow that lives in there. If you didn't have baby clouds, you wouldn't have big clouds.
-	
-	.container background:{yellow} radius:{1cm}
-		.column
-			.repeat {5}
-				!(30%)[Sky](images/sky.jpg "A nice sky.")
