@@ -61,21 +61,33 @@ Export your Quarkdown project as:
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
 
-<!-- Shows the source code of a Quarkdown snippet AND its rendered result with an animation -->
-.function {animatedsourceresult}
-    source:
-    .fragment
-        ---
+<!-- Shows a Quarkdown source as *both* its code AND its visual output. -->
+<!-- Parameters: whether the output should be animated on interaction, -->
+<!-- and whether the output should be displayed slightly above than expected (resets heading margin) -->
 
-        .code {markdown}
-            .source
-        
-    .fragment
-        .downarrow
-        
+.function {sourceresult}
+    shrinkvertical? animated? source:
+    ---
+    .code {markdown}
         .source
 
-.animatedsourceresult
+    .var {output}
+        .container alignment:{center} fullwidth:{yes}
+            .downarrow
+
+        .var {voffset} {-60}
+
+        .container alignment:{center} margin:{.voffset::takeif {.shrinkvertical::otherwise {no}}::otherwise {0} 0 0 0} fullwidth:{yes}
+            .source
+
+    .let {.animated::otherwise {no}}
+        .if {.1}
+            .fragment
+                .output
+        .ifnot {.1}
+            .output
+
+.sourceresult shrinkvertical:{yes} animated:{yes}
     ### Diving into _Quarkdown_
     
     Somebody once said:
@@ -108,17 +120,6 @@ from your Markdown code.
 .fragment
     .text {**Hello, world** from Giorgio!} size:{small}
 
-<!-- Like .animatedsourceresult, but with no animations. -->
-.function {sourceresult}
-    source:
-    ---
-    .code {markdown}
-        .source
-
-    .downarrow
-
-    .source
-
 ## Full layout control 
 
 .sourceresult
@@ -132,7 +133,7 @@ from your Markdown code.
 
 ## Multi-file project
 
-.sourceresult
+.sourceresult shrinkvertical:{yes}
     .include {sources/other.qmd}
 
 .whitespace
