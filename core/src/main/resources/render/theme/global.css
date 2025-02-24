@@ -331,7 +331,7 @@ pre code {
     line-height: var(--qd-code-line-height);
     font-style: normal !important;
     max-height: none !important;
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 pre, pre code {
