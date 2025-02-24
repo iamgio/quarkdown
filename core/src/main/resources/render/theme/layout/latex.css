@@ -15,6 +15,7 @@
     --qd-line-height: 1.5;
     --qd-location-suffix: " ";
     --qd-slides-horizontal-alignment: start;
+    --qd-table-default-cell-alignment: start;
     --qd-quote-type-label-suffix: ". ";
 
     --border-width-thick: 2px;
@@ -134,7 +135,6 @@ table > tbody > tr:last-child > th {
 }
 
 th, td {
-    text-align: left;
     padding: 0.5rem;
     line-height: 1.1;
 }

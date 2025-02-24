@@ -48,6 +48,9 @@
     --qd-code-line-numbers-padding: 0 0.8em; /* Padding of line numbers of code blocks. Vertical padding also defines code line height. */
     --qd-code-line-numbers-opacity: 0.6; /* Opacity of line numbers of code blocks */
 
+    /* Tables */
+    --qd-table-default-cell-alignment: initial; /* Text alignment of table cells, if not specified */
+
     /* Quotes */
     --qd-quote-type-label-suffix: ": "; /* Suffix for localized quote type labels, e.g. Tip, Note, Warning, ... */
     --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
@@ -231,6 +234,10 @@ blockquote .attribution::before {
 
 table {
     caption-side: bottom;
+}
+
+table :is(th, td):not([align]) {
+    text-align: var(--qd-table-default-cell-alignment);
 }
 
 table > caption {
