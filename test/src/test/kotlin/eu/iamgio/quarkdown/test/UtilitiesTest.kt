@@ -156,7 +156,7 @@ class UtilitiesTest {
                     (if (animate) "<div class=\"fragment fade-in\">" else "") +
                     "<div class=\"container\"><p>=</p></div>" +
                     "<div class=\"container\">$contentOutput</div>" +
-                    (if (animate) "</div>" else "")
+                    if (animate) "</div>" else ""
 
             assertEquals(
                 output(false) +
