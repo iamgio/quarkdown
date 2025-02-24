@@ -26,6 +26,7 @@
     --qd-block-margin: 32px; /* Margin of block elements */
     --qd-paragraph-vertical-margin: var(--qd-block-margin); /* Vertical margin of paragraphs preceded by a paragraph */
     --qd-heading-margin: 40px 0 20px 0; /* Margin of headings */
+    --qd-task-checkbox-margin-right: 0.9em; /* Right margin of checkboxes in GFM task list items */
     --qd-box-margin-multiplier: 1.5; /* --qd-block-margin * this = box vertical margin */
 
     /* Text */
@@ -253,7 +254,7 @@ a {
 }
 
 .task-list-item input[type="checkbox"]:first-child {
-    margin-right: 1em;
+    margin-right: var(--qd-task-checkbox-margin-right);
     transform: translateY(1px);
 }
 
