@@ -66,8 +66,9 @@ import org.apache.commons.text.StringEscapeUtils
  * A renderer for vanilla Markdown ([eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
-open class BaseHtmlNodeRenderer(context: Context) :
-    TagNodeRenderer<HtmlTagBuilder>(context),
+open class BaseHtmlNodeRenderer(
+    context: Context,
+) : TagNodeRenderer<HtmlTagBuilder>(context),
     // Along with nodes, this component is also responsible for rendering list item variants.
     // For instance, a checked/unchecked task of attached to a list item.
     // These flavors directly affect the behavior of the HTML list item builder.
@@ -137,21 +138,30 @@ open class BaseHtmlNodeRenderer(context: Context) :
 
             // Loose lists (or items not linked to a list for some reason) are rendered as-is.
             if (node.owner?.isLoose != false) {
-                +node.children
+                // This base builder is empty by default.
+                // If any of the variants added some content (e.g. a task checkbox),
+                // the actual content is wrapped in a container for more convenient styling.
+                when {
+                    this.isEmpty -> +node.children
+                    else -> +buildTag("div", node.children)
+                }
                 return@buildTag
             }
             // Tight lists don't wrap paragraphs in <p> tags (CommonMark 5.3).
             node.children.forEach {
-                if (it is Paragraph) {
-                    +it.text
-                } else {
-                    +it
+                when (it) {
+                    is Paragraph -> +it.text
+                    else -> +it
                 }
             }
         }
 
     // GFM 5.3 extension.
-    override fun visit(variant: TaskListItemVariant): HtmlTagBuilder.() -> Unit = { +visit(CheckBox(variant.isChecked)) }
+    override fun visit(variant: TaskListItemVariant): HtmlTagBuilder.() -> Unit =
+        {
+            `class`("task-list-item")
+            +visit(CheckBox(variant.isChecked))
+        }
 
     override fun visit(node: Html) = node.content
 
@@ -171,7 +181,8 @@ open class BaseHtmlNodeRenderer(context: Context) :
                 val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.asCSS
 
                 // Header cell.
-                headerRow.tag("th", column.header.text)
+                headerRow
+                    .tag("th", column.header.text)
                     .optionalAttribute("align", alignment)
 
                 // Body cells.
@@ -181,7 +192,8 @@ open class BaseHtmlNodeRenderer(context: Context) :
                         bodyRows += body.tag("tr")
                     }
                     // Adding a cell.
-                    bodyRows[index].tag("td", cell.text)
+                    bodyRows[index]
+                        .tag("td", cell.text)
                         .optionalAttribute("align", alignment)
                 }
             }
@@ -221,8 +233,7 @@ open class BaseHtmlNodeRenderer(context: Context) :
             .style {
                 "width" value node.width
                 "height" value node.height
-            }
-            .void(true)
+            }.void(true)
             .build()
 
     override fun visit(node: ReferenceImage) = context.resolveOrFallback(node).accept(this)

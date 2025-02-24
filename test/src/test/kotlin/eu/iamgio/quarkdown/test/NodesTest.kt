@@ -300,8 +300,8 @@ class NodesTest {
 
         execute("- [ ] Unchecked\n- [x] Checked") {
             assertEquals(
-                "<ul><li><input disabled=\"\" type=\"checkbox\" />Unchecked</li>" +
-                    "<li><input disabled=\"\" type=\"checkbox\" checked=\"\" />Checked</li></ul>",
+                "<ul><li class=\"task-list-item\"><input disabled=\"\" type=\"checkbox\" />Unchecked</li>" +
+                    "<li class=\"task-list-item\"><input disabled=\"\" type=\"checkbox\" checked=\"\" />Checked</li></ul>",
                 it,
             )
         }

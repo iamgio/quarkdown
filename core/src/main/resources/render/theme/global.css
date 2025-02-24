@@ -247,6 +247,26 @@ a {
     text-decoration: none;
 }
 
+/* GFM Tasks */
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item input[type="checkbox"]:first-child {
+    margin-right: 1em;
+    transform: translateY(1px);
+}
+
+:is(ul, ol):has(> .task-list-item) {
+    padding-left: 0;
+}
+
+/* If a list item has a custom bullet element, the actual content is wrapped in a container */
+li:has(> div:nth-child(2)) {
+    display: flex;
+    align-items: flex-start;
+}
+
 /* Vertical spacing. */
 table:not(code table), pre, figure, blockquote,
 ul, ol, hr,
