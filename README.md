@@ -100,7 +100,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
   - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
     to learn how to convert an artifact to PDF.
 
-The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-metadata) within the Markdown source itself:
+The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-metadata) within the source itself:
 - `.doctype {slides}`
 - `.doctype {paged}`
 
@@ -204,6 +204,19 @@ Running `quarkdown c file.qmd` will compile the given file and save the output t
 
 If you would like to familiarize yourself with Quarkdown instead, `quarkdown repl` lets you play with an interactive REPL mode.
 
+### Quickstart: mock document
+
+&nbsp;
+
+<p align="center">
+  <img width="450" src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/mock-demo.png" alt="Mock document demo">
+</p>
+
+***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
+making it ideal for exploring and understanding its key features — all while playing with a concrete outcome in the form of pages or slides.
+
+The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
+
 ### Options
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
@@ -247,7 +260,7 @@ The server can be started via `quarkdown start`, with the following options:
 - **`-o`** or **`--open`**: if set, opens the target file in the default browser.
 
 > [!TIP]
-> `quarkdown c ... --preview` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -o`
+> `quarkdown c ... -p` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -o`
 
 ## Themes
 
@@ -256,64 +269,8 @@ Quarkdown comes with a set of themes that can give a unique look to your documen
 - [How to apply a theme?](https://github.com/iamgio/quarkdown/wiki/themes)
 
 > [Theme contributions](core/src/main/resources/render/theme) are welcome!  
-> Please make sure they work well with all the three document types before submitting.
-
-## Scripting
-
-<details>
-<summary><strong>Iterative Fibonacci</strong></summary>
-
-```
-.var {t1} {0}
-.var {t2} {1}
-
-.table
-    .foreach {0..8}
-        n:
-        | $ F_{.n} $ |
-        |:----------:|
-        |    .t1     |
-        .var {tmp} {.sum {.t1} {.t2}}
-        .var {t1} {.t2}
-        .var {t2} {.tmp}
-```
-
-| $F_0$ | $F_1$ | $F_2$ | $F_3$ | $F_4$ | $F_5$ | $F_6$ | $F_7$ | $F_8$ |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
-
-</details>
-
-<details>
-<summary><strong>Recursive Fibonacci</strong></summary>
-
-> The recursive approach is significantly slower than the iterative one.
-
-```
-.function {fib}
-    n:
-    .if { .islower {.n} than:{2} }
-        .n
-    .ifnot { .islower {.n} than:{2} }
-        .sum {
-            .fib { .subtract {.n} {1} }
-        } {
-            .fib { .subtract {.n} {2} }
-        }
-  
-.table
-    .foreach {0..8}
-        | $ F_{.1} $ |
-        |:----------:|
-        | .fib {.1}  |
-```
-
-| $F_0$ | $F_1$ | $F_2$ | $F_3$ | $F_4$ | $F_5$ | $F_6$ | $F_7$ | $F_8$ |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-|   0   |   1   |   1   |   2   |   3   |   5   |   8   |  13   |  21   |
-
-</details>
-
+> Please make sure they work well with all the three document types before submitting.  
+> The [Mock document](#quickstart-mock-document) is a great way to test.
 
 ## Concept
 
