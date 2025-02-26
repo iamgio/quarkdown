@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.rendering
 
 import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
+import eu.iamgio.quarkdown.template.TemplateProcessor
 
 /**
  * Strategy used to run the post-rendering stage:
@@ -27,7 +27,7 @@ interface PostRenderer {
      * See `resources/render` for templates.
      * @return a new instance of the corresponding wrapper
      */
-    fun createCodeWrapper(): RenderWrapper
+    fun createCodeWrapper(): TemplateProcessor
 
     /**
      * Generates the required output resources.
@@ -42,6 +42,6 @@ interface PostRenderer {
  * Wraps rendered code in a template.
  * @param content code to wrap
  * @return [content], wrapped in the corresponding template for this rendering strategy
- * @see RenderWrapper
+ * @see TemplateProcessor
  */
-fun PostRenderer.wrap(content: CharSequence) = createCodeWrapper().content(content).wrap()
+fun PostRenderer.wrap(content: CharSequence) = createCodeWrapper().content(content).build()

@@ -9,8 +9,8 @@ import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
-import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
+import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
+import eu.iamgio.quarkdown.template.TemplateProcessor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,78 +20,75 @@ import kotlin.test.assertTrue
  */
 class HtmlPostRendererTest {
     @Test
-    fun `render wrapper`() {
+    fun `template processor`() {
         assertEquals(
             "<html><head></head><body></body></html>",
-            RenderWrapper("<html><head></head><body></body></html>").wrap(),
+            TemplateProcessor("<html><head></head><body></body></html>").build(),
         )
 
-        RenderWrapper("<body>[[CONTENT]]</body>")
+        TemplateProcessor("<body>[[CONTENT]]</body>")
             .value(TemplatePlaceholders.CONTENT, "<strong>Hello, world!</strong>")
             .let {
-                assertEquals("<body><strong>Hello, world!</strong></body>", it.wrap())
+                assertEquals("<body><strong>Hello, world!</strong></body>", it.build())
             }
 
-        RenderWrapper(
+        TemplateProcessor(
             """
             <body>
                 [[CONTENT]]
             </body>
             """.trimIndent(),
-        )
-            .content("<strong>Hello, world!</strong>") // Shorthand
+        ).content("<strong>Hello, world!</strong>") // Shorthand
             .let {
-                assertEquals("<body>\n    <strong>Hello, world!</strong>\n</body>", it.wrap())
+                assertEquals("<body>\n    <strong>Hello, world!</strong>\n</body>", it.build())
             }
 
-        RenderWrapper("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
+        TemplateProcessor("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
             .value(TemplatePlaceholders.TITLE, "Doc title")
             .content("<strong>Hello, world!</strong>")
             .let {
                 assertEquals(
                     "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
-                    it.wrap(),
+                    it.build(),
                 )
             }
 
-        RenderWrapper("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
+        TemplateProcessor("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
             .conditional("CONDITION", true)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body><em>Hello, world!</em></body>", it.wrap())
+                assertEquals("<body><em>Hello, world!</em></body>", it.build())
             }
 
-        RenderWrapper("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
+        TemplateProcessor("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
             .conditional("CONDITION", false)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body></body>", it.wrap())
+                assertEquals("<body></body>", it.build())
             }
 
-        RenderWrapper("<body>[[if:!CONDITION]][[CONTENT]][[endif:!CONDITION]]</body>")
+        TemplateProcessor("<body>[[if:!CONDITION]][[CONTENT]][[endif:!CONDITION]]</body>")
             .conditional("CONDITION", true)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body></body>", it.wrap())
+                assertEquals("<body></body>", it.build())
             }
 
-        RenderWrapper(
+        TemplateProcessor(
             """
             <body>
                 [[if:!CONDITION]]
                 [[CONTENT]]
                 [[endif:!CONDITION]]
             </body>
-            """
-                .trimIndent(),
-        )
-            .conditional("CONDITION", false)
+            """.trimIndent(),
+        ).conditional("CONDITION", false)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body>\n    <em>Hello, world!</em>\n</body>", it.wrap())
+                assertEquals("<body>\n    <em>Hello, world!</em>\n</body>", it.build())
             }
 
-        RenderWrapper(
+        TemplateProcessor(
             """
             <body>
                 [[if:CONDITION]]
@@ -102,8 +99,7 @@ class HtmlPostRendererTest {
                 [[endif:!CONDITION]]
             </body>
             """.trimIndent(),
-        )
-            .conditional("CONDITION", false)
+        ).conditional("CONDITION", false)
             .content("Hello, world!")
             .let {
                 assertEquals(
@@ -113,23 +109,23 @@ class HtmlPostRendererTest {
                         <strong>Hello, world!</strong>
                     </body>
                     """.trimIndent(),
-                    it.wrap(),
+                    it.build(),
                 )
             }
 
-        RenderWrapper("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
+        TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
             .optionalValue("XYZ", "Hello, world!")
             .let {
-                assertEquals("<body>XYZ</body>", it.wrap())
+                assertEquals("<body>XYZ</body>", it.build())
             }
 
-        RenderWrapper("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
+        TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
             .optionalValue("XYZ", null)
             .let {
-                assertEquals("<body></body>", it.wrap())
+                assertEquals("<body></body>", it.build())
             }
 
-        RenderWrapper(
+        TemplateProcessor(
             """
             <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
             <head>
@@ -168,8 +164,7 @@ class HtmlPostRendererTest {
             </body>
             </html>
             """.trimIndent(),
-        )
-            .conditional(TemplatePlaceholders.IS_SLIDES, true)
+        ).conditional(TemplatePlaceholders.IS_SLIDES, true)
             .optionalValue(TemplatePlaceholders.LANGUAGE, JVMLocaleLoader.fromName("english")?.tag)
             .value(TemplatePlaceholders.TITLE, "Quarkdown")
             .conditional(TemplatePlaceholders.HAS_CODE, false)
@@ -202,11 +197,12 @@ class HtmlPostRendererTest {
                     </body>
                     </html>
                     """.trimIndent(),
-                    it.wrap(),
+                    it.build(),
                 )
             }
 
-        RenderWrapper.fromResourceName("/postrendering/html-test-wrapper.html")
+        TemplateProcessor
+            .fromResourceName("/postrendering/html-test-wrapper.html")
             .optionalValue(TemplatePlaceholders.LANGUAGE, JVMLocaleLoader.fromName("english")?.tag)
             .value(TemplatePlaceholders.TITLE, "Quarkdown")
             .conditional(TemplatePlaceholders.IS_PAGED, false)
@@ -220,10 +216,11 @@ class HtmlPostRendererTest {
             .content("<p><em>Hello, world!</em></p>")
             .let {
                 assertEquals(
-                    javaClass.getResourceAsStream("/postrendering/html-test-result.html")!!
+                    javaClass
+                        .getResourceAsStream("/postrendering/html-test-result.html")!!
                         .reader()
                         .readText(),
-                    it.wrap().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
+                    it.build().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
                 )
             }
     }

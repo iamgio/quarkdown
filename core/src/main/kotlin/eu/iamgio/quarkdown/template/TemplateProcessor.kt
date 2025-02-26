@@ -1,15 +1,26 @@
-package eu.iamgio.quarkdown.rendering.wrapper
+package eu.iamgio.quarkdown.template
 
+import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
 import eu.iamgio.quarkdown.util.replace
 
 /**
- * A code wrapper that adds static content to the output code of the rendering stage, and supports injection of values via placeholder keys.
+ * A builder-like processor for a simple template engine with two basic features:
+ *
+ * - **Placeholders**: replace a placeholder in the template with a value.
+ *   Placeholders in templates are wrapped by double square brackets: `\[\[NAME]]`.
+ *
+ * - **Conditionals**: show or hide fragments of the template code.
+ *   The fragment in the template must be fenced by `[[if:NAME]]` and `[[endif:NAME]]`.
+ *   An inverted (_not_) placeholder is fenced by `[[if:!NAME]]` and `[[endif:!NAME]]`.
+ *
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
- * Placeholders in templates are wrapped by double square brackets: `\[\[CONTENT]]` is the default placeholder for content code to inject.
- * See `resources/render` for templates.
- * @param code code of the template
+ * An example template resource can be found in `resources/render/html-wrapper.html`
+ *
+ * @param text text or code of the template
  */
-class RenderWrapper(private val code: String) {
+class TemplateProcessor(
+    private val text: String,
+) {
     private val placeholders: MutableMap<String, Any> = mutableMapOf()
     private val conditionals: MutableMap<String, Boolean> = mutableMapOf()
 
@@ -64,11 +75,11 @@ class RenderWrapper(private val code: String) {
     fun content(content: CharSequence) = value(TemplatePlaceholders.CONTENT, content)
 
     /**
-     * @return the template, with the supplied placeholders replaced with the actual values
+     * @return the original template [text], with all placeholders and conditionals processed into the final output
      */
-    fun wrap(): CharSequence =
+    fun build(): CharSequence =
         buildString {
-            append(code)
+            append(text)
 
             // Replace conditionals.
             // Just like ifdef macros, conditionals keep or cut content depending on a boolean value.
@@ -82,11 +93,11 @@ class RenderWrapper(private val code: String) {
                             "((.|\\R)+?)" + // Content
                             "(?:\\R\\s*)?" + // Trim end
                             "\\[\\[endif:$placeholder]]" // End
-                    )
-                        .toRegex(RegexOption.MULTILINE)
+                    ).toRegex(RegexOption.MULTILINE)
                 // If there is a match:
                 // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
-                regex.findAll(this)
+                regex
+                    .findAll(this)
                     .sortedByDescending { it.range.first } // Iterate backwards to avoid index mismatches after replacing.
                     .forEach { match ->
                         replace(
@@ -107,12 +118,13 @@ class RenderWrapper(private val code: String) {
     companion object {
         /**
          * @param name name of the internal resource
-         * @return a new [RenderWrapper] with its template loaded from the resource content
+         * @return a new [TemplateProcessor] with its template loaded from the resource content
          * @throws IllegalStateException if the resource cannot be found
          */
         fun fromResourceName(name: String) =
-            RenderWrapper(
-                Companion::class.java.getResourceAsStream(name)
+            TemplateProcessor(
+                Companion::class.java
+                    .getResourceAsStream(name)
                     ?.reader()
                     ?.readText()
                     ?: throw IllegalStateException("Cannot find wrapper resource $name."),

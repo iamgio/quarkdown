@@ -1,7 +1,10 @@
-package eu.iamgio.quarkdown.rendering.wrapper
+package eu.iamgio.quarkdown.rendering.template
+
+import eu.iamgio.quarkdown.template.TemplateProcessor
 
 /**
- * Placeholders for a [RenderWrapper] template.
+ * Placeholders for a [TemplateProcessor] used for the post-rendering stage,
+ * which involves wrapping the output of the rendering stage in a template.
  */
 object TemplatePlaceholders {
     /**

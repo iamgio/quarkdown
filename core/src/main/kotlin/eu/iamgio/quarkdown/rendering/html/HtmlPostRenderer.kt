@@ -12,8 +12,8 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.PostRenderer
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
-import eu.iamgio.quarkdown.rendering.wrapper.TemplatePlaceholders
+import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
+import eu.iamgio.quarkdown.template.TemplateProcessor
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -29,15 +29,24 @@ private val DEFAULT_THEME =
  * - MathJax for math rendering;
  * - HighlightJS for code highlighting.
  */
-class HtmlPostRenderer(private val context: Context) : PostRenderer {
+class HtmlPostRenderer(
+    private val context: Context,
+) : PostRenderer {
     // HTML requires local media to be resolved from the file system.
     override val preferredMediaStorageOptions: MediaStorageOptions =
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
     override fun createCodeWrapper() =
-        RenderWrapper.fromResourceName("/render/html-wrapper.html")
+        TemplateProcessor
+            .fromResourceName("/render/html-wrapper.html")
             // Local server port to communicate with.
-            .optionalValue(TemplatePlaceholders.SERVER_PORT, context.attachedPipeline?.options?.serverPort?.toString())
+            .optionalValue(
+                TemplatePlaceholders.SERVER_PORT,
+                context.attachedPipeline
+                    ?.options
+                    ?.serverPort
+                    ?.toString(),
+            )
             // Document metadata.
             .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             .optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
@@ -55,10 +64,23 @@ class HtmlPostRenderer(private val context: Context) : PostRenderer {
             ) // MathJax is initialized only if needed.
             // Page format
             .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
-            .value(TemplatePlaceholders.PAGE_WIDTH, context.documentInfo.pageFormat.pageWidth.toString())
-            .value(TemplatePlaceholders.PAGE_HEIGHT, context.documentInfo.pageFormat.pageHeight.toString())
-            .optionalValue(TemplatePlaceholders.PAGE_MARGIN, context.documentInfo.pageFormat.margin?.asCSS)
-            .optionalValue(TemplatePlaceholders.COLUMN_COUNT, context.documentInfo.pageFormat.columnCount?.toString())
+            .value(
+                TemplatePlaceholders.PAGE_WIDTH,
+                context.documentInfo.pageFormat.pageWidth
+                    .toString(),
+            ).value(
+                TemplatePlaceholders.PAGE_HEIGHT,
+                context.documentInfo.pageFormat.pageHeight
+                    .toString(),
+            ).optionalValue(
+                TemplatePlaceholders.PAGE_MARGIN,
+                context.documentInfo.pageFormat.margin
+                    ?.asCSS,
+            ).optionalValue(
+                TemplatePlaceholders.COLUMN_COUNT,
+                context.documentInfo.pageFormat.columnCount
+                    ?.toString(),
+            )
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
