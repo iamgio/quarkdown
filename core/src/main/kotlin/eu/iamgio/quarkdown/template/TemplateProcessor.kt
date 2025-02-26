@@ -6,8 +6,8 @@ import eu.iamgio.quarkdown.util.replace
 /**
  * A builder-like processor for a simple template engine with two basic features:
  *
- * - **Placeholders**: replace a placeholder in the template with a value.
- *   Placeholders in templates are wrapped by double square brackets: `\[\[NAME]]`.
+ * - **Values**: replace a placeholder in the template with a value.
+ *   Values in templates are wrapped by double square brackets: `[[NAME]]`.
  *
  * - **Conditionals**: show or hide fragments of the template code.
  *   The fragment in the template must be fenced by `[[if:NAME]]` and `[[endif:NAME]]`.
@@ -21,7 +21,7 @@ import eu.iamgio.quarkdown.util.replace
 class TemplateProcessor(
     private val text: String,
 ) {
-    private val placeholders: MutableMap<String, Any> = mutableMapOf()
+    private val values: MutableMap<String, Any> = mutableMapOf()
     private val conditionals: MutableMap<String, Boolean> = mutableMapOf()
 
     /**
@@ -34,7 +34,7 @@ class TemplateProcessor(
     fun value(
         placeholder: String,
         value: Any,
-    ) = apply { placeholders[placeholder] = value }
+    ) = apply { values[placeholder] = value }
 
     /**
      * Adds a conditional variable that shows or removes fragments of the template code.
@@ -110,7 +110,7 @@ class TemplateProcessor(
             }
 
             // Replace placeholders (defined as [[NAME]] in the template file) with their corresponding value.
-            placeholders.forEach { (placeholder, value) ->
+            values.forEach { (placeholder, value) ->
                 replace("[[$placeholder]]", value.toString())
             }
         }
