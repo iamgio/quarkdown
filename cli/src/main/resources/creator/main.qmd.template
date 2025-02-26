@@ -1,1 +1,2 @@
 [[if:NAME]].docname {[[NAME]]}[[endif:NAME]]
+[[if:AUTHOR]].docauthor {[[AUTHOR]]}[[endif:AUTHOR]]

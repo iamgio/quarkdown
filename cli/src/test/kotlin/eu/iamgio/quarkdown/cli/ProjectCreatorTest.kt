@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.cli
 
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
+import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,11 +24,30 @@ class ProjectCreatorTest {
         }
     }
 
+    private val OutputResource.textContent
+        get() = (this as TextOutputArtifact).content
+
     @Test
     fun `only name`() {
         val creator = ProjectCreator(name = "Test")
         val resources = creator.createResources()
         assertEquals(1, resources.size)
-        assertEquals(".docname {Test}", (resources.first() as TextOutputArtifact).content)
+        assertEquals(".docname {Test}", resources.first().textContent)
+    }
+
+    @Test
+    fun `only author`() {
+        val creator = ProjectCreator(author = "Giorgio")
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".docauthor {Giorgio}", resources.first().textContent)
+    }
+
+    @Test
+    fun `name and author`() {
+        val creator = ProjectCreator(name = "Document", author = "Giorgio")
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".docname {Document}\n.docauthor {Giorgio}", resources.first().textContent)
     }
 }

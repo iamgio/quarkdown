@@ -12,15 +12,20 @@ private const val TEMPLATE = "/creator/main.qmd.template"
  */
 class ProjectCreator(
     val name: String? = null,
+    val author: String? = null,
 ) {
-    fun createResources(): List<OutputResource> {
-        val template =
-            with(ProjectCreatorTemplatePlaceholders) {
-                TemplateProcessor.fromResourceName(TEMPLATE).apply {
-                    optionalValue(NAME, name)
-                }
+    private fun createTemplateProcessor() =
+        with(ProjectCreatorTemplatePlaceholders) {
+            TemplateProcessor.fromResourceName(TEMPLATE).apply {
+                optionalValue(NAME, name)
+                optionalValue(AUTHOR, author)
             }
-        val main = TextOutputArtifact("main.qmd", template.process(), ArtifactType.QUARKDOWN)
+        }
+
+    fun createResources(): List<OutputResource> {
+        val template = this.createTemplateProcessor()
+
+        val main = TextOutputArtifact("main.qmd", template.process().trim(), ArtifactType.QUARKDOWN)
         return listOf(main)
     }
 }
