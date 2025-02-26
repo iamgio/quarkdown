@@ -75,44 +75,60 @@ class TemplateProcessor(
     fun content(content: CharSequence) = value(TemplatePlaceholders.CONTENT, content)
 
     /**
+     * Creates a regex to find the conditional fragments of a given placeholder.
+     * @param placeholder name of the conditional
+     * @return a regex that matches the conditional fragments between `[[if:PLACEHOLDER]]` and `[[endif:PLACEHOLDER]]`
+     */
+    private fun createConditionalRegex(placeholder: String) =
+        (
+            "\\[\\[if:$placeholder]]" + // Start
+                "(?:\\R\\s*)?" + // Trim start
+                "((.|\\R)+?)" + // Content
+                "(?:\\R\\s*)?" + // Trim end
+                "\\[\\[endif:$placeholder]]" // End
+        ).toRegex(RegexOption.MULTILINE)
+
+    /**
+     * Processes conditionals in the template by keeping or cutting content depending on their boolean value.
+     */
+    private fun StringBuilder.replaceConditionals() {
+        // Just like ifdef macros, conditionals keep or cut content depending on a boolean value.
+        // Delimiters are defined as [[if:NAME]]...[[endif:NAME]] in the template files.
+        conditionals.forEach { (placeholder, isTrue) ->
+            // If there is a match with the regex:
+            // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
+            createConditionalRegex(placeholder)
+                .findAll(this)
+                .sortedByDescending { it.range.first } // Iterate backwards to avoid index mismatches after replacing.
+                .forEach { match ->
+                    // Text to replace the fragment with. Group [1] is the inner content without the delimiters.
+                    val replacement = match.groups[1]?.value?.takeIf { isTrue } ?: ""
+                    replace(
+                        match.range.first,
+                        match.range.last + 1,
+                        replacement,
+                    )
+                }
+        }
+    }
+
+    /**
+     * Processes values in the template by replacing their placeholder with their corresponding value.
+     */
+    private fun StringBuilder.replaceValues() {
+        values.forEach { (placeholder, value) ->
+            replace("[[$placeholder]]", value.toString())
+        }
+    }
+
+    /**
      * @return the original template [text], with all placeholders and conditionals processed into the final output
      */
     fun process(): CharSequence =
         buildString {
             append(text)
-
-            // Replace conditionals.
-            // Just like ifdef macros, conditionals keep or cut content depending on a boolean value.
-            // Delimiters are defined as [[if:NAME]]...[[endif:NAME]] in the template files.
-            conditionals.forEach { (placeholder, value) ->
-                // Regex to find conditional fragments.
-                val regex =
-                    (
-                        "\\[\\[if:$placeholder]]" + // Start
-                            "(?:\\R\\s*)?" + // Trim start
-                            "((.|\\R)+?)" + // Content
-                            "(?:\\R\\s*)?" + // Trim end
-                            "\\[\\[endif:$placeholder]]" // End
-                    ).toRegex(RegexOption.MULTILINE)
-                // If there is a match:
-                // Keep the inner content (without the delimiters) if the conditional value is true, remove it otherwise.
-                regex
-                    .findAll(this)
-                    .sortedByDescending { it.range.first } // Iterate backwards to avoid index mismatches after replacing.
-                    .forEach { match ->
-                        replace(
-                            match.range.first,
-                            match.range.last + 1,
-                            // First group is the whole match, second group is the inner content without the delimiters.
-                            match.groups[1]?.value?.takeIf { value } ?: "",
-                        )
-                    }
-            }
-
-            // Replace placeholders (defined as [[NAME]] in the template file) with their corresponding value.
-            values.forEach { (placeholder, value) ->
-                replace("[[$placeholder]]", value.toString())
-            }
+            replaceConditionals()
+            replaceValues()
         }
 
     companion object {
