@@ -28,6 +28,12 @@ class TemplateProcessorTest {
     }
 
     @Test
+    fun `single placeholder not set`() {
+        val template = TemplateProcessor("Hello, [[NAME]]!")
+        assertEquals("Hello, [[NAME]]!", template.build())
+    }
+
+    @Test
     fun `single condition`() {
         val template = TemplateProcessor("Hello[[if:HASNAME]], world[[endif:HASNAME]]!")
 
@@ -36,5 +42,17 @@ class TemplateProcessorTest {
 
         template.conditional("HASNAME", true)
         assertEquals("Hello, world!", template.build())
+    }
+
+    @Test
+    fun `single placeholder and single condition`() {
+        val template = TemplateProcessor("Hello, [[NAME]]![[if:ASK]] How are you?[[endif:ASK]]")
+        template.value("NAME", "world")
+
+        template.conditional("ASK", false)
+        assertEquals("Hello, world!", template.build())
+
+        template.conditional("ASK", true)
+        assertEquals("Hello, world! How are you?", template.build())
     }
 }
