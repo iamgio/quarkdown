@@ -37,50 +37,53 @@ class HtmlPostRenderer(
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
     override fun createTemplateProcessor() =
-        TemplateProcessor
-            .fromResourceName("/render/html-wrapper.html")
+        TemplateProcessor.fromResourceName("/render/html-wrapper.html").apply {
             // Local server port to communicate with.
-            .optionalValue(
+            optionalValue(
                 TemplatePlaceholders.SERVER_PORT,
                 context.attachedPipeline
                     ?.options
-                    ?.serverPort
-                    ?.toString(),
+                    ?.serverPort,
             )
             // Document metadata.
-            .value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
-            .optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
+            value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
+            optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
             // "Paged" document rendering via PagesJS.
-            .conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
+            conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.
-            .conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
-            .conditional(
+            conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
+            // HighlightJS is initialized only if needed.
+            conditional(
                 TemplatePlaceholders.HAS_CODE,
                 context.attributes.hasCode,
-            ) // HighlightJS is initialized only if needed.
-            .conditional(
+            )
+            // MathJax is initialized only if needed.
+            conditional(
                 TemplatePlaceholders.HAS_MATH,
                 context.attributes.hasMath,
-            ) // MathJax is initialized only if needed.
-            // Page format
-            .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
-            .value(
+            )
+            // Page format.
+            conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
+            optionalValue(
                 TemplatePlaceholders.PAGE_WIDTH,
                 context.documentInfo.pageFormat.pageWidth
-                    .toString(),
-            ).value(
+                    ?.asCSS,
+            )
+            optionalValue(
                 TemplatePlaceholders.PAGE_HEIGHT,
                 context.documentInfo.pageFormat.pageHeight
-                    .toString(),
-            ).optionalValue(
+                    ?.asCSS,
+            )
+            optionalValue(
                 TemplatePlaceholders.PAGE_MARGIN,
                 context.documentInfo.pageFormat.margin
                     ?.asCSS,
-            ).optionalValue(
-                TemplatePlaceholders.COLUMN_COUNT,
-                context.documentInfo.pageFormat.columnCount
-                    ?.toString(),
             )
+            optionalValue(
+                TemplatePlaceholders.COLUMN_COUNT,
+                context.documentInfo.pageFormat.columnCount,
+            )
+        }
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
