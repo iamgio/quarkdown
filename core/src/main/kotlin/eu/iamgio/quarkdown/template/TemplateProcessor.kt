@@ -77,7 +77,7 @@ class TemplateProcessor(
     /**
      * @return the original template [text], with all placeholders and conditionals processed into the final output
      */
-    fun build(): CharSequence =
+    fun process(): CharSequence =
         buildString {
             append(text)
 

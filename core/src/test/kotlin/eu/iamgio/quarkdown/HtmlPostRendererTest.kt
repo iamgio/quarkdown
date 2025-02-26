@@ -23,13 +23,13 @@ class HtmlPostRendererTest {
     fun `template processor`() {
         assertEquals(
             "<html><head></head><body></body></html>",
-            TemplateProcessor("<html><head></head><body></body></html>").build(),
+            TemplateProcessor("<html><head></head><body></body></html>").process(),
         )
 
         TemplateProcessor("<body>[[CONTENT]]</body>")
             .value(TemplatePlaceholders.CONTENT, "<strong>Hello, world!</strong>")
             .let {
-                assertEquals("<body><strong>Hello, world!</strong></body>", it.build())
+                assertEquals("<body><strong>Hello, world!</strong></body>", it.process())
             }
 
         TemplateProcessor(
@@ -40,7 +40,7 @@ class HtmlPostRendererTest {
             """.trimIndent(),
         ).content("<strong>Hello, world!</strong>") // Shorthand
             .let {
-                assertEquals("<body>\n    <strong>Hello, world!</strong>\n</body>", it.build())
+                assertEquals("<body>\n    <strong>Hello, world!</strong>\n</body>", it.process())
             }
 
         TemplateProcessor("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
@@ -49,7 +49,7 @@ class HtmlPostRendererTest {
             .let {
                 assertEquals(
                     "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
-                    it.build(),
+                    it.process(),
                 )
             }
 
@@ -57,21 +57,21 @@ class HtmlPostRendererTest {
             .conditional("CONDITION", true)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body><em>Hello, world!</em></body>", it.build())
+                assertEquals("<body><em>Hello, world!</em></body>", it.process())
             }
 
         TemplateProcessor("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
             .conditional("CONDITION", false)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body></body>", it.build())
+                assertEquals("<body></body>", it.process())
             }
 
         TemplateProcessor("<body>[[if:!CONDITION]][[CONTENT]][[endif:!CONDITION]]</body>")
             .conditional("CONDITION", true)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body></body>", it.build())
+                assertEquals("<body></body>", it.process())
             }
 
         TemplateProcessor(
@@ -85,7 +85,7 @@ class HtmlPostRendererTest {
         ).conditional("CONDITION", false)
             .content("<em>Hello, world!</em>")
             .let {
-                assertEquals("<body>\n    <em>Hello, world!</em>\n</body>", it.build())
+                assertEquals("<body>\n    <em>Hello, world!</em>\n</body>", it.process())
             }
 
         TemplateProcessor(
@@ -109,20 +109,20 @@ class HtmlPostRendererTest {
                         <strong>Hello, world!</strong>
                     </body>
                     """.trimIndent(),
-                    it.build(),
+                    it.process(),
                 )
             }
 
         TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
             .optionalValue("XYZ", "Hello, world!")
             .let {
-                assertEquals("<body>XYZ</body>", it.build())
+                assertEquals("<body>XYZ</body>", it.process())
             }
 
         TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
             .optionalValue("XYZ", null)
             .let {
-                assertEquals("<body></body>", it.build())
+                assertEquals("<body></body>", it.process())
             }
 
         TemplateProcessor(
@@ -197,7 +197,7 @@ class HtmlPostRendererTest {
                     </body>
                     </html>
                     """.trimIndent(),
-                    it.build(),
+                    it.process(),
                 )
             }
 
@@ -220,7 +220,7 @@ class HtmlPostRendererTest {
                         .getResourceAsStream("/postrendering/html-test-result.html")!!
                         .reader()
                         .readText(),
-                    it.build().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
+                    it.process().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
                 )
             }
     }

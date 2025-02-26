@@ -11,20 +11,20 @@ class TemplateProcessorTest {
     @Test
     fun `no values`() {
         val template = TemplateProcessor("Hello, world!")
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
     }
 
     @Test
     fun empty() {
         val template = TemplateProcessor("")
-        assertEquals("", template.build())
+        assertEquals("", template.process())
     }
 
     @Test
     fun `single value`() {
         val template = TemplateProcessor("Hello, [[NAME]]!")
         template.value("NAME", "world")
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
     }
 
     @Test
@@ -32,13 +32,13 @@ class TemplateProcessorTest {
         val template = TemplateProcessor("Hello, [[NAME]] from [[FROM]]!")
         template.value("NAME", "world")
         template.value("FROM", "Quarkdown")
-        assertEquals("Hello, world from Quarkdown!", template.build())
+        assertEquals("Hello, world from Quarkdown!", template.process())
     }
 
     @Test
     fun `single value not set`() {
         val template = TemplateProcessor("Hello, [[NAME]]!")
-        assertEquals("Hello, [[NAME]]!", template.build())
+        assertEquals("Hello, [[NAME]]!", template.process())
     }
 
     @Test
@@ -46,10 +46,10 @@ class TemplateProcessorTest {
         val template = TemplateProcessor("Hello[[if:HASNAME]], world[[endif:HASNAME]]!")
 
         template.conditional("HASNAME", false)
-        assertEquals("Hello!", template.build())
+        assertEquals("Hello!", template.process())
 
         template.conditional("HASNAME", true)
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
     }
 
     @Test
@@ -59,16 +59,16 @@ class TemplateProcessorTest {
 
         template.conditional("HASNAME", false)
         template.conditional("ASK", false)
-        assertEquals("Hello!", template.build())
+        assertEquals("Hello!", template.process())
 
         template.conditional("ASK", true)
-        assertEquals("Hello! How are you?", template.build())
+        assertEquals("Hello! How are you?", template.process())
 
         template.conditional("HASNAME", true)
-        assertEquals("Hello, world! How are you?", template.build())
+        assertEquals("Hello, world! How are you?", template.process())
 
         template.conditional("ASK", false)
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
     }
 
     @Test
@@ -77,10 +77,10 @@ class TemplateProcessorTest {
         template.value("NAME", "world")
 
         template.conditional("ASK", false)
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
 
         template.conditional("ASK", true)
-        assertEquals("Hello, world! How are you?", template.build())
+        assertEquals("Hello, world! How are you?", template.process())
     }
 
     @Test
@@ -88,10 +88,10 @@ class TemplateProcessorTest {
         val template = TemplateProcessor("Hello[[if:NAME]], [[NAME]][[endif:NAME]]!")
 
         template.optionalValue("NAME", "world")
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
 
         template.optionalValue("NAME", null)
-        assertEquals("Hello!", template.build())
+        assertEquals("Hello!", template.process())
     }
 
     @Test
@@ -99,10 +99,10 @@ class TemplateProcessorTest {
         val template = TemplateProcessor("Hello, [[if:NAME]][[NAME]][[endif:NAME]][[if:!NAME]]unnamed[[endif:!NAME]]!")
 
         template.optionalValue("NAME", "world")
-        assertEquals("Hello, world!", template.build())
+        assertEquals("Hello, world!", template.process())
 
         template.optionalValue("NAME", null)
-        assertEquals("Hello, unnamed!", template.build())
+        assertEquals("Hello, unnamed!", template.process())
     }
 
     @Test
@@ -124,10 +124,10 @@ class TemplateProcessorTest {
             How are you?
             I hope you are good.
             """.trimIndent(),
-            template.build(),
+            template.process(),
         )
 
         template.conditional("ASK", false)
-        assertEquals("Hello, world!\n", template.build())
+        assertEquals("Hello, world!\n", template.process())
     }
 }

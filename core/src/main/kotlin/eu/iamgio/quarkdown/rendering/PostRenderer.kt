@@ -45,4 +45,4 @@ interface PostRenderer {
  * @return [content], wrapped in the corresponding template for this rendering strategy
  * @see TemplateProcessor
  */
-fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).build()
+fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).process()
