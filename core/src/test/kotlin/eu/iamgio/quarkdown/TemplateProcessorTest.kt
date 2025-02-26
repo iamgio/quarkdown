@@ -130,4 +130,21 @@ class TemplateProcessorTest {
         template.conditional("ASK", false)
         assertEquals("Hello, world!\n", template.process())
     }
+
+    @Test
+    fun `from resource`() {
+        val template = TemplateProcessor.fromResourceName("/postrendering/template.txt")
+        template.optionalValue("NAME", "world")
+        template.conditional("ASK", true)
+
+        assertEquals(
+            """
+            Hello, world!
+            
+            How are you?
+            I'm good.
+            """.trimIndent(),
+            template.process(),
+        )
+    }
 }

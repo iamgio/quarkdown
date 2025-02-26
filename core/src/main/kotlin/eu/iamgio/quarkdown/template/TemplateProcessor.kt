@@ -134,16 +134,19 @@ class TemplateProcessor(
     companion object {
         /**
          * @param name name of the internal resource
+         * @param referenceClass reference classpath to use to retrieve the internal resource
          * @return a new [TemplateProcessor] with its template loaded from the resource content
          * @throws IllegalStateException if the resource cannot be found
          */
-        fun fromResourceName(name: String) =
-            TemplateProcessor(
-                Companion::class.java
-                    .getResourceAsStream(name)
-                    ?.reader()
-                    ?.readText()
-                    ?: throw IllegalStateException("Cannot find wrapper resource $name."),
-            )
+        fun fromResourceName(
+            name: String,
+            referenceClass: Class<*> = TemplateProcessor::class.java,
+        ) = TemplateProcessor(
+            referenceClass
+                .getResourceAsStream(name)
+                ?.reader()
+                ?.readText()
+                ?: throw IllegalStateException("Cannot find wrapper resource $name."),
+        )
     }
 }
