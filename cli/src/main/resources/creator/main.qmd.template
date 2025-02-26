@@ -1,0 +1,1 @@
+[[if:NAME]].docname {[[NAME]]}[[endif:NAME]]

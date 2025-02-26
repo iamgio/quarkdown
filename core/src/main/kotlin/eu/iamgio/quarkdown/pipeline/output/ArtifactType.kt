@@ -9,6 +9,11 @@ enum class ArtifactType {
     JAVASCRIPT,
 
     /**
+     * Quarkdown source file (QMD)
+     */
+    QUARKDOWN,
+
+    /**
      * In case the artifact name includes a file extension, the type does not need to be specified.
      */
     AUTO,

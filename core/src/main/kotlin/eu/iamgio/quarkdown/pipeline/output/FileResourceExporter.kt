@@ -7,7 +7,9 @@ import java.io.File
  * A visitor that saves each type of [OutputResource] to a file and returns it.
  * @param location directory to save the resources to
  */
-class FileResourceExporter(private val location: File) : OutputResourceVisitor<File> {
+class FileResourceExporter(
+    private val location: File,
+) : OutputResourceVisitor<File> {
     /**
      * Name of the corresponding file of this resource, without the extension,
      * with symbols removed and spaces replaced with dashes.
@@ -24,6 +26,7 @@ class FileResourceExporter(private val location: File) : OutputResourceVisitor<F
                 ArtifactType.HTML -> ".html"
                 ArtifactType.CSS -> ".css"
                 ArtifactType.JAVASCRIPT -> ".js"
+                ArtifactType.QUARKDOWN -> ".qmd"
                 ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
             }
 
