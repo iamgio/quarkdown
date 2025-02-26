@@ -21,13 +21,14 @@ interface PostRenderer {
     val preferredMediaStorageOptions: MediaStorageOptions
 
     /**
-     * Creates a new instance of a code wrapper for this rendering strategy.
-     * A wrapper adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
+     * Creates a new instance of a template processor for this rendering strategy.
+     * A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
      * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * See `resources/render` for templates.
-     * @return a new instance of the corresponding wrapper
+     * See `resources/render/html-wrapper.html` for an HTML template.
+     * @return a new instance of the corresponding template processor
+     * @see TemplateProcessor
      */
-    fun createCodeWrapper(): TemplateProcessor
+    fun createTemplateProcessor(): TemplateProcessor
 
     /**
      * Generates the required output resources.
@@ -44,4 +45,4 @@ interface PostRenderer {
  * @return [content], wrapped in the corresponding template for this rendering strategy
  * @see TemplateProcessor
  */
-fun PostRenderer.wrap(content: CharSequence) = createCodeWrapper().content(content).build()
+fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).build()

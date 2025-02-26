@@ -36,7 +36,7 @@ class HtmlPostRenderer(
     override val preferredMediaStorageOptions: MediaStorageOptions =
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
-    override fun createCodeWrapper() =
+    override fun createTemplateProcessor() =
         TemplateProcessor
             .fromResourceName("/render/html-wrapper.html")
             // Local server port to communicate with.
