@@ -46,7 +46,7 @@ class ProjectCreatorTest {
         val creator = ProjectCreator(DocumentInfo(authors = singleAuthor))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
-        assertEquals(".docauthor {Giorgio}\n.doctype {plain}", resources.first().textContent)
+        assertEquals(".doctype {plain}\n\n.docauthors\n  - Giorgio", resources.first().textContent)
     }
 
     @Test
@@ -54,15 +54,15 @@ class ProjectCreatorTest {
         val creator = ProjectCreator(DocumentInfo(name = "Document", authors = singleAuthor))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
-        assertEquals(".docname {Document}\n.docauthor {Giorgio}\n.doctype {plain}", resources.first().textContent)
+        assertEquals(".docname {Document}\n.doctype {plain}\n\n.docauthors\n  - Giorgio", resources.first().textContent)
     }
 
     @Test
-    fun `author and type`() {
-        val creator = ProjectCreator(DocumentInfo(authors = singleAuthor, type = DocumentType.SLIDES))
+    fun `multiple authors`() {
+        val creator = ProjectCreator(DocumentInfo(authors = mutableListOf(DocumentAuthor("Giorgio"), DocumentAuthor("John"))))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
-        assertEquals(".docauthor {Giorgio}\n.doctype {slides}", resources.first().textContent)
+        assertEquals(".doctype {plain}\n\n.docauthors\n  - Giorgio\n  - John", resources.first().textContent)
     }
 
     @Test

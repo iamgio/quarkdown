@@ -19,7 +19,8 @@ class ProjectCreator(
         with(ProjectCreatorTemplatePlaceholders) {
             TemplateProcessor.fromResourceName(TEMPLATE).apply {
                 optionalValue(NAME, info.name)
-                optionalValue(AUTHOR, info.authors.firstOrNull()?.name) // TODO multiple authors
+                conditional(AUTHORS, info.authors.isNotEmpty())
+                iterable(AUTHORS, info.authors.map { it.name })
                 optionalValue(TYPE, info.type.quarkdownName)
                 optionalValue(LANGUAGE, info.locale?.displayName)
             }
