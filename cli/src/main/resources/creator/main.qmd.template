@@ -1,2 +1,3 @@
 [[if:NAME]].docname {[[NAME]]}[[endif:NAME]]
 [[if:AUTHOR]].docauthor {[[AUTHOR]]}[[endif:AUTHOR]]
+[[if:TYPE]].doctype {[[TYPE]]}[[endif:TYPE]]

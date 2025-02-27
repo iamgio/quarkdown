@@ -89,6 +89,66 @@ class TemplateProcessor(
         ).toRegex(RegexOption.MULTILINE)
 
     /**
+     * Starting from [index], goes backwards through whitespaces to find the first non-whitespace character.
+     * The result is the final index, stopping at the last newline character encountered (excluded).
+     *
+     * Example (`*` is the start index, `|` is the result index):
+     * ```
+     * Line 1
+     * |
+     *    *Line 2
+     * ```
+     *
+     * By removing this whitespace, the result would be:
+     * ```
+     * Line 1
+     * Line 2
+     * ```
+     *
+     * In the following example, no trimming is performed because no newline is met:
+     * ```
+     * Line 1   *Line 2
+     * ```
+     *
+     * Example in context (see [replaceConditionals]):
+     * ```
+     * [[if:A]]Line 1[[endif:A]]
+     * [[if:B]]Line 2[[endif:B]]
+     * [[if:C]]Line 3[[endif:C]]
+     * [[if:D]]Line 4[[endif:D]]
+     * ```
+     *
+     * Suppose `A`=true, `B`=false, `C`=false, `D`=true.
+     * Without this operation, the result would be:
+     * ```
+     * Line 1
+     *
+     *
+     * Line 4
+     * ```
+     *
+     * With this operation, the result is:
+     * ```
+     * Line 1
+     * Line 4
+     * ```
+     *
+     * @param index index to start from
+     * @return the index of the first non-whitespace character before a newline
+     */
+    private fun CharSequence.findStartTrimmedIndexToNewline(index: Int): Int {
+        var start = index
+        var offset = 0
+        while (start > offset && this[start - 1].isWhitespace()) {
+            offset++
+            if (this[start - offset] == '\n') {
+                start -= offset
+            }
+        }
+        return start
+    }
+
+    /**
      * Processes conditionals in the template by keeping or cutting content depending on their boolean value.
      */
     private fun StringBuilder.replaceConditionals() {
@@ -103,8 +163,12 @@ class TemplateProcessor(
                 .forEach { match ->
                     // Text to replace the fragment with. Group [1] is the inner content without the delimiters.
                     val replacement = match.groups[1]?.value?.takeIf { isTrue } ?: ""
+                    // Start index of the fragment to replace.
+                    // If the fragment is to be removed (condition is false), leading whitespace is trimmed.
+                    val start = match.range.first.let { if (isTrue) it else findStartTrimmedIndexToNewline(it) }
+
                     replace(
-                        match.range.first,
+                        start,
                         match.range.last + 1,
                         replacement,
                     )

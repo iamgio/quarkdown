@@ -128,7 +128,23 @@ class TemplateProcessorTest {
         )
 
         template.conditional("ASK", false)
-        assertEquals("Hello, world!\n", template.process())
+        assertEquals("Hello, world!", template.process())
+    }
+
+    @Test
+    fun `multiline with gap`() {
+        val template =
+            TemplateProcessor(
+                """
+                [[if:A]]A[[endif:A]]
+                [[if:B]]B[[endif:B]]
+                [[if:C]]C[[endif:C]]
+                """.trimIndent(),
+            )
+        template.conditional("A", true)
+        template.conditional("B", false)
+        template.conditional("C", true)
+        assertEquals("A\nC", template.process())
     }
 
     @Test

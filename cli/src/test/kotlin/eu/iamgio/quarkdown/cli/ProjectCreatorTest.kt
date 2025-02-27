@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.cli
 
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
@@ -49,5 +50,21 @@ class ProjectCreatorTest {
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".docname {Document}\n.docauthor {Giorgio}", resources.first().textContent)
+    }
+
+    @Test
+    fun `author and type`() {
+        val creator = ProjectCreator(author = "Giorgio", type = DocumentType.SLIDES)
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".docauthor {Giorgio}\n.doctype {slides}", resources.first().textContent)
+    }
+
+    @Test
+    fun `name and type`() {
+        val creator = ProjectCreator(name = "Document", type = DocumentType.SLIDES)
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".docname {Document}\n.doctype {slides}", resources.first().textContent)
     }
 }

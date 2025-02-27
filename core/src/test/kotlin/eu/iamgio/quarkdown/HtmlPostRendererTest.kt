@@ -105,7 +105,6 @@ class HtmlPostRendererTest {
                 assertEquals(
                     """
                     <body>
-                        
                         <strong>Hello, world!</strong>
                     </body>
                     """.trimIndent(),
@@ -176,7 +175,6 @@ class HtmlPostRendererTest {
                     <html lang="en">
                     <head>
                         <link rel="stylesheet" href="...css"></link>
-                        
                         <script src="...js"></script>
                         <script src="...js"></script>
                         <title>Quarkdown</title>
@@ -193,7 +191,6 @@ class HtmlPostRendererTest {
                             </div>
                         </div>
                         <script src="slides.js"></script>
-                        
                     </body>
                     </html>
                     """.trimIndent(),
@@ -220,7 +217,7 @@ class HtmlPostRendererTest {
                         .getResourceAsStream("/postrendering/html-test-result.html")!!
                         .reader()
                         .readText(),
-                    it.process().replace("^ {4}\\R".toRegex(RegexOption.MULTILINE), ""),
+                    it.process(),
                 )
             }
     }
