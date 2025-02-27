@@ -132,6 +132,54 @@ class TemplateProcessorTest {
     }
 
     @Test
+    fun `multiline with delimiter`() {
+        val template =
+            TemplateProcessor(
+                """
+                [[if:A]]A[[endif:A]]
+                X
+                [[if:B]]B[[endif:B]]
+                """.trimIndent(),
+            )
+        template.conditional("A", true)
+        template.conditional("B", false)
+        assertEquals("A\nX", template.process())
+
+        template.conditional("A", false)
+        template.conditional("B", false)
+        assertEquals("\nX", template.process())
+
+        template.conditional("A", false)
+        template.conditional("B", true)
+        assertEquals("\nX\nB", template.process())
+    }
+
+    @Test
+    fun `multiline with spaced delimiter`() {
+        val template =
+            TemplateProcessor(
+                """
+                [[if:A]]A[[endif:A]]
+                
+                X
+                
+                [[if:B]]B[[endif:B]]
+                """.trimIndent(),
+            )
+        template.conditional("A", true)
+        template.conditional("B", false)
+        assertEquals("A\n\nX", template.process())
+
+        template.conditional("A", false)
+        template.conditional("B", false)
+        assertEquals("\n\nX", template.process())
+
+        template.conditional("A", false)
+        template.conditional("B", true)
+        assertEquals("\n\nX\n\nB", template.process())
+    }
+
+    @Test
     fun `multiline with gap`() {
         val template =
             TemplateProcessor(

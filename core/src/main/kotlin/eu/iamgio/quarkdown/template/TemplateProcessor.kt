@@ -175,10 +175,10 @@ class TemplateProcessor(
     private fun CharSequence.findStartTrimmedIndexToNewline(index: Int): Int {
         var start = index
         var offset = 0
-        while (start > offset && this[start - 1].isWhitespace()) {
-            offset++
+        while (start > offset++ && this[start - offset].isWhitespace()) {
             if (this[start - offset] == '\n') {
                 start -= offset
+                offset = 0
             }
         }
         return start
