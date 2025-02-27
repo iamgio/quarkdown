@@ -4,7 +4,7 @@ import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
 import eu.iamgio.quarkdown.util.replace
 
 /**
- * A builder-like processor for a simple template engine with two basic features:
+ * A builder-like processor for a simple template engine with three basic features:
  *
  * - **Values**: replace a placeholder in the template with a value.
  *   Values in templates are wrapped by double square brackets: `[[NAME]]`.
@@ -12,6 +12,11 @@ import eu.iamgio.quarkdown.util.replace
  * - **Conditionals**: show or hide fragments of the template code.
  *   The fragment in the template must be fenced by `[[if:NAME]]` and `[[endif:NAME]]`.
  *   An inverted (_not_) placeholder is fenced by `[[if:!NAME]]` and `[[endif:!NAME]]`.
+ *
+ * - **Iterables**: repeat the content in their fragment as many times as the iterable's size,
+ *   while replacing the placeholder with the current item during each iteration.
+ *   The fragment in the template must be fenced by `[[for:NAME]]` and `[[endfor:NAME]]`,
+ *   and the iterated value appears like a normal value: `[[NAME]]`.
  *
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
  * An example template resource can be found in `resources/render/html-wrapper.html`
@@ -23,6 +28,7 @@ class TemplateProcessor(
 ) {
     private val values: MutableMap<String, Any> = mutableMapOf()
     private val conditionals: MutableMap<String, Boolean> = mutableMapOf()
+    private val iterables: MutableMap<String, Iterable<Any>> = mutableMapOf()
 
     /**
      * Adds a reference to a placeholder in the template code.
@@ -67,6 +73,19 @@ class TemplateProcessor(
     ) = conditional(placeholder, value != null).value(placeholder, value ?: "")
 
     /**
+     * Adds an iterable to replace a placeholder in the template code.
+     * The placeholder in the template must be fenced by `[[for:NAME]]` and `[[endfor:NAME]]`,
+     * and the iterated value appears like a normal value: `[[NAME]]`.
+     * @param placeholder placeholder to replace
+     * @param iterable iterable to replace in change of [placeholder]
+     * @return this for concatenation
+     */
+    fun iterable(
+        placeholder: String,
+        iterable: Iterable<Any>,
+    ) = apply { iterables[placeholder] = iterable }
+
+    /**
      * Adds a reference to a content placeholder in the template code.
      * This is used to inject rendered code in a template.
      * @param content value to replace in change of the `\[\[CONTENT]]` placeholder
@@ -75,18 +94,35 @@ class TemplateProcessor(
     fun content(content: CharSequence) = value(TemplatePlaceholders.CONTENT, content)
 
     /**
-     * Creates a regex to find the conditional fragments of a given placeholder.
-     * @param placeholder name of the conditional
+     * Creates a regex to find the fragment of a given placeholder and keyword.
+     * @param keyword name of the keyword, such as `if` or `for`
+     * @param placeholder name of the placeholder associated with the actual content
+     * @param trimStart whether to trim leading whitespace after the beginning of the fragment
+     * @param trimEnd whether to trim trailing whitespace before the end of the fragment
+     * @return a regex that matches the conditional fragments between `[[keyword:PLACEHOLDER]]` and `[[endkeyword:PLACEHOLDER]]`
+     */
+    private fun createFragmentRegex(
+        keyword: String,
+        placeholder: String,
+        trimStart: Boolean = true,
+        trimEnd: Boolean = true,
+    ) = (
+        "\\[\\[$keyword:$placeholder]]" + // Start
+            (if (trimStart) "(?:\\R\\s*)?" else "") + // Trim start
+            "((.|\\R)+?)" + // Content
+            (if (trimEnd) "(?:\\R\\s*)?" else "") + // Trim end
+            "\\[\\[end$keyword:$placeholder]]" // End
+    ).toRegex(RegexOption.MULTILINE)
+
+    /**
      * @return a regex that matches the conditional fragments between `[[if:PLACEHOLDER]]` and `[[endif:PLACEHOLDER]]`
      */
-    private fun createConditionalRegex(placeholder: String) =
-        (
-            "\\[\\[if:$placeholder]]" + // Start
-                "(?:\\R\\s*)?" + // Trim start
-                "((.|\\R)+?)" + // Content
-                "(?:\\R\\s*)?" + // Trim end
-                "\\[\\[endif:$placeholder]]" // End
-        ).toRegex(RegexOption.MULTILINE)
+    private fun createConditionalRegex(placeholder: String) = createFragmentRegex("if", placeholder)
+
+    /**
+     * @return a regex that matches the conditional fragments between `[[for:PLACEHOLDER]]` and `[[endfor:PLACEHOLDER]]`
+     */
+    private fun createIterableRegex(placeholder: String) = createFragmentRegex("for", placeholder, trimStart = false)
 
     /**
      * Starting from [index], goes backwards through whitespaces to find the first non-whitespace character.
@@ -177,6 +213,37 @@ class TemplateProcessor(
     }
 
     /**
+     * Processes iterables in the template by repeating the content in their fragment as many times as the iterable's size,
+     * while replacing the placeholder with the current item during each iteration.
+     *
+     * Example:
+     * ```
+     * [[for:ITEM]][[ITEM]] [[endfor:ITEM]]
+     * ```
+     * Output on `[a, b, c]`: `a b c `
+     */
+    private fun StringBuilder.replaceIterables() {
+        iterables.forEach { (placeholder, iterable) ->
+            createIterableRegex(placeholder)
+                .findAll(this)
+                .sortedByDescending { it.range.first }
+                .forEach { match ->
+                    // Repeat the inner content for each item in the iterable, replacing the placeholder with the item.
+                    val replacement =
+                        iterable.joinToString(separator = "") { item ->
+                            match.groups[1]?.value?.replace("[[$placeholder]]", item.toString()) ?: ""
+                        }
+                    val start = findStartTrimmedIndexToNewline(match.range.first)
+                    replace(
+                        start,
+                        match.range.last + 1,
+                        replacement,
+                    )
+                }
+        }
+    }
+
+    /**
      * Processes values in the template by replacing their placeholder with their corresponding value.
      */
     private fun StringBuilder.replaceValues() {
@@ -192,6 +259,7 @@ class TemplateProcessor(
         buildString {
             append(text)
             replaceConditionals()
+            replaceIterables()
             replaceValues()
         }
 

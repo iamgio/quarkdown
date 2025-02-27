@@ -163,4 +163,83 @@ class TemplateProcessorTest {
             template.process(),
         )
     }
+
+    @Test
+    fun `for each with no delimiters`() {
+        val template = TemplateProcessor("Hello, [[for:NAME]][[NAME]][[endfor:NAME]]!")
+        template.iterable("NAME", listOf("Alice", "Bob", "Charlie"))
+        assertEquals("Hello, AliceBobCharlie!", template.process())
+    }
+
+    @Test
+    fun `for each with delimiters`() {
+        val template = TemplateProcessor("Hello, [[for:NAME]][[NAME]],[[endfor:NAME]]!")
+        template.iterable("NAME", listOf("Alice", "Bob", "Charlie"))
+        assertEquals("Hello, Alice,Bob,Charlie,!", template.process())
+    }
+
+    @Test
+    fun `multiline for each`() {
+        val template =
+            TemplateProcessor(
+                """
+                Groceries:
+                [[for:ITEM]]
+                - [[ITEM]]
+                [[endfor:ITEM]]
+                """.trimIndent(),
+            )
+        template.iterable("ITEM", listOf("Apples", "Bananas", "Carrots"))
+        assertEquals(
+            """
+            Groceries:
+            - Apples
+            - Bananas
+            - Carrots
+            """.trimIndent(),
+            template.process(),
+        )
+    }
+
+    @Test
+    fun `empty for each`() {
+        val template =
+            TemplateProcessor(
+                """
+                Groceries:
+                [[for:ITEM]]
+                - [[ITEM]]
+                [[endfor:ITEM]]
+                """.trimIndent(),
+            )
+        template.iterable("ITEM", emptyList())
+        assertEquals("Groceries:", template.process())
+    }
+
+    @Test
+    fun `nested for each`() {
+        val template =
+            TemplateProcessor(
+                """
+                Groceries:
+                [[for:ITEM]]
+                [[for:LETTER]]
+                - [[ITEM]] [[LETTER]]
+                [[endfor:LETTER]]
+                [[endfor:ITEM]]
+                """.trimIndent(),
+            )
+        template.iterable("ITEM", listOf("Apple", "Banana"))
+        template.iterable("LETTER", listOf("A", "B"))
+        assertEquals(
+            """
+            Groceries:
+            - Apple A
+            - Apple B
+            - Banana A
+            - Banana B
+            """.trimIndent(),
+            template.process(),
+        )
+    }
 }
