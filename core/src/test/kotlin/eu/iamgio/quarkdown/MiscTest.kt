@@ -65,13 +65,43 @@ class MiscTest {
         TableOfContents.generate(headings1).let { toc ->
             assertEquals(2, toc.items.size)
             assertEquals(3, toc.items[0].subItems.size)
-            assertEquals(1, toc.items[0].subItems[1].subItems.size)
+            assertEquals(
+                1,
+                toc.items[0]
+                    .subItems[1]
+                    .subItems.size,
+            )
 
             assertNodeEquals(Text("ABC"), toc.items[0].text.first())
-            assertNodeEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertNodeEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
-            assertNodeEquals(Text("JKL"), toc.items[0].subItems[1].subItems[0].text.first())
-            assertNodeEquals(Text("MNO"), toc.items[0].subItems[2].text.first())
+            assertNodeEquals(
+                Text("DEF"),
+                toc.items[0]
+                    .subItems[0]
+                    .text
+                    .first(),
+            )
+            assertNodeEquals(
+                Text("GHI"),
+                toc.items[0]
+                    .subItems[1]
+                    .text
+                    .first(),
+            )
+            assertNodeEquals(
+                Text("JKL"),
+                toc.items[0]
+                    .subItems[1]
+                    .subItems[0]
+                    .text
+                    .first(),
+            )
+            assertNodeEquals(
+                Text("MNO"),
+                toc.items[0]
+                    .subItems[2]
+                    .text
+                    .first(),
+            )
             assertNodeEquals(Text("PQR"), toc.items[1].text.first())
         }
 
@@ -87,8 +117,20 @@ class MiscTest {
             assertEquals(2, toc.items[0].subItems.size)
 
             assertNodeEquals(Text("ABC"), toc.items[0].text.first())
-            assertNodeEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertNodeEquals(Text("GHI"), toc.items[0].subItems[1].text.first())
+            assertNodeEquals(
+                Text("DEF"),
+                toc.items[0]
+                    .subItems[0]
+                    .text
+                    .first(),
+            )
+            assertNodeEquals(
+                Text("GHI"),
+                toc.items[0]
+                    .subItems[1]
+                    .text
+                    .first(),
+            )
         }
 
         /*
@@ -126,6 +168,7 @@ class MiscTest {
             assertEquals(this, retriever.find("eNgLiSh"))
             assertEquals("en", code)
             assertEquals("en", tag)
+            assertEquals("English", displayName)
             assertEquals("English", localizedName)
             assertNull(countryCode)
             assertNull(localizedCountryName)
@@ -138,6 +181,7 @@ class MiscTest {
             assertEquals(this, retriever.find("iTaLiAn"))
             assertEquals("it", code)
             assertEquals("it", tag)
+            assertEquals("Italian", displayName)
             assertEquals("italiano", localizedName)
             assertNull(countryCode)
             assertNull(localizedCountryName)
@@ -149,6 +193,7 @@ class MiscTest {
             assertEquals(this, retriever.find("En-us"))
             assertEquals("en", code)
             assertEquals("en-US", tag)
+            assertEquals("English (United States)", displayName)
             assertEquals("English (United States)", localizedName)
             assertEquals("US", countryCode)
             assertEquals("United States", localizedCountryName)
@@ -159,6 +204,7 @@ class MiscTest {
             assertEquals(this, retriever.find("French (Canada)"))
             assertEquals("fr", code)
             assertEquals("fr-CA", tag)
+            assertEquals("French (Canada)", displayName)
             assertEquals("français (Canada)", localizedName)
             assertEquals("CA", countryCode)
             assertEquals("Canada", localizedCountryName)
@@ -296,19 +342,21 @@ class MiscTest {
                 }
         }
 
-        LazyOutputArtifact.internal(
-            resource = "/media/icon.png",
-            name = "artif@ct 4.png",
-            type = ArtifactType.AUTO,
-            referenceClass = this::class,
-        ).run {
-            assertContentEquals(
-                this::class.java.getResourceAsStream("/media/icon.png")!!.readBytes(),
-                this.accept(exporter)
-                    .also { assertEquals("artif@ct-4.png", it.name) }
-                    .readBytes(),
-            )
-        }
+        LazyOutputArtifact
+            .internal(
+                resource = "/media/icon.png",
+                name = "artif@ct 4.png",
+                type = ArtifactType.AUTO,
+                referenceClass = this::class,
+            ).run {
+                assertContentEquals(
+                    this::class.java.getResourceAsStream("/media/icon.png")!!.readBytes(),
+                    this
+                        .accept(exporter)
+                        .also { assertEquals("artif@ct-4.png", it.name) }
+                        .readBytes(),
+                )
+            }
 
         val group =
             OutputResourceGroup(

@@ -5,12 +5,17 @@ import eu.iamgio.quarkdown.localization.Locale
 /**
  * [Locale] implementation using [java.util.Locale].
  */
-internal data class JVMLocale(private val jvmLocale: java.util.Locale) : Locale {
+internal data class JVMLocale(
+    private val jvmLocale: JLocale,
+) : Locale {
     override val code: String
         get() = jvmLocale.language
 
     override val countryCode: String?
         get() = jvmLocale.country.takeIf { it.isNotBlank() }
+
+    override val displayName: String
+        get() = jvmLocale.getDisplayName(JLocale.ENGLISH)
 
     override val localizedName: String
         get() = jvmLocale.getDisplayName(jvmLocale)

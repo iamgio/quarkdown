@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.cli.creator
 
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.value.quarkdownName
+import eu.iamgio.quarkdown.localization.Locale
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
@@ -16,6 +17,7 @@ class ProjectCreator(
     val name: String? = null,
     val author: String? = null,
     val type: DocumentType? = null,
+    val language: Locale? = null,
 ) {
     private fun createTemplateProcessor() =
         with(ProjectCreatorTemplatePlaceholders) {
@@ -23,6 +25,7 @@ class ProjectCreator(
                 optionalValue(NAME, name)
                 optionalValue(AUTHOR, author)
                 optionalValue(TYPE, type?.quarkdownName)
+                optionalValue(LANGUAGE, language?.displayName)
             }
         }
 
