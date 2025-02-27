@@ -1,8 +1,7 @@
 package eu.iamgio.quarkdown.cli.creator
 
-import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.value.quarkdownName
-import eu.iamgio.quarkdown.localization.Locale
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
@@ -14,18 +13,15 @@ private const val TEMPLATE = "/creator/main.qmd.template"
  *
  */
 class ProjectCreator(
-    val name: String? = null,
-    val author: String? = null,
-    val type: DocumentType? = null,
-    val language: Locale? = null,
+    private val info: DocumentInfo,
 ) {
     private fun createTemplateProcessor() =
         with(ProjectCreatorTemplatePlaceholders) {
             TemplateProcessor.fromResourceName(TEMPLATE).apply {
-                optionalValue(NAME, name)
-                optionalValue(AUTHOR, author)
-                optionalValue(TYPE, type?.quarkdownName)
-                optionalValue(LANGUAGE, language?.displayName)
+                optionalValue(NAME, info.name)
+                optionalValue(AUTHOR, info.authors.firstOrNull()?.name) // TODO multiple authors
+                optionalValue(TYPE, info.type.quarkdownName)
+                optionalValue(LANGUAGE, info.locale?.displayName)
             }
         }
 
