@@ -23,6 +23,9 @@ class ProjectCreator(
                 iterable(AUTHORS, info.authors.map { it.name })
                 optionalValue(TYPE, info.type.quarkdownName)
                 optionalValue(LANGUAGE, info.locale?.displayName)
+                conditional(HAS_THEME, info.theme != null)
+                optionalValue(COLOR_THEME, info.theme?.color)
+                optionalValue(LAYOUT_THEME, info.theme?.layout)
             }
         }
 

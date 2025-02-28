@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.cli
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
@@ -59,7 +60,8 @@ class ProjectCreatorTest {
 
     @Test
     fun `multiple authors`() {
-        val creator = ProjectCreator(DocumentInfo(authors = mutableListOf(DocumentAuthor("Giorgio"), DocumentAuthor("John"))))
+        val creator =
+            ProjectCreator(DocumentInfo(authors = mutableListOf(DocumentAuthor("Giorgio"), DocumentAuthor("John"))))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n\n.docauthors\n  - Giorgio\n  - John", resources.first().textContent)
@@ -79,5 +81,57 @@ class ProjectCreatorTest {
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n.doclang {Italian}", resources.first().textContent)
+    }
+
+    @Test
+    fun `full theme`() {
+        val creator = ProjectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = "minimal")))
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".doctype {plain}\n.theme {dark} layout:{minimal}", resources.first().textContent)
+    }
+
+    @Test
+    fun `only color theme`() {
+        val creator = ProjectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = null)))
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".doctype {plain}\n.theme {dark}", resources.first().textContent)
+    }
+
+    @Test
+    fun `only layout theme`() {
+        val creator =
+            ProjectCreator(
+                DocumentInfo(theme = DocumentTheme(color = null, layout = "latex")),
+            )
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(".doctype {plain}\n.theme layout:{latex}", resources.first().textContent)
+    }
+
+    @Test
+    fun `locale, theme and author`() {
+        val creator =
+            ProjectCreator(
+                DocumentInfo(
+                    locale = LocaleLoader.SYSTEM.find("en")!!,
+                    theme = DocumentTheme(color = "dark", layout = "minimal"),
+                    authors = singleAuthor,
+                ),
+            )
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(
+            """
+            .doctype {plain}
+            .doclang {English}
+            .theme {dark} layout:{minimal}
+            
+            .docauthors
+              - Giorgio
+            """.trimIndent(),
+            resources.first().textContent,
+        )
     }
 }
