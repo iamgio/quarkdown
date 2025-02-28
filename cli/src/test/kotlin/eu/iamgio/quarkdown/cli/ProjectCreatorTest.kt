@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -140,9 +141,16 @@ class ProjectCreatorTest {
     fun `initial content`() {
         val creator = ProjectCreator(DocumentInfo(name = "Document"), setupInitialContent = true)
         val resources = creator.createResources()
-        assertEquals(1, resources.size)
+        assertEquals(2, resources.size)
+
+        val source = resources.first { it is TextOutputArtifact }
+        val groups = resources.filterIsInstance<OutputResourceGroup>()
+        assertEquals(1, groups.size)
+
+        val images = groups.first { it.name == "image" }
+
         assertTrue(
-            resources.first().textContent.startsWith(
+            source.textContent.startsWith(
                 """
                 .docname {Document}
                 .doctype {plain}

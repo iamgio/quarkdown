@@ -3,7 +3,9 @@ package eu.iamgio.quarkdown.cli.creator
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
+import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
+import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.template.TemplateProcessor
 
@@ -40,6 +42,19 @@ class ProjectCreator(
                 template.process().trim(),
                 ArtifactType.QUARKDOWN,
             )
-        return listOf(main)
+
+        return buildList {
+            add(main)
+            if (setupInitialContent) {
+                val logo =
+                    LazyOutputArtifact.internal(
+                        "/creator/logo.png",
+                        "logo.png",
+                        ArtifactType.AUTO,
+                    )
+                val imageGroup = OutputResourceGroup("image", setOf(logo))
+                add(imageGroup)
+            }
+        }
     }
 }
