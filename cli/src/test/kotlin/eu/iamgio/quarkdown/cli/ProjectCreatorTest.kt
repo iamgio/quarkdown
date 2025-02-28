@@ -11,6 +11,7 @@ import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * Tests for [ProjectCreator].
@@ -132,6 +133,23 @@ class ProjectCreatorTest {
               - Giorgio
             """.trimIndent(),
             resources.first().textContent,
+        )
+    }
+
+    @Test
+    fun `initial content`() {
+        val creator = ProjectCreator(DocumentInfo(name = "Document"), setupInitialContent = true)
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertTrue(
+            resources.first().textContent.startsWith(
+                """
+                .docname {Document}
+                .doctype {plain}
+                
+                # Document
+                """.trimIndent(),
+            ),
         )
     }
 }

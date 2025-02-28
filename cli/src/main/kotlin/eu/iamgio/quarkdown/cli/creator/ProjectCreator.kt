@@ -14,6 +14,7 @@ private const val TEMPLATE = "/creator/main.qmd.template"
  */
 class ProjectCreator(
     private val info: DocumentInfo,
+    private val setupInitialContent: Boolean = false,
 ) {
     private fun createTemplateProcessor() =
         with(ProjectCreatorTemplatePlaceholders) {
@@ -26,6 +27,7 @@ class ProjectCreator(
                 conditional(HAS_THEME, info.theme != null)
                 optionalValue(COLOR_THEME, info.theme?.color)
                 optionalValue(LAYOUT_THEME, info.theme?.layout)
+                conditional(USE_INITIAL_CONTENT, setupInitialContent)
             }
         }
 

@@ -11,3 +11,11 @@
   - [[AUTHORS]]
 [[endfor:AUTHORS]]
 [[endif:AUTHORS]]
+
+[[if:INITIALCONTENT]]
+[[if:NAME]]# [[NAME]][[endif:NAME]]
+
+Welcome to Quarkdown! This is the starting point for your document.
+
+For further information, please refer to the [official wiki](https://github.com/iamgio/quarkdown/wiki).
+[[endif:INITIALCONTENT]]

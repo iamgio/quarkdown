@@ -11,4 +11,5 @@ object ProjectCreatorTemplatePlaceholders {
     const val HAS_THEME = "THEME"
     const val COLOR_THEME = "COLORTHEME"
     const val LAYOUT_THEME = "LAYOUTTHEME"
+    const val USE_INITIAL_CONTENT = "INITIALCONTENT"
 }
