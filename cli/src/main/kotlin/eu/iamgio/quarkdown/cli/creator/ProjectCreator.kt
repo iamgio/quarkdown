@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.template.TemplateProcessor
 class ProjectCreator(
     private val templateProcessorFactory: ProjectCreatorTemplateProcessorFactory,
     private val initialContentFactory: ProjectCreatorInitialContentSupplier,
+    private val mainFileName: String,
 ) {
     fun createResources(): List<OutputResource> {
         val template: TemplateProcessor = templateProcessorFactory.create()
@@ -26,7 +27,7 @@ class ProjectCreator(
 
         val main =
             TextOutputArtifact(
-                "main.qmd",
+                mainFileName,
                 template.process().trim(),
                 ArtifactType.QUARKDOWN,
             )

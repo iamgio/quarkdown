@@ -30,6 +30,7 @@ class ProjectCreatorTest {
     ) = ProjectCreator(
         DefaultProjectCreatorTemplateProcessorFactory(info),
         if (includeInitialContent) DefaultProjectCreatorInitialContentSupplier() else EmptyProjectCreatorInitialContentSupplier(),
+        mainFileName = "main",
     )
 
     @Test
@@ -38,7 +39,7 @@ class ProjectCreatorTest {
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         with(resources.first()) {
-            assertEquals("main.qmd", name)
+            assertEquals("main", name)
             assertIs<TextOutputArtifact>(this)
             assertEquals(".doctype {plain}", textContent)
         }
@@ -159,9 +160,10 @@ class ProjectCreatorTest {
         assertEquals(1, groups.size)
 
         val images = groups.first { it.name == "image" }
+        assertEquals("logo.png", images.resources.single().name)
 
         assertTrue(
-            source.textContent.also { println(it) }.startsWith(
+            source.textContent.startsWith(
                 """
                 .docname {Document}
                 .doctype {plain}
