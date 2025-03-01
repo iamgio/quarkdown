@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.cli
 
-import eu.iamgio.quarkdown.cli.creator.DefaultProjectCreatorTemplateProcessorFactory
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
 import eu.iamgio.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
+import eu.iamgio.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme

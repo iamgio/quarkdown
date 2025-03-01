@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.cli.creator
+package eu.iamgio.quarkdown.cli.creator.template
 
 import eu.iamgio.quarkdown.template.TemplateProcessor
 

@@ -1,6 +1,8 @@
 package eu.iamgio.quarkdown.cli.creator
 
 import eu.iamgio.quarkdown.cli.creator.content.ProjectCreatorInitialContentSupplier
+import eu.iamgio.quarkdown.cli.creator.template.ProjectCreatorTemplatePlaceholders
+import eu.iamgio.quarkdown.cli.creator.template.ProjectCreatorTemplateProcessorFactory
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
