@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.cli
 
+import eu.iamgio.quarkdown.cli.creator.DefaultProjectCreatorTemplateProcessorFactory
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
@@ -21,9 +22,17 @@ class ProjectCreatorTest {
     private val OutputResource.textContent
         get() = (this as TextOutputArtifact).content
 
+    private fun projectCreator(
+        info: DocumentInfo,
+        includeInitialContent: Boolean = false,
+    ) = ProjectCreator(
+        DefaultProjectCreatorTemplateProcessorFactory(info),
+        includeInitialContent,
+    )
+
     @Test
     fun empty() {
-        val creator = ProjectCreator(DocumentInfo())
+        val creator = projectCreator(DocumentInfo())
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         with(resources.first()) {
@@ -35,7 +44,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `only name`() {
-        val creator = ProjectCreator(DocumentInfo(name = "Test"))
+        val creator = projectCreator(DocumentInfo(name = "Test"))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".docname {Test}\n.doctype {plain}", resources.first().textContent)
@@ -46,7 +55,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `only author`() {
-        val creator = ProjectCreator(DocumentInfo(authors = singleAuthor))
+        val creator = projectCreator(DocumentInfo(authors = singleAuthor))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n\n.docauthors\n  - Giorgio", resources.first().textContent)
@@ -54,7 +63,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `name and author`() {
-        val creator = ProjectCreator(DocumentInfo(name = "Document", authors = singleAuthor))
+        val creator = projectCreator(DocumentInfo(name = "Document", authors = singleAuthor))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".docname {Document}\n.doctype {plain}\n\n.docauthors\n  - Giorgio", resources.first().textContent)
@@ -63,7 +72,7 @@ class ProjectCreatorTest {
     @Test
     fun `multiple authors`() {
         val creator =
-            ProjectCreator(DocumentInfo(authors = mutableListOf(DocumentAuthor("Giorgio"), DocumentAuthor("John"))))
+            projectCreator(DocumentInfo(authors = mutableListOf(DocumentAuthor("Giorgio"), DocumentAuthor("John"))))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n\n.docauthors\n  - Giorgio\n  - John", resources.first().textContent)
@@ -71,7 +80,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `name and type`() {
-        val creator = ProjectCreator(DocumentInfo(name = "Document", type = DocumentType.SLIDES))
+        val creator = projectCreator(DocumentInfo(name = "Document", type = DocumentType.SLIDES))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".docname {Document}\n.doctype {slides}", resources.first().textContent)
@@ -79,7 +88,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `only language`() {
-        val creator = ProjectCreator(DocumentInfo(locale = LocaleLoader.SYSTEM.find("it")!!))
+        val creator = projectCreator(DocumentInfo(locale = LocaleLoader.SYSTEM.find("it")!!))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n.doclang {Italian}", resources.first().textContent)
@@ -87,7 +96,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `full theme`() {
-        val creator = ProjectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = "minimal")))
+        val creator = projectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = "minimal")))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n.theme {dark} layout:{minimal}", resources.first().textContent)
@@ -95,7 +104,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `only color theme`() {
-        val creator = ProjectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = null)))
+        val creator = projectCreator(DocumentInfo(theme = DocumentTheme(color = "dark", layout = null)))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".doctype {plain}\n.theme {dark}", resources.first().textContent)
@@ -104,7 +113,7 @@ class ProjectCreatorTest {
     @Test
     fun `only layout theme`() {
         val creator =
-            ProjectCreator(
+            projectCreator(
                 DocumentInfo(theme = DocumentTheme(color = null, layout = "latex")),
             )
         val resources = creator.createResources()
@@ -115,7 +124,7 @@ class ProjectCreatorTest {
     @Test
     fun `locale, theme and author`() {
         val creator =
-            ProjectCreator(
+            projectCreator(
                 DocumentInfo(
                     locale = LocaleLoader.SYSTEM.find("en")!!,
                     theme = DocumentTheme(color = "dark", layout = "minimal"),
@@ -139,7 +148,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `initial content`() {
-        val creator = ProjectCreator(DocumentInfo(name = "Document"), setupInitialContent = true)
+        val creator = projectCreator(DocumentInfo(name = "Document"), includeInitialContent = true)
         val resources = creator.createResources()
         assertEquals(2, resources.size)
 
