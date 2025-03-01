@@ -12,7 +12,7 @@ private const val TEMPLATE = "/creator/main.qmd.template"
 class DefaultProjectCreatorTemplateProcessorFactory(
     private val info: DocumentInfo,
 ) : ProjectCreatorTemplateProcessorFactory {
-    override fun create(includeInitialContent: Boolean): TemplateProcessor =
+    override fun create(): TemplateProcessor =
         with(ProjectCreatorTemplatePlaceholders) {
             TemplateProcessor.fromResourceName(TEMPLATE).apply {
                 optionalValue(NAME, info.name)
@@ -23,7 +23,6 @@ class DefaultProjectCreatorTemplateProcessorFactory(
                 conditional(HAS_THEME, info.theme != null)
                 optionalValue(COLOR_THEME, info.theme?.color)
                 optionalValue(LAYOUT_THEME, info.theme?.layout)
-                conditional(USE_INITIAL_CONTENT, includeInitialContent)
             }
         }
 }

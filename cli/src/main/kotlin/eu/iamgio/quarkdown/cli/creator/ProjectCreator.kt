@@ -1,9 +1,8 @@
 package eu.iamgio.quarkdown.cli.creator
 
+import eu.iamgio.quarkdown.cli.creator.content.ProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
-import eu.iamgio.quarkdown.pipeline.output.LazyOutputArtifact
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
-import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.template.TemplateProcessor
 
@@ -12,10 +11,18 @@ import eu.iamgio.quarkdown.template.TemplateProcessor
  */
 class ProjectCreator(
     private val templateProcessorFactory: ProjectCreatorTemplateProcessorFactory,
-    private val includeInitialContent: Boolean = false,
+    private val initialContentFactory: ProjectCreatorInitialContentSupplier,
 ) {
     fun createResources(): List<OutputResource> {
-        val template: TemplateProcessor = templateProcessorFactory.create(includeInitialContent)
+        val template: TemplateProcessor = templateProcessorFactory.create()
+
+        // Initial content is processed via the same template processor.
+        val initialContentCode =
+            initialContentFactory.templateCodeContent
+                ?.let { template.copy(text = it) }
+                ?.process()
+
+        template.optionalValue(ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT, initialContentCode)
 
         val main =
             TextOutputArtifact(
@@ -26,16 +33,7 @@ class ProjectCreator(
 
         return buildList {
             add(main)
-            if (includeInitialContent) {
-                val logo =
-                    LazyOutputArtifact.internal(
-                        "/creator/logo.png",
-                        "logo.png",
-                        ArtifactType.AUTO,
-                    )
-                val imageGroup = OutputResourceGroup("image", setOf(logo))
-                add(imageGroup)
-            }
+            addAll(initialContentFactory.createResources())
         }
     }
 }

@@ -25,11 +25,10 @@ import eu.iamgio.quarkdown.util.replace
  */
 class TemplateProcessor(
     private val text: String,
+    private val values: MutableMap<String, Any> = mutableMapOf(),
+    private val conditionals: MutableMap<String, Boolean> = mutableMapOf(),
+    private val iterables: MutableMap<String, Iterable<Any>> = mutableMapOf(),
 ) {
-    private val values: MutableMap<String, Any> = mutableMapOf()
-    private val conditionals: MutableMap<String, Boolean> = mutableMapOf()
-    private val iterables: MutableMap<String, Iterable<Any>> = mutableMapOf()
-
     /**
      * Adds a reference to a placeholder in the template code.
      * The placeholder in the template must be wrapped by double square brackets.
@@ -84,6 +83,19 @@ class TemplateProcessor(
         placeholder: String,
         iterable: Iterable<Any>,
     ) = apply { iterables[placeholder] = iterable }
+
+    /**
+     * Creates a copy of this template processor with the same injected properties.
+     * @param text new text the template
+     * @return a new [TemplateProcessor] with the same injections, and the new text
+     */
+    fun copy(text: String) =
+        TemplateProcessor(
+            text,
+            values.toMutableMap(),
+            conditionals.toMutableMap(),
+            iterables.toMutableMap(),
+        )
 
     /**
      * Adds a reference to a content placeholder in the template code.

@@ -6,5 +6,5 @@ import eu.iamgio.quarkdown.template.TemplateProcessor
  *
  */
 interface ProjectCreatorTemplateProcessorFactory {
-    fun create(includeInitialContent: Boolean): TemplateProcessor
+    fun create(): TemplateProcessor
 }
