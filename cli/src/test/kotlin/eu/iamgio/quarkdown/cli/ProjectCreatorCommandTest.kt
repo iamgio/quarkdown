@@ -29,7 +29,8 @@ class ProjectCreatorCommandTest {
             "$directory " +
                 "--name test " +
                 "--authors \"Aaa, Bbb,Ccc\" " +
-                "--type slides" +
+                "--type slides " +
+                "--lang en" +
                 additionalArgs,
         )
         println(directory.listFiles()!!.map { it.name })
@@ -41,6 +42,7 @@ class ProjectCreatorCommandTest {
         assertTrue("- Bbb" in main)
         assertTrue("- Ccc" in main)
         assertTrue(".doctype {slides}" in main)
+        assertTrue(".doclang {English}" in main)
     }
 
     @Test

@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.cli.creator.command
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
+import com.github.ajalt.clikt.parameters.options.check
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
@@ -17,6 +18,8 @@ import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.value.quarkdownName
+import eu.iamgio.quarkdown.localization.Locale
+import eu.iamgio.quarkdown.localization.LocaleLoader
 import java.io.File
 
 /**
@@ -59,6 +62,19 @@ class CreateProjectCommand : CliktCommand("create") {
             showDefault = false,
         )
 
+    private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
+
+    private val languageRaw: String? by option("--lang", help = "Document language")
+        .prompt("Document language")
+        .check(
+            lazyMessage = { "$it is not a valid locale." },
+            validator = { it.isBlank() || findLocale(it) != null },
+        )
+
+    private val language: Locale? by lazy {
+        languageRaw?.let(::findLocale)
+    }
+
     private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
         .flag()
 
@@ -68,6 +84,7 @@ class CreateProjectCommand : CliktCommand("create") {
                 name = name?.takeUnless { it.isBlank() } ?: directory.name,
                 authors = authors.toMutableList(),
                 type = type,
+                locale = language,
             )
 
         val templateFactory = DefaultProjectCreatorTemplateProcessorFactory(info)
