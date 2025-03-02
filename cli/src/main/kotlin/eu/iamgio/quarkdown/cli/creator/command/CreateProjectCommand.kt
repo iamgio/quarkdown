@@ -22,6 +22,7 @@ import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.localization.Locale
 import eu.iamgio.quarkdown.localization.LocaleLoader
+import eu.iamgio.quarkdown.log.Log
 import java.io.File
 
 /**
@@ -37,6 +38,7 @@ class CreateProjectCommand : CliktCommand("create") {
         .file(
             canBeFile = false,
             canBeDir = true,
+            mustBeWritable = true,
         ).default(File(DEFAULT_DIRECTORY))
 
     private val name: String? by option("--name", help = "Project name")
@@ -91,19 +93,23 @@ class CreateProjectCommand : CliktCommand("create") {
             theme = DocumentTheme(colorTheme, layoutTheme),
         )
 
+    private fun createProjectCreator() =
+        ProjectCreator(
+            templateProcessorFactory = DefaultProjectCreatorTemplateProcessorFactory(this.createDocumentInfo()),
+            initialContentSupplier =
+                when {
+                    noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
+                    else -> DefaultProjectCreatorInitialContentSupplier()
+                },
+            "main",
+        )
+
     override fun run() {
-        val info = this.createDocumentInfo()
-
-        val templateFactory = DefaultProjectCreatorTemplateProcessorFactory(info)
-        val initialContentSupplier =
-            when {
-                noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
-                else -> DefaultProjectCreatorInitialContentSupplier()
-            }
-
-        val creator = ProjectCreator(templateFactory, initialContentSupplier, "main")
+        val creator = this.createProjectCreator()
 
         directory.mkdirs()
         creator.createResources().forEach { it.saveTo(directory) }
+
+        Log.info("Project created in ${directory.canonicalPath}")
     }
 }
