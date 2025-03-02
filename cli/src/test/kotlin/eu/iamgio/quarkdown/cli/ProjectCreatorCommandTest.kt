@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- *
+ * Tests for [CreateProjectCommand]
  */
 class ProjectCreatorCommandTest {
     private val directory =
@@ -27,6 +27,7 @@ class ProjectCreatorCommandTest {
     private fun test(additionalArgs: String = "") {
         command.test(
             "$directory " +
+                "--main-file main " +
                 "--name test " +
                 "--authors \"Aaa, Bbb,Ccc\" " +
                 "--type slides " +
@@ -36,6 +37,7 @@ class ProjectCreatorCommandTest {
                 additionalArgs,
         )
         println(directory.listFiles()!!.map { it.name })
+
         assertTrue("main.qmd" in directory.listFiles()!!.map { it.name })
 
         val main = directory.listFiles()!!.first { it.name == "main.qmd" }.readText()

@@ -41,6 +41,8 @@ class CreateProjectCommand : CliktCommand("create") {
             mustBeWritable = true,
         ).default(File(DEFAULT_DIRECTORY))
 
+    private val mainFileName: String? by option("--main-file", help = "Main file name")
+
     private val name: String? by option("--name", help = "Project name")
         .prompt("Project name")
 
@@ -101,7 +103,7 @@ class CreateProjectCommand : CliktCommand("create") {
                     noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
                     else -> DefaultProjectCreatorInitialContentSupplier()
                 },
-            "main",
+            mainFileName ?: directory.name,
         )
 
     override fun run() {
