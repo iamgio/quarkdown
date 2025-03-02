@@ -7,7 +7,11 @@ import eu.iamgio.quarkdown.template.TemplateProcessor
 private const val TEMPLATE = "/creator/main.qmd.template"
 
 /**
- *
+ * Implementation of [ProjectCreatorTemplateProcessorFactory]
+ * based on the default template, which relies on document information
+ * to fill placeholders.
+ * @param info document information to inject into the template
+ * @see ProjectCreatorTemplatePlaceholders
  */
 class DefaultProjectCreatorTemplateProcessorFactory(
     private val info: DocumentInfo,

@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.cli.creator.template
 
 /**
- *
+ * Placeholders used in project creator templates.
  */
 object ProjectCreatorTemplatePlaceholders {
     const val NAME = "NAME"
