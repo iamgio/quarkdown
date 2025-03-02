@@ -1,33 +1,37 @@
 package eu.iamgio.quarkdown.cli
 
 import com.github.ajalt.clikt.testing.test
-import eu.iamgio.quarkdown.cli.creator.CreateProjectCommand
+import eu.iamgio.quarkdown.cli.creator.command.CreateProjectCommand
 import org.junit.Test
-import java.io.File
+import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 
 /**
  *
  */
 class ProjectCreatorCommandTest {
-    private val rootDirectory =
+    private val directory =
         kotlin.io.path
             .createTempDirectory()
             .toFile()
 
+    private val command = CreateProjectCommand()
+
+    @BeforeTest
+    fun setup() {
+        directory.deleteRecursively()
+        directory.mkdirs()
+    }
+
     @Test
     fun default() {
-        val command = CreateProjectCommand()
-        val directory = File(rootDirectory, "default")
-        command.test("$directory")
+        command.test("$directory --name test")
         assertEquals(2, directory.listFiles()!!.size)
     }
 
     @Test
     fun `default empty`() {
-        val command = CreateProjectCommand()
-        val directory = File(rootDirectory, "empty")
-        command.test("$directory --empty")
+        command.test("$directory --empty --name test")
         assertEquals(1, directory.listFiles()!!.size)
         assertEquals("main.qmd", directory.listFiles()!!.single().name)
     }

@@ -8,7 +8,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":server"))
     implementation(project(":stdlib"))
-    implementation("com.github.ajalt.clikt:clikt:5.0.1")
+    implementation("com.github.ajalt.clikt:clikt:5.0.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("io.methvin:directory-watcher:0.18.0")
 }

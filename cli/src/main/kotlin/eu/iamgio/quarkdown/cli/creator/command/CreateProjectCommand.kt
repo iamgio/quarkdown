@@ -1,11 +1,13 @@
-package eu.iamgio.quarkdown.cli.creator
+package eu.iamgio.quarkdown.cli.creator.command
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.ajalt.clikt.parameters.types.file
+import eu.iamgio.quarkdown.cli.creator.ProjectCreator
 import eu.iamgio.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
@@ -32,10 +34,18 @@ class CreateProjectCommand : CliktCommand("create") {
             canBeDir = true,
         ).default(File(DEFAULT_DIRECTORY))
 
-    private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content").flag()
+    private val name: String? by option("--name", help = "Project name")
+        .prompt("Project name")
+
+    private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
+        .flag()
 
     override fun run() {
-        val info = DocumentInfo()
+        val info =
+            DocumentInfo(
+                name = name,
+            )
+
         val templateFactory = DefaultProjectCreatorTemplateProcessorFactory(info)
         val initialContentSupplier =
             when {
