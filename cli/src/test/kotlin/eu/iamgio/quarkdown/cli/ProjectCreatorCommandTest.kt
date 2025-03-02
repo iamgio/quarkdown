@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.cli.creator.command.CreateProjectCommand
 import org.junit.Test
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  *
@@ -23,16 +24,34 @@ class ProjectCreatorCommandTest {
         directory.mkdirs()
     }
 
+    private fun test(additionalArgs: String = "") {
+        command.test(
+            "$directory " +
+                "--name test " +
+                "--authors \"Aaa, Bbb,Ccc\" " +
+                "--type slides" +
+                additionalArgs,
+        )
+        println(directory.listFiles()!!.map { it.name })
+        assertTrue("main.qmd" in directory.listFiles()!!.map { it.name })
+
+        val main = directory.listFiles()!!.first { it.name == "main.qmd" }.readText()
+        assertTrue(main.startsWith(".docname {test}"))
+        assertTrue("- Aaa" in main)
+        assertTrue("- Bbb" in main)
+        assertTrue("- Ccc" in main)
+        assertTrue(".doctype {slides}" in main)
+    }
+
     @Test
     fun default() {
-        command.test("$directory --name test")
+        test()
         assertEquals(2, directory.listFiles()!!.size)
     }
 
     @Test
     fun `default empty`() {
-        command.test("$directory --empty --name test")
+        test("--empty")
         assertEquals(1, directory.listFiles()!!.size)
-        assertEquals("main.qmd", directory.listFiles()!!.single().name)
     }
 }

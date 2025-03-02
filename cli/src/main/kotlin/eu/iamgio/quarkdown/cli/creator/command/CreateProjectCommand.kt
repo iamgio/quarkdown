@@ -6,13 +6,17 @@ import com.github.ajalt.clikt.parameters.arguments.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import eu.iamgio.quarkdown.cli.creator.ProjectCreator
 import eu.iamgio.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
 import eu.iamgio.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import eu.iamgio.quarkdown.cli.util.saveTo
+import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.function.value.quarkdownName
 import java.io.File
 
 /**
@@ -37,13 +41,33 @@ class CreateProjectCommand : CliktCommand("create") {
     private val name: String? by option("--name", help = "Project name")
         .prompt("Project name")
 
+    private val authorsRaw: String by option("--authors", help = "Project authors")
+        .prompt("Authors (separated by commas)")
+
+    private val authors: List<DocumentAuthor> by lazy {
+        authorsRaw
+            .split(",")
+            .filter { it.isNotBlank() }
+            .map { DocumentAuthor(it.trim()) }
+    }
+
+    private val type: DocumentType by option("--type", help = "Document type")
+        .enum<DocumentType> { it.quarkdownName }
+        .prompt(
+            "Document type (${DocumentType.entries.joinToString("/") { it.quarkdownName }})",
+            default = DocumentType.PAGED,
+            showDefault = false,
+        )
+
     private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
         .flag()
 
     override fun run() {
         val info =
             DocumentInfo(
-                name = name,
+                name = name?.takeUnless { it.isBlank() } ?: directory.name,
+                authors = authors.toMutableList(),
+                type = type,
             )
 
         val templateFactory = DefaultProjectCreatorTemplateProcessorFactory(info)
