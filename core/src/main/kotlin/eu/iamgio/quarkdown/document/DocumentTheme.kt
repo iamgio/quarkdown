@@ -9,7 +9,13 @@ package eu.iamgio.quarkdown.document
 data class DocumentTheme(
     val color: String?,
     val layout: String?,
-)
+) {
+    /**
+     * @return whether this theme has at least one component specified
+     */
+    val hasComponent: Boolean
+        get() = color != null || layout != null
+}
 
 /**
  * Given [this] theme with nullable components, merges it with a default theme in order to fill in the missing components.

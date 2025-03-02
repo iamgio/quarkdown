@@ -30,7 +30,9 @@ class ProjectCreatorCommandTest {
                 "--name test " +
                 "--authors \"Aaa, Bbb,Ccc\" " +
                 "--type slides " +
-                "--lang en" +
+                "--lang en " +
+                "--color-theme darko " +
+                "--layout-theme latex " +
                 additionalArgs,
         )
         println(directory.listFiles()!!.map { it.name })
@@ -43,6 +45,7 @@ class ProjectCreatorCommandTest {
         assertTrue("- Ccc" in main)
         assertTrue(".doctype {slides}" in main)
         assertTrue(".doclang {English}" in main)
+        assertTrue(".theme {darko} layout:{latex}" in main)
     }
 
     @Test

@@ -24,7 +24,7 @@ class DefaultProjectCreatorTemplateProcessorFactory(
                 iterable(AUTHORS, info.authors.map { it.name })
                 optionalValue(TYPE, info.type.quarkdownName)
                 optionalValue(LANGUAGE, info.locale?.displayName)
-                conditional(HAS_THEME, info.theme != null)
+                conditional(HAS_THEME, info.theme?.hasComponent == true)
                 optionalValue(COLOR_THEME, info.theme?.color)
                 optionalValue(LAYOUT_THEME, info.theme?.layout)
             }

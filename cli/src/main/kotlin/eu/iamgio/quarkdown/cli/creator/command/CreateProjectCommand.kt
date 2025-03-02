@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
 import com.github.ajalt.clikt.parameters.options.check
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
@@ -16,6 +17,7 @@ import eu.iamgio.quarkdown.cli.creator.template.DefaultProjectCreatorTemplatePro
 import eu.iamgio.quarkdown.cli.util.saveTo
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.localization.Locale
@@ -31,10 +33,6 @@ private const val DEFAULT_DIRECTORY = "."
  * Command to create a new Quarkdown project with a default template.
  */
 class CreateProjectCommand : CliktCommand("create") {
-    /**
-     * Optional output directory.
-     * If not set, the output is saved in [DEFAULT_DIRECTORY].
-     */
     private val directory: File by argument(help = "Project directory")
         .file(
             canBeFile = false,
@@ -75,17 +73,26 @@ class CreateProjectCommand : CliktCommand("create") {
         languageRaw?.let(::findLocale)
     }
 
+    private val colorTheme: String? by option("--color-theme", help = "Color theme")
+        .default("paperwhite")
+
+    private val layoutTheme: String? by option("--layout-theme", help = "Layout theme")
+        .default("latex")
+
     private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
         .flag()
 
+    private fun createDocumentInfo() =
+        DocumentInfo(
+            name = name?.takeUnless { it.isBlank() } ?: directory.name,
+            authors = authors.toMutableList(),
+            type = type,
+            locale = language,
+            theme = DocumentTheme(colorTheme, layoutTheme),
+        )
+
     override fun run() {
-        val info =
-            DocumentInfo(
-                name = name?.takeUnless { it.isBlank() } ?: directory.name,
-                authors = authors.toMutableList(),
-                type = type,
-                locale = language,
-            )
+        val info = this.createDocumentInfo()
 
         val templateFactory = DefaultProjectCreatorTemplateProcessorFactory(info)
         val initialContentSupplier =
