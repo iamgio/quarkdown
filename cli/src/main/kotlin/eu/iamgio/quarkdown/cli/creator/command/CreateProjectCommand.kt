@@ -103,7 +103,7 @@ class CreateProjectCommand : CliktCommand("create") {
                     noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
                     else -> DefaultProjectCreatorInitialContentSupplier()
                 },
-            mainFileName ?: directory.name,
+            mainFileName ?: directory.name, // TODO template's instructions refer to project name as file name, but they are !=
         )
 
     override fun run() {
