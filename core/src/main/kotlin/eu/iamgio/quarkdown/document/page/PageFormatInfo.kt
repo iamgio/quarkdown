@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.document.page
 
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 
@@ -10,12 +11,14 @@ import eu.iamgio.quarkdown.document.size.Sizes
  * @param pageHeight height of each page
  * @param margin blank space around the content of each page
  * @param columnCount number of columns on each page. If set, the layout becomes multi-column
+ * @param alignment horizontal alignment of the content of each page
  */
 data class PageFormatInfo(
     var pageWidth: Size? = null,
     var pageHeight: Size? = null,
     var margin: Sizes? = null,
     var columnCount: Int? = null,
+    var alignment: Aligned.Alignment? = null,
 ) {
     /**
      * Whether the document has a fixed size.

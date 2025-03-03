@@ -41,6 +41,11 @@
     <style>
         body {
             [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
+            [[if:HALIGNMENT]]
+            --qd-slides-horizontal-alignment: [[HALIGNMENT]];
+            --qd-paged-horizontal-alignment: [[HALIGNMENT]];
+            text-align: [[HALIGNMENT]];
+            [[endif:HALIGNMENT]]
         }
 
         .page-break {

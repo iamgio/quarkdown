@@ -3,6 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -93,7 +94,11 @@ fun docType(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         type,
-        get = { this.type.name.lowercase().wrappedAsValue() },
+        get = {
+            this.type.name
+                .lowercase()
+                .wrappedAsValue()
+        },
         set = { this.type = it },
     )
 
@@ -306,6 +311,7 @@ fun disableNumbering(
  * @param margin blank space around the content of each page. Only supported in paged documents
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
+ * @param alignment horizontal alignment of the content on each page
  */
 @Name("pageformat")
 fun pageFormat(
@@ -316,6 +322,7 @@ fun pageFormat(
     height: Size? = null,
     margin: Sizes? = null,
     columns: Int? = null,
+    alignment: Aligned.Alignment? = null,
 ): VoidValue {
     with(context.documentInfo.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
@@ -328,6 +335,7 @@ fun pageFormat(
 
         this.margin = margin
         this.columnCount = columns?.takeIf { it > 0 }
+        this.alignment = alignment
     }
 
     return VoidValue
