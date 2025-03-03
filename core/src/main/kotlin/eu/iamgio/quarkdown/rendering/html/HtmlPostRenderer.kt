@@ -83,6 +83,11 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.COLUMN_COUNT,
                 context.documentInfo.pageFormat.columnCount,
             )
+            optionalValue(
+                TemplatePlaceholders.HORIZONTAL_ALIGNMENT,
+                context.documentInfo.pageFormat.alignment
+                    ?.asCSS,
+            )
         }
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =

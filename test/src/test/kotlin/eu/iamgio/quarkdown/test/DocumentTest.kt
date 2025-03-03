@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.test
 
 import eu.iamgio.quarkdown.ast.AstRoot
+import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageOrientation
@@ -49,7 +50,7 @@ class DocumentTest {
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
-            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} columns:{4}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} columns:{4} alignment:{end}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
             """.trimIndent(),
@@ -82,6 +83,7 @@ class DocumentTest {
             )
 
             assertEquals(4, documentInfo.pageFormat.columnCount)
+            assertEquals(Aligned.Alignment.END, documentInfo.pageFormat.alignment)
         }
     }
 

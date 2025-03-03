@@ -71,4 +71,9 @@ object TemplatePlaceholders {
      * Number of columns on each page.
      */
     const val COLUMN_COUNT = "COLUMNCOUNT"
+
+    /**
+     * Horizontal content alignment of each page.
+     */
+    const val HORIZONTAL_ALIGNMENT = "HALIGNMENT"
 }
