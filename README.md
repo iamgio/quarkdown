@@ -230,8 +230,9 @@ The document's source files are available in the [`mock`](mock) directory, and c
   If a [server](#server) is not running yet, it is started and the document is opened in the default browser.
 
 - **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
-  > [!TIP]
-  > Combine `-p -w` to achieve live preview!
+  
+> [!TIP]
+> Combine `-p -w` to achieve ***live preview***!
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
