@@ -1,15 +1,3 @@
-// Different kinds of documents.
-
-class QuarkdownDocument {
-    setupQueueExecutionHook() {
-        document.addEventListener('DOMContentLoaded', executeQueue);
-    }
-}
-
-class PlainDocument extends QuarkdownDocument {}
-
-let doc = new PlainDocument(); // Overridden externally by html-wrapper
-
 //
 // Actions to be executed after the document has been loaded.
 
@@ -18,6 +6,86 @@ let executionQueue = [];
 function executeQueue() {
     executionQueue.forEach((fn) => fn());
 }
+
+//
+// Different kinds of documents.
+
+/**
+ * A Quarkdown document, inherited by each specific document type.
+ */
+class QuarkdownDocument {
+    pageMarginInitializers;
+
+    /**
+     * Prepares the stages of the document runtime.
+     */
+    prepare() {
+        this.populateExecutionQueue();
+        this.setupBeforeReadyHook();
+        this.setupAfterReadyHook();
+    }
+
+    /**
+     * Hook to be executed before the document is ready.
+     * For instance, this is run before paged.js or Reveal.js processes the content.
+     * @param content pre-processed content
+     */
+    beforeReady(content) {
+        // A page margin content initializer is an element that will be copied into each section,
+        // and is placed on one of the page margins.
+        this.pageMarginInitializers = content.querySelectorAll('.page-margin-content');
+    }
+
+    /**
+     * Removes all page margin initializers from the document.
+     */
+    removeAllPageMarginInitializers() {
+        this.pageMarginInitializers.forEach(initializer => initializer.remove());
+    }
+
+    /**
+     * To be run after the document is ready.
+     * This pastes the previously-loaded page margin initializers into each new processed page.
+     */
+    copyPageMarginInitializers() {
+        if (!this.pageMarginInitializers) {
+            console.error('pageMarginInitializers not set');
+        }
+    }
+
+    /**
+     * Updates the content of `.current-page-number` and `.total-page-number` elements.
+     */
+    updatePageNumberElements() {}
+
+    /**
+     * Populates the execution queue with the necessary functions to be executed after the document is ready.
+     */
+    populateExecutionQueue() {
+        executionQueue.push(
+            () => this.copyPageMarginInitializers(),
+            () => this.updatePageNumberElements()
+        );
+    }
+
+    /**
+     * Sets up a hook called before the document is processed.
+     */
+    setupBeforeReadyHook() {
+        document.addEventListener('DOMContentLoaded', () => this.beforeReady(document));
+    }
+
+    /**
+     * Sets up a hook called after the document is processed.
+     */
+    setupAfterReadyHook() {
+        document.addEventListener('DOMContentLoaded', executeQueue);
+    }
+}
+
+class PlainDocument extends QuarkdownDocument {}
+
+let doc = new PlainDocument(); // Overridden externally by html-wrapper
 
 //
 // Enables toggling of the collapsed/expanded state of inline elements.
@@ -29,9 +97,6 @@ executionQueue.push(() => {
         span.addEventListener('click', () => toggleCollapse(span));
     });
 });
-
-//
-// Toggles the collapsed/expanded state of inline collapsibles.
 
 function toggleCollapse(span) {
     const fullText = span.dataset.fullText;

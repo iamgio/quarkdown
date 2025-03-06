@@ -10,6 +10,7 @@
     <script src="script/paged.js"></script>
     [[endif:PAGED]]
     [[if:SLIDES]]
+    <script src="script/slides.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.css">
@@ -25,7 +26,7 @@
         [[if:PAGED]]
         doc = new PagedDocument();
         [[endif:PAGED]]
-        doc.setupQueueExecutionHook();
+        doc.prepare();
     </script>
     [[if:CODE]]
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -78,7 +79,6 @@
         [[CONTENT]]
     </div>
 </div>
-<script src="script/slides.js"></script>
 [[endif:SLIDES]]
 [[if:!SLIDES]]
 [[CONTENT]]
