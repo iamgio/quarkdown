@@ -37,7 +37,7 @@ class HtmlPostRenderer(
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
     override fun createTemplateProcessor() =
-        TemplateProcessor.fromResourceName("/render/html-wrapper.html").apply {
+        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template").apply {
             // Local server port to communicate with.
             optionalValue(
                 TemplatePlaceholders.SERVER_PORT,

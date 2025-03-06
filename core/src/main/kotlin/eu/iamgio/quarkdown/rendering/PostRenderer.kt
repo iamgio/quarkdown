@@ -24,7 +24,7 @@ interface PostRenderer {
      * Creates a new instance of a template processor for this rendering strategy.
      * A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
      * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * See `resources/render/html-wrapper.html` for an HTML template.
+     * See `resources/render/html-wrapper.html.template` for an HTML template.
      * @return a new instance of the corresponding template processor
      * @see TemplateProcessor
      */

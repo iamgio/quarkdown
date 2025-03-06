@@ -19,7 +19,7 @@ import eu.iamgio.quarkdown.util.replace
  *   and the iterated value appears like a normal value: `[[NAME]]`.
  *
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
- * An example template resource can be found in `resources/render/html-wrapper.html`
+ * An example template resource can be found in `resources/render/html-wrapper.html.template`
  *
  * @param text text or code of the template
  */
