@@ -1,3 +1,5 @@
+class SlidesDocument extends QuarkdownDocument {}
+
 // Utility that replaces page breaks with RevealJS sections.
 // Example:
 // Input:

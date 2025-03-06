@@ -1,24 +1,26 @@
+class PagedDocument extends QuarkdownDocument {
+    setupQueueExecutionHook() {
+        class PagedExecutionHandler extends Paged.Handler {
+            beforeParsed(content) {
+                // Load page margin content initializers.
+                pageMarginInitializers = content.querySelectorAll('.page-margin-content');
+                // Initializers are removed from the content before paged.js is launched
+                // in order to avoid blank pages.
+                pageMarginInitializers.forEach(initializer => initializer.remove());
+            }
+
+            afterPreview() {
+                executeQueue();
+            }
+        }
+
+        Paged.registerHandlers(PagedExecutionHandler);
+    }
+}
+
 // A page margin content initializer is an element that will be copied into each page,
 // and is placed on one of the page margins.
 let pageMarginInitializers;
-
-function setupPagedHandler() {
-    class PagedExecutionHandler extends Paged.Handler {
-        beforeParsed(content) {
-            // Load page margin content initializers.
-            pageMarginInitializers = content.querySelectorAll('.page-margin-content');
-            // Initializers are removed from the content before paged.js is launched
-            // in order to avoid blank pages.
-            pageMarginInitializers.forEach(initializer => initializer.remove());
-        }
-
-        afterPreview() {
-            executeQueue();
-        }
-    }
-
-    Paged.registerHandlers(PagedExecutionHandler);
-}
 
 // Copies the content of each page margin content initializer to each page.
 function setupPageMargins() {
