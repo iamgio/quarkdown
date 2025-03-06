@@ -5,7 +5,7 @@ Welcome to Quarkdown! This is the starting point for your document.
 To compile this document, please `cd` to this file's parent directory and run:
 `quarkdown c [[NAME]].qmd`
 
-To enable live preview, run: `quarkdown c [[NAME]].qmd -p -w`.
+To enable live preview, run: `quarkdown c [[MAINFILE]].qmd -p -w`.
 
 For further information, please refer to the [official wiki](https://github.com/iamgio/quarkdown/wiki).
 

@@ -35,8 +35,9 @@ class ProjectCreator(
             initialContentSupplier.templateCodeContent
                 ?.let { template.copy(text = it).process() }
 
-        // Processed initial content is injected into the main template.
+        // Processed initial content and additional information are injected into the main template.
         template.optionalValue(ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT, initialContentCode)
+        template.optionalValue(ProjectCreatorTemplatePlaceholders.MAIN_FILE, mainFileName)
 
         return template
     }

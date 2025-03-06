@@ -95,16 +95,18 @@ class CreateProjectCommand : CliktCommand("create") {
             theme = DocumentTheme(colorTheme, layoutTheme),
         )
 
-    private fun createProjectCreator() =
-        ProjectCreator(
+    private fun createProjectCreator(): ProjectCreator {
+        val mainFileName = this.mainFileName ?: directory.name
+        return ProjectCreator(
             templateProcessorFactory = DefaultProjectCreatorTemplateProcessorFactory(this.createDocumentInfo()),
             initialContentSupplier =
                 when {
                     noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
                     else -> DefaultProjectCreatorInitialContentSupplier()
                 },
-            mainFileName ?: directory.name, // TODO template's instructions refer to project name as file name, but they are !=
+            mainFileName,
         )
+    }
 
     override fun run() {
         val creator = this.createProjectCreator()

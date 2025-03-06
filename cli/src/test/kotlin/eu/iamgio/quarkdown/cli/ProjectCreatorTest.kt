@@ -172,5 +172,7 @@ class ProjectCreatorTest {
                 """.trimIndent(),
             ),
         )
+
+        assertTrue("quarkdown c main.qmd" in source.textContent)
     }
 }
