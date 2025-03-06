@@ -196,13 +196,18 @@ Java 17 or higher is required.
 
 ## Getting started
 
-Running `quarkdown c file.qmd` will compile the given file and save the output to file.
+Running **`quarkdown c file.qmd`** will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
 > - [How to include other files?](https://github.com/iamgio/quarkdown/wiki/including-other-quarkdown-files)
 
 If you would like to familiarize yourself with Quarkdown instead, `quarkdown repl` lets you play with an interactive REPL mode.
+
+### Project creator
+
+Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
+to start a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
 
 ### Mock document
 
@@ -217,7 +222,7 @@ making it ideal for exploring and understanding its key features — all while p
 
 The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
 
-### Options
+### Options for `c`
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
 
@@ -225,7 +230,8 @@ The document's source files are available in the [`mock`](mock) directory, and c
   If a [server](#server) is not running yet, it is started and the document is opened in the default browser.
 
 - **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
-  *Tip: combine with `-p` to achieve live preview!*
+  > [!TIP]
+  > Combine `-p -w` to achieve live preview!
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
