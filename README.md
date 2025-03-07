@@ -96,7 +96,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 - **HTML**
   - :white_check_mark: Plain output (default)
   - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org)) - *Requires a webserver. See [Server](#server) below.*
+  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org)) - *Requires a webserver to render in the browser. See the [`-p`](#options) option below.*
   - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
     to learn how to convert an artifact to PDF.
 
@@ -196,6 +196,17 @@ Java 17 or higher is required.
 
 ## Getting started
 
+### Creating a project
+
+Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
+to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
+
+For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
+
+Alternatively, you may manually create a `.qmd` source file and start from there.
+
+### Compiling
+
 Running **`quarkdown c file.qmd`** will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
@@ -204,30 +215,13 @@ Running **`quarkdown c file.qmd`** will compile the given file and save the outp
 
 If you would like to familiarize yourself with Quarkdown instead, `quarkdown repl` lets you play with an interactive REPL mode.
 
-### Project creator
-
-Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
-to start a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
-
-### Mock document
-
-&nbsp;
-
-<p align="center">
-  <img width="550" src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/mock-demo.png" alt="Mock document demo">
-</p>
-
-***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
-making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
-
-The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
-
-### Options for `c`
+#### Options
 
 - **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
 
 - **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
-  If a [server](#server) is not running yet, it is started and the document is opened in the default browser.
+  If a [webserver](https://github.com/iamgio/quarkdown/wiki/cli%3A-webserver) is not running yet, it is started and the document is opened in the default browser.  
+  This is required in order to render paged documents in the browser.
 
 - **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
   
@@ -249,35 +243,18 @@ The document's source files are available in the [`mock`](mock) directory, and c
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-### Server
+### Mock document
 
-Quarkdown's webserver allows direct communication between the compiler and the browser,
-enabling automatic content reloading.
+&nbsp;
 
-> [!IMPORTANT]
-> A webserver is **mandatory** in order to show *paged* documents, because of a paged.js requirement.  
-> For that purpose, you can also use other servers, such as Visual Studio Code's *Live Preview*, if you prefer.
+<p align="center">
+  <img width="550" src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/mock-demo.png" alt="Mock document demo">
+</p>
 
-The server can be started via `quarkdown start`, with the following options:
+***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
+making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
-- **`-f <file>`** or **`--file <file>`**: (*mandatory*) the file the server should point to. It would preferably be the output directory of the compilation.
-
-- **`-p <port>`** or **`--port <port>`**: the webserver's port. If unset, defaults to `8089`.
-
-- **`-o`** or **`--open`**: if set, opens the target file in the default browser.
-
-> [!TIP]
-> `quarkdown c ... -p` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -o`
-
-## Themes
-
-Quarkdown comes with a set of themes that can give a unique look to your document.
-
-- [How to apply a theme?](https://github.com/iamgio/quarkdown/wiki/themes)
-
-> [Theme contributions](core/src/main/resources/render/theme) are welcome!  
-> Please make sure they work well with all the three document types before submitting.  
-> The [Mock document](#mock-document) is a great way to test.
+The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
 
 ## Concept
 
