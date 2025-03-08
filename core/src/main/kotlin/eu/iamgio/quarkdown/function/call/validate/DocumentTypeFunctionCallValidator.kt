@@ -24,7 +24,7 @@ class DocumentTypeFunctionCallValidator<T : OutputValue<*>>(
         throw InvalidFunctionCallException(
             call,
             reason =
-                "it was called in a ${type.quarkdownName} document, " +
+                "the function was called in a ${type.quarkdownName} document, " +
                     "while it is allowed only in ${allowedTypes.joinToString { it.quarkdownName }}",
             includeArguments = false,
         )
