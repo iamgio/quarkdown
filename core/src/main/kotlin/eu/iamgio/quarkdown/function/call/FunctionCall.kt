@@ -30,8 +30,11 @@ data class FunctionCall<T : OutputValue<*>>(
     /**
      * Checks the call validity and calls the function.
      * @return the function output
+     * @throws Exception if [Function.validate] does not succeed
      */
     fun execute(): T {
+        function.validate(this)
+
         // Allows binding each argument to its parameter.
         val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
         return function.invoke(bindings).also(onComplete)

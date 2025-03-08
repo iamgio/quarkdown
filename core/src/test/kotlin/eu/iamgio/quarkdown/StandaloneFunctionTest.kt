@@ -178,6 +178,26 @@ class StandaloneFunctionTest {
         assertEquals("Hello AB from B", callGreet.execute().unwrappedValue)
     }
 
+    @Test
+    fun `with call condition`() {
+        var canCall = true
+
+        val function =
+            SimpleFunction(
+                name = "greet",
+                parameters = emptyList(),
+                validate = { if (!canCall) throw IllegalStateException() },
+            ) {
+                canCall = false
+                ValueFactory.string("Hello")
+            }
+
+        val call = FunctionCall(function, arguments = emptyList())
+
+        assertEquals("Hello", call.execute().unwrappedValue)
+        assertFailsWith<IllegalStateException> { call.execute() }
+    }
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun greetNoArgs(): StringValue = StringValue("Hello")
 

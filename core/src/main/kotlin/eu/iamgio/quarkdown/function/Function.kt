@@ -25,6 +25,13 @@ interface Function<T : OutputValue<*>> {
      * The [ArgumentBindings] allow looking up argument values by their parameter.
      */
     val invoke: (ArgumentBindings) -> T
+
+    /**
+     * Validates a function call.
+     * If a condition is not met, an exception should be thrown (ideally, a [FunctionException] or subclass).
+     * @param call call to validate
+     */
+    fun validate(call: FunctionCall<T>)
 }
 
 /**
@@ -34,8 +41,11 @@ interface Function<T : OutputValue<*>> {
 data class SimpleFunction<T : OutputValue<*>>(
     override val name: String,
     override val parameters: List<FunctionParameter<*>>,
+    private val validate: (FunctionCall<T>) -> Unit = { },
     override val invoke: (ArgumentBindings) -> T,
-) : Function<T>
+) : Function<T> {
+    override fun validate(call: FunctionCall<T>) = this.validate.invoke(call)
+}
 
 fun Function<*>.signatureAsString(includeName: Boolean = true) =
     buildString {

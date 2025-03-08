@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
+import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
 import eu.iamgio.quarkdown.function.error.FunctionException
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
@@ -21,7 +22,9 @@ import kotlin.reflect.full.hasAnnotation
  * A Quarkdown [Function] adapted from a regular Kotlin [KFunction].
  * @param function Kotlin function to adapt
  */
-class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) : Function<T> {
+class KFunctionAdapter<T : OutputValue<*>>(
+    private val function: KFunction<T>,
+) : Function<T> {
     /**
      * If the [Name] annotation is present on [function], the Quarkdown function name is set from there.
      * Otherwise, it is [function]'s original name.
@@ -42,6 +45,9 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     isInjected = it.hasAnnotation<Injected>(),
                 )
             }
+
+    override fun validate(call: FunctionCall<T>) {
+    }
 
     override val invoke: (ArgumentBindings) -> T
         get() = { bindings ->
