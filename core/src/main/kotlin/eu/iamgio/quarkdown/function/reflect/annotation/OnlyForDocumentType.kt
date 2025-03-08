@@ -8,6 +8,7 @@ import eu.iamgio.quarkdown.function.value.OutputValue
  * When a library function is annotated with this annotation, it can only be called if the document adopts one of the given document types.
  * @param types allowed document types
  */
+@Target(AnnotationTarget.FUNCTION)
 annotation class OnlyForDocumentType(
     vararg val types: DocumentType,
 )
@@ -17,6 +18,7 @@ annotation class OnlyForDocumentType(
  * This is the opposite of [OnlyForDocumentType].
  * @param types allowed document types
  */
+@Target(AnnotationTarget.FUNCTION)
 annotation class NotForDocumentType(
     vararg val types: DocumentType,
 )
