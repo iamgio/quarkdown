@@ -10,6 +10,7 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
+import eu.iamgio.quarkdown.function.call.validate.FunctionCallValidator
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
 import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.error.NoSuchElementException
@@ -179,14 +180,21 @@ class StandaloneFunctionTest {
     }
 
     @Test
-    fun `with call condition`() {
+    fun `with validator`() {
         var canCall = true
+
+        val validator =
+            object : FunctionCallValidator<StringValue> {
+                override fun validate(call: FunctionCall<StringValue>) {
+                    if (!canCall) throw IllegalStateException()
+                }
+            }
 
         val function =
             SimpleFunction(
                 name = "greet",
                 parameters = emptyList(),
-                validate = { if (!canCall) throw IllegalStateException() },
+                validators = listOf(validator),
             ) {
                 canCall = false
                 ValueFactory.string("Hello")

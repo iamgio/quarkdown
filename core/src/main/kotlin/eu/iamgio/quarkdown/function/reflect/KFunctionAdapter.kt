@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
-import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
+import eu.iamgio.quarkdown.function.call.validate.FunctionCallValidator
 import eu.iamgio.quarkdown.function.error.FunctionException
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
@@ -46,8 +46,8 @@ class KFunctionAdapter<T : OutputValue<*>>(
                 )
             }
 
-    override fun validate(call: FunctionCall<T>) {
-    }
+    override val validators: List<FunctionCallValidator<T>>
+        get() = emptyList()
 
     override val invoke: (ArgumentBindings) -> T
         get() = { bindings ->

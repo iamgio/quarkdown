@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.function
 
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
+import eu.iamgio.quarkdown.function.call.validate.FunctionCallValidator
 import eu.iamgio.quarkdown.function.value.OutputValue
 
 /**
@@ -20,18 +21,17 @@ interface Function<T : OutputValue<*>> {
     val parameters: List<FunctionParameter<*>>
 
     /**
+     * Validators that check the validity of a function call towards this function.
+     * If a condition is not met during the validation, an exception should be thrown.
+     */
+    val validators: List<FunctionCallValidator<T>>
+
+    /**
      * Function that maps the input arguments into an output value.
      * Arguments and [parameters] compliance in terms of matching types and count is not checked here.
      * The [ArgumentBindings] allow looking up argument values by their parameter.
      */
     val invoke: (ArgumentBindings) -> T
-
-    /**
-     * Validates a function call.
-     * If a condition is not met, an exception should be thrown (ideally, a [FunctionException] or subclass).
-     * @param call call to validate
-     */
-    fun validate(call: FunctionCall<T>)
 }
 
 /**
@@ -41,11 +41,9 @@ interface Function<T : OutputValue<*>> {
 data class SimpleFunction<T : OutputValue<*>>(
     override val name: String,
     override val parameters: List<FunctionParameter<*>>,
-    private val validate: (FunctionCall<T>) -> Unit = { },
+    override val validators: List<FunctionCallValidator<T>> = emptyList(),
     override val invoke: (ArgumentBindings) -> T,
-) : Function<T> {
-    override fun validate(call: FunctionCall<T>) = this.validate.invoke(call)
-}
+) : Function<T>
 
 fun Function<*>.signatureAsString(includeName: Boolean = true) =
     buildString {

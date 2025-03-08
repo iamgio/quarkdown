@@ -27,13 +27,17 @@ data class FunctionCall<T : OutputValue<*>>(
     val sourceNode: FunctionCallNode? = null,
     var onComplete: (T) -> Unit = { },
 ) : Expression {
+    private fun validate() {
+        function.validators.forEach { it.validate(this) }
+    }
+
     /**
      * Checks the call validity and calls the function.
      * @return the function output
      * @throws Exception if [Function.validate] does not succeed
      */
     fun execute(): T {
-        function.validate(this)
+        this.validate()
 
         // Allows binding each argument to its parameter.
         val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
