@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
@@ -19,6 +20,7 @@ import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.NotForDocumentType
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -48,6 +50,7 @@ class FunctionNodeExpansionTest {
     ) = NumberValue(a.toFloat() + b.toFloat())
 
     @Name("customfunction")
+    @NotForDocumentType(DocumentType.SLIDES)
     fun myFunction(x: String) = StringValue(x)
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -369,5 +372,26 @@ class FunctionNodeExpansionTest {
             ),
             node.children.first(),
         )
+    }
+
+    @Test
+    fun `invalid document type`() {
+        context.documentInfo.type = DocumentType.SLIDES
+        val node =
+            FunctionCallNode(
+                context,
+                "myFunction",
+                listOf(FunctionCallArgument(DynamicValue("abc"))),
+                isBlock = false,
+            )
+
+        context.register(node)
+
+        expander.expandAll()
+
+        with(node.children.first()) {
+            assertIs<Box>(this)
+            assertEquals(Box.Type.ERROR, this.type)
+        }
     }
 }

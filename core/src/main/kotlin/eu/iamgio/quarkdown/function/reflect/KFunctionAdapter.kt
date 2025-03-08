@@ -9,6 +9,9 @@ import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.reflect.annotation.NoAutoArgumentUnwrapping
+import eu.iamgio.quarkdown.function.reflect.annotation.NotForDocumentType
+import eu.iamgio.quarkdown.function.reflect.annotation.OnlyForDocumentType
+import eu.iamgio.quarkdown.function.reflect.annotation.toValidator
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.log.Log
@@ -47,7 +50,11 @@ class KFunctionAdapter<T : OutputValue<*>>(
             }
 
     override val validators: List<FunctionCallValidator<T>>
-        get() = emptyList()
+        get() =
+            buildList {
+                function.findAnnotation<OnlyForDocumentType>()?.toValidator<T>()?.let(::add)
+                function.findAnnotation<NotForDocumentType>()?.toValidator<T>()?.let(::add)
+            }
 
     override val invoke: (ArgumentBindings) -> T
         get() = { bindings ->
