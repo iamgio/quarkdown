@@ -136,7 +136,7 @@ class UtilitiesTest {
 
                 .let {.animated::otherwise {no}}
                     .if {.1}
-                        .fragment
+                        .container
                             .output
                     .ifnot {.1}
                         .output
@@ -153,7 +153,7 @@ class UtilitiesTest {
         ) {
             fun output(animate: Boolean) =
                 codeOutput +
-                    (if (animate) "<div class=\"fragment fade-in\">" else "") +
+                    (if (animate) "<div class=\"container\">" else "") +
                     "<div class=\"container\"><p>=</p></div>" +
                     "<div class=\"container\">$contentOutput</div>" +
                     if (animate) "</div>" else ""

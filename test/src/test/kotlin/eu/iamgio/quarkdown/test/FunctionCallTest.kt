@@ -60,11 +60,14 @@ class FunctionCallTest {
     }
 
     @Test
-    fun errors() {
+    fun `error unresolved reference`() {
         assertFailsWith<UnresolvedReferenceException> {
             execute(".nonexistant") {}
         }
+    }
 
+    @Test
+    fun `error argument count`() {
         assertFailsWith<InvalidArgumentCountException> {
             execute(".sum {2}") {}
         }
@@ -72,9 +75,16 @@ class FunctionCallTest {
         assertFailsWith<InvalidArgumentCountException> {
             execute(".sum {2} {5} {9}") {}
         }
+    }
 
+    @Test
+    fun `error argument type`() {
         assertFailsWith<InvalidFunctionCallException> {
             execute(".sum {a} {3}") {}
+        }
+
+        assertFailsWith<InvalidFunctionCallException> {
+            execute(".sum {2} {.multiply {3} {a}}") {}
         }
 
         assertFailsWith<InvalidFunctionCallException> {
@@ -84,9 +94,17 @@ class FunctionCallTest {
         assertFailsWith<InvalidFunctionCallException> {
             execute(".row alignment:{center} cross:{hello}\n\tHi") {}
         }
+    }
 
-        // Non-strict error handling.
+    @Test
+    fun `error document type`() {
+        assertFailsWith<InvalidFunctionCallException> {
+            execute(".doctype {plain}\n.slides") {}
+        }
+    }
 
+    @Test
+    fun `non strict error handling`() {
         execute(".sum {a} {3}", errorHandler = BasePipelineErrorHandler()) {
             assertEquals(
                 "<div class=\"box error\">" +
