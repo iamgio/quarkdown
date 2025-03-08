@@ -3,8 +3,10 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.slides.Transition
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.OnlyForDocumentType
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
@@ -26,6 +28,7 @@ val Slides: Module =
  * @param transitionSpeed global transition speed between slides
  * @return a wrapped [SlidesConfigurationInitializer] node
  */
+@OnlyForDocumentType(DocumentType.SLIDES)
 @Name("slides")
 fun setSlidesConfiguration(
     center: Boolean? = null,
@@ -47,6 +50,7 @@ fun setSlidesConfiguration(
  * @param content content to show/hide
  * @return the fragment node
  */
+@OnlyForDocumentType(DocumentType.SLIDES)
 fun fragment(
     behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
     content: MarkdownContent,
