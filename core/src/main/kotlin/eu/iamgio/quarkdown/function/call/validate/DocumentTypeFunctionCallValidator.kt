@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.quarkdownName
 
 /**
  * Validator of a function call that checks if the document the function call lies in is of a certain type.
@@ -23,8 +24,9 @@ class DocumentTypeFunctionCallValidator<T : OutputValue<*>>(
         throw InvalidFunctionCallException(
             call,
             reason =
-                "Function ${call.function.name} was called in a $type document type, " +
-                    "while it only allows the following: ${allowedTypes.joinToString()}",
+                "it was called in a ${type.quarkdownName} document, " +
+                    "while it is allowed only in ${allowedTypes.joinToString { it.quarkdownName }}",
+            includeArguments = false,
         )
     }
 }
