@@ -75,9 +75,9 @@ so that you'll feel at home typing code you're comfortable typing.
         .container alignment:{center} fullwidth:{yes}
             .downarrow
 
-        .var {voffset} {-60}
+        .var {voffset} {.shrinkvertical::ifpresent {@lambda .1::multiply {-1}}::otherwise {0}}
 
-        .container alignment:{center} margin:{.voffset::takeif {.shrinkvertical::otherwise {no}}::otherwise {0} 0 0 0} fullwidth:{yes}
+        .container alignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
             .source
 
     .let {.animated::otherwise {no}}
@@ -87,7 +87,7 @@ so that you'll feel at home typing code you're comfortable typing.
         .ifnot {.1}
             .output
 
-.sourceresult shrinkvertical:{yes} animated:{yes}
+.sourceresult shrinkvertical:{50} animated:{yes}
     ### Diving into _Quarkdown_
     
     Somebody once said:
@@ -122,7 +122,7 @@ from your Markdown code.
 
 ## Full layout control 
 
-.sourceresult
+.sourceresult shrinkvertical:{50}
     .row alignment:{center} gap:{1cm}
         !(150x150)[Quarkdown](img/icon.png)
         
@@ -133,7 +133,7 @@ from your Markdown code.
 
 ## Multi-file project
 
-.sourceresult shrinkvertical:{yes}
+.sourceresult shrinkvertical:{40}
     .include {sources/other.qmd}
 
 .whitespace
@@ -163,9 +163,12 @@ from your Markdown code.
     If we try to calculate the **surface** of a circle of **radius .radius**,
     we'll find out it's **.pow {.radius} to:{2}::multiply {.pi}::truncate {2}**
 
-## Scripting {#scripting-basic}
+<<<
 
-.text {Basic algorithm} size:{small}
+.column gap:{16px}
+    ## Scripting {#scripting-basic}
+
+    .text {Basic algorithm} size:{small}
 
 .sourceresult
     .row alignment:{spacearound}
@@ -174,11 +177,14 @@ from your Markdown code.
             .if {.n::iseven}
                 **.n** is even
 
-## Scripting {#scripting-fibonacci}
+<<<
 
-.text {Fibonacci sequence} size:{small}
+.column gap:{12px}
+    ## Scripting {#scripting-fibonacci}
 
-.sourceresult
+    .text {Fibonacci sequence} size:{small}
+
+.sourceresult shrinkvertical:{25}
     .var {t1} {0}
     .var {t2} {1}
 
@@ -228,7 +234,7 @@ from your Markdown code.
 
 ## Intuitive error handling
 
-.sourceresult
+.sourceresult shrinkvertical:{30}
     .divide {x} by:{.pi}
 
     .grid columns:{3} alignment:{right}
@@ -248,9 +254,9 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .poweredby {[MathJax](https://www.mathjax.org/)}
 
-## Quote type
+## Alerts
 
-.sourceresult
+.sourceresult shrinkvertical:{25}
     > Note: did you know Quarkdown is a flexible tool to generate modern documents?
 
     > Tip: you might want to try it out. Feedback and suggestions are welcome!
@@ -285,7 +291,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 ## Labeled figure
 
-.sourceresult
+.sourceresult shrinkvertical:{30}
     !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
 
 ## Color preview
