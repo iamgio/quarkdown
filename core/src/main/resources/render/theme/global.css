@@ -420,7 +420,7 @@ Example: "Figure 1.1:"
     display: block;
 }
 
-.container:not(.clip > .container) :only-child {
+.container:not(.fullwidth):not(.clip > .container) :only-child {
     margin: 0;
 }
 
