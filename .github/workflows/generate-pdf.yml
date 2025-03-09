@@ -89,13 +89,13 @@ jobs:
 
     - name: Push to generated branch
       run: |
-        mv pdf/mock temp
+        mv pdf temp
         git add temp
         git fetch
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         git checkout generated
-        mv temp/mock pdf
+        mv temp pdf
         git add pdf
         git commit -m "[Automated] Generate Mock PDF"
         git push
