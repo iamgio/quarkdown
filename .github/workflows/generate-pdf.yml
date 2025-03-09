@@ -86,3 +86,19 @@ jobs:
       with:
         name: mock-pdf
         path: pdf/mock
+
+    - name: Push to generated branch
+      run: |
+        mv pdf temp
+        git add temp
+        git fetch
+        LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout generated
+        cp -r temp/mock/* pdf/mock
+        rm -rf temp
+        git add temp
+        git add pdf
+        git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
+        git push
