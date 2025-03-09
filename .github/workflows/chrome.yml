@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.7.3
-    - name: Test
-      run: |
+      id: setup-chrome
+    - run: |
         echo "Chrome path: ${{ steps.setup-chrome.outputs.chrome-path }}"
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
