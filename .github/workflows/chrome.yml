@@ -66,7 +66,7 @@ jobs:
 
     - run: |
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
-        ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf http://localhost:8080/index.html
+        ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf http://localhost:8080/output/Quarkdown-Mock/index.html
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
