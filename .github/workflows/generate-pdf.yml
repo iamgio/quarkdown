@@ -91,7 +91,6 @@ jobs:
       run: |
         mv pdf temp
         git add temp
-        git add pdf
         git fetch
         LAST_COMMIT=$(git log -n 1 main --pretty=format:"%h")
         git config --global user.name "github-actions[bot]"
