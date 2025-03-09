@@ -15,7 +15,7 @@ const puppeteer = require('puppeteer');
     await page.waitForFunction('readyState');
 
     await page.pdf({
-        path: 'output/mock.pdf',
+        path: 'pdf/mock.pdf',
         preferCSSPageSize: true,
     });
     await browser.close();
