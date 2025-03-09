@@ -69,6 +69,11 @@ jobs:
         mkdir pdf/mock
         npm install puppeteer
 
+    - name: Checkout to generated branch
+      run: |
+        git fetch
+        git checkout generated
+
     - name: Generate theme combinations
       run: |
         node .github/workflows/generate-pdf/generate-theme-combinations.js
@@ -91,8 +96,6 @@ jobs:
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        git fetch
-        git checkout generated
         git add pdf
         git commit -m "[Automated] Generate Mock PDF"
         git push
