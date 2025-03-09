@@ -92,7 +92,7 @@ jobs:
         mv pdf temp
         git add temp
         git fetch
-        LAST_COMMIT=$(git log -n 1 main --pretty=format:"%h")
+        LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
