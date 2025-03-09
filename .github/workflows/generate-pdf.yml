@@ -65,7 +65,8 @@ jobs:
 
     - name: Install Puppeteer
       run: |
-        mkdirs pdf/mock
+        mkdir pdf
+        mkdir pdf/mock
         npm install puppeteer
 
     - name: Generate theme combinations
