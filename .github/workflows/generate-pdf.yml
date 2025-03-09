@@ -89,6 +89,7 @@ jobs:
 
     - name: Push to generated branch
       run: |
+        LAST_COMMIT=$(git rev-parse main)
         mv pdf temp
         git add temp
         git fetch
@@ -98,5 +99,5 @@ jobs:
         cp -r temp/mock/* pdf/mock
         rm -rf temp
         git add pdf
-        git commit -m "Generate Mock PDF files"
+        git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
         git push
