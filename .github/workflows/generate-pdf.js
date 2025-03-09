@@ -10,8 +10,7 @@ const puppeteer = require('puppeteer');
         ]
     });
     const page = await browser.newPage();
-    //await page.goto('http://localhost:8089');
-    await page.goto('http://localhost:8080/Quarkdown-Mock/index.html');
+    await page.goto('http://localhost:8080/output/Quarkdown-Mock/index.html');
 
     await page.waitForFunction('readyState');
 
