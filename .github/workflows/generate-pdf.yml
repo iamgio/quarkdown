@@ -50,6 +50,7 @@ jobs:
 
     - name: Launch Puppeteer
       run: |
+        mkdir output
         npm install puppeteer
         node .github/workflows/generate-pdf.js
 
