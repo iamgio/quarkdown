@@ -41,6 +41,17 @@ jobs:
           }
         log: "log.txt"
 
+    - name: Wait for server to be ready
+      run: |
+        for i in {1..30}; do
+          if curl --output /dev/null --silent --head --fail http://localhost:8080/Quarkdown-Mock/index.html; then
+            echo "Server is up!"
+            break
+          fi
+          echo "Waiting for server..."
+          sleep 2
+        done
+
     - uses: tj-actions/puppeteer@v5
       id: puppeteer
       with:
