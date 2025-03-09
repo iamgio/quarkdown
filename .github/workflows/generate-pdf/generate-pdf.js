@@ -2,8 +2,10 @@
 
 const puppeteer = require('puppeteer');
 
-// File name from arguments, without extension.
-const fileName = process.argv[2].replace(/\.[^/.]+$/, "");
+// File name from arguments, without extension
+const fileName = process.argv[2]
+    .replace(/\.[^/.]+$/, "")
+    .replace('generated_main_', '');
 
 (async () => {
     const browser = await puppeteer.launch({
