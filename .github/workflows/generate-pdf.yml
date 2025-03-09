@@ -41,18 +41,17 @@ jobs:
           }
         log: "log.txt"
 
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.7.3
+      id: setup-chrome
+
     - name: Install Dependencies
       uses: actions/setup-node@v4
-      env:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "false"
-      with:
-        args: install
-    - name: Test Code
-      uses: mujo-code/puppeteer-headful@16.6.0
-      env:
-        CI: "true"
-      with:
-        args: "node .github/workflows/generate-pdf.js"
+
+    - name: Launch Puppeteer
+      run: |
+        npm install puppeteer
+        node .github/workflows/generate-pdf.js
 
     #- uses: tj-actions/puppeteer@v5
     #  id: puppeteer
