@@ -95,7 +95,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
-        mv temp pdf
+        cp -r temp/mock/* pdf/mock
         rm -rf temp
         git add pdf
         git commit -m "Generate Mock PDF files"
