@@ -65,7 +65,7 @@ jobs:
 
     - name: Install Puppeteer
       run: |
-        mkdir pdf
+        mkdirs pdf/mock
         npm install puppeteer
 
     - name: Generate theme combinations
@@ -75,7 +75,7 @@ jobs:
     - name: Compile Mock and generate PDF
       run: |
         for generated in $(ls mock/generated_*.qmd); do
-          ./build/distributions/quarkdown/bin/quarkdown c mock/$generated -o output --clean
+          ./build/distributions/quarkdown/bin/quarkdown c $generated -o output --clean
           node .github/workflows/generate-pdf/generate-pdf.js $generated
         done
         ls -d $PWD/pdf/*
@@ -84,4 +84,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mock-pdf
-        path: pdf
+        path: pdf/mock
