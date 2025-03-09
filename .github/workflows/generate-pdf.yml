@@ -89,11 +89,11 @@ jobs:
 
     - name: Push to generated branch
       run: |
-        LAST_COMMIT=$(git rev-parse main)
         mv pdf temp
         git add temp
         git add pdf
         git fetch
+        LAST_COMMIT=$(git log -n 1 main --pretty=format:"%h")
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
