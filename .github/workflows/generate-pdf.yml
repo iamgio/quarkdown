@@ -70,7 +70,7 @@ jobs:
 
     - name: Generate theme combinations
       run: |
-        node .github/workflows/generate-themes/generate-theme-combinations.js
+        node .github/workflows/generate-pdf/generate-theme-combinations.js
 
     - name: Compile Mock and generate PDF
       run: |
