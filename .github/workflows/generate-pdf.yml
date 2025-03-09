@@ -2,7 +2,7 @@ name: PDF generation via Puppeteer
 
 on:
   push:
-    branches: [ "chrome-action" ]
+    branches: [ "main", "chrome-action" ]
   pull_request:
     branches: [ "main" ]
 
