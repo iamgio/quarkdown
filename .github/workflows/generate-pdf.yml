@@ -1,0 +1,88 @@
+name: PDF generation via Puppeteer
+
+on:
+  push:
+    branches: [ "main", "chrome-action" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew clean build distZip
+
+    - name: Unzip distribution
+      run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
+
+    - name: Serve Files
+      uses: Eun/http-server-action@v1
+      with:
+        directory: ${{ github.workspace }}
+        port: 8080
+        no-cache: false
+        index-files: |
+          ["$PWD/output/Quarkdown-Mock/index.html"]
+        allowed-methods: |
+          ["GET", "HEAD"]
+        content-types: |
+          {
+            "appcache": "text/cache-manifest",
+            "css": "text/css",
+            "gif": "image/gif",
+            "html": "text/html",
+            "ico": "image/x-icon",
+            "jpeg": "image/jpeg",
+            "jpg": "image/jpeg",
+            "js": "text/javascript",
+            "json": "application/json",
+            "png": "image/png",
+            "txt": "text/plain",
+            "xml": "text/xml"
+          }
+        log: "log.txt"
+
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.7.3
+      id: setup-chrome
+
+    - name: Install Dependencies
+      uses: actions/setup-node@v4
+
+    - name: Install Puppeteer
+      run: |
+        mkdir pdf
+        mkdir pdf/mock
+        npm install puppeteer
+
+    - name: Generate theme combinations
+      run: |
+        node .github/workflows/generate-pdf/generate-theme-combinations.js
+
+    - name: Compile Mock and generate PDF
+      run: |
+        for generated in $(ls mock/generated_*.qmd); do
+          ./build/distributions/quarkdown/bin/quarkdown c $generated -o output --clean
+          node .github/workflows/generate-pdf/generate-pdf.js $generated
+        done
+        ls -d $PWD/pdf/*
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mock-pdf
+        path: pdf/mock
