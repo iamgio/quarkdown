@@ -52,8 +52,7 @@ jobs:
       env:
         CI: "true"
       with:
-        files: |
-          .github/workflows/generate-pdf.js
+        args: "node .github/workflows/generate-pdf.js"
 
     #- uses: tj-actions/puppeteer@v5
     #  id: puppeteer
