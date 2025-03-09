@@ -5,7 +5,12 @@ const puppeteer = require('puppeteer');
 (async () => {
     console.log('starting');
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: [
+            '--no-sandbox',
+            '--disable-gpu',
+        ]
+    });
     const page = await browser.newPage();
     //await page.goto('http://localhost:8089');
     await page.goto('http://localhost:8080/Quarkdown-Mock/index.html');
@@ -14,7 +19,10 @@ const puppeteer = require('puppeteer');
 
     await page.waitForFunction('readyState');
 
-    await page.pdf({ path: 'output/mock.pdf', format: 'A4' });
+    await page.pdf({
+        path: 'output/mock.pdf',
+        format: 'A4'
+    });
     await browser.close();
 
     console.log('finished');
