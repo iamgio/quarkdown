@@ -29,11 +29,6 @@ jobs:
     - name: Unzip distribution
       run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
 
-    - name: Compile Mock
-      run: |
-        ./build/distributions/quarkdown/bin/quarkdown c mock/main.qmd -o output
-        ls -d "$PWD/output/Quarkdown-Mock/"*
-
     - name: Serve Files
       uses: Eun/http-server-action@v1
       with:
@@ -73,9 +68,17 @@ jobs:
         mkdir pdf
         npm install puppeteer
 
-    - name: Generate PDF
+    - name: Generate theme combinations
       run: |
-        node .github/workflows/generate-pdf/generate-pdf.js
+        node .github/workflows/generate-themes/generate-theme-combinations.js
+
+    - name: Compile Mock and generate PDF
+      run: |
+        for generated in $(ls mock/generated_*.qmd); do
+          ./build/distributions/quarkdown/bin/quarkdown c mock/$generated -o output --clean
+          node .github/workflows/generate-pdf/generate-pdf.js $generated
+        done
+        ls -d $PWD/pdf/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

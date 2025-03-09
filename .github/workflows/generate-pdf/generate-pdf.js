@@ -2,6 +2,9 @@
 
 const puppeteer = require('puppeteer');
 
+// File name from arguments, without extension.
+const fileName = process.argv[2].replace(/\.[^/.]+$/, "");
+
 (async () => {
     const browser = await puppeteer.launch({
         args: [
@@ -15,8 +18,9 @@ const puppeteer = require('puppeteer');
     await page.waitForFunction('readyState');
 
     await page.pdf({
-        path: 'pdf/mock.pdf',
+        path: `pdf/${fileName}.pdf`,
         preferCSSPageSize: true,
+        printBackground: true,
     });
     await browser.close();
 })();
