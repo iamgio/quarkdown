@@ -91,9 +91,9 @@ jobs:
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        git config --global user.email "iamgio@users.noreply.github.com"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git fetch
         git checkout generated
         git add pdf
-        git commit -m "Generate Mock PDF"
+        git commit -m "[Automated] Generate Mock PDF"
         git push
