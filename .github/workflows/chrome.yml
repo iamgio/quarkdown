@@ -1,0 +1,19 @@
+name: PDF generation via headless Chrome
+
+on:
+  push:
+    branches: [ "chrome-action" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.7.3
+    - name: Test
+      run: |
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
