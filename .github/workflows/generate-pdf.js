@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     //await page.goto('http://localhost:8089');
-    await page.goto('http://localhost:8080/.github/workflows/Quarkdown-Mock/index.html');
+    await page.goto('http://localhost:8080/Quarkdown-Mock/index.html');
 
     console.log('waiting for ready');
 
