@@ -278,7 +278,7 @@ li:has(> div:nth-child(2)) {
 /* Vertical block spacing. */
 :is(body, .reveal) :is(
     table:not(code table), pre, figure, blockquote,
-    ul, ol, hr, .stack:not(.stack .stack)
+    hr, .stack:not(.stack .stack)
 ) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
