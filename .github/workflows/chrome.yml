@@ -40,3 +40,9 @@ jobs:
     - run: |
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
         ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf file://$PWD/output/Quarkdown-Mock/index.html
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mock-pdf
+        path: output/mock.pdf
