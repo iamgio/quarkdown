@@ -3,11 +3,12 @@
 
 let executionQueue = [];
 
-let ready = false;
+// Global state. This can be watched by other tools (e.g. Puppeteer).
+let readyState = false;
 
 function executeQueue() {
     executionQueue.forEach((fn) => fn());
-    ready = true;
+    readyState = true;
 }
 
 //
