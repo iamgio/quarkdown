@@ -2,7 +2,7 @@ name: PDF generation via headless Chrome
 
 on:
   push:
-    branches: [ "chrome-action" ]
+    branches: [ ]
   pull_request:
     branches: [ "main" ]
 
@@ -67,7 +67,7 @@ jobs:
     - run: |
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
         ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf http://localhost:8080/output/Quarkdown-Mock/index.html
-
+# TODO this only saves the first page of the PDF, how to save all pages?
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:

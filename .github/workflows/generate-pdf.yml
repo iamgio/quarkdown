@@ -1,0 +1,28 @@
+name: PDF generation via headless Chrome
+
+on:
+  push:
+    branches: [ "chrome-action" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run test
+      uses: tj-actions/puppeteer@v5
+      id: puppeteer
+      with:
+        files: |
+          .github/workflows/generate-pdf.js
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mock-pdf
+        path: output/mock.pdf
