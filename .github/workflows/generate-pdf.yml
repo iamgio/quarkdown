@@ -41,8 +41,7 @@ jobs:
           }
         log: "log.txt"
 
-    - name: Run test
-      uses: tj-actions/puppeteer@v5
+    - uses: tj-actions/puppeteer@v5
       id: puppeteer
       with:
         files: |
