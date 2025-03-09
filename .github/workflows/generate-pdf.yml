@@ -92,12 +92,14 @@ jobs:
         LAST_COMMIT=$(git rev-parse main)
         mv pdf temp
         git add temp
+        git add pdf
         git fetch
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
         cp -r temp/mock/* pdf/mock
         rm -rf temp
+        git add temp
         git add pdf
         git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
         git push
