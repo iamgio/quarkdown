@@ -12,35 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#    - uses: actions/checkout@v4
-#    - name: Set up JDK 17
-#      uses: actions/setup-java@v4
-#      with:
-#        java-version: '17'
-#        distribution: 'temurin'
-#
-#    - name: Setup Gradle
-#      uses: gradle/actions/setup-gradle@v4
-#
-#    - name: Build with Gradle Wrapper
-#      run: ./gradlew clean build distZip
-#
-#    - name: Unzip distribution
-#      run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
-#
-#    - name: Compile Mock
-#      run: |
-#        ./build/distributions/quarkdown/bin/quarkdown c mock/main.qmd -o output
-#        ls -d "$PWD/output/Quarkdown-Mock/"*
-
+    #- uses: actions/checkout@v4
+    #- name: Set up JDK 17
+    #  uses: actions/setup-java@v4
+    #  with:
+    #    java-version: '17'
+    #    distribution: 'temurin'
+    #
+    #- name: Setup Gradle
+    #  uses: gradle/actions/setup-gradle@v4
+    #
+    #- name: Build with Gradle Wrapper
+    #  run: ./gradlew clean build distZip
+    #
+    #- name: Unzip distribution
+    #  run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
+    #
+    #- name: Compile Mock
+    #  run: |
+    #    ./build/distributions/quarkdown/bin/quarkdown c mock/main.qmd -o output
+    #    ls -d "$PWD/output/Quarkdown-Mock/"*
+    #
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.7.3
       id: setup-chrome
 
     - run: |
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
-#        ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf file://$PWD/output/Quarkdown-Mock/index.html
-        ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf https://iamgio.eu/quarkdown/demo/
+        ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --no-sandbox --print-to-pdf=output/mock.pdf https://iamgio.eu/quarkdown/demo/index.html
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
