@@ -96,5 +96,6 @@ jobs:
         git stash
         git checkout generated
         git stash pop
+        git add pdf
         git commit -m "[Automated] Generate Mock PDF"
         git push
