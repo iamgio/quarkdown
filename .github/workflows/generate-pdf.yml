@@ -96,6 +96,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git checkout generated
         mv temp pdf
+        rm -rf temp
         git add pdf
-        git commit -m "[Automated] Generate Mock PDF"
+        git commit -m "Generate Mock PDF files"
         git push
