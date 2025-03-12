@@ -26,11 +26,18 @@ class NpmWrapper(
     }
 
     fun link(
-        module: NodeModule,
         node: NodeJsWrapper,
+        module: NodeModule,
     ) {
         getCommandOutput("link", module.name, workingDirectory = node.workingDirectory)
     }
+
+    fun isInstalled(module: NodeModule): Boolean =
+        try {
+            getCommandOutput("list", "-g", module.name).contains(module.name)
+        } catch (e: Exception) {
+            false
+        }
 
     companion object {
         const val DEFAULT_PATH = "npm"

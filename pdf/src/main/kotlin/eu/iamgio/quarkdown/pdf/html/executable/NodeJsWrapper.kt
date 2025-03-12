@@ -32,6 +32,13 @@ data class NodeJsWrapper(
      */
     fun eval(code: String): String = getCommandOutput("-e", code, workingDirectory = workingDirectory)
 
+    fun isLinked(module: NodeModule): Boolean =
+        try {
+            eval("require('${module.name}')").isEmpty()
+        } catch (e: Exception) {
+            false
+        }
+
     companion object {
         const val DEFAULT_PATH = "node"
     }

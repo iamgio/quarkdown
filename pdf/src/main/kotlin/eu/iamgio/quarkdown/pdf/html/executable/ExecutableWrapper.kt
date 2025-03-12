@@ -19,6 +19,12 @@ abstract class ExecutableWrapper {
                 .redirectErrorStream(true)
                 .start()
 
+        process.waitFor()
+
+        if (process.exitValue() != 0) {
+            throw IllegalStateException("Command failed with non-zero exit code")
+        }
+
         return process.inputStream.bufferedReader().readText()
     }
 }

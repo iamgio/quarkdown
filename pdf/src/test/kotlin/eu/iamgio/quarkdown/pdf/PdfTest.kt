@@ -4,12 +4,14 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
 import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NodeModule
 import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -74,9 +76,16 @@ class PdfTest {
     }
 
     @Test
-    fun `puppeteer not installed`() {
+    fun `nonexisting module not installed`() {
+        val npm = NpmWrapper()
+        val module = NodeModule("quarkdown-nonexisting-module-xyz")
+        assertFalse(npm.isInstalled(module))
+    }
+
+    @Test
+    fun `puppeteer not linked`() {
         val wrapper = NodeJsWrapper(workingDirectory = directory)
-        assertEquals(false, PuppeteerNodeModule.isInstalled(wrapper))
+        assertEquals(false, wrapper.isLinked(PuppeteerNodeModule))
     }
 
     @Test
@@ -84,7 +93,9 @@ class PdfTest {
         val node = NodeJsWrapper(workingDirectory = directory)
         val npm = NpmWrapper()
         npm.install(PuppeteerNodeModule)
-        npm.link(PuppeteerNodeModule, node)
-        assertTrue(PuppeteerNodeModule.isInstalled(node))
+        assertTrue(npm.isInstalled(PuppeteerNodeModule))
+        assertFalse(node.isLinked(PuppeteerNodeModule))
+        npm.link(node, PuppeteerNodeModule)
+        assertTrue(node.isLinked(PuppeteerNodeModule))
     }
 }
