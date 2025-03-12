@@ -12,11 +12,8 @@ import kotlin.test.assertIs
 class PdfTest {
     @Test
     fun `corresponding generator`() {
-        val htmlToPdf =
-            QuarkdownFlavor.rendererFactory
-                .html(MutableContext(QuarkdownFlavor))
-                .postRenderer
-                .accept(PdfGeneratorSupplierPostRendererVisitor())
+        val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
+        val htmlToPdf = PdfGenerators.getForRenderingTarget(html)
 
         assertIs<HtmlToPdfGenerator>(htmlToPdf)
     }
