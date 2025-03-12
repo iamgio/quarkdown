@@ -15,11 +15,7 @@ import kotlin.test.assertTrue
  * Tests for directory watching.
  * @see DirectoryWatcher
  */
-class WatcherTest {
-    private val directory =
-        kotlin.io.path
-            .createTempDirectory()
-            .toFile()
+class WatcherTest : TempDirectory() {
     private val file = File(directory, "file.txt")
 
     @BeforeTest

@@ -10,12 +10,7 @@ import kotlin.test.assertTrue
 /**
  * Tests for [CreateProjectCommand]
  */
-class ProjectCreatorCommandTest {
-    private val directory =
-        kotlin.io.path
-            .createTempDirectory()
-            .toFile()
-
+class ProjectCreatorCommandTest : TempDirectory() {
     private val command = CreateProjectCommand()
 
     @BeforeTest
