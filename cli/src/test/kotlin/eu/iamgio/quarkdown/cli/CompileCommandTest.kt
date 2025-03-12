@@ -91,4 +91,14 @@ class CompileCommandTest : TempDirectory() {
             test("--clean")
         }
     }
+
+    @Test
+    fun pdf() {
+        /*
+        TODO implement PDF export
+        val (_, _) = test("--pdf")
+        val pdf = File(directory, "Quarkdown-test.pdf")
+        assertTrue(pdf.exists())
+         */
+    }
 }

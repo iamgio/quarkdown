@@ -37,6 +37,13 @@ interface PostRenderer {
      * @return the generated output resources
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
+
+    /**
+     * Accepts a post-renderer visitor.
+     * @param visitor visitor to accept
+     * @return the result of the visit operation
+     */
+    fun <T> accept(visitor: PostRendererVisitor<T>): T
 }
 
 /**

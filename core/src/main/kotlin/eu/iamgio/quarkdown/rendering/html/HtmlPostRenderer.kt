@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.PostRenderer
+import eu.iamgio.quarkdown.rendering.PostRendererVisitor
 import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
 import eu.iamgio.quarkdown.template.TemplateProcessor
 
@@ -35,6 +36,8 @@ class HtmlPostRenderer(
     // HTML requires local media to be resolved from the file system.
     override val preferredMediaStorageOptions: MediaStorageOptions =
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
+
+    override fun <T> accept(visitor: PostRendererVisitor<T>): T = visitor.visit(this)
 
     override fun createTemplateProcessor() =
         TemplateProcessor.fromResourceName("/render/html-wrapper.html.template").apply {
