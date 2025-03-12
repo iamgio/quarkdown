@@ -125,30 +125,40 @@ abstract class ExecuteCommand(
         .int()
         .default(DEFAULT_SERVER_PORT)
 
-    override fun run() {
-        val cliOptions =
-            CliOptions(
-                // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
-                source = null,
-                outputDirectory,
-                libraryDirectory,
-                clean,
-            ).let(::finalizeCliOptions)
+    /**
+     * @return the finalized CLI options based on the command's properties
+     */
+    fun createCliOptions() =
+        CliOptions(
+            // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
+            source = null,
+            outputDirectory,
+            libraryDirectory,
+            clean,
+        ).let(::finalizeCliOptions)
 
-        val pipelineOptions =
-            PipelineOptions(
-                prettyOutput = prettyOutput,
-                wrapOutput = !noWrap,
-                workingDirectory = cliOptions.source?.parentFile,
-                enableMediaStorage = !noMediaStorage,
-                serverPort = serverPort.takeIf { preview },
-                mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
-                errorHandler =
-                    when {
-                        strict -> StrictPipelineErrorHandler()
-                        else -> BasePipelineErrorHandler()
-                    },
-            )
+    /**
+     * @param cliOptions finalized CLI options
+     * @return pipeline options based on the command's properties
+     */
+    fun createPipelineOptions(cliOptions: CliOptions) =
+        PipelineOptions(
+            prettyOutput = prettyOutput,
+            wrapOutput = !noWrap,
+            workingDirectory = cliOptions.source?.parentFile,
+            enableMediaStorage = !noMediaStorage,
+            serverPort = serverPort.takeIf { preview },
+            mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
+            errorHandler =
+                when {
+                    strict -> StrictPipelineErrorHandler()
+                    else -> BasePipelineErrorHandler()
+                },
+        )
+
+    override fun run() {
+        val cliOptions = this.createCliOptions()
+        val pipelineOptions = this.createPipelineOptions(cliOptions)
 
         // If file watching is enabled, a file change triggers the pipeline execution again.
         cliOptions.takeIf { watch }?.source?.absoluteFile?.parentFile?.let { sourceDirectory ->
