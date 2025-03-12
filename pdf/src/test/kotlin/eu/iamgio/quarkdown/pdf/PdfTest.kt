@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
 import eu.iamgio.quarkdown.pdf.html.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.NpmWrapper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -42,8 +43,20 @@ class PdfTest {
 
     @Test
     fun `nonexisting nodejs`() {
-        val nodeWrapper = NodeJsWrapper("quarkdown-nodejs-nonexisting-path")
-        assertEquals(false, nodeWrapper.isValid)
+        val wrapper = NodeJsWrapper("quarkdown-nodejs-nonexisting-path")
+        assertEquals(false, wrapper.isValid)
+    }
+
+    @Test
+    fun `npm wrapper`() {
+        val wrapper = NpmWrapper()
+        assertTrue(wrapper.isValid)
+    }
+
+    @Test
+    fun `nonexisting npm`() {
+        val wrapper = NpmWrapper("quarkdown-npm-nonexisting-path")
+        assertEquals(false, wrapper.isValid)
     }
 
     @Test

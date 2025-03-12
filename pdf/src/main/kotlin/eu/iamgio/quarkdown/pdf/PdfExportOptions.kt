@@ -6,5 +6,5 @@ import eu.iamgio.quarkdown.pdf.html.NodeJsWrapper
  * Options for exporting PDF files.
  */
 data class PdfExportOptions(
-    val nodeJsPath: String = NodeJsWrapper.DEFAULT_NODEJS_PATH,
+    val nodeJsPath: String = NodeJsWrapper.DEFAULT_PATH,
 )

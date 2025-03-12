@@ -5,8 +5,8 @@ package eu.iamgio.quarkdown.pdf.html
  * @param path path to the Node.js executable
  */
 data class NodeJsWrapper(
-    val path: String = DEFAULT_NODEJS_PATH,
-) {
+    override val path: String = DEFAULT_PATH,
+) : ExecutableWrapper() {
     init {
         require(path.isNotBlank()) { "Path cannot be blank" }
     }
@@ -14,7 +14,7 @@ data class NodeJsWrapper(
     /**
      * @return whether Node.js is found from [path] and works
      */
-    val isValid: Boolean
+    override val isValid: Boolean
         get() =
             try {
                 eval("console.log('Hello!')") == "Hello!\n"
@@ -30,15 +30,9 @@ data class NodeJsWrapper(
      * @param code the code to run
      * @return the stdout and stderr of the execution
      */
-    fun eval(code: String): String {
-        val process =
-            ProcessBuilder(path, "-e", code)
-                .redirectErrorStream(true)
-                .start()
-        return process.inputStream.bufferedReader().readText()
-    }
+    fun eval(code: String): String = super.getCommandOutput("-e", code)
 
     companion object {
-        const val DEFAULT_NODEJS_PATH = "node"
+        const val DEFAULT_PATH = "node"
     }
 }
