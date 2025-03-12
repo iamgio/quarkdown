@@ -7,6 +7,8 @@ import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
 /**
  * Visitor that supplies [PdfExporter]s for each kind of [PostRenderer].
  */
-class PdfExporterSupplierPostRendererVisitor : PostRendererVisitor<PdfExporter> {
-    override fun visit(postRenderer: HtmlPostRenderer) = HtmlToPdfExporter()
+class PdfExporterSupplierPostRendererVisitor(
+    private val options: PdfExportOptions,
+) : PostRendererVisitor<PdfExporter> {
+    override fun visit(postRenderer: HtmlPostRenderer) = HtmlToPdfExporter(options)
 }
