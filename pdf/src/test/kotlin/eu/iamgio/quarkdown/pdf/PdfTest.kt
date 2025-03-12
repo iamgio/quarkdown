@@ -45,4 +45,10 @@ class PdfTest {
         val nodeWrapper = NodeJsWrapper("quarkdown-nodejs-nonexisting-path")
         assertEquals(false, nodeWrapper.isValid)
     }
+
+    @Test
+    fun `puppeteer not installed`() {
+        val nodeWrapper = NodeJsWrapper()
+        assertEquals(false, nodeWrapper.isPuppeteerInstalled)
+    }
 }

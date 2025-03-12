@@ -22,13 +22,19 @@ data class NodeJsWrapper(
                 false
             }
 
+    val isPuppeteerInstalled: Boolean
+        get() = eval("require('puppeteer')") == ""
+
     /**
      * Runs an expression or code snippet via Node.js from [path].
      * @param code the code to run
-     * @return the stdout of the execution
+     * @return the stdout and stderr of the execution
      */
     fun eval(code: String): String {
-        val process = ProcessBuilder(path, "-e", code).start()
+        val process =
+            ProcessBuilder(path, "-e", code)
+                .redirectErrorStream(true)
+                .start()
         return process.inputStream.bufferedReader().readText()
     }
 
