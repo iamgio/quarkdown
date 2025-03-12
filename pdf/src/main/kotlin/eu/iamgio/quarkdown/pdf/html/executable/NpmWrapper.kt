@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.pdf.html.executable
 
+import java.io.File
+
 /**
  * Wrapper for invoking the Node Package Manager.
  * @param path path to the NPM executable
@@ -7,6 +9,8 @@ package eu.iamgio.quarkdown.pdf.html.executable
 class NpmWrapper(
     override val path: String = DEFAULT_PATH,
 ) : ExecutableWrapper() {
+    override val workingDirectory: File? = null
+
     override val isValid: Boolean
         get() =
             try {
@@ -21,9 +25,12 @@ class NpmWrapper(
         getCommandOutput("install", "-g", module.name)
     }
 
-    fun uninstall(module: NodeModule) {
-        getCommandOutput("uninstall", "-g", module.name)
-    }
+    fun isInstalled(module: NodeModule): Boolean =
+        try {
+            getCommandOutput("list", "-g", module.name).contains(module.name)
+        } catch (e: Exception) {
+            false
+        }
 
     fun link(
         node: NodeJsWrapper,
@@ -31,13 +38,6 @@ class NpmWrapper(
     ) {
         getCommandOutput("link", module.name, workingDirectory = node.workingDirectory)
     }
-
-    fun isInstalled(module: NodeModule): Boolean =
-        try {
-            getCommandOutput("list", "-g", module.name).contains(module.name)
-        } catch (e: Exception) {
-            false
-        }
 
     companion object {
         const val DEFAULT_PATH = "npm"
