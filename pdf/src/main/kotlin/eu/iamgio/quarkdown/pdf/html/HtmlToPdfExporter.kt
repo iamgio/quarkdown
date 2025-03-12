@@ -12,7 +12,7 @@ class HtmlToPdfExporter(
     private val options: PdfExportOptions,
 ) : PdfExporter {
     override fun export(out: File) {
-        val wrapper = NodeJsWrapper(path = options.nodeJsPath)
+        val wrapper = NodeJsWrapper(path = options.nodeJsPath, workingDirectory = out.parentFile)
         if (!wrapper.isValid) {
             throw IllegalStateException("Node.js cannot be found at '${options.nodeJsPath}'")
         }

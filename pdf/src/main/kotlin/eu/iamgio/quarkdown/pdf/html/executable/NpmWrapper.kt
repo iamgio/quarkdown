@@ -10,12 +10,27 @@ class NpmWrapper(
     override val isValid: Boolean
         get() =
             try {
-                super.getCommandOutput("--version").trim().let {
+                getCommandOutput("--version").trim().let {
                     it.isNotBlank() && it.lines().size == 1
                 }
             } catch (e: Exception) {
                 false
             }
+
+    fun install(module: NodeModule) {
+        getCommandOutput("install", "-g", module.name)
+    }
+
+    fun uninstall(module: NodeModule) {
+        getCommandOutput("uninstall", "-g", module.name)
+    }
+
+    fun link(
+        module: NodeModule,
+        node: NodeJsWrapper,
+    ) {
+        getCommandOutput("link", module.name, workingDirectory = node.workingDirectory)
+    }
 
     companion object {
         const val DEFAULT_PATH = "npm"

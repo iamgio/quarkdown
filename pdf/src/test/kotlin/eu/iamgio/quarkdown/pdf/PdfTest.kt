@@ -6,6 +6,8 @@ import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
 import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
+import java.io.File
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -15,6 +17,17 @@ import kotlin.test.assertTrue
  * Tests for the PDF module.
  */
 class PdfTest {
+    private val directory: File =
+        kotlin.io.path
+            .createTempDirectory()
+            .toFile()
+
+    @BeforeTest
+    fun setup() {
+        directory.deleteRecursively()
+        directory.mkdirs()
+    }
+
     @Test
     fun `corresponding exporter`() {
         val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
@@ -25,7 +38,7 @@ class PdfTest {
 
     @Test
     fun `nodejs wrapper`() {
-        val wrapper = NodeJsWrapper()
+        val wrapper = NodeJsWrapper(workingDirectory = directory)
         assertTrue(wrapper.isValid)
         assertEquals("Hello, Quarkdown!\n", wrapper.eval("console.log('Hello, Quarkdown!')"))
         assertEquals(
@@ -44,7 +57,7 @@ class PdfTest {
 
     @Test
     fun `nonexisting nodejs`() {
-        val wrapper = NodeJsWrapper("quarkdown-nodejs-nonexisting-path")
+        val wrapper = NodeJsWrapper("quarkdown-nodejs-nonexisting-path", directory)
         assertEquals(false, wrapper.isValid)
     }
 
@@ -62,7 +75,16 @@ class PdfTest {
 
     @Test
     fun `puppeteer not installed`() {
-        val wrapper = NodeJsWrapper()
+        val wrapper = NodeJsWrapper(workingDirectory = directory)
         assertEquals(false, PuppeteerNodeModule.isInstalled(wrapper))
+    }
+
+    @Test
+    fun `install puppeteer`() {
+        val node = NodeJsWrapper(workingDirectory = directory)
+        val npm = NpmWrapper()
+        npm.install(PuppeteerNodeModule)
+        npm.link(PuppeteerNodeModule, node)
+        assertTrue(PuppeteerNodeModule.isInstalled(node))
     }
 }
