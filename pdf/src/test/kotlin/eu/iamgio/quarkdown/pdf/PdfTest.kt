@@ -3,8 +3,9 @@ package eu.iamgio.quarkdown.pdf
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
-import eu.iamgio.quarkdown.pdf.html.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.NpmWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -61,7 +62,7 @@ class PdfTest {
 
     @Test
     fun `puppeteer not installed`() {
-        val nodeWrapper = NodeJsWrapper()
-        assertEquals(false, nodeWrapper.isPuppeteerInstalled)
+        val wrapper = NodeJsWrapper()
+        assertEquals(false, PuppeteerNodeModule.isInstalled(wrapper))
     }
 }

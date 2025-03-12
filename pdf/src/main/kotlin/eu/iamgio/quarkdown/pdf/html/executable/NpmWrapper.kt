@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.pdf.html
+package eu.iamgio.quarkdown.pdf.html.executable
 
 /**
  * Wrapper for invoking the Node Package Manager.
@@ -14,7 +14,6 @@ class NpmWrapper(
                     it.isNotBlank() && it.lines().size == 1
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
                 false
             }
 

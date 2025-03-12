@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.pdf.html
+package eu.iamgio.quarkdown.pdf.html.executable
 
 /**
  * Wrapper for launching scripts via Node.js.
@@ -21,9 +21,6 @@ data class NodeJsWrapper(
             } catch (e: Exception) {
                 false
             }
-
-    val isPuppeteerInstalled: Boolean
-        get() = eval("require('puppeteer')") == ""
 
     /**
      * Runs an expression or code snippet via Node.js from [path].

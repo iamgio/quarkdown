@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.pdf.html
+package eu.iamgio.quarkdown.pdf.html.executable
 
 /**
  *
