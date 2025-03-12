@@ -20,8 +20,7 @@ class WatcherTest : TempDirectory() {
 
     @BeforeTest
     fun setup() {
-        directory.deleteRecursively()
-        directory.mkdir()
+        super.reset()
     }
 
     /**

@@ -10,4 +10,9 @@ open class TempDirectory {
         kotlin.io.path
             .createTempDirectory()
             .toFile()
+
+    protected fun reset() {
+        directory.deleteRecursively()
+        directory.mkdirs()
+    }
 }

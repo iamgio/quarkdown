@@ -15,8 +15,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
 
     @BeforeTest
     fun setup() {
-        directory.deleteRecursively()
-        directory.mkdirs()
+        super.reset()
     }
 
     private fun test(additionalArgs: String = "") {
