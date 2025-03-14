@@ -1,5 +1,7 @@
 package eu.iamgio.quarkdown.server
 
+import eu.iamgio.quarkdown.server.stop.KtorStoppableAdapter
+import eu.iamgio.quarkdown.server.stop.Stoppable
 import io.ktor.server.application.ServerReady
 import io.ktor.server.application.install
 import io.ktor.server.application.log
@@ -33,7 +35,7 @@ class LocalFileWebServer(
      */
     override fun start(
         port: Int,
-        onReady: (Server) -> Unit,
+        onReady: (Stoppable) -> Unit,
     ) {
         if (!targetFile.exists()) throw IllegalArgumentException("Cannot start web server from non-existing file: $targetFile")
 
@@ -48,7 +50,7 @@ class LocalFileWebServer(
                 maxFrameSize = Long.MAX_VALUE
             }
 
-            monitor.subscribe(ServerReady) { onReady(this@LocalFileWebServer) }
+            monitor.subscribe(ServerReady) { onReady(KtorStoppableAdapter(this)) }
 
             routing {
                 webSocket("/reload") {
@@ -84,6 +86,6 @@ class LocalFileWebServer(
                 // Serve the target file.
                 staticFiles("/", targetFile)
             }
-        }
+        }.start(wait = true)
     }
 }

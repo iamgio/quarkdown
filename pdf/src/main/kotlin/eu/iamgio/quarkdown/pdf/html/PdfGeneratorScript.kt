@@ -26,6 +26,7 @@ class PdfGeneratorScript(
             println("scriptFile: $scriptFile")
             runScript(scriptFile)
             Log.info("PDF generated at ${out.absolutePath}")
+            it.stop()
         }
     }
 

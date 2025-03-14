@@ -1,6 +1,11 @@
 package eu.iamgio.quarkdown.server.stop
 
 /**
- *
+ * A component that can be stopped.
  */
-interface Stoppable
+interface Stoppable {
+    /**
+     * Stops the component.
+     */
+    fun stop()
+}
