@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.pdf.html.executable
 
+import eu.iamgio.quarkdown.log.Log
 import java.io.File
 
 /**
@@ -20,14 +21,22 @@ abstract class ExecutableWrapper {
                 .redirectErrorStream(true)
                 .start()
 
+        val outputBuffer = StringBuilder()
+
+        val output =
+            process.inputStream
+                .bufferedReader()
+                .lines()
+                // .peek(Log::debug)
+                .peek(Log::info)
+                .forEach { outputBuffer.append(it).append("\n") }
+
         process.waitFor()
 
-        fun readOutput() = process.inputStream.bufferedReader().readText()
-
         if (process.exitValue() != 0) {
-            throw IllegalStateException("Command failed with non-zero exit code:\n${readOutput()}")
+            throw IllegalStateException("Command failed with non-zero exit code:\n$output")
         }
 
-        return readOutput()
+        return output.toString()
     }
 }

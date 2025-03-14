@@ -7,5 +7,8 @@ interface Server {
     /**
      * Starts the server on [port].
      */
-    fun start(port: Int)
+    fun start(
+        port: Int,
+        onReady: (Server) -> Unit = {},
+    )
 }

@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.server
 
+import io.ktor.server.application.ServerReady
 import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.engine.embeddedServer
@@ -23,12 +24,17 @@ import kotlin.time.Duration.Companion.seconds
  * Web server that serves a local file.
  * @param targetFile file to serve
  */
-class LocalFileWebServer(private val targetFile: File) : Server {
+class LocalFileWebServer(
+    private val targetFile: File,
+) : Server {
     /**
      * Starts the server on [port].
      * @throws IllegalArgumentException if [targetFile] does not exist
      */
-    override fun start(port: Int) {
+    override fun start(
+        port: Int,
+        onReady: (Server) -> Unit,
+    ) {
         if (!targetFile.exists()) throw IllegalArgumentException("Cannot start web server from non-existing file: $targetFile")
 
         // Shared flow to broadcast messages to all connected clients.
@@ -41,6 +47,8 @@ class LocalFileWebServer(private val targetFile: File) : Server {
                 timeout = 10.seconds
                 maxFrameSize = Long.MAX_VALUE
             }
+
+            monitor.subscribe(ServerReady) { onReady(this@LocalFileWebServer) }
 
             routing {
                 webSocket("/reload") {
@@ -76,6 +84,6 @@ class LocalFileWebServer(private val targetFile: File) : Server {
                 // Serve the target file.
                 staticFiles("/", targetFile)
             }
-        }.start(wait = true)
+        }
     }
 }

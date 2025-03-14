@@ -46,6 +46,7 @@ class PdfTest {
             </head>
             <body>
                 <h1>Hello, Quarkdown!</h1>
+                <script>const readyState = true;</script>
             </body>
             </html>
             """.trimIndent(),
@@ -56,7 +57,8 @@ class PdfTest {
         val out = File(directory, "out.pdf")
 
         // todo figure out how to avoid webserver. file:// times out
-        PdfGeneratorScript.launch(out, "http://localhost:8089" /*"file://${html.absolutePath}"*/, node, npm)
+        PdfGeneratorScript(out, node, npm).launch()
+        Thread.sleep(1000)
         println(directory.listFiles()!!.toList())
     }
 }
