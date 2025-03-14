@@ -10,6 +10,7 @@ import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 /**
  * Tests for the PDF module.
@@ -56,9 +57,8 @@ class PdfTest {
         val npm = NpmWrapper()
         val out = File(directory, "out.pdf")
 
-        // todo figure out how to avoid webserver. file:// times out
         PdfGeneratorScript(out, node, npm).launch()
         Thread.sleep(1000)
-        println(directory.listFiles()!!.toList())
+        assertTrue(out.exists())
     }
 }
