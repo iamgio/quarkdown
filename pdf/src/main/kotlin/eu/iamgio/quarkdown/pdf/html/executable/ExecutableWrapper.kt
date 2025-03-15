@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.pdf.html.executable
 
 import eu.iamgio.quarkdown.log.Log
 import java.io.File
+import kotlin.streams.asSequence
 
 /**
  *
@@ -21,15 +22,14 @@ abstract class ExecutableWrapper {
                 .redirectErrorStream(true)
                 .start()
 
-        val outputBuffer = StringBuilder()
-
         val output =
             process.inputStream
                 .bufferedReader()
                 .lines()
+                .asSequence()
                 // .peek(Log::debug)
-                .peek(Log::info)
-                .forEach { outputBuffer.append(it).append("\n") }
+                .onEach(Log::info)
+                .joinToString(separator = "\n")
 
         process.waitFor()
 
@@ -37,6 +37,6 @@ abstract class ExecutableWrapper {
             throw IllegalStateException("Command failed with non-zero exit code:\n$output")
         }
 
-        return output.toString()
+        return output
     }
 }

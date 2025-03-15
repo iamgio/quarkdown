@@ -6,6 +6,8 @@ import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
 import eu.iamgio.quarkdown.server.LocalFileWebServer
 import java.io.File
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.deleteRecursively
 
 private const val SERVER_PORT = 8090
 
@@ -21,14 +23,29 @@ class PdfGeneratorScript(
     private lateinit var scriptFile: File
 
     fun launch() {
+        checkNode()
+        checkNpm()
+        linkPuppeteer()
+        scriptFile = copyScript()
+
         LocalFileWebServer(directory).start(SERVER_PORT) { server ->
             Log.info("PDF server is ready.")
-            linkPuppeteer()
-            scriptFile = copyScript()
             runScript()
-            cleanup()
             Log.info("PDF generated at $out")
             server.stop()
+            cleanup()
+        }
+    }
+
+    private fun checkNode() {
+        if (!node.isValid) {
+            throw IllegalStateException("Node.js cannot be found at '${node.path}'")
+        }
+    }
+
+    private fun checkNpm() {
+        if (!npm.isValid) {
+            throw IllegalStateException("NPM cannot be found at '${npm.path}'")
         }
     }
 
@@ -54,11 +71,15 @@ class PdfGeneratorScript(
         node.evalFile(scriptFile, out.absolutePath, url)
     }
 
+    @OptIn(ExperimentalPathApi::class)
     private fun cleanup() {
         scriptFile.delete()
 
+        // Path#deleteRecursively does not follow symlinks, while File#deleteRecursively does.
+        // The symlinks contained in the node_modules directory point to the global packages,
+        // and should not be deleted.
         sequenceOf("package.json", "package-lock.json", "node_modules")
             .map { File(directory, it) }
-            .forEach { it.deleteRecursively() }
+            .forEach { it.toPath().deleteRecursively() }
     }
 }

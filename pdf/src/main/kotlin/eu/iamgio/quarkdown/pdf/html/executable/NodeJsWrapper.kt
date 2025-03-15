@@ -20,7 +20,7 @@ data class NodeJsWrapper(
     override val isValid: Boolean
         get() =
             try {
-                eval("console.log('Hello!')") == "Hello!\n"
+                eval("console.log('Hello!')").trim().also { println(it) } == "Hello!"
             } catch (e: Exception) {
                 false
             }
