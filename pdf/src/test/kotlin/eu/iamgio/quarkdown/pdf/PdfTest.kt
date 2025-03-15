@@ -3,9 +3,6 @@ package eu.iamgio.quarkdown.pdf
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
-import eu.iamgio.quarkdown.pdf.html.PdfGeneratorScript
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -54,11 +51,8 @@ class PdfTest {
             """.trimIndent(),
         )
 
-        val node = NodeJsWrapper(workingDirectory = directory)
-        val npm = NpmWrapper()
         val out = File(directory, "out.pdf")
-
-        PdfGeneratorScript(directory, out, node, npm).launch()
+        HtmlToPdfExporter(PdfExportOptions()).export(directory, out)
         Thread.sleep(1000)
 
         assertTrue(out.exists())

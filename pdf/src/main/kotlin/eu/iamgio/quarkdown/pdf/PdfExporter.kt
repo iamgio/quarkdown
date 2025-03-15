@@ -6,5 +6,8 @@ import java.io.File
  *
  */
 interface PdfExporter {
-    fun export(out: File)
+    fun export(
+        directory: File,
+        out: File,
+    )
 }
