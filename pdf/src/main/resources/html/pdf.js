@@ -15,6 +15,9 @@ const puppeteer = require('puppeteer');
     });
     const page = await browser.newPage();
     await page.goto(url);
+    await page.content();
+
+    console.log('Connected. Waiting for page to be ready.');
 
     await page.waitForFunction('readyState');
 
