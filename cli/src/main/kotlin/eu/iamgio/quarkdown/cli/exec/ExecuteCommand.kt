@@ -184,8 +184,8 @@ abstract class ExecuteCommand(
         pipelineOptions: PipelineOptions,
     ) {
         // Executes the Quarkdown pipeline.
-        // If generated, the output directory is returned, which is a child of pipelineOptions.outputDirectory.
-        val directory: File? = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+        val outcome: ExecutionOutcome = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+        val directory = outcome.directory
 
         // If enabled, communicates with the server to reload the requested resources.
         // If enabled and the server is not running, also starts the server
@@ -200,5 +200,17 @@ abstract class ExecuteCommand(
                 ),
             )
         }
+
+        this.postExecute(outcome, cliOptions, pipelineOptions)
     }
+
+    /**
+     * Executes actions after the execution of the pipeline has been completed
+     * and the output files have been generated.
+     */
+    protected open fun postExecute(
+        outcome: ExecutionOutcome,
+        cliOptions: CliOptions,
+        pipelineOptions: PipelineOptions,
+    ) {}
 }

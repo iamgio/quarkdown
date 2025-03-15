@@ -18,7 +18,6 @@ import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import eu.iamgio.quarkdown.server.message.Reload
 import eu.iamgio.quarkdown.server.message.ServerMessage
-import java.io.File
 import kotlin.system.exitProcess
 
 /**
@@ -26,13 +25,13 @@ import kotlin.system.exitProcess
  * @param executionStrategy launch strategy of the pipeline, e.g. from file or REPL
  * @param cliOptions options that define the behavior of the CLI, especially I/O
  * @param pipelineOptions options that define the behavior of the pipeline
- * @return the output file or directory, if any
+ * @return the output file or directory, if any, associated with the executed pipeline
  */
 fun runQuarkdown(
     executionStrategy: PipelineExecutionStrategy,
     cliOptions: CliOptions,
     pipelineOptions: PipelineOptions,
-): File? {
+): ExecutionOutcome {
     // Flavor to use across the pipeline.
     val flavor: MarkdownFlavor = QuarkdownFlavor
 
@@ -60,9 +59,10 @@ fun runQuarkdown(
 
         // Pipeline execution and output resource retrieving.
         val resource = executionStrategy.execute(pipeline)
-
         // Exports the generated resources to file if enabled in options.
-        return directory?.let { resource?.saveTo(it) }
+        directory?.let { resource?.saveTo(it) }
+
+        return ExecutionOutcome(directory, pipeline)
     } catch (e: PipelineException) {
         val targetException = (e as? FunctionRuntimeException)?.cause ?: e
         targetException.printStackTrace()

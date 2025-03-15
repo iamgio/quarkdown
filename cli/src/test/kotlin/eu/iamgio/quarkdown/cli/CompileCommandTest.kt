@@ -26,7 +26,7 @@ class CompileCommandTest : TempDirectory() {
     fun setup() {
         super.reset()
 
-        main.writeText(".docname {Quarkdown test}\n\nHello, world!")
+        main.writeText(".docname {Quarkdown test}\n.doctype {paged}\n\nHello, world!")
     }
 
     private fun test(additionalArgs: String = ""): Pair<CliOptions, PipelineOptions> {
@@ -94,11 +94,9 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun pdf() {
-        /*
-        TODO implement PDF export
         val (_, _) = test("--pdf")
         val pdf = File(directory, "Quarkdown-test.pdf")
+        Thread.sleep(1000)
         assertTrue(pdf.exists())
-         */
     }
 }
