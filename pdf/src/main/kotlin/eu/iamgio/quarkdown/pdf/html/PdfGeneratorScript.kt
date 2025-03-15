@@ -30,10 +30,15 @@ class PdfGeneratorScript(
 
         LocalFileWebServer(directory).start(SERVER_PORT) { server ->
             Log.info("PDF server is ready.")
-            runScript()
-            Log.info("PDF generated at $out")
-            server.stop()
-            cleanup()
+            try {
+                runScript()
+                Log.info("PDF generated at $out")
+            } catch (e: Exception) {
+                throw e
+            } finally {
+                server.stop()
+                cleanup()
+            }
         }
     }
 
