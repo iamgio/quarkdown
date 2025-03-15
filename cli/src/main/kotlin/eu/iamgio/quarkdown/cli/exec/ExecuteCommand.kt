@@ -14,6 +14,8 @@ import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.cli.watcher.DirectoryWatcher
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
+import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
@@ -126,6 +128,18 @@ abstract class ExecuteCommand(
         .default(DEFAULT_SERVER_PORT)
 
     /**
+     * Path to the Node.js executable, needed for PDF export.
+     */
+    protected val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
+        .default(NodeJsWrapper.DEFAULT_PATH)
+
+    /**
+     * Path to the npm executable, needed for PDF export.
+     */
+    protected val npmPath: String by option("--npm-path", help = "Path to the npm executable")
+        .default(NpmWrapper.DEFAULT_PATH)
+
+    /**
      * @return the finalized CLI options based on the command's properties
      */
     fun createCliOptions() =
@@ -135,6 +149,8 @@ abstract class ExecuteCommand(
             outputDirectory,
             libraryDirectory,
             clean,
+            nodePath,
+            npmPath,
         ).let(::finalizeCliOptions)
 
     /**
@@ -212,5 +228,6 @@ abstract class ExecuteCommand(
         outcome: ExecutionOutcome,
         cliOptions: CliOptions,
         pipelineOptions: PipelineOptions,
-    ) {}
+    ) {
+    }
 }

@@ -48,7 +48,7 @@ class CompileCommand : ExecuteCommand("c") {
         // and the PDF exporter for the corresponding target should be selected.
         val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
 
-        val options = PdfExportOptions()
+        val options = PdfExportOptions(super.nodePath, super.npmPath)
         val exporter = PdfExporters.getForRenderingTarget(html.postRenderer, options)
         exporter.export(sourceDirectory, out)
     }
