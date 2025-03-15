@@ -3,8 +3,17 @@
 
 let executionQueue = [];
 
-// Global state. This can be watched by other tools (e.g. Puppeteer).
+// Global state.
 let readyState = false;
+
+/**
+ * Returns whether the document is finalized and ready.
+ * This can be watched by other tools (e.g. Puppeteer).
+ * @returns {boolean}
+ */
+function isReady() {
+    return readyState;
+}
 
 function executeQueue() {
     executionQueue.forEach((fn) => fn());

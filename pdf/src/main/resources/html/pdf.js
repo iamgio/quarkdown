@@ -14,12 +14,15 @@ const puppeteer = require('puppeteer');
         ]
     });
     const page = await browser.newPage();
+
+    console.log('Connecting to ' + url);
     await page.goto(url);
+
+    console.log('Connected. Waiting for page content.');
     await page.content();
 
     console.log('Connected. Waiting for page to be ready.');
-
-    await page.waitForFunction('readyState');
+    await page.waitForFunction('isReady()');
 
     await page.pdf({
         path: outputFile,
