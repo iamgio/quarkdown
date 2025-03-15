@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.iamgio.quarkdown.cli.CliOptions
 import eu.iamgio.quarkdown.cli.exec.strategy.FileExecutionStrategy
+import eu.iamgio.quarkdown.cli.resource.OuputResourceDirectoryResolver
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.log.Log
@@ -62,8 +63,10 @@ class CompileCommand : ExecuteCommand("c") {
             return
         }
 
-        if (exportPdf) {
-            exportPdf(File(outcome.directory, "Test-2"))
+        if (exportPdf && outcome.resource != null) {
+            // Resolve the parent directory to the HTML file.
+            val sourceDirectory = outcome.resource.accept(OuputResourceDirectoryResolver(outcome.directory))
+            exportPdf(sourceDirectory)
         }
     }
 }

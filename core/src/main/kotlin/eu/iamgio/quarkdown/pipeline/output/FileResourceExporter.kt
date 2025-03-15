@@ -9,6 +9,7 @@ import java.io.File
  */
 class FileResourceExporter(
     private val location: File,
+    private val write: Boolean = true,
 ) : OutputResourceVisitor<File> {
     /**
      * Name of the corresponding file of this resource, without the extension,
@@ -42,12 +43,12 @@ class FileResourceExporter(
      */
     override fun visit(artifact: TextOutputArtifact) =
         File(location, artifact.fullFileName).also {
-            it.writeText(artifact.content.toString())
+            if (write) it.writeText(artifact.content.toString())
         }
 
     override fun visit(artifact: BinaryOutputArtifact) =
         File(location, artifact.fullFileName).also {
-            it.writeBytes(artifact.content)
+            if (write) it.writeBytes(artifact.content)
         }
 
     /**
@@ -62,11 +63,11 @@ class FileResourceExporter(
             return directory
         }
 
-        directory.mkdirs()
+        if (write) directory.mkdirs()
 
         // Saves the subfiles in the new directory.
         group.resources.forEach {
-            it.accept(FileResourceExporter(directory))
+            it.accept(FileResourceExporter(directory, write))
         }
 
         return directory

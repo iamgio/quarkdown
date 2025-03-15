@@ -62,7 +62,7 @@ fun runQuarkdown(
         // Exports the generated resources to file if enabled in options.
         directory?.let { resource?.saveTo(it) }
 
-        return ExecutionOutcome(directory, pipeline)
+        return ExecutionOutcome(resource, directory, pipeline)
     } catch (e: PipelineException) {
         val targetException = (e as? FunctionRuntimeException)?.cause ?: e
         targetException.printStackTrace()

@@ -30,9 +30,9 @@ class NodeNpmWrapperTest {
     fun `nodejs wrapper`() {
         val wrapper = NodeJsWrapper(workingDirectory = directory)
         assertTrue(wrapper.isValid)
-        assertEquals("Hello, Quarkdown!\n", wrapper.eval("console.log('Hello, Quarkdown!')"))
+        assertEquals("Hello, Quarkdown!", wrapper.eval("console.log('Hello, Quarkdown!')"))
         assertEquals(
-            "Hello, Quarkdown!\n".repeat(2),
+            "Hello, Quarkdown!\nHello, Quarkdown!",
             wrapper.eval(
                 """
                 function hello() {

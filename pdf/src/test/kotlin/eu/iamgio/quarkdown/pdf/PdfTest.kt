@@ -45,7 +45,7 @@ class PdfTest {
             </head>
             <body>
                 <h1>Hello, Quarkdown!</h1>
-                <script>const readyState = true;</script>
+                <script>function isReady() { return true; }</script>
             </body>
             </html>
             """.trimIndent(),
