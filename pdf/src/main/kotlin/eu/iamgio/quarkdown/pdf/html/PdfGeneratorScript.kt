@@ -13,24 +13,26 @@ private const val SERVER_PORT = 8090
  *
  */
 class PdfGeneratorScript(
+    private val directory: File,
     private val out: File,
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
 ) {
+    private lateinit var scriptFile: File
+
     fun launch() {
-        LocalFileWebServer(out.parentFile).start(SERVER_PORT) {
+        LocalFileWebServer(directory).start(SERVER_PORT) { server ->
             Log.info("PDF server is ready.")
-            checkPuppeteer()
-            println("out: $out")
-            val scriptFile = copyScript()
-            println("scriptFile: $scriptFile")
-            runScript(scriptFile)
-            Log.info("PDF generated at ${out.absolutePath}")
-            it.stop()
+            linkPuppeteer()
+            scriptFile = copyScript()
+            runScript()
+            cleanup()
+            Log.info("PDF generated at $out")
+            server.stop()
         }
     }
 
-    private fun checkPuppeteer() {
+    private fun linkPuppeteer() {
         if (!npm.isInstalled(PuppeteerNodeModule)) {
             Log.info("Puppeteer is not installed. Installing...")
             npm.install(PuppeteerNodeModule)
@@ -47,8 +49,16 @@ class PdfGeneratorScript(
             javaClass.getResourceAsStream("/html/pdf.js")!!.copyTo(it.outputStream())
         }
 
-    private fun runScript(scriptFile: File) {
+    private fun runScript() {
         val url = "http://localhost:$SERVER_PORT"
         node.evalFile(scriptFile, out.absolutePath, url)
+    }
+
+    private fun cleanup() {
+        scriptFile.delete()
+
+        sequenceOf("package.json", "package-lock.json", "node_modules")
+            .map { File(directory, it) }
+            .forEach { it.deleteRecursively() }
     }
 }

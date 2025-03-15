@@ -9,6 +9,7 @@ import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -57,8 +58,13 @@ class PdfTest {
         val npm = NpmWrapper()
         val out = File(directory, "out.pdf")
 
-        PdfGeneratorScript(out, node, npm).launch()
+        PdfGeneratorScript(directory, out, node, npm).launch()
         Thread.sleep(1000)
+
         assertTrue(out.exists())
+        assertFalse(File(directory, "pdf.js").exists())
+        assertFalse(File(directory, "package.json").exists())
+        assertFalse(File(directory, "package-lock.json").exists())
+        assertFalse(File(directory, "node_modules").exists())
     }
 }
