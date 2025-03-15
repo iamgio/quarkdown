@@ -2,9 +2,12 @@ package eu.iamgio.quarkdown.cli
 
 import com.github.ajalt.clikt.testing.test
 import eu.iamgio.quarkdown.cli.exec.CompileCommand
+import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
+import org.junit.Assume.assumeTrue
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.test.BeforeTest
@@ -92,11 +95,27 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
-    @Test
-    fun pdf() {
-        val (_, _) = test("--pdf")
+    private fun checkPdf() {
         val pdf = File(directory, "Quarkdown-test.pdf")
         Thread.sleep(1000)
         assertTrue(pdf.exists())
+    }
+
+    @Test
+    fun pdf() {
+        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper().isValid)
+
+        val (_, _) = test("--pdf")
+        checkPdf()
+    }
+
+    @Test
+    fun `pdf with node and npm set`() {
+        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper().isValid)
+
+        val (_, _) = test("--pdf --node-path node --npm-path npm")
+        checkPdf()
     }
 }

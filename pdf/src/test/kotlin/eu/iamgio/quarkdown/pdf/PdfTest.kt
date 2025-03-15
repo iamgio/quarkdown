@@ -3,6 +3,9 @@ package eu.iamgio.quarkdown.pdf
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
+import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
+import org.junit.Assume.assumeTrue
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -35,6 +38,9 @@ class PdfTest {
 
     @Test
     fun `bare script on simple html`() {
+        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper().isValid)
+
         val html = File(directory, "index.html")
         html.writeText(
             """
