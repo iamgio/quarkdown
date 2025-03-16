@@ -29,7 +29,6 @@ class PuppeteerPdfGeneratorScript(
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
 ) {
-    private lateinit var scriptFile: File
     private var port: Int? = null
 
     /**
@@ -39,7 +38,6 @@ class PuppeteerPdfGeneratorScript(
         checkNode()
         checkNpm()
         linkPuppeteer()
-        scriptFile = copyScript()
 
         LocalFileWebServer(directory).withScanner().attemptStartUntilPortAvailable(STARTING_SERVER_PORT) { server, port ->
             this.port = port
@@ -76,26 +74,16 @@ class PuppeteerPdfGeneratorScript(
         npm.link(node, PuppeteerNodeModule)
     }
 
-    /**
-     * Copies pdf.js into the working directory.
-     * @return the copied file
-     */
-    private fun copyScript() =
-        File(out.parentFile, "pdf.js").also {
-            javaClass.getResourceAsStream("/html/pdf.js")!!.copyTo(it.outputStream())
-        }
-
     private fun runScript() {
         requireNotNull(port) { "PDF server port is not set" }
 
+        val script = javaClass.getResourceAsStream("/html/pdf.js")!!
         val url = "http://localhost:$port/?print-pdf"
-        node.evalFile(scriptFile, out.absolutePath, url)
+        node.eval(script.reader(), out.absolutePath, url)
     }
 
     @OptIn(ExperimentalPathApi::class)
     private fun cleanup() {
-        scriptFile.delete()
-
         // Path#deleteRecursively does not follow symlinks, while File#deleteRecursively does.
         // The symlinks contained in the node_modules directory point to the global packages,
         // and should not be deleted.

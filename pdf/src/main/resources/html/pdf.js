@@ -1,5 +1,5 @@
-const outputFile = process.argv[2];
-const url = process.argv[3];
+const outputFile = process.argv[1];
+const url = process.argv[2];
 
 console.log('outputFile: ' + outputFile);
 console.log('url: ' + url);
