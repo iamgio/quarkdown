@@ -5,11 +5,16 @@ import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
 import eu.iamgio.quarkdown.server.LocalFileWebServer
+import eu.iamgio.quarkdown.server.withScanner
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
 
-private const val SERVER_PORT = 8090
+/**
+ * The starting port to attempt to start the server on.
+ * It is incremented until a free port is found.
+ */
+private const val STARTING_SERVER_PORT = 8096
 
 /**
  * Script-like generator of a PDF from HTML through Puppeteer via Node.js.
@@ -25,6 +30,7 @@ class PuppeteerPdfGeneratorScript(
     private val npm: NpmWrapper,
 ) {
     private lateinit var scriptFile: File
+    private var port: Int? = null
 
     /**
      * Launches Puppeteer to convert the webpage from [directory] into a PDF saved at [out].
@@ -35,8 +41,9 @@ class PuppeteerPdfGeneratorScript(
         linkPuppeteer()
         scriptFile = copyScript()
 
-        LocalFileWebServer(directory).start(SERVER_PORT) { server ->
-            Log.info("PDF server is ready.")
+        LocalFileWebServer(directory).withScanner().attemptStartUntilPortAvailable(STARTING_SERVER_PORT) { server, port ->
+            this.port = port
+            Log.info("PDF server is ready on port $port.")
             try {
                 runScript()
                 Log.info("PDF generated at $out")
@@ -79,7 +86,9 @@ class PuppeteerPdfGeneratorScript(
         }
 
     private fun runScript() {
-        val url = "http://localhost:$SERVER_PORT/?print-pdf"
+        requireNotNull(port) { "PDF server port is not set" }
+
+        val url = "http://localhost:$port/?print-pdf"
         node.evalFile(scriptFile, out.absolutePath, url)
     }
 
