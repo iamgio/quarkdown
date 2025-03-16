@@ -8,7 +8,7 @@ import java.io.File
 /**
  * Outcome of a pipeline execution.
  * @param resource the output resource produced by the pipeline, if any
- * @param directory output directory, if any
+ * @param directory the directory, child of the configuration's output directory, where the output artifacts are saved
  * @param pipeline the executed pipeline
  * @see runQuarkdown
  */

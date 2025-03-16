@@ -95,6 +95,11 @@ class CompileCommand : ExecuteCommand("c") {
 
         val options = PdfExportOptions(super.nodePath, super.npmPath)
         val exporter = PdfExporters.getForRenderingTarget(html.postRenderer, options)
-        exporter.export(sourceDirectory, out)
+
+        try {
+            exporter.export(sourceDirectory, out)
+        } catch (e: Exception) {
+            Log.error("Failed to export PDF: ${e.message}")
+        }
     }
 }

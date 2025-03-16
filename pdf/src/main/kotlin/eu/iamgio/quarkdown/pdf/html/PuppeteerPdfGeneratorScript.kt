@@ -56,13 +56,13 @@ class PuppeteerPdfGeneratorScript(
 
     private fun checkNode() {
         if (!node.isValid) {
-            throw IllegalStateException("Node.js cannot be found at '${node.path}'")
+            throw IllegalStateException("Node.js executable cannot be found at '${node.path}'")
         }
     }
 
     private fun checkNpm() {
         if (!npm.isValid) {
-            throw IllegalStateException("NPM cannot be found at '${npm.path}'")
+            throw IllegalStateException("NPM executable cannot be found at '${npm.path}'")
         }
     }
 
