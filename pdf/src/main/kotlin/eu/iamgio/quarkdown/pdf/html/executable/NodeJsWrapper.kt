@@ -38,7 +38,7 @@ data class NodeJsWrapper(
     fun evalFile(
         script: File,
         vararg argv: String,
-    ): String = launchAndGetOutput(script.path, *argv)
+    ): String = launchAndGetOutput(script.absolutePath, *argv)
 
     /**
      * @return whether the given [module] is linked to the project located in [workingDirectory]
