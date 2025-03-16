@@ -6,7 +6,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import eu.iamgio.quarkdown.cli.CliOptions
 import eu.iamgio.quarkdown.cli.exec.strategy.FileExecutionStrategy
-import eu.iamgio.quarkdown.cli.resource.OuputResourceDirectoryResolver
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.log.Log
@@ -38,6 +37,21 @@ class CompileCommand : ExecuteCommand("c") {
 
     override fun createExecutionStrategy(cliOptions: CliOptions) = FileExecutionStrategy(source)
 
+    override fun postExecute(
+        outcome: ExecutionOutcome,
+        cliOptions: CliOptions,
+        pipelineOptions: PipelineOptions,
+    ) {
+        if (outcome.directory == null) {
+            Log.warn("Unexpected null output directory during compilation post-processing")
+            return
+        }
+
+        if (exportPdf) {
+            exportPdf(outcome.directory)
+        }
+    }
+
     private fun exportPdf(
         sourceDirectory: File,
         outDirectory: File = sourceDirectory.parentFile,
@@ -51,22 +65,5 @@ class CompileCommand : ExecuteCommand("c") {
         val options = PdfExportOptions(super.nodePath, super.npmPath)
         val exporter = PdfExporters.getForRenderingTarget(html.postRenderer, options)
         exporter.export(sourceDirectory, out)
-    }
-
-    override fun postExecute(
-        outcome: ExecutionOutcome,
-        cliOptions: CliOptions,
-        pipelineOptions: PipelineOptions,
-    ) {
-        if (outcome.directory == null) {
-            Log.warn("Unexpected null output directory during compilation post-processing")
-            return
-        }
-
-        if (exportPdf && outcome.resource != null) {
-            // Resolve the parent directory to the HTML file.
-            val sourceDirectory = outcome.resource.accept(OuputResourceDirectoryResolver(outcome.directory))
-            exportPdf(sourceDirectory)
-        }
     }
 }

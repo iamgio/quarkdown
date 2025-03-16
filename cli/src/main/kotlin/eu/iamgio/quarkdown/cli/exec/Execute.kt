@@ -49,20 +49,20 @@ fun runQuarkdown(
     val pipeline: Pipeline = PipelineInitialization.init(flavor, libraries, pipelineOptions)
 
     // Output directory to save the generated resources in.
-    val directory = cliOptions.outputDirectory
+    val outputDirectory = cliOptions.outputDirectory
 
     try {
         // Cleans the output directory if enabled in options.
         if (cliOptions.clean) {
-            directory?.cleanDirectory()
+            outputDirectory?.cleanDirectory()
         }
 
         // Pipeline execution and output resource retrieving.
         val resource = executionStrategy.execute(pipeline)
         // Exports the generated resources to file if enabled in options.
-        directory?.let { resource?.saveTo(it) }
+        val childDirectory = outputDirectory?.let { resource?.saveTo(it) }
 
-        return ExecutionOutcome(resource, directory, pipeline)
+        return ExecutionOutcome(resource, childDirectory, pipeline)
     } catch (e: PipelineException) {
         val targetException = (e as? FunctionRuntimeException)?.cause ?: e
         targetException.printStackTrace()
