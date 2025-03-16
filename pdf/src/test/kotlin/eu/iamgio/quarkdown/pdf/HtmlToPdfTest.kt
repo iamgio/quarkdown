@@ -62,7 +62,6 @@ class HtmlToPdfTest {
 
         val out = File(directory, "out.pdf")
         HtmlPdfExporter(PdfExportOptions()).export(directory, out)
-        Thread.sleep(1000)
 
         assertTrue(out.exists())
         assertFalse(File(directory, "pdf.js").exists())

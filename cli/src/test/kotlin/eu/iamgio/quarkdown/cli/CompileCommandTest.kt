@@ -113,7 +113,6 @@ class CompileCommandTest : TempDirectory() {
 
     private fun checkPdf() {
         val pdf = File(directory, "Quarkdown-test.pdf")
-        Thread.sleep(1000)
         assertTrue(pdf.exists())
 
         Loader.loadPDF(pdf).use {
