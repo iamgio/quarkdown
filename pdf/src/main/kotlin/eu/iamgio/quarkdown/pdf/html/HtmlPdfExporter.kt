@@ -9,7 +9,7 @@ import java.io.File
 /**
  *
  */
-class HtmlToPdfExporter(
+class HtmlPdfExporter(
     private val options: PdfExportOptions,
 ) : PdfExporter {
     override fun export(

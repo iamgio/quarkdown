@@ -2,7 +2,7 @@ package eu.iamgio.quarkdown.pdf
 
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
-import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
+import eu.iamgio.quarkdown.pdf.html.HtmlPdfExporter
 import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import org.apache.pdfbox.Loader
@@ -36,7 +36,7 @@ class PdfTest {
         val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
         val htmlToPdf = PdfExporters.getForRenderingTarget(html.postRenderer, PdfExportOptions())
 
-        assertIs<HtmlToPdfExporter>(htmlToPdf)
+        assertIs<HtmlPdfExporter>(htmlToPdf)
     }
 
     @Test
@@ -61,7 +61,7 @@ class PdfTest {
         )
 
         val out = File(directory, "out.pdf")
-        HtmlToPdfExporter(PdfExportOptions()).export(directory, out)
+        HtmlPdfExporter(PdfExportOptions()).export(directory, out)
         Thread.sleep(1000)
 
         assertTrue(out.exists())
