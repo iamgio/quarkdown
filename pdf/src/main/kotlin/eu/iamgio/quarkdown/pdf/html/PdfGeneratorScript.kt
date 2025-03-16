@@ -72,7 +72,7 @@ class PdfGeneratorScript(
         }
 
     private fun runScript() {
-        val url = "http://localhost:$SERVER_PORT"
+        val url = "http://localhost:$SERVER_PORT/?print-pdf"
         node.evalFile(scriptFile, out.absolutePath, url)
     }
 
