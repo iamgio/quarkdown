@@ -9,7 +9,6 @@ import com.github.ajalt.clikt.parameters.types.int
 import eu.iamgio.quarkdown.cli.CliOptions
 import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.server.DEFAULT_SERVER_PORT
-import eu.iamgio.quarkdown.cli.server.WebServerOptions
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.cli.watcher.DirectoryWatcher
 import eu.iamgio.quarkdown.log.Log
@@ -19,7 +18,6 @@ import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
-import eu.iamgio.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
 /**
@@ -112,7 +110,7 @@ abstract class ExecuteCommand(
     /**
      * When enabled, the program communicates with the local server to dynamically reload the requested resources.
      */
-    private val preview: Boolean by option("-p", "--preview", help = "Open or reload content after compiling").flag()
+    protected val preview: Boolean by option("-p", "--preview", help = "Open or reload content after compiling").flag()
 
     /**
      * When enabled, the program watches for file changes and automatically recompiles the source.
@@ -123,7 +121,7 @@ abstract class ExecuteCommand(
     /**
      * Port to communicate with the local server on if [preview] is enabled.
      */
-    private val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on")
+    protected val serverPort: Int by option("--server-port", help = "Port to communicate with the local server on")
         .int()
         .default(DEFAULT_SERVER_PORT)
 
@@ -201,21 +199,6 @@ abstract class ExecuteCommand(
     ) {
         // Executes the Quarkdown pipeline.
         val outcome: ExecutionOutcome = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
-        val directory = outcome.directory
-
-        // If enabled, communicates with the server to reload the requested resources.
-        // If enabled and the server is not running, also starts the server
-        // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -o`).
-        if (preview && directory != null) {
-            runServerCommunication(
-                startServerOnFailedConnection = true,
-                WebServerOptions(
-                    port = serverPort,
-                    targetFile = directory,
-                    browserLauncher = DefaultBrowserLauncher(),
-                ),
-            )
-        }
 
         this.postExecute(outcome, cliOptions, pipelineOptions)
     }
