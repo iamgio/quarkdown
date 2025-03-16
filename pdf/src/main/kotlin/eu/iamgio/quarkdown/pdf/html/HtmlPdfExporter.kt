@@ -7,7 +7,11 @@ import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import java.io.File
 
 /**
- *
+ * Exports a PDF from a directory with an `index.html` root file.
+ * This is done via the Puppeteer library, invoked through Node.js.
+ * @param options options that affect the export process
+ * @see NodeJsWrapper
+ * @see NpmWrapper
  */
 class HtmlPdfExporter(
     private val options: PdfExportOptions,
@@ -18,6 +22,6 @@ class HtmlPdfExporter(
     ) {
         val node = NodeJsWrapper(path = options.nodeJsPath, workingDirectory = out.parentFile)
         val npm = NpmWrapper(path = options.npmPath)
-        PdfGeneratorScript(directory, out, node, npm).launch()
+        PuppeteerPdfGeneratorScript(directory, out, node, npm).launch()
     }
 }

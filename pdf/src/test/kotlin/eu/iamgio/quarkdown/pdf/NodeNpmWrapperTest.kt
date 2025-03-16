@@ -14,6 +14,8 @@ import kotlin.test.assertTrue
 
 /**
  * Tests for wrappers around Node.js and NPM.
+ * @see NodeJsWrapper
+ * @see NpmWrapper
  */
 class NodeNpmWrapperTest {
     private val directory: File =

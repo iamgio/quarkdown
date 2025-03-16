@@ -9,7 +9,8 @@ object PdfExporters {
     /**
      * @param postRenderer post-renderer component to get the [PdfExporter] for
      * @param options exporter options
-     * @return the corresponding [PdfExporter] that can work on the output of the given post-renderer target
+     * @return the corresponding [PdfExporter] that can work on the output of the given post-renderer target.
+     * @see PdfExporterSupplierPostRendererVisitor
      */
     fun getForRenderingTarget(
         postRenderer: PostRenderer,

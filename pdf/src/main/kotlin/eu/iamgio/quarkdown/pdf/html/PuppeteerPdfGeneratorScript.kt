@@ -12,9 +12,13 @@ import kotlin.io.path.deleteRecursively
 private const val SERVER_PORT = 8090
 
 /**
- *
+ * Script-like generator of a PDF from HTML through Puppeteer via Node.js.
+ * @param directory directory containing the `index.html` file
+ * @param out output PDF file to be written
+ * @param node Node.js executable wrapper
+ * @param npm NPM executable wrapper
  */
-class PdfGeneratorScript(
+class PuppeteerPdfGeneratorScript(
     private val directory: File,
     private val out: File,
     private val node: NodeJsWrapper,
@@ -22,6 +26,9 @@ class PdfGeneratorScript(
 ) {
     private lateinit var scriptFile: File
 
+    /**
+     * Launches Puppeteer to convert the webpage from [directory] into a PDF saved at [out].
+     */
     fun launch() {
         checkNode()
         checkNpm()
@@ -84,7 +91,7 @@ class PdfGeneratorScript(
         // The symlinks contained in the node_modules directory point to the global packages,
         // and should not be deleted.
         sequenceOf("package.json", "package-lock.json", "node_modules")
-            .map { File(directory, it) }
-            .forEach { it.toPath().deleteRecursively() }
+            .map { File(directory, it).toPath() }
+            .forEach { it.deleteRecursively() }
     }
 }

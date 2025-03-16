@@ -17,9 +17,9 @@ import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
- * Tests for the PDF module.
+ * Tests for HTML-to-PDF generation.
  */
-class PdfTest {
+class HtmlToPdfTest {
     private val directory: File =
         kotlin.io.path
             .createTempDirectory()
