@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler
+import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
 import java.io.FileNotFoundException
@@ -29,7 +30,22 @@ class CompileCommandTest : TempDirectory() {
     fun setup() {
         super.reset()
 
-        main.writeText(".docname {Quarkdown test}\n.doctype {paged}\n\nHello, world!")
+        main.writeText(
+            """
+            .docname {Quarkdown test}
+            .doctype {paged}
+
+            Page 1
+            
+            <<<
+            
+            Page 2
+            
+            <<<
+            
+            Page 3
+            """.trimIndent(),
+        )
     }
 
     private fun test(additionalArgs: String = ""): Pair<CliOptions, PipelineOptions> {
@@ -99,6 +115,10 @@ class CompileCommandTest : TempDirectory() {
         val pdf = File(directory, "Quarkdown-test.pdf")
         Thread.sleep(1000)
         assertTrue(pdf.exists())
+
+        Loader.loadPDF(pdf).use {
+            assertEquals(3, it.numberOfPages)
+        }
     }
 
     @Test

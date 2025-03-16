@@ -5,10 +5,13 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.pdf.html.HtmlToPdfExporter
 import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
 import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
+import org.apache.pdfbox.Loader
+import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -66,5 +69,11 @@ class PdfTest {
         assertFalse(File(directory, "package.json").exists())
         assertFalse(File(directory, "package-lock.json").exists())
         assertFalse(File(directory, "node_modules").exists())
+
+        Loader.loadPDF(out).use {
+            val text = PDFTextStripper().getText(it).trim()
+            assertEquals(1, it.numberOfPages)
+            assertEquals("Hello, Quarkdown!", text)
+        }
     }
 }
