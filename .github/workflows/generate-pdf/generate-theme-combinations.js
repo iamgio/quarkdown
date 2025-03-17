@@ -28,12 +28,11 @@ function generateThemeVariants() {
         // Generate all combinations
         for (const color of colors) {
             for (const layout of layouts) {
-                const fileName = createNewFileName(color, layout);
-                const newFile = `${PROJECT_DIR}/${fileName}`;
+                const newFile = `${PROJECT_DIR}/${createNewFileName(color, layout)}`;
 
                 // Create new content with theme line
                 const themeLine = `.theme color:{${color}} layout:{${layout}}`;
-                const newNameLine = `.docname {${fileName}}`;
+                const newNameLine = `.docname {${color}_${layout}}`;
                 const newContent = mainContent + '\n\n' + newNameLine + '\n' + themeLine;
 
                 // Write to file
