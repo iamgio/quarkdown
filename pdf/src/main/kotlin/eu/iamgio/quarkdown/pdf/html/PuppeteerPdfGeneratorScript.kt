@@ -22,12 +22,14 @@ private const val STARTING_SERVER_PORT = 8096
  * @param out output PDF file to be written
  * @param node Node.js executable wrapper
  * @param npm NPM executable wrapper
+ * @param noSandbox whether to disable Chrome sandbox for PDF export
  */
 class PuppeteerPdfGeneratorScript(
     private val directory: File,
     private val out: File,
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
+    private val noSandbox: Boolean = false,
 ) {
     private var port: Int? = null
 
@@ -79,7 +81,8 @@ class PuppeteerPdfGeneratorScript(
 
         val script = javaClass.getResourceAsStream("/html/pdf.js")!!
         val url = "http://localhost:$port/?print-pdf"
-        node.eval(script.reader(), out.absolutePath, url)
+
+        node.eval(script.reader(), out.absolutePath, url, noSandbox.toString())
     }
 
     @OptIn(ExperimentalPathApi::class)

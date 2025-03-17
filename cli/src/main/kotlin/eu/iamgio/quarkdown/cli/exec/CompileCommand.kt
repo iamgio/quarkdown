@@ -36,6 +36,14 @@ class CompileCommand : ExecuteCommand("c") {
      */
     private val exportPdf: Boolean by option("--pdf", help = "Export to PDF").flag()
 
+    /**
+     * Whether to disable Chrome sandbox for PDF export from HTML. Potentially unsafe.
+     */
+    private val noPdfSandbox: Boolean by option(
+        "--pdf-no-sandbox",
+        help = "(Unsafe) Disable Chrome sandbox for PDF export",
+    ).flag()
+
     override fun finalizeCliOptions(original: CliOptions) = original.copy(source = source)
 
     override fun createExecutionStrategy(cliOptions: CliOptions) = FileExecutionStrategy(source)
@@ -59,6 +67,13 @@ class CompileCommand : ExecuteCommand("c") {
         if (outcome.directory == null) {
             Log.warn("Unexpected null output directory during compilation post-processing")
             return
+        }
+
+        if (noPdfSandbox) {
+            when {
+                !exportPdf -> Log.warn("--pdf-no-sandbox flag is ignored because --pdf flag is not set.")
+                else -> Log.warn("Disabling Chrome sandbox for PDF export. This is potentially unsafe.")
+            }
         }
 
         if (exportPdf) {
@@ -93,7 +108,7 @@ class CompileCommand : ExecuteCommand("c") {
         // and the PDF exporter for the corresponding target should be selected.
         val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
 
-        val options = PdfExportOptions(super.nodePath, super.npmPath)
+        val options = PdfExportOptions(super.nodePath, super.npmPath, this.noPdfSandbox)
         val exporter = PdfExporters.getForRenderingTarget(html.postRenderer, options)
 
         try {

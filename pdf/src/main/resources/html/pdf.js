@@ -1,18 +1,27 @@
 const outputFile = process.argv[1];
 const url = process.argv[2];
+const noSandbox = process.argv[3] === 'true';
 
 console.log('outputFile: ' + outputFile);
 console.log('url: ' + url);
 
 const puppeteer = require('puppeteer');
 
+function createArgs() {
+    const args = [
+        '--disable-gpu',
+    ]
+    if (noSandbox) {
+        args.push('--no-sandbox');
+    }
+    return args;
+}
+
 (async () => {
-    const browser = await puppeteer.launch({
-        args: [
-            // '--no-sandbox',
-            '--disable-gpu',
-        ]
-    });
+    const args = createArgs();
+    console.log('Running with args: ' + args);
+
+    const browser = await puppeteer.launch({args: args});
     const page = await browser.newPage();
 
     console.log('Connecting to ' + url);
