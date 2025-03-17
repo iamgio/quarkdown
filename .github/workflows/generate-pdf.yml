@@ -29,45 +29,17 @@ jobs:
     - name: Unzip distribution
       run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
 
-    - name: Serve Files
-      uses: Eun/http-server-action@v1
-      with:
-        directory: ${{ github.workspace }}
-        port: 8080
-        no-cache: false
-        index-files: |
-          ["$PWD/output/Quarkdown-Mock/index.html"]
-        allowed-methods: |
-          ["GET", "HEAD"]
-        content-types: |
-          {
-            "appcache": "text/cache-manifest",
-            "css": "text/css",
-            "gif": "image/gif",
-            "html": "text/html",
-            "ico": "image/x-icon",
-            "jpeg": "image/jpeg",
-            "jpg": "image/jpeg",
-            "js": "text/javascript",
-            "json": "application/json",
-            "png": "image/png",
-            "txt": "text/plain",
-            "xml": "text/xml"
-          }
-        log: "log.txt"
-
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.7.3
       id: setup-chrome
 
-    - name: Install Dependencies
+    - name: Install Node
       uses: actions/setup-node@v4
 
-    - name: Install Puppeteer
+    - name: Setup staging directory
       run: |
-        mkdir _pdf
-        mkdir _pdf/mock
-        npm install puppeteer
+        rm -rf pdf
+        mkdir -p pdf/mock
 
     - name: Generate theme combinations
       run: |
@@ -76,29 +48,32 @@ jobs:
     - name: Compile Mock and generate PDF
       run: |
         for generated in $(ls mock/generated_*.qmd); do
-          ./build/distributions/quarkdown/bin/quarkdown c $generated -o output --clean
-          node .github/workflows/generate-pdf/generate-pdf.js $generated
+          ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf --pdf --pdf-no-sandbox
         done
-        ls -d $PWD/_pdf/*
+        ls -d $PWD/pdf/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: mock-pdf
-        path: _pdf/mock
+        path: pdf/mock
+
+    - name: Remove directories, keep files
+      run: |
+        rm -rf */
 
     - name: Push to generated branch
       run: |
-        mv _pdf temp
+        mv pdf temp
         git add temp
         git fetch
         LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
-        cp -r temp/mock/* _pdf/mock
+        cp -r temp/mock/* pdf/mock
         rm -rf temp
         git add temp
-        git add _pdf
+        git add pdf
         git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
         git push
