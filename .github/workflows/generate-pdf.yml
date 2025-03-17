@@ -45,11 +45,16 @@ jobs:
       run: |
         node .github/workflows/generate-pdf/generate-theme-combinations.js
 
-    - name: Compile Mock and generate PDF
+    - name: Compile Mock as PDF
       run: |
         for generated in $(ls mock/generated_*.qmd); do
           ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf/mock --pdf --pdf-no-sandbox
         done
+        ls -d $PWD/pdf/*
+
+    - name: Remove directories, keep files
+      run: |
+        rm -rf pdf/mock/*/
         ls -d $PWD/pdf/*
 
     - name: Upload artifact
@@ -57,10 +62,6 @@ jobs:
       with:
         name: mock-pdf
         path: pdf/mock
-
-    - name: Remove directories, keep files
-      run: |
-        rm -rf pdf/mock/*/
 
     - name: Push to generated branch
       run: |
