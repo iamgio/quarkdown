@@ -95,10 +95,13 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 
 - **HTML**
   - :white_check_mark: Plain output (default)
-  - :white_check_mark: Slides (via [reveal.js](https://revealjs.com))
-  - :white_check_mark: Paged (books, articles) (via [paged.js](https://pagedjs.org)) - *Requires a webserver to render in the browser. See the [`-p`](#options) option below.*
-  - Quarkdown's HTML is PDF-ready: check the [wiki](https://github.com/iamgio/quarkdown/wiki/pdf-export)
-    to learn how to convert an artifact to PDF.
+  - :white_check_mark: Slides <sup>via [reveal.js](https://revealjs.com)</sup>
+  - :white_check_mark: Paged (books, articles) <sup>via [paged.js](https://pagedjs.org)</sup>  
+    *Paged documents require a webserver to render in the browser. See the [`-p`](#options) option below.*
+
+- **PDF**
+  - :white_check_mark: All document types and features supported by HTML are also supported when exporting to PDF.
+  - Check the wiki's [PDF export](https://github.com/iamgio/quarkdown/wiki/pdf-export) page to learn more.
 
 The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-metadata) within the source itself:
 - `.doctype {slides}`
@@ -113,6 +116,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 | Scripting             | :white_check_mark: |        :x:         |      Partial       |        :x:         | :white_check_mark: |
 | Book/article export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Presentation export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
+| Targets               |     HTML, PDF      |        HTML        |        PDF         |  HTML, PDF, ePub   |        HTML        |
 
 <table>
   <thead>
@@ -228,6 +232,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 > [!TIP]
 > Combine `-p -w` to achieve ***live preview***!
 
+- **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
+
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
 - `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
@@ -254,7 +260,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 ***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
 making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
-The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
+- The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
+- The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
 ## Concept
 
