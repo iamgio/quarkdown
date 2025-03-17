@@ -125,7 +125,7 @@ class CompileCommandTest : TempDirectory() {
         assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
         assumeTrue(NpmWrapper().isValid)
 
-        val (_, _) = test("--pdf")
+        val (_, _) = test("--pdf --pdf-no-sandbox")
         checkPdf()
     }
 
@@ -134,7 +134,7 @@ class CompileCommandTest : TempDirectory() {
         assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
         assumeTrue(NpmWrapper().isValid)
 
-        val (_, _) = test("--pdf --node-path node --npm-path npm")
+        val (_, _) = test("--pdf --pdf-no-sandbox --node-path node --npm-path npm")
         checkPdf()
     }
 }

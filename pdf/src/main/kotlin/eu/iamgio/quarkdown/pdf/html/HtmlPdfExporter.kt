@@ -22,6 +22,6 @@ class HtmlPdfExporter(
     ) {
         val node = NodeJsWrapper(path = options.nodeJsPath, workingDirectory = out.parentFile)
         val npm = NpmWrapper(path = options.npmPath)
-        PuppeteerPdfGeneratorScript(directory, out, node, npm).launch()
+        PuppeteerPdfGeneratorScript(directory, out, node, npm, options.noSandbox).launch()
     }
 }
