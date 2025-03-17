@@ -48,7 +48,7 @@ jobs:
     - name: Compile Mock and generate PDF
       run: |
         for generated in $(ls mock/generated_*.qmd); do
-          ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf --pdf --pdf-no-sandbox
+          ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf/mock --pdf --pdf-no-sandbox
         done
         ls -d $PWD/pdf/*
 
@@ -60,7 +60,7 @@ jobs:
 
     - name: Remove directories, keep files
       run: |
-        rm -rf */
+        rm -rf pdf/mock/*/
 
     - name: Push to generated branch
       run: |
