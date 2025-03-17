@@ -20,7 +20,7 @@ const fileName = process.argv[2]
     await page.waitForFunction('readyState');
 
     await page.pdf({
-        path: `pdf/${fileName}.pdf`,
+        path: `_pdf/${fileName}.pdf`,
         preferCSSPageSize: true,
         printBackground: true,
     });

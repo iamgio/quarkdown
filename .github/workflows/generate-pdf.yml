@@ -65,8 +65,8 @@ jobs:
 
     - name: Install Puppeteer
       run: |
-        mkdir pdf
-        mkdir pdf/mock
+        mkdir _pdf
+        mkdir _pdf/mock
         npm install puppeteer
 
     - name: Generate theme combinations
@@ -79,26 +79,26 @@ jobs:
           ./build/distributions/quarkdown/bin/quarkdown c $generated -o output --clean
           node .github/workflows/generate-pdf/generate-pdf.js $generated
         done
-        ls -d $PWD/pdf/*
+        ls -d $PWD/_pdf/*
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: mock-pdf
-        path: pdf/mock
+        path: _pdf/mock
 
     - name: Push to generated branch
       run: |
-        mv pdf temp
+        mv _pdf temp
         git add temp
         git fetch
         LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
-        cp -r temp/mock/* pdf/mock
+        cp -r temp/mock/* _pdf/mock
         rm -rf temp
         git add temp
-        git add pdf
+        git add _pdf
         git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
         git push
