@@ -188,6 +188,8 @@ The desired document type can be set by calling the [`.doctype` function](https:
 </tbody>
 </table>
 
+&nbsp;
+
 ## Installation
 
 Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
