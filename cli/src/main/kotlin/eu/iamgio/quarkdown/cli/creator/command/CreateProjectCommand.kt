@@ -38,7 +38,7 @@ class CreateProjectCommand : CliktCommand("create") {
         .file(
             canBeFile = false,
             canBeDir = true,
-            mustBeWritable = true,
+            mustExist = false,
         ).default(File(DEFAULT_DIRECTORY))
 
     private val mainFileName: String? by option("--main-file", help = "Main file name")
