@@ -12,4 +12,9 @@
 [[endfor:AUTHORS]]
 [[endif:AUTHORS]]
 
+[[if:PAGECOUNTER]]
+.pagemargin {bottomcenter}
+    .currentpage
+[[endif:PAGECOUNTER]]
+
 [[if:INITIALCONTENT]][[INITIALCONTENT]][[endif:INITIALCONTENT]]

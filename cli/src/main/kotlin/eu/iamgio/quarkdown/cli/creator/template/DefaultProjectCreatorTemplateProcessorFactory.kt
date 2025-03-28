@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.cli.creator.template
 
 import eu.iamgio.quarkdown.document.DocumentInfo
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.template.TemplateProcessor
 
@@ -27,6 +28,7 @@ class DefaultProjectCreatorTemplateProcessorFactory(
                 conditional(HAS_THEME, info.theme?.hasComponent == true)
                 optionalValue(COLOR_THEME, info.theme?.color)
                 optionalValue(LAYOUT_THEME, info.theme?.layout)
+                conditional(USE_PAGE_COUNTER, info.type == DocumentType.PAGED)
             }
         }
 }

@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResource
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -82,11 +83,22 @@ class ProjectCreatorTest {
     }
 
     @Test
-    fun `name and type`() {
+    fun `name and slides type`() {
         val creator = projectCreator(DocumentInfo(name = "Document", type = DocumentType.SLIDES))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
         assertEquals(".docname {Document}\n.doctype {slides}", resources.first().textContent)
+    }
+
+    @Test
+    fun `name and paged type`() {
+        val creator = projectCreator(DocumentInfo(name = "Document", type = DocumentType.PAGED))
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        resources.first().textContent.let {
+            assertContains(it, ".doctype {paged}")
+            assertContains(it, ".pagemargin {bottomcenter}")
+        }
     }
 
     @Test
