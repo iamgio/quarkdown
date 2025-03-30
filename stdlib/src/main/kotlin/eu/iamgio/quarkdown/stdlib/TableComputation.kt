@@ -13,10 +13,10 @@ import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
- * `Table` stdlib module exporter.
+ * `TableComputation` stdlib module exporter.
  * This module provides advanced functionality for tables, enhancing their capabilities
- * beyond basic data representation. It adds dynamic operations like sorting, filtering,
- * calculations, and conditional styling.
+ * beyond basic data representation.
+ * It adds dynamic operations like sorting, filtering, calculations.
  */
 val TableComputation: Module =
     setOf(
@@ -25,11 +25,21 @@ val TableComputation: Module =
         ::tableCompute,
     )
 
+/**
+ * The sorting order for a table column.
+ * @see [tableSort]
+ */
 enum class TableSortOrder {
     ASCENDING,
     DESCENDING,
     ;
 
+    /**
+     * Applies the sorting order to a sequence of items.
+     * @param sequence the sequence to sort
+     * @param by the function to extract the sorting key from each item
+     * @return the sorted sequence
+     */
     fun <T, R : Comparable<R>> apply(
         sequence: Sequence<T>,
         by: (T) -> R,
@@ -100,25 +110,23 @@ private fun reconstructTable(
 /**
  * Sorts a table based on the values of a column.
  *
- * This function takes a table and returns a new table with rows sorted according to
- * the values in the specified column. Both text and numeric sorting are supported.
- *
  * Example:
+ * ```
+ * .tablesort {2}
+ *     | Name | Age | City |
+ *     |------|-----|------|
+ *     | John | 25  | NY   |
+ *     | Lisa | 32  | LA   |
+ *     | Mike | 19  | CHI  |
+ * ```
+ *
+ * Result:
  * ```
  * | Name | Age | City |
  * |------|-----|------|
+ * | Mike | 19  | CHI  |
  * | John | 25  | NY   |
  * | Lisa | 32  | LA   |
- * | Mike | 19  | CHI  |
- *
- * .tablesort {table} {2} {true}  // Sort by age (column 2) in descending order
- *
- * // Result:
- * | Name | Age | City |
- * |------|-----|------|
- * | Lisa | 32  | LA   |
- * | John | 25  | NY   |
- * | Mike | 19  | CHI  |
  * ```
  *
  * @param column index of the column (starting from 1)
@@ -147,44 +155,29 @@ fun tableSort(
 }
 
 /**
- * Filters the rows of a table based on a conditional expression.
- *
- * Only the rows that satisfy the condition for the specified column are kept in the resulting table.
- * The filtering is applied on the text content of the cells, using various operators for comparison.
- *
- * Supports various filter operators:
- * - contains:text - Cells containing the specified text
- * - >n, <n, =n - Numeric comparisons
- * - date:>date, date:<date - Date comparisons
- * - regex:pattern - Filtering via regular expression
+ * Filters the rows of a table based on a boolean expression on a specific column.
  *
  * Example:
  * ```
- * | Product | Price | Category |
- * |---------|-------|----------|
- * | Laptop  | 1200  | Tech     |
- * | Chair   | 150   | Home     |
- * | Phone   | 800   | Tech     |
- * | Table   | 350   | Home     |
- *
- * .tablefilter {table} {2} {">300"}  // Filter to only show items costing more than 300
- *
- * // Result:
- * | Product | Price | Category |
- * |---------|-------|----------|
- * | Laptop  | 1200  | Tech     |
- * | Table   | 350   | Home     |
+ * .tablefilter {2} {@lambda x: .x::isgreater {20}}
+ *     | Name | Age | City |
+ *     |------|-----|------|
+ *     | John | 25  | NY   |
+ *     | Lisa | 32  | LA   |
+ *     | Mike | 19  | CHI  |
  * ```
  *
- * Additional filter examples:
+ * Result:
  * ```
- * .tablefilter {table} {3} {contains:Tech}  // Products in Tech category
- * .tablefilter {table} {1} {regex:^T.*}     // Products starting with 'T'
+ * | Name | Age | City |
+ * |------|-----|------|
+ * | John | 25  | NY   |
+ * | Lisa | 32  | LA   |
  * ```
  *
- * @param content table to filter
- * @param columnIndex index of the column (1-based)
- * @param filterExpression filter expression
+ * @param column index of the column (starting from 1)
+ * @param filter a lambda function that returns a boolean value. When `true`, the rows is to be kept.
+ * The lambda accepts a single argument, which is the cell value of the column.
  * @return the filtered table
  */
 @Name("tablefilter")
@@ -205,47 +198,32 @@ fun tableFilter(
 }
 
 /**
- * Performs calculations on the values of a column of a table.
- *
- * This function adds a new row at the bottom of the table with the result of the
- * calculation applied to the numeric values in the specified column. Non-numeric
- * values are treated as 0.
- *
- * Supports the following aggregation functions:
- * - SUM - Sum of values
- * - AVG - Average of values
- * - COUNT - Count of elements
- * - MIN - Minimum value
- * - MAX - Maximum value
+ * Performs a computation on a specific column of a table, appending the result to a new cell in the bottom.
  *
  * Example:
  * ```
- * | Item     | Quantity | Price | Total |
- * |----------|----------|-------|-------|
- * | Product A| 2        | 10    | 20    |
- * | Product B| 1        | 15    | 15    |
- * | Product C| 3        | 5     | 15    |
- *
- * .tablecompute {table} {SUM} {4}  // Calculate sum of Total column
- *
- * // Result:
- * | Item     | Quantity | Price | Total |
- * |----------|----------|-------|-------|
- * | Product A| 2        | 10    | 20    |
- * | Product B| 1        | 15    | 15    |
- * | Product C| 3        | 5     | 15    |
- * | SUM      |          |       | 50    |
+ * .tablecompute {2} {@lambda x: .x::sumall}
+ *     | Name | Age | City |
+ *     |------|-----|------|
+ *     | John | 25  | NY   |
+ *     | Lisa | 32  | LA   |
+ *     | Mike | 19  | CHI  |
  * ```
  *
- * Calculating average:
+ * Result:
  * ```
- * .tablecompute {table} {AVG} {4}  // Result will add row with: AVG | | | 16.67
+ * | Name | Age | City |
+ * |------|-----|------|
+ * | John | 25  | NY   |
+ * | Lisa | 32  | LA   |
+ * | Mike | 19  | CHI  |
+ * |      | 76  |      |
  * ```
  *
- * @param table table to compute on
- * @param formula aggregation function to apply
- * @param columnIndex index of the column (1-based)
- * @return the table with the result row added
+ * @param column index of the column (starting from 1)
+ * @param compute a lambda function that returns any value, which is the output of the computation.
+ * The lambda accepts a single argument, which is the ordered collection of cell values of the column.
+ * @return the computed table, of size `columns * (rows + 1)`
  */
 @Name("tablecompute")
 fun tableCompute(
