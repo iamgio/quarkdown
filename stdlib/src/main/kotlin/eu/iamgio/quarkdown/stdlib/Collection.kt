@@ -2,8 +2,10 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.PairValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * Index of the first element in a collection.
@@ -22,6 +24,7 @@ val Collection: Module =
         ::collectionThird,
         ::collectionLast,
         ::pair,
+        ::sumAll,
     )
 
 /**
@@ -46,9 +49,7 @@ private fun nativeCollectionGet(
     index: Int,
     collection: Iterable<OutputValue<*>>,
     fallback: OutputValue<*> = NOT_FOUND,
-): OutputValue<*> {
-    return collection.toList().getOrNull(index) ?: NOT_FOUND
-}
+): OutputValue<*> = collection.toList().getOrNull(index) ?: NOT_FOUND
 
 /**
  * @param index index of the element to get **(starting at 1)**
@@ -97,9 +98,7 @@ fun collectionThird(
 @Name("last")
 fun collectionLast(
     @Name("from") collection: Iterable<OutputValue<*>>,
-): OutputValue<*> {
-    return collection.toList().lastOrNull() ?: NOT_FOUND
-}
+): OutputValue<*> = collection.toList().lastOrNull() ?: NOT_FOUND
 
 /**
  * Creates a new pair.
@@ -111,3 +110,21 @@ fun pair(
     first: DynamicValue,
     second: DynamicValue,
 ): PairValue<*, *> = PairValue(first to second)
+
+/**
+ * Sums all the elements in a collection.
+ * If an element is not numeric it is ignored.
+ * @param collection collection to sum
+ * @return the sum of all elements in the collection
+ */
+@Name("sumall")
+fun sumAll(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): NumberValue =
+    collection
+        .sumOf {
+            when (val value = it.unwrappedValue) {
+                is Number -> value.toDouble()
+                else -> value.toString().toDoubleOrNull() ?: 0.0
+            }
+        }.wrappedAsValue()
