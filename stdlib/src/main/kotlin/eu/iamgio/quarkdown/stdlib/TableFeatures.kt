@@ -4,9 +4,12 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
 
@@ -40,6 +43,52 @@ enum class TableSortOrder {
 }
 
 /**
+ * Retrieves a specific column from a table.
+ * @param content table to extract the column from
+ * @param column index of the column (starting from 1)
+ * @return a triple containing the table, the column, and the cells of the column, in order, as strings
+ * @throws IllegalArgumentException if the supplied content is not a table or if the column index is out of bounds
+ */
+private fun getTableColumn(
+    content: MarkdownContent,
+    columnIndex: Int,
+): Triple<Table, Table.Column, List<String>> {
+    val table =
+        content.children.firstOrNull() as? Table
+            ?: throw IllegalArgumentException("Invalid argument: a table is required")
+
+    // Index starts from 1.
+    val normalizedColumnIndex = columnIndex - 1
+
+    val column =
+        table.columns.getOrNull(normalizedColumnIndex)
+            ?: throw IllegalArgumentException("Column index must be between 1 and ${table.columns.size}")
+
+    val values = column.cells.map { it.text.toPlainText() }
+
+    return Triple(table, column, values)
+}
+
+/**
+ * Reconstructs a table based on the specified row indexes.
+ * @param table the original table
+ * @param orderedRowIndexes the list of ordered row indexes
+ * @return a new table with the same content as [table],
+ * with the rows rearranged or filtered according to the new indexes
+ */
+private fun reconstructTable(
+    table: Table,
+    orderedRowIndexes: List<Int>,
+): Table {
+    val newColumns =
+        table.columns.map {
+            it.copy(cells = orderedRowIndexes.map(it.cells::get))
+        }
+
+    return Table(newColumns, table.caption)
+}
+
+/**
  * Sorts a table based on the values of a column.
  *
  * This function takes a table and returns a new table with rows sorted according to
@@ -65,47 +114,27 @@ enum class TableSortOrder {
  *
  * @param column index of the column (starting from 1)
  * @param order sorting order (`ascending` or `descending`)
- * @param table table to sort
+ * @param content table to sort
  * @return the sorted table
  */
 @Name("tablesort")
 fun tableSort(
-    column: Int,
+    @Name("column") columnIndex: Int,
     order: TableSortOrder = TableSortOrder.ASCENDING,
-    table: MarkdownContent,
+    @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val tableNode =
-        table.children.firstOrNull() as? Table
-            ?: throw IllegalArgumentException("Invalid argument: a table is required")
-
-    val columnIndex = column - 1
-
-    require(columnIndex in 0 until tableNode.columns.size) {
-        "Column index must be between 1 and ${tableNode.columns.size}"
-    }
-
-    val referenceColumn: Table.Column = tableNode.columns[columnIndex]
-
-    // Extract text values from cells.
-    val referenceValues =
-        referenceColumn.cells.map { it.text.toPlainText() }
+    val (table, _, values) = getTableColumn(content, columnIndex)
 
     // Obtain the indexes of the rows sorted by the reference column.
     val orderedRowIndexes: List<Int> =
-        referenceValues
+        values
             .asSequence()
             .withIndex()
             .let { order.apply(it) { item -> item.value } }
             .map { it.index }
             .toList()
 
-    // Create new columns with sorted rows.
-    val newColumns =
-        tableNode.columns.map {
-            it.copy(cells = orderedRowIndexes.map(it.cells::get))
-        }
-
-    return Table(newColumns, tableNode.caption).wrappedAsValue()
+    return reconstructTable(table, orderedRowIndexes).wrappedAsValue()
 }
 
 /**
@@ -144,59 +173,27 @@ fun tableSort(
  * .tablefilter {table} {1} {regex:^T.*}     // Products starting with 'T'
  * ```
  *
- * @param table table to filter
+ * @param content table to filter
  * @param columnIndex index of the column (1-based)
  * @param filterExpression filter expression
  * @return the filtered table
  */
 @Name("tablefilter")
 fun tableFilter(
-    table: NodeValue,
-    columnIndex: NumberValue,
-    filterExpression: StringValue,
+    @Name("column") columnIndex: Int,
+    filter: Lambda,
+    @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val tableNode =
-        table.unwrappedValue as? Table
-            ?: throw IllegalArgumentException("Invalid argument: a table is required")
-
-    val colIndex = columnIndex.unwrappedValue.toInt() - 1
-
-    if (colIndex < 0 || colIndex >= tableNode.columns.size) {
-        throw IllegalArgumentException("Invalid column index: must be between 1 and ${tableNode.columns.size}")
-    }
-
-    // Get the reference column for filtering
-    val filterColumn = tableNode.columns[colIndex]
-
-    // Extract text values from cells
-    val filterValues =
-        filterColumn.cells.map { cell ->
-            cell.text.joinToString("") { node ->
-                if (node is Text) node.text else ""
-            }
-        }
-
-    // Parse the filter expression into operation and value
-    val (operation, value) = parseFilterExpression(filterExpression.unwrappedValue)
+    val (table, _, values) = getTableColumn(content, columnIndex)
 
     // Find indices of rows that match the filter
     val filteredIndices =
-        filterValues
+        values
             .withIndex()
-            .filter { (_, cellValue) -> applyFilter(cellValue, operation, value) }
+            .filter { item -> filter.invoke<Boolean, BooleanValue>(DynamicValue(item.value)).unwrappedValue }
             .map { it.index }
 
-    // Create new columns with only the filtered rows
-    val newColumns =
-        tableNode.columns.map { column ->
-            Table.Column(
-                alignment = column.alignment,
-                header = column.header,
-                cells = filteredIndices.map { column.cells[it] },
-            )
-        }
-
-    return Table(newColumns, tableNode.caption).wrappedAsValue()
+    return reconstructTable(table, filteredIndices).wrappedAsValue()
 }
 
 /**
