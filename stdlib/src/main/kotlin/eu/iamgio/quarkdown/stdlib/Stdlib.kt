@@ -45,12 +45,12 @@ object Stdlib : LibraryExporter {
                         Optionality +
                         Logger +
                         Flow +
+                        TableComputation +
                         Data +
                         Localization +
                         Library +
                         Slides +
-                        Ecosystem +
-                        TableFeatures,
+                        Ecosystem,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.
