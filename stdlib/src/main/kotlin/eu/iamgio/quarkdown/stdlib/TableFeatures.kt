@@ -3,11 +3,13 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
@@ -70,6 +72,17 @@ private fun getTableColumn(
 }
 
 /**
+ * Edits a table by replacing its columns with the specified ones.
+ * @param table the original table
+ * @param columns the new columns to replace the original ones
+ * @return a new table with the specified columns, and the same other properties as the original
+ */
+private fun editTable(
+    table: Table,
+    columns: List<Table.Column>,
+) = Table(columns, table.caption)
+
+/**
  * Reconstructs a table based on the specified row indexes.
  * @param table the original table
  * @param orderedRowIndexes the list of ordered row indexes
@@ -85,7 +98,7 @@ private fun reconstructTable(
             it.copy(cells = orderedRowIndexes.map(it.cells::get))
         }
 
-    return Table(newColumns, table.caption)
+    return editTable(table, newColumns)
 }
 
 /**
@@ -186,14 +199,13 @@ fun tableFilter(
 ): NodeValue {
     val (table, _, values) = getTableColumn(content, columnIndex)
 
-    // Find indices of rows that match the filter
-    val filteredIndices =
+    val filteredRowIndexes =
         values
             .withIndex()
             .filter { item -> filter.invoke<Boolean, BooleanValue>(DynamicValue(item.value)).unwrappedValue }
             .map { it.index }
 
-    return reconstructTable(table, filteredIndices).wrappedAsValue()
+    return reconstructTable(table, filteredRowIndexes).wrappedAsValue()
 }
 
 /**
@@ -241,77 +253,27 @@ fun tableFilter(
  */
 @Name("tablecompute")
 fun tableCompute(
-    table: NodeValue,
-    formula: StringValue,
-    columnIndex: NumberValue,
+    @Name("column") columnIndex: Int,
+    compute: Lambda,
+    @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val tableNode =
-        table.unwrappedValue as? Table
-            ?: throw IllegalArgumentException("Invalid argument: a table is required")
+    val (table, column, values) = getTableColumn(content, columnIndex)
 
-    val colIndex = columnIndex.unwrappedValue.toInt() - 1
+    // `compute` is called with the collection of cell values as an argument.
+    val cellValuesCollection = OrderedCollectionValue(values.map(::DynamicValue))
+    val computedCell = compute.invokeDynamic(cellValuesCollection).unwrappedValue
 
-    if (colIndex < 0 || colIndex >= tableNode.columns.size) {
-        throw IllegalArgumentException("Invalid column index: must be between 1 and ${tableNode.columns.size}")
-    }
-
-    // Get the reference column for computation
-    val computeColumn = tableNode.columns[colIndex]
-
-    // Extract numeric values from cells (non-numeric values become 0)
-    val values =
-        computeColumn.cells.map { cell ->
-            val textValue =
-                cell.text.joinToString("") { node ->
-                    if (node is Text) node.text else ""
-                }
-            textValue.toDoubleOrNull() ?: 0.0
-        }
-
-    // Apply the selected formula to the values
-    val result =
-        when (formula.unwrappedValue.uppercase()) {
-            "SUM" -> values.sum()
-            "AVG" -> if (values.isNotEmpty()) values.average() else 0.0
-            "COUNT" -> values.size.toDouble()
-            "MIN" -> if (values.isNotEmpty()) values.minOrNull() ?: 0.0 else 0.0
-            "MAX" -> if (values.isNotEmpty()) values.maxOrNull() ?: 0.0 else 0.0
-            else -> 0.0
-        }
-
-    val resultText =
-        if (result == result.toInt().toDouble()) {
-            result.toInt().toString()
-        } else {
-            "%.2f".format(result)
-        }
-
-    // Create new columns with the computation result added
+    // Append the computed cell to the column, and empty cells to the others.
     val newColumns =
-        tableNode.columns.mapIndexed { index, column ->
+        table.columns.map {
             val resultCell =
-                if (index == colIndex) {
-                    Table.Cell(listOf(Text(resultText)))
-                } else {
-                    Table.Cell(listOf(Text("")))
-                }
-
-            // Add formula label in the first column
-            val firstColumnCell =
-                if (index == 0) {
-                    Table.Cell(listOf(Text(formula.unwrappedValue.uppercase())))
-                } else {
-                    resultCell
-                }
-
-            Table.Column(
-                alignment = column.alignment,
-                header = column.header,
-                cells = column.cells + if (index == 0) firstColumnCell else resultCell,
-            )
+                Table.Cell(
+                    buildInline { if (it === column) text(computedCell.toString()) },
+                )
+            it.copy(cells = it.cells + resultCell)
         }
 
-    return Table(newColumns, tableNode.caption).wrappedAsValue()
+    return editTable(table, newColumns).wrappedAsValue()
 }
 
 /**
