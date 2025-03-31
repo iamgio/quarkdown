@@ -202,7 +202,7 @@ fun tableFilter(
  *
  * Example:
  * ```
- * .tablecompute {2} {@lambda x: .x::sumall}
+ * .tablecompute {2} {@lambda x: .x::average::round}
  *     | Name | Age | City |
  *     |------|-----|------|
  *     | John | 25  | NY   |
@@ -217,7 +217,7 @@ fun tableFilter(
  * | John | 25  | NY   |
  * | Lisa | 32  | LA   |
  * | Mike | 19  | CHI  |
- * |      | 76  |      |
+ * |      | 25  |      |
  * ```
  *
  * @param column index of the column (starting from 1)
