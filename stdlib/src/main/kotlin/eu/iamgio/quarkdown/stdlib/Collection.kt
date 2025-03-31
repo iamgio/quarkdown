@@ -2,8 +2,10 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.PairValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
  * Index of the first element in a collection.
@@ -22,6 +24,8 @@ val Collection: Module =
         ::collectionThird,
         ::collectionLast,
         ::pair,
+        ::sumAll,
+        ::average,
     )
 
 /**
@@ -46,9 +50,7 @@ private fun nativeCollectionGet(
     index: Int,
     collection: Iterable<OutputValue<*>>,
     fallback: OutputValue<*> = NOT_FOUND,
-): OutputValue<*> {
-    return collection.toList().getOrNull(index) ?: NOT_FOUND
-}
+): OutputValue<*> = collection.toList().getOrNull(index) ?: NOT_FOUND
 
 /**
  * @param index index of the element to get **(starting at 1)**
@@ -97,9 +99,7 @@ fun collectionThird(
 @Name("last")
 fun collectionLast(
     @Name("from") collection: Iterable<OutputValue<*>>,
-): OutputValue<*> {
-    return collection.toList().lastOrNull() ?: NOT_FOUND
-}
+): OutputValue<*> = collection.toList().lastOrNull() ?: NOT_FOUND
 
 /**
  * Creates a new pair.
@@ -111,3 +111,37 @@ fun pair(
     first: DynamicValue,
     second: DynamicValue,
 ): PairValue<*, *> = PairValue(first to second)
+
+/**
+ * Converts an [OutputValue] to a [Double].
+ * @return the value as a double, or 0 if the value is not numeric
+ */
+private fun OutputValue<*>.asDouble(): Double =
+    when (val value = unwrappedValue) {
+        is Number -> value.toDouble()
+        else -> value.toString().toDoubleOrNull()
+    } ?: .0
+
+/**
+ * @param collection numeric collection to sum
+ * @return the sum of all elements in the collection. If an element is not numeric it is ignored.
+ */
+@Name("sumall")
+fun sumAll(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): NumberValue =
+    collection
+        .sumOf { it.asDouble() }
+        .wrappedAsValue()
+
+/**
+ * @param collection numeric collection to get the average from
+ * @return the average of all elements in the collection. If an element is not numeric it is ignored.
+ */
+fun average(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): NumberValue =
+    collection
+        .map { it.asDouble() }
+        .average()
+        .wrappedAsValue()

@@ -45,6 +45,7 @@ object Stdlib : LibraryExporter {
                         Optionality +
                         Logger +
                         Flow +
+                        TableComputation +
                         Data +
                         Localization +
                         Library +
