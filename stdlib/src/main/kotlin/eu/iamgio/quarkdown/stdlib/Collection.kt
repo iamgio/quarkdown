@@ -25,6 +25,7 @@ val Collection: Module =
         ::collectionLast,
         ::pair,
         ::sumAll,
+        ::average,
     )
 
 /**
@@ -112,19 +113,35 @@ fun pair(
 ): PairValue<*, *> = PairValue(first to second)
 
 /**
- * Sums all the elements in a collection.
- * If an element is not numeric it is ignored.
- * @param collection collection to sum
- * @return the sum of all elements in the collection
+ * Converts an [OutputValue] to a [Double].
+ * @return the value as a double, or 0 if the value is not numeric
+ */
+private fun OutputValue<*>.asDouble(): Double =
+    when (val value = unwrappedValue) {
+        is Number -> value.toDouble()
+        else -> value.toString().toDoubleOrNull()
+    } ?: .0
+
+/**
+ * @param collection numeric collection to sum
+ * @return the sum of all elements in the collection. If an element is not numeric it is ignored.
  */
 @Name("sumall")
 fun sumAll(
     @Name("from") collection: Iterable<OutputValue<*>>,
 ): NumberValue =
     collection
-        .sumOf {
-            when (val value = it.unwrappedValue) {
-                is Number -> value.toDouble()
-                else -> value.toString().toDoubleOrNull() ?: 0.0
-            }
-        }.wrappedAsValue()
+        .sumOf { it.asDouble() }
+        .wrappedAsValue()
+
+/**
+ * @param collection numeric collection to get the average from
+ * @return the average of all elements in the collection. If an element is not numeric it is ignored.
+ */
+fun average(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): NumberValue =
+    collection
+        .map { it.asDouble() }
+        .average()
+        .wrappedAsValue()
