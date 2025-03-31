@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.MarkdownContent
+import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
@@ -51,6 +52,22 @@ enum class TableSortOrder {
 }
 
 /**
+ * Finds a table nested in a given content.
+ * The reason to go deeper instead of searching just in the first layer is because of function calls:
+ * a function call node is a [NestableNode] which saves its output content into its children.
+ * This allows to use table computation features not only on Markdown tables, but also on
+ * function-generated tables, for example via [csv].
+ * @param content the content to search for a table
+ * @return the first table found, if any
+ */
+private fun findTable(content: NestableNode): Table? =
+    when (val child = content.children.firstOrNull()) {
+        is Table -> child
+        is NestableNode -> findTable(child)
+        else -> null
+    }
+
+/**
  * Retrieves a specific column from a table.
  * @param content table to extract the column from
  * @param column index of the column (starting from 1)
@@ -58,19 +75,19 @@ enum class TableSortOrder {
  * @throws IllegalArgumentException if the supplied content is not a table or if the column index is out of bounds
  */
 private fun getTableColumn(
-    content: MarkdownContent,
+    content: NestableNode,
     columnIndex: Int,
 ): Triple<Table, Table.Column, List<String>> {
     val table =
-        content.children.firstOrNull() as? Table
-            ?: throw IllegalArgumentException("Invalid argument: a table is required")
+        findTable(content)
+            ?: throw IllegalArgumentException("A table is not provided and cannot be found.")
 
     // Index starts from 1.
     val normalizedColumnIndex = columnIndex - 1
 
     val column =
         table.columns.getOrNull(normalizedColumnIndex)
-            ?: throw IllegalArgumentException("Column index must be between 1 and ${table.columns.size}")
+            ?: throw IllegalArgumentException("Column index must be between 1 and ${table.columns.size}.")
 
     val values = column.cells.map { it.text.toPlainText() }
 
