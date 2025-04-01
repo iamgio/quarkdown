@@ -376,8 +376,8 @@ class NodesTest {
         execute("| Header 1 | Header 2 |\n|----------|----------|\n| $ X $ | $ Y $ |") {
             assertEquals(
                 "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
-                    "<tbody><tr><td>__QD_INLINE_MATH__\$X\$__QD_INLINE_MATH__</td>" +
-                    "<td>__QD_INLINE_MATH__\$Y\$__QD_INLINE_MATH__</td></tr></tbody></table>",
+                    "<tbody><tr><td><formula>X</formula></td>" +
+                    "<td><formula>Y</formula></td></tr></tbody></table>",
                 it,
             )
             assertTrue(attributes.hasMath) // Ensures the tree traversal visits table cells too.

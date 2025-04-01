@@ -1,11 +1,24 @@
 executionQueue.push(() => {
     MathJax = {
-        tex: {
-            displayMath: [['__QD_BLOCK_MATH__$', '$__QD_BLOCK_MATH__']],
-            inlineMath: [['__QD_INLINE_MATH__$', '$__QD_INLINE_MATH__']]
-        },
         svg: {
             fontCache: 'global'
+        },
+        options: {
+            // Letting MathJax render formulas from <formula> tags.
+            // https://stackoverflow.com/questions/62089234/execute-mathjax-for-custom-tags-without-delimiters
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('formula')) {
+                        const isBlock = node.dataset.block === '';
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], isBlock);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = {node: text, delim: '', n: 0};
+                        math.end = {node: text, delim: '', n: 0};
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
         }
     };
 

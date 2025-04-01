@@ -45,9 +45,6 @@ import eu.iamgio.quarkdown.rendering.tag.buildMultiTag
 import eu.iamgio.quarkdown.rendering.tag.buildTag
 import eu.iamgio.quarkdown.rendering.tag.tagBuilder
 
-private const val BLOCK_MATH_FENCE = "__QD_BLOCK_MATH__"
-private const val INLINE_MATH_FENCE = "__QD_INLINE_MATH__"
-
 /**
  * A renderer for Quarkdown ([eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
@@ -149,8 +146,11 @@ class QuarkdownHtmlNodeRenderer(
             .hidden()
             .build()
 
-    // Math is processed by the MathJax library which requires text delimiters instead of tags.
-    override fun visit(node: Math) = BLOCK_MATH_FENCE + "$" + node.expression + "$" + BLOCK_MATH_FENCE
+    override fun visit(node: Math) =
+        buildTag("formula") {
+            +node.expression
+            attribute("data-block", "")
+        }
 
     override fun visit(node: Container) =
         buildTag("div") {
@@ -301,8 +301,7 @@ class QuarkdownHtmlNodeRenderer(
 
     // Inline
 
-    // Math is processed by the MathJax library which requires text delimiters instead of tags.
-    override fun visit(node: MathSpan) = INLINE_MATH_FENCE + "$" + node.expression + "$" + INLINE_MATH_FENCE
+    override fun visit(node: MathSpan) = buildTag("formula", node.expression)
 
     override fun visit(node: SlidesFragment): CharSequence =
         tagBuilder("div", node.children)

@@ -625,11 +625,11 @@ class ScriptingTest {
 
         val out =
             "<table><thead><tr>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{0}\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{1}\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{2}\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{3}\$__QD_INLINE_MATH__</th>" +
-                "<th align=\"center\">__QD_INLINE_MATH__\$F_{4}\$__QD_INLINE_MATH__</th>" +
+                "<th align=\"center\"><formula>F_{0}</formula></th>" +
+                "<th align=\"center\"><formula>F_{1}</formula></th>" +
+                "<th align=\"center\"><formula>F_{2}</formula></th>" +
+                "<th align=\"center\"><formula>F_{3}</formula></th>" +
+                "<th align=\"center\"><formula>F_{4}</formula></th>" +
                 "</tr></thead><tbody><tr>" +
                 "<td align=\"center\">0</td>" +
                 "<td align=\"center\">1</td>" +
@@ -675,7 +675,7 @@ class ScriptingTest {
             "$layoutFunction\n.mylayout {world} {3}",
         ) {
             assertEquals(
-                "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>",
+                "<h1>Hello, world!</h1><p>3 <formula>\\times</formula> 3 is 9</p><h3>End</h3>",
                 it,
             )
         }
@@ -690,10 +690,10 @@ class ScriptingTest {
                 """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Hello, world!</h1><p>1 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 1 is 1</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>2 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 2 is 4</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>3 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 3 is 9</p><h3>End</h3>" +
-                    "<h1>Hello, world!</h1><p>4 __QD_INLINE_MATH__$\\times\$__QD_INLINE_MATH__ 4 is 16</p><h3>End</h3>",
+                "<h1>Hello, world!</h1><p>1 <formula>\\times</formula> 1 is 1</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>2 <formula>\\times</formula> 2 is 4</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>3 <formula>\\times</formula> 3 is 9</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>4 <formula>\\times</formula> 4 is 16</p><h3>End</h3>",
                 it,
             )
         }

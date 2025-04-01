@@ -41,7 +41,7 @@ class FunctionCallTest {
         }
 
         execute("$ 4 - 2 = $ .subtract {4} {2}") {
-            assertEquals("<p>__QD_INLINE_MATH__$4 - 2 =\$__QD_INLINE_MATH__ 2</p>", it)
+            assertEquals("<p><formula>4 - 2 =</formula> 2</p>", it)
             assertTrue(attributes.hasMath)
         }
 

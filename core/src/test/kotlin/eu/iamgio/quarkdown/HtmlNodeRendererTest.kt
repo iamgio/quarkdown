@@ -720,20 +720,18 @@ class HtmlNodeRendererTest {
 
     @Test
     fun mathBlock() {
-        assertEquals("__QD_BLOCK_MATH__\$some expression\$__QD_BLOCK_MATH__", Math("some expression").render())
-        assertEquals(
-            "__QD_BLOCK_MATH__\$\\lim_{x\\to\\infty}x\$__QD_BLOCK_MATH__",
-            Math("\\lim_{x\\to\\infty}x").render(),
-        )
+        val out = readParts("block/math.html")
+
+        assertEquals(out.next(), Math("some expression").render())
+        assertEquals(out.next(), Math("\\lim_{x\\to\\infty}x").render())
     }
 
     @Test
     fun mathSpan() {
-        assertEquals("__QD_INLINE_MATH__\$some expression\$__QD_INLINE_MATH__", MathSpan("some expression").render())
-        assertEquals(
-            "__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__",
-            MathSpan("\\lim_{x\\to\\infty}x").render(),
-        )
+        val out = readParts("inline/math.html")
+
+        assertEquals(out.next(), MathSpan("some expression").render())
+        assertEquals(out.next(), MathSpan("\\lim_{x\\to\\infty}x").render())
     }
 
     @Test
