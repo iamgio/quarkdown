@@ -27,7 +27,7 @@ private val DEFAULT_THEME =
  * A [PostRenderer] that injects content into an HTML template, which supports out of the box:
  * - RevealJS for slides rendering;
  * - PagedJS for page-based rendering (e.g. books);
- * - MathJax for math rendering;
+ * - KaTeX for math rendering;
  * - HighlightJS for code highlighting.
  */
 class HtmlPostRenderer(
@@ -60,7 +60,7 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.HAS_CODE,
                 context.attributes.hasCode,
             )
-            // MathJax is initialized only if needed.
+            // KaTeX is initialized only if needed.
             conditional(
                 TemplatePlaceholders.HAS_MATH,
                 context.attributes.hasMath,

@@ -255,6 +255,12 @@ a {
     text-decoration: none;
 }
 
+/* Math */
+.katex.katex {
+    font-size: 1.1em;
+    margin: 0 .1em;
+}
+
 /* GFM Tasks */
 .task-list-item {
     list-style-type: none;

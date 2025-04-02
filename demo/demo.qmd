@@ -252,7 +252,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
     
     $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
-.poweredby {[MathJax](https://www.mathjax.org/)}
+.poweredby {[KaTeX](https://katex.org)}
 
 ## Alerts
 

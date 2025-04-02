@@ -47,13 +47,13 @@ interface AstAttributes {
 
     /**
      * Whether there is at least one code block.
-     * This is used to load the HighlightJS library in HTML rendering.
+     * This is used to load the HighlightJS library in HTML rendering only if necessary.
      */
     val hasCode: Boolean
 
     /**
      * Whether there is at least one math block or inline.
-     * This is used to load the MathJax library in HTML rendering.
+     * This is used to load the KaTeX library in HTML rendering only if necessary.
      */
     val hasMath: Boolean
 
