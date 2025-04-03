@@ -135,12 +135,12 @@ nav li {
     margin: 4px 0;
 }
 
-.reveal nav > ol {
+.quarkdown-slides nav > ol {
     /* Resets the no-clipping workaround because this theme's ToC hides list markers. */
     margin-left: auto;
 }
 
-.reveal :is(nav, h1#table-of-contents) {
+.quarkdown-slides :is(nav, h1#table-of-contents) {
     margin-left: 44px;
 }
 

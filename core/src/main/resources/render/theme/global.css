@@ -95,16 +95,16 @@ body {
     text-align: var(--qd-horizontal-alignment);
 }
 
-body:not(:has(.pagedjs_page)), .pagedjs_page {
+body:not(.quarkdown-paged), .quarkdown-paged .pagedjs_page {
     background-color: var(--qd-background-color);
 }
 
-body:not(:has(.pagedjs_page), :has(.reveal)) {
+body.quarkdown-plain {
     column-count: var(--property-column-count);
 }
 
 /* Slides viewport */
-.reveal {
+.quarkdown-slides {
     --qd-horizontal-alignment: var(--qd-slides-horizontal-alignment);
 }
 
@@ -114,7 +114,7 @@ body:not(:has(.pagedjs_page), :has(.reveal)) {
 }
 
 /* Paged viewport */
-body:has(.pagedjs_page) {
+body.quarkdown-paged {
     background-color: lightgray;
 }
 
@@ -282,7 +282,7 @@ li:has(> div:nth-child(2)) {
 }
 
 /* Vertical block spacing. */
-:is(body, .reveal) :is(
+.quarkdown :is(
     table:not(code table), pre, figure, blockquote,
     hr, .stack:not(.stack .stack)
 ) {
@@ -297,8 +297,8 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: none !important;
 }
 
-.reveal section > :is(h1, h2, h3, h4, h5, h6):first-child {
-    margin-top: 0 !important;
+.quarkdown-slides section > :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0;
 }
 
 details summary {
@@ -306,13 +306,13 @@ details summary {
     margin-bottom: var(--qd-paragraph-vertical-margin);
 }
 
-p, .reveal p {
+.quarkdown.quarkdown p {
     line-height: var(--qd-line-height);
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-p:empty {
+.quarkdown p:empty {
     display: none;
 }
 
@@ -331,27 +331,27 @@ p + p:not(.stack > p):not(.page-margin-content > p) {
     margin-top: 0 !important;
 }
 
-code, .box.error > .box-content {
+.quarkdown code, .box.error > .box-content {
     font-family: var(--qd-code-font);
 }
 
-code:not(pre code) {
+.quarkdown code:not(pre code) {
     font-size: var(--qd-code-span-font-size);
 }
 
-pre code {
+.quarkdown pre code {
     font-size: var(--qd-code-block-font-size);
     line-height: var(--qd-code-line-height);
-    font-style: normal !important;
-    max-height: none !important;
-    overflow: hidden !important;
+    font-style: normal;
+    max-height: none;
+    overflow: hidden;
 }
 
-pre, pre code {
+.quarkdown :is(pre, pre code) {
     border-radius: var(--qd-code-border-radius);
 }
 
-.reveal pre code {
+.quarkdown-slides pre code {
     font-size: var(--qd-slides-code-block-font-size);
 }
 
@@ -383,7 +383,7 @@ pre, pre code {
 }
 
 /* Line numbers are displayed in a table, so no borders by default. */
-code table :is(td, th) {
+.quarkdown code table :is(td, th) {
     border: 0;
 }
 
@@ -598,7 +598,7 @@ Example: "Figure 1.1:"
     padding-left: 24px;
 }
 
-.reveal .box > .box-content :is(ul, ol) {
+.quarkdown-slides .box > .box-content :is(ul, ol) {
     padding-left: 4px;
 }
 
@@ -696,7 +696,7 @@ pre {
     min-width: 20%;
 }
 
-.reveal pre:not(.stack > pre) {
+.quarkdown-slides pre:not(.stack > pre) {
     min-width: 100%;
 }
 
@@ -705,9 +705,9 @@ pre {
     margin: 0;
 }
 
-.reveal img, .pagedjs_page img {
-    max-width: 100% !important;
-    max-height: 100% !important;
+.quarkdown img {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 /* Table of contents */
@@ -726,12 +726,12 @@ nav ol ol {
 }
 
 /* ToC is scrollable in slides. */
-.reveal nav {
+.quarkdown-slides nav {
     overflow-y: scroll;
     max-height: 50vh;
 }
 
-.reveal nav > ol {
+.quarkdown-slides nav > ol {
     /*
     Content is clipped for some reason when overflow-y is enabled,
     but this isn't needed if the list hides markers.
@@ -749,8 +749,8 @@ nav li a::after {
     float: right;
 }
 
-span.current-page-number, span.total-page-number {
-    display: inline !important;
+.quarkdown span:is(.current-page-number, .total-page-number) {
+    display: inline;
 }
 
 /* Footer */

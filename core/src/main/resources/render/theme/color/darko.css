@@ -22,7 +22,7 @@ pre {
     box-shadow: 0 5px 15px rgba(0, 0, 0, var(--shadow-opacity));
 }
 
-.reveal pre {
+.quarkdown-slides pre {
     --shadow-opacity: 0.1;
 }
 

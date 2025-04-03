@@ -13,7 +13,7 @@ blockquote {
     border-color: rgba(0, 0, 0, 0.2);
 }
 
-.reveal blockquote {
+.quarkdown-slides blockquote {
     box-shadow: none;
 }
 
@@ -26,7 +26,7 @@ pre code {
     padding-left: 0 !important;
 }
 
-.reveal pre {
+.quarkdown-slides pre {
     box-shadow: none;
 }
 
