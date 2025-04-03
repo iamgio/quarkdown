@@ -232,4 +232,5 @@ blockquote {
 
 .quarkdown nav li {
     margin-top: 7px;
+    list-style-type: none; /* Only numbering-generated bullets are shown */
 }
