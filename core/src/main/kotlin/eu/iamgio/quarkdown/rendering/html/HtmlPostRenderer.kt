@@ -51,6 +51,11 @@ class HtmlPostRenderer(
             // Document metadata.
             value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
             optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
+            value(
+                TemplatePlaceholders.DOCUMENT_TYPE,
+                context.documentInfo.type.name
+                    .lowercase(),
+            )
             // "Paged" document rendering via PagesJS.
             conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.

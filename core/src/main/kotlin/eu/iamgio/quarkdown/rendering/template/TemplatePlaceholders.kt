@@ -38,6 +38,11 @@ object TemplatePlaceholders {
     const val HAS_MATH = "MATH"
 
     /**
+     * Document type, lowercase.
+     */
+    const val DOCUMENT_TYPE = "DOCTYPE"
+
+    /**
      * Whether this document is grouped in pages.
      */
     const val IS_PAGED = "PAGED"

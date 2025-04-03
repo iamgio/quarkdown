@@ -202,6 +202,7 @@ class HtmlPostRendererTest {
             .fromResourceName("/postrendering/html-test-wrapper.html")
             .optionalValue(TemplatePlaceholders.LANGUAGE, JVMLocaleLoader.fromName("english")?.tag)
             .value(TemplatePlaceholders.TITLE, "Quarkdown")
+            .value(TemplatePlaceholders.DOCUMENT_TYPE, DocumentType.SLIDES.name.lowercase())
             .conditional(TemplatePlaceholders.IS_PAGED, false)
             .conditional(TemplatePlaceholders.IS_SLIDES, true)
             .conditional(TemplatePlaceholders.HAS_CODE, true)
