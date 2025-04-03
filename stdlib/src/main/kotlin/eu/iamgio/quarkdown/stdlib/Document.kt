@@ -308,7 +308,7 @@ fun disableNumbering(
  *                    Does not take effect if [format] is not specified.
  * @param width width of each page
  * @param height height of each page
- * @param margin blank space around the content of each page. Only supported in paged documents
+ * @param margin blank space around the content of each page. Not supported in slides documents
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment horizontal alignment of the content on each page
