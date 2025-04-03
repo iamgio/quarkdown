@@ -56,7 +56,11 @@
             break-before: always;
         }
 
-        .reveal {
+        body.quarkdown-plain {
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+        }
+
+        body.quarkdown-slides .reveal {
             [[if:PAGESIZE]]
             width: [[PAGEWIDTH]];
             height: [[PAGEHEIGHT]];
@@ -65,7 +69,7 @@
 
         @page {
             [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
-            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]]; !important;[[endif:PAGEMARGIN]]
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
         }
     </style>
 </head>
