@@ -127,7 +127,7 @@
     border-bottom: var(--border-width-thin) solid;
 }
 
-th, td {
+.quarkdown :is(th, td) {
     padding: 0.5rem;
     line-height: 1.1;
 }
@@ -135,25 +135,28 @@ th, td {
 /* Quotes */
 
 blockquote {
-    padding: 4px 1.5em !important;
     border-left: 2px solid;
+}
+
+.quarkdown blockquote {
+    padding: 4px 1.5em;
     font-style: italic;
 }
 
-blockquote > :first-child {
+.quarkdown blockquote > :first-child {
     margin-top: 10px;
 }
 
-blockquote > :last-child {
+.quarkdown blockquote > :last-child {
     margin-bottom: 10px;
 }
 
 /* Tip, note, warning, ... */
-blockquote[class] {
+.quarkdown blockquote[class] {
     font-style: normal;
 }
 
-blockquote .attribution {
+.quarkdown blockquote .attribution {
     text-align: end;
 }
 
@@ -203,7 +206,11 @@ blockquote .attribution {
 /* Table of contents */
 
 .quarkdown h1#table-of-contents {
-    text-align: start !important;
+    text-align: start;
+}
+
+.quarkdown nav a {
+    text-decoration: none;
 }
 
 .quarkdown nav ol {
@@ -216,7 +223,7 @@ blockquote .attribution {
 }
 
 .quarkdown nav > ol > li {
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .quarkdown nav > ol > li > a {
