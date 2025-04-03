@@ -106,23 +106,21 @@ pre code {
 
 /* Table of contents */
 
-nav a:not(:hover) {
+.quarkdown nav a:not(:hover) {
     color: var(--qd-main-color) !important;
 }
 
 /* First-level entries show their index in a circle */
-nav > ol {
+.quarkdown nav > ol {
     list-style-type: none !important;
     padding-left: 0;
 }
 
-nav > ol > li {
-    counter-increment: li;
+.quarkdown nav > ol > li {
     padding-bottom: 0.5em;
 }
 
-nav > ol > li::before {
-    content: counter(li);
+.quarkdown nav > ol > li::before {
     background-color: var(--qd-primary-color);
     color: var(--qd-color-on-primary);
     border-radius: 100%;
@@ -133,23 +131,23 @@ nav > ol > li::before {
 }
 
 /* Not-first-level entries use a bullet */
-nav > ol ol {
+.quarkdown nav > ol ol {
     list-style-type: disc !important;
     padding-left: 1.35em;
 }
 
-nav > ol ol li::marker {
+.quarkdown nav > ol ol li::marker {
     color: var(--qd-primary-color);
     border: 1px solid var(--qd-color-on-primary);
 }
 
-nav > ol > li > ol {
-    padding-left: 1.75em;
+.quarkdown nav > ol > li > ol {
+    padding-left: 36px;
 }
 
 /* Third-level (or more) entries */
-nav > ol > li > ol ol {
-    margin-left: 0 !important;
+.quarkdown nav > ol > li > ol ol {
+    margin-left: 0;
 }
 
 /* Footer */

@@ -118,8 +118,8 @@ figure figcaption, table caption {
 
 /* Table of contents */
 
-nav ol {
-    list-style-type: none !important;
+.quarkdown nav ol {
+    list-style-type: none;
     margin: 0;
     padding-left: 12px;
 }
@@ -127,11 +127,14 @@ nav ol {
 nav ol ol {
     border-left: 2px solid;
     border-radius: 2px;
-    margin-left: 1px !important;
+    margin-left: 1px;
+}
+
+.quarkdown nav ol ol {
     padding: 0 0 0 28px;
 }
 
-nav li {
+.quarkdown nav li {
     margin: 4px 0;
 }
 
@@ -152,7 +155,7 @@ nav li {
     margin-right: 0.4em;
 }
 
-nav [data-location]::before {
+.quarkdown nav [data-location]::before {
     opacity: .5;
 }
 

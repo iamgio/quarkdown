@@ -209,27 +209,27 @@ blockquote .attribution {
 
 /* Table of contents */
 
-h1#table-of-contents {
+.quarkdown h1#table-of-contents {
     text-align: start !important;
 }
 
-nav ol {
-    margin: 0 !important;
-    padding: 0;
+.quarkdown nav ol {
+    margin: 0;
+    padding-left: 0;
 }
 
-nav > ol ol {
+.quarkdown nav > ol ol {
     padding-left: 2rem;
 }
 
-nav > ol > li {
-    margin: 20px 0;
+.quarkdown nav > ol > li {
+    margin-bottom: 20px;
 }
 
-nav > ol > li > a {
+.quarkdown nav > ol > li > a {
     font-weight: bold;
 }
 
-nav li {
+.quarkdown nav li {
     margin-top: 7px;
 }

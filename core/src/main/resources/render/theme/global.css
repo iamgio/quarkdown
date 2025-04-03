@@ -144,6 +144,10 @@ body.quarkdown-paged {
     margin: 0 var(--qd-block-margin);
 }
 
+.quarkdown :is(ul, ol) {
+    padding-left: 20px;
+}
+
 /* Not loose. */
 .quarkdown li {
     margin-top: 0.5em;
@@ -713,17 +717,16 @@ pre {
 
 /* Table of contents */
 
-nav {
+.quarkdown nav {
     text-align: start;
 }
 
-nav ol {
+.quarkdown nav ol {
     margin: 0 0 0 1em;
-    padding-left: 0;
 }
 
-nav ol ol {
-    margin-left: 40px;
+.quarkdown nav ol:not(ol ol) {
+    padding-left: 0;
 }
 
 /* ToC is scrollable in slides. */
