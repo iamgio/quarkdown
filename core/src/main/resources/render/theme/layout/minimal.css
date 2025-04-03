@@ -15,76 +15,74 @@
     --qd-location-suffix: "";
 }
 
-h1 {
-    font-size: 3.5em !important;
+.quarkdown h1 {
+    font-size: 3.5em;
 }
 
-h2 {
-    font-size: 2.75em !important;
+.quarkdown h2 {
+    font-size: 2.75em;
 }
 
-h3 {
-    font-size: 2.25em !important;
+.quarkdown h3 {
+    font-size: 2.25em;
 }
 
-h4 {
-    font-size: 1.75em !important;
+.quarkdown h4 {
+    font-size: 1.75em;
 }
 
-h5 {
-    font-size: 1.5em !important;
+.quarkdown h5 {
+    font-size: 1.5em;
 }
 
-h6 {
-    font-size: 1.25em !important;
+.quarkdown h6 {
+    font-size: 1.25em;
 }
 
-ol, ul {
+.quarkdown :is(ul, ol) {
     line-height: 1.5;
 }
 
-table {
+.quarkdown table {
     border-spacing: 0;
     border-collapse: collapse;
 }
 
-table:not(pre table) :is(th, td) {
+.quarkdown table:not(pre table) :is(th, td) {
     padding: 0.5em 1em !important;
     border: 1px solid;
 }
 
 /* Only internal table borders */
 
-table tr:first-child th {
+.quarkdown table tr:first-child th {
     border-top: 0;
 }
 
-table tr:last-child td {
+.quarkdown table tr:last-child td {
     border-bottom: 0;
 }
 
-table tr td:first-child,
-table tr th:first-child {
+.quarkdown table tr :is(td:first-child, th:first-child) {
     border-left: 0;
 }
 
-table tr td:last-child,
-table tr th:last-child {
+.quarkdown table tr :is(td:last-child, th:last-child) {
     border-right: 0;
 }
 
-blockquote {
+.quarkdown blockquote {
     font-style: italic;
     border-left: 0.4em solid;
     padding-left: 1em;
     padding-right: 1em;
 }
 
-figure img {
+.quarkdown figure img {
     margin-bottom: 0.5em !important;
 }
 
-figure figcaption, table caption {
+.quarkdown :is(figure figcaption, table caption) {
     font-size: 0.8em;
     font-style: italic;
 }

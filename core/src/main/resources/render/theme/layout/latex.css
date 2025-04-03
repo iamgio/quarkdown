@@ -29,81 +29,74 @@
 
 /* Headings */
 
-h1 {
+.quarkdown h1 {
     font-size: 2.5rem;
     line-height: 3.25rem;
     margin-bottom: 1.625rem;
 }
 
-h2 {
+.quarkdown h2 {
     font-size: 1.7rem;
     line-height: 2rem;
     margin-top: 3rem;
 }
 
-h3 {
+.quarkdown h3 {
     font-size: 1.4rem;
     margin-top: 2.5rem;
 }
 
-h4 {
+.quarkdown h4 {
     font-size: 1.2rem;
     margin-top: 2rem;
 }
 
-h5 {
+.quarkdown h5 {
     font-size: 1rem;
     margin-top: 1.8rem;
 }
 
-h6 {
+.quarkdown h6 {
     font-size: 1rem;
     font-style: italic;
     font-weight: normal;
     margin-top: 2.5rem;
 }
 
-h3,
-h4,
-h5,
-h6 {
+.quarkdown :is(h3, h4, h5, h6) {
     line-height: 1.625rem;
 }
 
-h1 + h2 {
+.quarkdown h1 + h2 {
     margin-top: 1.625rem;
 }
 
-h2 + h3,
-h3 + h4,
-h4 + h5 {
+.quarkdown h2 + h3,
+.quarkdown h3 + h4,
+.quarkdown h4 + h5 {
     margin-top: 0.8rem;
 }
 
-h5 + h6 {
+.quarkdown h5 + h6 {
     margin-top: -0.8rem;
 }
 
-h2,
-h3,
-h4,
-h5,
-h6 {
+.quarkdown :is(h2, h3, h4, h5, h6) {
     margin-bottom: 0.8rem;
 }
 
-a {
+.quarkdown a {
     text-decoration: underline;
 }
 
 /* Table */
 
-pre table {
+.quarkdown pre table {
     --border-width-thick: 0;
     --border-width-thin: 0;
 }
 
-table:not(pre table) {
+.quarkdown table:not(pre table) {
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
@@ -115,22 +108,22 @@ table:not(pre table) {
 }
 
 /* add bottom border on column table headings  */
-table tr > th[scope='col'] {
+.quarkdown table tr > th[scope='col'] {
     border-bottom: var(--border-width-thin) solid;
 }
 
 /* add right border on row table headings  */
-table tr > th[scope='row'] {
+.quarkdown table tr > th[scope='row'] {
     border-right: var(--border-width-thin) solid;
 }
 
-table > tbody > tr:first-child > td,
-table > tbody > tr:first-child > th {
+.quarkdown table > tbody > tr:first-child > td,
+.quarkdown table > tbody > tr:first-child > th {
     border-top: var(--border-width-thin) solid;
 }
 
-table > tbody > tr:last-child > td,
-table > tbody > tr:last-child > th {
+.quarkdown table > tbody > tr:last-child > td,
+.quarkdown table > tbody > tr:last-child > th {
     border-bottom: var(--border-width-thin) solid;
 }
 
