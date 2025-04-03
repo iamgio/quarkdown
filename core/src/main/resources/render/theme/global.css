@@ -138,120 +138,120 @@ body.quarkdown-paged {
 }
 
 /* A divider in a row is vertical instead of horizontal */
-.stack-row > hr {
+.quarkdown .stack-row > hr {
     display: list-item;
     width: auto;
     margin: 0 var(--qd-block-margin);
 }
 
 /* Not loose. */
-li {
+.quarkdown li {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
 /* Loose. */
-li:has(p) {
+.quarkdown li:has(p) {
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
-figure {
+.quarkdown figure {
     text-align: center;
 }
 
-blockquote {
+.quarkdown blockquote {
     display: block;
-    margin: 0;
-}
-
-blockquote, .reveal blockquote {
     color: var(--qd-quote-foreground-color);
     padding: var(--qd-block-margin);
 }
 
-:is(blockquote, .reveal blockquote):not([class]) {
+.quarkdown blockquote:not([class]) {
     background-color: var(--qd-quote-background-color);
 }
 
+.quarkdown:not(.quarkdown-slides) blockquote {
+    margin: 0;
+}
+
 /* Blockquotes with a type (e.g. tip, note, warning, ...) */
-blockquote[class] {
+.quarkdown blockquote[class] {
     /* This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:' */
     --quote-type-label: "";
     font-style: normal;
 }
 
-blockquote[class][data-labeled] > :first-child::before {
+.quarkdown blockquote[class][data-labeled] > :first-child::before {
     content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
     font-weight: bold;
     font-style: normal;
 }
 
-blockquote.tip {
+.quarkdown blockquote.tip {
     border-color: var(--qd-tip-foreground-color);
     background-color: var(--qd-tip-background-color);
 }
 
-blockquote.tip :first-child::before {
+.quarkdown blockquote.tip :first-child::before {
     color: var(--qd-tip-foreground-color);
 }
 
-blockquote.note {
+.quarkdown blockquote.note {
     border-color: var(--qd-note-foreground-color);
     background-color: var(--qd-note-background-color);
 }
 
-blockquote.note :first-child::before {
+.quarkdown blockquote.note :first-child::before {
     color: var(--qd-note-foreground-color);
 }
 
-blockquote.warning {
+.quarkdown blockquote.warning {
     border-color: var(--qd-warning-foreground-color);
     background-color: var(--qd-warning-background-color);
 }
 
-blockquote.warning :first-child::before {
+.quarkdown blockquote.warning :first-child::before {
     color: var(--qd-warning-foreground-color);
 }
 
-blockquote.important {
+.quarkdown blockquote.important {
     border-color: var(--qd-important-foreground-color);
     background-color: var(--qd-important-background-color);
 }
 
-blockquote.important :first-child::before {
+.quarkdown blockquote.important :first-child::before {
     color: var(--qd-important-foreground-color);
 }
 
-blockquote .attribution {
+.quarkdown blockquote .attribution {
     opacity: 0.6;
     display: block !important;
     margin-top: 0 !important;
 }
 
-blockquote .attribution::before {
+.quarkdown blockquote .attribution::before {
     content: var(--qd-quote-attribution-prefix);
 }
 
-table {
+.quarkdown table {
     caption-side: bottom;
 }
 
-table :is(th, td):not([align]) {
+.quarkdown table :is(th, td):not([align]) {
     text-align: var(--qd-table-default-cell-alignment);
 }
 
-table > caption {
+.quarkdown table > caption {
     margin-top: 1em;
     white-space: nowrap;
     overflow-x: hidden;
 }
 
-hr {
+.quarkdown hr {
     width: 100%;
 }
 
-a {
+.quarkdown a {
     color: var(--qd-link-color);
     text-decoration: none;
 }
@@ -272,12 +272,12 @@ a {
     transform: translateY(1px);
 }
 
-:is(ul, ol):has(> .task-list-item) {
+.quarkdown :is(ul, ol):has(> .task-list-item) {
     padding-left: 0;
 }
 
 /* If a list item has a custom bullet element, the actual content is wrapped in a container */
-li:has(> div:nth-child(2)) {
+.quarkdown li:has(> div:nth-child(2)) {
     display: flex;
     align-items: flex-start;
 }
@@ -291,7 +291,7 @@ li:has(> div:nth-child(2)) {
     margin-bottom: var(--qd-block-margin);
 }
 
-h1, h2, h3, h4, h5, h6 {
+.quarkdown :is(h1, h2, h3, h4, h5, h6) {
     color: var(--qd-heading-color);
     font-family: var(--qd-heading-font);
     margin: var(--qd-heading-margin);
@@ -302,7 +302,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
 }
 
-details summary {
+.quarkdown details summary {
     cursor: pointer;
     margin-bottom: var(--qd-paragraph-vertical-margin);
 }
@@ -400,7 +400,7 @@ code.focus-lines .hljs-ln-line:not(.focused),
 }
 
 /* Location data in a list item replaces its marker */
-li[data-location] {
+.quarkdown li[data-location] {
     list-style-type: none;
 }
 
