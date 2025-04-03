@@ -722,6 +722,7 @@ pre {
 }
 
 .quarkdown nav ol {
+    list-style-position: inside;
     margin: 0 0 0 1em;
 }
 
@@ -735,19 +736,11 @@ pre {
     max-height: 50vh;
 }
 
-.quarkdown-slides nav > ol {
-    /*
-    Content is clipped for some reason when overflow-y is enabled,
-    but this isn't needed if the list hides markers.
-    */
-    margin-left: 24px;
-}
-
-h1#table-of-contents {
+.quarkdown h1#table-of-contents {
     text-align: start;
 }
 
-nav li a::after {
+.quarkdown nav li a::after {
     /* TOC page counter on supported targets */
     content: target-counter(attr(href), page);
     float: right;
