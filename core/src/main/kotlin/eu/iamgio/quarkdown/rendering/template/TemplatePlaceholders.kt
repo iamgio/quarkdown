@@ -81,4 +81,9 @@ object TemplatePlaceholders {
      * Horizontal content alignment of each page.
      */
     const val HORIZONTAL_ALIGNMENT = "HALIGNMENT"
+
+    /**
+     * Custom user-defined TeX macros.
+     */
+    const val TEX_MACROS = "TEXMACRO"
 }

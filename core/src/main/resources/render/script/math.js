@@ -7,7 +7,7 @@ executionQueue.push(() => {
         formula.outerHTML = katex.renderToString(math, {
             throwOnError: false,
             displayMode: isBlock,
-            output: 'html'
+            macros: texMacros || {},
         });
     });
 });

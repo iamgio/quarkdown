@@ -15,6 +15,7 @@ import eu.iamgio.quarkdown.rendering.PostRenderer
 import eu.iamgio.quarkdown.rendering.PostRendererVisitor
 import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
 import eu.iamgio.quarkdown.template.TemplateProcessor
+import org.apache.commons.text.StringEscapeUtils
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -96,6 +97,21 @@ class HtmlPostRenderer(
                 context.documentInfo.pageFormat.alignment
                     ?.asCSS,
             )
+            iterable(
+                TemplatePlaceholders.TEX_MACROS,
+                mapToJsObjectEntries(context.documentInfo.tex.macros),
+            )
+        }
+
+    private fun sanitizeJs(text: String): String = StringEscapeUtils.escapeEcmaScript(text)
+
+    /**
+     * @param map map to convert to a list of JavaScript object entries
+     * @return a list of JavaScript object entries in the form of "key": "value"
+     */
+    fun mapToJsObjectEntries(map: Map<String, String>): List<String> =
+        map.map { (key, value) ->
+            "\"${sanitizeJs(key)}\": \"${sanitizeJs(value)}\""
         }
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
