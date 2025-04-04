@@ -30,9 +30,13 @@ private val DEFAULT_THEME =
  * - PagedJS for page-based rendering (e.g. books);
  * - KaTeX for math rendering;
  * - HighlightJS for code highlighting.
+ * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process
  */
 class HtmlPostRenderer(
     private val context: Context,
+    private val baseTemplateProcessor: () -> TemplateProcessor = {
+        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template")
+    },
 ) : PostRenderer {
     // HTML requires local media to be resolved from the file system.
     override val preferredMediaStorageOptions: MediaStorageOptions =
@@ -41,7 +45,7 @@ class HtmlPostRenderer(
     override fun <T> accept(visitor: PostRendererVisitor<T>): T = visitor.visit(this)
 
     override fun createTemplateProcessor() =
-        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template").apply {
+        baseTemplateProcessor().apply {
             // Local server port to communicate with.
             optionalValue(
                 TemplatePlaceholders.SERVER_PORT,
@@ -105,11 +109,7 @@ class HtmlPostRenderer(
 
     private fun sanitizeJs(text: String): String = StringEscapeUtils.escapeEcmaScript(text)
 
-    /**
-     * @param map map to convert to a list of JavaScript object entries
-     * @return a list of JavaScript object entries in the form of "key": "value"
-     */
-    fun mapToJsObjectEntries(map: Map<String, String>): List<String> =
+    private fun mapToJsObjectEntries(map: Map<String, String>): List<String> =
         map.map { (key, value) ->
             "\"${sanitizeJs(key)}\": \"${sanitizeJs(value)}\""
         }
