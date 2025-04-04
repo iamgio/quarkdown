@@ -82,13 +82,13 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     // - If it is a collection: its items are wrapped in a GeneralCollectionValue and visited.
     // - Otherwise: its string content is parsed as Markdown.
     @Suppress("UNCHECKED_CAST")
-    override fun visit(value: DynamicValue): Node {
-        return when (value.unwrappedValue) {
+    override fun visit(value: DynamicValue): Node =
+        when (value.unwrappedValue) {
             is OutputValue<*> -> value.unwrappedValue.accept(this)
             is Iterable<*> -> GeneralCollectionValue(value.unwrappedValue as Iterable<OutputValue<*>>).accept(this)
+            is Node -> value.unwrappedValue
             else -> this.visit(parseRaw(value.unwrappedValue.toString()))
         }
-    }
 
     /**
      * When a [DynamicValue] cannot be converted to a [NodeValue], its string content is parsed as Markdown.

@@ -168,6 +168,8 @@ class AppendExpressionVisitor(
     override fun visit(value: InlineMarkdownContentValue): Expression =
         GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
 
+    override fun visit(value: NodeValue): Expression = throw InvalidExpressionEvalException()
+
     // DynamicValue(15) "abc"        -> "15abc"
     // DynamicValue("abc") [1, 2, 3] -> ["abc", 1, 2, 3]
     override fun visit(value: DynamicValue): Expression =

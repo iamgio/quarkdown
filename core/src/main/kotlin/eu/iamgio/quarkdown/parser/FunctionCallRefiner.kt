@@ -41,10 +41,10 @@ class FunctionCallRefiner(
         arguments +=
             call.arguments
                 .asSequence()
-                .mapNotNull { arg ->
+                .map { arg ->
+                    val raw = arg.value.trim()
                     // Convert the raw argument to an expression.
-                    val expression =
-                        ValueFactory.expression(arg.value.trim(), context) ?: return@mapNotNull null
+                    val expression = ValueFactory.safeExpression(raw, context)
                     FunctionCallArgument(
                         expression,
                         name = arg.name,

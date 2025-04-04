@@ -12,9 +12,9 @@ import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
-import eu.iamgio.quarkdown.function.error.internal.InvalidExpressionEvalException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
+import eu.iamgio.quarkdown.function.expression.SafeExpression
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
 import eu.iamgio.quarkdown.function.value.BooleanValue
@@ -540,12 +540,14 @@ object ValueFactory {
     /**
      * Evaluates a dynamic expression from a raw string input.
      * Special case: if the raw string starts with `@lambda`, the content is parsed as a [lambda] value.
+     * This is generally an *unsafe* expression, as evaluating it may throw an [InvalidExpressionEvalException].
+     * See [safeExpression] for a fallback mechanism.
      * @param raw either an [Expression] or a string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
      * @return if [raw] is an [Expression], it is returned, otherwise returns the expression from the string input
      * (in the previous example: `ComposedExpression(DynamicValue("2 + 2 is "), FunctionCall(sum, 2, 2))`)
      */
-    fun expression(
+    private fun expression(
         raw: Any,
         context: Context,
     ): Expression? {
@@ -592,6 +594,22 @@ object ValueFactory {
     }
 
     /**
+     * Evaluates a dynamic expression from a raw string input.
+     * This is a safe expression, meaning that if an [InvalidExpressionEvalException] is caught while
+     * evaluating it, the expression is discarded and a fallback expression is used.
+     * @see expression
+     * @see SafeExpression
+     */
+    fun safeExpression(
+        raw: Any,
+        context: Context,
+        fallback: () -> Expression = { blockMarkdown(raw, context) },
+    ): Expression {
+        val expression = expression(raw, context) ?: return fallback()
+        return SafeExpression(expression, fallback)
+    }
+
+    /**
      * Evaluates an expression from a raw string input.
      * @param raw string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
@@ -604,21 +622,18 @@ object ValueFactory {
     fun eval(
         raw: Any,
         context: Context,
-        fallback: () -> OutputValue<*> = { blockMarkdown(raw, context).asNodeValue() },
+        fallback: () -> Expression = { blockMarkdown(raw, context).asNodeValue() },
     ): OutputValue<*> {
-        val expression = expression(raw, context) ?: return fallback()
-
-        return try {
-            expression.eval().let {
-                it as? OutputValue<*>
-                    ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
+        val expression =
+            safeExpression(raw, context) {
+                // All enqueued function calls are invalidated and discarded.
+                (context as? MutableContext)?.dequeueAllFunctionCalls()
+                fallback()
             }
-        } catch (e: InvalidExpressionEvalException) {
-            // All enqueued function calls are invalidated and discarded.
-            (context as? MutableContext)?.dequeueAllFunctionCalls()
-            // The fallback function is called to provide a default value.
-            // The default behavior is Markdown parsing.
-            fallback()
+
+        return expression.eval().let {
+            it as? OutputValue<*>
+                ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
         }
     }
 }
