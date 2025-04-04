@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.document
 
 import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
 import eu.iamgio.quarkdown.document.page.PageFormatInfo
+import eu.iamgio.quarkdown.document.tex.TexInfo
 import eu.iamgio.quarkdown.localization.Locale
 
 /**
@@ -23,6 +24,7 @@ data class DocumentInfo(
     var numbering: DocumentNumbering? = null,
     var theme: DocumentTheme? = null,
     val pageFormat: PageFormatInfo = PageFormatInfo(),
+    val tex: TexInfo = TexInfo(),
 ) {
     /**
      * The numbering formats of the document if set by the user,

@@ -49,6 +49,7 @@ val Document: Module =
         ::theme,
         ::numbering,
         ::disableNumbering,
+        ::texMacro,
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
@@ -296,6 +297,13 @@ fun numbering(
 fun disableNumbering(
     @Injected context: Context,
 ) = numbering(context, emptyMap())
+
+@Name("texmacro")
+fun texMacro(
+    @Injected context: Context,
+    name: String,
+    macro: String,
+) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
 
 /**
  * Sets the format of the document.

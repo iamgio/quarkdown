@@ -25,6 +25,7 @@ class TexTest {
                 "<formula data-block=\"\">\\frac {x} {2}</formula>",
                 it,
             )
+            assertEquals(0, documentInfo.tex.macros.size)
         }
     }
 
@@ -49,6 +50,21 @@ class TexTest {
                 """.trimIndent(),
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `custom macro`() {
+        execute(
+            """
+            .texmacro {\hello}
+                Hello \textit {world}
+            $ \hello $
+            """.trimIndent(),
+        ) {
+            assertEquals(1, documentInfo.tex.macros.size)
+            val macro = documentInfo.tex.macros["\\hello"]
+            assertEquals("Hello \\textit {world}", macro)
         }
     }
 }
