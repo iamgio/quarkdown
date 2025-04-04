@@ -697,7 +697,7 @@ Example: "Figure 1.1:"
     display: none;
 }
 
-pre {
+.quarkdown pre {
     min-width: 20%;
 }
 
@@ -765,9 +765,11 @@ pre {
 
 /* Fixed page margins */
 
-.page-margin-content:not(.pagedjs_page .page-margin-content) {
-    /* Paged documents have dedicated areas for each margin. Others use absolute positions. */
-    position: absolute;
+.page-margin-content:not(.quarkdown-paged .page-margin-content) {
+    /* Paged documents have dedicated areas for each margin. Others use fixed positions. */
+    position: fixed;
+    background-color: var(--qd-background-color);
+    z-index: 9999;
 }
 
 .pagedjs_margin-left-top, .pagedjs_margin-right-top {
