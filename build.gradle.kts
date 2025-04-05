@@ -45,6 +45,7 @@ tasks.jar {
 
 tasks.test {
     useJUnitPlatform()
+    dependsOn(tasks.ktlintCheck)
 }
 
 tasks.distZip {
