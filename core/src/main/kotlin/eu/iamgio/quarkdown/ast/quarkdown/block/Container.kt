@@ -24,7 +24,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
  * @param textAlignment alignment of the text
- * @param float floating position of the container within the parent
+ * @param float floating position of the container within the subsequent content
  */
 class Container(
     val width: Size? = null,

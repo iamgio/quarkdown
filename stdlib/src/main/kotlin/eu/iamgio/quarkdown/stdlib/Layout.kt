@@ -130,11 +130,10 @@ fun align(
 fun center(body: MarkdownContent) = align(Container.Alignment.CENTER, body)
 
 /**
- * Makes content float within its parent.
+ * Turns content into a floating element, allowing subsequent content to wrap around it.
  * @param alignment floating position
  * @param body content to float
  * @return the new floating container
- * @see container
  */
 fun float(
     alignment: Container.FloatAlignment,
