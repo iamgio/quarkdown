@@ -58,7 +58,7 @@ class QuarkdownHtmlNodeRenderer(
         styleClass: String? = null,
         init: HtmlTagBuilder.() -> Unit,
     ) = tagBuilder("div", init = init)
-        .`class`(styleClass)
+        .className(styleClass)
         .build()
 
     /**
@@ -141,7 +141,7 @@ class QuarkdownHtmlNodeRenderer(
     // An empty div that acts as a page break.
     override fun visit(node: PageBreak) =
         tagBuilder("div")
-            .`class`("page-break")
+            .className("page-break")
             .hidden()
             .build()
 
@@ -153,7 +153,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: Container) =
         buildTag("div") {
-            classes("container", "fullwidth".takeIf { node.fullWidth })
+            classNames("container", "fullwidth".takeIf { node.fullWidth })
 
             +node.children
 
@@ -214,7 +214,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: Box) =
         div {
-            classes("box", node.type.asCSS)
+            classNames("box", node.type.asCSS)
 
             if (node.title != null) {
                 tag("header") {
@@ -302,14 +302,14 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: SlidesFragment): CharSequence =
         tagBuilder("div", node.children)
-            .classes("fragment", node.behavior.asCSS)
+            .classNames("fragment", node.behavior.asCSS)
             .build()
 
     override fun visit(node: TextTransform) =
         buildTag("span") {
             +node.children
 
-            `class`(node.data.size?.asCSS) // e.g. 'size-small' class
+            className(node.data.size?.asCSS) // e.g. 'size-small' class
 
             style {
                 "font-weight" value node.data.weight
@@ -324,7 +324,7 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: InlineCollapse) =
         buildTag("span") {
             // Dynamic behavior is handled by JS.
-            `class`("inline-collapse")
+            className("inline-collapse")
             attribute("data-full-text", buildMultiTag { +node.text })
             attribute("data-collapsed-text", buildMultiTag { +node.placeholder })
             attribute("data-collapsed", !node.isOpen)
@@ -344,7 +344,7 @@ class QuarkdownHtmlNodeRenderer(
         // (either slides.js or paged.js, depending on the document type).
         buildTag("span") {
             +"-" // The default placeholder in case it is not filled by a script (e.g. plain documents).
-            `class`(
+            className(
                 when (node.target) {
                     PageCounter.Target.CURRENT -> "current-page-number"
                     PageCounter.Target.TOTAL -> "total-page-number"
@@ -379,7 +379,7 @@ class QuarkdownHtmlNodeRenderer(
                 // When a heading has a depth of 0 (achievable only via functions), it is an invisible marker with an ID.
                 node.isMarker ->
                     tagBuilder("div") {
-                        `class`("marker")
+                        className("marker")
                         hidden()
                     }
                 // Regular headings.
@@ -414,7 +414,7 @@ class QuarkdownHtmlNodeRenderer(
             // the whole quote is marked as a 'tip' blockquote
             // and a localized label is shown (e.g. 'Tip:' for English).
             node.type?.asCSS?.let { type ->
-                `class`(type)
+                className(type)
                 // The type is associated to a localized label
                 // only if the documant language is set and the set language is supported.
                 context.localizeOrNull(type)?.let { localizedLabel ->
@@ -429,7 +429,7 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
             node.attribution?.let {
                 +tagBuilder("p", it)
-                    .`class`("attribution")
+                    .className("attribution")
                     .build()
             }
         }
@@ -448,7 +448,7 @@ class QuarkdownHtmlNodeRenderer(
 
         // The code is wrapped to allow additional content.
         return buildTag("span") {
-            `class`("codespan-content")
+            className("codespan-content")
 
             +codeTag
 
@@ -458,7 +458,7 @@ class QuarkdownHtmlNodeRenderer(
                     // If the code contains a color code, show the color preview.
                     +buildTag("span") {
                         style { "background-color" value node.content.color }
-                        `class`("color-preview")
+                        className("color-preview")
                     }
                 }
             }
@@ -470,7 +470,7 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit =
         {
             if (variant.isFocused) {
-                `class`("focused")
+                className("focused")
             }
         }
 

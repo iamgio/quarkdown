@@ -21,6 +21,10 @@ allprojects {
     }
 }
 
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+}
+
 dependencies {
     subprojects.forEach {
         implementation(it)

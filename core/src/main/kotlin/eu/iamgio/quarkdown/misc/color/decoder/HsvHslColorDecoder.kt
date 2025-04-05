@@ -28,16 +28,22 @@ object HsvHslColorDecoder : ColorDecoder {
                 match.destructured.let { (h, s, lv) ->
                     Triple(
                         // Hue (0-360).
-                        h.toFloatOrNull()
-                            ?.rem(MAX_HUE), // e.g. 520 % 360 = 160
+                        // e.g. 520 % 360 = 160
+                        h
+                            .toFloatOrNull()
+                            ?.rem(MAX_HUE),
                         // Normalized saturation (0-1).
-                        s.toFloatOrNull()
+                        // [0, 100] -> [0, 1]
+                        s
+                            .toFloatOrNull()
                             ?.takeIf { it <= MAX_SVL }
-                            ?.div(MAX_SVL), // [0, 100] -> [0, 1]
+                            ?.div(MAX_SVL),
                         // Normalized lightness/value (0-1).
-                        lv.toFloatOrNull()
+                        // [0, 100] -> [0, 1]
+                        lv
+                            .toFloatOrNull()
                             ?.takeIf { it <= MAX_SVL }
-                            ?.div(MAX_SVL), // [0, 100] -> [0, 1]
+                            ?.div(MAX_SVL),
                     )
                 }
 

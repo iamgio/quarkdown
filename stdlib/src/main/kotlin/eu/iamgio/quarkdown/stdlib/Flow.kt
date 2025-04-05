@@ -45,6 +45,7 @@ val Flow: Module =
  * @return the evaluation of [body] if [condition] is `true`, otherwise nothing
  */
 @Name("if")
+@Suppress("ktlint:standard:function-naming")
 fun `if`(
     condition: Boolean,
     body: Lambda,

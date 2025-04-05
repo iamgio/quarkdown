@@ -16,7 +16,7 @@ data class WalkedFunctionCall(
     val name: String,
     val arguments: List<WalkedFunctionArgument>,
     val bodyArgument: WalkedFunctionArgument?,
-    var next: WalkedFunctionCall? = null
+    var next: WalkedFunctionCall? = null,
 )
 
 /**
@@ -24,4 +24,7 @@ data class WalkedFunctionCall(
  * @param name the name of the argument, if the argument is named
  * @param value the raw value of the argument
  */
-data class WalkedFunctionArgument(val name: String?, val value: String)
+data class WalkedFunctionArgument(
+    val name: String?,
+    val value: String,
+)

@@ -98,7 +98,7 @@ open class BaseHtmlNodeRenderer(
             tag("code") {
                 +escapeCriticalContent(node.content)
 
-                classes(
+                classNames(
                     // Sets the code language.
                     node.language?.let { "language-$it" },
                     // Disables line numbers.
@@ -158,7 +158,7 @@ open class BaseHtmlNodeRenderer(
     // GFM 5.3 extension.
     override fun visit(variant: TaskListItemVariant): HtmlTagBuilder.() -> Unit =
         {
-            `class`("task-list-item")
+            className("task-list-item")
             +visit(CheckBox(variant.isChecked))
         }
 

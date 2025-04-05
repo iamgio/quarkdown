@@ -62,9 +62,8 @@ open class Lambda(
         // hence the argument count is always valid.
         if (explicitParameters.isEmpty()) return true
         // If the amount of arguments matches the amount of mandatory parameters, the argument count is valid.
-        if (arguments.size in explicitParameters.count { !it.isOptional }..explicitParameters.size) return true
-
-        return false
+        val mandatoryParameterCount = explicitParameters.count { !it.isOptional }
+        return arguments.size in mandatoryParameterCount..explicitParameters.size
     }
 
     /**
@@ -88,6 +87,7 @@ open class Lambda(
                     // If the remaining parameters are optional, fill the remaining parameters with 'none' placeholder values.
                     arguments + List(explicitParameters.size - arguments.size) { NoneValue }
                 }
+
                 else -> arguments
             }
 

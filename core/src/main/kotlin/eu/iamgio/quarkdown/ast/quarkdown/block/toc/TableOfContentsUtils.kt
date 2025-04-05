@@ -29,13 +29,15 @@ fun TableOfContentsView.convertToListNode(
                 // A link to the target heading.
                 this +=
                     Link(
-                        item.text.stripRichContent(renderer), // Rich content is ignored.
+                        // Rich content is ignored.
+                        item.text.stripRichContent(renderer),
                         url = linkUrlMapper(item),
                         title = null,
                     )
 
                 // Recursively include sub-items.
-                item.subItems.filter { it.depth <= view.maxDepth }
+                item.subItems
+                    .filter { it.depth <= view.maxDepth }
                     .takeIf { it.isNotEmpty() }
                     ?.let { this += convertToListNode(renderer, it, linkUrlMapper) }
             }
