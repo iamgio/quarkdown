@@ -19,7 +19,11 @@
     [[endif:CODE]]
     [[if:MATH]]
     <script>
-        // ...
+        const texMacros = {
+            [[for:TEXMACRO]]
+            [[TEXMACRO]],
+            [[endfor:TEXMACRO]]
+        }
     </script>
     <script src="...js"></script>
     [[endif:MATH]]

@@ -3,14 +3,16 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
+import eu.iamgio.quarkdown.document.size.Sizes
+import eu.iamgio.quarkdown.document.size.inch
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.localization.jvm.JVMLocaleLoader
 import eu.iamgio.quarkdown.pipeline.output.ArtifactType
 import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
-import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
 import eu.iamgio.quarkdown.template.TemplateProcessor
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -19,208 +21,245 @@ import kotlin.test.assertTrue
  * HTML post renderer tests.
  */
 class HtmlPostRendererTest {
+    private lateinit var context: MutableContext
+
+    @BeforeTest
+    fun setup() {
+        context = MutableContext(QuarkdownFlavor)
+    }
+
     @Test
-    fun `template processor`() {
+    fun empty() {
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor("<html><head></head><body></body></html>")
+            }
         assertEquals(
             "<html><head></head><body></body></html>",
-            TemplateProcessor("<html><head></head><body></body></html>").process(),
+            postRenderer.createTemplateProcessor().process(),
         )
+    }
 
-        TemplateProcessor("<body>[[CONTENT]]</body>")
-            .value(TemplatePlaceholders.CONTENT, "<strong>Hello, world!</strong>")
-            .let {
-                assertEquals("<body><strong>Hello, world!</strong></body>", it.process())
+    @Test
+    fun `with content, single line`() {
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor("<html><head></head><body>[[CONTENT]]</body></html>")
+                    .content("<strong>Hello, world!</strong>")
             }
 
-        TemplateProcessor(
-            """
-            <body>
-                [[CONTENT]]
-            </body>
-            """.trimIndent(),
-        ).content("<strong>Hello, world!</strong>") // Shorthand
-            .let {
-                assertEquals("<body>\n    <strong>Hello, world!</strong>\n</body>", it.process())
-            }
+        assertEquals(
+            "<html><head></head><body><strong>Hello, world!</strong></body></html>",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
 
-        TemplateProcessor("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
-            .value(TemplatePlaceholders.TITLE, "Doc title")
-            .content("<strong>Hello, world!</strong>")
-            .let {
-                assertEquals(
-                    "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
-                    it.process(),
-                )
-            }
-
-        TemplateProcessor("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
-            .conditional("CONDITION", true)
-            .content("<em>Hello, world!</em>")
-            .let {
-                assertEquals("<body><em>Hello, world!</em></body>", it.process())
-            }
-
-        TemplateProcessor("<body>[[if:CONDITION]][[CONTENT]][[endif:CONDITION]]</body>")
-            .conditional("CONDITION", false)
-            .content("<em>Hello, world!</em>")
-            .let {
-                assertEquals("<body></body>", it.process())
-            }
-
-        TemplateProcessor("<body>[[if:!CONDITION]][[CONTENT]][[endif:!CONDITION]]</body>")
-            .conditional("CONDITION", true)
-            .content("<em>Hello, world!</em>")
-            .let {
-                assertEquals("<body></body>", it.process())
-            }
-
-        TemplateProcessor(
-            """
-            <body>
-                [[if:!CONDITION]]
-                [[CONTENT]]
-                [[endif:!CONDITION]]
-            </body>
-            """.trimIndent(),
-        ).conditional("CONDITION", false)
-            .content("<em>Hello, world!</em>")
-            .let {
-                assertEquals("<body>\n    <em>Hello, world!</em>\n</body>", it.process())
-            }
-
-        TemplateProcessor(
-            """
-            <body>
-                [[if:CONDITION]]
-                <em>Hello, world!</em>
-                [[endif:CONDITION]]
-                [[if:!CONDITION]]
-                <strong>Hello, world!</strong>
-                [[endif:!CONDITION]]
-            </body>
-            """.trimIndent(),
-        ).conditional("CONDITION", false)
-            .content("Hello, world!")
-            .let {
-                assertEquals(
+    @Test
+    fun `with content, multiline`() {
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor(
                     """
                     <body>
-                        <strong>Hello, world!</strong>
+                        [[CONTENT]]
                     </body>
                     """.trimIndent(),
-                    it.process(),
-                )
+                ).content("<strong>Hello, world!</strong>")
             }
-
-        TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
-            .optionalValue("XYZ", "Hello, world!")
-            .let {
-                assertEquals("<body>XYZ</body>", it.process())
-            }
-
-        TemplateProcessor("<body>[[if:XYZ]]XYZ[[endif:XYZ]]</body>")
-            .optionalValue("XYZ", null)
-            .let {
-                assertEquals("<body></body>", it.process())
-            }
-
-        TemplateProcessor(
+        assertEquals(
             """
-            <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
-            <head>
-                [[if:SLIDES]]
-                <link rel="stylesheet" href="...css"></link>
-                [[endif:SLIDES]]
-                [[if:CODE]]
-                <script src="...js"></script>
-                <script src="...js"></script>
-                [[endif:CODE]]
-                [[if:MATH]]
-                <script src="...js"></script>
-                <script src="...js"></script>
-                [[endif:MATH]]
-                <title>[[TITLE]]</title>
-                <style>
-                [[if:MATH]]
-                mjx-container {
-                    margin: 0 0.3em;
-                }
-                [[endif:MATH]]
-                </style>
-            </head>
             <body>
-                [[if:SLIDES]]
-                <div class="reveal">
-                    <div class="slides">
-                        [[CONTENT]]
-                    </div>
-                </div>
-                <script src="slides.js"></script>
-                [[endif:SLIDES]]
-                [[if:!SLIDES]]
-                [[CONTENT]]
-                [[endif:!SLIDES]]
+                <strong>Hello, world!</strong>
             </body>
-            </html>
             """.trimIndent(),
-        ).conditional(TemplatePlaceholders.IS_SLIDES, true)
-            .optionalValue(TemplatePlaceholders.LANGUAGE, JVMLocaleLoader.fromName("english")?.tag)
-            .value(TemplatePlaceholders.TITLE, "Quarkdown")
-            .conditional(TemplatePlaceholders.HAS_CODE, false)
-            .conditional(TemplatePlaceholders.HAS_MATH, true)
-            .content("<p><em>Hello, world!</em></p>")
-            .let {
-                assertEquals(
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `with title`() {
+        context.documentInfo.name = "Doc title"
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
+                    .content("<strong>Hello, world!</strong>")
+            }
+        assertEquals(
+            "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `math conditional`() {
+        context.attributes.hasMath = true
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor("<body>[[if:MATH]][[CONTENT]][[endif:MATH]]</body>")
+                    .content("<em>Hello, world!</em>")
+            }
+        assertEquals(
+            "<body><em>Hello, world!</em></body>",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `code conditional`() {
+        context.attributes.hasCode = false
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor(
                     """
-                    <html lang="en">
+                    <body>
+                        [[if:!CODE]]
+                        [[CONTENT]]
+                        [[endif:!CODE]]
+                    </body>
+                    """.trimIndent(),
+                ).content("<em>Hello, world!</em>")
+            }
+        assertEquals(
+            "<body>\n    <em>Hello, world!</em>\n</body>",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `slides conditional`() {
+        context.documentInfo.type = DocumentType.PLAIN
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor(
+                    """
+                    <body>
+                        [[if:SLIDES]]
+                        <em>Hello, world!</em>
+                        [[endif:SLIDES]]
+                        [[if:!SLIDES]]
+                        <strong>Hello, world!</strong>
+                        [[endif:!SLIDES]]
+                    </body>
+                    """.trimIndent(),
+                ).content("Hello, world!")
+            }
+        assertEquals(
+            """
+            <body>
+                <strong>Hello, world!</strong>
+            </body>
+            """.trimIndent(),
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `semi-real`() {
+        context.documentInfo.name = "Quarkdown"
+        context.documentInfo.locale = JVMLocaleLoader.fromName("english")
+        context.documentInfo.type = DocumentType.SLIDES
+        context.attributes.hasMath = true
+        context.attributes.hasCode = false
+
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor(
+                    """
+                    <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
                     <head>
+                        [[if:SLIDES]]
                         <link rel="stylesheet" href="...css"></link>
+                        [[endif:SLIDES]]
+                        [[if:CODE]]
                         <script src="...js"></script>
                         <script src="...js"></script>
-                        <title>Quarkdown</title>
+                        [[endif:CODE]]
+                        [[if:MATH]]
+                        <script src="...js"></script>
+                        <script src="...js"></script>
+                        [[endif:MATH]]
+                        <title>[[TITLE]]</title>
                         <style>
+                        [[if:MATH]]
                         mjx-container {
                             margin: 0 0.3em;
                         }
+                        [[endif:MATH]]
                         </style>
                     </head>
                     <body>
+                        [[if:SLIDES]]
                         <div class="reveal">
                             <div class="slides">
-                                <p><em>Hello, world!</em></p>
+                                [[CONTENT]]
                             </div>
                         </div>
                         <script src="slides.js"></script>
+                        [[endif:SLIDES]]
+                        [[if:!SLIDES]]
+                        [[CONTENT]]
+                        [[endif:!SLIDES]]
                     </body>
                     </html>
                     """.trimIndent(),
-                    it.process(),
-                )
+                ).content("<p><em>Hello, world!</em></p>")
             }
 
-        TemplateProcessor
-            .fromResourceName("/postrendering/html-test-wrapper.html")
-            .optionalValue(TemplatePlaceholders.LANGUAGE, JVMLocaleLoader.fromName("english")?.tag)
-            .value(TemplatePlaceholders.TITLE, "Quarkdown")
-            .value(TemplatePlaceholders.DOCUMENT_TYPE, DocumentType.SLIDES.name.lowercase())
-            .conditional(TemplatePlaceholders.IS_PAGED, false)
-            .conditional(TemplatePlaceholders.IS_SLIDES, true)
-            .conditional(TemplatePlaceholders.HAS_CODE, true)
-            .conditional(TemplatePlaceholders.HAS_MATH, false)
-            .conditional(TemplatePlaceholders.HAS_PAGE_SIZE, true)
-            .value(TemplatePlaceholders.PAGE_WIDTH, "8.5in")
-            .value(TemplatePlaceholders.PAGE_HEIGHT, "11in")
-            .optionalValue(TemplatePlaceholders.PAGE_MARGIN, "1in")
-            .content("<p><em>Hello, world!</em></p>")
-            .let {
-                assertEquals(
-                    javaClass
-                        .getResourceAsStream("/postrendering/html-test-result.html")!!
-                        .reader()
-                        .readText(),
-                    it.process(),
-                )
+        assertEquals(
+            """
+            <html lang="en">
+            <head>
+                <link rel="stylesheet" href="...css"></link>
+                <script src="...js"></script>
+                <script src="...js"></script>
+                <title>Quarkdown</title>
+                <style>
+                mjx-container {
+                    margin: 0 0.3em;
+                }
+                </style>
+            </head>
+            <body>
+                <div class="reveal">
+                    <div class="slides">
+                        <p><em>Hello, world!</em></p>
+                    </div>
+                </div>
+                <script src="slides.js"></script>
+            </body>
+            </html>
+            """.trimIndent(),
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun real() {
+        context.documentInfo.name = "Quarkdown"
+        context.documentInfo.locale = JVMLocaleLoader.fromName("english")
+        context.documentInfo.type = DocumentType.SLIDES
+        context.attributes.hasMath = true
+        context.attributes.hasCode = false
+        context.documentInfo.pageFormat.pageWidth = 8.5.inch
+        context.documentInfo.pageFormat.pageHeight = 11.0.inch
+        context.documentInfo.pageFormat.margin = Sizes(1.0.inch)
+        context.documentInfo.tex.macros["\\R"] = "\\mathbb{R}"
+        context.documentInfo.tex.macros["\\Z"] = "\\mathbb{Z}"
+
+        val postRenderer =
+            HtmlPostRenderer(context) {
+                TemplateProcessor
+                    .fromResourceName("/postrendering/html-test-wrapper.html")
+                    .content("<p><em>Hello, world!</em></p>")
             }
+
+        assertEquals(
+            javaClass
+                .getResourceAsStream("/postrendering/html-test-result.html")!!
+                .reader()
+                .readText(),
+            postRenderer.createTemplateProcessor().process(),
+        )
     }
 
     @Test
