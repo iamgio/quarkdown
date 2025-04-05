@@ -24,6 +24,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
  * @param textAlignment alignment of the text
+ * @param float floating position of the container within the parent
  */
 class Container(
     val width: Size? = null,
@@ -39,6 +40,7 @@ class Container(
     val cornerRadius: Sizes? = null,
     val alignment: Alignment? = null,
     val textAlignment: Alignment? = null,
+    val float: FloatAlignment? = null,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
@@ -79,6 +81,17 @@ class Container(
          */
         DOUBLE,
 
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
+
+    /**
+     * Floating position of a [Container].
+     */
+    enum class FloatAlignment : RenderRepresentable {
+        START,
+        END,
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)

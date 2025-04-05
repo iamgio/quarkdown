@@ -36,6 +36,7 @@ val Layout: Module =
         ::container,
         ::align,
         ::center,
+        ::float,
         ::row,
         ::column,
         ::grid,
@@ -65,6 +66,7 @@ val Layout: Module =
  * @param cornerRadius corner (and border) radius. None if unset
  * @param alignment alignment of the content. Default if unset
  * @param textAlignment alignment of the text. [alignment] if unset
+ * @param float floating position of the container within the parent. Not floating if unset
  * @param body content to group
  * @return the new container node
  */
@@ -82,6 +84,7 @@ fun container(
     @Name("radius") cornerRadius: Sizes? = null,
     alignment: Container.Alignment? = null,
     @Name("textalignment") textAlignment: Container.Alignment? = alignment,
+    float: Container.FloatAlignment? = null,
     body: MarkdownContent? = null,
 ) = Container(
     width,
@@ -97,6 +100,7 @@ fun container(
     cornerRadius,
     alignment,
     textAlignment,
+    float,
     body?.children ?: emptyList(),
 ).wrappedAsValue()
 
@@ -124,6 +128,21 @@ fun align(
  * @see align
  */
 fun center(body: MarkdownContent) = align(Container.Alignment.CENTER, body)
+
+/**
+ * Makes content float within its parent.
+ * @param alignment floating position
+ * @param body content to float
+ * @return the new floating container
+ * @see container
+ */
+fun float(
+    alignment: Container.FloatAlignment,
+    body: MarkdownContent,
+) = container(
+    float = alignment,
+    body = body,
+)
 
 /**
  * Stacks content together, according to the specified type.

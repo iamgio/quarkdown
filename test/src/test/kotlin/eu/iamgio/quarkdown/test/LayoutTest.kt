@@ -193,4 +193,27 @@ class LayoutTest {
             )
         }
     }
+
+    @Test
+    fun float() {
+        execute(
+            """
+            Hello 1
+            
+            .float {start}
+                ![Quarkdown](img/icon.png)
+            
+            Hello 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hello 1</p>" +
+                    "<div class=\"container\" style=\"float: inline-start;\">" +
+                    "<figure><img src=\"img/icon.png\" alt=\"Quarkdown\" /></figure>" +
+                    "</div>" +
+                    "<p>Hello 2</p>",
+                it,
+            )
+        }
+    }
 }

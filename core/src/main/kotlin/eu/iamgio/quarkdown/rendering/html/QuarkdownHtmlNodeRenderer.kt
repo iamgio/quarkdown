@@ -180,6 +180,7 @@ class QuarkdownHtmlNodeRenderer(
 
                 "justify-items" value node.alignment
                 "text-align" value node.textAlignment
+                "float" value node.float
             }
         }
 

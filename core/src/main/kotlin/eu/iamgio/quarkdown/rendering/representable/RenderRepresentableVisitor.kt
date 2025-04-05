@@ -28,9 +28,11 @@ interface RenderRepresentableVisitor<T> {
 
     fun visit(alignment: Table.Alignment): T
 
+    fun visit(borderStyle: Container.BorderStyle): T
+
     fun visit(alignment: Container.Alignment): T
 
-    fun visit(borderStyle: Container.BorderStyle): T
+    fun visit(alignment: Container.FloatAlignment): T
 
     fun visit(stackLayout: Stacked.Layout): T
 

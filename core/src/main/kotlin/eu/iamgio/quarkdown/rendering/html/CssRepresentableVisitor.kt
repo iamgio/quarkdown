@@ -38,13 +38,15 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
 
-    override fun visit(alignment: Container.Alignment) = alignment.kebabCaseName
-
     override fun visit(borderStyle: Container.BorderStyle) =
         when (borderStyle) {
             Container.BorderStyle.NORMAL -> "solid"
             else -> borderStyle.kebabCaseName
         }
+
+    override fun visit(alignment: Container.Alignment) = alignment.kebabCaseName
+
+    override fun visit(alignment: Container.FloatAlignment) = "inline-${alignment.kebabCaseName}"
 
     override fun visit(stackLayout: Stacked.Layout) =
         when (stackLayout) {
