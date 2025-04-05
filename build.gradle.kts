@@ -1,11 +1,14 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
 plugins {
     kotlin("jvm") version "2.0.20"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-    id("com.gradleup.shadow") version "8.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
+    id("com.gradleup.shadow") version "8.3.6"
+    id("com.github.ben-manes.versions") version "0.52.0"
     application
 }
 
@@ -67,4 +70,12 @@ tasks.withType<KotlinCompile> {
 tasks.withType<ShadowJar> {
     archiveVersion.set("")
     archiveClassifier.set("")
+}
+
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        sequenceOf("alpha", "beta", "preview", "-m", "-rc").any {
+            candidate.version.contains(it, ignoreCase = true)
+        }
+    }
 }
