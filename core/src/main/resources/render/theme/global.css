@@ -317,6 +317,11 @@ body.quarkdown-paged {
     margin-bottom: 0;
 }
 
+/* Syllables-based word break */
+.quarkdown:not(.quarkdown-slides) p {
+    hyphens: auto;
+}
+
 .quarkdown p:empty {
     display: none;
 }
@@ -328,11 +333,6 @@ p + .float + p:not(.stack > p):not(.page-margin-content > p),
 /* Spacing between the paragraph and its floating element sibling. */
 p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
-}
-
-/* Syllables-based word break in paged documents */
-.pagedjs_page_content p {
-    hyphens: auto;
 }
 
 /* Reset the margin of the first element in a page */
