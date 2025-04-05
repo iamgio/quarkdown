@@ -208,7 +208,7 @@ class LayoutTest {
         ) {
             assertEquals(
                 "<p>Hello 1</p>" +
-                    "<div class=\"container\" style=\"float: inline-start;\">" +
+                    "<div class=\"container float\" style=\"float: inline-start;\">" +
                     "<figure><img src=\"img/icon.png\" alt=\"Quarkdown\" /></figure>" +
                     "</div>" +
                     "<p>Hello 2</p>",

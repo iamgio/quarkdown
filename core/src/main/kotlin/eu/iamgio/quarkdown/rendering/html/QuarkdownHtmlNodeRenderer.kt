@@ -153,7 +153,11 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: Container) =
         buildTag("div") {
-            classNames("container", "fullwidth".takeIf { node.fullWidth })
+            classNames(
+                "container",
+                "fullwidth".takeIf { node.fullWidth },
+                "float".takeIf { node.float != null },
+            )
 
             +node.children
 

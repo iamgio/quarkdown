@@ -321,7 +321,12 @@ body.quarkdown-paged {
     display: none;
 }
 
-p + p:not(.stack > p):not(.page-margin-content > p) {
+/* Spacing between two sibling paragraphs */
+p + p:not(.stack > p):not(.page-margin-content > p),
+/* Spacing between two sibling paragraphs with a floating element in-between */
+p + .float + p:not(.stack > p):not(.page-margin-content > p),
+/* Spacing between the paragraph and its floating element sibling. */
+p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
