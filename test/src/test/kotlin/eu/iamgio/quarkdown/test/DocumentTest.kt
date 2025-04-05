@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.test
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container.Alignment
 import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.document.page.PageOrientation
@@ -83,7 +83,7 @@ class DocumentTest {
             )
 
             assertEquals(4, documentInfo.pageFormat.columnCount)
-            assertEquals(Aligned.Alignment.END, documentInfo.pageFormat.alignment)
+            assertEquals(Alignment.END, documentInfo.pageFormat.alignment)
         }
     }
 

@@ -435,32 +435,6 @@ Example: "Figure 1.1:"
     margin: 0;
 }
 
-/* Alignment */
-
-.align {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.align-start {
-    text-align: start;
-    justify-content: start;
-    align-items: start;
-}
-
-.align-center {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.align-end {
-    text-align: end;
-    justify-content: end;
-    align-items: end;
-}
-
 /* Stacks */
 
 :is(.stack, .page-margin-content) > :is(p, h1, h2, h3, h4, h5, h6, figure) {

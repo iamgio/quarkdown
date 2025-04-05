@@ -68,7 +68,7 @@ class UtilitiesTest {
         ) {
             assertEquals(
                 codeOutput +
-                    "<div class=\"container fullwidth\" style=\"text-align: center; justify-items: center;\">$contentOutput</div>",
+                    "<div class=\"container fullwidth\" style=\"justify-items: center; text-align: center;\">$contentOutput</div>",
                 it,
             )
         }
@@ -106,7 +106,7 @@ class UtilitiesTest {
                 codeOutput +
                     "<div class=\"container\"><p>=</p></div>" +
                     "<div class=\"container fullwidth\" style=\"" +
-                    "margin: ${if (shrinkVertical) "-50.0px" else "0.0px"} 0.0px 0.0px 0.0px; text-align: center; justify-items: center;" +
+                    "margin: ${if (shrinkVertical) "-50.0px" else "0.0px"} 0.0px 0.0px 0.0px; justify-items: center; text-align: center;" +
                     "\">" +
                     contentOutput +
                     "</div>"

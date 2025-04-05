@@ -3,7 +3,7 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
 import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -330,7 +330,7 @@ fun pageFormat(
     height: Size? = null,
     margin: Sizes? = null,
     columns: Int? = null,
-    alignment: Aligned.Alignment? = null,
+    alignment: Container.Alignment? = null,
 ): VoidValue {
     with(context.documentInfo.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,

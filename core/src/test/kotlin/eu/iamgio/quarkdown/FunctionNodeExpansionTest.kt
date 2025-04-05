@@ -8,8 +8,8 @@ import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentType
@@ -57,7 +57,7 @@ class FunctionNodeExpansionTest {
     fun echoBoolean(value: Boolean) = BooleanValue(value)
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun resourceContent(path: String) = StringValue(javaClass.getResourceAsStream("/function/$path")!!.reader().readText())

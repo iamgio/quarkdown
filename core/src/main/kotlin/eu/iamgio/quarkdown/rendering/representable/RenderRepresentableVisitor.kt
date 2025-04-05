@@ -2,7 +2,6 @@ package eu.iamgio.quarkdown.rendering.representable
 
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
@@ -29,7 +28,7 @@ interface RenderRepresentableVisitor<T> {
 
     fun visit(alignment: Table.Alignment): T
 
-    fun visit(alignment: Aligned.Alignment): T
+    fun visit(alignment: Container.Alignment): T
 
     fun visit(borderStyle: Container.BorderStyle): T
 

@@ -58,7 +58,9 @@ class PaperLibTest {
             assertEquals(
                 "<p><strong>Theorem 0.1.</strong> This is my theorem.</p>" +
                     "<p><strong>Proof 0.i.</strong> And this is my proof.</p>" +
-                    "<div class=\"align align-end\"><span class=\"size-huge\">∎</span></div>",
+                    "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
+                    "<span class=\"size-huge\">∎</span>" +
+                    "</div>",
                 it,
             )
         }
@@ -80,7 +82,9 @@ class PaperLibTest {
         ) {
             assertEquals(
                 "<p><strong>Proof a:</strong> This is my proof.</p>" +
-                    "<div class=\"align align-end\"><span class=\"size-huge\">#</span></div>",
+                    "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
+                    "<span class=\"size-huge\">#</span>" +
+                    "</div>",
                 it,
             )
         }
@@ -100,8 +104,18 @@ class PaperLibTest {
             """.trimIndent(),
             loadableLibraries = setOf("paper"),
         ) {
-            assertContains(it, "<div class=\"align align-center\"><p><strong>Abstract</strong></p></div>")
-            assertContains(it, "<div class=\"align align-end\"><p><strong>Abstract</strong></p></div>")
+            assertContains(
+                it,
+                "<div class=\"container fullwidth\" style=\"justify-items: center; text-align: center;\">" +
+                    "<p><strong>Abstract</strong></p>" +
+                    "</div>",
+            )
+            assertContains(
+                it,
+                "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
+                    "<p><strong>Abstract</strong></p>" +
+                    "</div>",
+            )
         }
     }
 }

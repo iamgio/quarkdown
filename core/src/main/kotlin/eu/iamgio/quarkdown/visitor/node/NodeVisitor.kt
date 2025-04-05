@@ -29,7 +29,6 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
@@ -131,8 +130,6 @@ interface NodeVisitor<T> {
     fun visit(node: Math): T
 
     fun visit(node: Container): T
-
-    fun visit(node: Aligned): T
 
     fun visit(node: Stacked): T
 

@@ -23,6 +23,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param padding whitespace around the content
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
+ * @param textAlignment alignment of the text
  */
 class Container(
     val width: Size? = null,
@@ -36,10 +37,23 @@ class Container(
     val margin: Sizes? = null,
     val padding: Sizes? = null,
     val cornerRadius: Sizes? = null,
-    val alignment: Aligned.Alignment? = null,
+    val alignment: Alignment? = null,
+    val textAlignment: Alignment? = null,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+
+    /**
+     * Possible alignment types of a [Container].
+     */
+    enum class Alignment : RenderRepresentable {
+        START,
+        CENTER,
+        END,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
 
     /**
      * Style of the border of a [Container].

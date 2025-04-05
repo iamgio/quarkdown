@@ -33,7 +33,6 @@ import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.dsl.buildBlock
 import eu.iamgio.quarkdown.ast.dsl.buildBlocks
 import eu.iamgio.quarkdown.ast.dsl.buildInline
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
@@ -773,7 +772,8 @@ class HtmlNodeRendererTest {
                 margin = Sizes(all = 2.0.cm),
                 padding = Sizes(2.0.inch, 3.percent, 4.0.inch, 5.0.inch),
                 cornerRadius = Sizes(all = 6.0.px),
-                alignment = Aligned.Alignment.CENTER,
+                alignment = Container.Alignment.CENTER,
+                textAlignment = Container.Alignment.START,
                 children = children,
             ).render(),
         )
@@ -783,20 +783,10 @@ class HtmlNodeRendererTest {
             Container(
                 borderColor = Color(30, 20, 10),
                 borderStyle = Container.BorderStyle.DOTTED,
-                alignment = Aligned.Alignment.END,
+                alignment = Container.Alignment.END,
                 children = children,
             ).render(),
         )
-    }
-
-    @Test
-    fun aligned() {
-        val out = readParts("quarkdown/aligned.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
-
-        assertEquals(out.next(), Aligned(Aligned.Alignment.START, listOf(paragraph)).render())
-        assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
-        assertEquals(out.next(), Aligned(Aligned.Alignment.END, listOf(paragraph)).render())
     }
 
     @Test

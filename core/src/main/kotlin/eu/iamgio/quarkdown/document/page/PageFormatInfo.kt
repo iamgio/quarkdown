@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.document.page
 
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container.Alignment
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 
@@ -18,7 +18,7 @@ data class PageFormatInfo(
     var pageHeight: Size? = null,
     var margin: Sizes? = null,
     var columnCount: Int? = null,
-    var alignment: Aligned.Alignment? = null,
+    var alignment: Alignment? = null,
 ) {
     /**
      * Whether the document has a fixed size.

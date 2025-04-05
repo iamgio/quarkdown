@@ -13,7 +13,6 @@ import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
@@ -179,12 +178,10 @@ class QuarkdownHtmlNodeRenderer(
                         else -> null
                     }
 
-                "text-align" value node.alignment
                 "justify-items" value node.alignment
+                "text-align" value node.textAlignment
             }
         }
-
-    override fun visit(node: Aligned) = div("align align-${node.alignment.asCSS}", node.children)
 
     override fun visit(node: Stacked) =
         div("stack stack-${node.layout.asCSS}") {

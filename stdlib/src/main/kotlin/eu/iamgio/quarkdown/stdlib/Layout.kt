@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.dsl.buildInline
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
@@ -65,6 +64,7 @@ val Layout: Module =
  * @param padding whitespace around the content. None if unset
  * @param cornerRadius corner (and border) radius. None if unset
  * @param alignment alignment of the content. Default if unset
+ * @param textAlignment alignment of the text. [alignment] if unset
  * @param body content to group
  * @return the new container node
  */
@@ -80,7 +80,8 @@ fun container(
     @Name("margin") margin: Sizes? = null,
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
-    alignment: Aligned.Alignment? = null,
+    alignment: Container.Alignment? = null,
+    @Name("textalignment") textAlignment: Container.Alignment? = alignment,
     body: MarkdownContent? = null,
 ) = Container(
     width,
@@ -95,27 +96,34 @@ fun container(
     padding,
     cornerRadius,
     alignment,
+    textAlignment,
     body?.children ?: emptyList(),
 ).wrappedAsValue()
 
 /**
- * Aligns content within its parent.
- * @param alignment content alignment anchor
+ * Aligns content and text within its parent.
+ * @param alignment content alignment anchor and text alignment
  * @param body content to center
- * @return the new aligned block
+ * @return the new aligned container
+ * @see container
  */
 fun align(
-    alignment: Aligned.Alignment,
+    alignment: Container.Alignment,
     body: MarkdownContent,
-) = Aligned(alignment, body.children).wrappedAsValue()
+) = container(
+    fullWidth = true,
+    alignment = alignment,
+    textAlignment = alignment,
+    body = body,
+)
 
 /**
- * Centers content within its parent.
+ * Centers content and text within its parent.
  * @param body content to center
- * @return the new aligned block
+ * @return the new aligned container
  * @see align
  */
-fun center(body: MarkdownContent) = align(Aligned.Alignment.CENTER, body)
+fun center(body: MarkdownContent) = align(Container.Alignment.CENTER, body)
 
 /**
  * Stacks content together, according to the specified type.
@@ -295,7 +303,8 @@ fun numbered(
 ): NodeValue {
     val node =
         Numbered(key) { number ->
-            body.invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue())
+            body
+                .invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue())
                 .unwrappedValue
                 .children
         }
@@ -322,7 +331,8 @@ fun table(
     subTables: Iterable<Value<String>>,
 ): NodeValue {
     val columns =
-        subTables.asSequence()
+        subTables
+            .asSequence()
             .map { it.unwrappedValue }
             .map { ValueFactory.blockMarkdown(it, context).unwrappedValue }
             .map { it.children.first() }

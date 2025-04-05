@@ -113,7 +113,12 @@ class NodesTest {
             C
             """.trimIndent(),
         ) {
-            assertEquals("<p>A</p><div class=\"align align-end\"><h3>B</h3></div><p>C</p>", it)
+            assertEquals(
+                "<p>A</p>" +
+                    "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\"><h3>B</h3></div>" +
+                    "<p>C</p>",
+                it,
+            )
         }
     }
 

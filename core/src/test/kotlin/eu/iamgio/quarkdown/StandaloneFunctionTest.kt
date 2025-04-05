@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.DocumentType
@@ -583,7 +583,7 @@ class StandaloneFunctionTest {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
 
     @Test
     fun `KFunction with enum`() {

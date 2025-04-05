@@ -30,7 +30,6 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
@@ -276,8 +275,6 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Math): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Container): CharSequence = throw UnsupportedRenderException(node)
-
-    override fun visit(node: Aligned): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Stacked): CharSequence = throw UnsupportedRenderException(node)
 

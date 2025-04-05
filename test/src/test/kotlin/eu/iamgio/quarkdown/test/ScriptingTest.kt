@@ -747,7 +747,7 @@ class ScriptingTest {
                   
             .function {author}
                 name branch email:
-                .center
+                .container
                     **.name**  
                     .branch  
                     .text {.email} size:{small}  
@@ -762,19 +762,19 @@ class ScriptingTest {
             assertEquals(
                 "<div style=\"grid-template-columns: auto auto; justify-content: space-around; align-items: center;\" " +
                     "class=\"stack stack-grid\">" +
-                    "<div class=\"align align-center\">" +
+                    "<div class=\"container\">" +
                     "<p><strong>Llion Jones</strong><br />Google Research<br />" +
                     "<span class=\"size-small\"><a href=\"llion@google.com\">llion@google.com</a></span><br /><span>&nbsp;</span></p>" +
-                    "</div><div class=\"align align-center\">" +
+                    "</div><div class=\"container\">" +
                     "<p><strong>Aidan N. Gomez</strong>" +
                     "<br />University of Toronto<br />" +
                     "<span class=\"size-small\"><a href=\"aidan@cs.toronto.edu\">aidan@cs.toronto.edu</a></span><br />" +
                     "<span>&nbsp;</span></p>" +
-                    "</div><div class=\"align align-center\"><p><strong>Łukasz Kaiser</strong>" +
+                    "</div><div class=\"container\"><p><strong>Łukasz Kaiser</strong>" +
                     "<br />Google Brain<br />" +
                     "<span class=\"size-small\"><a href=\"lukaszkaiser@google.com\">lukaszkaiser@google.com</a></span><br />" +
                     "<span>&nbsp;</span></p></div>" +
-                    "<div class=\"align align-center\"><p><strong>Illia Polosukhin</strong>" +
+                    "<div class=\"container\"><p><strong>Illia Polosukhin</strong>" +
                     "<br />-<br />" +
                     "<span class=\"size-small\"><a href=\"illia.polosukhin@gmail.com\">illia.polosukhin@gmail.com</a></span><br />" +
                     "<span>&nbsp;</span></p></div></div>",

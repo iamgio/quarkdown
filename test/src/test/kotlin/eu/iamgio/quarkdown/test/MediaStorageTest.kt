@@ -34,7 +34,7 @@ class MediaStorageTest {
 
         execute(
             """
-            .center
+            .container
                 ![Icon](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-light.svg "The Quarkdown icon")
                 
                 ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)
@@ -43,7 +43,7 @@ class MediaStorageTest {
             enableMediaStorage = true,
         ) {
             assertEquals(
-                "<div class=\"align align-center\">" +
+                "<div class=\"container\">" +
                     "<figure>" +
                     "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg\" " +
                     "alt=\"Icon\" title=\"The Quarkdown icon\" />" +
