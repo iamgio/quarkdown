@@ -335,6 +335,14 @@ p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
+.float[style*="float: inline-start"] {
+    margin-right: 1.1em;
+}
+
+.float[style*="float: inline-end"] {
+    margin-left: 1.1em;
+}
+
 /* Reset the margin of the first element in a page */
 .pagedjs_page_content > div > *:first-child,
 .pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
