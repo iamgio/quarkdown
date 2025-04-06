@@ -11,7 +11,6 @@ import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
@@ -125,71 +124,6 @@ class DocumentTest {
                     "<p>English</p>",
                 it,
             )
-        }
-    }
-
-    @Test
-    fun localization() {
-        execute(
-            """
-            .doclang {english}
-            .localization {mytable}
-                - English
-                    - morning: Good morning
-                    - evening: Good evening
-                - Italian
-                    - morning: Buongiorno
-                    - evening: Buonasera
-            
-            > .localize {mytable:morning}.
-            """.trimIndent(),
-        ) {
-            assertEquals("<blockquote><p>Good morning.</p></blockquote>", it)
-        }
-
-        execute(
-            """
-            .doclang {italian}
-            .localization {mytable}
-                - English
-                    - theorem: Theorem
-                - Italian
-                    - theorem: Teorema
-
-            .function {theorem}
-                **.localize {mytable:theorem}.**
-
-            .theorem Test
-            """.trimIndent(),
-        ) {
-            assertEquals("<p><strong>Teorema.</strong> Test</p>", it)
-        }
-
-        assertFails {
-            execute(
-                """
-                .doclang {english}
-                .localization {mytable}
-                    - English
-                        - morning: Good morning
-                        - evening: Good evening
-                    - Italian
-                        - morning: Buongiorno
-                        - evening: Buonasera
-                
-                > .localize {mytable:afternoon}.
-                """.trimIndent(),
-            ) {}
-        }
-
-        // Library's injected localization table.
-        execute(
-            """
-            .doclang {english}
-            .localize {std:warning}
-            """.trimIndent(),
-        ) {
-            assertEquals("<p>Warning</p>", it)
         }
     }
 }

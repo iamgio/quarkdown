@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.localization.Locale
 import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.localization.LocalizationEntries
+import eu.iamgio.quarkdown.localization.LocalizationTable
 
 /**
  * `Localization` stdlib module exporter.
@@ -24,41 +25,18 @@ val Localization: Module =
     )
 
 /**
- * Defines and registers a new localization table, whose entries are key-value pairs for each locale and defined by a Markdown dictionary.
- *
- * Example:
- * ```
- * .localization
- *     - English
- *         - morning: Good morning
- *         - evening: Good evening
- *     - Italian
- *         - morning: Buongiorno
- *         - evening: Buonasera
- * ```
- *
- * @param tableName name of the localization table. Must be unique
- * @param contents dictionary of locales and their key-value entries
- * @throws IllegalArgumentException if the contents are not in the correct format or if the table name is already defined
+ * Builds a localization table from the given dictionary of locales and their key-value entries.
  */
-fun localization(
-    @Injected context: MutableContext,
-    @Name("name") tableName: String,
-    contents: Map<String, DictionaryValue<OutputValue<String>>>,
-): VoidValue {
-    // Duplicate table names are not allowed.
-    if (tableName in context.localizationTables) {
-        throw IllegalArgumentException("Localization table \"$tableName\" is already defined.")
-    }
-
-    val table =
-        contents.asSequence().map { (key, value) ->
+private fun buildLocalizationTable(contents: Map<String, DictionaryValue<OutputValue<String>>>): LocalizationTable =
+    contents
+        .asSequence()
+        .map { (key, value) ->
             // The locale name is the first element of each list item:
             // English <-- this is the locale name
             //   - key1: value1
             //   - key2: value2
             val locale: Locale =
-                LocaleLoader.SYSTEM.fromName(key)
+                LocaleLoader.SYSTEM.find(key)
                     ?: throw IllegalArgumentException("Could not find locale \"${key}\".")
 
             val entries: LocalizationEntries =
@@ -67,7 +45,85 @@ fun localization(
             locale to entries
         }.toMap()
 
-    // The table is registered to the context.
+/**
+ * Merges two localization tables, giving priority to the new one.
+ */
+private fun mergeLocalizationTables(
+    existingTable: LocalizationTable,
+    newTable: LocalizationTable,
+): LocalizationTable =
+    existingTable.toMutableMap().apply {
+        newTable.forEach { (locale, entries) ->
+            merge(locale, entries) { existingEntries, newEntries -> existingEntries + newEntries }
+        }
+    }
+
+/**
+ * Defines and registers a new localization table, whose entries are key-value pairs for each locale and defined by a Markdown dictionary.
+ *
+ * Example:
+ * ```
+ * .localization {mytable}
+ *     - English
+ *         - morning: Good morning
+ *         - evening: Good evening
+ *     - Italian
+ *         - morning: Buongiorno
+ *         - evening: Buonasera
+ * ```
+ * The localization entries can then be accessed via the [localize] function, after setting the document language via [docLanguage]:
+ * ```
+ * .doclang {english}
+ *
+ * .localize {mytable:morning} <!-- Good morning -->
+ * ```
+ *
+ * If [merge] is set to true, it can be used to expand an existing localization table.
+ *
+ * Example, extending stdlib's localization table:
+ * ```
+ * .doclang {fr-CA}
+ *
+ * .localization {std} merge:{true}
+ *    - fr-CA
+ *        - warning: Avertissement
+ *
+ * .box type:{warning}
+ *     Box content
+ * ```
+ * In this example, the warning box will automatically feature the "Avertissement" title,
+ * since the `std:warning` localization key is accessed by the `.box` function.
+ *
+ * @param tableName name of the localization table. Must be unique if [merge] is false.
+ * @param merge if enabled and a table with the same name already exists, the two tables will be merged, with higher priority to the new one
+ * @param contents dictionary of locales and their key-value entries
+ * @throws IllegalArgumentException if the contents are not in the correct format,
+ * or if the table name is already defined and [merge] is false
+ */
+fun localization(
+    @Injected context: MutableContext,
+    @Name("name") tableName: String,
+    merge: Boolean = false,
+    contents: Map<String, DictionaryValue<OutputValue<String>>>,
+): VoidValue {
+    val tableExists = tableName in context.localizationTables
+
+    // Duplicate table names are not allowed.
+    if (!merge && tableExists) {
+        throw IllegalArgumentException(
+            "Localization table \"$tableName\" is already defined. " +
+                "To merge an existing table, use the merge parameter.",
+        )
+    }
+
+    var table = buildLocalizationTable(contents)
+
+    if (merge && tableExists) {
+        val existingTable = context.localizationTables[tableName]!!
+        table = mergeLocalizationTables(existingTable, table)
+    }
+
+    // The table is registered in the context.
     context.localizationTables[tableName] = table
 
     return VoidValue
