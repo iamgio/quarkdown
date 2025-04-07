@@ -50,7 +50,8 @@ object Stdlib : LibraryExporter {
                         Localization +
                         Library +
                         Slides +
-                        Ecosystem,
+                        Ecosystem +
+                        Injection,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.
