@@ -5,7 +5,6 @@
     --qd-background-color: hsl(210, 20%, 98%);
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: hsl(0, 100%, 33%);
-    --qd-callout-box-header-color: var(--qd-primary-color);
     --qd-color-on-primary: var(--qd-main-color);
 }
 
@@ -30,10 +29,10 @@ pre code {
     box-shadow: none;
 }
 
-.box.callout > header {
-    background-image: linear-gradient(to right, var(--qd-primary-color), transparent);
-}
-
 nav ol ol {
     border-color: rgba(0, 0, 0, .2);
+}
+
+.box.callout {
+    --box-header-background-color: rgba(0, 0, 0, .03);
 }

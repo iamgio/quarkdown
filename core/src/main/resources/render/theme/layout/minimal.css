@@ -13,6 +13,7 @@
     --qd-line-height: 1.8;
     --qd-code-line-height: 1.85;
     --qd-location-suffix: "";
+    --qd-box-border-radius: 10px;
 }
 
 .quarkdown h1 {
@@ -87,17 +88,8 @@
     font-style: italic;
 }
 
-.box {
-    border-radius: 10px;
-}
-
 .box > header {
     font-size: 0.6em;
-    border-radius: 8px 8px 0 0;
-}
-
-.box.error code {
-    font-size: 0.7em;
 }
 
 .codespan-content {

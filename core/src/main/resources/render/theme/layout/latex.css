@@ -162,29 +162,18 @@ blockquote {
 
 /* Box */
 
-.box {
+.box.callout {
+    border-color: var(--box-header-background-color) !important;
     border-left: 2px solid;
-    border-radius: 8px;
-}
-
-.box > header {
-    border-radius: 6px 6px 0 0;
-}
-
-.box.box {
-    border-color: var(--qd-callout-box-header-color);
-}
-
-.box.callout:has(> header) {
     border-radius: 8px 8px 8px 0;
 }
 
-.box.callout:not(:has(> header)) {
-    border-radius: 0;
+.box.callout > .box-content {
+    background-color: var(--qd-background-color);
 }
 
-.box.callout > .box-content {
-    background-color: var(--qd-background-color) !important;
+.box.callout:not(:has(> header)) {
+    border-top: 16px solid;
 }
 
 /* Code span */

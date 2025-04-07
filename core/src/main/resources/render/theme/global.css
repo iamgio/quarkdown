@@ -56,6 +56,14 @@
     --qd-quote-attribution-prefix: "— "; /* Prefix for quote attributions */
     --qd-quote-foreground-color: var(--qd-main-color);
     --qd-quote-background-color: color-mix(in srgb, var(--qd-quote-foreground-color) 5%, transparent);
+
+    /* Boxes */
+    --qd-box-border-radius: 8px;
+    --qd-box-section-padding: 12px 16px; /* Padding of box sections (header and content) */
+
+    /* Callout elements */
+    --qd-callout-foreground-color: var(--qd-color-on-primary);
+    --qd-callout-background-color: color-mix(in srgb, var(--qd-callout-foreground-color) 5%, transparent);
     /* Tip elements */
     --qd-tip-foreground-color: rgb(33, 102, 25);
     --qd-tip-background-color: color-mix(in srgb, var(--qd-tip-foreground-color) 5%, transparent);
@@ -68,9 +76,9 @@
     /* Important elements */
     --qd-important-foreground-color: rgb(145, 34, 34);
     --qd-important-background-color: color-mix(in srgb, var(--qd-important-foreground-color) 5%, transparent);
-
-    /* Boxes */
-    --qd-box-section-padding: 12px 16px; /* Padding of box sections (header and content) */
+    /* Error elements */
+    --qd-error-foreground-color: white;
+    --qd-error-background-color: rgb(224, 67, 64);
 
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
@@ -554,15 +562,35 @@ Example: "Figure 1.1:"
 
 .box {
     width: 100%;
+    border-radius: var(--qd-box-border-radius);
     margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
     margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
+    --box-background-color: transparent;
+    --box-content-foreground-color: var(--qd-main-color);
+    --box-header-foreground-color: var(--qd-main-color);
+    --box-header-background-color: color-mix(in srgb,
+        var(--box-header-foreground-color) 2.5%,
+        color-mix(in srgb, var(--box-background-color) 98%, rgba(0, 0, 0, .1))
+    );
+    background-color: var(--box-background-color);
+}
+
+.box > .box-content {
+    color: var(--box-content-foreground-color);
+}
+
+.box > header {
+    color: var(--box-header-foreground-color);
+    background-color: var(--box-header-background-color);
+    border-radius: var(--qd-box-border-radius) var(--qd-box-border-radius) 0 0;
 }
 
 .box > header p {
     margin: 0;
 }
 
-.box > header h4 {
+.box > header > h4 {
+    color: var(--box-header-foreground-color);
     font-family: var(--qd-box-heading-font);
     margin: 0;
 }
@@ -598,50 +626,37 @@ Example: "Figure 1.1:"
 
 /* Box types */
 
+.box.callout {
+    --box-background-color: var(--qd-callout-background-color);
+    --box-header-foreground-color: var(--qd-callout-foreground-color);
+}
+
+.box.tip {
+    --box-background-color: var(--qd-tip-background-color);
+    --box-header-foreground-color: var(--qd-tip-foreground-color);
+}
+
+.box.note {
+    --box-background-color: var(--qd-note-background-color);
+    --box-header-foreground-color: var(--qd-note-foreground-color);
+}
+
+.box.warning {
+    --box-background-color: var(--qd-warning-background-color);
+    --box-header-foreground-color: var(--qd-warning-foreground-color);;
+}
+
 .box.error {
-    background-color: rgb(224, 67, 64);
-    color: white;
+    --box-background-color: var(--qd-error-background-color);
+    --box-content-foreground-color: var(--qd-error-foreground-color);
+    --box-header-foreground-color: var(--qd-error-foreground-color);
+    --box-header-background-color: rgba(0, 0, 0, .1);
 }
 
 .box.error > .box-content {
     font-size: 0.7em;
 }
 
-.box.warning {
-    background-color: rgb(244, 206, 94);
-}
-
-.box.tip {
-    background-color: rgb(175, 230, 173);
-}
-
-.box.tip > header > h4 {
-    color: rgb(33, 102, 25);
-}
-
-.box.tip > header {
-    background-color: rgba(33, 102, 25, .1);
-}
-
-.box.note {
-    background-color: rgb(173, 216, 230);
-}
-
-.box.note > header > h4 {
-    color: rgb(25, 60, 102);
-}
-
-.box.note > header {
-    background-color: rgba(25, 60, 102, .1);
-}
-
-.box.error > header > h4 {
-    color: white;
-}
-
-.box:is(.tip, .note, .warning) {
-    color: #333;
-}
 
 /* Box icons */
 
@@ -672,10 +687,6 @@ Example: "Figure 1.1:"
 
 .box.warning > header > h4::before {
     content: "\eac5"; /* 'error' (triangle) icon */
-}
-
-.box:is(.warning, .error) > header {
-    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* End of box styling */

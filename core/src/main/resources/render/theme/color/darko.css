@@ -5,10 +5,14 @@
     --qd-background-color: #242528;
     --qd-main-color: #C9C9D7;
     --qd-link-color: #5FC7C7;
-    --qd-callout-box-header-color: var(--qd-primary-color);
-    --qd-tip-foreground-color: #86DC93;
-    --qd-note-foreground-color: #84AAEC;
-    --qd-warning-foreground-color: #FFB86C;
+    --qd-callout-background-color: var(--qd-primary-color);
+    --qd-callout-foreground-color: var(--qd-color-on-primary);
+    --qd-tip-background-color: rgb(60, 114, 74);
+    --qd-tip-foreground-color: rgb(210, 250, 214);
+    --qd-note-background-color: rgb(52, 79, 117);
+    --qd-note-foreground-color: rgb(194, 236, 250);
+    --qd-warning-background-color: rgb(239, 203, 99);
+    --qd-warning-foreground-color: #333;
     --qd-important-foreground-color: #FF7373;
     --qd-color-on-primary: var(--qd-main-color);
 }
@@ -26,44 +30,17 @@ pre {
     --shadow-opacity: 0.1;
 }
 
-.box > header {
-    background-color: rgba(23, 53, 56, 0.35);
+.box {
+    --box-header-background-color: rgba(23, 53, 56, 0.35);
 }
 
 .box > header > h4 {
     color: inherit;
 }
 
-.box.callout {
-    background-color: var(--qd-primary-color);
-}
-
-.box.tip, .box.note {
-    color: white;
-}
-
-.box.tip {
-    background-color: rgb(60, 114, 74);
-}
-
-.box.tip > header {
-    background-color: rgba(12, 26, 10, 0.2);
-}
-
-.box.tip > header > h4 {
-    color: rgb(210, 250, 214);
-}
-
-.box.note {
-    background-color: rgb(52, 79, 117);
-}
-
-.box.note > header {
-    background-color: rgb(10, 17, 26, 0.15);
-}
-
-.box.note > header > h4 {
-    color: rgb(194, 236, 250);
+.box.warning {
+    --box-content-foreground-color: var(--qd-warning-foreground-color);
+    --box-header-background-color: rgba(0, 0, 0, .1);
 }
 
 .codespan-content:not(.box .codespan-content) {
