@@ -12,13 +12,12 @@ import java.net.URL
 fun String.removeOptionalPrefix(
     prefix: String,
     ignoreCase: Boolean = false,
-): Pair<String, Boolean> {
-    return if (startsWith(prefix, ignoreCase)) {
+): Pair<String, Boolean> =
+    if (startsWith(prefix, ignoreCase)) {
         substring(prefix.length) to true
     } else {
         this to false
     }
-}
 
 /**
  * @return a sliced copy of this string from start to the last occurrence of [string] if it exists,
@@ -46,7 +45,8 @@ fun String.trimDelimiters(): String = if (length >= 2) substring(1, length - 1) 
  */
 fun CharSequence.indent(indent: String) =
     buildString {
-        this@indent.lineSequence()
+        this@indent
+            .lineSequence()
             .filterNot { it.isEmpty() }
             .forEach { append(indent).append(it).append("\n") }
     }
@@ -59,9 +59,10 @@ fun StringBuilder.replace(
     oldValue: String,
     newValue: String,
 ) = apply {
-    var index: Int
-    while (indexOf(oldValue).also { index = it } >= 0) {
-        replace(index, index + oldValue.length, newValue)
+    var startIndex = indexOf(oldValue)
+    while (startIndex >= 0) {
+        replace(startIndex, startIndex + oldValue.length, newValue)
+        startIndex = indexOf(oldValue, startIndex + newValue.length)
     }
 }
 
