@@ -224,7 +224,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             TokenRegexPattern(
                 name = "InlineComment",
                 wrap = ::CommentToken,
-                regex = COMMENT_HELPER.toRegex(),
+                regex = COMMENT_PATTERN,
             )
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis

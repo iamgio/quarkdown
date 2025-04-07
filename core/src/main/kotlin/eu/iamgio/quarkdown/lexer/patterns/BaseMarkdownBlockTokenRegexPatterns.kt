@@ -92,7 +92,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         TokenRegexPattern(
             name = "BlockComment",
             wrap = ::CommentToken,
-            regex = COMMENT_HELPER.toRegex(),
+            regex = COMMENT_PATTERN,
         )
 
     /**
@@ -291,4 +291,4 @@ open class BaseMarkdownBlockTokenRegexPatterns {
 
 private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
 
-internal const val COMMENT_HELPER = "<!--(-?>|[\\s\\S]*?-->)"
+internal val COMMENT_PATTERN = "<!--(-?>|[\\s\\S]*?-->)".toRegex()

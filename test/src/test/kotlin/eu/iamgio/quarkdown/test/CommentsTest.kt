@@ -92,6 +92,19 @@ class CommentsTest {
     }
 
     @Test
+    fun `comment in static-value block argument is not a comment`() {
+        execute(
+            """
+            .uppercase
+                <!-- comment -->
+                Hi
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><!-- COMMENT -->\nHI</p>", it)
+        }
+    }
+
+    @Test
     fun `comment in inline argument`() {
         execute(".sum {1} {<!-- comment -->3}") {
             assertEquals("<p>4</p>", it)

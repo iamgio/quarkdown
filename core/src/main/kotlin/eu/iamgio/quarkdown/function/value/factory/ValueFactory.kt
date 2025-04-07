@@ -41,6 +41,7 @@ import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.quarkdownName
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.lexer.Lexer
+import eu.iamgio.quarkdown.lexer.patterns.COMMENT_PATTERN
 import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
@@ -473,7 +474,7 @@ object ValueFactory {
 
     /**
      * Converts a raw string input to a lambda value.
-     * Lambda example: `param1 param2 => Hello, .param1 and .param2!`
+     * Lambda example: `param1 param2: Hello, .param1 and .param2!`
      * @param raw string input to parse the lambda from
      * @return a new [LambdaValue] from the raw input
      */
@@ -556,7 +557,8 @@ object ValueFactory {
             raw is Expression -> return raw
         }
 
-        val rawCode = raw.toString()
+        // Strip comments.
+        val rawCode = raw.toString().replace(COMMENT_PATTERN, "")
 
         if (rawCode.isEmpty()) return DynamicValue("")
 
