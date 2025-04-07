@@ -40,6 +40,7 @@ class QuarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
+                    comment,
                     functionCall,
                     blockQuote,
                     blockCode,
@@ -52,7 +53,6 @@ class QuarkdownLexerFactory : LexerFactory {
                     pageBreak,
                     setextHeading,
                     table,
-                    html,
                     unorderedList,
                     orderedList,
                     newline,

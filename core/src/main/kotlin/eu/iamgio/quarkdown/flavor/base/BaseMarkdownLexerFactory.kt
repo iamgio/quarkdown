@@ -16,6 +16,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
             StandardRegexLexer(
                 source,
                 listOf(
+                    comment,
                     blockQuote,
                     blockCode,
                     linkDefinition,
@@ -24,7 +25,6 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     horizontalRule,
                     setextHeading,
                     table,
-                    html,
                     unorderedList,
                     orderedList,
                     newline,

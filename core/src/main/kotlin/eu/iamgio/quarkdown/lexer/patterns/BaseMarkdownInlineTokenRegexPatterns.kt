@@ -127,8 +127,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                             "email",
                             "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
                                 "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
-                        )
-                        .build(),
+                        ).build(),
             )
 
     /**
@@ -146,8 +145,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                         .withReference(
                             "email",
                             "[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])",
-                        )
-                        .build(),
+                        ).build(),
             )
 
     /**
@@ -226,14 +224,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             TokenRegexPattern(
                 name = "InlineComment",
                 wrap = ::CommentToken,
-                regex =
-                    RegexBuilder(COMMENT_TAG_HELPER)
-                        .withReference("comment", COMMENT_HELPER)
-                        .withReference(
-                            "attribute",
-                            "\\s+[a-zA-Z:_][\\w.:-]*(?:\\s*=\\s*\"[^\"]*\"|\\s*=\\s*'[^']*'|\\s*=\\s*[^\\s\"'=<>`]+)?",
-                        )
-                        .build(),
+                regex = COMMENT_HELPER.toRegex(),
             )
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
@@ -337,14 +328,6 @@ internal const val DELIMITED_TITLE_HELPER =
 // Width and height separator in images.
 private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*1, 1cm*1cm, 1 1, 1cm 1cm, 1x1 but not 1cmx1cm
 
-private const val COMMENT_TAG_HELPER =
-    "comment" +
-        "|^</[a-zA-Z][\\w:-]*\\s*>" + // self-closing tag
-        "|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>" + // open tag
-        "|^<\\?[\\s\\S]*?\\?>" + // processing instruction, e.g. <?php ?>
-        "|^<![a-zA-Z]+\\s[\\s\\S]*?>" + // declaration, e.g. <!DOCTYPE html>
-        "|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>" // CDATA section
-
 /**
  * @param startDelimiter begin of the match (included)
  * @param endDelimiter end of the match (included)
@@ -377,8 +360,7 @@ private fun delimiteredPattern(
         } else {
             "((?<![\\spunct])end|(?<!\\s)end(?=[\\spunct]))"
         },
-)
-    .withReference("punct", PUNCTUATION_HELPER)
+).withReference("punct", PUNCTUATION_HELPER)
     .withReference("start", startDelimiter)
     .withReference("end", endDelimiter)
     .build()
