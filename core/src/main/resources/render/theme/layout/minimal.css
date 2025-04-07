@@ -14,6 +14,7 @@
     --qd-code-line-height: 1.85;
     --qd-location-suffix: "";
     --qd-box-border-radius: 10px;
+    --qd-box-icon-baseline: 0.1em;
 }
 
 .quarkdown h1 {

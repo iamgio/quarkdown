@@ -17,6 +17,7 @@
     --qd-slides-horizontal-alignment: start;
     --qd-table-default-cell-alignment: start;
     --qd-quote-type-label-suffix: ". ";
+    --qd-box-icon-baseline: -0.1em;
 
     --border-width-thick: 2px;
     --border-width-thin: 1px;
