@@ -651,7 +651,7 @@ Example: "Figure 1.1:"
     float: left;
     width: 18px;
     margin-right: 6px;
-    margin-top: 3px;
+    margin-top: -2px;
 }
 
 .box:is(.tip, .note, .warning) > header > h4 {
