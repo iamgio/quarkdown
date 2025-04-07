@@ -192,48 +192,16 @@ body.quarkdown-paged {
     /* This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:' */
     --quote-type-label: "";
     font-style: normal;
+    background-color: color-mix(in srgb, var(--box-header-foreground-color) 5%, transparent);
+    border-color: var(--box-header-foreground-color);
+    color: var(--box-content-foreground-color);
 }
 
 .quarkdown blockquote[class][data-labeled] > :first-child::before {
     content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
     font-weight: bold;
     font-style: normal;
-}
-
-.quarkdown blockquote.tip {
-    border-color: var(--qd-tip-foreground-color);
-    background-color: var(--qd-tip-background-color);
-}
-
-.quarkdown blockquote.tip :first-child::before {
-    color: var(--qd-tip-foreground-color);
-}
-
-.quarkdown blockquote.note {
-    border-color: var(--qd-note-foreground-color);
-    background-color: var(--qd-note-background-color);
-}
-
-.quarkdown blockquote.note :first-child::before {
-    color: var(--qd-note-foreground-color);
-}
-
-.quarkdown blockquote.warning {
-    border-color: var(--qd-warning-foreground-color);
-    background-color: var(--qd-warning-background-color);
-}
-
-.quarkdown blockquote.warning :first-child::before {
-    color: var(--qd-warning-foreground-color);
-}
-
-.quarkdown blockquote.important {
-    border-color: var(--qd-important-foreground-color);
-    background-color: var(--qd-important-background-color);
-}
-
-.quarkdown blockquote.important :first-child::before {
-    color: var(--qd-important-foreground-color);
+    color: var(--box-header-foreground-color);
 }
 
 .quarkdown blockquote .attribution {
@@ -625,29 +593,34 @@ Example: "Figure 1.1:"
 
 /* End of the target-based styling */
 
-/* Box types */
+/* Box (and quote) types */
 
-.box.callout {
+.callout {
     --box-background-color: var(--qd-callout-background-color);
     --box-header-foreground-color: var(--qd-callout-foreground-color);
 }
 
-.box.tip {
+.tip {
     --box-background-color: var(--qd-tip-background-color);
     --box-header-foreground-color: var(--qd-tip-foreground-color);
 }
 
-.box.note {
+.note {
     --box-background-color: var(--qd-note-background-color);
     --box-header-foreground-color: var(--qd-note-foreground-color);
 }
 
-.box.warning {
+.important {
+    --box-background-color: var(--qd-important-background-color);
+    --box-header-foreground-color: var(--qd-important-foreground-color);
+}
+
+.warning {
     --box-background-color: var(--qd-warning-background-color);
     --box-header-foreground-color: var(--qd-warning-foreground-color);;
 }
 
-.box.error {
+.error {
     --box-background-color: var(--qd-error-background-color);
     --box-content-foreground-color: var(--qd-error-foreground-color);
     --box-header-foreground-color: var(--qd-error-foreground-color);

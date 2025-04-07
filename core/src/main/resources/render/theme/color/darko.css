@@ -10,7 +10,7 @@
     --qd-tip-background-color: rgb(60, 114, 74);
     --qd-tip-foreground-color: rgb(210, 250, 214);
     --qd-note-background-color: rgb(52, 79, 117);
-    --qd-note-foreground-color: rgb(194, 236, 250);
+    --qd-note-foreground-color: rgb(197, 222, 255);
     --qd-warning-background-color: rgb(239, 203, 99);
     --qd-warning-foreground-color: #333;
     --qd-important-foreground-color: #FF7373;
@@ -38,9 +38,14 @@ pre {
     color: inherit;
 }
 
-.box.warning {
+.warning {
     --box-content-foreground-color: var(--qd-warning-foreground-color);
     --box-header-background-color: rgba(0, 0, 0, .1);
+}
+
+blockquote.warning {
+    --box-header-foreground-color: var(--qd-warning-background-color);
+    --box-content-foreground-color: var(--qd-main-color);
 }
 
 .codespan-content:not(.box .codespan-content) {
