@@ -50,10 +50,6 @@ $ Math expression $
 
 ---
 
-<p>
-    HTML
-</p>
-
 [link]: url "Title
 multiline"
 

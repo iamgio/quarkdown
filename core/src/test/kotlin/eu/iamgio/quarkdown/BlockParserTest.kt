@@ -7,7 +7,6 @@ import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
-import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
@@ -387,16 +386,6 @@ class BlockParserTest {
             assertEquals("/url", url)
             assertEquals("Title", title)
         }
-    }
-
-    @Test
-    fun html() {
-        val nodes = blocksIterator<Html>(readSource("/parsing/html.md"))
-
-        assertEquals("<p>Text</p>", nodes.next().content)
-        assertEquals("<p><i>Text</i></p>", nodes.next().content)
-        assertTrue { nodes.next().content.endsWith("</header>") }
-        assertTrue { nodes.next().content.endsWith("</html>") }
     }
 
     @Test

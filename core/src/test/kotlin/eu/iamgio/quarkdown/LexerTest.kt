@@ -21,7 +21,6 @@ import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
 import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
 import eu.iamgio.quarkdown.lexer.tokens.ImageToken
 import eu.iamgio.quarkdown.lexer.tokens.InlineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
@@ -140,7 +139,6 @@ class LexerTest {
         assertIs<OnelineMathToken>(tokens.next())
         assertIs<PageBreakToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
-        assertIs<HtmlToken>(tokens.next())
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<TableToken>(tokens.next())
@@ -617,7 +615,12 @@ class LexerTest {
             assertEquals("bar", value.next!!.name)
             assertEquals(1, value.next!!.arguments.size)
             assertEquals("baz", value.next!!.next!!.name)
-            assertEquals(1, value.next!!.next!!.arguments.size)
+            assertEquals(
+                1,
+                value.next!!
+                    .next!!
+                    .arguments.size,
+            )
         }
     }
 }
