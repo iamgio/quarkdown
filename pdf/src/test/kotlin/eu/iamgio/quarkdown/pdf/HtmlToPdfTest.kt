@@ -2,9 +2,9 @@ package eu.iamgio.quarkdown.pdf
 
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.html.HtmlPdfExporter
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue

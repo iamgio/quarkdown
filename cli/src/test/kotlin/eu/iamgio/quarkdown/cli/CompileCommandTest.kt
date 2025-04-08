@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.cli
 
 import com.github.ajalt.clikt.testing.test
 import eu.iamgio.quarkdown.cli.exec.CompileCommand
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler

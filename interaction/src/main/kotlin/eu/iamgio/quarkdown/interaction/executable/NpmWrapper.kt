@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.pdf.html.executable
+package eu.iamgio.quarkdown.interaction.executable
 
 import java.io.File
 

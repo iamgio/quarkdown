@@ -1,9 +1,8 @@
 package eu.iamgio.quarkdown.pdf.html
 
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 import eu.iamgio.quarkdown.log.Log
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
 import eu.iamgio.quarkdown.server.LocalFileWebServer
 import eu.iamgio.quarkdown.server.withScanner
 import java.io.File

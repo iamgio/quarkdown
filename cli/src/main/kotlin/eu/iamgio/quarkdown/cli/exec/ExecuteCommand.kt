@@ -11,10 +11,10 @@ import eu.iamgio.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import eu.iamgio.quarkdown.cli.server.DEFAULT_SERVER_PORT
 import eu.iamgio.quarkdown.cli.util.thisExecutableFile
 import eu.iamgio.quarkdown.cli.watcher.DirectoryWatcher
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 import eu.iamgio.quarkdown.log.Log
 import eu.iamgio.quarkdown.media.storage.options.ReadOnlyMediaStorageOptions
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.error.BasePipelineErrorHandler
 import eu.iamgio.quarkdown.pipeline.error.StrictPipelineErrorHandler

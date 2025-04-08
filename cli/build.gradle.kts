@@ -8,6 +8,7 @@ dependencies {
     testImplementation("org.apache.pdfbox:pdfbox:3.0.4")
     implementation(project(":core"))
     implementation(project(":server"))
+    implementation(project(":interaction"))
     implementation(project(":pdf"))
     implementation(project(":stdlib"))
     implementation("com.github.ajalt.clikt:clikt:5.0.3")

@@ -1,7 +1,7 @@
 package eu.iamgio.quarkdown.pdf
 
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 
 /**
  * Options for exporting PDF files.

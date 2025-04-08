@@ -1,4 +1,4 @@
-package eu.iamgio.quarkdown.pdf.html.executable
+package eu.iamgio.quarkdown.interaction.executable
 
 /**
  * Abstraction of a Node.js module, which can be installed and linked to a [NodeJsWrapper] through a [NpmWrapper].

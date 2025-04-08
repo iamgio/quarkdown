@@ -1,9 +1,9 @@
 package eu.iamgio.quarkdown.pdf.html
 
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
 import eu.iamgio.quarkdown.pdf.PdfExportOptions
 import eu.iamgio.quarkdown.pdf.PdfExporter
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
 import java.io.File
 
 /**

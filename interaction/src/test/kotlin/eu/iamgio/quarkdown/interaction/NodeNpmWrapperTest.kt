@@ -1,10 +1,9 @@
-package eu.iamgio.quarkdown.pdf
+package eu.iamgio.quarkdown.interaction
 
-import eu.iamgio.quarkdown.pdf.html.executable.NodeJsWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.NodeModule
-import eu.iamgio.quarkdown.pdf.html.executable.NpmWrapper
-import eu.iamgio.quarkdown.pdf.html.executable.PuppeteerNodeModule
-import org.junit.Assume.assumeTrue
+import eu.iamgio.quarkdown.interaction.executable.NodeJsWrapper
+import eu.iamgio.quarkdown.interaction.executable.NodeModule
+import eu.iamgio.quarkdown.interaction.executable.NpmWrapper
+import org.junit.jupiter.api.Assumptions.assumeTrue
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -18,6 +17,8 @@ import kotlin.test.assertTrue
  * @see NpmWrapper
  */
 class NodeNpmWrapperTest {
+    private data object PuppeteerNodeModule : NodeModule("puppeteer")
+
     private val directory: File =
         kotlin.io.path
             .createTempDirectory()
