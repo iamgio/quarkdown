@@ -91,6 +91,13 @@
 [[if:!SLIDES]]
 [[CONTENT]]
 [[endif:!SLIDES]]
+[[if:MERMAID]]
+<script src="script/mermaid.js"></script>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    initMermaid(mermaid);
+</script>
+[[endif:MERMAID]]
 [[if:SERVERPORT]]
 <script src="script/websockets.js"></script>
 <script>startWebSockets("localhost:[[SERVERPORT]]")</script>

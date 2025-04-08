@@ -5,6 +5,7 @@ import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.hooks.CodePresenceHook
 import eu.iamgio.quarkdown.context.hooks.LinkDefinitionRegistrationHook
 import eu.iamgio.quarkdown.context.hooks.MathPresenceHook
+import eu.iamgio.quarkdown.context.hooks.MermaidDiagramPresenceHook
 import eu.iamgio.quarkdown.flavor.TreeIteratorFactory
 
 /**
@@ -18,7 +19,10 @@ class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
             // Allows loading code libraries (e.g. highlight.js syntax highlighting)
             // if at least one code block is present.
             .attach(CodePresenceHook(context))
-            // Allows loading math libraries (e.g. MathJax)
+            // Allows loading Mermaid libraries
+            // if at least one diagram is present.
+            .attach(MermaidDiagramPresenceHook(context))
+            // Allows loading math libraries (e.g. KaTeX)
             // if at least one math block is present.
             .attach(MathPresenceHook(context))
 }

@@ -70,6 +70,11 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.HAS_CODE,
                 context.attributes.hasCode,
             )
+            // Mermaid is initialized only if needed.
+            conditional(
+                TemplatePlaceholders.HAS_MERMAID_DIAGRAM,
+                context.attributes.hasMermaidDiagram,
+            )
             // KaTeX is initialized only if needed.
             conditional(
                 TemplatePlaceholders.HAS_MATH,
@@ -214,6 +219,7 @@ class HtmlPostRenderer(
             pushArtifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
             pushArtifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
             pushArtifact("math", condition = context.attributes.hasMath)
+            pushArtifact("mermaid", condition = context.attributes.hasMermaidDiagram)
             pushArtifact("code", condition = context.attributes.hasCode)
             pushArtifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }

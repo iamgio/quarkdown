@@ -36,6 +36,7 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
+import eu.iamgio.quarkdown.ast.quarkdown.block.MermaidDiagram
 import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
@@ -146,6 +147,8 @@ interface NodeVisitor<T> {
     fun visit(node: Whitespace): T
 
     fun visit(node: TableOfContentsView): T
+
+    fun visit(node: MermaidDiagram): T
 
     // Quarkdown inline
 
