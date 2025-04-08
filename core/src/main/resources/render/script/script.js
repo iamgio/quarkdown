@@ -3,21 +3,33 @@
 
 let executionQueue = [];
 
-// Global state.
-let readyState = false;
+// Global state which tracks the number of ongoing tasks.
+// It starts at 1 because the execution queue is seen as a whole single task.
+let ongoingTasks = 1;
+
+function notifyTaskStarted() {
+    ongoingTasks++;
+}
+
+function notifyTaskFinished() {
+    ongoingTasks--;
+    if (ongoingTasks < 0) {
+        console.error('Ongoing tasks count is negative. This should not happen.');
+    }
+}
 
 /**
  * Returns whether the document is finalized and ready.
- * This can be watched by other tools (e.g. Puppeteer).
+ * This can be watched and waited for by other tools, such as Puppeteer to generate a PDF.
  * @returns {boolean}
  */
 function isReady() {
-    return readyState;
+    return ongoingTasks === 0;
 }
 
 function executeQueue() {
     executionQueue.forEach((fn) => fn());
-    readyState = true;
+    notifyTaskFinished();
 }
 
 //
