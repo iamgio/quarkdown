@@ -169,7 +169,7 @@ body.quarkdown-paged {
     margin-bottom: 1em;
 }
 
-.quarkdown figure {
+.quarkdown :is(figure, .mermaid) {
     text-align: center;
 }
 
