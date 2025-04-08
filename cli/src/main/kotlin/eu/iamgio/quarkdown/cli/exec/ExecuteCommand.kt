@@ -159,7 +159,7 @@ abstract class ExecuteCommand(
         PipelineOptions(
             prettyOutput = prettyOutput,
             wrapOutput = !noWrap,
-            workingDirectory = cliOptions.source?.parentFile,
+            workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
             enableMediaStorage = !noMediaStorage,
             serverPort = serverPort.takeIf { preview },
             mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
