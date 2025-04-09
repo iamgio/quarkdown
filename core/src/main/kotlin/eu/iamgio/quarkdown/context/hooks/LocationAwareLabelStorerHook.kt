@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.ast.attributes.SectionLocation
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.iterator.AstIteratorHook
 import eu.iamgio.quarkdown.ast.iterator.ObservableAstIterator
-import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
+import eu.iamgio.quarkdown.ast.quarkdown.block.Figure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
@@ -42,9 +42,11 @@ import eu.iamgio.quarkdown.document.numbering.NumberingFormat
  * @see AstAttributes.locations
  * @see LocationTrackableNode
  */
-class LocationAwareLabelStorerHook(private val context: MutableContext) : AstIteratorHook {
+class LocationAwareLabelStorerHook(
+    private val context: MutableContext,
+) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        updateLabels<ImageFigure>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
+        updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
         updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
 
         // Updates the labels of Numbered nodes, which are grouped by their key.

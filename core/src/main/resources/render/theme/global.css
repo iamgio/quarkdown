@@ -173,6 +173,14 @@ body.quarkdown-paged {
     text-align: center;
 }
 
+.quarkdown .mermaid > svg {
+    max-width: 52% !important;
+}
+
+.quarkdown-paged .mermaid > svg {
+    max-width: 80% !important;
+}
+
 .quarkdown blockquote {
     display: block;
     color: var(--qd-quote-foreground-color);

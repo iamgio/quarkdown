@@ -17,8 +17,8 @@ import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
 import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
 import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.Figure
 import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
-import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.MermaidDiagram
 import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
@@ -131,7 +131,7 @@ class QuarkdownHtmlNodeRenderer(
 
     // Block
 
-    override fun visit(node: ImageFigure) =
+    override fun visit(node: Figure<*>) =
         buildTag("figure") {
             +node.child
 
