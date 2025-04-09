@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.quarkdown.block.MermaidDiagram
+import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 
 /**
@@ -17,4 +18,4 @@ val Mermaid: Module =
  * @param code the Mermaid code of the diagram
  * @return the generated diagram node
  */
-fun mermaid(code: String) = MermaidDiagram(code).wrappedAsValue()
+fun mermaid(code: EvaluableString) = MermaidDiagram(code.content).wrappedAsValue()
