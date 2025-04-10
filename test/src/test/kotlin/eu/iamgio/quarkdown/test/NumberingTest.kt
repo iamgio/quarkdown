@@ -406,6 +406,45 @@ class NumberingTest {
     }
 
     @Test
+    fun `mermaid diagram numbered as figure`() {
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+                - headings: 1.1.1
+                - figures: 1.1
+            
+            # A
+            
+            ![](img.png "Caption 1")
+            
+            .mermaid caption:{Caption 2}
+                graph TD
+                    A-->B
+                    A-->C
+            
+            ![](img.png "Caption 3")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 1\" />" +
+                    "<figcaption data-element-label=\"1.1\">Caption 1</figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-1.2\">" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A-->B\n    A-->C</pre>" +
+                    "<figcaption data-element-label=\"1.2\">Caption 2</figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
+                    "<figcaption data-element-label=\"1.3\">Caption 3</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `localized numbering captions`() {
         // Localized kind names.
         execute(
