@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.test
 
 import eu.iamgio.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -40,6 +41,19 @@ class MermaidTest {
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
+        }
+    }
+
+    @Test
+    fun `mermaid from file`() {
+        execute(
+            """
+            .mermaid caption:{My graph}
+                .read {mermaid/class.mmd}
+            """.trimIndent(),
+        ) {
+            assertContains(it, "<figure><pre class=\"mermaid fill-height\">classDiagram\n    class Bank {")
+            assertContains(it, "<figcaption>My graph</figcaption></figure>")
         }
     }
 }
