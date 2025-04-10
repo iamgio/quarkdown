@@ -1,0 +1,32 @@
+# Mermaid diagrams
+
+## Class diagram
+
+.mermaid caption:{Class diagram of a bank system.}
+    .read {mermaid/class.mmd}
+
+<<<
+
+## Sequence diagram
+
+.mermaid caption:{Sequence diagram of a communication.}
+    .read {mermaid/sequence.mmd}
+
+<<<
+
+## Flowchart
+
+.mermaid caption:{Flowchart of the dashboard.}
+    .read {mermaid/flow.mmd}
+
+<<<
+
+## Git graph
+
+.mermaid caption:{Graph of a Git repository.}
+    .read {mermaid/git.mmd}
+
+## Pie chart
+
+.mermaid caption:{Pie chart of a daily routine.}
+    .read {mermaid/pie.mmd}
