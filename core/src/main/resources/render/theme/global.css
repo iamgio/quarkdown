@@ -186,17 +186,22 @@ body.quarkdown-paged {
 
 /* Mermaid diagrams */
 
+.quarkdown .mermaid:not([data-processed]) {
+    font-size: 0;
+}
+
 .quarkdown .mermaid > svg {
     max-width: 52% !important;
 }
 
+/* In paged documents, a diagram may fill the remaining height of the page. */
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
-    max-height: calc(var(--page-remaining-height) - 100px);
+    max-height: calc(var(--page-remaining-height));
 }
 
-.quarkdown .mermaid:not([data-processed]) {
-    font-size: 0;
+.quarkdown-paged figure:has(figcaption) .mermaid > svg {
+    max-height: calc(var(--page-remaining-height) - 100px);
 }
 
 /* Nodes */
