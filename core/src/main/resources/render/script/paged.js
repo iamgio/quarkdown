@@ -81,3 +81,19 @@ function setColumnCount() {
         content.style.columnCount = columnCount;
     });
 }
+
+// For elements marked with .fill-height, the CSS variable --page-remaining-height is injected.
+function injectRemainingHeightSizes() {
+    const fillHeightElements = document.querySelectorAll('.fill-height');
+
+    fillHeightElements.forEach(element => {
+        const contentArea = element.closest('.pagedjs_area');
+        if (!contentArea) return;
+        const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
+
+        // Inject CSS variable.
+        element.style.setProperty('--page-remaining-height', `${remainingHeight}px`);
+    });
+}
+
+executionQueue.push(injectRemainingHeightSizes);

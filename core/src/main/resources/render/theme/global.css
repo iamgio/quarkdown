@@ -103,6 +103,7 @@
 
     /* Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values. */
     --property-column-count: unset;
+    --page-remaining-height: 50vh;
 
     --primary: red;
 }
@@ -191,6 +192,11 @@ body.quarkdown-paged {
 
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
+    max-height: calc(var(--page-remaining-height) - 100px);
+}
+
+.quarkdown .mermaid:not([data-processed]) {
+    font-size: 0;
 }
 
 /* Nodes */
