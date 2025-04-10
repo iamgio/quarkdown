@@ -14,7 +14,7 @@
     --qd-warning-background-color: rgb(239, 203, 99);
     --qd-warning-foreground-color: #333;
     --qd-important-foreground-color: #FF7373;
-    --qd-color-on-primary: var(--qd-main-color);
+    --qd-color-on-primary: #ECECFF;
     --qd-mermaid-node-background-color: var(--qd-main-color);
     --qd-mermaid-node-text-color: var(--qd-background-color);
 }
