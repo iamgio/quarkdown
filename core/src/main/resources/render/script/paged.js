@@ -29,6 +29,10 @@ class PagedDocument extends QuarkdownDocument {
         });
     }
 
+    getParentViewport(element) {
+        return element.closest('.pagedjs_area');
+    }
+
     updatePageNumberElements() {
         const pages = document.querySelectorAll('.pagedjs_page')
         // Inject the total amount of pages into .total-page-number elements.
@@ -81,19 +85,3 @@ function setColumnCount() {
         content.style.columnCount = columnCount;
     });
 }
-
-// For elements marked with .fill-height, the CSS variable --page-remaining-height is injected.
-function injectRemainingHeightSizes() {
-    const fillHeightElements = document.querySelectorAll('.fill-height');
-
-    fillHeightElements.forEach(element => {
-        const contentArea = element.closest('.pagedjs_area');
-        if (!contentArea) return;
-        const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
-
-        // Inject CSS variable.
-        element.style.setProperty('--page-remaining-height', `${remainingHeight}px`);
-    });
-}
-
-executionQueue.push(injectRemainingHeightSizes);

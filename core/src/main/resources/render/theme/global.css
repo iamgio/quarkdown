@@ -103,7 +103,7 @@
 
     /* Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values. */
     --property-column-count: unset;
-    --page-remaining-height: 50vh;
+    --viewport-remaining-height: 50vh;
 
     --primary: red;
 }
@@ -194,14 +194,21 @@ body.quarkdown-paged {
     max-width: 52% !important;
 }
 
-/* In paged documents, a diagram may fill the remaining height of the page. */
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
-    max-height: calc(var(--page-remaining-height));
+}
+
+/* Fit the diagram into the remaining space of the viewport. */
+.quarkdown-paged .mermaid > svg {
+    max-height: calc(var(--viewport-remaining-height));
 }
 
 .quarkdown-paged figure:has(figcaption) .mermaid > svg {
-    max-height: calc(var(--page-remaining-height) - 100px);
+    max-height: calc(var(--viewport-remaining-height) - 100px);
+}
+
+.quarkdown-slides .mermaid > svg {
+    max-height: 50vh;
 }
 
 /* Nodes */

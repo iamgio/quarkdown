@@ -57,6 +57,10 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
+    getParentViewport(element) {
+        return element.closest('.reveal .slides > :is(section, .pdf-page)');
+    }
+
     updatePageNumberElements() {
         const slides = document.querySelectorAll('.reveal .slides > :is(section, div)');
 

@@ -79,6 +79,14 @@ class QuarkdownDocument {
     }
 
     /**
+     * @returns {Element} The parent viewport of the given element,
+     * such as the slide section in slides or the page area in paged.
+     */
+    getParentViewport(element) {
+        return document.documentElement;
+    }
+
+    /**
      * Updates the content of `.current-page-number` and `.total-page-number` elements.
      */
     updatePageNumberElements() {}
@@ -140,3 +148,20 @@ function toggleCollapse(span) {
         span.textContent = content;
     }
 }
+
+// For elements marked with .fill-height, the CSS variable --viewport-remaining-height is injected.
+function applyRemainingHeightProperties() {
+    const fillHeightElements = document.querySelectorAll('.fill-height');
+
+    fillHeightElements.forEach(element => {
+        const contentArea = doc.getParentViewport(element)
+        if (!contentArea) return;
+        const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
+        console.log(contentArea.getBoundingClientRect().height + " " + element.getBoundingClientRect().top)
+
+        // Inject CSS variable.
+        element.style.setProperty('--viewport-remaining-height', `${remainingHeight}px`);
+    });
+}
+
+executionQueue.push(applyRemainingHeightProperties);
