@@ -15,13 +15,15 @@
     --qd-warning-foreground-color: #333;
     --qd-important-foreground-color: #FF7373;
     --qd-color-on-primary: var(--qd-main-color);
+    --qd-mermaid-node-background-color: var(--qd-main-color);
+    --qd-mermaid-node-text-color: var(--qd-background-color);
 }
 
 hr {
     opacity: 0.5;
 }
 
-pre {
+pre :has(code) {
     --shadow-opacity: 0.08;
     box-shadow: 0 5px 15px rgba(0, 0, 0, var(--shadow-opacity));
 }

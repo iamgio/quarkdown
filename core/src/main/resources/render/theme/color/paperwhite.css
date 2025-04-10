@@ -6,9 +6,10 @@
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: hsl(0, 100%, 33%);
     --qd-color-on-primary: var(--qd-main-color);
+    --qd-mermaid-node-background-color: var(--qd-background-color);
 }
 
-blockquote {
+.quarkdown blockquote {
     border-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -16,17 +17,17 @@ blockquote {
     box-shadow: none;
 }
 
-pre code {
-    background-color: var(--qd-background-color) !important;
-    padding: 0 !important;
-}
-
-.hljs-ln td:first-child {
-    padding-left: 0 !important;
+.quarkdown pre code {
+    background-color: var(--qd-background-color);
+    padding: 0;
 }
 
 .quarkdown-slides pre {
     box-shadow: none;
+}
+
+.hljs-ln td:first-child {
+    padding-left: 0 !important;
 }
 
 nav ol ol {

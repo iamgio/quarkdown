@@ -81,6 +81,14 @@
     --qd-error-foreground-color: white;
     --qd-error-background-color: rgb(224, 67, 64);
 
+    /* Mermaid diagrams */
+    --qd-mermaid-node-background-color: var(--qd-primary-color);
+    --qd-mermaid-node-border-color: var(--qd-mermaid-node-text-color);
+    --qd-mermaid-node-border-width: 1px;
+    --qd-mermaid-node-text-color: var(--qd-color-on-primary);
+    --qd-mermaid-node-line-color: var(--qd-main-color);
+    --qd-mermaid-node-filter: none;
+
     /* Reveal properties */
     --r-background-color: var(--qd-background-color);
     --r-main-color: var(--qd-main-color);
@@ -95,6 +103,8 @@
 
     /* Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values. */
     --property-column-count: unset;
+
+    --primary: red;
 }
 
 body {
@@ -173,6 +183,8 @@ body.quarkdown-paged {
     text-align: center;
 }
 
+/* Mermaid diagrams */
+
 .quarkdown .mermaid > svg {
     max-width: 52% !important;
 }
@@ -180,6 +192,51 @@ body.quarkdown-paged {
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
 }
+
+/* Nodes */
+.quarkdown .mermaid :is(.node path, .actor, rect:not(.legend rect), polygon, circle) {
+    fill: var(--qd-mermaid-node-background-color) !important;
+    stroke: var(--qd-mermaid-node-border-color) !important;
+    stroke-width: var(--qd-mermaid-node-border-width) !important;
+}
+
+.quarkdown .mermaid :is(.node, rect:not(.legend rect), polygon) {
+    filter: var(--qd-mermaid-node-filter);
+}
+
+.quarkdown .mermaid .legend rect {
+    stroke: var(--qd-mermaid-node-border-color) !important;
+    stroke-width: var(--qd-mermaid-node-border-width) !important;
+}
+
+/* Text in nodes */
+.quarkdown .mermaid .nodeLabel {
+    color: var(--qd-mermaid-node-text-color) !important;
+}
+
+/* Edge labels */
+.quarkdown .mermaid :is(.edgeLabel, .edgeLabel p) {
+    color: var(--qd-mermaid-node-line-color) !important;
+    background-color: var(--qd-background-color) !important;
+}
+
+/* Lines */
+.quarkdown .mermaid :is(.relation, line, path[class^="edge"]) {
+    stroke: var(--qd-mermaid-node-line-color) !important;
+}
+
+/* Text outside nodes */
+.quarkdown .mermaid :is(.legend text, .messageText, .loopText, .loopText tspan,
+                        .branchLabel text, text[class*="TitleText"]) {
+    fill: var(--qd-mermaid-node-line-color) !important;
+}
+
+/* Line endings */
+.quarkdown .mermaid :is(defs, .marker) path {
+    stroke: var(--qd-mermaid-node-line-color) !important;
+}
+
+/* Blockquotes and alerts */
 
 .quarkdown blockquote {
     display: block;

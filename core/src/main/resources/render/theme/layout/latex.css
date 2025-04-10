@@ -18,6 +18,7 @@
     --qd-table-default-cell-alignment: start;
     --qd-quote-type-label-suffix: ". ";
     --qd-box-icon-baseline: -0.1em;
+    --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
 
     --border-width-thick: 2px;
     --border-width-thin: 1px;
