@@ -253,6 +253,10 @@ body.quarkdown-paged {
     fill: var(--qd-mermaid-node-line-color) !important;
 }
 
+.quarkdown .mermaid .labelBkg {
+    background: none !important;
+}
+
 /* Line endings */
 .quarkdown .mermaid :is(defs, .marker) path {
     stroke: var(--qd-mermaid-node-line-color) !important;
