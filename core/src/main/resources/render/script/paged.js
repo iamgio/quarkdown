@@ -1,7 +1,7 @@
 class PagedDocument extends QuarkdownDocument {
     populateExecutionQueue() {
         super.populateExecutionQueue();
-        executionQueue.push(async () => setColumnCount());
+        postRenderingExecutionQueue.push(setColumnCount);
     }
 
     copyPageMarginInitializers() {
@@ -34,7 +34,6 @@ class PagedDocument extends QuarkdownDocument {
     }
 
     updatePageNumberElements() {
-        console.log('Populating execution queue');
         const pages = document.querySelectorAll('.pagedjs_page')
         // Inject the total amount of pages into .total-page-number elements.
         const amount = pages.length;
@@ -49,6 +48,11 @@ class PagedDocument extends QuarkdownDocument {
                 pageNumber.innerText = number;
             });
         });
+    }
+
+    async onInitialDocumentReady() {
+        await super.onInitialDocumentReady();
+        await window.PagedPolyfill.preview()
     }
 
     beforeReady(content) {
@@ -68,7 +72,7 @@ class PagedDocument extends QuarkdownDocument {
     setupAfterReadyHook() {
         class PagedAfterReadyHandler extends Paged.Handler {
             afterPreview() {
-                executionQueue.execute().then();
+                postRenderingExecutionQueue.execute().then();
             }
         }
         Paged.registerHandlers(PagedAfterReadyHandler);

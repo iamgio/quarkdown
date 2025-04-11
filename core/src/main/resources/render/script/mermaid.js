@@ -4,7 +4,7 @@ function initMermaid(mermaid) {
     });
 
     // Render Mermaid diagrams.
-    executionQueue.push(async () => {
+    preRenderingExecutionQueue.push(async () => {
         await mermaid.run();
         realignMermaidContents();
     });

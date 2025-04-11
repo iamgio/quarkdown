@@ -80,11 +80,11 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
-    beforeReady(content) {
+    async beforeReady(content) {
         const slidesDiv = document.querySelector('.reveal .slides');
         if (!slidesDiv) return;
 
-        super.beforeReady(content);
+        await super.beforeReady(content);
         super.removeAllPageMarginInitializers();
 
         const children = Array.from(slidesDiv.childNodes);
@@ -96,9 +96,9 @@ class SlidesDocument extends QuarkdownDocument {
     setupAfterReadyHook() {
         Reveal.addEventListener('ready', () => {
             if (Reveal.isPrintView()) {
-                Reveal.addEventListener('pdf-ready', () => executionQueue.execute());
+                Reveal.addEventListener('pdf-ready', () => postRenderingExecutionQueue.execute());
             } else {
-                executionQueue.execute().then();
+                postRenderingExecutionQueue.execute().then();
             }
         });
     }

@@ -26,8 +26,11 @@ function isReady() {
     return readyState;
 }
 
-// Actions to be executed after the document has been loaded.
-const executionQueue = new AsyncExecutionQueue(() => {
+// Queue of actions to be executed before the document is handled by Reveal/Paged.
+// The document is elaborated only after this queue is executed.
+const preRenderingExecutionQueue = new AsyncExecutionQueue();
+// Queue of actions to be executed after the document has been rendered in its final form.
+const postRenderingExecutionQueue = new AsyncExecutionQueue(() => {
     readyState = true;
 });
 
@@ -47,6 +50,10 @@ class QuarkdownDocument {
         this.populateExecutionQueue();
         this.setupBeforeReadyHook();
         this.setupAfterReadyHook();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            this.onInitialDocumentReady().then();
+        });
     }
 
     /**
@@ -94,8 +101,15 @@ class QuarkdownDocument {
      * Populates the execution queue with the necessary functions to be executed after the document is ready.
      */
     populateExecutionQueue() {
-        executionQueue.push(() => this.copyPageMarginInitializers());
-        executionQueue.push(() => this.updatePageNumberElements());
+        postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
+        postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
+    }
+
+    /**
+     * Action run on DOMContentLoaded.
+     */
+    async onInitialDocumentReady() {
+        await preRenderingExecutionQueue.execute();
     }
 
     /**
@@ -109,7 +123,7 @@ class QuarkdownDocument {
      * Sets up a hook called after the document is processed.
      */
     setupAfterReadyHook() {
-        document.addEventListener('DOMContentLoaded', () => executionQueue.execute());
+        document.addEventListener('DOMContentLoaded', () => postRenderingExecutionQueue.execute());
     }
 }
 
@@ -120,7 +134,7 @@ let doc = new PlainDocument(); // Overridden externally by html-wrapper
 //
 // Enables toggling of the collapsed/expanded state of inline elements.
 
-executionQueue.push(() => {
+postRenderingExecutionQueue.push(() => {
     // Add click event listener to the collapsible spans.
     const collapsibles = document.querySelectorAll('.inline-collapse');
     collapsibles.forEach((span) => {
@@ -160,4 +174,4 @@ function applyRemainingHeightProperties() {
     });
 }
 
-executionQueue.push(applyRemainingHeightProperties);
+postRenderingExecutionQueue.push(applyRemainingHeightProperties);

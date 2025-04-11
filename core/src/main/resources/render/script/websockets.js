@@ -53,4 +53,4 @@ function restoreScrollPosition() {
 window.addEventListener("beforeunload", saveScrollPosition);
 
 // Restore after reload to keep the scroll position.
-executionQueue.push(restoreScrollPosition)
+postRenderingExecutionQueue.push(restoreScrollPosition)

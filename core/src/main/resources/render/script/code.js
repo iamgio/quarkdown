@@ -1,4 +1,4 @@
-executionQueue.push(() => {
+postRenderingExecutionQueue.push(() => {
     hljs.addPlugin(new CopyButtonPlugin()); // Add copy button to code blocks.
     hljs.highlightAll(); // Highlight all code blocks.
     hljs.initLineNumbersOnLoad(); // Show line numbers on code blocks.

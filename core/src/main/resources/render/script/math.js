@@ -1,5 +1,5 @@
 // Render KaTeX inside <formula> tags.
-executionQueue.push(() => {
+postRenderingExecutionQueue.push(() => {
     const formulas = document.querySelectorAll('formula');
     formulas.forEach((formula) => {
         const isBlock = formula.dataset.block === '';
