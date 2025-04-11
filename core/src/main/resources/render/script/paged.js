@@ -1,7 +1,7 @@
 class PagedDocument extends QuarkdownDocument {
     populateExecutionQueue() {
         super.populateExecutionQueue();
-        executionQueue.push(setColumnCount);
+        executionQueue.push(async () => setColumnCount());
     }
 
     copyPageMarginInitializers() {
@@ -34,6 +34,7 @@ class PagedDocument extends QuarkdownDocument {
     }
 
     updatePageNumberElements() {
+        console.log('Populating execution queue');
         const pages = document.querySelectorAll('.pagedjs_page')
         // Inject the total amount of pages into .total-page-number elements.
         const amount = pages.length;
@@ -67,7 +68,7 @@ class PagedDocument extends QuarkdownDocument {
     setupAfterReadyHook() {
         class PagedAfterReadyHandler extends Paged.Handler {
             afterPreview() {
-                executeQueue();
+                executionQueue.execute().then();
             }
         }
         Paged.registerHandlers(PagedAfterReadyHandler);

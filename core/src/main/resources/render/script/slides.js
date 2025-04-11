@@ -96,9 +96,9 @@ class SlidesDocument extends QuarkdownDocument {
     setupAfterReadyHook() {
         Reveal.addEventListener('ready', () => {
             if (Reveal.isPrintView()) {
-                Reveal.addEventListener('pdf-ready', executeQueue);
+                Reveal.addEventListener('pdf-ready', () => executionQueue.execute());
             } else {
-                executeQueue();
+                executionQueue.execute().then();
             }
         });
     }

@@ -1,5 +1,4 @@
 function initMermaid(mermaid) {
-    notifyTaskStarted();
     mermaid.initialize({
         startOnLoad: false,
     });
@@ -8,7 +7,6 @@ function initMermaid(mermaid) {
     executionQueue.push(async () => {
         await mermaid.run();
         realignMermaidContents();
-        notifyTaskFinished();
     });
 }
 

@@ -1,22 +1,21 @@
-//
-// Actions to be executed after the document has been loaded.
+class AsyncExecutionQueue {
+    constructor(onExecute) {
+        this.queue = [];
+        this.onExecute = onExecute;
+    }
 
-let executionQueue = [];
+    push(fn) {
+        this.queue.push(fn);
+    }
 
-// Global state which tracks the number of ongoing tasks.
-// It starts at 1 because the execution queue is seen as a whole single task.
-let ongoingTasks = 1;
-
-function notifyTaskStarted() {
-    ongoingTasks++;
-}
-
-function notifyTaskFinished() {
-    ongoingTasks--;
-    if (ongoingTasks < 0) {
-        console.error('Ongoing tasks count is negative. This should not happen.');
+    async execute() {
+        await Promise.all(this.queue.map(async fn => fn()));
+        this.queue = [];
+        if (this.onExecute) this.onExecute();
     }
 }
+
+let readyState = false;
 
 /**
  * Returns whether the document is finalized and ready.
@@ -24,13 +23,13 @@ function notifyTaskFinished() {
  * @returns {boolean}
  */
 function isReady() {
-    return ongoingTasks === 0;
+    return readyState;
 }
 
-function executeQueue() {
-    executionQueue.forEach((fn) => fn());
-    notifyTaskFinished();
-}
+// Actions to be executed after the document has been loaded.
+const executionQueue = new AsyncExecutionQueue(() => {
+    readyState = true;
+});
 
 //
 // Different kinds of documents.
@@ -95,10 +94,8 @@ class QuarkdownDocument {
      * Populates the execution queue with the necessary functions to be executed after the document is ready.
      */
     populateExecutionQueue() {
-        executionQueue.push(
-            () => this.copyPageMarginInitializers(),
-            () => this.updatePageNumberElements()
-        );
+        executionQueue.push(() => this.copyPageMarginInitializers());
+        executionQueue.push(() => this.updatePageNumberElements());
     }
 
     /**
@@ -112,7 +109,7 @@ class QuarkdownDocument {
      * Sets up a hook called after the document is processed.
      */
     setupAfterReadyHook() {
-        document.addEventListener('DOMContentLoaded', executeQueue);
+        document.addEventListener('DOMContentLoaded', () => executionQueue.execute());
     }
 }
 
@@ -157,7 +154,6 @@ function applyRemainingHeightProperties() {
         const contentArea = doc.getParentViewport(element)
         if (!contentArea) return;
         const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
-        console.log(contentArea.getBoundingClientRect().height + " " + element.getBoundingClientRect().top)
 
         // Inject CSS variable.
         element.style.setProperty('--viewport-remaining-height', `${remainingHeight}px`);
