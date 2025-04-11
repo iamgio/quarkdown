@@ -186,16 +186,24 @@ body.quarkdown-paged {
 
 /* Mermaid diagrams */
 
+.quarkdown figure:has(> .mermaid) {
+    /*width: 100%;*/
+}
+
 .quarkdown .mermaid:not([data-processed]) {
     font-size: 0;
 }
 
-.quarkdown .mermaid > svg {
+.quarkdown-plain .mermaid > svg {
     max-width: 52% !important;
 }
 
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
+}
+
+.quarkdown-slides .mermaid > svg {
+    max-height: 50vh !important;
 }
 
 /* Fit the diagram into the remaining space of the viewport. */
@@ -205,10 +213,6 @@ body.quarkdown-paged {
 
 .quarkdown-paged figure:has(figcaption) .mermaid > svg {
     max-height: calc(var(--viewport-remaining-height) - 100px);
-}
-
-.quarkdown-slides .mermaid > svg {
-    max-height: 50vh;
 }
 
 /* Nodes */

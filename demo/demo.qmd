@@ -77,7 +77,7 @@ so that you'll feel at home typing code you're comfortable typing.
 
         .var {voffset} {.shrinkvertical::ifpresent {@lambda .1::multiply {-1}}::otherwise {0}}
 
-        .container alignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
+        .container textalignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
             .source
 
     .let {.animated::otherwise {no}}
@@ -149,6 +149,12 @@ from your Markdown code.
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
+
+## File data: Mermaid diagrams
+
+.sourceresult
+    .mermaid
+        .read {mermaid/flow.mmd}
 
 ## File data: CSV
 
