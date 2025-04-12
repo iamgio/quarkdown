@@ -150,16 +150,16 @@ from your Markdown code.
     .code {java}
         .read {code/Point.java} lines:{5..8}
 
+## File data: CSV
+
+.sourceresult
+    .csv {csv/people.csv}
+
 ## File data: Mermaid diagrams
 
 .sourceresult
     .mermaid
         .read {mermaid/flow.mmd}
-
-## File data: CSV
-
-.sourceresult
-    .csv {csv/people.csv}
 
 ## Math
 
