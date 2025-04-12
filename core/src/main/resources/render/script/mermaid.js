@@ -4,10 +4,11 @@ function initMermaid(mermaid) {
     });
 
     // Render Mermaid diagrams or load them from cache.
-    postRenderingExecutionQueue.push(async () => {
-        for (const element of document.querySelectorAll('.mermaid')) {
-            await loadFromCacheOrRender(mermaid, element);
-        }
+    preRenderingExecutionQueue.push(async () => {
+        const renderPromises = Array.from(document.querySelectorAll('.mermaid')).map(
+            (element) => loadFromCacheOrRender(mermaid, element)
+        );
+        await Promise.all(renderPromises);
         realignMermaidContents();
     });
 }
