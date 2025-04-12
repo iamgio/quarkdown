@@ -50,10 +50,6 @@ class QuarkdownDocument {
         this.populateExecutionQueue();
         this.setupBeforeReadyHook();
         this.setupAfterReadyHook();
-
-        document.addEventListener('DOMContentLoaded', () => {
-            this.onInitialDocumentReady().then();
-        });
     }
 
     /**
@@ -106,17 +102,13 @@ class QuarkdownDocument {
     }
 
     /**
-     * Action run on DOMContentLoaded.
-     */
-    async onInitialDocumentReady() {
-        await preRenderingExecutionQueue.execute();
-    }
-
-    /**
      * Sets up a hook called before the document is processed.
      */
     setupBeforeReadyHook() {
-        document.addEventListener('DOMContentLoaded', () => this.beforeReady(document));
+        document.addEventListener('DOMContentLoaded', async () => {
+            await preRenderingExecutionQueue.execute();
+            this.beforeReady(document);
+        });
     }
 
     /**
@@ -129,7 +121,7 @@ class QuarkdownDocument {
 
 class PlainDocument extends QuarkdownDocument {}
 
-let doc = new PlainDocument(); // Overridden externally by html-wrapper
+let doc = new PlainDocument(); // Overwritten externally by html-wrapper
 
 //
 // Enables toggling of the collapsed/expanded state of inline elements.

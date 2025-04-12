@@ -80,11 +80,11 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
-    async beforeReady(content) {
+    beforeReady(content) {
         const slidesDiv = document.querySelector('.reveal .slides');
         if (!slidesDiv) return;
 
-        await super.beforeReady(content);
+        super.beforeReady(content);
         super.removeAllPageMarginInitializers();
 
         const children = Array.from(slidesDiv.childNodes);

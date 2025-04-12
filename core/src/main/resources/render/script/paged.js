@@ -50,23 +50,10 @@ class PagedDocument extends QuarkdownDocument {
         });
     }
 
-    async onInitialDocumentReady() {
-        await super.onInitialDocumentReady();
-        await window.PagedPolyfill.preview()
-    }
-
     beforeReady(content) {
         super.beforeReady(content);
         super.removeAllPageMarginInitializers()
-    }
-
-    setupBeforeReadyHook() {
-        class PagedBeforeReadyHandler extends Paged.Handler {
-            beforeParsed(content) {
-                doc.beforeReady(content);
-            }
-        }
-        Paged.registerHandlers(PagedBeforeReadyHandler);
+        window.PagedPolyfill.preview()
     }
 
     setupAfterReadyHook() {
