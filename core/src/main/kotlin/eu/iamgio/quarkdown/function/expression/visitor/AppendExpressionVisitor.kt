@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.expression.append
 import eu.iamgio.quarkdown.function.expression.eval
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
@@ -16,10 +17,12 @@ import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
 import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.PairValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 import eu.iamgio.quarkdown.function.value.Value
@@ -59,17 +62,17 @@ import eu.iamgio.quarkdown.function.value.VoidValue
  * @param other expression to append to the visited expression
  * @see ComposedExpression
  */
-class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor<Expression> {
-    private val otherEval = other.eval() // Evaluate the next expression.
+class AppendExpressionVisitor(
+    private val other: Expression,
+) : ExpressionVisitor<Expression> {
+    private val otherEval by lazy { other.eval() } // Evaluate the next expression.
 
     /**
      * @return string result of the concatenation between [this] and [other]
-     * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.ValueFactory.eval])
+     * @throws InvalidExpressionEvalException if either [this] or [other] is a [NodeValue] (see [eu.iamgio.quarkdown.function.value.factory.ValueFactory.eval])
      */
     private fun Value<*>.concatenate(): InputValue<*> {
-        // Void values are ignored.
-        if (this is VoidValue) return otherEval as InputValue<*>
-        if (otherEval is VoidValue) return this as InputValue<*>
+        val otherEval = this@AppendExpressionVisitor.otherEval
 
         // Whenever a NodeValue appears in a composed expression, it means the expected output is strictly meant to be
         // a pure Markdown output node. Therefore, the thrown error is caught at eval-time and the expression
@@ -78,6 +81,10 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
         if (this is NodeValue || otherEval is NodeValue) {
             throw InvalidExpressionEvalException()
         }
+
+        // Void values are ignored.
+        if (this is VoidValue) return otherEval as InputValue<*>
+        if (otherEval is VoidValue) return this as InputValue<*>
 
         // If the other value is a collection, add the current value to it as the first element.
         if (otherEval is IterableValue<*> && this is OutputValue<*>) {
@@ -136,6 +143,11 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             value.unwrappedValue + otherEval as OutputValue<*>,
         )
 
+    override fun visit(value: PairValue<*, *>): Expression = visit(GeneralCollectionValue(value.unwrappedValue))
+
+    // {a: 1, b: 2} "abc" -> "{a=1, b=2}abc"
+    override fun visit(value: DictionaryValue<*>) = value.concatenate()
+
     // CENTER "abc"  -> "CENTERabc"
     // CENTER CENTER -> "CENTERCENTER"
     // CENTER 15     -> "CENTER15"
@@ -147,16 +159,16 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     // MarkdownContent(Text("abc")) Text("def") -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) "def"       -> MarkdownContent(Text("abc"), Text("abcdef"))
     // MarkdownContent(Text("abc")) 15          -> MarkdownContent(Text("abc"), Text("15"))
-    override fun visit(value: MarkdownContentValue): Expression {
-        return GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
-    }
+    override fun visit(value: MarkdownContentValue): Expression =
+        GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
 
     // InlineMarkdownContent(Text("abc")) Text("def") -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) "def"       -> InlineMarkdownContent(Text("abc"), Text("abcdef"))
     // InlineMarkdownContent(Text("abc")) 15          -> InlineMarkdownContent(Text("abc"), Text("15"))
-    override fun visit(value: InlineMarkdownContentValue): Expression {
-        return GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
-    }
+    override fun visit(value: InlineMarkdownContentValue): Expression =
+        GeneralCollectionValue(listOf(value.asNodeValue(), otherEval as OutputValue<*>))
+
+    override fun visit(value: NodeValue): Expression = throw InvalidExpressionEvalException()
 
     // DynamicValue(15) "abc"        -> "15abc"
     // DynamicValue("abc") [1, 2, 3] -> ["abc", 1, 2, 3]
@@ -166,8 +178,10 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
             else -> DynamicValue(result.unwrappedValue)
         }
 
-    // TODO append lambda
     override fun visit(value: LambdaValue): Expression = throw UnsupportedOperationException()
+
+    // None "abc" -> "noneabc"
+    override fun visit(value: NoneValue) = value.concatenate()
 
     // Appends the result of the evaluation.
     override fun visit(expression: FunctionCall<*>): Expression =
@@ -179,7 +193,5 @@ class AppendExpressionVisitor(private val other: Expression) : ExpressionVisitor
     /**
      * @throws UnsupportedOperationException there is no way a composed expression could be appended to another expression
      */
-    override fun visit(expression: ComposedExpression): Expression {
-        throw UnsupportedOperationException()
-    }
+    override fun visit(expression: ComposedExpression): Expression = throw UnsupportedOperationException()
 }

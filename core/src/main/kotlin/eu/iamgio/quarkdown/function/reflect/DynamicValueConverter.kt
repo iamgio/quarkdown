@@ -2,11 +2,12 @@ package eu.iamgio.quarkdown.function.reflect
 
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.call.FunctionCall
-import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
+import eu.iamgio.quarkdown.function.error.NoSuchElementException
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.Value
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
+import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
@@ -25,6 +26,8 @@ class DynamicValueConverter(private val value: DynamicValue) {
      * This type is unwrapped (e.g. if [type] is `String`, the output is of type `StringValue`)
      * @param context context to evaluate the value for
      * @return a new typed [InputValue], automatically determined from [type], or `null` if it could not be converted
+     * @throws IllegalArgumentException if the value could not be converted to the target type or if [context] is required and it's `null`
+     * @throws NoSuchElementException if the value could not be converted to an enum entry
      */
     @Suppress("UNCHECKED_CAST")
     fun convertTo(
@@ -45,8 +48,8 @@ class DynamicValueConverter(private val value: DynamicValue) {
             val valuesFunction = type.functions.first { it.name == "values" } as KFunction<Array<Enum<*>>>
             val values = valuesFunction.call()
 
-            return ValueFactory.enum(raw.toString(), values)
-                ?: throw NoSuchElementFunctionException(element = raw, values)
+            return ValueFactory.enum(raw, values)
+                ?: throw NoSuchElementException(element = raw, values)
         }
 
         // Gets ValueFactory methods annotated with @FromDynamicType(X::class),
@@ -57,17 +60,21 @@ class DynamicValueConverter(private val value: DynamicValue) {
 
             // The factory method is suitable. Invoking it.
 
-            return when {
-                // Fetch the context from the function call if it's required.
-                from.requiresContext -> {
-                    if (context == null) {
-                        throw IllegalStateException("Function call does not have an attached context")
+            return try {
+                when {
+                    // Fetch the context from the function call if it's required.
+                    from.requiresContext -> {
+                        if (context == null) {
+                            throw IllegalStateException("Function call does not have an attached context")
+                        }
+                        function.call(ValueFactory, raw, context)
                     }
-                    function.call(ValueFactory, raw.toString(), context)
-                }
 
-                else -> function.call(ValueFactory, raw.toString())
-            } as InputValue<*>?
+                    else -> function.call(ValueFactory, raw)
+                } as InputValue<*>?
+            } catch (e: InvocationTargetException) {
+                throw e.cause ?: e
+            }
         }
 
         throw IllegalArgumentException("Cannot convert DynamicValue to type $type")

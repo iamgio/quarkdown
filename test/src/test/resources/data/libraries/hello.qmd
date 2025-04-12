@@ -1,0 +1,3 @@
+.function {hellofromlib}
+    x:
+    Hello, *.x*!

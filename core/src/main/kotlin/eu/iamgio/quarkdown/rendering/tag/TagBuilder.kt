@@ -29,6 +29,12 @@ abstract class TagBuilder(
     protected val content = StringBuilder()
 
     /**
+     * Whether this builder is empty (has no content or nested tags).
+     */
+    val isEmpty: Boolean
+        get() = content.isEmpty() && builders.isEmpty()
+
+    /**
      * @return this builder and its nested content into stringified HTML code.
      */
     abstract fun build(): String

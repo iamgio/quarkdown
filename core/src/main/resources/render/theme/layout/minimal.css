@@ -5,98 +5,92 @@
 :root {
     --qd-main-font: "Lato", sans-serif;
     --qd-heading-font: "Inter", sans-serif;
+    --qd-heading-margin: 60px 0 30px 0;
     --qd-code-font: "Noto Sans Mono", monospace;
-    --qd-code-block-font-size: 1.3em;
+    --qd-slides-code-block-font-size: 1.3em;
     --qd-code-span-font-size: 0.9em;
     --qd-block-margin: 1.8em;
     --qd-line-height: 1.8;
+    --qd-code-line-height: 1.85;
+    --qd-location-suffix: "";
+    --qd-box-border-radius: 10px;
+    --qd-box-icon-baseline: 0.1em;
 }
 
-h1 {
-    font-size: 3.5em !important;
+.quarkdown h1 {
+    font-size: 3.5em;
 }
 
-h2 {
-    font-size: 2.75em !important;
+.quarkdown h2 {
+    font-size: 2.75em;
 }
 
-h3 {
-    font-size: 2.25em !important;
+.quarkdown h3 {
+    font-size: 2.25em;
 }
 
-h4 {
-    font-size: 1.75em !important;
+.quarkdown h4 {
+    font-size: 1.75em;
 }
 
-h5 {
-    font-size: 1.5em !important;
+.quarkdown h5 {
+    font-size: 1.5em;
 }
 
-h6 {
-    font-size: 1.25em !important;
+.quarkdown h6 {
+    font-size: 1.25em;
 }
 
-ol, ul {
+.quarkdown :is(ul, ol) {
     line-height: 1.5;
 }
 
-table {
+.quarkdown table {
     border-spacing: 0;
     border-collapse: collapse;
 }
 
-table th, table td {
+.quarkdown table:not(pre table) :is(th, td) {
     padding: 0.5em 1em !important;
     border: 1px solid;
 }
 
 /* Only internal table borders */
 
-table tr:first-child th {
+.quarkdown table tr:first-child th {
     border-top: 0;
 }
 
-table tr:last-child td {
+.quarkdown table tr:last-child td {
     border-bottom: 0;
 }
 
-table tr td:first-child,
-table tr th:first-child {
+.quarkdown table tr :is(td:first-child, th:first-child) {
     border-left: 0;
 }
 
-table tr td:last-child,
-table tr th:last-child {
+.quarkdown table tr :is(td:last-child, th:last-child) {
     border-right: 0;
 }
 
-blockquote {
-    background-color: transparent;
-    border-left: 0.5em solid;
-    padding: 0;
+.quarkdown blockquote {
+    font-style: italic;
+    border-left: 0.4em solid;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
-figure img {
+.quarkdown figure img {
     margin-bottom: 0.5em !important;
 }
 
-figure figcaption {
+.quarkdown :is(figure figcaption, table caption) {
     font-size: 0.8em;
     font-style: italic;
 }
 
-.box {
-    border-radius: 10px;
-}
-
 .box > header {
     font-size: 0.6em;
-    padding: 12px;
-    border-radius: 8px 8px 0 0;
-}
-
-.error-box code {
-    font-size: 0.7em;
 }
 
 .codespan-content {
@@ -104,6 +98,7 @@ figure figcaption {
     padding: 0.3em 0.6em;
     border-radius: 8px;
     line-height: normal;
+    background-color: color-mix(in srgb, currentColor 9%, transparent);
 }
 
 .color-preview {
@@ -114,40 +109,58 @@ figure figcaption {
 
 /* Table of contents */
 
-.table-of-contents, h1#table-of-contents {
-    margin-left: 44px;
-}
-
-.table-of-contents ol {
+.quarkdown nav ol {
     list-style-type: none;
+    margin: 0;
+    padding-left: 12px;
 }
 
-.table-of-contents ol ol {
+nav ol ol {
     border-left: 2px solid;
     border-radius: 2px;
     margin-left: 1px;
-    padding: 0 28px;
 }
 
-.table-of-contents li {
+.quarkdown nav ol ol {
+    padding: 0 0 0 28px;
+}
+
+.quarkdown nav li {
     margin: 4px 0;
+}
+
+.quarkdown-slides nav > ol {
+    /* Resets the no-clipping workaround because this theme's ToC hides list markers. */
+    margin-left: auto;
+}
+
+.quarkdown-slides :is(nav, h1#table-of-contents) {
+    margin-left: 44px;
+}
+
+/* Location prefix of elements. */
+
+[data-location]::before {
+    opacity: .3;
+    font-weight: normal;
+    margin-right: 0.4em;
+}
+
+.quarkdown nav [data-location]::before {
+    opacity: .5;
 }
 
 /* Footer */
 
-.page-margin-bottom-center {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-}
-
 .page-margin-bottom-center > * {
-    width: 100%;
     padding: 16px;
     margin: 0 !important;
-    text-align: center;
     border-top: 2px solid;
     border-color: inherit;
+}
+
+.page-margin-bottom-center > p {
+    line-height: 1;
 }
 
 .page-margin-bottom-center > *:first-child {

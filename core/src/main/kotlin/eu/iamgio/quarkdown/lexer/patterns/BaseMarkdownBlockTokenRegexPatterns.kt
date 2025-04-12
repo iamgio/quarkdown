@@ -2,7 +2,21 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.*
+import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
+import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
+import eu.iamgio.quarkdown.lexer.tokens.BlockTextToken
+import eu.iamgio.quarkdown.lexer.tokens.CommentToken
+import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
+import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
+import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
+import eu.iamgio.quarkdown.lexer.tokens.LinkDefinitionToken
+import eu.iamgio.quarkdown.lexer.tokens.ListItemToken
+import eu.iamgio.quarkdown.lexer.tokens.NewlineToken
+import eu.iamgio.quarkdown.lexer.tokens.OrderedListToken
+import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
+import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
+import eu.iamgio.quarkdown.lexer.tokens.TableToken
+import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] blocks.
@@ -17,20 +31,16 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     open fun interruptionRule(
         includeList: Boolean = true,
         includeTable: Boolean = true,
-    ): Regex {
-        return RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
+    ): Regex =
+        RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
             .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
-            .withReference("html", "<\\/?(?:tag)(?: +|\\n|\\/?>)|<(?:script|pre|style|textarea|!--)")
             .withReference("blockquote", " {0,3}>")
-            .withReference("tag", TAG_HELPER)
             .apply {
                 if (includeList) withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
                 if (includeTable) withReference("table", table.regex.pattern)
-            }
-            .build()
-    }
+            }.build()
 
     /**
      * 4-spaces indented content.
@@ -75,6 +85,17 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         )
 
     /**
+     * An ignored piece of content wrapped in `<!-- ... -->` (the amount of `-` can vary).
+     * @see CommentToken
+     */
+    val comment =
+        TokenRegexPattern(
+            name = "BlockComment",
+            wrap = ::CommentToken,
+            regex = COMMENT_PATTERN,
+        )
+
+    /**
      * Fenced content within triple backticks or tildes, with an optional language tag.
      * @see FencesCodeToken
      */
@@ -98,7 +119,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "Heading",
                 wrap = ::HeadingToken,
                 regex =
-                    "^ {0,3}(#{1,6})(?=\\s|$)(.*)(?:\\n+|$)"
+                    "^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*)(?:\\n+|$)"
                         .toRegex(),
             )
 
@@ -117,26 +138,6 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             )
 
     /**
-     * HTML content.
-     * @see HtmlToken
-     */
-    val html
-        get() =
-            TokenRegexPattern(
-                name = "HTML",
-                wrap = ::HtmlToken,
-                regex =
-                    RegexBuilder(HTML_HELPER)
-                        .withReference("comment", COMMENT_HELPER)
-                        .withReference("tag", TAG_HELPER)
-                        .withReference(
-                            "attribute",
-                            " +[a-zA-Z:_][\\w.:-]*(?: *= *\"[^\"\\n]*\"| *= *'[^'\\n]*'| *= *[^\\s\"'=<>`]+)?",
-                        )
-                        .build(),
-            )
-
-    /**
      * Creation of a link reference defined by label, url and optional title.
      * @see LinkDefinitionToken
      */
@@ -151,8 +152,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                         .withReference(
                             "title",
                             "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
-                        )
-                        .build(),
+                        ).build(),
             )
 
     /**
@@ -167,8 +167,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 regex =
                     RegexBuilder(
                         "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
-                    )
-                        .withReference("bullet", BULLET_HELPER)
+                    ).withReference("bullet", BULLET_HELPER)
                         .build(),
             )
 
@@ -248,8 +247,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                             " {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)" +
                             // Cells
                             "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
-                    )
-                        .withReference("interruption", interruptionRule(includeTable = false).pattern)
+                    ).withReference("interruption", interruptionRule(includeTable = false).pattern)
                         .withReference("|table", "")
                         .build(),
             )
@@ -293,24 +291,4 @@ open class BaseMarkdownBlockTokenRegexPatterns {
 
 private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
 
-internal const val TAG_HELPER =
-    "address|article|aside|base|basefont|blockquote|body|caption" +
-        "|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption" +
-        "|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe" +
-        "|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option" +
-        "|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title" +
-        "|tr|track|ul"
-
-private const val HTML_HELPER =
-    "^ {0,3}(?:" +
-        "<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:<\\/\\1>[^\\n]*\\n+)" +
-        "|comment[^\\n]*(\\n+)" +
-        "|<\\?[\\s\\S]*?(?:\\?>\\n*)" +
-        "|<![A-Z][\\s\\S]*?(?:>\\n*)" +
-        "|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*)" +
-        "|<\\/?(tag)(?: +|\\n|\\/?>)[\\s\\S]*?(?:(?:\\n *)+\\n)" +
-        "|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? *\\/?>(?=[ \\t]*(?:\\n))[\\s\\S]*?(?:(?:\\n *)+\\n)" +
-        "|<\\/(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n))[\\s\\S]*?(?:(?:\\n *)+\\n)" +
-        ")"
-
-internal const val COMMENT_HELPER = "<!--(?:-?>|[\\s\\S]*?(?:-->))"
+internal val COMMENT_PATTERN = "<!--(-?>|[\\s\\S]*?-->)".toRegex()

@@ -28,4 +28,9 @@ class QuarkdownInlineTokenRegexPatterns : BaseMarkdownInlineTokenRegexPatterns()
                         .withReference("math", ONELINE_MATH_HELPER)
                         .build(),
             )
+
+    /**
+     * Patterns for sequences of characters that correspond to text symbols.
+     */
+    val textReplacements: List<TokenRegexPattern> = TextSymbolReplacement.entries.map { it.toTokenPattern() }
 }

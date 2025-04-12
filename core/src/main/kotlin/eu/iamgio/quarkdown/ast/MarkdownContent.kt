@@ -6,9 +6,9 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
  * A generic group of block nodes used as input for Quarkdown functions.
- * @see eu.iamgio.quarkdown.function.value.ValueFactory.blockMarkdown
+ * @see eu.iamgio.quarkdown.function.value.factory.ValueFactory.blockMarkdown
  */
-data class MarkdownContent(
+class MarkdownContent(
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(AstRoot(children))
@@ -16,9 +16,9 @@ data class MarkdownContent(
 
 /**
  * A generic group of inline nodes used as input for Quarkdown functions.
- * @see eu.iamgio.quarkdown.function.value.ValueFactory.inlineMarkdown
+ * @see eu.iamgio.quarkdown.function.value.factory.ValueFactory.inlineMarkdown
  */
-data class InlineMarkdownContent(
+class InlineMarkdownContent(
     override val children: InlineContent,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(AstRoot(children))

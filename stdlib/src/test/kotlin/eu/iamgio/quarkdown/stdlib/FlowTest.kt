@@ -2,8 +2,8 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCall
@@ -12,10 +12,11 @@ import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.function.value.output.node.BlockNodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.output.node.InlineNodeOutputValueVisitor
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
@@ -91,8 +92,8 @@ class FlowTest {
             val list = blockNode.children.first()
             assertIs<UnorderedList>(list)
             assertEquals(2, list.children.size)
-            assertIs<BaseListItem>(list.children[0])
-            assertIs<BaseListItem>(list.children[1])
+            assertIs<ListItem>(list.children[0])
+            assertIs<ListItem>(list.children[1])
         }
 
         function(
@@ -140,7 +141,7 @@ class FlowTest {
         assertFailsWith<InvalidLambdaArgumentCountException> {
             `if`(
                 isLower(2, 4).unwrappedValue,
-                Lambda(context, explicitParameters = listOf("a")) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
+                Lambda(context, explicitParameters = listOf(LambdaParameter("a"))) { _, _ -> "Hello Quarkdown".wrappedAsValue() },
             )
         }
     }

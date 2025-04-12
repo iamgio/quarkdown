@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.ast.base.inline
 
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param text text content
  * @param content additional content this code holds, if any
  */
-data class CodeSpan(
+class CodeSpan(
     override val text: String,
     val content: ContentInfo? = null,
 ) : PlainTextNode {

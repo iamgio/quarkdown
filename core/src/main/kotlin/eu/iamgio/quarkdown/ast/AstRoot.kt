@@ -5,7 +5,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * The root of a node tree.
  */
-data class AstRoot(
+class AstRoot(
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

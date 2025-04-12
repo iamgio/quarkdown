@@ -6,7 +6,7 @@ import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 /**
  * A blank line.
- * @see eu.iamgio.quarkdown.ast.Newline
+ * @see eu.iamgio.quarkdown.ast.base.block.Newline
  */
 class NewlineToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -17,7 +17,7 @@ class NewlineToken(data: TokenData) : Token(data) {
  * ```
  *     Code
  * ```
- * @see eu.iamgio.quarkdown.ast.Code
+ * @see eu.iamgio.quarkdown.ast.base.block.Code
  */
 class BlockCodeToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -36,7 +36,7 @@ class BlockCodeToken(data: TokenData) : Token(data) {
  * Code
  * ~~~
  * ```
- * @see eu.iamgio.quarkdown.ast.Code
+ * @see eu.iamgio.quarkdown.ast.base.block.Code
  */
 class FencesCodeToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -51,7 +51,7 @@ class FencesCodeToken(data: TokenData) : Token(data) {
  * LaTeX expression line 1
  * LaTeX expression line 2
  * $$$
- * @see eu.iamgio.quarkdown.ast.Math
+ * @see eu.iamgio.quarkdown.ast.quarkdown.block.Math
  */
 class MultilineMathToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -64,7 +64,7 @@ class MultilineMathToken(data: TokenData) : Token(data) {
  *
  * Example:
  * $ LaTeX expression $
- * @see eu.iamgio.quarkdown.ast.Math
+ * @see eu.iamgio.quarkdown.ast.quarkdown.block.Math
  */
 class OnelineMathToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -79,7 +79,7 @@ class OnelineMathToken(data: TokenData) : Token(data) {
  * ```
  * *****
  * ```
- * @see eu.iamgio.quarkdown.ast.HorizontalRule
+ * @see eu.iamgio.quarkdown.ast.base.block.HorizontalRule
  */
 class HorizontalRuleToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -93,7 +93,7 @@ class HorizontalRuleToken(data: TokenData) : Token(data) {
  * ```
  * <<<
  * ```
- * @see eu.iamgio.quarkdown.ast.HorizontalRule
+ * @see eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
  */
 class PageBreakToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -104,7 +104,7 @@ class PageBreakToken(data: TokenData) : Token(data) {
  * ```
  * # Heading
  * ```
- * @see eu.iamgio.quarkdown.ast.Heading
+ * @see eu.iamgio.quarkdown.ast.base.block.Heading
  */
 class HeadingToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -120,7 +120,7 @@ class HeadingToken(data: TokenData) : Token(data) {
  * Heading
  * ---
  * ```
- * @see eu.iamgio.quarkdown.ast.Heading
+ * @see eu.iamgio.quarkdown.ast.base.block.Heading
  */
 class SetextHeadingToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -131,7 +131,7 @@ class SetextHeadingToken(data: TokenData) : Token(data) {
  * ```
  * [label]: url "Title"
  * ```
- * @see eu.iamgio.quarkdown.ast.LinkDefinition
+ * @see eu.iamgio.quarkdown.ast.base.block.LinkDefinition
  */
 class LinkDefinitionToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -143,7 +143,7 @@ class LinkDefinitionToken(data: TokenData) : Token(data) {
  * - A
  * - B
  * ```
- * @see eu.iamgio.quarkdown.ast.UnorderedList
+ * @see eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
  */
 class UnorderedListToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -155,7 +155,7 @@ class UnorderedListToken(data: TokenData) : Token(data) {
  * 1. First
  * 2. Second
  * ```
- * @see eu.iamgio.quarkdown.ast.OrderedList
+ * @see eu.iamgio.quarkdown.ast.base.block.list.OrderedList
  */
 class OrderedListToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -169,7 +169,7 @@ class OrderedListToken(data: TokenData) : Token(data) {
  * ```
  * 1. First
  * ```
- * @see eu.iamgio.quarkdown.ast.ListItem
+ * @see eu.iamgio.quarkdown.ast.base.block.list.ListItem
  */
 class ListItemToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -187,7 +187,7 @@ class ListItemToken(data: TokenData) : Token(data) {
  * | :--- | ---: |
  * | baz  |  bim |
  * ```
- * @see eu.iamgio.quarkdown.ast.Table
+ * @see eu.iamgio.quarkdown.ast.base.block.Table
  */
 class TableToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -200,14 +200,14 @@ class TableToken(data: TokenData) : Token(data) {
  *     Content
  * </p>
  * ```
- * @see eu.iamgio.quarkdown.ast.Html
+ * @see eu.iamgio.quarkdown.ast.base.block.Html
  */
 class HtmlToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.Paragraph
+ * @see eu.iamgio.quarkdown.ast.base.block.Paragraph
  */
 class ParagraphToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -218,14 +218,14 @@ class ParagraphToken(data: TokenData) : Token(data) {
  * ```
  * > Quote
  * ```
- * @see eu.iamgio.quarkdown.ast.BlockQuote
+ * @see eu.iamgio.quarkdown.ast.base.block.BlockQuote
  */
 class BlockQuoteToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
- * @see eu.iamgio.quarkdown.ast.BlockText
+ * @see eu.iamgio.quarkdown.ast.base.block.BlankNode
  */
 class BlockTextToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)

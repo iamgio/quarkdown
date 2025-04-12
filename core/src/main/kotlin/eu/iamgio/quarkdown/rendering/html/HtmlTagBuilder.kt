@@ -90,25 +90,30 @@ class HtmlTagBuilder(
      * @return this for concatenation
      * @see optionalAttribute
      */
-    fun `class`(className: String?) = optionalAttribute("class", className)
+    fun className(className: String?) = optionalAttribute("class", className)
 
     /**
      * Applies a sequence of class names via the `class` attribute to this tag.
      * @param classNames class names. `null` elements are ignored. The attribute is not applied if all elements are `null`
      * @return this for concatenation
      */
-    fun classes(vararg classNames: String?) =
+    fun classNames(vararg classNames: String?) =
         optionalAttribute(
             "class",
-            classNames.asSequence().filterNotNull().joinToString(separator = " ").takeIf { it.isNotEmpty() },
+            classNames
+                .asSequence()
+                .filterNotNull()
+                .joinToString(separator = " ")
+                .takeIf { it.isNotEmpty() },
         )
 
     /**
      * Adds a `data-hidden` attribute to this tag as a flag that this is a hidden element.
      * A page that has either zero elements or only hidden elements is considered blank.
+     * This attribute is usually read by external stylesheets and scripts.
      * @return this for concatenation
      */
-    fun hidden() = attribute("data-hidden", true)
+    fun hidden() = attribute("data-hidden", "")
 
     /**
      * @return this builder and its nested content into stringified HTML code.

@@ -33,9 +33,28 @@ class Pipeline(
     private val renderer: (RendererFactory, Context) -> RenderingComponents,
     private val hooks: PipelineHooks? = null,
 ) {
+    /**
+     * A read-only version of the context of this pipeline.
+     */
+    val readOnlyContext: Context
+        get() = context
+
     init {
-        registerLibraries()
         Pipelines.attach(context, this)
+        registerLibraries()
+    }
+
+    /**
+     * Invokes the given [hook] of this pipeline and of all the registered libraries.
+     * @param hook hook invocation
+     * @see PipelineHooks
+     * @see Library.hooks
+     */
+    private fun invokeHooks(hook: (PipelineHooks) -> Unit) {
+        // Invoke the hook of this pipeline.
+        hooks?.let { hook(it) }
+        // Invoke the hook of all the registered libraries.
+        libraries.forEach { it.hooks?.let(hook) }
     }
 
     /**
@@ -44,7 +63,7 @@ class Pipeline(
      */
     private fun registerLibraries() {
         LibraryRegistrant(context).registerAll(this.libraries)
-        hooks?.afterRegisteringLibraries?.invoke(this, this.libraries)
+        invokeHooks { it.afterRegisteringLibraries(this, this.libraries) }
     }
 
     /**
@@ -54,15 +73,16 @@ class Pipeline(
      */
     fun tokenize(source: CharSequence): List<Token> {
         val lexer = context.flavor.lexerFactory.newBlockLexer(source)
-        return lexer.tokenize().also {
-            hooks?.afterLexing?.invoke(this, it)
+        return lexer.tokenize().also { tokens ->
+            invokeHooks { it.afterLexing(this, tokens) }
         }
     }
 
     /**
      * Parses a list of tokens into an Abstract Syntax Tree.
      * @param tokens tokens to parse
-     * @param context context to use for parsing. If not provided, the pipeline's context is used.
+     * @param context context to use for parsing, usually a child of this pipeline's context.
+     *                If not provided, the pipeline's context is used.
      * @see eu.iamgio.quarkdown.parser.BlockTokenParser
      * @see eu.iamgio.quarkdown.parser.InlineTokenParser
      */
@@ -71,8 +91,8 @@ class Pipeline(
         context: MutableContext = this.context,
     ): Document {
         val parser = context.flavor.parserFactory.newParser(context)
-        return Document(children = tokens.acceptAll(parser)).also {
-            hooks?.afterParsing?.invoke(this, it)
+        return Document(children = tokens.acceptAll(parser)).also { document ->
+            invokeHooks { it.afterParsing(this, document) }
         }
     }
 
@@ -81,18 +101,18 @@ class Pipeline(
      */
     fun expandFunctionCalls(document: Document) {
         FunctionCallNodeExpander(context, options.errorHandler).expandAll()
-        hooks?.afterExpanding?.invoke(this, document)
+        invokeHooks { it.afterExpanding(this, document) }
     }
 
     /**
-     * Perform one full traversal of [document]'s AST.
+     * Performs one full traversal of [document]'s AST.
      */
     private fun visitTree(document: Document) {
         context.flavor.treeIteratorFactory
             .default(context)
-            .run(document)
+            .traverse(document)
 
-        hooks?.afterTreeVisiting?.invoke(this)
+        invokeHooks { it.afterTreeVisiting(this) }
     }
 
     /**
@@ -108,7 +128,7 @@ class Pipeline(
     ): CharSequence {
         val rendered = components.nodeRenderer.visit(document)
 
-        hooks?.afterRendering?.invoke(this, rendered)
+        invokeHooks { it.afterRendering(this, rendered) }
 
         // If enabled, the output code is wrapped in a template.
         val wrapped =
@@ -118,7 +138,7 @@ class Pipeline(
                 rendered
             }
 
-        hooks?.afterPostRendering?.invoke(this, wrapped)
+        invokeHooks { it.afterPostRendering(this, wrapped) }
 
         return wrapped
     }
@@ -134,17 +154,37 @@ class Pipeline(
         val document = parse(tokens)
         context.attributes.root = document
 
+        val renderer = this.renderer(context.flavor.rendererFactory, context)
+
+        // The chosen renderer has its own preferred media storage options.
+        // For example, HTML requires local media to be accessible from the file system,
+        // hence local files must be stored and copied to the output directory.
+        // It does not require remote media to be stored, as they are linked to from the web.
+        // On the other hand, for example, LaTeX rendering (not yet supported) would require
+        // all media to be stored locally, as it does not support remote media.
+        //
+        // The options are merged: if a rule is already set by the user, it is not overridden.
+        // These options must be set before traversing the tree, as media is stored during it.
+        context.options.mergeMediaStorageOptions(renderer.postRenderer.preferredMediaStorageOptions)
+
+        // The user can further force override the media storage options.
+        context.options.mergeMediaStorageOptions(options.mediaStorageOptionsOverrides)
+
         expandFunctionCalls(document)
 
         visitTree(document)
 
-        val renderer = this.renderer(context.flavor.rendererFactory, context)
         val rendered = render(document, renderer)
 
-        val resources = renderer.postRenderer.generateResources(rendered)
+        // Resources generated by the post-renderer.
+        val resources: Set<OutputResource> = renderer.postRenderer.generateResources(rendered)
+
+        // Media resources (e.g. images) generated by the media storage.
+        val media: OutputResource = context.mediaStorage.toResource()
+
         return OutputResourceGroup(
             name = context.documentInfo.name ?: "Untitled Quarkdown Document",
-            resources,
+            resources = resources + media,
         )
     }
 }

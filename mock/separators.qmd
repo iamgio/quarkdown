@@ -1,0 +1,30 @@
+# Separators
+
+#### Horizontal
+
+The quick brown fox jumps over the lazy dog.
+
+---
+
+The quick brown fox jumps over the lazy dog.
+
+.whitespace
+
+#### Vertical
+
+.row
+	.container
+		A
+		
+		B
+		
+		C
+	
+	---
+	
+	.container
+		D
+	
+		E
+		
+		F

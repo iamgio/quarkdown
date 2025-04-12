@@ -1,0 +1,39 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.css');
+
+:root {
+    --qd-primary-color: rgb(220, 220, 220);
+    --qd-background-color: hsl(210, 20%, 98%);
+    --qd-main-color: hsl(0, 5%, 10%);
+    --qd-link-color: hsl(0, 100%, 33%);
+    --qd-color-on-primary: var(--qd-main-color);
+    --qd-mermaid-node-background-color: var(--qd-background-color);
+}
+
+.quarkdown blockquote {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.quarkdown-slides blockquote {
+    box-shadow: none;
+}
+
+.quarkdown pre code {
+    background-color: var(--qd-background-color);
+    padding: 0;
+}
+
+.quarkdown-slides pre {
+    box-shadow: none;
+}
+
+.hljs-ln td:first-child {
+    padding-left: 0 !important;
+}
+
+nav ol ol {
+    border-color: rgba(0, 0, 0, .2);
+}
+
+.box.callout {
+    --box-header-background-color: rgba(0, 0, 0, .03);
+}

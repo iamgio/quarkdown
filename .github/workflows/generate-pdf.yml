@@ -1,0 +1,80 @@
+name: PDF generation via Puppeteer
+
+on:
+  push:
+    branches: [ "main", "chrome-action" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew clean build distZip
+
+    - name: Unzip distribution
+      run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
+
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.7.3
+      id: setup-chrome
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+
+    - name: Setup staging directory
+      run: |
+        rm -rf pdf
+        mkdir -p pdf/mock
+
+    - name: Generate theme combinations
+      run: |
+        node .github/workflows/generate-pdf/generate-theme-combinations.js
+
+    - name: Compile Mock as PDF
+      run: |
+        for generated in $(ls mock/generated_*.qmd); do
+          ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf/mock --pdf --pdf-no-sandbox
+        done
+        ls -d $PWD/pdf/*
+
+    - name: Remove directories, keep files
+      run: |
+        rm -rf pdf/mock/*/
+        ls -d $PWD/pdf/*
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mock-pdf
+        path: pdf/mock
+
+    - name: Push to generated branch
+      run: |
+        mv pdf temp
+        git add temp
+        git fetch
+        LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout generated
+        cp -r temp/mock/* pdf/mock
+        rm -rf temp
+        git add temp
+        git add pdf
+        git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
+        git push

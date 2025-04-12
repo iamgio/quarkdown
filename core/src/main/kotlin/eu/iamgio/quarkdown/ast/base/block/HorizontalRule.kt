@@ -6,8 +6,6 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * A horizontal line (thematic break).
  */
-class HorizontalRule : Node {
-    override fun toString() = "HorizontalRule"
-
+object HorizontalRule : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

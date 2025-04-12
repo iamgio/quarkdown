@@ -32,6 +32,12 @@ object Log {
         }
     }
 
+    fun debug(throwable: Throwable) {
+        if (isDebug) {
+            throwable.printStackTrace()
+        }
+    }
+
     fun info(message: Any) = logger.info(message)
 
     fun warn(message: Any) = logger.warn(message)

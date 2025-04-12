@@ -1,7 +1,8 @@
 package eu.iamgio.quarkdown.stdlib
 
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DynamicValue
 
 /**
  * `Logical` stdlib module exporter.
@@ -10,7 +11,8 @@ val Logical: Module =
     setOf(
         ::isLower,
         ::isGreater,
-        ::isEqual,
+        ::equals,
+        ::not,
     )
 
 /**
@@ -50,8 +52,13 @@ fun isGreater(
 /**
  * @return whether [a] and [b] have equal content
  */
-@Name("isequal")
-fun isEqual(
-    a: String,
-    @Name("to") b: String,
-) = BooleanValue(a == b)
+@Name("equals")
+fun equals(
+    a: DynamicValue,
+    @Name("to") b: DynamicValue,
+) = BooleanValue(a == b || a.unwrappedValue == b.unwrappedValue)
+
+/**
+ * @return the negation of [value]
+ */
+fun not(value: Boolean) = BooleanValue(!value)

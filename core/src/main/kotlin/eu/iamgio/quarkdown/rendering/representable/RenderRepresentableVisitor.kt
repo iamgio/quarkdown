@@ -1,8 +1,10 @@
 package eu.iamgio.quarkdown.rendering.representable
 
+import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Table
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
@@ -10,7 +12,7 @@ import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.slides.Transition
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 
 /**
  * Visitor that produces representations of each [RenderRepresentable] subtype
@@ -26,6 +28,12 @@ interface RenderRepresentableVisitor<T> {
 
     fun visit(alignment: Table.Alignment): T
 
+    fun visit(borderStyle: Container.BorderStyle): T
+
+    fun visit(alignment: Container.Alignment): T
+
+    fun visit(alignment: Container.FloatAlignment): T
+
     fun visit(stackLayout: Stacked.Layout): T
 
     fun visit(alignment: Stacked.MainAxisAlignment): T
@@ -33,6 +41,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(alignment: Stacked.CrossAxisAlignment): T
 
     fun visit(clip: Clipped.Clip): T
+
+    fun visit(quoteType: BlockQuote.Type): T
 
     fun visit(boxType: Box.Type): T
 

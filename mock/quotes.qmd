@@ -1,0 +1,26 @@
+# Blockquotes
+
+> The quick brown fox jumps over the lazy dog.
+
+> Let your imagination be your guide. Maybe we got a few little happy bushes here, just covered with snow. A big strong tree needs big strong roots.
+> - Bob Ross
+
+>> You miss 100% of the shots you don't take.
+>> - Wayne Gretzky
+> - _Michael Scott_
+
+<<<
+
+## Alerts
+
+> Tip: Some useful information.  
+> The quick brown fox jumps over the lazy dog.
+
+> Note: Something to be aware of.  
+> The quick brown fox jumps over the lazy dog.
+
+> Warning: Something to be cautious about.  
+> The quick brown fox jumps over the lazy dog.
+
+> Important: Some critical information.  
+> The quick brown fox jumps over the lazy dog

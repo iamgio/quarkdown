@@ -3,7 +3,15 @@ package eu.iamgio.quarkdown.function.reflect
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
+import eu.iamgio.quarkdown.function.call.validate.FunctionCallValidator
+import eu.iamgio.quarkdown.function.error.FunctionException
 import eu.iamgio.quarkdown.function.error.FunctionRuntimeException
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.NoAutoArgumentUnwrapping
+import eu.iamgio.quarkdown.function.reflect.annotation.NotForDocumentType
+import eu.iamgio.quarkdown.function.reflect.annotation.OnlyForDocumentType
+import eu.iamgio.quarkdown.function.reflect.annotation.toValidator
 import eu.iamgio.quarkdown.function.value.InputValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.log.Log
@@ -17,7 +25,9 @@ import kotlin.reflect.full.hasAnnotation
  * A Quarkdown [Function] adapted from a regular Kotlin [KFunction].
  * @param function Kotlin function to adapt
  */
-class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) : Function<T> {
+class KFunctionAdapter<T : OutputValue<*>>(
+    private val function: KFunction<T>,
+) : Function<T> {
     /**
      * If the [Name] annotation is present on [function], the Quarkdown function name is set from there.
      * Otherwise, it is [function]'s original name.
@@ -37,6 +47,13 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                     isOptional = it.isOptional,
                     isInjected = it.hasAnnotation<Injected>(),
                 )
+            }
+
+    override val validators: List<FunctionCallValidator<T>>
+        get() =
+            buildList {
+                function.findAnnotation<OnlyForDocumentType>()?.toValidator<T>()?.let(::add)
+                function.findAnnotation<NotForDocumentType>()?.toValidator<T>()?.let(::add)
             }
 
     override val invoke: (ArgumentBindings) -> T
@@ -63,7 +80,12 @@ class KFunctionAdapter<T : OutputValue<*>>(private val function: KFunction<T>) :
                 // Exceptions thrown within the called function are converted to Quarkdown exceptions
                 // and handled accordingly by the pipeline's function expander component.
                 Log.debug("(expected, received): " + args.map { it.key.type to it.value })
-                throw FunctionRuntimeException(this, e.targetException)
+
+                // If the exception comes from a nested function call, the source function is retrieved.
+                // Otherwise, this function becomes the source.
+                val source: Function<*> = (e.targetException as? FunctionException)?.function ?: this
+
+                throw FunctionRuntimeException(source, e.targetException)
             }
         }
 }

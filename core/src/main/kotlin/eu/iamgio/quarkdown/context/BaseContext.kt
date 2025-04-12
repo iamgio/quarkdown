@@ -1,6 +1,6 @@
 package eu.iamgio.quarkdown.context
 
-import eu.iamgio.quarkdown.ast.AstAttributes
+import eu.iamgio.quarkdown.ast.attributes.AstAttributes
 import eu.iamgio.quarkdown.ast.base.LinkNode
 import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.base.inline.ReferenceLink
@@ -11,11 +11,20 @@ import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
 import eu.iamgio.quarkdown.function.library.Library
+import eu.iamgio.quarkdown.localization.LocaleNotSetException
+import eu.iamgio.quarkdown.localization.LocalizationKeyNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationLocaleNotFoundException
+import eu.iamgio.quarkdown.localization.LocalizationTable
+import eu.iamgio.quarkdown.localization.LocalizationTableNotFoundException
+import eu.iamgio.quarkdown.media.storage.MutableMediaStorage
+import eu.iamgio.quarkdown.media.storage.ReadOnlyMediaStorage
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.Pipelines
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * An immutable [Context] implementation.
+ * This might be used in tests as a toy context, but in a concrete execution, its mutable subclass [MutableContext] is used.
  * @param attributes attributes of the node tree, produced by the parsing stage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
@@ -32,6 +41,12 @@ open class BaseContext(
 
     override val options: ContextOptions = MutableContextOptions()
 
+    override val loadableLibraries = emptySet<Library>()
+
+    override val localizationTables = emptyMap<String, LocalizationTable>()
+
+    override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
+
     override fun getFunctionByName(name: String): Function<*>? {
         return libraries.asSequence()
             .flatMap { it.functions }
@@ -39,8 +54,11 @@ open class BaseContext(
     }
 
     override fun resolve(reference: ReferenceLink): LinkNode? {
-        return attributes.linkDefinitions.firstOrNull { it.label == reference.reference }
+        return attributes.linkDefinitions.firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
             ?.let { Link(reference.label, it.url, it.title) }
+            ?.also { link ->
+                reference.onResolve.forEach { action -> action(link) }
+            }
     }
 
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
@@ -58,6 +76,16 @@ open class BaseContext(
 
     override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> {
         return UncheckedFunctionCall(call.name) { resolve(call) }
+    }
+
+    override fun localize(
+        tableName: String,
+        key: String,
+    ): String {
+        val locale = documentInfo.locale ?: throw LocaleNotSetException()
+        val table = localizationTables[tableName] ?: throw LocalizationTableNotFoundException(tableName)
+        val entries = table[locale] ?: throw LocalizationLocaleNotFoundException(tableName, locale)
+        return entries[key] ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
     override fun fork(): ScopeContext = ScopeContext(parent = this)

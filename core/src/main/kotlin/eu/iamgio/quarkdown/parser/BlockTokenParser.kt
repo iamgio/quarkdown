@@ -2,32 +2,32 @@ package eu.iamgio.quarkdown.parser
 
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.TextNode
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
-import eu.iamgio.quarkdown.ast.base.block.BlockText
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
-import eu.iamgio.quarkdown.ast.base.block.ListBlock
-import eu.iamgio.quarkdown.ast.base.block.ListItem
 import eu.iamgio.quarkdown.ast.base.block.Newline
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
-import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.ListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
+import eu.iamgio.quarkdown.ast.base.inline.Image
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
-import eu.iamgio.quarkdown.function.call.FunctionCallArgument
-import eu.iamgio.quarkdown.function.value.DynamicValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.acceptAll
+import eu.iamgio.quarkdown.lexer.patterns.DELIMITED_TITLE_HELPER
 import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
 import eu.iamgio.quarkdown.lexer.tokens.BlockQuoteToken
 import eu.iamgio.quarkdown.lexer.tokens.BlockTextToken
@@ -47,8 +47,10 @@ import eu.iamgio.quarkdown.lexer.tokens.ParagraphToken
 import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
+import eu.iamgio.quarkdown.parser.walker.funcall.WalkedFunctionCall
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
+import eu.iamgio.quarkdown.util.removeOptionalPrefix
 import eu.iamgio.quarkdown.util.takeUntilLastOccurrence
 import eu.iamgio.quarkdown.util.trimDelimiters
 import eu.iamgio.quarkdown.visitor.token.BlockTokenVisitor
@@ -79,7 +81,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
             .tokenizeAndParse()
 
     override fun visit(token: NewlineToken): Node {
-        return Newline()
+        return Newline
     }
 
     override fun visit(token: BlockCodeToken): Node {
@@ -109,7 +111,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: HorizontalRuleToken): Node {
-        return HorizontalRule()
+        return HorizontalRule
     }
 
     /**
@@ -133,6 +135,9 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         val depth = groups.next().length // Amount of # characters.
 
+        // e.g. ###! Heading => the heading is decorative, meaning it's not part of the document structure.
+        val isDecorative = groups.next() == "!"
+
         val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
         // Heading {#custom-id} -> Heading, custom-id
         val (text, customId) = splitHeadingTextAndId(rawText)
@@ -140,6 +145,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         return Heading(
             depth,
             text.toInline(),
+            isDecorative,
             customId,
         )
     }
@@ -254,11 +260,21 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         val lines = content.lineSequence()
 
         if (lines.none()) {
-            return BaseListItem(children = emptyList())
+            return ListItem(children = emptyList())
         }
 
-        //
+        // Trims the content, removing common indentation.
         val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length)
+
+        // Additional features of this list item.
+        val variants =
+            buildList<ListItemVariant> {
+                // GFM 5.3 task list item.
+                if (task.isNotBlank()) {
+                    val isChecked = "[ ]" !in task
+                    add(TaskListItemVariant(isChecked))
+                }
+            }
 
         // Parsed content.
         val children =
@@ -266,15 +282,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 .newBlockLexer(source = trimmedContent)
                 .tokenizeAndParse()
 
-        return when {
-            // GFM task list item.
-            task.isNotBlank() -> {
-                val isChecked = "[ ]" !in task
-                TaskListItem(isChecked, children)
-            }
-            // Regular list item.
-            else -> BaseListItem(children = children)
-        }
+        return ListItem(variants, children)
     }
 
     override fun visit(token: TableToken): Node {
@@ -320,9 +328,24 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
                 }
         }
 
+        // Quarkdown extension: a table may have a caption.
+        // A caption is located at the end of the table, after a line break,
+        // wrapped by a delimiter, the same way as a link/image title.
+        // "This is a caption", 'This is a caption', (This is a caption)
+        val captionRegex = Regex("^\\s*($DELIMITED_TITLE_HELPER)\\s*$")
+        // The found caption of the table, if any.
+        var caption: String? = null
+
         // Other rows.
         groups.next().lineSequence()
             .filterNot { it.isBlank() }
+            .onEach { row ->
+                // Extract the caption if this is the caption row.
+                captionRegex.find(row)?.let { captionMatch ->
+                    caption = captionMatch.groupValues.getOrNull(1)?.trimDelimiters()
+                }
+            }
+            .filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
             .forEach { row ->
                 var cellCount = 0
                 // Push cell.
@@ -338,6 +361,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
         return Table(
             columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
+            caption,
         )
     }
 
@@ -348,25 +372,63 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: ParagraphToken): Node {
-        return Paragraph(
-            text = token.data.text.trim().toInline(),
-        )
+        val text = token.data.text.trim().toInline()
+
+        // If the paragraph only consists of a single child, it could be a special block.
+        return when (val singleChild = text.singleOrNull()) {
+            // Single image -> a figure.
+            is Image -> ImageFigure(singleChild)
+            // Regular paragraph otherwise (most cases).
+            else -> Paragraph(text)
+        }
     }
 
     override fun visit(token: BlockQuoteToken): Node {
         // Remove leading >
-        val text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
+        var text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
+
+        // Blockquote type, if any. e.g. Tip, note, warning.
+        val type: BlockQuote.Type? =
+            BlockQuote.Type.entries.find { type ->
+                val prefix = type.name + ": " // e.g. Tip:, Note:, Warning:
+                // If the text begins with the prefix, it's a blockquote of that type.
+                val (newText, prefixFound) = text.removeOptionalPrefix(prefix, ignoreCase = true)
+                // If the prefix was found, it is stripped off.
+                if (prefixFound) {
+                    text = newText
+                }
+
+                // If the prefix was found, the type is set.
+                prefixFound
+            }
+
+        // Content nodes.
+        var children =
+            context.flavor.lexerFactory
+                .newBlockLexer(source = text)
+                .tokenizeAndParse()
+
+        // If the last child is a single-item unordered list, then it's not part of the blockquote,
+        // but rather its content is the attribution of the citation.
+        // Example:
+        // > To be, or not to be, that is the question.
+        // > - William Shakespeare
+        val attribution: InlineContent? =
+            (children.lastOrNull() as? UnorderedList)
+                ?.children?.singleOrNull()?.let { it as? ListItem } // Only lists with one item are considered.
+                ?.children?.firstOrNull()?.let { it as? TextNode } // Usually a paragraph.
+                ?.text // The text of the attribution, as inline content.
+                ?.also { children = children.dropLast(1) } // If found, the attribution is not part of the children.
 
         return BlockQuote(
-            children =
-                context.flavor.lexerFactory
-                    .newBlockLexer(source = text)
-                    .tokenizeAndParse(),
+            type,
+            attribution,
+            children,
         )
     }
 
     override fun visit(token: BlockTextToken): Node {
-        return BlockText()
+        return BlankNode
     }
 
     override fun visit(token: PageBreakToken): Node {
@@ -374,54 +436,18 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
     }
 
     override fun visit(token: FunctionCallToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val call =
+            token.data.walkerResult?.value as? WalkedFunctionCall
+                ?: throw IllegalStateException("Function call walker result not found.")
 
-        // Function name.
-        val name = groups.next()
+        // The syntax-only information held by the walked function call is converted to a context-aware function call node.
+        // Function chaining is also handled here, delegated to the refiner.
 
-        // Function arguments.
-        val arguments = mutableListOf<FunctionCallArgument>()
+        val callNode = FunctionCallRefiner(context, call, token.isBlock).toNode()
 
-        // The name of the next argument. `null` means the next argument is unnamed.
-        var argName: String? = null
+        // Enqueuing the function call, in order to expand it in the next stage of the pipeline.
+        context.register(callNode)
 
-        // Regular function arguments.
-        groups.forEachRemaining { arg ->
-            // If this group contains the name of a named argument,
-            // it is applied to the very next argument.
-            if (arg.firstOrNull() != '{' && arg.lastOrNull() != '}') {
-                argName = arg
-                return@forEachRemaining
-            }
-
-            // Regular argument wrapped in brackets, which are stripped off.
-            val argContent = arg.trimDelimiters().trim()
-
-            // An expression from the raw string is created.
-            ValueFactory.expression(argContent, context)?.let {
-                arguments += FunctionCallArgument(it, argName)
-                argName = null // The name of the next named argument is reset.
-            }
-        }
-
-        // Body function argument.
-        // A body argument is always the last one, it goes on a new line and each line is indented.
-        token.data.namedGroups["bodyarg"]?.takeUnless { it.isBlank() }?.let { body ->
-            // A body argument is treated as plain text, thus nested function calls are not executed by default.
-            // They are executed if the argument is used as Markdown content from the referenced function,
-            // that runs recursive lexing & parsing on the arg content, triggering function calls.
-
-            // Remove indentation at the beginning of each line.
-            val value = DynamicValue(body.trimIndent())
-
-            arguments += FunctionCallArgument(value, isBody = true)
-        }
-
-        val call = FunctionCallNode(context, name, arguments, token.isBlock)
-
-        // Enqueuing the function call, in order to expand it in the next stage.
-        context.register(call)
-
-        return call
+        return callNode
     }
 }

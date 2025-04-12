@@ -3,21 +3,20 @@
 package eu.iamgio.quarkdown
 
 import eu.iamgio.quarkdown.ast.InlineContent
-import eu.iamgio.quarkdown.ast.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.Node
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.attributes.MutableAstAttributes
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
-import eu.iamgio.quarkdown.ast.base.block.ListItem
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Comment
 import eu.iamgio.quarkdown.ast.base.inline.CriticalContent
@@ -31,22 +30,37 @@ import eu.iamgio.quarkdown.ast.base.inline.Strikethrough
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.dsl.buildBlock
+import eu.iamgio.quarkdown.ast.dsl.buildBlocks
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
+import eu.iamgio.quarkdown.ast.quarkdown.block.list.FocusListItemVariant
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
 import eu.iamgio.quarkdown.context.BaseContext
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.MutableContextOptions
+import eu.iamgio.quarkdown.document.size.Sizes
 import eu.iamgio.quarkdown.document.size.cm
 import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.percent
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
+import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
 import eu.iamgio.quarkdown.pipeline.Pipelines
 import eu.iamgio.quarkdown.rendering.NodeRenderer
@@ -76,7 +90,9 @@ class HtmlNodeRendererTest {
             )
         }
 
-        return context.flavor.rendererFactory.html(context).nodeRenderer
+        return context.flavor.rendererFactory
+            .html(context)
+            .nodeRenderer
     }
 
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
@@ -84,12 +100,12 @@ class HtmlNodeRendererTest {
     // Inline
     @Test
     fun comment() {
-        assertEquals("", Comment().render())
+        assertEquals("", Comment.render())
     }
 
     @Test
     fun lineBreak() {
-        assertEquals("<br />", LineBreak().render())
+        assertEquals("<br />", LineBreak.render())
     }
 
     @Test
@@ -171,38 +187,22 @@ class HtmlNodeRendererTest {
                 Link(label = listOf(), url = "/url", title = "Title"),
                 width = null,
                 height = null,
-            ).render(MutableContext(BaseMarkdownFlavor)),
-        ) // The figcaption appears only with the Quarkdown rendering!
-        assertEquals(
-            out.next(),
-            Image(
-                Link(label = listOf(), url = "/url", title = "Title"),
-                width = null,
-                height = null,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
-                Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
-                width = null,
-                height = null,
+                Link(label = buildInline { text("Foo bar") }, url = "/url", title = null),
+                width = 150.px,
+                height = 100.px,
             ).render(),
         )
         assertEquals(
             out.next(),
             Image(
-                Link(label = listOf(Strong(listOf(Text("Foo"))), CodeSpan(" bar")), url = "/url", title = "Title"),
-                width = null,
+                Link(label = buildInline { text("Foo bar") }, url = "/url", title = "Title"),
+                width = 3.2.cm,
                 height = null,
-            ).render(),
-        )
-        assertEquals(
-            out.next(),
-            Image(
-                Link(label = listOf(Text("Foo bar")), url = "/url", title = "Title"),
-                width = 150,
-                height = 100,
             ).render(),
         )
     }
@@ -257,8 +257,8 @@ class HtmlNodeRendererTest {
                     label,
                     fallback,
                 ),
-                width = 150,
-                height = 100,
+                width = 150.px,
+                height = 100.px,
             ).render(context),
         )
         assertEquals(
@@ -275,9 +275,45 @@ class HtmlNodeRendererTest {
         )
     }
 
+    fun figure() {
+        val out = readParts("quarkdown/figure.html")
+
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = ""),
+                    width = null,
+                    height = null,
+                ),
+            ).render(),
+        )
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = "Title"),
+                    width = null,
+                    height = null,
+                ),
+            ).render(),
+        )
+        assertEquals(
+            out.next(),
+            ImageFigure(
+                Image(
+                    Link(label = listOf(), url = "/url", title = "Title"),
+                    width = 150.px,
+                    height = 100.px,
+                ),
+            ).render(),
+        )
+    }
+
     @Test
     fun text() {
         assertEquals("Foo bar", Text("Foo bar").render())
+        assertEquals("&copy;", TextSymbol('©').render())
     }
 
     @Test
@@ -291,7 +327,7 @@ class HtmlNodeRendererTest {
         val spanWithColor =
             CodeSpan(
                 "#FFFF00",
-                CodeSpan.ColorContent(Color.fromHex("#FFFF00")!!),
+                CodeSpan.ColorContent(HexColorDecoder.decode("#FFFF00")!!),
             )
 
         assertEquals(out.next(), CodeSpan("Foo bar").render(base))
@@ -385,12 +421,12 @@ class HtmlNodeRendererTest {
 
     @Test
     fun horizontalRule() {
-        assertEquals("<hr />", HorizontalRule().render())
+        assertEquals("<hr />", HorizontalRule.render())
     }
 
     @Test
     fun pageBreak() {
-        assertEquals("<div class=\"page-break\">\n</div>", PageBreak().render())
+        assertEquals("<div class=\"page-break\" data-hidden=\"\">\n</div>", PageBreak().render())
     }
 
     @Test
@@ -401,7 +437,7 @@ class HtmlNodeRendererTest {
         val noIdNoPageBreak =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(autoPageBreakHeadingDepth = 0, enableAutomaticIdentifiers = false),
+                options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 0, enableAutomaticIdentifiers = false),
             )
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
@@ -414,7 +450,7 @@ class HtmlNodeRendererTest {
         val idNoPageBreak =
             MutableContext(
                 QuarkdownFlavor,
-                options = MutableContextOptions(autoPageBreakHeadingDepth = 0),
+                options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 0),
             )
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(idNoPageBreak))
@@ -423,7 +459,7 @@ class HtmlNodeRendererTest {
 
         // Automatic ID, force page break on depth <= 2
         val autoPageBreak =
-            MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingDepth = 2))
+            MutableContext(QuarkdownFlavor, options = MutableContextOptions(autoPageBreakHeadingMaxDepth = 2))
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(autoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(autoPageBreak))
@@ -433,36 +469,45 @@ class HtmlNodeRendererTest {
 
     private fun listItems() =
         listOf(
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("A1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("A2"))),
                     ),
             ),
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("B1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("B2"))),
                     ),
             ),
-            BaseListItem(
+            ListItem(
                 children =
                     listOf(
                         Paragraph(listOf(Text("C1"))),
-                        HorizontalRule(),
+                        HorizontalRule,
                         Paragraph(listOf(Text("C2"))),
                     ),
             ),
-            TaskListItem(
-                isChecked = true,
+            ListItem(
+                variants = listOf(FocusListItemVariant(isFocused = true)),
+                children =
+                    listOf(
+                        Paragraph(listOf(Text("D1"))),
+                        HorizontalRule,
+                        Paragraph(listOf(Text("D2"))),
+                    ),
+            ),
+            ListItem(
+                variants = listOf(TaskListItemVariant(isChecked = true)),
                 listOf(
-                    Paragraph(listOf(Text("D1"))),
-                    HorizontalRule(),
-                    Paragraph(listOf(Text("D2"))),
+                    Paragraph(listOf(Text("E1"))),
+                    HorizontalRule,
+                    Paragraph(listOf(Text("E2"))),
                 ),
             ),
         )
@@ -497,9 +542,12 @@ class HtmlNodeRendererTest {
                 startIndex = 1,
                 isLoose = false,
                 listItems(),
-            )
-                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
-                .render(),
+            ).also { list ->
+                list.children
+                    .asSequence()
+                    .filterIsInstance<ListItem>()
+                    .forEach { it.owner = list }
+            }.render(),
         )
     }
 
@@ -522,9 +570,12 @@ class HtmlNodeRendererTest {
             UnorderedList(
                 isLoose = false,
                 listItems(),
-            )
-                .also { list -> list.children.asSequence().filterIsInstance<ListItem>().forEach { it.owner = list } }
-                .render(),
+            ).also { list ->
+                list.children
+                    .asSequence()
+                    .filterIsInstance<ListItem>()
+                    .forEach { it.owner = list }
+            }.render(),
         )
     }
 
@@ -538,7 +589,7 @@ class HtmlNodeRendererTest {
         val out = readParts("block/paragraph.html")
 
         assertEquals(out.next(), Paragraph(listOf(Text("Foo bar"))).render())
-        assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar"))).render())
+        assertEquals(out.next(), Paragraph(listOf(Text("Foo"), LineBreak, Text("bar"))).render())
     }
 
     @Test
@@ -547,12 +598,36 @@ class HtmlNodeRendererTest {
 
         assertEquals(
             out.next(),
-            BlockQuote(
-                listOf(
-                    Paragraph(listOf(Text("Foo bar"))),
-                    Paragraph(listOf(Text("Baz bim"))),
-                ),
-            ).render(),
+            buildBlock {
+                blockQuote {
+                    paragraph { text("Foo bar") }
+                    paragraph { text("Baz bim") }
+                }
+            }.render(),
+        )
+
+        assertEquals(
+            out.next(),
+            buildBlock {
+                blockQuote(attribution = { text("William Shakespeare") }) {
+                    paragraph { text("To be, or not to be.") }
+                    paragraph { text("That is the question.") }
+                }
+            }.render(),
+        )
+
+        // The 'Tip' label is not rendered here because
+        // it requires the stdlib localization table.
+        assertEquals(
+            out.next(),
+            buildBlock {
+                blockQuote(
+                    type = BlockQuote.Type.TIP,
+                    attribution = { text("Someone") },
+                ) {
+                    paragraph { text("Hi there!") }
+                }
+            }.render(),
         )
     }
 
@@ -611,50 +686,130 @@ class HtmlNodeRendererTest {
                 ),
             ).render(),
         )
+
+        assertEquals(
+            out.next(),
+            Table(
+                listOf(
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("A"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("C"))),
+                                Table.Cell(listOf(Text("E"))),
+                            ),
+                    ),
+                    Table.Column(
+                        Table.Alignment.NONE,
+                        header = Table.Cell(listOf(Text("B"))),
+                        cells =
+                            listOf(
+                                Table.Cell(listOf(Text("D"))),
+                                Table.Cell(listOf(Text("F"))),
+                            ),
+                    ),
+                ),
+                caption = "Table 'caption'.",
+            ).render(),
+        )
     }
 
     // Quarkdown
 
     @Test
     fun mathBlock() {
-        assertEquals("__QD_BLOCK_MATH__\$some expression\$__QD_BLOCK_MATH__", Math("some expression").render())
-        assertEquals(
-            "__QD_BLOCK_MATH__\$\\lim_{x\\to\\infty}x\$__QD_BLOCK_MATH__",
-            Math("\\lim_{x\\to\\infty}x").render(),
-        )
+        val out = readParts("block/math.html")
+
+        assertEquals(out.next(), Math("some expression").render())
+        assertEquals(out.next(), Math("\\lim_{x\\to\\infty}x").render())
     }
 
     @Test
     fun mathSpan() {
-        assertEquals("__QD_INLINE_MATH__\$some expression\$__QD_INLINE_MATH__", MathSpan("some expression").render())
+        val out = readParts("inline/math.html")
+
+        assertEquals(out.next(), MathSpan("some expression").render())
+        assertEquals(out.next(), MathSpan("\\lim_{x\\to\\infty}x").render())
+    }
+
+    @Test
+    fun container() {
+        val out = readParts("quarkdown/container.html")
+        val children =
+            buildBlocks {
+                paragraph { text("Foo bar") }
+                blockQuote { paragraph { text("Baz") } }
+            }
+
+        assertEquals(out.next(), Container(children = children).render())
+
         assertEquals(
-            "__QD_INLINE_MATH__\$\\lim_{x\\to\\infty}x\$__QD_INLINE_MATH__",
-            MathSpan("\\lim_{x\\to\\infty}x").render(),
+            out.next(),
+            Container(
+                foregroundColor = Color(100, 20, 80),
+                backgroundColor = Color(10, 20, 30),
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Container(
+                backgroundColor = Color(10, 20, 30),
+                padding = Sizes(vertical = 2.0.cm, horizontal = 3.0.cm),
+                cornerRadius = Sizes(all = 12.0.px),
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Container(
+                fullWidth = true,
+                borderColor = Color(30, 20, 10),
+                borderWidth = Sizes(all = 1.0.cm),
+                margin = Sizes(all = 2.0.cm),
+                padding = Sizes(2.0.inch, 3.percent, 4.0.inch, 5.0.inch),
+                cornerRadius = Sizes(all = 6.0.px),
+                alignment = Container.Alignment.CENTER,
+                textAlignment = Container.Alignment.START,
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Container(
+                borderColor = Color(30, 20, 10),
+                borderStyle = Container.BorderStyle.DOTTED,
+                alignment = Container.Alignment.END,
+                children = children,
+            ).render(),
         )
     }
 
     @Test
-    fun aligned() {
-        val out = readParts("quarkdown/aligned.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+    fun fullSpan() {
+        val out = readParts("quarkdown/fullspan.html")
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
-        assertEquals(out.next(), Aligned(Aligned.Alignment.LEFT, listOf(paragraph)).render())
-        assertEquals(out.next(), Aligned(Aligned.Alignment.CENTER, listOf(paragraph)).render())
-        assertEquals(out.next(), Aligned(Aligned.Alignment.RIGHT, listOf(paragraph)).render())
+        assertEquals(out.next(), FullColumnSpan(listOf(paragraph)).render())
     }
 
     @Test
     fun clipped() {
         val out = readParts("quarkdown/clipped.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph)).render())
+        assertEquals(out.next(), Clipped(Clipped.Clip.CIRCLE, listOf(paragraph, paragraph)).render())
     }
 
     @Test
     fun box() {
         val out = readParts("quarkdown/box.html")
-        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak(), Text("bar")))
+        val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
         assertEquals(
             out.next(),
@@ -672,7 +827,7 @@ class HtmlNodeRendererTest {
             out.next(),
             Box(
                 title = listOf(Text("Title"), Emphasis(listOf(Text("Title")))),
-                type = Box.Type.CALLOUT,
+                type = Box.Type.WARNING,
                 padding = null,
                 backgroundColor = null,
                 foregroundColor = null,
@@ -701,6 +856,102 @@ class HtmlNodeRendererTest {
                 backgroundColor = Color(255, 0, 120),
                 foregroundColor = Color(0, 10, 25),
                 listOf(paragraph),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun collapse() {
+        val out = readParts("quarkdown/collapse.html")
+
+        assertEquals(
+            out.next(),
+            Collapse(
+                title = listOf(Emphasis(listOf(Text("Hello")))),
+                isOpen = false,
+                children = listOf(Strong(listOf(Text("world")))),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Collapse(
+                title = listOf(Text("Hello")),
+                isOpen = true,
+                children = listOf(BlockQuote(children = listOf(Paragraph(listOf(Text("world")))))),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `inline collapse`() {
+        val out = readParts("quarkdown/inlinecollapse.html")
+
+        assertEquals(
+            out.next(),
+            InlineCollapse(
+                text = buildInline { text("Foo bar") },
+                placeholder = buildInline { text("Placeholder") },
+                isOpen = false,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            InlineCollapse(
+                text = buildInline { text("Foo bar") },
+                placeholder = buildInline { text("Placeholder") },
+                isOpen = true,
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `text transform`() {
+        val out = readParts("quarkdown/texttransform.html")
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.LARGE,
+                    style = TextTransformData.Style.ITALIC,
+                    decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    size = TextTransformData.Size.TINY,
+                    weight = TextTransformData.Weight.BOLD,
+                    decoration = TextTransformData.Decoration.UNDEROVERLINE,
+                    variant = TextTransformData.Variant.SMALL_CAPS,
+                ),
+                listOf(Emphasis(listOf(Text("Foo"))), Text("bar")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    case = TextTransformData.Case.CAPITALIZE,
+                    decoration = TextTransformData.Decoration.ALL,
+                    color = Color(255, 0, 0),
+                ),
+                listOf(Text("Foo")),
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(),
+                listOf(Text("Foo")),
             ).render(),
         )
     }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
+<head>
+    <meta charset="UTF-8">
+    <title>[[TITLE]]</title>
+    <script src="script/script.js"></script>
+    [[if:PAGED]]
+    <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <script src="script/paged.js"></script>
+    [[endif:PAGED]]
+    [[if:SLIDES]]
+    <script src="script/slides.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.css">
+    [[endif:SLIDES]]
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="theme/theme.css">
+    <script>
+        [[if:SLIDES]]
+        doc = new SlidesDocument();
+        [[endif:SLIDES]]
+        [[if:PAGED]]
+        doc = new PagedDocument();
+        [[endif:PAGED]]
+        doc.prepare();
+    </script>
+    [[if:CODE]]
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script src="script/code.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    [[endif:CODE]]
+    [[if:MATH]]
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script>
+    <script src="script/math.js"></script>
+    <script>
+        const texMacros = {
+            [[for:TEXMACRO]]
+            [[TEXMACRO]],
+            [[endfor:TEXMACRO]]
+        }
+    </script>
+    [[endif:MATH]]
+
+    <style>
+        body {
+            [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
+            [[if:HALIGNMENT]]
+            --qd-slides-horizontal-alignment: [[HALIGNMENT]];
+            --qd-paged-horizontal-alignment: [[HALIGNMENT]];
+            text-align: [[HALIGNMENT]];
+            [[endif:HALIGNMENT]]
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        body.quarkdown-plain {
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+        }
+
+        body.quarkdown-slides .reveal {
+            [[if:PAGESIZE]]
+            width: [[PAGEWIDTH]];
+            height: [[PAGEHEIGHT]];
+            [[endif:PAGESIZE]]
+        }
+
+        @page {
+            [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+        }
+    </style>
+</head>
+<body class="quarkdown quarkdown-[[DOCTYPE]]">
+[[if:SLIDES]]
+<div class="reveal">
+    <div class="slides">
+        [[CONTENT]]
+    </div>
+</div>
+[[endif:SLIDES]]
+[[if:!SLIDES]]
+[[CONTENT]]
+[[endif:!SLIDES]]
+[[if:MERMAID]]
+<script src="script/mermaid.js"></script>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    initMermaid(mermaid);
+</script>
+[[endif:MERMAID]]
+[[if:SERVERPORT]]
+<script src="script/websockets.js"></script>
+<script>startWebSockets("localhost:[[SERVERPORT]]")</script>
+[[endif:SERVERPORT]]
+</body>
+</html>

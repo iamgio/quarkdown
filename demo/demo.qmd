@@ -1,8 +1,9 @@
 .docname {Quarkdown demo}
 .docauthor {iamgio}
 .doctype {slides}
+.doclang {English}
 .theme {darko} layout:{minimal}
-.autopagebreak depth:{2}
+.autopagebreak maxdepth:{2}
 
 .footer
     .docauthor
@@ -13,7 +14,7 @@
 
 
 .column
-    !(_x100)[Quarkdown logo](https://iamgio.eu/quarkdown/img/logo-light.svg)
+    !(_x100)[Quarkdown logo](img/banner.svg)
 
     Markdown with superpowers
 
@@ -24,8 +25,7 @@ Export your Quarkdown project as:
 
 .function {poweredby}
     credits:
-    .text size:{tiny} variant:{smallcaps}
-        powered by .credits
+    .text {powered by .credits} size:{tiny} variant:{smallcaps}
 
 - .fragment
       beautiful slides for your next presentation, just like this one.  
@@ -37,9 +37,11 @@ Export your Quarkdown project as:
       a plain document.
 
 .fragment
-    *…in just one line, within your code.*
+    .whitespace
 
-    .row gap:{5mm}
+    *...in just one line, within your code.*
+
+    .row alignment:{center} gap:{5mm}
         ```
         .doctype {slides}
         ```
@@ -50,32 +52,48 @@ Export your Quarkdown project as:
         .doctype {plain}
         ```
 
-# Same foundations…
+# Same foundations...
+
+.var {downarrow}
+    .container padding:{6px 0 16px 0}
+        .text {↓} weight:{bold} size:{large}
 
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
 
-<!-- Shows the source code of a Quarkdown snippet AND its rendered result with an animation -->
-.function {animatedsourceresult}
-    source:
-    .fragment
-        ---
+<!-- Shows a Quarkdown source as *both* its code AND its visual output. -->
+<!-- Parameters: whether the output should be animated on interaction, -->
+<!-- and whether the output should be displayed slightly above than expected (resets heading margin) -->
 
-        .code {markdown}
-            .source
-        
-    .fragment
-        #### ↓
-        
+.function {sourceresult}
+    shrinkvertical? animated? source:
+    ---
+    .code {markdown}
         .source
 
-.animatedsourceresult
+    .var {output}
+        .container alignment:{center} fullwidth:{yes}
+            .downarrow
+
+        .var {voffset} {.shrinkvertical::ifpresent {@lambda .1::multiply {-1}}::otherwise {0}}
+
+        .container textalignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
+            .source
+
+    .let {.animated::otherwise {no}}
+        .if {.1}
+            .fragment
+                .output
+        .ifnot {.1}
+            .output
+
+.sourceresult shrinkvertical:{50} animated:{yes}
     ### Diving into _Quarkdown_
     
     Somebody once said:
     > Write once, run **anywhere**.
     
-# …brand-new everything
+# ...brand-new everything
 
 Go ahead to discover Quarkdown's capabilities.
 
@@ -100,48 +118,43 @@ from your Markdown code.
     ```
 
 .fragment
-    .text size:{small}
-        **Hello, world** from Giorgio!
-
-<!-- Like .animatedsourceresult, but with no animations. -->
-.function {sourceresult}
-    source:
-    ---
-    .code {markdown}
-        .source
-    #### ↓ 
-    .source
+    .text {**Hello, world** from Giorgio!} size:{small}
 
 ## Full layout control 
 
-.sourceresult
+.sourceresult shrinkvertical:{50}
     .row alignment:{center} gap:{1cm}
-        !(150x150)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png)
+        !(150x150)[Quarkdown](img/icon.png)
         
         .column cross:{start}
-            .text size:{large} variant:{smallcaps}
-                **Quarkdown is on GitHub!**
+            .text {**Quarkdown is on GitHub!**} size:{large} variant:{smallcaps}
     
             https://github.com/iamgio/quarkdown
 
 ## Multi-file project
 
-.sourceresult
+.sourceresult shrinkvertical:{40}
     .include {sources/other.qmd}
 
-.whitespace height:{1cm}
+.whitespace
 
 .fragment
-    > Functions declared in included files are imported as well.  
+    > Tip: functions declared in included files are imported as well.  
     > Use it to your advantage to make awesome libraries!
 
 ## File data: code
 
 .sourceresult
-    The contructor of the class `Point` is as follows:
+    The constructor of the class `Point` is as follows:
 
     .code {java}
         .read {code/Point.java} lines:{5..8}
+
+## File data: Mermaid diagrams
+
+.sourceresult
+    .mermaid
+        .read {mermaid/flow.mmd}
 
 ## File data: CSV
 
@@ -151,27 +164,33 @@ from your Markdown code.
 ## Math
 
 .sourceresult
-    If we try to calculate the **surface** of a circle of **radius 8**,
-    we'll find out it's **.multiply {.pow {8} to:{2}} by:{.pi}**
+    .var {radius} {8}
 
-## Scripting {#scripting-basic}
+    If we try to calculate the **surface** of a circle of **radius .radius**,
+    we'll find out it's **.pow {.radius} to:{2}::multiply {.pi}::truncate {2}**
 
-.text size:{small}
-    Basic algorithm
+<<<
+
+.column gap:{16px}
+    ## Scripting {#scripting-basic}
+
+    .text {Basic algorithm} size:{small}
 
 .sourceresult
     .row alignment:{spacearound}
         .repeat {10}
             n:
-            .if {.iseven {.n}}
+            .if {.n::iseven}
                 **.n** is even
 
-## Scripting {#scripting-fibonacci}
+<<<
 
-.text size:{small}
-    Fibonacci sequence
+.column gap:{12px}
+    ## Scripting {#scripting-fibonacci}
 
-.sourceresult
+    .text {Fibonacci sequence} size:{small}
+
+.sourceresult shrinkvertical:{25}
     .var {t1} {0}
     .var {t2} {1}
 
@@ -182,46 +201,47 @@ from your Markdown code.
             |:----------:|
             |    .t1     |
             .var {tmp} {.sum {.t1} {.t2}}
-            .var {t1} {.t2}
-            .var {t2} {.tmp}
+            .t1 {.t2}
+            .t2 {.tmp}
 
 ## Document customization
 
 ---
 
-.grid columns:{2} gap:{1cm}
-    **Metadata**
-
-    ```markdown
-    .docname {Quarkdown demo}
-    .docauthor {iamgio}
-    .doctype {slides}
-    .doclang {english}
-    ```
-
-    **Layout and aesthetics**
-
-    ```markdown
-    .theme {darko} layout:{minimal}
-    .pageformat {A4} orientation:{landscape}
-    .slides transition:{zoom} speed:{fast}
-    ```
-
-    **Fixed content on each page**
-
-    ```markdown
-    .footer
-        .docauthor
-        
-        **.docname**
-        
-        [GitHub](https://github.com/iamgio/quarkdown)
-    ```
+.container fullwidth:{yes}
+    .grid columns:{2} gap:{1cm}
+        **Metadata**
+    
+        ```markdown
+        .docname {Quarkdown demo}
+        .docauthor {iamgio}
+        .doctype {slides}
+        .doclang {english}
+        ```
+    
+        **Layout and aesthetics**
+    
+        ```markdown
+        .theme {darko} layout:{minimal}
+        .pageformat {A4} orientation:{landscape}
+        .slides transition:{zoom} speed:{fast}
+        ```
+    
+        **Fixed content on each page**
+    
+        ```markdown
+        .footer
+            .docauthor
+            
+            **.docname**
+            
+            [GitHub](https://github.com/iamgio/quarkdown)
+        ```
 
 ## Intuitive error handling
 
-.sourceresult
-    .sum {3} {x}
+.sourceresult shrinkvertical:{30}
+    .divide {x} by:{.pi}
 
     .grid columns:{3} alignment:{right}
         Hello, world!
@@ -238,44 +258,61 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
     
     $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
-.poweredby {[MathJax](https://www.mathjax.org/)}
+.poweredby {[KaTeX](https://katex.org)}
+
+## Alerts
+
+.sourceresult shrinkvertical:{25}
+    > Note: did you know Quarkdown is a flexible tool to generate modern documents?
+
+    > Tip: you might want to try it out. Feedback and suggestions are welcome!
+
+    > Warning: it's a young project and some things may change in the near future.
+
+## Quotation source
+
+.sourceresult
+    > To be, or not to be, that is the question.
+    > - William Shakespeare, Hamlet
 
 ## Image size
 
 .var {sizedimages}
     <!-- 200px width, auto height -->
-    !(200x_)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
-    <!-- 80px height, auto width -->
-    !(_x80)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
-    <!-- 200px width, 100px height -->
-    !(200x100)[Quarkdown](https://iamgio.eu/quarkdown/img/tbanner-light.png)
+    !(200x_)[Quarkdown](img/banner.png)
+    <!-- 2cm height, auto width -->
+    !(_x2cm)[Quarkdown](img/banner.png)
+    <!-- 2 inches width, 100px height -->
+    !(2in*100)[Quarkdown](img/banner.png)
 
 ---
 
 .code {markdown}
     .sizedimages
 
-#### ↓
+.downarrow
 
 .row alignment:{center} gap:{1cm}
     .sizedimages
 
-## Labeled image
+## Labeled figure
 
-.sourceresult
+.sourceresult shrinkvertical:{30}
     !(150x_)[Quarkdown](https://iamgio.eu/quarkdown/img/icon-light.png "The Quarkdown icon")
 
 ## Color preview
 
 .sourceresult
-    The color magenta's hexadecimal representation is `#FF00FF`.
+    The color magenta's hexadecimal representation is `#FF00FF`.  
+    The following are equivalent:
+    - `rgb(255, 0, 255)`
+    - `hsl(300, 100, 50)`
+    - `hsv(300, 100, 100)`
 
 # It's a wrap
 
-You've seen the **key features** of Quarkdown — the door to making stunning documents is now open.  
-
-The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!  
-.text size:{small} content:{Just note that while `slides` documents are already stable and usable, `paged` ones are not yet.}
+You've seen the **key features** of Quarkdown - the door to making stunning documents is now open.  
+The project is [open source](https://github.com/iamgio/quarkdown), still in development and **open to feedback and contributions**!
 
 .box
     The **source code** of this presentation is available [**here**](https://github.com/iamgio/quarkdown/tree/main/demo).

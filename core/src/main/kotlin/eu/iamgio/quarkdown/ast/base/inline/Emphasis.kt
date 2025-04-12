@@ -8,7 +8,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * Weakly emphasized content.
  * @param text content
  */
-data class Emphasis(override val text: InlineContent) : TextNode {
+class Emphasis(override val text: InlineContent) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -16,7 +16,7 @@ data class Emphasis(override val text: InlineContent) : TextNode {
  * Strongly emphasized content.
  * @param text content
  */
-data class Strong(override val text: InlineContent) : TextNode {
+class Strong(override val text: InlineContent) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -24,7 +24,7 @@ data class Strong(override val text: InlineContent) : TextNode {
  * Heavily emphasized content.
  * @param text content
  */
-data class StrongEmphasis(override val text: InlineContent) : TextNode {
+class StrongEmphasis(override val text: InlineContent) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -32,6 +32,6 @@ data class StrongEmphasis(override val text: InlineContent) : TextNode {
  * Strikethrough content.
  * @param text content
  */
-data class Strikethrough(override val text: InlineContent) : TextNode {
+class Strikethrough(override val text: InlineContent) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

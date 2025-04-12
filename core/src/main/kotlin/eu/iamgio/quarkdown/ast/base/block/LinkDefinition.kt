@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param url URL this link points to
  * @param title optional title
  */
-data class LinkDefinition(
+class LinkDefinition(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,

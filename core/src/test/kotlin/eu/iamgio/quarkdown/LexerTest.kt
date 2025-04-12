@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.patterns.TextSymbolReplacement
 import eu.iamgio.quarkdown.lexer.regex.StandardRegexLexer
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
 import eu.iamgio.quarkdown.lexer.tokens.BlockCodeToken
@@ -20,7 +21,6 @@ import eu.iamgio.quarkdown.lexer.tokens.FencesCodeToken
 import eu.iamgio.quarkdown.lexer.tokens.FunctionCallToken
 import eu.iamgio.quarkdown.lexer.tokens.HeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.HorizontalRuleToken
-import eu.iamgio.quarkdown.lexer.tokens.HtmlToken
 import eu.iamgio.quarkdown.lexer.tokens.ImageToken
 import eu.iamgio.quarkdown.lexer.tokens.InlineMathToken
 import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
@@ -39,9 +39,10 @@ import eu.iamgio.quarkdown.lexer.tokens.SetextHeadingToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
 import eu.iamgio.quarkdown.lexer.tokens.TableToken
+import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UnorderedListToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
-import eu.iamgio.quarkdown.lexer.walker.SourceReader
+import eu.iamgio.quarkdown.parser.walker.funcall.FunctionCallWalkerParser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -61,21 +62,12 @@ class LexerTest {
     ) = flavor.lexerFactory.newBlockLexer(source)
 
     private fun inlineLex(source: CharSequence) =
-        QuarkdownFlavor.lexerFactory.newInlineLexer(source.trim())
-            .tokenize().asSequence()
+        QuarkdownFlavor.lexerFactory
+            .newInlineLexer(source.trim())
+            .tokenize()
+            .asSequence()
             .filter { it !is NewlineToken }
             .iterator()
-
-    @Test
-    fun sourceReader() {
-        val reader = SourceReader("Test")
-        assertEquals('T', reader.read())
-        assertEquals('e', reader.peek())
-        assertEquals('e', reader.read())
-        assertEquals('s', reader.read())
-        assertEquals('t', reader.read())
-        assertNull(reader.read())
-    }
 
     @Test
     fun regex() {
@@ -122,7 +114,9 @@ class LexerTest {
     @Test
     fun blocks() {
         val tokens =
-            blockLexer(readSource("/lexing/blocks.md")).tokenize().asSequence()
+            blockLexer(readSource("/lexing/blocks.md"))
+                .tokenize()
+                .asSequence()
                 .filter { it !is NewlineToken }
                 .iterator()
 
@@ -145,7 +139,6 @@ class LexerTest {
         assertIs<OnelineMathToken>(tokens.next())
         assertIs<PageBreakToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
-        assertIs<HtmlToken>(tokens.next())
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<TableToken>(tokens.next())
@@ -163,7 +156,8 @@ class LexerTest {
 
     @Test
     fun emphasis() {
-        val sources = readSource("/lexing/emphasis.md").split("${System.lineSeparator()}---${System.lineSeparator()}").iterator()
+        val sources =
+            readSource("/lexing/emphasis.md").split("${System.lineSeparator()}---${System.lineSeparator()}").iterator()
 
         repeat(2) {
             with(inlineLex(sources.next())) {
@@ -365,11 +359,268 @@ class LexerTest {
     }
 
     @Test
+    fun textReplacement() {
+        val tokens = inlineLex(readSource("/lexing/textreplacement.md"))
+
+        fun assertSymbolEquals(symbol: TextSymbolReplacement) =
+            with(tokens.next()) {
+                assertIs<TextSymbolToken>(this)
+                assertEquals(symbol, this.symbol)
+            }
+
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.ELLIPSIS)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.COPYRIGHT)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.EM_DASH)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.EM_DASH)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.DOUBLE_RIGHT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.NOT_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.SINGLE_RIGHT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.LESS_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.GREATER_EQUAL)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.SINGLE_LEFT_ARROW)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.ELLIPSIS)
+        assertIs<PlainTextToken>(tokens.next()) // Soft line break
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_APOSTROPHE)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TRADEMARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_RIGHT_QUOTATION_MARK)
+        assertIs<PlainTextToken>(tokens.next())
+    }
+
+    @Test
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
         assertTrue(tokens.filterIsInstance<MultilineMathToken>().isEmpty())
         assertTrue(tokens.filterIsInstance<OnelineMathToken>().isEmpty())
         assertFalse(tokens.filterIsInstance<BlockQuoteToken>().isEmpty())
+    }
+
+    @Test
+    fun functionCall() {
+        fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
+
+        with(walk(".function")) {
+            assertEquals("function", value.name)
+            assertEquals(".function".length, endIndex)
+        }
+
+        with(walk(".function something")) {
+            assertEquals("function", value.name)
+            assertEquals(".function".length, endIndex)
+        }
+
+        with(walk(".function {x}")) {
+            assertEquals("function", value.name)
+            assertEquals(".function {x}".length, endIndex)
+            with(value.arguments.single()) {
+                assertEquals("x", value)
+                assertNull(name)
+            }
+        }
+
+        with(walk(".function {x} {y}")) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+        }
+
+        with(walk(".function {x {a} b} {y {hello {world}}} {}")) {
+            assertEquals("function", value.name)
+            assertEquals("x {a} b", value.arguments[0].value)
+            assertEquals("y {hello {world}}", value.arguments[1].value)
+            assertEquals("", value.arguments[2].value)
+        }
+
+        with(walk(".function firstname:{y} lastname:{z}")) {
+            assertEquals("function", value.name)
+            with(value.arguments[0]) {
+                assertEquals("firstname", name)
+                assertEquals("y", value)
+            }
+            with(value.arguments[1]) {
+                assertEquals("lastname", name)
+                assertEquals("z", value)
+            }
+        }
+
+        with(walk(".function {x} firstname:{y} lastname:{z}")) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
+                assertEquals("firstname", name)
+                assertEquals("y", value)
+            }
+            with(value.arguments[2]) {
+                assertEquals("lastname", name)
+                assertEquals("z", value)
+            }
+        }
+
+        with(
+            walk(
+                """
+                .function {
+                    x
+                } name:{
+                    y
+                }
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
+                assertEquals("name", name)
+                assertEquals("y", value)
+            }
+        }
+
+        with(
+            walk(
+                """
+                .function {x} {y}
+                  Body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body", value.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                .function {x} {y}
+                    Body body
+                    body body
+                    body
+                      body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body body\nbody body\nbody\n  body", value.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                .function {x} {y}
+                    Body body
+                    body
+                    
+                    body
+                      body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body body\nbody\n\nbody\n  body", value.bodyArgument?.value)
+        }
+
+        with(
+            walk(
+                """
+                .foreach {1..3}
+                    Hi .sum {.1} {2} hello
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("foreach", value.name)
+            assertEquals("1..3", value.arguments[0].value)
+            assertEquals("Hi .sum {.1} {2} hello", value.bodyArgument?.value)
+        }
+
+        with(walk(".function\n\n\nx")) {
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+        }
+
+        with(walk(".function\n\n  p\nx")) {
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertEquals("p", value.bodyArgument?.value?.trim())
+        }
+
+        with(walk(".function\n\n  \np\nx")) {
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
+        }
+
+        with(walk(".function\n\nfunction")) {
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
+        }
+
+        with(walk(".function\n\nfunction {arg1} {arg2}")) {
+            assertEquals("function", value.name)
+            assertEquals(0, value.arguments.size)
+            assertNull(value.bodyArgument)
+        }
+
+        with(walk(".foo::bar")) {
+            assertEquals("foo", value.name)
+            assertEquals(0, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(0, value.next!!.arguments.size)
+        }
+
+        with(walk(".foo {a} {b}::bar {c}")) {
+            assertEquals("foo", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+        }
+
+        with(walk(".foo {a} {b}::bar {c}::baz {d}")) {
+            assertEquals("foo", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+            assertEquals("baz", value.next!!.next!!.name)
+            assertEquals(
+                1,
+                value.next!!
+                    .next!!
+                    .arguments.size,
+            )
+        }
     }
 }

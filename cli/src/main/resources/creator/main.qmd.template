@@ -1,0 +1,20 @@
+[[if:NAME]].docname {[[NAME]]}[[endif:NAME]]
+[[if:TYPE]].doctype {[[TYPE]]}[[endif:TYPE]]
+[[if:LANG]].doclang {[[LANG]]}[[endif:LANG]]
+[[if:THEME]]
+.theme[[if:COLORTHEME]] {[[COLORTHEME]]}[[endif:COLORTHEME]][[if:LAYOUTTHEME]] layout:{[[LAYOUTTHEME]]}[[endif:LAYOUTTHEME]]
+[[endif:THEME]]
+
+[[if:AUTHORS]]
+.docauthors
+[[for:AUTHORS]]
+  - [[AUTHORS]]
+[[endfor:AUTHORS]]
+[[endif:AUTHORS]]
+
+[[if:PAGECOUNTER]]
+.pagemargin {bottomcenter}
+    .currentpage
+[[endif:PAGECOUNTER]]
+
+[[if:INITIALCONTENT]][[INITIALCONTENT]][[endif:INITIALCONTENT]]

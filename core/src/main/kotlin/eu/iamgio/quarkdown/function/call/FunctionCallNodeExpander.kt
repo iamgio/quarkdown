@@ -4,6 +4,7 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.function.error.FunctionException
 import eu.iamgio.quarkdown.function.value.output.OutputValueVisitorFactory
 import eu.iamgio.quarkdown.function.value.output.node.NodeOutputValueVisitorFactory
 import eu.iamgio.quarkdown.pipeline.error.PipelineErrorHandler
@@ -48,8 +49,16 @@ class FunctionCallNodeExpander(
             appendOutput(node, outputNode)
         } catch (e: PipelineException) {
             // If the function call is invalid.
-            errorHandler.handle(e) { message ->
-                appendOutput(node, Box.error(message)) // Shows an error message box in the final document.
+
+            // The function that the error originated from.
+            // Note that sourceFunction might be different from call.function if the error comes from a nested function call down the stack.
+            val sourceFunction = (e as? FunctionException)?.function
+
+            // The error is handled by the error handler strategy.
+            errorHandler.handle(e, sourceFunction) {
+                // Shows an error message box in the final document.
+                // If the exception is linked to a function, its name appears in the error title.
+                appendOutput(node, Box.error(e.richMessage, title = sourceFunction?.name))
             }
         }
     }

@@ -3,29 +3,37 @@ package eu.iamgio.quarkdown
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
-import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
-import eu.iamgio.quarkdown.ast.base.block.ListBlock
 import eu.iamgio.quarkdown.ast.base.block.Newline
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.TaskListItemVariant
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
+import eu.iamgio.quarkdown.ast.base.inline.Emphasis
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
+import eu.iamgio.quarkdown.ast.quarkdown.block.ImageFigure
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.size.cm
+import eu.iamgio.quarkdown.document.size.inch
+import eu.iamgio.quarkdown.document.size.mm
+import eu.iamgio.quarkdown.document.size.px
 import eu.iamgio.quarkdown.flavor.MarkdownFlavor
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
+import eu.iamgio.quarkdown.function.call.UncheckedFunctionCall
+import eu.iamgio.quarkdown.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -60,10 +68,8 @@ class BlockParserTest {
 
     private val TextNode.rawText: String
         get() {
-            if (children.size == 1) {
-                (children.first() as? PlainTextNode)?.let {
-                    return it.text
-                }
+            (children.singleOrNull() as? PlainTextNode)?.let {
+                return it.text
             }
             throw IllegalStateException("rawText requires a single PlainText node")
         }
@@ -96,6 +102,7 @@ class BlockParserTest {
             assertEquals("Title", rawText)
             assertNull(customId)
             assertEquals(1, depth)
+            assertFalse(isDecorative)
         }
         with(nodes.next()) {
             assertEquals("Title", rawText)
@@ -106,6 +113,18 @@ class BlockParserTest {
             assertEquals("Title", rawText)
             assertNull(customId)
             assertEquals(3, depth)
+        }
+        with(nodes.next()) {
+            assertEquals("Decorative title", rawText)
+            assertNull(customId)
+            assertEquals(1, depth)
+            assertTrue(isDecorative)
+        }
+        with(nodes.next()) {
+            assertEquals("Decorative title", rawText)
+            assertNull(customId)
+            assertEquals(6, depth)
+            assertTrue(isDecorative)
         }
         with(nodes.next()) {
             assertTrue(text.isEmpty())
@@ -270,7 +289,58 @@ class BlockParserTest {
             assertEquals("Text", rawText(nodes.next()))
         }
 
-        assertIs<OrderedList>(nodes.next().children.first())
+        with(nodes.next().children.first()) {
+            assertIs<OrderedList>(this)
+            assertEquals(2, children.size)
+        }
+
+        with(nodes.next()) {
+            assertEquals("A note.", rawText(this))
+            assertEquals(BlockQuote.Type.NOTE, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("This is a tip!", rawText(this))
+            assertIs<UnorderedList>(children[1])
+            assertEquals(BlockQuote.Type.TIP, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("you should be\nmore careful.", rawText(this))
+            assertEquals(BlockQuote.Type.WARNING, type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("Something: not a typed quote.", rawText(this))
+            assertNull(type)
+        }
+
+        with(nodes.next()) {
+            assertEquals("To be, or not to be, that is the question.", rawText(this))
+            assertNodeEquals(Text("William Shakespeare, Hamlet"), attribution!!.single())
+        }
+
+        with(nodes.next()) {
+            assertEquals("Shopping list", rawText(this))
+            assertIs<UnorderedList>(children[1])
+            assertNull(attribution)
+        }
+
+        with(nodes.next()) {
+            assertEquals(1, children.size)
+            children.first().let { inner ->
+                assertIs<BlockQuote>(inner)
+                assertEquals("You miss 100% of the shots you don’t take.", inner.children.toPlainText())
+                assertNodeEquals(Text("Wayne Gretzky"), inner.attribution!!.single())
+            }
+            assertNodeEquals(Emphasis(listOf(Text("Michael Scott"))), attribution!!.single())
+        }
+
+        with(nodes.next()) {
+            assertEquals("Try Quarkdown.", rawText(this))
+            assertNodeEquals(Text("iamgio"), attribution!!.single())
+            assertEquals(BlockQuote.Type.TIP, type)
+        }
 
         assertFalse(nodes.hasNext())
     }
@@ -319,48 +389,38 @@ class BlockParserTest {
     }
 
     @Test
-    fun html() {
-        val nodes = blocksIterator<Html>(readSource("/parsing/html.md"))
-
-        assertEquals("<p>Text</p>", nodes.next().content)
-        assertEquals("<p><i>Text</i></p>", nodes.next().content)
-        assertTrue { nodes.next().content.endsWith("</header>") }
-        assertTrue { nodes.next().content.endsWith("</html>") }
-    }
-
-    @Test
     fun table() {
         val nodes = blocksIterator<Table>(readSource("/parsing/table.md"))
 
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("foo"), header.text.first())
+                assertNodeEquals(Text("foo"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("abc"), cells[0].text.first())
-                assertEquals(Text("ghi"), cells[1].text.first())
+                assertNodeEquals(Text("abc"), cells[0].text.first())
+                assertNodeEquals(Text("ghi"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("bar"), header.text.first())
+                assertNodeEquals(Text("bar"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("def"), cells[0].text.first())
-                assertEquals(Text("jkl"), cells[1].text.first())
+                assertNodeEquals(Text("def"), cells[0].text.first())
+                assertNodeEquals(Text("jkl"), cells[1].text.first())
             }
         }
 
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.CENTER, alignment)
-                assertEquals(Text("abc"), header.text.first())
+                assertNodeEquals(Text("abc"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(Text("bar"), cells.first().text.first())
+                assertNodeEquals(Text("bar"), cells.first().text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.RIGHT, alignment)
-                assertEquals(Text("defghi"), header.text.first())
+                assertNodeEquals(Text("defghi"), header.text.first())
                 assertEquals(1, cells.size)
-                assertEquals(Text("baz"), cells.first().text.first())
+                assertNodeEquals(Text("baz"), cells.first().text.first())
             }
         }
 
@@ -375,17 +435,17 @@ class BlockParserTest {
         with(nodes.next().columns.iterator()) {
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("abc"), header.text.first())
+                assertNodeEquals(Text("abc"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("bar"), cells[0].text.first())
-                assertEquals(Text("bar"), cells[1].text.first())
+                assertNodeEquals(Text("bar"), cells[0].text.first())
+                assertNodeEquals(Text("bar"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.LEFT, alignment)
-                assertEquals(Text("def"), header.text.first())
+                assertNodeEquals(Text("def"), header.text.first())
                 assertEquals(2, cells.size)
                 assertTrue(cells[0].text.isEmpty())
-                assertEquals(Text("baz"), cells[1].text.first())
+                assertNodeEquals(Text("baz"), cells[1].text.first())
             }
 
             assertFalse(hasNext())
@@ -396,25 +456,47 @@ class BlockParserTest {
                 assertEquals(Table.Alignment.LEFT, alignment)
                 assertTrue(header.text.isEmpty())
                 assertEquals(2, cells.size)
-                assertEquals(Strong(listOf(Text("C"))), cells[0].text.first())
-                assertEquals(Strong(listOf(Text("D"))), cells[1].text.first())
+                assertNodeEquals(Strong(listOf(Text("C"))), cells[0].text.first())
+                assertNodeEquals(Strong(listOf(Text("D"))), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
-                assertEquals(Text("A"), header.text.first())
+                assertNodeEquals(Text("A"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("AC"), cells[0].text.first())
-                assertEquals(Text("AD"), cells[1].text.first())
+                assertNodeEquals(Text("AC"), cells[0].text.first())
+                assertNodeEquals(Text("AD"), cells[1].text.first())
             }
             with(next()) {
                 assertEquals(Table.Alignment.RIGHT, alignment)
-                assertEquals(Text("B"), header.text.first())
+                assertNodeEquals(Text("B"), header.text.first())
                 assertEquals(2, cells.size)
-                assertEquals(Text("BC"), cells[0].text.first())
-                assertEquals(Text("BD"), cells[1].text.first())
+                assertNodeEquals(Text("BC"), cells[0].text.first())
+                assertNodeEquals(Text("BD"), cells[1].text.first())
             }
 
             assertFalse(hasNext())
+        }
+
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("Table caption", caption)
+
+                val columns = columns.iterator()
+                with(columns.next()) {
+                    assertEquals(Table.Alignment.NONE, alignment)
+                    assertEquals(2, cells.size)
+                    assertNodeEquals(Text("G H I"), cells[0].text.first())
+                    assertNodeEquals(Text("M N O"), cells[1].text.first())
+                }
+                with(columns.next()) {
+                    assertEquals(Table.Alignment.NONE, alignment)
+                    assertEquals(2, cells.size)
+                    assertNodeEquals(Text("J K L"), cells[0].text.first())
+                    assertNodeEquals(Text("P Q R"), cells[1].text.first())
+                }
+
+                assertFalse(columns.hasNext())
+            }
         }
 
         assertFalse(nodes.hasNext())
@@ -435,15 +517,16 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("A", rawText(this))
+                assertEquals(0, this.variants.size)
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("B", rawText(this))
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("C", rawText(this))
             }
         }
@@ -455,11 +538,11 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("A", rawText(this))
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("B", rawText(this))
             }
         }
@@ -470,7 +553,7 @@ class BlockParserTest {
             assertFalse(isLoose)
 
             with(children.first()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("C", rawText(this))
             }
         }
@@ -483,12 +566,13 @@ class BlockParserTest {
             val items = children.iterator()
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
                 assertIs<Paragraph>(children[2])
                 assertEquals("Some paragraph", rawText(this, childIndex = 2))
+                assertEquals(0, variants.size)
             }
 
             assertIs<Newline>(items.next())
@@ -496,7 +580,7 @@ class BlockParserTest {
             // Nested list
             with(items.next()) {
                 // First list item
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertEquals("B", rawText(this))
                 assertIs<Paragraph>(children[0])
                 with(children[1]) {
@@ -504,15 +588,16 @@ class BlockParserTest {
                     assertEquals(1, children.size)
                     with(children[0]) {
                         // Second list item
-                        assertIs<BaseListItem>(this)
+                        assertIs<ListItem>(this)
                         assertEquals("Nested 1", rawText(this))
                         assertIs<Paragraph>(children[0])
+                        assertEquals(0, variants.size)
                         with(children[1]) {
                             assertIs<T>(this)
                             assertTrue(isLoose)
                             with(children[0]) {
                                 // Third list item
-                                assertIs<BaseListItem>(this)
+                                assertIs<ListItem>(this)
                                 assertIs<Paragraph>(children[0])
                                 assertEquals("Nested A", rawText(this))
                                 assertIs<Newline>(children[1])
@@ -523,7 +608,7 @@ class BlockParserTest {
                             assertIs<Newline>(children[1])
 
                             with(children[2]) {
-                                assertIs<BaseListItem>(this)
+                                assertIs<ListItem>(this)
                                 assertIs<Paragraph>(children[0])
                                 assertEquals("Nested B", rawText(this))
                             }
@@ -535,7 +620,7 @@ class BlockParserTest {
             assertIs<Newline>(items.next())
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("C", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
@@ -546,7 +631,7 @@ class BlockParserTest {
             assertIs<Newline>(items.next())
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("D", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
@@ -555,7 +640,7 @@ class BlockParserTest {
                 with(children[3]) {
                     assertIs<T>(this)
                     with(children[0]) {
-                        assertIs<BaseListItem>(this)
+                        assertIs<ListItem>(this)
                         assertIs<Paragraph>(children[0])
                         assertEquals("E", rawText(this))
                         assertIs<Code>(children[1])
@@ -566,11 +651,11 @@ class BlockParserTest {
             assertIs<Newline>(items.next())
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 with(children[0]) {
                     assertIs<T>(this)
                     with(children[0]) {
-                        assertIs<BaseListItem>(this)
+                        assertIs<ListItem>(this)
                         assertIs<Paragraph>(children[0])
                         assertEquals("E", rawText(this))
                     }
@@ -585,7 +670,7 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("Another list\nwith lazy line", rawText(this))
             }
@@ -593,7 +678,7 @@ class BlockParserTest {
             assertIs<Newline>(items.next())
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("B", rawText(this, childIndex = 0))
                 assertIs<Newline>(children[1])
@@ -604,17 +689,17 @@ class BlockParserTest {
             assertIs<Newline>(items.next())
 
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Heading>(children[0])
                 assertEquals("Heading", rawText(this))
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("C", rawText(this))
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Heading>(children[0])
                 assertEquals("Heading", rawText(this, childIndex = 0))
                 assertIs<Paragraph>(children[1])
@@ -633,12 +718,13 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", rawText(this))
+                assertEquals(0, variants.size)
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("B", rawText(this))
             }
@@ -649,7 +735,7 @@ class BlockParserTest {
             assertIs<T>(this)
             assertFalse(isLoose)
             with(children.iterator().next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", rawText(this))
             }
@@ -662,11 +748,11 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<BlockQuote>(children[0])
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", rawText(this))
             }
@@ -683,12 +769,12 @@ class BlockParserTest {
 
             val items = children.iterator()
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 assertIs<Paragraph>(children[0])
                 assertEquals("A", rawText(this))
             }
             with(items.next()) {
-                assertIs<BaseListItem>(this)
+                assertIs<ListItem>(this)
                 with(children[0]) {
                     assertIs<Code>(this)
                     assertEquals("Some multiline\ncode", this.content)
@@ -704,17 +790,19 @@ class BlockParserTest {
             val items = children.iterator()
             repeat(2) {
                 with(items.next()) {
-                    assertIs<TaskListItem>(this)
+                    assertIs<ListItem>(this)
+                    assertEquals(1, variants.size)
+                    assertTrue((variants.first() as TaskListItemVariant).isChecked)
                     assertIs<Paragraph>(children[0])
                     assertEquals("Checked", rawText(this))
-                    assertTrue(isChecked)
                 }
             }
             with(items.next()) {
-                assertIs<TaskListItem>(this)
+                assertIs<ListItem>(this)
+                assertEquals(1, variants.size)
+                assertFalse((variants.first() as TaskListItemVariant).isChecked)
                 assertIs<Paragraph>(children[0])
                 assertEquals("Unchecked", rawText(this))
-                assertFalse(isChecked)
             }
         }
 
@@ -724,7 +812,7 @@ class BlockParserTest {
             assertFalse(isLoose)
             assertEquals(2, children.size)
 
-            with((children[1] as BaseListItem).children[1]) {
+            with((children[1] as ListItem).children[1]) {
                 assertIs<T>(this)
 
                 if (this is OrderedList) {
@@ -732,8 +820,9 @@ class BlockParserTest {
                 }
 
                 with(children[0]) {
-                    assertIs<TaskListItem>(this)
-                    assertTrue(isChecked)
+                    assertIs<ListItem>(this)
+                    assertEquals(1, variants.size)
+                    assertTrue((variants.first() as TaskListItemVariant).isChecked)
 
                     assertIs<Paragraph>(children[0])
                 }
@@ -751,6 +840,85 @@ class BlockParserTest {
     @Test
     fun orderedList() {
         list<OrderedList>(readSource("/parsing/orderedlist.md"))
+    }
+
+    @Test
+    fun figure() {
+        val nodes = blocksIterator<ImageFigure>(readSource("/parsing/figure.md"))
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url") { text("Label") }
+                }.first(),
+                child,
+            )
+            assertNull(caption)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", "Title") { text("Label") }
+                }.first(),
+                child,
+            )
+            assertEquals("Title", caption)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 150.px, 100.px) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 150.px, null) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, null, 100.px) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 1.0.cm, 2.1.inch) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, 100.px, 50.0.mm) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                buildInline {
+                    image("/url", null, null, 10.px) { text("Label") }
+                }.first(),
+                child,
+            )
+        }
     }
 
     @Test
@@ -780,6 +948,17 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("function", name)
             assertEquals(0, arguments.size)
+        }
+
+        with(nodes.next()) {
+            assertEquals("function", name)
+            assertEquals(1, arguments.size)
+            assertTrue(arguments.first().isBody)
+
+            assertEquals(
+                "body content",
+                arguments.first().value.unwrappedValue,
+            )
         }
 
         with(nodes.next()) {
@@ -901,5 +1080,41 @@ class BlockParserTest {
                 )
             }
         }
+    }
+
+    @Test
+    fun chainedFunctionCall() {
+        val nodes =
+            blocksIterator<FunctionCallNode>(readSource("/parsing/functioncall-chain.md"))
+
+        // .foo::bar {x}
+        with(nodes.next()) {
+            assertEquals("bar", name)
+            assertEquals(2, arguments.size)
+            arguments.first().expression.let {
+                assertIs<UncheckedFunctionCall<*>>(it)
+                assertEquals("foo", it.name)
+            }
+            assertEquals("x", arguments[1].value.unwrappedValue)
+        }
+
+        // .foo {x}::bar name:{y}
+        with(nodes.next()) {
+            assertEquals("bar", name)
+            assertEquals(2, arguments.size)
+            assertEquals("foo", (arguments.first().expression as UncheckedFunctionCall<*>).name)
+            assertEquals("y", arguments[1].value.unwrappedValue)
+            assertEquals("name", arguments[1].name)
+        }
+
+        // .foo {x}::bar {y}::baz {z}
+        with(nodes.next()) {
+            assertEquals("baz", name)
+            assertEquals(2, arguments.size)
+            assertEquals("z", arguments[1].value.unwrappedValue)
+            assertEquals("bar", (arguments.first().expression as UncheckedFunctionCall<*>).name)
+        }
+
+        assertFalse(nodes.hasNext())
     }
 }

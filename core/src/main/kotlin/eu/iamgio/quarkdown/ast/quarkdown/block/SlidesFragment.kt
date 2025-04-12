@@ -12,7 +12,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * Multiple fragments in the same slide are shown in order on distinct user interactions.
  * @param behavior visibility type of the fragment and how it reacts to user interactions
  */
-data class SlidesFragment(
+class SlidesFragment(
     val behavior: Behavior,
     override val children: List<Node>,
 ) : NestableNode {

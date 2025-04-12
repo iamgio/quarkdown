@@ -1,0 +1,22 @@
+# Tables
+
+| Name       | Age | City         |
+|------------|-----|--------------|
+| Alice      | 30  | New York     |
+| Bob        | 25  | San Francisco|
+| Charlie    | 35  | Los Angeles  |
+
+The quick brown fox jumps over the lazy dog. This is a separator text.
+
+| Name       | Age | City         |
+|------------|-----|--------------|
+| Alice      | 30  | New York     |
+| Bob        | 25  | San Francisco|
+| Charlie    | 35  | Los Angeles  |
+"User information."
+
+|			   | Jump     | Move left | Move right | Ability | Sprint |
+|--------------|:--------:|:---------:|:----------:|:-------:|:------:|
+| **Player 1** | W, Space | A         | D          | Shift   | CTRL   |
+| **Player 2** | Up       | Left      | Right      | X       | Z      |
+"Key bindings of the game."

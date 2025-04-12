@@ -1,20 +1,19 @@
 package eu.iamgio.quarkdown.visitor.node
 
 import eu.iamgio.quarkdown.ast.AstRoot
-import eu.iamgio.quarkdown.ast.base.block.BaseListItem
+import eu.iamgio.quarkdown.ast.base.block.BlankNode
 import eu.iamgio.quarkdown.ast.base.block.BlockQuote
-import eu.iamgio.quarkdown.ast.base.block.BlockText
 import eu.iamgio.quarkdown.ast.base.block.Code
 import eu.iamgio.quarkdown.ast.base.block.Heading
 import eu.iamgio.quarkdown.ast.base.block.HorizontalRule
 import eu.iamgio.quarkdown.ast.base.block.Html
 import eu.iamgio.quarkdown.ast.base.block.LinkDefinition
 import eu.iamgio.quarkdown.ast.base.block.Newline
-import eu.iamgio.quarkdown.ast.base.block.OrderedList
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.ast.base.block.Table
-import eu.iamgio.quarkdown.ast.base.block.TaskListItem
-import eu.iamgio.quarkdown.ast.base.block.UnorderedList
+import eu.iamgio.quarkdown.ast.base.block.list.ListItem
+import eu.iamgio.quarkdown.ast.base.block.list.OrderedList
+import eu.iamgio.quarkdown.ast.base.block.list.UnorderedList
 import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
 import eu.iamgio.quarkdown.ast.base.inline.Comment
@@ -30,18 +29,25 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
 import eu.iamgio.quarkdown.ast.quarkdown.block.Clipped
+import eu.iamgio.quarkdown.ast.quarkdown.block.Collapse
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.Figure
+import eu.iamgio.quarkdown.ast.quarkdown.block.FullColumnSpan
 import eu.iamgio.quarkdown.ast.quarkdown.block.Math
+import eu.iamgio.quarkdown.ast.quarkdown.block.MermaidDiagram
+import eu.iamgio.quarkdown.ast.quarkdown.block.Numbered
 import eu.iamgio.quarkdown.ast.quarkdown.block.PageBreak
 import eu.iamgio.quarkdown.ast.quarkdown.block.SlidesFragment
 import eu.iamgio.quarkdown.ast.quarkdown.block.Stacked
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.inline.InlineCollapse
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.Whitespace
-import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.SlidesConfigurationInitializer
 
@@ -68,9 +74,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: UnorderedList): T
 
-    fun visit(node: BaseListItem): T
-
-    fun visit(node: TaskListItem): T
+    fun visit(node: ListItem): T
 
     fun visit(node: Html): T
 
@@ -80,7 +84,7 @@ interface NodeVisitor<T> {
 
     fun visit(node: BlockQuote): T
 
-    fun visit(node: BlockText): T
+    fun visit(node: BlankNode): T
 
     // Base inline
 
@@ -102,6 +106,8 @@ interface NodeVisitor<T> {
 
     fun visit(node: Text): T
 
+    fun visit(node: TextSymbol): T
+
     fun visit(node: CodeSpan): T
 
     fun visit(node: Emphasis): T
@@ -118,21 +124,31 @@ interface NodeVisitor<T> {
 
     // Quarkdown block
 
+    fun visit(node: Figure<*>): T
+
     fun visit(node: PageBreak): T
 
     fun visit(node: Math): T
 
-    fun visit(node: Aligned): T
+    fun visit(node: Container): T
 
     fun visit(node: Stacked): T
+
+    fun visit(node: Numbered): T
+
+    fun visit(node: FullColumnSpan): T
 
     fun visit(node: Clipped): T
 
     fun visit(node: Box): T
 
+    fun visit(node: Collapse): T
+
     fun visit(node: Whitespace): T
 
     fun visit(node: TableOfContentsView): T
+
+    fun visit(node: MermaidDiagram): T
 
     // Quarkdown inline
 
@@ -140,13 +156,15 @@ interface NodeVisitor<T> {
 
     fun visit(node: TextTransform): T
 
+    fun visit(node: InlineCollapse): T
+
+    fun visit(node: PageCounter): T
+
     fun visit(node: SlidesFragment): T
 
     // Quarkdown invisible nodes
 
     fun visit(node: PageMarginContentInitializer): T
-
-    fun visit(node: PageCounterInitializer): T
 
     fun visit(node: SlidesConfigurationInitializer): T
 }

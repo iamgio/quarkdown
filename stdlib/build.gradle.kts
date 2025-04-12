@@ -1,9 +1,9 @@
 plugins {
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm")
 }
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":core"))
-    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
 }

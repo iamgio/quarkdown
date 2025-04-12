@@ -1,8 +1,8 @@
 package eu.iamgio.quarkdown.context.toc
 
 import eu.iamgio.quarkdown.ast.InlineContent
+import eu.iamgio.quarkdown.ast.attributes.id.Identifiable
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.id.Identifiable
 
 /**
  * A summary of the document's structure. Each item links to a section.

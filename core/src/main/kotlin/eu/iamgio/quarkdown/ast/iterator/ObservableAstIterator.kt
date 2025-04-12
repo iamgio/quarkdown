@@ -22,6 +22,7 @@ class ObservableAstIterator : AstIterator {
     /**
      * Registers a hook that will be called when a node of type [T] is visited.
      * @param hook action to be called, with the visited node as parameter
+     * @param T desired node type
      * @return this for concatenation
      */
     inline fun <reified T : Node> on(noinline hook: (T) -> Unit): ObservableAstIterator =
@@ -40,6 +41,26 @@ class ObservableAstIterator : AstIterator {
         }
 
     /**
+     * Collects the visited nodes of type [T] into a collection, as long as they satisfy a [condition].
+     * @param condition condition to be satisfied for the node to be collected
+     * @param T node type
+     * @return an ordered list (DFS order) containing all the visited nodes of type [T] in the tree
+     */
+    inline fun <reified T : Node> collect(crossinline condition: (T) -> Boolean): List<T> =
+        mutableListOf<T>().apply {
+            on<T> {
+                if (condition(it)) add(it)
+            }
+        }
+
+    /**
+     * Collects all the visited nodes of type [T] into a collection.
+     * @param T node type
+     * @return an ordered list (DFS order) containing all the visited nodes of type [T] in the tree
+     */
+    inline fun <reified T : Node> collectAll(): List<T> = collect { true }
+
+    /**
      * Attaches a hook to this iterator.
      * @param hook hook to attach
      * @return this for concatenation
@@ -50,7 +71,7 @@ class ObservableAstIterator : AstIterator {
             hook.attach(this)
         }
 
-    override fun run(root: NestableNode) {
+    override fun traverse(root: NestableNode) {
         root.flattenedChildren().forEach { node ->
             hooks.forEach { hook -> hook(node) }
         }

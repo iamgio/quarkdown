@@ -4,15 +4,19 @@ import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.expression.Expression
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.EnumValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.InlineMarkdownContentValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.MarkdownContentValue
+import eu.iamgio.quarkdown.function.value.NodeValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.PairValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.UnorderedCollectionValue
 
@@ -36,6 +40,10 @@ interface ExpressionVisitor<T> {
 
     fun visit(value: GeneralCollectionValue<*>): T
 
+    fun visit(value: PairValue<*, *>): T
+
+    fun visit(value: DictionaryValue<*>): T
+
     fun visit(value: EnumValue): T
 
     fun visit(value: ObjectValue<*>): T
@@ -44,9 +52,13 @@ interface ExpressionVisitor<T> {
 
     fun visit(value: InlineMarkdownContentValue): T
 
+    fun visit(value: NodeValue): T
+
     fun visit(value: DynamicValue): T
 
     fun visit(value: LambdaValue): T
+
+    fun visit(value: NoneValue): T
 
     fun visit(expression: FunctionCall<*>): T
 

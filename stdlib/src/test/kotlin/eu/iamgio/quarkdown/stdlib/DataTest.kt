@@ -7,6 +7,7 @@ import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.pipeline.Pipeline
 import eu.iamgio.quarkdown.pipeline.PipelineOptions
+import eu.iamgio.quarkdown.util.toPlainText
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -72,77 +73,77 @@ class DataTest {
         val columns = (table.unwrappedValue as Table).columns.iterator()
 
         with(columns.next()) {
-            assertEquals(Text("Name"), header.text.first())
+            assertEquals("Name", (header.text.first() as Text).text)
             with(cells.iterator()) {
-                assertEquals(Text("Alex"), next().text.first())
-                assertEquals(Text("Bert"), next().text.first())
-                assertEquals(Text("Carl"), next().text.first())
-                assertEquals(Text("Dave"), next().text.first())
-                assertEquals(Text("Elly"), next().text.first())
-                assertEquals(Text("Fran"), next().text.first())
-                assertEquals(Text("Gwen"), next().text.first())
-                assertEquals(Text("Hank"), next().text.first())
-                assertEquals(Text("Ivan"), next().text.first())
+                assertEquals("Alex", next().text.toPlainText())
+                assertEquals("Bert", next().text.toPlainText())
+                assertEquals("Carl", next().text.toPlainText())
+                assertEquals("Dave", next().text.toPlainText())
+                assertEquals("Elly", next().text.toPlainText())
+                assertEquals("Fran", next().text.toPlainText())
+                assertEquals("Gwen", next().text.toPlainText())
+                assertEquals("Hank", next().text.toPlainText())
+                assertEquals("Ivan", next().text.toPlainText())
             }
         }
 
         with(columns.next()) {
-            assertEquals(Text("Sex"), header.text.first())
+            assertEquals("Sex", header.text.toPlainText())
             with(cells.iterator()) {
                 repeat(4) {
-                    assertEquals(Text("M"), next().text.first())
+                    assertEquals("M", next().text.toPlainText())
                 }
                 repeat(3) {
-                    assertEquals(Text("F"), next().text.first())
+                    assertEquals("F", next().text.toPlainText())
                 }
                 repeat(2) {
-                    assertEquals(Text("M"), next().text.first())
+                    assertEquals("M", next().text.toPlainText())
                 }
             }
         }
 
         with(columns.next()) {
-            assertEquals(Text("Age"), header.text.first())
+            assertEquals("Age", header.text.toPlainText())
             with(cells.iterator()) {
-                assertEquals(Text("41"), next().text.first())
-                assertEquals(Text("42"), next().text.first())
-                assertEquals(Text("32"), next().text.first())
-                assertEquals(Text("39"), next().text.first())
-                assertEquals(Text("30"), next().text.first())
-                assertEquals(Text("33"), next().text.first())
-                assertEquals(Text("26"), next().text.first())
-                assertEquals(Text("30"), next().text.first())
-                assertEquals(Text("53"), next().text.first())
+                assertEquals("41", next().text.toPlainText())
+                assertEquals("42", next().text.toPlainText())
+                assertEquals("32", next().text.toPlainText())
+                assertEquals("39", next().text.toPlainText())
+                assertEquals("30", next().text.toPlainText())
+                assertEquals("33", next().text.toPlainText())
+                assertEquals("26", next().text.toPlainText())
+                assertEquals("30", next().text.toPlainText())
+                assertEquals("53", next().text.toPlainText())
             }
         }
 
         with(columns.next()) {
-            assertEquals(Text("Height (in)"), header.text.first())
+            assertEquals("Height (in)", header.text.toPlainText())
             with(cells.iterator()) {
-                assertEquals(Text("74"), next().text.first())
-                assertEquals(Text("68"), next().text.first())
-                assertEquals(Text("70"), next().text.first())
-                assertEquals(Text("72"), next().text.first())
-                assertEquals(Text("66"), next().text.first())
-                assertEquals(Text("66"), next().text.first())
-                assertEquals(Text("64"), next().text.first())
-                assertEquals(Text("71"), next().text.first())
-                assertEquals(Text("72"), next().text.first())
+                assertEquals("74", next().text.toPlainText())
+                assertEquals("68", next().text.toPlainText())
+                assertEquals("70", next().text.toPlainText())
+                assertEquals("72", next().text.toPlainText())
+                assertEquals("66", next().text.toPlainText())
+                assertEquals("66", next().text.toPlainText())
+                assertEquals("64", next().text.toPlainText())
+                assertEquals("71", next().text.toPlainText())
+                assertEquals("72", next().text.toPlainText())
             }
         }
 
         with(columns.next()) {
-            assertEquals(Text("Weight (lbs)"), header.text.first())
+            assertEquals("Weight (lbs)", header.text.toPlainText())
             with(cells.iterator()) {
-                assertEquals(Text("170"), next().text.first())
-                assertEquals(Text("166"), next().text.first())
-                assertEquals(Text("155"), next().text.first())
-                assertEquals(Text("167"), next().text.first())
-                assertEquals(Text("124"), next().text.first())
-                assertEquals(Text("115"), next().text.first())
-                assertEquals(Text("121"), next().text.first())
-                assertEquals(Text("158"), next().text.first())
-                assertEquals(Text("175"), next().text.first())
+                assertEquals("170", next().text.toPlainText())
+                assertEquals("166", next().text.toPlainText())
+                assertEquals("155", next().text.toPlainText())
+                assertEquals("167", next().text.toPlainText())
+                assertEquals("124", next().text.toPlainText())
+                assertEquals("115", next().text.toPlainText())
+                assertEquals("121", next().text.toPlainText())
+                assertEquals("158", next().text.toPlainText())
+                assertEquals("175", next().text.toPlainText())
             }
         }
     }

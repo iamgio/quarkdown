@@ -2,7 +2,22 @@ package eu.iamgio.quarkdown.lexer.patterns
 
 import eu.iamgio.quarkdown.lexer.regex.RegexBuilder
 import eu.iamgio.quarkdown.lexer.regex.pattern.TokenRegexPattern
-import eu.iamgio.quarkdown.lexer.tokens.*
+import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
+import eu.iamgio.quarkdown.lexer.tokens.CommentToken
+import eu.iamgio.quarkdown.lexer.tokens.CriticalContentToken
+import eu.iamgio.quarkdown.lexer.tokens.DiamondAutolinkToken
+import eu.iamgio.quarkdown.lexer.tokens.EmphasisToken
+import eu.iamgio.quarkdown.lexer.tokens.EntityToken
+import eu.iamgio.quarkdown.lexer.tokens.EscapeToken
+import eu.iamgio.quarkdown.lexer.tokens.ImageToken
+import eu.iamgio.quarkdown.lexer.tokens.LineBreakToken
+import eu.iamgio.quarkdown.lexer.tokens.LinkToken
+import eu.iamgio.quarkdown.lexer.tokens.ReferenceImageToken
+import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
+import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
+import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
+import eu.iamgio.quarkdown.lexer.tokens.StrongToken
+import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
 
 /**
  * Regex patterns for [eu.iamgio.quarkdown.flavor.base.BaseMarkdownFlavor] inlines.
@@ -92,10 +107,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                     RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                         .withReference("label", LABEL_HELPER)
                         .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
-                        .withReference(
-                            "title",
-                            "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)",
-                        )
+                        .withReference("title", DELIMITED_TITLE_HELPER)
                         .build(),
             )
 
@@ -115,8 +127,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                             "email",
                             "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
                                 "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
-                        )
-                        .build(),
+                        ).build(),
             )
 
     /**
@@ -134,8 +145,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                         .withReference(
                             "email",
                             "[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])",
-                        )
-                        .build(),
+                        ).build(),
             )
 
     /**
@@ -156,8 +166,8 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             )
 
     /**
-     * An image, same as a link preceeded by a `!`.
-     * As an extension, Quarkdown introduces an optional `(WxH)` to be added at the end which specifies
+     * An image, same as a link preceded by a `!`.
+     * As an extension, Quarkdown introduces an optional `(WxH)` or `(W) to be added after the `!` the end which specifies
      * the image size, where W and H can be integers or `_` (auto).
      * @see ImageToken
      * @see link
@@ -169,14 +179,15 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::ImageToken,
                 regex =
                     RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<imgwidth>\\d+|_)x(?<imgheight>\\d+|_)")
+                        .withReference("imgsize", "(?<imgwidth>.+?)(?:sizedivider(?<imgheight>.+?))?")
+                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
                         .withReference("link", link.regex.pattern)
                         .build(),
                 groupNames = listOf("imgwidth", "imgheight"),
             )
 
     /**
-     * An image that references a link definition, same as a reference link preceeded by a `!`.
+     * An image that references a link definition, same as a reference link preceded by a `!`.
      * @see ReferenceImageToken
      * @see referenceLink
      */
@@ -187,7 +198,8 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 wrap = ::ReferenceImageToken,
                 regex =
                     RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<refimgwidth>\\d+|_)x(?<refimgheight>\\d+|_)")
+                        .withReference("imgsize", "(?<refimgwidth>.+?)(?:sizedivider(?<refimgheight>.+?))?")
+                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
                         .withReference("link", referenceLink.regex.pattern)
                         .build(),
                 groupNames = listOf("refimgwidth", "refimgheight"),
@@ -212,14 +224,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             TokenRegexPattern(
                 name = "InlineComment",
                 wrap = ::CommentToken,
-                regex =
-                    RegexBuilder(COMMENT_TAG_HELPER)
-                        .withReference("comment", COMMENT_HELPER)
-                        .withReference(
-                            "attribute",
-                            "\\s+[a-zA-Z:_][\\w.:-]*(?:\\s*=\\s*\"[^\"]*\"|\\s*=\\s*'[^']*'|\\s*=\\s*[^\\s\"'=<>`]+)?",
-                        )
-                        .build(),
+                regex = COMMENT_PATTERN,
             )
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
@@ -316,13 +321,12 @@ private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
 
-private const val COMMENT_TAG_HELPER =
-    "comment" +
-        "|^</[a-zA-Z][\\w:-]*\\s*>" + // self-closing tag
-        "|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>" + // open tag
-        "|^<\\?[\\s\\S]*?\\?>" + // processing instruction, e.g. <?php ?>
-        "|^<![a-zA-Z]+\\s[\\s\\S]*?>" + // declaration, e.g. <!DOCTYPE html>
-        "|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>" // CDATA section
+// "This is a title", 'This is a title', (This is a title)
+internal const val DELIMITED_TITLE_HELPER =
+    "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)"
+
+// Width and height separator in images.
+private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*1, 1cm*1cm, 1 1, 1cm 1cm, 1x1 but not 1cmx1cm
 
 /**
  * @param startDelimiter begin of the match (included)
@@ -356,8 +360,7 @@ private fun delimiteredPattern(
         } else {
             "((?<![\\spunct])end|(?<!\\s)end(?=[\\spunct]))"
         },
-)
-    .withReference("punct", PUNCTUATION_HELPER)
+).withReference("punct", PUNCTUATION_HELPER)
     .withReference("start", startDelimiter)
     .withReference("end", endDelimiter)
     .build()

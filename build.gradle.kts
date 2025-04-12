@@ -1,10 +1,14 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
 plugins {
-    kotlin("jvm") version "1.8.21"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-    id("com.gradleup.shadow") version "8.3.0"
+    kotlin("jvm") version "2.1.20"
+    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
+    id("com.gradleup.shadow") version "8.3.6"
+    id("com.github.ben-manes.versions") version "0.52.0"
     application
 }
 
@@ -15,6 +19,10 @@ allprojects {
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
 }
 
 dependencies {
@@ -37,10 +45,20 @@ tasks.jar {
 
 tasks.test {
     useJUnitPlatform()
+    dependsOn(tasks.ktlintCheck)
 }
 
 tasks.distZip {
     archiveVersion.set("")
+
+    // The module 'libs' contains .qmd library files that are saved in the lib/qmd directory of the distribution zip.
+    val librariesModule = project(":libs")
+
+    into("${archiveBaseName.get()}/lib/qmd") {
+        from(librariesModule.file("src/main/resources")) {
+            include("*.qmd")
+        }
+    }
 }
 
 tasks.wrapper {
@@ -49,10 +67,20 @@ tasks.wrapper {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 tasks.withType<ShadowJar> {
     archiveVersion.set("")
     archiveClassifier.set("")
+}
+
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        sequenceOf("alpha", "beta", "preview", "-m", "-rc").any {
+            candidate.version.contains(it, ignoreCase = true)
+        }
+    }
 }

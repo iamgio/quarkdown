@@ -8,17 +8,19 @@ import eu.iamgio.quarkdown.ast.base.inline.CheckBox
 import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
 import eu.iamgio.quarkdown.ast.quarkdown.block.Box
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.FunctionCallNodeExpander
 import eu.iamgio.quarkdown.function.library.LibraryRegistrant
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.NotForDocumentType
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NodeValue
@@ -48,13 +50,14 @@ class FunctionNodeExpansionTest {
     ) = NumberValue(a.toFloat() + b.toFloat())
 
     @Name("customfunction")
+    @NotForDocumentType(DocumentType.SLIDES)
     fun myFunction(x: String) = StringValue(x)
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun echoBoolean(value: Boolean) = BooleanValue(value)
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun resourceContent(path: String) = StringValue(javaClass.getResourceAsStream("/function/$path")!!.reader().readText())
@@ -71,7 +74,7 @@ class FunctionNodeExpansionTest {
     @Suppress("MemberVisibilityCanBePrivate")
     fun makeQuote(body: MarkdownContent) =
         NodeValue(
-            BlockQuote(body.children),
+            BlockQuote(children = body.children),
         )
 
     @BeforeTest
@@ -119,7 +122,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("5"), node.children.first())
+        assertNodeEquals(Text("5"), node.children.first())
     }
 
     @Test
@@ -168,7 +171,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("abc"), node.children.first())
+        assertNodeEquals(Text("abc"), node.children.first())
     }
 
     @Test
@@ -241,7 +244,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(Text("Hello Quarkdown!"), node.children.first())
+        assertNodeEquals(Text("Hello Quarkdown!"), node.children.first())
     }
 
     @Test
@@ -264,7 +267,7 @@ class FunctionNodeExpansionTest {
 
         assertEquals(1, node.children.size)
         // The function call is block, so the output is wrapped in a paragraph.
-        assertEquals(Paragraph(listOf(Text("Hello Quarkdown!"))), node.children.first())
+        assertNodeEquals(Paragraph(listOf(Text("Hello Quarkdown!"))), node.children.first())
     }
 
     @Test
@@ -286,7 +289,7 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(CheckBox(isChecked = true), node.children.first())
+        assertNodeEquals(CheckBox(isChecked = true), node.children.first())
     }
 
     @Test
@@ -336,7 +339,7 @@ class FunctionNodeExpansionTest {
 
         assertEquals(1, node.children.size)
         assertEquals("New name", context.documentInfo.name)
-        assertEquals(Text("New name"), node.children.first())
+        assertNodeEquals(Text("New name"), node.children.first())
     }
 
     @Test
@@ -358,15 +361,37 @@ class FunctionNodeExpansionTest {
         expander.expandAll()
 
         assertEquals(1, node.children.size)
-        assertEquals(
+        assertNodeEquals(
             BlockQuote(
-                listOf(
-                    Paragraph(
-                        listOf(Text("Hello "), Strong(listOf(Text("world")))),
+                children =
+                    listOf(
+                        Paragraph(
+                            listOf(Text("Hello "), Strong(listOf(Text("world")))),
+                        ),
                     ),
-                ),
             ),
             node.children.first(),
         )
+    }
+
+    @Test
+    fun `invalid document type`() {
+        context.documentInfo.type = DocumentType.SLIDES
+        val node =
+            FunctionCallNode(
+                context,
+                "myFunction",
+                listOf(FunctionCallArgument(DynamicValue("abc"))),
+                isBlock = false,
+            )
+
+        context.register(node)
+
+        expander.expandAll()
+
+        with(node.children.first()) {
+            assertIs<Box>(this)
+            assertEquals(Box.Type.ERROR, this.type)
+        }
     }
 }

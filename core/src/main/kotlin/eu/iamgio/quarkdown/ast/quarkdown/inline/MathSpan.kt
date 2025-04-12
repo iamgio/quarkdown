@@ -7,7 +7,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * A math (TeX) inline.
  * @param expression expression content
  */
-data class MathSpan(
+class MathSpan(
     val expression: String,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

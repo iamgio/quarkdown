@@ -1,0 +1,7 @@
+flowchart LR
+    A([Start]) --> B[Enter username and password]
+    B --> C{Correct?}
+    C -- Yes --> D[Redirect to dashboard]
+    C -- No --> E[Show error message]
+    D --> F([END])
+    E --> F

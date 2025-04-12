@@ -6,8 +6,6 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 /**
  * A blank line.
  */
-class Newline : Node {
-    override fun toString() = "Newline"
-
+object Newline : Node {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

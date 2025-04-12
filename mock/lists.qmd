@@ -1,0 +1,100 @@
+# Lists
+
+## Unordered
+
+#### Tight
+
+My favorite foods:
+
+- Some delicious pasta
+- A huge pizza
+- A lot of sushi
+- A tasty burger
+
+#### Loose
+
+My favorite foods:
+
+- Some delicious pasta
+
+- A huge pizza
+
+- A lot of sushi
+
+- A tasty burger
+
+<<<
+
+#### Nested
+
+- .loremipsum
+  - The quick brown fox jumps over the lazy dog
+  - The quick brown fox jumps over the lazy dog
+
+- The quick brown fox jumps over the lazy dog
+  - The quick brown fox jumps over the lazy dog
+    - The quick brown fox jumps over the lazy dog
+  - The quick brown fox jumps over the lazy dog
+  
+<<<
+
+## Ordered
+
+#### Tight
+
+My favorite foods:
+
+1. Some delicious pasta
+2. A huge pizza
+3. A lot of sushi
+4. A tasty burger
+
+#### Loose
+
+My favorite foods:
+
+1. Some delicious pasta
+
+2. A huge pizza
+
+3. A lot of sushi
+
+4. A tasty burger
+
+<<<
+
+#### Nested
+
+1. .loremipsum
+  1. The quick brown fox jumps over the lazy dog
+  2. The quick brown fox jumps over the lazy dog
+
+1. The quick brown fox jumps over the lazy dog
+   1. The quick brown fox jumps over the lazy dog
+      1. The quick brown fox jumps over the lazy dog
+   2. The quick brown fox jumps over the lazy dog
+
+<<<
+
+## Tasks
+
+#### Tight
+
+Today's shopping list:
+
+- [ ] Some delicious pasta
+- [x] A huge pizza
+- [x] A lot of sushi
+- [ ] A tasty burger
+
+#### Loose
+
+Today's shopping list:
+
+- [ ] Some delicious pasta
+
+- [x] A huge pizza
+
+- [x] A lot of sushi
+
+- [ ] A tasty burger

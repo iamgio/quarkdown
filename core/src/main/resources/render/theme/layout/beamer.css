@@ -9,59 +9,75 @@
     --qd-main-font: "Source Sans Pro", sans-serif;
     --qd-heading-font: "Fira Sans", sans-serif;
     --qd-code-font: "Noto Sans Mono", monospace;
-    --qd-code-block-font-size: 1.25em;
     --qd-code-span-font-size: 0.9em;
+    --qd-code-block-font-size: 0.75em;
+    --qd-slides-code-block-font-size: 1.25em;
     --qd-block-margin: 32px;
     --qd-box-margin-multiplier: 1.2;
     --qd-slides-horizontal-alignment: start;
 }
 
-h1 {
-    font-size: 1.77em;
+.quarkdown h1 {
+    font-size: 2em;
     padding: 12px;
 }
 
-h2 {
-    font-size: 1.30em;
+.quarkdown h2 {
+    font-size: 1.5em;
 }
 
-h3 {
-    font-size: .95em;
+.quarkdown h3 {
+    font-size: 1.25em;
 }
 
-h4 {
-    font-size: .75em;
+.quarkdown h4 {
+    font-size: 1em;
 }
 
-p {
+.quarkdown p {
     line-height: 1.3;
 }
 
-ol, ul {
+.quarkdown :is(ul, ol) {
     line-height: 1.5;
 }
 
-table {
+.quarkdown table {
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-table th {
+.quarkdown table th {
     font-weight: bold;
 }
 
-table th,
-table td {
+.quarkdown table :is(th, td) {
     text-align: left;
     padding: 0.2em 0.5em;
     border-bottom: 1px solid;
 }
 
-table tr:last-child td {
+.quarkdown table tr:last-child td {
     border-bottom: none;
 }
 
-pre code {
+.quarkdown blockquote {
+    font-style: italic;
+    opacity: 0.7;
+    background: none !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.quarkdown blockquote[class] {
+    font-style: normal;
+}
+
+.quarkdown blockquote .attribution {
+    text-align: end;
+}
+
+.quarkdown pre code {
     line-height: 1.5;
 }
 
@@ -70,16 +86,11 @@ pre code {
 }
 
 .box > header {
-    padding: 12px;
     border-radius: 8px 8px 0 0;
 }
 
 .box:has(> header) > .box-content {
     margin-top: 0;
-}
-
-.box > .box-content ul {
-    padding-left: 4px;
 }
 
 .codespan-content {
@@ -92,17 +103,55 @@ pre code {
     border: 0.1em solid;
 }
 
-/* Footer */
+/* Table of contents */
 
-.page-margin-bottom-center {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
+.quarkdown nav a:not(:hover) {
+    color: var(--qd-main-color) !important;
 }
 
+/* First-level entries show their index in a circle */
+.quarkdown nav > ol {
+    list-style-type: none !important;
+    padding-left: 0;
+}
+
+.quarkdown nav > ol > li {
+    padding-bottom: 0.5em;
+}
+
+.quarkdown nav > ol > li::before {
+    background-color: var(--qd-primary-color);
+    color: var(--qd-color-on-primary);
+    border-radius: 100%;
+    margin-right: 1em;
+    padding: 2px 10px;
+    display: inline-block;
+    border: 1px solid color-mix(in srgb, var(--qd-color-on-primary) 25%, transparent);
+}
+
+/* Not-first-level entries use a bullet */
+.quarkdown nav > ol ol {
+    list-style-type: disc !important;
+    padding-left: 1.35em;
+}
+
+.quarkdown nav > ol ol li::marker {
+    color: var(--qd-primary-color);
+    border: 1px solid var(--qd-color-on-primary);
+}
+
+.quarkdown nav > ol > li > ol {
+    padding-left: 36px;
+}
+
+/* Third-level (or more) entries */
+.quarkdown nav > ol > li > ol ol {
+    margin-left: 0;
+}
+
+/* Footer */
+
 .page-margin-bottom-center > * {
-    width: 100%;
     padding: 12px;
     margin-bottom: 0 !important;
-    text-align: center;
 }

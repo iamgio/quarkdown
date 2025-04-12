@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
+<head>
+    <meta charset="UTF-8">
+    <title>[[TITLE]]</title>
+    [[if:PAGED]]
+    <script src="...js"></script>
+    [[endif:PAGED]]
+    [[if:SLIDES]]
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="...js"></script>
+    <link rel="stylesheet" href="...css">
+    [[endif:SLIDES]]
+    <link rel="stylesheet" href="theme/theme.css">
+    [[if:CODE]]
+    <script src="...js"></script>
+    <script src="...js"></script>
+    [[endif:CODE]]
+    [[if:MATH]]
+    <script>
+        const texMacros = {
+            [[for:TEXMACRO]]
+            [[TEXMACRO]],
+            [[endfor:TEXMACRO]]
+        }
+    </script>
+    <script src="...js"></script>
+    [[endif:MATH]]
+    <style>
+        @page {
+            [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
+            [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+        }
+    </style>
+</head>
+<body class="quarkdown quarkdown-[[DOCTYPE]]">
+[[if:SLIDES]]
+<div class="reveal">
+    <div class="slides">
+        [[CONTENT]]
+    </div>
+</div>
+<script src="slides.js"></script>
+[[endif:SLIDES]]
+[[if:!SLIDES]]
+[[CONTENT]]
+[[endif:!SLIDES]]
+[[if:CODE]]
+<script></script>
+[[endif:CODE]]
+</body>
+</html>

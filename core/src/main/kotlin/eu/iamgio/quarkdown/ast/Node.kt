@@ -15,8 +15,25 @@ interface Node {
 }
 
 /**
- * A node that may contain nested nodes as children.
+ * A node that may contain a variable number of nested nodes as children.
  */
 interface NestableNode : Node {
     val children: List<Node>
+}
+
+/**
+ * A node that contains a single child node.
+ * @param T type of the child node
+ */
+interface SingleChildNestableNode<T : Node> : NestableNode {
+    /**
+     * The single child node.
+     */
+    val child: T
+
+    /**
+     * A singleton list containing [child].
+     */
+    override val children: List<Node>
+        get() = listOf(child)
 }

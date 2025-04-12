@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param children content to be displayed on each page
  * @param position position of the content within the page
  */
-data class PageMarginContentInitializer(
+class PageMarginContentInitializer(
     override val children: List<Node>,
     val position: PageMarginPosition,
 ) : NestableNode {

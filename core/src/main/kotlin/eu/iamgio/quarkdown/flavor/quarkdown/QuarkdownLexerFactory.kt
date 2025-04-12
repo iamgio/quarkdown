@@ -15,21 +15,32 @@ class QuarkdownLexerFactory : LexerFactory {
     private val base = BaseMarkdownLexerFactory()
 
     /**
-     * New inline patterns introduced by this flavor.
+     * Inserts patterns of Quarkdown's inline extensions into the base inline lexer (produced by [BaseMarkdownLexerFactory]).
+     * @return a copy of the base inline lexer also containing Quarkdown's inline extensions.
      */
-    private val inlineExtensions =
-        with(QuarkdownInlineTokenRegexPatterns()) {
-            listOf(
-                inlineFunctionCall,
-                inlineMath,
-            )
+    private fun StandardRegexLexer.insertInlineExtensions(): Lexer {
+        // New inline patterns introduced by this flavor on top of the base patterns.
+        val inlineExtensions =
+            with(QuarkdownInlineTokenRegexPatterns()) {
+                listOf(
+                    inlineFunctionCall,
+                    inlineMath,
+                    *textReplacements.toTypedArray(),
+                )
+            }
+
+        // The last pattern is the critical content one, which should always last.
+        return this.updatePatterns { patterns ->
+            patterns.dropLast(1) + inlineExtensions + patterns.last()
         }
+    }
 
     override fun newBlockLexer(source: CharSequence): Lexer =
         with(QuarkdownBlockTokenRegexPatterns()) {
             StandardRegexLexer(
                 source,
                 listOf(
+                    comment,
                     functionCall,
                     blockQuote,
                     blockCode,
@@ -42,7 +53,6 @@ class QuarkdownLexerFactory : LexerFactory {
                     pageBreak,
                     setextHeading,
                     table,
-                    html,
                     unorderedList,
                     orderedList,
                     newline,
@@ -54,15 +64,9 @@ class QuarkdownLexerFactory : LexerFactory {
 
     override fun newListLexer(source: CharSequence): Lexer = base.newListLexer(source)
 
-    override fun newInlineLexer(source: CharSequence): Lexer =
-        base.newInlineLexer(source).updatePatterns { patterns ->
-            patterns + this.inlineExtensions
-        }
+    override fun newInlineLexer(source: CharSequence): Lexer = base.newInlineLexer(source).insertInlineExtensions()
 
-    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer =
-        base.newLinkLabelInlineLexer(source).updatePatterns { patterns ->
-            patterns + this.inlineExtensions
-        }
+    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer = base.newLinkLabelInlineLexer(source).insertInlineExtensions()
 
     override fun newExpressionLexer(
         source: CharSequence,

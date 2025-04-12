@@ -11,7 +11,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param showLineNumbers whether to show line numbers
  * @param focusedLines range of lines to focus on. No lines are focused if `null`
  */
-data class Code(
+class Code(
     val content: String,
     val language: String?,
     val showLineNumbers: Boolean = true,

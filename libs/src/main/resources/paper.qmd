@@ -1,0 +1,80 @@
+.localization {paper}
+    - English
+        - abstract: Abstract
+        - definition: Definition
+        - lemma: Lemma
+        - theorem: Theorem
+        - proof: Proof
+    - Italian
+        - abstract: Sommario
+        - definition: Definizione
+        - lemma: Lemma
+        - theorem: Teorema
+        - proof: Dimostrazione
+
+<!-- Alignment of the 'Abstract' title, relative to its body content -->
+
+.var {abstractalignment} {center}
+
+<!-- The suffix that follows the title of a block, e.g. "Definition", "Lemma", ... -->
+
+.var {paperblocksuffix} {\.}
+
+<!-- Content at the end of a proof block -->
+
+.var {proofend} {∎}
+
+<!-- An 'abstract' block -->
+
+.function {abstract}
+    content:
+    .container padding:{0 1cm} fullwidth:{yes}
+        .align {.abstractalignment}
+            **.localize {paper:abstract}**
+
+        .container padding:{2mm 0}
+            .content
+
+    .whitespace
+
+<!-- Internal helper that builds a titled numerable block -->
+
+.function {INTERNALcontenttype}
+    type content:
+    .var {localizedname} {.localize {paper:.type}}
+    .numbered {.concatenate {.type} {s}}
+        number:
+        **.concatenate {
+            .localizedname
+          } with:{
+            .string {" .number"}
+          } if:{
+            .isnotempty {.number}
+          }.paperblocksuffix** .content
+
+<-- A numerable 'definition' block -->
+
+.function {definition}
+    content:
+    .INTERNALcontenttype {definition} {.content}
+
+<-- A numerable 'lemma' block -->
+
+.function {lemma}
+    content:
+    .INTERNALcontenttype {lemma} {.content}
+
+<-- A numerable 'theorem' block -->
+
+.function {theorem}
+    content:
+    .INTERNALcontenttype {theorem} {.content}
+
+<-- A numerable 'proof' block -->
+
+.function {proof}
+    content:
+    .INTERNALcontenttype {proof} {.content}
+
+    .align {end}
+        .text {.proofend} size:{huge}

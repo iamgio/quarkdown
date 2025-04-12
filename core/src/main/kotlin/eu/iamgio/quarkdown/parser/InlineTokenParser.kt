@@ -16,9 +16,14 @@ import eu.iamgio.quarkdown.ast.base.inline.Strong
 import eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
 import eu.iamgio.quarkdown.ast.base.inline.Text
 import eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
+import eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.size.Size
+import eu.iamgio.quarkdown.function.value.factory.IllegalRawValueException
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.Token
+import eu.iamgio.quarkdown.lexer.TokenData
 import eu.iamgio.quarkdown.lexer.acceptAll
 import eu.iamgio.quarkdown.lexer.tokens.CodeSpanToken
 import eu.iamgio.quarkdown.lexer.tokens.CommentToken
@@ -37,8 +42,14 @@ import eu.iamgio.quarkdown.lexer.tokens.ReferenceLinkToken
 import eu.iamgio.quarkdown.lexer.tokens.StrikethroughToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongEmphasisToken
 import eu.iamgio.quarkdown.lexer.tokens.StrongToken
+import eu.iamgio.quarkdown.lexer.tokens.TextSymbolToken
 import eu.iamgio.quarkdown.lexer.tokens.UrlAutolinkToken
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
+import eu.iamgio.quarkdown.misc.color.decoder.HexColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.HsvHslColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.RgbColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.RgbaColorDecoder
+import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.util.iterator
 import eu.iamgio.quarkdown.util.nextOrNull
 import eu.iamgio.quarkdown.util.trimDelimiters
@@ -55,12 +66,15 @@ private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
  * A parser for inline tokens.
  * @param context additional data to fill during the parsing process
  */
-class InlineTokenParser(private val context: MutableContext) : InlineTokenVisitor<Node> {
+class InlineTokenParser(
+    private val context: MutableContext,
+) : InlineTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
-        this.tokenize()
+        this
+            .tokenize()
             .acceptAll(context.flavor.parserFactory.newParser(context))
 
     /**
@@ -120,20 +134,22 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
-    override fun visit(token: CriticalContentToken): Node {
-        return CriticalContent(token.data.text)
+    override fun visit(token: CriticalContentToken): Node = CriticalContent(token.data.text)
+
+    override fun visit(token: TextSymbolToken): Node {
+        // The symbol is then treated separately from text in the renderer.
+        // e.g. the HTML renderer converts the symbol to its corresponding HTML entity (© -> &copy;).
+        return TextSymbol(token.symbol.result)
     }
 
     override fun visit(token: CommentToken): Node {
         // Content is ignored.
-        return Comment()
+        return Comment
     }
 
-    override fun visit(token: LineBreakToken): Node {
-        return LineBreak()
-    }
+    override fun visit(token: LineBreakToken): Node = LineBreak
 
-    override fun visit(token: LinkToken): Node {
+    override fun visit(token: LinkToken): Link {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         return Link(
             label = parseLinkLabelSubContent(groups.next()),
@@ -143,7 +159,7 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
-    override fun visit(token: ReferenceLinkToken): Node {
+    override fun visit(token: ReferenceLinkToken): ReferenceLink {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val label = parseLinkLabelSubContent(groups.next())
         // When the reference is collapsed, the label is the same as the reference label.
@@ -169,30 +185,42 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
         )
     }
 
+    /**
+     * Given an image token, extracts its width and height, if they are set.
+     * They are stored in the named groups `width` and `height`, both prefixed by [namedGroupPrefix].
+     * @param namedGroupPrefix prefix of the named groups
+     * @param data token data to extract the size from
+     * @return pair of width and height, or `null` if they are either unset or invalid
+     */
+    private fun extractImageSize(
+        namedGroupPrefix: String,
+        data: TokenData,
+    ): Pair<Size?, Size?> {
+        val width = data.namedGroups["${namedGroupPrefix}width"]
+        val height = data.namedGroups["${namedGroupPrefix}height"]
+
+        fun toSize(raw: String?): Size? =
+            try {
+                raw?.let(ValueFactory::size)?.unwrappedValue // Parses the value.
+            } catch (e: IllegalRawValueException) {
+                null
+            }
+
+        return toSize(width) to toSize(height)
+    }
+
     override fun visit(token: ImageToken): Node {
-        val link = visit(LinkToken(token.data)) as Link
+        val link = visit(LinkToken(token.data))
+        val (width, height) = extractImageSize("img", token.data)
 
-        val width = token.data.namedGroups["imgwidth"]
-        val height = token.data.namedGroups["imgheight"]
-
-        return Image(
-            link,
-            width = width?.toIntOrNull(),
-            height = height?.toIntOrNull(),
-        )
+        return Image(link, width, height)
     }
 
     override fun visit(token: ReferenceImageToken): Node {
-        val link = visit(ReferenceLinkToken(token.data)) as ReferenceLink
+        val link = visit(ReferenceLinkToken(token.data))
+        val (width, height) = extractImageSize("refimg", token.data)
 
-        val width = token.data.namedGroups["refimgwidth"]
-        val height = token.data.namedGroups["refimgheight"]
-
-        return ReferenceImage(
-            link,
-            width = width?.toIntOrNull(),
-            height = height?.toIntOrNull(),
-        )
+        return ReferenceImage(link, width, height)
     }
 
     override fun visit(token: CodeSpanToken): Node {
@@ -213,20 +241,17 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
             }
 
         // Additional content brought by the code span.
+        // If null, no additional content is present.
         val content: CodeSpan.ContentInfo? =
-            when {
-                // Hexadecimal color.
-                text.firstOrNull() == '#' -> Color.fromHex(text)?.let(CodeSpan::ColorContent)
-                // No content.
-                else -> null
-            }
+            // Color decoding. Named colors are disabled due to performance reasons.
+            Color
+                .decode(text, HexColorDecoder, RgbColorDecoder, RgbaColorDecoder, HsvHslColorDecoder)
+                ?.let(CodeSpan::ColorContent)
 
         return CodeSpan(text, content)
     }
 
-    override fun visit(token: PlainTextToken): Node {
-        return Text(token.data.text)
-    }
+    override fun visit(token: PlainTextToken): Node = Text(token.data.text)
 
     /**
      * @param token emphasis token to parse the content for
@@ -234,25 +259,20 @@ class InlineTokenParser(private val context: MutableContext) : InlineTokenVisito
      */
     private fun emphasisContent(token: Token): InlineContent {
         // The raw string content, without the delimiters.
-        val text = token.data.groups.iterator(consumeAmount = 3).next()
+        val text =
+            token.data.groups
+                .iterator(consumeAmount = 3)
+                .next()
         return parseSubContent(text)
     }
 
-    override fun visit(token: EmphasisToken): Node {
-        return Emphasis(emphasisContent(token))
-    }
+    override fun visit(token: EmphasisToken): Node = Emphasis(emphasisContent(token))
 
-    override fun visit(token: StrongToken): Node {
-        return Strong(emphasisContent(token))
-    }
+    override fun visit(token: StrongToken): Node = Strong(emphasisContent(token))
 
-    override fun visit(token: StrongEmphasisToken): Node {
-        return StrongEmphasis(emphasisContent(token))
-    }
+    override fun visit(token: StrongEmphasisToken): Node = StrongEmphasis(emphasisContent(token))
 
-    override fun visit(token: StrikethroughToken): Node {
-        return Strikethrough(emphasisContent(token))
-    }
+    override fun visit(token: StrikethroughToken): Node = Strikethrough(emphasisContent(token))
 
     override fun visit(token: InlineMathToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)

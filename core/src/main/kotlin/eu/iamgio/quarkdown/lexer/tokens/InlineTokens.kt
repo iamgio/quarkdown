@@ -2,6 +2,7 @@ package eu.iamgio.quarkdown.lexer.tokens
 
 import eu.iamgio.quarkdown.lexer.Token
 import eu.iamgio.quarkdown.lexer.TokenData
+import eu.iamgio.quarkdown.lexer.patterns.TextSymbolReplacement
 import eu.iamgio.quarkdown.visitor.token.TokenVisitor
 
 // Inline tokens
@@ -25,6 +26,7 @@ class EntityToken(data: TokenData) : Token(data) {
 /**
  * A character that requires special treatment during the rendering stage.
  * Examples: `&`, `<`, `>`, `"`, `'`, ...
+ * @see eu.iamgio.quarkdown.ast.base.inline.CriticalContent
  */
 class CriticalContentToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -38,6 +40,7 @@ class CriticalContentToken(data: TokenData) : Token(data) {
  * ```
  * ````code````
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.CodeSpan
  */
 class CodeSpanToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -50,6 +53,7 @@ class CodeSpanToken(data: TokenData) : Token(data) {
  * Line 1<space><space>
  * Line 2
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.LineBreak
  */
 class LineBreakToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -60,6 +64,7 @@ class LineBreakToken(data: TokenData) : Token(data) {
  * ```
  * [Quarkdown](https://github.com/iamgio/quarkdown)
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.Link
  */
 class LinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -70,6 +75,7 @@ class LinkToken(data: TokenData) : Token(data) {
  * ```
  * <https://github.com/iamgio/quarkdown>
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.Link
  */
 class DiamondAutolinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -81,6 +87,7 @@ class DiamondAutolinkToken(data: TokenData) : Token(data) {
  * ```
  * https://github.com/iamgio/quarkdown
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.Link
  */
 class UrlAutolinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -97,6 +104,7 @@ class UrlAutolinkToken(data: TokenData) : Token(data) {
  * ```
  * [label]
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.ReferenceLink
  */
 class ReferenceLinkToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -107,6 +115,7 @@ class ReferenceLinkToken(data: TokenData) : Token(data) {
  * ```
  * ![Label](img.png)
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.Image
  */
 class ImageToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -123,6 +132,7 @@ class ImageToken(data: TokenData) : Token(data) {
  * ```
  * ![label]
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.ReferenceImage
  */
 class ReferenceImageToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -133,6 +143,7 @@ class ReferenceImageToken(data: TokenData) : Token(data) {
  * ```
  * <!-- comment -->
  * ```
+ * @see eu.iamgio.quarkdown.ast.base.inline.Comment
  */
 class CommentToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -140,9 +151,19 @@ class CommentToken(data: TokenData) : Token(data) {
 
 /**
  * Text content.
- * @see eu.iamgio.quarkdown.ast.Text
+ * @see eu.iamgio.quarkdown.ast.base.inline.Text
  */
 class PlainTextToken(data: TokenData) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * A sequence of characters that is replaced with a symbol (e.g. `(C)` -> ©).
+ * This is a Quarkdown extension.
+ * @param symbol symbol type
+ * @see eu.iamgio.quarkdown.ast.quarkdown.inline.TextSymbol
+ */
+class TextSymbolToken(data: TokenData, val symbol: TextSymbolReplacement) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -156,7 +177,7 @@ class PlainTextToken(data: TokenData) : Token(data) {
  * ```
  * __strong__
  * ```
- * @see eu.iamgio.quarkdown.ast.Strong
+ * @see eu.iamgio.quarkdown.ast.base.inline.Strong
  */
 class StrongToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -170,7 +191,7 @@ class StrongToken(data: TokenData) : Token(data) {
  * ```
  * _emphasis_
  * ```
- * @see eu.iamgio.quarkdown.ast.Emphasis
+ * @see eu.iamgio.quarkdown.ast.base.inline.Emphasis
  */
 class EmphasisToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -184,7 +205,7 @@ class EmphasisToken(data: TokenData) : Token(data) {
  * ```
  * ___emphasis___
  * ```
- * @see eu.iamgio.quarkdown.ast.StrongEmphasis
+ * @see eu.iamgio.quarkdown.ast.base.inline.StrongEmphasis
  */
 class StrongEmphasisToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -195,7 +216,7 @@ class StrongEmphasisToken(data: TokenData) : Token(data) {
  * ```
  * ~~text~~
  * ```
- * @see eu.iamgio.quarkdown.ast.Strikethrough
+ * @see eu.iamgio.quarkdown.ast.base.inline.Strikethrough
  */
 class StrikethroughToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
@@ -206,11 +227,11 @@ class StrikethroughToken(data: TokenData) : Token(data) {
 /**
  * A one-line fenced block that contains a TeX expression.
  * If it's isolated, then it's a [OnelineMathToken].
- * This is a custom Quarkdown block.
+ * This is a Quarkdown extension.
  *
  * Example:
  * $ LaTeX expression $
- * @see eu.iamgio.quarkdown.ast.MathSpan
+ * @see eu.iamgio.quarkdown.ast.quarkdown.inline.MathSpan
  */
 class InlineMathToken(data: TokenData) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)

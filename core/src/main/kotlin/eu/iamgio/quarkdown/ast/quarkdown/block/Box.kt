@@ -4,10 +4,9 @@ import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
-import eu.iamgio.quarkdown.ast.base.inline.CodeSpan
-import eu.iamgio.quarkdown.ast.base.inline.Text
+import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.document.size.Size
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
@@ -21,7 +20,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param foregroundColor foreground color of the box. If `null`, the box uses the default value
  * @param children content of the box
  */
-data class Box(
+class Box(
     val title: InlineContent?,
     val type: Type,
     val padding: Size? = null,
@@ -41,6 +40,21 @@ data class Box(
         CALLOUT,
 
         /**
+         * A tip.
+         */
+        TIP,
+
+        /**
+         * A note.
+         */
+        NOTE,
+
+        /**
+         * A warning.
+         */
+        WARNING,
+
+        /**
          * An error.
          */
         ERROR,
@@ -57,12 +71,15 @@ data class Box(
          * @return a box containing the error message
          */
         fun error(
-            message: String,
+            message: InlineContent,
             title: String? = null,
         ) = Box(
-            title = listOf(Text("Error" + if (title != null) ": $title" else "")),
+            title =
+                buildInline {
+                    text("Error" + if (title != null) ": $title" else "")
+                },
             type = Type.ERROR,
-            children = listOf(Paragraph(listOf(CodeSpan(message)))),
+            children = listOf(Paragraph(message)),
         )
     }
 }

@@ -1,8 +1,9 @@
 package eu.iamgio.quarkdown
 
-import eu.iamgio.quarkdown.ast.quarkdown.block.Aligned
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
+import eu.iamgio.quarkdown.document.DocumentType
 import eu.iamgio.quarkdown.flavor.quarkdown.QuarkdownFlavor
 import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.function.FunctionParameter
@@ -10,20 +11,25 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.call.binding.ArgumentBindings
+import eu.iamgio.quarkdown.function.call.validate.FunctionCallValidator
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
-import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
-import eu.iamgio.quarkdown.function.error.NoSuchElementFunctionException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
+import eu.iamgio.quarkdown.function.error.NoSuchElementException
 import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.expression.ComposedExpression
 import eu.iamgio.quarkdown.function.library.loader.MultiFunctionLibraryLoader
-import eu.iamgio.quarkdown.function.reflect.Injected
 import eu.iamgio.quarkdown.function.reflect.KFunctionAdapter
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.NotForDocumentType
+import eu.iamgio.quarkdown.function.reflect.annotation.OnlyForDocumentType
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
 import eu.iamgio.quarkdown.function.value.VoidValue
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
+import kotlin.reflect.KFunction
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -176,6 +182,33 @@ class StandaloneFunctionTest {
             )
 
         assertEquals("Hello AB from B", callGreet.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `with validator`() {
+        var canCall = true
+
+        val validator =
+            object : FunctionCallValidator<StringValue> {
+                override fun validate(call: FunctionCall<StringValue>) {
+                    if (!canCall) throw IllegalStateException()
+                }
+            }
+
+        val function =
+            SimpleFunction(
+                name = "greet",
+                parameters = emptyList(),
+                validators = listOf(validator),
+            ) {
+                canCall = false
+                ValueFactory.string("Hello")
+            }
+
+        val call = FunctionCall(function, arguments = emptyList())
+
+        assertEquals("Hello", call.execute().unwrappedValue)
+        assertFailsWith<IllegalStateException> { call.execute() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -437,7 +470,8 @@ class StandaloneFunctionTest {
                     ),
             )
 
-        assertFailsWith<MismatchingArgumentTypeException> {
+        // Mismatching types
+        assertFailsWith<InvalidFunctionCallException> {
             call1.execute()
         }
 
@@ -451,7 +485,7 @@ class StandaloneFunctionTest {
                     ),
             )
 
-        assertFailsWith<MismatchingArgumentTypeException> {
+        assertFailsWith<InvalidFunctionCallException> {
             call2.execute()
         }
 
@@ -465,7 +499,7 @@ class StandaloneFunctionTest {
                     ),
             )
 
-        assertFailsWith<MismatchingArgumentTypeException> {
+        assertFailsWith<InvalidFunctionCallException> {
             call3.execute()
         }
     }
@@ -549,7 +583,7 @@ class StandaloneFunctionTest {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Aligned.Alignment) = StringValue(value.name)
+    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
 
     @Test
     fun `KFunction with enum`() {
@@ -580,7 +614,7 @@ class StandaloneFunctionTest {
                     ),
             )
 
-        assertFailsWith<NoSuchElementFunctionException> {
+        assertFailsWith<InvalidFunctionCallException> {
             call.execute()
         }
     }
@@ -641,6 +675,48 @@ class StandaloneFunctionTest {
         assertFailsWith<IllegalArgumentException> {
             call.execute()
         }
+    }
+
+    private fun <T : OutputValue<*>> createCallForDocumentType(
+        function: KFunction<T>,
+        documentType: DocumentType,
+    ): FunctionCall<T> {
+        val context = MutableContext(QuarkdownFlavor)
+        context.documentInfo.type = documentType
+        val adapter = KFunctionAdapter(function)
+        return FunctionCall(adapter, emptyList(), context)
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    @OnlyForDocumentType(DocumentType.SLIDES)
+    fun slidesOnlyGreet(): StringValue = StringValue("Hello")
+
+    @Test
+    fun `KFunction with whitelisted document type`() {
+        val call = createCallForDocumentType(::slidesOnlyGreet, DocumentType.SLIDES)
+        assertEquals("Hello", call.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with non-whitelisted document type`() {
+        val call = createCallForDocumentType(::slidesOnlyGreet, DocumentType.PLAIN)
+        assertFailsWith<InvalidFunctionCallException> { call.execute() }
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    @NotForDocumentType(DocumentType.SLIDES)
+    fun allButSlidesGreet(): StringValue = StringValue("Hello")
+
+    @Test
+    fun `KFunction with non-blacklisted document type`() {
+        val call = createCallForDocumentType(::allButSlidesGreet, DocumentType.PAGED)
+        assertEquals("Hello", call.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction with blacklisted document type`() {
+        val call = createCallForDocumentType(::allButSlidesGreet, DocumentType.SLIDES)
+        assertFailsWith<InvalidFunctionCallException> { call.execute() }
     }
 
     @Test

@@ -3,30 +3,35 @@ package eu.iamgio.quarkdown.stdlib
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Heading
-import eu.iamgio.quarkdown.ast.base.inline.Text
-import eu.iamgio.quarkdown.ast.quarkdown.block.TableOfContentsView
-import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageCounterInitializer
+import eu.iamgio.quarkdown.ast.quarkdown.block.Container
+import eu.iamgio.quarkdown.ast.quarkdown.block.toc.TableOfContentsView
+import eu.iamgio.quarkdown.ast.quarkdown.inline.PageCounter
 import eu.iamgio.quarkdown.ast.quarkdown.invisible.PageMarginContentInitializer
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.context.MutableContext
 import eu.iamgio.quarkdown.context.toc.TableOfContents
+import eu.iamgio.quarkdown.document.DocumentAuthor
 import eu.iamgio.quarkdown.document.DocumentInfo
 import eu.iamgio.quarkdown.document.DocumentTheme
 import eu.iamgio.quarkdown.document.DocumentType
-import eu.iamgio.quarkdown.document.locale.LocaleLoader
+import eu.iamgio.quarkdown.document.numbering.DocumentNumbering
+import eu.iamgio.quarkdown.document.numbering.NumberingFormat
 import eu.iamgio.quarkdown.document.page.PageMarginPosition
 import eu.iamgio.quarkdown.document.page.PageOrientation
 import eu.iamgio.quarkdown.document.page.PageSizeFormat
 import eu.iamgio.quarkdown.document.size.Size
 import eu.iamgio.quarkdown.document.size.Sizes
-import eu.iamgio.quarkdown.function.reflect.Injected
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Injected
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
+import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.StringValue
+import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.VoidValue
-import eu.iamgio.quarkdown.function.value.data.Lambda
+import eu.iamgio.quarkdown.function.value.dictionaryOf
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.localization.LocaleLoader
 import eu.iamgio.quarkdown.pipeline.error.IOPipelineException
 
 /**
@@ -39,12 +44,17 @@ val Document: Module =
         ::docType,
         ::docName,
         ::docAuthor,
+        ::docAuthors,
         ::docLanguage,
         ::theme,
+        ::numbering,
+        ::disableNumbering,
+        ::texMacro,
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
-        ::pageCounter,
+        ::currentPage,
+        ::totalPages,
         ::autoPageBreak,
         ::disableAutoPageBreak,
         ::marker,
@@ -60,11 +70,11 @@ val Document: Module =
  */
 private fun <T> Context.modifyOrEchoDocumentInfo(
     value: T?,
-    get: DocumentInfo.() -> String,
+    get: DocumentInfo.() -> OutputValue<*>,
     set: DocumentInfo.(T) -> Unit,
 ): OutputValue<*> {
     if (value == null) {
-        return get(this.documentInfo).wrappedAsValue()
+        return get(this.documentInfo)
     }
 
     set(this.documentInfo, value)
@@ -85,7 +95,11 @@ fun docType(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         type,
-        get = { this.type.name.lowercase() },
+        get = {
+            this.type.name
+                .lowercase()
+                .wrappedAsValue()
+        },
         set = { this.type = it },
     )
 
@@ -102,7 +116,7 @@ fun docName(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         name,
-        get = { this.name ?: "" },
+        get = { (this.name ?: "").wrappedAsValue() },
         set = { this.name = it },
     )
 
@@ -119,8 +133,59 @@ fun docAuthor(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         author,
-        get = { this.author ?: "" },
-        set = { this.author = it },
+        get = { (this.authors.firstOrNull()?.name ?: "").wrappedAsValue() },
+        set = { this.authors += DocumentAuthor(name = it) },
+    )
+
+/**
+ * If [authors] is not `null`, it sets the document authors to its value.
+ * If it's `null`, the current document authors are returned.
+ *
+ * Set example:
+ * ```
+ * .docauthors
+ *   - John Doe
+ *     - email: johndoe@email.com
+ *     - website: https://github.com/iamgio/quarkdown
+ *   - Jane Doe
+ *     - email: janedoe@email.com
+ * ```
+ *
+ * Compared to [docAuthor], this function allows for multiple authors and additional information.
+ *
+ * @param authors (optional) authors to assign to the document.
+ * Each dictionary entry contains the author's name associated with a nested dictionary of additional information.
+ * @return the current document authors if [authors] is `null`
+ */
+@Name("docauthors")
+fun docAuthors(
+    @Injected context: Context,
+    authors: Map<String, DictionaryValue<OutputValue<String>>>? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        authors,
+        get = {
+            // List<(String, Map<String, String>)> -> Map<String, Map<String, String>>
+            dictionaryOf(
+                this.authors.map {
+                    it.name to
+                        DictionaryValue(
+                            it.info.mapValues { (_, value) -> value.wrappedAsValue() }.toMutableMap(),
+                        )
+                },
+            )
+        },
+        set = {
+            // Map<String, Map<String, String>> -> List<(String, Map<String, String>)>
+            this.authors.addAll(
+                it.map { (name, info) ->
+                    DocumentAuthor(
+                        name = name,
+                        info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
+                    )
+                },
+            )
+        },
     )
 
 /**
@@ -140,7 +205,7 @@ fun docLanguage(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         locale,
-        get = { this.locale?.localizedName ?: "" },
+        get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
         set = {
             this.locale =
                 LocaleLoader.SYSTEM.find(it)
@@ -178,6 +243,69 @@ fun theme(
 }
 
 /**
+ * Sets the global numbering format across the document.
+ * Numbering is applied to elements that support it, such as headings and figures.
+ *
+ * - If a format is `none`, that kind of numbering is disabled.
+ *
+ * - Otherwise, it accepts a string where each character represents a symbol.
+ *   Some characters are reserved for counting:
+ *     - `1` for decimal (`1, 2, 3, ...`)
+ *     - `a` for lowercase latin alphabet (`a, b, c, ...`)
+ *     - `A` for uppercase latin alphabet (`A, B, C, ...`)
+ *     - `i` for lowercase roman numerals (`i, ii, iii, ...`)
+ *     - `I` for uppercase roman numerals (`I, II, III, ...`)
+ *
+ *     Any other character is considered a fixed symbol.
+ *
+ * Sample numbering strings are `1.1.1`, `1.A.a`, `A.A`.
+ * @param formats map of numbering formats for different element types.
+ * Built-in keys are:
+ * - `headings`, used for headings (titles) and [tableOfContents] entries;
+ * - `figures`, used for captioned images;
+ * - `tables`, used for captioned tables.
+ * Any other key can be addressed by other elements (see [numbered])
+ */
+fun numbering(
+    @Injected context: Context,
+    formats: Map<String, Value<String>>,
+): VoidValue {
+    fun parse(format: Value<String>): NumberingFormat =
+        when (val unwrapped = format.unwrappedValue) {
+            // Disable numbering. Setting to null would instead trigger the default one.
+            "none" -> NumberingFormat(symbols = emptyList())
+            // Parse the format string.
+            else -> NumberingFormat.fromString(unwrapped)
+        }
+
+    context.documentInfo.numbering =
+        DocumentNumbering(
+            headings = formats["headings"]?.let(::parse),
+            figures = formats["figures"]?.let(::parse),
+            tables = formats["tables"]?.let(::parse),
+            extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
+        )
+
+    return VoidValue
+}
+
+/**
+ * Disables numbering across the document, in case a default numbering is set.
+ * @see numbering
+ */
+@Name("nonumbering")
+fun disableNumbering(
+    @Injected context: Context,
+) = numbering(context, emptyMap())
+
+@Name("texmacro")
+fun texMacro(
+    @Injected context: Context,
+    name: String,
+    macro: String,
+) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
+
+/**
  * Sets the format of the document.
  * If a value is `null`, the default value supplied by the underlying renderer is used.
  * If neither [format] nor [width] or [height] are `null`, the latter override the former.
@@ -188,7 +316,10 @@ fun theme(
  *                    Does not take effect if [format] is not specified.
  * @param width width of each page
  * @param height height of each page
- * @param margin blank space around the content of each page. Only supported in paged mode.
+ * @param margin blank space around the content of each page. Not supported in slides documents
+ * @param columns positive number of columns on each page.
+ *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
+ * @param alignment horizontal alignment of the content on each page
  */
 @Name("pageformat")
 fun pageFormat(
@@ -198,6 +329,8 @@ fun pageFormat(
     width: Size? = null,
     height: Size? = null,
     margin: Sizes? = null,
+    columns: Int? = null,
+    alignment: Container.Alignment? = null,
 ): VoidValue {
     with(context.documentInfo.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
@@ -207,7 +340,10 @@ fun pageFormat(
         // Width and/or height override the format size if both are not null.
         this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
+
         this.margin = margin
+        this.columnCount = columns?.takeIf { it > 0 }
+        this.alignment = alignment
     }
 
     return VoidValue
@@ -219,7 +355,7 @@ fun pageFormat(
  * @param content content to be displayed on each page
  * @return a wrapped [PageMarginContentInitializer] node
  */
-@Name("pagemargincontent")
+@Name("pagemargin")
 fun pageMarginContent(
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
     content: MarkdownContent,
@@ -242,53 +378,41 @@ fun footer(content: MarkdownContent): NodeValue =
     )
 
 /**
- * Sets the global page counter for a paged document.
- * @param position position of the counter within the page
- * @param text action that returns the text of the counter.
- *             Accepts two arguments: index of the current page and total amount of pages.
- *             Markdown content is not supported.
- * @return a wrapped [PageCounterInitializer] node
+ * Displays the index (beginning from 1) of the page this element lies in.
+ * In case the current document type does not support page counting (e.g. plain document),
+ * a placeholder is used.
+ * @return a [PageCounter] node
  */
-@Name("pagecounter")
-fun pageCounter(
-    @Injected context: Context,
-    position: PageMarginPosition = PageMarginPosition.BOTTOM_CENTER,
-    text: Lambda =
-        Lambda(context) { (current, total), _ ->
-            "$current / $total".wrappedAsValue()
-        },
-): NodeValue =
-    PageCounterInitializer(
-        content = { current, total ->
-            val textValue =
-                text.invoke<String, StringValue>(
-                    StringValue(current),
-                    StringValue(total),
-                ).unwrappedValue
+@Name("currentpage")
+fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
 
-            listOf(Text(textValue))
-        },
-        position,
-    ).wrappedAsValue()
+/**
+ * Displays the total amount of pages in the document.
+ * In case the current document type does not support page counting (e.g. plain document),
+ * a placeholder is used.
+ * @return a [PageCounter] node
+ */
+@Name("totalpages")
+fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 
 /**
  * Sets a new automatic page break threshold when a heading is found:
- * if a heading's depth value (the amount of leading `#`s) is equals or less than [depth],
+ * if a heading's depth value (the amount of leading `#`s) is equals or less than [maxDepth],
  * a page break is forced before the heading.
- * @param depth heading depth to force page breaks for (positive only).
- * @throws IllegalArgumentException if [depth] is a negative value
+ * @param maxDepth heading depth to force page breaks for (positive only).
+ * @throws IllegalArgumentException if [maxDepth] is a negative value
  * @see disableAutoPageBreak
  */
 @Name("autopagebreak")
 fun autoPageBreak(
     @Injected context: MutableContext,
-    depth: Int,
+    @Name("maxdepth") maxDepth: Int,
 ): VoidValue {
-    if (depth < 0) {
+    if (maxDepth < 0) {
         throw IllegalArgumentException("Heading depth cannot be negative.")
     }
 
-    context.options.autoPageBreakHeadingDepth = depth
+    context.options.autoPageBreakHeadingMaxDepth = maxDepth
     return VoidValue
 }
 

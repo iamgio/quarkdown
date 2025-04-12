@@ -4,13 +4,16 @@ import eu.iamgio.quarkdown.function.FunctionParameter
 import eu.iamgio.quarkdown.function.call.FunctionCall
 import eu.iamgio.quarkdown.function.call.FunctionCallArgument
 import eu.iamgio.quarkdown.function.error.InvalidArgumentCountException
+import eu.iamgio.quarkdown.function.error.InvalidFunctionCallException
 import eu.iamgio.quarkdown.function.error.MismatchingArgumentTypeException
 import eu.iamgio.quarkdown.function.error.UnnamedArgumentAfterNamedException
 import eu.iamgio.quarkdown.function.error.UnresolvedParameterException
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
+import eu.iamgio.quarkdown.function.value.AdaptableValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
+import eu.iamgio.quarkdown.pipeline.error.PipelineException
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -80,7 +83,14 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
                 // The dynamic value is converted into the expected parameter type.
                 // Throws error if the conversion could not happen.
                 val staticValue =
-                    DynamicValueConverter(value).convertTo(parameter.type, call.context)
+                    try {
+                        DynamicValueConverter(value).convertTo(parameter.type, call.context)
+                    } catch (e: PipelineException) {
+                        // In case the conversion fails, the error is wrapped so that it can refer to this function call as a source.
+                        throw InvalidFunctionCallException(call, e.message)
+                    }
+                        // convertTo returns null if the called ValueFactory method returns null.
+                        // This means the supplied value cannot be converted to the expected type.
                         ?: throw MismatchingArgumentTypeException(call, parameter, argument)
 
                 argument.copy(expression = staticValue)
@@ -90,6 +100,17 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
             // it is automatically converted to a string.
             value !is StringValue && parameter.type == String::class -> {
                 argument.copy(expression = ValueFactory.string(value.unwrappedValue.toString()))
+            }
+
+            // If the argument does not directly match the parameter type, but is adaptable,
+            // it is adapted (or at least attempted) to the expected type.
+            value is AdaptableValue<*> && !value::class.isSubclassOf(parameter.type) -> {
+                val adapted = value.adapt()
+                when {
+                    adapted::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
+                    adapted.unwrappedValue!!::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
+                    else -> argument
+                }
             }
 
             else -> argument

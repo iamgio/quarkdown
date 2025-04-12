@@ -4,10 +4,11 @@ import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.Paragraph
 import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.BooleanValue
+import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.ObjectValue
 import eu.iamgio.quarkdown.function.value.StringValue
-import eu.iamgio.quarkdown.function.value.ValueFactory
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory
 
 /**
  * Producer of block nodes from function output values.
@@ -32,6 +33,8 @@ class BlockNodeOutputValueVisitor(private val context: Context) : NodeOutputValu
     override fun visit(value: BooleanValue) = inline.visit(value).inParagraph()
 
     override fun visit(value: ObjectValue<*>) = inline.visit(value).inParagraph()
+
+    override fun visit(value: NoneValue) = inline.visit(value).inParagraph()
 
     // Raw Markdown code is parsed as blocks.
     override fun parseRaw(raw: String) = ValueFactory.blockMarkdown(raw, context).asNodeValue()

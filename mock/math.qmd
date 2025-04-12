@@ -1,0 +1,16 @@
+# Math
+
+#### Inline
+Let $ F(u) $ be the *Fourier Transform* of the function $ f(x) $.
+
+#### Block
+$ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
+
+#### Multiline block
+
+$$$
+f(x) = \begin{cases} 
+  x^2, & \text{if } x \ge 0 \\
+  -x, & \text{if } x < 0
+\end{cases}
+$$$

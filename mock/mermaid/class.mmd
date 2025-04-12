@@ -1,0 +1,35 @@
+classDiagram
+    class Bank {
+        +name: string
+        +address: string
+    }
+
+    class Customer {
+        +name: string
+        +id: int
+    }
+
+    class BankAccount {
+        +id: int
+        +balance: double
+        +deposit(amount: double)
+        +withdraw(amount: double)
+    }
+
+    class Transaction {
+        +amount: double
+        +date: date
+        +execute()
+    }
+
+    class Loan {
+        +id: int
+        +amount: double
+        +interestRate: double
+        +approve()
+    }
+
+Bank "1" o-- "*" Customer : manages
+Customer "1" --> "*" BankAccount : owns
+Customer "1" --> "*" Loan : has
+BankAccount "1" --> "*" Transaction : records

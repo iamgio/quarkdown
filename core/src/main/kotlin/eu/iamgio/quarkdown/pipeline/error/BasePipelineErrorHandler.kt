@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.pipeline.error
 
+import eu.iamgio.quarkdown.function.Function
 import eu.iamgio.quarkdown.log.Log
 
 /**
@@ -8,11 +9,12 @@ import eu.iamgio.quarkdown.log.Log
 class BasePipelineErrorHandler : PipelineErrorHandler {
     override fun handle(
         error: PipelineException,
-        action: (String) -> Unit,
+        sourceFunction: Function<*>?,
+        action: () -> Unit,
     ) {
         val message = error.message ?: "Unknown error"
         Log.error(message)
 
-        action(message)
+        action()
     }
 }

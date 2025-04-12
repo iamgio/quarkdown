@@ -2,18 +2,20 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.ast.InlineMarkdownContent
 import eu.iamgio.quarkdown.ast.base.block.Code
+import eu.iamgio.quarkdown.ast.base.inline.Link
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransform
 import eu.iamgio.quarkdown.ast.quarkdown.inline.TextTransformData
-import eu.iamgio.quarkdown.function.reflect.Name
+import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
-import eu.iamgio.quarkdown.misc.Color
+import eu.iamgio.quarkdown.misc.color.Color
+import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * `Text` stdlib module exporter.
- * This module handles text formatting and manipulation.
+ * This module handles text formatting.
  */
 val Text: Module =
     setOf(
@@ -24,6 +26,7 @@ val Text: Module =
 
 /**
  * Creates an inline text node with specified formatting and transformation.
+ * @param text inline content to transform
  * @param size font size, or default if not specified
  * @param weight font weight, or default if not specified
  * @param style font style, or default if not specified
@@ -31,9 +34,10 @@ val Text: Module =
  * @param case text case, or default if not specified
  * @param variant font variant, or default if not specified
  * @param color text color, or default if not specified
- * @param content inline content to transform
+ * @param url optional URL to link the text to. If empty (but specified), the URL will match the text content.
  */
 fun text(
+    text: InlineMarkdownContent,
     size: TextTransformData.Size? = null,
     weight: TextTransformData.Weight? = null,
     style: TextTransformData.Style? = null,
@@ -41,12 +45,26 @@ fun text(
     case: TextTransformData.Case? = null,
     variant: TextTransformData.Variant? = null,
     color: Color? = null,
-    content: InlineMarkdownContent,
-): NodeValue =
-    TextTransform(
-        TextTransformData(size, weight, style, decoration, case, variant, color),
-        content.children,
-    ).wrappedAsValue()
+    url: String? = null,
+): NodeValue {
+    val transform =
+        TextTransform(
+            TextTransformData(size, weight, style, decoration, case, variant, color),
+            text.children,
+        )
+
+    return when {
+        // If URL is specified, wrap the text in a link
+        url != null ->
+            Link(
+                listOf(transform),
+                url = url.takeIf { it.isNotBlank() } ?: text.children.toPlainText(),
+                title = null,
+            )
+
+        else -> transform
+    }.wrappedAsValue()
+}
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
@@ -80,21 +98,21 @@ fun code(
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
     code: EvaluableString,
-): NodeValue {
-    return Code(
+): NodeValue =
+    Code(
         code.content,
         language,
         showLineNumbers,
         focusedLines,
     ).wrappedAsValue()
-}
 
 /**
  * @return a fixed Lorem Ipsum text.
  */
 @Name("loremipsum")
 fun loremIpsum() =
-    object {}::class.java.getResourceAsStream("/text/lorem-ipsum.txt")!!
+    object {}::class.java
+        .getResourceAsStream("/text/lorem-ipsum.txt")!!
         .reader()
         .readText()
         .wrappedAsValue()

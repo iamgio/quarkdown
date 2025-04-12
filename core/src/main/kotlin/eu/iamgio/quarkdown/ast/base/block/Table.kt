@@ -3,17 +3,22 @@ package eu.iamgio.quarkdown.ast.base.block
 import eu.iamgio.quarkdown.ast.InlineContent
 import eu.iamgio.quarkdown.ast.NestableNode
 import eu.iamgio.quarkdown.ast.Node
+import eu.iamgio.quarkdown.ast.attributes.CaptionableNode
+import eu.iamgio.quarkdown.ast.attributes.LocationTrackableNode
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentable
 import eu.iamgio.quarkdown.rendering.representable.RenderRepresentableVisitor
 import eu.iamgio.quarkdown.visitor.node.NodeVisitor
 
 /**
- * A table.
+ * A table, consisting of columns, each of which has a header and multiple cells.
+ * A table is location-trackable since, if requested by the user, it may show a caption displaying its location-based label.
  * @param columns columns of the table. Each column has a header and multiple cells
+ * @param caption optional caption of the table (Quarkdown extension)
  */
-data class Table(
+class Table(
     val columns: List<Column>,
-) : NestableNode {
+    override val caption: String? = null,
+) : NestableNode, LocationTrackableNode, CaptionableNode {
     // Exposing all the cell contents as this table's direct children
     // allows visiting them during a tree traversal.
     // If they were isolated, they would be unreachable.

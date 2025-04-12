@@ -1,7 +1,8 @@
 package eu.iamgio.quarkdown.rendering
 
+import eu.iamgio.quarkdown.media.storage.options.MediaStorageOptions
 import eu.iamgio.quarkdown.pipeline.output.OutputResource
-import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
+import eu.iamgio.quarkdown.template.TemplateProcessor
 
 /**
  * Strategy used to run the post-rendering stage:
@@ -10,13 +11,24 @@ import eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
  */
 interface PostRenderer {
     /**
-     * Creates a new instance of a code wrapper for this rendering strategy.
-     * A wrapper adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
-     * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * See `resources/render` for templates.
-     * @return a new instance of the corresponding wrapper
+     * Rules that determine the default behavior of the media storage.
+     * For example, HTML requires local media to be accessible from the file system,
+     * hence it's preferred to copy local media to the output directory;
+     * it's not necessary to store remote media locally.
+     * On the other hand, for example, LaTeX rendering (not yet supported) would require
+     * all media to be stored locally, as it does not support remote media.
      */
-    fun createCodeWrapper(): RenderWrapper
+    val preferredMediaStorageOptions: MediaStorageOptions
+
+    /**
+     * Creates a new instance of a template processor for this rendering strategy.
+     * A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
+     * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
+     * See `resources/render/html-wrapper.html.template` for an HTML template.
+     * @return a new instance of the corresponding template processor
+     * @see TemplateProcessor
+     */
+    fun createTemplateProcessor(): TemplateProcessor
 
     /**
      * Generates the required output resources.
@@ -25,12 +37,19 @@ interface PostRenderer {
      * @return the generated output resources
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
+
+    /**
+     * Accepts a post-renderer visitor.
+     * @param visitor visitor to accept
+     * @return the result of the visit operation
+     */
+    fun <T> accept(visitor: PostRendererVisitor<T>): T
 }
 
 /**
  * Wraps rendered code in a template.
  * @param content code to wrap
  * @return [content], wrapped in the corresponding template for this rendering strategy
- * @see RenderWrapper
+ * @see TemplateProcessor
  */
-fun PostRenderer.wrap(content: CharSequence) = createCodeWrapper().content(content).wrap()
+fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).process()

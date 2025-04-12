@@ -1,0 +1,123 @@
+# Layout stacks
+
+Here positioning techniques will be used: rows, columns, grids and containers.
+
+.row alignment:{center}
+	A
+	
+	B
+	
+	C
+	
+	D
+	
+---
+
+.row alignment:{spacearound}
+	A
+	
+	B
+	
+	C
+	
+	D
+
+---
+
+.column
+	A
+	
+	B
+	
+	C
+
+---
+
+.grid columns:{3}
+	A
+	
+	B
+	
+	C
+	
+	D
+	
+	E
+	
+	F
+
+<<<
+
+.row alignment:{spacearound}
+	.row
+		Left
+	
+		##! Title
+	
+		Right
+
+	---
+
+	.column cross:{start}
+		Top
+	
+		##! Title
+	
+		Bottom
+
+---
+
+.row alignment:{spacebetween} gap:{1cm}
+	.container
+		##! Container 1
+		
+		.loremipsum
+	
+	.container
+		##! Container 2
+		
+		.loremipsum
+
+---
+
+<<<
+
+.grid columns:{2} gap:{1cm}
+	.repeat {4}
+		.container
+			##! Container .1
+		
+			.loremipsum
+
+---
+
+<<<
+
+.var {skyimg}
+	![Sky](images/sky.jpg)
+
+.grid columns:{2} gap:{1cm}
+	.column
+		##! Some nice clouds!
+		
+		.row gap:{1cm}
+			A
+			
+			B
+			
+			C
+	
+	.repeat {2}
+		.skyimg
+	
+	.container
+		There it is. In nature, dead trees are just as normal as live trees. Just a happy little shadow that lives in there. If you didn't have baby clouds, you wouldn't have big clouds.
+		
+		---
+		
+		That's it.
+	
+	.whitespace
+	
+	.clip {circle}
+		.skyimg

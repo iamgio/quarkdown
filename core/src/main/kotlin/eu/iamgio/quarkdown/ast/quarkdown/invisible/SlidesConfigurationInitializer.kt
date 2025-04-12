@@ -10,7 +10,7 @@ import eu.iamgio.quarkdown.visitor.node.NodeVisitor
  * @param showControls whether navigation controls should be shown
  * @param transition global transition between slides
  */
-data class SlidesConfigurationInitializer(
+class SlidesConfigurationInitializer(
     val centerVertically: Boolean?,
     val showControls: Boolean?,
     val transition: Transition?,
