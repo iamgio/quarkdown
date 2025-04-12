@@ -186,10 +186,6 @@ body.quarkdown-paged {
 
 /* Mermaid diagrams */
 
-.quarkdown figure:has(> .mermaid) {
-    /*width: 100%;*/
-}
-
 .quarkdown .mermaid:not([data-processed]) {
     font-size: 0;
 }
@@ -204,6 +200,10 @@ body.quarkdown-paged {
 
 .quarkdown-slides .mermaid > svg {
     max-height: 50vh !important;
+}
+
+.quarkdown-slides .mermaid {
+    box-shadow: none;
 }
 
 /* Fit the diagram into the remaining space of the viewport. */
