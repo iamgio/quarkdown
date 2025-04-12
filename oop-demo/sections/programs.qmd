@@ -55,12 +55,10 @@
 
 .box {Importare una classe di "libreria"}
     - per usare le classi di una libreria prima le si importa
-
     - lo si fa con la clausola `import`, da usare all'inizio del sorgente
         - importo la singola classe: `import java.util.Date`;
         - importo l'intero package: `import java.util.*`;
         - importazione di default: `import java.lang.*`;
-
     - senza importazioni, ogni classe andrebbe sempre qualificata indicandone
       anche il package completo:  
       `java.util.Date obj = new java.util.Date();`
