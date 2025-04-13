@@ -1,8 +1,16 @@
-postRenderingExecutionQueue.push(() => {
+postRenderingExecutionQueue.push(async () => {
     hljs.addPlugin(new CopyButtonPlugin()); // Add copy button to code blocks.
-    hljs.highlightAll(); // Highlight all code blocks.
-    hljs.initLineNumbersOnLoad(); // Show line numbers on code blocks.
+    await hljs.highlightAll(); // Highlight all code blocks.
+    initLineNumbers();
 });
+
+// Shows line numbers on code blocks.
+function initLineNumbers() {
+    const codeBlocks = document.querySelectorAll('code.hljs:not(.nohljsln)');
+    codeBlocks.forEach((code) => {
+        hljs.lineNumbersBlockSync(code);
+    });
+}
 
 // Focuses specific lines in selected code blocks.
 function focusCodeLines() {
