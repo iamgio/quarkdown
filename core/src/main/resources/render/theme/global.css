@@ -139,6 +139,11 @@ body.quarkdown-paged {
     background-color: lightgray;
 }
 
+/* Paged rendering is loading */
+body.quarkdown-paged:not(:has(.pagedjs_page)) {
+    opacity: 0;
+}
+
 /* Pages area */
 .pagedjs_pages {
     display: flex;
