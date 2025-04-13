@@ -927,3 +927,77 @@ Example: "Figure 1.1:"
         background-color: var(--qd-background-color);
     }
 }
+
+/* Navigation sidebar */
+
+.sidebar {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    padding: 20px;
+    border-radius: 5px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.sidebar ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 0 !important;
+}
+
+.sidebar a {
+    height: 12px;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.sidebar a::before {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #444;
+    opacity: 0.2;
+    transition: opacity 0.3s;
+}
+
+.sidebar li.h1 a::before {
+    width: 30px;
+    margin-left: 10px;
+}
+
+.sidebar li.h2 a::before {
+    width: 20px;
+    margin-left: 20px;
+}
+
+.sidebar li.h3 a::before {
+    width: 10px;
+    margin-left: 30px;
+}
+
+.sidebar a:not(:hover) {
+    color: transparent;
+}
+
+.sidebar li.active a::before {
+    opacity: .75;
+}
+
+.sidebar a:hover::before {
+    opacity: 1;
+}
+
+@media print {
+    .sidebar {
+        /*TODO hide in pdf but show in paged*/
+        /*display: none;*/
+    }
+}

@@ -316,3 +316,41 @@ class PageChunker {
         this.apply();
     }
 }
+
+//
+// Navigation sidebar.
+
+function createSidebar() {
+    const sidebar = document.createElement('div');
+    sidebar.className = 'sidebar';
+    sidebar.style.position = 'fixed';
+
+    const sidebarList = document.createElement('ol');
+
+    let currentActiveListItem = null;
+
+    document.querySelectorAll('h1, h2, h3').forEach(header => {
+        const listItem = document.createElement('li');
+        listItem.className = header.tagName.toLowerCase();
+        listItem.innerHTML = `<a href="#${header.id}">${header.textContent}</a>`;
+        sidebarList.appendChild(listItem);
+
+        function checkForActive() {
+            const rect = header.getBoundingClientRect();
+            if (rect.top <= window.innerHeight * 0.5 && rect.top + rect.height >= 0) {
+                currentActiveListItem?.classList.remove('active');
+                currentActiveListItem = listItem;
+                currentActiveListItem.classList.add('active');
+            }
+        }
+
+        checkForActive()
+        window.addEventListener('scroll', checkForActive);
+    });
+
+    sidebar.appendChild(sidebarList);
+    document.body.appendChild(sidebar);
+    return sidebar;
+}
+
+postRenderingExecutionQueue.push(createSidebar);
