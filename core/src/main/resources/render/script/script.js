@@ -206,3 +206,108 @@ function restoreScrollPosition() {
 
 window.addEventListener("beforeunload", saveScrollPosition);
 postRenderingExecutionQueue.push(restoreScrollPosition)
+
+//
+// Page chunker.
+
+// Utility that splits content into chunks based on page break elements.
+// Example of chunking on a slides document:
+// Input:
+// <div class="reveal">
+//     <div class="slides">
+//         <p>First</p>
+//         <div class="page-break"></div>
+//         <p>Second</p>
+//     </div>
+// </div>
+//
+// Output:
+// <div class="reveal">
+//     <div class="slides">
+//         <section>
+//             <p>First</p>
+//          </section>
+//         <section>
+//             <p>Second</p>
+//         </section>
+//     </div>
+// </div>
+class PageChunker {
+    chunks = [];
+
+    constructor(container) {
+        this.container = container;
+    }
+
+    // Whether an element is not visible in the document.
+    isHidden(element) {
+        return element.hasAttribute('data-hidden');
+    }
+
+    // Whether a chunk has no visible content.
+    isBlank(chunk) {
+        return chunk.childNodes.length === 0 || Array.from(chunk.children).every(child => this.isHidden(child));
+    }
+
+    // Generates chunks based on the page break elements.
+    // Page break elements are not preserved in the chunked output.
+    generateChunks(createElement) {
+        let chunks = [];
+        let currentChunk = createElement();
+
+        Array.from(this.container.children).forEach(child => {
+            if (child.className === 'page-break') {
+                // If we hit a page break, finalize the current section and start a new one.
+                chunks.push(currentChunk);
+                currentChunk = createElement();
+            } else {
+                // Otherwise, add the child to the current section.
+                currentChunk.appendChild(child);
+            }
+        });
+
+        // Add the last section if it has any content.
+        if (currentChunk.childNodes.length > 0) {
+            chunks.push(currentChunk);
+        }
+
+        this.chunks = chunks;
+    }
+
+    // Applies the generated chunks to the container.
+    apply() {
+        // Clear out the original slides div and add the new sections.
+        this.container.innerHTML = '';
+        // Elements that are not part of a section yet and will be added to the next one.
+        let queuedElements = [];
+
+        this.chunks.forEach(chunk => {
+            // Empty slides are ignored.
+            if (this.isBlank(chunk)) {
+                // If the section is blank and NOT empty,
+                // meaning all its children are hidden (e.g. a marker produced by the .marker function),
+                // they are added to the queued elements in order to be added to the next section
+                // and not produce an empty slide.
+                queuedElements.push(...chunk.children);
+            } else {
+                // If there are any queued elements, they are added to the beginning of the new section.
+                if (queuedElements.length > 0) {
+                    queuedElements.forEach(element => chunk.prepend(element));
+                    queuedElements = [];
+                }
+                this.container.appendChild(chunk);
+            }
+        });
+
+        // If there are any queued elements left, they are added to the last visible section.
+        if (queuedElements.length > 0 && this.chunks.length > 0) {
+            queuedElements.forEach(element => this.container.lastChild.appendChild(element));
+            queuedElements = [];
+        }
+    }
+
+    chunk(createElement) {
+        this.generateChunks(createElement);
+        this.apply();
+    }
+}

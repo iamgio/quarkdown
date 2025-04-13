@@ -1,43 +1,4 @@
-// In slides documents, page breaks are replaced with RevealJS sections during preprocessing.
-// Example:
-// Input:
-// <div class="reveal">
-//     <div class="slides">
-//         <p>First</p>
-//         <div class="page-break"></div>
-//         <p>Second</p>
-//     </div>
-// </div>
-//
-// Output:
-// <div class="reveal">
-//     <div class="slides">
-//         <section>
-//             <p>First</p>
-//          </section>
-//         <section>
-//             <p>Second</p>
-//         </section>
-//     </div>
-// </div>
-
 class SlidesDocument extends QuarkdownDocument {
-    initialize() {
-        // Used to check if a property was injected (see below).
-        const undef = 'undefined';
-
-        // Initialize RevealJS with the updated DOM.
-        // slides_X properties are optionally set by the SlidesSettingsInitializer invisible node.
-        Reveal.initialize({
-            // If the center property is not explicitly set, it defaults to true unless the `--reveal-center-vertically` CSS variable of `:root` is set to `false`.
-            center: typeof slides_center !== undef ? slides_center : getComputedStyle(document.documentElement).getPropertyValue('--reveal-center-vertically') !== 'false',
-            controls: typeof slides_showControls !== undef ? slides_showControls : true,
-            transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
-            transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
-            hash: true,
-        });
-    }
-
     copyPageMarginInitializers() {
         super.copyPageMarginInitializers();
         // Copy the content of each global page margin initializer to the background of each section.
@@ -87,10 +48,24 @@ class SlidesDocument extends QuarkdownDocument {
         super.beforeReady(content);
         super.removeAllPageMarginInitializers();
 
-        const children = Array.from(slidesDiv.childNodes);
-        const sections = generateSections(children);
-        appendSections(slidesDiv, sections);
+        new PageChunker(slidesDiv).chunk(() => document.createElement('section'));
         this.initialize()
+    }
+
+    initialize() {
+        // Used to check if a property was injected (see below).
+        const undef = 'undefined';
+
+        // Initialize RevealJS with the updated DOM.
+        // slides_X properties are optionally set by the SlidesSettingsInitializer invisible node.
+        Reveal.initialize({
+            // If the center property is not explicitly set, it defaults to true unless the `--reveal-center-vertically` CSS variable of `:root` is set to `false`.
+            center: typeof slides_center !== undef ? slides_center : getComputedStyle(document.documentElement).getPropertyValue('--reveal-center-vertically') !== 'false',
+            controls: typeof slides_showControls !== undef ? slides_showControls : true,
+            transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
+            transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
+            hash: true,
+        });
     }
 
     setupAfterReadyHook() {
@@ -102,68 +77,4 @@ class SlidesDocument extends QuarkdownDocument {
             }
         });
     }
-}
-
-function generateSections(slides) {
-    let sections = [];
-    let currentSection = document.createElement('section');
-
-    slides.forEach(child => {
-        if (child.className === 'page-break') {
-            // If we hit a page break, finalize the current section and start a new one.
-            sections.push(currentSection);
-            currentSection = document.createElement('section');
-        } else {
-            // Otherwise, add the child to the current section.
-            currentSection.appendChild(child);
-        }
-    });
-
-    // Add the last section if it has any content.
-    if (currentSection.childNodes.length > 0) {
-        sections.push(currentSection);
-    }
-
-    return sections;
-}
-
-function appendSections(slidesDiv, sections) {
-    // Clear out the original slides div and add the new sections.
-    slidesDiv.innerHTML = '';
-    // Elements that are not part of a section yet and will be added to the next one.
-    let queuedElements = [];
-
-    sections.forEach(section => {
-        // Empty slides are ignored.
-        if (isBlank(section)) {
-            // If the section is blank and NOT empty,
-            // meaning all its children are hidden (e.g. a marker produced by the .marker function),
-            // they are added to the queued elements in order to be added to the next section
-            // and not produce an empty slide.
-            queuedElements.push(...section.children);
-        } else {
-            // If there are any queued elements, they are added to the beginning of the new section.
-            if (queuedElements.length > 0) {
-                queuedElements.forEach(element => section.prepend(element));
-                queuedElements = [];
-            }
-            slidesDiv.appendChild(section);
-        }
-    });
-
-    // If there are any queued elements left, they are added to the last visible section.
-    if (queuedElements.length > 0 && sections.length > 0) {
-        queuedElements.forEach(element => slidesDiv.lastChild.appendChild(element));
-        queuedElements = [];
-    }
-}
-
-// Whether an element is not visible in the document.
-function isHidden(element) {
-    return element.hasAttribute('data-hidden');
-}
-
-// Whether a slide has no visible content.
-function isBlank(slide) {
-    return slide.childNodes.length === 0 || Array.from(slide.children).every(isHidden);
 }
