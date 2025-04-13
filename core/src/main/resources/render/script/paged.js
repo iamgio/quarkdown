@@ -32,7 +32,7 @@ class PagedDocument extends QuarkdownDocument {
     getParentViewport(element) {
         return element.closest('.pagedjs_area');
     }
-
+// TODO until the paged document is processed, hide the content to remove the visual glitch.
     updatePageNumberElements() {
         const pages = document.querySelectorAll('.pagedjs_page')
         // Inject the total amount of pages into .total-page-number elements.
@@ -58,7 +58,13 @@ class PagedDocument extends QuarkdownDocument {
 
     setupAfterReadyHook() {
         class PagedAfterReadyHandler extends Paged.Handler {
-            afterPreview() {
+            afterPageLayout(page) {
+                if (storedScrollY && page.getBoundingClientRect().top > storedScrollY) {
+                    restoreScrollPosition()
+                }
+            }
+
+            afterRendered() {
                 postRenderingExecutionQueue.execute().then();
             }
         }

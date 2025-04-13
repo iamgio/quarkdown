@@ -91,7 +91,8 @@ class QuarkdownDocument {
     /**
      * Updates the content of `.current-page-number` and `.total-page-number` elements.
      */
-    updatePageNumberElements() {}
+    updatePageNumberElements() {
+    }
 
     /**
      * Populates the execution queue with the necessary functions to be executed after the document is ready.
@@ -119,7 +120,8 @@ class QuarkdownDocument {
     }
 }
 
-class PlainDocument extends QuarkdownDocument {}
+class PlainDocument extends QuarkdownDocument {
+}
 
 let doc = new PlainDocument(); // Overwritten externally by html-wrapper
 
@@ -177,3 +179,30 @@ function hashCode(str) {
     }
     return hash.toString();
 }
+
+//
+// Scroll position restoration.
+
+const scrollYStorageKey = "scrollY";
+const storedScrollY = +sessionStorage.getItem(scrollYStorageKey);
+let scrollRestored = false;
+
+// Saves scroll position.
+function saveScrollPosition() {
+    history.scrollRestoration = "manual";
+    sessionStorage.setItem(scrollYStorageKey, window.scrollY.toString());
+}
+
+// Restores scroll position. Even if called multiple times, it will only restore the first time.
+function restoreScrollPosition() {
+    if (scrollRestored || !storedScrollY) return;
+
+    console.log("Restoring scroll position to", storedScrollY);
+    scrollRestored = true;
+    requestAnimationFrame(() => {
+        window.scrollTo({top: storedScrollY, behavior: "auto"});
+    });
+}
+
+window.addEventListener("beforeunload", saveScrollPosition);
+postRenderingExecutionQueue.push(restoreScrollPosition)

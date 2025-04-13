@@ -28,26 +28,3 @@ function createWebSocket(serverUrl, endpoint, onMessage) {
 function startReloadWebSocket(serverUrl) {
     createWebSocket(serverUrl, 'reload', () => location.reload());
 }
-
-const scrollYStorageKey = "scrollY";
-
-// Saves scroll position.
-function saveScrollPosition() {
-    history.scrollRestoration = "manual";
-    localStorage.setItem(scrollYStorageKey, window.scrollY.toString());
-}
-
-// Restores scroll position.
-function restoreScrollPosition() {
-    const scrollY = parseInt(localStorage.getItem(scrollYStorageKey));
-    if (scrollY) {
-        window.scrollTo({top: scrollY, behavior: "auto"});
-        localStorage.removeItem(scrollYStorageKey); // Clean up.
-    }
-}
-
-// Save scroll position before reload.
-window.addEventListener("beforeunload", saveScrollPosition);
-
-// Restore after reload to keep the scroll position.
-postRenderingExecutionQueue.push(restoreScrollPosition)
