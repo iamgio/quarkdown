@@ -29,23 +29,20 @@ function startReloadWebSocket(serverUrl) {
     createWebSocket(serverUrl, 'reload', () => location.reload());
 }
 
+const scrollYStorageKey = "scrollY";
+
 // Saves scroll position.
 function saveScrollPosition() {
     history.scrollRestoration = "manual";
-    const scrollPosition = {
-        top: window.scrollY,
-        left: window.scrollX
-    };
-    localStorage.setItem("scrollPosition", JSON.stringify(scrollPosition));
+    localStorage.setItem(scrollYStorageKey, window.scrollY.toString());
 }
 
 // Restores scroll position.
 function restoreScrollPosition() {
-    const savedPosition = localStorage.getItem("scrollPosition");
-    if (savedPosition) {
-        const {top, left} = JSON.parse(savedPosition);
-        window.scrollTo({top, left, behavior: "auto"});
-        localStorage.removeItem("scrollPosition"); // Clean up.
+    const scrollY = parseInt(localStorage.getItem(scrollYStorageKey));
+    if (scrollY) {
+        window.scrollTo({top: scrollY, behavior: "auto"});
+        localStorage.removeItem(scrollYStorageKey); // Clean up.
     }
 }
 
