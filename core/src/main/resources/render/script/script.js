@@ -306,7 +306,12 @@ class PageChunker {
         }
     }
 
-    chunk(createElement) {
+    chunk() {
+        const createElement = () => {
+            const element = document.createElement('section');
+            element.className = 'chunk';
+            return element;
+        };
         this.generateChunks(createElement);
         this.apply();
     }

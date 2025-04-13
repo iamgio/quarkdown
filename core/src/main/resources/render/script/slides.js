@@ -48,7 +48,7 @@ class SlidesDocument extends QuarkdownDocument {
         super.beforeReady(content);
         super.removeAllPageMarginInitializers();
 
-        new PageChunker(slidesDiv).chunk(() => document.createElement('section'));
+        new PageChunker(slidesDiv).chunk();
         this.initialize()
     }
 
