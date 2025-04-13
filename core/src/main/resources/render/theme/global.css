@@ -196,6 +196,11 @@ body.quarkdown-paged {
 
 .quarkdown-paged .mermaid > svg {
     max-width: 80% !important;
+    max-height: calc(var(--viewport-remaining-height)); /* Fit the diagram into the remaining space of the viewport. */
+}
+
+.quarkdown-paged figure:has(figcaption) .mermaid > svg {
+    max-height: calc(var(--viewport-remaining-height) - 100px);
 }
 
 .quarkdown-slides .mermaid > svg {
@@ -204,15 +209,6 @@ body.quarkdown-paged {
 
 .quarkdown-slides .mermaid {
     box-shadow: none;
-}
-
-/* Fit the diagram into the remaining space of the viewport. */
-.quarkdown-paged .mermaid > svg {
-    max-height: calc(var(--viewport-remaining-height));
-}
-
-.quarkdown-paged figure:has(figcaption) .mermaid > svg {
-    max-height: calc(var(--viewport-remaining-height) - 100px);
 }
 
 /* Nodes */
