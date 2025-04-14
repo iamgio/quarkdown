@@ -100,6 +100,13 @@ class QuarkdownDocument {
     populateExecutionQueue() {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
+        if (this.usesNavigationSidebar()) {
+            postRenderingExecutionQueue.push(createSidebar);
+        }
+    }
+
+    usesNavigationSidebar() {
+        return true;
     }
 
     /**
@@ -352,5 +359,3 @@ function createSidebar() {
     document.body.appendChild(sidebar);
     return sidebar;
 }
-
-postRenderingExecutionQueue.push(createSidebar);

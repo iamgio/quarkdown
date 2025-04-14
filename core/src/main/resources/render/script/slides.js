@@ -41,6 +41,10 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
+    usesNavigationSidebar() {
+        return false;
+    }
+
     beforeReady(content) {
         const slidesDiv = document.querySelector('.reveal .slides');
         if (!slidesDiv) return;
