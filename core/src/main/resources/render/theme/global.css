@@ -1001,7 +1001,7 @@ Example: "Figure 1.1:"
     }
 }
 
-@media screen, pagedjs-ignore {
+@media screen and (min-aspect-ratio: 1.3), pagedjs-ignore {
     .sidebar {
         display: block !important;
     }
