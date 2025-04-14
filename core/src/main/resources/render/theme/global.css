@@ -951,6 +951,7 @@ Example: "Figure 1.1:"
 }
 
 .sidebar a {
+    color: var(--qd-main-color);
     height: 12px;
     text-decoration: none !important;
     display: flex;
@@ -963,24 +964,32 @@ Example: "Figure 1.1:"
     content: '';
     width: 100%;
     height: 2px;
-    background: #444;
-    opacity: 0.2;
+    background: var(--qd-main-color);
+    opacity: 0.25;
     transition: opacity 0.3s;
+}
+
+.quarkdown-paged .sidebar a span {
+    margin-right: 10px;
+}
+
+.quarkdown-paged .sidebar a::before {
+    background: #444;
 }
 
 .sidebar li.h1 a::before {
     width: 30px;
-    margin-left: 10px;
+    margin-left: 0;
 }
 
 .sidebar li.h2 a::before {
     width: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .sidebar li.h3 a::before {
     width: 10px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 .sidebar a:not(:hover) {
@@ -993,6 +1002,12 @@ Example: "Figure 1.1:"
 
 .sidebar a:hover::before {
     opacity: 1;
+}
+
+.sidebar a:hover span {
+    background-color: var(--qd-background-color);
+    padding: 4px 16px;
+    border-radius: 8px;
 }
 
 @media print {

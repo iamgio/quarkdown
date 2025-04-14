@@ -339,7 +339,7 @@ function createSidebar() {
     document.querySelectorAll('h1, h2, h3').forEach(header => {
         const listItem = document.createElement('li');
         listItem.className = header.tagName.toLowerCase();
-        listItem.innerHTML = `<a href="#${header.id}">${header.textContent}</a>`;
+        listItem.innerHTML = `<a href="#${header.id}"><span>${header.textContent}</span></a>`;
         sidebarList.appendChild(listItem);
 
         function checkForActive() {
