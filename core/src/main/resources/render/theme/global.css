@@ -997,7 +997,12 @@ Example: "Figure 1.1:"
 
 @media print {
     .sidebar {
-        /*TODO hide in pdf but show in paged*/
-        /*display: none;*/
+        display: none;
+    }
+}
+
+@media screen, pagedjs-ignore {
+    .sidebar {
+        display: block !important;
     }
 }
