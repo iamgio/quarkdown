@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.PairValue
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
+import eu.iamgio.quarkdown.stdlib.internal.asDouble
 
 /**
  * Index of the first element in a collection.
@@ -111,16 +112,6 @@ fun pair(
     first: DynamicValue,
     second: DynamicValue,
 ): PairValue<*, *> = PairValue(first to second)
-
-/**
- * Converts an [OutputValue] to a [Double].
- * @return the value as a double, or 0 if the value is not numeric
- */
-private fun OutputValue<*>.asDouble(): Double =
-    when (val value = unwrappedValue) {
-        is Number -> value.toDouble()
-        else -> value.toString().toDoubleOrNull()
-    } ?: .0
 
 /**
  * @param collection numeric collection to sum
