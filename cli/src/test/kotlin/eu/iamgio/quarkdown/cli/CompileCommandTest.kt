@@ -123,19 +123,19 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun pdf() {
-        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper().isValid)
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
 
-        val (_, _) = test("--pdf --pdf-no-sandbox")
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
     fun `pdf with node and npm set`() {
-        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper().isValid)
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
 
-        val (_, _) = test("--pdf --pdf-no-sandbox --node-path node --npm-path npm")
+        val (_, _) = test("--pdf", "--pdf-no-sandbox", "--node-path", NodeJsWrapper.defaultPath, "--npm-path", NpmWrapper.defaultPath)
         checkPdf()
     }
 }

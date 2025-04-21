@@ -11,6 +11,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+private fun npm() = NpmWrapper(NpmWrapper.defaultPath)
+
+private fun node(workingDirectory: File) = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory)
+
 /**
  * Tests for wrappers around Node.js and NPM.
  * @see NodeJsWrapper
@@ -32,7 +36,7 @@ class NodeNpmWrapperTest {
 
     @Test
     fun `nodejs wrapper`() {
-        val node = NodeJsWrapper(workingDirectory = directory)
+        val node = node(workingDirectory = directory)
         assumeTrue(node.isValid)
 
         assertEquals("Hello, Quarkdown!", node.eval("console.log('Hello, Quarkdown!')"))
@@ -58,8 +62,7 @@ class NodeNpmWrapperTest {
 
     @Test
     fun `npm wrapper`() {
-        val npm = NpmWrapper()
-        assumeTrue(npm.isValid)
+        assumeTrue(npm().isValid)
     }
 
     @Test
@@ -70,7 +73,7 @@ class NodeNpmWrapperTest {
 
     @Test
     fun `nonexisting module not installed`() {
-        val npm = NpmWrapper()
+        val npm = npm()
         val module = NodeModule("quarkdown-nonexisting-module-xyz")
         assumeTrue(npm.isValid)
         assertFalse(npm.isInstalled(module))
@@ -78,15 +81,15 @@ class NodeNpmWrapperTest {
 
     @Test
     fun `puppeteer not linked`() {
-        val node = NodeJsWrapper(workingDirectory = directory)
+        val node = node(workingDirectory = directory)
         assumeTrue(node.isValid)
         assertEquals(false, node.isLinked(PuppeteerNodeModule))
     }
 
     @Test
     fun `install puppeteer`() {
-        val node = NodeJsWrapper(workingDirectory = directory)
-        val npm = NpmWrapper()
+        val node = node(workingDirectory = directory)
+        val npm = npm()
         assumeTrue(node.isValid)
         assumeTrue(npm.isValid)
         npm.install(PuppeteerNodeModule)

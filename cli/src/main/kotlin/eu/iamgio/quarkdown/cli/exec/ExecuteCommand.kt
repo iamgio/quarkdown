@@ -86,7 +86,7 @@ abstract class ExecuteCommand(
     /**
      * When enabled, the rendered code isn't wrapped in a template code.
      * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * @see eu.iamgio.quarkdown.rendering.wrapper.RenderWrapper
+     * @see eu.iamgio.quarkdown.template.TemplateProcessor
      */
     private val noWrap: Boolean by option("--nowrap", help = "Don't wrap output").flag()
 
@@ -129,13 +129,13 @@ abstract class ExecuteCommand(
      * Path to the Node.js executable, needed for PDF export.
      */
     protected val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
-        .default(NodeJsWrapper.DEFAULT_PATH)
+        .default(NodeJsWrapper.defaultPath)
 
     /**
      * Path to the npm executable, needed for PDF export.
      */
     protected val npmPath: String by option("--npm-path", help = "Path to the npm executable")
-        .default(NpmWrapper.DEFAULT_PATH)
+        .default(NpmWrapper.defaultPath)
 
     /**
      * @return the finalized CLI options based on the command's properties

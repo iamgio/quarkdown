@@ -8,7 +8,7 @@ import java.io.Reader
  * @param path path to the Node.js executable
  */
 data class NodeJsWrapper(
-    override val path: String = DEFAULT_PATH,
+    override val path: String,
     override val workingDirectory: File,
 ) : ExecutableWrapper() {
     override val isValid: Boolean
@@ -52,10 +52,13 @@ data class NodeJsWrapper(
             false
         }
 
-    companion object {
+    companion object : WithDefaultPath {
         /**
          * Default path to the Node.js executable.
          */
-        const val DEFAULT_PATH = "node"
+        private const val DEFAULT_PATH = "node"
+
+        override val defaultPath: String
+            get() = DEFAULT_PATH
     }
 }

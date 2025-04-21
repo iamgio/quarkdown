@@ -16,6 +16,12 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+private val options =
+    PdfExportOptions(
+        nodeJsPath = NodeJsWrapper.defaultPath,
+        npmPath = NpmWrapper.defaultPath,
+    )
+
 /**
  * Tests for HTML-to-PDF generation.
  */
@@ -34,15 +40,15 @@ class HtmlToPdfTest {
     @Test
     fun `corresponding exporter`() {
         val html = QuarkdownFlavor.rendererFactory.html(MutableContext(QuarkdownFlavor))
-        val htmlToPdf = PdfExporters.getForRenderingTarget(html.postRenderer, PdfExportOptions())
+        val htmlToPdf = PdfExporters.getForRenderingTarget(html.postRenderer, options)
 
         assertIs<HtmlPdfExporter>(htmlToPdf)
     }
 
     @Test
     fun `bare script on simple html`() {
-        assumeTrue(NodeJsWrapper(workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper().isValid)
+        assumeTrue(NodeJsWrapper(options.nodeJsPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(options.npmPath).isValid)
 
         val html = File(directory, "index.html")
         html.writeText(
@@ -61,12 +67,13 @@ class HtmlToPdfTest {
         )
 
         val out = File(directory, "out.pdf")
-        HtmlPdfExporter(PdfExportOptions(noSandbox = true)).export(directory, out)
+        HtmlPdfExporter(options.copy(noSandbox = true)).export(directory, out)
 
         assertTrue(out.exists())
         assertFalse(File(directory, "pdf.js").exists())
         assertFalse(File(directory, "package.json").exists())
         assertFalse(File(directory, "package-lock.json").exists())
+        println(directory)
         assertFalse(File(directory, "node_modules").exists())
 
         Loader.loadPDF(out).use {

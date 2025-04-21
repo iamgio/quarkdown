@@ -1,5 +1,6 @@
 package eu.iamgio.quarkdown.interaction.executable
 
+import eu.iamgio.quarkdown.interaction.os.OsUtils
 import java.io.File
 
 /**
@@ -8,7 +9,7 @@ import java.io.File
  * @param path path to the NPM executable
  */
 class NpmWrapper(
-    override val path: String = DEFAULT_PATH,
+    override val path: String,
 ) : ExecutableWrapper() {
     override val workingDirectory: File? = null
 
@@ -56,10 +57,20 @@ class NpmWrapper(
         launchAndGetOutput("link", module.name, workingDirectory = node.workingDirectory)
     }
 
-    companion object {
+    companion object : WithDefaultPath {
         /**
-         * Default path to the NPM executable.
+         * Default base path to the NPM executable.
          */
-        const val DEFAULT_PATH = "npm"
+        private const val DEFAULT_PATH = "npm"
+
+        /**
+         * Default path to the NPM executable, OS-dependent.
+         * @see [OsUtils.cmdBasedExecutablePath]
+         */
+        private val osDependentDefaultPath: String
+            get() = OsUtils.cmdBasedExecutablePath(DEFAULT_PATH)
+
+        override val defaultPath: String
+            get() = osDependentDefaultPath
     }
 }
