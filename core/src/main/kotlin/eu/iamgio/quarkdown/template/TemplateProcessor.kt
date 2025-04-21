@@ -1,6 +1,7 @@
 package eu.iamgio.quarkdown.template
 
 import eu.iamgio.quarkdown.rendering.template.TemplatePlaceholders
+import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import eu.iamgio.quarkdown.util.replace
 
 /**
@@ -269,7 +270,7 @@ class TemplateProcessor(
      */
     fun process(): CharSequence =
         buildString {
-            append(text)
+            append(text.normalizeLineSeparators())
             replaceConditionals()
             replaceIterables()
             replaceValues()

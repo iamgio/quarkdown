@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.data.subList
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.IOUtils
+import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import java.io.File
 
 /**
@@ -62,7 +63,7 @@ fun read(
 
     // If the range is infinite on both ends, the whole file is read.
     if (lineRange.isInfinite) {
-        return StringValue(file.readText())
+        return StringValue(file.readText().normalizeLineSeparators().toString())
     }
 
     // Lines from the file in the given range.
@@ -74,8 +75,9 @@ fun read(
         throw IllegalArgumentException("Invalid range $lineRange in bounds $bounds")
     }
 
-    return lines.subList(lineRange)
-        .joinToString(System.lineSeparator())
+    return lines
+        .subList(lineRange)
+        .joinToString("\n")
         .wrappedAsValue()
 }
 

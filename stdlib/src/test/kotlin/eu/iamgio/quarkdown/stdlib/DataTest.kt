@@ -17,8 +17,6 @@ import kotlin.test.assertIs
 
 private const val DATA_FOLDER = "src/test/resources/data"
 
-private val LINE_SEPARATOR = System.lineSeparator()
-
 /**
  * [Data] module tests.
  */
@@ -37,22 +35,22 @@ class DataTest {
         val path = "test.txt"
 
         assertEquals(
-            "Line 1${LINE_SEPARATOR}Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4${LINE_SEPARATOR}Line 5",
+            "Line 1\nLine 2\n\nLine 4\nLine 5",
             read(context, path).unwrappedValue,
         )
 
         assertEquals(
-            "Line 2${LINE_SEPARATOR}${LINE_SEPARATOR}Line 4",
+            "Line 2\n\nLine 4",
             read(context, path, Range(2, 4)).unwrappedValue,
         )
 
         assertEquals(
-            "Line 1${LINE_SEPARATOR}Line 2",
+            "Line 1\nLine 2",
             read(context, path, Range(null, 2)).unwrappedValue,
         )
 
         assertEquals(
-            "Line 4${LINE_SEPARATOR}Line 5",
+            "Line 4\nLine 5",
             read(context, path, Range(4, null)).unwrappedValue,
         )
 

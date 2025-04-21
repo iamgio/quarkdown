@@ -48,11 +48,12 @@ class CompileCommandTest : TempDirectory() {
         )
     }
 
-    private fun test(additionalArgs: String = ""): Pair<CliOptions, PipelineOptions> {
+    private fun test(vararg additionalArgs: String): Pair<CliOptions, PipelineOptions> {
         command.test(
-            "$main " +
-                "-o $directory " +
-                additionalArgs,
+            main.absolutePath,
+            "-o",
+            directory.absolutePath,
+            *additionalArgs,
         )
 
         val outputDir = File(directory, "Quarkdown-test")
@@ -97,7 +98,7 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `pretty, no wrap`() {
-        val (_, pipelineOptions) = test("--pretty --nowrap")
+        val (_, pipelineOptions) = test("--pretty", "--nowrap")
         assertTrue(pipelineOptions.prettyOutput)
         assertFalse(pipelineOptions.wrapOutput)
     }

@@ -12,6 +12,7 @@ import eu.iamgio.quarkdown.pipeline.output.OutputResourceGroup
 import eu.iamgio.quarkdown.pipeline.output.TextOutputArtifact
 import eu.iamgio.quarkdown.rendering.html.HtmlPostRenderer
 import eu.iamgio.quarkdown.template.TemplateProcessor
+import eu.iamgio.quarkdown.util.normalizeLineSeparators
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -257,7 +258,8 @@ class HtmlPostRendererTest {
             javaClass
                 .getResourceAsStream("/postrendering/html-test-result.html")!!
                 .reader()
-                .readText(),
+                .readText()
+                .normalizeLineSeparators(),
             postRenderer.createTemplateProcessor().process(),
         )
     }

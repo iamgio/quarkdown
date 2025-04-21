@@ -52,7 +52,8 @@ class MermaidTest {
                 .read {mermaid/class.mmd}
             """.trimIndent(),
         ) {
-            assertContains(it, "<figure><pre class=\"mermaid fill-height\">classDiagram\n    class Bank {")
+            assertEquals(it.lines().first(), "<figure><pre class=\"mermaid fill-height\">classDiagram")
+            assertEquals(it.lines()[1], "    class Bank {")
             assertContains(it, "<figcaption>My graph</figcaption></figure>")
         }
     }

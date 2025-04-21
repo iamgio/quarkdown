@@ -20,19 +20,26 @@ class ProjectCreatorCommandTest : TempDirectory() {
     }
 
     private fun test(
-        additionalArgs: String = "",
+        additionalArgs: Array<String> = emptyArray(),
         directory: File = super.directory,
     ) {
         command.test(
-            "$directory " +
-                "--main-file main " +
-                "--name test " +
-                "--authors \"Aaa, Bbb,Ccc\" " +
-                "--type slides " +
-                "--lang en " +
-                "--color-theme darko " +
-                "--layout-theme latex " +
-                additionalArgs,
+            directory.absolutePath,
+            "--main-file",
+            "main",
+            "--name",
+            "test",
+            "--authors",
+            "Aaa, Bbb,Ccc",
+            "--type",
+            "slides",
+            "--lang",
+            "en",
+            "--color-theme",
+            "darko",
+            "--layout-theme",
+            "latex",
+            *additionalArgs,
         )
         assertTrue(directory.exists())
 
@@ -65,7 +72,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
 
     @Test
     fun `default empty`() {
-        test("--empty")
+        test(arrayOf("--empty"))
         assertEquals(1, directory.listFiles()!!.size)
     }
 }
