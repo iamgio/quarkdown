@@ -7,15 +7,15 @@ import kotlin.io.path.deleteRecursively
 
 /**
  * Helper class for easily launching Node.js scripts with required NPM modules.
- * @param directory the working directory to launch Node.js in
  * @param node the Node.js wrapper
  * @param npm the NPM wrapper
  */
 class NodeNpmHelper(
-    private val directory: File,
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
 ) {
+    private val linkedModules = mutableSetOf<NodeModule>()
+
     private fun checkWrapper(
         wrapper: ExecutableWrapper,
         name: String,
@@ -31,15 +31,17 @@ class NodeNpmHelper(
             npm.install(module)
         }
         npm.link(node, module)
+        linkedModules += module
     }
 
     @OptIn(ExperimentalPathApi::class)
     private fun cleanup() {
+        linkedModules.forEach { npm.unlink(node, it) }
         // Path#deleteRecursively does not follow symlinks, while File#deleteRecursively does.
         // The symlinks contained in the node_modules directory point to the global packages,
         // and should not be deleted.
         sequenceOf("package.json", "package-lock.json", "node_modules")
-            .map { File(directory, it).toPath() }
+            .map { File(node.workingDirectory, it).toPath() }
             .forEach { it.deleteRecursively() }
     }
 

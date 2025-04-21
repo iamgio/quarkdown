@@ -35,7 +35,7 @@ class PuppeteerPdfGeneratorScript(
      * Launches Puppeteer to convert the webpage from [directory] into a PDF saved at [out].
      */
     fun launch() =
-        NodeNpmHelper(directory, node, npm).launch(PuppeteerNodeModule) {
+        NodeNpmHelper(node, npm).launch(PuppeteerNodeModule) {
             launchServer()
         }
 

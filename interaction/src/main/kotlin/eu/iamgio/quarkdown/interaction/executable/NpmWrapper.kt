@@ -57,6 +57,18 @@ class NpmWrapper(
         launchAndGetOutput("link", module.name, workingDirectory = node.workingDirectory)
     }
 
+    /**
+     * Unlinks a linked Node.js module from the project located in [node]'s working directory.
+     * @param node the Node.js wrapper
+     * @param module the module to unlink
+     */
+    fun unlink(
+        node: NodeJsWrapper,
+        module: NodeModule,
+    ) {
+        launchAndGetOutput("unlink", module.name, workingDirectory = node.workingDirectory)
+    }
+
     companion object : WithDefaultPath {
         /**
          * Default base path to the NPM executable.
