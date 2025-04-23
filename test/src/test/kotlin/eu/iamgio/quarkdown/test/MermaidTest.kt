@@ -6,6 +6,9 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+private const val MERMAID_OPEN = "<figure><pre class=\"mermaid fill-height\">"
+private const val MERMAID_CLOSE = "</pre></figure>"
+
 /**
  * Tests for Mermaid diagrams.
  */
@@ -20,7 +23,7 @@ class MermaidTest {
                     A-->C
             """.trimIndent(),
         ) {
-            assertEquals("<figure><pre class=\"mermaid fill-height\">graph TD\n    A-->B\n    A-->C</pre></figure>", it)
+            assertEquals("${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C$MERMAID_CLOSE", it)
             assertTrue(attributes.hasMermaidDiagram)
         }
     }
@@ -36,8 +39,8 @@ class MermaidTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<figure><pre class=\"mermaid fill-height\">graph TD\n    A-->B\n    A-->C</pre>" +
-                    "<figcaption>My graph</figcaption></figure>",
+                "${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C</pre>" +
+                        "<figcaption>My graph</figcaption></figure>",
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
@@ -52,9 +55,52 @@ class MermaidTest {
                 .read {mermaid/class.mmd}
             """.trimIndent(),
         ) {
-            assertEquals(it.lines().first(), "<figure><pre class=\"mermaid fill-height\">classDiagram")
+            assertEquals(it.lines().first(), MERMAID_OPEN + "classDiagram")
             assertEquals(it.lines()[1], "    class Bank {")
             assertContains(it, "<figcaption>My graph</figcaption></figure>")
+        }
+    }
+
+    @Test
+    fun `simple xy chart`() {
+        execute(
+            """
+              .xychart
+                - 5000
+                - 6000
+                - 7500
+            """.trimIndent()
+        ) {
+            assertEquals(
+                MERMAID_OPEN +
+                        "xychart-beta\n\t" +
+                        "line [5000.0, 6000.0, 7500.0]\n" +
+                        MERMAID_CLOSE,
+                it,
+            )
+            assertTrue(attributes.hasMermaidDiagram)
+        }
+    }
+
+    @Test
+    fun `simple xy chart with bars`() {
+        execute(
+            """
+              .xychart bars:{yes}
+                - 5000
+                - 6000
+                - 7500
+            """.trimIndent()
+        ) {
+            assertEquals(
+                MERMAID_OPEN +
+                        "xychart-beta\n" +
+                        "\tline [5000.0, 6000.0, 7500.0]\n" +
+                        "\tbar [5000.0, 6000.0, 7500.0]\n" +
+                        MERMAID_CLOSE,
+                it,
+            )
+            assertTrue(attributes.hasMermaidDiagram)
         }
     }
 }

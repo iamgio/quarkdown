@@ -41,20 +41,32 @@ fun mermaid(
 
 /**
  * Creates a chart diagram on the XY plane.
+ * @param line whether to draw a line chart
+ * @param bars whether to draw a bar chart
  * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
  * @param values the Y values to plot
  * @return the generated diagram node
  */
 @Name("xychart")
 fun xyChart(
+    line: Boolean = true,
+    bars: Boolean = false,
     caption: String? = null,
     values: Iterable<OutputValue<*>>,
 ): NodeValue {
     val content =
         buildString {
-            append("bar [")
-            values.joinToString(separator = ", ") { it.asDouble().toString() }.also(::append)
-            append("]")
+            val points = values.map { it.asDouble() }
+            if (line) {
+                append("\n")
+                append("line ")
+                append(points)
+            }
+            if (bars) {
+                append("\n")
+                append("bar ")
+                append(points)
+            }
         }
 
     val code = "xychart-beta\n" + content.indent("\t")
