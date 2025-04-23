@@ -246,6 +246,37 @@ class ValueFactoryTest {
     }
 
     @Test
+    fun iterable() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.attachMockPipeline()
+
+        assertEquals(
+            listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
+            ValueFactory.iterable(
+                """
+                - 1
+                - 2
+                - 3
+                """.trimIndent(),
+                context,
+            ).unwrappedValue,
+        )
+
+        /*assertEquals(
+            listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
+            ValueFactory.iterable(
+                """
+                - 1
+                  - 11
+                - 2
+                  - 22
+                """.trimIndent(),
+                context,
+            ).unwrappedValue,
+        )*/
+    }
+
+    @Test
     fun dictionary() {
         val context = MutableContext(QuarkdownFlavor)
         context.attachMockPipeline()
@@ -272,12 +303,12 @@ class ValueFactoryTest {
             DictionaryValue(
                 mutableMapOf(
                     "abc" to
-                        DictionaryValue(
-                            mutableMapOf(
-                                "def" to DynamicValue("1"),
-                                "ghi" to DynamicValue("2"),
+                            DictionaryValue(
+                                mutableMapOf(
+                                    "def" to DynamicValue("1"),
+                                    "ghi" to DynamicValue("2"),
+                                ),
                             ),
-                        ),
                 ),
             ),
             ValueFactory.dictionary(
@@ -295,31 +326,31 @@ class ValueFactoryTest {
                 mutableMapOf(
                     "a" to DynamicValue("1"),
                     "b" to
-                        DictionaryValue(
-                            mutableMapOf(
-                                "c" to DynamicValue("2"),
-                                "d" to DynamicValue("3"),
+                            DictionaryValue(
+                                mutableMapOf(
+                                    "c" to DynamicValue("2"),
+                                    "d" to DynamicValue("3"),
+                                ),
                             ),
-                        ),
                     "e" to DynamicValue("4"),
                     "f" to
-                        DictionaryValue(
-                            mutableMapOf(
-                                "g" to
-                                    DictionaryValue(
-                                        mutableMapOf(
-                                            "h" to DynamicValue("5"),
-                                            "i" to
-                                                DictionaryValue(
-                                                    mutableMapOf(
-                                                        "j" to DynamicValue("6"),
-                                                    ),
+                            DictionaryValue(
+                                mutableMapOf(
+                                    "g" to
+                                            DictionaryValue(
+                                                mutableMapOf(
+                                                    "h" to DynamicValue("5"),
+                                                    "i" to
+                                                            DictionaryValue(
+                                                                mutableMapOf(
+                                                                    "j" to DynamicValue("6"),
+                                                                ),
+                                                            ),
                                                 ),
-                                        ),
-                                    ),
-                                "k" to DynamicValue("7"),
+                                            ),
+                                    "k" to DynamicValue("7"),
+                                ),
                             ),
-                        ),
                     "l" to DynamicValue("8"),
                 ),
             ),
@@ -342,6 +373,4 @@ class ValueFactoryTest {
             ),
         )
     }
-
-    // TODO others that require context
 }

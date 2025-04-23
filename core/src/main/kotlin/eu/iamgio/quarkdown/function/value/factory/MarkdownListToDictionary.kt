@@ -1,10 +1,12 @@
 package eu.iamgio.quarkdown.function.value.factory
 
+import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.TextNode
-import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
+import eu.iamgio.quarkdown.context.Context
 import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
 
 /**
@@ -33,64 +35,63 @@ private const val KEY_VALUE_SEPARATOR = ":"
  * @see ValueFactory.dictionary
  */
 class MarkdownListToDictionary<T : OutputValue<*>>(
-    private val list: ListBlock,
+    list: ListBlock,
     private val inlineValueMapper: (String) -> T,
     private val nestedValueMapper: (ListBlock) -> T,
     private val nothingValueMapper: () -> T,
-) {
-    /**
-     * @return [DictionaryValue] representation of the list
-     * @throws IllegalRawValueException if the list is not in the correct format
-     */
-    fun convert(): DictionaryValue<T> =
-        mutableMapOf<String, T>().run {
-            list.items.asSequence()
-                .map { it.children.filterNot { child -> child is Newline } }
-                .forEach { children ->
+) : MarkdownListToValue<DictionaryValue<T>, Pair<String, T>, TextNode>(list) {
+    private val map = mutableMapOf<String, T>()
 
-                    // The first child of a list item is usually a Paragraph.
-                    // - This
-                    val firstChild =
-                        children.first() as? TextNode
-                            ?: throw IllegalRawValueException(
-                                "Dictionary element does not contain a key",
-                                children.first(),
-                            )
+    override fun push(element: Pair<String, T>) {
+        map[element.first] = element.second
+    }
 
-                    // Cases:
-                    val (key, value) =
-                        when (val secondChild = children.getOrNull(1)) {
-                            // Inline value: the item is a key-value pair.
-                            // - This: that
-                            null -> {
-                                val text = firstChild.text.toPlainText()
-                                val parts = text.split(KEY_VALUE_SEPARATOR, limit = 2)
-                                val key = parts.first()
-                                key to
-                                    when {
-                                        parts.size > 1 -> inlineValueMapper(parts[1].trimStart())
-                                        else -> nothingValueMapper()
-                                    }
-                            }
+    override fun validateChild(firstChild: Node) =
+        firstChild as? TextNode
+            ?: throw IllegalRawValueException(
+                "Dictionary element does not contain a key",
+                firstChild,
+            )
 
-                            // Nested value: the item is a nested dictionary.
-                            // - This
-                            //     - that: those
-                            // The key-value separator at the end of the text is optional.
-                            is ListBlock -> {
-                                val key = firstChild.text.toPlainText().removeSuffix(KEY_VALUE_SEPARATOR)
-                                key to nestedValueMapper(secondChild)
-                            }
+    override fun inlineValue(child: TextNode): Pair<String, T> {
+        val text = child.text.toPlainText()
+        // A key-value pair.
+        // - This: that
+        val parts = text.split(KEY_VALUE_SEPARATOR, limit = 2)
+        val key = parts.first()
+        return key to
+            when {
+                parts.size > 1 -> inlineValueMapper(parts[1].trimStart())
+                else -> nothingValueMapper()
+            }
+    }
 
-                            // Not a valid dictionary element.
-                            else -> {
-                                throw IllegalRawValueException("Unexpected dictionary element", secondChild)
-                            }
-                        }
+    override fun nestedValue(
+        child: TextNode,
+        list: ListBlock,
+    ): Pair<String, T> {
+        // Nested dictionary.
+        // - This
+        //     - that: those
+        // The key-value separator at the end of the text is optional.
+        val key = child.text.toPlainText().removeSuffix(KEY_VALUE_SEPARATOR)
+        return key to nestedValueMapper(list)
+    }
 
-                    put(key, value)
-                }
+    override fun wrap() = DictionaryValue(map)
 
-            DictionaryValue(this)
-        }
+    companion object {
+        fun viaValueFactory(
+            list: ListBlock,
+            context: Context,
+        ): MarkdownListToDictionary<*> =
+            MarkdownListToDictionary(
+                list,
+                // Node values are currently unsupported as dictionary values.
+                // Here we give back the raw string as a fallback in case a node is met.
+                inlineValueMapper = { ValueFactory.eval(it, context, fallback = { it.wrappedAsValue() }) },
+                nestedValueMapper = { viaValueFactory(it, context).convert() },
+                nothingValueMapper = { DictionaryValue(mutableMapOf()) },
+            )
+    }
 }

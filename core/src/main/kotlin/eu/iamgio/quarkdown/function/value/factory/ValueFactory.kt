@@ -38,8 +38,14 @@ import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.data.LambdaParameter
 import eu.iamgio.quarkdown.function.value.data.Range
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.eval
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.expression
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.iterable
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.lambda
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.range
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.safeExpression
+import eu.iamgio.quarkdown.function.value.factory.ValueFactory.size
 import eu.iamgio.quarkdown.function.value.quarkdownName
-import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.lexer.Lexer
 import eu.iamgio.quarkdown.lexer.patterns.COMMENT_PATTERN
 import eu.iamgio.quarkdown.misc.color.Color
@@ -434,7 +440,7 @@ object ValueFactory {
      * ```
      * - keyA:
      *   - keyAA: valueAA
-     * - keyB
+     * - keyB:
      *   - keyBA: valueBA
      *   - keyBB: valueBB
      * - keyC:
@@ -459,17 +465,7 @@ object ValueFactory {
             content.children.singleOrNull { it !is Newline } as? ListBlock
                 ?: throw IllegalRawValueException("Not a dictionary (the only element must be a Markdown list)", raw)
 
-        fun convert(list: ListBlock): DictionaryValue<*> =
-            MarkdownListToDictionary(
-                list,
-                // Node values are currently unsupported as dictionary values.
-                // Here we give back the raw string as a fallback in case a node is met.
-                inlineValueMapper = { eval(it, context, fallback = { it.wrappedAsValue() }) },
-                nestedValueMapper = { convert(it) },
-                nothingValueMapper = { DictionaryValue(mutableMapOf()) },
-            ).convert()
-
-        return convert(list)
+        return MarkdownListToDictionary.viaValueFactory(list, context).convert()
     }
 
     /**
