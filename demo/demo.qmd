@@ -58,6 +58,9 @@ Export your Quarkdown project as:
     .container padding:{6px 0 16px 0}
         .text {↓} weight:{bold} size:{large}
 
+.var {rightarrow}
+    .text {->} weight:{bold} size:{large}
+
 Quarkdown's base features follow [**CommonMark**](https://spec.commonmark.org/) and [**GitHub Flavored Markdown**](https://github.github.com/gfm/) specifications,  
 so that you'll feel at home typing code you're comfortable typing.
 
@@ -66,10 +69,15 @@ so that you'll feel at home typing code you're comfortable typing.
 <!-- and whether the output should be displayed slightly above than expected (resets heading margin) -->
 
 .function {sourceresult}
-    shrinkvertical? animated? source:
+    shrinkvertical? animated? horizontal? source:
+    .node
     ---
-    .code {markdown}
-        .source
+
+    .var {snippet}
+        .code {markdown}
+            .source
+
+    .var {ishorizontal} {.horizontal::otherwise {no}}
 
     .var {output}
         .container alignment:{center} fullwidth:{yes}
@@ -79,13 +87,25 @@ so that you'll feel at home typing code you're comfortable typing.
 
         .container textalignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
             .source
+            
+    .ifnot {.ishorizontal}
+        .snippet
 
-    .let {.animated::otherwise {no}}
-        .if {.1}
-            .fragment
+        .let {.animated::otherwise {no}}
+            .if {.1}
+                .fragment
+                    .output
+            .ifnot {.1}
                 .output
-        .ifnot {.1}
-            .output
+    
+    .if {.ishorizontal}
+        .row alignment:{spacearound}
+            .snippet
+
+            .rightarrow
+
+            .container textalignment:{center} width:{50%}
+                .source
 
 .sourceresult shrinkvertical:{50} animated:{yes}
     ### Diving into _Quarkdown_
@@ -168,6 +188,18 @@ from your Markdown code.
 
     If we try to calculate the **surface** of a circle of **radius .radius**,
     we'll find out it's **.pow {.radius} to:{2}::multiply {.pi}::truncate {2}**
+
+## Charts
+
+.sourceresult horizontal:{yes}
+    .var {n} {100}
+    
+    .xychart
+        .repeat {.n}
+            .1::pow {2}::divide {100}
+    
+        .repeat {.n}
+            .1::logn::multiply {10}
 
 <<<
 
