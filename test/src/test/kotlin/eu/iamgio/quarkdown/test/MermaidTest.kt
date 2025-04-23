@@ -97,8 +97,8 @@ class MermaidTest {
             assertEquals(
                 """
                     xychart-beta
-                        line [5000.0, 6000.0, 7500.0]
                         bar [5000.0, 6000.0, 7500.0]
+                        line [5000.0, 6000.0, 7500.0]
                 """.expectedChart(),
                 it,
             )
@@ -215,6 +215,29 @@ class MermaidTest {
                         line [3.0, 2.0, 1.0]
                         line [1.0, 2.0, 3.0]
                         line [2.0, 1.0, 3.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `xy chart with two curves`() {
+        execute(
+            """
+            .xychart
+              .repeat {3}
+                .1::pow {2}
+              
+              .repeat {3}
+                .1::sin::multiply {5}::round
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        line [4.0, 5.0, 1.0]
+                        line [1.0, 4.0, 9.0]
                 """.expectedChart(),
                 it,
             )
