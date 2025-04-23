@@ -99,6 +99,7 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
  * @param showLines whether to draw lines
  * @param showBars whether to draw bars
  * @param xAxisLabel optional label for the X axis
+ * @param xAxisRange optional range for the X axis. If open-ended, the range will be set to the minimum and maximum values of the X values
  * @param yAxisLabel optional label for the Y axis
  * @param yAxisRange optional range for the Y axis. If open-ended, the range will be set to the minimum and maximum values of the Y values
  * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
@@ -112,38 +113,43 @@ fun xyChart(
     @Name("lines") showLines: Boolean = true,
     @Name("bars") showBars: Boolean = false,
     @Name("x") xAxisLabel: String? = null,
+    @Name("xrange") xAxisRange: Range? = null,
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
     caption: String? = null,
     values: Iterable<OutputValue<*>>,
 ): NodeValue {
     val lines: List<ChartLine> = extractLines(values)
-    val (min, max) = lines.flatten().let { (it.minOrNull() ?: 0.0) to (it.maxOrNull() ?: 1.0) }
+    val (minY, maxY) = lines.flatten().let { (it.minOrNull() ?: 0.0) to (it.maxOrNull() ?: 1.0) }
+    val (minX, maxX) = 0.0 to (lines.maxByOrNull { it.size }?.size?.toDouble() ?: 1.0)
+
+    fun StringBuilder.axis(
+        name: String,
+        label: String?,
+        range: Range?,
+        min: Double,
+        max: Double,
+    ) {
+        if (label == null && range == null) return
+        append("\n")
+        append(name).append("-axis")
+        label?.let {
+            append(" \"")
+            append(it)
+            append("\"")
+        }
+        range?.let {
+            append(" ")
+            append(it.start ?: min)
+            append(" --> ")
+            append(it.end ?: max)
+        }
+    }
 
     val content =
         buildString {
-            xAxisLabel?.let {
-                append("\n")
-                append("x-axis \"")
-                append(it)
-                append("\"")
-            }
-
-            if (yAxisLabel != null || yAxisRange != null) {
-                append("\n")
-                append("y-axis")
-                yAxisLabel?.let {
-                    append(" \"")
-                    append(it)
-                    append("\"")
-                }
-                yAxisRange?.let {
-                    append(" ")
-                    append(it.start ?: min)
-                    append(" --> ")
-                    append(it.end ?: max)
-                }
-            }
+            axis("x", xAxisLabel, xAxisRange, minX, maxX)
+            axis("y", yAxisLabel, yAxisRange, minY, maxY)
 
             lines.forEach { points ->
                 if (showBars) {

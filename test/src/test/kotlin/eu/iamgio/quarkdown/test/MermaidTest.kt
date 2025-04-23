@@ -222,6 +222,32 @@ class MermaidTest {
     }
 
     @Test
+    fun `xy chart with open-ranged x axis`() {
+        execute(
+            """
+            .xychart xrange:{1..}
+              - |
+                - 3
+                - 2
+              - |
+                - 1
+                - 2
+                - 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        x-axis 1 --> 3.0
+                        line [3.0, 2.0]
+                        line [1.0, 2.0, 3.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `xy chart with two curves`() {
         execute(
             """
