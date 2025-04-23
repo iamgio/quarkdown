@@ -96,8 +96,8 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
  *     - 5
  * ```
  *
- * @param line whether to draw a line chart
- * @param bars whether to draw a bar chart
+ * @param showLines whether to draw lines
+ * @param showBars whether to draw bars
  * @param xAxisLabel optional label for the X axis
  * @param yAxisLabel optional label for the Y axis
  * @param yAxisRange optional range for the Y axis. If open-ended, the range will be set to the minimum and maximum values of the Y values
@@ -109,8 +109,8 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
  */
 @Name("xychart")
 fun xyChart(
-    line: Boolean = true,
-    bars: Boolean = false,
+    @Name("lines") showLines: Boolean = true,
+    @Name("bars") showBars: Boolean = false,
     @Name("x") xAxisLabel: String? = null,
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
@@ -146,12 +146,12 @@ fun xyChart(
             }
 
             lines.forEach { points ->
-                if (bars) {
+                if (showBars) {
                     append("\n")
                     append("bar ")
                     append(points)
                 }
-                if (line) {
+                if (showLines) {
                     append("\n")
                     append("line ")
                     append(points)
