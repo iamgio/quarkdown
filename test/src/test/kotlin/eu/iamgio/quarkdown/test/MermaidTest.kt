@@ -40,7 +40,7 @@ class MermaidTest {
         ) {
             assertEquals(
                 "${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C</pre>" +
-                        "<figcaption>My graph</figcaption></figure>",
+                    "<figcaption>My graph</figcaption></figure>",
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
@@ -61,18 +61,17 @@ class MermaidTest {
         }
     }
 
-    private fun String.expectedChart() =
-        MERMAID_OPEN + trimIndent().replace("    ", "\t") + "\n" + MERMAID_CLOSE
+    private fun String.expectedChart() = MERMAID_OPEN + trimIndent().replace("    ", "\t") + "\n" + MERMAID_CLOSE
 
     @Test
     fun `xy chart`() {
         execute(
             """
-              .xychart
-                - 5000
-                - 6000
-                - 7500
-            """.trimIndent()
+            .xychart
+              - 5000
+              - 6000
+              - 7500
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
@@ -89,11 +88,11 @@ class MermaidTest {
     fun `xy chart with bars`() {
         execute(
             """
-              .xychart bars:{yes}
-                - 5000
-                - 6000
-                - 7500
-            """.trimIndent()
+            .xychart bars:{yes}
+              - 5000
+              - 6000
+              - 7500
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
@@ -110,11 +109,11 @@ class MermaidTest {
     fun `xy chart with named axis`() {
         execute(
             """
-              .xychart x:{Months} y:{Revenue}
-                - 5000
-                - 6000
-                - 7500
-            """.trimIndent()
+            .xychart x:{Months} y:{Revenue}
+              - 5000
+              - 6000
+              - 7500
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
@@ -132,11 +131,11 @@ class MermaidTest {
     fun `xy chart with ranged and named y axis`() {
         execute(
             """
-              .xychart y:{Revenue} yrange:{2..8000}
-                - 5000
-                - 6000
-                - 7500
-            """.trimIndent()
+            .xychart y:{Revenue} yrange:{2..8000}
+              - 5000
+              - 6000
+              - 7500
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
@@ -153,11 +152,11 @@ class MermaidTest {
     fun `xy chart with open-ranged y axis`() {
         execute(
             """
-              .xychart yrange:{..}
-                - 5000
-                - 6000
-                - 7500
-            """.trimIndent()
+            .xychart yrange:{..}
+              - 5000
+              - 6000
+              - 7500
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
@@ -174,17 +173,48 @@ class MermaidTest {
     fun `xy chart with function call in data`() {
         execute(
             """
-              .var {x} {2}
-              .xychart
-                .repeat {3}
-                  .var {x} {.pow {.x} {2}}
-                  .x
-            """.trimIndent()
+            .var {x} {2}
+            .xychart
+              .repeat {3}
+                .var {x} {.pow {.x} {2}}
+                .x
+            """.trimIndent(),
         ) {
             assertEquals(
                 """
                     xychart-beta
                         line [4.0, 16.0, 256.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `xy chart with two lines`() {
+        execute(
+            """
+            .xychart
+              - |
+                - 3
+                - 2
+                - 1
+              - |
+                - 1
+                - 2
+                - 3
+              - |
+                - 2
+                - 1
+                - 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        line [3.0, 2.0, 1.0]
+                        line [1.0, 2.0, 3.0]
+                        line [2.0, 1.0, 3.0]
                 """.expectedChart(),
                 it,
             )
