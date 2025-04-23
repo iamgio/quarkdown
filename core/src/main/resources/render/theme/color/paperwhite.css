@@ -37,3 +37,7 @@ nav ol ol {
 .box.callout {
     --box-header-background-color: rgba(0, 0, 0, .03);
 }
+
+.quarkdown .mermaid .plot .line-plot-3 path {
+    stroke: lightskyblue;
+}
