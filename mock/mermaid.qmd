@@ -1,5 +1,38 @@
 # Mermaid diagrams
 
+## XY chart
+
+.let {100}
+    n:
+    .xychart yrange:{..100}
+        .repeat {.n}
+            .1::pow {2}::divide {100}
+    
+        .repeat {.n}
+            .1::logn::multiply {5}
+    
+        .repeat {.n}
+            .1::divide {3}::sin::multiply {5}::sum {40}
+    
+        .repeat {.n}
+            .1::divide {3}::cos::multiply {5}::sum {40}
+
+.xychart lines:{no} bars:{yes} x:{Months} y:{Revenue}
+    - 5000
+    - 6000
+    - 7500
+    - 8200
+    - 9500
+    - 10500
+    - 11000
+    - 10200
+    - 9200
+    - 8500
+    - 7000
+    - 6000
+
+<<<
+
 ## Class diagram
 
 .mermaid caption:{Class diagram of a bank system.}
