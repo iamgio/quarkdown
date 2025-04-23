@@ -255,8 +255,8 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 
 /* Text outside nodes */
 .quarkdown .mermaid :is(.label text, .legend text, .messageText,
-                        .loopText, .loopText tspan,
-                        .branchLabel text, text[class*="TitleText"]) {
+                        .loopText, .loopText tspan, .branchLabel text,
+                        .title text, text[class*="TitleText"]) {
     fill: var(--qd-mermaid-node-line-color) !important;
 }
 

@@ -61,3 +61,7 @@ nav ol ol {
 .page-margin-bottom-center {
     border-color: var(--qd-link-color);
 }
+
+.quarkdown .mermaid .plot .line-plot-3 path {
+    stroke: salmon;
+}
