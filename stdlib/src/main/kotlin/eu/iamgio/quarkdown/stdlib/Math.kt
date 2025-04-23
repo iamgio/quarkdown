@@ -19,6 +19,10 @@ val Math: Module =
         ::divide,
         ::rem,
         ::pow,
+        ::abs,
+        ::negate,
+        ::sqrt,
+        ::logn,
         ::pi,
         ::sin,
         ::cos,
@@ -80,6 +84,38 @@ fun pow(
     base: Number,
     @Name("to") exponent: Number,
 ) = NumberValue(base.toFloat().pow(exponent.toInt()))
+
+/**
+ * @param x number to get the absolute value of
+ * @return the absolute value of [x]
+ */
+fun abs(x: Number) =
+    when (x) {
+        is Int -> kotlin.math.abs(x)
+        else -> kotlin.math.abs(x.toFloat())
+    }.let(::NumberValue)
+
+/**
+ * @param x the number to negate (positive to negative and vice versa)
+ * @return the negation of [x]
+ */
+fun negate(x: Number) =
+    when (x) {
+        is Int -> -x
+        else -> -x.toFloat()
+    }.let(::NumberValue)
+
+/**
+ * @param x number to get the square root of
+ * @return the square root of [x]
+ */
+fun sqrt(x: Number) = kotlin.math.sqrt(x.toFloat()).let(::NumberValue)
+
+/**
+ * @param x number to get the natural logarithm of
+ * @return the natural logarithm of [x]
+ */
+fun logn(x: Number) = kotlin.math.ln(x.toFloat()).let(::NumberValue)
 
 // Trigonometry
 
