@@ -169,4 +169,25 @@ class MermaidTest {
             )
         }
     }
+
+    @Test
+    fun `xy chart with function call in data`() {
+        execute(
+            """
+              .var {x} {2}
+              .xychart
+                .repeat {3}
+                  .var {x} {.pow {.x} {2}}
+                  .x
+            """.trimIndent()
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        line [4.0, 16.0, 256.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
 }
