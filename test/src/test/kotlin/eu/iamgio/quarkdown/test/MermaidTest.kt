@@ -61,8 +61,11 @@ class MermaidTest {
         }
     }
 
+    private fun String.expectedChart() =
+        MERMAID_OPEN + trimIndent().replace("    ", "\t") + "\n" + MERMAID_CLOSE
+
     @Test
-    fun `simple xy chart`() {
+    fun `xy chart`() {
         execute(
             """
               .xychart
@@ -72,10 +75,10 @@ class MermaidTest {
             """.trimIndent()
         ) {
             assertEquals(
-                MERMAID_OPEN +
-                        "xychart-beta\n\t" +
-                        "line [5000.0, 6000.0, 7500.0]\n" +
-                        MERMAID_CLOSE,
+                """
+                    xychart-beta
+                        line [5000.0, 6000.0, 7500.0]
+                """.expectedChart(),
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
@@ -83,7 +86,7 @@ class MermaidTest {
     }
 
     @Test
-    fun `simple xy chart with bars`() {
+    fun `xy chart with bars`() {
         execute(
             """
               .xychart bars:{yes}
@@ -93,14 +96,77 @@ class MermaidTest {
             """.trimIndent()
         ) {
             assertEquals(
-                MERMAID_OPEN +
-                        "xychart-beta\n" +
-                        "\tline [5000.0, 6000.0, 7500.0]\n" +
-                        "\tbar [5000.0, 6000.0, 7500.0]\n" +
-                        MERMAID_CLOSE,
+                """
+                    xychart-beta
+                        line [5000.0, 6000.0, 7500.0]
+                        bar [5000.0, 6000.0, 7500.0]
+                """.expectedChart(),
                 it,
             )
-            assertTrue(attributes.hasMermaidDiagram)
+        }
+    }
+
+    @Test
+    fun `xy chart with named axis`() {
+        execute(
+            """
+              .xychart x:{Months} y:{Revenue}
+                - 5000
+                - 6000
+                - 7500
+            """.trimIndent()
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        x-axis "Months"
+                        y-axis "Revenue"
+                        line [5000.0, 6000.0, 7500.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `xy chart with ranged and named y axis`() {
+        execute(
+            """
+              .xychart y:{Revenue} yrange:{2..8000}
+                - 5000
+                - 6000
+                - 7500
+            """.trimIndent()
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        y-axis "Revenue" 2 --> 8000
+                        line [5000.0, 6000.0, 7500.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `xy chart with open-ranged y axis`() {
+        execute(
+            """
+              .xychart yrange:{..}
+                - 5000
+                - 6000
+                - 7500
+            """.trimIndent()
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        y-axis 5000.0 --> 7500.0
+                        line [5000.0, 6000.0, 7500.0]
+                """.expectedChart(),
+                it,
+            )
         }
     }
 }
