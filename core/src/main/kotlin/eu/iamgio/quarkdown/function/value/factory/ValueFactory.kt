@@ -5,7 +5,6 @@ import eu.iamgio.quarkdown.ast.MarkdownContent
 import eu.iamgio.quarkdown.ast.Node
 import eu.iamgio.quarkdown.ast.base.block.Newline
 import eu.iamgio.quarkdown.ast.base.block.list.ListBlock
-import eu.iamgio.quarkdown.ast.base.block.list.ListItem
 import eu.iamgio.quarkdown.ast.base.inline.PlainTextNode
 import eu.iamgio.quarkdown.ast.quarkdown.FunctionCallNode
 import eu.iamgio.quarkdown.context.Context
@@ -52,7 +51,6 @@ import eu.iamgio.quarkdown.misc.color.Color
 import eu.iamgio.quarkdown.misc.color.decoder.decode
 import eu.iamgio.quarkdown.pipeline.error.UnattachedPipelineException
 import eu.iamgio.quarkdown.util.iterator
-import eu.iamgio.quarkdown.util.toPlainText
 
 /**
  * Suffix that marks a lambda parameter as optional.
@@ -354,36 +352,21 @@ object ValueFactory {
         }
 
     /**
-     * Converts a Markdown list to an [OrderedCollectionValue] iterable.
-     * The text of each list item is stored as a [DynamicValue], hence it can be adapted to any type at invocation time.
-     * Currently, it's not supported to have nested lists or node values.
-     * Example:
-     * ```
-     * - A
-     * - B
-     * - C
-     * ```
-     * is converted to an iterable containing `A`, `B` and `C`.
-     * @param raw Markdown string input that represents a list to parse the expression from
+     * Given a list block as a raw Markdown content, parsed and extracts it.
+     * @param raw Markdown input to parse
      * @param context context to retrieve the pipeline from
-     * @return a new [OrderedCollectionValue] from the raw expression, or `null` if the raw input is not a list
-     * @see iterable
+     * @param lazyErrorMessage function that returns the error message to show if the input is not a valid Markdown list
+     * @return the [ListBlock] contained in the Markdown input
+     * @throws IllegalRawValueException if [raw] is not a valid Markdown list
      */
-    private fun markdownListToIterable(
-        raw: String,
+    private fun extractList(
+        raw: Any,
         context: Context,
-    ): IterableValue<*>? {
+        lazyErrorMessage: () -> String,
+    ): ListBlock {
         val content = blockMarkdown(raw, context).unwrappedValue
-        val list = content.children.singleOrNull() as? ListBlock ?: return null
-
-        val items =
-            list.children
-                .asSequence()
-                .filterIsInstance<ListItem>()
-                .map { it.children.toPlainText() }
-                .map(::DynamicValue)
-
-        return OrderedCollectionValue(items.toList())
+        return content.children.singleOrNull { it !is Newline } as? ListBlock
+            ?: throw IllegalRawValueException("${lazyErrorMessage()} (the only element must be a Markdown list)", raw)
     }
 
     /**
@@ -419,10 +402,14 @@ object ValueFactory {
         // The expression is evaluated into an iterable.
         val value = expression(rawString, context)?.eval() ?: return OrderedCollectionValue(emptyList())
 
+        fun fromMarkdownList() =
+            this.extractList(raw, context) { "Not an iterable" }.let {
+                MarkdownListToCollection.viaValueFactory(it, context).convert()
+            }
+
         return value as? IterableValue<*>
             ?: (value as? DictionaryValue<*>)?.adapt() // A dictionary is an iterable of key-value pairs.
-            ?: markdownListToIterable(rawString, context) // A Markdown list is a valid iterable.
-            ?: throw IllegalRawValueException("Not a suitable iterable (found: $value)", raw)
+            ?: fromMarkdownList() // A Markdown list is a valid iterable.
     }
 
     /**
@@ -460,11 +447,7 @@ object ValueFactory {
     ): DictionaryValue<*> {
         (raw as? Map<String, OutputValue<*>>)?.let { return DictionaryValue(it.toMutableMap()) }
 
-        val content = blockMarkdown(raw, context).unwrappedValue
-        val list =
-            content.children.singleOrNull { it !is Newline } as? ListBlock
-                ?: throw IllegalRawValueException("Not a dictionary (the only element must be a Markdown list)", raw)
-
+        val list = this.extractList(raw, context) { "Not a dictionary" }
         return MarkdownListToDictionary.viaValueFactory(list, context).convert()
     }
 

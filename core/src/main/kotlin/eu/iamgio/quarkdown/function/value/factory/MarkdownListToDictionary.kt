@@ -81,6 +81,11 @@ class MarkdownListToDictionary<T : OutputValue<*>>(
     override fun wrap() = DictionaryValue(map)
 
     companion object {
+        /**
+         * [MarkdownListToDictionary] factory via a [ValueFactory].
+         * @param list list to convert
+         * @param context context to use for the conversion
+         */
         fun viaValueFactory(
             list: ListBlock,
             context: Context,

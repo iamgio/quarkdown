@@ -13,6 +13,7 @@ import eu.iamgio.quarkdown.function.value.DictionaryValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.LambdaValue
 import eu.iamgio.quarkdown.function.value.NumberValue
+import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
 import eu.iamgio.quarkdown.function.value.StringValue
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.factory.IllegalRawValueException
@@ -252,28 +253,75 @@ class ValueFactoryTest {
 
         assertEquals(
             listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
-            ValueFactory.iterable(
-                """
-                - 1
-                - 2
-                - 3
-                """.trimIndent(),
-                context,
-            ).unwrappedValue,
+            ValueFactory
+                .iterable(
+                    """
+                    - 1
+                    - 2
+                    - 3
+                    """.trimIndent(),
+                    context,
+                ).unwrappedValue,
         )
 
-        /*assertEquals(
-            listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
-            ValueFactory.iterable(
-                """
-                - 1
-                  - 11
-                - 2
-                  - 22
-                """.trimIndent(),
-                context,
-            ).unwrappedValue,
-        )*/
+        assertEquals(
+            listOf(
+                OrderedCollectionValue(
+                    listOf(DynamicValue("11"), DynamicValue("12")),
+                ),
+                OrderedCollectionValue(
+                    listOf(DynamicValue("22")),
+                ),
+            ),
+            ValueFactory
+                .iterable(
+                    """
+                    - |
+                      - 11
+                      - 12
+                    - |
+                      - 22
+                    """.trimIndent(),
+                    context,
+                ).unwrappedValue,
+        )
+
+        assertEquals(
+            listOf(
+                OrderedCollectionValue(
+                    listOf(
+                        DynamicValue("11"),
+                        DynamicValue("12"),
+                        OrderedCollectionValue(
+                            listOf(DynamicValue("121")),
+                        ),
+                    ),
+                ),
+                OrderedCollectionValue(
+                    listOf(
+                        OrderedCollectionValue(
+                            listOf(DynamicValue("211")),
+                        ),
+                        DynamicValue("22"),
+                    ),
+                ),
+            ),
+            ValueFactory
+                .iterable(
+                    """
+                    - |
+                      - 11
+                      - 12
+                      - |
+                        - 121
+                    - |
+                      - |
+                        - 211
+                      - 22
+                    """.trimIndent(),
+                    context,
+                ).unwrappedValue,
+        )
     }
 
     @Test
@@ -303,12 +351,12 @@ class ValueFactoryTest {
             DictionaryValue(
                 mutableMapOf(
                     "abc" to
-                            DictionaryValue(
-                                mutableMapOf(
-                                    "def" to DynamicValue("1"),
-                                    "ghi" to DynamicValue("2"),
-                                ),
+                        DictionaryValue(
+                            mutableMapOf(
+                                "def" to DynamicValue("1"),
+                                "ghi" to DynamicValue("2"),
                             ),
+                        ),
                 ),
             ),
             ValueFactory.dictionary(
@@ -326,31 +374,31 @@ class ValueFactoryTest {
                 mutableMapOf(
                     "a" to DynamicValue("1"),
                     "b" to
-                            DictionaryValue(
-                                mutableMapOf(
-                                    "c" to DynamicValue("2"),
-                                    "d" to DynamicValue("3"),
-                                ),
+                        DictionaryValue(
+                            mutableMapOf(
+                                "c" to DynamicValue("2"),
+                                "d" to DynamicValue("3"),
                             ),
+                        ),
                     "e" to DynamicValue("4"),
                     "f" to
-                            DictionaryValue(
-                                mutableMapOf(
-                                    "g" to
-                                            DictionaryValue(
-                                                mutableMapOf(
-                                                    "h" to DynamicValue("5"),
-                                                    "i" to
-                                                            DictionaryValue(
-                                                                mutableMapOf(
-                                                                    "j" to DynamicValue("6"),
-                                                                ),
-                                                            ),
+                        DictionaryValue(
+                            mutableMapOf(
+                                "g" to
+                                    DictionaryValue(
+                                        mutableMapOf(
+                                            "h" to DynamicValue("5"),
+                                            "i" to
+                                                DictionaryValue(
+                                                    mutableMapOf(
+                                                        "j" to DynamicValue("6"),
+                                                    ),
                                                 ),
-                                            ),
-                                    "k" to DynamicValue("7"),
-                                ),
+                                        ),
+                                    ),
+                                "k" to DynamicValue("7"),
                             ),
+                        ),
                     "l" to DynamicValue("8"),
                 ),
             ),
