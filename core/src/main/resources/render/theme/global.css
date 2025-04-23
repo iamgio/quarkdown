@@ -217,7 +217,7 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 }
 
 /* Nodes */
-.quarkdown .mermaid :is(.node path, .actor, rect:not(.legend rect), polygon, circle):not(.background) {
+.quarkdown .mermaid :is(.node path, .actor, rect:not(.legend rect, .plot rect), polygon, circle):not(.background) {
     fill: var(--qd-mermaid-node-background-color) !important;
     stroke: var(--qd-mermaid-node-border-color) !important;
     stroke-width: var(--qd-mermaid-node-border-width) !important;
@@ -230,6 +230,12 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 .quarkdown .mermaid .legend rect {
     stroke: var(--qd-mermaid-node-border-color) !important;
     stroke-width: var(--qd-mermaid-node-border-width) !important;
+}
+
+/* Bar chart */
+.quarkdown .mermaid .plot rect {
+    fill: var(--qd-link-color) !important;
+    opacity: .6;
 }
 
 .quarkdown .mermaid .background {
