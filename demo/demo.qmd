@@ -310,12 +310,14 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 ## Image size
 
 .var {sizedimages}
-    <!-- 200px width, auto height -->
-    !(200x_)[Quarkdown](img/banner.png)
-    <!-- 2cm height, auto width -->
-    !(_x2cm)[Quarkdown](img/banner.png)
-    <!-- 2 inches width, 100px height -->
-    !(2in*100)[Quarkdown](img/banner.png)
+    <\!-- 200px width, auto height -->
+    !(200)[Quarkdown](img/banner.png)
+
+    <\!-- auto width, 2cm height -->
+    !(_*2cm)[Quarkdown](img/banner.png)
+    
+    <\!-- 2-inch width, 2-centimeter height -->
+    !(2in*2cm)[Quarkdown](img/banner.png)
 
 ---
 
@@ -324,7 +326,7 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
 
 .downarrow
 
-.row alignment:{center} gap:{1cm}
+.row alignment:{spaceevenly} cross:{center}
     .sizedimages
 
 ## Labeled figure
