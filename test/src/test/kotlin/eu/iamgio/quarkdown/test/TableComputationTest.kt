@@ -138,4 +138,39 @@ class TableComputationTest {
             )
         }
     }
+
+    @Test
+    fun `get column`() {
+        execute(
+            ".var {col}\n" +
+                "\t.tablecolumn {2}\n" +
+                table.indent("\t\t") +
+                """
+                .foreach {.col}
+                    Cell = .1
+                """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Cell = 25</p>" +
+                    "<p>Cell = 32</p>" +
+                    "<p>Cell = 19</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `sum column of csv`() {
+        execute(
+            """
+            .var {col}
+                .tablecolumn {2}
+                    .csv {csv/people.csv}
+            
+            **.col::sumall**
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><strong>76</strong></p>", it)
+        }
+    }
 }

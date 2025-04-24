@@ -7,8 +7,10 @@ import eu.iamgio.quarkdown.ast.dsl.buildInline
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.BooleanValue
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OrderedCollectionValue
+import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.util.toPlainText
@@ -24,6 +26,7 @@ val TableComputation: Module =
         ::tableSort,
         ::tableFilter,
         ::tableCompute,
+        ::tableColumn,
     )
 
 /**
@@ -265,4 +268,37 @@ fun tableCompute(
         }
 
     return editTable(table, newColumns).wrappedAsValue()
+}
+
+/**
+ * Retrieves a specific column from a table as a collection of values.
+ *
+ * Example:
+ * ```
+ * .getcolumn {2}
+ *     | Name | Age | City |
+ *     |------|-----|------|
+ *     | John | 25  | NY   |
+ *     | Lisa | 32  | LA   |
+ *     | Mike | 19  | CHI  |
+ * ```
+ *
+ * Result:
+ * ```
+ * - 25
+ * - 32
+ * - 19
+ * ```
+ *
+ * @param column index of the column (starting from 1)
+ * @param content table to extract the column from
+ * @return the extracted cells
+ */
+@Name("tablecolumn")
+fun tableColumn(
+    @Name("column") columnIndex: Int,
+    @Name("table") content: MarkdownContent,
+): IterableValue<OutputValue<*>> {
+    val (_, _, values) = getTableColumn(content, columnIndex)
+    return OrderedCollectionValue(values.map(::DynamicValue))
 }

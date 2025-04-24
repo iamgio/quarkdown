@@ -269,4 +269,23 @@ class MermaidTest {
             )
         }
     }
+
+    @Test
+    fun `xy chart from csv`() {
+        execute(
+            """
+            .xychart
+                .tablecolumn {2}
+                    .csv {csv/people.csv}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                    xychart-beta
+                        line [25.0, 32.0, 19.0]
+                """.expectedChart(),
+                it,
+            )
+        }
+    }
 }
