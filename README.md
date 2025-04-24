@@ -91,14 +91,16 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 
 &nbsp;
 
-### As simple as you expect...
+## As simple as you expect...
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-paper.png" alt="Paper code demo">
   <p align="center"><em>Inspired by: <a href="https://news.mit.edu/2025/x-ray-flashes-nearby-supermassive-black-hole-accelerate-mysteriously-0113">X-ray flashes from a nearby supermassive black hole accelerate mysteriously</a></em></p>
 </p>
 
-### ...as complex as you need.
+&nbsp;
+
+<h2 align="right">...as complex as you need.</h2>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-chart.png" alt="Chart code demo">
