@@ -501,7 +501,7 @@ class ScriptingTest {
             .var {t1} {0}
             .var {t2} {1}
             
-            .function {tablecolumn}
+            .function {newtablecolumn}
                 n:
                 |  $ F_{.n} $  |
                 |:-------------:|
@@ -509,7 +509,7 @@ class ScriptingTest {
             
             .table
                 .foreach {0..4}
-                    .tablecolumn {.1}
+                    .newtablecolumn {.1}
                     .var {tmp} {.sum {.t1} {.t2}}
                     .var {t1} {.t2}
                     .var {t2} {.tmp}
