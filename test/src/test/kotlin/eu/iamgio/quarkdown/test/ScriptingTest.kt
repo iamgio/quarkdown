@@ -748,4 +748,41 @@ class ScriptingTest {
             assertEquals("<p>0</p>", it)
         }
     }
+
+    @Test
+    fun `chart of element repetition`() {
+        execute(
+            """
+            .var {x}
+                - b
+                - a
+                - b
+                - c
+                - b
+                - a
+                - d
+                - e
+                - f
+                - e
+                - d
+                - b
+            
+            .x {.x::sorted}
+            
+            .xychart bars:{yes} lines:{no} xtags:{.x::distinct}
+                .foreach {.x::groupvalues}
+                    .1::size
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                <figure><pre class="mermaid fill-height">xychart-beta
+                	x-axis [a, b, c, d, e, f]
+                	bar [2.0, 4.0, 1.0, 2.0, 2.0, 1.0]
+                </pre></figure>
+                """.trimIndent(),
+                it,
+            )
+        }
+    }
 }
