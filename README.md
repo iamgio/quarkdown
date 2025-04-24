@@ -101,7 +101,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
 ### ...as complex as you need.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-chart.png" alt="Paper code demo">
+  <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-chart.png" alt="Chart code demo">
 </p>
 
 ## Targets
