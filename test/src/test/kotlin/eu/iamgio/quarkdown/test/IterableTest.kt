@@ -84,6 +84,13 @@ class IterableTest {
     }
 
     @Test
+    fun `get size`() {
+        execute("$letters.size of:{.abc}") {
+            assertEquals("<p>3</p>", it)
+        }
+    }
+
+    @Test
     fun `iterate numbers`() {
         execute(
             numbers +
@@ -108,6 +115,54 @@ class IterableTest {
     fun `average of numbers`() {
         execute("$numbers.nums::average") {
             assertEquals("<p>2.5</p>", it)
+        }
+    }
+
+    @Test
+    fun distinct() {
+        execute(
+            """
+            .var {abc}
+              - A
+              - B
+              - A
+              - A
+              - B
+              - C
+            
+            .abc::distinct::size
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>3</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun group() {
+        execute(
+            """
+            .var {abc}
+              - A
+              - B
+              - A
+              - A
+              - B
+              - C
+            
+            .foreach {.abc::groupvalues}
+                group:
+                Group of .group::first of size .group::size
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Group of A of size 3</p>" +
+                    "<p>Group of B of size 2</p>" +
+                    "<p>Group of C of size 1</p>",
+                it,
+            )
         }
     }
 

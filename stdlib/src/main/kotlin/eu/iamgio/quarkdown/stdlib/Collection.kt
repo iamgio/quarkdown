@@ -2,6 +2,8 @@ package eu.iamgio.quarkdown.stdlib
 
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.DynamicValue
+import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
+import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.PairValue
@@ -24,9 +26,12 @@ val Collection: Module =
         ::collectionSecond,
         ::collectionThird,
         ::collectionLast,
+        ::collectionSize,
+        ::collectionSumAll,
+        ::collectionAverage,
+        ::collectionDistinct,
+        ::collectionGroup,
         ::pair,
-        ::sumAll,
-        ::average,
     )
 
 /**
@@ -103,22 +108,20 @@ fun collectionLast(
 ): OutputValue<*> = collection.toList().lastOrNull() ?: NOT_FOUND
 
 /**
- * Creates a new pair.
- * @param first first element of the pair
- * @param second second element of the pair
- * @return a pair of the two elements
+ * @param collection collection to get the size of
+ * @return the non-negative size of the collection
  */
-fun pair(
-    first: DynamicValue,
-    second: DynamicValue,
-): PairValue<*, *> = PairValue(first to second)
+@Name("size")
+fun collectionSize(
+    @Name("of") collection: Iterable<OutputValue<*>>,
+): NumberValue = collection.count().wrappedAsValue()
 
 /**
  * @param collection numeric collection to sum
  * @return the sum of all elements in the collection. If an element is not numeric it is ignored.
  */
 @Name("sumall")
-fun sumAll(
+fun collectionSumAll(
     @Name("from") collection: Iterable<OutputValue<*>>,
 ): NumberValue =
     collection
@@ -129,10 +132,48 @@ fun sumAll(
  * @param collection numeric collection to get the average from
  * @return the average of all elements in the collection. If an element is not numeric it is ignored.
  */
-fun average(
+@Name("average")
+fun collectionAverage(
     @Name("from") collection: Iterable<OutputValue<*>>,
 ): NumberValue =
     collection
         .map { it.asDouble() }
         .average()
         .wrappedAsValue()
+
+/**
+ * @param collection collection to get the distinct elements from
+ * @return a new collection with the same elements as the original, without duplicates
+ */
+@Name("distinct")
+fun collectionDistinct(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): IterableValue<OutputValue<*>> = collection.distinct().wrappedAsValue()
+
+/**
+ * Groups a collection by their value.
+ * @param collection collection to group
+ * @return a collection of collections, each containing the elements that are equal to each other
+ */
+@Name("groupvalues")
+fun collectionGroup(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): IterableValue<IterableValue<OutputValue<*>>> =
+    collection
+        .asSequence()
+        .groupBy { it }
+        .mapValues { it.value.toList() }
+        .mapValues { it.value.wrappedAsValue() }
+        .values
+        .let(::GeneralCollectionValue)
+
+/**
+ * Creates a new pair.
+ * @param first first element of the pair
+ * @param second second element of the pair
+ * @return a pair of the two elements
+ */
+fun pair(
+    first: DynamicValue,
+    second: DynamicValue,
+): PairValue<*, *> = PairValue(first to second)
