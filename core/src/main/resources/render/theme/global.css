@@ -223,7 +223,7 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
     stroke-width: var(--qd-mermaid-node-border-width) !important;
 }
 
-.quarkdown .mermaid :is(.node, rect:not(.legend rect), polygon):not(.background) {
+.quarkdown .mermaid :is(.node, rect:not(.legend rect, .plot rect), polygon):not(.background) {
     filter: var(--qd-mermaid-node-filter);
 }
 
@@ -236,6 +236,11 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 .quarkdown .mermaid .plot rect {
     fill: var(--qd-link-color) !important;
     opacity: .6;
+}
+
+/* Bar chart + line chart */
+.quarkdown .mermaid .plot:has(path) rect {
+    opacity: .25;
 }
 
 .quarkdown .mermaid .background {
