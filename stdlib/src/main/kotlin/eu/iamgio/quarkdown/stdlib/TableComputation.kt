@@ -27,6 +27,7 @@ val TableComputation: Module =
         ::tableFilter,
         ::tableCompute,
         ::tableColumn,
+        ::tableColumns,
     )
 
 /**
@@ -61,32 +62,29 @@ enum class TableSortOrder {
  * This allows to use table computation features not only on Markdown tables, but also on
  * function-generated tables, for example via [csv].
  * @param content the content to search for a table
- * @return the first table found, if any
+ * @return the first table found
+ * @throws IllegalArgumentException if no table is found
  */
-private fun findTable(content: NestableNode): Table? =
+private fun findTable(content: NestableNode): Table =
     when (val child = content.children.firstOrNull()) {
         is Table -> child
         is NestableNode -> findTable(child)
-        else -> null
+        else -> throw IllegalArgumentException("A table is not provided and cannot be found.")
     }
 
 /**
  * Retrieves a specific column from a table.
- * @param content table to extract the column from
- * @param column index of the column (starting from 1)
+ * @param table the table to extract the column from
+ * @param columnIndex index of the column (starting from 1)
  * @return a triple containing the table, the column, and the cells of the column, in order, as strings
- * @throws IllegalArgumentException if the supplied content is not a table or if the column index is out of bounds
+ * @throws IllegalArgumentException if the column index is out of bounds
  */
 private fun getTableColumn(
-    content: NestableNode,
+    table: Table,
     columnIndex: Int,
 ): Triple<Table, Table.Column, List<String>> {
-    val table =
-        findTable(content)
-            ?: throw IllegalArgumentException("A table is not provided and cannot be found.")
-
     // Index starts from 1.
-    val normalizedColumnIndex = columnIndex - 1
+    val normalizedColumnIndex = columnIndex - INDEX_STARTS_AT
 
     val column =
         table.columns.getOrNull(normalizedColumnIndex)
@@ -96,6 +94,18 @@ private fun getTableColumn(
 
     return Triple(table, column, values)
 }
+
+/**
+ * Retrieves a specific column from a table nested in a given content.
+ * @param content the content to search for a table
+ * @param columnIndex index of the column (starting from 1)
+ * @return a triple containing the table, the column, and the cells of the column, in order, as strings
+ * @throws IllegalArgumentException if no table is found or if the column index is out of bounds
+ */
+private fun findTableColumn(
+    content: NestableNode,
+    columnIndex: Int,
+) = getTableColumn(findTable(content), columnIndex)
 
 /**
  * Edits a table by replacing its columns with the specified ones.
@@ -160,7 +170,7 @@ fun tableSort(
     order: TableSortOrder = TableSortOrder.ASCENDING,
     @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val (table, _, values) = getTableColumn(content, columnIndex)
+    val (table, _, values) = findTableColumn(content, columnIndex)
 
     // Obtain the indexes of the rows sorted by the reference column.
     val orderedRowIndexes: List<Int> =
@@ -206,7 +216,7 @@ fun tableFilter(
     filter: Lambda,
     @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val (table, _, values) = getTableColumn(content, columnIndex)
+    val (table, _, values) = findTableColumn(content, columnIndex)
 
     val filteredRowIndexes =
         values
@@ -251,7 +261,7 @@ fun tableCompute(
     compute: Lambda,
     @Name("table") content: MarkdownContent,
 ): NodeValue {
-    val (table, column, values) = getTableColumn(content, columnIndex)
+    val (table, column, values) = findTableColumn(content, columnIndex)
 
     // `compute` is called with the collection of cell values as an argument.
     val cellValuesCollection = OrderedCollectionValue(values.map(::DynamicValue))
@@ -275,7 +285,7 @@ fun tableCompute(
  *
  * Example:
  * ```
- * .getcolumn {2}
+ * .tablecolumn {2}
  *     | Name | Age | City |
  *     |------|-----|------|
  *     | John | 25  | NY   |
@@ -297,8 +307,51 @@ fun tableCompute(
 @Name("tablecolumn")
 fun tableColumn(
     @Name("column") columnIndex: Int,
-    @Name("table") content: MarkdownContent,
+    @Name("of") content: MarkdownContent,
 ): IterableValue<OutputValue<*>> {
-    val (_, _, values) = getTableColumn(content, columnIndex)
+    val (_, _, values) = findTableColumn(content, columnIndex)
     return OrderedCollectionValue(values.map(::DynamicValue))
+}
+
+/**
+ * Retrieves all columns from a table as a collection of collections.
+ *
+ * Example:
+ * ```
+ * .tablecolumns
+ *     | Name | Age | City |
+ *     |------|-----|------|
+ *     | John | 25  | NY   |
+ *     | Lisa | 32  | LA   |
+ *     | Mike | 19  | CHI  |
+ * ```
+ *
+ * Result:
+ * ```
+ * - - John
+ *   - Lisa
+ *   - Mike
+ *
+ * - - 25
+ *   - 32
+ *   - 19
+ *
+ * - - NY
+ *   - LA
+ *   - CHI
+ * ```
+ *
+ * @param content table to extract the columns from
+ * @return the extracted cells, grouped by column
+ */
+@Name("tablecolumns")
+fun tableColumns(
+    @Name("of") content: MarkdownContent,
+): IterableValue<IterableValue<out OutputValue<*>>> {
+    val table = findTable(content)
+    return table.columns
+        .mapIndexed { index, column ->
+            val (_, _, values) = getTableColumn(table, index + INDEX_STARTS_AT)
+            values.map(::DynamicValue).wrappedAsValue()
+        }.wrappedAsValue()
 }

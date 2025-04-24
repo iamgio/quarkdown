@@ -15,7 +15,7 @@ import eu.iamgio.quarkdown.stdlib.internal.asDouble
 /**
  * Index of the first element in a collection.
  */
-private const val INDEX_STARTS_AT = 1
+internal const val INDEX_STARTS_AT = 1
 
 /**
  * `Collection` stdlib module exporter.

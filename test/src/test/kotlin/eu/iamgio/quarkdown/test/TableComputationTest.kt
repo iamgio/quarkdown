@@ -160,6 +160,21 @@ class TableComputationTest {
     }
 
     @Test
+    fun `get columns`() {
+        execute(
+            ".var {cols}\n" +
+                "\t.tablecolumns\n" +
+                table.indent("\t\t") +
+                "\n.cols::size",
+        ) {
+            assertEquals(
+                "<p>3</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `sum column of csv`() {
         execute(
             """
