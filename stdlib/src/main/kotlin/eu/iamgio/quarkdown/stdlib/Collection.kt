@@ -7,6 +7,8 @@ import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NumberValue
 import eu.iamgio.quarkdown.function.value.OutputValue
 import eu.iamgio.quarkdown.function.value.PairValue
+import eu.iamgio.quarkdown.function.value.Value
+import eu.iamgio.quarkdown.function.value.data.Lambda
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
 import eu.iamgio.quarkdown.stdlib.internal.asDouble
 
@@ -30,6 +32,8 @@ val Collection: Module =
         ::collectionSumAll,
         ::collectionAverage,
         ::collectionDistinct,
+        ::collectionSorted,
+        ::collectionReverse,
         ::collectionGroup,
         ::pair,
     )
@@ -56,7 +60,7 @@ private fun nativeCollectionGet(
     index: Int,
     collection: Iterable<OutputValue<*>>,
     fallback: OutputValue<*> = NOT_FOUND,
-): OutputValue<*> = collection.toList().getOrNull(index) ?: NOT_FOUND
+): OutputValue<*> = collection.toList().getOrNull(index) ?: fallback
 
 /**
  * @param index index of the element to get **(starting at 1)**
@@ -149,6 +153,44 @@ fun collectionAverage(
 fun collectionDistinct(
     @Name("from") collection: Iterable<OutputValue<*>>,
 ): IterableValue<OutputValue<*>> = collection.distinct().wrappedAsValue()
+
+/**
+ * @param collection collection to sort
+ * @param sorting optional sorting function. If not provided, the collection is sorted by its natural order.
+ * @return a new collection with the same elements as the original, sorted
+ * @throws IllegalArgumentException if the elements, or the properties supplied by [sorting], cannot be compared
+ */
+@Suppress("UNCHECKED_CAST")
+@Name("sorted")
+fun collectionSorted(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+    @Name("by") sorting: Lambda? = null,
+): IterableValue<OutputValue<*>> {
+    fun toComparable(value: Value<*>): Comparable<Comparable<*>> =
+        value.unwrappedValue.let {
+            requireNotNull(it) as? Comparable<Comparable<*>>
+                ?: throw IllegalArgumentException("Cannot sort collection of unsortable type ${it::class}")
+        }
+
+    return when {
+        sorting != null ->
+            collection.sortedBy {
+                val selector = sorting.invokeDynamic(it)
+                toComparable(selector)
+            }
+
+        else -> collection.sortedBy { toComparable(it) }
+    }.wrappedAsValue()
+}
+
+/**
+ * @param collection collection to reverse
+ * @return a new collection with the same elements as the original, in reverse order
+ */
+@Name("reversed")
+fun collectionReverse(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): IterableValue<OutputValue<*>> = collection.reversed().wrappedAsValue()
 
 /**
  * Groups a collection by their value.

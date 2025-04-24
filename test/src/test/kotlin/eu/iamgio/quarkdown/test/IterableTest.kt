@@ -141,6 +141,66 @@ class IterableTest {
     }
 
     @Test
+    fun reverse() {
+        execute("$letters.foreach {.abc::reversed}\n\t.1") {
+            assertEquals("<p>C</p><p>B</p><p>A</p>", it)
+        }
+    }
+
+    @Test
+    fun `sort by natural order`() {
+        execute(
+            """
+            .var {abc}
+              - C
+              - A
+              - B
+            
+            .foreach {.abc::sorted}
+                .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A</p><p>B</p><p>C</p>", it)
+        }
+    }
+
+    @Test
+    fun `sort by natural order, descending`() {
+        execute(
+            """
+            .var {abc}
+              - 3
+              - 1
+              - 2
+            
+            .foreach {.abc::sorted::reversed}
+                .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p><p>2</p><p>1</p>", it)
+        }
+    }
+
+    @Test
+    fun `sort by property`() {
+        execute(
+            """
+             .var {dict}
+                 .dictionary
+                     - a: 3
+                     - b: 1
+                     - c: 2
+             
+            .foreach {.dict::sorted by:{@lambda name value: .value}}
+                name value:
+                .name
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>b</p><p>c</p><p>a</p>", it)
+        }
+    }
+
+    @Test
     fun group() {
         execute(
             """
