@@ -17,10 +17,10 @@ import eu.iamgio.quarkdown.util.toPlainText
  * @param nestedValueMapper function that maps a nested list to a value.
  * This is invoked when the entry is in the format:
  * ```
- * - |
+ * - :
  *   - value
  * ```
- * (Note that the `|` character is not mandatory. Any character is valid since it's ignored by the parsing. `|` or `:` are the preferred ones.)
+ * (Note that the `:` character is not mandatory. Any string is valid since it's ignored by the parsing. `:` is the preferred one.)
  * @param T type of values in the list
  * @see OrderedCollectionValue
  * @see ValueFactory.iterable

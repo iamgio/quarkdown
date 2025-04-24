@@ -309,13 +309,13 @@ class ValueFactoryTest {
             ValueFactory
                 .iterable(
                     """
-                    - |
+                    - :
                       - 11
                       - 12
-                      - |
+                      - :
                         - 121
-                    - |
-                      - |
+                    - :
+                      - :
                         - 211
                       - 22
                     """.trimIndent(),
