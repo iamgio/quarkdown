@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.function.reflect.annotation.Name
 import eu.iamgio.quarkdown.function.value.IterableValue
 import eu.iamgio.quarkdown.function.value.NodeValue
 import eu.iamgio.quarkdown.function.value.OutputValue
+import eu.iamgio.quarkdown.function.value.Value
 import eu.iamgio.quarkdown.function.value.data.EvaluableString
 import eu.iamgio.quarkdown.function.value.data.Range
 import eu.iamgio.quarkdown.function.value.wrappedAsValue
@@ -99,7 +100,8 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
  * @param showLines whether to draw lines
  * @param showBars whether to draw bars
  * @param xAxisLabel optional label for the X axis
- * @param xAxisRange optional range for the X axis. If open-ended, the range will be set to the minimum and maximum values of the X values
+ * @param xAxisRange optional range for the X axis. If open-ended, the range will be set to the minimum and maximum values of the X values. Incompatible with [xAxisTags].
+ * @param xAxisTags optional categorical tags for the X axis. Incompatible with [xAxisRange].
  * @param yAxisLabel optional label for the Y axis
  * @param yAxisRange optional range for the Y axis. If open-ended, the range will be set to the minimum and maximum values of the Y values
  * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
@@ -107,6 +109,7 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
  *               They can be a list of points, which will be plotted as a single line,
  *               or a list of lists of points, which will be plotted as multiple lines.
  * @return the generated diagram node
+ * @throws IllegalArgumentException if both [xrange] and [xtags] are set
  */
 @Name("xychart")
 fun xyChart(
@@ -114,6 +117,7 @@ fun xyChart(
     @Name("bars") showBars: Boolean = false,
     @Name("x") xAxisLabel: String? = null,
     @Name("xrange") xAxisRange: Range? = null,
+    @Name("xtags") xAxisTags: Iterable<Value<*>>? = null,
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
     caption: String? = null,
@@ -127,10 +131,14 @@ fun xyChart(
         name: String,
         label: String?,
         range: Range?,
+        tags: Iterable<Value<*>>?,
         min: Double,
         max: Double,
     ) {
-        if (label == null && range == null) return
+        if (label == null && range == null && tags == null) return
+
+        require(!(range != null && tags != null)) { "An XY chart axis cannot feature both numeric range and categorical tags." }
+
         append("\n")
         append(name).append("-axis")
         label?.let {
@@ -144,12 +152,16 @@ fun xyChart(
             append(" --> ")
             append(it.end ?: max)
         }
+        tags?.let {
+            append(" ")
+            append(it.map { tag -> tag.unwrappedValue })
+        }
     }
 
     val content =
         buildString {
-            axis("x", xAxisLabel, xAxisRange, minX, maxX)
-            axis("y", yAxisLabel, yAxisRange, minY, maxY)
+            axis("x", xAxisLabel, xAxisRange, xAxisTags, minX, maxX)
+            axis("y", yAxisLabel, yAxisRange, null, minY, maxY)
 
             lines.forEach { points ->
                 if (showBars) {
