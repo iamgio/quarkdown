@@ -6,6 +6,7 @@ import eu.iamgio.quarkdown.function.error.InvalidLambdaArgumentCountException
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.DynamicValueConverter
 import eu.iamgio.quarkdown.function.reflect.FromDynamicType
+import eu.iamgio.quarkdown.function.value.Destructurable
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.NoneValue
 import eu.iamgio.quarkdown.function.value.OutputValue
@@ -69,9 +70,22 @@ open class Lambda(
     /**
      * Invokes the lambda action with given arguments.
      * @param arguments arguments of the lambda action
+     * @param allowDestructuring if `true`, [arguments] has only 1 element which is [Destructurable], and the lambda has N>1 explicit parameters,
+     *                           the argument is destructured into N parts.
+     *                           For example, a dictionary may be destructured into its key and value.
      * @return the result of the lambda action, as an undetermined, thus dynamically-typed, value
      */
-    fun invokeDynamic(arguments: List<Value<*>>): OutputValue<*> {
+    fun invokeDynamic(
+        arguments: List<Value<*>>,
+        allowDestructuring: Boolean = true,
+    ): OutputValue<*> {
+        // Destructuring
+        if (allowDestructuring && explicitParameters.size > 1) {
+            // The lambda is invoked with the first N destructured components.
+            (arguments.singleOrNull() as? Destructurable<*>)
+                ?.let { return invokeDynamic(it.destructured(componentCount = explicitParameters.size)) }
+        }
+
         // Check if the amount of arguments matches the amount of expected parameters.
         // In case parameters are not present, placeholders are automatically set to
         // .1, .2, etc., similarly to Kotlin's 'it' argument.

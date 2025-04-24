@@ -8,7 +8,6 @@ import eu.iamgio.quarkdown.function.SimpleFunction
 import eu.iamgio.quarkdown.function.library.Library
 import eu.iamgio.quarkdown.function.reflect.annotation.Injected
 import eu.iamgio.quarkdown.function.reflect.annotation.Name
-import eu.iamgio.quarkdown.function.value.Destructurable
 import eu.iamgio.quarkdown.function.value.DynamicValue
 import eu.iamgio.quarkdown.function.value.GeneralCollectionValue
 import eu.iamgio.quarkdown.function.value.IterableValue
@@ -112,22 +111,7 @@ fun forEach(
     iterable: Iterable<Value<*>>,
     body: Lambda,
 ): IterableValue<OutputValue<*>> {
-    val values =
-        iterable.map { value ->
-            when {
-                // Destructuring: if the lambda has more than 1 explicit parameter, the value is destructured.
-                // For example, a dictionary may be destructured into its key and value.
-                value is Destructurable<*> && body.explicitParameters.size > 1 -> {
-                    // The body is invoked with the first N destructured components.
-                    val destructured = value.destructured(componentCount = body.explicitParameters.size)
-                    body.invokeDynamic(destructured)
-                }
-
-                // Regular iteration with 1 parameter.
-                else -> body.invokeDynamic(value)
-            }
-        }
-
+    val values = iterable.map { value -> body.invokeDynamic(value) }
     return GeneralCollectionValue(values)
 }
 
@@ -256,7 +240,8 @@ fun variable(
                 evaluated
             } else {
                 // Setter
-                val newValue = args.first().let { it as? DynamicValue ?: DynamicValue(it) } // Wrapping the value if needed.
+                val newValue =
+                    args.first().let { it as? DynamicValue ?: DynamicValue(it) } // Wrapping the value if needed.
                 variable(targetContext, name, newValue)
             }
         },
