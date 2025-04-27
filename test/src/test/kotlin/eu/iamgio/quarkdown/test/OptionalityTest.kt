@@ -239,9 +239,9 @@ class OptionalityTest {
               - 20
               - 30
               
-            .getat {2} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::getat {2}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
             
-            .getat {5} from:{.x}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::getat {5}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
             """.trimIndent(),
         ) {
             assertEquals("<p>23</p><p>No</p>", it)

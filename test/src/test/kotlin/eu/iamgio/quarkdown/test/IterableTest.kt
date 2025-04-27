@@ -57,14 +57,14 @@ class IterableTest {
 
     @Test
     fun `get at`() {
-        execute("$letters.getat {2} from:{.abc}") {
+        execute("$letters.abc::getat {2}") {
             assertEquals("<p>B</p>", it)
         }
     }
 
     @Test
     fun `get at, out of bounds`() {
-        execute("$letters.getat {5} from:{.abc}") {
+        execute("$letters.abc::getat {5}") {
             assertEquals("<p><span class=\"codespan-content\"><code>None</code></span></p>", it)
         }
     }
