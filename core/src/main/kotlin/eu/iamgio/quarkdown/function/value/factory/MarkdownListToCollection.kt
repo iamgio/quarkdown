@@ -15,12 +15,19 @@ import eu.iamgio.quarkdown.util.toPlainText
  * @param list list to convert
  * @param inlineValueMapper function that maps the node of a list item a value.
  * @param nestedValueMapper function that maps a nested list to a value.
- * This is invoked when the entry is in the format:
- * ```
- * - :
- *   - value
- * ```
- * (Note that the `:` character is not mandatory. Any string is valid since it's ignored by the parsing. `:` is the preferred one.)
+ * This is invoked when the entry is in any of these formats:
+ *
+ * - Extended:
+ *   ```
+ *   - :
+ *     - value
+ *   ```
+ *   (Note that the `:` character is not mandatory. Any string is valid since it's ignored by the parsing. `:` is the preferred one.)
+ *
+ * - Compact:
+ *   ```
+ *   - - value
+ *   ```
  * @param T type of values in the list
  * @see OrderedCollectionValue
  * @see ValueFactory.iterable
@@ -38,8 +45,13 @@ class MarkdownListToCollection<T : OutputValue<*>>(
 
     override fun validateChild(firstChild: Node) = firstChild
 
-    override fun inlineValue(child: Node) = inlineValueMapper(child)
+    override fun inlineValue(child: Node) =
+        when (child) {
+            is ListBlock -> nestedValueMapper(child) // Compact syntax.
+            else -> inlineValueMapper(child)
+        }
 
+    // Extended syntax.
     override fun nestedValue(
         child: Node,
         list: ListBlock,

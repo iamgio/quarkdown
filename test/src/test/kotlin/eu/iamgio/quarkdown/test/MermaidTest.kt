@@ -191,20 +191,19 @@ class MermaidTest {
     }
 
     @Test
-    fun `xy chart with two lines`() {
+    fun `xy chart with three lines`() {
         execute(
             """
             .xychart
-              - |
-                - 3
+              - - 3
                 - 2
                 - 1
-              - |
-                - 1
+                
+              - - 1
                 - 2
                 - 3
-              - |
-                - 2
+                
+              - - 2
                 - 1
                 - 3
             """.trimIndent(),

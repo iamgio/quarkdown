@@ -30,6 +30,8 @@ import kotlin.test.assertNull
  * Tests of retrieval of value wrappers from raw strings.
  */
 class ValueFactoryTest {
+    private fun newContext() = MutableContext(QuarkdownFlavor).apply { attachMockPipeline() }
+
     @Test
     fun string() {
         assertEquals(StringValue("Hello, world!"), ValueFactory.string("Hello, world!"))
@@ -160,84 +162,92 @@ class ValueFactoryTest {
     }
 
     @Test
-    fun lambda() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.attachMockPipeline()
-
-        // No arguments.
-        with(ValueFactory.lambda("hello", context)) {
+    fun `no arguments lambda`() {
+        with(ValueFactory.lambda("hello", newContext())) {
             assertIs<LambdaValue>(this)
             assertEquals("hello", unwrappedValue.invoke<String, StringValue>().unwrappedValue)
         }
+    }
 
-        // Two implicit arguments.
+    @Test
+    fun `two implicit arguments lambda`() {
         assertEquals(
             "hello world from iamgio",
             ValueFactory
-                .lambda("hello .1 from .2", context)
+                .lambda("hello .1 from .2", newContext())
                 .unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
                     StringValue("iamgio"),
                 ).unwrappedValue,
         )
+    }
 
-        // Two explicit arguments.
+    @Test
+    fun `two explicit arguments lambda`() {
         assertEquals(
             "hello world from iamgio",
             ValueFactory
                 .lambda(
                     "to from: hello .to from .from",
-                    context,
+                    newContext(),
                 ).unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
                     StringValue("iamgio"),
                 ).unwrappedValue,
         )
+    }
 
-        // An optional parameter, passed.
+    @Test
+    fun `present optional parameter lambda`() {
         assertEquals(
             "hello world from iamgio",
             ValueFactory
                 .lambda(
                     "to?: hello .to from iamgio",
-                    context,
+                    newContext(),
                 ).unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
                 ).unwrappedValue,
         )
+    }
 
-        // An optional parameter, not passed.
+    @Test
+    fun `unpassed optional parameter lambda`() {
         assertEquals(
             "hello None from iamgio",
             ValueFactory
                 .lambda(
                     "to?: hello .to from iamgio",
-                    context,
+                    newContext(),
                 ).unwrappedValue
                 .invoke<String, StringValue>()
                 .unwrappedValue,
         )
+    }
 
-        // Two optional parameter, one passed.
+    @Test
+    fun `one-passed two optional parameters lambda`() {
         assertEquals(
             "hello world from None",
             ValueFactory
                 .lambda(
                     "to from?: hello .to from .from",
-                    context,
+                    newContext(),
                 ).unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
                 ).unwrappedValue,
         )
+    }
 
-        // Mixing explicit and implicit arguments is not allowed.
+    @Test
+    fun `unallowed mixing of explicit and implicit arguments in lambda`() {
         assertFailsWith<InvalidLambdaArgumentCountException> {
             ValueFactory
-                .lambda("to: hello .to from .2", context)
+                .lambda("to: hello .to from .2", newContext())
                 .unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
@@ -247,10 +257,7 @@ class ValueFactoryTest {
     }
 
     @Test
-    fun iterable() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.attachMockPipeline()
-
+    fun `simple iterable`() {
         assertEquals(
             listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
             ValueFactory
@@ -260,10 +267,13 @@ class ValueFactoryTest {
                     - 2
                     - 3
                     """.trimIndent(),
-                    context,
+                    newContext(),
                 ).unwrappedValue,
         )
+    }
 
+    @Test
+    fun `nested iterable, compact`() {
         assertEquals(
             listOf(
                 OrderedCollectionValue(
@@ -276,36 +286,62 @@ class ValueFactoryTest {
             ValueFactory
                 .iterable(
                     """
-                    - |
-                      - 11
+                    - - 11
                       - 12
-                    - |
-                      - 22
+                    - - 22
                     """.trimIndent(),
-                    context,
+                    newContext(),
                 ).unwrappedValue,
         )
+    }
 
-        assertEquals(
-            listOf(
-                OrderedCollectionValue(
-                    listOf(
-                        DynamicValue("11"),
-                        DynamicValue("12"),
-                        OrderedCollectionValue(
-                            listOf(DynamicValue("121")),
+    private val complexIterableResult =
+        listOf(
+            OrderedCollectionValue(
+                listOf(
+                    DynamicValue("11"),
+                    DynamicValue("12"),
+                    OrderedCollectionValue(
+                        listOf(
+                            DynamicValue("121"),
+                            DynamicValue("122"),
                         ),
-                    ),
-                ),
-                OrderedCollectionValue(
-                    listOf(
-                        OrderedCollectionValue(
-                            listOf(DynamicValue("211")),
-                        ),
-                        DynamicValue("22"),
                     ),
                 ),
             ),
+            OrderedCollectionValue(
+                listOf(
+                    OrderedCollectionValue(
+                        listOf(DynamicValue("211")),
+                    ),
+                    DynamicValue("22"),
+                ),
+            ),
+        )
+
+    @Test
+    fun `complex nested iterable, compact`() {
+        assertEquals(
+            complexIterableResult,
+            ValueFactory
+                .iterable(
+                    """
+                    - - 11
+                      - 12
+                      - - 121
+                        - 122
+                    - - - 211
+                      - 22
+                    """.trimIndent(),
+                    newContext(),
+                ).unwrappedValue,
+        )
+    }
+
+    @Test
+    fun `complex nested iterable, extended syntax`() {
+        assertEquals(
+            complexIterableResult,
             ValueFactory
                 .iterable(
                     """
@@ -314,21 +350,19 @@ class ValueFactoryTest {
                       - 12
                       - :
                         - 121
+                        - 122
                     - :
                       - :
                         - 211
                       - 22
                     """.trimIndent(),
-                    context,
+                    newContext(),
                 ).unwrappedValue,
         )
     }
 
     @Test
-    fun dictionary() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.attachMockPipeline()
-
+    fun `simple dictionary`() {
         assertEquals(
             DictionaryValue(
                 mutableMapOf(
@@ -343,10 +377,13 @@ class ValueFactoryTest {
                 - def: 2
                 - ghi: 3
                 """.trimIndent(),
-                context,
+                newContext(),
             ),
         )
+    }
 
+    @Test
+    fun `nested dictionary`() {
         assertEquals(
             DictionaryValue(
                 mutableMapOf(
@@ -365,10 +402,13 @@ class ValueFactoryTest {
                   - def: 1
                   - ghi: 2
                 """.trimIndent(),
-                context,
+                newContext(),
             ),
         )
+    }
 
+    @Test
+    fun `complex nested dictionary`() {
         assertEquals(
             DictionaryValue(
                 mutableMapOf(
@@ -417,7 +457,7 @@ class ValueFactoryTest {
                     - k: 7
                 - l: 8
                 """.trimIndent(),
-                context,
+                newContext(),
             ),
         )
     }
