@@ -23,7 +23,9 @@ class Heading(
     override val text: InlineContent,
     val isDecorative: Boolean = false,
     val customId: String? = null,
-) : TextNode, Identifiable, LocationTrackableNode {
+) : TextNode,
+    Identifiable,
+    LocationTrackableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
