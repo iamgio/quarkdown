@@ -3,7 +3,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 plugins {
     kotlin("jvm") version "2.1.20"
     id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
@@ -52,7 +51,7 @@ tasks.distZip {
     archiveVersion.set("")
 
     // The module 'libs' contains .qmd library files that are saved in the lib/qmd directory of the distribution zip.
-    val librariesModule = project(":libs")
+    val librariesModule = project(":quarkdown-libs")
 
     into("${archiveBaseName.get()}/lib/qmd") {
         from(librariesModule.file("src/main/resources")) {

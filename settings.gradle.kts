@@ -3,11 +3,11 @@ plugins {
 }
 rootProject.name = "quarkdown"
 
-include("core")
-include("cli")
-include("stdlib")
-include("test")
-include("libs")
-include("server")
-include("interaction")
-include("pdf")
+include("quarkdown-core")
+include("quarkdown-cli")
+include("quarkdown-stdlib")
+include("quarkdown-test")
+include("quarkdown-libs")
+include("quarkdown-server")
+include("quarkdown-interaction")
+include("quarkdown-pdf")

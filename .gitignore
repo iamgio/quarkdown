@@ -91,4 +91,4 @@ nb-configuration.xml
 ## Miscellaneous
 ##############################
 *.log
-/core/src/test/resources/_test/
+/quarkdown-core/src/test/resources/_test/
