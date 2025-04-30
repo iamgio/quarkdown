@@ -131,7 +131,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 | Scripting             | :white_check_mark: |        :x:         |      Partial       |        :x:         | :white_check_mark: |
 | Book/article export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Presentation export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
-| Targets               |     HTML, PDF      |        HTML        |        PDF         |  HTML, PDF, ePub   |        HTML        |
+| Targets               |     HTML, PDF      |        HTML        |  PDF, PostScript   |  HTML, PDF, ePub   |        HTML        |
 
 <table>
   <thead>
