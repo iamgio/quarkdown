@@ -17,5 +17,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("eu.iamgio.quarkdown.cli.QuarkdownCliKt")
+    mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
 }

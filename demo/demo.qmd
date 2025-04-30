@@ -119,7 +119,7 @@ Go ahead to discover Quarkdown's capabilities.
 
 # Functions
 
-Call any function from the extensive [standard library](https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib)
+Call any function from the extensive [standard library](https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib)
 from your Markdown code.
 
 ```markdown

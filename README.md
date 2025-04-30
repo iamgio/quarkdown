@@ -42,7 +42,7 @@ Born as an extension of CommonMark and GFM, the Quarkdown Flavor brings **functi
 
 <br>
 
-**Possibilities are unlimited** thanks to an ever-expanding [standard library](quarkdown-stdlib/src/main/kotlin/eu/iamgio/quarkdown/stdlib),
+**Possibilities are unlimited** thanks to an ever-expanding [standard library](quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib),
 which offers layout builders, I/O, math, conditional statements and loops.
 
 **Not enough?** You can still define your own functions and variables — all within Markdown.
