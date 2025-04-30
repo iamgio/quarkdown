@@ -11,7 +11,7 @@ plugins {
     application
 }
 
-group = "eu.iamgio.quarkdown"
+group = "com.quarkdown"
 version = "1.0-SNAPSHOT"
 
 allprojects {
@@ -31,7 +31,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("eu.iamgio.quarkdown.cli.QuarkdownCliKt")
+    mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
 }
 
 tasks.build {
