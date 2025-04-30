@@ -16,7 +16,9 @@ object QmdLibraries {
         if (!directory.exists()) throw IllegalArgumentException("Libraries directory does not exist: $directory")
         if (!directory.isDirectory) throw IllegalArgumentException("Libraries directory is not a directory: $directory")
 
-        return directory.listFiles()!!.asSequence()
+        return directory
+            .listFiles()!!
+            .asSequence()
             .filter { it.extension == "qmd" }
             .map { QmdLibraryExporter(it.nameWithoutExtension, it.reader()) }
             .toSet()

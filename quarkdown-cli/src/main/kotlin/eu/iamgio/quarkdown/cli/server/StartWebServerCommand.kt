@@ -31,7 +31,8 @@ class StartWebServerCommand : CliktCommand(name = "start") {
     /**
      * Port to start the server on. If unset, the default port [DEFAULT_SERVER_PORT] is used.
      */
-    private val port: Int by option("-p", "--port", help = "Port to start the server on").int()
+    private val port: Int by option("-p", "--port", help = "Port to start the server on")
+        .int()
         .default(DEFAULT_SERVER_PORT)
 
     /**
