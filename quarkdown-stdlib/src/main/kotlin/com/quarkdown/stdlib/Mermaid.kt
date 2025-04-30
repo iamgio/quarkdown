@@ -69,6 +69,46 @@ private fun extractLines(values: Iterable<OutputValue<*>>): List<ChartLine> {
 }
 
 /**
+ * Appends the axis definition to the given [StringBuilder].
+ * @param name name of the axis (e.g. "x" or "y")
+ * @param label optional label of the axis
+ * @param range optional range of the axis
+ * @param tags optional categorical tags of the axis
+ * @param min minimum value of the plotted points along the axis
+ * @param max maximum value of the plotted points along the axis
+ */
+private fun StringBuilder.axis(
+    name: String,
+    label: String?,
+    range: Range?,
+    tags: Iterable<Value<*>>?,
+    min: Double,
+    max: Double,
+) {
+    if (label == null && range == null && tags == null) return
+
+    require(!(range != null && tags != null)) { "An XY chart axis cannot feature both numeric range and categorical tags." }
+
+    append("\n")
+    append(name).append("-axis")
+    label?.let {
+        append(" \"")
+        append(it)
+        append("\"")
+    }
+    range?.let {
+        append(" ")
+        append(it.start ?: min)
+        append(" --> ")
+        append(it.end ?: max)
+    }
+    tags?.let {
+        append(" ")
+        append(it.map { tag -> tag.unwrappedValue })
+    }
+}
+
+/**
  * Creates a chart diagram on the XY plane.
  *
  * The following example plots 4 points at (1, 5), (2, 2), (3, 4), (4, 10), connected by a line:
@@ -126,37 +166,6 @@ fun xyChart(
     val lines: List<ChartLine> = extractLines(values)
     val (minY, maxY) = lines.flatten().let { (it.minOrNull() ?: 0.0) to (it.maxOrNull() ?: 1.0) }
     val (minX, maxX) = 0.0 to (lines.maxByOrNull { it.size }?.size?.toDouble() ?: 1.0)
-
-    fun StringBuilder.axis(
-        name: String,
-        label: String?,
-        range: Range?,
-        tags: Iterable<Value<*>>?,
-        min: Double,
-        max: Double,
-    ) {
-        if (label == null && range == null && tags == null) return
-
-        require(!(range != null && tags != null)) { "An XY chart axis cannot feature both numeric range and categorical tags." }
-
-        append("\n")
-        append(name).append("-axis")
-        label?.let {
-            append(" \"")
-            append(it)
-            append("\"")
-        }
-        range?.let {
-            append(" ")
-            append(it.start ?: min)
-            append(" --> ")
-            append(it.end ?: max)
-        }
-        tags?.let {
-            append(" ")
-            append(it.map { tag -> tag.unwrappedValue })
-        }
-    }
 
     val content =
         buildString {
