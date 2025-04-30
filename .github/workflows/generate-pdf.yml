@@ -2,9 +2,7 @@ name: PDF generation via Puppeteer
 
 on:
   push:
-    branches: [ "main", "chrome-action" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "workflow-test" ]
 
 jobs:
   build:
@@ -12,29 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-
-    - name: Build with Gradle Wrapper
-      run: ./gradlew clean build distZip
-
-    - name: Unzip distribution
-      run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
 
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.7.3
       id: setup-chrome
 
-    - name: Install Node
-      uses: actions/setup-node@v4
+    - name: Create distribution
+      run: ./gradlew clean distZip
+
+    - name: Unzip distribution
+      run: unzip -q build/distributions/quarkdown.zip -d build/distributions/
 
     - name: Setup staging directory
       run: |

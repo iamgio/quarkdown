@@ -1,0 +1,21 @@
+# This workflow will build the project with Gradle and release its build.
+
+name: Gradle test
+
+on:
+  workflow_call:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+
+    - name: Run ktlint check
+      run: ./gradlew ktlintCheck
+
+    - name: Run tests
+      run: ./gradlew test
