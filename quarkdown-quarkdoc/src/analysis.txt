@@ -1,0 +1,13 @@
+@Name("x") on function => function name
+@Name("x") on param => param name
+Name transformations also affect references via [y]
+
+@OnlyForDocumentType
+@NotForDocumentType
+=> warning
+
+@Injected => hide
+
+The output value must be shown as the unwrapped type
+
+(hard) a Module should act as a package

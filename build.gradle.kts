@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.1.20"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
     id("com.gradleup.shadow") version "8.3.6"
     id("com.github.ben-manes.versions") version "0.52.0"
@@ -21,6 +22,7 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 }
 
