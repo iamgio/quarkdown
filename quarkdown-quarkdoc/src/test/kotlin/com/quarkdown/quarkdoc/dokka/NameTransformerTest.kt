@@ -31,4 +31,32 @@ class NameTransformerTest : QuarkdocDokkaTest() {
             assertFalse("(?<!pageIds=\"root::$rootPackage//)someFunction".toRegex() in it)
         }
     }
+
+    @Test
+    fun `parameter name transformation`() {
+        test(
+            """
+            fun someFunction(@Name("newname") oldParam: String) = Unit
+            """.trimIndent(),
+            "some-function",
+        ) {
+            assertContains(it, "newname")
+            assertFalse("oldParam" in it)
+        }
+    }
+
+    @Test
+    fun `function and parameter name transformation`() {
+        test(
+            """
+            @Name("newfuncname")
+            fun someFunction(@Name("newparam1") oldParam1: String, @Name("newparam2") oldParam2: String) = Unit
+            """.trimIndent(),
+            "newfuncname",
+        ) {
+            assertContains(it, "newfuncname")
+            assertContains(it, "newparam1")
+            assertContains(it, "newparam2")
+        }
+    }
 }
