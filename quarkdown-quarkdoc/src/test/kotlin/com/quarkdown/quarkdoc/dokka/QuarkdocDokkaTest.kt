@@ -3,6 +3,9 @@ package com.quarkdown.quarkdoc.dokka
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
+import org.jetbrains.dokka.testApi.logger.TestLogger
+import org.jetbrains.dokka.utilities.DokkaConsoleLogger
+import org.jetbrains.dokka.utilities.LoggingLevel
 import org.jsoup.Jsoup
 import utils.TestOutputWriterPlugin
 import java.io.File
@@ -29,7 +32,7 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
  */
 open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
-) : BaseAbstractTest() {
+) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
     private val imports = listOf(Name::class, Injected::class)
 
     private fun createConfiguration() =
