@@ -26,7 +26,7 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
  * @param rootPackage the root package for the test source
  */
 open class QuarkdocDokkaTest(
-    private val rootPackage: String = "test",
+    protected val rootPackage: String = "test",
 ) : BaseAbstractTest() {
     private val imports = listOf(Name::class)
 

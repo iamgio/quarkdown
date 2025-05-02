@@ -10,11 +10,10 @@ inline fun <reified T> Documentable.extractAnnotation(): Annotations.Annotation?
             ?.extra
             ?.allOfType<Annotations>()
             ?.flatMap { it.directAnnotations.values.flatten() }
-            ?.also { println(it) }
             ?: emptyList()
 
     return annotations.firstOrNull {
-        it.dri.packageName == T::class.qualifiedName?.substringBeforeLast(".") &&
+        it.dri.packageName == T::class.java.`package`.name &&
             it.dri.classNames == T::class.simpleName
     }
 }

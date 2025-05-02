@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka
 
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertFalse
 
 /**
  * Tests for name transformation in Dokka via `@Name`.
@@ -27,7 +28,7 @@ class NameTransformerTest : QuarkdocDokkaTest() {
             "newname",
         ) {
             assertContains(it, "newname")
-            // assertFalse("someFunction" in it)
+            assertFalse("(?<!pageIds=\"root::$rootPackage//)someFunction".toRegex() in it)
         }
     }
 }
