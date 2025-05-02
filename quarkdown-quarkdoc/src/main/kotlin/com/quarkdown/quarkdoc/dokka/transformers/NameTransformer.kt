@@ -2,13 +2,16 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.util.filterNotNullEntries
+import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
+import org.jetbrains.dokka.model.doc.DocumentationLink
 import org.jetbrains.dokka.model.doc.Param
+import org.jetbrains.dokka.model.doc.Text
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
@@ -40,8 +43,6 @@ class NameTransformer(
                 parameterRenamings = parameterRenamings,
                 documentation = function.documentation,
             )
-
-        println(documentation.values)
 
         // The function name is updated if it is annotated with `@Name`.
         return overrideNameIfAnnotated(function).merge {
@@ -102,10 +103,23 @@ class NameTransformer(
         parameterRenamings: ParameterRenamings,
         documentation: DokkaDocumentation,
     ) = mapDocumentation(documentation) {
-        register(Param::class) { tag ->
-            parameterRenamings[tag.name]
-                ?.let { tag.copy(name = it) }
-                ?: tag
+        // @param oldName -> @param newName
+        register(Param::class) { param ->
+            parameterRenamings[param.name]
+                ?.let { param.copy(name = it) }
+                ?: param
+        }
+
+        // [oldName] -> [newName]
+        register(DocumentationLink::class) { link ->
+            val oldName = link.params["href"]?.trimDelimiters()
+            val referencedParameter = parameterRenamings[oldName] ?: return@register link
+
+            val text = link.children.singleOrNull() as? Text ?: return@register link
+            val newText = text.copy(body = referencedParameter)
+            val newParams = link.params.toMutableMap().apply { this["href"] = "[$referencedParameter]" }
+
+            link.copy(children = listOf(newText), params = newParams).also { println("-> $it") }
         }
     }
 }
