@@ -20,7 +20,7 @@ class NameTransformer(
 
     private fun <D : Documentable> overrideNameIfAnnotated(documentable: D): AnyWithChanges<D> {
         val nameAnnotation = documentable.extractAnnotation<Name>()
-        val newName = nameAnnotation?.params["name"]?.toString() ?: return AnyWithChanges(documentable, changed = false)
+        val newName = nameAnnotation?.params["name"]?.toString() ?: return documentable.unchanged()
 
         @Suppress("UNCHECKED_CAST")
         return when (documentable) {
@@ -28,7 +28,7 @@ class NameTransformer(
             is DParameter -> documentable.copy(name = newName)
             else -> null
         }?.let { it as D }
-            ?.let { AnyWithChanges(it, changed = true) }
-            ?: AnyWithChanges(documentable, changed = false)
+            ?.changed()
+            ?: documentable.unchanged()
     }
 }

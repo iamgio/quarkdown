@@ -13,7 +13,9 @@ import org.jetbrains.dokka.plugability.DokkaContext
 open class QuarkdocDocumentableReplacerTransformer(
     context: DokkaContext,
 ) : DocumentableReplacerTransformer(context) {
-    private fun <D : Documentable> D.unmodified() = AnyWithChanges(this, changed = false)
+    protected fun <D : Documentable> D.changed() = AnyWithChanges(this, changed = true)
+
+    protected fun <D : Documentable> D.unchanged() = AnyWithChanges(this, changed = false)
 
     private fun <T> AnyWithChanges<T>.merge(other: AnyWithChanges<T>): AnyWithChanges<T> =
         AnyWithChanges(
@@ -23,11 +25,11 @@ open class QuarkdocDocumentableReplacerTransformer(
 
     private fun <T> AnyWithChanges<T>.merge(other: (T) -> AnyWithChanges<T>): AnyWithChanges<T> = this.merge(other(this.target!!))
 
-    protected open fun transformFunction(function: DFunction) = function.unmodified()
+    protected open fun transformFunction(function: DFunction) = function.unchanged()
 
     override fun processFunction(dFunction: DFunction) = super.processFunction(dFunction).merge(::transformFunction)
 
-    protected open fun transformParameter(parameter: DParameter) = parameter.unmodified()
+    protected open fun transformParameter(parameter: DParameter) = parameter.unchanged()
 
     override fun processParameter(dParameter: DParameter) = super.processParameter(dParameter).merge(::transformParameter)
 }
