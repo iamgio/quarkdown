@@ -2,12 +2,12 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.util.filterNotNullEntries
+import com.quarkdown.quarkdoc.dokka.kdoc.DeepDocumentationMapper
+import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
-import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
-import org.jetbrains.dokka.model.doc.DocumentationNode
 import org.jetbrains.dokka.model.doc.Param
 import org.jetbrains.dokka.plugability.DokkaContext
 
@@ -40,6 +40,8 @@ class NameTransformer(
                 parameterRenamings = parameterRenamings,
                 documentation = function.documentation,
             )
+
+        println(documentation.values)
 
         // The function name is updated if it is annotated with `@Name`.
         return overrideNameIfAnnotated(function).merge {
@@ -98,19 +100,10 @@ class NameTransformer(
      */
     private fun updateDocumentationReferences(
         parameterRenamings: ParameterRenamings,
-        documentation: Map<DokkaConfiguration.DokkaSourceSet, DocumentationNode>,
-    ) = documentation
-        .mapValues { (_, node) ->
-            val newChildren =
-                node.children
-                    .map { tag ->
-                        if (tag is Param) {
-                            val newName = parameterRenamings[tag.name]
-                            newName?.let { tag.copy(name = it) } ?: tag
-                        } else {
-                            tag
-                        }
-                    }
-            node.copy(children = newChildren)
-        }.toMap()
+        documentation: DokkaDocumentation,
+    ) = DeepDocumentationMapper()
+        .register(Param::class) { tag ->
+            val newName = parameterRenamings[tag.name]
+            newName?.let { tag.copy(name = it) } ?: tag
+        }.map(documentation)
 }

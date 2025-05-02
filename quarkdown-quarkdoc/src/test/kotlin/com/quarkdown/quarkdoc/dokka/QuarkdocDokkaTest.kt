@@ -92,6 +92,19 @@ open class QuarkdocDokkaTest(
 
     /**
      * @param html the HTML content to parse
+     * @return the main documentation paragraph text
+     * @throws IllegalStateException if the paragraph is not found
+     */
+    protected fun getParagraph(html: String) =
+        Jsoup
+            .parse(html)
+            .select(".content > .paragraph")
+            .firstOrNull()
+            ?.text()
+            ?: throw IllegalStateException("Paragraph not found")
+
+    /**
+     * @param html the HTML content to parse
      * @return the parameters table element
      * @throws IllegalStateException if the table is not found
      */

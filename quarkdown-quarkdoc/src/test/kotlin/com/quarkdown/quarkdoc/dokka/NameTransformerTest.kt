@@ -62,7 +62,7 @@ class NameTransformerTest : QuarkdocDokkaTest() {
     }
 
     @Test
-    fun `parameter name transformation with reference`() {
+    fun `parameter name transformation with doc`() {
         test(
             """
             /**
@@ -74,6 +74,21 @@ class NameTransformerTest : QuarkdocDokkaTest() {
         ) {
             val parameters = getParametersTable(it)
             assertEquals("newname the parameter", parameters.text())
+        }
+    }
+
+    @Test
+    fun `parameter name transformation with reference`() {
+        test(
+            """
+            /**
+            * The parameter is [oldParam].
+            */
+            fun someFunction(@Name("newname") oldParam: String) = Unit
+            """.trimIndent(),
+            "some-function",
+        ) {
+            assertEquals("The parameter is newname.", getParagraph(it))
         }
     }
 }

@@ -5,6 +5,7 @@ plugins {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":quarkdown-core"))
+    implementation(kotlin("reflect"))
 
     val dokkaVersion = "1.9.20"
 
