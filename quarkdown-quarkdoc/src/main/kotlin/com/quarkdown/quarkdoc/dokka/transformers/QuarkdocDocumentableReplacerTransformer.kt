@@ -23,7 +23,7 @@ open class QuarkdocDocumentableReplacerTransformer(
             changed = this.changed || other.changed,
         )
 
-    private fun <T> AnyWithChanges<T>.merge(other: (T) -> AnyWithChanges<T>): AnyWithChanges<T> = this.merge(other(this.target!!))
+    protected fun <T> AnyWithChanges<T>.merge(other: (T) -> AnyWithChanges<T>): AnyWithChanges<T> = this.merge(other(this.target!!))
 
     protected open fun transformFunction(function: DFunction) = function.unchanged()
 

@@ -61,7 +61,7 @@ class NameTransformerTest : QuarkdocDokkaTest() {
         }
     }
 
-    // @Test
+    @Test
     fun `parameter name transformation with reference`() {
         test(
             """
