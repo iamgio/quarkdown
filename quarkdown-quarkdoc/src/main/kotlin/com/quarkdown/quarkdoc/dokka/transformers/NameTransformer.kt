@@ -2,8 +2,8 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.util.filterNotNullEntries
-import com.quarkdown.quarkdoc.dokka.kdoc.DeepDocumentationMapper
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
+import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
@@ -101,9 +101,11 @@ class NameTransformer(
     private fun updateDocumentationReferences(
         parameterRenamings: ParameterRenamings,
         documentation: DokkaDocumentation,
-    ) = DeepDocumentationMapper()
-        .register(Param::class) { tag ->
-            val newName = parameterRenamings[tag.name]
-            newName?.let { tag.copy(name = it) } ?: tag
-        }.map(documentation)
+    ) = mapDocumentation(documentation) {
+        register(Param::class) { tag ->
+            parameterRenamings[tag.name]
+                ?.let { tag.copy(name = it) }
+                ?: tag
+        }
+    }
 }
