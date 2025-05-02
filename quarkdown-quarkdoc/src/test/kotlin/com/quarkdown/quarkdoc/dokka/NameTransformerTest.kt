@@ -91,4 +91,22 @@ class NameTransformerTest : QuarkdocDokkaTest() {
             assertEquals("The parameter is newname.", getParagraph(it))
         }
     }
+
+    @Test
+    fun `see-also function with transformed name`() {
+        test(
+            """
+            @Name("newname")
+            fun someFunction() = Unit
+            
+            /**
+            * @see someFunction
+            */
+            fun anotherFunction() = Unit
+            """.trimIndent(),
+            "another-function",
+        ) {
+            assertEquals("newname", getSeeAlsoTable(it).text())
+        }
+    }
 }

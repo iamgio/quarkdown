@@ -1,16 +1,15 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.util.filterNotNullEntries
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
-import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.doc.DocumentationLink
 import org.jetbrains.dokka.model.doc.Param
+import org.jetbrains.dokka.model.doc.See
 import org.jetbrains.dokka.model.doc.Text
 import org.jetbrains.dokka.plugability.DokkaContext
 
@@ -26,6 +25,8 @@ class NameTransformer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
     override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
+        println("Y ${function.name}")
+
         // Parameters annotated with `@Name` are renamed.
         val parameters = function.parameters.map(::overrideNameIfAnnotated).map { it.target!! }
 
@@ -50,11 +51,6 @@ class NameTransformer(
                 .copy(parameters = parameters, documentation = documentation)
                 .changed(changed = parameterRenamings.isNotEmpty())
         }
-    }
-
-    private fun getOverriddenName(documentable: Documentable): String? {
-        val nameAnnotation = documentable.extractAnnotation<Name>()
-        return nameAnnotation?.params?.get("name")?.toString()
     }
 
     private fun <D : Documentable> overrideNameIfAnnotated(documentable: D): AnyWithChanges<D> {
@@ -119,7 +115,13 @@ class NameTransformer(
             val newText = text.copy(body = referencedParameter)
             val newParams = link.params.toMutableMap().apply { this["href"] = "[$referencedParameter]" }
 
-            link.copy(children = listOf(newText), params = newParams).also { println("-> $it") }
+            link.copy(children = listOf(newText), params = newParams)
+        }
+
+        // @see oldName -> @see newName
+        register(See::class) { see ->
+            val newName = RenamingsStorage.functionRenamings[see.address] ?: return@register see
+            see.copy(name = newName)
         }
     }
 }

@@ -103,16 +103,27 @@ open class QuarkdocDokkaTest(
             ?.text()
             ?: throw IllegalStateException("Paragraph not found")
 
+    private fun getTable(
+        html: String,
+        name: String,
+    ) = Jsoup
+        .parse(html)
+        .select("h4:contains($name)")
+        .firstOrNull()
+        ?.nextElementSibling()
+        ?: throw IllegalStateException("Table $name not found")
+
     /**
      * @param html the HTML content to parse
      * @return the parameters table element
      * @throws IllegalStateException if the table is not found
      */
-    protected fun getParametersTable(html: String) =
-        Jsoup
-            .parse(html)
-            .select("h4:contains(Parameters)")
-            .firstOrNull()
-            ?.nextElementSibling()
-            ?: throw IllegalStateException("Parameters table not found")
+    protected fun getParametersTable(html: String) = getTable(html, "Parameters")
+
+    /**
+     * @param html the HTML content to parse
+     * @return the see-also table element
+     * @throws IllegalStateException if the table is not found
+     */
+    protected fun getSeeAlsoTable(html: String) = getTable(html, "See also")
 }
