@@ -15,7 +15,7 @@ import org.jetbrains.dokka.plugability.PluginApiPreviewAcknowledgement
 @Suppress("unused")
 class QuarkdocDokkaPlugin : DokkaPlugin() {
     val nameTransformer by extending {
-        plugin<DokkaBase>().preMergeDocumentableTransformer with NameTransformer()
+        plugin<DokkaBase>().preMergeDocumentableTransformer providing ::NameTransformer
     }
 
     @DokkaPluginApiPreview

@@ -5,23 +5,30 @@ import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
+import org.jetbrains.dokka.plugability.DokkaContext
 
-class NameTransformer : PreMergeLeafTransformer() {
-    override fun transform(function: DFunction): DFunction =
-        function.copy(
-            name = overrideNameIfAnnotated(function).name,
-            parameters = function.parameters.map(::overrideNameIfAnnotated),
-        )
+/**
+ * Transformer that renames functions and parameters annotated with `@Name` in the generated documentation.
+ * @param context the Dokka context
+ */
+class NameTransformer(
+    context: DokkaContext,
+) : QuarkdocDocumentableReplacerTransformer(context) {
+    override fun transformFunction(function: DFunction) = overrideNameIfAnnotated(function)
 
-    private fun <D : Documentable> overrideNameIfAnnotated(documentable: D): D {
+    override fun transformParameter(parameter: DParameter) = overrideNameIfAnnotated(parameter)
+
+    private fun <D : Documentable> overrideNameIfAnnotated(documentable: D): AnyWithChanges<D> {
         val nameAnnotation = documentable.extractAnnotation<Name>()
-        val newName = nameAnnotation?.params["name"]?.toString() ?: return documentable
+        val newName = nameAnnotation?.params["name"]?.toString() ?: return AnyWithChanges(documentable, changed = false)
 
         @Suppress("UNCHECKED_CAST")
         return when (documentable) {
             is DFunction -> documentable.copy(name = newName)
             is DParameter -> documentable.copy(name = newName)
-            else -> documentable
-        } as D
+            else -> null
+        }?.let { it as D }
+            ?.let { AnyWithChanges(it, changed = true) }
+            ?: AnyWithChanges(documentable, changed = false)
     }
 }
