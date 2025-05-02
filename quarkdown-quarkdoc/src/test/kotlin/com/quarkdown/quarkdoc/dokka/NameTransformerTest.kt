@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka
 
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 /**
@@ -57,6 +58,22 @@ class NameTransformerTest : QuarkdocDokkaTest() {
             assertContains(it, "newfuncname")
             assertContains(it, "newparam1")
             assertContains(it, "newparam2")
+        }
+    }
+
+    // @Test
+    fun `parameter name transformation with reference`() {
+        test(
+            """
+            /**
+            * @param oldParam the parameter
+            */
+            fun someFunction(@Name("newname") oldParam: String) = Unit
+            """.trimIndent(),
+            "some-function",
+        ) {
+            val parameters = getParametersTable(it)
+            assertEquals("newname the parameter", parameters.text())
         }
     }
 }

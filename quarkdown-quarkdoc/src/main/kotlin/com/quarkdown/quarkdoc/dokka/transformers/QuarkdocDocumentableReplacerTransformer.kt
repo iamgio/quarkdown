@@ -13,9 +13,9 @@ import org.jetbrains.dokka.plugability.DokkaContext
 open class QuarkdocDocumentableReplacerTransformer(
     context: DokkaContext,
 ) : DocumentableReplacerTransformer(context) {
-    protected fun <D : Documentable> D.changed() = AnyWithChanges(this, changed = true)
+    protected fun <D : Documentable> D.changed(changed: Boolean = true) = AnyWithChanges(this, changed = changed)
 
-    protected fun <D : Documentable> D.unchanged() = AnyWithChanges(this, changed = false)
+    protected fun <D : Documentable> D.unchanged() = changed(changed = false)
 
     private fun <T> AnyWithChanges<T>.merge(other: AnyWithChanges<T>): AnyWithChanges<T> =
         AnyWithChanges(

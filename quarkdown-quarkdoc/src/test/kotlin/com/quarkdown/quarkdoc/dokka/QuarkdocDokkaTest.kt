@@ -1,7 +1,9 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
+import org.jsoup.Jsoup
 import utils.TestOutputWriterPlugin
 import java.io.File
 import kotlin.reflect.KClass
@@ -28,7 +30,7 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
 open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
 ) : BaseAbstractTest() {
-    private val imports = listOf(Name::class)
+    private val imports = listOf(Name::class, Injected::class)
 
     private fun createConfiguration() =
         dokkaConfiguration {
@@ -71,4 +73,30 @@ open class QuarkdocDokkaTest(
             }
         }
     }
+
+    /**
+     * @param html the HTML content to parse
+     * @return the function signature as text
+     * @throws IllegalStateException if the signature is not found
+     */
+    protected fun getSignature(html: String) =
+        Jsoup
+            .parse(html)
+            .select(".content > .monospace")
+            .firstOrNull()
+            ?.text()
+            ?: throw IllegalStateException("Signature not found")
+
+    /**
+     * @param html the HTML content to parse
+     * @return the parameters table element
+     * @throws IllegalStateException if the table is not found
+     */
+    protected fun getParametersTable(html: String) =
+        Jsoup
+            .parse(html)
+            .select("h4:contains(Parameters)")
+            .firstOrNull()
+            ?.nextElementSibling()
+            ?: throw IllegalStateException("Parameters table not found")
 }

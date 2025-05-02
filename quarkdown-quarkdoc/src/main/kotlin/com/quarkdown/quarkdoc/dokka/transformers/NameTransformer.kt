@@ -9,7 +9,6 @@ import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
  * Transformer that renames functions and parameters annotated with `@Name` in the generated documentation.
- * @param context the Dokka context
  */
 class NameTransformer(
     context: DokkaContext,
