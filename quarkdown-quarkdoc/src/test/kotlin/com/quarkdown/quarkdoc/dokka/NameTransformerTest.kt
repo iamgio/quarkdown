@@ -109,4 +109,22 @@ class NameTransformerTest : QuarkdocDokkaTest() {
             assertEquals("newname", getSeeAlsoTable(it).text())
         }
     }
+
+    @Test
+    fun `referenced function with transformed name`() {
+        test(
+            """
+            @Name("newname")
+            fun someFunction() = Unit
+            
+            /**
+            * The function is [someFunction].
+            */
+            fun anotherFunction() = Unit
+            """.trimIndent(),
+            "another-function",
+        ) {
+            assertEquals("The function is newname.", getParagraph(it))
+        }
+    }
 }

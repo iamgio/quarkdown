@@ -17,6 +17,10 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
 
     /**
      * Functions and parameters annotated with `@Name` are renamed in the generated documentation.
+     * This includes:
+     * - Direct links (`[name]`)
+     * - Parameter (`@param name`)
+     * - See references (`@see name`)
      */
     val nameTransformer by extending {
         base.preMergeDocumentableTransformer providing ::NameTransformer
@@ -30,7 +34,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
-     * Stores the old-new function name pairs, to be used in the generated documentation.
+     * Stores the old-new function name pairs, to be used in [nameTransformer].
      * This extension has to be last, so that it's executed first.
      */
     val renamingsStorer by extending {

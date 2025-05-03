@@ -108,19 +108,20 @@ class NameTransformer(
 
         // [oldName] -> [newName]
         register(DocumentationLink::class) { link ->
-            val oldName = link.params["href"]?.trimDelimiters()
-            val referencedParameter = parameterRenamings[oldName] ?: return@register link
+            val oldName = link.params["href"]?.trimDelimiters() ?: return@register link
+            val newName =
+                parameterRenamings[oldName] ?: RenamingsStorage.getFunctionRenamingByOldName(oldName) ?: return@register link
 
             val text = link.children.singleOrNull() as? Text ?: return@register link
-            val newText = text.copy(body = referencedParameter)
-            val newParams = link.params.toMutableMap().apply { this["href"] = "[$referencedParameter]" }
+            val newText = text.copy(body = newName)
+            val newParams = link.params.toMutableMap().apply { this["href"] = "[$newName]" }
 
             link.copy(children = listOf(newText), params = newParams)
         }
 
         // @see oldName -> @see newName
         register(See::class) { see ->
-            val newName = RenamingsStorage.functionRenamings[see.address] ?: return@register see
+            val newName = RenamingsStorage.getFunctionRenamingByAddress(requireNotNull(see.address)) ?: return@register see
             see.copy(name = newName)
         }
     }
