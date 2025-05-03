@@ -14,7 +14,7 @@ class RenamingsStorer(
 ) : QuarkdocDocumentableReplacerTransformer(context) {
     override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
         getOverriddenName(function)?.let {
-            PrivateRenamingsStorage.addFunctionRenaming(function, it)
+            PrivateRenamingsStorage.renamings[function.dri] = it
         }
         return super.transformFunction(function)
     }
@@ -24,23 +24,7 @@ private object PrivateRenamingsStorage {
     /**
      * Renamed function names associated with their address.
      */
-    val functionRenamingsByAddress: MutableMap<DRI, String> = mutableMapOf()
-
-    /**
-     * Renamed function names associated with their old name.
-     */
-    val functionRenamingsByOldName: MutableMap<String, String> = mutableMapOf()
-
-    /**
-     * Adds a function renaming to the storage.
-     */
-    fun addFunctionRenaming(
-        function: DFunction,
-        newName: String,
-    ) {
-        functionRenamingsByAddress[function.dri] = newName
-        functionRenamingsByOldName[function.name] = newName
-    }
+    val renamings: MutableMap<DRI, String> = mutableMapOf()
 }
 
 /**
@@ -48,7 +32,8 @@ private object PrivateRenamingsStorage {
  * This is a mutable map that is populated by the [RenamingsStorer] transformer.
  */
 object RenamingsStorage {
-    fun getFunctionRenamingByAddress(dri: DRI): String? = PrivateRenamingsStorage.functionRenamingsByAddress[dri]
-
-    fun getFunctionRenamingByOldName(oldName: String): String? = PrivateRenamingsStorage.functionRenamingsByOldName[oldName]
+    /**
+     * @return the new name for the function with the given DRI, or null if it is not found.
+     */
+    operator fun get(dri: DRI): String? = PrivateRenamingsStorage.renamings[dri]
 }

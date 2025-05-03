@@ -25,8 +25,6 @@ class NameTransformer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
     override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
-        println("Y ${function.name}")
-
         // Parameters annotated with `@Name` are renamed.
         val parameters = function.parameters.map(::overrideNameIfAnnotated).map { it.target!! }
 
@@ -39,7 +37,7 @@ class NameTransformer(
                 .toMap()
 
         // Parameter documentation must be updated to reflect the new names.
-        val documentation =
+        val documentation = // todo refactor: one extension for documentation and one for names
             updateDocumentationReferences(
                 parameterRenamings = parameterRenamings,
                 documentation = function.documentation,
@@ -110,7 +108,7 @@ class NameTransformer(
         register(DocumentationLink::class) { link ->
             val oldName = link.params["href"]?.trimDelimiters() ?: return@register link
             val newName =
-                parameterRenamings[oldName] ?: RenamingsStorage.getFunctionRenamingByOldName(oldName) ?: return@register link
+                parameterRenamings[oldName] ?: RenamingsStorage[link.dri] ?: return@register link
 
             val text = link.children.singleOrNull() as? Text ?: return@register link
             val newText = text.copy(body = newName)
@@ -121,7 +119,7 @@ class NameTransformer(
 
         // @see oldName -> @see newName
         register(See::class) { see ->
-            val newName = RenamingsStorage.getFunctionRenamingByAddress(requireNotNull(see.address)) ?: return@register see
+            val newName = RenamingsStorage[requireNotNull(see.address)] ?: return@register see
             see.copy(name = newName)
         }
     }
