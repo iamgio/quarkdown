@@ -1,7 +1,5 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
-import com.quarkdown.core.util.filterNotNullEntries
-import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import org.jetbrains.dokka.model.DFunction
@@ -14,11 +12,6 @@ import org.jetbrains.dokka.model.doc.Text
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
- * Old-new parameter name pairs.
- */
-private typealias ParameterRenamings = Map<String, String>
-
-/**
  * Transformer that renames functions and parameters annotated with `@Name` in the generated documentation.
  */
 class NameTransformer(
@@ -28,26 +21,15 @@ class NameTransformer(
         // Parameters annotated with `@Name` are renamed.
         val parameters = function.parameters.map(::overrideNameIfAnnotated).map { it.target!! }
 
-        // Old-new parameter name pairs.
-        val parameterRenamings: ParameterRenamings =
-            function.parameters
-                .asSequence()
-                .mapIndexed { index, parameter -> parameter.name to parameters[index].name }
-                .filterNotNullEntries()
-                .toMap()
-
         // Parameter documentation must be updated to reflect the new names.
         val documentation = // todo refactor: one extension for documentation and one for names
-            updateDocumentationReferences(
-                parameterRenamings = parameterRenamings,
-                documentation = function.documentation,
-            )
+            updateDocumentationReferences(documentation = function.documentation, parameters = function.parameters)
 
         // The function name is updated if it is annotated with `@Name`.
         return overrideNameIfAnnotated(function).merge {
             it
                 .copy(parameters = parameters, documentation = documentation)
-                .changed(changed = parameterRenamings.isNotEmpty())
+                .changed(changed = true) // parameterRenamings.isNotEmpty())
         }
     }
 
@@ -78,8 +60,9 @@ class NameTransformer(
         // Renaming must also be reflected in the parameter documentation.
         val documentation =
             updateDocumentationReferences(
-                parameterRenamings = mapOf(parameter.name!! to newName),
+                // parameterRenamings = mapOf(parameter.name!! to newName),
                 parameter.documentation,
+                listOf(parameter),
             )
 
         return parameter.copy(
@@ -94,33 +77,32 @@ class NameTransformer(
      * @param documentation the documentation to update
      */
     private fun updateDocumentationReferences(
-        parameterRenamings: ParameterRenamings,
         documentation: DokkaDocumentation,
+        parameters: List<DParameter>,
     ) = mapDocumentation(documentation) {
         // @param oldName -> @param newName
         register(Param::class) { param ->
-            parameterRenamings[param.name]
-                ?.let { param.copy(name = it) }
-                ?: param
+            val address = parameters.find { it.name == param.name }?.dri ?: return@register param
+            val renaming = RenamingsStorage[address] ?: return@register param
+
+            param.copy(name = renaming.newName)
         }
 
         // [oldName] -> [newName]
         register(DocumentationLink::class) { link ->
-            val oldName = link.params["href"]?.trimDelimiters() ?: return@register link
-            val newName =
-                parameterRenamings[oldName] ?: RenamingsStorage[link.dri] ?: return@register link
+            val renaming = RenamingsStorage[link.dri] ?: return@register link
 
             val text = link.children.singleOrNull() as? Text ?: return@register link
-            val newText = text.copy(body = newName)
-            val newParams = link.params.toMutableMap().apply { this["href"] = "[$newName]" }
+            val newText = text.copy(body = renaming.newName)
+            val newParams = link.params.toMutableMap().apply { this["href"] = "[${renaming.newName}]" }
 
             link.copy(children = listOf(newText), params = newParams)
         }
 
         // @see oldName -> @see newName
         register(See::class) { see ->
-            val newName = RenamingsStorage[requireNotNull(see.address)] ?: return@register see
-            see.copy(name = newName)
+            val renaming = RenamingsStorage[requireNotNull(see.address)] ?: return@register see
+            see.copy(name = renaming.newName)
         }
     }
 }
