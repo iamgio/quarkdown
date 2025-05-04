@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
+import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.doc.DocumentationLink
@@ -30,7 +31,6 @@ class DocumentationNameTransformer(
     override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> {
         val documentation =
             updateDocumentationReferences(
-                // parameterRenamings = mapOf(parameter.name!! to newName),
                 parameter.documentation,
                 listOf(parameter),
             )

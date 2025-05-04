@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
+import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable

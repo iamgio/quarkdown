@@ -2,7 +2,7 @@ package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
-import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorage
+import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
