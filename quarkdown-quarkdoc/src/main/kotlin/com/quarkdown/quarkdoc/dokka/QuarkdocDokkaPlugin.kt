@@ -4,7 +4,7 @@ import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
 import com.quarkdown.quarkdoc.dokka.transformers.SuppressInjectedTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.ValueTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.ValueTypeTransformer
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin
 import org.jetbrains.dokka.plugability.DokkaPluginApiPreview
@@ -39,8 +39,8 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      * Renames references of [com.quarkdown.core.function.value.Value], and subclasses, in the signature
      * to a more human-readable form.
      */
-    val valueTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::ValueTransformer
+    val valueTypeTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::ValueTypeTransformer
     }
 
     /**

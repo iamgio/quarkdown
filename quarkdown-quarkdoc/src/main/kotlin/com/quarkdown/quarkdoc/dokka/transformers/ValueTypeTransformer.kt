@@ -1,6 +1,5 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
-import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.plugability.DokkaContext
 
@@ -11,27 +10,24 @@ private const val VALUE_SUFFIX = "Value"
  * For example:
  * - `NumberValue` -> `Number`
  * - `IterableValue` -> `Iterable`
+ * - `OutputValue` -> `Any`
  */
-class ValueTransformer(
+class ValueTypeTransformer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
-    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
-        val type = function.type as? GenericTypeConstructor ?: return function.unchanged()
+    override fun transformType(type: GenericTypeConstructor): AnyWithChanges<GenericTypeConstructor> {
         val dri = type.dri
-        val className = dri.classNames ?: return function.unchanged()
+        val className = dri.classNames ?: return type.unchanged()
 
         val newClassName: String =
             when {
+                // className == OutputValue::class.simpleName -> "Any"
                 className.endsWith(VALUE_SUFFIX) -> className.removeSuffix(VALUE_SUFFIX)
-                else -> return function.unchanged()
+                else -> return type.unchanged()
             }
 
-        return function
-            .copy(
-                type =
-                    type.copy(
-                        dri = dri.copy(classNames = newClassName),
-                    ),
-            ).changed()
+        return type
+            .copy(dri = dri.copy(classNames = newClassName))
+            .changed()
     }
 }

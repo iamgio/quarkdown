@@ -6,6 +6,7 @@ import org.jetbrains.dokka.base.transformers.documentables.DocumentableReplacerT
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
+import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
@@ -15,9 +16,9 @@ import org.jetbrains.dokka.plugability.DokkaContext
 open class QuarkdocDocumentableReplacerTransformer(
     context: DokkaContext,
 ) : DocumentableReplacerTransformer(context) {
-    protected fun <D : Documentable> D.changed(changed: Boolean = true) = AnyWithChanges(this, changed = changed)
+    protected fun <T> T.changed(changed: Boolean = true) = AnyWithChanges(this, changed = changed)
 
-    protected fun <D : Documentable> D.unchanged() = changed(changed = false)
+    protected fun <T> T.unchanged() = changed(changed = false)
 
     private fun <T> AnyWithChanges<T>.merge(other: AnyWithChanges<T>): AnyWithChanges<T> =
         AnyWithChanges(
@@ -34,6 +35,11 @@ open class QuarkdocDocumentableReplacerTransformer(
     protected open fun transformParameter(parameter: DParameter) = parameter.unchanged()
 
     override fun processParameter(dParameter: DParameter) = super.processParameter(dParameter).merge(::transformParameter)
+
+    protected open fun transformType(type: GenericTypeConstructor) = type.unchanged()
+
+    override fun processGenericTypeConstructor(genericTypeConstructor: GenericTypeConstructor) =
+        super.processGenericTypeConstructor(genericTypeConstructor).merge(::transformType)
 
     /**
      * @return the optional overridden name of the function or parameter, or `null` if not annotated with `@Name`.
