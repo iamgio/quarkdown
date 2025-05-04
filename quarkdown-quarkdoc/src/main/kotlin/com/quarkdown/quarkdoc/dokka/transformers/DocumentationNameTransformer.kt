@@ -1,10 +1,11 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
+import com.quarkdown.quarkdoc.dokka.kdoc.DocumentationReferencesTransformer
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
-import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
+import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.doc.DocumentationLink
 import org.jetbrains.dokka.model.doc.Param
 import org.jetbrains.dokka.model.doc.See
@@ -19,59 +20,54 @@ import org.jetbrains.dokka.plugability.DokkaContext
 class DocumentationNameTransformer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
-    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
-        val documentation =
-            updateDocumentationReferences(documentation = function.documentation, parameters = function.parameters)
-
-        return function
-            .copy(documentation = documentation)
-            .changed(documentation != function.documentation)
-    }
-
-    override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> {
-        val documentation =
-            updateDocumentationReferences(
-                parameter.documentation,
-                listOf(parameter),
-            )
-
-        return parameter
-            .copy(documentation = documentation)
-            .changed(documentation != parameter.documentation)
-    }
-
-    /**
-     * Updates the parameter names in the documentation of a function or parameter.
-     * @param documentation the documentation to update
-     * @param parameters the list of parameters to update in `@param` tags
-     */
-    private fun updateDocumentationReferences(
-        documentation: DokkaDocumentation,
+    private fun <D : Documentable> applyDocumentation(
+        documentable: D,
         parameters: List<DParameter>,
-    ) = mapDocumentation(documentation) {
-        // [oldName] -> [newName]
-        register(DocumentationLink::class) { link ->
-            val renaming = RenamingsStorage[link.dri] ?: return@register link
+        copy: (DokkaDocumentation) -> D,
+    ): AnyWithChanges<D> {
+        val documentation =
+            NameTransformerDocumentationReferencesTransformer().transformReferences(
+                documentation = documentable.documentation,
+                parameters = parameters,
+            )
+        return copy(documentation).changed(documentation != documentable.documentation)
+    }
 
-            val text = link.children.singleOrNull() as? Text ?: return@register link
-            val newText = text.copy(body = renaming.newName)
-            val newParams = link.params.toMutableMap().apply { this["href"] = "[${renaming.newName}]" }
-
-            link.copy(children = listOf(newText), params = newParams)
+    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> =
+        applyDocumentation(function, function.parameters) {
+            function.copy(documentation = it)
         }
 
-        // @param oldName -> @param newName
-        register(Param::class) { param ->
-            val address = parameters.find { it.name == param.name }?.dri ?: return@register param
-            val renaming = RenamingsStorage[address] ?: return@register param
-
-            param.copy(name = renaming.newName)
+    override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> =
+        applyDocumentation(parameter, listOf(parameter)) {
+            parameter.copy(documentation = it)
         }
+}
 
-        // @see oldName -> @see newName
-        register(See::class) { see ->
-            val renaming = RenamingsStorage[requireNotNull(see.address)] ?: return@register see
-            see.copy(name = renaming.newName)
-        }
+/**
+ * Transformer that applies renamings to KDoc references in the documentation.
+ */
+private class NameTransformerDocumentationReferencesTransformer : DocumentationReferencesTransformer {
+    override fun onLink(link: DocumentationLink): DocumentationLink {
+        val renaming = RenamingsStorage[link.dri] ?: return link
+        val textChild = link.children.singleOrNull() as? Text ?: return link
+        val newParams = link.params.toMutableMap().apply { this["href"] = "[${renaming.newName}]" }
+        return link.copy(
+            children = listOf(textChild.copy(body = renaming.newName)),
+            params = newParams,
+        )
+    }
+
+    override fun onParam(
+        param: Param,
+        actualParameter: DParameter,
+    ): Param {
+        val renaming = RenamingsStorage[actualParameter.dri] ?: return param
+        return param.copy(name = renaming.newName)
+    }
+
+    override fun onSee(see: See): See {
+        val renaming = RenamingsStorage[requireNotNull(see.address)] ?: return see
+        return see.copy(name = renaming.newName)
     }
 }
