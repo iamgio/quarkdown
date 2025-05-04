@@ -84,4 +84,22 @@ class ValueTypeTransformerTest :
             assertFalse("OutputValue" in it)
         }
     }
+
+    @Test
+    fun `iterable of any, in parameter`() {
+        test(
+            "fun iterableOfAnyParameter(iterable: Iterable<OutputValue<*>>): IterableValue<OutputValue<*>> = GeneralCollectionValue(iterable)",
+            "iterable-of-any-parameter",
+        ) {
+            // Assert Iterable<Any> appears twice
+            val signature = getSignature(it)
+            val type = "Iterable<Any>"
+            val firstIndex = signature.indexOf(type)
+            assertTrue(firstIndex >= 0)
+            val secondIndex = signature.indexOf(type, firstIndex + type.length)
+            assertTrue(secondIndex >= 0)
+
+            assertFalse("OutputValue" in signature)
+        }
+    }
 }
