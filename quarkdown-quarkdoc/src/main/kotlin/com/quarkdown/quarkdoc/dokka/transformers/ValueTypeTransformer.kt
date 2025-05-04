@@ -1,8 +1,11 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
+import com.quarkdown.core.function.value.ObjectValue
 import com.quarkdown.core.function.value.OutputValue
+import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.model.Projection
+import org.jetbrains.dokka.model.Variance
 import org.jetbrains.dokka.plugability.DokkaContext
 
 private const val VALUE_SUFFIX = "Value"
@@ -26,6 +29,19 @@ class ValueTypeTransformer(
                 // OutputValue<*> -> Any
                 className == OutputValue::class.simpleName -> {
                     "Any" to emptyList<Projection>()
+                }
+
+                // ObjectValue<Xyz> -> Xyz
+                className == ObjectValue::class.simpleName -> {
+                    val projection = type.projections.firstOrNull()
+                    val projectionName =
+                        (projection as? Variance<*>)
+                            ?.inner
+                            ?.driOrNull
+                            ?.classNames
+
+                    projectionName?.let { it to emptyList() }
+                        ?: return type.unchanged()
                 }
 
                 // XyzValue -> Xyz
