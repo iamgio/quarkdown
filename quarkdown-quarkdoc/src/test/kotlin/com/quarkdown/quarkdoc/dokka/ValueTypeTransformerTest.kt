@@ -48,7 +48,7 @@ class ValueTypeTransformerTest :
         }
     }
 
-    /*@Test
+    @Test
     fun `object`() {
         test(
             "fun obj() = ObjectValue(10)",
@@ -60,7 +60,7 @@ class ValueTypeTransformerTest :
             assertTrue(signature.endsWith("Int"))
             assertFalse("ObjectValue" in it)
         }
-    }*/
+    }
 
     @Test
     fun any() {
@@ -70,6 +70,17 @@ class ValueTypeTransformerTest :
         ) {
             println(getSignature(it))
             assertTrue(getSignature(it).endsWith("Any"))
+            assertFalse("OutputValue" in it)
+        }
+    }
+
+    @Test
+    fun `iterable of any`() {
+        test(
+            "fun iterableOfAny(): IterableValue<OutputValue<*>> = GeneralCollectionValue(listOf())",
+            "iterable-of-any",
+        ) {
+            assertTrue(getSignature(it).endsWith("Iterable<Any>"))
             assertFalse("OutputValue" in it)
         }
     }
