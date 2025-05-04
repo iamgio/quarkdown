@@ -54,4 +54,11 @@ object RenamingsStorage {
      * @return the new name for the function with the given DRI, or null if it is not found.
      */
     operator fun get(dri: DRI): Renaming? = PrivateRenamingsStorage.renamings[dri]
+
+    /**
+     * Clears the stored renamings.
+     */
+    fun clear() {
+        PrivateRenamingsStorage.renamings.clear()
+    }
 }

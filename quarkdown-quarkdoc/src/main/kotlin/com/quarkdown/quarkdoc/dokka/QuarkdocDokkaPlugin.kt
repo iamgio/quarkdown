@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
-import com.quarkdown.quarkdoc.dokka.transformers.NameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
 import com.quarkdown.quarkdoc.dokka.transformers.SuppressInjectedTransformer
 import org.jetbrains.dokka.base.DokkaBase
@@ -16,14 +17,21 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     private val base by lazy { plugin<DokkaBase>() }
 
     /**
-     * Functions and parameters annotated with `@Name` are renamed in the generated documentation.
+     * Functions and parameters annotated with `@Name` are renamed in the function signature.
+     */
+    val documentableNameTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::DocumentableNameTransformer
+    }
+
+    /**
+     * Functions and parameters annotated with `@Name` are renamed in the documentation.
      * This includes:
      * - Direct links (`[name]`)
      * - Parameter (`@param name`)
      * - See references (`@see name`)
      */
-    val nameTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::NameTransformer
+    val documentationNameTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::DocumentationNameTransformer
     }
 
     /**
@@ -34,7 +42,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
-     * Stores the old-new function name pairs, to be used in [nameTransformer].
+     * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
      * This extension has to be last, so that it's executed first.
      */
     val renamingsStorer by extending {
