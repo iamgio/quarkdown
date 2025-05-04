@@ -1,12 +1,13 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.function.reflect.annotation.Injected
 import kotlin.test.Test
 import kotlin.test.assertContains
 
 /**
  * Tests for name transformation in Dokka via `@Name`.
  */
-class SuppressInjectedTransformerTest : QuarkdocDokkaTest() {
+class SuppressInjectedTransformerTest : QuarkdocDokkaTest(imports = listOf(Injected::class)) {
     @Test
     fun `injected single parameter`() {
         test(

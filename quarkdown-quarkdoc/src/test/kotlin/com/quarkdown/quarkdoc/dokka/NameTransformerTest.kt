@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.function.reflect.annotation.Name
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -8,7 +9,7 @@ import kotlin.test.assertFalse
 /**
  * Tests for name transformation in Dokka via `@Name`.
  */
-class NameTransformerTest : QuarkdocDokkaTest() {
+class NameTransformerTest : QuarkdocDokkaTest(imports = listOf(Name::class)) {
     @Test
     fun `no name transformation`() {
         test(

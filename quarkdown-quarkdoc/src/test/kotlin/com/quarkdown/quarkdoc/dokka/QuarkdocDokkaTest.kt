@@ -1,7 +1,5 @@
 package com.quarkdown.quarkdoc.dokka
 
-import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
@@ -34,9 +32,8 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
  */
 open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
+    private val imports: List<KClass<*>>,
 ) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
-    private val imports = listOf(Name::class, Injected::class)
-
     @BeforeTest
     fun setUp() {
         RenamingsStorage.clear()
