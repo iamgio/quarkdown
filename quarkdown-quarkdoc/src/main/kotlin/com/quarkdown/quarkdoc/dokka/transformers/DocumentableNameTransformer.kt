@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
+import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
@@ -12,17 +13,16 @@ import org.jetbrains.dokka.plugability.DokkaContext
 class DocumentableNameTransformer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
-    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
-        val renaming = RenamingsStorage[function.dri] ?: return function.unchanged()
-        return function
-            .copy(name = renaming.newName)
-            .changed()
+    private fun <D : Documentable> rename(
+        documentable: D,
+        copy: (String) -> D,
+    ): AnyWithChanges<D> {
+        val renaming = RenamingsStorage[documentable.dri] ?: return documentable.unchanged()
+        return copy(renaming.newName).changed()
     }
 
-    override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> {
-        val renaming = RenamingsStorage[parameter.dri] ?: return parameter.unchanged()
-        return parameter
-            .copy(name = renaming.newName)
-            .changed()
-    }
+    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> = rename(function) { name -> function.copy(name = name) }
+
+    override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> =
+        rename(parameter) { name -> parameter.copy(name = name) }
 }
