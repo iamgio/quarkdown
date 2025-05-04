@@ -21,8 +21,7 @@ class DocumentableNameTransformer(
         return copy(renaming.newName).changed()
     }
 
-    override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> = rename(function) { name -> function.copy(name = name) }
+    override fun transformFunction(function: DFunction) = rename(function) { name -> function.copy(name = name) }
 
-    override fun transformParameter(parameter: DParameter): AnyWithChanges<DParameter> =
-        rename(parameter) { name -> parameter.copy(name = name) }
+    override fun transformParameter(parameter: DParameter) = rename(parameter) { name -> parameter.copy(name = name) }
 }
