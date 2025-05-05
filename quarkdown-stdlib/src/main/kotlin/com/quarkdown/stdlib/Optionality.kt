@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -15,7 +16,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * This module handles `None` values to express optional values.
  */
 val Optionality: Module =
-    setOf(
+    moduleOf(
         ::none,
         ::isNone,
         ::otherwise,

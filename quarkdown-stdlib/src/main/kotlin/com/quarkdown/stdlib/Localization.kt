@@ -3,6 +3,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
@@ -20,7 +21,7 @@ import com.quarkdown.core.localization.LocalizationTable
  * This module handles localization-related features.
  */
 val Localization: Module =
-    setOf(
+    moduleOf(
         ::localization,
         ::localize,
     )

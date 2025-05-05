@@ -9,6 +9,8 @@ import kotlin.reflect.KFunction
  */
 typealias Module = Set<ExportableFunction>
 
+fun moduleOf(vararg functions: ExportableFunction): Module = setOf(*functions)
+
 /**
  * Creates a library from a set of Kotlin functions.
  * @param name name to assign to the library
@@ -16,6 +18,6 @@ typealias Module = Set<ExportableFunction>
  */
 class MultiFunctionLibraryLoader(
     private val name: String,
-) : LibraryLoader<Set<KFunction<OutputValue<*>>>> {
+) : LibraryLoader<Module> {
     override fun load(source: Set<KFunction<OutputValue<*>>>): Library = MultiLibraryLoader(this.name, FunctionLibraryLoader()).load(source)
 }

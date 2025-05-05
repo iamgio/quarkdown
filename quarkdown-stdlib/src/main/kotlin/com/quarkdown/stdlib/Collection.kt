@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
@@ -23,7 +24,7 @@ internal const val INDEX_STARTS_AT = 1
  * This module handles iterable collections.
  */
 val Collection: Module =
-    setOf(
+    moduleOf(
         ::collectionGet,
         ::collectionFirst,
         ::collectionSecond,

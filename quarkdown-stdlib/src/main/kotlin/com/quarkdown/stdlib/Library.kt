@@ -3,6 +3,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -14,7 +15,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * This module handles loaded libraries and their functions.
  */
 val Library: Module =
-    setOf(
+    moduleOf(
         ::libraryExists,
         ::functionExists,
         ::libraries,

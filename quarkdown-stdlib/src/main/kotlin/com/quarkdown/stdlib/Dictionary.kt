@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -11,7 +12,7 @@ import com.quarkdown.core.function.value.OutputValue
  * This module handles map-like dictionaries.
  */
 val Dictionary: Module =
-    setOf(
+    moduleOf(
         ::dictionary,
         ::dictionaryGet,
     )

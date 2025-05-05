@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.NumberValue
@@ -13,7 +14,7 @@ import kotlin.math.pow
  * `Math` stdlib module exporter.
  */
 val Math: Module =
-    setOf(
+    moduleOf(
         ::sum,
         ::subtract,
         ::multiply,
