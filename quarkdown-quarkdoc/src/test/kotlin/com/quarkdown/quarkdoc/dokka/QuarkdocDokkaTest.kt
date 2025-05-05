@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
+import jdk.nashorn.internal.objects.NativeRegExp.source
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
@@ -32,25 +33,28 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
  */
 open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
-    private val imports: List<KClass<*>>,
+    private val imports: List<KClass<*>> = emptyList(),
 ) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
     @BeforeTest
     fun setUp() {
         RenamingsStorage.clear()
     }
 
-    private fun createConfiguration() =
+    private fun createConfiguration(sourcePaths: List<String>) =
         dokkaConfiguration {
             sourceSets {
                 sourceSet {
-                    sourceRoots = listOf(SOURCE_ROOT) + imports.map { it.path() }
+                    sourceRoots = sourcePaths + imports.map { it.path() }
                 }
             }
         }
 
-    private fun createFullSource(rootSource: String): String =
+    private fun createFullSource(
+        rootPath: String,
+        rootSource: String,
+    ): String =
         buildString {
-            append("/").append(SOURCE_ROOT).append("\n")
+            append("/").append(rootPath).append("\n")
             append("package ").append(rootPackage).append("\n")
             imports.forEach { append("import ").append(it.qualifiedName).append("\n") }
             append(rootSource)
@@ -64,22 +68,44 @@ open class QuarkdocDokkaTest(
      * @param block action to execute with the output content.
      */
     protected fun test(
-        source: String,
+        sources: Map<String, String>,
         outName: String,
         block: (String) -> Unit,
     ) {
+        val unifiedSource =
+            sources.asSequence().joinToString(separator = "\n\n") { (path, source) ->
+                createFullSource(path, source)
+            }
         val writerPlugin = TestOutputWriterPlugin()
         testInline(
-            createFullSource(source).also { println(it) },
-            createConfiguration(),
+            unifiedSource,
+            createConfiguration(sources.keys.toList()),
             pluginOverrides = listOf(QuarkdocDokkaPlugin(), writerPlugin),
         ) {
             renderingStage = { _, _ ->
+                println(writerPlugin.writer.contents.keys)
                 val content = writerPlugin.writer.contents.getValue("root/$rootPackage/$outName.html")
                 block(content)
             }
         }
     }
+
+    /**
+     * Tests the output of a given source file.
+     *
+     * @param source the source code to test
+     * @param outName the name of the output file, without extension
+     * @param block action to execute with the output content.
+     */
+    protected fun test(
+        source: String,
+        outName: String,
+        block: (String) -> Unit,
+    ) = test(
+        mapOf(SOURCE_ROOT to source),
+        outName,
+        block,
+    )
 
     /**
      * @param html the HTML content to parse
