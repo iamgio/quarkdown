@@ -1,13 +1,16 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.ObjectValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
+import com.quarkdown.core.function.value.VoidValue
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -22,6 +25,8 @@ class ValueTypeTransformerTest :
                 IterableValue::class,
                 GeneralCollectionValue::class,
                 ObjectValue::class,
+                DictionaryValue::class,
+                VoidValue::class,
                 Value::class,
                 OutputValue::class,
             ),
@@ -85,21 +90,64 @@ class ValueTypeTransformerTest :
         }
     }
 
+    private fun countOccurrences(
+        string: String,
+        substring: String,
+    ): Int {
+        var count = 0
+        var index = string.indexOf(substring)
+        while (index != -1) {
+            count++
+            index = string.indexOf(substring, index + substring.length)
+        }
+        return count
+    }
+
     @Test
     fun `iterable of any, in parameter`() {
         test(
             "fun iterableOfAnyParameter(iterable: Iterable<OutputValue<*>>): IterableValue<OutputValue<*>> = GeneralCollectionValue(iterable)",
             "iterable-of-any-parameter",
         ) {
-            // Assert Iterable<Any> appears twice
             val signature = getSignature(it)
-            val type = "Iterable<Any>"
-            val firstIndex = signature.indexOf(type)
-            assertTrue(firstIndex >= 0)
-            val secondIndex = signature.indexOf(type, firstIndex + type.length)
-            assertTrue(secondIndex >= 0)
-
+            assertEquals(2, countOccurrences(signature, "Iterable<Any>"))
             assertFalse("OutputValue" in signature)
+        }
+    }
+
+    @Test
+    fun `nullable iterable of any, in parameter`() {
+        test(
+            "fun nullableIterableOfAnyParameter(iterable: Iterable<OutputValue<*>>?): IterableValue<OutputValue<*>> = GeneralCollectionValue(iterable)",
+            "nullable-iterable-of-any-parameter",
+        ) {
+            val signature = getSignature(it)
+            println(signature)
+            assertEquals(2, countOccurrences(signature, "Iterable<Any>"))
+            assertFalse("OutputValue" in signature)
+        }
+    }
+
+    @Test
+    fun map() {
+        test(
+            "fun map(map: Map<String, OutputValue<*>>) = VoidValue",
+            "map",
+        ) {
+            assertTrue("Map<String, Any>" in getSignature(it))
+        }
+    }
+
+    @Test
+    fun `doc authors`() {
+        test(
+            """
+            fun docAuthors(authors: Map<String, DictionaryValue<OutputValue<String>>>? = null) = VoidValue
+            """.trimIndent(),
+            "doc-authors",
+        ) {
+            println(getSignature(it))
+            assertTrue("Map<String, Dictionary<Any>>" in getSignature(it))
         }
     }
 }

@@ -3,10 +3,12 @@ package com.quarkdown.quarkdoc.dokka.transformers
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.base.transformers.documentables.DocumentableReplacerTransformer
+import org.jetbrains.dokka.model.Bound
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.GenericTypeConstructor
+import org.jetbrains.dokka.model.Nullable
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
@@ -40,6 +42,25 @@ open class QuarkdocDocumentableReplacerTransformer(
 
     override fun processGenericTypeConstructor(genericTypeConstructor: GenericTypeConstructor) =
         super.processGenericTypeConstructor(genericTypeConstructor).merge(::transformType)
+
+    // Dokka's DocumentableReplacerTransformer implementation does not propagate into Nullable types for some reason.
+
+    private fun transformNullableType(nullable: Nullable) =
+        super
+            .processBound(nullable.inner)
+            .takeIf { it.changed }
+            ?.let { nullable.copy(inner = it.target!!).changed() }
+            ?: nullable.unchanged()
+
+    override fun processBound(bound: Bound): AnyWithChanges<Bound> =
+        super
+            .processBound(bound)
+            .merge {
+                when (it) {
+                    is Nullable -> transformNullableType(it)
+                    else -> it.unchanged()
+                }
+            }
 
     /**
      * @return the optional overridden name of the function or parameter, or `null` if not annotated with `@Name`.
