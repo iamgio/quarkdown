@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.slides.Transition
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
 import com.quarkdown.core.function.value.NodeValue

@@ -4,6 +4,7 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue

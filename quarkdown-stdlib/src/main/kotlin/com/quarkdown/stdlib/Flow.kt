@@ -6,6 +6,7 @@ import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.function.FunctionParameter
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue

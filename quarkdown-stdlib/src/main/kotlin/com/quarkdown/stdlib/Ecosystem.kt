@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OutputValue

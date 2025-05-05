@@ -1,5 +1,6 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.log.Log
 

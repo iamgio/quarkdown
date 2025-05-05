@@ -1,5 +1,6 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue

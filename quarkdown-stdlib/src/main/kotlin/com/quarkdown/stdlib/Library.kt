@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -57,7 +58,8 @@ fun functionExists(
 fun libraries(
     @Injected context: Context,
 ) = UnorderedCollectionValue(
-    context.libraries.asSequence()
+    context.libraries
+        .asSequence()
         .map { it.name.wrappedAsValue() }
         .toSet(),
 )
@@ -71,7 +73,9 @@ fun libraryFunctions(
     @Injected context: Context,
     libraryName: String,
 ) = UnorderedCollectionValue(
-    findLibrary(context, libraryName)?.functions?.asSequence()
+    findLibrary(context, libraryName)
+        ?.functions
+        ?.asSequence()
         ?.map { it.name.wrappedAsValue() }
         ?.toSet()
         ?: emptySet(),

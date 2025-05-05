@@ -1,5 +1,6 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -46,6 +47,4 @@ fun dictionaryGet(
     key: String,
     @Name("from") dictionary: Map<String, OutputValue<*>>,
     @Name("orelse") fallback: DynamicValue = DynamicValue(NOT_FOUND),
-): OutputValue<*> {
-    return dictionary[key] ?: fallback
-}
+): OutputValue<*> = dictionary[key] ?: fallback

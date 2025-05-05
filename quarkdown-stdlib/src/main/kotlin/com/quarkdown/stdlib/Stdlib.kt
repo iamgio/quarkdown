@@ -9,12 +9,6 @@ import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.stdlib.Stdlib.LOCALIZATION_TABLE
-import kotlin.reflect.KFunction
-
-/**
- * An exporter of a subsection of Quarkdown functions.
- */
-typealias Module = Set<KFunction<OutputValue<*>>>
 
 /**
  * Fallback value for non-existent elements in collections, dictionaries, and more.
