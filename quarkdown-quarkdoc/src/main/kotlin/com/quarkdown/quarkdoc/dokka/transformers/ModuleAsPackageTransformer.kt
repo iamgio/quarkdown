@@ -44,7 +44,7 @@ class ModuleAsPackageTransformer(
             syntheticModules.flatMap { (pkg, modules) ->
                 modules.map { module ->
                     pkg.copy(
-                        dri = DRI(pkg.dri.packageName + "." + module.name, module.name),
+                        dri = DRI(packageName = module.name),
                         sourceSets = emptySet(),
                         functions = module.functions,
                         properties = emptyList(),
@@ -55,7 +55,16 @@ class ModuleAsPackageTransformer(
 
         return module
             .copy(
-                packages = newPackages,
+                packages = newPackages + module.packages.difference(newPackages),
             ).changed()
     }
+
+    private fun Iterable<DPackage>.difference(others: Iterable<DPackage>): List<DPackage> =
+        map { pkg ->
+            pkg.copy(
+                functions = pkg.functions - others.flatMap { it.functions },
+                properties = pkg.properties - others.flatMap { it.properties },
+                classlikes = pkg.classlikes - others.flatMap { it.classlikes },
+            )
+        }
 }
