@@ -1,8 +1,6 @@
 package com.quarkdown.core.function.library.loader
 
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.value.OutputValue
-import kotlin.reflect.KFunction
 
 /**
  * A subsection of Quarkdown functions that can be exported via a [MultiFunctionLibraryLoader].
@@ -19,5 +17,5 @@ fun moduleOf(vararg functions: ExportableFunction): Module = setOf(*functions)
 class MultiFunctionLibraryLoader(
     private val name: String,
 ) : LibraryLoader<Module> {
-    override fun load(source: Set<KFunction<OutputValue<*>>>): Library = MultiLibraryLoader(this.name, FunctionLibraryLoader()).load(source)
+    override fun load(source: Module): Library = MultiLibraryLoader(this.name, FunctionLibraryLoader()).load(source)
 }

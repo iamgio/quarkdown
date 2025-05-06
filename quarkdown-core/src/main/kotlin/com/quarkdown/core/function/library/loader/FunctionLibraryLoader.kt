@@ -14,6 +14,6 @@ typealias ExportableFunction = KFunction<OutputValue<*>>
  * Creates a library from a single Kotlin function.
  * @see KFunctionAdapter
  */
-class FunctionLibraryLoader : LibraryLoader<KFunction<OutputValue<*>>> {
-    override fun load(source: KFunction<OutputValue<*>>) = Library(source.name, setOf(KFunctionAdapter(source)))
+class FunctionLibraryLoader : LibraryLoader<ExportableFunction> {
+    override fun load(source: ExportableFunction) = Library(source.name, setOf(KFunctionAdapter(source)))
 }
