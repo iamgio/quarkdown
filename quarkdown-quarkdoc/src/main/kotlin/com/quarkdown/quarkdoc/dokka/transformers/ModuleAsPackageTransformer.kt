@@ -46,7 +46,6 @@ class ModuleAsPackageTransformer(
                 modules.map { module ->
                     pkg.copy(
                         dri = DRI(packageName = pkg.packageName + "." + module.name),
-                        sourceSets = emptySet(),
                         functions = module.functions,
                         properties = emptyList(),
                         classlikes = emptyList(),
