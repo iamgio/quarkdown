@@ -13,5 +13,6 @@ fun Iterable<DPackage>.difference(others: Iterable<DPackage>): List<DPackage> =
             functions = pkg.functions - others.flatMap { it.functions },
             properties = pkg.properties - others.flatMap { it.properties },
             classlikes = pkg.classlikes - others.flatMap { it.classlikes },
+            typealiases = pkg.typealiases - others.flatMap { it.typealiases },
         )
     }

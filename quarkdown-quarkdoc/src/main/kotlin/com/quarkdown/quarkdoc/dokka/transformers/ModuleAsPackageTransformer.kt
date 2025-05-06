@@ -45,11 +45,12 @@ class ModuleAsPackageTransformer(
             syntheticModules.flatMap { (pkg, modules) ->
                 modules.map { module ->
                     pkg.copy(
-                        dri = DRI(packageName = module.name),
+                        dri = DRI(packageName = pkg.packageName + "." + module.name),
                         sourceSets = emptySet(),
                         functions = module.functions,
                         properties = emptyList(),
                         classlikes = emptyList(),
+                        typealiases = emptyList(),
                     )
                 }
             }
