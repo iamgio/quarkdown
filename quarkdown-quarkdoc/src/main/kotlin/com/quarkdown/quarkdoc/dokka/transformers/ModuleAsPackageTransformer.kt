@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import com.quarkdown.core.util.filterNotNullEntries
 import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
+import com.quarkdown.quarkdoc.dokka.util.difference
 import com.quarkdown.quarkdoc.dokka.util.sourcePaths
 import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.links.DRI
@@ -58,13 +59,4 @@ class ModuleAsPackageTransformer(
                 packages = newPackages + module.packages.difference(newPackages),
             ).changed()
     }
-
-    private fun Iterable<DPackage>.difference(others: Iterable<DPackage>): List<DPackage> =
-        map { pkg ->
-            pkg.copy(
-                functions = pkg.functions - others.flatMap { it.functions },
-                properties = pkg.properties - others.flatMap { it.properties },
-                classlikes = pkg.classlikes - others.flatMap { it.classlikes },
-            )
-        }
 }
