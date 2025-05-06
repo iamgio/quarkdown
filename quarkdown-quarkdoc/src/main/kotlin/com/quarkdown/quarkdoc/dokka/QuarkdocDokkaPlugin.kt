@@ -20,11 +20,27 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     private val base by lazy { plugin<DokkaBase>() }
 
     /**
+     * Stores the modules in which the functions are declared, to be used in [moduleAsPackageTransformer].
+     */
+    val modulesStorer by extending {
+        base.preMergeDocumentableTransformer providing ::ModulesStorer order { before(moduleAsPackageTransformer) }
+    }
+
+    /**
      * Quarkdown modules, defined by a [com.quarkdown.core.function.library.loader.Module] property,
      * contain the functions declared in the same source file and are shown in the documentation as packages.
      */
     val moduleAsPackageTransformer by extending {
         base.preMergeDocumentableTransformer providing ::ModuleAsPackageTransformer
+    }
+
+    /**
+     * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
+     */
+    val renamingsStorer by extending {
+        plugin<DokkaBase>().preMergeDocumentableTransformer providing ::RenamingsStorer order {
+            before(documentableNameTransformer, documentationNameTransformer)
+        }
     }
 
     /**
@@ -58,22 +74,6 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      */
     val suppressInjectedTransformer by extending {
         base.preMergeDocumentableTransformer providing ::SuppressInjectedTransformer
-    }
-
-    /**
-     * Stores the modules in which the functions are declared, to be used in [moduleAsPackageTransformer].
-     * This extension has to be last, so that it's executed before said transformers.
-     */
-    val modulesStorer by extending {
-        base.preMergeDocumentableTransformer providing ::ModulesStorer
-    }
-
-    /**
-     * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
-     * This extension has to be last, so that it's executed before said transformers.
-     */
-    val renamingsStorer by extending {
-        plugin<DokkaBase>().preMergeDocumentableTransformer providing ::RenamingsStorer
     }
 
     @DokkaPluginApiPreview

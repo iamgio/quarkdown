@@ -96,7 +96,7 @@ open class QuarkdocDokkaTest(
                 )
                 val path =
                     if (autoPath) {
-                        val directoryPath = rootPackage + (outModule?.let { ".$it" } ?: "")
+                        val directoryPath = rootPackage + (outModule?.let { ".module.$it" } ?: "")
                         "root/$directoryPath/$outName.html"
                     } else {
                         outName
