@@ -7,6 +7,10 @@ import com.quarkdown.core.function.library.Library
  */
 typealias Module = Set<ExportableFunction>
 
+/**
+ * Creates a [Module] from a set of Kotlin functions.
+ * @param functions the functions to export in the module
+ */
 fun moduleOf(vararg functions: ExportableFunction): Module = setOf(*functions)
 
 /**
