@@ -55,7 +55,7 @@ private fun createSyntheticPackages(
 ): List<DPackage> =
     syntheticModules.map { module ->
         parentPackage.copy(
-            dri = DRI(packageName = parentPackage.packageName + "." + module.name),
+            dri = DRI(packageName = parentPackage.packageName + ".module." + module.name),
             functions = module.functions,
             properties = emptyList(),
             classlikes = emptyList(),

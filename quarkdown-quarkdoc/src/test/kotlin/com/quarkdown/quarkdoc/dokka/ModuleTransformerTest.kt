@@ -86,8 +86,9 @@ class ModuleTransformerTest :
             assertEquals(moduleCount, QuarkdownModulesStorage.moduleCount)
             assertContains(it, rootPackage)
             for (i in 1..moduleCount) {
-                assertContains(it, "$rootPackage.Module$i")
+                assertContains(it, "$rootPackage.module.Module$i")
                 assertContains(it, "$rootPackage/-module$i.html")
+                assertContains(it, "$rootPackage.module.Module$i/some-function$i.html")
             }
         }
     }
