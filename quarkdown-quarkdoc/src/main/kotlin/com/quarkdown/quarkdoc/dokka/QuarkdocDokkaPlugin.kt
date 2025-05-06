@@ -19,6 +19,10 @@ import org.jetbrains.dokka.plugability.PluginApiPreviewAcknowledgement
 class QuarkdocDokkaPlugin : DokkaPlugin() {
     private val base by lazy { plugin<DokkaBase>() }
 
+    /**
+     * Quarkdown modules, defined by a [com.quarkdown.core.function.library.loader.Module] property,
+     * contain the functions declared in the same source file and are shown in the documentation as packages.
+     */
     val moduleAsPackageTransformer by extending {
         base.preMergeDocumentableTransformer providing ::ModuleAsPackageTransformer
     }

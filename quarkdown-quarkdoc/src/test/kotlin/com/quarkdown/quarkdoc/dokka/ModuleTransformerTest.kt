@@ -65,4 +65,30 @@ class ModuleTransformerTest :
             // No error = file exists
         }
     }
+
+    @Test
+    fun `five modules, package list`() {
+        val moduleCount = 5
+        val sources =
+            (1..moduleCount).associate {
+                "M$it.kt" to
+                    """
+                    val Module$it: Module = moduleOf(::someFunction$it)
+                    fun someFunction$it() = VoidValue
+                    """.trimIndent()
+            }
+
+        test(
+            sources,
+            outName = "root/package-list",
+            autoPath = false,
+        ) {
+            assertEquals(moduleCount, QuarkdownModulesStorage.moduleCount)
+            assertContains(it, rootPackage)
+            for (i in 1..moduleCount) {
+                assertContains(it, "$rootPackage.Module$i")
+                assertContains(it, "$rootPackage/-module$i.html")
+            }
+        }
+    }
 }

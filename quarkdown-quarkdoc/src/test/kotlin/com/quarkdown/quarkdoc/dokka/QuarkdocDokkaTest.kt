@@ -66,15 +66,17 @@ open class QuarkdocDokkaTest(
 
     /**
      * Tests the output of a given source file.
-     *
      * @param source the source code to test
      * @param outName the name of the output file, without extension
+     * @param outModule the name of the module to test, or null for the root module
+     * @param autoPath if true, the output path is automatically generated based on [outName] and [outModule].
      * @param block action to execute with the output content.
      */
     protected fun test(
         sources: Map<String, String>,
         outName: String,
         outModule: String? = null,
+        autoPath: Boolean = true,
         block: (String) -> Unit,
     ) {
         val unifiedSource =
@@ -92,8 +94,14 @@ open class QuarkdocDokkaTest(
                     writerPlugin.writer.contents.keys
                         .filter { it.startsWith("root/") },
                 )
-                val directoryPath = rootPackage + (outModule?.let { ".$it" } ?: "")
-                val content = writerPlugin.writer.contents.getValue("root/$directoryPath/$outName.html")
+                val path =
+                    if (autoPath) {
+                        val directoryPath = rootPackage + (outModule?.let { ".$it" } ?: "")
+                        "root/$directoryPath/$outName.html"
+                    } else {
+                        outName
+                    }
+                val content = writerPlugin.writer.contents.getValue(path)
                 block(content)
             }
         }
@@ -112,9 +120,8 @@ open class QuarkdocDokkaTest(
         block: (String) -> Unit,
     ) = test(
         mapOf(SOURCE_ROOT to source),
-        outName,
-        outModule = null,
-        block,
+        outName = outName,
+        block = block,
     )
 
     /**
