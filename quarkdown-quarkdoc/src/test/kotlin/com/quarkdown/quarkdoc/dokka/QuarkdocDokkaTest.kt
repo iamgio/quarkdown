@@ -1,5 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.log.Log
+import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import jdk.nashorn.internal.objects.NativeRegExp.source
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
@@ -34,10 +36,12 @@ private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
 open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
     private val imports: List<KClass<*>> = emptyList(),
+    private val stringImports: List<String> = emptyList(),
 ) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
     @BeforeTest
     fun setUp() {
         RenamingsStorage.clear()
+        QuarkdownModulesStorage.clear()
     }
 
     private fun createConfiguration(sourcePaths: List<String>) =
@@ -56,7 +60,7 @@ open class QuarkdocDokkaTest(
         buildString {
             append("/").append(rootPath).append("\n")
             append("package ").append(rootPackage).append("\n")
-            imports.forEach { append("import ").append(it.qualifiedName).append("\n") }
+            (stringImports + imports.map { it.qualifiedName }).forEach { append("import ").append(it).append("\n") }
             append(rootSource)
         }
 
@@ -70,6 +74,7 @@ open class QuarkdocDokkaTest(
     protected fun test(
         sources: Map<String, String>,
         outName: String,
+        outModule: String? = null,
         block: (String) -> Unit,
     ) {
         val unifiedSource =
@@ -83,8 +88,12 @@ open class QuarkdocDokkaTest(
             pluginOverrides = listOf(QuarkdocDokkaPlugin(), writerPlugin),
         ) {
             renderingStage = { _, _ ->
-                println(writerPlugin.writer.contents.keys)
-                val content = writerPlugin.writer.contents.getValue("root/$rootPackage/$outName.html")
+                Log.info(
+                    writerPlugin.writer.contents.keys
+                        .filter { it.startsWith("root/") },
+                )
+                val directoryPath = rootPackage + (outModule?.let { ".$it" } ?: "")
+                val content = writerPlugin.writer.contents.getValue("root/$directoryPath/$outName.html")
                 block(content)
             }
         }
@@ -104,6 +113,7 @@ open class QuarkdocDokkaTest(
     ) = test(
         mapOf(SOURCE_ROOT to source),
         outName,
+        outModule = null,
         block,
     )
 

@@ -15,10 +15,7 @@ inline fun <reified T> Documentable.extractAnnotation(): Annotations.Annotation?
             ?.flatMap { it.directAnnotations.values.flatten() }
             ?: emptyList()
 
-    return annotations.firstOrNull {
-        it.dri.packageName == T::class.java.`package`.name &&
-            it.dri.classNames == T::class.simpleName
-    }
+    return annotations.firstOrNull { it.dri.isOfType<T>() }
 }
 
 /**

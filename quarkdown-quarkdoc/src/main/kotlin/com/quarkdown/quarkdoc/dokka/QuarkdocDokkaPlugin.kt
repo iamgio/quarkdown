@@ -2,6 +2,8 @@ package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.ModuleAsPackageTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.ModulesStorer
 import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
 import com.quarkdown.quarkdoc.dokka.transformers.SuppressInjectedTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.ValueTypeTransformer
@@ -16,6 +18,10 @@ import org.jetbrains.dokka.plugability.PluginApiPreviewAcknowledgement
 @Suppress("unused")
 class QuarkdocDokkaPlugin : DokkaPlugin() {
     private val base by lazy { plugin<DokkaBase>() }
+
+    val moduleAsPackageTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::ModuleAsPackageTransformer
+    }
 
     /**
      * Functions and parameters annotated with `@Name` are renamed in the function signature.
@@ -51,8 +57,16 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
+     * Stores the modules in which the functions are declared, to be used in [moduleAsPackageTransformer].
+     * This extension has to be last, so that it's executed before said transformers.
+     */
+    val modulesStorer by extending {
+        base.preMergeDocumentableTransformer providing ::ModulesStorer
+    }
+
+    /**
      * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
-     * This extension has to be last, so that it's executed first.
+     * This extension has to be last, so that it's executed before said transformers.
      */
     val renamingsStorer by extending {
         plugin<DokkaBase>().preMergeDocumentableTransformer providing ::RenamingsStorer

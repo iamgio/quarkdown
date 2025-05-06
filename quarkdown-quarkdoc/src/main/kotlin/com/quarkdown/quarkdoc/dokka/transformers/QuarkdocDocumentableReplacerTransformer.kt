@@ -5,7 +5,10 @@ import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.base.transformers.documentables.DocumentableReplacerTransformer
 import org.jetbrains.dokka.model.Bound
 import org.jetbrains.dokka.model.DFunction
+import org.jetbrains.dokka.model.DModule
+import org.jetbrains.dokka.model.DPackage
 import org.jetbrains.dokka.model.DParameter
+import org.jetbrains.dokka.model.DProperty
 import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.model.Nullable
@@ -29,6 +32,18 @@ open class QuarkdocDocumentableReplacerTransformer(
         )
 
     protected fun <T> AnyWithChanges<T>.merge(other: (T) -> AnyWithChanges<T>): AnyWithChanges<T> = this.merge(other(this.target!!))
+
+    protected open fun transformModule(module: DModule) = module.unchanged()
+
+    override fun processModule(dModule: DModule) = super.processModule(dModule).merge(::transformModule)
+
+    protected open fun transformPackage(pkg: DPackage) = pkg.unchanged()
+
+    override fun processPackage(dPackage: DPackage) = super.processPackage(dPackage).merge(::transformPackage)
+
+    protected open fun transformProperty(property: DProperty) = property.unchanged()
+
+    override fun processProperty(dProperty: DProperty) = super.processProperty(dProperty).merge(::transformProperty)
 
     protected open fun transformFunction(function: DFunction) = function.unchanged()
 
