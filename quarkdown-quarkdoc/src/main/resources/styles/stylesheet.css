@@ -1,0 +1,8 @@
+/* package.module.Abc => Abc */
+#sideMenu a[href*='module.']:has(wbr) > span:not(:last-child) {
+    display: none;
+}
+
+.toc--part[nesting-level='0']:has(a[href*='module.']) a:not([href*='module.']) {
+    opacity: .5;
+}
