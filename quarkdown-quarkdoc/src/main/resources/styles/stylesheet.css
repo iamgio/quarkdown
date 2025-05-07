@@ -3,6 +3,7 @@
     display: none;
 }
 
-.toc--part[nesting-level='0']:has(a[href*='module.']) a:not([href*='module.']) {
+/* If a package contains Quarkdown modules, non-module packages are semi-hidden. */
+.toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
     opacity: .5;
 }
