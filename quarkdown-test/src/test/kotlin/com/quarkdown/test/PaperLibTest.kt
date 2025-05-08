@@ -100,6 +100,59 @@ class PaperLibTest {
     }
 
     @Test
+    fun `custom named paragraph`() {
+        execute(
+            """
+            .doclang {english}
+            .include {paper}
+            
+            .namedparagraph {Problem}
+                This is my problem.
+            
+            .namedparagraph {Solution}
+                This is my solution.
+            """.trimIndent(),
+            loadableLibraries = setOf("paper"),
+        ) {
+            assertEquals(
+                "<p><strong>Problem.</strong> This is my problem.</p>" +
+                    "<p><strong>Solution.</strong> This is my solution.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered custom named paragraph`() {
+        execute(
+            """
+            .doclang {english}
+            .include {paper}
+            
+            .numbering
+                - problem: a
+                
+            .function {problem}
+                content:
+                .namedparagraph {Problem} tag:{problem} content:{.content}
+            
+            .problem
+                This is my problem.
+                
+            .problem
+                This is another problem.
+            """.trimIndent(),
+            loadableLibraries = setOf("paper"),
+        ) {
+            assertEquals(
+                "<p><strong>Problem a.</strong> This is my problem.</p>" +
+                    "<p><strong>Problem b.</strong> This is another problem.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `abstract`() {
         execute(
             """

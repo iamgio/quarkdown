@@ -39,42 +39,47 @@
 
 <!-- Internal helper that builds a titled numerable block -->
 
-.function {INTERNALcontenttype}
-    type content:
-    .var {localizedname} {.localize {paper:.type}}
-    .numbered {.concatenate {.type} {s}}
+.function {namedparagraph}
+    name tag? content:
+    .numbered {.tag::otherwise {}}
         number:
         **.concatenate {
-            .localizedname
-          } with:{
+            .name
+        } with:{
             .string {" .number"}
-          } if:{
+        } if:{
             .isnotempty {.number}
-          }.paperblocksuffix** .content
+        }.paperblocksuffix** .content
+
+.function {INTERNALtypedparagraph}
+    type content:
+    .var {localizedname} {.localize {paper:.type}}
+    .var {numberingtag} {.concatenate {.type} {s}}
+    .namedparagraph {.localizedname} {.numberingtag} {.content}
 
 <-- A numerable 'definition' block -->
 
 .function {definition}
     content:
-    .INTERNALcontenttype {definition} {.content}
+    .INTERNALtypedparagraph {definition} {.content}
 
 <-- A numerable 'lemma' block -->
 
 .function {lemma}
     content:
-    .INTERNALcontenttype {lemma} {.content}
+    .INTERNALtypedparagraph {lemma} {.content}
 
 <-- A numerable 'theorem' block -->
 
 .function {theorem}
     content:
-    .INTERNALcontenttype {theorem} {.content}
+    .INTERNALtypedparagraph {theorem} {.content}
 
 <-- A numerable 'proof' block -->
 
 .function {proof}
     content:
-    .INTERNALcontenttype {proof} {.content}
+    .INTERNALtypedparagraph {proof} {.content}
 
     .align {end}
         .text {.proofend} size:{huge}
