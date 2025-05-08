@@ -30,7 +30,7 @@
     content:
     .container padding:{0 1cm} fullwidth:{yes}
         .align {.abstractalignment}
-            #### .localize {paper:abstract}
+            ####! .localize {paper:abstract}
 
         .container padding:{2mm 0}
             .content
