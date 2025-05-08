@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
  */
 class PaperLibTest {
     @Test
-    fun paper() {
+    fun definition() {
         execute(
             """
             .doclang {english}
@@ -23,7 +23,10 @@ class PaperLibTest {
         ) {
             assertEquals("<p><strong>Definition.</strong> This is my definition.</p>", it)
         }
+    }
 
+    @Test
+    fun `definition numbering`() {
         execute(
             """
             .doclang {italian}
@@ -38,7 +41,10 @@ class PaperLibTest {
         ) {
             assertEquals("<p><strong>Definizione A.</strong> This is my definition.</p>", it)
         }
+    }
 
+    @Test
+    fun `theorem numbering`() {
         execute(
             """
             .doclang {english}
@@ -64,7 +70,10 @@ class PaperLibTest {
                 it,
             )
         }
+    }
 
+    @Test
+    fun `proof customization`() {
         execute(
             """
             .doclang {english}
@@ -88,7 +97,63 @@ class PaperLibTest {
                 it,
             )
         }
+    }
 
+    @Test
+    fun `custom named paragraph`() {
+        execute(
+            """
+            .doclang {english}
+            .include {paper}
+            
+            .namedparagraph {Problem}
+                This is my problem.
+            
+            .namedparagraph {Solution}
+                This is my solution.
+            """.trimIndent(),
+            loadableLibraries = setOf("paper"),
+        ) {
+            assertEquals(
+                "<p><strong>Problem.</strong> This is my problem.</p>" +
+                    "<p><strong>Solution.</strong> This is my solution.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered custom named paragraph`() {
+        execute(
+            """
+            .doclang {english}
+            .include {paper}
+            
+            .numbering
+                - problem: a
+                
+            .function {problem}
+                content:
+                .namedparagraph {Problem} tag:{problem} content:{.content}
+            
+            .problem
+                This is my problem.
+                
+            .problem
+                This is another problem.
+            """.trimIndent(),
+            loadableLibraries = setOf("paper"),
+        ) {
+            assertEquals(
+                "<p><strong>Problem a.</strong> This is my problem.</p>" +
+                    "<p><strong>Problem b.</strong> This is another problem.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `abstract`() {
         execute(
             """
             .doclang {english}
@@ -107,13 +172,13 @@ class PaperLibTest {
             assertContains(
                 it,
                 "<div class=\"container fullwidth\" style=\"justify-items: center; text-align: center;\">" +
-                    "<p><strong>Abstract</strong></p>" +
+                    "<h4>Abstract</h4>" +
                     "</div>",
             )
             assertContains(
                 it,
                 "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
-                    "<p><strong>Abstract</strong></p>" +
+                    "<h4>Abstract</h4>" +
                     "</div>",
             )
         }
