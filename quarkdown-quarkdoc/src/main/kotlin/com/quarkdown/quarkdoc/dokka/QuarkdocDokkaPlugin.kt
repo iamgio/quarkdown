@@ -1,5 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.DocumentTypeConstraintsTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.ModuleAsPackageTransformer
@@ -7,6 +9,7 @@ import com.quarkdown.quarkdoc.dokka.transformers.ModulesStorer
 import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
 import com.quarkdown.quarkdoc.dokka.transformers.SuppressInjectedTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.ValueTypeTransformer
+import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin
 import org.jetbrains.dokka.plugability.DokkaPluginApiPreview
@@ -67,6 +70,22 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      */
     val valueTypeTransformer by extending {
         base.preMergeDocumentableTransformer providing ::ValueTypeTransformer
+    }
+
+    /**
+     * Given a function annotated with `@OnlyForDocumentType` which defines constraints
+     * about the document type the function supports, this transformer stores this data
+     * for [documentTypeConstraintsPageTransformer] to display it.
+     */
+    val documentTypeConstraintsTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::DocumentTypeConstraintsTransformer
+    }
+
+    /**
+     * Displays the document type constraints produced by [documentTypeConstraintsTransformer] in the documentation.
+     */
+    val documentTypeConstraintsPageTransformer by extending {
+        CoreExtensions.pageTransformer providing ::DocumentTypeConstraintsPageTransformer
     }
 
     /**
