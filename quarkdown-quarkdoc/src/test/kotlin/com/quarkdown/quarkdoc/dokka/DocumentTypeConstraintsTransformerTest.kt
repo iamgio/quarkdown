@@ -17,6 +17,12 @@ class DocumentTypeConstraintsTransformerTest :
                 OnlyForDocumentType::class,
             ),
     ) {
+    private fun assertContainsNormalGeneration(output: String) {
+        assertContains(output, "Paragraph 1.")
+        assertContains(output, "Paragraph 2.")
+        assertContains(output, "Return")
+    }
+
     @Test
     fun `no constraint`() {
         test(
@@ -32,7 +38,7 @@ class DocumentTypeConstraintsTransformerTest :
             """.trimIndent(),
             "func",
         ) {
-            assertContains(it, "Return")
+            assertContainsNormalGeneration(it)
             assertFalse("Target" in it)
         }
     }
@@ -53,7 +59,7 @@ class DocumentTypeConstraintsTransformerTest :
             """.trimIndent(),
             "func",
         ) {
-            assertContains(it, "Return")
+            assertContainsNormalGeneration(it)
             assertContains(it, "Target")
             assertContains(it, "paged")
         }
@@ -75,7 +81,7 @@ class DocumentTypeConstraintsTransformerTest :
             """.trimIndent(),
             "func",
         ) {
-            assertContains(it, "Return")
+            assertContainsNormalGeneration(it)
             assertContains(it, "Target")
             assertContains(it, "paged")
             assertContains(it, "slides")

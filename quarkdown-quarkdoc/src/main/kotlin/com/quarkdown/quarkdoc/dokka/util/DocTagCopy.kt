@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka.util
 
 import org.jetbrains.dokka.model.WithChildren
+import org.jetbrains.dokka.model.doc.CustomDocTag
 import org.jetbrains.dokka.model.doc.DocTag
 import kotlin.reflect.full.instanceParameter
 
@@ -18,7 +19,7 @@ fun WithChildren<*>.tryCopy(newChildren: List<DocTag>): WithChildren<*> {
             .associateWith { parameter ->
                 when (parameter.name) {
                     "children" -> newChildren
-                    "child", "root" -> newChildren.firstOrNull()
+                    "child", "root" -> newChildren.singleOrNull() ?: CustomDocTag(newChildren, name = "")
                     else -> null
                 }
             }.filterValues { it != null }
