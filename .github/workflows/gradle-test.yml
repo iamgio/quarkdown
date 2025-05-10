@@ -4,6 +4,8 @@ name: Gradle test
 
 on:
   workflow_call:
+  push:
+    branches-ignore: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
