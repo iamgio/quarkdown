@@ -3,7 +3,6 @@ package com.quarkdown.quarkdoc.dokka
 import com.quarkdown.core.log.Log
 import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
-import jdk.nashorn.internal.objects.NativeRegExp.source
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
