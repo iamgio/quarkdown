@@ -2,6 +2,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.Year
 
 plugins {
     kotlin("jvm") version "2.1.20"
@@ -29,11 +30,33 @@ subprojects {
 dependencies {
     subprojects.forEach {
         implementation(it)
+        dokka(it)
     }
 }
 
 application {
     mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
+}
+
+// The following Dokka configuration might be part of a Gradle plugin in the future.
+dokka {
+    fun asset(path: String): File = project(":quarkdown-quarkdoc").projectDir.resolve("src/main/resources/$path")
+
+    pluginsConfiguration.html {
+        val year = Year.now().value
+        footerMessage.set("(c) $year Quarkdown")
+        customAssets.from(*asset("assets/images").listFiles())
+        customStyleSheets.from(asset("styles/stylesheet.css"))
+    }
+
+    dokkaPublications.html {
+        outputDirectory.set(
+            layout.buildDirectory
+                .file("docs")
+                .get()
+                .asFile,
+        )
+    }
 }
 
 tasks.build {
