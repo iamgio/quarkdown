@@ -1,3 +1,5 @@
+extra["noRuntime"] = true
+
 plugins {
     kotlin("jvm")
 }

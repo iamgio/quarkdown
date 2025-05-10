@@ -27,10 +27,19 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 }
 
-dependencies {
-    subprojects.forEach {
-        implementation(it)
-        dokka(it)
+// Fat JAR / Distribution dependencies
+gradle.projectsEvaluated {
+    dependencies {
+        subprojects.forEach {
+            when {
+                it.extra.has("noRuntime") && it.extra["noRuntime"] == true -> {
+                    compileOnly(it)
+                }
+
+                else -> implementation(it)
+            }
+            dokka(it)
+        }
     }
 }
 
