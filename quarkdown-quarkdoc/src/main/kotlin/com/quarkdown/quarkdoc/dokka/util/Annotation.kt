@@ -17,7 +17,7 @@ inline fun <reified T> Documentable.extractAnnotation(): Annotations.Annotation?
             ?.flatMap { it.directAnnotations.values.flatten() }
             ?: emptyList()
 
-    return annotations.firstOrNull { it.dri.isOfType<T>() }
+    return annotations.find { it.dri.isOfType<T>() }
 }
 
 /**

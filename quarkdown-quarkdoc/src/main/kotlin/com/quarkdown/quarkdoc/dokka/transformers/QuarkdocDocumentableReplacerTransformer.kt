@@ -1,7 +1,5 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
-import com.quarkdown.core.function.reflect.annotation.Name
-import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.base.transformers.documentables.DocumentableReplacerTransformer
 import org.jetbrains.dokka.model.Bound
 import org.jetbrains.dokka.model.DFunction
@@ -9,7 +7,6 @@ import org.jetbrains.dokka.model.DModule
 import org.jetbrains.dokka.model.DPackage
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.DProperty
-import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.model.Nullable
 import org.jetbrains.dokka.plugability.DokkaContext
@@ -35,7 +32,7 @@ open class QuarkdocDocumentableReplacerTransformer(
 
     protected open fun transformModule(module: DModule) = module.unchanged()
 
-    override fun processModule(dModule: DModule) = super.processModule(dModule).merge(::transformModule)
+    override fun processModule(module: DModule) = super.processModule(module).merge(::transformModule)
 
     protected open fun transformPackage(pkg: DPackage) = pkg.unchanged()
 
@@ -76,12 +73,4 @@ open class QuarkdocDocumentableReplacerTransformer(
                     else -> it.unchanged()
                 }
             }
-
-    /**
-     * @return the optional overridden name of the function or parameter, or `null` if not annotated with `@Name`.
-     */
-    protected fun getOverriddenName(documentable: Documentable): String? {
-        val nameAnnotation = documentable.extractAnnotation<Name>()
-        return nameAnnotation?.params?.get("name")?.toString()
-    }
 }
