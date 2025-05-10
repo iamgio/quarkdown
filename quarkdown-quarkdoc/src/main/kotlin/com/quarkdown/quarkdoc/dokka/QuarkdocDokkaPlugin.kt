@@ -24,6 +24,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
 
     /**
      * Stores the modules in which the functions are declared, to be used in [moduleAsPackageTransformer].
+     * @see com.quarkdown.core.function.library.loader.Module
      */
     val modulesStorer by extending {
         base.preMergeDocumentableTransformer providing ::ModulesStorer order { before(moduleAsPackageTransformer) }
@@ -32,6 +33,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     /**
      * Quarkdown modules, defined by a [com.quarkdown.core.function.library.loader.Module] property,
      * contain the functions declared in the same source file and are shown in the documentation as packages.
+     * @see com.quarkdown.core.function.library.loader.Module
      */
     val moduleAsPackageTransformer by extending {
         base.preMergeDocumentableTransformer providing ::ModuleAsPackageTransformer
@@ -39,6 +41,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
 
     /**
      * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
+     * @see com.quarkdown.core.function.reflect.annotation.Name
      */
     val renamingsStorer by extending {
         plugin<DokkaBase>().preMergeDocumentableTransformer providing ::RenamingsStorer order {
@@ -48,6 +51,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
 
     /**
      * Functions and parameters annotated with `@Name` are renamed in the function signature.
+     * @see com.quarkdown.core.function.reflect.annotation.Name
      */
     val documentableNameTransformer by extending {
         base.preMergeDocumentableTransformer providing ::DocumentableNameTransformer
@@ -59,6 +63,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      * - Direct links (`[name]`)
      * - Parameter (`@param name`)
      * - See references (`@see name`)
+     * @see com.quarkdown.core.function.reflect.annotation.Name
      */
     val documentationNameTransformer by extending {
         base.preMergeDocumentableTransformer providing ::DocumentationNameTransformer
@@ -76,9 +81,18 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      * Given a function annotated with `@OnlyForDocumentType` which defines constraints
      * about the document type the function supports, this transformer stores this data
      * for [documentTypeConstraintsPageTransformer] to display it.
+     * @see com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
      */
-    val documentTypeConstraintsTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::DocumentTypeConstraintsTransformer
+    val documentPositiveTypeConstraintsTransformer by extending {
+        base.preMergeDocumentableTransformer providing DocumentTypeConstraintsTransformer::Positive
+    }
+
+    /**
+     * Like [documentPositiveTypeConstraintsTransformer] but for the negative case, via `@NotForDocumentType`.
+     * @see com.quarkdown.core.function.reflect.annotation.NotForDocumentType
+     */
+    val documentNegativeTypeConstraintsTransformer by extending {
+        base.preMergeDocumentableTransformer providing DocumentTypeConstraintsTransformer::Negative
     }
 
     /**
@@ -90,6 +104,7 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
 
     /**
      * Parameters annotated with `@Injected` are hidden (suppressed) in the generated documentation.
+     * @see com.quarkdown.core.function.reflect.annotation.Injected
      */
     val suppressInjectedTransformer by extending {
         base.preMergeDocumentableTransformer providing ::SuppressInjectedTransformer

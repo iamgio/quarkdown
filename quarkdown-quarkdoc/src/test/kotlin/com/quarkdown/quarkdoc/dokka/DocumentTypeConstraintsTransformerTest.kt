@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -17,6 +18,10 @@ class DocumentTypeConstraintsTransformerTest :
                 DocumentType::class,
                 OnlyForDocumentType::class,
                 Name::class,
+            ),
+        stringImports =
+            listOf(
+                NotForDocumentType::class.qualifiedName!!,
             ),
     ) {
     private fun assertContainsNormalGeneration(output: String) {
@@ -112,6 +117,62 @@ class DocumentTypeConstraintsTransformerTest :
             assertContains(it, "paged")
             assertContains(it, "abc")
             assertFalse("(?<!/)oldFunc".toRegex() in it)
+        }
+    }
+
+    @Test
+    fun `not for type`() {
+        test(
+            """
+            /**
+             * Paragraph 1.
+             *
+             * Paragraph 2.
+             *
+             * @return test
+             */
+            @NotForDocumentType(DocumentType.PAGED)
+            fun func() = Unit
+            """.trimIndent(),
+            "func",
+        ) {
+            assertContainsNormalGeneration(it)
+            assertContains(it, "Target")
+            assertContains(it, "plain")
+            assertContains(it, "slides")
+            assertFalse("paged" in it)
+        }
+    }
+
+    @Test
+    fun `not for two types`() {
+        test(
+            """
+            @NotForDocumentType(DocumentType.PAGED, DocumentType.SLIDES)
+            fun func() = Unit
+            """.trimIndent(),
+            "func",
+        ) {
+            assertContains(it, "Target")
+            assertContains(it, "plain")
+            assertFalse("slides" in it)
+            assertFalse("paged" in it)
+        }
+    }
+
+    @Test
+    fun `for all types`() {
+        test(
+            """
+            @NotForDocumentType()
+            fun func() = Unit
+            """.trimIndent(),
+            "func",
+        ) {
+            assertContains(it, "Target")
+            assertContains(it, "plain")
+            assertContains(it, "slides")
+            assertContains(it, "paged")
         }
     }
 }
