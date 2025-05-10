@@ -106,7 +106,8 @@ class ValueTypeTransformerTest :
     @Test
     fun `iterable of any, in parameter`() {
         test(
-            "fun iterableOfAnyParameter(iterable: Iterable<OutputValue<*>>): IterableValue<OutputValue<*>> = GeneralCollectionValue(iterable)",
+            "fun iterableOfAnyParameter(iterable: Iterable<OutputValue<*>>): IterableValue<OutputValue<*>>" +
+                " = GeneralCollectionValue(iterable)",
             "iterable-of-any-parameter",
         ) {
             val signature = getSignature(it)
@@ -118,7 +119,8 @@ class ValueTypeTransformerTest :
     @Test
     fun `nullable iterable of any, in parameter`() {
         test(
-            "fun nullableIterableOfAnyParameter(iterable: Iterable<OutputValue<*>>?): IterableValue<OutputValue<*>> = GeneralCollectionValue(iterable)",
+            "fun nullableIterableOfAnyParameter(iterable: Iterable<OutputValue<*>>?): IterableValue<OutputValue<*>>" +
+                " = GeneralCollectionValue(iterable)",
             "nullable-iterable-of-any-parameter",
         ) {
             val signature = getSignature(it)
