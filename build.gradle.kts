@@ -38,7 +38,6 @@ gradle.projectsEvaluated {
 
                 else -> implementation(it)
             }
-            dokka(it)
         }
     }
 }
@@ -47,17 +46,15 @@ application {
     mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
 }
 
-// The following Dokka configuration might be part of a Gradle plugin in the future.
-dokka {
-    fun asset(path: String): File = project(":quarkdown-quarkdoc").projectDir.resolve("src/main/resources/$path")
+// Dokka
 
-    pluginsConfiguration.html {
-        val year = Year.now().value
-        footerMessage.set("(c) $year Quarkdown")
-        customAssets.from(*asset("assets/images").listFiles())
-        customStyleSheets.from(asset("styles/stylesheet.css"))
+dependencies {
+    subprojects.forEach {
+        dokka(it)
     }
+}
 
+dokka {
     dokkaPublications.html {
         outputDirectory.set(
             layout.buildDirectory
@@ -67,6 +64,21 @@ dokka {
         )
     }
 }
+
+allprojects {
+    fun asset(path: String): File = project(":quarkdown-quarkdoc").projectDir.resolve("src/main/resources/$path")
+
+    dokka {
+        pluginsConfiguration.html {
+            val year = Year.now().value
+            footerMessage.set("&copy; $year Quarkdown")
+            customAssets.from(*asset("assets/images").listFiles())
+            customStyleSheets.from(asset("styles/stylesheet.css"))
+        }
+    }
+}
+
+// Tasks
 
 tasks.build {
     dependsOn("shadowJar")
