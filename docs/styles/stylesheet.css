@@ -1,0 +1,9 @@
+/* package.module.Abc => Abc */
+#sideMenu a[href*='module.']:has(wbr) > span:not(:last-child) {
+    display: none;
+}
+
+/* If a package contains Quarkdown modules, non-module packages are semi-hidden. */
+.toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
+    opacity: .5;
+}
