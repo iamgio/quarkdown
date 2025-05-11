@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
+import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentTypeConstraintsTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
@@ -108,6 +109,13 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      */
     val suppressInjectedTransformer by extending {
         base.preMergeDocumentableTransformer providing ::SuppressInjectedTransformer
+    }
+
+    /**
+     * Generates Quarkdown signatures for functions in Quarkdown modules.
+     */
+    val signatureProvider by extending {
+        base.signatureProvider providing ::QuarkdownSignatureProvider override base.kotlinSignatureProvider
     }
 
     @DokkaPluginApiPreview

@@ -1,6 +1,9 @@
 package com.quarkdown.quarkdoc.dokka.storage
 
+import com.quarkdown.quarkdoc.dokka.util.sourcePaths
 import org.jetbrains.dokka.links.DRI
+import org.jetbrains.dokka.model.Documentable
+import org.jetbrains.dokka.model.WithSources
 
 data class StoredModule(
     val name: String,
@@ -23,6 +26,10 @@ object QuarkdownModulesStorage {
     ) {
         modules[sourcePath] = module
     }
+
+    fun isModule(documentable: Documentable) =
+        documentable is WithSources &&
+            documentable.sourcePaths.any { it in modules }
 
     /**
      * The number of modules stored in this storage.
