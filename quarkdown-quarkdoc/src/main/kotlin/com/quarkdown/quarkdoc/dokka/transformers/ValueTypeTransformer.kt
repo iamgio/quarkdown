@@ -1,7 +1,9 @@
 package com.quarkdown.quarkdoc.dokka.transformers
 
+import com.quarkdown.core.function.value.InputValue
 import com.quarkdown.core.function.value.ObjectValue
 import com.quarkdown.core.function.value.OutputValue
+import com.quarkdown.core.function.value.Value
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.model.Projection
@@ -26,8 +28,10 @@ class ValueTypeTransformer(
 
         val (newClassName: String, newProjections: List<Projection>?) =
             when {
-                // OutputValue<*> -> Any
-                className == OutputValue::class.simpleName -> {
+                // Value<*>, InputValue<*>, OutputValue<*> -> Any
+                className == Value::class.simpleName ||
+                    className == OutputValue::class.simpleName ||
+                    className == InputValue::class.simpleName -> {
                     "Any" to emptyList<Projection>()
                 }
 
