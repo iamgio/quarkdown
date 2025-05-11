@@ -70,7 +70,7 @@ class QuarkdownSignatureProvider(
         with(helper) {
             punctuation(INLINE_PARAMETER_DELIMITER)
             punctuation(INLINE_PARAMETER_START)
-            text(parameter.name ?: "<unnamed>")
+            constant(parameter.name ?: "<unnamed>")
             operator(PARAMETER_TYPE_DELIMITER)
             projectionSignature(parameter.type)
             defaultValue(parameter)
