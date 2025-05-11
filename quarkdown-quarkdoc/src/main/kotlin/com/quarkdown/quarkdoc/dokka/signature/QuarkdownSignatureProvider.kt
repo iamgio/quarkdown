@@ -12,7 +12,7 @@ import org.jetbrains.dokka.pages.ContentNode
 import org.jetbrains.dokka.pages.TokenStyle
 import org.jetbrains.dokka.plugability.DokkaContext
 
-private const val BEGIN = "."
+internal const val BEGIN = "."
 private const val INLINE_PARAMETER_START = "{"
 private const val INLINE_PARAMETER_END = "}"
 private const val INLINE_PARAMETER_DELIMITER = " "
@@ -52,9 +52,16 @@ class QuarkdownSignatureProvider(
 
     private fun PageContentBuilder.DocumentableContentBuilder.signature(function: DFunction) =
         with(helper) {
+            val lineBreakingStrategy = LineBreakingStrategy.fromFunction(function)
             punctuation(BEGIN)
             text(function.name, styles = setOf(TokenStyle.Function))
-            function.parameters.forEach { signature(it) }
+
+            function.parameters.forEachIndexed { index, parameter ->
+                lineBreakingStrategy.run { beforeParameter(index) }
+                signature(parameter)
+            }
+
+            lineBreakingStrategy.run { beforeReturn() }
             operator(RETURN_TYPE_DELIMITER)
             projectionSignature(function.type)
         }
