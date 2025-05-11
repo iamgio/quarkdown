@@ -131,7 +131,7 @@ open class QuarkdocDokkaTest(
     protected fun getSignature(html: String) =
         Jsoup
             .parse(html)
-            .select(".content > .monospace")
+            .select(".content pre")
             .firstOrNull()
             ?.text()
             ?: throw IllegalStateException("Signature not found")
