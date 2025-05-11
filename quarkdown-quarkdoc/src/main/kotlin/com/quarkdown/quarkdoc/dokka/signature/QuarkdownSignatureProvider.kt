@@ -6,12 +6,11 @@ import org.jetbrains.dokka.base.signatures.KotlinSignatureProvider
 import org.jetbrains.dokka.base.signatures.SignatureProvider
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
+import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.Documentable
-import org.jetbrains.dokka.model.Projection
 import org.jetbrains.dokka.pages.ContentNode
 import org.jetbrains.dokka.pages.TokenStyle
 import org.jetbrains.dokka.plugability.DokkaContext
-import kotlin.reflect.jvm.isAccessible
 
 private const val BEGIN = "."
 private const val INLINE_PARAMETER_START = "{"
@@ -27,6 +26,7 @@ class QuarkdownSignatureProvider(
     private val context: DokkaContext,
 ) : SignatureProvider {
     private val kotlin = KotlinSignatureProvider(context)
+    private val helper = KotlinSignatureReflectionHelper(kotlin)
 
     override fun signature(documentable: Documentable): List<ContentNode> {
         if (!QuarkdownModulesStorage.isModule(documentable)) {
@@ -50,29 +50,23 @@ class QuarkdownSignatureProvider(
         }
     }
 
-    private fun PageContentBuilder.DocumentableContentBuilder.signature(function: DFunction) {
-        punctuation(BEGIN)
-        text(function.name, styles = setOf(TokenStyle.Function))
-        function.parameters.forEach { parameter ->
+    private fun PageContentBuilder.DocumentableContentBuilder.signature(function: DFunction) =
+        with(helper) {
+            punctuation(BEGIN)
+            text(function.name, styles = setOf(TokenStyle.Function))
+            function.parameters.forEach { signature(it) }
+            operator(RETURN_TYPE_DELIMITER)
+            projectionSignature(function.type)
+        }
+
+    private fun PageContentBuilder.DocumentableContentBuilder.signature(parameter: DParameter) =
+        with(helper) {
             punctuation(INLINE_PARAMETER_DELIMITER)
             punctuation(INLINE_PARAMETER_START)
-            text(parameter.name ?: "")
+            text(parameter.name ?: "<unnamed>")
             operator(PARAMETER_TYPE_DELIMITER)
-            +projectionSignature(parameter.type)
+            projectionSignature(parameter.type)
+            defaultValue(parameter)
             punctuation(INLINE_PARAMETER_END)
         }
-        operator(RETURN_TYPE_DELIMITER)
-        +projectionSignature(function.type)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun PageContentBuilder.DocumentableContentBuilder.projectionSignature(projection: Projection): List<ContentNode> {
-        // Invokes the private method `signatureForProjection` from the KotlinSignatureProvider.
-        return kotlin::class
-            .members
-            .find { it.name == "signatureForProjection" }
-            ?.apply { isAccessible = true }
-            ?.call(kotlin, this, projection, false) as? List<ContentNode>
-            ?: emptyList()
-    }
 }

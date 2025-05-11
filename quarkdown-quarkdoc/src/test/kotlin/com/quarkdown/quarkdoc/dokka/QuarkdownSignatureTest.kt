@@ -60,4 +60,11 @@ class QuarkdownSignatureTest :
             assertEquals(".func {a: Int} {b: Iterable<Dynamic>} -> Void", it)
         }
     }
+
+    @Test
+    fun `default value`() {
+        testSignature("fun func(a: Int = 0) = VoidValue") {
+            assertEquals(".func {a: Int = 0} -> Void", it)
+        }
+    }
 }
