@@ -1,16 +1,13 @@
 package com.quarkdown.quarkdoc.dokka.page
 
-import org.jetbrains.dokka.base.DokkaBase
+import com.quarkdown.quarkdoc.dokka.util.documentableContentBuilder
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.Documentable
-import org.jetbrains.dokka.model.properties.PropertyContainer
 import org.jetbrains.dokka.pages.ContentNode
 import org.jetbrains.dokka.pages.ContentPage
 import org.jetbrains.dokka.pages.RootPageNode
 import org.jetbrains.dokka.pages.WithDocumentables
 import org.jetbrains.dokka.plugability.DokkaContext
-import org.jetbrains.dokka.plugability.plugin
-import org.jetbrains.dokka.plugability.querySingle
 import org.jetbrains.dokka.transformers.pages.PageTransformer
 
 /**
@@ -18,15 +15,8 @@ import org.jetbrains.dokka.transformers.pages.PageTransformer
  * @param D the type of [Documentable] that should own the page
  */
 abstract class DocumentablePageTransformer<D : Documentable>(
-    context: DokkaContext,
+    private val context: DokkaContext,
 ) : PageTransformer {
-    private val builder: PageContentBuilder =
-        PageContentBuilder(
-            context.plugin<DokkaBase>().querySingle { commentsToContentConverter },
-            context.plugin<DokkaBase>().querySingle { signatureProvider },
-            context.logger,
-        )
-
     /**
      * Extracts the [Documentable] from the list of documentables featured in the page.
      * @param documentables the list of documentables of the page
@@ -55,15 +45,13 @@ abstract class DocumentablePageTransformer<D : Documentable>(
                 extractDocumentable(page.documentables)
                     ?: return@transformContentPagesTree page
 
-            val contentBuilder =
-                builder.DocumentableContentBuilder(
+            val builder =
+                context.documentableContentBuilder(
+                    documentable,
                     page.dri,
-                    mainSourcesetData = documentable.sourceSets,
-                    emptySet(),
-                    PropertyContainer.empty(),
                 )
 
-            createContent(page, documentable, contentBuilder)
+            createContent(page, documentable, builder)
                 ?.let { page.modified(content = it) }
                 ?: page
         }
