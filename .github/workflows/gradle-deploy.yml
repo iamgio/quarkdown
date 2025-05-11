@@ -38,6 +38,15 @@ jobs:
         title: Development build
         files: build/distributions/quarkdown.zip
 
+    - name: Generate docs
+      run: ./gradlew dokkaGeneratePublicationHtml
+
+    - name: Deploy docs
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: build/dokka
+
   dependency-submission:
 
     runs-on: ubuntu-latest
