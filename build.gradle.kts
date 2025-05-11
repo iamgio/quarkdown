@@ -58,11 +58,9 @@ dokka {
     dokkaPublications.html {
         outputDirectory.set(
             layout.buildDirectory
-                .file("dokka")
+                .file("docs")
                 .get()
-                .asFile
-                .also { it.mkdirs() }
-                .resolve("docs"),
+                .asFile,
         )
     }
 }
