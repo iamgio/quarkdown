@@ -37,7 +37,7 @@ class ModuleTransformerTest :
             outName = "a-function",
         ) {
             assertEquals(2, QuarkdownModulesStorage.moduleCount)
-            assertContains(getSignature(it), "aFunction()")
+            assertContains(getSignature(it), "aFunction")
         }
     }
 
