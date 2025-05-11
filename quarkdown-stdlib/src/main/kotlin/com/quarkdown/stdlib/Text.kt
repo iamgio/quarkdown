@@ -5,6 +5,8 @@ import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
@@ -18,7 +20,7 @@ import com.quarkdown.core.util.toPlainText
  * This module handles text formatting.
  */
 val Text: Module =
-    setOf(
+    moduleOf(
         ::text,
         ::code,
         ::loremIpsum,

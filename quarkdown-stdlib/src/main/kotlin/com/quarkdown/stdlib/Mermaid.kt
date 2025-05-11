@@ -2,6 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagramFigure
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
@@ -18,7 +20,7 @@ import com.quarkdown.stdlib.internal.asDouble
  * This module handles generation of Mermaid diagrams.
  */
 val Mermaid: Module =
-    setOf(
+    moduleOf(
         ::mermaid,
         ::xyChart,
     )

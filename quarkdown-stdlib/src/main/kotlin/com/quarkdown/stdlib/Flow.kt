@@ -6,6 +6,8 @@ import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.function.FunctionParameter
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
@@ -27,7 +29,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * This module handles the control flow and other statements.
  */
 val Flow: Module =
-    setOf(
+    moduleOf(
         ::`if`,
         ::ifNot,
         ::forEach,

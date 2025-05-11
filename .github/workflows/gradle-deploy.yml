@@ -38,6 +38,16 @@ jobs:
         title: Development build
         files: build/distributions/quarkdown.zip
 
+    - name: Generate docs
+      run: ./gradlew dokkaGeneratePublicationHtml
+
+    - name: Deploy docs
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/docs
+        destination_dir: docs
+
   dependency-submission:
 
     runs-on: ubuntu-latest

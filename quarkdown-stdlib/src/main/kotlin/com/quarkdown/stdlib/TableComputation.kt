@@ -4,6 +4,8 @@ import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -22,7 +24,7 @@ import com.quarkdown.core.util.toPlainText
  * It adds dynamic operations like sorting, filtering, calculations.
  */
 val TableComputation: Module =
-    setOf(
+    moduleOf(
         ::tableSort,
         ::tableFilter,
         ::tableCompute,

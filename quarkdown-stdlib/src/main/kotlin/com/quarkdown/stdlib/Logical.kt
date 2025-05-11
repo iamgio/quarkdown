@@ -1,5 +1,7 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -8,7 +10,7 @@ import com.quarkdown.core.function.value.DynamicValue
  * `Logical` stdlib module exporter.
  */
 val Logical: Module =
-    setOf(
+    moduleOf(
         ::isLower,
         ::isGreater,
         ::equals,

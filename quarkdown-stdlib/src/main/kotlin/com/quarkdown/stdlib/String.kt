@@ -1,5 +1,7 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -12,7 +14,7 @@ import com.quarkdown.core.util.trimDelimiters
  * This module handles string manipulation.
  */
 val String: Module =
-    setOf(
+    moduleOf(
         ::string,
         ::concatenate,
         ::uppercase,

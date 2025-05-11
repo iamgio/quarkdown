@@ -1,5 +1,7 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.log.Log
 
@@ -8,7 +10,7 @@ import com.quarkdown.core.log.Log
  * This module contains logging utility.
  */
 val Logger: Module =
-    setOf(
+    moduleOf(
         ::log,
         ::debug,
         ::error,

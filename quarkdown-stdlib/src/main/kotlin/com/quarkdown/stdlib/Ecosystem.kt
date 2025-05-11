@@ -2,6 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OutputValue
@@ -14,7 +16,7 @@ import java.io.Reader
  * This module handles interaction between Quarkdown sources.
  */
 val Ecosystem: Module =
-    setOf(
+    moduleOf(
         ::include,
     )
 

@@ -21,6 +21,8 @@ import com.quarkdown.core.document.page.PageOrientation
 import com.quarkdown.core.document.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
@@ -40,7 +42,7 @@ import com.quarkdown.core.pipeline.error.IOPipelineException
  * @see com.quarkdown.core.document.DocumentInfo
  */
 val Document: Module =
-    setOf(
+    moduleOf(
         ::docType,
         ::docName,
         ::docAuthor,

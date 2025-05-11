@@ -1,6 +1,8 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Html
+import com.quarkdown.core.function.library.loader.Module
+import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.value.wrappedAsValue
 
 /**
@@ -8,7 +10,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * This module handles code injection of different languages.
  */
 val Injection: Module =
-    setOf(
+    moduleOf(
         ::html,
     )
 
