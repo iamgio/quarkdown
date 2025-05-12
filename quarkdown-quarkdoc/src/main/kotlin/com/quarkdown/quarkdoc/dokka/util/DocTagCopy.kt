@@ -12,6 +12,8 @@ import kotlin.reflect.full.instanceParameter
  */
 @Suppress("UNCHECKED_CAST")
 fun <T : WithChildren<*>> T.tryCopy(newChildren: List<DocTag>): T {
+    if (newChildren == this.children) return this
+
     // This implementation via reflection is a terrible workaround, yet the most convenient one.
     val copyMethod = this::class.members.find { it.name == "copy" } ?: return this
     val parameters = copyMethod.parameters
