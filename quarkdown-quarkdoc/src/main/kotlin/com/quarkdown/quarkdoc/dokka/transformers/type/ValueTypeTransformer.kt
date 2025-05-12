@@ -1,9 +1,10 @@
-package com.quarkdown.quarkdoc.dokka.transformers
+package com.quarkdown.quarkdoc.dokka.transformers.type
 
 import com.quarkdown.core.function.value.InputValue
 import com.quarkdown.core.function.value.ObjectValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
+import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.GenericTypeConstructor
 import org.jetbrains.dokka.model.Projection
@@ -13,7 +14,7 @@ import org.jetbrains.dokka.plugability.DokkaContext
 private const val VALUE_SUFFIX = "Value"
 
 /**
- * Transformer that renames [com.quarkdown.core.function.value.Value] and subclasses in the signature to a more human-readable form.
+ * Transformer that renames [Value] and subclasses in the signature to a more human-readable form.
  * For example:
  * - `NumberValue` -> `Number`
  * - `IterableValue` -> `Iterable`

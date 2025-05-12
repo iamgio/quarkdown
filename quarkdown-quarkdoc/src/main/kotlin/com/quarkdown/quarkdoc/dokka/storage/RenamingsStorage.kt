@@ -1,6 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.storage
 
-import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
+import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorer
 import org.jetbrains.dokka.links.DRI
 
 /**

@@ -1,7 +1,8 @@
-package com.quarkdown.quarkdoc.dokka.transformers
+package com.quarkdown.quarkdoc.dokka.transformers.module
 
 import com.quarkdown.core.util.filterNotNullEntries
 import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
+import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.difference
 import com.quarkdown.quarkdoc.dokka.util.sourcePaths
 import org.jetbrains.dokka.DokkaConfiguration

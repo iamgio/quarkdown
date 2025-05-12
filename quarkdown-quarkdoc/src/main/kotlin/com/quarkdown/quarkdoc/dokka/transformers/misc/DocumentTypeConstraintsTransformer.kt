@@ -1,8 +1,9 @@
-package com.quarkdown.quarkdoc.dokka.transformers
+package com.quarkdown.quarkdoc.dokka.transformers.misc
 
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
+import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import com.quarkdown.quarkdoc.dokka.util.parameterToEnumArray
 import com.quarkdown.quarkdoc.dokka.util.withAddedExtra

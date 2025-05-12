@@ -2,7 +2,7 @@ package com.quarkdown.quarkdoc.dokka.page
 
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.quarkdownName
-import com.quarkdown.quarkdoc.dokka.transformers.DocumentTargetProperty
+import com.quarkdown.quarkdoc.dokka.transformers.misc.DocumentTargetProperty
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.Documentable
@@ -12,7 +12,7 @@ import org.jetbrains.dokka.plugability.DokkaContext
 /**
  * Given a function that is constrained to specific document types,
  * this page transformer explains these constraints in a new section of the documentation page.
- * @see com.quarkdown.quarkdoc.dokka.transformers.DocumentTypeConstraintsTransformer
+ * @see com.quarkdown.quarkdoc.dokka.transformers.misc.DocumentTypeConstraintsTransformer
  */
 class DocumentTypeConstraintsPageTransformer(
     context: DokkaContext,

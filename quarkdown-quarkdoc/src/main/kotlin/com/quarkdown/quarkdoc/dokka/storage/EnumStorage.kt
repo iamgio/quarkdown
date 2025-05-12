@@ -5,8 +5,8 @@ import org.jetbrains.dokka.model.DEnum
 
 /**
  * Storage of enum declarations.
- * @see com.quarkdown.quarkdoc.dokka.transformers.EnumStorer
- * @see com.quarkdown.quarkdoc.dokka.transformers.EnumParameterEntryListerTransformer
+ * @see com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorer
+ * @see com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumParameterEntryListerTransformer
  */
 object EnumStorage {
     private val enums = mutableSetOf<DEnum>()

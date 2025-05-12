@@ -2,16 +2,16 @@ package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
 import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
-import com.quarkdown.quarkdoc.dokka.transformers.DocumentTypeConstraintsTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.EnumParameterEntryListerTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.EnumStorer
-import com.quarkdown.quarkdoc.dokka.transformers.ModuleAsPackageTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.ModulesStorer
-import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
-import com.quarkdown.quarkdoc.dokka.transformers.SuppressInjectedTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.ValueTypeTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumParameterEntryListerTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorer
+import com.quarkdown.quarkdoc.dokka.transformers.misc.DocumentTypeConstraintsTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.module.ModuleAsPackageTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.module.ModulesStorer
+import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentableNameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentationNameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorer
+import com.quarkdown.quarkdoc.dokka.transformers.suppress.SuppressInjectedTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.type.ValueTypeTransformer
 import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin

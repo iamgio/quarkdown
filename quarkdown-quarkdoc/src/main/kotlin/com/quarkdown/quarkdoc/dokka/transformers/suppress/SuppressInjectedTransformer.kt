@@ -1,6 +1,7 @@
-package com.quarkdown.quarkdoc.dokka.transformers
+package com.quarkdown.quarkdoc.dokka.transformers.suppress
 
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.plugability.DokkaContext

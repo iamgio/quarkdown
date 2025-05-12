@@ -1,9 +1,10 @@
-package com.quarkdown.quarkdoc.dokka.transformers
+package com.quarkdown.quarkdoc.dokka.transformers.enumeration
 
 import com.quarkdown.core.function.toQuarkdownNamingFormat
 import com.quarkdown.core.util.filterNotNullEntries
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import com.quarkdown.quarkdoc.dokka.storage.EnumStorage
+import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.tryCopy
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.DEnum
