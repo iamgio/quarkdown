@@ -10,7 +10,8 @@ import kotlin.reflect.full.instanceParameter
  * @param newChildren the new children to set in the copied instance
  * @return a new instance of the same type as [this] with the new children set, or [this] if the copy operation fails
  */
-fun WithChildren<*>.tryCopy(newChildren: List<DocTag>): WithChildren<*> {
+@Suppress("UNCHECKED_CAST")
+fun <T : WithChildren<*>> T.tryCopy(newChildren: List<DocTag>): T {
     // This implementation via reflection is a terrible workaround, yet the most convenient one.
     val copyMethod = this::class.members.find { it.name == "copy" } ?: return this
     val parameters = copyMethod.parameters
@@ -25,5 +26,5 @@ fun WithChildren<*>.tryCopy(newChildren: List<DocTag>): WithChildren<*> {
             }.filterValues { it != null }
             .plus(copyMethod.instanceParameter!! to this)
 
-    return copyMethod.callBy(args) as WithChildren<*>
+    return copyMethod.callBy(args) as T
 }

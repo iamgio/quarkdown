@@ -15,6 +15,7 @@ import com.quarkdown.core.function.expression.ComposedExpression
 import com.quarkdown.core.function.expression.Expression
 import com.quarkdown.core.function.expression.SafeExpression
 import com.quarkdown.core.function.expression.eval
+import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.function.reflect.FromDynamicType
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DictionaryValue
@@ -44,7 +45,6 @@ import com.quarkdown.core.function.value.factory.ValueFactory.lambda
 import com.quarkdown.core.function.value.factory.ValueFactory.range
 import com.quarkdown.core.function.value.factory.ValueFactory.safeExpression
 import com.quarkdown.core.function.value.factory.ValueFactory.size
-import com.quarkdown.core.function.value.quarkdownName
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.patterns.COMMENT_PATTERN
 import com.quarkdown.core.misc.color.Color

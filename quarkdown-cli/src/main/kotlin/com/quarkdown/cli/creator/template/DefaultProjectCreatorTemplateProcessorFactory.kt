@@ -2,7 +2,7 @@ package com.quarkdown.cli.creator.template
 
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.function.value.quarkdownName
+import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.template.TemplateProcessor
 
 private const val TEMPLATE = "/creator/main.qmd.template"

@@ -11,12 +11,11 @@ data class StoredModule(
 )
 
 /**
- *
+ * Storage that assigns Quarkdown modules to their .kt source file.
  */
 object QuarkdownModulesStorage {
     // Path to the source file of the module declaration associated with its module
-    // private
-    val modules = mutableMapOf<String, StoredModule>()
+    private val modules = mutableMapOf<String, StoredModule>()
 
     operator fun get(sourcePath: String): StoredModule? = modules[sourcePath]
 

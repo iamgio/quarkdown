@@ -3,8 +3,8 @@ package com.quarkdown.core.function.call.validate
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.error.InvalidFunctionCallException
+import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.function.value.OutputValue
-import com.quarkdown.core.function.value.quarkdownName
 
 /**
  * Validator of a function call that checks if the document the function call lies in is of a certain type.

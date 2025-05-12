@@ -19,7 +19,7 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.function.value.quarkdownName
+import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.log.Log

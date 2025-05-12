@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.core.log.Log
+import com.quarkdown.quarkdoc.dokka.storage.EnumStorage
 import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
 import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
@@ -40,6 +41,7 @@ open class QuarkdocDokkaTest(
     @BeforeTest
     fun setUp() {
         RenamingsStorage.clear()
+        EnumStorage.clear()
         QuarkdownModulesStorage.clear()
     }
 
@@ -111,15 +113,18 @@ open class QuarkdocDokkaTest(
      *
      * @param source the source code to test
      * @param outName the name of the output file, without extension
+     * @param autoPath if true, the output path is automatically generated based on [outName].
      * @param block action to execute with the output content.
      */
     protected fun test(
         source: String,
         outName: String,
+        autoPath: Boolean = true,
         block: (String) -> Unit,
     ) = test(
         mapOf(SOURCE_ROOT to source),
         outName = outName,
+        autoPath = autoPath,
         block = block,
     )
 

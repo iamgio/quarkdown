@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.dokka.transformers
 
 import org.jetbrains.dokka.base.transformers.documentables.DocumentableReplacerTransformer
 import org.jetbrains.dokka.model.Bound
+import org.jetbrains.dokka.model.DClasslike
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DModule
 import org.jetbrains.dokka.model.DPackage
@@ -37,6 +38,10 @@ open class QuarkdocDocumentableReplacerTransformer(
     protected open fun transformPackage(pkg: DPackage) = pkg.unchanged()
 
     override fun processPackage(dPackage: DPackage) = super.processPackage(dPackage).merge(::transformPackage)
+
+    protected open fun transformClassLike(classlike: DClasslike) = classlike.unchanged()
+
+    override fun processClassLike(classlike: DClasslike) = super.processClassLike(classlike).merge(::transformClassLike)
 
     protected open fun transformProperty(property: DProperty) = property.unchanged()
 

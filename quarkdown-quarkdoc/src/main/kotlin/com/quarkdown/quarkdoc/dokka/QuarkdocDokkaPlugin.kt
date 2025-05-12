@@ -5,6 +5,8 @@ import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentTypeConstraintsTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentationNameTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.EnumParameterEntryListerTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.EnumStorer
 import com.quarkdown.quarkdoc.dokka.transformers.ModuleAsPackageTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.ModulesStorer
 import com.quarkdown.quarkdoc.dokka.transformers.RenamingsStorer
@@ -79,6 +81,30 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
+     * Parameters annotated with `@Injected` are hidden (suppressed) in the generated documentation.
+     * @see com.quarkdown.core.function.reflect.annotation.Injected
+     */
+    val suppressInjectedTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::SuppressInjectedTransformer
+    }
+
+    /**
+     * Stores enum declarations, to be used in [enumParameterEntryListerTransformer].
+     */
+    val enumStorer by extending {
+        base.preMergeDocumentableTransformer providing ::EnumStorer order {
+            before(enumParameterEntryListerTransformer)
+        }
+    }
+
+    /**
+     * Lists enum entries in the documentation for parameters that expect an enum.
+     */
+    val enumParameterEntryListerTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::EnumParameterEntryListerTransformer
+    }
+
+    /**
      * Given a function annotated with `@OnlyForDocumentType` which defines constraints
      * about the document type the function supports, this transformer stores this data
      * for [documentTypeConstraintsPageTransformer] to display it.
@@ -101,14 +127,6 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      */
     val documentTypeConstraintsPageTransformer by extending {
         CoreExtensions.pageTransformer providing ::DocumentTypeConstraintsPageTransformer
-    }
-
-    /**
-     * Parameters annotated with `@Injected` are hidden (suppressed) in the generated documentation.
-     * @see com.quarkdown.core.function.reflect.annotation.Injected
-     */
-    val suppressInjectedTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::SuppressInjectedTransformer
     }
 
     /**

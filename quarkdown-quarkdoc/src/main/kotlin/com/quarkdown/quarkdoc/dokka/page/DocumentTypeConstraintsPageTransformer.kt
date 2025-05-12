@@ -1,7 +1,7 @@
 package com.quarkdown.quarkdoc.dokka.page
 
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.function.value.quarkdownName
+import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.quarkdoc.dokka.transformers.DocumentTargetProperty
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
