@@ -1,8 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.transformers.module
 
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
-import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
-import com.quarkdown.quarkdoc.dokka.storage.StoredModule
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.isOfType
 import com.quarkdown.quarkdoc.dokka.util.sourcePaths

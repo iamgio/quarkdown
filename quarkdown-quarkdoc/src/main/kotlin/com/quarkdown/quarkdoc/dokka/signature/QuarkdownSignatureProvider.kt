@@ -1,6 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.signature
 
-import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
+import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
 import com.quarkdown.quarkdoc.dokka.util.documentableContentBuilder
 import org.jetbrains.dokka.base.signatures.KotlinSignatureProvider
 import org.jetbrains.dokka.base.signatures.SignatureProvider

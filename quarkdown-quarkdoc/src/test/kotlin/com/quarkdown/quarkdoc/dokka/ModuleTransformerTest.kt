@@ -2,7 +2,7 @@ package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
 import com.quarkdown.core.function.value.VoidValue
-import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
+import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals

@@ -1,8 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.transformers.name
 
 import com.quarkdown.core.function.reflect.annotation.Name
-import com.quarkdown.quarkdoc.dokka.storage.Renaming
-import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.extractAnnotation
 import org.jetbrains.dokka.model.DFunction
@@ -12,7 +10,7 @@ import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
  * Transformer that, instead of performing transformations,
- * stores the old-new function name pairs into [com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage].
+ * stores the old-new function name pairs into [RenamingsStorage].
  * This should be executed before other transformers that rely on the renamings.
  */
 class RenamingsStorer(

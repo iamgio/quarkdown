@@ -2,7 +2,6 @@ package com.quarkdown.quarkdoc.dokka.transformers.name
 
 import com.quarkdown.quarkdoc.dokka.kdoc.DocumentationReferencesTransformer
 import com.quarkdown.quarkdoc.dokka.kdoc.DokkaDocumentation
-import com.quarkdown.quarkdoc.dokka.storage.RenamingsStorage
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter

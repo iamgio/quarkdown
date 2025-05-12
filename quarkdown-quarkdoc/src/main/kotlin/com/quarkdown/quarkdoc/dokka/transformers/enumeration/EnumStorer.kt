@@ -1,8 +1,8 @@
 package com.quarkdown.quarkdoc.dokka.transformers.enumeration
 
-import com.quarkdown.quarkdoc.dokka.storage.EnumStorage
-import com.quarkdown.quarkdoc.dokka.storage.QuarkdownModulesStorage
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorage
+import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
 import org.jetbrains.dokka.model.DClasslike
 import org.jetbrains.dokka.model.DEnum
 import org.jetbrains.dokka.plugability.DokkaContext

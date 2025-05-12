@@ -1,10 +1,15 @@
-package com.quarkdown.quarkdoc.dokka.storage
+package com.quarkdown.quarkdoc.dokka.transformers.module
 
 import com.quarkdown.quarkdoc.dokka.util.sourcePaths
 import org.jetbrains.dokka.links.DRI
 import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.WithSources
 
+/**
+ * A Quarkdown module.
+ * @param name the module name
+ * @param dri the module DRI
+ */
 data class StoredModule(
     val name: String,
     val dri: DRI,
