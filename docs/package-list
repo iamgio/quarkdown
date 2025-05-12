@@ -215,8 +215,14 @@ com.quarkdown.quarkdoc.dokka
 com.quarkdown.quarkdoc.dokka.kdoc
 com.quarkdown.quarkdoc.dokka.page
 com.quarkdown.quarkdoc.dokka.signature
-com.quarkdown.quarkdoc.dokka.storage
 com.quarkdown.quarkdoc.dokka.transformers
+com.quarkdown.quarkdoc.dokka.transformers.enumeration
+com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters
+com.quarkdown.quarkdoc.dokka.transformers.misc
+com.quarkdown.quarkdoc.dokka.transformers.module
+com.quarkdown.quarkdoc.dokka.transformers.name
+com.quarkdown.quarkdoc.dokka.transformers.suppress
+com.quarkdown.quarkdoc.dokka.transformers.type
 com.quarkdown.quarkdoc.dokka.util
 module:quarkdown-server
 com.quarkdown.server
