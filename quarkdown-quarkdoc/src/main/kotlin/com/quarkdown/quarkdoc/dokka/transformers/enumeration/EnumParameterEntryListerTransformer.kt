@@ -4,9 +4,9 @@ import com.quarkdown.core.function.toQuarkdownNamingFormat
 import com.quarkdown.core.util.filterNotNullEntries
 import com.quarkdown.quarkdoc.dokka.kdoc.mapDocumentation
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters.QuarkdocEnumAdapters
 import com.quarkdown.quarkdoc.dokka.util.tryCopy
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
-import org.jetbrains.dokka.model.DEnum
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.doc.CodeInline
@@ -29,10 +29,10 @@ class EnumParameterEntryListerTransformer(
     /**
      * @return the parameters, among [parameters], that expect an enum value, associated with their enum declaration.
      */
-    private fun associateEnumParameters(parameters: List<DParameter>): Map<String, DEnum> =
+    private fun associateEnumParameters(parameters: List<DParameter>): Map<String, QuarkdocEnum> =
         parameters
             .asSequence()
-            .map { it.name to it.type.driOrNull?.let(EnumStorage::getByDri) }
+            .map { it.name to it.type.driOrNull?.let(QuarkdocEnumAdapters::fromDRI) }
             .filterNotNullEntries()
             .toMap()
 
@@ -40,7 +40,7 @@ class EnumParameterEntryListerTransformer(
      * @return the documentation content to add to the parameter documentation,
      * which lists the enum entries of the given [enum].
      */
-    private fun createNewDocumentationContent(enum: DEnum): List<DocTag> =
+    private fun createNewDocumentationContent(enum: QuarkdocEnum): List<DocTag> =
         listOf(
             H4(
                 listOf(
@@ -68,7 +68,7 @@ class EnumParameterEntryListerTransformer(
         )
 
     override fun transformFunction(function: DFunction): AnyWithChanges<DFunction> {
-        val enumParameters: Map<String, DEnum> =
+        val enumParameters: Map<String, QuarkdocEnum> =
             associateEnumParameters(function.parameters)
                 .takeIf { it.isNotEmpty() }
                 ?: return function.unchanged()

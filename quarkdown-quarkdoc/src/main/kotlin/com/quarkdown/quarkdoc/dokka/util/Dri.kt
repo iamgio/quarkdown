@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka.util
 
 import org.jetbrains.dokka.links.DRI
+import org.jetbrains.dokka.links.sureClassNames
 
 fun DRI.isOfType(
     packageName: String,
@@ -15,3 +16,10 @@ inline fun <reified T> DRI.isOfType(): Boolean {
     val className = T::class.simpleName
     return isOfType(packageName, className ?: "")
 }
+
+/**
+ * @return the fully qualified name of the class represented, ready to be passed to [Class.forName]
+ * @throws IllegalStateException if the DRI does not represent a class
+ */
+val DRI.fullyQualifiedReflectionName: String
+    get() = "$packageName.${sureClassNames.replace('.', '$')}"

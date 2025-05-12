@@ -13,7 +13,7 @@ class EnumParameterEntryListerTransformerTest :
             listOf(DocumentType::class),
     ) {
     @Test
-    fun `enum parameter with existing documentation`() {
+    fun `enum parameter from same module`() {
         test(
             """
             /**
@@ -31,4 +31,6 @@ class EnumParameterEntryListerTransformerTest :
             assertContains(parameters, "paged")
         }
     }
+
+    // Could not find a way to unit-test enums from the `core` module.
 }

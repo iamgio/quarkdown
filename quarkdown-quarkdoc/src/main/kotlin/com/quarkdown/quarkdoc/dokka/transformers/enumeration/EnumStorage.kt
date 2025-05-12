@@ -21,7 +21,7 @@ object EnumStorage {
     /**
      * @return the enum declaration associated with the given [dri], if any
      */
-    fun getByDri(dri: DRI) = enums.find { it.dri == dri }
+    fun fromDRI(dri: DRI) = enums.find { it.dri == dri }
 
     /**
      * Removes all enum declarations from this storage.
