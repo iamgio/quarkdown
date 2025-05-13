@@ -16,8 +16,8 @@ internal const val BEGIN = "."
 private const val INLINE_PARAMETER_START = "{"
 private const val INLINE_PARAMETER_END = "}"
 private const val INLINE_PARAMETER_DELIMITER = " "
-private const val PARAMETER_TYPE_DELIMITER = ": "
-private const val RETURN_TYPE_DELIMITER = " -> "
+private const val PARAMETER_NAME_DELIMITER = ":"
+private const val RETURN_TYPE_DELIMITER = "-> "
 
 /**
  *
@@ -57,7 +57,7 @@ class QuarkdownSignatureProvider(
             text(function.name, styles = setOf(TokenStyle.Function))
 
             function.parameters.forEachIndexed { index, parameter ->
-                lineBreakingStrategy.run { beforeParameter(index) }
+                lineBreakingStrategy.run { beforeParameter(parameter, index) }
                 signature(parameter)
             }
 
@@ -69,9 +69,9 @@ class QuarkdownSignatureProvider(
     private fun PageContentBuilder.DocumentableContentBuilder.signature(parameter: DParameter) =
         with(helper) {
             punctuation(INLINE_PARAMETER_DELIMITER)
-            punctuation(INLINE_PARAMETER_START)
             constant(parameter.name ?: "<unnamed>")
-            operator(PARAMETER_TYPE_DELIMITER)
+            operator(PARAMETER_NAME_DELIMITER)
+            punctuation(INLINE_PARAMETER_START)
             projectionSignature(parameter.type)
             defaultValue(parameter)
             punctuation(INLINE_PARAMETER_END)
