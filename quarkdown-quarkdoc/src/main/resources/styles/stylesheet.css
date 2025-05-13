@@ -3,6 +3,28 @@
     display: none;
 }
 
+#sideMenu .sideMenu {
+    display: flex;
+    flex-direction: column;
+}
+
+#sideMenu .sideMenu > .toc--part {
+    order: 10;
+}
+
+/* User libraries (e.g. stdlib) show on top. */
+#sideMenu .sideMenu > .toc--part:has(a[href*='module.']) {
+    order: 1;
+}
+
+/* Shows a label on top of user libraries. */
+.toc--part[data-nesting-level="0"]:has(a[href*='module.']) > .toc--row > a:before {
+    content: 'User Library';
+    display: block;
+    text-transform: uppercase;
+    opacity: .5;
+}
+
 /* If a package contains Quarkdown modules, non-module packages are semi-hidden. */
 .toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
     opacity: .5;
