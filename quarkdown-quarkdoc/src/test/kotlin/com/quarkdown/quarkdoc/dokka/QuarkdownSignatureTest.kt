@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- *
+ * Tests for Quarkdown signatures.
  */
 class QuarkdownSignatureTest :
     QuarkdocDokkaTest(
@@ -50,21 +50,66 @@ class QuarkdownSignatureTest :
     @Test
     fun `one parameter`() {
         testSignature("fun func(a: Int) = VoidValue") {
-            assertEquals(".func {a: Int} -> Void", it)
+            assertEquals(".func a:{Int} -> Void", it)
         }
     }
 
     @Test
     fun `two parameters`() {
         testSignature("fun func(a: Int, b: Iterable<DynamicValue>) = VoidValue") {
-            assertEquals(".func {a: Int} {b: Iterable<Dynamic>} -> Void", it)
+            assertEquals(".func a:{Int} b:{Iterable<Dynamic>} -> Void", it)
         }
     }
 
     @Test
     fun `default value`() {
         testSignature("fun func(a: Int = 0) = VoidValue") {
-            assertEquals(".func {a: Int = 0} -> Void", it)
+            assertEquals(".func a:{Int = 0} -> Void", it)
+        }
+    }
+
+    @Test
+    fun `line breaking, same length`() {
+        testSignature("fun func(a: Int, b: Int, c: Int) = VoidValue") {
+            assertEquals(
+                """
+                .func a:{Int}
+                      b:{Int}
+                      c:{Int}
+                -> Void
+                """.trimIndent(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `line breaking, different length`() {
+        testSignature("fun func(abcd: Int, ef: String, ghijkl: Int) = VoidValue") {
+            assertEquals(
+                """
+                .func abcd:{Int}
+                        ef:{String}
+                    ghijkl:{Int}
+                -> Void
+                """.trimIndent(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `line breaking, different length, out of bounds`() {
+        testSignature("fun func(abcd: Int, ef: String, ghijklmnopqrst: Int) = VoidValue") {
+            assertEquals(
+                """
+                .func      abcd:{Int}
+                             ef:{String}
+                 ghijklmnopqrst:{Int}
+                -> Void
+                """.trimIndent(),
+                it,
+            )
         }
     }
 }

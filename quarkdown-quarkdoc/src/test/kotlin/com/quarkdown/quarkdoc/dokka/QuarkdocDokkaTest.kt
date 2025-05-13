@@ -138,7 +138,7 @@ open class QuarkdocDokkaTest(
             .parse(html)
             .select(".content :is(pre, .monospace)")
             .firstOrNull()
-            ?.text()
+            ?.wholeText()
             ?: throw IllegalStateException("Signature not found")
 
     /**
