@@ -50,7 +50,8 @@ private class NoLineBreakingStrategy : LineBreakingStrategy {
     override fun PageContentBuilder.DocumentableContentBuilder.beforeParameter(
         parameter: DParameter,
         index: Int,
-    ) {}
+    ) {
+    }
 
     override fun PageContentBuilder.DocumentableContentBuilder.beforeReturn() {
         punctuation(" ")
@@ -61,7 +62,7 @@ private class NoLineBreakingStrategy : LineBreakingStrategy {
  * Adds a line break and indents each parameter.
  */
 private class SplitLineBreakingStrategy(
-    private val function: DFunction,
+    function: DFunction,
 ) : LineBreakingStrategy {
     private val firstParameterNameLength =
         function.parameters
@@ -79,20 +80,29 @@ private class SplitLineBreakingStrategy(
         punctuation(" ".repeat(size))
     }
 
+    /**
+     * Result:
+     * ```
+     * .func abcd:{Int}
+     *         ef:{String}
+     *     ghijkl:{Int}
+     * ```
+     */
     override fun PageContentBuilder.DocumentableContentBuilder.beforeParameter(
         parameter: DParameter,
         index: Int,
     ) {
         val parameterNameLength = parameter.name?.length ?: 0
         val supplementPad = max(minPad, maxParameterNameLength - firstParameterNameLength)
-        if (index != 0) {
-            breakLine()
-            pad(
-                supplementPad + (firstParameterNameLength - parameterNameLength),
-            )
-        } else {
+
+        if (index == 0) {
+            // The first parameter can have a small padding in case another parameter has a long name.
             pad(supplementPad - minPad)
+            return
         }
+
+        breakLine()
+        pad(supplementPad + firstParameterNameLength - parameterNameLength)
     }
 
     override fun PageContentBuilder.DocumentableContentBuilder.beforeReturn() {
