@@ -7,11 +7,17 @@
   <br>
   <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
   <a href="https://quarkdown.com/docs"><img alt="Docs" src="https://img.shields.io/badge/docs-read-blue"></a>
+  <a href="https://github.com/iamgio/quarkdown/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/iamgio/quarkdown?color=mediumseagreen"></a>
   <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
   <br>
-  <strong>Download</strong> the latest build <strong><a href="https://github.com/iamgio/quarkdown/releases">here</a></strong>&nbsp;
+  <strong>Download</strong>
+  <br>
+  <strong><a href="https://github.com/iamgio/quarkdown/releases/latest">Stable</a></strong>&nbsp;
+  &nbsp; | &nbsp;
+  <a href="https://github.com/iamgio/quarkdown/releases/tag/latest">Latest</a>
+  &nbsp;
   <br>
   <hr>
 </p>
@@ -208,10 +214,9 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
-Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it yourself with `gradlew distZip`, and unzip it.    
-If you'd rather keep it minimal, `gradlew build` produces only the JAR file.
+Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it with `gradlew distZip`, and unzip it.    
 
-- The `bin` directory contains the executable scripts. Optionally, add it to your `PATH` to access Quarkdown more easily.
+- The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
 - The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
 
 Java 17 or higher is required.
@@ -239,8 +244,6 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 #### Options
 
-- **`-o <dir>`** or **`--output <dir>`**: sets the directory of the output files. If unset, defaults to `./output`.
-
 - **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
   If a [webserver](https://github.com/iamgio/quarkdown/wiki/cli%3A-webserver) is not running yet, it is started and the document is opened in the default browser.  
   This is required in order to render paged documents in the browser.
@@ -252,9 +255,11 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
 
-- `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
+- `-o <dir>` or `--output <dir>`: sets the directory of the output files. If unset, defaults to `./output`.
 
 - `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+
+- `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
 - `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
