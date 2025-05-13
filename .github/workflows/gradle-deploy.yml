@@ -5,6 +5,7 @@ name: Gradle deploy
 on:
   push:
     branches: [ "main", "workflow-test" ]
+    tags: [ "v*" ]
 
 jobs:
   test:
