@@ -29,6 +29,12 @@ jobs:
         name: quarkdown
         path: build/distributions/quarkdown.zip
 
+    - name: Move devbuild tag to latest commit
+      run: |
+        git tag -d latest || true
+        git tag -f latest
+        git push origin +latest
+
     - name: Create devbuild release
       uses: softprops/action-gh-release@v2
       with:
