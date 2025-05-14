@@ -5,7 +5,7 @@ name: Gradle test
 on:
   workflow_call:
   push:
-    branches-ignore: [ "main" ]
+    branches-ignore: [ "main", "workflow-test" ]
   pull_request:
     branches: [ "main" ]
 

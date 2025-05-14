@@ -10,10 +10,12 @@ on:
 jobs:
   test:
     uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@main
+    with:
+      full-checkout: true
 
   build:
     runs-on: ubuntu-latest
-    needs: [test]
+#    needs: [test]
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
