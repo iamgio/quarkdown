@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: iamgio/quarkdown/.github/actions/setup-environment@workflow-test
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
       with:
         full-checkout: ${{ inputs.full-checkout }}
 

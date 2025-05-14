@@ -9,14 +9,14 @@ on:
 
 jobs:
   test:
-    uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@workflow-test
+    uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@main
 
   build:
     runs-on: ubuntu-latest
     needs: [test]
 
     steps:
-    - uses: iamgio/quarkdown/.github/actions/setup-environment@workflow-test
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
       with:
         full-checkout: true
 
