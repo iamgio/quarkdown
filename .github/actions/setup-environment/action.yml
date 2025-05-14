@@ -3,7 +3,7 @@ description: Sets up Quarkdown execution environment
 inputs:
   full-checkout:
     description: "If true, fetches full history and tags. Defaults to false."
-    default: false
+    default: true # TODO default to false
 
 runs:
   using: composite

@@ -10,8 +10,6 @@ on:
 jobs:
   test:
     uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@main
-    with:
-      full-checkout: true
 
   build:
     runs-on: ubuntu-latest
