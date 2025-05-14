@@ -20,9 +20,11 @@ group = "com.quarkdown"
 // Fetch the project version from the latest v* git tag
 val lastVersionTag: String? by lazy {
     try {
+        exec {
+            commandLine("git", "fetch", "--tags", "-f")
+        }
         val stdout = ByteArrayOutputStream()
         exec {
-            commandLine("git", "fetch", "--tags")
             commandLine("git", "describe", "--tags", "--match", "v*", "--abbrev=0")
             standardOutput = stdout
         }
