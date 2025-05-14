@@ -15,6 +15,8 @@ jobs:
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@workflow-test
+      with:
+        full-checkout: ${{ inputs.full-checkout }}
 
     - name: Run ktlint check
       run: ./gradlew ktlintCheck
