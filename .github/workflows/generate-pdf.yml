@@ -16,8 +16,11 @@ jobs:
       uses: browser-actions/setup-chrome@v1.7.3
       id: setup-chrome
 
-    - name: Create distribution
-      run: ./gradlew clean distZip
+    - name: Build distribution
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: main
+        arguments: distZip
 
     - name: Unzip distribution
       run: unzip -q build/distributions/quarkdown.zip -d build/distributions/

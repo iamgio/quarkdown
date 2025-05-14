@@ -18,8 +18,8 @@ jobs:
       with:
         full-checkout: ${{ inputs.full-checkout }}
 
-    - name: Run ktlint check
-      run: ./gradlew ktlintCheck
-
     - name: Run tests
-      run: ./gradlew test
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: main
+        arguments: ktlintCheck test

@@ -13,7 +13,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-#    needs: [test]
+    needs: [test]
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@workflow-test
@@ -21,7 +21,10 @@ jobs:
         full-checkout: true
 
     - name: Build distribution
-      run: ./gradlew clean build distZip
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: main
+        arguments: build distZip
 
     - name: Echo output files
       run: ls -d "$PWD/build/"*
@@ -91,4 +94,4 @@ jobs:
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      uses: gradle/actions/dependency-submission@v4
