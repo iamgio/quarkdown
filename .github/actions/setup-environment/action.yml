@@ -3,7 +3,7 @@ description: Sets up Quarkdown execution environment
 inputs:
   full-checkout:
     description: "If true, fetches full history and tags. Defaults to false."
-    default: false
+    default: true # TODO set to false
 
 runs:
   using: composite
@@ -11,8 +11,8 @@ runs:
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # ${{ inputs.full-checkout && '0' || '1' }}
-        fetch-tags: true #${{ inputs.full-checkout }}
+        fetch-depth: ${{ inputs.full-checkout && '0' || '1' }}
+        fetch-tags: ${{ inputs.full-checkout }}
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4

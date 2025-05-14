@@ -16,7 +16,7 @@ jobs:
 #    needs: [test]
 
     steps:
-    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@workflow-test
 
     - name: Build distribution
       run: ./gradlew clean build distZip
