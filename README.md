@@ -15,7 +15,7 @@
   <strong>Download</strong>
   <br>
   <strong><a href="https://github.com/iamgio/quarkdown/releases/latest">Stable</a></strong>
-  &nbsp; &nbsp; | &nbsp; &nbsp;
+  &nbsp;&nbsp; | &nbsp;&nbsp;
   <a href="https://github.com/iamgio/quarkdown/releases/tag/latest">Latest</a>
   &nbsp;
   <br>
