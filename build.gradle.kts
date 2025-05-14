@@ -22,6 +22,7 @@ val lastVersionTag: String? by lazy {
     try {
         val stdout = ByteArrayOutputStream()
         exec {
+            commandLine("git", "fetch", "--tags")
             commandLine("git", "describe", "--tags", "--match", "v*", "--abbrev=0")
             standardOutput = stdout
         }
