@@ -11,7 +11,7 @@ runs:
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: ${{ inputs.full-checkout && '0' || '1' }}
+        # fetch-depth: ${{ inputs.full-checkout && '0' || '1' }}
         fetch-tags: ${{ inputs.full-checkout }}
 
     - name: Set up JDK 17
