@@ -25,6 +25,10 @@
     opacity: .5;
 }
 
+#sideMenu .sideMenu > .toc--part:has(a[href*='module.']) > .toc--row {
+    background-color: rgba(77, 187, 95, .1);
+}
+
 /* If a package contains Quarkdown modules, non-module packages are semi-hidden. */
 .toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
     opacity: .5;
