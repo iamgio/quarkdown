@@ -64,6 +64,10 @@ application {
     mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
 }
 
+ktlint {
+    version.set("1.5.0")
+}
+
 // Dokka
 
 dependencies {
