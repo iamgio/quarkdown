@@ -1,0 +1,253 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ObservableAstIterator</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.0.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-core::com.quarkdown.core.ast.iterator/ObservableAstIterator///PointingToDeclaration//1831116724">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.ast.iterator</a><span class="delimiter">/</span><span class="current">ObservableAstIterator</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Observable</span><wbr><span>Ast</span><wbr><span><span>Iterator</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ObservableAstIterator</a> : <a href="../-ast-iterator/index.html">AstIterator</a></div><p class="paragraph">An iterator that performs a DFS traversal through the nodes of an AST, allowing the registration of observers that will be notified when a node of a certain type is visited.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-298614917%2FConstructors%2F1831116724" anchor-label="ObservableAstIterator" id="-298614917%2FConstructors%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-observable-ast-iterator.html"><span>Observable</span><wbr><span>Ast</span><wbr><span><span>Iterator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-298614917%2FConstructors%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-664850728%2FProperties%2F1831116724" anchor-label="hooks" id="-664850728%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hooks.html"><span><span>hooks</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-664850728%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="hooks.html">hooks</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token punctuation">(</span><a href="../../com.quarkdown.core.ast/-node/index.html">Node</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Hooks that will be called when a node of a certain type is visited.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1461963254%2FFunctions%2F1831116724" anchor-label="attach" id="-1461963254%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="attach.html"><span><span>attach</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1461963254%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="attach.html"><span class="token function">attach</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hook<span class="token operator">: </span><a href="../-ast-iterator-hook/index.html">AstIteratorHook</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ObservableAstIterator</a></div><div class="brief "><p class="paragraph">Attaches a hook to this iterator.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1025062663%2FFunctions%2F1831116724" anchor-label="collect" id="-1025062663%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="collect.html"><span><span>collect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1025062663%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="collect.html">T</a><span class="token operator"> : </span><a href="../../com.quarkdown.core.ast/-node/index.html">Node</a><span class="token operator">&gt; </span><a href="collect.html"><span class="token function">collect</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">crossinline </span>condition<span class="token operator">: </span><span class="token punctuation">(</span><a href="collect.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="collect.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Collects the visited nodes of type <a href="collect.html">T</a> into a collection, as long as they satisfy a <a href="collect.html">condition</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1157830043%2FFunctions%2F1831116724" anchor-label="collectAll" id="1157830043%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="collect-all.html"><span>collect</span><wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1157830043%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="collect-all.html">T</a><span class="token operator"> : </span><a href="../../com.quarkdown.core.ast/-node/index.html">Node</a><span class="token operator">&gt; </span><a href="collect-all.html"><span class="token function">collectAll</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="collect-all.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Collects all the visited nodes of type <a href="collect-all.html">T</a> into a collection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1947169830%2FFunctions%2F1831116724" anchor-label="on" id="1947169830%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on.html"><span><span>on</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1947169830%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="on.html">T</a><span class="token operator"> : </span><a href="../../com.quarkdown.core.ast/-node/index.html">Node</a><span class="token operator">&gt; </span><a href="on.html"><span class="token function">on</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">noinline </span>hook<span class="token operator">: </span><span class="token punctuation">(</span><a href="on.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ObservableAstIterator</a></div><div class="brief "><p class="paragraph">Registers a hook that will be called when a node of type <a href="on.html">T</a> is visited.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="409908197%2FFunctions%2F1831116724" anchor-label="onFinished" id="409908197%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-finished.html"><span>on</span><wbr><span><span>Finished</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="409908197%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="on-finished.html"><span class="token function">onFinished</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">hook<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ObservableAstIterator</a></div><div class="brief "><p class="paragraph">Registers a hook that will be called when the tree traversal fully finishes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="89046422%2FFunctions%2F1831116724" anchor-label="traverse" id="89046422%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="traverse.html"><span><span>traverse</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="89046422%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="traverse.html"><span class="token function">traverse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">root<span class="token operator">: </span><a href="../../com.quarkdown.core.ast/-nestable-node/index.html">NestableNode</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Runs the iterator from the given root node, traversing the node tree and visiting each node.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
