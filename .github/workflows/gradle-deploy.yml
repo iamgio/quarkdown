@@ -59,10 +59,18 @@ jobs:
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v4
+      if: github.ref_type == 'tag'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build/docs
         destination_dir: docs
+
+    - name: Deploy devbuild docs
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/docs
+        destination_dir: docs/latest
 
   dependency-submission:
 
