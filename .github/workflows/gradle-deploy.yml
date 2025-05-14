@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@main
+    uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@workflow-test
 
   build:
     runs-on: ubuntu-latest
