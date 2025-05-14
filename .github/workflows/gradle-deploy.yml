@@ -60,7 +60,10 @@ jobs:
         files: build/distributions/quarkdown.zip
 
     - name: Generate docs
-      run: ./gradlew dokkaGeneratePublicationHtml
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: main
+        arguments: dokkaGeneratePublicationHtml
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v4
