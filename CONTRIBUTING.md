@@ -1,10 +1,10 @@
-[Issues]: /issues
-[Issue]: /issues
-[Discussions]: /discussions
-[Discussion]: /discussions
-[wiki]: /wiki
+[Issues]: https://github.com/iamgio/quarkdown/issues
+[Issue]: https://github.com/iamgio/quarkdown/issues
+[Discussions]: https://github.com/iamgio/quarkdown/discussions
+[Discussion]: https://github.com/iamgio/quarkdown/discussions
+[wiki]: https://github.com/iamgio/quarkdown/wiki
 [documentation]: https://quarkdown.com/docs
-[standard library]: /tree/main/quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib
+[standard library]: https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib
 
 
 # Contributing to Quarkdown
@@ -16,9 +16,9 @@ Please make sure to read the relevant section before making your contribution, a
 
 > If you like the project, but don't have time to contribute, that's totally fine!
 > You can still support us and show your appreciation by doing any of the following:
-> - Star :star2: the project
-> - Post the project on social media
-> - Mention the project to others
+> - Star :star2: the project.
+> - Post the project on social media.
+> - Mention the project to others.
 
 
 ## Table of Contents
@@ -40,7 +40,7 @@ Before you ask a question, it is best to search for existing [Issues] or [Discus
 
 If you then still feel the need to ask a question and need clarification, we recommend the following:
 
-- Open a [Discussion](/discussions/new/choose) or [Issue](/issues/new), depending on what you feel is more appropriate for your question.
+- Open a [Discussion](https://github.com/iamgio/quarkdown/discussions/new/choose) or [Issue](https://github.com/iamgio/quarkdown/issues/new), depending on what you feel is more appropriate for your question.
 - Provide as much context as you can about what you're running into.
 - Provide project version, along with JVM version and OS if relevant.
 
@@ -108,9 +108,9 @@ The following list shows contributions that are highly welcome, in order of impo
 
 2. Add new functions to the [standard library]. It's suggested to open an [enhancement suggestion](#suggesting-enhancements) first.
 
-3. Add new [themes](/tree/main/quarkdown-core/src/main/resources/render/theme).
+3. Add new [themes](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/resources/render/theme).
    Please ensure your theme looks correctly on all document types (`plain`, `paged`, `slides`)
-   on the [Mock document](/tree/main/mock) or another comprehensive document.
+   on the [Mock document](https://github.com/iamgio/quarkdown/tree/main/mock) or another comprehensive document.
 
   > [!WARNING]
   > The theme system will undergo an internal refactor soon.
@@ -118,7 +118,7 @@ The following list shows contributions that are highly welcome, in order of impo
 
 ### Understanding the architecture
 
-The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](/wiki/pipeline).
+The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](https://github.com/iamgio/quarkdown/wiki/pipeline).
 However, contributions to Quarkdown's core are not the priority at the moment.
 
 
