@@ -22,7 +22,10 @@
   <hr>
 </p>
 
-## Table of contents
+&nbsp;
+
+# Table of contents
+
 1. [About](#about)
 2. [Demo](#as-simple-as-you-expect)
 3. [Targets](#targets)
@@ -36,7 +39,9 @@
 9. [Sponsors](#sponsors)
 10. [Concept](#concept)
 
-## About
+&nbsp;
+
+# About
 
 Quarkdown is a modern Markdown-based typetting system, designed around the key concept of **versatility**, by seamlessly compiling a project
 into a print-ready book or an interactive presentation.
@@ -127,7 +132,7 @@ Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>
   <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-chart.png" alt="Chart code demo">
 </p>
 
-## Targets
+# Targets
 
 - **HTML**
   - :white_check_mark: Plain output (default)
@@ -143,7 +148,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 - `.doctype {slides}`
 - `.doctype {paged}`
 
-## Comparison
+# Comparison
 
 |                       |     Quarkdown      |      Markdown      |       LaTeX        |      AsciiDoc      |        MDX         |
 |-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
@@ -226,18 +231,18 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 &nbsp;
 
+# Getting started
+
 ## Installation
 
-Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it with `gradlew distZip`, and unzip it.    
+Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it with `gradlew distZip`, and unzip it.
 
 - The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
 - The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
 
 Java 17 or higher is required.
 
-## Getting started
-
-### Creating a project
+## Creating a project
 
 Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
 to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
@@ -246,7 +251,7 @@ For more information about the project creator, check out its [wiki page](https:
 
 Alternatively, you may manually create a `.qmd` source file and start from there.
 
-### Compiling
+## Compiling
 
 Running **`quarkdown c file.qmd`** will compile the given file and save the output to file.
 
@@ -286,7 +291,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-## Mock document
+# Mock document
 
 &nbsp;
 
@@ -300,11 +305,11 @@ making it ideal for exploring and understanding its key features — all while p
 - The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
 - The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
-## Contributing
+# Contributing
 
 Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to know how contribute via issues or pull requests.
 
-## Sponsors
+# Sponsors
 
 A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
 
@@ -312,7 +317,7 @@ A special thanks to all the sponsors who [supported this project](https://github
   <a href="https://github.com/https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>
 </p>
 
-## Concept
+# Concept
 
 The logo resembles the original [Markdown icon](https://github.com/dcurtis/markdown-mark), with focus on Quarkdown's completeness,
 richness of features and customization options, emphasized by the revolving arrow all around the sphere.
