@@ -6,6 +6,11 @@ on:
   push:
     branches: [ "main", "workflow-test" ]
     tags: [ "v*" ]
+    paths-ignore:
+      - '*.md'
+      - '**/README.md'
+      - 'LICENSE'
+      - '.github/FUNDING.yml'
 
 jobs:
   test:

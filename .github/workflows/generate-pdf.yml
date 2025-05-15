@@ -3,6 +3,11 @@ name: PDF generation via Puppeteer
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - '*.md'
+      - '**/README.md'
+      - 'LICENSE'
+      - '.github/FUNDING.yml'
 
 jobs:
   build:
