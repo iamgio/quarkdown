@@ -286,6 +286,10 @@ making it ideal for exploring and understanding its key features — all while p
 - The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
 - The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
+## Contributing
+
+Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to know how contribute via issues or pull requests.
+
 ## Concept
 
 The logo resembles the original [Markdown icon](https://github.com/dcurtis/markdown-mark), with focus on Quarkdown's completeness,
