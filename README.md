@@ -22,8 +22,6 @@
   <hr>
 </p>
 
-&nbsp;
-
 # Table of contents
 
 1. [About](#about)
@@ -291,7 +289,13 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-# Mock document
+&nbsp;
+
+---
+
+&nbsp;
+
+## Mock document
 
 &nbsp;
 
@@ -305,11 +309,11 @@ making it ideal for exploring and understanding its key features — all while p
 - The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
 - The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
-# Contributing
+## Contributing
 
 Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to know how contribute via issues or pull requests.
 
-# Sponsors
+## Sponsors
 
 A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
 
@@ -317,7 +321,7 @@ A special thanks to all the sponsors who [supported this project](https://github
   <a href="https://github.com/https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>
 </p>
 
-# Concept
+## Concept
 
 The logo resembles the original [Markdown icon](https://github.com/dcurtis/markdown-mark), with focus on Quarkdown's completeness,
 richness of features and customization options, emphasized by the revolving arrow all around the sphere.
