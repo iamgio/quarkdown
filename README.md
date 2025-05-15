@@ -22,7 +22,21 @@
   <hr>
 </p>
 
-&nbsp;
+## Table of contents
+1. [About](#about)
+2. [Demo](#as-simple-as-you-expect)
+3. [Targets](#targets)
+4. [Comparison](#comparison)
+5. [Installation](#installation)
+6. [Getting started](#getting-started)
+    - [Creating a project](#creating-a-project)
+    - [Compiling](#compiling)
+7. [Mock document](#mock-document)
+8. [Contributing](#contributing)
+9. [Sponsors](#sponsors)
+10. [Concept](#concept)
+
+## About
 
 Quarkdown is a modern Markdown-based typetting system, designed around the key concept of **versatility**, by seamlessly compiling a project
 into a print-ready book or an interactive presentation.
@@ -272,7 +286,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
-### Mock document
+## Mock document
 
 &nbsp;
 
@@ -289,6 +303,14 @@ making it ideal for exploring and understanding its key features — all while p
 ## Contributing
 
 Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to know how contribute via issues or pull requests.
+
+## Sponsors
+
+A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
+
+<p align="center">
+  <a href="https://github.com/https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>
+</p>
 
 ## Concept
 
