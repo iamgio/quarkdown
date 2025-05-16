@@ -1,3 +1,5 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://quarkdown.com/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Quarkdown'
+theme = 'long-teng'
+[ou]

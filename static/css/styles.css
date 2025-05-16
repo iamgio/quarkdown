@@ -1,0 +1,20 @@
+:root {
+    --base-spacing-xlarge: 4rem;
+}
+
+.container-small {
+    max-width: 52rem;
+}
+
+.product-description {
+    margin-top: 8px;
+}
+
+.product-description p:first-child {
+    font-size: 1.3rem;
+    margin: 36px 0;
+}
+
+.product-description p:not(:first-child) {
+    font-size: 1.1rem;
+}

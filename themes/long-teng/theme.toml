@@ -1,0 +1,16 @@
+name = "Long Teng"
+license = "MIT"
+licenselink = "https://github.com/mdfriday/theme-long-term/blob/main/LICENSE"
+description = "Long Teng is a vibrant product landing page theme inspired by Chinese colors. It is designed to showcase your product or service, highlight its key features, and engage potential users. With flexible configuration options, it’s perfect for creating a visually appealing and effective online presence."
+
+homepage = "https://github.com/mdfriday/theme-long-teng"
+demosite = "https://longteng.app.mdfriday.com"
+
+tags = ["company", "landing", "responsive", "light", "mdfriday"]
+features = ["responsive design", "customizable content", "Chinese color theme", "service showcase", "call-to-action buttons", "user trust section"]
+
+[author]
+name = "MDFriday"
+homepage = "https://mdfriday.com"
+
+min_version = "0.112.7"

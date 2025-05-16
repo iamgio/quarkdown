@@ -1,0 +1,173 @@
+{{ define "main" }}
+{{ $product := .Site.GetPage "product" }}
+{{ $userTrust := .Site.GetPage "user-trust" }}
+{{ $howToPage := .Site.GetPage "how-to" }}
+
+<main class="main-wrapper">
+    <header class="position-relative">
+        <div class="background-image-container">
+            <img src="{{ "img/banner-bg.svg" | absURL }}" loading="eager" alt="" class="background-cover-image">
+        </div>
+        <div class="transparent-navbar_spacer"></div>
+        <div class="page-padding">
+            <div class="container-large z-1">
+                <div id="w-node-c6b48c05-3349-7860-7f2d-74f76180164f-6180164b"
+                     class="padding-vertical padding-xlarge is-fixed is-bottom-2rem">
+                    <div id="w-node-c6b48c05-3349-7860-7f2d-74f761801650-6180164b" class="container-small">
+                        <div id="w-node-c6b48c05-3349-7860-7f2d-74f761801651-6180164b" class="text-align-center">
+                            <div class="spacer-xsmall"></div>
+                            <div class="product-title margin-horizontal margin-small no-margin-tablet">
+                                <div class="text-color-base-dark">
+                                    <h1 class="heading-huge">
+                                        <span>{{ $product.Params.tagline | default "Turn MD docs to website, in" }}</span>
+                                        <span class="text-highlight-gradient">&nbsp;{{ $product.Params.highlight | default "minutes" }}</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="spacer-xsmall"></div>
+                            <div class="margin-horizontal margin-huge no-margin-mobile-landscape">
+                                <div class="product-description rich-text-xlarge w-richtext">
+                                    <p>{{ $product.Params.description1 }}</p>
+                                    <p>{{ $product.Params.description2_line1 }}<br>{{ $product.Params.description2_line2 }}</p>
+                                </div>
+                            </div>
+                            <div class="spacer-large"></div>
+                            <div class="buttonwrapper center-button">
+                                <a id="free-demo-btn"
+                                   freemium-text="{{ $product.Params.freemium_text | default "Get started for FREE" }}"
+                                href="{{ $product.Params.button_link | default "#how-to" }}"
+                                class="button is-large w-inline-block">
+                                <div>{{ $product.Params.button_text | default "Create free website" }}</div>
+                                <div class="icon-16 w-embed">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+                                         viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet"
+                                         aria-hidden="true" role="img">
+                                        <path d="M1 7.72656H15" stroke="currentColor" stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                        <path d="M9.27246 2L14.9997 7.72727L9.27246 13.4545"
+                                              stroke="currentColor"
+                                              stroke-width="1.27273" stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="text-color-grey-600">
+                                <div class="spacer-xsmall"></div>
+                                <div class="hero_disclaimer-container">
+                                    <p class="paragraph-small hide-mobile-landscape">{{ $product.Params.claimer1 | default "No coding required, no fuss" }}</p>
+                                    <div hero-divider="" class="flex-child-stretch hide-mobile-landscape">
+                                        <div color="" vertical="true" class="divider"></div>
+                                    </div>
+                                    <div class="flex flex-gap-075rem">
+                                        <p class="paragraph-small">{{ $product.Params.claimer2 | default "Just your perfect website" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+
+    <section id="user-trust">
+        <div class="padding-vertical padding-xxhuge">
+            <div class="z-3">
+                <div class="page-padding">
+                    <div class="container-large">
+                        <div class="grid-12col-base is-align-bottom">
+                            <div id="w-node-_19ea42c6-8f34-1041-d1a8-ebfb2d3d272f-2d3d2728">
+                                <div class="max-width-56rem">
+                                    <div is-round="false" color="light" class="caption">
+                                        <div class="caption-medium">{{ $userTrust.Params.title }}</div>
+                                    </div>
+                                    <div class="spacer-xxxsmall"></div>
+                                    <div class="text-color-base-dark">
+                                        <h1 class="heading-large">
+                                            <span>{{ $userTrust.Params.trusted_count }}</span>
+                                        </h1>
+                                        <h2 class="heading-medium">
+                                            <span>{{ $userTrust.Params.websites_created }}</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-to">
+        <div class="padding-vertical padding-large">
+            <div class="page-padding">
+                <div class="container-large">
+                    <div class="position-relative">
+                        <div class="padding-top padding-xhuge">
+                            <div class="text-color-white">
+                                <div class="text-align-center">
+                                    <div is-round="false" color="dark" class="caption">
+                                        <div class="caption-medium">{{ $howToPage.Params.subtitle }}</div>
+                                    </div>
+                                    <div class="spacer-xsmall"></div>
+                                    <h2 class="heading-large">{{ $howToPage.Params.title }}</h2>
+                                </div>
+                                <div class="spacer-xxxlarge"></div>
+                                <div>
+                                    <div class="tab-container">
+                                        <div class="tab_component-wrapper">
+                                            <div class="grid-1col w-tabs">
+                                                <div class="grid-4col is-gap-1rem is-2col-tablet w-tab-menu" role="tablist">
+                                                    {{ range $step := $howToPage.Params.steps }}
+
+                                                    {{ $parts := split $step " | " }}
+                                                    {{ $step_number := strings.TrimSpace (index $parts 0) }}
+                                                    {{ $title := strings.TrimSpace (index $parts 1) }}
+                                                    {{ $description := strings.TrimSpace (index $parts 2) }}
+
+
+                                                    <a class="product-tour-tab_link-wrap w-inline-block w-tab-link active w--current">
+                                                        <div class="z-1">
+                                                            <div class="text-color-white">
+                                                                <div class="flex-horizontal gap-1rem">
+                                                                    <div class="marketing-icon is-small is-indigo is-indigo-600">
+                                                                        <div class="paragraph-large is-medium">{{ $step_number }}</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <h3 class="paragraph-xlarge is-medium">{{ $title }}</h3>
+                                                                        <div class="spacer-tiny"></div>
+                                                                        <p class="label-regular">{{ $description }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    {{ end }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hide-mobile-landscape">
+                            <div class="spacer-xxxlarge"></div>
+                        </div>
+                    </div>
+                    <div class="container-xlarge-background border-radius-huge-corner border-radius-xlarge background-black">
+                        <img src="{{ "img/how-to-bg.webp" | absURL }}" alt="" class="background-cover-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div color="" vertical="false" class="divider"></div>
+
+</main>
+{{ end }}

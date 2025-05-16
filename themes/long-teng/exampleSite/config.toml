@@ -1,0 +1,11 @@
+baseURL = "/"
+defaultLanguage = "en"
+title = "MDFriday"
+description = "MDFriday homepage, showcase the product or service."
+
+[module]
+    [[module.imports]]
+        path = "github.com/mdfriday/theme-long-teng"
+
+[params]
+    Author = 'sunwei'

@@ -1,0 +1,158 @@
+{{ $nav := .Site.GetPage "nav" }}
+
+<nav id="nav" class="navbar">
+    <div class="navbar_container">
+        <div class="z-9999 flex-child-fixed" style="margin-top: -5px;">
+            <div class="navbar_logo-dark">
+                <a href="/" aria-current="page" class="logo-medium w-inline-block">
+                    <div class="logo-wrapper">
+                        <img width="auto" alt="{{ .Site.Title }} Logo" src="{{ "img/logo.svg" | absURL }}" loading="eager" class="height-inherit">
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="navbar_content-wrapper">
+            <div class="navbar_menu-items-wrapper">
+                {{ range $link := $nav.Params.left_links }}
+                {{ $parts := split $link "," }}
+                {{ if eq (len $parts) 3 }}
+                {{ $title := strings.TrimSpace (index $parts 0) }}
+                {{ $url := strings.TrimSpace (index $parts 1) }}
+                {{ $enabled := strings.TrimSpace (index $parts 2) }}
+
+                <div class="navbar_dropdown-element-wrapper">
+                    {{ if eq $enabled "false" }}
+                    <a onclick="showToast()" class="navbar_dropdown-toggle w-inline-block">
+                        <div class="paragraph-medium" title="{{ $title }}">{{ $title }}</div>
+                    </a>
+                    {{ else }}
+                    <a href="{{ $url }}" class="navbar_dropdown-toggle w-inline-block" target="_blank">
+                        <div class="paragraph-medium" title="{{ $title }}">{{ $title }}</div>
+                    </a>
+                    {{ end }}
+                </div>
+                {{ end }}
+                {{ end }}
+
+                <div class="navbar_bg-overlay"></div>
+            </div>
+            <div class="navbar_cta-container">
+
+                {{ range $link := $nav.Params.right_links }}
+                {{ $parts := split $link "," }}
+                {{ $title := strings.TrimSpace (index $parts 0) }}
+                {{ $url := strings.TrimSpace (index $parts 1) }}
+                {{ $hasOnClick := eq (len $parts) 3 }}
+                {{ $needsOnClick := false }}
+
+                {{ if $hasOnClick }}
+                {{ $needsOnClick = strings.TrimSpace (index $parts 2) | eq "false" }}
+                {{ end }}
+
+                <div class="navbar_hide-desktop-custom">
+                    <div class="navbar_dropdown-element-wrapper">
+                        {{ if $needsOnClick }}
+                        <a onclick="showToast()" class="navbar_dropdown-toggle w-inline-block">
+                            {{ else }}
+                            <a href="{{ $url }}" class="navbar_dropdown-toggle w-inline-block" target="_blank">
+                                {{ end }}
+                                <div class="paragraph-medium" title="{{ $title }}">{{ $title }}</div>
+                            </a>
+                    </div>
+                </div>
+
+                <div class="navbar_hide-desktop-custom">
+                    <div class="height-1-25rem">
+                        <div color="" vertical="true" class="divider"></div>
+                    </div>
+                </div>
+                {{ end }}
+
+
+                {{ range $item := (append $nav.Params.right_links $nav.Params.buttons) }}
+                {{ $parts := split $item "," }}
+                {{ $title := strings.TrimSpace (index $parts 0) }}
+                {{ $url := strings.TrimSpace (index $parts 1) }}
+                {{ $needsOnClick := false }}
+
+                {{ if eq (len $parts) 3 }}
+                {{ $needsOnClick = strings.TrimSpace (index $parts 2) | eq "false" }}
+                {{ end }}
+
+                <div class="buttonwrapper is-navbar">
+                    {{ if eq $title "Get started" }}
+                    {{ if $needsOnClick }}
+                    <a onclick="showToast()" class="button is-small is-stretched w-inline-block">
+                        {{ else }}
+                        <a href="{{ $url }}" class="button is-small is-stretched w-inline-block">
+                            {{ end }}
+                            <div>{{ $title }}</div>
+                            <div class="icon-12 w-embed">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 16 16"
+                                     fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+                                    <path d="M1 7.72705H15" stroke="currentColor" stroke-linecap="round"
+                                          stroke-linejoin="round"></path>
+                                    <path d="M9.27246 2L14.9997 7.72727L9.27246 13.4545" stroke="currentColor"
+                                          stroke-width="1.27273" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </a>
+                        {{ else }}
+                        {{ if $needsOnClick }}
+                        <a onclick="showToast()" button="" show-tablet="true"
+                           class="button-secondary is-small is-stretched w-inline-block">
+                            {{ else }}
+                            <a href="{{ $url }}" button="" show-tablet="true"
+                               class="button-secondary is-small is-stretched w-inline-block" target="_blank">
+                                {{ end }}
+                                <div title="{{ $title }}">{{ $title }}</div>
+                            </a>
+                            {{ end }}
+
+                </div>
+                {{ end }}
+
+
+            </div>
+        </div>
+
+        <div class="show-tablet">
+            <div class="z-9999">
+                <div class="flex flex-centre-align flex-gap-1-5rem">
+                    {{ range $btn := $nav.Params.buttons }}
+                    {{ $parts := split $btn "," }}
+                    {{ $title := strings.TrimSpace (index $parts 0) }}
+                    {{ $url := strings.TrimSpace (index $parts 1) }}
+                    {{ $needsOnClick := false }}
+
+                    {{ if eq (len $parts) 3 }}
+                    {{ $needsOnClick = strings.TrimSpace (index $parts 2) | eq "false" }}
+                    {{ end }}
+
+                    {{ if eq $title "Get started" }}
+                    <div class="hide-mobile-landscape">
+                        <div class="buttonwrapper is-navbar">
+                            {{ if $needsOnClick }}
+                            <a onclick="showToast()" class="button is-small is-stretched w-inline-block">
+                                {{ else }}
+                                <a href="{{ $url }}" class="button is-small is-stretched w-inline-block">
+                                    {{ end }}
+                                    <div>{{ $title }}</div>
+                                </a>
+                        </div>
+                    </div>
+                    {{ end }}
+                    {{ end }}
+
+                    <div class="navbar_burger-icon-wrapper">
+                        <div class="navbar_burger-menu-stroke"></div>
+                        <div class="navbar_burger-menu-stroke"></div>
+                        <div class="navbar_burger-menu-stroke"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
