@@ -11,11 +11,12 @@
 
 .background-image-container {
     filter: hue-rotate(270deg) saturate(.6);
-    opacity: .6;
+    opacity: .5;
 }
 
 .background-image-container > img {
     scale: 1.2;
+    rotate: 45deg;
 }
 
 .container-small {
@@ -24,6 +25,10 @@
 
 .weight-normal {
     font-weight: normal !important;
+}
+
+.product-title {
+    margin-top: 2rem;
 }
 
 .product-title h1 > :is(:first-child, :nth-child(2)) {

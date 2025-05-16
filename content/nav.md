@@ -1,7 +1,7 @@
 ---
 title: "Quarkdown"
 logo_link: "https://quarkdown.com/"
-logo_image: "https://raw.githubusercontent.com/iamgio/quarkdown/refs/heads/project-files/images/tbanner-dark.svg"
+logo_image: "img/logo.svg"
 right_links:
   - "Wiki, https://github.com/iamgio/quarkdown/wiki"
   - "Docs, https://quarkdown.com/docs"
