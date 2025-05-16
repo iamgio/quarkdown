@@ -18,3 +18,7 @@
 .product-description p:not(:first-child) {
     font-size: 1.1rem;
 }
+
+.nav-icon {
+    width: 1.5rem;
+}

@@ -8,8 +8,8 @@ description2_line2: "Free and open source, forever."
 button_text: "Get started"
 button_link: "https://github.com/iamgio/quarkdown?tab=readme-ov-file#getting-started"
 freemium_text: "Get started for FREE"
-claimer1: "No coding required, no fuss"
-claimer2: "Just your perfect website"
+claimer1: " "
+claimer2: " "
 ---
 
 # Product Field Explanation

@@ -2,14 +2,10 @@
 title: "Quarkdown"
 logo_link: "https://quarkdown.com/"
 logo_image: "https://raw.githubusercontent.com/iamgio/quarkdown/refs/heads/project-files/images/tbanner-dark.svg"
-left_links:
-  - "Themes, /themes, false"
-  - "Pricing, /pricing, false"
 right_links:
   - "Wiki, https://github.com/iamgio/quarkdown/wiki"
   - "Docs, https://quarkdown.com/docs"
-buttons:
-  - "Get started, https://github.com/iamgio/quarkdown?tab=readme-ov-file#getting-started"
+buttons: []
 ---
 
 # Navigation Configuration Field Explanation

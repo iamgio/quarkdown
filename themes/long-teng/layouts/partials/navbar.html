@@ -69,6 +69,11 @@
                 </div>
                 {{ end }}
 
+                <div class="buttonwrapper is-navbar">
+                    <a class="icon-16 nav-icon" href="https://github.com/iamgio/quarkdown">
+                        <img src="img/github.svg" alt="GitHub Logo" class="github-logo">
+                    </a>
+                </div>
 
                 {{ range $item := (append $nav.Params.right_links $nav.Params.buttons) }}
                 {{ $parts := split $item "," }}
