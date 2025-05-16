@@ -1,6 +1,7 @@
 ---
 title: "Quarkdown"
-tagline: "Markdown with"
+tagline: "Markdown "
+tagline_normal: " with"
 highlight: "superpowers"
 description1: "Letting your ideas flow into your next presentation, paper or book."
 description2_line1: "Markdown meets the power of LaTeX in this modern typesetting system."
