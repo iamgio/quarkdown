@@ -9,6 +9,7 @@
     --indigo-500-main: var(--main);
     --indigo-600: color-mix(in srgb, var(--main) 30%, #176917);
     --indigo-700: var(--indigo-100);
+    --indigo-800: var(--main);
 }
 
 nav .logo-wrapper img {
