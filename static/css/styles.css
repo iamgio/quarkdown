@@ -82,15 +82,15 @@ nav .logo-wrapper img {
     rotate: 45deg;
 }
 
-@media screen and (max-width: 1200px) {
-    .background-image-container > img {
-        scale: 2;
-    }
-}
-
 @media screen and (max-width: 768px) {
     .background-image-container > img {
         scale: 2.5;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .background-image-container > img {
+        scale: 2;
     }
 }
 
@@ -153,6 +153,8 @@ nav .logo-wrapper img {
 }
 
 :is(.button, .button-secondary).is-large {
+    padding-top: .8rem;
+    padding-bottom: .8rem;
     font-size: 1rem;
 }
 
