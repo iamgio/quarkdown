@@ -84,7 +84,13 @@ nav .logo-wrapper img {
 
 @media screen and (max-width: 1200px) {
     .background-image-container > img {
-        scale: 3;
+        scale: 2;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .background-image-container > img {
+        scale: 2.5;
     }
 }
 
