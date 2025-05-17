@@ -36,25 +36,33 @@
                                 </div>
                             </div>
                             <div class="spacer-large"></div>
-                            <div class="buttonwrapper center-button">
-                                <a id="free-demo-btn"
-                                   freemium-text="{{ $product.Params.freemium_text | default "Get started for FREE" }}"
-                                href="{{ $product.Params.button_link | default "#how-to" }}"
-                                class="button is-large w-inline-block">
-                                <div>{{ $product.Params.button_text | default "Create free website" }}</div>
-                                <div class="icon-16 w-embed">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
-                                         viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet"
-                                         aria-hidden="true" role="img">
-                                        <path d="M1 7.72656H15" stroke="currentColor" stroke-linecap="round"
-                                              stroke-linejoin="round"></path>
-                                        <path d="M9.27246 2L14.9997 7.72727L9.27246 13.4545"
-                                              stroke="currentColor"
-                                              stroke-width="1.27273" stroke-linecap="round"
-                                              stroke-linejoin="round"></path>
-                                    </svg>
+                            <div class="buttons flex flex-horizontal">
+                                <div class="buttonwrapper center-button">
+                                    <a href="{{ $product.Params.button_secondary_link | default "#how-to" }}"
+                                    class="button-secondary is-large w-inline-block">
+                                    <div>{{ $product.Params.button_secondary_text | default "Create free website" }}</div>
+                                    </a>
                                 </div>
-                                </a>
+                                <div class="buttonwrapper center-button">
+                                    <a id="free-demo-btn"
+                                       freemium-text="{{ $product.Params.freemium_text | default "Get started for FREE" }}"
+                                    href="{{ $product.Params.button_link | default "#how-to" }}"
+                                    class="button is-large w-inline-block">
+                                    <div>{{ $product.Params.button_text | default "Create free website" }}</div>
+                                    <div class="icon-16 w-embed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+                                             viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet"
+                                             aria-hidden="true" role="img">
+                                            <path d="M1 7.72656H15" stroke="currentColor" stroke-linecap="round"
+                                                  stroke-linejoin="round"></path>
+                                            <path d="M9.27246 2L14.9997 7.72727L9.27246 13.4545"
+                                                  stroke="currentColor"
+                                                  stroke-width="1.27273" stroke-linecap="round"
+                                                  stroke-linejoin="round"></path>
+                                        </svg>
+                                    </div>
+                                    </a>
+                                </div>
                             </div>
                             <div class="text-color-grey-600">
                                 <div class="spacer-xsmall"></div>

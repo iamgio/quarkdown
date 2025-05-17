@@ -8,6 +8,8 @@ description2_line1: "Markdown meets the power of LaTeX in this modern typesettin
 description2_line2: "And it's free and open source."
 button_text: "Get started"
 button_link: "https://github.com/iamgio/quarkdown?tab=readme-ov-file#getting-started"
+button_secondary_text: "Learn more"
+button_secondary_link: "https://github.com/iamgio/quarkdown?tab=readme-ov-file#table-of-contents"
 freemium_text: "Get started"
 claimer1: " "
 claimer2: " "

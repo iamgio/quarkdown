@@ -5,6 +5,8 @@
     --main: #2A4F3B;
     --base-spacing-xlarge: 4rem;
     --indigo-100: #5A935A;
+    --indigo-200: var(--indigo-100);
+    --indigo-300: var(--indigo-700);
     --indigo-400: color-mix(in srgb, var(--main) 20%, var(--indigo-100));
     --indigo-500-main: var(--main);
     --indigo-600: color-mix(in srgb, var(--main) 30%, #176917);
@@ -47,6 +49,10 @@ main > .divider {
 
 nav .logo-wrapper img {
     scale: 1.1;
+}
+
+.nav-icon {
+    width: 1.5rem;
 }
 
 .background-image-container {
@@ -102,6 +108,17 @@ nav .logo-wrapper img {
     font-size: 1.1rem;
 }
 
-.nav-icon {
-    width: 1.5rem;
+.buttons {
+    justify-content: center;
+    gap: 1rem;
+}
+
+.button-secondary {
+    color: var(--main);
+    font-size: 1.125rem;
+}
+
+.button-secondary:hover {
+    background: var(--indigo-400);
+    color: var(--base-white);
 }
