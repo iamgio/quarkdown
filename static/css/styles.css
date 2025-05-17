@@ -56,7 +56,7 @@ footer .label-regular {
 
 @media screen and (max-width: 600px) {
     footer .label-regular {
-        font-size: .25rem;
+        font-size: .35rem;
     }
 }
 
