@@ -75,8 +75,17 @@ nav .logo-wrapper img {
     font-family: 'Zilla Slab', sans-serif;
 }
 
+.product-title h1 > .text-highlight-gradient {
+    font-size: 6rem;
+}
+
+.product-title h1 > :first-child {
+    letter-spacing: -0.15rem;
+}
+
 .product-title .weight-normal {
-    opacity: .7;
+    color: var(--main);
+    opacity: .65;
 }
 
 .product-description {
@@ -85,6 +94,7 @@ nav .logo-wrapper img {
 
 .product-description p:first-child {
     font-size: 1.3rem;
+    font-weight: 500;
     margin: 36px 0;
 }
 
