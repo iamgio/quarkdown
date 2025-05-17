@@ -21,7 +21,27 @@ body {
     overflow: hidden !important;
 }
 
-footer, main > .divider {
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+footer.footer-section {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: .9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: .8;
+    background: linear-gradient(90deg, transparent 10%, var(--indigo-400), var(--main), var(--indigo-400), transparent 90%);
+}
+
+main > .divider {
     display: none;
 }
 
