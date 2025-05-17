@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Quarkdown</title><link>https://quarkdown.com/</link><description>Recent content on Quarkdown</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://quarkdown.com/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://quarkdown.com/footer/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://quarkdown.com/footer/</guid><description/></item><item><title>Quarkdown</title><link>https://quarkdown.com/nav/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://quarkdown.com/nav/</guid><description>&lt;h1 id="navigation-configuration-field-explanation">Navigation Configuration Field Explanation&lt;/h1>
+&lt;ul>
+&lt;li>&lt;strong>title&lt;/strong>: The main title for the navigation section, typically describing the purpose of the navigation configuration, in this case, &amp;ldquo;Navigation Configuration.&amp;rdquo;&lt;/li>
+&lt;li>&lt;strong>logo_link&lt;/strong>: The URL where the logo links to when clicked. This is typically the homepage or the main site URL, in this case, &amp;ldquo;&lt;a href="https://mdfriday.com/%22">https://mdfriday.com/&amp;quot;&lt;/a>&lt;/li>
+&lt;li>&lt;strong>logo_image&lt;/strong>: The path to the logo image file used in the navigation bar. This is the image that will be displayed as the logo in the navigation, here it is &amp;ldquo;img/mdfriday.svg.&amp;rdquo;&lt;/li>
+&lt;li>&lt;strong>left_links&lt;/strong>: A list of links that will appear on the left side of the navigation bar. Each link is described by a title, URL, and a flag indicating whether the link is ready to be used (&lt;code>true&lt;/code> means the link is ready and functional, &lt;code>false&lt;/code> means the link is not ready, and may trigger an action like &lt;code>onclick&lt;/code> instead of a direct URL).
+&lt;ul>
+&lt;li>Example: &lt;code>&amp;quot;Themes, /themes, false&amp;quot;&lt;/code> means there is a &amp;ldquo;Themes&amp;rdquo; link that leads to &lt;code>/themes&lt;/code>, but it is not yet ready (potentially triggering an action like &lt;code>onclick&lt;/code>).&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>right_links&lt;/strong>: A list of links that will appear on the right side of the navigation bar. Similar to &lt;code>left_links&lt;/code>, but typically used for links like &amp;ldquo;Contact Us,&amp;rdquo; external URLs, etc.
+&lt;ul>
+&lt;li>Example: &lt;code>&amp;quot;Contact Us, mailto:service@mdfriday.com&amp;quot;&lt;/code> means there is a &amp;ldquo;Contact Us&amp;rdquo; link that opens the user&amp;rsquo;s email client with the provided email address.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>buttons&lt;/strong>: A list of buttons that can be displayed in the navigation bar. Each button is defined by a text label, URL or action link, and a flag indicating if it’s ready (&lt;code>true&lt;/code> means the button’s action or link is ready, &lt;code>false&lt;/code> means it is not ready and might trigger an action instead).
+&lt;ul>
+&lt;li>Example: &lt;code>&amp;quot;Get started, #, false&amp;quot;&lt;/code> means there is a &amp;ldquo;Get started&amp;rdquo; button with a &lt;code>#&lt;/code> link that is not yet ready (potentially triggering an action like &lt;code>onclick&lt;/code>).&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul></description></item><item><title>Quarkdown</title><link>https://quarkdown.com/product/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://quarkdown.com/product/</guid><description>&lt;h1 id="product-field-explanation">Product Field Explanation&lt;/h1>
+&lt;ul>
+&lt;li>&lt;strong>title&lt;/strong>: The theme of the current page in the browser.&lt;/li>
+&lt;li>&lt;strong>tagline&lt;/strong>: A short slogan or subtitle that summarizes the core value or feature of the product.&lt;/li>
+&lt;li>&lt;strong>highlight&lt;/strong>: A key advantage of the product, such as speed or ease of use, often used to capture the user&amp;rsquo;s attention.&lt;/li>
+&lt;li>&lt;strong>description&lt;/strong>: A detailed explanation of the product, including its features, benefits, and use cases, helping users better understand the product.&lt;/li>
+&lt;li>&lt;strong>button_text&lt;/strong>: The text displayed on the button, guiding the user to perform a specific action (e.g., sign up, create a website).&lt;/li>
+&lt;li>&lt;strong>button_link&lt;/strong>: The link that the button directs to when clicked, leading to a specific page or process.&lt;/li>
+&lt;li>&lt;strong>freemium_text&lt;/strong>: Text that promotes getting started for free, often used to encourage users to try the product for free or begin their journey.&lt;/li>
+&lt;li>&lt;strong>claimer1&lt;/strong>: A statement emphasizing a product advantage or feature, such as &amp;ldquo;No coding required.&amp;rdquo;&lt;/li>
+&lt;li>&lt;strong>claimer2&lt;/strong>: Another statement or supplementary explanation highlighting another benefit or feature of the product.&lt;/li>
+&lt;/ul></description></item></channel></rss>

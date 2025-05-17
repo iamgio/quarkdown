@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+:root {
+    --main: #2A4F3B;
+    --base-spacing-xlarge: 4rem;
+    --indigo-100: #5A935A;
+    --indigo-200: var(--indigo-100);
+    --indigo-300: var(--indigo-700);
+    --indigo-400: color-mix(in srgb, var(--main) 20%, var(--indigo-100));
+    --indigo-500-main: var(--main);
+    --indigo-600: color-mix(in srgb, var(--main) 30%, #176917);
+    --indigo-700: var(--indigo-100);
+    --indigo-800: var(--main);
+}
+
+.main-wrapper, .background-image-container {
+    overflow: visible !important;
+    max-height: none;
+}
+
+body {
+    overflow: hidden !important;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+footer.footer-section {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: .9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: .8;
+    /*background: linear-gradient(90deg, transparent 10%, var(--indigo-400), var(--main), var(--indigo-400), transparent 90%);*/
+    background-color: transparent;
+    color: var(--main);
+}
+
+main > .divider {
+    display: none;
+}
+
+nav .logo-wrapper img {
+    scale: 1.1;
+}
+
+.nav-icon {
+    width: 1.5rem;
+}
+
+.background-image-container {
+    filter: hue-rotate(270deg) saturate(.6);
+    opacity: .5;
+}
+
+.background-image-container > img {
+    scale: 1.2;
+    rotate: 45deg;
+}
+
+.container-small {
+    max-width: 52rem;
+}
+
+.weight-normal {
+    font-weight: normal !important;
+}
+
+.product-title {
+    margin-top: 1.6rem;
+}
+
+.product-title h1 > :not(.text-highlight-gradient) {
+    font-family: 'Zilla Slab', sans-serif;
+}
+
+.product-title h1 > .text-highlight-gradient {
+    font-size: 6rem;
+}
+
+.product-title h1 > :first-child {
+    letter-spacing: -0.15rem;
+}
+
+.product-title .weight-normal {
+    color: var(--main);
+    opacity: .65;
+}
+
+.product-description {
+    margin-top: 8px;
+}
+
+.product-description p:first-child {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 36px 0;
+}
+
+.product-description p:not(:first-child) {
+    font-size: 1.1rem;
+}
+
+.buttons {
+    justify-content: center;
+    gap: 1rem;
+}
+
+.button-secondary {
+    color: var(--main);
+    font-size: 1.125rem;
+}
+
+.button-secondary:hover {
+    background: var(--indigo-400);
+    color: var(--base-white);
+}
