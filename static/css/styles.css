@@ -91,6 +91,12 @@ nav .logo-wrapper img {
     font-size: 5rem;
 }
 
+@media screen and (max-width: 767px) {
+    .product-title h1 > :not(.text-highlight-gradient) {
+        font-size: 3rem;
+    }
+}
+
 .product-title h1 > :first-child {
     letter-spacing: -0.15rem;
 }
