@@ -2,7 +2,7 @@
 
 :root {
     --main: #2A4F3B;
-    --base-spacing-xlarge: 4rem;
+    --base-spacing-xlarge: 3rem;
     --indigo-100: #5A935A;
     --indigo-200: var(--indigo-100);
     --indigo-300: var(--indigo-700);
@@ -44,6 +44,10 @@ footer.footer-section {
     color: var(--main);
 }
 
+footer .label-regular {
+    font-size: .6rem;
+}
+
 main > .divider {
     display: none;
 }
@@ -74,16 +78,17 @@ nav .logo-wrapper img {
     font-weight: normal !important;
 }
 
+.main-wrapper .logo-wrapper img {
+    max-height: 5rem;
+}
+
 .product-title {
-    margin-top: 1.6rem;
+    margin-top: 1.2rem;
 }
 
 .product-title h1 > :not(.text-highlight-gradient) {
     font-family: 'Zilla Slab', sans-serif;
-}
-
-.product-title h1 > .text-highlight-gradient {
-    font-size: 6rem;
+    font-size: 5rem;
 }
 
 .product-title h1 > :first-child {
@@ -100,13 +105,13 @@ nav .logo-wrapper img {
 }
 
 .product-description p:first-child {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    margin: 36px 0;
+    margin: 32px 0;
 }
 
 .product-description p:not(:first-child) {
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .buttons {
@@ -114,9 +119,12 @@ nav .logo-wrapper img {
     gap: 1rem;
 }
 
+:is(.button, .button-secondary).is-large {
+    font-size: 1rem;
+}
+
 .button-secondary {
     color: var(--main);
-    font-size: 1.125rem;
 }
 
 .button-secondary:hover {
