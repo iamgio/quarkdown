@@ -82,15 +82,12 @@ nav .logo-wrapper img {
     rotate: 45deg;
 }
 
-@media screen and (max-width: 768px) {
-    .background-image-container > img {
-        scale: 2.5;
-    }
-}
-
 @media screen and (max-width: 1200px) {
     .background-image-container > img {
-        scale: 2;
+        scale: 1;
+        rotate: 0deg;
+        height: 100vh;
+        transform: scaleY(1.5);
     }
 }
 
