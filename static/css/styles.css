@@ -39,7 +39,9 @@ footer.footer-section {
     justify-content: center;
     align-items: center;
     opacity: .8;
-    background: linear-gradient(90deg, transparent 10%, var(--indigo-400), var(--main), var(--indigo-400), transparent 90%);
+    /*background: linear-gradient(90deg, transparent 10%, var(--indigo-400), var(--main), var(--indigo-400), transparent 90%);*/
+    background-color: transparent;
+    color: var(--main);
 }
 
 main > .divider {
