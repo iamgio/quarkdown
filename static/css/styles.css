@@ -12,6 +12,19 @@
     --indigo-800: var(--main);
 }
 
+.main-wrapper, .background-image-container {
+    overflow: visible !important;
+    max-height: none;
+}
+
+body {
+    overflow: hidden !important;
+}
+
+footer, main > .divider {
+    display: none;
+}
+
 nav .logo-wrapper img {
     scale: 1.1;
 }
