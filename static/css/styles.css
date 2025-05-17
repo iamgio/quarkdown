@@ -4,9 +4,15 @@
 :root {
     --main: #2A4F3B;
     --base-spacing-xlarge: 4rem;
-    --indigo-400: color-mix(in srgb, var(--main) 20%, #5A935A);
+    --indigo-100: #5A935A;
+    --indigo-400: color-mix(in srgb, var(--main) 20%, var(--indigo-100));
     --indigo-500-main: var(--main);
     --indigo-600: color-mix(in srgb, var(--main) 30%, #176917);
+    --indigo-700: var(--indigo-100);
+}
+
+nav .logo-wrapper img {
+    scale: 1.1;
 }
 
 .background-image-container {
@@ -28,10 +34,10 @@
 }
 
 .product-title {
-    margin-top: 2rem;
+    margin-top: 1.6rem;
 }
 
-.product-title h1 > :is(:first-child, :nth-child(2)) {
+.product-title h1 > :not(.text-highlight-gradient) {
     font-family: 'Zilla Slab', sans-serif;
 }
 
