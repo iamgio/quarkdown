@@ -2,4 +2,3 @@ baseURL = 'https://quarkdown.com/'
 languageCode = 'en-us'
 title = 'Quarkdown'
 theme = 'long-teng'
-[ou]
