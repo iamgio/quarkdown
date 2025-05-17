@@ -48,6 +48,12 @@ footer .label-regular {
     font-size: .6rem;
 }
 
+@media screen and (max-width: 767px) {
+    footer .label-regular {
+        font-size: .4rem;
+    }
+}
+
 main > .divider {
     display: none;
 }
@@ -83,7 +89,7 @@ nav .logo-wrapper img {
     margin-bottom: calc(var(--base-spacing-xlarge) / 2);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     .main-wrapper .logo-wrapper {
         display: none;
     }
