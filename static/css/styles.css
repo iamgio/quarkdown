@@ -2,7 +2,7 @@
 
 :root {
     --main: #2A4F3B;
-    --base-spacing-xlarge: 3rem;
+    --base-spacing-xlarge: 5vh;
     --indigo-100: #5A935A;
     --indigo-200: var(--indigo-100);
     --indigo-300: var(--indigo-700);
@@ -80,10 +80,13 @@ nav .logo-wrapper img {
 
 .main-wrapper .logo-wrapper img {
     max-height: 5rem;
+    margin-bottom: calc(var(--base-spacing-xlarge) / 2);
 }
 
-.product-title {
-    margin-top: 1.2rem;
+@media screen and (max-width: 768px) {
+    .main-wrapper .logo-wrapper {
+        display: none;
+    }
 }
 
 .product-title h1 > :not(.text-highlight-gradient) {
