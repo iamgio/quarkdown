@@ -54,7 +54,6 @@ $dokka.location:com.quarkdown.stdlib//if/#kotlin.Boolean#com.quarkdown.core.func
 $dokka.location:com.quarkdown.stdlib//ifNot/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/ifnot.html
 $dokka.location:com.quarkdown.stdlib//ifPresent/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/ifpresent.html
 $dokka.location:com.quarkdown.stdlib//include/#com.quarkdown.core.context.MutableContext#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html
-$dokka.location:com.quarkdown.stdlib//includeResource/#com.quarkdown.core.context.Context#java.io.Reader/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include-resource.html
 $dokka.location:com.quarkdown.stdlib//inlineCollapse/#com.quarkdown.core.ast.InlineMarkdownContent#com.quarkdown.core.ast.InlineMarkdownContent#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/textcollapse.html
 $dokka.location:com.quarkdown.stdlib//isEmpty/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/isempty.html
 $dokka.location:com.quarkdown.stdlib//isEven/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/iseven.html

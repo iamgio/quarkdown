@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>mermaid</title>
+    <title>findDeep</title>
 <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-stdlib/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-quarkdoc/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-stdlib/main" data-filter=":quarkdown-stdlib/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-quarkdoc/main" data-filter=":quarkdown-quarkdoc/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-stdlib::com.quarkdown.stdlib//mermaid/#kotlin.String?#com.quarkdown.core.function.value.data.EvaluableString/PointingToDeclaration//742850071">
-  <div class="breadcrumbs"><a href="../index.html">quarkdown-stdlib</a><span class="delimiter">/</span><a href="index.html">com.quarkdown.stdlib.module.Mermaid</a><span class="delimiter">/</span><span class="current">mermaid</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-quarkdoc::com.quarkdown.quarkdoc.dokka.util//findDeep/org.jetbrains.dokka.model.WithChildren[*]#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Boolean]/PointingToDeclaration//-807095081">
+  <div class="breadcrumbs"><a href="../index.html">quarkdown-quarkdoc</a><span class="delimiter">/</span><a href="index.html">com.quarkdown.quarkdoc.dokka.util</a><span class="delimiter">/</span><span class="current">findDeep</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>mermaid</span></span></h1>
+    <h1 class="cover"><span>find</span><wbr><span><span>Deep</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-stdlib/main"><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea"><span class="token punctuation">.</span><span class="token function">mermaid</span><span class="token punctuation"> </span><span class="token constant">caption</span><span class="token operator">:</span><span class="token punctuation">{</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">}</span><span class="token punctuation"> </span><span class="token constant">code</span><span class="token operator">:</span><span class="token punctuation">{</span><a href="../../quarkdown-core/com.quarkdown.core.function.value.data/-evaluable-string/index.html">EvaluableString</a><span class="token punctuation">}</span><span class="token punctuation"> </span><span class="token operator">-&gt; </span><a href="../../quarkdown-core/com.quarkdown.core.function.value/-node/index.html">Node</a></code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Creates a Mermaid diagram.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">a new <a href="../../quarkdown-core/com.quarkdown.core.ast.quarkdown.block/-mermaid-diagram-figure/index.html">MermaidDiagramFigure</a> node</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>caption</span></span></u></div></span></div><div><div class="title"><p class="paragraph">optional caption. If a caption is present, the diagram will be numbered as a figure.</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>code</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the Mermaid code of the diagram</p></div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="find-deep.html">T</a><span class="token operator">&gt; </span><span data-unresolved-link="org.jetbrains.dokka.model/WithChildren///PointingToDeclaration/">WithChildren</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="find-deep.html"><span class="token function">findDeep</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">crossinline </span>predicate<span class="token operator">: </span><span class="token punctuation">(</span><a href="find-deep.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span>{ true }</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="find-deep.html">T</a><span class="token operator">?</span></div><p class="paragraph">Finds the first child of type <a href="find-deep.html">T</a> in the documentation tree, starting from <a href="../../quarkdown-quarkdoc/com.quarkdown.quarkdoc.dokka.util/index.html">this</a> root.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">the first child of type <a href="find-deep.html">T</a> that matches the predicate, if any</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>predicate</span></span></u></div></span></div><div><div class="title"><p class="paragraph">optional predicate to filter the children of type <a href="find-deep.html">T</a></p></div></div></div></div></div></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
