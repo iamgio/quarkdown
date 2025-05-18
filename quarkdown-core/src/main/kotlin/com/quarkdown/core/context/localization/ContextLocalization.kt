@@ -37,7 +37,7 @@ fun Context.localizeOrNull(
             null -> localize(tableName, key)
             else -> localize(tableName, key, locale)
         }
-    } catch (e: LocalizationException) {
+    } catch (_: LocalizationException) {
         null
     }
 
