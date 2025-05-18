@@ -13,6 +13,8 @@ import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.localization.Locale
+import com.quarkdown.core.localization.LocaleNotSetException
 import com.quarkdown.core.localization.LocalizationTables
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
@@ -113,8 +115,9 @@ interface Context {
      * Localizes a string to this context's language (the locale set in [documentInfo]) by looking up a key in a localization table.
      * @param tableName name of the localization table, which must exist within [localizationTables]
      * @param key localization key to look up within the table
+     * @param locale the locale to use for localization, defaulting to the one set in [documentInfo], if any
      * @return the localized string corresponding to the key in the table, if there is any
-     * @throws com.quarkdown.core.localization.LocaleNotSetException if a locale is not set within [documentInfo]
+     * @throws com.quarkdown.core.localization.LocaleNotSetException if [locale] is not explicitly set and a locale is not set within [documentInfo]
      * @throws com.quarkdown.core.localization.LocalizationTableNotFoundException if the table does not exist
      * @throws com.quarkdown.core.localization.LocalizationKeyNotFoundException if the locale does not exist in the table
      * @throws com.quarkdown.core.localization.LocalizationKeyNotFoundException if the key does not exist in the table entry for the locale
@@ -123,6 +126,7 @@ interface Context {
     fun localize(
         tableName: String,
         key: String,
+        locale: Locale = documentInfo.locale ?: throw LocaleNotSetException(),
     ): String
 
     /**

@@ -118,7 +118,7 @@ class QuarkdownHtmlNodeRenderer(
                     // The label is set as an attribute for styling.
                     optionalAttribute("data-element-label", label)
                     // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
-                    optionalAttribute("data-localized-kind", context.localizeOrNull(kindLocalizationKey))
+                    optionalAttribute("data-localized-kind", context.localizeOrNull(key = kindLocalizationKey))
                 }
             }
         }
@@ -280,7 +280,7 @@ class QuarkdownHtmlNodeRenderer(
 
         return buildMultiTag {
             // Localized title.
-            val titleText = context.localizeOrNull("tableofcontents")
+            val titleText = context.localizeOrNull(key = "tableofcontents")
 
             // Title heading. Its content is either the node's user-set title or a default localized one.
             +Heading(
@@ -429,7 +429,7 @@ class QuarkdownHtmlNodeRenderer(
                 className(type)
                 // The type is associated to a localized label
                 // only if the documant language is set and the set language is supported.
-                context.localizeOrNull(type)?.let { localizedLabel ->
+                context.localizeOrNull(key = type)?.let { localizedLabel ->
                     // The localized label is set as a CSS variable.
                     // Themes can customize label appearance and formatting.
                     style { "--quote-type-label" value "'$localizedLabel'" }
