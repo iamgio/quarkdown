@@ -445,6 +445,27 @@ class NumberingTest {
     }
 
     @Test
+    fun `custom figure`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+                - figures: 1
+            
+            .figure {My caption.}
+                Hello, world!
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure id=\"figure-1\"><p>Hello, world!</p>" +
+                    "<figcaption data-element-label=\"1\" data-localized-kind=\"Figure\">" +
+                    "My caption.</figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `localized numbering captions`() {
         // Localized kind names.
         execute(
