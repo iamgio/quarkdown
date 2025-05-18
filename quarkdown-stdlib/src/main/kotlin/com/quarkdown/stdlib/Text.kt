@@ -73,20 +73,10 @@ fun text(
  * this function accepts function calls within its [code] argument,
  * hence it can be used - for example - in combination with [read] to load code from file.
  *
- * Examples:
- *
- * Load from file:
+ * Example of a code block loaded from file via [read]:
  * ```
  * .code {kotlin} focus:{2..5}
  *     .read {snippet.kt}
- * ```
- *
- * Load dynamically:
- * ```
- * .function {mycode} {mylang}
- *     source:
- *         code {mylang}
- *             .source
  * ```
  *
  * @param language optional language of the code
