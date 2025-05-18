@@ -40,6 +40,7 @@ $dokka.location:com.quarkdown.stdlib//docName/#com.quarkdown.core.context.Contex
 $dokka.location:com.quarkdown.stdlib//docType/#com.quarkdown.core.context.Context#com.quarkdown.core.document.DocumentType?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/doctype.html
 $dokka.location:com.quarkdown.stdlib//equals/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/equals.html
 $dokka.location:com.quarkdown.stdlib//error/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/error.html
+$dokka.location:com.quarkdown.stdlib//figure/#kotlin.String?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/figure.html
 $dokka.location:com.quarkdown.stdlib//float/#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/float.html
 $dokka.location:com.quarkdown.stdlib//footer/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/footer.html
 $dokka.location:com.quarkdown.stdlib//forEach/#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/foreach.html
