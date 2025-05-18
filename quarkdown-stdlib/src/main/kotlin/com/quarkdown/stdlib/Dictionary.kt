@@ -34,6 +34,7 @@ val Dictionary: Module =
  * ```
  * @param dictionary dictionary to initialize
  * @return the dictionary
+ * @wiki Dictionary
  */
 fun dictionary(dictionary: Map<String, OutputValue<*>>): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
 

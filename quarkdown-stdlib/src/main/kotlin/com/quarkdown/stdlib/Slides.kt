@@ -28,7 +28,8 @@ val Slides: Module =
  * @param showControls whether navigation controls should be shown
  * @param transitionStyle global transition style between slides
  * @param transitionSpeed global transition speed between slides
- * @return a wrapped [SlidesConfigurationInitializer] node
+ * @return a new [SlidesConfigurationInitializer] node
+ * @wiki Slides configuration
  */
 @OnlyForDocumentType(DocumentType.SLIDES)
 @Name("slides")
@@ -50,7 +51,8 @@ fun setSlidesConfiguration(
  * Multiple fragments in the same slide are shown in order on distinct user interactions.
  * @param behavior visibility type of the fragment and how it reacts to user interactions
  * @param content content to show/hide
- * @return the fragment node
+ * @return a new [SlidesFragment] node
+ * @wiki Slides fragment
  */
 @OnlyForDocumentType(DocumentType.SLIDES)
 fun fragment(

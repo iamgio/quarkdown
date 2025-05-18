@@ -16,8 +16,8 @@ val Injection: Module =
 
 /**
  * Creates an HTML element, which is rendered as-is without any additional processing or escaping.
- *
  * @param content raw HTML content to inject
- * @return the HTML node
+ * @return a new [Html] node
+ * @wiki HTML
  */
 fun html(content: String) = Html(content).wrappedAsValue()

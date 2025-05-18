@@ -89,6 +89,7 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
  * If it's `null`, the name of the current document type is returned.
  * @param type (optional) type to assign to the document
  * @return the lowercase name of the current document type if [type] is `null`
+ * @wiki Document metadata
  */
 @Name("doctype")
 fun docType(
@@ -110,6 +111,7 @@ fun docType(
  * If it's `null`, the current document name is returned.
  * @param name (optional) name to assign to the document
  * @return the current document name if [name] is `null`
+ * @wiki Document metadata
  */
 @Name("docname")
 fun docName(
@@ -127,6 +129,7 @@ fun docName(
  * If it's `null`, the current document author is returned.
  * @param author (optional) author to assign to the document
  * @return the current document author if [author] is `null`
+ * @wiki Document metadata
  */
 @Name("docauthor")
 fun docAuthor(
@@ -158,6 +161,7 @@ fun docAuthor(
  * @param authors (optional) authors to assign to the document.
  * Each dictionary entry contains the author's name associated with a nested dictionary of additional information.
  * @return the current document authors if [authors] is `null`
+ * @wiki Document metadata
  */
 @Name("docauthors")
 fun docAuthors(
@@ -199,6 +203,7 @@ fun docAuthors(
  *               to assign to the document
  * @return the localized name of the current document locale if [locale] is `null`
  * @throws IllegalArgumentException if the locale tag is not invalid or not found
+ * @wiki Localization
  */
 @Name("doclang")
 fun docLanguage(
@@ -220,6 +225,7 @@ fun docLanguage(
  * @param color (optional) color scheme to assign (searched in `resources/render/theme/color`)
  * @param layout (optional) layout format to assign (searched in `resources/render/theme/layout`)
  * @throws IOPipelineException if any of the theme components isn't resolved
+ * @wiki Theme
  */
 fun theme(
     @Injected context: Context,
@@ -266,7 +272,8 @@ fun theme(
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
  * - `figures`, used for captioned images;
  * - `tables`, used for captioned tables.
- * Any other key can be addressed by other elements (see [numbered])
+ * Any other key can be addressed by custom elements (see [numbered]).
+ * @wiki Numbering
  */
 fun numbering(
     @Injected context: Context,
@@ -294,12 +301,19 @@ fun numbering(
 /**
  * Disables numbering across the document, in case a default numbering is set.
  * @see numbering
+ * @wiki Numbering
  */
 @Name("nonumbering")
 fun disableNumbering(
     @Injected context: Context,
 ) = numbering(context, emptyMap())
 
+/**
+ * Creates a new global TeX macro that can be accessed within math blocks.
+ * @param name name of the macro
+ * @param macro TeX code
+ * @wiki TeX macros
+ */
 @Name("texmacro")
 fun texMacro(
     @Injected context: Context,
@@ -322,6 +336,7 @@ fun texMacro(
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment horizontal alignment of the content on each page
+ * @wiki Page format
  */
 @Name("pageformat")
 fun pageFormat(
@@ -356,6 +371,7 @@ fun pageFormat(
  * @param position position of the content within the page
  * @param content content to be displayed on each page
  * @return a wrapped [PageMarginContentInitializer] node
+ * @wiki Page margin content
  */
 @Name("pagemargin")
 fun pageMarginContent(
@@ -372,6 +388,7 @@ fun pageMarginContent(
  * Shortcut for [pageMarginContent] with [PageMarginPosition.BOTTOM_CENTER] as its position.
  * @see pageMarginContent
  * @return a wrapped [PageMarginContentInitializer] node with its position set to bottom center
+ * @wiki Page margin content
  */
 fun footer(content: MarkdownContent): NodeValue =
     pageMarginContent(
@@ -383,7 +400,8 @@ fun footer(content: MarkdownContent): NodeValue =
  * Displays the index (beginning from 1) of the page this element lies in.
  * In case the current document type does not support page counting (e.g. plain document),
  * a placeholder is used.
- * @return a [PageCounter] node
+ * @return a new [PageCounter] node
+ * @wiki Page counter
  */
 @Name("currentpage")
 fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
@@ -392,7 +410,8 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  * Displays the total amount of pages in the document.
  * In case the current document type does not support page counting (e.g. plain document),
  * a placeholder is used.
- * @return a [PageCounter] node
+ * @return a new [PageCounter] node
+ * @wiki Page counter
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
@@ -404,6 +423,7 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
  * @param maxDepth heading depth to force page breaks for (positive only).
  * @throws IllegalArgumentException if [maxDepth] is a negative value
  * @see disableAutoPageBreak
+ * @wiki Page break
  */
 @Name("autopagebreak")
 fun autoPageBreak(
@@ -421,6 +441,7 @@ fun autoPageBreak(
 /**
  * Disables automatic page breaks when a heading is found.
  * @see autoPageBreak
+ * @wiki Page break
  */
 @Name("noautopagebreak")
 fun disableAutoPageBreak(
@@ -434,6 +455,7 @@ fun disableAutoPageBreak(
  * @param name name of the marker
  * @return a wrapped [Heading] marker node
  * @see tableOfContents
+ * @wiki Table of contents
  */
 fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
 
@@ -444,6 +466,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  * @return a wrapped [TableOfContents] node
+ * @wiki Table of contents
  */
 @Name("tableofcontents")
 fun tableOfContents(
