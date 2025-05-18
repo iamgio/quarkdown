@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.Stacked
@@ -53,6 +54,7 @@ val Layout: Module =
         ::toDo,
         ::collapse,
         ::inlineCollapse,
+        ::figure,
         ::numbered,
         ::table,
     )
@@ -336,6 +338,20 @@ fun inlineCollapse(
     short: InlineMarkdownContent,
     open: Boolean = false,
 ) = InlineCollapse(full.children, short.children, open).wrappedAsValue()
+
+/**
+ * Inserts content in a figure block, which features an optional caption and can be numbered according to the `figures` numbering rules.
+ * @param caption optional caption of the figure
+ * @param body content of the figure
+ * @return the new [Figure] node
+ */
+fun figure(
+    caption: String? = null,
+    body: MarkdownContent,
+): NodeValue =
+    object : Figure<MarkdownContent>(body) {
+        override val caption: String? = caption
+    }.wrappedAsValue()
 
 /**
  * Node that can be numbered depending on its location in the document
