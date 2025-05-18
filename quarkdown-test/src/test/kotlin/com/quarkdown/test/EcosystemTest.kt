@@ -6,6 +6,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
+private const val OUTPUT_1 = "<h1>Title</h1><p>Some <em>text</em>.</p>"
+private const val OUTPUT_3 = "<h2>Included</h2><pre><code>code\ncode</code></pre>"
+
 /**
  * Tests for including files and libraries.
  */
@@ -19,7 +22,7 @@ class EcosystemTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Title</h1><p>Some <em>text</em>.</p>",
+                OUTPUT_1,
                 it,
             )
         }
@@ -47,7 +50,7 @@ class EcosystemTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Main</h1><h2>Included</h2><pre><code>code\ncode</code></pre>",
+                "<h1>Main</h1>$OUTPUT_3",
                 it,
             )
         }
@@ -134,8 +137,10 @@ class EcosystemTest {
                 it,
             )
         }
+    }
 
-        // Not included.
+    @Test
+    fun `invocation of unincluded library`() {
         assertFails {
             execute(
                 """
@@ -146,8 +151,11 @@ class EcosystemTest {
                 errorHandler = StrictPipelineErrorHandler(),
             ) {}
         }
+    }
 
-        // Included but not available.
+    @Test
+    fun `inclusion of unexisting library`() {
+        // Not available in the environment.
         assertFails {
             execute(
                 """
@@ -157,6 +165,43 @@ class EcosystemTest {
                 errorHandler = StrictPipelineErrorHandler(),
                 useDummyLibraryDirectory = true,
             ) {}
+        }
+    }
+
+    @Test
+    fun `include multiple sources`() {
+        execute(
+            """
+            .noautopagebreak
+            .include {include/include-1.md}
+            .include {include/include-3.md}
+            
+            .hello {world}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "$OUTPUT_1$OUTPUT_3<p>Hello, world!</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `include multiple sources via bulk`() {
+        execute(
+            """
+            .noautopagebreak
+            .includeall
+                - include/include-1.md
+                - include/include-3.md
+            
+            .hello {world}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "$OUTPUT_1$OUTPUT_3<p>Hello, world!</p>",
+                it,
+            )
         }
     }
 }

@@ -3,21 +3,22 @@
 <!-- Change here to paged/slides/plain to test a different document type -->
 .doctype {paged}
 
-.include {setup.qmd}
-.include {headings.qmd}
-.include {paragraphs.qmd}
-.include {lists.qmd}
-.include {images.qmd}
-.include {tables.qmd}
-.include {code.qmd}
-.include {textformatting.qmd}
-.include {colorpreview.qmd}
-.include {quotes.qmd}
-.include {boxes.qmd}
-.include {math.qmd}
-.include {mermaid.qmd}
-.include {collapsibles.qmd}
-.include {errors.qmd}
-.include {separators.qmd}
-.include {alignment.qmd}
-.include {stacks.qmd}
+.includeall
+    - setup.qmd
+    - headings.qmd
+    - paragraphs.qmd
+    - lists.qmd
+    - images.qmd
+    - tables.qmd
+    - code.qmd
+    - textformatting.qmd
+    - colorpreview.qmd
+    - quotes.qmd
+    - boxes.qmd
+    - math.qmd
+    - mermaid.qmd
+    - collapsibles.qmd
+    - errors.qmd
+    - separators.qmd
+    - alignment.qmd
+    - stacks.qmd
