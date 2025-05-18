@@ -300,7 +300,7 @@ fun toDo(
     val title = Stdlib.localizeOrNull("todo", context) ?: "TO DO"
     return Box(
         title = buildInline { text(title.uppercase()) },
-        type = Box.Type.CALLOUT,
+        type = Box.Type.WARNING,
         children = body.children,
     ).wrappedAsValue().also {
         Log.warn("To do: ${body.children.toPlainText()}")
