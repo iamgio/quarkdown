@@ -42,8 +42,8 @@ fun includeResource(
 /**
  * This function has two behaviors:
  * - Reads a Quarkdown file and includes its parsed content in the current document.
- *   Loadable libraries are fetched from the library folder (`--libs` option).
- * - Loads a present but unloaded library into the current context.
+ * - Loads a library into the current context. Loadable libraries are fetched from the library folder (`--libs` option).
+ *
  * The context of the main file is shared to the sub-file and vice versa, allowing for sharing of variables, functions and other declarations.
  * @param path either a path (relative or absolute with extension) to the file to include, or the name of a loadable library
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
