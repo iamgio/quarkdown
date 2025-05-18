@@ -55,6 +55,7 @@ internal fun file(
  *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
  * @throws IllegalArgumentException if [lineRange] is out of bounds
+ * @wiki File data
  */
 fun read(
     @Injected context: Context,
@@ -86,6 +87,7 @@ fun read(
 /**
  * @param path path of the CSV file (with extension) to show
  * @return a table whose content is loaded from the file located in [path]
+ * @wiki File data
  */
 fun csv(
     @Injected context: Context,

@@ -37,7 +37,7 @@ private fun mermaidFigure(
  * Creates a Mermaid diagram.
  * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
  * @param code the Mermaid code of the diagram
- * @return the generated diagram node
+ * @return a new [MermaidDiagramFigure] node
  */
 fun mermaid(
     caption: String? = null,
@@ -152,6 +152,7 @@ private fun StringBuilder.axis(
  *               or a list of lists of points, which will be plotted as multiple lines.
  * @return the generated diagram node
  * @throws IllegalArgumentException if both [xrange] and [xtags] are set
+ * @wiki XY chart
  */
 @Name("xychart")
 fun xyChart(

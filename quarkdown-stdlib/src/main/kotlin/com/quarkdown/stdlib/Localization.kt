@@ -101,6 +101,7 @@ private fun mergeLocalizationTables(
  * @param contents dictionary of locales and their key-value entries
  * @throws IllegalArgumentException if the contents are not in the correct format,
  * or if the table name is already defined and [merge] is false
+ * @wiki Localization
  */
 fun localization(
     @Injected context: MutableContext,
@@ -144,6 +145,7 @@ fun localization(
  * @return the localized value
  * @throws com.quarkdown.core.localization.LocalizationException if an error occurs during the lookup
  * @see localization
+ * @wiki Localization
  */
 fun localize(
     @Injected context: Context,
