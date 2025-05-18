@@ -15,6 +15,8 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.localization.localizeOrDefault
+import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module
@@ -27,7 +29,9 @@ import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.log.Log
 import com.quarkdown.core.misc.color.Color
+import com.quarkdown.core.util.toPlainText
 
 /**
  * `Layout` stdlib module exporter.
@@ -46,6 +50,7 @@ val Layout: Module =
         ::whitespace,
         ::clip,
         ::box,
+        ::toDo,
         ::collapse,
         ::inlineCollapse,
         ::numbered,
@@ -271,7 +276,7 @@ fun box(
     // Localizes the title according to the box type,
     // if the title is not manually set.
     fun localizedTitle(): InlineContent? =
-        Stdlib.localizeOrNull(type.name, context)?.let {
+        context.localizeOrNull(key = type.name)?.let {
             buildInline { text(it) }
         }
 
@@ -283,6 +288,27 @@ fun box(
         foregroundColor,
         body.children,
     ).wrappedAsValue()
+}
+
+/**
+ * Creates a _to do_ box, to mark content that needs to be done later, and logs it.
+ * The title is localized according to the current locale ([docLanguage]), or English as a fallback.
+ * @param body content to show in the box
+ * @return the new box node
+ */
+@Name("todo")
+fun toDo(
+    @Injected context: Context,
+    body: MarkdownContent,
+): NodeValue {
+    val title = context.localizeOrDefault(key = "todo")!!
+    return Box(
+        title = buildInline { text(title.uppercase()) },
+        type = Box.Type.WARNING,
+        children = body.children,
+    ).wrappedAsValue().also {
+        Log.warn("$title: ${body.children.toPlainText()}")
+    }
 }
 
 /**

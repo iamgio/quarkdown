@@ -11,7 +11,7 @@ import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.localization.LocaleNotSetException
+import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocalizationKeyNotFoundException
 import com.quarkdown.core.localization.LocalizationLocaleNotFoundException
 import com.quarkdown.core.localization.LocalizationTable
@@ -47,19 +47,19 @@ open class BaseContext(
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
-    override fun getFunctionByName(name: String): Function<*>? {
-        return libraries.asSequence()
+    override fun getFunctionByName(name: String): Function<*>? =
+        libraries
+            .asSequence()
             .flatMap { it.functions }
             .find { it.name == name }
-    }
 
-    override fun resolve(reference: ReferenceLink): LinkNode? {
-        return attributes.linkDefinitions.firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
+    override fun resolve(reference: ReferenceLink): LinkNode? =
+        attributes.linkDefinitions
+            .firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
             ?.let { Link(reference.label, it.url, it.title) }
             ?.also { link ->
                 reference.onResolve.forEach { action -> action(link) }
             }
-    }
 
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
         val function = getFunctionByName(call.name)
@@ -74,18 +74,17 @@ open class BaseContext(
         }
     }
 
-    override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> {
-        return UncheckedFunctionCall(call.name) { resolve(call) }
-    }
+    override fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*> = UncheckedFunctionCall(call.name) { resolve(call) }
 
     override fun localize(
         tableName: String,
         key: String,
+        locale: Locale,
     ): String {
-        val locale = documentInfo.locale ?: throw LocaleNotSetException()
         val table = localizationTables[tableName] ?: throw LocalizationTableNotFoundException(tableName)
         val entries = table[locale] ?: throw LocalizationLocaleNotFoundException(tableName, locale)
-        return entries[key] ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
+        return entries[key.lowercase()] ?: entries[key]
+            ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
     override fun fork(): ScopeContext = ScopeContext(parent = this)

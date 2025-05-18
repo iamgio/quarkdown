@@ -12,13 +12,6 @@ import com.quarkdown.core.document.numbering.DecimalNumberingSymbol
 import com.quarkdown.core.document.numbering.NumberingFixedSymbol
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.localization.LocaleLoader
-import com.quarkdown.core.localization.LocaleNotSetException
-import com.quarkdown.core.localization.LocalizationKeyNotFoundException
-import com.quarkdown.core.localization.LocalizationLocaleNotFoundException
-import com.quarkdown.core.localization.LocalizationTable
-import com.quarkdown.core.localization.LocalizationTableNotFoundException
-import com.quarkdown.core.localization.jvm.JVMLocaleLoader
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileResourceExporter
@@ -32,10 +25,7 @@ import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -153,107 +143,6 @@ class MiscTest {
             assertEquals(Text("JKL"), toc.items[1].text.first())
         }
          */
-    }
-
-    @Test
-    fun locale() {
-        val retriever = JVMLocaleLoader
-
-        assertEquals(retriever, LocaleLoader.SYSTEM)
-
-        with(retriever.fromTag("en")) {
-            assertNotNull(this)
-            assertEquals(this, retriever.fromName("English"))
-            assertEquals(this, retriever.find("English"))
-            assertEquals(this, retriever.find("eNgLiSh"))
-            assertEquals("en", code)
-            assertEquals("en", tag)
-            assertEquals("English", displayName)
-            assertEquals("English", localizedName)
-            assertNull(countryCode)
-            assertNull(localizedCountryName)
-        }
-
-        with(retriever.find("it")) {
-            assertNotNull(this)
-            assertEquals(this, retriever.fromName("Italian"))
-            assertEquals(this, retriever.find("Italian"))
-            assertEquals(this, retriever.find("iTaLiAn"))
-            assertEquals("it", code)
-            assertEquals("it", tag)
-            assertEquals("Italian", displayName)
-            assertEquals("italiano", localizedName)
-            assertNull(countryCode)
-            assertNull(localizedCountryName)
-        }
-
-        with(retriever.find("en-US")) {
-            assertNotNull(this)
-            assertEquals(this, retriever.find("English (United States)"))
-            assertEquals(this, retriever.find("En-us"))
-            assertEquals("en", code)
-            assertEquals("en-US", tag)
-            assertEquals("English (United States)", displayName)
-            assertEquals("English (United States)", localizedName)
-            assertEquals("US", countryCode)
-            assertEquals("United States", localizedCountryName)
-        }
-
-        with(retriever.find("fr-CA")) {
-            assertNotNull(this)
-            assertEquals(this, retriever.find("French (Canada)"))
-            assertEquals("fr", code)
-            assertEquals("fr-CA", tag)
-            assertEquals("French (Canada)", displayName)
-            assertEquals("français (Canada)", localizedName)
-            assertEquals("CA", countryCode)
-            assertEquals("Canada", localizedCountryName)
-        }
-
-        assertNull(retriever.fromTag("nonexistent"))
-        assertNull(retriever.fromName("nonexistent"))
-        assertNull(retriever.find("nonexistent"))
-
-        assertTrue(retriever.all.iterator().hasNext())
-    }
-
-    @Test
-    fun localization() {
-        val loader = LocaleLoader.SYSTEM
-
-        val table: LocalizationTable =
-            mapOf(
-                loader.fromName("English")!! to
-                    mapOf(
-                        "morning" to "Good morning",
-                        "evening" to "Good evening",
-                    ),
-                loader.fromName("Italian")!! to
-                    mapOf(
-                        "morning" to "Buongiorno",
-                        "evening" to "Buonasera",
-                    ),
-            )
-
-        assertEquals("Good morning", table[loader.fromName("English")]!!["morning"])
-
-        val context = MutableContext(QuarkdownFlavor)
-        context.localizationTables["mytable"] = table
-
-        assertFailsWith<LocaleNotSetException> { context.localize("mytable", "morning") }
-
-        context.documentInfo.locale = loader.fromName("English")!!
-        assertEquals("Good morning", context.localize("mytable", "morning"))
-        assertEquals("Good evening", context.localize("mytable", "evening"))
-        assertFailsWith<LocalizationKeyNotFoundException> { context.localize("mytable", "afternoon") }
-        assertFailsWith<LocalizationTableNotFoundException> { context.localize("sometable", "morning") }
-
-        context.documentInfo.locale = loader.fromName("Italian")!!
-        assertEquals("Buongiorno", context.localize("mytable", "morning"))
-        assertEquals("Buonasera", context.localize("mytable", "evening"))
-
-        context.documentInfo.locale = loader.fromName("French")!!
-        assertFailsWith<LocalizationLocaleNotFoundException> { context.localize("mytable", "morning") }
     }
 
     @Test
