@@ -27,7 +27,7 @@ val Ecosystem: Module =
  * @param reader reader of the raw Quarkdown source to include
  * @return the content of the file as a node
  */
-fun includeResource(
+internal fun includeResource(
     context: Context,
     reader: Reader,
 ): NodeValue {
@@ -48,6 +48,7 @@ fun includeResource(
  * @param path either a path (relative or absolute with extension) to the file to include, or the name of a loadable library
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
  * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated or if it cannot be evaluated into a suitable output value
+ * @wiki Including other Quarkdown files
  */
 fun include(
     @Injected context: MutableContext,

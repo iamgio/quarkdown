@@ -164,7 +164,8 @@ private fun reconstructTable(
  * @param column index of the column (starting from 1)
  * @param order sorting order (`ascending` or `descending`)
  * @param content table to sort
- * @return the sorted table
+ * @return the sorted [Table] node
+ * @wiki Table manipulation
  */
 @Name("tablesort")
 fun tableSort(
@@ -210,7 +211,8 @@ fun tableSort(
  * @param column index of the column (starting from 1)
  * @param filter a lambda function that returns a boolean value. When `true`, the rows is to be kept.
  * The lambda accepts a single argument, which is the cell value of the column.
- * @return the filtered table
+ * @return the filtered [Table] node
+ * @wiki Table manipulation
  */
 @Name("tablefilter")
 fun tableFilter(
@@ -255,7 +257,8 @@ fun tableFilter(
  * @param column index of the column (starting from 1)
  * @param compute a lambda function that returns any value, which is the output of the computation.
  * The lambda accepts a single argument, which is the ordered collection of cell values of the column.
- * @return the computed table, of size `columns * (rows + 1)`
+ * @return the computed [Table] node, of size `columns * (rows + 1)`
+ * @wiki Table manipulation
  */
 @Name("tablecompute")
 fun tableCompute(
@@ -305,6 +308,7 @@ fun tableCompute(
  * @param column index of the column (starting from 1)
  * @param content table to extract the column from
  * @return the extracted cells
+ * @wiki Table manipulation
  */
 @Name("tablecolumn")
 fun tableColumn(
@@ -345,6 +349,7 @@ fun tableColumn(
  *
  * @param content table to extract the columns from
  * @return the extracted cells, grouped by column
+ * @wiki Table manipulation
  */
 @Name("tablecolumns")
 fun tableColumns(

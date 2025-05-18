@@ -43,7 +43,8 @@ val Flow: Module =
 /**
  * @param condition whether the content should be added to the document
  * @param body content to append if [condition] is verified. Accepts 0 parameters.
- * @return the evaluation of [body] if [condition] is `true`, otherwise nothing
+ * @return the evaluation of [body] if [condition] is `true`, nothing otherwise
+ * @wiki Conditional statements
  */
 @Name("if")
 @Suppress("ktlint:standard:function-naming")
@@ -59,7 +60,8 @@ fun `if`(
 /**
  * @param condition whether the content should be added to the document
  * @param body content to append if [condition] is not verified. Accepts 0 parameters.
- * @return [body] if [condition] is `false`, otherwise nothing
+ * @return [body] if [condition] is `false`, nothing otherwise
+ * @wiki Conditional statements
  */
 @Name("ifnot")
 fun ifNot(
@@ -107,6 +109,7 @@ fun ifNot(
  * @param iterable collection to iterate
  * @param body content, output of each iteration. Accepts 1 parameter (the current element).
  * @return a collection that contains the output of each iteration
+ * @wiki Loops
  */
 @Name("foreach")
 fun forEach(
@@ -124,6 +127,7 @@ fun forEach(
  * @param times amount of times to repeat the content
  * @param body content, output of each iteration. Accepts 1 parameter (the current element).
  * @return a collection that contains the output of each iteration
+ * @wiki Loops
  */
 fun repeat(
     times: Int,
@@ -166,6 +170,7 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
  *
  * @param name name of the function
  * @param body content of the function. Function parameters must be **explicit** lambda parameters
+ * @wiki Declaring functions
  */
 fun function(
     @Injected context: MutableContext,
@@ -200,6 +205,7 @@ fun function(
  * Variables can be referenced just like functions, via `.variablename`.
  * @param name name of the variable
  * @param value value to assign
+ * @wiki Variables
  */
 @Name("var")
 fun variable(
@@ -260,6 +266,7 @@ fun variable(
  * @param value value to use as a temporary variable
  * @param body content to evaluate with the temporary variable. Accepts 1 parameter ([value] itself)
  * @return the evaluation of [body] with [value] as a parameter
+ * @wiki Let
  */
 fun let(
     value: DynamicValue,

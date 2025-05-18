@@ -26,18 +26,22 @@ val Optionality: Module =
 
 /**
  * @return a value which represents nothing
+ * @wiki None
  */
 fun none() = NoneValue
 
 /**
  * @param value value to check
  * @return whether [value] represents a `None` value
+ * @see [none]
  */
 internal fun isNone(value: Any?) = value == null || value is None || value is NoneValue
 
 /**
  * @param value value to check
  * @return whether [value] represents a [none] value
+ * @see [none]
+ * @wiki None
  */
 @Name("isnone")
 fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wrappedAsValue()
@@ -47,6 +51,7 @@ fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wra
  * @param fallback value to return if [value] is [none]
  * @return [value] if it is not none, [fallback] otherwise
  * @see isNone
+ * @wiki None
  */
 fun otherwise(
     value: DynamicValue,
@@ -60,6 +65,7 @@ fun otherwise(
  * It should accept one argument, which is [value], and return a value.
  * @return the result of [mapping] executed on [value] if [value] is not [none], [none] otherwise
  * @see isNone
+ * @wiki None
  */
 @Name("ifpresent")
 fun ifPresent(
@@ -83,6 +89,7 @@ fun ifPresent(
  * @param value value to check
  * @param condition condition to check, which accepts one argument ([value]) and returns a boolean
  * @return [value] if the result of [condition] is true, [none] otherwise
+ * @wiki None
  */
 @Name("takeif")
 fun takeIf(

@@ -77,7 +77,8 @@ val Layout: Module =
  * @param textAlignment alignment of the text. [alignment] if unset
  * @param float floating position of the container within the parent. Not floating if unset
  * @param body content to group
- * @return the new container node
+ * @return the new [Container] node
+ * @wiki Container
  */
 fun container(
     width: Size? = null,
@@ -117,8 +118,9 @@ fun container(
  * Aligns content and text within its parent.
  * @param alignment content alignment anchor and text alignment
  * @param body content to center
- * @return the new aligned container
+ * @return the new aligned [Container] node
  * @see container
+ * @wiki Align
  */
 fun align(
     alignment: Container.Alignment,
@@ -133,8 +135,9 @@ fun align(
 /**
  * Centers content and text within its parent.
  * @param body content to center
- * @return the new aligned container
+ * @return the new aligned [Container] node
  * @see align
+ * @wiki Align
  */
 fun center(body: MarkdownContent) = align(Container.Alignment.CENTER, body)
 
@@ -142,7 +145,8 @@ fun center(body: MarkdownContent) = align(Container.Alignment.CENTER, body)
  * Turns content into a floating element, allowing subsequent content to wrap around it.
  * @param alignment floating position
  * @param body content to float
- * @return the new floating container
+ * @return the new floating [Container] node
+ * @wiki Float
  */
 fun float(
     alignment: Container.FloatAlignment,
@@ -159,9 +163,10 @@ fun float(
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
- * @return the new stacked block
+ * @return the new [Stacked] node
  * @see row
  * @see column
+ * @see grid
  */
 private fun stack(
     layout: Stacked.Layout,
@@ -177,7 +182,8 @@ private fun stack(
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
- * @return the new stacked block
+ * @return the new [Stacked] node
+ * @wiki Stacks
  */
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
@@ -192,7 +198,8 @@ fun row(
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
- * @return the new stacked block
+ * @return the new [Stacked] node
+ * @wiki Stacks
  */
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
@@ -204,12 +211,14 @@ fun column(
 /**
  * Stacks content in a grid layout.
  * Each child is placed in a cell in a row, and a row ends when its cell count reaches [columnCount].
- * @param columnCount number of columns. Must be greater than 0
+ * @param columnCount positive number of columns
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between rows and columns. If omitted, the default value is used
  * @param body content to stack
- * @return the new stacked block
+ * @return the new [Stacked] node
+ * @throws IllegalArgumentException if [columnCount] is non-positive
+ * @wiki Stacks
  */
 fun grid(
     @Name("columns") columnCount: Int,
@@ -226,7 +235,8 @@ fun grid(
  * If the document has a multi-column layout (set via [pageFormat]), makes content span across all columns in a multi-column layout.
  * If the document has a single-column layout, the effect is the same as [container].
  * @param body content to span across all columns
- * @return the new full column span node
+ * @return the new [FullColumnSpan] span node
+ * @wiki Multi-column layout
  */
 @Name("fullspan")
 fun fullColumnSpan(body: MarkdownContent) = FullColumnSpan(body.children).wrappedAsValue()
@@ -237,7 +247,7 @@ fun fullColumnSpan(body: MarkdownContent) = FullColumnSpan(body.children).wrappe
  * If both dimensions are unset, a blank character is used, which can be useful for spacing and adding line breaks.
  * @param width width of the square. If unset, it defaults to zero
  * @param height height of the square. If unset, it defaults to zero
- * @return the new whitespace node
+ * @return the new [Whitespace] node
  */
 fun whitespace(
     width: Size? = null,
@@ -247,7 +257,8 @@ fun whitespace(
 /**
  * Applies a clipping path to its content.
  * @param clip clip type to apply
- * @return the new clipped block
+ * @return the new [Clipped] block
+ * @wiki Clip
  */
 fun clip(
     clip: Clipped.Clip,
@@ -264,7 +275,8 @@ fun clip(
  * @param backgroundColor background color. If unset, the box uses the default color
  * @param foregroundColor foreground (text) color. If unset, the box uses the default color
  * @param body box content
- * @return the new box node
+ * @return the new [Box] node
+ * @wiki Box
  */
 fun box(
     @Injected context: Context,
@@ -318,6 +330,7 @@ fun toDo(
  * @param title title of the block
  * @param open whether the block is open at the beginning
  * @return the new [Collapse] node
+ * @wiki Collapsible
  */
 fun collapse(
     title: InlineMarkdownContent,
@@ -331,6 +344,7 @@ fun collapse(
  * @param short content to show when the node is collapsed
  * @param open whether the block is open at the beginning
  * @return the new [InlineCollapse] node
+ * @wiki Collapsible
  */
 @Name("textcollapse")
 fun inlineCollapse(
@@ -358,6 +372,8 @@ fun figure(
  * and the amount of occurrences according to its [key].
  * @param key name to group (and count) numbered nodes
  * @param body content, with the formatted location of this element (as a string) as an argument
+ * @return the new [Numbered] node
+ * @wiki Numbering
  */
 fun numbered(
     key: String,
@@ -387,6 +403,7 @@ fun numbered(
  *
  * @param subTables independent tables (as Markdown sources) that will be parsed and joined together into a single table
  * @return a new [Table] node
+ * @wiki Table generator
  */
 fun table(
     @Injected context: Context,
