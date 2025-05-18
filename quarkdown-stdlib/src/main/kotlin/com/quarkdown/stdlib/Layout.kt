@@ -27,7 +27,9 @@ import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.log.Log
 import com.quarkdown.core.misc.color.Color
+import com.quarkdown.core.util.toPlainText
 
 /**
  * `Layout` stdlib module exporter.
@@ -46,6 +48,7 @@ val Layout: Module =
         ::whitespace,
         ::clip,
         ::box,
+        ::toDo,
         ::collapse,
         ::inlineCollapse,
         ::numbered,
@@ -283,6 +286,25 @@ fun box(
         foregroundColor,
         body.children,
     ).wrappedAsValue()
+}
+
+/**
+ * Creates a _to do_ box, to mark content that needs to be done later, and logs it.
+ * @param body content to show in the box
+ */
+@Name("todo")
+fun toDo(
+    @Injected context: Context,
+    body: MarkdownContent,
+): NodeValue {
+    val title = Stdlib.localizeOrNull("todo", context) ?: "TO DO"
+    return Box(
+        title = buildInline { text(title.uppercase()) },
+        type = Box.Type.CALLOUT,
+        children = body.children,
+    ).wrappedAsValue().also {
+        Log.warn("To do: ${body.children.toPlainText()}")
+    }
 }
 
 /**

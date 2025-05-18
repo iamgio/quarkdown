@@ -2,20 +2,22 @@
 
 .localization name:{std}
     - English
-        - note: Note
-        - tip: Tip
-        - warning: Warning
-        - important: Important
-        - error: Error
-        - tableofcontents: Table of Contents
-        - figure: Figure
-        - table: Table
+      - note: Note
+      - tip: Tip
+      - warning: Warning
+      - important: Important
+      - error: Error
+      - todo: To do
+      - tableofcontents: Table of Contents
+      - figure: Figure
+      - table: Table
     - Italian
-        - note: Nota
-        - tip: Consiglio
-        - warning: Attenzione
-        - important: Importante
-        - error: Errore
-        - tableofcontents: Indice
-        - figure: Figura
-        - table: Tabella
+      - note: Nota
+      - tip: Consiglio
+      - warning: Attenzione
+      - important: Importante
+      - error: Errore
+      - todo: Da fare
+      - tableofcontents: Indice
+      - figure: Figura
+      - table: Tabella
