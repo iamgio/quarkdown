@@ -1,15 +1,17 @@
 package com.quarkdown.core.flavor
 
-import com.quarkdown.core.context.Context
-import com.quarkdown.core.rendering.RenderingComponents
+import com.quarkdown.core.flavor.base.BaseMarkdownRendererFactory
+import com.quarkdown.core.flavor.quarkdown.QuarkdownRendererFactory
 
 /**
  * Provider of rendering strategies.
  */
 interface RendererFactory {
-    /**
-     * @param context additional information gathered during the parsing stage
-     * @return a new HTML node renderer and post-renderer
-     */
-    fun html(context: Context): RenderingComponents
+    fun <T> accept(visitor: RendererFactoryVisitor<T>): T
+}
+
+interface RendererFactoryVisitor<T> {
+    fun visit(factory: BaseMarkdownRendererFactory): T
+
+    fun visit(factory: QuarkdownRendererFactory): T
 }

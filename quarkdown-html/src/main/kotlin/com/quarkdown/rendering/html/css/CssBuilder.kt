@@ -1,4 +1,4 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html.css
 
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 

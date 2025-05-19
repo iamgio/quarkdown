@@ -1,4 +1,4 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.base.block.Heading
@@ -8,16 +8,19 @@ import com.quarkdown.core.util.toPlainText
 /**
  * Provides identifiers for elements suitable for HTML rendering.
  * @param renderer renderer that uses this provider
- * @see com.quarkdown.core.ast.attributes.id.IdentifierProvider
+ * @see IdentifierProvider
  */
-class HtmlIdentifierProvider private constructor(private val renderer: NodeRenderer) : IdentifierProvider<String> {
+class HtmlIdentifierProvider private constructor(
+    private val renderer: NodeRenderer,
+) : IdentifierProvider<String> {
     /**
      * Converts [this] string to a URI-like string removing special characters and replacing spaces with dashes.
      * Example: "Hello, World!" -> "hello-world"
      * @return URI-like string
      */
     private fun String.toURIString() =
-        this.lowercase()
+        this
+            .lowercase()
             .replace(" ", "-")
             .replace("[^a-z0-9-]".toRegex(), "")
 

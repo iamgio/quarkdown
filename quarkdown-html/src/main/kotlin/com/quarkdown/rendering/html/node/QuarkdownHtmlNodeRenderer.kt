@@ -1,4 +1,4 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
@@ -41,9 +41,13 @@ import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.rendering.html.BaseHtmlNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
+import com.quarkdown.rendering.html.HtmlIdentifierProvider
+import com.quarkdown.rendering.html.HtmlTagBuilder
+import com.quarkdown.rendering.html.css.asCSS
 
 /**
  * A renderer for Quarkdown ([com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
@@ -194,9 +198,9 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
 
             style {
-                if (node.layout is Stacked.Grid) {
+                (node.layout as? Stacked.Grid)?.let {
                     // The amount of 'auto' matches the amount of columns/rows.
-                    "grid-template-columns" value "auto ".repeat(node.layout.columnCount).trimEnd()
+                    "grid-template-columns" value "auto ".repeat(it.columnCount).trimEnd()
                 }
 
                 "justify-content" value node.mainAxisAlignment
@@ -224,7 +228,7 @@ class QuarkdownHtmlNodeRenderer(
 
             if (node.title != null) {
                 tag("header") {
-                    tag("h4", node.title)
+                    tag("h4", node.title!!)
 
                     style {
                         "color" value node.foregroundColor // Must be repeated to force override.
@@ -295,7 +299,7 @@ class QuarkdownHtmlNodeRenderer(
                     this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
                     linkUrlMapper = { item ->
-                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                        "#" + HtmlIdentifierProvider.Companion.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
                     },
                 )
             }
@@ -404,7 +408,7 @@ class QuarkdownHtmlNodeRenderer(
                 .optionalAttribute(
                     "id",
                     // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider
+                    HtmlIdentifierProvider.Companion
                         .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
@@ -464,12 +468,12 @@ class QuarkdownHtmlNodeRenderer(
 
             +codeTag
 
-            when (node.content) {
+            when (val content = node.content) {
                 null -> {} // No additional content.
                 is CodeSpan.ColorContent -> {
                     // If the code contains a color code, show the color preview.
                     +buildTag("span") {
-                        style { "background-color" value node.content.color }
+                        style { "background-color" value content.color }
                         className("color-preview")
                     }
                 }

@@ -1,9 +1,12 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.rendering.html.BaseHtmlNodeRenderer
 import com.quarkdown.core.rendering.tag.TagBuilder
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.indent
+import com.quarkdown.rendering.html.css.CssBuilder
+import com.quarkdown.rendering.html.css.css
 
 /**
  * String used to indent nested code.
@@ -80,7 +83,7 @@ class HtmlTagBuilder(
      * The attribute is _not_ added if the generated CSS string is empty.
      * @param init CSS builder initialization
      * @return this for concatenation
-     * @see css
+     * @see com.quarkdown.rendering.html.css.css
      */
     fun style(init: CssBuilder.() -> Unit) = optionalAttribute("style", css(init).takeUnless { it.isEmpty() })
 

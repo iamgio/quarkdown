@@ -60,6 +60,8 @@ import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.rendering.html.HtmlTagBuilder
+import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
 
 /**

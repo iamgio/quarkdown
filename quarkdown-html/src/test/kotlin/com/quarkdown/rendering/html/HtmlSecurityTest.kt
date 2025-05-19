@@ -1,16 +1,16 @@
-package com.quarkdown.core
+package com.quarkdown.rendering.html
 
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.rendering.html.HtmlPostRenderer
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for system security from code injection and other vulnerabilities.
+ * Tests for system security from HTML code injection and other vulnerabilities.
  */
-class SecurityTest {
+class HtmlSecurityTest {
     private fun texMacrosTemplateProcessor() =
         TemplateProcessor(
             """

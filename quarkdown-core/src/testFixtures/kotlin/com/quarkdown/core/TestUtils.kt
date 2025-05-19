@@ -30,7 +30,7 @@ fun assertNodeEquals(
  * @throws IllegalAccessError if the resource was not found
  */
 fun readSource(path: String) =
-    LexerTest::class.java
+    object {}::class.java
         .getResourceAsStream(path)
         ?.bufferedReader()
         ?.readText()

@@ -1,4 +1,4 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html.post
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
@@ -12,9 +12,9 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.rendering.PostRendererVisitor
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
 
 // Default theme components to use if not specified by the user.
@@ -41,8 +41,6 @@ class HtmlPostRenderer(
     // HTML requires local media to be resolved from the file system.
     override val preferredMediaStorageOptions: MediaStorageOptions =
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
-
-    override fun <T> accept(visitor: PostRendererVisitor<T>): T = visitor.visit(this)
 
     override fun createTemplateProcessor() =
         baseTemplateProcessor().apply {

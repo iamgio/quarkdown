@@ -1,25 +1,19 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.attributes.SectionLocation
-import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.base.block.Heading
-import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.numbering.AlphaNumberingSymbol
 import com.quarkdown.core.document.numbering.DecimalNumberingSymbol
 import com.quarkdown.core.document.numbering.NumberingFixedSymbol
 import com.quarkdown.core.document.numbering.NumberingFormat
-import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileResourceExporter
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
-import com.quarkdown.core.rendering.html.HtmlIdentifierProvider
-import com.quarkdown.core.rendering.html.QuarkdownHtmlNodeRenderer
 import com.quarkdown.core.util.StringCase
 import java.nio.file.Files
 import kotlin.test.Test
@@ -32,14 +26,6 @@ import kotlin.test.assertTrue
  * Tests for miscellaneous classes.
  */
 class MiscTest {
-    @Test
-    fun identifiers() {
-        val provider = HtmlIdentifierProvider.of(QuarkdownHtmlNodeRenderer(MutableContext(QuarkdownFlavor)))
-        assertEquals("abc", provider.getId(Heading(1, listOf(Text("Abc")))))
-        assertEquals("abc-def", provider.getId(Heading(1, listOf(Strong(listOf(Text("Abc Def")))))))
-        assertEquals("hello-world", provider.getId(Heading(1, listOf(Text("Hello, World!")))))
-    }
-
     @Test
     fun `table of contents`() {
         val headings1 =

@@ -1,4 +1,4 @@
-package com.quarkdown.core
+package com.quarkdown.rendering.html
 
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentTheme
@@ -6,13 +6,13 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.localization.jvm.JVMLocaleLoader
+import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
-import com.quarkdown.core.rendering.html.HtmlPostRenderer
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -157,7 +157,7 @@ class HtmlPostRendererTest {
     @Test
     fun `semi-real`() {
         context.documentInfo.name = "Quarkdown"
-        context.documentInfo.locale = JVMLocaleLoader.fromName("english")
+        context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
         context.attributes.hasMath = true
         context.attributes.hasCode = false
@@ -237,7 +237,7 @@ class HtmlPostRendererTest {
     @Test
     fun real() {
         context.documentInfo.name = "Quarkdown"
-        context.documentInfo.locale = JVMLocaleLoader.fromName("english")
+        context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
         context.attributes.hasMath = true
         context.attributes.hasCode = false
@@ -309,7 +309,7 @@ class HtmlPostRendererTest {
             assertTrue("script" in scripts)
             assertTrue("slides" in scripts)
             assertTrue("math" in scripts)
-            assertTrue("code" !in scripts)
+            assertTrue("code" in scripts)
         }
     }
 

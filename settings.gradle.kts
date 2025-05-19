@@ -4,6 +4,7 @@ plugins {
 rootProject.name = "quarkdown"
 
 include("quarkdown-core")
+include("quarkdown-html")
 include("quarkdown-cli")
 include("quarkdown-stdlib")
 include("quarkdown-test")

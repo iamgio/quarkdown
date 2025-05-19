@@ -43,7 +43,7 @@ interface PostRenderer {
      * @param visitor visitor to accept
      * @return the result of the visit operation
      */
-    fun <T> accept(visitor: PostRendererVisitor<T>): T
+    // fun <T> accept(visitor: PostRendererVisitor<T>): T
 }
 
 /**

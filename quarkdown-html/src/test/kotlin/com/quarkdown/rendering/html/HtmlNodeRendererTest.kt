@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:no-wildcard-imports")
 
-package com.quarkdown.core
+package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
@@ -47,6 +47,7 @@ import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
+import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
@@ -63,9 +64,11 @@ import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.HexColorDecoder
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.Pipelines
+import com.quarkdown.core.readSource
 import com.quarkdown.core.rendering.NodeRenderer
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.rendering.html.extension.html
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -275,6 +278,7 @@ class HtmlNodeRendererTest {
         )
     }
 
+    @Test
     fun figure() {
         val out = readParts("quarkdown/figure.html")
 

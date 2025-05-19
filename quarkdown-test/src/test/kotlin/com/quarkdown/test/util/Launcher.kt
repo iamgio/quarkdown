@@ -9,6 +9,7 @@ import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.rendering.html.extension.html
 import com.quarkdown.stdlib.Stdlib
 import java.io.File
 

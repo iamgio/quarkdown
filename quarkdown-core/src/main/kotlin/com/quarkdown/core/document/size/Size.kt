@@ -1,6 +1,5 @@
 package com.quarkdown.core.document.size
 
-import com.quarkdown.core.rendering.html.CssRepresentableVisitor
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
 
@@ -11,7 +10,7 @@ data class Size(
     val value: Double,
     val unit: Unit,
 ) : RenderRepresentable {
-    override fun toString() = this.accept(CssRepresentableVisitor()) // e.g. 10px, 5cm, 2in
+    override fun toString() = "$value${unit.symbol}" // e.g. 10px, 5cm, 2in
 
     override fun <T> accept(visitor: RenderRepresentableVisitor<T>) = visitor.visit(this)
 
