@@ -40,6 +40,7 @@ $dokka.location:com.quarkdown.stdlib//docName/#com.quarkdown.core.context.Contex
 $dokka.location:com.quarkdown.stdlib//docType/#com.quarkdown.core.context.Context#com.quarkdown.core.document.DocumentType?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/doctype.html
 $dokka.location:com.quarkdown.stdlib//equals/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/equals.html
 $dokka.location:com.quarkdown.stdlib//error/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/error.html
+$dokka.location:com.quarkdown.stdlib//figure/#kotlin.String?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/figure.html
 $dokka.location:com.quarkdown.stdlib//float/#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/float.html
 $dokka.location:com.quarkdown.stdlib//footer/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/footer.html
 $dokka.location:com.quarkdown.stdlib//forEach/#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/foreach.html
@@ -53,7 +54,7 @@ $dokka.location:com.quarkdown.stdlib//if/#kotlin.Boolean#com.quarkdown.core.func
 $dokka.location:com.quarkdown.stdlib//ifNot/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/ifnot.html
 $dokka.location:com.quarkdown.stdlib//ifPresent/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/ifpresent.html
 $dokka.location:com.quarkdown.stdlib//include/#com.quarkdown.core.context.MutableContext#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html
-$dokka.location:com.quarkdown.stdlib//includeResource/#com.quarkdown.core.context.Context#java.io.Reader/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include-resource.html
+$dokka.location:com.quarkdown.stdlib//includeAll/#com.quarkdown.core.context.MutableContext#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/includeall.html
 $dokka.location:com.quarkdown.stdlib//inlineCollapse/#com.quarkdown.core.ast.InlineMarkdownContent#com.quarkdown.core.ast.InlineMarkdownContent#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/textcollapse.html
 $dokka.location:com.quarkdown.stdlib//isEmpty/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/isempty.html
 $dokka.location:com.quarkdown.stdlib//isEven/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/iseven.html
@@ -110,6 +111,7 @@ $dokka.location:com.quarkdown.stdlib//tan/#kotlin.Number/PointingToDeclaration/
 $dokka.location:com.quarkdown.stdlib//texMacro/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/texmacro.html
 $dokka.location:com.quarkdown.stdlib//text/#com.quarkdown.core.ast.InlineMarkdownContent#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Size?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Weight?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Style?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Decoration?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Case?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Variant?#com.quarkdown.core.misc.color.Color?#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/text.html
 $dokka.location:com.quarkdown.stdlib//theme/#com.quarkdown.core.context.Context#kotlin.String?#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/theme.html
+$dokka.location:com.quarkdown.stdlib//toDo/#com.quarkdown.core.context.Context#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/todo.html
 $dokka.location:com.quarkdown.stdlib//totalPages/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/totalpages.html
 $dokka.location:com.quarkdown.stdlib//truncate/#kotlin.Number#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/truncate.html
 $dokka.location:com.quarkdown.stdlib//uppercase/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/uppercase.html
@@ -125,6 +127,7 @@ com.quarkdown.cli.creator.template
 com.quarkdown.cli.exec
 com.quarkdown.cli.exec.strategy
 com.quarkdown.cli.lib
+com.quarkdown.cli.renderer
 com.quarkdown.cli.server
 com.quarkdown.cli.util
 com.quarkdown.cli.watcher
@@ -196,7 +199,6 @@ com.quarkdown.core.pipeline
 com.quarkdown.core.pipeline.error
 com.quarkdown.core.pipeline.output
 com.quarkdown.core.rendering
-com.quarkdown.core.rendering.html
 com.quarkdown.core.rendering.representable
 com.quarkdown.core.rendering.tag
 com.quarkdown.core.rendering.template
@@ -204,12 +206,17 @@ com.quarkdown.core.template
 com.quarkdown.core.util
 com.quarkdown.core.visitor.node
 com.quarkdown.core.visitor.token
+module:quarkdown-html
+com.quarkdown.core.rendering.html
+com.quarkdown.rendering.html
+com.quarkdown.rendering.html.css
+com.quarkdown.rendering.html.extension
+com.quarkdown.rendering.html.node
+com.quarkdown.rendering.html.pdf
+com.quarkdown.rendering.html.post
 module:quarkdown-interaction
 com.quarkdown.interaction.executable
 com.quarkdown.interaction.os
-module:quarkdown-pdf
-com.quarkdown.pdf
-com.quarkdown.pdf.html
 module:quarkdown-quarkdoc
 com.quarkdown.quarkdoc.dokka
 com.quarkdown.quarkdoc.dokka.kdoc
@@ -232,7 +239,6 @@ com.quarkdown.server.stop
 module:quarkdown-stdlib
 com.quarkdown.stdlib
 com.quarkdown.stdlib.external
-com.quarkdown.stdlib.internal
 com.quarkdown.stdlib.module.Collection
 com.quarkdown.stdlib.module.Data
 com.quarkdown.stdlib.module.Dictionary

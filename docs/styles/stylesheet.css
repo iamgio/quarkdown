@@ -8,6 +8,10 @@
     flex-direction: column;
 }
 
+#sideMenu .sideMenu > .toc--part:not([data-active]) > .toc--row > .toc--button:not(:hover) {
+    background-color: transparent;
+}
+
 #sideMenu .sideMenu > .toc--part {
     order: 10;
 }
@@ -23,6 +27,10 @@
     display: block;
     text-transform: uppercase;
     opacity: .5;
+}
+
+#sideMenu .sideMenu > .toc--part:has(a[href*='module.']) > .toc--row {
+    background-color: rgba(77, 187, 95, .1);
 }
 
 /* If a package contains Quarkdown modules, non-module packages are semi-hidden. */

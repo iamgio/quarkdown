@@ -43,7 +43,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">latest
+        <div class="library-version" id="library-version">1.1.0
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
@@ -96,7 +96,7 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.media.storage</a><span class="delimiter">/</span><span class="current">MutableMediaStorage</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Mutable</span><wbr><span>Media</span><wbr><span><span>Storage</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">MutableMediaStorage</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">options<span class="token operator">: </span><a href="../../com.quarkdown.core.media.storage.options/-media-storage-options/index.html">MediaStorageOptions</a><span class="token punctuation">, </span></span><span class="parameter ">nameProvider<span class="token operator">: </span><a href="../../com.quarkdown.core.media.storage.name/-media-name-provider-strategy/index.html">MediaNameProviderStrategy</a><span class="token operator"> = </span>SanitizedMediaNameProvider()</span></span><span class="token punctuation">)</span> : <a href="../-read-only-media-storage/index.html">ReadOnlyMediaStorage</a></div><p class="paragraph">A media storage that can be modified with new entries.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>options</span></span></u></div></span></div><div><div class="title"><p class="paragraph">storage rules</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>name</span><wbr><span><span>Provider</span></span></u></div></span></div><div><div class="title"><p class="paragraph">strategy used to generate media names.     The name of a media is defines the file name in the output directory,     hence this is the resource the document should refer to (e.g. images).</p></div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">MutableMediaStorage</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">options<span class="token operator">: </span><a href="../../com.quarkdown.core.media.storage.options/-media-storage-options/index.html">MediaStorageOptions</a><span class="token punctuation">, </span></span><span class="parameter ">nameProvider<span class="token operator">: </span><a href="../../com.quarkdown.core.media.storage.name/-media-name-provider-strategy/index.html">MediaNameProviderStrategy</a><span class="token operator"> = </span>SanitizedMediaNameProvider()</span></span><span class="token punctuation">)</span> : <a href="../-read-only-media-storage/index.html">ReadOnlyMediaStorage</a></div><p class="paragraph">A media storage that can be modified with new entries.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>options</span></span></u></div></span></div><div><div class="title"><p class="paragraph">storage rules</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>name</span><wbr><span><span>Provider</span></span></u></div></span></div><div><div class="title"><p class="paragraph">strategy used to generate media names.     The name of a media defines the file name in the output directory,     hence this is the resource the document should refer to (e.g. images).</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -133,6 +133,21 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="all.html">all</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../-stored-media/index.html">StoredMedia</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All the stored entries.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-149820410%2FProperties%2F1831116724" anchor-label="isEmpty" id="-149820410%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-read-only-media-storage/is-empty.html"><span>is</span><wbr><span><span>Empty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-149820410%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-read-only-media-storage/is-empty.html">isEmpty</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Whether this storage does not contain any media.</p></div></div></div>
                 </div>
               </div>
             </div>
