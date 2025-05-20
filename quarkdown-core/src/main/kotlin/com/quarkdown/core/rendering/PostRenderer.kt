@@ -1,5 +1,6 @@
 package com.quarkdown.core.rendering
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.template.TemplateProcessor
@@ -53,3 +54,5 @@ interface PostRenderer {
  * @see TemplateProcessor
  */
 fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).process()
+
+fun Set<OutputResource>.withMedia(context: Context) = this + context.mediaStorage.toResource()

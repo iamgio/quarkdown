@@ -128,7 +128,7 @@ abstract class ExecuteCommand(
     /**
      * Path to the Node.js executable, needed for PDF export.
      */
-    protected val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
+    private val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
         .default(NodeJsWrapper.defaultPath)
 
     /**

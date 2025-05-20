@@ -19,4 +19,5 @@ data class CliOptions(
     val clean: Boolean,
     val nodePath: String?,
     val npmPath: String?,
+    val noPdfSandbox: Boolean = false,
 )

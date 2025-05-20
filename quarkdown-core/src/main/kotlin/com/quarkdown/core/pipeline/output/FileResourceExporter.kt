@@ -73,3 +73,10 @@ class FileResourceExporter(
         return directory
     }
 }
+
+/**
+ * Saves [this] resource to file in a [directory].
+ * @see FileResourceExporter
+ * @return the saved file
+ */
+fun OutputResource.saveTo(directory: File): File = accept(FileResourceExporter(location = directory))

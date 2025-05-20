@@ -13,6 +13,7 @@ import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.rendering.PostRenderer
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
+import com.quarkdown.core.rendering.withMedia
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
@@ -146,7 +147,7 @@ class HtmlPostRenderer(
                     name = "script",
                     resources = retrieveScriptComponentsArtifacts(),
                 )
-        }
+        }.withMedia(context)
 
     /**
      * @param theme theme to get the artifacts for

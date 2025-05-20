@@ -1,7 +1,5 @@
 package com.quarkdown.cli.util
 
-import com.quarkdown.core.pipeline.output.FileResourceExporter
-import com.quarkdown.core.pipeline.output.OutputResource
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
@@ -26,10 +24,3 @@ val thisExecutableFile: File?
 fun File.cleanDirectory() {
     listFiles()?.forEach { it.toPath().deleteRecursively() }
 }
-
-/**
- * Saves [this] resource to file in a [directory].
- * @see FileResourceExporter
- * @return the saved file
- */
-fun OutputResource.saveTo(directory: File): File = accept(FileResourceExporter(location = directory))
