@@ -1,11 +1,12 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocation
+import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
-import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Strong
@@ -139,7 +140,7 @@ class TreeTraversalTest {
             ),
             tree
                 .flattenedChildren()
-                .filterIsInstance<Heading>()
+                .filterIsInstance<LocationTrackableNode>()
                 .associateWith { it.getLocation(context)!! }
                 .mapKeys { (node, _) -> (node as TextNode).text.toPlainText() }
                 .mapValues { (_, location) -> location.levels },
@@ -178,7 +179,10 @@ class TreeTraversalTest {
                 .attach(LocationAwareLabelStorerHook(context))
                 .traverse(tree)
 
-            return context.attributes.positionalLabels.values
+            return tree
+                .flattenedChildren()
+                .filterIsInstance<LocationTrackableNode>()
+                .mapNotNull { it.getLocationLabel(context) }
                 .toList()
         }
 
@@ -238,7 +242,10 @@ class TreeTraversalTest {
 
         assertEquals(
             listOf("0.1", "1.1", "A", "1.2", "B", "2.1"),
-            context.attributes.positionalLabels.values
+            tree
+                .flattenedChildren()
+                .filterIsInstance<LocationTrackableNode>()
+                .mapNotNull { it.getLocationLabel(context) }
                 .toList(),
         )
     }

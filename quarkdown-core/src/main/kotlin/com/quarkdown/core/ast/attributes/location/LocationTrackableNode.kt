@@ -20,21 +20,45 @@ interface LocationTrackableNode : Node {
 }
 
 /**
+ * @param context context where location data is stored
  * @return the location of this node within the document handled by [context],
  * or `null` if the location for [this] node is not registered
  */
 fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = context.attributes.of(this)[SectionLocationProperty]
 
 /**
- * Registered the location of this node within the document handled by [context].
+ * Registers the location of this node within the document handled by [context].
  * @param context context where location data is stored
  * @param location location to set
+ * @see com.quarkdown.core.context.hooks.LocationAwarenessHook
  */
 fun LocationTrackableNode.setLocation(
     context: MutableContext,
     location: SectionLocation,
 ) {
     context.attributes.of(this) += SectionLocationProperty(location)
+}
+
+/**
+ * @param context context where location data is stored
+ * @return the location of this node within the document handled by [context],
+ * formatted according to its corresponding [NumberingFormat] via [formatLocation].
+ * Returns `null` if the location for [this] node is not registered or if it does not have a corresponding [NumberingFormat] rule
+ */
+fun LocationTrackableNode.getLocationLabel(context: Context) = context.attributes.of(this)[LocationLabelProperty]
+
+/**
+ * Registers the formatted location of this node within the document handled by [context],
+ * according to [this] node's [NumberingFormat].
+ * @param context context where location data is stored
+ * @param label formatted location to set
+ * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook
+ */
+fun LocationTrackableNode.setLocationLabel(
+    context: MutableContext,
+    label: String,
+) {
+    context.attributes.of(this) += LocationLabelProperty(label)
 }
 
 /**

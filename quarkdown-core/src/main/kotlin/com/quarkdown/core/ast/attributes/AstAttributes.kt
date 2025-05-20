@@ -6,7 +6,6 @@ import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.toc.TableOfContents
-import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.property.AssociatedProperties
 import com.quarkdown.core.property.MutableAssociatedProperties
 import com.quarkdown.core.property.MutablePropertyContainer
@@ -33,17 +32,6 @@ interface AstAttributes {
      * @see AssociatedProperties.of on [properties]
      */
     fun of(node: Node): PropertyContainer = properties.of(node)
-
-    /**
-     * Labels/identifiers of nodes assigned based on their position,
-     * either their own (see [LocationTrackableNode]) or relative to others.
-     * The labels are often displayed in a caption.
-     * Examples of these nodes are figures and tables.
-     * For instance, depending on the document's [NumberingFormat],
-     * an element may be labeled as `1.1`, `1.2`, `1.3`, `2.1`, etc.
-     * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook for the storing stage
-     */
-    val positionalLabels: Map<Node, String>
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -99,7 +87,6 @@ interface AstAttributes {
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
     override val properties: MutableAssociatedProperties<Node> = MutableAssociatedProperties(),
-    override val positionalLabels: MutableMap<Node, String> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,

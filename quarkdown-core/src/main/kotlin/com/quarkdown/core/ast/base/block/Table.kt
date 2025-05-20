@@ -3,8 +3,8 @@ package com.quarkdown.core.ast.base.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.CaptionableNode
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
 import com.quarkdown.core.visitor.node.NodeVisitor
