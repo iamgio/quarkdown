@@ -80,7 +80,7 @@ class CompileCommandTest : TempDirectory() {
 
     private fun base(explicitRenderer: String? = null) {
         val (cliOptions, pipelineOptions) =
-            explicitRenderer?.let { test("--renderer", it) }
+            explicitRenderer?.let { test("--render", it) }
                 ?: test()
 
         assertHtmlContentPresent()
@@ -147,7 +147,7 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `pdf via explicit html-pdf`() {
-        val (_, _) = test("--renderer", "html-pdf")
+        val (_, _) = test("--render", "html-pdf")
         checkPdf()
     }
 

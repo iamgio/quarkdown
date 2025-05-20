@@ -83,7 +83,7 @@ abstract class ExecuteCommand(
      */
     private val renderer: String by option(
         "-r",
-        "--renderer",
+        "--render",
         help = "Rendering target to generate output for",
     ).default("html")
 
