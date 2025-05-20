@@ -13,5 +13,5 @@ data class SectionLocationProperty(
 ) : Property<SectionLocation> {
     companion object : Property.Key<SectionLocation>
 
-    override val key: Property.Key<SectionLocation> = SectionLocationProperty
+    override val key = SectionLocationProperty
 }

@@ -2,6 +2,16 @@ package com.quarkdown.core.property
 
 /**
  * A property is an atom that represents a value associated with a key, similar to a map entry.
+ *
+ * Example implementation:
+ * ```kotlin
+ * data class MyProperty(override val value: X) : Property<X> {
+ *     companion object : Property.Key<X>
+ *
+ *     override val key = MyProperty
+ * }
+ * ```
+ *
  * @param T the type of the value associated with the key
  * @see PropertyContainer
  */

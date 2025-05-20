@@ -2,10 +2,18 @@ package com.quarkdown.core.property
 
 /**
  * A group of properties, associated with their own key.
+ * @see MutablePropertyContainer
  * @see Property
  * @see AssociatedProperties
  */
-class PropertyContainer {
+interface PropertyContainer {
+    operator fun <T> get(key: Property.Key<T>): T?
+}
+
+/**
+ * Mutable implementation of [PropertyContainer].
+ */
+class MutablePropertyContainer : PropertyContainer {
     private val properties: MutableMap<Property.Key<*>, Property<*>> = mutableMapOf()
 
     /**
@@ -27,5 +35,5 @@ class PropertyContainer {
      * @return the property associated with the key, if any
      */
     @Suppress("UNCHECKED_CAST") // Safe to assume the property has the same generic type as the key.
-    operator fun <T> get(key: Property.Key<T>): T? = properties[key]?.value as? T
+    override operator fun <T> get(key: Property.Key<T>): T? = properties[key]?.value as? T
 }

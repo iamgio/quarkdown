@@ -2,8 +2,8 @@ package com.quarkdown.core
 
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.property.MutablePropertyContainer
 import com.quarkdown.core.property.Property
-import com.quarkdown.core.property.PropertyContainer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,7 +23,7 @@ class PropertiesTest {
 
     @Test
     fun properties() {
-        val properties = PropertyContainer()
+        val properties = MutablePropertyContainer()
         properties += property
 
         val retrievedProperty: String? = properties[MyProperty]

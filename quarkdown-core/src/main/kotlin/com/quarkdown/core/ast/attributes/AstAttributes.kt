@@ -8,6 +8,8 @@ import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.property.AssociatedProperties
+import com.quarkdown.core.property.MutableAssociatedProperties
+import com.quarkdown.core.property.MutablePropertyContainer
 import com.quarkdown.core.property.PropertyContainer
 
 /**
@@ -96,7 +98,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
-    override val properties: AssociatedProperties<Node> = AssociatedProperties(),
+    override val properties: MutableAssociatedProperties<Node> = MutableAssociatedProperties(),
     override val positionalLabels: MutableMap<Node, String> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
@@ -105,5 +107,7 @@ data class MutableAstAttributes(
     override var hasMermaidDiagram: Boolean = false,
     override var tableOfContents: TableOfContents? = null,
 ) : AstAttributes {
+    override fun of(node: Node): MutablePropertyContainer = properties.of(node)
+
     override fun toMutable(): MutableAstAttributes = this.copy()
 }
