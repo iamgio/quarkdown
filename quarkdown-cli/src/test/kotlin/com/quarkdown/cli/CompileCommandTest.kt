@@ -126,7 +126,6 @@ class CompileCommandTest : TempDirectory() {
     }
 
     private fun checkPdf() {
-        println(directory.listFiles().toList())
         val pdf = File(directory, "Quarkdown-test.pdf")
         assertTrue(pdf.exists())
         assertFalse(File(directory, "Quarkdown-test").exists())
@@ -147,7 +146,7 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `pdf via explicit html-pdf`() {
-        val (_, _) = test("--render", "html-pdf")
+        val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
