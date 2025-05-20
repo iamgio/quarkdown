@@ -8,6 +8,7 @@ import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.pipeline.output.ArtifactType
+import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.template.TemplateProcessor
@@ -16,6 +17,7 @@ import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -264,9 +266,7 @@ class HtmlPostRendererTest {
         )
     }
 
-    @Test
-    fun `resource generation`() {
-        val context = MutableContext(QuarkdownFlavor)
+    private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
         context.documentInfo.type = DocumentType.SLIDES
         context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
         context.attributes.hasMath = true
@@ -276,7 +276,8 @@ class HtmlPostRendererTest {
         val html = "<html><head></head><body></body></html>"
 
         val resources = postRenderer.generateResources(html)
-        assertEquals(3, resources.size)
+
+        block(resources)
 
         resources.filterIsInstance<TextOutputArtifact>().first { it.type == ArtifactType.HTML }.let {
             assertEquals(html, it.content)
@@ -309,7 +310,24 @@ class HtmlPostRendererTest {
             assertTrue("script" in scripts)
             assertTrue("slides" in scripts)
             assertTrue("math" in scripts)
-            assertTrue("code" in scripts)
+            assertFalse("code" in scripts)
+        }
+    }
+
+    @Test
+    fun `resource generation, no media`() =
+        `resource generation` { resources ->
+            assertEquals(3, resources.size)
+            assertFalse("media" in resources.map { it.name }) // Media storage is empty.
+        }
+
+    @Test
+    fun `resource generation, with media`() {
+        context.options.enableLocalMediaStorage = true
+        context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
+        `resource generation` { resources ->
+            assertEquals(4, resources.size)
+            assertTrue("media" in resources.map { it.name }) // Media storage is empty.
         }
     }
 

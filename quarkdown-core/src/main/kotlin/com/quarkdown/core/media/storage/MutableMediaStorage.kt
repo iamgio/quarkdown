@@ -20,7 +20,7 @@ private const val MEDIA_SUBDIRECTORY_NAME = "media"
  * A media storage that can be modified with new entries.
  * @param options storage rules
  * @param nameProvider strategy used to generate media names.
- *                     The name of a media is defines the file name in the output directory,
+ *                     The name of a media defines the file name in the output directory,
  *                     hence this is the resource the document should refer to (e.g. images).
  */
 class MutableMediaStorage(
@@ -43,18 +43,19 @@ class MutableMediaStorage(
     override fun resolve(path: String): StoredMedia? = bindings[path]
 
     override fun resolveMediaLocationOrFallback(path: String): String =
-        resolve(path)?.name
+        resolve(path)
+            ?.name
             ?.let { "$MEDIA_SUBDIRECTORY_NAME/$it" }
             ?: path
 
     override fun toResource(): OutputResource {
         val subResources =
-            this.all.asSequence()
+            this.all
+                .asSequence()
                 .map {
                     val converter = MediaOutputResourceConverter(it.name)
                     it.media.accept(converter)
-                }
-                .toSet()
+                }.toSet()
 
         return OutputResourceGroup(name = MEDIA_SUBDIRECTORY_NAME, subResources)
     }

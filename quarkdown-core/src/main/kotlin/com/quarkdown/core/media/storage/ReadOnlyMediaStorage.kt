@@ -19,6 +19,12 @@ interface ReadOnlyMediaStorage {
     val all: Set<StoredMedia>
 
     /**
+     * Whether this storage does not contain any media.
+     */
+    val isEmpty: Boolean
+        get() = all.isEmpty()
+
+    /**
      * Resolves a media by its path.
      * @param path path of the media. Can be a file path or a URL
      * @return the matching media, if any is found

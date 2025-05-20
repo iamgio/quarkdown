@@ -42,7 +42,7 @@ class MediaTest {
                 override fun visit(media: RemoteMedia) = media
             }
 
-        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html.template").accept(selfVisitor))
+        assertIs<LocalMedia>(ResolvableMedia("src/test/resources/media/icon.png").accept(selfVisitor))
         assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").accept(selfVisitor))
         assertFails { ResolvableMedia("nonexistent").accept(selfVisitor) }
         assertFails { ResolvableMedia("src").accept(selfVisitor) } // Directory
