@@ -127,6 +127,7 @@ com.quarkdown.cli.creator.template
 com.quarkdown.cli.exec
 com.quarkdown.cli.exec.strategy
 com.quarkdown.cli.lib
+com.quarkdown.cli.renderer
 com.quarkdown.cli.server
 com.quarkdown.cli.util
 com.quarkdown.cli.watcher
@@ -198,7 +199,6 @@ com.quarkdown.core.pipeline
 com.quarkdown.core.pipeline.error
 com.quarkdown.core.pipeline.output
 com.quarkdown.core.rendering
-com.quarkdown.core.rendering.html
 com.quarkdown.core.rendering.representable
 com.quarkdown.core.rendering.tag
 com.quarkdown.core.rendering.template
@@ -206,12 +206,17 @@ com.quarkdown.core.template
 com.quarkdown.core.util
 com.quarkdown.core.visitor.node
 com.quarkdown.core.visitor.token
+module:quarkdown-html
+com.quarkdown.core.rendering.html
+com.quarkdown.rendering.html
+com.quarkdown.rendering.html.css
+com.quarkdown.rendering.html.extension
+com.quarkdown.rendering.html.node
+com.quarkdown.rendering.html.pdf
+com.quarkdown.rendering.html.post
 module:quarkdown-interaction
 com.quarkdown.interaction.executable
 com.quarkdown.interaction.os
-module:quarkdown-pdf
-com.quarkdown.pdf
-com.quarkdown.pdf.html
 module:quarkdown-quarkdoc
 com.quarkdown.quarkdoc.dokka
 com.quarkdown.quarkdoc.dokka.kdoc

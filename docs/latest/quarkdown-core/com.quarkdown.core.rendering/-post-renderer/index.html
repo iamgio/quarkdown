@@ -96,7 +96,7 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.rendering</a><span class="delimiter">/</span><span class="current">PostRenderer</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Post</span><wbr><span><span>Renderer</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">PostRenderer</a></div><p class="paragraph">Strategy used to run the post-rendering stage: the rendered content from the rendering stage is injected into a template offered by the post-renderer. Additionally, the post-renderer provides the output resources that can be saved to file.</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../com.quarkdown.core.rendering.html/-html-post-renderer/index.html">HtmlPostRenderer</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">PostRenderer</a></div><p class="paragraph">Strategy used to run the post-rendering stage: the rendered content from the rendering stage is injected into a template offered by the post-renderer. Additionally, the post-renderer provides the output resources that can be saved to file.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
@@ -122,22 +122,7 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-304280141%2FFunctions%2F1831116724" anchor-label="accept" id="-304280141%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
-          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="accept.html"><span><span>accept</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-304280141%2FFunctions%2F1831116724"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="accept.html">T</a><span class="token operator">&gt; </span><a href="accept.html"><span class="token function">accept</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">visitor<span class="token operator">: </span><a href="../-post-renderer-visitor/index.html">PostRendererVisitor</a><span class="token operator">&lt;</span><a href="accept.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="accept.html">T</a></div><div class="brief "><p class="paragraph">Accepts a post-renderer visitor.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1954761950%2FFunctions%2F1831116724" anchor-label="createTemplateProcessor" id="1954761950%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="1954761950%2FFunctions%2F1831116724" anchor-label="createTemplateProcessor" id="1954761950%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -178,6 +163,21 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PostRenderer</a><span class="token punctuation">.</span><a href="../wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></div><div class="brief "><p class="paragraph">Wraps rendered code in a template.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1223456488%2FFunctions%2F1831116724" anchor-label="wrapResources" id="1223456488%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="wrap-resources.html"><span>wrap</span><wbr><span><span>Resources</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1223456488%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="wrap-resources.html"><span class="token function">wrapResources</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">resources<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
