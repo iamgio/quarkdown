@@ -272,9 +272,13 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
 
-- `-o <dir>` or `--output <dir>`: sets the directory of the output files. If unset, defaults to `./output`.
+- `-o <dir>` or `--output <dir>`: sets the directory of the output files. Defaults to `./output`.
 
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. If unset, defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+
+- `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
+  - `html`
+  - `html-pdf` (equivalent to `-r html --pdf`)
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
