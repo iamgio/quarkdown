@@ -1,7 +1,9 @@
 package com.quarkdown.cli
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.MarkdownFlavor
+import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryExporter
 import com.quarkdown.core.log.DebugFormatter
@@ -9,8 +11,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
-import com.quarkdown.rendering.html.extension.htmlPdf
-import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
+import com.quarkdown.core.rendering.RenderingComponents
 import com.quarkdown.stdlib.Stdlib
 
 /**
@@ -27,7 +28,7 @@ object PipelineInitialization {
         flavor: MarkdownFlavor,
         loadableLibraryExporters: Set<LibraryExporter>,
         options: PipelineOptions,
-        cliOptions: CliOptions,
+        renderer: (RendererFactory, Context) -> RenderingComponents,
     ): Pipeline {
         // Libraries to load.
         val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
@@ -50,21 +51,12 @@ object PipelineInitialization {
                 },
             )
 
-        // TODO choose renderer from CLI
-        val pdfExportOptions =
-            HtmlPdfExportOptions(
-                outputDirectory = cliOptions.outputDirectory!!,
-                nodeJsPath = cliOptions.nodePath!!,
-                npmPath = cliOptions.npmPath!!,
-                noSandbox = cliOptions.noPdfSandbox,
-            )
-
         // The pipeline.
         return Pipeline(
             context = MutableContext(flavor, loadableLibraries = loadableLibraries),
             options = options,
             libraries = libraries,
-            renderer = { rendererFactory, context -> rendererFactory.htmlPdf(context, pdfExportOptions) },
+            renderer = renderer,
             hooks = hooks,
         )
     }

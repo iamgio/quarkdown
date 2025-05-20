@@ -49,6 +49,7 @@ class CompileCommand : ExecuteCommand("c") {
         original.copy(
             source = source,
             noPdfSandbox = noPdfSandbox,
+            generatePdf = exportPdf,
         )
 
     override fun createExecutionStrategy(cliOptions: CliOptions) = FileExecutionStrategy(source)
