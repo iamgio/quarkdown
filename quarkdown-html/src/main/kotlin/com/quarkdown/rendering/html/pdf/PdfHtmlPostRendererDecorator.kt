@@ -5,8 +5,6 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.saveTo
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.interaction.executable.NodeJsWrapper
-import com.quarkdown.interaction.executable.NpmWrapper
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
 
@@ -30,24 +28,16 @@ class PdfHtmlPostRendererDecorator(
         val sourcesDirectory: File = OutputResourceGroup("sources", resources).saveTo(tempDirectory)
         val out: File = tempDirectory.resolve("out.pdf")
 
-        val node = NodeJsWrapper(path = options.nodeJsPath, workingDirectory = out.parentFile)
-        val npm = NpmWrapper(path = options.npmPath)
-
-        PuppeteerPdfGeneratorScript(
-            sourcesDirectory,
-            out,
-            node,
-            npm,
-            options.noSandbox,
-        ).launch()
+        HtmlPdfExporter(options).export(sourcesDirectory, out)
 
         // In order to comply with the pipeline's contract, the output PDF is wrapped in an OutputResource.
         // It is deleted along with its temporary directory, and will be recreated in the output directory
         // by the pipeline's final process.
-        return sequenceOf(out)
-            .filter { it.exists() }
-            .map(BinaryOutputArtifact::fromFile)
-            .toSet()
+        return out
+            .takeIf { it.exists() }
+            ?.let(BinaryOutputArtifact::fromFile)
             .also { tempDirectory.deleteRecursively() }
+            ?.let(::setOf)
+            ?: emptySet()
     }
 }

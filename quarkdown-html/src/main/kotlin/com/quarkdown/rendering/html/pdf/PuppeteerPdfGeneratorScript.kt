@@ -16,14 +16,14 @@ private const val STARTING_SERVER_PORT = 8096
 
 /**
  * Script-like generator of a PDF from HTML through Puppeteer via Node.js.
- * @param directory directory containing the `index.html` file
+ * @param sourcesDirectory directory containing the `index.html` file
  * @param out output PDF file to be written
  * @param node Node.js executable wrapper
  * @param npm NPM executable wrapper
  * @param noSandbox whether to disable Chrome sandbox for PDF export
  */
 class PuppeteerPdfGeneratorScript(
-    private val directory: File,
+    private val sourcesDirectory: File,
     private val out: File,
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
@@ -32,7 +32,8 @@ class PuppeteerPdfGeneratorScript(
     private var port: Int? = null
 
     /**
-     * Launches Puppeteer to convert the webpage from [directory] into a PDF saved at [out].
+     * Launches Puppeteer to convert the webpage from [sourcesDirectory] into a PDF saved at [out].
+     * Blocking call.
      */
     fun launch() =
         NodeNpmHelper(node, npm).launch(PuppeteerNodeModule) {
@@ -40,7 +41,7 @@ class PuppeteerPdfGeneratorScript(
         }
 
     private fun launchServer() {
-        LocalFileWebServer(directory)
+        LocalFileWebServer(sourcesDirectory)
             .withScanner()
             .attemptStartUntilPortAvailable(STARTING_SERVER_PORT) { server, port ->
                 this.port = port
