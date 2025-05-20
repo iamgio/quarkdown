@@ -10,5 +10,5 @@ import java.io.File
 class FileExecutionStrategy(
     private val file: File,
 ) : PipelineExecutionStrategy {
-    override fun execute(pipeline: Pipeline): OutputResource = pipeline.execute(file.readText())
+    override fun execute(pipeline: Pipeline): OutputResource? = pipeline.execute(file.readText())
 }

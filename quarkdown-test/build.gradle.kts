@@ -7,6 +7,7 @@ plugins {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":quarkdown-core"))
+    implementation(project(":quarkdown-html"))
     implementation(project(":quarkdown-stdlib"))
 }
 

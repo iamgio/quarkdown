@@ -48,7 +48,7 @@ class FileResourceExporter(
 
     override fun visit(artifact: BinaryOutputArtifact) =
         File(location, artifact.fullFileName).also {
-            if (write) it.writeBytes(artifact.content)
+            if (write) it.writeBytes(artifact.content.toByteArray())
         }
 
     /**
@@ -73,3 +73,10 @@ class FileResourceExporter(
         return directory
     }
 }
+
+/**
+ * Saves [this] resource to file in a [directory].
+ * @see FileResourceExporter
+ * @return the saved file
+ */
+fun OutputResource.saveTo(directory: File): File = accept(FileResourceExporter(location = directory))

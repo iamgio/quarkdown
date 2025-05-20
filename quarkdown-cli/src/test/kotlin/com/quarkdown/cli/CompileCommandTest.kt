@@ -56,16 +56,6 @@ class CompileCommandTest : TempDirectory() {
             *additionalArgs,
         )
 
-        val outputDir = File(directory, "Quarkdown-test")
-        assertTrue(outputDir.exists())
-        assertTrue(outputDir.isDirectory())
-
-        outputDir.listFiles()!!.map { it.name }.let {
-            "index.html" in it
-            "script" in it
-            "theme" in it
-        }
-
         val cliOptions = command.createCliOptions()
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
@@ -76,9 +66,24 @@ class CompileCommandTest : TempDirectory() {
         return cliOptions to pipelineOptions
     }
 
-    @Test
-    fun base() {
-        val (cliOptions, pipelineOptions) = test()
+    private fun assertHtmlContentPresent() {
+        val outputDir = File(directory, "Quarkdown-test")
+        assertTrue(outputDir.exists())
+        assertTrue(outputDir.isDirectory())
+
+        outputDir.listFiles()!!.map { it.name }.let {
+            "index.html" in it
+            "script" in it
+            "theme" in it
+        }
+    }
+
+    private fun base(explicitRenderer: String? = null) {
+        val (cliOptions, pipelineOptions) =
+            explicitRenderer?.let { test("--render", it) }
+                ?: test()
+
+        assertHtmlContentPresent()
 
         assertFalse(cliOptions.clean)
 
@@ -91,14 +96,22 @@ class CompileCommandTest : TempDirectory() {
     }
 
     @Test
+    fun base() = base(null)
+
+    @Test
+    fun `base with explicit html renderer`() = base("html")
+
+    @Test
     fun strict() {
         val (_, pipelineOptions) = test("--strict")
+        assertHtmlContentPresent()
         assertIs<StrictPipelineErrorHandler>(pipelineOptions.errorHandler)
     }
 
     @Test
     fun `pretty, no wrap`() {
         val (_, pipelineOptions) = test("--pretty", "--nowrap")
+        assertHtmlContentPresent()
         assertTrue(pipelineOptions.prettyOutput)
         assertFalse(pipelineOptions.wrapOutput)
     }
@@ -115,6 +128,7 @@ class CompileCommandTest : TempDirectory() {
     private fun checkPdf() {
         val pdf = File(directory, "Quarkdown-test.pdf")
         assertTrue(pdf.exists())
+        assertFalse(File(directory, "Quarkdown-test").exists())
 
         Loader.loadPDF(pdf).use {
             assertEquals(3, it.numberOfPages)
@@ -127,6 +141,12 @@ class CompileCommandTest : TempDirectory() {
         assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
 
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
+        checkPdf()
+    }
+
+    @Test
+    fun `pdf via explicit html-pdf`() {
+        val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 

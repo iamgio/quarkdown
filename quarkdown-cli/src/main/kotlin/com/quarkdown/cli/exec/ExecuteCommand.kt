@@ -79,6 +79,15 @@ abstract class ExecuteCommand(
         ).default(File(thisExecutableFile?.parentFile, DEFAULT_LIBRARY_DIRECTORY))
 
     /**
+     * The rendering target to generate output for.
+     */
+    private val renderer: String by option(
+        "-r",
+        "--render",
+        help = "Rendering target to generate output for",
+    ).default("html")
+
+    /**
      * When enabled, the rendering stage produces pretty output code.
      */
     private val prettyOutput: Boolean by option("--pretty", help = "Pretty output").flag()
@@ -128,7 +137,7 @@ abstract class ExecuteCommand(
     /**
      * Path to the Node.js executable, needed for PDF export.
      */
-    protected val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
+    private val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
         .default(NodeJsWrapper.defaultPath)
 
     /**
@@ -146,6 +155,7 @@ abstract class ExecuteCommand(
             source = null,
             outputDirectory,
             libraryDirectory,
+            renderer,
             clean,
             nodePath,
             npmPath,

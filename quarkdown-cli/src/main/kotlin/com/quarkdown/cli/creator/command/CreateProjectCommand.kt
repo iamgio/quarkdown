@@ -14,7 +14,6 @@ import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
-import com.quarkdown.cli.util.saveTo
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -23,6 +22,7 @@ import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.log.Log
+import com.quarkdown.core.pipeline.output.saveTo
 import java.io.File
 
 /**

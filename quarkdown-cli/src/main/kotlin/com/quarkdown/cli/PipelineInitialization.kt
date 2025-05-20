@@ -1,7 +1,9 @@
 package com.quarkdown.cli
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.MarkdownFlavor
+import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryExporter
 import com.quarkdown.core.log.DebugFormatter
@@ -9,6 +11,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
+import com.quarkdown.core.rendering.RenderingComponents
 import com.quarkdown.stdlib.Stdlib
 
 /**
@@ -25,6 +28,7 @@ object PipelineInitialization {
         flavor: MarkdownFlavor,
         loadableLibraryExporters: Set<LibraryExporter>,
         options: PipelineOptions,
+        renderer: (RendererFactory, Context) -> RenderingComponents,
     ): Pipeline {
         // Libraries to load.
         val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
@@ -52,7 +56,7 @@ object PipelineInitialization {
             context = MutableContext(flavor, loadableLibraries = loadableLibraries),
             options = options,
             libraries = libraries,
-            renderer = { rendererFactory, context -> rendererFactory.html(context) },
+            renderer = renderer,
             hooks = hooks,
         )
     }

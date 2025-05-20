@@ -1,5 +1,6 @@
 package com.quarkdown.core.rendering
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.template.TemplateProcessor
@@ -38,12 +39,10 @@ interface PostRenderer {
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
 
-    /**
-     * Accepts a post-renderer visitor.
-     * @param visitor visitor to accept
-     * @return the result of the visit operation
-     */
-    fun <T> accept(visitor: PostRendererVisitor<T>): T
+    fun wrapResources(
+        name: String,
+        resources: Set<OutputResource>,
+    ): OutputResource?
 }
 
 /**
@@ -53,3 +52,13 @@ interface PostRenderer {
  * @see TemplateProcessor
  */
 fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).process()
+
+/**
+ * @return a copy of [this] set of output resources, with also the media storage resources added,
+ * as long as the media storage is not empty.
+ */
+fun Set<OutputResource>.withMedia(context: Context) =
+    when {
+        context.mediaStorage.isEmpty -> this
+        else -> this + context.mediaStorage.toResource()
+    }

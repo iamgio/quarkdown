@@ -8,9 +8,7 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
-import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.MediaStorerHook
-import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.media.LocalMedia
 import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.MediaVisitor
@@ -20,7 +18,6 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.core.rendering.html.QuarkdownHtmlNodeRenderer
 import java.io.File
 import java.net.URL
 import kotlin.test.Test
@@ -45,7 +42,7 @@ class MediaTest {
                 override fun visit(media: RemoteMedia) = media
             }
 
-        assertIs<LocalMedia>(ResolvableMedia("src/main/resources/render/html-wrapper.html.template").accept(selfVisitor))
+        assertIs<LocalMedia>(ResolvableMedia("src/test/resources/media/icon.png").accept(selfVisitor))
         assertIs<RemoteMedia>(ResolvableMedia("https://example.com/image.jpg").accept(selfVisitor))
         assertFails { ResolvableMedia("nonexistent").accept(selfVisitor) }
         assertFails { ResolvableMedia("src").accept(selfVisitor) } // Directory
@@ -198,76 +195,6 @@ class MediaTest {
     }
 
     @Test
-    fun `path update`() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.options.enableLocalMediaStorage = true
-        context.options.enableRemoteMediaStorage = true
-
-        val renderer = QuarkdownHtmlNodeRenderer(context)
-
-        context.mediaStorage.register("https://iamgio.eu/quarkdown/img/logo-light.svg", workingDirectory = null)
-
-        val remoteImage =
-            Image(
-                Link(
-                    label = listOf(),
-                    url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                    title = null,
-                ),
-                width = null,
-                height = null,
-            )
-
-        assertEquals(
-            "<img src=\"media/https-iamgio.eu-quarkdown-img-logo-light.svg\" alt=\"\" />",
-            remoteImage.accept(renderer),
-        )
-
-        context.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
-
-        val localImage =
-            Image(
-                Link(
-                    label = listOf(),
-                    url = "media/icon.png",
-                    title = null,
-                ),
-                width = null,
-                height = null,
-            )
-
-        assertTrue(localImage.accept(renderer).startsWith("<img src=\"media/icon@"))
-
-        MutableContext(QuarkdownFlavor).let { localOnlyContext ->
-            localOnlyContext.options.enableLocalMediaStorage = true
-            localOnlyContext.options.enableRemoteMediaStorage = false
-
-            localOnlyContext.mediaStorage.register(
-                "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                workingDirectory = null,
-            )
-
-            val localOnlyRenderer = QuarkdownHtmlNodeRenderer(localOnlyContext)
-
-            assertEquals(
-                "<img src=\"https://iamgio.eu/quarkdown/img/logo-light.svg\" alt=\"\" />",
-                remoteImage.accept(localOnlyRenderer),
-            )
-
-            // Not yet registered.
-
-            assertEquals(
-                "<img src=\"media/icon.png\" alt=\"\" />",
-                localImage.accept(localOnlyRenderer),
-            )
-
-            localOnlyContext.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
-
-            assertTrue(localImage.accept(localOnlyRenderer).startsWith("<img src=\"media/icon@"))
-        }
-    }
-
-    @Test
     fun `resource exportation`() {
         val storage =
             MutableMediaStorage(
@@ -290,13 +217,14 @@ class MediaTest {
         resource.resources.first { it.name.startsWith("icon@") }.let { icon ->
             assertIs<BinaryOutputArtifact>(icon)
             assertEquals(storage.resolve("media/icon.png")?.name, icon.name)
-            assertTrue(File("src/test/resources/media/icon.png").readBytes().contentEquals(icon.content))
+            assertEquals(File("src/test/resources/media/icon.png").readBytes().toList(), icon.content)
         }
 
         resource.resources.first { it.name == "https-iamgio.eu-quarkdown-img-tbanner-light.png" }.let { banner ->
             assertIs<BinaryOutputArtifact>(banner)
-            assertTrue(
-                URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().contentEquals(banner.content),
+            assertEquals(
+                URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().toList(),
+                banner.content,
             )
         }
     }

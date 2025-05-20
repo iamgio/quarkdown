@@ -7,7 +7,6 @@ import com.quarkdown.cli.lib.QmdLibraries
 import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.cli.server.WebServerStarter
 import com.quarkdown.cli.util.cleanDirectory
-import com.quarkdown.cli.util.saveTo
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.error.FunctionRuntimeException
@@ -16,6 +15,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineException
+import com.quarkdown.core.pipeline.output.saveTo
 import com.quarkdown.server.message.Reload
 import com.quarkdown.server.message.ServerMessage
 import kotlin.system.exitProcess
@@ -46,7 +46,7 @@ fun runQuarkdown(
 
     // The pipeline that contains all the stages to go through,
     // from the source input to the final output.
-    val pipeline: Pipeline = PipelineInitialization.init(flavor, libraries, pipelineOptions)
+    val pipeline: Pipeline = PipelineInitialization.init(flavor, libraries, pipelineOptions, cliOptions.renderer)
 
     // Output directory to save the generated resources in.
     val outputDirectory = cliOptions.outputDirectory
