@@ -1,8 +1,8 @@
 package com.quarkdown.core.context.hooks
 
-import com.quarkdown.core.ast.attributes.AstAttributes
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.SectionLocation
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.SectionLocation
+import com.quarkdown.core.ast.attributes.location.setLocation
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
@@ -11,9 +11,11 @@ import com.quarkdown.core.context.MutableContext
 /**
  * Hook that stores the location of each [LocationTrackableNode] in the document.
  * @see LocationTrackableNode
- * @see AstAttributes.locations
+ * @see com.quarkdown.core.ast.attributes.location
  */
-class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHook {
+class LocationAwarenessHook(
+    private val context: MutableContext,
+) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         // Stores the current section location.
         // The key is the depth of the last heading found;
@@ -52,12 +54,13 @@ class LocationAwarenessHook(private val context: MutableContext) : AstIteratorHo
             if (!trackable.canTrackLocation) return@on
 
             val locationData =
-                location.asSequence()
+                location
+                    .asSequence()
                     .sortedBy { it.key }
                     .map { it.value }
 
             // Registration of the location.
-            context.attributes.locations[trackable] = SectionLocation(locationData.toList())
+            trackable.setLocation(context, SectionLocation(locationData.toList()))
         }
     }
 }

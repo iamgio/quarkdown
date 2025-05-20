@@ -3,7 +3,7 @@ package com.quarkdown.core.ast.quarkdown.block
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.SingleChildNestableNode
 import com.quarkdown.core.ast.attributes.CaptionableNode
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.visitor.node.NodeVisitor
 

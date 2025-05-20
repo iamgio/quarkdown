@@ -1,6 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block.list
 
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.ListItemVariant
 import com.quarkdown.core.ast.base.block.list.ListItemVariantVisitor

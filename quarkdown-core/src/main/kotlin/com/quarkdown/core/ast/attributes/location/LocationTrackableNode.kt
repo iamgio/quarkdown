@@ -1,7 +1,8 @@
-package com.quarkdown.core.ast.attributes
+package com.quarkdown.core.ast.attributes.location
 
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 
@@ -19,24 +20,22 @@ interface LocationTrackableNode : Node {
 }
 
 /**
- * The location of a node within the document, in terms of section indices.
- * Example:
- * ```markdown
- * # A
- * ## A.A
- * # B
- * ## B.A
- * Node <-- location: B.A, represented by the levels [2, 1]
- * ```
- * @param levels section indices
- */
-data class SectionLocation(val levels: List<Int>)
-
-/**
  * @return the location of this node within the document handled by [context],
  * or `null` if the location for [this] node is not registered
  */
-fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = context.attributes.locations[this]
+fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = context.attributes.of(this)[SectionLocationProperty]
+
+/**
+ * Registered the location of this node within the document handled by [context].
+ * @param context context where location data is stored
+ * @param location location to set
+ */
+fun LocationTrackableNode.setLocation(
+    context: MutableContext,
+    location: SectionLocation,
+) {
+    context.attributes.of(this) += SectionLocationProperty(location)
+}
 
 /**
  * @return the location of this node within the document handled by [context],
@@ -46,7 +45,7 @@ fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = cont
  * @param context context where location data is stored
  * @param format numbering format to apply in order to stringify the location
  * @see getLocation
- * @see com.quarkdown.core.document.numbering.NumberingFormat
+ * @see NumberingFormat
  * @see com.quarkdown.core.document.DocumentInfo.numberingOrDefault
  */
 fun LocationTrackableNode.formatLocation(

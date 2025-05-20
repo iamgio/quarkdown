@@ -2,10 +2,13 @@ package com.quarkdown.core.ast.attributes
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.property.AssociatedProperties
+import com.quarkdown.core.property.PropertyContainer
 
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [com.quarkdown.core.context.Context].
@@ -18,15 +21,20 @@ interface AstAttributes {
     val root: NestableNode?
 
     /**
-     * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
-     * contains its location in the document, in terms of section indices.
-     * @see com.quarkdown.core.context.hooks.LocationAwarenessHook for the storing stage
+     * Properties associated with nodes in the AST.
+     * These properties enrich the AST by storing additional information about the nodes, such as:
+     * - [com.quarkdown.core.ast.attributes.location.SectionLocationProperty] for tracking the location of [LocationTrackableNode]s;
      */
-    val locations: Map<LocationTrackableNode, SectionLocation>
+    val properties: AssociatedProperties<Node>
 
     /**
-     * Labels/identifiers of nodes that are assigned it based on their position,
-     * both own (see [locations]) and relative to others of the same kind.
+     * @see AssociatedProperties.of on [properties]
+     */
+    fun of(node: Node): PropertyContainer = properties.of(node)
+
+    /**
+     * Labels/identifiers of nodes assigned based on their position,
+     * either their own (see [LocationTrackableNode]) or relative to others.
      * The labels are often displayed in a caption.
      * Examples of these nodes are figures and tables.
      * For instance, depending on the document's [NumberingFormat],
@@ -80,8 +88,6 @@ interface AstAttributes {
  * and carry useful information for the next stages of the pipeline.
  * Storing these attributes while parsing prevents a further visit of the final tree.
  * @param root the root node of the tree. According to the architecture, this is set right after the parsing stage
- * @param locations the locations (in terms of section indices) of the nodes that request their location to be tracked.
- *                  This is populated in the tree traversal stage of the pipeline
  * @param linkDefinitions the defined links, which can be referenced by other nodes
  * @param functionCalls the function calls to be later executed
  * @param hasCode whether there is at least one code block.
@@ -90,8 +96,8 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
+    override val properties: AssociatedProperties<Node> = AssociatedProperties(),
     override val positionalLabels: MutableMap<Node, String> = mutableMapOf(),
-    override val locations: MutableMap<LocationTrackableNode, SectionLocation> = mutableMapOf(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,

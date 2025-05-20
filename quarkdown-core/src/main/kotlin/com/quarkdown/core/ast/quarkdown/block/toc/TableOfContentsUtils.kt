@@ -1,6 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.inline.Link

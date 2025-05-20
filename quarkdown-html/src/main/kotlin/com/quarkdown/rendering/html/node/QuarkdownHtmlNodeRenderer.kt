@@ -4,9 +4,9 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.AstAttributes
 import com.quarkdown.core.ast.attributes.CaptionableNode
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.formatLocation
 import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.formatLocation
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table

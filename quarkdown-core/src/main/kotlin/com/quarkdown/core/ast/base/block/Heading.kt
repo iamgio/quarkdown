@@ -1,9 +1,9 @@
 package com.quarkdown.core.ast.base.block
 
 import com.quarkdown.core.ast.InlineContent
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.Heading.Companion.marker
 import com.quarkdown.core.visitor.node.NodeVisitor

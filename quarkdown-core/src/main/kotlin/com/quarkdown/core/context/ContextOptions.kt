@@ -25,7 +25,7 @@ interface ContextOptions : MediaStorageOptions {
     /**
      * Whether certain nodes can be aware of their location within the document
      * in order to display it, for example in headings.
-     * @see com.quarkdown.core.ast.attributes.LocationTrackableNode
+     * @see com.quarkdown.core.ast.attributes.location.LocationTrackableNode
      */
     val enableLocationAwareness: Boolean
 }

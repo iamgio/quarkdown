@@ -1,9 +1,11 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.location.getLocation
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Strong
@@ -90,8 +92,7 @@ class TreeTraversalTest {
             .on<Code> {
                 assertEquals("Hello, world!", it.content)
                 assertEquals("java", it.language)
-            }
-            .onFinished { finished = true }
+            }.onFinished { finished = true }
             .traverse(node)
 
         assertTrue(finished)
@@ -124,8 +125,6 @@ class TreeTraversalTest {
             .attach(LocationAwarenessHook(context))
             .traverse(tree)
 
-        val locations = context.attributes.locations
-
         assertEquals(
             mapOf(
                 "1" to listOf(1),
@@ -138,7 +137,10 @@ class TreeTraversalTest {
                 "2" to listOf(2),
                 "3" to listOf(3),
             ),
-            locations
+            tree
+                .flattenedChildren()
+                .filterIsInstance<Heading>()
+                .associateWith { it.getLocation(context)!! }
                 .mapKeys { (node, _) -> (node as TextNode).text.toPlainText() }
                 .mapValues { (_, location) -> location.levels },
         )
@@ -176,7 +178,8 @@ class TreeTraversalTest {
                 .attach(LocationAwareLabelStorerHook(context))
                 .traverse(tree)
 
-            return context.attributes.positionalLabels.values.toList()
+            return context.attributes.positionalLabels.values
+                .toList()
         }
 
         assertEquals(
@@ -235,7 +238,8 @@ class TreeTraversalTest {
 
         assertEquals(
             listOf("0.1", "1.1", "A", "1.2", "B", "2.1"),
-            context.attributes.positionalLabels.values.toList(),
+            context.attributes.positionalLabels.values
+                .toList(),
         )
     }
 }
