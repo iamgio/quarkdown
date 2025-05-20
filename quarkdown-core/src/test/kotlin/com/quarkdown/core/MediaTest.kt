@@ -217,13 +217,14 @@ class MediaTest {
         resource.resources.first { it.name.startsWith("icon@") }.let { icon ->
             assertIs<BinaryOutputArtifact>(icon)
             assertEquals(storage.resolve("media/icon.png")?.name, icon.name)
-            assertTrue(File("src/test/resources/media/icon.png").readBytes().contentEquals(icon.content))
+            assertEquals(File("src/test/resources/media/icon.png").readBytes().toList(), icon.content)
         }
 
         resource.resources.first { it.name == "https-iamgio.eu-quarkdown-img-tbanner-light.png" }.let { banner ->
             assertIs<BinaryOutputArtifact>(banner)
-            assertTrue(
-                URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().contentEquals(banner.content),
+            assertEquals(
+                URL("https://iamgio.eu/quarkdown/img/tbanner-light.png").readBytes().toList(),
+                banner.content,
             )
         }
     }

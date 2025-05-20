@@ -12,18 +12,23 @@ import com.quarkdown.core.pipeline.output.OutputResource
  * A converter of a [Media] to an [OutputResource].
  * @param name generated media name
  */
-class MediaOutputResourceConverter(private val name: String) : MediaVisitor<OutputResource> {
+class MediaOutputResourceConverter(
+    private val name: String,
+) : MediaVisitor<OutputResource> {
     override fun visit(media: LocalMedia) =
         BinaryOutputArtifact(
             name,
-            media.file.readBytes(),
+            media.file.readBytes().toList(),
             ArtifactType.AUTO,
         )
 
     override fun visit(media: RemoteMedia) =
         BinaryOutputArtifact(
             name,
-            media.url.openStream().readBytes(),
+            media.url
+                .openStream()
+                .readBytes()
+                .toList(),
             ArtifactType.AUTO,
         )
 }

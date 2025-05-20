@@ -200,7 +200,7 @@ class MiscTest {
             )
             assertContentEquals(
                 this.toByteArray(),
-                BinaryOutputArtifact("a/rt*fact::2", this.toByteArray(), ArtifactType.JAVASCRIPT)
+                BinaryOutputArtifact("a/rt*fact::2", this.toByteArray().toList(), ArtifactType.JAVASCRIPT)
                     .accept(exporter)
                     .also { assertEquals("a-rt-fact-2.js", it.name) }
                     .readBytes(),
@@ -208,7 +208,7 @@ class MiscTest {
         }
 
         with("Quarkdown".repeat(1000)) {
-            LazyOutputArtifact("artifact3", { this.toByteArray() }, ArtifactType.CSS)
+            LazyOutputArtifact("artifact3", { this.toByteArray().toList() }, ArtifactType.CSS)
                 .accept(exporter)
                 .also { assertEquals("artifact3.css", it.name) }
                 .let { file ->
@@ -238,13 +238,13 @@ class MiscTest {
                 "Group 1",
                 setOf(
                     TextOutputArtifact("Artifact 5", "Hello, world!", ArtifactType.HTML),
-                    BinaryOutputArtifact("arti-fact6", "Quarkdown".toByteArray(), ArtifactType.JAVASCRIPT),
-                    LazyOutputArtifact("artifact7", { "Quarkdown".toByteArray() }, ArtifactType.CSS),
+                    BinaryOutputArtifact("arti-fact6", "Quarkdown".toByteArray().toList(), ArtifactType.JAVASCRIPT),
+                    LazyOutputArtifact("artifact7", { "Quarkdown".toByteArray().toList() }, ArtifactType.CSS),
                     OutputResourceGroup(
                         "Group 2",
                         setOf(
                             TextOutputArtifact("Artifact 8", "Hello, world!", ArtifactType.HTML),
-                            BinaryOutputArtifact("art*fact/9", "Quarkdown".toByteArray(), ArtifactType.JAVASCRIPT),
+                            BinaryOutputArtifact("art*fact/9", "Quarkdown".toByteArray().toList(), ArtifactType.JAVASCRIPT),
                         ),
                     ),
                     LazyOutputArtifact.internal(
@@ -255,7 +255,7 @@ class MiscTest {
                     ),
                     BinaryOutputArtifact(
                         "artifact11",
-                        "Hello world".repeat(100).toByteArray(),
+                        "Hello world".repeat(100).toByteArray().toList(),
                         ArtifactType.JAVASCRIPT,
                     ),
                 ),

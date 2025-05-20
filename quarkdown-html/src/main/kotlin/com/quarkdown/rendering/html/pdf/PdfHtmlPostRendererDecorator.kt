@@ -40,4 +40,9 @@ class PdfHtmlPostRendererDecorator(
             ?.let(::setOf)
             ?: emptySet()
     }
+
+    override fun wrapResources(
+        name: String,
+        resources: Set<OutputResource>,
+    ): OutputResource? = (resources.singleOrNull() as? BinaryOutputArtifact)?.copy(name = "$name.pdf")
 }

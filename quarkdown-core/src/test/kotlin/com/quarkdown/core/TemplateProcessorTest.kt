@@ -197,7 +197,7 @@ class TemplateProcessorTest {
 
     @Test
     fun `from resource`() {
-        val template = TemplateProcessor.fromResourceName("/postrendering/template.txt")
+        val template = TemplateProcessor.fromResourceName("/template/template.txt")
         template.optionalValue("NAME", "world")
         template.conditional("ASK", true)
 

@@ -38,6 +38,11 @@ interface PostRenderer {
      * @return the generated output resources
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
+
+    fun wrapResources(
+        name: String,
+        resources: Set<OutputResource>,
+    ): OutputResource?
 }
 
 /**

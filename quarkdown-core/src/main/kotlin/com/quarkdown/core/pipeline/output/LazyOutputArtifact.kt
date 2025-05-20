@@ -11,9 +11,9 @@ import kotlin.reflect.KClass
  */
 data class LazyOutputArtifact(
     override val name: String,
-    override val content: () -> ByteArray,
+    override val content: () -> List<Byte>,
     override val type: ArtifactType,
-) : OutputArtifact<() -> ByteArray> {
+) : OutputArtifact<() -> List<Byte>> {
     // When visited, the content is loaded and a [BinaryOutputArtifact] is created and visited instead.
     override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(BinaryOutputArtifact(name, content(), type))
 
@@ -33,8 +33,10 @@ data class LazyOutputArtifact(
         ) = LazyOutputArtifact(
             name,
             content = {
-                referenceClass.java.getResource(resource)
+                referenceClass.java
+                    .getResource(resource)
                     ?.readBytes()
+                    ?.toList()
                     ?: throw IOPipelineException("Resource $resource not found")
             },
             type,

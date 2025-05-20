@@ -222,4 +222,9 @@ class HtmlPostRenderer(
             pushArtifact("code", condition = context.attributes.hasCode)
             pushArtifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
+
+    override fun wrapResources(
+        name: String,
+        resources: Set<OutputResource>,
+    ) = OutputResourceGroup(name, resources)
 }

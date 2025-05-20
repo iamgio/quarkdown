@@ -8,11 +8,11 @@ import java.io.File
  * @param content binary content of the resource
  * @param type type of content the resource contains
  */
-class BinaryOutputArtifact(
+data class BinaryOutputArtifact(
     override val name: String,
-    override val content: ByteArray,
+    override val content: List<Byte>,
     override val type: ArtifactType,
-) : OutputArtifact<ByteArray> {
+) : OutputArtifact<List<Byte>> {
     override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(this)
 
     companion object {
@@ -24,7 +24,7 @@ class BinaryOutputArtifact(
         fun fromFile(file: File): BinaryOutputArtifact =
             BinaryOutputArtifact(
                 name = file.name,
-                content = file.readBytes(),
+                content = file.readBytes().toList(),
                 type = ArtifactType.AUTO,
             )
     }
