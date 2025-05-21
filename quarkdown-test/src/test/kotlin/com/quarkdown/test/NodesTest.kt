@@ -1,5 +1,7 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals

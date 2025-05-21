@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
@@ -95,7 +96,7 @@ class HtmlPostRendererTest {
 
     @Test
     fun `math conditional`() {
-        context.attributes.hasMath = true
+        context.attributes.markMathPresence()
         val postRenderer =
             HtmlPostRenderer(context) {
                 TemplateProcessor("<body>[[if:MATH]][[CONTENT]][[endif:MATH]]</body>")
@@ -109,7 +110,6 @@ class HtmlPostRendererTest {
 
     @Test
     fun `code conditional`() {
-        context.attributes.hasCode = false
         val postRenderer =
             HtmlPostRenderer(context) {
                 TemplateProcessor(
@@ -161,8 +161,7 @@ class HtmlPostRendererTest {
         context.documentInfo.name = "Quarkdown"
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
-        context.attributes.hasMath = true
-        context.attributes.hasCode = false
+        context.attributes.markMathPresence()
 
         val postRenderer =
             HtmlPostRenderer(context) {
@@ -241,8 +240,7 @@ class HtmlPostRendererTest {
         context.documentInfo.name = "Quarkdown"
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
-        context.attributes.hasMath = true
-        context.attributes.hasCode = false
+        context.attributes.markMathPresence()
         context.documentInfo.pageFormat.pageWidth = 8.5.inch
         context.documentInfo.pageFormat.pageHeight = 11.0.inch
         context.documentInfo.pageFormat.margin = Sizes(1.0.inch)
@@ -269,8 +267,7 @@ class HtmlPostRendererTest {
     private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
         context.documentInfo.type = DocumentType.SLIDES
         context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
-        context.attributes.hasMath = true
-        context.attributes.hasCode = false
+        context.attributes.markMathPresence()
 
         val postRenderer = HtmlPostRenderer(context)
         val html = "<html><head></head><body></body></html>"

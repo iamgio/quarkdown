@@ -35,6 +35,18 @@ interface AstAttributes {
     fun of(node: Node): PropertyContainer<Any> = properties.of(node)
 
     /**
+     * Properties associated with third-party elements in the AST.
+     * These properties are used to track the presence of third-party elements in the AST,
+     * in order to conditionally load third-party libraries in the final artifact
+     * to avoid unnecessary bloat and improve performance.
+     *
+     * These properties are updated during the tree traversal stage of the pipeline.
+     * @see com.quarkdown.core.ast.attributes.presence for properties
+     * @see com.quarkdown.core.context.hooks.presence for hooks that scan the AST and set these properties
+     */
+    val thirdPartyPresenceProperties: PropertyContainer<Boolean>
+
+    /**
      * The defined links, which can be referenced by other nodes.
      */
     val linkDefinitions: List<LinkDefinition>
@@ -43,24 +55,6 @@ interface AstAttributes {
      * The function calls to be later executed.
      */
     val functionCalls: List<FunctionCallNode>
-
-    /**
-     * Whether there is at least one code block.
-     * This is used to load the HighlightJS library in HTML rendering only if necessary.
-     */
-    val hasCode: Boolean
-
-    /**
-     * Whether there is at least one math block or inline.
-     * This is used to load the KaTeX library in HTML rendering only if necessary.
-     */
-    val hasMath: Boolean
-
-    /**
-     * Whether there is at least one Mermaid diagram.
-     * This is used to load the Mermaid library in HTML rendering only if necessary.
-     */
-    val hasMermaidDiagram: Boolean
 
     /**
      * The table of contents of all the headings in the document.
@@ -88,11 +82,9 @@ interface AstAttributes {
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
     override val properties: MutableAssociatedProperties<Node, Any> = MutableAssociatedProperties(),
+    override val thirdPartyPresenceProperties: MutablePropertyContainer<Boolean> = MutablePropertyContainer(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
-    override var hasCode: Boolean = false,
-    override var hasMath: Boolean = false,
-    override var hasMermaidDiagram: Boolean = false,
     override var tableOfContents: TableOfContents? = null,
 ) : AstAttributes {
     override fun of(node: Node): MutablePropertyContainer<Any> = properties.of(node)

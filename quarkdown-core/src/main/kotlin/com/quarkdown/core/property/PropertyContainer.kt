@@ -6,6 +6,7 @@ package com.quarkdown.core.property
  * @see MutablePropertyContainer
  * @see Property
  * @see AssociatedProperties
+ * @see com.quarkdown.core.ast.attributes.AstAttributes for an example of usage
  */
 interface PropertyContainer<T> {
     /**

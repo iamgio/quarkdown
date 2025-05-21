@@ -1,5 +1,7 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.core.function.error.UnresolvedReferenceException

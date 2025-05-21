@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertContains
