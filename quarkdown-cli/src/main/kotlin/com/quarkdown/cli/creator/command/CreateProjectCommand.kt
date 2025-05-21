@@ -96,7 +96,7 @@ class CreateProjectCommand : CliktCommand("create") {
         )
 
     private fun createProjectCreator(): ProjectCreator {
-        val mainFileName = this.mainFileName ?: directory.name
+        val mainFileName = this.mainFileName ?: directory.canonicalFile.name
         return ProjectCreator(
             templateProcessorFactory = DefaultProjectCreatorTemplateProcessorFactory(this.createDocumentInfo()),
             initialContentSupplier =

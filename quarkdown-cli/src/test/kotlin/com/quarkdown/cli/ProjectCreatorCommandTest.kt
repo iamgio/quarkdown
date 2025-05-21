@@ -21,12 +21,11 @@ class ProjectCreatorCommandTest : TempDirectory() {
 
     private fun test(
         additionalArgs: Array<String> = emptyArray(),
+        fixedMainFileName: Boolean = true,
         directory: File = super.directory,
     ) {
         command.test(
-            directory.absolutePath,
-            "--main-file",
-            "main",
+            directory.resolve(".").absolutePath, // Testing canonical path.
             "--name",
             "test",
             "--authors",
@@ -40,14 +39,17 @@ class ProjectCreatorCommandTest : TempDirectory() {
             "--layout-theme",
             "latex",
             *additionalArgs,
+            *if (fixedMainFileName) arrayOf("--main-file", "main") else emptyArray(),
         )
         assertTrue(directory.exists())
 
         println(directory.listFiles()!!.map { it.name })
 
-        assertTrue("main.qmd" in directory.listFiles()!!.map { it.name })
+        val mainFileName = (if (fixedMainFileName) "main" else directory.name) + ".qmd"
 
-        val main = directory.listFiles()!!.first { it.name == "main.qmd" }.readText()
+        assertTrue(mainFileName in directory.listFiles()!!.map { it.name })
+
+        val main = directory.listFiles()!!.first { it.name == mainFileName }.readText()
         assertTrue(main.startsWith(".docname {test}"))
         assertTrue("- Aaa" in main)
         assertTrue("- Bbb" in main)
@@ -60,6 +62,12 @@ class ProjectCreatorCommandTest : TempDirectory() {
     @Test
     fun default() {
         test()
+        assertEquals(2, directory.listFiles()!!.size)
+    }
+
+    @Test
+    fun `default with relative name`() {
+        test(fixedMainFileName = false)
         assertEquals(2, directory.listFiles()!!.size)
     }
 
