@@ -13,7 +13,7 @@ private const val HTML_PDF = "html-pdf"
 
 /**
  * Given a [CliOptions] instance, retrieves the appropriate renderer (e.g. HTML, PDF) for the pipeline
- * based on [CliOptions.rendererName] (case-insensitive), [CliOptions.generatePdf] and other options.
+ * based on [CliOptions.rendererName] (case-insensitive), [CliOptions.exportPdf] and other options.
  */
 class RendererRetriever(
     private val options: CliOptions,
@@ -38,7 +38,7 @@ class RendererRetriever(
 
     private fun isHtml() = name == HTML
 
-    private fun isHtmlPdf() = name == HTML_PDF || (name == HTML && options.generatePdf)
+    private fun isHtmlPdf() = name == HTML_PDF || (name == HTML && options.exportPdf)
 
     private fun createHtmlPdfExportOptions() =
         HtmlPdfExportOptions(

@@ -2,10 +2,10 @@ package com.quarkdown.core.flavor.base
 
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.hooks.CodePresenceHook
 import com.quarkdown.core.context.hooks.LinkDefinitionRegistrationHook
-import com.quarkdown.core.context.hooks.MathPresenceHook
-import com.quarkdown.core.context.hooks.MermaidDiagramPresenceHook
+import com.quarkdown.core.context.hooks.presence.CodePresenceHook
+import com.quarkdown.core.context.hooks.presence.MathPresenceHook
+import com.quarkdown.core.context.hooks.presence.MermaidDiagramPresenceHook
 import com.quarkdown.core.flavor.TreeIteratorFactory
 
 /**

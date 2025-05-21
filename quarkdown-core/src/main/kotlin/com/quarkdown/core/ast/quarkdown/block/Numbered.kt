@@ -1,8 +1,8 @@
 package com.quarkdown.core.ast.quarkdown.block
 
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.SectionLocation
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.visitor.node.NodeVisitor
 

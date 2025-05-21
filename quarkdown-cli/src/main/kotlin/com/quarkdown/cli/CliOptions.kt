@@ -13,6 +13,8 @@ import java.io.File
  * @param clean whether to clean the output directory before generating new files
  * @param nodePath path to the Node.js executable
  * @param npmPath path to the npm executable
+ * @param generatePdf whether to generate a PDF file
+ * @param noPdfSandbox whether to disable the Chrome sandbox for PDF export
  */
 data class CliOptions(
     val source: File?,
@@ -22,8 +24,8 @@ data class CliOptions(
     val clean: Boolean,
     val nodePath: String,
     val npmPath: String,
+    val exportPdf: Boolean = false,
     val noPdfSandbox: Boolean = false,
-    val generatePdf: Boolean = false,
 ) {
     /**
      * The rendering target to generate the output for.

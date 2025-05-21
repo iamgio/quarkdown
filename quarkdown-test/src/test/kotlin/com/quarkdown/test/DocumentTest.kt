@@ -1,6 +1,8 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType

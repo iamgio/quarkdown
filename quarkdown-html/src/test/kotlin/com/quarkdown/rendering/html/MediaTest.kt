@@ -1,86 +1,85 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.rendering.html.node.QuarkdownHtmlNodeRenderer
 import java.io.File
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+
+private const val WORKING_DIR_PATH = "src/test/resources"
+private const val REMOTE_URL = "https://iamgio.eu/quarkdown/img/logo-light.svg"
+private const val REMOTE_OUT_NAME = "https-iamgio.eu-quarkdown-img-logo-light.svg"
+private const val LOCAL_PATH = "media/icon.png"
+private const val OUT_DIR = "media"
 
 /**
  * Tests for media resolution and rendering via the HTML renderer.
  */
 class MediaTest {
-    @Test
-    fun `path update`() {
-        val context = MutableContext(QuarkdownFlavor)
+    private lateinit var context: MutableContext
+    private lateinit var renderer: QuarkdownHtmlNodeRenderer
+
+    @BeforeTest
+    fun setUp() {
+        context = MutableContext(QuarkdownFlavor)
+        renderer = QuarkdownHtmlNodeRenderer(context)
         context.options.enableLocalMediaStorage = true
         context.options.enableRemoteMediaStorage = true
+    }
 
-        val renderer = QuarkdownHtmlNodeRenderer(context)
+    private fun Node.attach(media: StoredMedia?) {
+        if (media == null) return
+        context.attributes.of(this) += StoredMediaProperty(media)
+    }
 
-        context.mediaStorage.register("https://iamgio.eu/quarkdown/img/logo-light.svg", workingDirectory = null)
-
-        val remoteImage =
-            Image(
-                Link(
-                    label = listOf(),
-                    url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                    title = null,
-                ),
-                width = null,
-                height = null,
-            )
-
-        assertEquals(
-            "<img src=\"media/https-iamgio.eu-quarkdown-img-logo-light.svg\" alt=\"\" />",
-            remoteImage.accept(renderer),
+    private fun remoteImage(media: StoredMedia?) =
+        Image(
+            Link(
+                label = listOf(),
+                url = REMOTE_URL,
+                title = null,
+            ).apply { attach(media) },
+            width = null,
+            height = null,
         )
 
-        context.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
+    private fun localImage(media: StoredMedia?) =
+        Image(
+            Link(
+                label = listOf(),
+                url = LOCAL_PATH,
+                title = null,
+            ).apply { attach(media) },
+            width = null,
+            height = null,
+        )
 
-        val localImage =
-            Image(
-                Link(
-                    label = listOf(),
-                    url = "media/icon.png",
-                    title = null,
-                ),
-                width = null,
-                height = null,
-            )
+    @Test
+    fun `remote media path update`() {
+        val media =
+            context.mediaStorage.register(REMOTE_URL, workingDirectory = null)!!
 
-        assertTrue(localImage.accept(renderer).startsWith("<img src=\"media/icon@"))
+        val image = remoteImage(media)
 
-        MutableContext(QuarkdownFlavor).let { localOnlyContext ->
-            localOnlyContext.options.enableLocalMediaStorage = true
-            localOnlyContext.options.enableRemoteMediaStorage = false
+        assertEquals(
+            "<img src=\"$OUT_DIR/$REMOTE_OUT_NAME\" alt=\"\" />",
+            image.accept(renderer),
+        )
+    }
 
-            localOnlyContext.mediaStorage.register(
-                "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                workingDirectory = null,
-            )
+    @Test
+    fun `local media path update`() {
+        val media = context.mediaStorage.register(LOCAL_PATH, workingDirectory = File(WORKING_DIR_PATH))!!
+        val image = localImage(media)
 
-            val localOnlyRenderer = QuarkdownHtmlNodeRenderer(localOnlyContext)
-
-            assertEquals(
-                "<img src=\"https://iamgio.eu/quarkdown/img/logo-light.svg\" alt=\"\" />",
-                remoteImage.accept(localOnlyRenderer),
-            )
-
-            // Not yet registered.
-
-            assertEquals(
-                "<img src=\"media/icon.png\" alt=\"\" />",
-                localImage.accept(localOnlyRenderer),
-            )
-
-            localOnlyContext.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))
-
-            assertTrue(localImage.accept(localOnlyRenderer).startsWith("<img src=\"media/icon@"))
-        }
+        assertTrue(image.accept(renderer).startsWith("<img src=\"$OUT_DIR/icon@"))
     }
 }

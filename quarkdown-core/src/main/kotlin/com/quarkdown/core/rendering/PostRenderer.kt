@@ -39,6 +39,14 @@ interface PostRenderer {
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
 
+    /**
+     * Given the output [resources] produced by [generateResources], merges them into a single resource
+     * which complies with [com.quarkdown.core.pipeline.Pipeline.execute]'s output type.
+     *
+     * Wrapping can happen by:
+     * - Grouping the resources into an [com.quarkdown.core.pipeline.output.OutputResourceGroup] (e.g. HTML output).
+     * - Selecting a single resource from the set (e.g. PDF output).
+     */
     fun wrapResources(
         name: String,
         resources: Set<OutputResource>,

@@ -2,10 +2,14 @@ package com.quarkdown.core.ast.attributes
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.toc.TableOfContents
-import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.property.AssociatedProperties
+import com.quarkdown.core.property.MutableAssociatedProperties
+import com.quarkdown.core.property.MutablePropertyContainer
+import com.quarkdown.core.property.PropertyContainer
 
 /**
  * Additional information about the node tree, produced by the parsing stage and stored in a [com.quarkdown.core.context.Context].
@@ -18,22 +22,30 @@ interface AstAttributes {
     val root: NestableNode?
 
     /**
-     * Storage that, for each node that requests its location to be tracked ([LocationTrackableNode]),
-     * contains its location in the document, in terms of section indices.
-     * @see com.quarkdown.core.context.hooks.LocationAwarenessHook for the storing stage
+     * Properties associated with nodes in the AST.
+     * These properties enrich the AST by storing additional information about the nodes, such as:
+     * - [com.quarkdown.core.ast.attributes.location.SectionLocationProperty] for tracking the location of [LocationTrackableNode]s;
+     * - [com.quarkdown.core.ast.attributes.location.LocationLabelProperty] for storing formatted labels of [LocationTrackableNode]s;
+     * - [com.quarkdown.core.ast.media.StoredMediaProperty] for attaching [com.quarkdown.core.media.Media] references.
      */
-    val locations: Map<LocationTrackableNode, SectionLocation>
+    val properties: AssociatedProperties<Node, Any>
 
     /**
-     * Labels/identifiers of nodes that are assigned it based on their position,
-     * both own (see [locations]) and relative to others of the same kind.
-     * The labels are often displayed in a caption.
-     * Examples of these nodes are figures and tables.
-     * For instance, depending on the document's [NumberingFormat],
-     * an element may be labeled as `1.1`, `1.2`, `1.3`, `2.1`, etc.
-     * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook for the storing stage
+     * @see AssociatedProperties.of on [properties]
      */
-    val positionalLabels: Map<Node, String>
+    fun of(node: Node): PropertyContainer<Any> = properties.of(node)
+
+    /**
+     * Properties associated with third-party elements in the AST.
+     * These properties are used to track the presence of third-party elements in the AST,
+     * in order to conditionally load third-party libraries in the final artifact
+     * to avoid unnecessary bloat and improve performance.
+     *
+     * These properties are updated during the tree traversal stage of the pipeline.
+     * @see com.quarkdown.core.ast.attributes.presence for properties
+     * @see com.quarkdown.core.context.hooks.presence for hooks that scan the AST and set these properties
+     */
+    val thirdPartyPresenceProperties: PropertyContainer<Boolean>
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -44,24 +56,6 @@ interface AstAttributes {
      * The function calls to be later executed.
      */
     val functionCalls: List<FunctionCallNode>
-
-    /**
-     * Whether there is at least one code block.
-     * This is used to load the HighlightJS library in HTML rendering only if necessary.
-     */
-    val hasCode: Boolean
-
-    /**
-     * Whether there is at least one math block or inline.
-     * This is used to load the KaTeX library in HTML rendering only if necessary.
-     */
-    val hasMath: Boolean
-
-    /**
-     * Whether there is at least one Mermaid diagram.
-     * This is used to load the Mermaid library in HTML rendering only if necessary.
-     */
-    val hasMermaidDiagram: Boolean
 
     /**
      * The table of contents of all the headings in the document.
@@ -80,8 +74,6 @@ interface AstAttributes {
  * and carry useful information for the next stages of the pipeline.
  * Storing these attributes while parsing prevents a further visit of the final tree.
  * @param root the root node of the tree. According to the architecture, this is set right after the parsing stage
- * @param locations the locations (in terms of section indices) of the nodes that request their location to be tracked.
- *                  This is populated in the tree traversal stage of the pipeline
  * @param linkDefinitions the defined links, which can be referenced by other nodes
  * @param functionCalls the function calls to be later executed
  * @param hasCode whether there is at least one code block.
@@ -90,14 +82,13 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
-    override val positionalLabels: MutableMap<Node, String> = mutableMapOf(),
-    override val locations: MutableMap<LocationTrackableNode, SectionLocation> = mutableMapOf(),
+    override val properties: MutableAssociatedProperties<Node, Any> = MutableAssociatedProperties(),
+    override val thirdPartyPresenceProperties: MutablePropertyContainer<Boolean> = MutablePropertyContainer(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
-    override var hasCode: Boolean = false,
-    override var hasMath: Boolean = false,
-    override var hasMermaidDiagram: Boolean = false,
     override var tableOfContents: TableOfContents? = null,
 ) : AstAttributes {
+    override fun of(node: Node): MutablePropertyContainer<Any> = properties.of(node)
+
     override fun toMutable(): MutableAstAttributes = this.copy()
 }

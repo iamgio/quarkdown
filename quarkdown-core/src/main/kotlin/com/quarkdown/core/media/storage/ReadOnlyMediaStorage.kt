@@ -14,6 +14,12 @@ import com.quarkdown.core.pipeline.output.OutputResource
  */
 interface ReadOnlyMediaStorage {
     /**
+     * The name of the storage.
+     * It also defines the name of the subdirectory in the output directory where media from this storage is saved.
+     */
+    val name: String
+
+    /**
      * All the stored entries.
      */
     val all: Set<StoredMedia>
@@ -30,14 +36,6 @@ interface ReadOnlyMediaStorage {
      * @return the matching media, if any is found
      */
     fun resolve(path: String): StoredMedia?
-
-    /**
-     * Retrieves the media location of a media file, starting from the output directory.
-     * If the media file is not found in the local storage, a fallback location is returned, which is usually the original path.
-     * @param path path of the media to resolve, either a local path or a URL
-     * @return the resolved media location, or the fallback location if the media is not found
-     */
-    fun resolveMediaLocationOrFallback(path: String): String
 
     /**
      * Converts this storage to an [OutputResource].

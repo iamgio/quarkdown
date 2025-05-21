@@ -2,16 +2,16 @@ package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.AstAttributes
-import com.quarkdown.core.ast.attributes.CaptionableNode
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.formatLocation
 import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.formatLocation
+import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
@@ -101,7 +101,7 @@ class QuarkdownHtmlNodeRenderer(
      * It allows localizing the kind name depending on the current locale.
      * @param idPrefix prefix for the ID. For instance, the prefix `figure` lets the ID be `figure-X.Y`, where `X.Y` is the label.
      * @see CaptionableNode
-     * @see AstAttributes.positionalLabels
+     * @see getLocationLabel to retrieve the numbered label
      */
     private fun HtmlTagBuilder.numberedCaption(
         node: CaptionableNode,
@@ -110,7 +110,7 @@ class QuarkdownHtmlNodeRenderer(
         idPrefix: String = kindLocalizationKey,
     ): HtmlTagBuilder {
         // The location-based, numbering format dependent identifier of the node, e.g. 1.1.
-        val label = context.attributes.positionalLabels[node]
+        val label = (node as? LocationTrackableNode)?.getLocationLabel(context)
 
         return this.apply {
             // The label is set as the ID of the element.
@@ -212,7 +212,7 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: Numbered) =
         buildMultiTag {
             // Evaluate content with the node's location as an argument.
-            +node.children(context.attributes.positionalLabels[node] ?: "")
+            +node.children(node.getLocationLabel(context) ?: "")
         }
 
     override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)

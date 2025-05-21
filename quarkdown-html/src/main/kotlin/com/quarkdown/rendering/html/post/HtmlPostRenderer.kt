@@ -1,5 +1,8 @@
 package com.quarkdown.rendering.html.post
 
+import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.core.ast.attributes.presence.hasMath
+import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType

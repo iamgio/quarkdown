@@ -3,8 +3,8 @@ package com.quarkdown.core.ast.base.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.CaptionableNode
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -18,13 +18,16 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class Table(
     val columns: List<Column>,
     override val caption: String? = null,
-) : NestableNode, LocationTrackableNode, CaptionableNode {
+) : NestableNode,
+    LocationTrackableNode,
+    CaptionableNode {
     // Exposing all the cell contents as this table's direct children
     // allows visiting them during a tree traversal.
     // If they were isolated, they would be unreachable.
     override val children: List<Node>
         get() =
-            columns.asSequence()
+            columns
+                .asSequence()
                 .flatMap { it.cells + it.header }
                 .flatMap { it.text }
                 .toList()
@@ -35,13 +38,19 @@ class Table(
      * @param header header cell
      * @param cells other cells
      */
-    data class Column(val alignment: Alignment, val header: Cell, val cells: List<Cell>)
+    data class Column(
+        val alignment: Alignment,
+        val header: Cell,
+        val cells: List<Cell>,
+    )
 
     /**
      * A single cell of a table.
      * @param text content
      */
-    data class Cell(val text: InlineContent)
+    data class Cell(
+        val text: InlineContent,
+    )
 
     /**
      * Text alignment of a [Column].

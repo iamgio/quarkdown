@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.numbering
 
-import com.quarkdown.core.ast.attributes.SectionLocation
+import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.document.numbering.NumberingFormat.Companion.fromString
 import com.quarkdown.core.util.StringCase
 

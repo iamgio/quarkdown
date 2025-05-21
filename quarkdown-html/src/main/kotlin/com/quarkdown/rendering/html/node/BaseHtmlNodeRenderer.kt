@@ -29,6 +29,7 @@ import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
@@ -229,7 +230,7 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Image) =
         tagBuilder("img")
-            .attribute("src", context.mediaStorage.resolveMediaLocationOrFallback(node.link.url))
+            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.url)
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .style {

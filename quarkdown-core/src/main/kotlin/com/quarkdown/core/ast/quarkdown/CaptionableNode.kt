@@ -1,4 +1,4 @@
-package com.quarkdown.core.ast.attributes
+package com.quarkdown.core.ast.quarkdown
 
 import com.quarkdown.core.ast.Node
 

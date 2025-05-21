@@ -1,6 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.attributes.SectionLocation
+import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.context.toc.TableOfContents

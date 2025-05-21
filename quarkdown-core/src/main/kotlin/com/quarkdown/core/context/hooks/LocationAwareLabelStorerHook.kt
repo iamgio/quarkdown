@@ -1,8 +1,9 @@
 package com.quarkdown.core.context.hooks
 
-import com.quarkdown.core.ast.attributes.AstAttributes
-import com.quarkdown.core.ast.attributes.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.SectionLocation
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.location.SectionLocation
+import com.quarkdown.core.ast.attributes.location.getLocation
+import com.quarkdown.core.ast.attributes.location.setLocationLabel
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
@@ -38,8 +39,7 @@ import com.quarkdown.core.document.numbering.NumberingFormat
  * - If the numbering format for figures is `1`, the first figure will be labeled as `1`,
  *   the second as `2`, and the third as `3`.
  *
- * @see AstAttributes.positionalLabels
- * @see AstAttributes.locations
+ * @see com.quarkdown.core.ast.attributes.location
  * @see LocationTrackableNode
  */
 class LocationAwareLabelStorerHook(
@@ -85,7 +85,7 @@ class LocationAwareLabelStorerHook(
             if (!filter(node)) return@on
 
             // A location has to be already stored for the given node (see LocationAwarenessHook)
-            val location = context.attributes.locations[node] ?: return@on
+            val location = node.getLocation(context) ?: return@on
 
             // The location of the element is trimmed to the desired accuracy.
             val trimmedLocation =
@@ -111,7 +111,7 @@ class LocationAwareLabelStorerHook(
             val label = location.copy(levels = trimmedLocation.levels + count)
 
             // The stringified label is stored.
-            context.attributes.positionalLabels[node] = format.format(label)
+            node.setLocationLabel(context, format.format(label))
         }
     }
 }
