@@ -25,13 +25,14 @@ interface AstAttributes {
      * Properties associated with nodes in the AST.
      * These properties enrich the AST by storing additional information about the nodes, such as:
      * - [com.quarkdown.core.ast.attributes.location.SectionLocationProperty] for tracking the location of [LocationTrackableNode]s;
+     * - [com.quarkdown.core.ast.attributes.location.LocationLabelProperty] for storing formatted labels of [LocationTrackableNode]s.
      */
-    val properties: AssociatedProperties<Node>
+    val properties: AssociatedProperties<Node, Any>
 
     /**
      * @see AssociatedProperties.of on [properties]
      */
-    fun of(node: Node): PropertyContainer = properties.of(node)
+    fun of(node: Node): PropertyContainer<Any> = properties.of(node)
 
     /**
      * The defined links, which can be referenced by other nodes.
@@ -86,7 +87,7 @@ interface AstAttributes {
  */
 data class MutableAstAttributes(
     override var root: NestableNode? = null,
-    override val properties: MutableAssociatedProperties<Node> = MutableAssociatedProperties(),
+    override val properties: MutableAssociatedProperties<Node, Any> = MutableAssociatedProperties(),
     override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var hasCode: Boolean = false,
@@ -94,7 +95,7 @@ data class MutableAstAttributes(
     override var hasMermaidDiagram: Boolean = false,
     override var tableOfContents: TableOfContents? = null,
 ) : AstAttributes {
-    override fun of(node: Node): MutablePropertyContainer = properties.of(node)
+    override fun of(node: Node): MutablePropertyContainer<Any> = properties.of(node)
 
     override fun toMutable(): MutableAstAttributes = this.copy()
 }

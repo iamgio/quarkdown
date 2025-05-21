@@ -45,7 +45,7 @@ fun LocationTrackableNode.setLocation(
  * formatted according to its corresponding [NumberingFormat] via [formatLocation].
  * Returns `null` if the location for [this] node is not registered or if it does not have a corresponding [NumberingFormat] rule
  */
-fun LocationTrackableNode.getLocationLabel(context: Context) = context.attributes.of(this)[LocationLabelProperty]
+fun LocationTrackableNode.getLocationLabel(context: Context): String? = context.attributes.of(this)[LocationLabelProperty]
 
 /**
  * Registers the formatted location of this node within the document handled by [context],

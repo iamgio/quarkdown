@@ -23,7 +23,7 @@ class PropertiesTest {
 
     @Test
     fun properties() {
-        val properties = MutablePropertyContainer()
+        val properties = MutablePropertyContainer<String>()
         properties += property
 
         val retrievedProperty: String? = properties[MyProperty]

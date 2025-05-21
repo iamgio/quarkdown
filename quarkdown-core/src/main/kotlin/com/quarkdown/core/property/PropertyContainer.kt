@@ -2,38 +2,41 @@ package com.quarkdown.core.property
 
 /**
  * A group of properties, associated with their own key.
+ * @param T type of the properties
  * @see MutablePropertyContainer
  * @see Property
  * @see AssociatedProperties
  */
-interface PropertyContainer {
-    operator fun <T> get(key: Property.Key<T>): T?
+interface PropertyContainer<T> {
+    /**
+     * Retrieves a property from the container by its key.
+     * @param key the key of the property to retrieve
+     * @param V the type of the property, subtype of [T]
+     * @return the property associated with the key, if any
+     */
+    operator fun <V : T> get(key: Property.Key<V>): V?
 }
 
 /**
  * Mutable implementation of [PropertyContainer].
  */
-class MutablePropertyContainer : PropertyContainer {
-    private val properties: MutableMap<Property.Key<*>, Property<*>> = mutableMapOf()
+class MutablePropertyContainer<T> : PropertyContainer<T> {
+    private val properties: MutableMap<Property.Key<out T>, Property<out T>> = mutableMapOf()
 
     /**
      * Adds a property to the container.
      * @param property the property to add
+     * @param V the type of the property, subtype of [T]
      */
-    fun addProperty(property: Property<*>) {
+    fun <V : T> addProperty(property: Property<V>) {
         properties[property.key] = property
     }
 
     /**
      * @see addProperty
      */
-    operator fun plusAssign(property: Property<*>) = addProperty(property)
+    operator fun <V : T> plusAssign(property: Property<V>) = addProperty(property)
 
-    /**
-     * Retrieves a property from the container by its key.
-     * @param key the key of the property to retrieve
-     * @return the property associated with the key, if any
-     */
     @Suppress("UNCHECKED_CAST") // Safe to assume the property has the same generic type as the key.
-    override operator fun <T> get(key: Property.Key<T>): T? = properties[key]?.value as? T
+    override operator fun <V : T> get(key: Property.Key<V>): V? = properties[key]?.value as? V
 }
