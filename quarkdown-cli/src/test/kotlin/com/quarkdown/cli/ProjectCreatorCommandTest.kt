@@ -24,8 +24,9 @@ class ProjectCreatorCommandTest : TempDirectory() {
         fixedMainFileName: Boolean = true,
         directory: File = super.directory,
     ) {
+        // resolve(".") tests the canonical path instead of the actual one.
         command.test(
-            directory.resolve(".").absolutePath, // Testing canonical path.
+            directory.resolve(".").absolutePath,
             "--name",
             "test",
             "--authors",
