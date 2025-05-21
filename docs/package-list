@@ -136,12 +136,15 @@ com.quarkdown.core
 com.quarkdown.core.ast
 com.quarkdown.core.ast.attributes
 com.quarkdown.core.ast.attributes.id
+com.quarkdown.core.ast.attributes.location
+com.quarkdown.core.ast.attributes.presence
 com.quarkdown.core.ast.base
 com.quarkdown.core.ast.base.block
 com.quarkdown.core.ast.base.block.list
 com.quarkdown.core.ast.base.inline
 com.quarkdown.core.ast.dsl
 com.quarkdown.core.ast.iterator
+com.quarkdown.core.ast.media
 com.quarkdown.core.ast.quarkdown
 com.quarkdown.core.ast.quarkdown.block
 com.quarkdown.core.ast.quarkdown.block.list
@@ -150,6 +153,7 @@ com.quarkdown.core.ast.quarkdown.inline
 com.quarkdown.core.ast.quarkdown.invisible
 com.quarkdown.core.context
 com.quarkdown.core.context.hooks
+com.quarkdown.core.context.hooks.presence
 com.quarkdown.core.context.localization
 com.quarkdown.core.context.toc
 com.quarkdown.core.document
@@ -198,6 +202,7 @@ com.quarkdown.core.parser.walker.funcall
 com.quarkdown.core.pipeline
 com.quarkdown.core.pipeline.error
 com.quarkdown.core.pipeline.output
+com.quarkdown.core.property
 com.quarkdown.core.rendering
 com.quarkdown.core.rendering.representable
 com.quarkdown.core.rendering.tag
