@@ -11,9 +11,6 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import java.io.File
 
-/**
- * Name of the subdirectory in the output directory where media is stored.
- */
 private const val MEDIA_SUBDIRECTORY_NAME = "media"
 
 /**
@@ -37,55 +34,55 @@ class MutableMediaStorage(
      */
     private val enabledChecker = MediaTypeEnabledChecker(options)
 
+    override val name: String = MEDIA_SUBDIRECTORY_NAME
+
     override val all: Set<StoredMedia>
         get() = bindings.values.toSet()
 
     override fun resolve(path: String): StoredMedia? = bindings[path]
 
-    override fun resolveMediaLocationOrFallback(path: String): String =
-        resolve(path)
-            ?.name
-            ?.let { "$MEDIA_SUBDIRECTORY_NAME/$it" }
-            ?: path
-
     override fun toResource(): OutputResource {
         val subResources =
             this.all
-                .asSequence()
                 .map {
                     val converter = MediaOutputResourceConverter(it.name)
                     it.media.accept(converter)
                 }.toSet()
 
-        return OutputResourceGroup(name = MEDIA_SUBDIRECTORY_NAME, subResources)
+        return OutputResourceGroup(this.name, subResources)
     }
 
     /**
      * Binds a media to a path.
+     * @return the [StoredMedia] associated with the path. If a media was already bound to the path, it is returned. Otherwise, the new [media] is returned.
+     * It may also return `null` if the media is not accepted into the storage.
      */
     private fun bind(
         path: String,
         media: Media,
-    ) {
+    ): StoredMedia? {
         // Media is not stored if its type isn't enabled.
-        if (!media.accept(enabledChecker)) return
+        if (!media.accept(enabledChecker)) return null
 
-        bindings.putIfAbsent(
-            path,
+        val media =
             StoredMedia(
                 name = media.accept(nameProvider),
-                media,
-            ),
-        )
+                media = media,
+                storage = this,
+            )
+
+        return bindings.putIfAbsent(path, media) ?: media
     }
 
     /**
      * Registers a media by its path. The corresponding media is resolved lazily from the path.
      * @param path path to the media, either a file or a URL
      * @param workingDirectory directory to resolve the media from, in case the path is relative
+     * @return the [StoredMedia] associated with the path. If a media was already bound to the path, it is returned. Otherwise, the new [media] is returned.
+     * It may also return `null` if the media is not accepted into the storage.
      */
     fun register(
         path: String,
         workingDirectory: File?,
-    ) = bind(path, ResolvableMedia(path, workingDirectory))
+    ): StoredMedia? = bind(path, ResolvableMedia(path, workingDirectory))
 }

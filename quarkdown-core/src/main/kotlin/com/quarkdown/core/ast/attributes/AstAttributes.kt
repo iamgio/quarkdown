@@ -25,7 +25,8 @@ interface AstAttributes {
      * Properties associated with nodes in the AST.
      * These properties enrich the AST by storing additional information about the nodes, such as:
      * - [com.quarkdown.core.ast.attributes.location.SectionLocationProperty] for tracking the location of [LocationTrackableNode]s;
-     * - [com.quarkdown.core.ast.attributes.location.LocationLabelProperty] for storing formatted labels of [LocationTrackableNode]s.
+     * - [com.quarkdown.core.ast.attributes.location.LocationLabelProperty] for storing formatted labels of [LocationTrackableNode]s;
+     * - [com.quarkdown.core.ast.media.StoredMediaProperty] for attaching [com.quarkdown.core.media.Media] references.
      */
     val properties: AssociatedProperties<Node, Any>
 

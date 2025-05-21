@@ -1,6 +1,7 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.Document
+import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
@@ -8,6 +9,7 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
+import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.context.hooks.MediaStorerHook
 import com.quarkdown.core.media.LocalMedia
 import com.quarkdown.core.media.Media
@@ -29,7 +31,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- *
+ * Test for the media storage and media resolution.
  */
 class MediaTest {
     @Test
@@ -127,6 +129,20 @@ class MediaTest {
 
     @Test
     fun `automatic media registration`() {
+        val iconLink =
+            Link(
+                label = listOf(Text("label")),
+                url = "media/icon.png",
+                title = null,
+            )
+
+        val logoLink =
+            Link(
+                label = listOf(Text("label")),
+                url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
+                title = null,
+            )
+
         val tree =
             Document(
                 listOf(
@@ -134,11 +150,7 @@ class MediaTest {
                         listOf(
                             Text("abc"),
                             Image(
-                                Link(
-                                    label = listOf(Text("label")),
-                                    url = "media/icon.png",
-                                    title = null,
-                                ),
+                                iconLink,
                                 width = null,
                                 height = null,
                             ),
@@ -151,11 +163,7 @@ class MediaTest {
                                     depth = 1,
                                     listOf(
                                         Image(
-                                            Link(
-                                                label = listOf(Text("label")),
-                                                url = "https://iamgio.eu/quarkdown/img/logo-light.svg",
-                                                title = null,
-                                            ),
+                                            logoLink,
                                             width = null,
                                             height = null,
                                         ),
@@ -175,9 +183,11 @@ class MediaTest {
                     ),
             )
 
+        val attributes = MutableAstAttributes()
+
         // The storage is updated while traversing the tree.
         ObservableAstIterator()
-            .attach(MediaStorerHook(storage, workingDirectory = File("src/test/resources")))
+            .attach(MediaStorerHook(storage, attributes, workingDirectory = File("src/test/resources")))
             .traverse(tree)
 
         assertEquals(2, storage.all.size)
@@ -185,13 +195,20 @@ class MediaTest {
         storage.resolve("media/icon.png")?.let { resolved ->
             assertTrue(resolved.name.startsWith("icon@"))
             assertTrue(resolved.name.endsWith(".png"))
+            assertTrue(resolved.path.startsWith("media/icon@"))
+            assertTrue(resolved.name.endsWith(".png"))
+
+            assertEquals(resolved, iconLink.getStoredMedia(attributes))
         }
 
         storage.resolve("https://iamgio.eu/quarkdown/img/logo-light.svg")?.let { resolved ->
             assertEquals("https-iamgio.eu-quarkdown-img-logo-light.svg", resolved.name)
+            assertTrue(resolved.path.startsWith("media/https-"))
+            assertEquals(resolved, logoLink.getStoredMedia(attributes))
         }
 
         assertNull(storage.resolve("media/other.png"))
+        assertNull(tree.getStoredMedia(attributes))
     }
 
     @Test

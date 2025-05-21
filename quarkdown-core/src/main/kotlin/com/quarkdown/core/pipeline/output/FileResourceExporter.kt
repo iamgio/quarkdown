@@ -1,5 +1,7 @@
 package com.quarkdown.core.pipeline.output
 
+import com.quarkdown.core.pipeline.output.FileResourceExporter.NameProvider.fileNameWithoutExtension
+import com.quarkdown.core.pipeline.output.FileResourceExporter.NameProvider.fullFileName
 import com.quarkdown.core.util.sanitizeFileName
 import java.io.File
 
@@ -12,30 +14,41 @@ class FileResourceExporter(
     private val write: Boolean = true,
 ) : OutputResourceVisitor<File> {
     /**
-     * Name of the corresponding file of this resource, without the extension,
-     * with symbols removed and spaces replaced with dashes.
+     * Mapping of [OutputResource]s to their file names.
      */
-    private val OutputResource.fileName: String
-        get() = name.sanitizeFileName(replacement = "-")
+    object NameProvider {
+        /**
+         * Given a string, returns a sanitized version of it to be used as a valid file name.
+         * @see sanitizeFileName
+         */
+        internal fun stringToFileName(string: String): String = string.sanitizeFileName(replacement = "-")
 
-    /**
-     * File extension relative to the [ArtifactType] of this resource.
-     */
-    private val OutputArtifact<*>.fileExtension: String
-        get() =
-            when (type) {
-                ArtifactType.HTML -> ".html"
-                ArtifactType.CSS -> ".css"
-                ArtifactType.JAVASCRIPT -> ".js"
-                ArtifactType.QUARKDOWN -> ".qmd"
-                ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
-            }
+        /**
+         * Name of the corresponding file of this resource, without the extension,
+         * with symbols removed and spaces replaced with dashes.
+         */
+        val OutputResource.fileNameWithoutExtension: String
+            get() = stringToFileName(name)
 
-    /**
-     * Full name of the file, including the extension relative to the [ArtifactType] of this resource.
-     */
-    private val OutputArtifact<*>.fullFileName: String
-        get() = fileName + fileExtension
+        /**
+         * File extension relative to the [ArtifactType] of this resource.
+         */
+        val OutputArtifact<*>.fileExtension: String
+            get() =
+                when (type) {
+                    ArtifactType.HTML -> ".html"
+                    ArtifactType.CSS -> ".css"
+                    ArtifactType.JAVASCRIPT -> ".js"
+                    ArtifactType.QUARKDOWN -> ".qmd"
+                    ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
+                }
+
+        /**
+         * Full name of the file, including the extension relative to the [ArtifactType] of this resource.
+         */
+        val OutputArtifact<*>.fullFileName: String
+            get() = fileNameWithoutExtension + fileExtension
+    }
 
     /**
      * Saves an [OutputArtifact] to a file with text content.
@@ -56,7 +69,7 @@ class FileResourceExporter(
      * @return the directory file itself
      */
     override fun visit(group: OutputResourceGroup): File {
-        val directory = File(location, group.fileName)
+        val directory = File(location, group.fileNameWithoutExtension)
 
         // The directory is not created if it has no content.
         if (group.resources.isEmpty()) {
