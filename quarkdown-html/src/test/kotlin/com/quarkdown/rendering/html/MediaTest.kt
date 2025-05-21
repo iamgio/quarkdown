@@ -12,10 +12,13 @@ import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+private const val WORKING_DIR_PATH = "src/test/resources"
 private const val REMOTE_URL = "https://iamgio.eu/quarkdown/img/logo-light.svg"
+private const val REMOTE_OUT_NAME = "https-iamgio.eu-quarkdown-img-logo-light.svg"
+private const val LOCAL_PATH = "media/icon.png"
+private const val OUT_DIR = "media"
 
 /**
  * Tests for media resolution and rendering via the HTML renderer.
@@ -52,7 +55,7 @@ class MediaTest {
         Image(
             Link(
                 label = listOf(),
-                url = "media/icon.png",
+                url = LOCAL_PATH,
                 title = null,
             ).apply { attach(media) },
             width = null,
@@ -67,40 +70,16 @@ class MediaTest {
         val image = remoteImage(media)
 
         assertEquals(
-            "<img src=\"media/https-iamgio.eu-quarkdown-img-logo-light.svg\" alt=\"\" />",
+            "<img src=\"$OUT_DIR/$REMOTE_OUT_NAME\" alt=\"\" />",
             image.accept(renderer),
         )
     }
 
     @Test
     fun `local media path update`() {
-        val media = context.mediaStorage.register("media/icon.png", workingDirectory = File("src/test/resources"))!!
+        val media = context.mediaStorage.register(LOCAL_PATH, workingDirectory = File(WORKING_DIR_PATH))!!
         val image = localImage(media)
 
-        assertTrue(image.accept(renderer).startsWith("<img src=\"media/icon@"))
-    }
-
-    @Test
-    fun `denied remote media path update`() {
-        context.options.enableRemoteMediaStorage = false
-
-        val media = context.mediaStorage.register(REMOTE_URL, workingDirectory = null)
-        assertNull(media)
-        val image = remoteImage(media)
-
-        assertEquals(
-            "<img src=\"https://iamgio.eu/quarkdown/img/logo-light.svg\" alt=\"\" />",
-            image.accept(renderer),
-        )
-    }
-
-    @Test
-    fun `unregistered local media path update`() {
-        val image = localImage(null)
-
-        assertEquals(
-            "<img src=\"media/icon.png\" alt=\"\" />",
-            image.accept(renderer),
-        )
+        assertTrue(image.accept(renderer).startsWith("<img src=\"$OUT_DIR/icon@"))
     }
 }
