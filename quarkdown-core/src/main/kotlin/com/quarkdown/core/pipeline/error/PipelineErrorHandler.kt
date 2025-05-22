@@ -13,10 +13,11 @@ interface PipelineErrorHandler {
      * @param action additional custom error handler
      * @see BasePipelineErrorHandler
      * @see StrictPipelineErrorHandler
+     * @return the result of the action
      */
-    fun handle(
+    fun <T> handle(
         error: PipelineException,
         sourceFunction: Function<*>?,
-        action: () -> Unit,
-    )
+        action: () -> T,
+    ): T
 }

@@ -7,14 +7,13 @@ import com.quarkdown.core.log.Log
  * Simple pipeline error handler that logs the error message.
  */
 class BasePipelineErrorHandler : PipelineErrorHandler {
-    override fun handle(
+    override fun <T> handle(
         error: PipelineException,
         sourceFunction: Function<*>?,
-        action: () -> Unit,
-    ) {
+        action: () -> T,
+    ): T {
         val message = error.message ?: "Unknown error"
         Log.error(message)
-
-        action()
+        return action()
     }
 }
