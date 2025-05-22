@@ -15,13 +15,13 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * but rather during the AST traversal.
  *
  * This is because in order to evaluate the children, we need to know the location of the node in the document,
- * which is not known until the AST is fully traversed by [LocationAwareLabelStorerHook].
+ * which is not known until the AST is fully traversed by [com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook].
  *
- * After the traversal, the [NumberedEvaluatorHook] will evaluate and assign the [children] of this node, ready to be rendered.
+ * After the traversal, the [com.quarkdown.core.context.hooks.location.NumberedEvaluatorHook] will evaluate and assign the [children] of this node, ready to be rendered.
  *
  * Since the evaluation does not happen within [com.quarkdown.core.function.call.FunctionCallNodeExpander],
  * errors thrown during the evaluation will have to be caught externally. This is handled by the hook itself,
- * which append an error box (the same produced from the expander) to [children].
+ * which appends an error box (the same produced from the expander) to [children].
  * From the user's perspective, this does not have any effect.
  * @param key name to group (and count) numbered nodes
  * @param childrenSupplier supplier of the node content given the evaluated [SectionLocation], formatted according to the active [DocumentNumbering]
