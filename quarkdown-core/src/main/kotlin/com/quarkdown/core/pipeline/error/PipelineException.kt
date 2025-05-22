@@ -21,19 +21,25 @@ open class PipelineException(
     constructor(message: String, code: Int) : this(buildInline { text(message) }, code)
 }
 
+/**
+ * Converts [this] exception to a renderable [Node], and performs the error handling provided by the [errorHandler] strategy.
+ * @param errorHandler strategy to handle the error
+ * @return [this] exception as a renderable [Node]
+ */
 fun PipelineException.asNode(errorHandler: PipelineErrorHandler): Node {
-    // The function that the error originated from.
-    // Note that sourceFunction might be different from call.function if the error comes from a nested function call down the stack.
+    // The function that the error originated from, if any.
     val sourceFunction = (this as? FunctionException)?.function
 
-    // The error is handled by the error handler strategy.
     return errorHandler.handle(this, sourceFunction) {
-        // Shows an error message box in the final document.
-        // If the exception is linked to a function, its name appears in the error title.
         Box.error(richMessage, title = sourceFunction?.name)
     }
 }
 
+/**
+ * @param context context to use to retrieve the error handler from
+ * @throws [this] exception if the context does not have an attached pipeline to retrieve the error handler from
+ * @see asNode
+ */
 fun PipelineException.asNode(context: Context): Node =
     context.attachedPipeline
         ?.options
