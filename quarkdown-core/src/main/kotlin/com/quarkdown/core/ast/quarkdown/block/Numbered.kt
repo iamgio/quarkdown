@@ -11,7 +11,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * and the amount of occurrences according to its [key].
  * @param key name to group (and count) numbered nodes
  * @param children supplier of the node content given the evaluated [SectionLocation], formatted according to the active [DocumentNumbering]
- * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook for storing locations
+ * @see com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook for storing locations
  * @see com.quarkdown.core.document.numbering.NumberingFormat
  */
 class Numbered(

@@ -30,7 +30,7 @@ fun LocationTrackableNode.getLocation(context: Context): SectionLocation? = cont
  * Registers the location of this node within the document handled by [context].
  * @param context context where location data is stored
  * @param location location to set
- * @see com.quarkdown.core.context.hooks.LocationAwarenessHook
+ * @see com.quarkdown.core.context.hooks.location.LocationAwarenessHook
  */
 fun LocationTrackableNode.setLocation(
     context: MutableContext,
@@ -52,7 +52,7 @@ fun LocationTrackableNode.getLocationLabel(context: Context): String? = context.
  * according to [this] node's [NumberingFormat].
  * @param context context where location data is stored
  * @param label formatted location to set
- * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook
+ * @see com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
  */
 fun LocationTrackableNode.setLocationLabel(
     context: MutableContext,
