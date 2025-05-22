@@ -1,9 +1,11 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Tests for numbering of headings, figures, tables and other elements.
@@ -467,7 +469,6 @@ class NumberingTest {
 
     @Test
     fun `localized numbering captions`() {
-        // Localized kind names.
         execute(
             """
             .noautopagebreak
@@ -503,7 +504,6 @@ class NumberingTest {
 
     @Test
     fun `custom numbering`() {
-        // Custom elements.
         execute(
             """
             .noautopagebreak
@@ -546,6 +546,25 @@ class NumberingTest {
                     "<p>Hey, B!</p>",
                 it,
             )
+        }
+    }
+
+    /**
+     * To understand why this is a special case, see [com.quarkdown.core.ast.quarkdown.block.Numbered]'s documentation.
+     */
+    @Test
+    fun `error handling in custom numbering`() {
+        execute(
+            """
+            .numbering
+                - key: 1
+            
+            .numbered {key}
+                .sum {1} {a}
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertTrue(it.startsWith("<div class=\"box error\"><header><h4>Error: sum</h4>"))
         }
     }
 }

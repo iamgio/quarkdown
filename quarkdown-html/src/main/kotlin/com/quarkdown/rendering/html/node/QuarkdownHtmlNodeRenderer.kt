@@ -41,8 +41,6 @@ import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
-import com.quarkdown.core.pipeline.error.PipelineException
-import com.quarkdown.core.pipeline.error.asNode
 import com.quarkdown.core.rendering.html.BaseHtmlNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
@@ -212,14 +210,8 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(node: Numbered) =
-        try {
-            buildMultiTag {
-                // Evaluate content with the node's location as an argument.
-                +node.children(node.getLocationLabel(context) ?: "")
-            }
-        } catch (e: PipelineException) {
-            // Show error box if the evaluation fails.
-            e.asNode(context).accept(this)
+        buildMultiTag {
+            +node.children
         }
 
     override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
