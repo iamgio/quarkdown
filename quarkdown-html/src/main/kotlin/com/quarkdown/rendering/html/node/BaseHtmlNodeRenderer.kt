@@ -1,4 +1,4 @@
-package com.quarkdown.core.rendering.html
+package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode

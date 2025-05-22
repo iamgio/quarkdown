@@ -1,12 +1,12 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.rendering.html.BaseHtmlNodeRenderer
 import com.quarkdown.core.rendering.tag.TagBuilder
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.indent
 import com.quarkdown.rendering.html.css.CssBuilder
 import com.quarkdown.rendering.html.css.css
+import com.quarkdown.rendering.html.node.BaseHtmlNodeRenderer
 
 /**
  * String used to indent nested code.
