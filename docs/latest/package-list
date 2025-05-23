@@ -153,6 +153,7 @@ com.quarkdown.core.ast.quarkdown.inline
 com.quarkdown.core.ast.quarkdown.invisible
 com.quarkdown.core.context
 com.quarkdown.core.context.hooks
+com.quarkdown.core.context.hooks.location
 com.quarkdown.core.context.hooks.presence
 com.quarkdown.core.context.localization
 com.quarkdown.core.context.toc
@@ -212,7 +213,6 @@ com.quarkdown.core.util
 com.quarkdown.core.visitor.node
 com.quarkdown.core.visitor.token
 module:quarkdown-html
-com.quarkdown.core.rendering.html
 com.quarkdown.rendering.html
 com.quarkdown.rendering.html.css
 com.quarkdown.rendering.html.extension
