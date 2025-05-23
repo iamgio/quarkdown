@@ -17,8 +17,8 @@ import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook
-import com.quarkdown.core.context.hooks.LocationAwarenessHook
+import com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
+import com.quarkdown.core.context.hooks.location.LocationAwarenessHook
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor

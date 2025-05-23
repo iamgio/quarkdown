@@ -5,7 +5,7 @@ import com.quarkdown.core.flavor.RendererFactoryVisitor
 import com.quarkdown.core.flavor.base.BaseMarkdownRendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownRendererFactory
 import com.quarkdown.core.rendering.NodeRenderer
-import com.quarkdown.core.rendering.html.BaseHtmlNodeRenderer
+import com.quarkdown.rendering.html.node.BaseHtmlNodeRenderer
 import com.quarkdown.rendering.html.node.QuarkdownHtmlNodeRenderer
 
 /**

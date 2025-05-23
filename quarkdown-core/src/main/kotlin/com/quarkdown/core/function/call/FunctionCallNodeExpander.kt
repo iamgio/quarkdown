@@ -2,13 +2,12 @@ package com.quarkdown.core.function.call
 
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
-import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.function.error.FunctionException
 import com.quarkdown.core.function.value.output.OutputValueVisitorFactory
 import com.quarkdown.core.function.value.output.node.NodeOutputValueVisitorFactory
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineException
+import com.quarkdown.core.pipeline.error.asNode
 
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
@@ -48,18 +47,8 @@ class FunctionCallNodeExpander(
             val outputNode = call.execute().accept(mapper)
             appendOutput(node, outputNode)
         } catch (e: PipelineException) {
-            // If the function call is invalid.
-
-            // The function that the error originated from.
-            // Note that sourceFunction might be different from call.function if the error comes from a nested function call down the stack.
-            val sourceFunction = (e as? FunctionException)?.function
-
-            // The error is handled by the error handler strategy.
-            errorHandler.handle(e, sourceFunction) {
-                // Shows an error message box in the final document.
-                // If the exception is linked to a function, its name appears in the error title.
-                appendOutput(node, Box.error(e.richMessage, title = sourceFunction?.name))
-            }
+            // If the function call is invalid, shows an error box.
+            appendOutput(node, e.asNode(errorHandler))
         }
     }
 

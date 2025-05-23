@@ -1,4 +1,4 @@
-package com.quarkdown.core.context.hooks
+package com.quarkdown.core.context.hooks.location
 
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.SectionLocation

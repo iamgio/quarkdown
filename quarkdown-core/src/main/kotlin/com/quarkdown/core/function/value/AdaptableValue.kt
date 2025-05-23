@@ -4,7 +4,8 @@ package com.quarkdown.core.function.value
  * If a [Value] subclass is adaptable, it can be converted to another [Value]
  * in case the parameter of the function it is passed to expects a different type.
  *
- * For example, a [DictionaryValue] can be adapted to an [IterableValue].
+ * For example, a [DictionaryValue] can be adapted to an [IterableValue],
+ * and a [MarkdownContentValue] can be adapted to a [NodeValue].
  *
  * @param T type of the value to adapt to
  */

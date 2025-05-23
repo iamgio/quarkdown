@@ -11,7 +11,7 @@ import com.quarkdown.core.property.Property
  * Examples of these nodes are figures and tables. For instance, depending on the document's [NumberingFormat],
  * an element may be labeled as `1.1`, `1.2`, `1.3`, `2.1`, etc.
  * @param value the formatted label
- * @see com.quarkdown.core.context.hooks.LocationAwareLabelStorerHook for the storing stage
+ * @see com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook for the storing stage
  */
 data class LocationLabelProperty(
     override val value: String,
