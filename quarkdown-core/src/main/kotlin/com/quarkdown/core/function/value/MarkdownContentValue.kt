@@ -7,7 +7,9 @@ import com.quarkdown.core.function.expression.visitor.ExpressionVisitor
 /**
  * A sub-AST that contains Markdown nodes. This is usually accepted in 'body' parameters.
  */
-data class MarkdownContentValue(override val unwrappedValue: MarkdownContent) : InputValue<MarkdownContent> {
+data class MarkdownContentValue(
+    override val unwrappedValue: MarkdownContent,
+) : InputValue<MarkdownContent> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     /**
@@ -29,7 +31,9 @@ fun MarkdownContent.wrappedAsValue() = MarkdownContentValue(this)
 /**
  * A sub-AST that contains Markdown nodes. This is usually accepted in 'body' parameters.
  */
-data class InlineMarkdownContentValue(override val unwrappedValue: InlineMarkdownContent) : InputValue<InlineMarkdownContent> {
+data class InlineMarkdownContentValue(
+    override val unwrappedValue: InlineMarkdownContent,
+) : InputValue<InlineMarkdownContent> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     /**

@@ -6,6 +6,7 @@ import com.quarkdown.core.function.error.InvalidLambdaArgumentCountException
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.reflect.DynamicValueConverter
 import com.quarkdown.core.function.reflect.FromDynamicType
+import com.quarkdown.core.function.value.AdaptableValue
 import com.quarkdown.core.function.value.Destructurable
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NoneValue
@@ -134,10 +135,11 @@ open class Lambda(
         // Invoke the lambda action and convert the result to a static type.
         val result = invokeDynamic(*values)
 
-        return if (result is DynamicValue) {
-            DynamicValueConverter(result).convertTo(T::class, parentContext)
-        } else {
-            result
+        return when (result) {
+            is V -> result
+            is DynamicValue -> DynamicValueConverter(result).convertTo(T::class, parentContext)
+            is AdaptableValue<*> -> result.adapt()
+            else -> result
         } as? V
             ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result::class}")
     }

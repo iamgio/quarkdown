@@ -553,6 +553,32 @@ class NumberingTest {
      * To understand why this is a special case, see [com.quarkdown.core.ast.quarkdown.block.Numbered]'s documentation.
      */
     @Test
+    fun `custom numbering on node`() {
+        execute(
+            """
+            .numbering
+                - key: 1
+            
+            .numbered {key}
+                num:
+                .container
+                    Hello, .num
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertEquals(
+                "<div class=\"container\">" +
+                    "<p>Hello, 1</p>" +
+                    "</div>",
+                it,
+            )
+        }
+    }
+
+    /**
+     * To understand why this is a special case, see [com.quarkdown.core.ast.quarkdown.block.Numbered]'s documentation.
+     */
+    @Test
     fun `error handling in custom numbering`() {
         execute(
             """
