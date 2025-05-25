@@ -495,11 +495,13 @@ class NumberingTest {
             assertEquals(
                 "<h1>A</h1>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\" data-localized-kind=\"Figura\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\" data-localized-kind=\"Figura\">" +
+                    "Caption</figcaption>" +
                     "</figure>" +
                     "<table id=\"table-1.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
-                    "<caption class=\"caption-bottom\" data-element-label=\"1.a\" data-localized-kind=\"Tabella\">Caption</caption></table>",
+                    "<caption class=\"caption-bottom\" data-element-label=\"1.a\" data-localized-kind=\"Tabella\">" +
+                    "Caption</caption></table>",
                 it,
             )
         }
