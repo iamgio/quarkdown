@@ -8,6 +8,7 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
+import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
@@ -37,6 +38,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
         }
 
     override fun visit(alignment: Table.Alignment) = alignment.kebabCaseName
+
+    override fun visit(position: CaptionPosition) = position.kebabCaseName
 
     override fun visit(borderStyle: Container.BorderStyle) =
         when (borderStyle) {

@@ -14,6 +14,7 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
@@ -51,6 +52,7 @@ val Document: Module =
         ::theme,
         ::numbering,
         ::disableNumbering,
+        ::captionPosition,
         ::texMacro,
         ::pageFormat,
         ::pageMarginContent,
@@ -307,6 +309,28 @@ fun numbering(
 fun disableNumbering(
     @Injected context: Context,
 ) = numbering(context, emptyMap())
+
+/**
+ * Sets the position of captions, relative to the content they describe.
+ * @param default the default position for all captions. Defaults to [CaptionPosition.BOTTOM]
+ * @param figures caption position for figures. If set, overrides [default] for figures.
+ * @param tables caption position for tables. If set, overrides [default] for tables.
+ * @wiki Caption position
+ */
+@Name("captionposition")
+fun captionPosition(
+    @Injected context: Context,
+    default: CaptionPosition? = null,
+    figures: CaptionPosition? = null,
+    tables: CaptionPosition? = null,
+): VoidValue {
+    with(context.documentInfo.layout.captionPosition) {
+        this.default = default ?: this.default
+        this.figures = figures ?: this.figures
+        this.tables = tables ?: this.tables
+    }
+    return VoidValue
+}
 
 /**
  * Creates a new global TeX macro that can be accessed within math blocks.

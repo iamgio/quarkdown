@@ -39,6 +39,8 @@ import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
+import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.rendering.tag.buildMultiTag
@@ -107,6 +109,7 @@ class QuarkdownHtmlNodeRenderer(
         captionTagName: String,
         kindLocalizationKey: String,
         idPrefix: String = kindLocalizationKey,
+        position: CaptionPosition,
     ): HtmlTagBuilder {
         // The location-based, numbering format dependent identifier of the node, e.g. 1.1.
         val label = (node as? LocationTrackableNode)?.getLocationLabel(context)
@@ -117,6 +120,8 @@ class QuarkdownHtmlNodeRenderer(
 
             node.caption?.let { caption ->
                 +buildTag(captionTagName) {
+                    className("caption-${position.asCSS}")
+
                     +escapeCriticalContent(caption)
                     // The label is set as an attribute for styling.
                     optionalAttribute("data-element-label", label)
@@ -139,7 +144,14 @@ class QuarkdownHtmlNodeRenderer(
             +node.child
 
             // Figure ID, e.g. 1.1, based on the current numbering format.
-            this.numberedCaption(node, "figcaption", kindLocalizationKey = "figure")
+            this.numberedCaption(
+                node,
+                "figcaption",
+                kindLocalizationKey = "figure",
+                position =
+                    context.documentInfo.layout.captionPosition
+                        .getOrDefault(CaptionPositionInfo::figures),
+            )
         }
 
     // An empty div that acts as a page break.
@@ -453,7 +465,14 @@ class QuarkdownHtmlNodeRenderer(
         super
             .tableBuilder(node)
             .apply {
-                numberedCaption(node, "caption", kindLocalizationKey = "table")
+                numberedCaption(
+                    node,
+                    "caption",
+                    kindLocalizationKey = "table",
+                    position =
+                        context.documentInfo.layout.captionPosition
+                            .getOrDefault(CaptionPositionInfo::tables),
+                )
             }.build()
 
     // A code span can contain additional content, such as a color preview.
