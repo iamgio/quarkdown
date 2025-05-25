@@ -41,7 +41,7 @@ class MermaidTest {
         ) {
             assertEquals(
                 "${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C</pre>" +
-                    "<figcaption>My graph</figcaption></figure>",
+                    "<figcaption class=\"caption-bottom\">My graph</figcaption></figure>",
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
@@ -58,7 +58,7 @@ class MermaidTest {
         ) {
             assertEquals(it.lines().first(), MERMAID_OPEN + "classDiagram")
             assertEquals(it.lines()[1], "    class Bank {")
-            assertContains(it, "<figcaption>My graph</figcaption></figure>")
+            assertContains(it, "<figcaption class=\"caption-bottom\">My graph</figcaption></figure>")
         }
     }
 

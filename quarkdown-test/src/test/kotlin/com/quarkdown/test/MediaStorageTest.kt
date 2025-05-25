@@ -47,7 +47,7 @@ class MediaStorageTest {
                     "<figure>" +
                     "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg\" " +
                     "alt=\"Icon\" title=\"The Quarkdown icon\" />" +
-                    "<figcaption>The Quarkdown icon</figcaption>" +
+                    "<figcaption class=\"caption-bottom\">The Quarkdown icon</figcaption>" +
                     "</figure>" +
                     "<figure>" +
                     "<img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
