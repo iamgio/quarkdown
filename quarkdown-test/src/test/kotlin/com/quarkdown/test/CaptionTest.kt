@@ -24,6 +24,21 @@ class CaptionTest {
     }
 
     @Test
+    fun `figure via function`() {
+        execute(
+            """
+            .figure caption:{Figure caption}
+                Hello
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure><p>Hello</p><figcaption>Figure caption</figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun table() {
         execute(
             """
