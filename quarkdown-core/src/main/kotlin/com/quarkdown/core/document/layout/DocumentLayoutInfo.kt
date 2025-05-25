@@ -1,6 +1,6 @@
-package com.quarkdown.core.document
+package com.quarkdown.core.document.layout
 
-import com.quarkdown.core.document.page.PageFormatInfo
+import com.quarkdown.core.document.layout.page.PageFormatInfo
 
 /**
  * Mutable information about the layout options of a document.

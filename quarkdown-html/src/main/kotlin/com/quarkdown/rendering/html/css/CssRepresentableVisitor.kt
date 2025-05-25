@@ -8,7 +8,7 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
-import com.quarkdown.core.document.page.PageMarginPosition
+import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.slides.Transition

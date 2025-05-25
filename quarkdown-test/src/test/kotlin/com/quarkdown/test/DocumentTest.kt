@@ -6,8 +6,8 @@ import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.document.page.PageOrientation
-import com.quarkdown.core.document.page.PageSizeFormat
+import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.test.util.execute

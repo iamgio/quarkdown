@@ -1,4 +1,4 @@
-package com.quarkdown.core.document.page
+package com.quarkdown.core.document.layout.page
 
 /**
  * The orientation of a page.

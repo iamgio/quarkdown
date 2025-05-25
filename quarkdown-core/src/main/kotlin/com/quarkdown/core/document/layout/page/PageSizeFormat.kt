@@ -1,4 +1,4 @@
-package com.quarkdown.core.document.page
+package com.quarkdown.core.document.layout.page
 
 import com.quarkdown.core.document.size.BoundingBox
 import com.quarkdown.core.document.size.by
@@ -9,7 +9,9 @@ import com.quarkdown.core.document.size.mm
  * Standard page sizes.
  * @param bounds size the page
  */
-enum class PageSizeFormat(private val bounds: BoundingBox) {
+enum class PageSizeFormat(
+    private val bounds: BoundingBox,
+) {
     A0(841.0.mm by 1189.0.mm),
     A1(594.0.mm by 841.0.mm),
     A2(420.0.mm by 594.0.mm),

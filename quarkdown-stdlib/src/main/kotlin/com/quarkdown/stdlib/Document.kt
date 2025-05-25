@@ -14,11 +14,11 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.layout.page.PageMarginPosition
+import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
-import com.quarkdown.core.document.page.PageMarginPosition
-import com.quarkdown.core.document.page.PageOrientation
-import com.quarkdown.core.document.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module

@@ -1,4 +1,4 @@
-package com.quarkdown.core.document.page
+package com.quarkdown.core.document.layout.page
 
 import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
 import com.quarkdown.core.document.size.Size

@@ -1,8 +1,8 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
-import com.quarkdown.core.document.page.PageOrientation
 
 /**
  * Type of produced document, which affects its post-rendering stage.

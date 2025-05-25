@@ -1,5 +1,6 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.localization.Locale
