@@ -188,6 +188,7 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 .quarkdown figure {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .quarkdown figure > :not(figcaption) {
