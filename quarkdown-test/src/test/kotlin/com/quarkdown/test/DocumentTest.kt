@@ -71,8 +71,8 @@ class DocumentTest {
             assertEquals("minimal", documentInfo.theme?.layout)
 
             PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
-                assertEquals(bounds.width, documentInfo.pageFormat.pageWidth)
-                assertEquals(bounds.height, documentInfo.pageFormat.pageHeight)
+                assertEquals(bounds.width, documentInfo.layout.pageFormat.pageWidth)
+                assertEquals(bounds.height, documentInfo.layout.pageFormat.pageHeight)
             }
 
             assertEquals(
@@ -80,11 +80,11 @@ class DocumentTest {
                     vertical = Size(3.0, Size.Unit.CENTIMETERS),
                     horizontal = Size(2.0, Size.Unit.PIXELS),
                 ),
-                documentInfo.pageFormat.margin,
+                documentInfo.layout.pageFormat.margin,
             )
 
-            assertEquals(4, documentInfo.pageFormat.columnCount)
-            assertEquals(Alignment.END, documentInfo.pageFormat.alignment)
+            assertEquals(4, documentInfo.layout.pageFormat.columnCount)
+            assertEquals(Alignment.END, documentInfo.layout.pageFormat.alignment)
         }
     }
 

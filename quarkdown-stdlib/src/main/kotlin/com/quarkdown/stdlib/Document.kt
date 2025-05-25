@@ -349,7 +349,7 @@ fun pageFormat(
     columns: Int? = null,
     alignment: Container.Alignment? = null,
 ): VoidValue {
-    with(context.documentInfo.pageFormat) {
+    with(context.documentInfo.layout.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
         // the format is converted to landscape.
         val formatBounds = format?.getBounds(orientation)

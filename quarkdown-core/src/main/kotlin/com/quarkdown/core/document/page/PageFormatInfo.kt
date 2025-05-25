@@ -5,7 +5,7 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 
 /**
- * Mutable information about the format of all pages of a paged document.
+ * Mutable information about the format of all pages of a document.
  * When any of the fields is `null`, the default value supplied by the underlying renderer is used.
  * @param pageWidth width of each page
  * @param pageHeight height of each page
