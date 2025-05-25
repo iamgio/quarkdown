@@ -22,9 +22,13 @@ class TableComputationTest {
     private val lisa = "<tr><td>Lisa</td><td>32</td><td>LA</td></tr>"
     private val mike = "<tr><td>Mike</td><td>19</td><td>CHI</td></tr>"
 
-    private fun htmlTable(htmlContent: String) =
-        "<table><thead><tr><th>Name</th><th>Age</th><th>City</th></tr></thead>" +
-            "<tbody>$htmlContent</tbody></table>"
+    private fun htmlTable(
+        htmlContent: String,
+        caption: String? = null,
+    ) = "<table><thead><tr><th>Name</th><th>Age</th><th>City</th></tr></thead>" +
+        "<tbody>$htmlContent</tbody>" +
+        (caption?.let { "<caption class=\"caption-bottom\">$it</caption>" } ?: "") +
+        "</table>"
 
     @Test
     fun `plain sorting, ascending`() {
@@ -104,6 +108,19 @@ class TableComputationTest {
         execute(".csv {csv/people.csv}") {
             assertEquals(
                 htmlTable(john + lisa + mike),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `csv with caption`() {
+        execute(".csv {csv/people.csv} caption:{People}") {
+            assertEquals(
+                htmlTable(
+                    john + lisa + mike,
+                    caption = "People",
+                ),
                 it,
             )
         }
