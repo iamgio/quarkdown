@@ -86,12 +86,14 @@ fun read(
 
 /**
  * @param path path of the CSV file (with extension) to show
+ * @param caption caption of the table, if any
  * @return a table whose content is loaded from the file located in [path]
  * @wiki File data
  */
 fun csv(
     @Injected context: Context,
     path: String,
+    caption: String? = null,
 ): NodeValue {
     val file = file(context, path)
     val columns = mutableMapOf<String, MutableList<String>>()
@@ -115,6 +117,7 @@ fun csv(
                     cells.map { cell -> Table.Cell(listOf(Text(cell.trim()))) },
                 )
             },
+            caption,
         )
 
     return table.wrappedAsValue()

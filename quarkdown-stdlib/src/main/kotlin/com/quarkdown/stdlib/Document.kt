@@ -14,11 +14,12 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.page.PageMarginPosition
+import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
-import com.quarkdown.core.document.page.PageMarginPosition
-import com.quarkdown.core.document.page.PageOrientation
-import com.quarkdown.core.document.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module
@@ -51,6 +52,7 @@ val Document: Module =
         ::theme,
         ::numbering,
         ::disableNumbering,
+        ::captionPosition,
         ::texMacro,
         ::pageFormat,
         ::pageMarginContent,
@@ -309,6 +311,28 @@ fun disableNumbering(
 ) = numbering(context, emptyMap())
 
 /**
+ * Sets the position of captions, relative to the content they describe.
+ * @param default the default position for all captions. Defaults to [CaptionPosition.BOTTOM]
+ * @param figures caption position for figures. If set, overrides [default] for figures.
+ * @param tables caption position for tables. If set, overrides [default] for tables.
+ * @wiki Caption position
+ */
+@Name("captionposition")
+fun captionPosition(
+    @Injected context: Context,
+    default: CaptionPosition? = null,
+    figures: CaptionPosition? = null,
+    tables: CaptionPosition? = null,
+): VoidValue {
+    with(context.documentInfo.layout.captionPosition) {
+        this.default = default ?: this.default
+        this.figures = figures ?: this.figures
+        this.tables = tables ?: this.tables
+    }
+    return VoidValue
+}
+
+/**
  * Creates a new global TeX macro that can be accessed within math blocks.
  * @param name name of the macro
  * @param macro TeX code
@@ -349,7 +373,7 @@ fun pageFormat(
     columns: Int? = null,
     alignment: Container.Alignment? = null,
 ): VoidValue {
-    with(context.documentInfo.pageFormat) {
+    with(context.documentInfo.layout.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
         // the format is converted to landscape.
         val formatBounds = format?.getBounds(orientation)

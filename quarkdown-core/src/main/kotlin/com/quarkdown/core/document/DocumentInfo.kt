@@ -1,7 +1,7 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
-import com.quarkdown.core.document.page.PageFormatInfo
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.localization.Locale
 
@@ -23,8 +23,8 @@ data class DocumentInfo(
     var locale: Locale? = null,
     var numbering: DocumentNumbering? = null,
     var theme: DocumentTheme? = null,
-    val pageFormat: PageFormatInfo = PageFormatInfo(),
     val tex: TexInfo = TexInfo(),
+    val layout: DocumentLayoutInfo = DocumentLayoutInfo(),
 ) {
     /**
      * The numbering formats of the document if set by the user,

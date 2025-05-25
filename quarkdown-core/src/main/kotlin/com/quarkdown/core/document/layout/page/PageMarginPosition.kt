@@ -1,4 +1,4 @@
-package com.quarkdown.core.document.page
+package com.quarkdown.core.document.layout.page
 
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor

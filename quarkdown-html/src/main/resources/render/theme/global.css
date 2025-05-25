@@ -185,6 +185,26 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
     margin-bottom: 1em;
 }
 
+.quarkdown figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.quarkdown figure > :not(figcaption) {
+    order: 1;
+}
+
+.quarkdown figure > figcaption.caption-top {
+    order: 0;
+    margin-bottom: 0.5em;
+}
+
+.quarkdown figure > figcaption.caption-bottom {
+    order: 2;
+    margin-top: 0.5em;
+}
+
 .quarkdown :is(figure, .mermaid) {
     text-align: center;
 }
@@ -331,18 +351,29 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
     content: var(--qd-quote-attribution-prefix);
 }
 
-.quarkdown table {
-    caption-side: bottom;
-}
-
 .quarkdown table :is(th, td):not([align]) {
     text-align: var(--qd-table-default-cell-alignment);
 }
 
+.quarkdown table:has(> caption.caption-top) {
+    caption-side: top;
+}
+
+.quarkdown table:has(> caption.caption-bottom) {
+    caption-side: bottom;
+}
+
 .quarkdown table > caption {
-    margin-top: 1em;
     white-space: nowrap;
     overflow-x: hidden;
+}
+
+.quarkdown table > caption.caption-top {
+    margin-bottom: 1em;
+}
+
+.quarkdown table > caption.caption-bottom {
+    margin-top: 1em;
 }
 
 .quarkdown hr {

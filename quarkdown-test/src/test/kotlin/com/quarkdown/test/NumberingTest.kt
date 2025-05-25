@@ -28,7 +28,7 @@ class NumberingTest {
                 "<h1>A</h1>" +
                     "<h2>A/1</h2>" +
                     "<h1>B</h1>" +
-                    "<figure><img src=\"img.png\" alt=\"\" title=\"\" /><figcaption></figcaption></figure>",
+                    "<figure><img src=\"img.png\" alt=\"\" title=\"\" /><figcaption class=\"caption-bottom\"></figcaption></figure>",
                 it,
             )
         }
@@ -246,9 +246,11 @@ class NumberingTest {
                 "<h1>A</h1>" +
                     "<h2>A/1</h2>" +
                     "<h1>B</h1>" +
-                    "<figure><img src=\"img.png\" alt=\"\" title=\"Caption\" /><figcaption>Caption</figcaption></figure>" +
+                    "<figure><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
+                    "<figcaption class=\"caption-bottom\">Caption</figcaption></figure>" +
                     "<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
-                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody><caption></caption></table>",
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\"></caption></table>",
                 it,
             )
         }
@@ -278,14 +280,14 @@ class NumberingTest {
             assertEquals(
                 "<h1 data-location=\"1\">A</h1>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 1\" />" +
-                    "<figcaption data-element-label=\"1.1\">Caption 1</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\">Caption 1</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.2\"><img src=\"img.png\" alt=\"\" title=\"Caption 2\" />" +
-                    "<figcaption data-element-label=\"1.2\">Caption 2</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.2\">Caption 2</figcaption>" +
                     "</figure>" +
                     "<h1 data-location=\"2\">B</h1>" +
                     "<figure id=\"figure-2.1\"><img src=\"img.png\" alt=\"\" title=\"\" />" +
-                    "<figcaption data-element-label=\"2.1\"></figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"2.1\"></figcaption>" +
                     "</figure>",
                 it,
             )
@@ -335,32 +337,33 @@ class NumberingTest {
         ) {
             assertEquals(
                 "<figure id=\"figure-0.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"0.0.a\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"0.0.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<h1 data-location=\"1\">A</h1>" +
                     "<figure id=\"figure-1.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.0.a\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.0.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<table id=\"table-1.0.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
-                    "<caption data-element-label=\"1.0.a\">Table caption</caption></table>" +
+                    "<caption class=\"caption-bottom\" data-element-label=\"1.0.a\">Table caption</caption></table>" +
                     "<h2>A/1</h2>" +
                     "<figure id=\"figure-1.A.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.A.a\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.A.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<h3>A/1/1</h3>" +
                     "<figure id=\"figure-1.A.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.A.b\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.A.b\">Caption</figcaption>" +
                     "</figure>" +
                     "<table id=\"table-1.A.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
-                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody><caption data-element-label=\"1.A.a\"></caption></table>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\" data-element-label=\"1.A.a\"></caption></table>" +
                     "<h1 data-location=\"2\">B</h1>" +
                     "<figure id=\"figure-2.0.a\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"2.0.a\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"2.0.a\">Caption</figcaption>" +
                     "</figure>" +
                     "<h3>B/0/1</h3>" +
                     "<figure id=\"figure-2.0.b\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"2.0.b\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"2.0.b\">Caption</figcaption>" +
                     "</figure>",
                 it,
             )
@@ -397,11 +400,11 @@ class NumberingTest {
                     "<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody></table>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.1\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\">Caption</figcaption>" +
                     "</figure>" +
                     "<table id=\"table-1.1\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
-                    "<caption data-element-label=\"1.1\">Caption</caption></table>",
+                    "<caption class=\"caption-bottom\" data-element-label=\"1.1\">Caption</caption></table>",
                 it,
             )
         }
@@ -432,14 +435,14 @@ class NumberingTest {
             assertEquals(
                 "<h1 data-location=\"1\">A</h1>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption 1\" />" +
-                    "<figcaption data-element-label=\"1.1\">Caption 1</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\">Caption 1</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.2\">" +
                     "<pre class=\"mermaid fill-height\">graph TD\n    A-->B\n    A-->C</pre>" +
-                    "<figcaption data-element-label=\"1.2\">Caption 2</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.2\">Caption 2</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
-                    "<figcaption data-element-label=\"1.3\">Caption 3</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.3\">Caption 3</figcaption>" +
                     "</figure>",
                 it,
             )
@@ -460,7 +463,7 @@ class NumberingTest {
         ) {
             assertEquals(
                 "<figure id=\"figure-1\"><p>Hello, world!</p>" +
-                    "<figcaption data-element-label=\"1\" data-localized-kind=\"Figure\">" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1\" data-localized-kind=\"Figure\">" +
                     "My caption.</figcaption></figure>",
                 it,
             )
@@ -492,11 +495,13 @@ class NumberingTest {
             assertEquals(
                 "<h1>A</h1>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
-                    "<figcaption data-element-label=\"1.1\" data-localized-kind=\"Figura\">Caption</figcaption>" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\" data-localized-kind=\"Figura\">" +
+                    "Caption</figcaption>" +
                     "</figure>" +
                     "<table id=\"table-1.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
-                    "<caption data-element-label=\"1.a\" data-localized-kind=\"Tabella\">Caption</caption></table>",
+                    "<caption class=\"caption-bottom\" data-element-label=\"1.a\" data-localized-kind=\"Tabella\">" +
+                    "Caption</caption></table>",
                 it,
             )
         }

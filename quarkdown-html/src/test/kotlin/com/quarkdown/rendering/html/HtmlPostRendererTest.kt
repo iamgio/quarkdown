@@ -241,11 +241,13 @@ class HtmlPostRendererTest {
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
         context.attributes.markMathPresence()
-        context.documentInfo.pageFormat.pageWidth = 8.5.inch
-        context.documentInfo.pageFormat.pageHeight = 11.0.inch
-        context.documentInfo.pageFormat.margin = Sizes(1.0.inch)
-        context.documentInfo.tex.macros["\\R"] = "\\mathbb{R}"
-        context.documentInfo.tex.macros["\\Z"] = "\\mathbb{Z}"
+        with(context.documentInfo) {
+            layout.pageFormat.pageWidth = 8.5.inch
+            layout.pageFormat.pageHeight = 11.0.inch
+            layout.pageFormat.margin = Sizes(1.0.inch)
+            tex.macros["\\R"] = "\\mathbb{R}"
+            tex.macros["\\Z"] = "\\mathbb{Z}"
+        }
 
         val postRenderer =
             HtmlPostRenderer(context) {

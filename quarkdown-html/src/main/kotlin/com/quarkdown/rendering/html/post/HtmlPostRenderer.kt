@@ -83,30 +83,27 @@ class HtmlPostRenderer(
                 context.attributes.hasMath,
             )
             // Page format.
-            conditional(TemplatePlaceholders.HAS_PAGE_SIZE, context.documentInfo.pageFormat.hasSize)
+            val pageFormat = context.documentInfo.layout.pageFormat
+            conditional(TemplatePlaceholders.HAS_PAGE_SIZE, pageFormat.hasSize)
             optionalValue(
                 TemplatePlaceholders.PAGE_WIDTH,
-                context.documentInfo.pageFormat.pageWidth
-                    ?.asCSS,
+                pageFormat.pageWidth?.asCSS,
             )
             optionalValue(
                 TemplatePlaceholders.PAGE_HEIGHT,
-                context.documentInfo.pageFormat.pageHeight
-                    ?.asCSS,
+                pageFormat.pageHeight?.asCSS,
             )
             optionalValue(
                 TemplatePlaceholders.PAGE_MARGIN,
-                context.documentInfo.pageFormat.margin
-                    ?.asCSS,
+                pageFormat.margin?.asCSS,
             )
             optionalValue(
                 TemplatePlaceholders.COLUMN_COUNT,
-                context.documentInfo.pageFormat.columnCount,
+                pageFormat.columnCount,
             )
             optionalValue(
                 TemplatePlaceholders.HORIZONTAL_ALIGNMENT,
-                context.documentInfo.pageFormat.alignment
-                    ?.asCSS,
+                pageFormat.alignment?.asCSS,
             )
             iterable(
                 TemplatePlaceholders.TEX_MACROS,

@@ -6,8 +6,8 @@ import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.document.page.PageOrientation
-import com.quarkdown.core.document.page.PageSizeFormat
+import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.test.util.execute
@@ -71,8 +71,8 @@ class DocumentTest {
             assertEquals("minimal", documentInfo.theme?.layout)
 
             PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
-                assertEquals(bounds.width, documentInfo.pageFormat.pageWidth)
-                assertEquals(bounds.height, documentInfo.pageFormat.pageHeight)
+                assertEquals(bounds.width, documentInfo.layout.pageFormat.pageWidth)
+                assertEquals(bounds.height, documentInfo.layout.pageFormat.pageHeight)
             }
 
             assertEquals(
@@ -80,11 +80,11 @@ class DocumentTest {
                     vertical = Size(3.0, Size.Unit.CENTIMETERS),
                     horizontal = Size(2.0, Size.Unit.PIXELS),
                 ),
-                documentInfo.pageFormat.margin,
+                documentInfo.layout.pageFormat.margin,
             )
 
-            assertEquals(4, documentInfo.pageFormat.columnCount)
-            assertEquals(Alignment.END, documentInfo.pageFormat.alignment)
+            assertEquals(4, documentInfo.layout.pageFormat.columnCount)
+            assertEquals(Alignment.END, documentInfo.layout.pageFormat.alignment)
         }
     }
 

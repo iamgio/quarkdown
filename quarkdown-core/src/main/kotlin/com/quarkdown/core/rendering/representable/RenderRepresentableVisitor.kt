@@ -8,7 +8,8 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
-import com.quarkdown.core.document.page.PageMarginPosition
+import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.slides.Transition
@@ -27,6 +28,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(sizes: Sizes): T
 
     fun visit(alignment: Table.Alignment): T
+
+    fun visit(position: CaptionPosition): T
 
     fun visit(borderStyle: Container.BorderStyle): T
 
