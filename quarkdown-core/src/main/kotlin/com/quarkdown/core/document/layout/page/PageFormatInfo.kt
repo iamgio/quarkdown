@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.layout.page
 
-import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
+import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 
@@ -11,14 +11,14 @@ import com.quarkdown.core.document.size.Sizes
  * @param pageHeight height of each page
  * @param margin blank space around the content of each page
  * @param columnCount number of columns on each page. If set, the layout becomes multi-column
- * @param alignment horizontal alignment of the content of each page
+ * @param alignment text alignment of the content of each page
  */
 data class PageFormatInfo(
     var pageWidth: Size? = null,
     var pageHeight: Size? = null,
     var margin: Sizes? = null,
     var columnCount: Int? = null,
-    var alignment: Alignment? = null,
+    var alignment: Container.TextAlignment? = null,
 ) {
     /**
      * Whether the document has a fixed size.

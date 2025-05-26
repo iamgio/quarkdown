@@ -39,7 +39,7 @@ class Container(
     val padding: Sizes? = null,
     val cornerRadius: Sizes? = null,
     val alignment: Alignment? = null,
-    val textAlignment: Alignment? = null,
+    val textAlignment: TextAlignment? = null,
     val float: FloatAlignment? = null,
     override val children: List<Node>,
 ) : NestableNode {
@@ -55,6 +55,31 @@ class Container(
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
+
+    /**
+     * Possible alignment types of a [Container].
+     */
+    enum class TextAlignment : RenderRepresentable {
+        START,
+        CENTER,
+        END,
+        JUSTIFY,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+
+        companion object {
+            /**
+             * Converts an [Alignment] to a [TextAlignment], if applicable.
+             */
+            fun fromAlignment(alignment: Alignment): TextAlignment? =
+                when (alignment) {
+                    Alignment.START -> START
+                    Alignment.CENTER -> CENTER
+                    Alignment.END -> END
+                }
+        }
     }
 
     /**

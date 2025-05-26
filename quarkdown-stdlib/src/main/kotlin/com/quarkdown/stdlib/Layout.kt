@@ -93,7 +93,7 @@ fun container(
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
     alignment: Container.Alignment? = null,
-    @Name("textalignment") textAlignment: Container.Alignment? = alignment,
+    @Name("textalignment") textAlignment: Container.TextAlignment? = alignment?.let(Container.TextAlignment::fromAlignment),
     float: Container.FloatAlignment? = null,
     body: MarkdownContent? = null,
 ) = Container(
@@ -128,7 +128,7 @@ fun align(
 ) = container(
     fullWidth = true,
     alignment = alignment,
-    textAlignment = alignment,
+    textAlignment = Container.TextAlignment.fromAlignment(alignment),
     body = body,
 )
 

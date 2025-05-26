@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>[[TITLE]]</title>
-    <script src="https://unpkg.com/tex-linebreak2@0.8/dist/lib.js"></script>
     <script src="script/script.js"></script>
     [[if:PAGED]]
     <script>window.PagedConfig = {auto: false};</script>

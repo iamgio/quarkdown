@@ -133,14 +133,6 @@ class PlainDocument extends QuarkdownDocument {
 let doc = new PlainDocument(); // Overwritten externally by html-wrapper
 
 //
-// TeX text justification support via tex-linebreak2
-
-postRenderingExecutionQueue.push(() => {
-    const justified = document.querySelectorAll("[style*='text-align: tex-justify'] p");
-    texLinebreak.texLinebreakDOM(justified);
-})
-
-//
 // Enables toggling of the collapsed/expanded state of inline elements.
 
 postRenderingExecutionQueue.push(() => {
