@@ -5,6 +5,7 @@ $dokka.location:com.quarkdown.stdlib//align/#com.quarkdown.core.ast.quarkdown.bl
 $dokka.location:com.quarkdown.stdlib//autoPageBreak/#com.quarkdown.core.context.MutableContext#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/autopagebreak.html
 $dokka.location:com.quarkdown.stdlib//box/#com.quarkdown.core.context.Context#com.quarkdown.core.ast.InlineMarkdownContent?#com.quarkdown.core.ast.quarkdown.block.Box.Type#com.quarkdown.core.document.size.Size?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html
 $dokka.location:com.quarkdown.stdlib//capitalize/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/capitalize.html
+$dokka.location:com.quarkdown.stdlib//captionPosition/#com.quarkdown.core.context.Context#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html
 $dokka.location:com.quarkdown.stdlib//center/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/center.html
 $dokka.location:com.quarkdown.stdlib//clip/#com.quarkdown.core.ast.quarkdown.block.Clipped.Clip#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/clip.html
 $dokka.location:com.quarkdown.stdlib//code/#kotlin.String?#kotlin.Boolean#com.quarkdown.core.function.value.data.Range?#com.quarkdown.core.function.value.data.EvaluableString/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html
@@ -23,9 +24,9 @@ $dokka.location:com.quarkdown.stdlib//collectionSumAll/#kotlin.collections.Itera
 $dokka.location:com.quarkdown.stdlib//collectionThird/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/third.html
 $dokka.location:com.quarkdown.stdlib//column/#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html
 $dokka.location:com.quarkdown.stdlib//concatenate/#kotlin.String#kotlin.String#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/concatenate.html
-$dokka.location:com.quarkdown.stdlib//container/#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#kotlin.Boolean#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.BorderStyle?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.Alignment?#com.quarkdown.core.ast.quarkdown.block.Container.Alignment?#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment?#com.quarkdown.core.ast.MarkdownContent?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html
+$dokka.location:com.quarkdown.stdlib//container/#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#kotlin.Boolean#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.BorderStyle?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.Alignment?#com.quarkdown.core.ast.quarkdown.block.Container.TextAlignment?#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment?#com.quarkdown.core.ast.MarkdownContent?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html
 $dokka.location:com.quarkdown.stdlib//cos/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/cos.html
-$dokka.location:com.quarkdown.stdlib//csv/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html
+$dokka.location:com.quarkdown.stdlib//csv/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html
 $dokka.location:com.quarkdown.stdlib//currentPage/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/currentpage.html
 $dokka.location:com.quarkdown.stdlib//debug/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/debug.html
 $dokka.location:com.quarkdown.stdlib//dictionary/#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary/dictionary.html
@@ -82,8 +83,8 @@ $dokka.location:com.quarkdown.stdlib//not/#kotlin.Boolean/PointingToDeclaration/
 $dokka.location:com.quarkdown.stdlib//numbered/#kotlin.String#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/numbered.html
 $dokka.location:com.quarkdown.stdlib//numbering/#com.quarkdown.core.context.Context#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.Value[kotlin.String]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/numbering.html
 $dokka.location:com.quarkdown.stdlib//otherwise/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/otherwise.html
-$dokka.location:com.quarkdown.stdlib//pageFormat/#com.quarkdown.core.context.Context#com.quarkdown.core.document.page.PageSizeFormat?#com.quarkdown.core.document.page.PageOrientation#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Sizes?#kotlin.Int?#com.quarkdown.core.ast.quarkdown.block.Container.Alignment?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html
-$dokka.location:com.quarkdown.stdlib//pageMarginContent/#com.quarkdown.core.document.page.PageMarginPosition#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pagemargin.html
+$dokka.location:com.quarkdown.stdlib//pageFormat/#com.quarkdown.core.context.Context#com.quarkdown.core.document.layout.page.PageSizeFormat?#com.quarkdown.core.document.layout.page.PageOrientation#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Sizes?#kotlin.Int?#com.quarkdown.core.ast.quarkdown.block.Container.TextAlignment?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html
+$dokka.location:com.quarkdown.stdlib//pageMarginContent/#com.quarkdown.core.document.layout.page.PageMarginPosition#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pagemargin.html
 $dokka.location:com.quarkdown.stdlib//pair/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/pair.html
 $dokka.location:com.quarkdown.stdlib//pi/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/pi.html
 $dokka.location:com.quarkdown.stdlib//pow/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/pow.html
@@ -158,8 +159,10 @@ com.quarkdown.core.context.hooks.presence
 com.quarkdown.core.context.localization
 com.quarkdown.core.context.toc
 com.quarkdown.core.document
+com.quarkdown.core.document.layout
+com.quarkdown.core.document.layout.caption
+com.quarkdown.core.document.layout.page
 com.quarkdown.core.document.numbering
-com.quarkdown.core.document.page
 com.quarkdown.core.document.size
 com.quarkdown.core.document.slides
 com.quarkdown.core.document.tex
