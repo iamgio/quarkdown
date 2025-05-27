@@ -34,7 +34,7 @@
     --qd-location-suffix: ". "; /* Suffix for element (e.g. headings) location numbering */
     --qd-caption-label-suffix: ": "; /* Suffix for labels (e.g. Figure 1.1: ...) in captions */
     --qd-slides-horizontal-alignment: center; /* Text alignment of slides documents */
-    --qd-paged-horizontal-alignment: start; /* Text alignment of paged documents */
+    --qd-paged-horizontal-alignment: justify; /* Text alignment of paged documents */
     /*
     Global text alignment (should not be overridden externally).
     It can equal to either --qd-pages-horizontal-alignment or --qd-slides-horizontal-alignment
@@ -777,6 +777,7 @@ Example: "Figure 1.1:"
 
 .box.error > .box-content {
     font-size: 0.7em;
+    text-align: start;
 }
 
 

@@ -359,7 +359,7 @@ fun texMacro(
  * @param margin blank space around the content of each page. Not supported in slides documents
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
- * @param alignment horizontal alignment of the content on each page
+ * @param alignment text alignment of the content on each page
  * @wiki Page format
  */
 @Name("pageformat")
@@ -371,7 +371,7 @@ fun pageFormat(
     height: Size? = null,
     margin: Sizes? = null,
     columns: Int? = null,
-    alignment: Container.Alignment? = null,
+    alignment: Container.TextAlignment? = null,
 ): VoidValue {
     with(context.documentInfo.layout.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,

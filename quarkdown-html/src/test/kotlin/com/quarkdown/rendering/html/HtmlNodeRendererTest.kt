@@ -777,7 +777,7 @@ class HtmlNodeRendererTest {
                 padding = Sizes(2.0.inch, 3.percent, 4.0.inch, 5.0.inch),
                 cornerRadius = Sizes(all = 6.0.px),
                 alignment = Container.Alignment.CENTER,
-                textAlignment = Container.Alignment.START,
+                textAlignment = Container.TextAlignment.JUSTIFY,
                 children = children,
             ).render(),
         )

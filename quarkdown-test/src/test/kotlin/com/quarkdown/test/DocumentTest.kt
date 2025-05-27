@@ -3,7 +3,7 @@ package com.quarkdown.test
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
-import com.quarkdown.core.ast.quarkdown.block.Container.Alignment
+import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.page.PageOrientation
@@ -84,7 +84,7 @@ class DocumentTest {
             )
 
             assertEquals(4, documentInfo.layout.pageFormat.columnCount)
-            assertEquals(Alignment.END, documentInfo.layout.pageFormat.alignment)
+            assertEquals(Container.TextAlignment.END, documentInfo.layout.pageFormat.alignment)
         }
     }
 
