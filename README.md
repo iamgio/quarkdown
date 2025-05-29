@@ -321,7 +321,8 @@ Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to kn
 A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
 
 <p align="center">
-  <a href="https://github.com/https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>
+  <a href="https://github.com/https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>&nbsp;
+  <a href="https://github.com/https://github.com/dcopia"><img src="https://avatars.githubusercontent.com/u/162327812?v=4" alt="dcopia" width="35"></a>
 </p>
 
 ## Concept
