@@ -14,10 +14,9 @@
   <br>
   <strong>Download</strong>
   <br>
-  <strong><a href="https://github.com/iamgio/quarkdown/releases/latest">Stable</a></strong>
-  &nbsp;&nbsp; | &nbsp;&nbsp;
   <a href="https://github.com/iamgio/quarkdown/releases/tag/latest">Latest</a>
-  &nbsp;
+  &nbsp; | &nbsp;
+  <strong><a href="https://github.com/iamgio/quarkdown/releases/latest">Stable</a></strong>&nbsp;
   <br>
   <hr>
 </p>
@@ -233,12 +232,12 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
-Download `quarkdown.zip` from the [releases](https://github.com/iamgio/quarkdown/releases) page or build it with `gradlew distZip`, and unzip it.
+Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
 
 - The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
 - The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
 
-Java 17 or higher is required.
+Java 17 or higher is required. All major operating systems are supported.
 
 ## Creating a project
 
