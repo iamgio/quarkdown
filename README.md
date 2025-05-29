@@ -28,14 +28,14 @@
 2. [Demo](#as-simple-as-you-expect)
 3. [Targets](#targets)
 4. [Comparison](#comparison)
-5. [Installation](#installation)
-6. [Getting started](#getting-started)
-    - [Creating a project](#creating-a-project)
-    - [Compiling](#compiling)
-7. [Mock document](#mock-document)
-8. [Contributing](#contributing)
-9. [Sponsors](#sponsors)
-10. [Concept](#concept)
+5. [Getting started](#getting-started)
+    1. [Installation](#installation)
+    2. [Creating a project](#creating-a-project)
+    3. [Compiling](#compiling)
+6. [Mock document](#mock-document)
+7. [Contributing](#contributing)
+8. [Sponsors](#sponsors)
+9. [Concept](#concept)
 
 &nbsp;
 
