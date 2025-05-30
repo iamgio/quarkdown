@@ -78,7 +78,6 @@ class LocalFileWebServer(
                         }
                     }.onFailure { exception ->
                         log.error("WebSocket error: ${exception.message}")
-                    }.also {
                         job.cancel()
                     }
                 }
