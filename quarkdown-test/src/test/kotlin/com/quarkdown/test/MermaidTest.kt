@@ -14,6 +14,8 @@ private const val MERMAID_CLOSE = "</pre></figure>"
  * Tests for Mermaid diagrams.
  */
 class MermaidTest {
+    private fun String.escape() = replace("<", "&lt;").replace(">", "&gt;")
+
     @Test
     fun mermaid() {
         execute(
@@ -24,7 +26,12 @@ class MermaidTest {
                     A-->C
             """.trimIndent(),
         ) {
-            assertEquals("${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C$MERMAID_CLOSE", it)
+            assertEquals(
+                MERMAID_OPEN +
+                    "graph TD\n    A-->B\n    A-->C".escape() +
+                    MERMAID_CLOSE,
+                it,
+            )
             assertTrue(attributes.hasMermaidDiagram)
         }
     }
@@ -40,8 +47,9 @@ class MermaidTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "${MERMAID_OPEN}graph TD\n    A-->B\n    A-->C</pre>" +
-                    "<figcaption class=\"caption-bottom\">My graph</figcaption></figure>",
+                MERMAID_OPEN +
+                    "graph TD\n    A-->B\n    A-->C".escape() +
+                    "</pre><figcaption class=\"caption-bottom\">My graph</figcaption></figure>",
                 it,
             )
             assertTrue(attributes.hasMermaidDiagram)
@@ -62,7 +70,7 @@ class MermaidTest {
         }
     }
 
-    private fun String.expectedChart() = MERMAID_OPEN + trimIndent().replace("    ", "\t") + "\n" + MERMAID_CLOSE
+    private fun String.expectedChart() = MERMAID_OPEN + trimIndent().escape().replace("    ", "\t") + "\n" + MERMAID_CLOSE
 
     @Test
     fun `xy chart`() {
@@ -119,8 +127,8 @@ class MermaidTest {
             assertEquals(
                 """
                     xychart-beta
-                        x-axis "Months"
-                        y-axis "Revenue"
+                        x-axis &quot;Months&quot;
+                        y-axis &quot;Revenue&quot;
                         line [5000.0, 6000.0, 7500.0]
                 """.expectedChart(),
                 it,
@@ -141,7 +149,7 @@ class MermaidTest {
             assertEquals(
                 """
                     xychart-beta
-                        y-axis "Revenue" 2 --> 8000
+                        y-axis &quot;Revenue&quot; 2 --> 8000
                         line [5000.0, 6000.0, 7500.0]
                 """.expectedChart(),
                 it,
