@@ -438,7 +438,7 @@ class NumberingTest {
                     "<figcaption class=\"caption-bottom\" data-element-label=\"1.1\">Caption 1</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.2\">" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A-->B\n    A-->C</pre>" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "<figcaption class=\"caption-bottom\" data-element-label=\"1.2\">Caption 2</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
