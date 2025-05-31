@@ -56,17 +56,17 @@ class HtmlPostRenderer(
                     ?.serverPort,
             )
             // Document metadata.
-            value(TemplatePlaceholders.TITLE, context.documentInfo.name ?: "Quarkdown")
-            optionalValue(TemplatePlaceholders.LANGUAGE, context.documentInfo.locale?.tag)
+            val document = context.documentInfo
+            value(TemplatePlaceholders.TITLE, document.name ?: "Quarkdown")
+            optionalValue(TemplatePlaceholders.LANGUAGE, document.locale?.tag)
             value(
                 TemplatePlaceholders.DOCUMENT_TYPE,
-                context.documentInfo.type.name
-                    .lowercase(),
+                document.type.name.lowercase(),
             )
             // "Paged" document rendering via PagesJS.
-            conditional(TemplatePlaceholders.IS_PAGED, context.documentInfo.type == DocumentType.PAGED)
+            conditional(TemplatePlaceholders.IS_PAGED, document.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.
-            conditional(TemplatePlaceholders.IS_SLIDES, context.documentInfo.type == DocumentType.SLIDES)
+            conditional(TemplatePlaceholders.IS_SLIDES, document.type == DocumentType.SLIDES)
             // HighlightJS is initialized only if needed.
             conditional(
                 TemplatePlaceholders.HAS_CODE,
@@ -83,7 +83,7 @@ class HtmlPostRenderer(
                 context.attributes.hasMath,
             )
             // Page format.
-            val pageFormat = context.documentInfo.layout.pageFormat
+            val pageFormat = document.layout.pageFormat
             conditional(TemplatePlaceholders.HAS_PAGE_SIZE, pageFormat.hasSize)
             optionalValue(
                 TemplatePlaceholders.PAGE_WIDTH,
@@ -104,6 +104,18 @@ class HtmlPostRenderer(
             optionalValue(
                 TemplatePlaceholders.HORIZONTAL_ALIGNMENT,
                 pageFormat.alignment?.asCSS,
+            )
+            optionalValue(
+                TemplatePlaceholders.PARAGRAPH_SPACING,
+                document.layout.paragraphStyle.spacing
+                    ?.toString()
+                    ?.plus("em"),
+            )
+            optionalValue(
+                TemplatePlaceholders.PARAGRAPH_INDENT,
+                document.layout.paragraphStyle.indent
+                    ?.toString()
+                    ?.plus("em"),
             )
             iterable(
                 TemplatePlaceholders.TEX_MACROS,
