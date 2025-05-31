@@ -440,6 +440,7 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
     line-height: var(--qd-line-height);
     margin-top: 0;
     margin-bottom: 0;
+    text-indent: 2em;
 }
 
 /* Syllables-based word break */
@@ -458,6 +459,28 @@ p + .float + p:not(.stack > p):not(.page-margin-content > p),
 /* Spacing between the paragraph and its floating element sibling. */
 p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
+}
+
+/* Paragraph indentation cancelling */
+p:first-child,
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p,
+hr + p,
+figure + p,
+table + p,
+details > summary + p,
+.float + p,
+figure p,
+.stack > p,
+.container[style*="text-align"] > p,
+.container[style*="justify-items"] > p,
+.mermaid p
+{
+    text-indent: 0 !important;
 }
 
 .float[style*="float: inline-start"] {
