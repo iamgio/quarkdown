@@ -112,6 +112,10 @@ class HtmlPostRenderer(
                     ?.plus("em"),
             )
             optionalValue(
+                TemplatePlaceholders.PARAGRAPH_LINE_HEIGHT,
+                document.layout.paragraphStyle.lineHeight,
+            )
+            optionalValue(
                 TemplatePlaceholders.PARAGRAPH_INDENT,
                 document.layout.paragraphStyle.indent
                     ?.toString()

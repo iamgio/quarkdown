@@ -314,18 +314,21 @@ fun disableNumbering(
 /**
  * Sets the global style of paragraphs in the document.
  * If a value is unset, the default value supplied by the underlying renderer is used.
- * @param spacing whitespace between paragraphs, multiplied by the font size.
+ * @param lineHeight height of each line, multiplied by the font size
+ * @param spacing whitespace between paragraphs, multiplied by the font size
  * @param indent whitespace at the start of each paragraph, multiplied by the font size.
- *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones.
+ *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones
  * @wiki Paragraph style
  */
 @Name("paragraphstyle")
 fun paragraphStyle(
     @Injected context: Context,
+    @Name("lineheight") lineHeight: Number? = null,
     spacing: Number? = null,
     indent: Number? = null,
 ): VoidValue {
     with(context.documentInfo.layout.paragraphStyle) {
+        this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
         this.spacing = spacing?.toDouble() ?: this.spacing
         this.indent = indent?.toDouble() ?: this.indent
     }

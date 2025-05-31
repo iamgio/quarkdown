@@ -81,6 +81,7 @@
         }
 
         p {
+            [[if:PARAGRAPHLINEHEIGHT]]--qd-line-height: [[PARAGRAPHLINEHEIGHT]];[[endif:PARAGRAPHLINEHEIGHT]]
             [[if:PARAGRAPHSPACING]]--qd-paragraph-vertical-margin: [[PARAGRAPHSPACING]];[[endif:PARAGRAPHSPACING]]
             [[if:PARAGRAPHINDENT]]--qd-paragraph-text-indent: [[PARAGRAPHINDENT]];[[endif:PARAGRAPHINDENT]]
         }
