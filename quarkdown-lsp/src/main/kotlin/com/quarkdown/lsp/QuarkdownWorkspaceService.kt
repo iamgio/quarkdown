@@ -7,12 +7,14 @@ import org.eclipse.lsp4j.services.WorkspaceService
 /**
  *
  */
-class QuarkdownWorkspaceService : WorkspaceService {
+class QuarkdownWorkspaceService(
+    private val server: QuarkdownLanguageServer,
+) : WorkspaceService {
     override fun didChangeConfiguration(params: DidChangeConfigurationParams?) {
-        println("Configuration changed: ${params?.settings}")
+        server.log("Configuration changed: ${params?.settings}")
     }
 
     override fun didChangeWatchedFiles(params: DidChangeWatchedFilesParams?) {
-        println("Watched files changed: ${params?.changes?.joinToString { it.uri }}")
+        server.log("Watched files changed: ${params?.changes?.joinToString { it.uri }}")
     }
 }
