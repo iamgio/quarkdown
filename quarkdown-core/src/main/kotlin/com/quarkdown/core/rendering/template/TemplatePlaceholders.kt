@@ -88,6 +88,11 @@ object TemplatePlaceholders {
     const val HORIZONTAL_ALIGNMENT = "HALIGNMENT"
 
     /**
+     * Line height of paragraphs.
+     */
+    const val PARAGRAPH_LINE_HEIGHT = "PARAGRAPHLINEHEIGHT"
+
+    /**
      * Whitespace height between paragraphs.
      */
     const val PARAGRAPH_SPACING = "PARAGRAPHSPACING"
