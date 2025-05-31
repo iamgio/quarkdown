@@ -22,6 +22,7 @@ object QuarkdownLanguageServerLauncher {
 
     fun startListening() {
         val client: LanguageClient = requireNotNull(launcher.remoteProxy)
+        languageServer.connect(client)
 
         launcher.startListening()
     }
