@@ -103,6 +103,10 @@
     border: 0.1em solid;
 }
 
+[data-location]::before {
+    padding-right: 1rem;
+}
+
 /* Table of contents */
 
 .quarkdown nav a:not(:hover) {

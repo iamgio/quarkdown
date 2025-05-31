@@ -191,7 +191,7 @@ blockquote {
 }
 
 [data-location]::before {
-    padding-right: 0.85rem;
+    padding-right: 2.15rem;
 }
 
 /* Table of contents */
