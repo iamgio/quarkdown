@@ -56,4 +56,7 @@ class QuarkdownTextDocumentService(
             completionItem.kind = CompletionItemKind.Snippet
             Either.forLeft(listOf<CompletionItem?>(completionItem))
         }
+
+    override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
+        CompletableFuture.completedFuture(unresolved)
 }

@@ -6,6 +6,8 @@ import org.eclipse.lsp4j.MessageParams
 import org.eclipse.lsp4j.MessageType
 import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.TextDocumentSyncKind
+import org.eclipse.lsp4j.CompletionOptions
+import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageClientAware
 import org.eclipse.lsp4j.services.LanguageServer
@@ -26,12 +28,12 @@ class QuarkdownLanguageServer :
     private lateinit var client: LanguageClient
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
-        val response =
-            InitializeResult(ServerCapabilities())
-                .apply {
-                    capabilities.setTextDocumentSync(TextDocumentSyncKind.Full)
-                }
-
+        val serverCaps = ServerCapabilities().apply {
+            textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
+            completionProvider = CompletionOptions(true, listOf("."))
+        }
+        val response = InitializeResult(serverCaps)
+        
         return CompletableFuture.completedFuture(response)
     }
 
