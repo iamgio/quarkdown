@@ -1,12 +1,13 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
+import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
 import org.eclipse.lsp4j.MessageParams
 import org.eclipse.lsp4j.MessageType
 import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.TextDocumentSyncKind
-import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageClientAware
@@ -28,12 +29,13 @@ class QuarkdownLanguageServer :
     private lateinit var client: LanguageClient
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
-        val serverCaps = ServerCapabilities().apply {
-            textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
-            completionProvider = CompletionOptions(true, listOf("."))
-        }
+        val serverCaps =
+            ServerCapabilities().apply {
+                textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
+                completionProvider = CompletionOptions(true, listOf(FunctionCallGrammar.BEGIN))
+            }
         val response = InitializeResult(serverCaps)
-        
+
         return CompletableFuture.completedFuture(response)
     }
 
