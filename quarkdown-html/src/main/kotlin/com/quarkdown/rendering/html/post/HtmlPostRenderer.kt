@@ -108,12 +108,14 @@ class HtmlPostRenderer(
             optionalValue(
                 TemplatePlaceholders.PARAGRAPH_SPACING,
                 document.layout.paragraphStyle.spacing
-                    ?.asCSS,
+                    ?.toString()
+                    ?.plus("em"),
             )
             optionalValue(
                 TemplatePlaceholders.PARAGRAPH_INDENT,
                 document.layout.paragraphStyle.indent
-                    ?.asCSS,
+                    ?.toString()
+                    ?.plus("em"),
             )
             iterable(
                 TemplatePlaceholders.TEX_MACROS,
