@@ -1,5 +1,8 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.function.library.LibraryExporter
+import com.quarkdown.stdlib.Stdlib
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionList
@@ -65,13 +68,21 @@ class QuarkdownTextDocumentService(
 
     override fun completion(position: CompletionParams): CompletableFuture<Either<List<CompletionItem?>?, CompletionList?>?>? =
         CompletableFuture.supplyAsync {
+            val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
+
             server.log("Operation '" + "text/completion")
-            val completionItem = CompletionItem()
-            completionItem.label = "Test completion item"
-            completionItem.insertText = "Test"
-            completionItem.detail = "Snippet"
-            completionItem.kind = CompletionItemKind.Snippet
-            Either.forLeft(listOf(completionItem))
+
+            val completions: List<CompletionItem> =
+                libraries.flatMap { it.functions }.map { function ->
+                    val completionItem = CompletionItem()
+                    completionItem.label = function.name
+                    completionItem.insertText = function.name
+                    completionItem.detail = "Function"
+                    completionItem.kind = CompletionItemKind.Function
+                    completionItem
+                }
+
+            Either.forLeft(completions)
         }
 
     override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
