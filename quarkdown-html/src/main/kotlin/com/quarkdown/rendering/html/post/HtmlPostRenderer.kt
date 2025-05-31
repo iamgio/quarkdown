@@ -105,6 +105,14 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.HORIZONTAL_ALIGNMENT,
                 pageFormat.alignment?.asCSS,
             )
+            optionalValue(
+                TemplatePlaceholders.PARAGRAPH_SPACING,
+                "15em",
+            )
+            optionalValue(
+                TemplatePlaceholders.PARAGRAPH_INDENT,
+                "15em",
+            )
             iterable(
                 TemplatePlaceholders.TEX_MACROS,
                 mapToJsObjectEntries(context.documentInfo.tex.macros),
