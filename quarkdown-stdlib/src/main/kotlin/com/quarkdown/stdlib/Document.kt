@@ -313,7 +313,7 @@ fun disableNumbering(
 
 /**
  * Sets the global style of paragraphs in the document.
- * If a value is `null`, the default value supplied by the underlying renderer is used.
+ * If a value is unset, the default value supplied by the underlying renderer is used.
  * @param spacing whitespace between paragraphs, multiplied by the font size.
  * @param indent whitespace at the start of each paragraph, multiplied by the font size.
  *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones.
