@@ -62,10 +62,12 @@ class DokkaReaderTest {
         results[0].let {
             assertEquals("lowercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
         results[1].let {
             assertEquals("uppercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
     }
 }
