@@ -1,6 +1,6 @@
 package com.quarkdown.quarkdoc.reader.dokka
 
-import com.quarkdown.quarkdoc.reader.ContentExtractor
+import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import org.jsoup.Jsoup
 
 /**
@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
  */
 class DokkaHtmlContentExtractor(
     private val html: String,
-) : ContentExtractor {
+) : DocsContentExtractor {
     override fun extractContent(): String? =
         Jsoup
             .parse(html)
