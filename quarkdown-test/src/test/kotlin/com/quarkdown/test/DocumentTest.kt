@@ -34,6 +34,8 @@ class DocumentTest {
             assertNull(documentInfo.name)
             assertEquals(0, documentInfo.authors.size)
             assertNull(documentInfo.locale)
+            assertNull(documentInfo.layout.pageFormat.pageWidth)
+            assertNull(documentInfo.layout.paragraphStyle.spacing)
         }
     }
 
@@ -52,6 +54,7 @@ class DocumentTest {
             .doclang {english}
             .theme {darko} layout:{minimal}
             .pageformat {A3} orientation:{landscape} margin:{3cm 2px} columns:{4} alignment:{end}
+            .paragraphstyle lineheight:{2.0} spacing:{1.5} indent:{2}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
             """.trimIndent(),
@@ -85,6 +88,10 @@ class DocumentTest {
 
             assertEquals(4, documentInfo.layout.pageFormat.columnCount)
             assertEquals(Container.TextAlignment.END, documentInfo.layout.pageFormat.alignment)
+
+            assertEquals(2.0, documentInfo.layout.paragraphStyle.lineHeight)
+            assertEquals(1.5, documentInfo.layout.paragraphStyle.spacing)
+            assertEquals(2.0, documentInfo.layout.paragraphStyle.indent)
         }
     }
 

@@ -88,6 +88,21 @@ object TemplatePlaceholders {
     const val HORIZONTAL_ALIGNMENT = "HALIGNMENT"
 
     /**
+     * Line height of paragraphs.
+     */
+    const val PARAGRAPH_LINE_HEIGHT = "PARAGRAPHLINEHEIGHT"
+
+    /**
+     * Whitespace height between paragraphs.
+     */
+    const val PARAGRAPH_SPACING = "PARAGRAPHSPACING"
+
+    /**
+     * Indentation width of the first line of paragraphs.
+     */
+    const val PARAGRAPH_INDENT = "PARAGRAPHINDENT"
+
+    /**
      * Custom user-defined TeX macros.
      */
     const val TEX_MACROS = "TEXMACRO"

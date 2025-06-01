@@ -68,7 +68,7 @@ jobs:
       uses: burrunan/gradle-cache-action@v3
       with:
         job-id: main
-        arguments: dokkaGeneratePublicationHtml
+        arguments: quarkdocGenerateAll
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v4

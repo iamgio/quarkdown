@@ -104,7 +104,7 @@ Open an [Issue] with a clear and descriptive title. The body should contain the 
 The following list shows contributions that are highly welcome, in order of importance:
 
 1. Improve the **documentation** of the [standard library], which will be shown in the auto-generated [documentation].  
-   To have a preview of the generated documentation, you can run `gradlew :quarkdown-stdlib:dokkaGenerate`
+   To have a preview of the generated documentation, you can run `gradlew quarkdocGenerate`
 
 2. Add new functions to the [standard library]. It's suggested to open an [enhancement suggestion](#suggesting-enhancements) first.
 

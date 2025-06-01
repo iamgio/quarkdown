@@ -7,7 +7,6 @@ on:
   push:
     branches-ignore: [ "main", "workflow-test" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   test:
