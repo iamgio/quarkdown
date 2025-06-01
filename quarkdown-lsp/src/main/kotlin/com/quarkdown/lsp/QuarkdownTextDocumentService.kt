@@ -1,7 +1,7 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.lsp.documentation.HtmlToMarkdown
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
-import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionList
@@ -86,12 +86,12 @@ class QuarkdownTextDocumentService(
                         val completionItem = CompletionItem()
                         completionItem.label = function.name
                         completionItem.insertText = function.name
-                        completionItem.detail = "Function"
+                        completionItem.detail = function.moduleName
                         completionItem.kind = CompletionItemKind.Function
 
                         completionItem.documentation =
                             function.extractor().extractContent()?.let {
-                                val md = FlexmarkHtmlConverter.builder().build().convert(it)
+                                val md = HtmlToMarkdown.convert(it)
                                 Either.forRight(MarkupContent(MarkupKind.MARKDOWN, md))
                             }
                         completionItem
