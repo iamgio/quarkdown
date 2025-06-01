@@ -14,8 +14,13 @@ private const val MODULE_DIR_NAME = "module"
 class DokkaHtmlWalker(
     private val root: File,
 ) : DocsWalker<DokkaHtmlContentExtractor> {
-    // e.g. com/quarkdown/stdlib/module/String/lowercase.html
-    private fun File.isInQuarkdownModule(): Boolean = parentFile?.parentFile?.name == MODULE_DIR_NAME
+    // e.g. com.quarkdown.stdlib.module.String/lowercase.html => String
+    private val File.quarkdownModuleName: String?
+        get() =
+            parentFile.name
+                .split('.')
+                .takeIf { it.getOrNull(it.size - 2) == MODULE_DIR_NAME }
+                ?.lastOrNull()
 
     /**
      * Recursively scans Dokka HTML files in the given root directory.
@@ -30,7 +35,7 @@ class DokkaHtmlWalker(
             .map { file ->
                 DocsWalker.Result(
                     name = file.nameWithoutExtension,
-                    moduleName = file.takeIf { it.isInQuarkdownModule() }?.parentFile?.name,
+                    moduleName = file.quarkdownModuleName,
                     extractor = { DokkaHtmlContentExtractor(file.readText()) },
                 )
             }

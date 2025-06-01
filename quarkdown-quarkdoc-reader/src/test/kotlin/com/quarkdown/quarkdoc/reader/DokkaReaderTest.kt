@@ -40,7 +40,7 @@ class DokkaReaderTest {
         resourceNames: List<String>,
     ): File {
         val tempDir = createTempDirectory().toFile()
-        val moduleDir = tempDir.resolve("com/quarkdown/stdlib/module/$moduleName").apply { mkdirs() }
+        val moduleDir = tempDir.resolve("com.quarkdown.stdlib.module.$moduleName").apply { mkdirs() }
         resourceNames.forEach { name ->
             javaClass.getResourceAsStream("/content/$name")!!.use { input ->
                 moduleDir.resolve(name).outputStream().use { output ->
