@@ -2,12 +2,16 @@ package com.quarkdown.lsp
 
 import org.eclipse.lsp4j.jsonrpc.Launcher
 import org.eclipse.lsp4j.services.LanguageClient
+import java.io.File
 
 /**
- *
+ * Launcher for the Quarkdown Language Server.
+ * @param quarkdownDirectory the directory containing the Quarkdown distribution, if available
  */
-object QuarkdownLanguageServerLauncher {
-    private val languageServer = QuarkdownLanguageServer()
+class QuarkdownLanguageServerLauncher(
+    quarkdownDirectory: File?,
+) {
+    private val languageServer = QuarkdownLanguageServer(quarkdownDirectory)
 
     private val launcher by lazy {
         Launcher

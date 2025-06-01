@@ -1,8 +1,6 @@
 package com.quarkdown.lsp
 
-import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.library.LibraryExporter
-import com.quarkdown.stdlib.Stdlib
+import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionList
@@ -66,24 +64,33 @@ class QuarkdownTextDocumentService(
     private fun getDocumentText(document: TextDocumentIdentifier): String? =
         documents[document.uri] ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
 
-    override fun completion(position: CompletionParams): CompletableFuture<Either<List<CompletionItem?>?, CompletionList?>?>? =
-        CompletableFuture.supplyAsync {
-            val libraries: Set<Library> = LibraryExporter.exportAll(Stdlib)
+    override fun completion(position: CompletionParams): CompletableFuture<Either<List<CompletionItem?>?, CompletionList?>?>? {
+        if (server.docsDirectory == null) {
+            server.log("No documentation directory found, cannot provide completions.")
+            return CompletableFuture.completedFuture(Either.forRight(CompletionList(false, emptyList())))
+        }
 
+        return CompletableFuture.supplyAsync {
             server.log("Operation '" + "text/completion")
 
+            val walker = DokkaHtmlWalker(server.docsDirectory!!)
+
             val completions: List<CompletionItem> =
-                libraries.flatMap { it.functions }.map { function ->
-                    val completionItem = CompletionItem()
-                    completionItem.label = function.name
-                    completionItem.insertText = function.name
-                    completionItem.detail = "Function"
-                    completionItem.kind = CompletionItemKind.Function
-                    completionItem
-                }
+                walker
+                    .walk()
+                    .filter { it.isInModule }
+                    .map { function ->
+                        val completionItem = CompletionItem()
+                        completionItem.label = function.name
+                        completionItem.insertText = function.name
+                        completionItem.detail = "Function"
+                        completionItem.kind = CompletionItemKind.Function
+                        completionItem
+                    }.toList()
 
             Either.forLeft(completions)
         }
+    }
 
     override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
         CompletableFuture.completedFuture(unresolved)

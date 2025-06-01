@@ -14,19 +14,29 @@ import org.eclipse.lsp4j.services.LanguageClientAware
 import org.eclipse.lsp4j.services.LanguageServer
 import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
+import java.io.File
 import java.util.concurrent.CompletableFuture
 import kotlin.system.exitProcess
 
 /**
- *
+ * Quarkdown Language Server implementation.
+ * @param quarkdownDirectory the directory containing the Quarkdown distribution, if available
  */
-class QuarkdownLanguageServer :
-    LanguageServer,
+class QuarkdownLanguageServer(
+    private val quarkdownDirectory: File?,
+) : LanguageServer,
     LanguageClientAware {
     private val textDocumentService: TextDocumentService = QuarkdownTextDocumentService(this)
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
 
     private lateinit var client: LanguageClient
+
+    /**
+     * The directory containing the documentation files, if available.
+     * This is located in the Quarkdown distribution.
+     */
+    val docsDirectory: File?
+        get() = quarkdownDirectory?.resolve("docs")?.takeIf { it.isDirectory }
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
         val serverCaps =
