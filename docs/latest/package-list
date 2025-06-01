@@ -241,6 +241,9 @@ com.quarkdown.quarkdoc.dokka.transformers.name
 com.quarkdown.quarkdoc.dokka.transformers.suppress
 com.quarkdown.quarkdoc.dokka.transformers.type
 com.quarkdown.quarkdoc.dokka.util
+module:quarkdown-quarkdoc-reader
+com.quarkdown.quarkdoc.reader
+com.quarkdown.quarkdoc.reader.dokka
 module:quarkdown-server
 com.quarkdown.server
 com.quarkdown.server.browser
