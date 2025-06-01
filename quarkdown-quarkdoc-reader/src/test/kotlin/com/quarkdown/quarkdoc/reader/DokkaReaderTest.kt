@@ -14,17 +14,16 @@ import kotlin.test.assertTrue
 class DokkaReaderTest {
     @Test
     fun `html extractor`() {
-        val subContentRange = 114..145
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
+        val extractedHtml = javaClass.getResourceAsStream("/extract/lowercase.html")!!.bufferedReader().readText()
+
+        fun String.withoutWhitespace(): String = replace("\\s+".toRegex(), "")
+
         assertEquals(
-            fullHtml
-                .lines()
-                .subList(subContentRange.first, subContentRange.last)
-                .joinToString("\n")
-                .replace("\\s+".toRegex(), ""),
+            extractedHtml.withoutWhitespace(),
             DokkaHtmlContentExtractor(fullHtml)
                 .extractContent()
-                ?.replace("\\s+".toRegex(), ""),
+                ?.withoutWhitespace(),
         )
     }
 
