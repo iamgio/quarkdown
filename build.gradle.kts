@@ -1,4 +1,3 @@
-
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -72,11 +71,11 @@ ktlint {
 
 // Dokka
 
-dependencies {
+/*dependencies {
     subprojects.forEach {
         dokka(it)
     }
-}
+}*/
 
 dokka {
     dokkaPublications.html {
@@ -87,6 +86,44 @@ dokka {
                 .asFile,
         )
     }
+}
+
+/**
+ * Whether [project] uses the Quarkdoc plugin, which means its documentation must be included in the distribution zip.
+ */
+fun usesQuarkdoc(project: Project): Boolean {
+    val quarkdoc = project(":quarkdown-quarkdoc")
+    return project.configurations
+        .asSequence()
+        .flatMap { it.dependencies }
+        .filterIsInstance<ProjectDependency>()
+        .any { it.dependencyProject == quarkdoc }
+}
+
+tasks.register("quarkdocGenerate") {
+    group = "documentation"
+    description = "Generates the Quarkdoc documentation for modules that include the Quarkdoc plugin."
+
+    dependencies {
+        subprojects.filter(::usesQuarkdoc).forEach {
+            dokka(it)
+        }
+    }
+
+    dependsOn(tasks.dokkaGenerate)
+}
+
+tasks.register("quarkdocGenerateAll") {
+    group = "documentation"
+    description = "Generates the Quarkdoc documentation for all modules."
+
+    dependencies {
+        subprojects.forEach {
+            dokka(it)
+        }
+    }
+
+    dependsOn(tasks.dokkaGenerate)
 }
 
 allprojects {
@@ -118,14 +155,26 @@ tasks.test {
 }
 
 tasks.distZip {
+    val baseName = archiveBaseName.get()
+
     archiveVersion.set("")
 
     // The module 'libs' contains .qmd library files that are saved in the lib/qmd directory of the distribution zip.
     val librariesModule = project(":quarkdown-libs")
 
-    into("${archiveBaseName.get()}/lib/qmd") {
+    into("$baseName/lib/qmd") {
         from(librariesModule.file("src/main/resources")) {
             include("*.qmd")
+        }
+    }
+
+    // Include the generated Dokka documentation in the 'docs' directory.
+    tasks.named("quarkdocGenerate").let { dokkaTask ->
+        dependsOn(dokkaTask)
+        val dokkaOutputDir = layout.buildDirectory.file("docs")
+
+        from(dokkaOutputDir) {
+            into("$baseName/docs")
         }
     }
 }
