@@ -1,6 +1,7 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
+import com.quarkdown.lsp.completion.CompletionSuppliersFactory
 import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
@@ -26,7 +27,12 @@ class QuarkdownLanguageServer(
     private val quarkdownDirectory: File?,
 ) : LanguageServer,
     LanguageClientAware {
-    private val textDocumentService: TextDocumentService = QuarkdownTextDocumentService(this)
+    private val textDocumentService: TextDocumentService =
+        QuarkdownTextDocumentService(
+            this,
+            CompletionSuppliersFactory(this).default(),
+        )
+
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
 
     private lateinit var client: LanguageClient
