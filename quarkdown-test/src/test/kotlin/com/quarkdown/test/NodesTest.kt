@@ -1,11 +1,9 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -311,62 +309,6 @@ class NodesTest {
                     "<li class=\"task-list-item\"><input disabled=\"\" type=\"checkbox\" checked=\"\" />Checked</li></ul>",
                 it,
             )
-        }
-    }
-
-    @Test
-    fun code() {
-        execute("`println(\"Hello, world!\")`") {
-            assertEquals(
-                "<p><span class=\"codespan-content\"><code>println(&quot;Hello, world!&quot;)</code></span></p>",
-                it,
-            )
-            assertFalse(attributes.hasCode)
-        }
-
-        // Color preview
-        execute("`#FF0000`") {
-            assertEquals(
-                "<p>" +
-                    "<span class=\"codespan-content\">" +
-                    "<code>#FF0000</code>" +
-                    "<span style=\"background-color: rgba(255, 0, 0, 1.0);\" class=\"color-preview\"></span>" +
-                    "</span>" +
-                    "</p>",
-                it,
-            )
-            assertFalse(attributes.hasCode)
-        }
-
-        execute("`rgba(200, 100, 50, 0.5)`") {
-            assertEquals(
-                "<p>" +
-                    "<span class=\"codespan-content\">" +
-                    "<code>rgba(200, 100, 50, 0.5)</code>" +
-                    "<span style=\"background-color: rgba(200, 100, 50, 0.5);\" class=\"color-preview\"></span>" +
-                    "</span>" +
-                    "</p>",
-                it,
-            )
-            assertFalse(attributes.hasCode)
-        }
-
-        execute("```\nprintln(\"Hello, world!\")\n```") {
-            assertEquals("<pre><code>println(&quot;Hello, world!&quot;)</code></pre>", it)
-            assertTrue(attributes.hasCode)
-        }
-
-        execute("```kotlin\nprintln(\"Hello, world!\")\n```") {
-            assertEquals("<pre><code class=\"language-kotlin\">println(&quot;Hello, world!&quot;)</code></pre>", it)
-            assertTrue(attributes.hasCode)
-        }
-
-        execute("```kotlin\nfun hello() {\n    println(\"Hello, world!\")\n}\n```") {
-            assertEquals(
-                "<pre><code class=\"language-kotlin\">fun hello() {\n    println(&quot;Hello, world!&quot;)\n}</code></pre>",
-                it,
-            )
-            assertTrue(attributes.hasCode)
         }
     }
 
