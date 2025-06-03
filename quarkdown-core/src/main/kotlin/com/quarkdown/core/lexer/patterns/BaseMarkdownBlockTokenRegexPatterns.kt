@@ -105,7 +105,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "FencesCode",
                 wrap = ::FencesCodeToken,
                 regex =
-                    "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)((.|\\s)+?)(\\k<fenceschar>{3,})"
+                    "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)(?s)(.+?)(\\k<fenceschar>{3,})[ \\t]*$"
                         .toRegex(),
             )
 

@@ -147,14 +147,15 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 # Comparison
 
-|                       |     Quarkdown      |      Markdown      |       LaTeX        |      AsciiDoc      |        MDX         |
-|-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| Concise and readable  | :white_check_mark: | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |
-| Full document control | :white_check_mark: |        :x:         | :white_check_mark: |        :x:         |        :x:         |
-| Scripting             | :white_check_mark: |        :x:         |      Partial       |        :x:         | :white_check_mark: |
-| Book/article export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
-| Presentation export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |    Third-party     |
-| Targets               |     HTML, PDF      |        HTML        |  PDF, PostScript   |  HTML, PDF, ePub   |        HTML        |
+|                       |     Quarkdown      |      Markdown      |       LaTeX        |       Typst        |      AsciiDoc      |        MDX         |
+|-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| Concise and readable  | :white_check_mark: | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Full document control | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
+| Scripting             | :white_check_mark: |        :x:         |      Partial       | :white_check_mark: |        :x:         | :white_check_mark: |
+| Book/article export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
+| Presentation export   | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
+| Learning curve        |   :green_circle:   |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
+| Targets               |     HTML, PDF      |        HTML        |  PDF, PostScript   |        PDF         |  HTML, PDF, ePub   |        HTML        |
 
 <table>
   <thead>
