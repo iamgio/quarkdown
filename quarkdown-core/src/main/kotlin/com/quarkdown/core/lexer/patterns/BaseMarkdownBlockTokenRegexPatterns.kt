@@ -244,9 +244,9 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                         // Header
                         "^ *([^\\n ].*)\\n" +
                             // Align
-                            " {0,3}((?:\\|?\\s*:?-+:?\\s*)+\\|?)\\n" +
+                            " {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)" +
                             // Cells
-                            "((?:[^\\n]*\\S[^\\n]*\\n?)*)",
+                            "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
                     ).withReference("interruption", interruptionRule(includeTable = false).pattern)
                         .withReference("|table", "")
                         .build(),

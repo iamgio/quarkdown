@@ -245,7 +245,7 @@ class BlockParserTest {
     @Test
     fun horizontalRule() {
         val nodes = blocksIterator<HorizontalRule>(readSource("/parsing/hr.md"), assertType = false)
-        assertEquals(6, nodes.asSequence().count())
+        assertEquals(7, nodes.asSequence().count())
     }
 
     @Test
