@@ -1,6 +1,7 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.hover.HoverSuppliersFactory
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.InitializeParams
@@ -31,6 +32,7 @@ class QuarkdownLanguageServer(
         QuarkdownTextDocumentService(
             this,
             CompletionSuppliersFactory(this).default(),
+            HoverSuppliersFactory(this).default(),
         )
 
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)

@@ -1,10 +1,7 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSupplier
-import com.quarkdown.lsp.documentation.extractContentAsMarkup
-import com.quarkdown.lsp.pattern.QuarkdownPatterns
-import com.quarkdown.lsp.util.getByPatternContaining
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
+import com.quarkdown.lsp.hover.HoverSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
 import org.eclipse.lsp4j.CompletionParams
@@ -27,6 +24,7 @@ private typealias CompletionResult = CompletableFuture<Either<List<CompletionIte
 class QuarkdownTextDocumentService(
     private val server: QuarkdownLanguageServer,
     private val completionSuppliers: List<CompletionSupplier>,
+    private val hoverSuppliers: List<HoverSupplier>,
 ) : TextDocumentService {
     /**
      * Maps document URIs to their text content.
@@ -100,18 +98,13 @@ class QuarkdownTextDocumentService(
 
         server.log("Operation '" + "text/hover")
 
-        val function =
-            params.position.getByPatternContaining(QuarkdownPatterns.FunctionCall.identifierInCall, text)
+        val hover =
+            hoverSuppliers
+                .asSequence()
+                .mapNotNull { it.getHover(params, text) }
+                .firstOrNull()
                 ?: return CompletableFuture.completedFuture(null)
 
-        val documentation =
-            DokkaHtmlWalker(server.docsDirectory!!)
-                .walk()
-                .find { it.name == function }
-                ?.extractor()
-                ?: return CompletableFuture.completedFuture(null)
-
-        val hover = Hover(documentation.extractContentAsMarkup())
         return CompletableFuture.completedFuture(hover)
     }
 }

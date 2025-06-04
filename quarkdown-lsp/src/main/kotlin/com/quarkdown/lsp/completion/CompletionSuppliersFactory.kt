@@ -3,7 +3,7 @@ package com.quarkdown.lsp.completion
 import com.quarkdown.lsp.QuarkdownLanguageServer
 
 /**
- * Factory for creating a list of completion suppliers.
+ * Factory for creating a list of [CompletionSupplier]s.
  * @property server the Quarkdown language server instance
  */
 class CompletionSuppliersFactory(
