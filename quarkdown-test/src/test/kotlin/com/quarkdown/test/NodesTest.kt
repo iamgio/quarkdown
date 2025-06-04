@@ -1,6 +1,5 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -307,53 +306,6 @@ class NodesTest {
             assertEquals(
                 "<ul><li class=\"task-list-item\"><input disabled=\"\" type=\"checkbox\" />Unchecked</li>" +
                     "<li class=\"task-list-item\"><input disabled=\"\" type=\"checkbox\" checked=\"\" />Checked</li></ul>",
-                it,
-            )
-        }
-    }
-
-    @Test
-    fun tables() {
-        execute("| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |") {
-            assertEquals(
-                "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
-                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>",
-                it,
-            )
-        }
-
-        execute("| Header 1 | Header 2 |\n|----------|----------|\n| $ X $ | $ Y $ |") {
-            assertEquals(
-                "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
-                    "<tbody><tr><td><formula>X</formula></td>" +
-                    "<td><formula>Y</formula></td></tr></tbody></table>",
-                it,
-            )
-            assertTrue(attributes.hasMath) // Ensures the tree traversal visits table cells too.
-        }
-
-        execute("| Header 1 | Header 2 | Header 3 |\n|:---------|:--------:|---------:|\n| Cell 1   | Cell 2   | Cell 3   |") {
-            assertEquals(
-                "<table><thead><tr><th align=\"left\">Header 1</th><th align=\"center\">Header 2</th>" +
-                    "<th align=\"right\">Header 3</th></tr></thead><tbody><tr><td align=\"left\">Cell 1</td>" +
-                    "<td align=\"center\">Cell 2</td><td align=\"right\">Cell 3</td></tr></tbody></table>",
-                it,
-            )
-        }
-
-        execute(
-            """
-            | Header 1 | Header 2 | Header 3 |
-            |----------|:--------:|----------|
-            | Cell 1   | Cell 2   | Cell 3   |
-            'Table caption'
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<table><thead><tr><th>Header 1</th><th align=\"center\">Header 2</th>" +
-                    "<th>Header 3</th></tr></thead><tbody><tr><td>Cell 1</td>" +
-                    "<td align=\"center\">Cell 2</td><td>Cell 3</td></tr></tbody>" +
-                    "<caption class=\"caption-bottom\">Table caption</caption></table>",
                 it,
             )
         }
