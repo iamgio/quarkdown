@@ -28,6 +28,18 @@ class DokkaReaderTest {
         )
     }
 
+    @Test
+    fun `parameter extractor`() {
+        val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
+        val parameters = DokkaHtmlContentExtractor(fullHtml).extractParameters()
+        assertEquals(
+            mapOf(
+                "string" to "<p class=\"paragraph\">string to convert</p>",
+            ),
+            parameters,
+        )
+    }
+
     /**
      * Copies content/{capitalize.html, lowercase.html, uppercase.html, index.html} to a temp directory
      * in order to simulate the structure of a Dokka-generated module.
