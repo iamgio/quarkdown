@@ -1,6 +1,10 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSupplier
+import com.quarkdown.lsp.documentation.extractContentAsMarkup
+import com.quarkdown.lsp.pattern.QuarkdownPatterns
+import com.quarkdown.lsp.util.getByPatternContaining
+import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
 import org.eclipse.lsp4j.CompletionParams
@@ -8,6 +12,8 @@ import org.eclipse.lsp4j.DidChangeTextDocumentParams
 import org.eclipse.lsp4j.DidCloseTextDocumentParams
 import org.eclipse.lsp4j.DidOpenTextDocumentParams
 import org.eclipse.lsp4j.DidSaveTextDocumentParams
+import org.eclipse.lsp4j.Hover
+import org.eclipse.lsp4j.HoverParams
 import org.eclipse.lsp4j.TextDocumentIdentifier
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.TextDocumentService
@@ -86,4 +92,26 @@ class QuarkdownTextDocumentService(
 
     override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
         CompletableFuture.completedFuture(unresolved)
+
+    override fun hover(params: HoverParams): CompletableFuture<Hover?>? {
+        val text =
+            getDocumentText(params.textDocument)
+                ?: return CompletableFuture.completedFuture(null)
+
+        server.log("Operation '" + "text/hover")
+
+        val function =
+            params.position.getByPatternContaining(QuarkdownPatterns.FunctionCall.identifierInCall, text)
+                ?: return CompletableFuture.completedFuture(null)
+
+        val documentation =
+            DokkaHtmlWalker(server.docsDirectory!!)
+                .walk()
+                .find { it.name == function }
+                ?.extractor()
+                ?: return CompletableFuture.completedFuture(null)
+
+        val hover = Hover(documentation.extractContentAsMarkup())
+        return CompletableFuture.completedFuture(hover)
+    }
 }

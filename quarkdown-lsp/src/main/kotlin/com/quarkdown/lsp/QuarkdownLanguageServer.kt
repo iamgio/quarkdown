@@ -1,7 +1,7 @@
 package com.quarkdown.lsp
 
-import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
@@ -48,7 +48,8 @@ class QuarkdownLanguageServer(
         val serverCaps =
             ServerCapabilities().apply {
                 textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
-                completionProvider = CompletionOptions(true, listOf(FunctionCallGrammar.BEGIN))
+                completionProvider = CompletionOptions(true, listOf(QuarkdownPatterns.FunctionCall.BEGIN))
+                hoverProvider = Either.forLeft(true)
             }
         val response = InitializeResult(serverCaps)
 

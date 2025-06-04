@@ -1,15 +1,13 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
-import com.quarkdown.lsp.documentation.HtmlToMarkdown
+import com.quarkdown.lsp.documentation.extractContentAsMarkup
+import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.util.getChar
 import com.quarkdown.quarkdoc.reader.DocsWalker
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionParams
-import org.eclipse.lsp4j.MarkupContent
-import org.eclipse.lsp4j.MarkupKind
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
 
@@ -25,21 +23,15 @@ class FunctionCompletionSupplier(
             label = name
             insertText = name
             detail = moduleName
-            documentation = Either.forRight(this@toCompletionItem.getDocumentationAsMarkup())
+            documentation = Either.forRight(extractor().extractContentAsMarkup())
             kind = CompletionItemKind.Function
-        }
-
-    private fun DocsWalker.Result<*>.getDocumentationAsMarkup(): MarkupContent? =
-        extractor().extractContent()?.let {
-            val md = HtmlToMarkdown.convert(it)
-            MarkupContent(MarkupKind.MARKDOWN, md)
         }
 
     override fun getCompletionItems(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> {
-        val isFunctionCall = params.position.getChar(text)?.toString() == FunctionCallGrammar.BEGIN
+        val isFunctionCall = params.position.getChar(text)?.toString() == QuarkdownPatterns.FunctionCall.BEGIN
 
         if (!isFunctionCall) {
             return emptyList()

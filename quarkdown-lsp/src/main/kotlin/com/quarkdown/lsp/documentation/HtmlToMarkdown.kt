@@ -1,6 +1,9 @@
 package com.quarkdown.lsp.documentation
 
+import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
+import org.eclipse.lsp4j.MarkupContent
+import org.eclipse.lsp4j.MarkupKind
 import org.jsoup.Jsoup
 
 /**
@@ -44,3 +47,11 @@ object HtmlToMarkdown {
         return FlexmarkHtmlConverter.builder().build().convert(processedHtml)
     }
 }
+
+/**
+ * @return the content extracted from the documentation as [MarkupContent], or `null` if no content is available
+ */
+fun DocsContentExtractor.extractContentAsMarkup(): MarkupContent? =
+    extractContent()
+        ?.let(HtmlToMarkdown::convert)
+        ?.let { MarkupContent(MarkupKind.MARKDOWN, it) }
