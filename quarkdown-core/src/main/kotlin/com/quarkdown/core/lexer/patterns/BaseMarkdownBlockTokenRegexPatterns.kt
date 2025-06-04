@@ -35,7 +35,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
-            .withReference("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n")
+            .withReference("fences", "^ {0,3}((`{3,})|(~{3,}))[^\\n]*\\n")
             .withReference("blockquote", " {0,3}>")
             .apply {
                 if (includeList) withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
@@ -225,7 +225,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 name = "SetextHeading",
                 wrap = ::SetextHeadingToken,
                 regex =
-                    RegexBuilder("^(?!bullet )((?:.|\\R(?!\\s*?\\R|bullet ))+?)\\R {0,3}(=+|-+) *(?:\\R+|$)")
+                    RegexBuilder("^((?:(?! {0,3}(?:bullet)).+\\R)+?) {0,3}(=+|-+) *(?:\\R+|$)")
                         .withReference("bullet", BULLET_HELPER)
                         .build(),
             )
