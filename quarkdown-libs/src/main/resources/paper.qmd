@@ -11,6 +11,12 @@
         - lemma: Lemma
         - theorem: Teorema
         - proof: Dimostrazione
+    - German
+        - abstract: Abstract
+        - definition: Definition
+        - lemma: Lemma
+        - theorem: Theorem
+        - proof: Beweis
 
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 
