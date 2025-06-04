@@ -42,11 +42,12 @@ class AdditionalParameterPropertiesTransformer(
                         ),
                     )
             }
-        }.let {
-            listOf(
-                Dl(listOf(Ul(it))),
-            )
-        }
+        }.takeUnless { it.isEmpty() }
+            ?.let {
+                listOf(
+                    Dl(listOf(Ul(it))),
+                )
+            } ?: emptyList()
 
     override fun mergeDocumentationContent(
         old: List<DocTag>,
