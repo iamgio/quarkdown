@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -171,7 +172,7 @@ private fun reconstructTable(
 fun tableSort(
     @Name("column") columnIndex: Int,
     order: TableSortOrder = TableSortOrder.ASCENDING,
-    @Name("table") content: MarkdownContent,
+    @Name("table") @LikelyBody content: MarkdownContent,
 ): NodeValue {
     val (table, _, values) = findTableColumn(content, columnIndex)
 
@@ -218,7 +219,7 @@ fun tableSort(
 fun tableFilter(
     @Name("column") columnIndex: Int,
     filter: Lambda,
-    @Name("table") content: MarkdownContent,
+    @Name("table") @LikelyBody content: MarkdownContent,
 ): NodeValue {
     val (table, _, values) = findTableColumn(content, columnIndex)
 
@@ -264,7 +265,7 @@ fun tableFilter(
 fun tableCompute(
     @Name("column") columnIndex: Int,
     compute: Lambda,
-    @Name("table") content: MarkdownContent,
+    @Name("table") @LikelyBody content: MarkdownContent,
 ): NodeValue {
     val (table, column, values) = findTableColumn(content, columnIndex)
 
@@ -313,7 +314,7 @@ fun tableCompute(
 @Name("tablecolumn")
 fun tableColumn(
     @Name("column") columnIndex: Int,
-    @Name("of") content: MarkdownContent,
+    @Name("of") @LikelyBody content: MarkdownContent,
 ): IterableValue<OutputValue<*>> {
     val (_, _, values) = findTableColumn(content, columnIndex)
     return OrderedCollectionValue(values.map(::DynamicValue))
@@ -353,7 +354,7 @@ fun tableColumn(
  */
 @Name("tablecolumns")
 fun tableColumns(
-    @Name("of") content: MarkdownContent,
+    @Name("of") @LikelyBody content: MarkdownContent,
 ): IterableValue<IterableValue<out OutputValue<*>>> {
     val table = findTable(content)
     return table.columns

@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -36,7 +37,9 @@ val Dictionary: Module =
  * @return the dictionary
  * @wiki Dictionary
  */
-fun dictionary(dictionary: Map<String, OutputValue<*>>): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
+fun dictionary(
+    @LikelyBody dictionary: Map<String, OutputValue<*>>,
+): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
 
 /**
  * @param key key to get the value of

@@ -25,6 +25,7 @@ import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.NodeValue
@@ -280,7 +281,7 @@ fun theme(
  */
 fun numbering(
     @Injected context: Context,
-    formats: Map<String, Value<String>>,
+    @LikelyBody formats: Map<String, Value<String>>,
 ): VoidValue {
     fun parse(format: Value<String>): NumberingFormat =
         when (val unwrapped = format.unwrappedValue) {
@@ -367,7 +368,7 @@ fun captionPosition(
 fun texMacro(
     @Injected context: Context,
     name: String,
-    macro: String,
+    @LikelyBody macro: String,
 ) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
 
 /**
@@ -425,7 +426,7 @@ fun pageFormat(
 @Name("pagemargin")
 fun pageMarginContent(
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
-    content: MarkdownContent,
+    @LikelyBody content: MarkdownContent,
 ): NodeValue =
     PageMarginContentInitializer(
         content.children,
@@ -439,7 +440,9 @@ fun pageMarginContent(
  * @return a wrapped [PageMarginContentInitializer] node with its position set to bottom center
  * @wiki Page margin content
  */
-fun footer(content: MarkdownContent): NodeValue =
+fun footer(
+    @LikelyBody content: MarkdownContent,
+): NodeValue =
     pageMarginContent(
         PageMarginPosition.BOTTOM_CENTER,
         content,

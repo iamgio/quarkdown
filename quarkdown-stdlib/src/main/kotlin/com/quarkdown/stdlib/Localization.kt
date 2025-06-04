@@ -5,6 +5,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.OutputValue
@@ -107,7 +108,7 @@ fun localization(
     @Injected context: MutableContext,
     @Name("name") tableName: String,
     merge: Boolean = false,
-    contents: Map<String, DictionaryValue<OutputValue<String>>>,
+    @LikelyBody contents: Map<String, DictionaryValue<OutputValue<String>>>,
 ): VoidValue {
     val tableExists = tableName in context.localizationTables
 
