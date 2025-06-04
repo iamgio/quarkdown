@@ -37,3 +37,17 @@
 .toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
     opacity: .5;
 }
+
+/* Extra parameter properties. */
+.table-row dl > ul {
+    opacity: .5;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    list-style-position: inside;
+    gap: 0.9em;
+}
+
+.table-row dl > ul > li:first-child {
+    list-style: none;
+}

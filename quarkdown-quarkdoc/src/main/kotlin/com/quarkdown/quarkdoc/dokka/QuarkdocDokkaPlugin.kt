@@ -11,6 +11,7 @@ import com.quarkdown.quarkdoc.dokka.transformers.module.ModulesStorer
 import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentationNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorer
+import com.quarkdown.quarkdoc.dokka.transformers.optional.AdditionalParameterPropertiesTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.suppress.SuppressInjectedTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.type.ValueTypeTransformer
 import org.jetbrains.dokka.CoreExtensions
@@ -103,6 +104,10 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
      */
     val enumParameterEntryListerTransformer by extending {
         base.preMergeDocumentableTransformer providing ::EnumParameterEntryListerTransformer
+    }
+
+    val additionalParameterPropertiesTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::AdditionalParameterPropertiesTransformer
     }
 
     /**
