@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -55,7 +56,7 @@ fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wra
  */
 fun otherwise(
     value: DynamicValue,
-    fallback: DynamicValue,
+    @LikelyNamed fallback: DynamicValue,
 ): DynamicValue = if (isNone(value.unwrappedValue)) fallback else value
 
 /**

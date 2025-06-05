@@ -45,7 +45,7 @@
     display: inline-flex;
     flex-direction: row;
     list-style-position: inside;
-    gap: 0.9em;
+    gap: 0.7em;
 }
 
 .table-row dl > ul > li:first-child {

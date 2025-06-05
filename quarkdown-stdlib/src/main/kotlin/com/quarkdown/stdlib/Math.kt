@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.NumberValue
@@ -49,7 +50,7 @@ fun sum(
  * @return arithmetic floating-point subtraction of [a] and [b]
  */
 fun subtract(
-    @Name("from") a: Number,
+    a: Number,
     b: Number,
 ) = NumberValue(a.toFloat() - b.toFloat())
 
@@ -153,7 +154,7 @@ fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
  */
 fun truncate(
     x: Number,
-    decimals: Int,
+    @LikelyNamed decimals: Int,
 ): NumberValue =
     when {
         decimals < 0 -> throw IllegalArgumentException("Decimals must be a non-negative number")

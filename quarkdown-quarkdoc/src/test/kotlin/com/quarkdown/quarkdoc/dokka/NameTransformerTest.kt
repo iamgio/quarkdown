@@ -74,7 +74,8 @@ class NameTransformerTest : QuarkdocDokkaTest(imports = listOf(Name::class)) {
             "some-function",
         ) {
             val parameters = getParametersTable(it)
-            assertEquals("newname the parameter", parameters.text())
+            assertContains(parameters.text(), "newname")
+            assertContains(parameters.text(), "the parameter")
         }
     }
 
