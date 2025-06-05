@@ -8,6 +8,7 @@ import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionParams
+import org.eclipse.lsp4j.InsertTextFormat
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
 
@@ -21,11 +22,31 @@ class FunctionCompletionSupplier(
     private fun DocsWalker.Result<*>.toCompletionItem() =
         CompletionItem().apply {
             label = name
-            insertText = name
             detail = moduleName
             documentation = Either.forRight(extractor().extractContentAsMarkup())
             kind = CompletionItemKind.Function
+            insertTextFormat = InsertTextFormat.Snippet
+            insertText = buildSnippet(this@toCompletionItem)
         }
+
+    private fun buildSnippet(item: DocsWalker.Result<*>): String {
+        val params =
+            item
+                .extractor()
+                .extractFunctionParameters()
+                .filter { !it.isOptional || it.isLikelyBody }
+
+        return buildString {
+            append(item.name)
+            params.forEachIndexed { index, param ->
+                val snippetArg = "\${${index + 1}:${param.name}}"
+                when {
+                    param.isLikelyBody -> append("\n    $snippetArg")
+                    else -> append(" {$snippetArg}")
+                }
+            }
+        }
+    }
 
     override fun getCompletionItems(
         params: CompletionParams,
