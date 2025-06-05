@@ -165,7 +165,7 @@ fun xyChart(
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
     caption: String? = null,
-    values: Iterable<OutputValue<*>>,
+    @LikelyBody values: Iterable<OutputValue<*>>,
 ): NodeValue {
     val lines: List<ChartLine> = extractLines(values)
     val (minY, maxY) = lines.flatten().let { (it.minOrNull() ?: 0.0) to (it.maxOrNull() ?: 1.0) }

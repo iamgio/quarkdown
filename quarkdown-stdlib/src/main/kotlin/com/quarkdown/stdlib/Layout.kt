@@ -262,6 +262,7 @@ fun whitespace(
 /**
  * Applies a clipping path to its content.
  * @param clip clip type to apply
+ * @param body content to clip
  * @return the new [Clipped] block
  * @wiki Clip
  */
