@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class DokkaReaderTest {
     @Test
     fun `html extractor`() {
-        val subContentRange = 114..145
+        val subContentRange = 114..143
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
         assertEquals(
             fullHtml

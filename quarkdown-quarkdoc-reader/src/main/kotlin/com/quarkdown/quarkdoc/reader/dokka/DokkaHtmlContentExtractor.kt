@@ -14,7 +14,9 @@ class DokkaHtmlContentExtractor(
         Jsoup
             .parse(html)
             .selectFirst("#main .content")
-            ?.outerHtml()
+            ?.apply {
+                selectFirst(".top-right-position:has(.copy-icon)")?.remove()
+            }?.outerHtml()
 
     /**
      * Converts a row of the parameters table into a [DocsParameter].
