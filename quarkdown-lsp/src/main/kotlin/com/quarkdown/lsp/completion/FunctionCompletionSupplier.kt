@@ -42,7 +42,16 @@ class FunctionCompletionSupplier(
                 val snippetArg = "\${${index + 1}:${param.name}}"
                 when {
                     param.isLikelyBody -> append("\n    $snippetArg")
-                    else -> append(" {$snippetArg}")
+                    else -> {
+                        append(" ")
+                        if (param.isLikelyNamed) {
+                            append(param.name)
+                            append(QuarkdownPatterns.FunctionCall.NAMED_ARGUMENT_DELIMITER)
+                        }
+                        append(QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN)
+                        append(snippetArg)
+                        append(QuarkdownPatterns.FunctionCall.ARGUMENT_END)
+                    }
                 }
             }
         }

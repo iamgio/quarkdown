@@ -22,6 +22,21 @@ object QuarkdownPatterns {
         val IDENTIFIER: Regex = FunctionCallGrammar.IDENTIFIER_PATTERN.toRegex()
 
         /**
+         * The character that begins an inline argument.
+         */
+        const val ARGUMENT_BEGIN = FunctionCallGrammar.ARGUMENT_BEGIN
+
+        /**
+         * The character that ends an inline argument.
+         */
+        const val ARGUMENT_END = FunctionCallGrammar.ARGUMENT_END
+
+        /**
+         * The character that delimits a named argument.
+         */
+        const val NAMED_ARGUMENT_DELIMITER = FunctionCallGrammar.NAMED_ARGUMENT_DELIMITER
+
+        /**
          * The pattern that matches the identifier in a function call, preceded by [BEGIN] (unmatched).
          */
         val identifierInCall: Regex = "(?<=${Regex.escape(BEGIN)})(${IDENTIFIER.pattern})".toRegex()
