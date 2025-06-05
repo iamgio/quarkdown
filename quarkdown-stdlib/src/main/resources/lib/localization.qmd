@@ -21,3 +21,13 @@
       - tableofcontents: Indice
       - figure: Figura
       - table: Tabella
+    - German
+      - note: Hinweis
+      - tip: Tip
+      - warning: Warnung
+      - important: Wichtig
+      - error: Fehler
+      - todo: Aufgabe
+      - tableofcontents: Inhaltsverzeichnis
+      - figure: Abbildung
+      - table: Tabelle

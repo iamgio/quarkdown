@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
+import com.quarkdown.core.function.error.ParameterAlreadyBoundException
 import com.quarkdown.core.function.error.UnresolvedReferenceException
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.execute
@@ -76,6 +77,20 @@ class FunctionCallTest {
 
         assertFailsWith<InvalidArgumentCountException> {
             execute(".sum {2} {5} {9}") {}
+        }
+    }
+
+    @Test
+    fun `error positional parameter already bound`() {
+        assertFailsWith<ParameterAlreadyBoundException> {
+            execute(".sum {2} a:{3}") {}
+        }
+    }
+
+    @Test
+    fun `error named parameter already bound`() {
+        assertFailsWith<ParameterAlreadyBoundException> {
+            execute(".sum a:{2} a:{3}") {}
         }
     }
 
