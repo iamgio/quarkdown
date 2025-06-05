@@ -31,6 +31,7 @@ class DokkaHtmlContentExtractor(
             name = name,
             description = descriptionHtml,
             isOptional = hasProperty("optional"),
+            isLikelyNamed = hasProperty("named"),
             isLikelyBody = hasProperty("body"),
         )
     }

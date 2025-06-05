@@ -23,10 +23,16 @@ private val CORE_SOURCE_DIR = File("../quarkdown-core/src/main/kotlin").absolute
  * @return [this] class to a path in the source tree
  */
 private fun KClass<*>.path(parent: String = CORE_SOURCE_DIR): String {
-    val packageName = this.java.`package`.name
-    val path = packageName.replace(".", "/")
-    val className = this.simpleName
-    return "$parent/$path/$className.kt"
+    val path = qualifiedName!!.replace(".", "/")
+    return "$parent/$path.kt"
+}
+
+/**
+ * @return [this] package string to a path in the source tree
+ */
+private fun String.path(parent: String = CORE_SOURCE_DIR): String {
+    val path = replace(".", "/")
+    return "$parent/$path.kt"
 }
 
 /**
@@ -37,6 +43,7 @@ open class QuarkdocDokkaTest(
     protected val rootPackage: String = "test",
     private val imports: List<KClass<*>> = emptyList(),
     private val stringImports: List<String> = emptyList(),
+    private val stringPaths: List<String> = emptyList(),
 ) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
     @BeforeTest
     fun setUp() {
@@ -49,7 +56,7 @@ open class QuarkdocDokkaTest(
         dokkaConfiguration {
             sourceSets {
                 sourceSet {
-                    sourceRoots = sourcePaths + imports.map { it.path() }
+                    sourceRoots = sourcePaths + imports.map { it.path() } + stringPaths.map { it.path() }
                 }
             }
         }

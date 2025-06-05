@@ -24,6 +24,7 @@ import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.MarkdownContentValue
 import com.quarkdown.core.function.value.NodeValue
@@ -82,8 +83,8 @@ val Layout: Module =
  * @wiki Container
  */
 fun container(
-    width: Size? = null,
-    height: Size? = null,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
     @Name("fullwidth") fullWidth: Boolean = false,
     @Name("foreground") foregroundColor: Color? = null,
     @Name("background") backgroundColor: Color? = null,
@@ -93,9 +94,9 @@ fun container(
     @Name("margin") margin: Sizes? = null,
     @Name("padding") padding: Sizes? = null,
     @Name("radius") cornerRadius: Sizes? = null,
-    alignment: Container.Alignment? = null,
+    @LikelyNamed alignment: Container.Alignment? = null,
     @Name("textalignment") textAlignment: Container.TextAlignment? = alignment?.let(Container.TextAlignment::fromAlignment),
-    float: Container.FloatAlignment? = null,
+    @LikelyNamed float: Container.FloatAlignment? = null,
     @LikelyBody body: MarkdownContent? = null,
 ) = Container(
     width,
@@ -152,7 +153,7 @@ fun center(
  * @wiki Float
  */
 fun float(
-    alignment: Container.FloatAlignment,
+    @LikelyNamed alignment: Container.FloatAlignment,
     @LikelyBody body: MarkdownContent,
 ) = container(
     float = alignment,
@@ -191,7 +192,7 @@ private fun stack(
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size? = null,
+    @LikelyNamed gap: Size? = null,
     @LikelyBody body: MarkdownContent,
 ) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, gap, body)
 
@@ -207,7 +208,7 @@ fun row(
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size? = null,
+    @LikelyNamed gap: Size? = null,
     @LikelyBody body: MarkdownContent,
 ) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, body)
 
@@ -227,7 +228,7 @@ fun grid(
     @Name("columns") columnCount: Int,
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.CENTER,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size? = null,
+    @LikelyNamed gap: Size? = null,
     @LikelyBody body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
@@ -255,13 +256,14 @@ fun fullColumnSpan(
  * @return the new [Whitespace] node
  */
 fun whitespace(
-    width: Size? = null,
-    height: Size? = null,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
 ) = Whitespace(width, height).wrappedAsValue()
 
 /**
  * Applies a clipping path to its content.
  * @param clip clip type to apply
+ * @param body content to clip
  * @return the new [Clipped] block
  * @wiki Clip
  */
@@ -286,8 +288,8 @@ fun clip(
 fun box(
     @Injected context: Context,
     title: InlineMarkdownContent? = null,
-    type: Box.Type = Box.Type.CALLOUT,
-    padding: Size? = null,
+    @LikelyNamed type: Box.Type = Box.Type.CALLOUT,
+    @LikelyNamed padding: Size? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("foreground") foregroundColor: Color? = null,
     @LikelyBody body: MarkdownContent,
@@ -339,7 +341,7 @@ fun toDo(
  */
 fun collapse(
     title: InlineMarkdownContent,
-    open: Boolean = false,
+    @LikelyNamed open: Boolean = false,
     @LikelyBody body: MarkdownContent,
 ) = Collapse(title.children, open, body.children).wrappedAsValue()
 
@@ -353,9 +355,9 @@ fun collapse(
  */
 @Name("textcollapse")
 fun inlineCollapse(
-    full: InlineMarkdownContent,
-    short: InlineMarkdownContent,
-    open: Boolean = false,
+    @LikelyNamed full: InlineMarkdownContent,
+    @LikelyNamed short: InlineMarkdownContent,
+    @LikelyNamed open: Boolean = false,
 ) = InlineCollapse(full.children, short.children, open).wrappedAsValue()
 
 /**
@@ -365,7 +367,7 @@ fun inlineCollapse(
  * @return the new [Figure] node
  */
 fun figure(
-    caption: String? = null,
+    @LikelyNamed caption: String? = null,
     @LikelyBody body: MarkdownContent,
 ): NodeValue =
     object : Figure<MarkdownContent>(body) {
@@ -381,7 +383,7 @@ fun figure(
  * @wiki Numbering
  */
 fun numbered(
-    key: String,
+    @LikelyNamed key: String,
     @LikelyBody body: Lambda,
 ): NodeValue {
     val node =

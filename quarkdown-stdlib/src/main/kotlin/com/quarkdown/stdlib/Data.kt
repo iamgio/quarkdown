@@ -7,6 +7,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.StringValue
@@ -93,7 +94,7 @@ fun read(
 fun csv(
     @Injected context: Context,
     path: String,
-    caption: String? = null,
+    @LikelyNamed caption: String? = null,
 ): NodeValue {
     val file = file(context, path)
     val columns = mutableMapOf<String, MutableList<String>>()

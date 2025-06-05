@@ -38,6 +38,7 @@ class DokkaReaderTest {
         )
         assertFalse(parameter.isOptional)
         assertFalse(parameter.isLikelyBody)
+        assertFalse(parameter.isLikelyNamed)
     }
 
     @Test
@@ -51,16 +52,19 @@ class DokkaReaderTest {
             <dl>
              <ul>
               <li>Optional</li>
+              <li>Likely <a href>named</a></li>
              </ul>
             </dl>
             <p class="paragraph">background color. Transparent if unset</p>
             """.trimIndent(),
-            backgroundParameter.description,
+            backgroundParameter.description.replace("(?<=href)=\".+?\"".toRegex(), ""),
         )
         assertTrue(backgroundParameter.isOptional)
         assertFalse(backgroundParameter.isLikelyBody)
+        assertTrue(backgroundParameter.isLikelyNamed)
         assertTrue(bodyParameter.isOptional)
         assertTrue(bodyParameter.isLikelyBody)
+        assertFalse(bodyParameter.isLikelyNamed)
     }
 
     /**

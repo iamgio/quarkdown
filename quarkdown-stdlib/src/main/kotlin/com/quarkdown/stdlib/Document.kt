@@ -26,6 +26,7 @@ import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.NodeValue
@@ -234,7 +235,7 @@ fun docLanguage(
 fun theme(
     @Injected context: Context,
     color: String? = null,
-    layout: String? = null,
+    @LikelyNamed layout: String? = null,
 ): VoidValue {
     /**
      * @throws IOPipelineException if [theme] is not a valid theme
@@ -325,8 +326,8 @@ fun disableNumbering(
 fun paragraphStyle(
     @Injected context: Context,
     @Name("lineheight") lineHeight: Number? = null,
-    spacing: Number? = null,
-    indent: Number? = null,
+    @LikelyNamed spacing: Number? = null,
+    @LikelyNamed indent: Number? = null,
 ): VoidValue {
     with(context.documentInfo.layout.paragraphStyle) {
         this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
@@ -346,9 +347,9 @@ fun paragraphStyle(
 @Name("captionposition")
 fun captionPosition(
     @Injected context: Context,
-    default: CaptionPosition? = null,
-    figures: CaptionPosition? = null,
-    tables: CaptionPosition? = null,
+    @LikelyNamed default: CaptionPosition? = null,
+    @LikelyNamed figures: CaptionPosition? = null,
+    @LikelyNamed tables: CaptionPosition? = null,
 ): VoidValue {
     with(context.documentInfo.layout.captionPosition) {
         this.default = default ?: this.default
@@ -392,12 +393,12 @@ fun texMacro(
 fun pageFormat(
     @Injected context: Context,
     @Name("size") format: PageSizeFormat? = null,
-    orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
-    width: Size? = null,
-    height: Size? = null,
-    margin: Sizes? = null,
-    columns: Int? = null,
-    alignment: Container.TextAlignment? = null,
+    @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
+    @LikelyNamed margin: Sizes? = null,
+    @LikelyNamed columns: Int? = null,
+    @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
     with(context.documentInfo.layout.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
@@ -522,7 +523,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  */
 @Name("tableofcontents")
 fun tableOfContents(
-    title: InlineMarkdownContent? = null,
+    @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue =
