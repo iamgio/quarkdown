@@ -6,6 +6,7 @@ import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.core.function.error.MismatchingArgumentTypeException
+import com.quarkdown.core.function.error.ParameterAlreadyBoundException
 import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
 import com.quarkdown.core.function.reflect.DynamicValueConverter
@@ -21,7 +22,9 @@ import kotlin.reflect.full.isSubclassOf
  * @param call function call to bind arguments for
  * @see InjectedArgumentsBinder for the injected argument subset
  */
-class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinder {
+class RegularArgumentsBinder(
+    private val call: FunctionCall<*>,
+) : ArgumentsBinder {
     // As soon as a named argument is encountered, all following arguments must be named too.
     private var encounteredNamedArgument = false
 
@@ -133,18 +136,30 @@ class RegularArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinde
         throw MismatchingArgumentTypeException(call, parameter, argument)
     }
 
-    override fun createBindings(parameters: List<FunctionParameter<*>>) =
-        call.arguments.mapIndexed { index, argument ->
-            // Corresponding parameter.
-            val parameter = findParameter(argument, index, parameters)
+    override fun createBindings(parameters: List<FunctionParameter<*>>): ArgumentBindings {
+        // Parameters that have been already bound to arguments.
+        val boundParameters = mutableSetOf<FunctionParameter<*>>()
 
-            // The type of dynamic arguments is determined.
-            val staticArgument = getStaticallyTypedArgument(parameter, argument)
+        return call.arguments
+            .withIndex()
+            .associate { (index, argument) ->
+                // Corresponding parameter.
+                val parameter = findParameter(argument, index, parameters)
 
-            // Type match check.
-            checkTypeMatch(parameter, staticArgument)
+                // Check if the parameter is already bound.
+                when {
+                    parameter in boundParameters -> throw ParameterAlreadyBoundException(call, parameter, argument)
+                    else -> boundParameters += parameter
+                }
 
-            // Push binding.
-            parameter to staticArgument
-        }.toMap()
+                // The type of dynamic arguments is determined.
+                val staticArgument = getStaticallyTypedArgument(parameter, argument)
+
+                // Type match check.
+                checkTypeMatch(parameter, staticArgument)
+
+                // Push binding.
+                parameter to staticArgument
+            }
+    }
 }
