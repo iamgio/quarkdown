@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
@@ -89,7 +90,7 @@ fun code(
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
-    code: EvaluableString,
+    @LikelyBody code: EvaluableString,
 ): NodeValue =
     Code(
         code.content,

@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagramFigure
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
@@ -27,7 +28,7 @@ val Mermaid: Module =
 
 private fun mermaidFigure(
     caption: String?,
-    code: String,
+    @LikelyBody code: String,
 ) = MermaidDiagramFigure(
     MermaidDiagram(code),
     caption,
@@ -41,7 +42,7 @@ private fun mermaidFigure(
  */
 fun mermaid(
     caption: String? = null,
-    code: EvaluableString,
+    @LikelyBody code: EvaluableString,
 ) = mermaidFigure(caption, code.content)
 
 /**
