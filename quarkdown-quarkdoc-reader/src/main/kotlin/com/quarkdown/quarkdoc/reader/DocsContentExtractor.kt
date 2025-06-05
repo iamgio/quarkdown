@@ -11,7 +11,7 @@ interface DocsContentExtractor {
     fun extractContent(): String?
 
     /**
-     * @return a map of parameter names to their descriptions, if available
+     * @return the parameters of the function that this documentation resource describes, if available
      */
-    fun extractParameters(): Map<String, String>
+    fun extractFunctionParameters(): List<DocsParameter>
 }

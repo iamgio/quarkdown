@@ -6,6 +6,7 @@ import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -29,15 +30,38 @@ class DokkaReaderTest {
     }
 
     @Test
-    fun `parameter extractor`() {
+    fun `simple parameter extractor`() {
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
-        val parameters = DokkaHtmlContentExtractor(fullHtml).extractParameters()
+        val parameter = DokkaHtmlContentExtractor(fullHtml).extractFunctionParameters().first { it.name == "string" }
         assertEquals(
-            mapOf(
-                "string" to "<p class=\"paragraph\">string to convert</p>",
-            ),
-            parameters,
+            "<p class=\"paragraph\">string to convert</p>",
+            parameter.description,
         )
+        assertFalse(parameter.isOptional)
+        assertFalse(parameter.isLikelyBody)
+    }
+
+    @Test
+    fun `long parameter extractor`() {
+        val fullHtml = javaClass.getResourceAsStream("/content/container.html")!!.bufferedReader().readText()
+        val parameters = DokkaHtmlContentExtractor(fullHtml).extractFunctionParameters()
+        val backgroundParameter = parameters.first { it.name == "background" }
+        val bodyParameter = parameters.first { it.name == "body" }
+        assertEquals(
+            """
+            <dl>
+             <ul>
+              <li>Optional</li>
+             </ul>
+            </dl>
+            <p class="paragraph">background color. Transparent if unset</p>
+            """.trimIndent(),
+            backgroundParameter.description,
+        )
+        assertTrue(backgroundParameter.isOptional)
+        assertFalse(backgroundParameter.isLikelyBody)
+        assertTrue(bodyParameter.isOptional)
+        assertTrue(bodyParameter.isLikelyBody)
     }
 
     /**
