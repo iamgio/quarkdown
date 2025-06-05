@@ -15,6 +15,7 @@ import com.quarkdown.core.function.call.validate.FunctionCallValidator
 import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.core.function.error.NoSuchElementException
+import com.quarkdown.core.function.error.ParameterAlreadyBoundException
 import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
 import com.quarkdown.core.function.expression.ComposedExpression
@@ -454,6 +455,25 @@ class StandaloneFunctionTest {
             )
 
         assertEquals(6, call3.execute().unwrappedValue)
+    }
+
+    @Test
+    fun `KFunction parameter bound twice`() {
+        val function = KFunctionAdapter(::sum)
+
+        val call1 =
+            FunctionCall(
+                function,
+                arguments =
+                    listOf(
+                        FunctionCallArgument(DynamicValue("5")),
+                        FunctionCallArgument(DynamicValue("2"), name = "a"),
+                    ),
+            )
+
+        assertFailsWith<ParameterAlreadyBoundException> {
+            call1.execute()
+        }
     }
 
     @Test

@@ -28,6 +28,11 @@ data class FunctionCallArgument(
 }
 
 /**
- * @return a string representation of a sequence of arguments
+ * @return a string representation of [this] argument's value
  */
-fun List<FunctionCallArgument>.asString() = "(" + joinToString { it.value.unwrappedValue.toString() } + ")"
+fun FunctionCallArgument.asString() = value.unwrappedValue.toString()
+
+/**
+ * @return a string representation of [this] sequence of arguments
+ */
+fun List<FunctionCallArgument>.asString() = "(" + joinToString { it.asString() } + ")"
