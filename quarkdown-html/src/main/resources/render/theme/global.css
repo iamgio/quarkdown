@@ -31,6 +31,7 @@
 
     /* Text */
     --qd-line-height: 1.5;
+    --qd-letter-spacing: normal;
     --qd-paragraph-text-indent: none; /* Paragraph indentation (with LaTeX policies) */
     --qd-location-suffix: ". "; /* Suffix for element (e.g. headings) location numbering */
     --qd-caption-label-suffix: ": "; /* Suffix for labels (e.g. Figure 1.1: ...) in captions */
@@ -439,6 +440,7 @@ body.quarkdown-paged:not(:has(.pagedjs_page)) {
 
 .quarkdown.quarkdown p {
     line-height: var(--qd-line-height);
+    letter-spacing: var(--qd-letter-spacing);
     margin-top: 0;
     margin-bottom: 0;
     text-indent: var(--qd-paragraph-text-indent);
