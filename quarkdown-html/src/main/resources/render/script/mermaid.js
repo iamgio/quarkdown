@@ -33,9 +33,23 @@ async function loadFromCacheOrRender(mermaid, element) {
     sessionStorage.setItem(id, svg);
 }
 
-// Only after rendering the diagrams, center some misaligned elements.
+// Generates a percentage value for the width of the SVG based on its aspect ratio.
+function calculateNewDiagramScale(svg) {
+    const baseScale = 25;
+    return Math.min(
+        100,
+        baseScale * (svg.clientWidth * svg.clientWidth) / (svg.clientHeight * svg.clientHeight),
+    );
+}
+
+// Only after rendering the diagrams, resize and center some misaligned elements.
 function realignMermaidContents() {
-    document.querySelectorAll('.mermaid foreignObject').forEach((obj) => {
+    document.querySelectorAll('.mermaid').forEach(diagram => {
+        diagram.style.width = '100%';
+        const svg = diagram.querySelector('svg');
+        svg.style.width = calculateNewDiagramScale(svg) + '%';
+    });
+    document.querySelectorAll('.mermaid foreignObject').forEach(obj => {
         obj.style.display = 'grid';
     });
 }
