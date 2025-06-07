@@ -93,6 +93,11 @@ object TemplatePlaceholders {
     const val PARAGRAPH_LINE_HEIGHT = "PARAGRAPHLINEHEIGHT"
 
     /**
+     * Whitespace width between words.
+     */
+    const val PARAGRAPH_LETTER_SPACING = "PARAGRAPHLETTERSPACING"
+
+    /**
      * Whitespace height between paragraphs.
      */
     const val PARAGRAPH_SPACING = "PARAGRAPHSPACING"

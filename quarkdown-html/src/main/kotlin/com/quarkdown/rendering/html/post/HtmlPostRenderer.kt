@@ -116,6 +116,12 @@ class HtmlPostRenderer(
                 document.layout.paragraphStyle.lineHeight,
             )
             optionalValue(
+                TemplatePlaceholders.PARAGRAPH_LETTER_SPACING,
+                document.layout.paragraphStyle.letterSpacing
+                    ?.toString()
+                    ?.plus("em"),
+            )
+            optionalValue(
                 TemplatePlaceholders.PARAGRAPH_INDENT,
                 document.layout.paragraphStyle.indent
                     ?.toString()
