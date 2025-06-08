@@ -1,0 +1,495 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>quarkdown-stdlib</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<link href="../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../images/logo-icon.svg">
+<link href="../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.4.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-stdlib/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-stdlib/main" data-filter=":quarkdown-stdlib/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" id="content" pageids="quarkdown-stdlib::////PointingToDeclaration//742850071">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>quarkdown-stdlib</span></span></h1>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="210761287%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib" id="210761287%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib/index.html">com.quarkdown.stdlib</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="210761287%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-521019946%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.external" id="-521019946%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.external/index.html">com.quarkdown.stdlib.external</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-521019946%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1750737511%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Collection" id="-1750737511%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Collection/index.html">com.quarkdown.stdlib.module.Collection</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1750737511%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1216967067%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Data" id="-1216967067%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Data/index.html">com.quarkdown.stdlib.module.Data</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1216967067%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-2122409583%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Dictionary" id="-2122409583%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Dictionary/index.html">com.quarkdown.stdlib.module.Dictionary</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2122409583%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-502743018%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Document" id="-502743018%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Document/index.html">com.quarkdown.stdlib.module.Document</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-502743018%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-46920919%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Ecosystem" id="-46920919%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Ecosystem/index.html">com.quarkdown.stdlib.module.Ecosystem</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-46920919%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1205796119%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Flow" id="-1205796119%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Flow/index.html">com.quarkdown.stdlib.module.Flow</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1205796119%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1624394816%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Injection" id="1624394816%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Injection/index.html">com.quarkdown.stdlib.module.Injection</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1624394816%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="894633893%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Layout" id="894633893%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Layout/index.html">com.quarkdown.stdlib.module.Layout</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="894633893%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-894760732%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Library" id="-894760732%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Library/index.html">com.quarkdown.stdlib.module.Library</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-894760732%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1965744236%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Localization" id="-1965744236%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Localization/index.html">com.quarkdown.stdlib.module.Localization</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1965744236%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-2085081461%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Logger" id="-2085081461%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Logger/index.html">com.quarkdown.stdlib.module.Logger</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2085081461%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-907617614%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Logical" id="-907617614%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Logical/index.html">com.quarkdown.stdlib.module.Logical</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-907617614%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1321208899%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Math" id="1321208899%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Math/index.html">com.quarkdown.stdlib.module.Math</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1321208899%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1206865202%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Mermaid" id="1206865202%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Mermaid/index.html">com.quarkdown.stdlib.module.Mermaid</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1206865202%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="834582583%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Optionality" id="834582583%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Optionality/index.html">com.quarkdown.stdlib.module.Optionality</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="834582583%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1123397795%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Slides" id="-1123397795%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Slides/index.html">com.quarkdown.stdlib.module.Slides</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1123397795%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="8292812%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.String" id="8292812%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.String/index.html">com.quarkdown.stdlib.module.String</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="8292812%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1052708244%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.TableComputation" id="1052708244%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.TableComputation/index.html">com.quarkdown.stdlib.module.TableComputation</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1052708244%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1808348712%2FPackages%2F742850071" anchor-label="com.quarkdown.stdlib.module.Text" id="1808348712%2FPackages%2F742850071" data-filterable-set=":quarkdown-stdlib/main"></a>
+    <div class="table-row" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="com.quarkdown.stdlib.module.Text/index.html">com.quarkdown.stdlib.module.Text</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1808348712%2FPackages%2F742850071"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
