@@ -238,6 +238,7 @@ com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters
 com.quarkdown.quarkdoc.dokka.transformers.misc
 com.quarkdown.quarkdoc.dokka.transformers.module
 com.quarkdown.quarkdoc.dokka.transformers.name
+com.quarkdown.quarkdoc.dokka.transformers.optional
 com.quarkdown.quarkdoc.dokka.transformers.suppress
 com.quarkdown.quarkdoc.dokka.transformers.type
 com.quarkdown.quarkdoc.dokka.util
