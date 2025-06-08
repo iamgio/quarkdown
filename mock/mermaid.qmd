@@ -61,6 +61,8 @@
 
 .conditionalpagebreak {slides}
 
+<<<
+
 ## Pie chart
 
 .mermaid caption:{Pie chart of a daily routine.}
