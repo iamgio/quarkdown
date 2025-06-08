@@ -31,3 +31,13 @@
       - tableofcontents: Inhaltsverzeichnis
       - figure: Abbildung
       - table: Tabelle
+    - Japanese
+      - note: ノート
+      - tip: ヒント
+      - warning: 警告
+      - important: 重要
+      - error: エラー
+      - todo: タスク
+      - tableofcontents: 目次
+      - figure: 数値
+      - table: テーブル

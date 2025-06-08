@@ -17,6 +17,12 @@
         - lemma: Lemma
         - theorem: Theorem
         - proof: Beweis
+    - Japanese
+        - abstract: 抽象
+        - definition: 定義
+        - lemma: 補題
+        - theorem: 定理
+        - proof: 証明
 
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 
