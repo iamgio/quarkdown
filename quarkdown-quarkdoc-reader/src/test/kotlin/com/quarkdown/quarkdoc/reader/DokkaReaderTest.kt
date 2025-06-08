@@ -6,6 +6,7 @@ import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
@@ -14,7 +15,7 @@ import kotlin.test.assertTrue
 class DokkaReaderTest {
     @Test
     fun `html extractor`() {
-        val subContentRange = 114..145
+        val subContentRange = 114..143
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
         assertEquals(
             fullHtml
@@ -26,6 +27,60 @@ class DokkaReaderTest {
                 .extractContent()
                 ?.replace("\\s+".toRegex(), ""),
         )
+    }
+
+    private fun extractFunctionData(resourceName: String): DocsFunction {
+        val fullHtml = javaClass.getResourceAsStream(resourceName)!!.bufferedReader().readText()
+        return DokkaHtmlContentExtractor(fullHtml).extractFunctionData()!!
+    }
+
+    @Test
+    fun `simple parameter extractor`() {
+        val function = extractFunctionData("/content/lowercase.html")
+        val parameter = function.parameters.first { it.name == "string" }
+        assertEquals("lowercase", function.name)
+        assertFalse(function.isLikelyChained)
+        assertEquals(
+            "<p class=\"paragraph\">string to convert</p>",
+            parameter.description,
+        )
+        assertFalse(parameter.isOptional)
+        assertFalse(parameter.isLikelyBody)
+        assertFalse(parameter.isLikelyNamed)
+    }
+
+    @Test
+    fun `long parameter extractor`() {
+        val function = extractFunctionData("/content/container.html")
+        val backgroundParameter = function.parameters.first { it.name == "background" }
+        val bodyParameter = function.parameters.first { it.name == "body" }
+        assertEquals("container", function.name)
+        assertFalse(function.isLikelyChained)
+        assertEquals(
+            """
+            <dl>
+             <ul>
+              <li>Optional</li>
+              <li>Likely <a href>named</a></li>
+             </ul>
+            </dl>
+            <p class="paragraph">background color. Transparent if unset</p>
+            """.trimIndent(),
+            backgroundParameter.description.replace("(?<=href)=\".+?\"".toRegex(), ""),
+        )
+        assertTrue(backgroundParameter.isOptional)
+        assertFalse(backgroundParameter.isLikelyBody)
+        assertTrue(backgroundParameter.isLikelyNamed)
+        assertTrue(bodyParameter.isOptional)
+        assertTrue(bodyParameter.isLikelyBody)
+        assertFalse(bodyParameter.isLikelyNamed)
+    }
+
+    @Test
+    fun `likely chained function extractor`() {
+        val function = extractFunctionData("/content/isnone.html")
+        assertEquals("isnone", function.name)
+        assertTrue(function.isLikelyChained)
     }
 
     /**

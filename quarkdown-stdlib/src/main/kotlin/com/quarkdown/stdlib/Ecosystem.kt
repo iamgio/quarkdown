@@ -5,6 +5,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
@@ -79,7 +80,7 @@ fun include(
 @Name("includeall")
 fun includeAll(
     @Injected context: MutableContext,
-    paths: Iterable<Value<*>>,
+    @LikelyBody paths: Iterable<Value<*>>,
 ): IterableValue<OutputValue<*>> =
     paths
         .map { include(context, it.asString()) }

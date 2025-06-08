@@ -5,6 +5,8 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.OutputValue
@@ -106,8 +108,8 @@ private fun mergeLocalizationTables(
 fun localization(
     @Injected context: MutableContext,
     @Name("name") tableName: String,
-    merge: Boolean = false,
-    contents: Map<String, DictionaryValue<OutputValue<String>>>,
+    @LikelyNamed merge: Boolean = false,
+    @LikelyBody contents: Map<String, DictionaryValue<OutputValue<String>>>,
 ): VoidValue {
     val tableExists = tableName in context.localizationTables
 
@@ -137,7 +139,7 @@ fun localization(
  *
  * Example:
  * ```
- * .localize("mytable:key")
+ * .localize {mytable:key}
  * ```
  *
  * @param key key to localize, in the format `tableName:keyName`
@@ -150,7 +152,7 @@ fun localization(
 fun localize(
     @Injected context: Context,
     key: String,
-    separator: String = ":",
+    @LikelyNamed separator: String = ":",
 ): StringValue {
     val (tableName, keyName) = key.split(separator, limit = 2)
     return context.localize(tableName, keyName).wrappedAsValue()

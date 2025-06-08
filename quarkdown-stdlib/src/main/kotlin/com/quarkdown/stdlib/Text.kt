@@ -7,6 +7,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
@@ -40,14 +42,14 @@ val Text: Module =
  */
 fun text(
     text: InlineMarkdownContent,
-    size: TextTransformData.Size? = null,
-    weight: TextTransformData.Weight? = null,
-    style: TextTransformData.Style? = null,
-    decoration: TextTransformData.Decoration? = null,
-    case: TextTransformData.Case? = null,
-    variant: TextTransformData.Variant? = null,
-    color: Color? = null,
-    url: String? = null,
+    @LikelyNamed size: TextTransformData.Size? = null,
+    @LikelyNamed weight: TextTransformData.Weight? = null,
+    @LikelyNamed style: TextTransformData.Style? = null,
+    @LikelyNamed decoration: TextTransformData.Decoration? = null,
+    @LikelyNamed case: TextTransformData.Case? = null,
+    @LikelyNamed variant: TextTransformData.Variant? = null,
+    @LikelyNamed color: Color? = null,
+    @LikelyNamed url: String? = null,
 ): NodeValue {
     val transform =
         TextTransform(
@@ -89,7 +91,7 @@ fun code(
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
-    code: EvaluableString,
+    @LikelyBody code: EvaluableString,
 ): NodeValue =
     Code(
         code.content,

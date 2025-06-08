@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
+import com.quarkdown.quarkdoc.dokka.page.LikelyChainedPageTransformer
 import com.quarkdown.quarkdoc.dokka.page.WikiLinkPageTransformer
 import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumParameterEntryListerTransformer
@@ -11,6 +12,7 @@ import com.quarkdown.quarkdoc.dokka.transformers.module.ModulesStorer
 import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentableNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentationNameTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorer
+import com.quarkdown.quarkdoc.dokka.transformers.optional.AdditionalParameterPropertiesTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.suppress.SuppressInjectedTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.type.ValueTypeTransformer
 import org.jetbrains.dokka.CoreExtensions
@@ -105,6 +107,10 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
         base.preMergeDocumentableTransformer providing ::EnumParameterEntryListerTransformer
     }
 
+    val additionalParameterPropertiesTransformer by extending {
+        base.preMergeDocumentableTransformer providing ::AdditionalParameterPropertiesTransformer
+    }
+
     /**
      * Given a function annotated with `@OnlyForDocumentType` which defines constraints
      * about the document type the function supports, this transformer stores this data
@@ -131,10 +137,19 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
+     * Generates a new section for likely chained functions.
+     */
+    val likelyChainedPageTransformer by extending {
+        CoreExtensions.pageTransformer providing ::LikelyChainedPageTransformer
+    }
+
+    /**
      * Generates a new section for the `@wiki` documentation tag with a link to the corresponding wiki page.
      */
     val wikiLinkPageTransformer by extending {
-        CoreExtensions.pageTransformer providing ::WikiLinkPageTransformer
+        CoreExtensions.pageTransformer providing ::WikiLinkPageTransformer order {
+            after(likelyChainedPageTransformer)
+        }
     }
 
     /**

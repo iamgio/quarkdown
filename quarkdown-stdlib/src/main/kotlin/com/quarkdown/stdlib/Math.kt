@@ -2,6 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.NumberValue
@@ -40,6 +42,7 @@ val Math: Module =
 /**
  * @return arithmetic floating-point sum of [a] and [b]
  */
+@LikelyChained
 fun sum(
     a: Number,
     b: Number,
@@ -48,14 +51,16 @@ fun sum(
 /**
  * @return arithmetic floating-point subtraction of [a] and [b]
  */
+@LikelyChained
 fun subtract(
-    @Name("from") a: Number,
+    a: Number,
     b: Number,
 ) = NumberValue(a.toFloat() - b.toFloat())
 
 /**
  * @return arithmetic floating-point multiplication of [a] and [b]
  */
+@LikelyChained
 fun multiply(
     a: Number,
     @Name("by") b: Number,
@@ -64,6 +69,7 @@ fun multiply(
 /**
  * @return arithmetic floating-point division of [a] and [b]
  */
+@LikelyChained
 fun divide(
     a: Number,
     @Name("by") b: Number,
@@ -72,6 +78,7 @@ fun divide(
 /**
  * @return remainder of the arithmetic floating-point division of [a] and [b]
  */
+@LikelyChained
 fun rem(
     a: Number,
     b: Number,
@@ -82,6 +89,7 @@ fun rem(
  * @param exponent exponent number. If it is a floating-point number, it will be truncated to an integer
  * @return [base] raised to the power of [exponent]
  */
+@LikelyChained
 fun pow(
     base: Number,
     @Name("to") exponent: Number,
@@ -91,6 +99,7 @@ fun pow(
  * @param x number to get the absolute value of
  * @return the absolute value of [x]
  */
+@LikelyChained
 fun abs(x: Number) =
     when (x) {
         is Int -> kotlin.math.abs(x)
@@ -101,6 +110,7 @@ fun abs(x: Number) =
  * @param x the number to negate (positive to negative and vice versa)
  * @return the negation of [x]
  */
+@LikelyChained
 fun negate(x: Number) =
     when (x) {
         is Int -> -x
@@ -111,12 +121,14 @@ fun negate(x: Number) =
  * @param x number to get the square root of
  * @return the square root of [x]
  */
+@LikelyChained
 fun sqrt(x: Number) = kotlin.math.sqrt(x.toFloat()).let(::NumberValue)
 
 /**
  * @param x number to get the natural logarithm of
  * @return the natural logarithm of [x]
  */
+@LikelyChained
 fun logn(x: Number) = kotlin.math.ln(x.toFloat()).let(::NumberValue)
 
 // Trigonometry
@@ -151,9 +163,10 @@ fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
  * otherwise to a floating-point number
  * @throws IllegalArgumentException if [decimals] is negative
  */
+@LikelyChained
 fun truncate(
     x: Number,
-    decimals: Int,
+    @LikelyNamed decimals: Int,
 ): NumberValue =
     when {
         decimals < 0 -> throw IllegalArgumentException("Decimals must be a non-negative number")
@@ -170,6 +183,7 @@ fun truncate(
  * @param x number to round
  * @return [x] rounded to the nearest integer
  */
+@LikelyChained
 fun round(x: Number): NumberValue =
     when (x) {
         is Int -> x
@@ -182,6 +196,7 @@ fun round(x: Number): NumberValue =
  * @return whether the integer value of [x] is an even number
  */
 @Name("iseven")
+@LikelyChained
 fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
 
 /**

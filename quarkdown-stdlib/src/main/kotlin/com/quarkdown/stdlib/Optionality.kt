@@ -2,6 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -44,6 +46,7 @@ internal fun isNone(value: Any?) = value == null || value is None || value is No
  * @wiki None
  */
 @Name("isnone")
+@LikelyChained
 fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wrappedAsValue()
 
 /**
@@ -53,9 +56,10 @@ fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wra
  * @see isNone
  * @wiki None
  */
+@LikelyChained
 fun otherwise(
     value: DynamicValue,
-    fallback: DynamicValue,
+    @LikelyNamed fallback: DynamicValue,
 ): DynamicValue = if (isNone(value.unwrappedValue)) fallback else value
 
 /**
@@ -67,6 +71,7 @@ fun otherwise(
  * @see isNone
  * @wiki None
  */
+@LikelyChained
 @Name("ifpresent")
 fun ifPresent(
     value: DynamicValue,
@@ -91,6 +96,7 @@ fun ifPresent(
  * @return [value] if the result of [condition] is true, [none] otherwise
  * @wiki None
  */
+@LikelyChained
 @Name("takeif")
 fun takeIf(
     value: DynamicValue,

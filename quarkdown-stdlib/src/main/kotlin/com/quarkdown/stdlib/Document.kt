@@ -25,6 +25,8 @@ import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.NodeValue
@@ -233,7 +235,7 @@ fun docLanguage(
 fun theme(
     @Injected context: Context,
     color: String? = null,
-    layout: String? = null,
+    @LikelyNamed layout: String? = null,
 ): VoidValue {
     /**
      * @throws IOPipelineException if [theme] is not a valid theme
@@ -280,7 +282,7 @@ fun theme(
  */
 fun numbering(
     @Injected context: Context,
-    formats: Map<String, Value<String>>,
+    @LikelyBody formats: Map<String, Value<String>>,
 ): VoidValue {
     fun parse(format: Value<String>): NumberingFormat =
         when (val unwrapped = format.unwrappedValue) {
@@ -326,8 +328,8 @@ fun paragraphStyle(
     @Injected context: Context,
     @Name("lineheight") lineHeight: Number? = null,
     @Name("letterspacing") letterSpacing: Number? = null,
-    spacing: Number? = null,
-    indent: Number? = null,
+    @LikelyNamed spacing: Number? = null,
+    @LikelyNamed indent: Number? = null,
 ): VoidValue {
     with(context.documentInfo.layout.paragraphStyle) {
         this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
@@ -348,9 +350,9 @@ fun paragraphStyle(
 @Name("captionposition")
 fun captionPosition(
     @Injected context: Context,
-    default: CaptionPosition? = null,
-    figures: CaptionPosition? = null,
-    tables: CaptionPosition? = null,
+    @LikelyNamed default: CaptionPosition? = null,
+    @LikelyNamed figures: CaptionPosition? = null,
+    @LikelyNamed tables: CaptionPosition? = null,
 ): VoidValue {
     with(context.documentInfo.layout.captionPosition) {
         this.default = default ?: this.default
@@ -370,7 +372,7 @@ fun captionPosition(
 fun texMacro(
     @Injected context: Context,
     name: String,
-    macro: String,
+    @LikelyBody macro: String,
 ) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
 
 /**
@@ -394,12 +396,12 @@ fun texMacro(
 fun pageFormat(
     @Injected context: Context,
     @Name("size") format: PageSizeFormat? = null,
-    orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
-    width: Size? = null,
-    height: Size? = null,
-    margin: Sizes? = null,
-    columns: Int? = null,
-    alignment: Container.TextAlignment? = null,
+    @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
+    @LikelyNamed margin: Sizes? = null,
+    @LikelyNamed columns: Int? = null,
+    @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
     with(context.documentInfo.layout.pageFormat) {
         // If, for instance, the document is landscape and the given format is portrait,
@@ -428,7 +430,7 @@ fun pageFormat(
 @Name("pagemargin")
 fun pageMarginContent(
     position: PageMarginPosition = PageMarginPosition.TOP_CENTER,
-    content: MarkdownContent,
+    @LikelyBody content: MarkdownContent,
 ): NodeValue =
     PageMarginContentInitializer(
         content.children,
@@ -442,7 +444,9 @@ fun pageMarginContent(
  * @return a wrapped [PageMarginContentInitializer] node with its position set to bottom center
  * @wiki Page margin content
  */
-fun footer(content: MarkdownContent): NodeValue =
+fun footer(
+    @LikelyBody content: MarkdownContent,
+): NodeValue =
     pageMarginContent(
         PageMarginPosition.BOTTOM_CENTER,
         content,
@@ -522,7 +526,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  */
 @Name("tableofcontents")
 fun tableOfContents(
-    title: InlineMarkdownContent? = null,
+    @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue =

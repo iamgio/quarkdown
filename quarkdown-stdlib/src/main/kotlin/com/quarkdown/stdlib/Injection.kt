@@ -3,6 +3,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.base.block.Html
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.value.wrappedAsValue
 
 /**
@@ -20,4 +21,6 @@ val Injection: Module =
  * @return a new [Html] node
  * @wiki HTML
  */
-fun html(content: String) = Html(content).wrappedAsValue()
+fun html(
+    @LikelyBody content: String,
+) = Html(content).wrappedAsValue()

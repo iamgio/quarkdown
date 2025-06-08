@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -22,6 +23,7 @@ val Logical: Module =
  * @return whether `a < b` (or `<=` if [equals] is `true`)
  */
 @Name("islower")
+@LikelyChained
 fun isLower(
     a: Number,
     @Name("than") b: Number,
@@ -39,6 +41,7 @@ fun isLower(
  * @return whether `a > b` (or `>=` if [equals] is `true`)
  */
 @Name("isgreater")
+@LikelyChained
 fun isGreater(
     a: Number,
     @Name("than") b: Number,
@@ -55,6 +58,7 @@ fun isGreater(
  * @return whether [a] and [b] have equal content
  */
 @Name("equals")
+@LikelyChained
 fun equals(
     a: DynamicValue,
     @Name("to") b: DynamicValue,
@@ -63,4 +67,5 @@ fun equals(
 /**
  * @return the negation of [value]
  */
+@LikelyChained
 fun not(value: Boolean) = BooleanValue(!value)

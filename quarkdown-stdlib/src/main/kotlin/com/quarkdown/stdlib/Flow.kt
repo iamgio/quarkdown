@@ -9,6 +9,7 @@ import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
@@ -50,7 +51,7 @@ val Flow: Module =
 @Suppress("ktlint:standard:function-naming")
 fun `if`(
     condition: Boolean,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): OutputValue<*> =
     when (condition) {
         true -> body.invokeDynamic()
@@ -66,7 +67,7 @@ fun `if`(
 @Name("ifnot")
 fun ifNot(
     condition: Boolean,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): OutputValue<*> = `if`(!condition, body)
 
 /**
@@ -114,7 +115,7 @@ fun ifNot(
 @Name("foreach")
 fun forEach(
     iterable: Iterable<Value<*>>,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): IterableValue<OutputValue<*>> {
     val values = iterable.map { value -> body.invokeDynamic(value) }
     return GeneralCollectionValue(values)
@@ -131,7 +132,7 @@ fun forEach(
  */
 fun repeat(
     times: Int,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): IterableValue<OutputValue<*>> = forEach(Range(1, times), body)
 
 /**
@@ -175,7 +176,7 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
 fun function(
     @Injected context: MutableContext,
     name: String,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): VoidValue {
     // Function parameters.
     val parameters =
@@ -270,7 +271,7 @@ fun variable(
  */
 fun let(
     value: DynamicValue,
-    body: Lambda,
+    @LikelyBody body: Lambda,
 ): OutputValue<*> = body.invokeDynamic(value)
 
 /**

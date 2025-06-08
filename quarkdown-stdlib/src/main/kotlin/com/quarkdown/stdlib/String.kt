@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -47,6 +48,7 @@ fun string(value: String) =
  * @param condition if true, concatenates `a` and `b`
  * @return a new string that is the concatenation of `a` and `b` if `condition` is true, `a` otherwise
  */
+@LikelyChained
 fun concatenate(
     a: String,
     @Name("with") b: String,
@@ -63,6 +65,7 @@ fun concatenate(
  * @param string string to convert
  * @return a new uppercase string
  */
+@LikelyChained
 fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
 
 /**
@@ -71,6 +74,7 @@ fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
  * @param string string to convert
  * @return a new lowercase string
  */
+@LikelyChained
 fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
 
 /**
@@ -79,6 +83,7 @@ fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
  * @param string string to capitalize
  * @return a new string with the first character capitalized
  */
+@LikelyChained
 fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsValue()
 
 /**
@@ -86,6 +91,7 @@ fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsVal
  * @param string string to check
  * @return `true` if the string is empty, `false` otherwise
  */
+@LikelyChained
 @Name("isempty")
 fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
 
@@ -96,4 +102,5 @@ fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
  * @see isEmpty
  */
 @Name("isnotempty")
+@LikelyChained
 fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
