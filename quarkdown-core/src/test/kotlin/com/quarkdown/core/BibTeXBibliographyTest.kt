@@ -1,9 +1,11 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.bibliography.ArticleBibliographyEntry
+import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.BookBibliographyEntry
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
 import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
+import com.quarkdown.core.bibliography.structuredAuthors
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -43,6 +45,14 @@ class BibTeXBibliographyTest {
             ),
             entry,
         )
+        assertEquals(
+            BibliographyEntryAuthor(
+                fullName = "Angenendt, Arnold",
+                firstName = "Arnold",
+                lastName = "Angenendt",
+            ),
+            entry.structuredAuthors.single(),
+        )
     }
 
     @Test
@@ -74,6 +84,14 @@ class BibTeXBibliographyTest {
             ),
             entry,
         )
+        assertEquals(
+            BibliographyEntryAuthor(
+                fullName = "Averroes",
+                firstName = null,
+                lastName = "Averroes",
+            ),
+            entry.structuredAuthors.single(),
+        )
     }
 
     @Test
@@ -96,6 +114,21 @@ class BibTeXBibliographyTest {
                     ),
             ),
             entry,
+        )
+        assertEquals(
+            listOf(
+                BibliographyEntryAuthor(
+                    fullName = "Baez, John C.",
+                    firstName = "John C.",
+                    lastName = "Baez",
+                ),
+                BibliographyEntryAuthor(
+                    fullName = "Lauda, Aaron D.",
+                    firstName = "Aaron D.",
+                    lastName = "Lauda",
+                ),
+            ),
+            entry.structuredAuthors,
         )
     }
 }
