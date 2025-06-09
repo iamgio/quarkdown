@@ -1,0 +1,101 @@
+package com.quarkdown.core
+
+import com.quarkdown.core.bibliography.ArticleBibliographyEntry
+import com.quarkdown.core.bibliography.BookBibliographyEntry
+import com.quarkdown.core.bibliography.GenericBibliographyEntry
+import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+/**
+ * Tests for .bib bibliographies.
+ */
+class BibTeXBibliographyTest {
+    // https://github.com/plk/biblatex/blob/dev/bibtex/bib/biblatex/biblatex-examples.bib
+
+    private fun getBibliography(resourceName: String) =
+        BibTeXBibliographyParser.parse(javaClass.getResourceAsStream("/bib/$resourceName.bib")!!.reader())
+
+    @Test
+    fun article() {
+        val entry = getBibliography("article").entries.single()
+        assertEquals(
+            ArticleBibliographyEntry(
+                citationKey = "angenendt",
+                title = "In Honore Salvatoris -- Vom Sinn und Unsinn der Patrozinienkunde",
+                author = "Angenendt, Arnold",
+                year = "2002",
+                journal = "Revue d'Histoire Ecclésiastique",
+                volume = "97",
+                number = null,
+                pages = "431--456, 791--823",
+                month = null,
+                doi = null,
+                publisher = "Institut de Recherches Historiques du Septentrion",
+                extraFields =
+                    mapOf(
+                        "langid" to "german",
+                        "indextitle" to "In Honore Salvatoris",
+                        "shorttitle" to "In Honore Salvatoris",
+                        "annotation" to "A German article in a French journal. " +
+                            "Apart from that, a typical \\texttt{article} entry. Note the \\texttt{indextitle} field",
+                    ),
+            ),
+            entry,
+        )
+    }
+
+    @Test
+    fun book() {
+        val entry = getBibliography("book").entries.single()
+        assertEquals(
+            BookBibliographyEntry(
+                citationKey = "averroes/hannes",
+                title = "Des Averroes Abhandlung: Uber die Moglichkeit der Conjunktion oder Uber den materiellen Intellekt",
+                author = "Averroes",
+                year = "1892",
+                publisher = "C. A. Kaemmerer",
+                editor = "Hannes, Ludwig",
+                volume = "1",
+                series = null,
+                address = "Halle an der Saale",
+                edition = "1",
+                extraFields =
+                    mapOf(
+                        "translator" to "Hannes, Ludwig",
+                        "annotator" to "Hannes, Ludwig",
+                        "keywords" to "primary",
+                        "langid" to "german",
+                        "sorttitle" to "Uber die Moglichkeit der Conjunktion",
+                        "indexsorttitle" to "Uber die Moglichkeit der Conjunktion",
+                        "indextitle" to "Über die Möglichkeit der Conjunktion",
+                        "annotation" to "An annotated edition",
+                    ),
+            ),
+            entry,
+        )
+    }
+
+    @Test
+    fun `generic (online)`() {
+        val entry = getBibliography("online").entries.single()
+        assertEquals(
+            GenericBibliographyEntry(
+                citationKey = "baez/online",
+                title = "Higher-Dimensional Algebra {V}: 2-Groups",
+                author = "Baez, John C. and Lauda, Aaron D.",
+                year = "2004",
+                extraFields =
+                    mapOf(
+                        "version" to "3",
+                        "langid" to "english",
+                        "langidopts" to "variant=american",
+                        "eprinttype" to "arxiv",
+                        "eprint" to "math/0307200v3",
+                        "annotation" to "An online reference from arXiv",
+                    ),
+            ),
+            entry,
+        )
+    }
+}
