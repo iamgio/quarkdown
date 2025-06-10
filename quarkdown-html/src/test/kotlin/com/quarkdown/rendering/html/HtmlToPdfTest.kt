@@ -4,6 +4,7 @@ import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
 import com.quarkdown.rendering.html.pdf.HtmlPdfExporter
+import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue
@@ -39,7 +40,10 @@ class HtmlToPdfTest {
     @Test
     fun `bare script on simple html`() {
         assumeTrue(NodeJsWrapper(options.nodeJsPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(options.npmPath).isValid)
+        with(NpmWrapper(options.npmPath)) {
+            assumeTrue(isValid)
+            assumeTrue(isInstalled(PuppeteerNodeModule))
+        }
 
         val html = File(directory, "index.html")
         html.writeText(

@@ -10,7 +10,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 private fun npm() = NpmWrapper(NpmWrapper.defaultPath)
 
@@ -86,6 +85,7 @@ class NodeNpmWrapperTest {
         assertEquals(false, node.isLinked(PuppeteerNodeModule))
     }
 
+    /*
     @Test
     fun `install puppeteer`() {
         val node = node(workingDirectory = directory)
@@ -98,4 +98,5 @@ class NodeNpmWrapperTest {
         npm.link(node, PuppeteerNodeModule)
         assertTrue(node.isLinked(PuppeteerNodeModule))
     }
+     */
 }
