@@ -10,18 +10,40 @@ data class Bibliography(
 
 /**
  * A single bibliography entry.
- * @param citationKey the unique identifier for the entry
- * @param title the title of the work
- * @param author the author(s) of the work
- * @param year the year of publication
- * @param extraFields any additional fields that are not standard
  */
 sealed interface BibliographyEntry {
+    /**
+     * The unique identifier for the bibliography entry, typically used as a citation key.
+     * This is often a string that can be used to reference the entry in citations.
+     */
     val citationKey: String
+
+    /**
+     * The title of the work
+     */
     val title: String?
+
+    /**
+     * The author(s) of the work.
+     */
     val author: String?
+
+    /**
+     * The year of publication.
+     */
     val year: String?
+
+    /**
+     * Any additional fields that are not standard in the bibliography entry.
+     * This allows for flexibility in including custom metadata.
+     */
     val extraFields: Map<String, String>
+
+    /**
+     * @param visitor the visitor to accept
+     * @return the result of the visit operation
+     */
+    fun <T> accept(visitor: BibliographyEntryVisitor<T>): T
 }
 
 /**
@@ -51,7 +73,9 @@ data class ArticleBibliographyEntry(
     val doi: String?,
     val publisher: String?,
     override val extraFields: Map<String, String> = emptyMap(),
-) : BibliographyEntry
+) : BibliographyEntry {
+    override fun <T> accept(visitor: BibliographyEntryVisitor<T>): T = visitor.visit(this)
+}
 
 /**
  * A bibliography entry for a book (BibTeX type `book`).
@@ -78,7 +102,9 @@ data class BookBibliographyEntry(
     val address: String? = null,
     val edition: String? = null,
     override val extraFields: Map<String, String> = emptyMap(),
-) : BibliographyEntry
+) : BibliographyEntry {
+    override fun <T> accept(visitor: BibliographyEntryVisitor<T>): T = visitor.visit(this)
+}
 
 /**
  * A generic bibliography entry for any other type of work.
@@ -94,4 +120,6 @@ data class GenericBibliographyEntry(
     override val author: String?,
     override val year: String?,
     override val extraFields: Map<String, String>,
-) : BibliographyEntry
+) : BibliographyEntry {
+    override fun <T> accept(visitor: BibliographyEntryVisitor<T>): T = visitor.visit(this)
+}
