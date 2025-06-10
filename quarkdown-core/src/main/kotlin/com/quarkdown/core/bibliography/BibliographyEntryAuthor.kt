@@ -12,7 +12,7 @@ data class BibliographyEntryAuthor(
     val lastName: String?,
 )
 
-private const val AUTHOR_SEPARATOR = " and "
+private val AUTHOR_SEPARATOR = ",? and ".toRegex()
 private const val NAME_SEPARATOR = ", "
 
 /**
