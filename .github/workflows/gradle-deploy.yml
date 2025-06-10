@@ -47,7 +47,7 @@ jobs:
         git push origin +latest
 
     - name: Create devbuild release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v2.2.2
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "latest"
@@ -57,7 +57,7 @@ jobs:
         files: build/distributions/quarkdown.zip
 
     - name: Create release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v2.2.2
       if: github.ref_type == 'tag'
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"

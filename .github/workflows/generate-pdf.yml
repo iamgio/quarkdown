@@ -2,7 +2,7 @@ name: PDF generation via Puppeteer
 
 on:
   push:
-    branches: [ "main" ]
+    tags: [ "v*" ]
     paths-ignore:
       - '*.md'
       - '**/README.md'
