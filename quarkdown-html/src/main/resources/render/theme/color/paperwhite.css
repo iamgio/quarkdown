@@ -2,7 +2,7 @@
 
 :root {
     --qd-primary-color: rgb(220, 220, 220);
-    --qd-background-color: hsl(210, 20%, 98%);
+    --qd-background-color: white;
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: hsl(0, 100%, 33%);
     --qd-color-on-primary: var(--qd-main-color);
