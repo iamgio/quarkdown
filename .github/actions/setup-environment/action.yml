@@ -26,3 +26,7 @@ runs:
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
+
+    - name: Install Puppeteer
+      run: npm install -g puppeteer
+      shell: bash

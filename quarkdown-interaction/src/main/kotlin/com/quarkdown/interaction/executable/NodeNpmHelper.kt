@@ -1,6 +1,5 @@
 package com.quarkdown.interaction.executable
 
-import com.quarkdown.core.log.Log
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
@@ -27,8 +26,7 @@ class NodeNpmHelper(
 
     private fun linkModule(module: NodeModule) {
         if (!npm.isInstalled(module)) {
-            Log.info("Module '${module.name}' is not installed. Installing...")
-            npm.install(module)
+            throw NodeModuleNotInstalledException(module)
         }
         npm.link(node, module)
         linkedModules += module
@@ -52,6 +50,7 @@ class NodeNpmHelper(
      * @param requiredModules the modules to link
      * @param action the action to run after the executables are checked and the modules are linked
      * @throws IllegalStateException if the Node.js or NPM wrappers are not valid
+     * @throws NodeModuleNotInstalledException if a required module is not installed globally
      */
     fun launch(
         vararg requiredModules: NodeModule,

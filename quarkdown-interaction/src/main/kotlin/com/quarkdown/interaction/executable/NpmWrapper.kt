@@ -19,7 +19,7 @@ class NpmWrapper(
                 launchAndGetOutput("--version").trim().let {
                     it.isNotBlank() && it.lines().size == 1
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 false
             }
 
@@ -28,20 +28,12 @@ class NpmWrapper(
     }
 
     /**
-     * Installs a Node.js module globally, overwriting it if it already exists.
-     * @param module the module to install
-     */
-    fun install(module: NodeModule) {
-        launchAndGetOutput("install", "-g", module.name)
-    }
-
-    /**
      * @return whether the given [module] is installed globally
      */
     fun isInstalled(module: NodeModule): Boolean =
         try {
             launchAndGetOutput("list", "-g", module.name).contains(module.name)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
 

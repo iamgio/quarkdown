@@ -1,6 +1,8 @@
 package com.quarkdown.rendering.html.pdf
 
+import com.quarkdown.core.log.Log
 import com.quarkdown.interaction.executable.NodeJsWrapper
+import com.quarkdown.interaction.executable.NodeModuleNotInstalledException
 import com.quarkdown.interaction.executable.NpmWrapper
 import java.io.File
 
@@ -26,12 +28,19 @@ class HtmlPdfExporter(
         val node = NodeJsWrapper(path = options.nodeJsPath, workingDirectory = out.parentFile)
         val npm = NpmWrapper(path = options.npmPath)
 
-        PuppeteerPdfGeneratorScript(
-            sourcesDirectory,
-            out,
-            node,
-            npm,
-            options.noSandbox,
-        ).launch()
+        val script =
+            PuppeteerPdfGeneratorScript(
+                sourcesDirectory,
+                out,
+                node,
+                npm,
+                options.noSandbox,
+            )
+
+        try {
+            script.launch()
+        } catch (e: NodeModuleNotInstalledException) {
+            Log.error(e.message!!)
+        }
     }
 }
