@@ -13,7 +13,8 @@ data class BibliographyEntryAuthor(
 )
 
 private val AUTHOR_SEPARATOR = ",? and ".toRegex()
-private const val NAME_SEPARATOR = ", "
+private const val NAME_SEPARATOR_LAST_NAME_FIRST = ", "
+private const val NAME_SEPARATOR_FIRST_NAME_FIRST = " "
 
 /**
  * Given a [BibliographyEntry] with the [author] property in the format "Last, First and Last, First",
@@ -21,15 +22,35 @@ private const val NAME_SEPARATOR = ", "
  * @return a list of structured authors, based on the [author] property.
  */
 val BibliographyEntry.structuredAuthors: List<BibliographyEntryAuthor>
-    get() =
-        author
-            ?.split(AUTHOR_SEPARATOR)
-            ?.map { it.trim() }
-            ?.map { name ->
-                val parts = name.split(NAME_SEPARATOR).map { it.trim() }
-                BibliographyEntryAuthor(
-                    fullName = name,
-                    firstName = parts.lastOrNull().takeIf { parts.size > 1 },
-                    lastName = parts.firstOrNull(),
-                )
-            } ?: emptyList()
+    get() {
+        val rawAuthors =
+            author
+                ?.split(AUTHOR_SEPARATOR)
+                ?.map { it.trim() }
+                ?: return emptyList()
+
+        return rawAuthors.map { name ->
+            // Last name is first: "Last, First"
+            // First name is first: "First Last"
+            val lastNameFirst = ", " in name
+            val parts =
+                name
+                    .split(if (lastNameFirst) NAME_SEPARATOR_LAST_NAME_FIRST else NAME_SEPARATOR_FIRST_NAME_FIRST)
+                    .map { it.trim() }
+
+            when {
+                lastNameFirst ->
+                    BibliographyEntryAuthor(
+                        fullName = name,
+                        firstName = parts.lastOrNull().takeIf { parts.size > 1 },
+                        lastName = parts.firstOrNull(),
+                    )
+                else ->
+                    BibliographyEntryAuthor(
+                        fullName = name,
+                        firstName = parts.firstOrNull().takeIf { parts.size > 1 },
+                        lastName = parts.lastOrNull(),
+                    )
+            }
+        }
+    }

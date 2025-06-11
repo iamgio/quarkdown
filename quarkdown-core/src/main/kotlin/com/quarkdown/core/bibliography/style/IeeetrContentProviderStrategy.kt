@@ -9,32 +9,42 @@ import com.quarkdown.core.bibliography.GenericBibliographyEntry
 import com.quarkdown.core.bibliography.structuredAuthors
 
 /**
- * Content provider for [BibliographyStyle.Plain].
+ * Content provider for [BibliographyStyle.Ieeetr].
  */
-internal data object PlainContentProviderStrategy : BibliographyEntryContentProviderStrategy {
+internal data object IeeetrContentProviderStrategy : BibliographyEntryContentProviderStrategy {
     private fun BibliographyEntry.authorsToString(): String =
-        BibliographyStyleUtils.joinAuthorsToString(structuredAuthors) { it.fullName ?: "" }
+        BibliographyStyleUtils.joinAuthorsToString(structuredAuthors) { author ->
+            author.firstName
+                ?.take(1)
+                ?.let { "$it. ${author.lastName}" }
+                ?: author.lastName
+                ?: ""
+        }
 
+    // N. Surname1, N. Surname2, and N. Surname3, “Title of the article,” Journal Name, vol. 1, no. 1, pp. 1–10, 2025.
     override fun visit(entry: ArticleBibliographyEntry): InlineContent =
         buildInline {
             text(entry.authorsToString())
+
             entry.title?.let {
-                text(". ")
-                text(it)
+                text(", ")
+                text("“$it”")
             }
             entry.journal?.let {
-                text(". ")
+                text(", ")
                 emphasis { text(it) }
             }
             entry.volume?.let {
                 text(", ")
-                text(it)
+                text("vol. $it")
             }
             entry.number?.let {
-                text("($it)")
+                text(", ")
+                text("no. $it")
             }
             entry.pages?.let {
-                text(":$it")
+                text(", ")
+                text("pp. $it")
             }
             entry.year?.let {
                 text(", ")
@@ -43,24 +53,27 @@ internal data object PlainContentProviderStrategy : BibliographyEntryContentProv
             text(".")
         }
 
+    // N. Surname1, N. Surname2, and N. Surname3, Title of the book, Address: Publisher, Year.
     override fun visit(entry: BookBibliographyEntry): InlineContent =
         buildInline {
             text(entry.authorsToString())
+            text(", ")
+
             entry.title?.let {
-                text(". ")
                 emphasis { text(it) }
-            }
-            entry.publisher?.let {
                 text(". ")
-                text(it)
             }
             entry.address?.let {
-                text(", ")
                 text(it)
+                text(": ")
+            }
+            entry.publisher?.let {
+                text(it)
+                text(", ")
             }
             entry.year?.let {
-                text(", ")
                 text(it)
+                text(". ")
             }
             text(".")
         }
@@ -68,9 +81,10 @@ internal data object PlainContentProviderStrategy : BibliographyEntryContentProv
     override fun visit(entry: GenericBibliographyEntry): InlineContent =
         buildInline {
             text(entry.authorsToString())
+            text(", ")
+
             entry.title?.let {
-                text(". ")
-                text(it)
+                text("“$it”")
             }
             BibliographyStyleUtils.run { genericEntryExtraFields(entry) }
             text(".")

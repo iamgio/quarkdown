@@ -23,4 +23,14 @@ interface BibliographyStyle {
         override val contentProvider: BibliographyEntryContentProviderStrategy =
             PlainContentProviderStrategy
     }
+
+    /**
+     * TeX bibliography style `ieeetr`.
+     */
+    data object Ieeetr : BibliographyStyle {
+        override val labelProvider: BibliographyEntryLabelProviderStrategy =
+            BibliographyEntryLabelProviderStrategy.IndexOnly
+        override val contentProvider: BibliographyEntryContentProviderStrategy =
+            IeeetrContentProviderStrategy
+    }
 }
