@@ -48,6 +48,11 @@ object TemplatePlaceholders {
     const val DOCUMENT_TYPE = "DOCTYPE"
 
     /**
+     * Whether this document is plain, with no sections or pages.
+     */
+    const val IS_PLAIN = "PLAIN"
+
+    /**
      * Whether this document is grouped in pages.
      */
     const val IS_PAGED = "PAGED"

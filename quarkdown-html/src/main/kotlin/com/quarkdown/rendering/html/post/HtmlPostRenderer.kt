@@ -63,6 +63,8 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.DOCUMENT_TYPE,
                 document.type.name.lowercase(),
             )
+            // "Plain" document rendering.
+            conditional(TemplatePlaceholders.IS_PLAIN, document.type == DocumentType.PLAIN)
             // "Paged" document rendering via PagesJS.
             conditional(TemplatePlaceholders.IS_PAGED, document.type == DocumentType.PAGED)
             // "Slides" document rendering via RevealJS.
