@@ -125,13 +125,13 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
-    private fun checkPdf() {
+    private fun checkPdf(expectedPages: Int = 3) {
         val pdf = File(directory, "Quarkdown-test.pdf")
         assertTrue(pdf.exists())
         assertFalse(File(directory, "Quarkdown-test").exists())
 
         Loader.loadPDF(pdf).use {
-            assertEquals(3, it.numberOfPages)
+            assertEquals(expectedPages, it.numberOfPages)
         }
     }
 
@@ -142,6 +142,16 @@ class CompileCommandTest : TempDirectory() {
 
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
+    }
+
+    @Test
+    fun `single-page pdf`() {
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
+
+        main.writeText(main.readText().replace("paged", "plain") + "\n\n.repeat {100}\n\t.loremipsum")
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+        checkPdf(expectedPages = 1)
     }
 
     @Test

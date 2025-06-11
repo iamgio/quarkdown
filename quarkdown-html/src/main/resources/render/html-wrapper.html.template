@@ -64,6 +64,11 @@
             break-before: always;
         }
 
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
         body.quarkdown-plain {
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
         }
@@ -78,6 +83,7 @@
         @page {
             [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+            [[if:!PAGEMARGIN]][[if:PLAIN]]margin: 0;[[endif:PLAIN]][[endif:!PAGEMARGIN]]
         }
 
         p {
