@@ -330,12 +330,15 @@ class QuarkdownHtmlNodeRenderer(
             )
 
             // Content.
-            +buildTag("ol") {
-                className("bibliography")
-                attribute("data-style", node.style.name)
+            +buildTag("div") {
+                classNames("bibliography", "bibliography-${node.style.name}")
                 node.bibliography.entries.mapIndexed { index, entry ->
-                    tag("li") {
-                        attribute("data-citation-label", node.style.labelProvider.getLabel(entry, index))
+                    tag("span") {
+                        className("bibliography-entry-label")
+                        +node.style.labelProvider.getLabel(entry, index)
+                    }
+                    tag("span") {
+                        className("bibliography-entry-content")
                         +node.style.contentProvider.getContent(entry)
                     }
                 }

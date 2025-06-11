@@ -897,6 +897,17 @@ Example: "Figure 1.1:"
     display: inline;
 }
 
+/* Bibliography */
+
+.quarkdown .bibliography {
+    padding: 0;
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 0.5em;
+    row-gap: 1em;
+}
+
 /* Footer */
 
 .page-margin-bottom-center, .page-margin-top-center {
