@@ -3,10 +3,12 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.quarkdown.block.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.toc.TableOfContents
@@ -38,6 +40,7 @@ import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.pipeline.error.IOPipelineException
+import com.quarkdown.core.bibliography.style.BibliographyStyle as CoreBibliographyStyle
 
 /**
  * `Document` stdlib module exporter.
@@ -66,6 +69,7 @@ val Document: Module =
         ::disableAutoPageBreak,
         ::marker,
         ::tableOfContents,
+        ::bibliography,
     )
 
 /**
@@ -517,7 +521,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 
 /**
  * Generates a table of contents for the document.
- * @param title title of the table of contents. If unset, the default title is used
+ * @param title title of the table of contents. If unset, the default localized title is used
  * @param maxDepth maximum depth of the table of contents
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
@@ -535,3 +539,38 @@ fun tableOfContents(
         maxDepth,
         focusedItem?.children,
     ).wrappedAsValue()
+
+/**
+ * Bibliography styles supported by [bibliography].
+ * See [here](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles) for examples of each style.
+ */
+enum class BibliographyStyle(
+    internal val style: CoreBibliographyStyle,
+) {
+    PLAIN(CoreBibliographyStyle.Plain),
+    IEEETR(CoreBibliographyStyle.Ieeetr),
+}
+
+/**
+ * Generates a bibliography from a [BibTeX](https://www.bibtex.org) file.
+ * @param path path to the BibTeX file, with extension
+ * @param style bibliography style to use
+ * @param title title of the bibliography. If unset, the default localized title is used
+ * @return a wrapped [BibliographyView] node
+ * @wiki Bibliography
+ */
+fun bibliography(
+    @Injected context: Context,
+    path: String,
+    @LikelyNamed style: BibliographyStyle = BibliographyStyle.PLAIN,
+    @LikelyNamed title: InlineMarkdownContent? = null,
+): NodeValue {
+    val file = file(context, path)
+    val bibliography = BibTeXBibliographyParser.parse(file.reader())
+
+    return BibliographyView(
+        title = title?.children,
+        bibliography = bibliography,
+        style = style.style,
+    ).wrappedAsValue()
+}
