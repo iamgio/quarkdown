@@ -31,6 +31,7 @@ import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.block.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -295,6 +296,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Whitespace): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: TableOfContentsView): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: BibliographyView): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MermaidDiagram): CharSequence = throw UnsupportedRenderException(node)
 

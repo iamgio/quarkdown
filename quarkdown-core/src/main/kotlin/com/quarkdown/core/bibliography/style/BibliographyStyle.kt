@@ -15,6 +15,12 @@ interface BibliographyStyle {
     val contentProvider: BibliographyEntryContentProviderStrategy
 
     /**
+     * The name of this bibliography style.
+     */
+    val name: String
+        get() = this::class.simpleName?.lowercase() ?: "unknown"
+
+    /**
      * TeX bibliography style `plain`.
      */
     data object Plain : BibliographyStyle {

@@ -13,6 +13,7 @@ import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.block.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -36,6 +37,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
@@ -303,7 +305,7 @@ class QuarkdownHtmlNodeRenderer(
                 customId = "table-of-contents",
             )
 
-            // Content
+            // Content.
             +buildTag("nav") {
                 +node.convertToListNode(
                     this@QuarkdownHtmlNodeRenderer,
@@ -315,6 +317,30 @@ class QuarkdownHtmlNodeRenderer(
             }
         }
     }
+
+    override fun visit(node: BibliographyView) =
+        buildMultiTag {
+            // Localized title.
+            val titleText = context.localizeOrNull(key = "bibliography")
+
+            // Title heading. Its content is either the node's user-set title or a default localized one.
+            +Heading(
+                depth = 1,
+                text = node.title ?: buildInline { titleText?.let { text(it) } },
+            )
+
+            // Content.
+            +buildTag("ol") {
+                className("bibliography")
+                attribute("data-style", node.style.name)
+                node.bibliography.entries.mapIndexed { index, entry ->
+                    tag("li") {
+                        attribute("data-citation-label", node.style.labelProvider.getLabel(entry, index))
+                        +node.style.contentProvider.getContent(entry)
+                    }
+                }
+            }
+        }
 
     override fun visit(node: MermaidDiagram) =
         buildTag("pre") {

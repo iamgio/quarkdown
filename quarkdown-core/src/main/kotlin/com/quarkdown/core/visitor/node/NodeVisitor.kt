@@ -29,6 +29,7 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.block.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -147,6 +148,8 @@ interface NodeVisitor<T> {
     fun visit(node: Whitespace): T
 
     fun visit(node: TableOfContentsView): T
+
+    fun visit(node: BibliographyView): T
 
     fun visit(node: MermaidDiagram): T
 

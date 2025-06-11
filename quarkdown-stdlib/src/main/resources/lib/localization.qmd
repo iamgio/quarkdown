@@ -9,6 +9,7 @@
       - error: Error
       - todo: To do
       - tableofcontents: Table of Contents
+      - bibliography: References
       - figure: Figure
       - table: Table
     - Italian
@@ -19,6 +20,7 @@
       - error: Errore
       - todo: Da fare
       - tableofcontents: Indice
+      - bibliography: Riferimenti
       - figure: Figura
       - table: Tabella
     - German
@@ -29,6 +31,7 @@
       - error: Fehler
       - todo: Aufgabe
       - tableofcontents: Inhaltsverzeichnis
+      - bibliography: Literaturverzeichnis
       - figure: Abbildung
       - table: Tabelle
     - Japanese
@@ -39,5 +42,6 @@
       - error: エラー
       - todo: タスク
       - tableofcontents: 目次
+      - bibliography: 参考文献
       - figure: 数値
       - table: テーブル

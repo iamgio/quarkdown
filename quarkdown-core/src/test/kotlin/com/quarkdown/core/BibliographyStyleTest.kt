@@ -1,10 +1,10 @@
 package com.quarkdown.core
 
+import com.quarkdown.core.BibliographySamples.article
+import com.quarkdown.core.BibliographySamples.book
+import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.dsl.buildInline
-import com.quarkdown.core.bibliography.ArticleBibliographyEntry
-import com.quarkdown.core.bibliography.BookBibliographyEntry
-import com.quarkdown.core.bibliography.GenericBibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.bibliography.style.getContent
 import kotlin.test.Test
@@ -14,44 +14,6 @@ import kotlin.test.assertEquals
  * Tests for bibliography styles.
  */
 class BibliographyStyleTest {
-    private val article =
-        ArticleBibliographyEntry(
-            citationKey = "einstein",
-            title = "Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]",
-            author = "Einstein, Albert",
-            year = "1905",
-            journal = "Annalen der Physik",
-            volume = "322",
-            number = "10",
-            pages = "891--921",
-            month = null,
-            doi = "http://dx.doi.org/10.1002/andp.19053221004",
-            publisher = null,
-        )
-
-    private val book =
-        BookBibliographyEntry(
-            citationKey = "latexcompanion",
-            title = "The LaTeX Companion",
-            author = "Michel Goossens and Frank Mittelbach and Alexander Samarin",
-            year = "1993",
-            publisher = "Addison-Wesley",
-            editor = null,
-            volume = null,
-            series = null,
-            address = "Reading, Massachusetts",
-            edition = null,
-        )
-
-    private val misc =
-        GenericBibliographyEntry(
-            citationKey = "knuthwebsite",
-            title = "Knuth: Computers and Typesetting",
-            author = "Donald Knuth",
-            year = null,
-            extraFields = mapOf("url" to "http://www-cs-faculty.stanford.edu/~uno/abcde.html"),
-        )
-
     @Test
     fun `plain, article`() {
         val style = BibliographyStyle.Plain
