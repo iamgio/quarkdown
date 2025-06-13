@@ -5,6 +5,7 @@ import com.quarkdown.core.BibliographySamples.book
 import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.bibliography.style.getContent
 import kotlin.test.Test
@@ -149,6 +150,81 @@ class BibliographyStyleTest {
                 text("“")
                 text("Knuth: Computers and Typesetting")
                 text(".” ")
+                text("1.0")
+                text(". ")
+                link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
+                    text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                }
+                text(".")
+            }.let(::AstRoot),
+            AstRoot(content),
+        )
+    }
+
+    @Test
+    fun `acm, article`() {
+        val style = BibliographyStyle.Acm
+        val label = style.labelProvider.getLabel(article, 0)
+        val content = style.contentProvider.getContent(article)
+        assertEquals("[1]", label)
+        assertNodeEquals(
+            buildInline {
+                text("Einstein, A.", TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS))
+                text(" ")
+                text("Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]")
+                text(". ")
+                emphasis { text("Annalen der Physik") }
+                text(" ")
+                emphasis { text("322") }
+                text(", ")
+                text("10")
+                text(" (")
+                text("1905")
+                text(")")
+                text(", ")
+                text("891--921")
+                text(".")
+            }.let(::AstRoot),
+            AstRoot(content),
+        )
+    }
+
+    @Test
+    fun `acm, book`() {
+        val style = BibliographyStyle.Acm
+        val label = style.labelProvider.getLabel(book, 0)
+        val content = style.contentProvider.getContent(book)
+        assertEquals("[1]", label)
+        assertNodeEquals(
+            buildInline {
+                text(
+                    "Goossens, M., Mittelbach, F., and Samarin, A.",
+                    TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS),
+                )
+                text(" ")
+                emphasis { text("The LaTeX Companion") }
+                text(". ")
+                text("Addison-Wesley")
+                text(", ")
+                text("Reading, Massachusetts")
+                text(", ")
+                text("1993")
+                text(".")
+            }.let(::AstRoot),
+            AstRoot(content),
+        )
+    }
+
+    @Test
+    fun `acm, misc`() {
+        val style = BibliographyStyle.Acm
+        val content = style.contentProvider.getContent(misc)
+        assertNodeEquals(
+            buildInline {
+                text("Knuth, D.", TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS))
+                text(" ")
+                text("Knuth: Computers and Typesetting")
+                text(". ")
                 text("1.0")
                 text(". ")
                 link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
