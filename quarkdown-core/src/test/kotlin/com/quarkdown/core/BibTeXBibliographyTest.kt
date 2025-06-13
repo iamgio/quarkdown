@@ -24,13 +24,13 @@ class BibTeXBibliographyTest {
         assertEquals(
             ArticleBibliographyEntry(
                 citationKey = "angenendt",
-                title = "In Honore Salvatoris -- Vom Sinn und Unsinn der Patrozinienkunde",
+                title = "In Honore Salvatoris – Vom Sinn und Unsinn der Patrozinienkunde",
                 author = "Angenendt, Arnold",
                 year = "2002",
                 journal = "Revue d'Histoire Ecclésiastique",
                 volume = "97",
                 number = null,
-                pages = "431--456, 791--823",
+                pages = "431–456, 791–823",
                 month = null,
                 doi = null,
                 publisher = "Institut de Recherches Historiques du Septentrion",

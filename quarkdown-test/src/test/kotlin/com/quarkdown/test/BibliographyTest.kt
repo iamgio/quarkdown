@@ -14,7 +14,7 @@ private const val PLAIN_BIBLIOGRAPHY_OUTPUT =
         "Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]. " +
         "<em>Annalen der Physik</em>" +
         ", " +
-        "322(10):891--921, 1905." +
+        "322(10):891–921, 1905." +
         "</span>" +
         "<span class=\"bibliography-entry-label\">[2]</span>" +
         "<span class=\"bibliography-entry-content\">" +

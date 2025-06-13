@@ -34,6 +34,8 @@ object BibTeXBibliographyParser : BibliographyParser {
             .replace("\n", " ")
             .replace("\r", " ")
             .replace("(?<!\\\\)~".toRegex(), " ")
+            .replace("(?<!\\\\)---".toRegex(), "—") // Em dash.
+            .replace("(?<!\\\\)--".toRegex(), "–") // En dash.
             .replace("\\\\(?=\\p{S})".toRegex(), "") // Symbol escape.
 
     private fun BibTeXEntry.pop(key: org.jbibtex.Key): String? =
