@@ -1,14 +1,16 @@
-package com.quarkdown.core.bibliography.style
+package com.quarkdown.core.bibliography.style.content
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.bibliography.ArticleBibliographyEntry
 import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.BookBibliographyEntry
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
+import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
 import com.quarkdown.core.bibliography.style.dsl.buildBibliographyContent
+import com.quarkdown.core.bibliography.style.genericEntryExtraFields
 
 /**
- * Content provider for [BibliographyStyle.Ieeetr].
+ * Content provider for [com.quarkdown.core.bibliography.style.BibliographyStyle.Ieeetr].
  */
 internal data object IeeetrContentProviderStrategy : BibliographyEntryContentProviderStrategy {
     /**

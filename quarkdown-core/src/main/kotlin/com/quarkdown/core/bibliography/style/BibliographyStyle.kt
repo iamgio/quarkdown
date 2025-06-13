@@ -1,5 +1,9 @@
 package com.quarkdown.core.bibliography.style
 
+import com.quarkdown.core.bibliography.style.content.AcmContentProviderStrategy
+import com.quarkdown.core.bibliography.style.content.IeeetrContentProviderStrategy
+import com.quarkdown.core.bibliography.style.content.PlainContentProviderStrategy
+
 /**
  * TeX-inspired styles for rendering bibliography entries.
  */
@@ -38,5 +42,15 @@ interface BibliographyStyle {
             BibliographyEntryLabelProviderStrategy.IndexOnly
         override val contentProvider: BibliographyEntryContentProviderStrategy =
             IeeetrContentProviderStrategy
+    }
+
+    /**
+     * TeX bibliography style `acm`.
+     */
+    data object Acm : BibliographyStyle {
+        override val labelProvider: BibliographyEntryLabelProviderStrategy =
+            BibliographyEntryLabelProviderStrategy.IndexOnly
+        override val contentProvider: BibliographyEntryContentProviderStrategy =
+            AcmContentProviderStrategy
     }
 }

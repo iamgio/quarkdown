@@ -3,6 +3,7 @@ package com.quarkdown.core.bibliography.style.dsl
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.dsl.InlineAstBuilder
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy.Companion.LEFT_TYPOGRAPHIC_QUOTE
@@ -48,7 +49,10 @@ class BibliographyEntryContentBuilder<E : BibliographyEntry>(
 
     // Just
 
-    private val InlineContent?.just: Unit?
+    /**
+     * Terminal operation: pushes a single [InlineContent].
+     */
+    val InlineContent?.just: Unit?
         get() = this?.forEach { ast.run { +it } }
 
     /**
@@ -111,6 +115,17 @@ class BibliographyEntryContentBuilder<E : BibliographyEntry>(
             this?.let {
                 buildInline {
                     emphasis { text(it) }
+                }
+            }
+
+    /**
+     * Makes text small caps.
+     */
+    val String?.smallCaps: InlineContent?
+        get() =
+            this?.let {
+                buildInline {
+                    text(it, TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS))
                 }
             }
 

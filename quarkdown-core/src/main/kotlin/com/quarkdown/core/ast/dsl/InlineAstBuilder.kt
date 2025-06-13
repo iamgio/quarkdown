@@ -9,6 +9,8 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.TextTransform
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.document.size.Size
 
 /**
@@ -29,6 +31,14 @@ class InlineAstBuilder : AstBuilder() {
      * @see Text
      */
     fun text(text: String) = +Text(text)
+
+    /**
+     * @see TextTransform
+     */
+    fun text(
+        text: String,
+        transform: TextTransformData,
+    ) = +TextTransform(transform, buildInline { text(text) })
 
     /**
      * @see Link
