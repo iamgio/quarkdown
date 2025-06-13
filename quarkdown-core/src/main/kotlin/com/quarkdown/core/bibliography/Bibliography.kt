@@ -2,11 +2,19 @@ package com.quarkdown.core.bibliography
 
 /**
  * A document's bibliography.
- * @param entries the bibliography entries
+ * @param entries the bibliography entries associated with their citation keys.
  */
-data class Bibliography(
-    val entries: List<BibliographyEntry>,
-)
+class Bibliography private constructor(
+    val entries: Map<String, BibliographyEntry>,
+) {
+    /**
+     * Creates a document's bibliography.
+     * @param entries the list of bibliography entries
+     */
+    constructor(entries: List<BibliographyEntry>) : this(
+        entries.associateBy { it.citationKey },
+    )
+}
 
 /**
  * A single bibliography entry.

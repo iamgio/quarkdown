@@ -20,7 +20,7 @@ class BibTeXBibliographyTest {
 
     @Test
     fun article() {
-        val entry = getBibliography("article").entries.single()
+        val entry = getBibliography("article").entries["angenendt"]!!
         assertEquals(
             ArticleBibliographyEntry(
                 citationKey = "angenendt",
@@ -57,7 +57,7 @@ class BibTeXBibliographyTest {
 
     @Test
     fun book() {
-        val entry = getBibliography("book").entries.single()
+        val entry = getBibliography("book").entries["averroes/hannes"]!!
         assertEquals(
             BookBibliographyEntry(
                 citationKey = "averroes/hannes",
@@ -96,7 +96,7 @@ class BibTeXBibliographyTest {
 
     @Test
     fun `generic (online)`() {
-        val entry = getBibliography("online").entries.single()
+        val entry = getBibliography("online").entries["baez/online"]!!
         assertEquals(
             GenericBibliographyEntry(
                 citationKey = "baez/online",
@@ -135,7 +135,7 @@ class BibTeXBibliographyTest {
 
     @Test
     fun `generic (misc)`() {
-        val entry = getBibliography("misc").entries.single()
+        val entry = getBibliography("misc").entries["knuthwebsite"]!!
         assertEquals(
             GenericBibliographyEntry(
                 citationKey = "knuthwebsite",
