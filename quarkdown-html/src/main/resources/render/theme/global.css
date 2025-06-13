@@ -900,6 +900,7 @@ Example: "Figure 1.1:"
 /* Bibliography */
 
 .quarkdown .bibliography {
+    text-align: start;
     padding: 0;
     list-style-type: none;
     display: grid;
