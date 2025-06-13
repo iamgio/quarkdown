@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
 import com.quarkdown.core.context.MutableContext
@@ -20,6 +21,7 @@ import com.quarkdown.core.bibliography.style.BibliographyStyle as CoreBibliograp
 val Bibliography: Module =
     moduleOf(
         ::bibliography,
+        ::cite,
     )
 
 /**
@@ -56,3 +58,40 @@ fun bibliography(
         style = style.style,
     ).wrappedAsValue()
 }
+
+/**
+ * Creates a citation to a bibliography entry.
+ *
+ * The result is a label that matches with that of the bibliography entry with the given [key].
+ *
+ * Example:
+ *
+ * `bibliography.bib`
+ *
+ * ```bibtex
+ * @article{einstein,
+ *   ...
+ * }
+ *
+ * ...
+ * ```
+ *
+ * Quarkdown:
+ *
+ * ```markdown
+ * Einstein's work .cite {einstein} is fundamental to modern physics.
+ *
+ * .bibliography {bibliography.bib}
+ * ```
+ *
+ * Result:
+ * ```text
+ * Einstein's work [1] is fundamental to modern physics.
+ * ```
+ * @param key the key of the bibliography entry to cite
+ * @return a wrapped [BibliographyCitation] node
+ * @wiki Bibliography#citing
+ */
+fun cite(key: String) =
+    BibliographyCitation(key)
+        .wrappedAsValue()
