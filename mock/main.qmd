@@ -22,3 +22,4 @@
     - separators.qmd
     - alignment.qmd
     - stacks.qmd
+    - bibliography.qmd

@@ -1,2 +1,8 @@
 # Bibliography
 
+Einstein's publication .cite {einstein} in 1905 revolutionized the field of physics, particularly in the realm of special relativity.
+His work laid the foundation for modern theoretical physics and has been cited extensively in subsequent research.
+
+Similarly, Hawking's book .cite {hawking} has had a profound impact on our understanding of cosmology and black holes.
+
+.bibliography {bibliography/bibliography.bib} style:{ieeetr} decorativetitle:{yes}
