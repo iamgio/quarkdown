@@ -72,7 +72,11 @@ class BibliographyStyleTest {
                 text(". ")
                 text("Knuth: Computers and Typesetting")
                 text(". ")
-                text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                text("1.0")
+                text(". ")
+                link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
+                    text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                }
                 text(".")
             }.let(::AstRoot),
             AstRoot(content),
@@ -137,7 +141,11 @@ class BibliographyStyleTest {
                 text(", ")
                 text("“Knuth: Computers and Typesetting”")
                 text(". ")
-                text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                text("1.0")
+                text(". ")
+                link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
+                    text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                }
                 text(".")
             }.let(::AstRoot),
             AstRoot(content),

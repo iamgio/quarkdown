@@ -31,6 +31,15 @@ class InlineAstBuilder : AstBuilder() {
     fun text(text: String) = +Text(text)
 
     /**
+     * @see Link
+     */
+    fun link(
+        url: String,
+        title: String? = null,
+        label: InlineAstBuilder.() -> Unit,
+    ) = +Link(buildInline(label), url, title)
+
+    /**
      * @see CodeSpan
      */
     fun codeSpan(text: String) = +CodeSpan(text)
@@ -79,6 +88,4 @@ class InlineAstBuilder : AstBuilder() {
  * @return the built nodes
  * @see InlineAstBuilder
  */
-fun buildInline(block: InlineAstBuilder.() -> Unit): InlineContent {
-    return InlineAstBuilder().apply(block).build()
-}
+fun buildInline(block: InlineAstBuilder.() -> Unit): InlineContent = InlineAstBuilder().apply(block).build()

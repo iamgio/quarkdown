@@ -43,6 +43,7 @@ object BibliographySamples {
             title = "Knuth: Computers and Typesetting",
             author = "Donald Knuth",
             year = null,
-            extraFields = mapOf("url" to "http://www-cs-faculty.stanford.edu/~uno/abcde.html"),
+            url = "http://www-cs-faculty.stanford.edu/~uno/abcde.html",
+            extraFields = mapOf("version" to "1.0"),
         )
 }

@@ -47,5 +47,9 @@ internal object BibliographyStyleUtils {
             text(". ")
             text(it)
         }
+        entry.url?.let {
+            text(". ")
+            link(it) { text(it) }
+        }
     }
 }
