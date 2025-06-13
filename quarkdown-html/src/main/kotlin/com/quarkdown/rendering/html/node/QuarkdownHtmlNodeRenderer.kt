@@ -328,10 +328,13 @@ class QuarkdownHtmlNodeRenderer(
             val titleText = context.localizeOrNull(key = "bibliography")
 
             // Title heading. Its content is either the node's user-set title or a default localized one.
-            +Heading(
-                depth = 1,
-                text = node.title ?: buildInline { titleText?.let { text(it) } },
-            )
+            val title = node.title ?: titleText?.let { buildInline { text(it) } }
+            title?.let {
+                +Heading(
+                    depth = 1,
+                    text = it,
+                )
+            }
 
             // Content.
             +buildTag("div") {
