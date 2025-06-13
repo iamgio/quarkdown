@@ -1,4 +1,4 @@
-package com.quarkdown.core.ast.quarkdown.block
+package com.quarkdown.core.ast.quarkdown.bibliography
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node

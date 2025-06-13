@@ -10,10 +10,13 @@ import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.CodeSpan
+import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
-import com.quarkdown.core.ast.quarkdown.block.BibliographyView
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
+import com.quarkdown.core.ast.quarkdown.bibliography.getEntry
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -37,6 +40,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
@@ -355,10 +359,19 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: MathSpan) = buildTag("formula", node.expression)
 
-    override fun visit(node: SlidesFragment): CharSequence =
+    override fun visit(node: SlidesFragment) =
         tagBuilder("div", node.children)
             .classNames("fragment", node.behavior.asCSS)
             .build()
+
+    override fun visit(node: BibliographyCitation): CharSequence {
+        val (entry: BibliographyEntry, view: BibliographyView) =
+            node.getEntry(context) ?: return Text("[???]").accept(this)
+
+        val index = view.bibliography.indexOf(entry)
+        val label = view.style.labelProvider.getLabel(entry, index)
+        return Text(label).accept(this)
+    }
 
     override fun visit(node: TextTransform) =
         buildTag("span") {

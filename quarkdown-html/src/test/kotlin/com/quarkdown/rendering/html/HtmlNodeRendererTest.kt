@@ -36,7 +36,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
-import com.quarkdown.core.ast.quarkdown.block.BibliographyView
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse

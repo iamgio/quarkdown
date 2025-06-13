@@ -14,6 +14,11 @@ class Bibliography private constructor(
     constructor(entries: List<BibliographyEntry>) : this(
         entries.associateBy { it.citationKey },
     )
+
+    /**
+     * @return the index of the given [entry] in the bibliography
+     */
+    fun indexOf(entry: BibliographyEntry): Int = entries.values.indexOf(entry)
 }
 
 /**
