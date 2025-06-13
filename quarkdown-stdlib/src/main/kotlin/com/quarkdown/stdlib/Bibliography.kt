@@ -9,6 +9,7 @@ import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
+import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.bibliography.style.BibliographyStyle as CoreBibliographyStyle
@@ -40,6 +41,8 @@ enum class BibliographyStyle(
  * @param path path to the BibTeX file, with extension
  * @param style bibliography style to use
  * @param title title of the bibliography. If unset, the default localized title is used
+ * @param decorativeTitle whether the title, if present, should be a decorative heading,
+ *                        which does not trigger automatic page breaks.
  * @return a wrapped [BibliographyView] node
  * @wiki Bibliography
  */
@@ -48,6 +51,7 @@ fun bibliography(
     path: String,
     @LikelyNamed style: BibliographyStyle = BibliographyStyle.PLAIN,
     @LikelyNamed title: InlineMarkdownContent? = null,
+    @Name("decorativetitle") decorativeTitle: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
     val bibliography = BibTeXBibliographyParser.parse(file.reader())
@@ -56,6 +60,7 @@ fun bibliography(
         title = title?.children,
         bibliography = bibliography,
         style = style.style,
+        isTitleDecorative = decorativeTitle,
     ).wrappedAsValue()
 }
 

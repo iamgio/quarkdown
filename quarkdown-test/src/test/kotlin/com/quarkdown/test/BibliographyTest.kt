@@ -4,7 +4,7 @@ import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-private const val BIBLIOGRAPHY_CALL = ".noautopagebreak\n.bibliography {bib/bibliography.bib}"
+private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativetitle:{yes}"
 
 private const val PLAIN_BIBLIOGRAPHY_OUTPUT =
     "<div class=\"bibliography bibliography-plain\">" +
@@ -77,9 +77,13 @@ class BibliographyTest {
     @Test
     fun citation() {
         execute(
-            "abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}\n\n" +
-                BIBLIOGRAPHY_CALL +
-                "\nabc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}\n\n",
+            """
+            abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
+            
+            $BIBLIOGRAPHY_CALL
+            
+            abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
+            """.trimIndent(),
         ) {
             assertEquals(
                 "<p>abc [1] def [2] ghi [3]</p>" +

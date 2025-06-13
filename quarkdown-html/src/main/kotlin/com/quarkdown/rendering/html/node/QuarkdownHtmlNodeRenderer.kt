@@ -333,6 +333,7 @@ class QuarkdownHtmlNodeRenderer(
                 +Heading(
                     depth = 1,
                     text = it,
+                    isDecorative = node.isTitleDecorative,
                 )
             }
 
