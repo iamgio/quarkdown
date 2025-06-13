@@ -7,6 +7,9 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
 import com.quarkdown.core.bibliography.style.formatAuthors
 
+private const val LEFT_TYPOGRAPHIC_QUOTE = "“"
+private const val RIGHT_TYPOGRAPHIC_QUOTE = "”"
+
 /**
  * Builds content for a [BibliographyEntryContentProviderStrategy].
  *
@@ -127,7 +130,7 @@ class BibliographyEntryContentBuilder<E : BibliographyEntry>(
      * Wraps the text in typographic double quotes.
      */
     val String?.inQuotes: InlineContent?
-        get() = "“" and this and "”"
+        get() = LEFT_TYPOGRAPHIC_QUOTE and this and RIGHT_TYPOGRAPHIC_QUOTE
 
     // Misc
 
