@@ -1,78 +1,45 @@
 package com.quarkdown.core.bibliography.style
 
 import com.quarkdown.core.ast.InlineContent
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.bibliography.ArticleBibliographyEntry
-import com.quarkdown.core.bibliography.BibliographyEntry
+import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.BookBibliographyEntry
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
-import com.quarkdown.core.bibliography.structuredAuthors
+import com.quarkdown.core.bibliography.style.dsl.buildBibliographyContent
 
 /**
  * Content provider for [BibliographyStyle.Plain].
  */
 internal data object PlainContentProviderStrategy : BibliographyEntryContentProviderStrategy {
-    private fun BibliographyEntry.authorsToString(): String =
-        BibliographyStyleUtils.joinAuthorsToString(structuredAuthors) { it.fullName ?: "" }
+    override fun formatAuthor(author: BibliographyEntryAuthor) = author.fullName ?: ""
 
     override fun visit(entry: ArticleBibliographyEntry): InlineContent =
-        buildInline {
-            text(entry.authorsToString())
-            entry.title?.let {
-                text(". ")
-                text(it)
-            }
-            entry.journal?.let {
-                text(". ")
-                emphasis { text(it) }
-            }
-            entry.volume?.let {
-                text(", ")
-                text(it)
-            }
-            entry.number?.let {
-                text("($it)")
-            }
-            entry.pages?.let {
-                text(":$it")
-            }
-            entry.year?.let {
-                text(", ")
-                text(it)
-            }
-            text(".")
+        buildBibliographyContent(entry) {
+            authors
+            ". " then it.title
+            ". " then it.journal.emphasized
+            ", " then it.volume
+            "(" and it.number then ")"
+            ":" then it.pages
+            ", " then it.year
+            ".".just
         }
 
     override fun visit(entry: BookBibliographyEntry): InlineContent =
-        buildInline {
-            text(entry.authorsToString())
-            entry.title?.let {
-                text(". ")
-                emphasis { text(it) }
-            }
-            entry.publisher?.let {
-                text(". ")
-                text(it)
-            }
-            entry.address?.let {
-                text(", ")
-                text(it)
-            }
-            entry.year?.let {
-                text(", ")
-                text(it)
-            }
-            text(".")
+        buildBibliographyContent(entry) {
+            authors
+            ". " then it.title.emphasized
+            ". " then it.publisher
+            ", " then it.address
+            ", " then it.year
+            ".".just
         }
 
     override fun visit(entry: GenericBibliographyEntry): InlineContent =
-        buildInline {
-            text(entry.authorsToString())
-            entry.title?.let {
-                text(". ")
-                text(it)
-            }
-            BibliographyStyleUtils.run { genericEntryExtraFields(entry) }
-            text(".")
+        buildBibliographyContent(entry) {
+            authors
+            ". " then it.title
+            genericEntryExtraFields(it)
+            ".".just
         }
 }

@@ -1,8 +1,8 @@
 package com.quarkdown.core.bibliography.style
 
-import com.quarkdown.core.ast.dsl.InlineAstBuilder
 import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
+import com.quarkdown.core.bibliography.style.dsl.BibliographyEntryContentBuilder
 
 /**
  * Utilities for generating bibliography styles.
@@ -33,23 +33,16 @@ internal object BibliographyStyleUtils {
                 }
             }
         }
+}
 
-    /**
-     * Appends extra fields of a generic bibliography entry to the inline content.
-     * @param entry the generic bibliography entry
-     */
-    fun InlineAstBuilder.genericEntryExtraFields(entry: GenericBibliographyEntry) {
-        entry.extraFields.forEach { (_, value) ->
-            text(". ")
-            text(value)
-        }
-        entry.year?.let {
-            text(". ")
-            text(it)
-        }
-        entry.url?.let {
-            text(". ")
-            link(it) { text(it) }
-        }
+/**
+ * Appends extra fields of a generic bibliography entry to the inline content.
+ * @param entry the generic bibliography entry
+ */
+internal fun BibliographyEntryContentBuilder<GenericBibliographyEntry>.genericEntryExtraFields(entry: GenericBibliographyEntry) {
+    entry.extraFields.forEach { (_, value) ->
+        ". " then value
     }
+    ". " then entry.year
+    ". " then entry.url.asLink
 }
