@@ -112,6 +112,7 @@ data class BookBibliographyEntry(
  * @param title the title of the work
  * @param author the author(s) of the work
  * @param year the year of publication
+ * @param url the URL of the work
  * @param extraFields any additional fields that are not standard
  */
 data class GenericBibliographyEntry(
@@ -119,6 +120,7 @@ data class GenericBibliographyEntry(
     override val title: String?,
     override val author: String?,
     override val year: String?,
+    val url: String? = null,
     override val extraFields: Map<String, String>,
 ) : BibliographyEntry {
     override fun <T> accept(visitor: BibliographyEntryVisitor<T>): T = visitor.visit(this)

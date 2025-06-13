@@ -103,6 +103,7 @@ class BibTeXBibliographyTest {
                 title = "Higher-Dimensional Algebra {V}: 2-Groups",
                 author = "Baez, John C. and Lauda, Aaron D.",
                 year = "2004",
+                url = "https://arxiv.org/abs/math/0307200v3",
                 extraFields =
                     mapOf(
                         "version" to "3",
@@ -126,6 +127,32 @@ class BibTeXBibliographyTest {
                     fullName = "Lauda, Aaron D.",
                     firstName = "Aaron D.",
                     lastName = "Lauda",
+                ),
+            ),
+            entry.structuredAuthors,
+        )
+    }
+
+    @Test
+    fun `generic (misc)`() {
+        val entry = getBibliography("misc").entries.single()
+        assertEquals(
+            GenericBibliographyEntry(
+                citationKey = "knuthwebsite",
+                title = "Knuth: Computers and Typesetting",
+                author = "Donald Knuth",
+                year = null,
+                url = "http://www-cs-faculty.stanford.edu/~uno/abcde.html",
+                extraFields = emptyMap(),
+            ),
+            entry,
+        )
+        assertEquals(
+            listOf(
+                BibliographyEntryAuthor(
+                    fullName = "Donald Knuth",
+                    firstName = "Donald",
+                    lastName = "Knuth",
                 ),
             ),
             entry.structuredAuthors,

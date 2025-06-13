@@ -33,7 +33,8 @@ object BibTeXBibliographyParser : BibliographyParser {
         toUserString()
             .replace("\n", " ")
             .replace("\r", " ")
-            .replace("~", " ")
+            .replace("(?<!\\\\)~".toRegex(), " ")
+            .replace("\\\\(?=\\p{S})".toRegex(), "") // Symbol escape.
 
     private fun BibTeXEntry.pop(key: org.jbibtex.Key): String? =
         this
@@ -88,6 +89,7 @@ object BibTeXBibliographyParser : BibliographyParser {
                 title = pop(BibTeXEntry.KEY_TITLE),
                 author = pop(BibTeXEntry.KEY_AUTHOR),
                 year = pop(BibTeXEntry.KEY_YEAR),
+                url = pop(BibTeXEntry.KEY_URL),
                 extraFields = extraFields(),
             )
         }
