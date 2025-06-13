@@ -6,6 +6,7 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.BibliographyEntryVisitor
 import com.quarkdown.core.bibliography.structuredAuthors
+import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy.Companion.RIGHT_TYPOGRAPHIC_QUOTE
 
 /**
  * Supplier of rich content for bibliography entries.
@@ -18,6 +19,11 @@ interface BibliographyEntryContentProviderStrategy : BibliographyEntryVisitor<In
      * @return the formatted author string
      */
     fun formatAuthor(author: BibliographyEntryAuthor): String
+
+    companion object {
+        internal const val LEFT_TYPOGRAPHIC_QUOTE = "“"
+        internal const val RIGHT_TYPOGRAPHIC_QUOTE = "”"
+    }
 }
 
 /**
@@ -38,22 +44,38 @@ fun BibliographyEntryContentProviderStrategy.formatAuthors(entry: BibliographyEn
 fun BibliographyEntryContentProviderStrategy.getContent(entry: BibliographyEntry): InlineContent {
     val content = entry.accept(this)
 
-    // Consecutive punctuation is merged.
-    return content.filterIndexed { index, node ->
-        val text =
+    fun String.isPunctuation() = trim() in listOf(".", ",", ";", ":")
+
+    var skipNext = false
+    return content.withIndex().mapNotNull { (index, node) ->
+        if (skipNext) {
+            skipNext = false
+            return@mapNotNull null
+        }
+
+        val current: String =
             (node as? Text)
                 ?.text
-                ?.trim()
-                ?: return@filterIndexed true
+                ?: return@mapNotNull node
 
-        val next =
+        val next: String =
             (content.getOrNull(index + 1) as? Text)
                 ?.text
-                ?.trim()
-                ?: return@filterIndexed true
+                ?: return@mapNotNull node
 
-        fun String.isPunctuation() = this == "," || this == ":" || this == "."
+        // Consecutive punctuation is merged:
+        // Text,. -> Text.
+        if (current.isPunctuation() && next.isPunctuation()) {
+            return@mapNotNull null
+        }
 
-        !(text.isPunctuation() && next.isPunctuation())
+        // Punctuation goes before typographic quotes:
+        // “Text”. -> “Text.”
+        if (current == RIGHT_TYPOGRAPHIC_QUOTE && next.take(1).isPunctuation()) {
+            skipNext = true
+            return@mapNotNull Text(text = next.take(1) + current + next.drop(1))
+        }
+
+        node
     }
 }

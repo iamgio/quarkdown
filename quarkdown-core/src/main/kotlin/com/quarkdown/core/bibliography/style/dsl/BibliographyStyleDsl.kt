@@ -5,10 +5,9 @@ import com.quarkdown.core.ast.dsl.InlineAstBuilder
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
+import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy.Companion.LEFT_TYPOGRAPHIC_QUOTE
+import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy.Companion.RIGHT_TYPOGRAPHIC_QUOTE
 import com.quarkdown.core.bibliography.style.formatAuthors
-
-private const val LEFT_TYPOGRAPHIC_QUOTE = "“"
-private const val RIGHT_TYPOGRAPHIC_QUOTE = "”"
 
 /**
  * Builds content for a [BibliographyEntryContentProviderStrategy].

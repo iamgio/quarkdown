@@ -98,8 +98,7 @@ class BibliographyStyleTest {
                 text(", ")
                 text("“")
                 text("Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]")
-                text("”")
-                text(", ")
+                text(",” ")
                 emphasis { text("Annalen der Physik") }
                 text(", ")
                 text("vol. ")
@@ -149,8 +148,7 @@ class BibliographyStyleTest {
                 text(", ")
                 text("“")
                 text("Knuth: Computers and Typesetting")
-                text("”")
-                text(". ")
+                text(".” ")
                 text("1.0")
                 text(". ")
                 link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
