@@ -35,6 +35,12 @@ val lastVersionTag: String? by lazy {
 
 version = lastVersionTag ?: "0.0.0"
 
+tasks.register("printVersion") {
+    doLast {
+        println(project.version)
+    }
+}
+
 allprojects {
     repositories {
         mavenCentral()
