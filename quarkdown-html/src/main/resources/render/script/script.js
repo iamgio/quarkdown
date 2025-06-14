@@ -12,10 +12,19 @@ class AsyncExecutionQueue {
         await Promise.all(this.queue.map(async fn => fn()));
         this.queue = [];
         if (this.onExecute) this.onExecute();
+        this.completed = true;
+    }
+
+    isCompleted() {
+        return this.completed;
     }
 }
 
-let readyState = false;
+// Queue of actions to be executed before the document is handled by Reveal/Paged.
+// The document is elaborated only after this queue is executed.
+const preRenderingExecutionQueue = new AsyncExecutionQueue();
+// Queue of actions to be executed after the document has been rendered in its final form.
+const postRenderingExecutionQueue = new AsyncExecutionQueue();
 
 /**
  * Returns whether the document is finalized and ready.
@@ -23,16 +32,8 @@ let readyState = false;
  * @returns {boolean}
  */
 function isReady() {
-    return readyState;
+    return preRenderingExecutionQueue.isCompleted() && postRenderingExecutionQueue.isCompleted();
 }
-
-// Queue of actions to be executed before the document is handled by Reveal/Paged.
-// The document is elaborated only after this queue is executed.
-const preRenderingExecutionQueue = new AsyncExecutionQueue();
-// Queue of actions to be executed after the document has been rendered in its final form.
-const postRenderingExecutionQueue = new AsyncExecutionQueue(() => {
-    readyState = true;
-});
 
 //
 // Different kinds of documents.
