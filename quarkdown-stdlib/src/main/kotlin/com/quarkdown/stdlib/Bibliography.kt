@@ -96,7 +96,7 @@ fun bibliography(
  * ```
  * @param key the key of the bibliography entry to cite
  * @return a wrapped [BibliographyCitation] node
- * @wiki Bibliography#citing
+ * @wiki Bibliography#citations
  */
 fun cite(key: String) =
     BibliographyCitation(key)
