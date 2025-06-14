@@ -66,6 +66,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
+        mkdir -p pdf/mock
         cp -r temp/mock/* pdf/mock
         rm -rf temp
         git add temp
