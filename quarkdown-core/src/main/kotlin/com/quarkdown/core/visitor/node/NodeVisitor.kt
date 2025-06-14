@@ -29,6 +29,8 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -148,6 +150,8 @@ interface NodeVisitor<T> {
 
     fun visit(node: TableOfContentsView): T
 
+    fun visit(node: BibliographyView): T
+
     fun visit(node: MermaidDiagram): T
 
     // Quarkdown inline
@@ -161,6 +165,8 @@ interface NodeVisitor<T> {
     fun visit(node: PageCounter): T
 
     fun visit(node: SlidesFragment): T
+
+    fun visit(node: BibliographyCitation): T
 
     // Quarkdown invisible nodes
 

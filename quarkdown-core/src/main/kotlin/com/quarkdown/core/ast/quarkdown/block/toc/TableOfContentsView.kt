@@ -10,7 +10,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 /**
  * When this node is rendered, the current table of contents,
  * retrieved from the auto-generated [AstAttributes.tableOfContents], is displayed.
- * @param title title of the table of contents. If `null`, the default title is used
+ * @param title title of the table of contents. If `null`, the default localized title is used
  * @param maxDepth maximum depth the table of contents to display.
  *                 For instance, if `maxDepth` is 2, only headings of level 1 and 2 will be displayed
  * @param focusedItem if not `null`, adds focus to the item of the table of contents with the same text content as this value

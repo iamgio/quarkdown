@@ -2,6 +2,9 @@
 
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.BibliographySamples.article
+import com.quarkdown.core.BibliographySamples.book
+import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
@@ -33,6 +36,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -48,6 +52,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.attachMockPipeline
+import com.quarkdown.core.bibliography.Bibliography
+import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
@@ -956,6 +962,29 @@ class HtmlNodeRendererTest {
             TextTransform(
                 TextTransformData(),
                 listOf(Text("Foo")),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun bibliography() {
+        val out = readParts("quarkdown/bibliography.html")
+
+        assertEquals(
+            out.next(),
+            BibliographyView(
+                title = buildInline { text("Bibliography (plain)") },
+                bibliography = Bibliography(listOf(article, book, misc)),
+                style = BibliographyStyle.Plain,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            BibliographyView(
+                title = buildInline { text("Bibliography (ieeetr)") },
+                bibliography = Bibliography(listOf(article, book, misc)),
+                style = BibliographyStyle.Ieeetr,
             ).render(),
         )
     }

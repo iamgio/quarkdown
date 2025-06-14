@@ -39,7 +39,8 @@ object Stdlib : LibraryExporter {
                         Slides +
                         Ecosystem +
                         Injection +
-                        Mermaid,
+                        Mermaid +
+                        Bibliography,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.

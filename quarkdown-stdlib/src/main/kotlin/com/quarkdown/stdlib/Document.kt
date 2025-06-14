@@ -517,7 +517,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 
 /**
  * Generates a table of contents for the document.
- * @param title title of the table of contents. If unset, the default title is used
+ * @param title title of the table of contents. If unset, the default localized title is used
  * @param maxDepth maximum depth of the table of contents
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
