@@ -34,9 +34,11 @@ function createArgs() {
     await page.waitForFunction('isReady()');
 
     const body = await page.$('body');
+
     // Plain documents render as a single-page PDF.
     const isSinglePage = await body.evaluate(bodyElement => bodyElement.classList.contains('quarkdown-plain'));
-    const singlePageHeightPadding = 50; // Additional height added to single-page PDFs. If not enough, an additional page will be incorrectly generated.
+    const singlePageHeightPadding = 100; // Additional height added to single-page PDFs. If not enough, an additional page will be incorrectly generated.
+    const singlePageHeightMultiplier = 1.03;
 
     const pdfOptions = {
         path: outputFile,
@@ -44,7 +46,7 @@ function createArgs() {
         preferCSSPageSize: true,
         ...(
             isSinglePage
-                ? {height: (await body.boundingBox()).height + singlePageHeightPadding + 'px'}
+                ? {height: (await getClientHeight(body)) * singlePageHeightMultiplier + singlePageHeightPadding + 'px'}
                 : {}
         ),
     };
@@ -52,3 +54,7 @@ function createArgs() {
 
     await browser.close();
 })();
+
+async function getClientHeight(body) {
+    return body.evaluate(bodyElement => bodyElement.clientHeight);
+}
