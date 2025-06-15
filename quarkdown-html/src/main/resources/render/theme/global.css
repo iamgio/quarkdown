@@ -502,6 +502,7 @@ figure p,
 
 .quarkdown code, .box.error > .box-content {
     font-family: var(--qd-code-font);
+    text-align: start;
 }
 
 .quarkdown code:not(pre code) {
@@ -716,6 +717,7 @@ Example: "Figure 1.1:"
         color-mix(in srgb, var(--box-background-color) 98%, rgba(0, 0, 0, .1))
     );
     background-color: var(--box-background-color);
+    break-inside: avoid;
 }
 
 .box > .box-content {
@@ -803,7 +805,6 @@ Example: "Figure 1.1:"
 
 .box.error > .box-content {
     font-size: 0.7em;
-    text-align: start;
 }
 
 
