@@ -24,7 +24,22 @@ class HtmlIdentifierProvider private constructor(
             .replace(" ", "-")
             .replace("[^a-z0-9-]".toRegex(), "")
 
-    override fun visit(heading: Heading) = heading.customId ?: heading.text.toPlainText(renderer).toURIString()
+    /**
+     * Ensures that the string is a valid identifier for HTML elements:
+     * - It is not empty.
+     * - It does not start with a digit (#86).
+     * @return a valid identifier string, possibly different from the original
+     */
+    private fun String.asValidId(): String =
+        when {
+            isEmpty() -> "_"
+            first().isDigit() -> "_$this"
+            else -> this
+        }
+
+    override fun visit(heading: Heading) =
+        (heading.customId ?: heading.text.toPlainText(renderer).toURIString())
+            .asValidId()
 
     companion object {
         /**
