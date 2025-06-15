@@ -23,18 +23,23 @@
 
 # Table of contents
 
-1. [About](#about)
-2. [Demo](#as-simple-as-you-expect)
-3. [Targets](#targets)
-4. [Comparison](#comparison)
-5. [Getting started](#getting-started)
-    1. [Installation](#installation)
-    2. [Creating a project](#creating-a-project)
-    3. [Compiling](#compiling)
-6. [Mock document](#mock-document)
-7. [Contributing](#contributing)
-8. [Sponsors](#sponsors)
-9. [Concept](#concept)
+- [Table of contents](#table-of-contents)
+- [About](#about)
+  - [As simple as you expect...](#as-simple-as-you-expect)
+- [Targets](#targets)
+- [Comparison](#comparison)
+- [Getting started](#getting-started)
+  - [Installation](#installation)
+    - [Option 1: Pre-built Release](#option-1-pre-built-release)
+    - [Option 2: Nix Flake](#option-2-nix-flake)
+  - [Quick Start](#quick-start)
+  - [Creating a project](#creating-a-project)
+  - [Compiling](#compiling)
+      - [Options](#options)
+  - [Mock document](#mock-document)
+  - [Contributing](#contributing)
+  - [Sponsors](#sponsors)
+  - [Concept](#concept)
 
 &nbsp;
 
@@ -233,12 +238,49 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
+### Option 1: Pre-built Release
+
 Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
 
 - The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
 - The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
 
 Java 17 or higher is required. All major operating systems are supported.
+
+### Option 2: Nix Flake
+
+If you have [Nix](https://nixos.org/) installed, you can install Quarkdown with zero configuration:
+
+```bash
+# Install to your profile
+nix profile install github:iamgio/quarkdown#quarkdown
+
+# Or run directly without installing
+nix run github:iamgio/quarkdown -- --help
+
+# Or use in a development shell
+nix shell github:iamgio/quarkdown
+```
+
+The Nix installation automatically provides Java 17 and all dependencies, so no additional setup is required.
+
+## Quick Start
+
+Once installed, you can immediately start using Quarkdown:
+
+```bash
+# Create a new project with the interactive wizard
+quarkdown create my-document
+
+# Compile a Quarkdown file to HTML
+quarkdown c document.qmd
+
+# Live preview with automatic recompilation
+quarkdown c document.qmd -p -w
+
+# Export to PDF
+quarkdown c document.qmd --pdf
+```
 
 ## Creating a project
 
