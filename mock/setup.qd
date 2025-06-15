@@ -32,10 +32,10 @@
 
 .center
 	To compile this document, run:  
-	**`quarkdown c mock/main.qmd -p`**
+	**`quarkdown c mock/main.qd -p`**
 	
 	Different themes and document types may be tested  
-	by changing the first lines of `main.qmd`.
+	by changing the first lines of `main.qd`.
 
 .whitespace height:{3cm}
 
