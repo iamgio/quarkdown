@@ -502,6 +502,7 @@ figure p,
 
 .quarkdown code, .box.error > .box-content {
     font-family: var(--qd-code-font);
+    text-align: start;
 }
 
 .quarkdown code:not(pre code) {
@@ -803,7 +804,6 @@ Example: "Figure 1.1:"
 
 .box.error > .box-content {
     font-size: 0.7em;
-    text-align: start;
 }
 
 
