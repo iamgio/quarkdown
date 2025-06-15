@@ -5,7 +5,7 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.template.TemplateProcessor
 
-private const val TEMPLATE = "/creator/main.qmd.template"
+private const val TEMPLATE = "/creator/main.qd.template"
 
 /**
  * Implementation of [ProjectCreatorTemplateProcessorFactory]
