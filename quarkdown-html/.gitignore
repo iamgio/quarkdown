@@ -1,0 +1,4 @@
+# Sass
+
+src/main/resources/render/theme/**/*.css
+src/main/resources/render/theme/**/*.css.map
