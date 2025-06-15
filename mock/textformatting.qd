@@ -7,7 +7,7 @@ We start with a ***vision*** in our **_heart_, and ~~we put it~~ on canvas**. If
 
 ## `Code`
 
-After running **`quarkdown c file.qmd -p`**, a webserver will run on port `8089`.  
+After running **`quarkdown c file.qd -p`**, a webserver will run on port `8089`.  
 It may also be changed it via `--server-port <port>`.  
 Combining `-p` with `-w` enables live content reload!
 

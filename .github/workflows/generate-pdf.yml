@@ -41,7 +41,7 @@ jobs:
 
     - name: Compile Mock as PDF
       run: |
-        for generated in $(ls mock/generated_*.qmd); do
+        for generated in $(ls mock/generated_*.qd); do
           ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf/mock --pdf --pdf-no-sandbox
         done
         ls -d $PWD/pdf/*

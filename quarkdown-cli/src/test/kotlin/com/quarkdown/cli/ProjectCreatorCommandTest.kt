@@ -46,7 +46,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
 
         println(directory.listFiles()!!.map { it.name })
 
-        val mainFileName = (if (fixedMainFileName) "main" else directory.name) + ".qmd"
+        val mainFileName = (if (fixedMainFileName) "main" else directory.name) + ".qd"
 
         assertTrue(mainFileName in directory.listFiles()!!.map { it.name })
 
