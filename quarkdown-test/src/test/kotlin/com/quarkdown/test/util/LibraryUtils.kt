@@ -1,7 +1,7 @@
 package com.quarkdown.test.util
 
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.stdlib.external.QmdLibraryExporter
+import com.quarkdown.stdlib.external.QdLibraryExporter
 import java.io.File
 
 /**
@@ -18,10 +18,11 @@ object LibraryUtils {
         names: Set<String>,
         directory: File,
     ): Set<Library> =
-        names.map {
-            QmdLibraryExporter(
-                it,
-                File(directory, "$it.qmd").reader(),
-            ).library
-        }.toSet()
+        names
+            .map {
+                QdLibraryExporter(
+                    it,
+                    File(directory, "$it.qd").reader(),
+                ).library
+            }.toSet()
 }
