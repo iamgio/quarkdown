@@ -165,7 +165,7 @@ tasks.distZip {
 
     archiveVersion.set("")
 
-    // The module 'libs' contains .qmd library files that are saved in the lib/qmd directory of the distribution zip.
+    // The module 'libs' contains .qd library files that are saved in the lib/qd directory of the distribution zip.
     val librariesModule = project(":quarkdown-libs")
 
     into("$baseName/lib/qd") {
