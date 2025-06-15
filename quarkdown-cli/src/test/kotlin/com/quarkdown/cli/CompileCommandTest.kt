@@ -154,8 +154,33 @@ class CompileCommandTest : TempDirectory() {
         checkPdf(expectedPages = 1)
     }
 
+    // #86
+    @Test
+    fun `pdf with toc and id starting with digit`() {
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
+
+        main.writeText(
+            """
+            .docname {Quarkdown test}
+            .doctype {paged}
+            .doclang {en}
+
+            .tableofcontents
+            
+            # 1 Test
+            """.trimIndent(),
+        )
+
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+        checkPdf(expectedPages = 2)
+    }
+
     @Test
     fun `pdf via explicit html-pdf`() {
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
+
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
