@@ -1,0 +1,49 @@
+@mixin progressive-heading-margins {
+  h1 {
+    line-height: 3.25rem;
+    margin-bottom: 1.625rem;
+  }
+
+  h2 {
+    line-height: 2rem;
+    margin-top: 3rem;
+  }
+
+  h3 {
+    margin-top: 2.5rem;
+  }
+
+  h4 {
+    margin-top: 2rem;
+  }
+
+  h5 {
+    margin-top: 1.8rem;
+  }
+
+  h6 {
+    margin-top: 2.5rem;
+  }
+
+  h3, h4, h5, h6 {
+    line-height: 1.625rem;
+  }
+
+  h1 + h2 {
+    margin-top: 1.625rem;
+  }
+
+  h2 + h3,
+  h3 + h4,
+  h4 + h5 {
+    margin-top: 0.8rem;
+  }
+
+  h5 + h6 {
+    margin-top: -0.8rem;
+  }
+
+  h2, h3, h4, h5, h6 {
+    margin-bottom: 0.8rem;
+  }
+}
