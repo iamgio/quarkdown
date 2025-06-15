@@ -9,10 +9,10 @@ import java.io.File
  */
 object LibraryUtils {
     /**
-     * Exports libraries from .qmd files.
+     * Exports libraries from .qd files.
      * @param names names of the libraries to export
-     * @param directory directory containing the .qmd files
-     * @return exported libraries, loaded from [directory] and matching [names] with a .qmd extension
+     * @param directory directory containing the .qd files
+     * @return exported libraries, loaded from [directory] and matching [names] with a .qd extension
      */
     fun export(
         names: Set<String>,
