@@ -5,7 +5,7 @@ logo_image: "img/logo.svg"
 right_links:
   - "Docs, https://quarkdown.com/docs"
   - "Wiki, https://github.com/iamgio/quarkdown/wiki"
-  - "Discuss, https://github.com/iamgio/quarkdown/discussions"
+  - "Discuss, https://github.com/iamgio/quarkdown/discussions?discussions_q="
 buttons: []
 ---
 
