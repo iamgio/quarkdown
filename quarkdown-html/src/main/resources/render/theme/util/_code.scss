@@ -59,4 +59,16 @@
       opacity: .8;
     }
   }
+
+  // Code span + additional content
+
+  .codespan-content {
+    display: inline-flex;
+    align-items: center;
+
+    .color-preview {
+      width: 0.5em;
+      height: 0.5em;
+    }
+  }
 }

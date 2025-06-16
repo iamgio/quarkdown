@@ -328,16 +328,6 @@ Example: "Figure 1.1:"
   font-size: 3em;
 }
 
-.codespan-content {
-  display: inline-flex;
-  align-items: center;
-}
-
-.color-preview {
-  width: 0.5em;
-  height: 0.5em;
-}
-
 .inline-collapse[data-collapsed="true"] {
   cursor: pointer;
   font-weight: bold;
