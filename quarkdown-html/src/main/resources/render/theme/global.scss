@@ -11,6 +11,7 @@
 @use "components/location";
 @use "components/toc";
 @use "components/bibliography";
+@use "components/sidebar";
 
 :root {
   /* Quarkdown exposed properties */
@@ -452,99 +453,5 @@ figure p,
 @media print {
   .pagedjs_margin, .pagedjs_margin-bottom, .pagedjs_margin-bottom-left-corner-holder, .pagedjs_margin-bottom-right-corner-holder {
     background-color: var(--qd-background-color);
-  }
-}
-
-/* Navigation sidebar */
-
-.sidebar {
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  padding: 20px;
-  border-radius: 5px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.sidebar ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar li {
-  margin: 0 !important;
-}
-
-.sidebar a {
-  color: var(--qd-main-color);
-  height: 12px;
-  text-decoration: none !important;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.sidebar a::before {
-  content: '';
-  width: 100%;
-  height: 2px;
-  background: var(--qd-main-color);
-  opacity: 0.25;
-  transition: opacity 0.3s;
-}
-
-.quarkdown-paged .sidebar a span {
-  margin-right: 10px;
-}
-
-.quarkdown-paged .sidebar a::before {
-  background: #444;
-}
-
-.sidebar li.h1 a::before {
-  width: 30px;
-  margin-left: 0;
-}
-
-.sidebar li.h2 a::before {
-  width: 20px;
-  margin-left: 10px;
-}
-
-.sidebar li.h3 a::before {
-  width: 10px;
-  margin-left: 20px;
-}
-
-.sidebar a:not(:hover) {
-  color: transparent;
-}
-
-.sidebar li.active a::before {
-  opacity: .75;
-}
-
-.sidebar a:hover::before {
-  opacity: 1;
-}
-
-.sidebar a:hover span {
-  background-color: var(--qd-background-color);
-  padding: 4px 16px;
-  border-radius: 8px;
-}
-
-@media print {
-  .sidebar {
-    display: none;
-  }
-}
-
-@media screen and (min-aspect-ratio: 1.3), pagedjs-ignore {
-  .sidebar {
-    display: block !important;
   }
 }

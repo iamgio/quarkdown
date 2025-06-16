@@ -1,0 +1,91 @@
+// Navigation sidebar (not part of the document)
+
+$max-level: 3;
+$level-width: 9px;
+
+.quarkdown .sidebar {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  padding: 20px;
+  border-radius: 5px;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0 !important;
+
+    @for $level from 0 through ($max-level - 1) {
+      // .h1, .h2, .h3
+      &.h#{$level + 1} a::before {
+        width: ($max-level - $level) * $level-width;
+        margin-left: $level * $level-width;
+      }
+    }
+  }
+
+  a {
+    color: var(--qd-main-color);
+    height: 12px;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+
+    &::before {
+      content: '';
+      width: 100%;
+      height: 2px;
+      background: var(--qd-main-color);
+      opacity: 0.25;
+      transition: opacity 0.3s;
+    }
+
+    &:not(:hover) {
+      color: transparent;
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+
+    &:hover span {
+      background-color: var(--qd-background-color);
+      padding: 4px 16px;
+      border-radius: 8px;
+    }
+
+    @at-root .quarkdown-paged#{&} {
+      &::before {
+        background: #444;
+      }
+
+      span {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  li.active a::before {
+    opacity: .75;
+  }
+}
+
+@media print {
+  .sidebar {
+    display: none;
+  }
+}
+
+@media screen and (min-aspect-ratio: 1.3), pagedjs-ignore {
+  .sidebar {
+    display: block !important;
+  }
+}
