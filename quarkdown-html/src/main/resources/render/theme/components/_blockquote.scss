@@ -5,7 +5,8 @@
     padding: var(--qd-block-margin);
 
     &:not(.quarkdown-slides blockquote) {
-      margin: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     // Attribution
