@@ -1,4 +1,5 @@
 @use "util/viewport";
+@use "util/figure";
 @use "util/mermaid";
 
 :root {
@@ -137,30 +138,6 @@
 .quarkdown li:has(p) {
   margin-top: 1em;
   margin-bottom: 1em;
-}
-
-.quarkdown figure {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.quarkdown figure > :not(figcaption) {
-  order: 1;
-}
-
-.quarkdown figure > figcaption.caption-top {
-  order: 0;
-  margin-bottom: 0.5em;
-}
-
-.quarkdown figure > figcaption.caption-bottom {
-  order: 2;
-  margin-top: 0.5em;
-}
-
-.quarkdown :is(figure, .mermaid) {
-  text-align: center;
 }
 
 /* Blockquotes and alerts */
