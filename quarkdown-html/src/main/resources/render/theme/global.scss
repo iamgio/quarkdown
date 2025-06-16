@@ -10,6 +10,7 @@
 @use "components/box";
 @use "components/size";
 @use "components/container";
+@use "components/stack";
 @use "components/location";
 @use "components/toc";
 @use "components/bibliography";
@@ -239,30 +240,6 @@ figure p,
   margin-top: 0 !important;
 }
 
-/* Stacks */
-
-:is(.stack, .page-margin-content) > :is(p, h1, h2, h3, h4, h5, h6, figure) {
-  margin: 0 !important;
-}
-
-.stack-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.stack-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.stack-grid {
-  display: grid;
-}
-
-.stack-grid > * {
-  margin: 0 !important;
-}
-
 .inline-collapse[data-collapsed="true"] {
   cursor: pointer;
   font-weight: bold;
@@ -284,11 +261,6 @@ figure p,
 
 .quarkdown-slides pre:not(.stack > pre) {
   min-width: 100%;
-}
-
-.stack > pre {
-  width: auto;
-  margin: 0;
 }
 
 .quarkdown img {
