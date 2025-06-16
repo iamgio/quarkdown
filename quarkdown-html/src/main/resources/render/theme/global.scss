@@ -1,4 +1,5 @@
 @use "components/viewport";
+@use "components/heading";
 @use "components/hr";
 @use "components/list";
 @use "components/table";
@@ -154,17 +155,6 @@
   margin-bottom: var(--qd-block-margin);
 }
 
-.quarkdown :is(h1, h2, h3, h4, h5, h6) {
-  color: var(--qd-heading-color);
-  font-family: var(--qd-heading-font);
-  margin: var(--qd-heading-margin);
-  text-transform: none !important;
-}
-
-.quarkdown-slides section > :is(h1, h2, h3, h4, h5, h6):first-child {
-  margin-top: 0;
-}
-
 .quarkdown.quarkdown p {
   line-height: var(--qd-line-height);
   letter-spacing: var(--qd-letter-spacing);
@@ -228,14 +218,6 @@ figure p,
 
 .marker {
   display: none;
-}
-
-.quarkdown pre {
-  min-width: 20%;
-}
-
-.quarkdown-slides pre:not(.stack > pre) {
-  min-width: 100%;
 }
 
 .quarkdown img {

@@ -8,6 +8,14 @@
     }
   }
 
+  pre {
+    min-width: 20%;
+
+    &:not(.stack > pre) {
+      min-width: 100%;
+    }
+  }
+
   pre code {
     font-size: var(--qd-code-block-font-size);
     line-height: var(--qd-code-line-height);
