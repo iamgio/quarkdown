@@ -1,0 +1,114 @@
+
+.quarkdown {
+  // Footer
+  .page-margin-bottom-center, .page-margin-top-center {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+    > * {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  // Other margins
+  .page-margin-content:not(.quarkdown-paged .page-margin-content) {
+    // Paged documents have dedicated areas for each margin. Others use fixed positions.
+    position: fixed;
+    background-color: var(--qd-background-color);
+    z-index: 9999;
+  }
+
+  .pagedjs_margin-left-top, .pagedjs_margin-right-top {
+    display: block;
+  }
+
+  .page-margin-top-left-corner, .page-margin-top-left {
+    top: 0;
+    left: 0;
+  }
+
+  .page-margin-top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .page-margin-top-right-corner, .page-margin-top-right {
+    top: 0;
+    right: 0;
+  }
+
+  .page-margin-right-top {
+    top: 0;
+    right: 0;
+    rotate: 90deg;
+    transform: translateX(50%);
+  }
+
+  .page-margin-right-middle {
+    top: 50%;
+    right: 0;
+    rotate: 90deg;
+    transform: translateX(-50%);
+  }
+
+  .page-margin-right-bottom {
+    bottom: 0;
+    right: 0;
+    rotate: 90deg;
+    transform: translateX(-50%);
+  }
+
+  .page-margin-bottom-right-corner, .page-margin-bottom-right {
+    bottom: 0;
+    right: 0;
+    transform: translateX(-50%);
+  }
+
+  .page-margin-bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .page-margin-bottom-left-corner, .page-margin-bottom-left {
+    bottom: 0;
+    left: 0;
+    transform: translateX(50%);
+  }
+
+  .page-margin-left-bottom {
+    bottom: 0;
+    left: 0;
+    rotate: -90deg;
+    transform: translateY(-50%);
+  }
+
+  .page-margin-left-middle {
+    top: 50%;
+    left: 0;
+    rotate: -90deg;
+    transform: translateY(-50%);
+  }
+
+  .page-margin-left-top {
+    top: 0;
+    left: 0;
+    rotate: -90deg;
+    transform: translateX(-50%);
+  }
+
+  .pagedjs_page .page-margin-content {
+    // Removes translations from the margin content of paged documents
+    transform: none;
+  }
+
+  // Experimental fix: Chrome export-to-PDF adds a colored strip to the bottom area.
+  @media print {
+    .pagedjs_margin, .pagedjs_margin-bottom, .pagedjs_margin-bottom-left-corner-holder, .pagedjs_margin-bottom-right-corner-holder {
+      background-color: var(--qd-background-color);
+    }
+  }
+}

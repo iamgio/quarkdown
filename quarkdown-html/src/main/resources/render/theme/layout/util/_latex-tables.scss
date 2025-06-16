@@ -1,0 +1,52 @@
+@mixin latex-tables {
+  pre table {
+    --border-width-thick: 0;
+    --border-width-thin: 0;
+  }
+
+  table:not(pre table) {
+    $table-border-color: var(--qd-main-color);
+    $table-border-thin: 1px solid $table-border-color;
+    $table-border-thick: 2px solid $table-border-color;
+
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: auto;
+    max-width: 100%;
+    border-top: $table-border-thick;
+    border-bottom: $table-border-thick;
+
+    tr > th {
+      &[scope='col'] {
+        // Bottom border for column headings.
+        border-bottom: $table-border-thin;
+      }
+
+      &[scope='row'] {
+        // Right border for row headings.
+        border-right: $table-border-thin;
+      }
+    }
+
+    th, td {
+      padding: 0.5rem;
+      line-height: 1.1;
+    }
+
+    > tbody > tr {
+      &:first-child {
+        th, td {
+          border-top: $table-border-thin;
+        }
+      }
+
+      &:last-child {
+        th, td {
+          border-bottom: $table-border-thin;
+        }
+      }
+    }
+  }
+}

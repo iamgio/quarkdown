@@ -1,0 +1,21 @@
+// When an element is marked as focused, other siblings are less visible
+
+@mixin unfocused {
+  opacity: 0.4;
+}
+
+.quarkdown {
+  // Unfocused list items
+  :is(ul, ol):has(.focused) {
+    > li:not(.focused, :has(.focused)) {
+      @include unfocused;
+    }
+  }
+
+  // Unfocused lines of code
+  code.focus-lines {
+    .hljs-ln-line:not(.focused) {
+      @include unfocused;
+    }
+  }
+}

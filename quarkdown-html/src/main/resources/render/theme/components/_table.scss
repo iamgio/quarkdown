@@ -1,0 +1,27 @@
+.quarkdown table:not(pre table) {
+  :is(th, td):not([align]) {
+    text-align: var(--qd-table-default-cell-alignment);
+  }
+
+  &:has(> caption.caption-top) {
+    caption-side: top;
+  }
+
+  &:has(> caption.caption-bottom) {
+    caption-side: bottom;
+  }
+
+  > caption {
+    white-space: nowrap;
+    overflow-x: hidden;
+    $margin: 1em;
+
+    &.caption-top {
+      margin-bottom: $margin;
+    }
+
+    &.caption-bottom {
+      margin-top: $margin;
+    }
+  }
+}

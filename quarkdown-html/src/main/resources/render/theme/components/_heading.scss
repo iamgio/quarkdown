@@ -1,0 +1,18 @@
+$headings: h1, h2, h3, h4, h5, h6;
+
+.quarkdown {
+  #{$headings} {
+    color: var(--qd-heading-color);
+    font-family: var(--qd-heading-font), serif;
+    margin: var(--qd-heading-margin);
+    text-transform: none !important;
+  }
+
+  &.quarkdown-slides section > :is(#{$headings}):first-child {
+    margin-top: 0;
+  }
+
+  .marker {
+    display: none;
+  }
+}

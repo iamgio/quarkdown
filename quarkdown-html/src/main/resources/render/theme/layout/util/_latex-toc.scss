@@ -1,0 +1,27 @@
+@mixin latex-toc {
+  nav a {
+    text-decoration: none;
+  }
+
+  nav ol {
+    margin: 0;
+    padding-left: 0;
+  }
+
+  nav > ol ol {
+    padding-left: 2rem;
+  }
+
+  nav > ol > li {
+    margin-top: 20px;
+  }
+
+  nav > ol > li > a {
+    font-weight: bold;
+  }
+
+  nav li {
+    margin-top: 7px;
+    list-style-type: none; /* Only numbering-generated bullets are shown */
+  }
+}

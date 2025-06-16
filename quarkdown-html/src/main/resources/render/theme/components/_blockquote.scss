@@ -1,0 +1,47 @@
+.quarkdown {
+  blockquote {
+    display: block;
+    color: var(--qd-quote-foreground-color);
+    padding: var(--qd-block-margin);
+
+    &:not(.quarkdown-slides blockquote) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    // Attribution
+
+    .attribution {
+      opacity: 0.6;
+      display: block !important;
+      margin-top: 0 !important;
+
+      &::before {
+        content: var(--qd-quote-attribution-prefix);
+      }
+    }
+
+    // Class attribute = quote type (e.g. tip, note, warning, ...)
+
+    &:not([class]) {
+      background-color: var(--qd-quote-background-color);
+    }
+
+    &[class] {
+      // This can be overridden by the renderer to display a localized label for each quote type, e.g. 'Tip:'
+      --quote-type-label: "";
+      font-style: normal;
+      background-color: color-mix(in srgb, var(--box-header-foreground-color) 5%, transparent);
+      border-color: var(--box-header-foreground-color);
+      color: var(--box-content-foreground-color);
+
+      // The alert label, e.g. 'Tip:', 'Note:', 'Warning:', etc.
+      &[data-labeled] > :first-child::before {
+        content: var(--quote-type-label) var(--qd-quote-type-label-suffix);
+        font-weight: bold;
+        font-style: normal;
+        color: var(--box-header-foreground-color);
+      }
+    }
+  }
+}
