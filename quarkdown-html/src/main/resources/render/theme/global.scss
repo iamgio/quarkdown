@@ -9,6 +9,7 @@
 @use "components/clip";
 @use "components/box";
 @use "components/toc";
+@use "components/bibliography";
 
 :root {
   /* Quarkdown exposed properties */
@@ -360,18 +361,6 @@ Example: "Figure 1.1:"
 .quarkdown img {
   max-width: 100%;
   max-height: 100%;
-}
-
-/* Bibliography */
-
-.quarkdown .bibliography {
-  text-align: start;
-  padding: 0;
-  list-style-type: none;
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 0.5em;
-  row-gap: 1em;
 }
 
 /* Footer */
