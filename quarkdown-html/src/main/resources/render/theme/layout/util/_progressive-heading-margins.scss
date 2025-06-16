@@ -1,7 +1,7 @@
-@mixin progressive-heading-margins {
+@mixin progressive-heading-margins($bottomAddition: 0) {
   h1 {
     line-height: 3.25rem;
-    margin-bottom: 1.625rem;
+    margin-bottom: 1.625rem + $bottomAddition;
   }
 
   h2 {
@@ -44,6 +44,6 @@
   }
 
   h2, h3, h4, h5, h6 {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.8rem + $bottomAddition;
   }
 }

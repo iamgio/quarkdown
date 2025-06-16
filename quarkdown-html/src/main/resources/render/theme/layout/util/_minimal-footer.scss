@@ -1,0 +1,22 @@
+@mixin minimal-footer {
+  .page-margin-bottom-center {
+    > * {
+      padding: 12px;
+      margin: 0 !important;
+      border-top: 2px solid;
+      border-color: inherit;
+
+      &:first-child {
+        margin-left: 64px !important;
+      }
+
+      &:last-child {
+        margin-right: 64px !important;
+      }
+    }
+
+    > p {
+      line-height: 1;
+    }
+  }
+}
