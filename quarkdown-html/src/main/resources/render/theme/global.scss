@@ -8,6 +8,7 @@
 @use "components/mermaid";
 @use "components/clip";
 @use "components/box";
+@use "components/size";
 @use "components/location";
 @use "components/toc";
 @use "components/bibliography";
@@ -278,36 +279,6 @@ figure p,
 .container > .stack {
   width: 100%;
   height: 100%;
-}
-
-/* Sizes */
-
-.size-tiny {
-  font-size: 0.5em;
-}
-
-.size-small {
-  font-size: 0.75em;
-}
-
-.size-normal {
-  font-size: 1em;
-}
-
-.size-medium {
-  font-size: 1.25em;
-}
-
-.size-larger {
-  font-size: 1.5em;
-}
-
-.size-large {
-  font-size: 2em;
-}
-
-.size-huge {
-  font-size: 3em;
 }
 
 .inline-collapse[data-collapsed="true"] {

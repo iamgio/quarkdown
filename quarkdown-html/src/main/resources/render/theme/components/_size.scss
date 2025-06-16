@@ -1,0 +1,15 @@
+$sizes: (
+  tiny: 0.5em,
+  small: 0.75em,
+  normal: 1em,
+  medium: 1.25em,
+  larger: 1.5em,
+  large: 2em,
+  huge: 3em
+);
+
+@each $name, $size in $sizes {
+  .size-#{$name} {
+    font-size: $size;
+  }
+}
