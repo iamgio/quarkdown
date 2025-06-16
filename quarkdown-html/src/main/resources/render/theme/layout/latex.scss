@@ -82,7 +82,7 @@
       background-color: var(--qd-background-color);
     }
 
-    :not(:has(> header)) {
+    &:not(:has(> header)) {
       border-top: 16px solid;
     }
   }
