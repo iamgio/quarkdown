@@ -1,13 +1,13 @@
-@use "util/viewport";
-@use "util/list";
-@use "util/table";
-@use "util/code";
-@use "util/focus";
-@use "util/blockquote";
-@use "util/figure";
-@use "util/mermaid";
-@use "util/clip";
-@use "util/box";
+@use "components/viewport";
+@use "components/list";
+@use "components/table";
+@use "components/code";
+@use "components/focus";
+@use "components/blockquote";
+@use "components/figure";
+@use "components/mermaid";
+@use "components/clip";
+@use "components/box";
 
 :root {
   /* Quarkdown exposed properties */
