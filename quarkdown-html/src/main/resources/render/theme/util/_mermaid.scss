@@ -1,108 +1,110 @@
-.quarkdown-plain .mermaid > svg {
-  min-width: 50%;
-}
-
-.quarkdown-paged {
-  .mermaid > svg {
-    max-height: calc(var(--viewport-remaining-height)); // Fit the diagram into the remaining space of the viewport.
+.quarkdown {
+  &.quarkdown-plain .mermaid > svg {
+    min-width: 50%;
   }
 
-  figure:has(figcaption) .mermaid > svg {
-    max-height: calc(var(--viewport-remaining-height) - 100px);
-  }
-}
+  &.quarkdown-paged {
+    .mermaid > svg {
+      max-height: calc(var(--viewport-remaining-height)); // Fit the diagram into the remaining space of the viewport.
+    }
 
-.quarkdown-slides .mermaid {
-  box-shadow: none;
-
-  > svg {
-    max-height: 50vh !important;
-  }
-}
-
-.mermaid {
-  &:not([data-processed]) {
-    font-size: 0;
+    figure:has(figcaption) .mermaid > svg {
+      max-height: calc(var(--viewport-remaining-height) - 100px);
+    }
   }
 
-  // Nodes
+  &.quarkdown-slides .mermaid {
+    box-shadow: none;
 
-  .node path, .actor, rect:not(.legend rect, .plot rect), polygon, circle {
-    &:not(.background) {
-      fill: var(--qd-mermaid-node-background-color) !important;
+    > svg {
+      max-height: 50vh !important;
+    }
+  }
+
+  .mermaid {
+    &:not([data-processed]) {
+      font-size: 0;
+    }
+
+    // Nodes
+
+    .node path, .actor, rect:not(.legend rect, .plot rect), polygon, circle {
+      &:not(.background) {
+        fill: var(--qd-mermaid-node-background-color) !important;
+        stroke: var(--qd-mermaid-node-border-color) !important;
+        stroke-width: var(--qd-mermaid-node-border-width) !important;
+      }
+    }
+
+    .node, rect:not(.legend rect, .plot rect), polygon {
+      &:not(.background) {
+        filter: var(--qd-mermaid-node-filter);
+      }
+    }
+
+    .legend rect {
       stroke: var(--qd-mermaid-node-border-color) !important;
       stroke-width: var(--qd-mermaid-node-border-width) !important;
     }
-  }
 
-  .node, rect:not(.legend rect, .plot rect), polygon {
-    &:not(.background) {
-      filter: var(--qd-mermaid-node-filter);
-    }
-  }
+    .plot {
+      // Bar chart
+      rect {
+        fill: var(--qd-link-color) !important;
+        opacity: .6;
+      }
 
-  .legend rect {
-    stroke: var(--qd-mermaid-node-border-color) !important;
-    stroke-width: var(--qd-mermaid-node-border-width) !important;
-  }
+      // Bar chart + line chart
+      &:has(path) rect {
+        opacity: .25;
+      }
 
-  .plot {
-    // Bar chart
-    rect {
-      fill: var(--qd-link-color) !important;
-      opacity: .6;
-    }
+      // Line
+      path {
+        stroke-width: 3px;
+      }
 
-    // Bar chart + line chart
-    &:has(path) rect {
-      opacity: .25;
+      .line-plot-0 path {
+        stroke: var(--qd-link-color);
+      }
     }
 
-    // Line
-    path {
-      stroke-width: 3px;
+    .background {
+      fill: none !important;
     }
 
-    .line-plot-0 path {
-      stroke: var(--qd-link-color);
+    // Text in nodes
+    .nodeLabel {
+      color: var(--qd-mermaid-node-text-color) !important;
     }
-  }
 
-  .background {
-    fill: none !important;
-  }
+    // Edge labels
+    .edgeLabel, .edgeLabel p {
+      color: var(--qd-mermaid-node-line-color) !important;
+      background-color: var(--qd-background-color) !important;
+    }
 
-  // Text in nodes
-  .nodeLabel {
-    color: var(--qd-mermaid-node-text-color) !important;
-  }
-
-  // Edge labels
-  .edgeLabel, .edgeLabel p {
-    color: var(--qd-mermaid-node-line-color) !important;
-    background-color: var(--qd-background-color) !important;
-  }
-
-  // Lines
-  .relation, line, path[class^="edge"], :is(.ticks, .axis-line, .axisl-line) path {
-    stroke: var(--qd-mermaid-node-line-color) !important;
-  }
-
-  // Text outside nodes
-  .label text, .legend text, .messageText,
-  .loopText, .loopText tspan, .branchLabel text,
-  .title text, text[class*="TitleText"] {
-    fill: var(--qd-mermaid-node-line-color) !important;
-  }
-
-  .labelBkg {
-    background: none !important;
-  }
-
-  // Line endings
-  defs, .marker {
-    path {
+    // Lines
+    .relation, line, path[class^="edge"], :is(.ticks, .axis-line, .axisl-line) path {
       stroke: var(--qd-mermaid-node-line-color) !important;
+    }
+
+    // Text outside nodes
+    .label text, .legend text, .messageText,
+    .loopText, .loopText tspan, .branchLabel text,
+    .title text, text[class*="TitleText"] {
+      fill: var(--qd-mermaid-node-line-color) !important;
+    }
+
+    .labelBkg {
+      background: none !important;
+    }
+
+    // Line endings
+    defs, .marker {
+      path {
+        stroke: var(--qd-mermaid-node-line-color) !important;
+      }
     }
   }
 }
