@@ -8,8 +8,10 @@ $sizes: (
   huge: 3em
 );
 
-@each $name, $size in $sizes {
-  .size-#{$name} {
-    font-size: $size;
+.quarkdown {
+  @each $name, $size in $sizes {
+    .size-#{$name} {
+      font-size: $size;
+    }
   }
 }
