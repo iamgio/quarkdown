@@ -1,5 +1,6 @@
 @use "util/viewport";
 @use "util/list";
+@use "util/table";
 @use "util/figure";
 @use "util/mermaid";
 @use "util/clip";
@@ -167,31 +168,6 @@
 
 .quarkdown blockquote .attribution::before {
   content: var(--qd-quote-attribution-prefix);
-}
-
-.quarkdown table :is(th, td):not([align]) {
-  text-align: var(--qd-table-default-cell-alignment);
-}
-
-.quarkdown table:has(> caption.caption-top) {
-  caption-side: top;
-}
-
-.quarkdown table:has(> caption.caption-bottom) {
-  caption-side: bottom;
-}
-
-.quarkdown table > caption {
-  white-space: nowrap;
-  overflow-x: hidden;
-}
-
-.quarkdown table > caption.caption-top {
-  margin-bottom: 1em;
-}
-
-.quarkdown table > caption.caption-bottom {
-  margin-top: 1em;
 }
 
 .quarkdown hr {

@@ -1,15 +1,17 @@
-.clip {
-  --clip-path: none;
-}
+.quarkdown {
+  .clip {
+    --clip-path: none;
+  }
 
-.clip > .container:not(:has(> figure)) {
-  clip-path: var(--clip-path);
-}
+  .clip > .container:not(:has(> figure)) {
+    clip-path: var(--clip-path);
+  }
 
-.clip > .container > figure > :not(figcaption) {
-  clip-path: var(--clip-path);
-}
+  .clip > .container > figure > :not(figcaption) {
+    clip-path: var(--clip-path);
+  }
 
-.clip-circle {
-  --clip-path: circle();
+  .clip-circle {
+    --clip-path: circle();
+  }
 }
