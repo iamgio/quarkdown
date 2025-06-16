@@ -1,0 +1,144 @@
+.quarkdown .box {
+  width: 100%;
+  border-radius: var(--qd-box-border-radius);
+  margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
+  margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
+  --box-background-color: transparent;
+  --box-content-foreground-color: var(--qd-main-color);
+  --box-header-foreground-color: var(--qd-main-color);
+  --box-header-background-color: color-mix(in srgb,
+          var(--box-header-foreground-color) 2.5%,
+          color-mix(in srgb, var(--box-background-color) 98%, rgba(0, 0, 0, .1))
+  );
+  background-color: var(--box-background-color);
+  break-inside: avoid;
+
+  > header, > .box-content {
+    padding: var(--qd-box-section-padding);
+  }
+
+  > header {
+    color: var(--box-header-foreground-color);
+    background-color: var(--box-header-background-color);
+    border-radius: var(--qd-box-border-radius) var(--qd-box-border-radius) 0 0;
+
+    p {
+      margin: 0;
+    }
+
+    > h4 {
+      color: var(--box-header-foreground-color);
+      font-family: var(--qd-box-heading-font), serif;
+      margin: 0;
+    }
+  }
+
+  > .box-content {
+    color: var(--box-content-foreground-color);
+
+    > *:first-child, li:first-child > p:first-child {
+      margin-top: 8px;
+    }
+
+    *:last-child, li:last-child > p:last-child {
+      margin-bottom: 8px;
+    }
+
+    ul, ol {
+      padding-left: 18px;
+
+      .quarkdown-paged & {
+        padding-left: 24px;
+      }
+
+      .quarkdown-slides & {
+        padding-left: 4px;
+      }
+    }
+  }
+
+  &.error {
+    > .box-content {
+      font-size: 0.7em;
+      font-family: var(--qd-code-font), monospace;
+    }
+
+    .inline-collapse[data-collapsed="true"] {
+      --qd-collapsed-text-color: var(--qd-error-message-collapsed-text-color);
+      background-color: rgba(0, 0, 0, 0.09);
+      border: none;
+    }
+  }
+
+  // Box icons
+
+  > header > h4::before {
+    font-family: 'boxicons', monospace;
+    font-weight: normal;
+    float: left;
+    width: 18px;
+    margin-right: 6px;
+    margin-top: var(--qd-box-icon-baseline);
+  }
+
+  @mixin header-icon($icon) {
+    > header > h4 {
+      margin-right: 24px; // 18px icon + 6px margin, used to realign text to the center
+      display: flex;
+      flex-direction: row;
+      align-items: center; // Align icons
+      justify-content: var(--qd-horizontal-alignment);
+
+      &::before {
+        content: $icon;
+      }
+    }
+  }
+
+  &.tip {
+    @include header-icon("\ea0d"); /* 'bulb' icon */
+  }
+
+  &.note {
+    @include header-icon("\eb21"); /* 'info' icon */
+  }
+
+  &.warning {
+    @include header-icon("\eac5"); /* 'error' (triangle) icon */
+  }
+}
+
+// Box (and quote) types
+.quarkdown {
+  .callout {
+    --box-background-color: var(--qd-callout-background-color);
+    --box-header-foreground-color: var(--qd-callout-foreground-color);
+  }
+
+  .tip {
+    --box-background-color: var(--qd-tip-background-color);
+    --box-header-foreground-color: var(--qd-tip-foreground-color);
+  }
+
+  .note {
+    --box-background-color: var(--qd-note-background-color);
+    --box-header-foreground-color: var(--qd-note-foreground-color);
+  }
+
+  .important {
+    --box-background-color: var(--qd-important-background-color);
+    --box-header-foreground-color: var(--qd-important-foreground-color);
+  }
+
+  .warning {
+    --box-background-color: var(--qd-warning-background-color);
+    --box-header-foreground-color: var(--qd-warning-foreground-color);;
+  }
+
+  .error {
+    --box-background-color: var(--qd-error-background-color);
+    --box-content-foreground-color: var(--qd-error-foreground-color);
+    --box-header-foreground-color: var(--qd-error-foreground-color);
+    --box-header-background-color: rgba(0, 0, 0, .1);
+  }
+}

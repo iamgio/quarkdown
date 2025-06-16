@@ -5,6 +5,7 @@
 @use "util/figure";
 @use "util/mermaid";
 @use "util/clip";
+@use "util/box";
 
 :root {
   /* Quarkdown exposed properties */
@@ -229,7 +230,7 @@ figure p,
   margin-top: 0 !important;
 }
 
-.quarkdown code, .box.error > .box-content {
+.quarkdown code {
   font-family: var(--qd-code-font);
   text-align: start;
 }
@@ -405,152 +406,9 @@ Example: "Figure 1.1:"
   border-bottom: 3px dotted color-mix(in srgb, var(--qd-collapsed-text-color) 28%, transparent);
 }
 
-.box.error .inline-collapse[data-collapsed="true"] {
-  --qd-collapsed-text-color: var(--qd-error-message-collapsed-text-color);
-  background-color: rgba(0, 0, 0, 0.09);
-  border: none;
-}
-
 .collapsible-text[data-collapsed="true"] {
   cursor: pointer;
 }
-
-.box {
-  width: 100%;
-  border-radius: var(--qd-box-border-radius);
-  margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
-  margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
-  --box-background-color: transparent;
-  --box-content-foreground-color: var(--qd-main-color);
-  --box-header-foreground-color: var(--qd-main-color);
-  --box-header-background-color: color-mix(in srgb,
-          var(--box-header-foreground-color) 2.5%,
-          color-mix(in srgb, var(--box-background-color) 98%, rgba(0, 0, 0, .1))
-  );
-  background-color: var(--box-background-color);
-  break-inside: avoid;
-}
-
-.box > .box-content {
-  color: var(--box-content-foreground-color);
-}
-
-.box > header {
-  color: var(--box-header-foreground-color);
-  background-color: var(--box-header-background-color);
-  border-radius: var(--qd-box-border-radius) var(--qd-box-border-radius) 0 0;
-}
-
-.box > header p {
-  margin: 0;
-}
-
-.box > header > h4 {
-  color: var(--box-header-foreground-color);
-  font-family: var(--qd-box-heading-font);
-  margin: 0;
-}
-
-.box > header, .box > .box-content {
-  padding: var(--qd-box-section-padding);
-}
-
-.box > .box-content > *:first-child,
-.box > .box-content li:first-child > p:first-child {
-  margin-top: 8px;
-}
-
-.box > .box-content > *:last-child,
-.box > .box-content li:last-child > p:last-child {
-  margin-bottom: 8px;
-}
-
-/* Lists have different spacing depending on the target */
-.box > .box-content :is(ul, ol) {
-  padding-left: 18px;
-}
-
-.pagedjs_page .box > .box-content :is(ul, ol) {
-  padding-left: 24px;
-}
-
-.quarkdown-slides .box > .box-content :is(ul, ol) {
-  padding-left: 4px;
-}
-
-/* End of the target-based styling */
-
-/* Box (and quote) types */
-
-.callout {
-  --box-background-color: var(--qd-callout-background-color);
-  --box-header-foreground-color: var(--qd-callout-foreground-color);
-}
-
-.tip {
-  --box-background-color: var(--qd-tip-background-color);
-  --box-header-foreground-color: var(--qd-tip-foreground-color);
-}
-
-.note {
-  --box-background-color: var(--qd-note-background-color);
-  --box-header-foreground-color: var(--qd-note-foreground-color);
-}
-
-.important {
-  --box-background-color: var(--qd-important-background-color);
-  --box-header-foreground-color: var(--qd-important-foreground-color);
-}
-
-.warning {
-  --box-background-color: var(--qd-warning-background-color);
-  --box-header-foreground-color: var(--qd-warning-foreground-color);;
-}
-
-.error {
-  --box-background-color: var(--qd-error-background-color);
-  --box-content-foreground-color: var(--qd-error-foreground-color);
-  --box-header-foreground-color: var(--qd-error-foreground-color);
-  --box-header-background-color: rgba(0, 0, 0, .1);
-}
-
-.box.error > .box-content {
-  font-size: 0.7em;
-}
-
-
-/* Box icons */
-
-.box > header > h4::before {
-  font-family: 'boxicons', monospace;
-  font-weight: normal;
-  float: left;
-  width: 18px;
-  margin-right: 6px;
-  margin-top: var(--qd-box-icon-baseline);
-}
-
-.box:is(.tip, .note, .warning) > header > h4 {
-  margin-right: 24px; /* 18px icon + 6px margin, used to realign text to the center */
-  display: flex;
-  flex-direction: row;
-  align-items: center; /* Align icons */
-  justify-content: var(--qd-horizontal-alignment);
-}
-
-.box.tip > header > h4::before {
-  content: "\ea0d"; /* 'bulb' icon */
-}
-
-.box.note > header > h4::before {
-  content: "\eb21"; /* 'info' icon */
-}
-
-.box.warning > header > h4::before {
-  content: "\eac5"; /* 'error' (triangle) icon */
-}
-
-/* End of box styling */
 
 .marker {
   display: none;
