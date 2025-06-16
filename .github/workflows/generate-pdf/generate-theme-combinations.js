@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PROJECT_DIR = 'mock';
-const MAIN_FILE = PROJECT_DIR + '/main.qmd';
+const MAIN_FILE = PROJECT_DIR + '/main.qd';
 const WORKFLOW_DIR = '.github/workflows/generate-pdf';
 const COLOR_FILE = WORKFLOW_DIR + '/color.txt';
 const LAYOUT_FILE = WORKFLOW_DIR + '/layout.txt';
@@ -15,7 +15,7 @@ function getLines(file) {
 }
 
 function createNewFileName(color, layout) {
-    return `generated_main_${color}_${layout}.qmd`;
+    return `generated_main_${color}_${layout}.qd`;
 }
 
 function generateThemeVariants() {

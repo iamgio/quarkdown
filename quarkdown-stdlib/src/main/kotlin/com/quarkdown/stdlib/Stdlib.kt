@@ -47,7 +47,7 @@ object Stdlib : LibraryExporter {
                         afterRegisteringLibraries = {
                             includeResource(
                                 this.readOnlyContext,
-                                javaClass.getResourceAsStream("/lib/localization.qmd")!!.reader(),
+                                javaClass.getResourceAsStream("/lib/localization.qd")!!.reader(),
                             )
                         },
                     ),

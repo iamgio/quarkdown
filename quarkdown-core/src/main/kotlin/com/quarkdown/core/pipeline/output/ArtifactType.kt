@@ -9,7 +9,7 @@ enum class ArtifactType {
     JAVASCRIPT,
 
     /**
-     * Quarkdown source file (QMD)
+     * Quarkdown source file (QD)
      */
     QUARKDOWN,
 

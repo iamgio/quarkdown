@@ -28,10 +28,10 @@ const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
  * Name of the default directory to load libraries from.
- * The default value is relative to the executable JAR file location, and points to the `lib/qmd` directory of the distribution archive.
+ * The default value is relative to the executable JAR file location, and points to the `lib/qd` directory of the distribution archive.
  * It can be overridden by the user.
  */
-val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qmd"
+val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qd"
 
 /**
  * Template for Quarkdown commands that launch a complete pipeline and produce output files.

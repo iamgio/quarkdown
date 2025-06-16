@@ -8,7 +8,7 @@ import java.io.File
  * For pipeline-related options, see [com.quarkdown.core.pipeline.PipelineOptions].
  * @param source main source file to process
  * @param outputDirectory the output directory to save resource in, if set
- * @param libraryDirectory the directory to load .qmd library files from
+ * @param libraryDirectory the directory to load .qd library files from
  * @param rendererName name of the renderer to use to generate the output for
  * @param clean whether to clean the output directory before generating new files
  * @param nodePath path to the Node.js executable

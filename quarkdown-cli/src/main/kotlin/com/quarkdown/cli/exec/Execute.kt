@@ -3,7 +3,7 @@ package com.quarkdown.cli.exec
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.PipelineInitialization
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
-import com.quarkdown.cli.lib.QmdLibraries
+import com.quarkdown.cli.lib.QdLibraries
 import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.cli.server.WebServerStarter
 import com.quarkdown.cli.util.cleanDirectory
@@ -35,10 +35,10 @@ fun runQuarkdown(
     // Flavor to use across the pipeline.
     val flavor: MarkdownFlavor = QuarkdownFlavor
 
-    // External libraries loaded from .qmd files.
+    // External libraries loaded from .qd files.
     val libraries: Set<LibraryExporter> =
         try {
-            cliOptions.libraryDirectory?.let(QmdLibraries::fromDirectory) ?: emptySet()
+            cliOptions.libraryDirectory?.let(QdLibraries::fromDirectory) ?: emptySet()
         } catch (e: Exception) {
             Log.warn(e.message ?: "")
             emptySet()

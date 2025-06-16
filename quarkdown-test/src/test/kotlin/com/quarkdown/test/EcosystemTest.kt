@@ -123,7 +123,7 @@ class EcosystemTest {
 
     @Test
     fun `include library`() {
-        // Load library named 'hello' from libraries/hello.qmd
+        // Load library named 'hello' from libraries/hello.qd
         execute(
             """
             .include {hello}

@@ -39,7 +39,7 @@ class FileResourceExporter(
                     ArtifactType.HTML -> ".html"
                     ArtifactType.CSS -> ".css"
                     ArtifactType.JAVASCRIPT -> ".js"
-                    ArtifactType.QUARKDOWN -> ".qmd"
+                    ArtifactType.QUARKDOWN -> ".qd"
                     ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
                 }
 
