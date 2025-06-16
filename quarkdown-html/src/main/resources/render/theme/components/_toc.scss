@@ -1,0 +1,34 @@
+.quarkdown {
+  h1#table-of-contents {
+    text-align: start;
+  }
+
+  .current-page-number, .total-page-number {
+    display: inline;
+  }
+
+  nav {
+    text-align: start;
+
+    ol {
+      list-style-position: inside;
+      margin: 0 0 0 1em;
+
+      &:not(ol ol) {
+        padding-left: 0;
+      }
+    }
+
+    li a::after {
+      // ToC page counter on supported targets
+      content: target-counter(attr(href), page);
+      float: right;
+    }
+
+    // ToC is scrollable in slides
+    .quarkdown-slides & {
+      overflow-y: scroll;
+      max-height: 50vh;
+    }
+  }
+}

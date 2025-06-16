@@ -8,6 +8,7 @@
 @use "components/mermaid";
 @use "components/clip";
 @use "components/box";
+@use "components/toc";
 
 :root {
   /* Quarkdown exposed properties */
@@ -359,41 +360,6 @@ Example: "Figure 1.1:"
 .quarkdown img {
   max-width: 100%;
   max-height: 100%;
-}
-
-/* Table of contents */
-
-.quarkdown nav {
-  text-align: start;
-}
-
-.quarkdown nav ol {
-  list-style-position: inside;
-  margin: 0 0 0 1em;
-}
-
-.quarkdown nav ol:not(ol ol) {
-  padding-left: 0;
-}
-
-/* ToC is scrollable in slides. */
-.quarkdown-slides nav {
-  overflow-y: scroll;
-  max-height: 50vh;
-}
-
-.quarkdown h1#table-of-contents {
-  text-align: start;
-}
-
-.quarkdown nav li a::after {
-  /* TOC page counter on supported targets */
-  content: target-counter(attr(href), page);
-  float: right;
-}
-
-.quarkdown span:is(.current-page-number, .total-page-number) {
-  display: inline;
 }
 
 /* Bibliography */
