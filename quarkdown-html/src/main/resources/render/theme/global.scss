@@ -1,4 +1,5 @@
 @use "components/viewport";
+@use "components/block";
 @use "components/heading";
 @use "components/paragraph";
 @use "components/link";
@@ -133,32 +134,12 @@
   --viewport-remaining-height: 50vh;
 }
 
-/* In a multi-column layout, these elements span across all columns. */
-.full-column-span, h1, h2, h3, nav {
-  column-span: all;
-}
-
-/* Vertical block spacing. */
-.quarkdown :is(
-    table:not(code table), pre, figure, blockquote,
-    hr, .stack:not(.stack .stack)
-) {
-  margin-top: var(--qd-block-margin);
-  margin-bottom: var(--qd-block-margin);
-}
-
 .float[style*="float: inline-start"] {
   margin-right: 1.1em;
 }
 
 .float[style*="float: inline-end"] {
   margin-left: 1.1em;
-}
-
-/* Reset the margin of the first element in a page */
-.pagedjs_page_content > div > *:first-child,
-.pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
-  margin-top: 0 !important;
 }
 
 .quarkdown img {
