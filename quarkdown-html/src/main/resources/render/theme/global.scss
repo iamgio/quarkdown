@@ -1,6 +1,7 @@
 @use "components/viewport";
 @use "components/heading";
 @use "components/paragraph";
+@use "components/math";
 @use "components/hr";
 @use "components/list";
 @use "components/table";
@@ -139,12 +140,6 @@
 .quarkdown a {
   color: var(--qd-link-color);
   text-decoration: none;
-}
-
-/* Math */
-.katex.katex {
-  font-size: 1.1em;
-  margin: 0 .1em;
 }
 
 /* Vertical block spacing. */
