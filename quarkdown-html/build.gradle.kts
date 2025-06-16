@@ -14,14 +14,11 @@ dependencies {
 }
 
 tasks.compileSass {
-    dependsOn(tasks.processResources)
     val dir = projectDir.resolve("src/main/resources/render/theme")
     sourceDir = dir
     outputDir = dir
 }
 
-sequenceOf("run", "build", "distZip").forEach {
-    project.parent!!.tasks.named(it) {
-        dependsOn(tasks.compileSass)
-    }
+tasks.processResources {
+    dependsOn(tasks.compileSass)
 }
