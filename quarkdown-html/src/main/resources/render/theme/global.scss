@@ -1,4 +1,5 @@
 @use "util/viewport";
+@use "util/list";
 @use "util/figure";
 @use "util/mermaid";
 
@@ -124,22 +125,6 @@
   margin: 0 var(--qd-block-margin);
 }
 
-.quarkdown :is(ul, ol) {
-  padding-left: 20px;
-}
-
-/* Not loose. */
-.quarkdown li {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-/* Loose. */
-.quarkdown li:has(p) {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
 /* Blockquotes and alerts */
 
 .quarkdown blockquote {
@@ -221,26 +206,6 @@
 .katex.katex {
   font-size: 1.1em;
   margin: 0 .1em;
-}
-
-/* GFM Tasks */
-.task-list-item {
-  list-style-type: none;
-}
-
-.task-list-item input[type="checkbox"]:first-child {
-  margin-right: var(--qd-task-checkbox-margin-right);
-  transform: translateY(1px);
-}
-
-.quarkdown :is(ul, ol):has(> .task-list-item) {
-  padding-left: 0;
-}
-
-/* If a list item has a custom bullet element, the actual content is wrapped in a container */
-.quarkdown li:has(> div:nth-child(2)) {
-  display: flex;
-  align-items: flex-start;
 }
 
 /* Vertical block spacing. */
