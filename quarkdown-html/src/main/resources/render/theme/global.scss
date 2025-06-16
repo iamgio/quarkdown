@@ -2,6 +2,7 @@
 @use "util/list";
 @use "util/figure";
 @use "util/mermaid";
+@use "util/clip";
 
 :root {
   /* Quarkdown exposed properties */
@@ -421,24 +422,6 @@ Example: "Figure 1.1:"
 .container > .stack {
   width: 100%;
   height: 100%;
-}
-
-/* Clipping */
-
-.clip {
-  --clip-path: none;
-}
-
-.clip > .container:not(:has(> figure)) {
-  clip-path: var(--clip-path);
-}
-
-.clip > .container > figure > :not(figcaption) {
-  clip-path: var(--clip-path);
-}
-
-.clip-circle {
-  --clip-path: circle();
 }
 
 /* Sizes */
