@@ -9,6 +9,7 @@
 @use "components/clip";
 @use "components/box";
 @use "components/size";
+@use "components/collapsible";
 @use "components/container";
 @use "components/stack";
 @use "components/location";
@@ -174,11 +175,6 @@
   margin-top: 0;
 }
 
-.quarkdown details summary {
-  cursor: pointer;
-  margin-bottom: var(--qd-paragraph-vertical-margin);
-}
-
 .quarkdown.quarkdown p {
   line-height: var(--qd-line-height);
   letter-spacing: var(--qd-letter-spacing);
@@ -238,17 +234,6 @@ figure p,
 .pagedjs_page_content > div > *:first-child,
 .pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {
   margin-top: 0 !important;
-}
-
-.inline-collapse[data-collapsed="true"] {
-  cursor: pointer;
-  font-weight: bold;
-  color: var(--qd-collapsed-text-color);
-  border-bottom: 3px dotted color-mix(in srgb, var(--qd-collapsed-text-color) 28%, transparent);
-}
-
-.collapsible-text[data-collapsed="true"] {
-  cursor: pointer;
 }
 
 .marker {
