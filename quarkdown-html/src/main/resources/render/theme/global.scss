@@ -1,4 +1,5 @@
 @use "components/viewport";
+@use "components/hr";
 @use "components/list";
 @use "components/table";
 @use "components/code";
@@ -131,17 +132,6 @@
 /* In a multi-column layout, these elements span across all columns. */
 .full-column-span, h1, h2, h3, nav {
   column-span: all;
-}
-
-/* A divider in a row is vertical instead of horizontal */
-.quarkdown .stack-row > hr {
-  display: list-item;
-  width: auto;
-  margin: 0 var(--qd-block-margin);
-}
-
-.quarkdown hr {
-  width: 100%;
 }
 
 .quarkdown a {
