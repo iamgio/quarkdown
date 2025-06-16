@@ -1,0 +1,52 @@
+@use "latex-toc" as *;
+
+@mixin beamer-toc {
+
+  nav {
+    a:not(:hover) {
+      color: var(--qd-main-color);
+    }
+
+    > ol {
+      // Non-first-level entries use a regular bullet
+      ol {
+        list-style-type: disc !important;
+        padding-left: 1.35em;
+
+        li::marker {
+          color: var(--qd-primary-color);
+          border: 1px solid var(--qd-color-on-primary);
+        }
+      }
+
+      > li {
+        padding-bottom: 0.5em;
+
+        // Custom marker for first-level entries
+        &::before {
+          background-color: var(--qd-primary-color);
+          color: var(--qd-color-on-primary);
+          border-radius: 100%;
+          margin-right: 1em;
+          padding: 2px 10px;
+          display: inline-block;
+          border: 1px solid color-mix(in srgb, var(--qd-color-on-primary) 25%, transparent);
+        }
+
+        > a {
+          font-weight: bold;
+        }
+
+        // Second-level entries
+        > ol {
+          padding-left: 36px;
+
+          // Third-level (and deeper) entries
+          ol {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

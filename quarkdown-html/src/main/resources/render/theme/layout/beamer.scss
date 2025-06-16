@@ -1,0 +1,82 @@
+/* LaTeX Beamer layout theme */
+
+@use "util/progressive-heading-sizes" as *;
+@use "util/latex-tables" as *;
+@use "util/beamer-toc" as *;
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
+
+:root {
+  --reveal-center-vertically: false;
+  --qd-main-font: "Source Sans Pro", sans-serif;
+  --qd-heading-font: "Fira Sans", sans-serif;
+  --qd-code-font: "Noto Sans Mono", monospace;
+  --qd-code-span-font-size: 0.9em;
+  --qd-code-block-font-size: 0.75em;
+  --qd-slides-code-block-font-size: 1.25em;
+  --qd-block-margin: 32px;
+  --qd-box-margin-multiplier: 1.2;
+  --qd-slides-horizontal-alignment: start;
+}
+
+.quarkdown {
+  @include progressive-heading-sizes($multiplier: 0.9);
+  @include latex-tables;
+  @include beamer-toc;
+
+  h1 {
+    padding: 12px;
+  }
+
+  p {
+    line-height: 1.3;
+  }
+
+  pre code, ul, ol {
+    line-height: 1.5;
+  }
+
+  blockquote {
+    font-style: italic;
+    opacity: 0.7;
+    background: none !important;
+    padding: 8px 0;
+
+    &[class] {
+      font-style: normal;
+    }
+
+    .attribution {
+      text-align: end;
+    }
+  }
+
+  .box {
+    border-radius: 8px;
+
+    > header {
+      border-radius: 8px 8px 0 0;
+    }
+
+    &:has(> header) > .box-content {
+      margin-top: 0;
+    }
+  }
+
+  .codespan-content {
+    margin: 0 0.2em;
+
+    .color-preview {
+      margin: 0 0.2em;
+      border-radius: 100%;
+      border: 0.1em solid;
+    }
+  }
+
+  // Footer
+  .page-margin-bottom-center > * {
+    padding: 12px;
+    margin-bottom: 0;
+  }
+}
