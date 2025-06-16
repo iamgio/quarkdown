@@ -47,11 +47,11 @@
     ul, ol {
       padding-left: 18px;
 
-      .quarkdown-paged & {
+      @at-root .quarkdown-paged#{&} {
         padding-left: 24px;
       }
 
-      .quarkdown-slides & {
+      @at-root .quarkdown-slides#{&} {
         padding-left: 4px;
       }
     }

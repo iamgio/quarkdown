@@ -15,7 +15,7 @@
     max-height: none;
     overflow: hidden;
 
-    .quarkdown-slides & {
+    @at-root .quarkdown-slides#{&} {
       font-size: var(--qd-slides-code-block-font-size);
     }
 
