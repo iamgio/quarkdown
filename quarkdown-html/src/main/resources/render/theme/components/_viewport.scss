@@ -1,6 +1,13 @@
+@mixin content-area-border {
+  border-width: var(--qd-page-content-border-width);
+  border-color: var(--qd-page-content-border-color);
+  border-style: var(--qd-page-content-border-style);
+  box-sizing: border-box;
+}
+
 body.quarkdown {
   color: var(--qd-main-color);
-  font-family: var(--qd-main-font);
+  font-family: var(--qd-main-font), serif;
   font-size: var(--qd-main-font-size);
   text-align: var(--qd-horizontal-alignment);
 
@@ -17,9 +24,13 @@ body.quarkdown {
   &.quarkdown-slides {
     --qd-horizontal-alignment: var(--qd-slides-horizontal-alignment);
 
-    .reveal .slides > :is(section, .pdf-page) {
-      text-align: var(--qd-slides-horizontal-alignment);
-      column-count: var(--property-column-count);
+    .reveal .slides {
+      @include content-area-border;
+
+      > :is(section, .pdf-page) {
+        text-align: var(--qd-slides-horizontal-alignment);
+        column-count: var(--property-column-count);
+      }
     }
   }
 
@@ -42,6 +53,10 @@ body.quarkdown {
     .pagedjs_page {
       text-align: var(--qd-paged-horizontal-alignment);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+    }
+
+    .pagedjs_page_content {
+      @include content-area-border;
     }
   }
 }

@@ -58,6 +58,18 @@
             --qd-paged-horizontal-alignment: [[HALIGNMENT]];
             text-align: [[HALIGNMENT]];
             [[endif:HALIGNMENT]]
+            [[if:PAGEBORDERWIDTH]]
+            --qd-page-content-border-width: [[PAGEBORDERWIDTH]];
+            --qd-page-content-border-style: solid;
+            [[endif:PAGEBORDERWIDTH]]
+            [[if:PAGEBORDERWIDTH]]
+            --qd-page-content-border-width: [[PAGEBORDERWIDTH]];
+            --qd-page-content-border-style: solid;
+            [[endif:PAGEBORDERWIDTH]]
+            [[if:PAGEBORDERCOLOR]]
+            --qd-page-content-border-color: [[PAGEBORDERCOLOR]];
+            --qd-page-content-border-style: solid;
+            [[endif:PAGEBORDERCOLOR]]
         }
 
         .page-break {
