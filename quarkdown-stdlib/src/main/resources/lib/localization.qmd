@@ -55,4 +55,4 @@
       - tableofcontents: 目录
       - bibliography: 参考文献
       - figure: 图
-      - table: 表格
+      - table: 表
