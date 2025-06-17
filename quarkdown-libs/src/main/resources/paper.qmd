@@ -23,6 +23,12 @@
         - lemma: 補題
         - theorem: 定理
         - proof: 証明
+    - Chinese
+        - abstract: 摘要
+        - definition: 定义
+        - lemma: 引理
+        - theorem: 定理
+        - proof: 证明
 
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 
