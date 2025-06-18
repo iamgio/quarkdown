@@ -1,6 +1,7 @@
 .docname {Quarkdown Mock}
 .docauthor {Giorgio Garofalo}
 .doclang {English}
+.pageformat borderbottom:{1px} bordercolor:{grey}
 .include {paper}
 
 .function {conditionalpagebreak}
@@ -11,7 +12,7 @@
 .footer
 	Quarkdown
 	
-.pagemargin {bottomrightcorner}
+.pagemargin {bottomright}
 	.currentpage
 
 .center

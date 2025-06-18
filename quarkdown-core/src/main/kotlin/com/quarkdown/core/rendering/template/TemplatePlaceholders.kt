@@ -83,6 +83,16 @@ object TemplatePlaceholders {
     const val PAGE_MARGIN = "PAGEMARGIN"
 
     /**
+     * Width of the border around the content area of each page.
+     */
+    const val PAGE_CONTENT_BORDER_WIDTH = "PAGEBORDERWIDTH"
+
+    /**
+     * Color of the border around the content area of each page.
+     */
+    const val PAGE_CONTENT_BORDER_COLOR = "PAGEBORDERCOLOR"
+
+    /**
      * Number of columns on each page.
      */
     const val COLUMN_COUNT = "COLUMNCOUNT"

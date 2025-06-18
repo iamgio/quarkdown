@@ -37,6 +37,7 @@ import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.pipeline.error.IOPipelineException
 
 /**
@@ -377,9 +378,16 @@ fun texMacro(
 
 /**
  * Sets the format of the document.
- * If a value is `null`, the default value supplied by the underlying renderer is used.
- * If neither [format] nor [width] or [height] are `null`, the latter override the former.
- * If both [format] and [width] or [height] are `null`, the default value is used.
+ * If a value is unset, the default value supplied by the underlying renderer is used.
+ *
+ * If both [format] and [width] or [height] are set, the latter override the former.
+ * If both [format] and [width] or [height] are unset, the default value is used.
+ *
+ * If any of [borderTop], [borderRight], [borderBottom], [borderLeft] or [borderColor] is set,
+ * the border will be applied around the content area of each page.
+ * If only [borderColor] is set, the border will be applied with a default width to each side.
+ * Border is not supported in plain documents.
+ *
  * @param format standard size format of each page (overridden by [width] and [height])
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
@@ -387,6 +395,11 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
+ * @param borderTop border width of the top content area of each page
+ * @param borderRight border width of the right content area of each page
+ * @param borderBottom border width of the bottom content area of each page
+ * @param borderLeft border width of the left content area of each page
+ * @param borderColor color of the border around the content area of each page
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment text alignment of the content on each page
@@ -400,6 +413,11 @@ fun pageFormat(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
     @LikelyNamed margin: Sizes? = null,
+    @Name("bordertop") borderTop: Size? = null,
+    @Name("borderright") borderRight: Size? = null,
+    @Name("borderbottom") borderBottom: Size? = null,
+    @Name("borderleft") borderLeft: Size? = null,
+    @Name("bordercolor") borderColor: Color? = null,
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
@@ -415,6 +433,18 @@ fun pageFormat(
         this.margin = margin
         this.columnCount = columns?.takeIf { it > 0 }
         this.alignment = alignment
+
+        val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
+        if (hasBorder) {
+            this.contentBorderWidth =
+                Sizes(
+                    top = borderTop ?: this.contentBorderWidth?.top ?: Size.ZERO,
+                    right = borderRight ?: this.contentBorderWidth?.right ?: Size.ZERO,
+                    bottom = borderBottom ?: this.contentBorderWidth?.bottom ?: Size.ZERO,
+                    left = borderLeft ?: this.contentBorderWidth?.left ?: Size.ZERO,
+                )
+        }
+        this.contentBorderColor = borderColor
     }
 
     return VoidValue

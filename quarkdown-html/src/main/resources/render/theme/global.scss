@@ -56,6 +56,11 @@
   --qd-task-checkbox-margin-right: 0.9em; // Right margin of checkboxes in GFM task list items
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
 
+  // Border
+  --qd-page-content-border-width: unset;
+  --qd-page-content-border-color: var(--qd-main-color);
+  --qd-page-content-border-style: unset;
+
   // Text
   --qd-line-height: 1.5;
   --qd-letter-spacing: normal;

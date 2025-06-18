@@ -100,6 +100,14 @@ class HtmlPostRenderer(
                 pageFormat.margin?.asCSS,
             )
             optionalValue(
+                TemplatePlaceholders.PAGE_CONTENT_BORDER_WIDTH,
+                pageFormat.contentBorderWidth?.asCSS,
+            )
+            optionalValue(
+                TemplatePlaceholders.PAGE_CONTENT_BORDER_COLOR,
+                pageFormat.contentBorderColor?.asCSS,
+            )
+            optionalValue(
                 TemplatePlaceholders.COLUMN_COUNT,
                 pageFormat.columnCount,
             )
