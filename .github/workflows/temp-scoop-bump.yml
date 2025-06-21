@@ -1,0 +1,14 @@
+name: Auto update scoop bucket
+
+on:
+  push:
+    tags: [ '*TEST' ]
+
+jobs:
+  bump-scoop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Scoop manifest
+        uses: iamgio/quarkdown/.github/actions/bump-scoop@pckg-managers
+        with:
+          version: ${{ github.event.release.tag_name }}
