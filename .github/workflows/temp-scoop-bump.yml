@@ -14,3 +14,5 @@ jobs:
         uses: iamgio/quarkdown/.github/actions/bump-scoop@pckg-managers
         with:
           version: ${{ github.event.release.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
