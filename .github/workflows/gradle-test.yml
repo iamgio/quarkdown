@@ -17,6 +17,14 @@ jobs:
       with:
         full-checkout: ${{ inputs.full-checkout }}
 
+    # TODO THIS IS A TEST!
+    - uses: mislav/bump-homebrew-formula-action@v3
+      with:
+        formula-name: quarkdown
+        homebrew-tap: 'quarkdown-labs/homebrew-quarkdown'
+      env:
+        COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+
     - name: Run tests
       uses: burrunan/gradle-cache-action@v3
       with:
