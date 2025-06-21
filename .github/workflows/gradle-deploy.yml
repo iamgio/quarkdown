@@ -85,6 +85,7 @@ jobs:
         publish_dir: ./build/docs
         destination_dir: docs/latest
 
+    # Bump Homebrew
     - uses: mislav/bump-homebrew-formula-action@v3
       if: github.ref_type == 'tag'
       with:
@@ -92,6 +93,13 @@ jobs:
         homebrew-tap: 'quarkdown-labs/homebrew-quarkdown'
       env:
         COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+
+    # Bump Scoop
+    - uses: iamgio/quarkdown/.github/actions/bump-scoop@main
+      if: github.ref_type == 'tag'
+      with:
+        version: ${{ github.ref_name }}
+        committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
   dependency-submission:
 
