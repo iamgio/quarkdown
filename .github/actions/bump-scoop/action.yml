@@ -10,9 +10,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout main repo
-      uses: actions/checkout@v3
-
     - name: Set version variable
       run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
       shell: bash
@@ -50,7 +47,6 @@ runs:
 
     - name: Commit and push updated manifest
       run: |
-        cd bucket
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git add bucket/quarkdown.json
