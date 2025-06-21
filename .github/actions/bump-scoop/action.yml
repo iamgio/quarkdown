@@ -53,3 +53,5 @@ runs:
         git diff --cached --quiet || git commit -m "Bump to $VERSION"
         git push origin main
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
