@@ -180,13 +180,17 @@ tasks.distZip {
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
-    // Prepends lines to the generated scripts.
+    // Prepends subscripts to the generated start scripts.
     doLast {
-        val unixFile = unixScript
-        // TODO windows
+        val dir = file("scripts")
+        val scripts = sequenceOf("puppeteer-executable")
 
-        val unixPrefix = file("scripts/unix-puppeteer-executable.sh").readText() + "\n"
-        unixFile.writeText("#!/bin/sh\n\n" + unixPrefix + unixFile.readText())
+        scripts.forEach { scriptName ->
+            val unixPrefix = dir.resolve("$scriptName.sh").readText() + "\n"
+            val windowsPrefix = dir.resolve("$scriptName.bat").readText() + "\n"
+            unixScript.writeText("#!/bin/sh\n\n" + unixPrefix + unixScript.readText())
+            windowsScript.writeText("@echo off\n\n" + windowsPrefix + windowsScript.readText())
+        }
     }
 }
 
