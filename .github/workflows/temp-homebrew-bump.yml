@@ -1,6 +1,6 @@
 on:
   push:
-    tags: [ "TEST" ]
+    tags: [ "aTEST" ]
 
 jobs:
   homebrew:
