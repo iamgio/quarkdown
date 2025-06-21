@@ -6,6 +6,10 @@ inputs:
     description: "Version string to update (e.g. 1.5.0)"
     required: true
     type: string
+  committer_token:
+    description: "Personal Access Token to push to the bucket"
+    required: true
+    type: string
 
 runs:
   using: composite
@@ -24,6 +28,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: "quarkdown-labs/scoop-quarkdown"
+        token: ${{ inputs.committer_token }}
 
     - name: Update manifest version and URL
       run: |
@@ -52,4 +57,6 @@ runs:
         git add bucket/quarkdown.json
         git diff --cached --quiet || git commit -m "Bump to $VERSION"
         git push origin main
+      env:
+        GITHUB_TOKEN: ${{ inputs.committer_token }}
       shell: bash
