@@ -15,7 +15,10 @@ runs:
   using: composite
   steps:
     - name: Set version variable
-      run: echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+      run: |
+        VERSION="${{ inputs.version }}"
+        VERSION="${VERSION#a}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
       shell: bash
 
     - name: Install dependencies

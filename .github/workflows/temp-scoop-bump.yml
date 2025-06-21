@@ -13,5 +13,5 @@ jobs:
       - name: Update Scoop manifest
         uses: iamgio/quarkdown/.github/actions/bump-scoop@pckg-managers
         with:
-          version: ${{ github.event.release.tag_name }}
+          version: ${{ github.ref_name }}
           committer_token: ${{ secrets.COMMITTER_TOKEN }}
