@@ -26,7 +26,7 @@ runs:
     - name: Checkout Scoop bucket repo
       uses: actions/checkout@v3
       with:
-        repository: "quarkdown-labs/scoop-bucket"
+        repository: "quarkdown-labs/scoop-quarkdown"
 
     - name: Update manifest version and URL
       run: |
