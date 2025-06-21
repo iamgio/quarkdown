@@ -7,6 +7,8 @@ on:
 jobs:
   bump-scoop:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Update Scoop manifest
         uses: iamgio/quarkdown/.github/actions/bump-scoop@pckg-managers
