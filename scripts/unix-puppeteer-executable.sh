@@ -1,3 +1,4 @@
+ERROR_MESSAGE="[!] Could not find a suitable installation of Google Chrome, Chromium, or Firefox. PDF generation may not be available."
 if [ "$(uname)" = "Darwin" ]; then
   # macOS
   if [ -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then
@@ -7,6 +8,9 @@ if [ "$(uname)" = "Darwin" ]; then
   elif [ -x "/Applications/Firefox.app/Contents/MacOS/firefox" ]; then
     export PUPPETEER_EXECUTABLE_PATH="/Applications/Firefox.app/Contents/MacOS/firefox"
     export PUPPETEER_BROWSER="firefox"
+  else
+    echo "$ERROR_MESSAGE"
+  fi
 else
   # Linux
   if command -v google-chrome > /dev/null; then
@@ -18,4 +22,6 @@ else
   elif command -v firefox > /dev/null; then
     export PUPPETEER_EXECUTABLE_PATH="$(command -v firefox)"
     export PUPPETEER_BROWSER="firefox"
+  else
+    echo "$ERROR_MESSAGE"
 fi
