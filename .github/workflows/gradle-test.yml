@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@pckg-managers # TODO bring back to main
       with:
         full-checkout: ${{ inputs.full-checkout }}
 

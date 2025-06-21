@@ -13,6 +13,17 @@ class NpmWrapper(
 ) : ExecutableWrapper() {
     override val workingDirectory: File? = null
 
+    /**
+     * If the `NPM_GLOBAL_PREFIX` environment variable is set,
+     * returns the `--prefix` argument with its value.
+     */
+    private val globalPrefixArgs: Array<String>
+        get() =
+            when (val prefix = System.getenv("NPM_GLOBAL_PREFIX")) {
+                null -> emptyArray()
+                else -> arrayOf("--prefix", prefix)
+            }
+
     override val isValid: Boolean
         get() =
             try {
@@ -32,7 +43,7 @@ class NpmWrapper(
      */
     fun isInstalled(module: NodeModule): Boolean =
         try {
-            launchAndGetOutput("list", "-g", module.name).contains(module.name)
+            launchAndGetOutput("list", "-g", module.name, *globalPrefixArgs).contains(module.name)
         } catch (_: Exception) {
             false
         }
@@ -46,7 +57,7 @@ class NpmWrapper(
         node: NodeJsWrapper,
         module: NodeModule,
     ) {
-        launchAndGetOutput("link", module.name, workingDirectory = node.workingDirectory)
+        launchAndGetOutput("link", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory)
     }
 
     /**
@@ -58,7 +69,7 @@ class NpmWrapper(
         node: NodeJsWrapper,
         module: NodeModule,
     ) {
-        launchAndGetOutput("unlink", module.name, workingDirectory = node.workingDirectory)
+        launchAndGetOutput("unlink", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory)
     }
 
     companion object : WithDefaultPath {

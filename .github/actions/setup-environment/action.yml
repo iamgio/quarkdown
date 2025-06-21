@@ -28,5 +28,7 @@ runs:
       uses: actions/setup-node@v4
 
     - name: Install Puppeteer
-      run: npm install -g puppeteer
+      run: |
+        export NPM_GLOBAL_PREFIX=$(npm config get prefix)
+        npm install -g puppeteer --prefix $NPM_GLOBAL_PREFIX
       shell: bash
