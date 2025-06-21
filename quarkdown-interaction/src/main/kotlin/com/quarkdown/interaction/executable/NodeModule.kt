@@ -20,5 +20,7 @@ class NodeModuleNotInstalledException(
         Make sure Quarkdown has the permissions to link the module correctly.
         If your NPM package directory requires root privileges, please consider updating your NPM configuration.
         For more information, see https://stackoverflow.com/questions/18088372/how-to-npm-install-global-not-as-root
+        
+        Note: installing Quarkdown via a package manager is suggested, as it sets up the required dependencies automatically.
         """.trimIndent(),
     )
