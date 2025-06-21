@@ -7,6 +7,7 @@ import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
+import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
@@ -125,6 +126,14 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
+    private fun assumePdfEnvironmentInstalled() {
+        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
+        with(NpmWrapper(NpmWrapper.defaultPath)) {
+            assumeTrue(isValid)
+            assumeTrue(isInstalled(PuppeteerNodeModule))
+        }
+    }
+
     private fun checkPdf(expectedPages: Int = 3) {
         val pdf = File(directory, "Quarkdown-test.pdf")
         assertTrue(pdf.exists())
@@ -137,9 +146,7 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun pdf() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
     }
@@ -178,18 +185,14 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `pdf via explicit html-pdf`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
     fun `pdf with node and npm set`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) =
             test(
                 "--pdf",
