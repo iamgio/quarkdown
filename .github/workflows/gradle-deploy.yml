@@ -85,6 +85,14 @@ jobs:
         publish_dir: ./build/docs
         destination_dir: docs/latest
 
+    - uses: mislav/bump-homebrew-formula-action@v3
+      if: github.ref_type == 'tag'
+      with:
+        formula-name: quarkdown
+        homebrew-tap: 'quarkdown-labs/homebrew-quarkdown'
+      env:
+        COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+
   dependency-submission:
 
     runs-on: ubuntu-latest
