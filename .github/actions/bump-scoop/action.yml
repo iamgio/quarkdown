@@ -33,12 +33,11 @@ runs:
         repository: "quarkdown-labs/scoop-quarkdown"
         token: ${{ inputs.committer_token }}
 
-    - name: Update manifest version, URL, and extract_dir
+    - name: Update manifest version and URL
       run: |
         jq --arg ver "$VERSION" \
            '.version = $ver
-           | .url = "https://github.com/iamgio/quarkdown/releases/download/v" + $ver + "/quarkdown.zip"
-           | .extract_dir = "quarkdown-" + $ver' \
+           | .url = "https://github.com/iamgio/quarkdown/releases/download/v" + $ver + "/quarkdown.zip"  \
            bucket/quarkdown.json > bucket/tmp.json
         mv bucket/tmp.json bucket/quarkdown.json
       shell: bash
