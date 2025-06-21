@@ -24,4 +24,5 @@ else
     export PUPPETEER_BROWSER="firefox"
   else
     echo "$ERROR_MESSAGE"
+  fi
 fi

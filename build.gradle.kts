@@ -186,7 +186,7 @@ tasks.named<CreateStartScripts>("startScripts") {
         // TODO windows
 
         val unixPrefix = file("scripts/unix-puppeteer-executable.sh").readText() + "\n"
-        unixFile.writeText("!/bin/sh\n\n" + unixPrefix + unixFile.readText())
+        unixFile.writeText("#!/bin/sh\n\n" + unixPrefix + unixFile.readText())
     }
 }
 
