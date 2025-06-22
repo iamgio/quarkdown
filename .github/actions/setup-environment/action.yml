@@ -38,7 +38,8 @@ runs:
 
     - name: Set npm environment variables
       run: |
-        echo "NPM_GLOBAL_PREFIX=$(npm config get prefix)" >> $GITHUB_ENV
+        mkdir -p $HOME/.npm-global
+        echo "NPM_GLOBAL_PREFIX=$HOME/.npm-global" >> $GITHUB_ENV
         echo "NODE_PATH=$NPM_GLOBAL_PREFIX/node_modules" >> $GITHUB_ENV
       shell: bash
 
