@@ -27,8 +27,23 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
 
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      id: setup-chrome
+
+    - name: Set Puppeteer's executable path
+      run: |
+        echo "PUPPETEER_EXECUTABLE_PATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set npm environment variables
+      run: |
+        echo "NPM_GLOBAL_PREFIX=$(npm config get prefix)" >> $GITHUB_ENV
+        echo "NODE_PATH=$NPM_GLOBAL_PREFIX/node_modules" >> $GITHUB_ENV
+      shell: bash
+
     - name: Install Puppeteer
       run: |
-        export NPM_GLOBAL_PREFIX=$(npm config get prefix)
-        npm install -g puppeteer --prefix $NPM_GLOBAL_PREFIX
+        export PUPPETEER_SKIP_DOWNLOAD=true
+        npm install puppeteer --prefix $NPM_GLOBAL_PREFIX
       shell: bash

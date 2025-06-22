@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.interaction.executable.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
@@ -39,10 +40,13 @@ class HtmlToPdfTest {
 
     @Test
     fun `bare script on simple html`() {
-        assumeTrue(NodeJsWrapper(options.nodeJsPath, workingDirectory = directory).isValid)
+        assumeTrue(Env.npmGlobalPrefix != null)
+        assumeTrue(Env.nodePath != null)
+        val node = NodeJsWrapper(options.nodeJsPath, workingDirectory = directory)
+        assumeTrue(node.isValid)
         with(NpmWrapper(options.npmPath)) {
             assumeTrue(isValid)
-            assumeTrue(isInstalled(PuppeteerNodeModule))
+            assumeTrue(isInstalled(node, PuppeteerNodeModule))
         }
 
         val html = File(directory, "index.html")

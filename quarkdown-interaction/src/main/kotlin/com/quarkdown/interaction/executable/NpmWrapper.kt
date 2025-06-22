@@ -8,7 +8,8 @@ import java.io.File
  * with functionalities for installing and linking [NodeModule]s.
  *
  * The following environment variable can affect the behavior of this wrapper:
- * - `NPM_GLOBAL_PREFIX`: if set, it will be used to determine the global prefix for NPM operations.
+ * - [Env.NPM_GLOBAL_PREFIX]: if set, determines the global prefix for NPM operations.
+ * - [Env.NODE_PATH]: if set, determines the path to the Node.js modules.
  *
  * @param path path to the NPM executable
  */
@@ -23,7 +24,7 @@ class NpmWrapper(
      */
     private val globalPrefixArgs: Array<String>
         get() =
-            when (val prefix = System.getenv("NPM_GLOBAL_PREFIX")) {
+            when (val prefix = Env.npmGlobalPrefix) {
                 null -> emptyArray()
                 else -> arrayOf("--prefix", prefix)
             }
