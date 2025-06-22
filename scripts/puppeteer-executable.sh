@@ -1,3 +1,7 @@
+if [ -n "$NPM_GLOBAL_PREFIX" ]; then
+  export NODE_PATH="$NPM_GLOBAL_PREFIX/node_modules"
+fi
+
 if [ -z "$PUPPETEER_EXECUTABLE_PATH" ]; then
   ERROR_MESSAGE="[!] Could not find a suitable installation of Google Chrome, Chromium, or Firefox. PDF generation may not be available."
   if [ "$(uname)" = "Darwin" ]; then

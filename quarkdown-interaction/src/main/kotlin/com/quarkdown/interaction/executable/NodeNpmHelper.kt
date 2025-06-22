@@ -13,8 +13,6 @@ class NodeNpmHelper(
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
 ) {
-    private val linkedModules = mutableSetOf<NodeModule>()
-
     private fun checkWrapper(
         wrapper: ExecutableWrapper,
         name: String,
@@ -24,17 +22,14 @@ class NodeNpmHelper(
         }
     }
 
-    private fun linkModule(module: NodeModule) {
-        if (!npm.isInstalled(module)) {
+    private fun checkModule(module: NodeModule) {
+        if (!npm.isInstalled(node, module)) {
             throw NodeModuleNotInstalledException(module)
         }
-        npm.link(node, module)
-        linkedModules += module
     }
 
     @OptIn(ExperimentalPathApi::class)
     private fun cleanup() {
-        linkedModules.forEach { npm.unlink(node, it) }
         // Path#deleteRecursively does not follow symlinks, while File#deleteRecursively does.
         // The symlinks contained in the node_modules directory point to the global packages,
         // and should not be deleted.
@@ -58,7 +53,7 @@ class NodeNpmHelper(
     ) {
         checkWrapper(node, "Node.js")
         checkWrapper(npm, "NPM")
-        requiredModules.forEach(::linkModule)
+        requiredModules.forEach(::checkModule)
 
         try {
             action()

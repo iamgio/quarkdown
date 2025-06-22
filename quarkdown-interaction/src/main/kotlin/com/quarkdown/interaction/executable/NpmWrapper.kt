@@ -6,6 +6,10 @@ import java.io.File
 /**
  * Wrapper for invoking the Node Package Manager,
  * with functionalities for installing and linking [NodeModule]s.
+ *
+ * The following environment variable can affect the behavior of this wrapper:
+ * - `NPM_GLOBAL_PREFIX`: if set, it will be used to determine the global prefix for NPM operations.
+ *
  * @param path path to the NPM executable
  */
 class NpmWrapper(
@@ -39,11 +43,14 @@ class NpmWrapper(
     }
 
     /**
-     * @return whether the given [module] is installed globally
+     * @return whether the given [module] is installed in [node]'s working directory.
      */
-    fun isInstalled(module: NodeModule): Boolean =
+    fun isInstalled(
+        node: NodeJsWrapper,
+        module: NodeModule,
+    ): Boolean =
         try {
-            launchAndGetOutput("list", "-g", module.name, *globalPrefixArgs).contains(module.name)
+            launchAndGetOutput("list", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory).contains(module.name)
         } catch (_: Exception) {
             false
         }
@@ -53,6 +60,7 @@ class NpmWrapper(
      * @param node the Node.js wrapper
      * @param module the module to link
      */
+    @Deprecated("Not used anymore since v1.6.0")
     fun link(
         node: NodeJsWrapper,
         module: NodeModule,
@@ -65,6 +73,7 @@ class NpmWrapper(
      * @param node the Node.js wrapper
      * @param module the module to unlink
      */
+    @Deprecated("Not used anymore since v1.6.0")
     fun unlink(
         node: NodeJsWrapper,
         module: NodeModule,
