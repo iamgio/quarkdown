@@ -40,7 +40,7 @@ runs:
       run: |
         mkdir -p $HOME/.npm-global/lib
         echo "NPM_GLOBAL_PREFIX=$HOME/.npm-global/lib" >> $GITHUB_ENV
-        echo "NODE_PATH=${{ env.NPM_GLOBAL_PREFIX }}/node_modules" >> $GITHUB_ENV
+        echo "NODE_PATH=$HOME/.npm-global/lib/node_modules" >> $GITHUB_ENV
       shell: bash
 
     - name: Install Puppeteer
