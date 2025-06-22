@@ -23,6 +23,15 @@ jobs:
 #        job-id: main
 #        arguments: ktlintCheck test
 
+    - name: Echo environment variables
+      run: |
+        echo "PUPPETEER_EXECUTABLE_PATH=${{ env.PUPPETEER_EXECUTABLE_PATH }}"
+        echo "NPM_GLOBAL_PREFIX=${{ env.NPM_GLOBAL_PREFIX }}"
+        echo "NODE_PATH=${{ env.NODE_PATH }}"
+        
+        ls -la $HOME/.npm-global
+      shell: bash
+
     - name: Run tests
       run: |
         ./gradlew :quarkdown-html:test
