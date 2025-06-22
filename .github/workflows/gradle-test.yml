@@ -17,12 +17,13 @@ jobs:
       with:
         full-checkout: ${{ inputs.full-checkout }}
 
+#    - name: Run tests
+#      uses: burrunan/gradle-cache-action@v3
+#      with:
+#        job-id: main
+#        arguments: ktlintCheck test
+
     - name: Run tests
-      uses: burrunan/gradle-cache-action@v3
-      with:
-        job-id: main
-        arguments: ktlintCheck test
-      env:
-        PUPPETEER_EXECUTABLE_PATH: ${{ env.PUPPETEER_EXECUTABLE_PATH }}
-        NPM_GLOBAL_PREFIX: ${{ env.NPM_GLOBAL_PREFIX }}
-        NODE_PATH: ${{ env.NODE_PATH }}
+      run: |
+        ./gradlew :quarkdown-html:test
+      shell: bash

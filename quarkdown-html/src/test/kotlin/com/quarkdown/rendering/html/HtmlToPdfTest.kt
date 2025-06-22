@@ -65,6 +65,9 @@ class HtmlToPdfTest {
             """.trimIndent(),
         )
 
+        println(directory)
+        println(directory.list().contentToString())
+
         val out = File(directory, "out.pdf")
         HtmlPdfExporter(options.copy(noSandbox = true)).export(directory, out)
 
@@ -72,7 +75,6 @@ class HtmlToPdfTest {
         assertFalse(File(directory, "pdf.js").exists())
         assertFalse(File(directory, "package.json").exists())
         assertFalse(File(directory, "package-lock.json").exists())
-        println(directory)
         assertFalse(File(directory, "node_modules").exists())
 
         Loader.loadPDF(out).use {
