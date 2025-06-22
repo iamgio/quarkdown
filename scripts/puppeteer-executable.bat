@@ -1,5 +1,3 @@
-@setlocal
-
 @if defined NPM_GLOBAL_PREFIX (
     set "NODE_PATH=%NPM_GLOBAL_PREFIX%\node_modules"
 )
@@ -21,5 +19,3 @@
         echo "[!] Could not find a suitable installation of Google Chrome, Chromium or Firefox. PDF generation may not be available."
     )
 )
-
-@endlocal
