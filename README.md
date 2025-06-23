@@ -233,12 +233,42 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
+### Homebrew (Linux/macOS)
+
+```shell
+brew tap quarkdown-labs/quarkdown
+brew install quarkdown-labs/quarkdown/quarkdown
+```
+
+### Scoop (Windows)
+
+```shell
+scoop bucket add java
+scoop bucket add quarkdown https://github.com/quarkdown-labs/scoop-quarkdown          
+scoop install quarkdown
+```
+
+### Install script (Linux/macOS)
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.sh | sudo bash
+```
+
+Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.
+
+Requirements:
+- Java 17 or higher
+- Node.js and npm
+
+### Manual installation
+
 Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
 
-- The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
-- The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
+Optionally, adding `<install_dir>/bin` it to your `PATH` allows you to access Quarkdown more easily.
 
-Java 17 or higher is required. All major operating systems are supported.
+Requirements:
+- Java 17 or higher
+- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://github.com/iamgio/quarkdown/wiki/PDF-export) for details.
 
 ## Creating a project
 
