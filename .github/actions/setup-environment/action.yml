@@ -39,12 +39,12 @@ runs:
     - name: Set npm environment variables
       run: |
         mkdir -p $HOME/.npm-global/lib
-        echo "NPM_GLOBAL_PREFIX=$HOME/.npm-global/lib" >> $GITHUB_ENV
+        echo "QD_NPM_PREFIX=$HOME/.npm-global/lib" >> $GITHUB_ENV
         echo "NODE_PATH=$HOME/.npm-global/lib/node_modules" >> $GITHUB_ENV
       shell: bash
 
     - name: Install Puppeteer
       run: |
         export PUPPETEER_SKIP_DOWNLOAD=true
-        npm install puppeteer --prefix ${{ env.NPM_GLOBAL_PREFIX }}
+        npm install puppeteer --prefix ${{ env.QD_NPM_PREFIX }}
       shell: bash

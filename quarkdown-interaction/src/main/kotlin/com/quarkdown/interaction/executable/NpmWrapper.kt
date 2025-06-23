@@ -1,5 +1,6 @@
 package com.quarkdown.interaction.executable
 
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.os.OsUtils
 import java.io.File
 
@@ -8,8 +9,8 @@ import java.io.File
  * with functionalities for installing and linking [NodeModule]s.
  *
  * The following environment variable can affect the behavior of this wrapper:
- * - [Env.NPM_GLOBAL_PREFIX]: if set, determines the global prefix for NPM operations.
- * - [Env.NODE_PATH]: if set, determines the path to the Node.js modules.
+ * - [com.quarkdown.interaction.Env.QD_NPM_PREFIX]: if set, determines the global prefix for NPM operations.
+ * - [com.quarkdown.interaction.Env.NODE_PATH]: if set, determines the path to the Node.js modules.
  *
  * @param path path to the NPM executable
  */
@@ -19,12 +20,12 @@ class NpmWrapper(
     override val workingDirectory: File? = null
 
     /**
-     * If the `NPM_GLOBAL_PREFIX` environment variable is set,
+     * If the `QD_NPM_PREFIX` environment variable is set,
      * returns the `--prefix` argument with its value.
      */
     private val globalPrefixArgs: Array<String>
         get() =
-            when (val prefix = Env.npmGlobalPrefix) {
+            when (val prefix = Env.npmPrefix) {
                 null -> emptyArray()
                 else -> arrayOf("--prefix", prefix)
             }

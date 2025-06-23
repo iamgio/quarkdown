@@ -1,5 +1,5 @@
-if [ -n "$NPM_GLOBAL_PREFIX" ]; then
-  export NODE_PATH="$NPM_GLOBAL_PREFIX/node_modules"
+if [ -n "$QD_NPM_PREFIX" ]; then
+  export NODE_PATH="$QD_NPM_PREFIX/node_modules"
 fi
 
 if [ -z "$PUPPETEER_EXECUTABLE_PATH" ]; then

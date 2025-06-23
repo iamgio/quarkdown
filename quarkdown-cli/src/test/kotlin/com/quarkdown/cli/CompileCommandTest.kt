@@ -5,7 +5,7 @@ import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
-import com.quarkdown.interaction.executable.Env
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
@@ -128,7 +128,7 @@ class CompileCommandTest : TempDirectory() {
     }
 
     private fun assumePdfEnvironmentInstalled() {
-        assumeTrue(Env.npmGlobalPrefix != null)
+        assumeTrue(Env.npmPrefix != null)
         assumeTrue(Env.nodePath != null)
         val node = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory)
         assumeTrue(node.isValid)

@@ -1,5 +1,5 @@
-@if defined NPM_GLOBAL_PREFIX (
-    set "NODE_PATH=%NPM_GLOBAL_PREFIX%\node_modules"
+@if defined QD_NPM_PREFIX (
+    set "NODE_PATH=%QD_NPM_PREFIX%\node_modules"
 )
 
 @if not defined PUPPETEER_EXECUTABLE_PATH (
