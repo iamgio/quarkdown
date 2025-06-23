@@ -234,6 +234,7 @@ com.quarkdown.rendering.html.node
 com.quarkdown.rendering.html.pdf
 com.quarkdown.rendering.html.post
 module:quarkdown-interaction
+com.quarkdown.interaction
 com.quarkdown.interaction.executable
 com.quarkdown.interaction.os
 module:quarkdown-quarkdoc
