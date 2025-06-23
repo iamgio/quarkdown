@@ -1,11 +1,17 @@
 package com.quarkdown.interaction.executable
 
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.os.OsUtils
 import java.io.File
 
 /**
  * Wrapper for invoking the Node Package Manager,
  * with functionalities for installing and linking [NodeModule]s.
+ *
+ * The following environment variable can affect the behavior of this wrapper:
+ * - [com.quarkdown.interaction.Env.QD_NPM_PREFIX]: if set, determines the global prefix for NPM operations.
+ * - [com.quarkdown.interaction.Env.NODE_PATH]: if set, determines the path to the Node.js modules.
+ *
  * @param path path to the NPM executable
  */
 class NpmWrapper(
@@ -13,13 +19,24 @@ class NpmWrapper(
 ) : ExecutableWrapper() {
     override val workingDirectory: File? = null
 
+    /**
+     * If the `QD_NPM_PREFIX` environment variable is set,
+     * returns the `--prefix` argument with its value.
+     */
+    private val globalPrefixArgs: Array<String>
+        get() =
+            when (val prefix = Env.npmPrefix) {
+                null -> emptyArray()
+                else -> arrayOf("--prefix", prefix)
+            }
+
     override val isValid: Boolean
         get() =
             try {
                 launchAndGetOutput("--version").trim().let {
                     it.isNotBlank() && it.lines().size == 1
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 false
             }
 
@@ -28,20 +45,15 @@ class NpmWrapper(
     }
 
     /**
-     * Installs a Node.js module globally, overwriting it if it already exists.
-     * @param module the module to install
+     * @return whether the given [module] is installed in [node]'s working directory.
      */
-    fun install(module: NodeModule) {
-        launchAndGetOutput("install", "-g", module.name)
-    }
-
-    /**
-     * @return whether the given [module] is installed globally
-     */
-    fun isInstalled(module: NodeModule): Boolean =
+    fun isInstalled(
+        node: NodeJsWrapper,
+        module: NodeModule,
+    ): Boolean =
         try {
-            launchAndGetOutput("list", "-g", module.name).contains(module.name)
-        } catch (e: Exception) {
+            launchAndGetOutput("list", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory).contains(module.name)
+        } catch (_: Exception) {
             false
         }
 
@@ -50,11 +62,12 @@ class NpmWrapper(
      * @param node the Node.js wrapper
      * @param module the module to link
      */
+    @Deprecated("Not used anymore since v1.6.0")
     fun link(
         node: NodeJsWrapper,
         module: NodeModule,
     ) {
-        launchAndGetOutput("link", module.name, workingDirectory = node.workingDirectory)
+        launchAndGetOutput("link", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory)
     }
 
     /**
@@ -62,11 +75,12 @@ class NpmWrapper(
      * @param node the Node.js wrapper
      * @param module the module to unlink
      */
+    @Deprecated("Not used anymore since v1.6.0")
     fun unlink(
         node: NodeJsWrapper,
         module: NodeModule,
     ) {
-        launchAndGetOutput("unlink", module.name, workingDirectory = node.workingDirectory)
+        launchAndGetOutput("unlink", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory)
     }
 
     companion object : WithDefaultPath {

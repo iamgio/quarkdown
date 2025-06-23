@@ -5,8 +5,10 @@ import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
+import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
@@ -125,6 +127,17 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
+    private fun assumePdfEnvironmentInstalled() {
+        assumeTrue(Env.npmPrefix != null)
+        assumeTrue(Env.nodePath != null)
+        val node = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory)
+        assumeTrue(node.isValid)
+        with(NpmWrapper(NpmWrapper.defaultPath)) {
+            assumeTrue(isValid)
+            assumeTrue(isInstalled(node, PuppeteerNodeModule))
+        }
+    }
+
     private fun checkPdf(expectedPages: Int = 3) {
         val pdf = File(directory, "Quarkdown-test.pdf")
         assertTrue(pdf.exists())
@@ -137,18 +150,14 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun pdf() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
     fun `single-page pdf`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         main.writeText(main.readText().replace("paged", "plain") + "\n\n.repeat {100}\n\t.loremipsum")
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf(expectedPages = 1)
@@ -157,9 +166,7 @@ class CompileCommandTest : TempDirectory() {
     // #86
     @Test
     fun `pdf with toc and id starting with digit`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         main.writeText(
             """
             .docname {Quarkdown test}
@@ -178,18 +185,14 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `pdf via explicit html-pdf`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
     fun `pdf with node and npm set`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) =
             test(
                 "--pdf",

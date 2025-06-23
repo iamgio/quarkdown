@@ -1,0 +1,28 @@
+.quarkdown {
+  :is(.stack, .page-margin-content) > :is(p, h1, h2, h3, h4, h5, h6, figure) {
+    margin: 0 !important;
+  }
+
+  .stack-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .stack-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stack-grid {
+    display: grid;
+  }
+
+  .stack-grid > * {
+    margin: 0 !important;
+  }
+
+  .stack > pre {
+    width: auto;
+    margin: 0;
+  }
+}

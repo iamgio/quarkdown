@@ -1,0 +1,37 @@
+@mixin minimal-toc {
+  nav {
+    ol {
+      list-style-type: none;
+      margin: 0;
+      padding-left: 12px;
+
+      // Nested entries
+      ol {
+        border-left: 2px solid;
+        border-radius: 2px;
+        margin-left: 1px;
+        padding: 0 0 0 28px;
+      }
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    // Location markers
+    [data-location]::before {
+      opacity: .5;
+    }
+  }
+
+  .quarkdown-slides {
+    nav > ol {
+      // Resets the no-clipping workaround because this theme's ToC hides list markers.
+      margin-left: auto;
+    }
+
+    nav, h1#table-of-contents {
+      margin-left: 44px;
+    }
+  }
+}

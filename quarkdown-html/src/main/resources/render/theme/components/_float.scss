@@ -1,0 +1,9 @@
+$margin: 1.1em;
+
+.float[style*="float: inline-start"] {
+  margin-right: $margin;
+}
+
+.float[style*="float: inline-end"] {
+  margin-left: $margin;
+}

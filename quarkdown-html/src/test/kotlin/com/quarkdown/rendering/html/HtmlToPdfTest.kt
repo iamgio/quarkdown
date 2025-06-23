@@ -1,9 +1,11 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
 import com.quarkdown.rendering.html.pdf.HtmlPdfExporter
+import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue
@@ -38,8 +40,14 @@ class HtmlToPdfTest {
 
     @Test
     fun `bare script on simple html`() {
-        assumeTrue(NodeJsWrapper(options.nodeJsPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(options.npmPath).isValid)
+        assumeTrue(Env.npmPrefix != null)
+        assumeTrue(Env.nodePath != null)
+        val node = NodeJsWrapper(options.nodeJsPath, workingDirectory = directory)
+        assumeTrue(node.isValid)
+        with(NpmWrapper(options.npmPath)) {
+            assumeTrue(isValid)
+            assumeTrue(isInstalled(node, PuppeteerNodeModule))
+        }
 
         val html = File(directory, "index.html")
         html.writeText(
@@ -57,6 +65,9 @@ class HtmlToPdfTest {
             """.trimIndent(),
         )
 
+        println(directory)
+        println(directory.list().contentToString())
+
         val out = File(directory, "out.pdf")
         HtmlPdfExporter(options.copy(noSandbox = true)).export(directory, out)
 
@@ -64,7 +75,6 @@ class HtmlToPdfTest {
         assertFalse(File(directory, "pdf.js").exists())
         assertFalse(File(directory, "package.json").exists())
         assertFalse(File(directory, "package-lock.json").exists())
-        println(directory)
         assertFalse(File(directory, "node_modules").exists())
 
         Loader.loadPDF(out).use {

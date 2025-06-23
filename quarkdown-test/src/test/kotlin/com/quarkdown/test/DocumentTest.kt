@@ -10,6 +10,7 @@ import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.misc.color.NamedColor
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,6 +36,9 @@ class DocumentTest {
             assertEquals(0, documentInfo.authors.size)
             assertNull(documentInfo.locale)
             assertNull(documentInfo.layout.pageFormat.pageWidth)
+            assertNull(documentInfo.layout.pageFormat.margin)
+            assertNull(documentInfo.layout.pageFormat.contentBorderWidth)
+            assertNull(documentInfo.layout.pageFormat.contentBorderColor)
             assertNull(documentInfo.layout.paragraphStyle.spacing)
         }
     }
@@ -53,7 +57,7 @@ class DocumentTest {
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
-            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} columns:{4} alignment:{end}
+            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} bordercolor:{green} columns:{4} alignment:{end}
             .paragraphstyle lineheight:{2.0} spacing:{1.5} indent:{2}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
@@ -86,6 +90,8 @@ class DocumentTest {
                 documentInfo.layout.pageFormat.margin,
             )
 
+            assertNull(documentInfo.layout.pageFormat.contentBorderWidth)
+            assertEquals(NamedColor.GREEN.color, documentInfo.layout.pageFormat.contentBorderColor)
             assertEquals(4, documentInfo.layout.pageFormat.columnCount)
             assertEquals(Container.TextAlignment.END, documentInfo.layout.pageFormat.alignment)
 

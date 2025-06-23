@@ -45,3 +45,14 @@
       - bibliography: 参考文献
       - figure: 数値
       - table: テーブル
+    - Chinese
+      - note: 注意
+      - tip: 提示
+      - warning: 警告
+      - important: 重要
+      - error: 错误
+      - todo: 待办
+      - tableofcontents: 目录
+      - bibliography: 参考文献
+      - figure: 图
+      - table: 表

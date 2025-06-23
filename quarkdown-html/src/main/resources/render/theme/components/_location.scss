@@ -1,0 +1,23 @@
+.quarkdown {
+  // Elements that contain location data display it accordingly
+  [data-location]::before {
+    content: attr(data-location) var(--qd-location-suffix);
+  }
+
+  // Location data in a list item replaces its marker
+  li[data-location] {
+    list-style-type: none;
+  }
+
+  // Elements with a label, e.g. "Figure 1.1"
+  [data-element-label] {
+    &::before {
+      content: attr(data-localized-kind) " " attr(data-element-label) var(--qd-caption-label-suffix);
+    }
+
+    // "Figure 1.1" instead of "Figure 1.1: " if the caption is empty
+    &:empty {
+      --qd-caption-label-suffix: "";
+    }
+  }
+}

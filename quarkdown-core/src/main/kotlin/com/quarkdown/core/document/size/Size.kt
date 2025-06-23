@@ -27,6 +27,13 @@ data class Size(
         INCHES("in"),
         PERCENTAGE("%"),
     }
+
+    companion object {
+        /**
+         * An empty size.
+         */
+        val ZERO = Size(0.0, Unit.PIXELS)
+    }
 }
 
 /**

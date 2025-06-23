@@ -1,0 +1,21 @@
+@mixin progressive-heading-sizes($multiplier: 1) {
+  h1 {
+    font-size: 2.5rem * $multiplier;
+  }
+
+  h2 {
+    font-size: 1.7rem * $multiplier;
+  }
+
+  h3 {
+    font-size: 1.4rem * $multiplier;
+  }
+
+  h4 {
+    font-size: 1.2rem * $multiplier;
+  }
+
+  h5, h6 {
+    font-size: 1rem * $multiplier;
+  }
+}

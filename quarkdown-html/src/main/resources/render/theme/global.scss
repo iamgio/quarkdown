@@ -1,0 +1,142 @@
+@use "components/viewport";
+@use "components/block";
+@use "components/heading";
+@use "components/paragraph";
+@use "components/link";
+@use "components/math";
+@use "components/hr";
+@use "components/list";
+@use "components/table";
+@use "components/code";
+@use "components/focus";
+@use "components/blockquote";
+@use "components/figure";
+@use "components/mermaid";
+@use "components/float";
+@use "components/clip";
+@use "components/box";
+@use "components/size";
+@use "components/collapsible";
+@use "components/container";
+@use "components/stack";
+@use "components/location";
+@use "components/toc";
+@use "components/bibliography";
+@use "components/page-margin";
+@use "components/sidebar";
+
+:root {
+  // Quarkdown's exposed properties
+
+  // Colors
+  --qd-background-color: inherit; // Background color
+  --qd-main-color: inherit; // Main text color
+  --qd-primary-color: var(--qd-main-color); // Primary/accent color
+  --qd-color-on-primary: var(--qd-background-color); // Text color on primary background color
+  --qd-heading-color: var(--qd-main-color); // Heading (titles) color
+  --qd-link-color: inherit; // Link color
+  --qd-callout-box-header-color: var(--qd-main-color); // Color of the header of callout box headers. This is just a referenceable value and is not used in this global theme
+  --qd-collapsed-text-color: var(--qd-link-color); // Color of expandible text
+  --qd-error-message-collapsed-text-color: rgb(240, 246, 77); // Color of expandible text in error messages
+
+  // Fonts
+  --qd-main-font: inherit;
+  --qd-main-font-size: 1em;
+  --qd-code-font: monospace;
+  --qd-box-heading-font: var(--qd-main-font); // Font of box headers
+  --qd-code-span-font-size: var(--qd-main-font-size);
+  --qd-code-block-font-size: var(--qd-code-span-font-size); // Font size of code blocks in non-slides documents
+  --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
+  --qd-heading-font: inherit;
+
+  // Margins
+  --qd-block-margin: 32px; // Margin of block elements
+  --qd-paragraph-vertical-margin: var(--qd-block-margin); // Vertical margin of paragraphs preceded by a paragraph
+  --qd-heading-margin: 40px 0 20px 0; // Margin of headings
+  --qd-task-checkbox-margin-right: 0.9em; // Right margin of checkboxes in GFM task list items
+  --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
+
+  // Border
+  --qd-page-content-border-width: unset;
+  --qd-page-content-border-color: var(--qd-main-color);
+  --qd-page-content-border-style: unset;
+
+  // Text
+  --qd-line-height: 1.5;
+  --qd-letter-spacing: normal;
+  --qd-paragraph-text-indent: none; // Paragraph indentation (with LaTeX policies)
+  --qd-location-suffix: ". "; // Suffix for element (e.g. headings) location numbering
+  --qd-caption-label-suffix: ": "; // Suffix for labels (e.g. Figure 1.1: ...) in captions
+  --qd-slides-horizontal-alignment: center; // Text alignment of slides documents
+  --qd-paged-horizontal-alignment: justify; // Text alignment of paged documents
+  /*
+  Global text alignment (should not be overridden externally).
+  It can equal to either --qd-pages-horizontal-alignment or --qd-slides-horizontal-alignment
+  according to the current document type.
+  */
+  --qd-horizontal-alignment: var(--qd-paged-horizontal-alignment);
+
+  // Code
+  --qd-code-line-height: var(--qd-line-height); // Line height of code blocks
+  --qd-code-border-radius: 8px; // Border radius of code blocks
+  --qd-code-line-numbers-padding: 0 0.8em; // Padding of line numbers of code blocks. Vertical padding also defines code line height.
+  --qd-code-line-numbers-opacity: 0.6; // Opacity of line numbers of code blocks
+
+  // Tables
+  --qd-table-default-cell-alignment: initial; // Text alignment of table cells, if not specified
+
+  // Quotes
+  --qd-quote-type-label-suffix: ": "; // Suffix for localized quote type labels, e.g. Tip, Note, Warning, ...
+  --qd-quote-attribution-prefix: "— "; // Prefix for quote attributions
+  --qd-quote-foreground-color: var(--qd-main-color);
+  --qd-quote-background-color: color-mix(in srgb, var(--qd-quote-foreground-color) 5%, transparent);
+
+  // Boxes
+  --qd-box-border-radius: 8px;
+  --qd-box-section-padding: 12px 16px; // Padding of box sections (header and content)
+  --qd-box-icon-baseline: 0; // Y offset of icons in box headers
+
+  // Callout elements
+  --qd-callout-foreground-color: var(--qd-color-on-primary);
+  --qd-callout-background-color: color-mix(in srgb, var(--qd-callout-foreground-color) 5%, transparent);
+  // Tip elements
+  --qd-tip-foreground-color: rgb(33, 102, 25);
+  --qd-tip-background-color: color-mix(in srgb, var(--qd-tip-foreground-color) 5%, transparent);
+  // Note elements
+  --qd-note-foreground-color: rgb(25, 60, 102);
+  --qd-note-background-color: color-mix(in srgb, var(--qd-note-foreground-color) 5%, transparent);
+  // Warning elements
+  --qd-warning-foreground-color: rgb(161, 76, 32);
+  --qd-warning-background-color: color-mix(in srgb, var(--qd-warning-foreground-color) 5%, transparent);
+  // Important elements
+  --qd-important-foreground-color: rgb(145, 34, 34);
+  --qd-important-background-color: color-mix(in srgb, var(--qd-important-foreground-color) 5%, transparent);
+  // Error elements
+  --qd-error-foreground-color: white;
+  --qd-error-background-color: rgb(224, 67, 64);
+
+  // Mermaid diagrams
+  --qd-mermaid-node-background-color: var(--qd-primary-color);
+  --qd-mermaid-node-border-color: var(--qd-mermaid-node-text-color);
+  --qd-mermaid-node-border-width: 1px;
+  --qd-mermaid-node-text-color: var(--qd-color-on-primary);
+  --qd-mermaid-node-line-color: var(--qd-main-color);
+  --qd-mermaid-node-filter: none;
+
+  // Reveal properties
+  --r-background-color: var(--qd-background-color);
+  --r-main-color: var(--qd-main-color);
+  --r-heading-color: var(--qd-heading-color);
+  --r-link-color: var(--qd-link-color);
+  --r-main-font: var(--qd-main-font);
+  --r-main-font-size: var(--qd-main-font-size);
+  --r-code-font: var(--qd-code-font);
+  --r-heading-font: var(--qd-heading-font);
+  --r-block-margin: var(--qd-block-margin);
+  --r-heading-margin: var(--qd-heading-margin);
+
+  // Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values.
+  --property-column-count: unset;
+  --viewport-remaining-height: 50vh;
+}
+
