@@ -36,7 +36,7 @@ runs:
     - name: Update manifest version and URL
       run: |
         jq --arg ver "$VERSION" \
-           '.version = $ver
+           '.version = $ver \
            | .url = "https://github.com/iamgio/quarkdown/releases/download/v" + $ver + "/quarkdown.zip"'  \
            bucket/quarkdown.json > bucket/tmp.json
         mv bucket/tmp.json bucket/quarkdown.json
