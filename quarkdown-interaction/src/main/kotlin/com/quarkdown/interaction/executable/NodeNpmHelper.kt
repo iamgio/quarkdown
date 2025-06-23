@@ -1,6 +1,5 @@
 package com.quarkdown.interaction.executable
 
-import com.quarkdown.core.log.Log
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
@@ -14,8 +13,6 @@ class NodeNpmHelper(
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
 ) {
-    private val linkedModules = mutableSetOf<NodeModule>()
-
     private fun checkWrapper(
         wrapper: ExecutableWrapper,
         name: String,
@@ -25,18 +22,14 @@ class NodeNpmHelper(
         }
     }
 
-    private fun linkModule(module: NodeModule) {
-        if (!npm.isInstalled(module)) {
-            Log.info("Module '${module.name}' is not installed. Installing...")
-            npm.install(module)
+    private fun checkModule(module: NodeModule) {
+        if (!npm.isInstalled(node, module)) {
+            throw NodeModuleNotInstalledException(module)
         }
-        npm.link(node, module)
-        linkedModules += module
     }
 
     @OptIn(ExperimentalPathApi::class)
     private fun cleanup() {
-        linkedModules.forEach { npm.unlink(node, it) }
         // Path#deleteRecursively does not follow symlinks, while File#deleteRecursively does.
         // The symlinks contained in the node_modules directory point to the global packages,
         // and should not be deleted.
@@ -52,6 +45,7 @@ class NodeNpmHelper(
      * @param requiredModules the modules to link
      * @param action the action to run after the executables are checked and the modules are linked
      * @throws IllegalStateException if the Node.js or NPM wrappers are not valid
+     * @throws NodeModuleNotInstalledException if a required module is not installed globally
      */
     fun launch(
         vararg requiredModules: NodeModule,
@@ -59,7 +53,7 @@ class NodeNpmHelper(
     ) {
         checkWrapper(node, "Node.js")
         checkWrapper(npm, "NPM")
-        requiredModules.forEach(::linkModule)
+        requiredModules.forEach(::checkModule)
 
         try {
             action()

@@ -45,6 +45,7 @@ data class NodeJsWrapper(
     /**
      * @return whether the given [module] is linked to the project located in [workingDirectory]
      */
+    @Deprecated("Not used anymore since v1.6.0")
     fun isLinked(module: NodeModule): Boolean =
         try {
             eval("require('${module.name}')").isEmpty()

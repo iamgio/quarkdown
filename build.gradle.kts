@@ -77,12 +77,6 @@ ktlint {
 
 // Dokka
 
-/*dependencies {
-    subprojects.forEach {
-        dokka(it)
-    }
-}*/
-
 dokka {
     dokkaPublications.html {
         outputDirectory.set(
@@ -181,6 +175,21 @@ tasks.distZip {
 
         from(dokkaOutputDir) {
             into("$baseName/docs")
+        }
+    }
+}
+
+tasks.named<CreateStartScripts>("startScripts") {
+    // Prepends subscripts to the generated start scripts.
+    doLast {
+        val dir = file("scripts")
+        val scripts = sequenceOf("puppeteer-executable")
+
+        scripts.forEach { scriptName ->
+            val unixPrefix = dir.resolve("$scriptName.sh").readText() + "\n"
+            val windowsPrefix = dir.resolve("$scriptName.bat").readText() + "\n"
+            unixScript.writeText("#!/bin/sh\n\n" + unixPrefix + unixScript.readText())
+            windowsScript.writeText("@echo off\n\n" + windowsPrefix + windowsScript.readText())
         }
     }
 }
