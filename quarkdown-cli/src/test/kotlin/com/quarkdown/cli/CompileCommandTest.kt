@@ -26,7 +26,7 @@ import kotlin.test.assertTrue
  */
 class CompileCommandTest : TempDirectory() {
     private val command = CompileCommand()
-    private val main = File(directory, "main.qmd")
+    private val main = File(directory, "main.qd")
 
     @BeforeTest
     fun setup() {

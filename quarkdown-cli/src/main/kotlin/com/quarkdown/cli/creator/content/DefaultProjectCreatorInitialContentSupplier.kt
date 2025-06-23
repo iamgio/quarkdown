@@ -6,7 +6,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 
 private const val RESOURCES_PATH = "/creator/"
-private const val CODE_CONTENT_PATH = RESOURCES_PATH + "initialcontent.qmd.template"
+private const val CODE_CONTENT_PATH = RESOURCES_PATH + "initialcontent.qd.template"
 private const val LOGO = "logo.png"
 private const val IMAGES_GROUP_NAME = "image"
 
