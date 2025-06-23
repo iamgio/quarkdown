@@ -22,13 +22,13 @@
   <strong>Translated</strong>
   <br>
   <!-- Keep these links. Translations will automatically update with the README. -->
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=de">Deutsch</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=es">Español</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=fr">français</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ja">日本語</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ko">한국어</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=pt">Português</a> | 
-  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ru">Русский</a> | 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=de">Deutsch</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=es">Español</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=fr">français</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ja">日本語</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ko">한국어</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=pt">Português</a> &nbsp; | &nbsp; 
+  <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=ru">Русский</a> &nbsp; | &nbsp; 
   <a href="https://www.readme-i18n.com/iamgio/quarkdown?lang=zh">中文</a>
   <br>
   <hr>
