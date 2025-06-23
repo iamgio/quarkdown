@@ -185,6 +185,6 @@ class ProjectCreatorTest {
             ),
         )
 
-        assertTrue("quarkdown c main.qmd" in source.textContent)
+        assertTrue("quarkdown c main.qd" in source.textContent)
     }
 }

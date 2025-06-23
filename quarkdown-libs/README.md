@@ -2,8 +2,8 @@
 
 This module contains libraries written in Quarkdown ([main/resources](src/main/resources)).
 
-The Gradle build system will automatically copy the `.qmd` files into the `lib/qmd` directory of the distribution zip.  
-At runtime, the CLI option `-l` or `--libs` sets the path to the library directory to use, which clearly defaults to `lib/qmd`.
+The Gradle build system will automatically copy the `.qd` files into the `lib/qd` directory of the distribution zip.  
+At runtime, the CLI option `-l` or `--libs` sets the path to the library directory to use, which clearly defaults to `lib/qd`.
 
 In order to load a library from the library directory, the `.include {name}` function can be used.
 After the library is loaded, the functions defined in the library can be used in the main document.

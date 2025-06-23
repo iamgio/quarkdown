@@ -154,7 +154,7 @@ from your Markdown code.
 ## Multi-file project
 
 .sourceresult shrinkvertical:{40}
-    .include {sources/other.qmd}
+    .include {sources/other.qd}
 
 .whitespace
 

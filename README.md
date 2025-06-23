@@ -105,7 +105,7 @@ Check the [wiki](https://github.com/iamgio/quarkdown/wiki) to learn more about t
 
 <h2 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo" target="_blank">here</a></h3>
 <p align="center">
-Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>source code</strong></a>
+Built with Quarkdown itself — <a href="demo/demo.qd" target="_blank"><strong>source code</strong></a>
 <br><br>
 <em>(Desktop view is suggested)</em>
 </p>
@@ -236,7 +236,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
 
 - The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
-- The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
+- The `lib/qd` directory contains `.qd` libraries that can be imported into a project.
 
 Java 17 or higher is required. All major operating systems are supported.
 
@@ -247,11 +247,11 @@ to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio
 
 For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
 
-Alternatively, you may manually create a `.qmd` source file and start from there.
+Alternatively, you may manually create a `.qd` source file and start from there.
 
 ## Compiling
 
-Running **`quarkdown c file.qmd`** will compile the given file and save the output to file.
+Running **`quarkdown c file.qd`** will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
@@ -274,7 +274,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `-o <dir>` or `--output <dir>`: sets the directory of the output files. Defaults to `./output`.
 
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
 
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
@@ -310,7 +310,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 ***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
 making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
-- The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
+- The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qd -p`.
 - The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
 ## Contributing
