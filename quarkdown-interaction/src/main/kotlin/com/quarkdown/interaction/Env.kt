@@ -4,7 +4,7 @@ package com.quarkdown.interaction
  * Environment variables that may affect the `interaction` module.
  */
 object Env {
-    private const val QUARKDOWN_NPM_PREFIX = "QD_NPM_PREFIX"
+    const val QUARKDOWN_NPM_PREFIX = "QD_NPM_PREFIX"
     private const val NODE_PATH = "NODE_PATH"
 
     private operator fun get(key: String): String? = System.getenv(key)

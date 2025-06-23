@@ -18,8 +18,8 @@ class NodeModuleNotInstalledException(
     module: NodeModule,
 ) : IllegalStateException(
         """
-        Module '${module.name}' is not installed. Please install it via `npm install ${module.name} --prefix $${Env.npmPrefix}` and retry.
-        Make sure ${Env.npmPrefix} is an environment variable pointing to Quarkdown's `lib` directory or any other installation directory,
+        Module '${module.name}' is not installed. Please install it via `npm install ${module.name} --prefix $${Env.QUARKDOWN_NPM_PREFIX}` and retry.
+        Make sure ${Env.QUARKDOWN_NPM_PREFIX} is an environment variable pointing to Quarkdown's `lib` directory or any other installation directory,
         and it must be available at Quarkdown's launch.
         
         For more information, see: https://github.com/iamgio/quarkdown/wiki/pdf-export
