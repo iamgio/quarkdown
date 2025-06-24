@@ -17,7 +17,7 @@ import java.io.File
  * Command to compile a Quarkdown file into an output.
  * @see FileExecutionStrategy
  */
-class CompileCommand : ExecuteCommand("c") {
+class CompileCommand : ExecuteCommand("compile") {
     /**
      * Quarkdown source file to process.
      */
