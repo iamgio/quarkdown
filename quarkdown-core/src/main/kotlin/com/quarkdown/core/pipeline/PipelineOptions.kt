@@ -25,6 +25,7 @@ import java.io.File
  *                   this is injected into JavaScript to communicate with the server, for example to enable dynamic reloading.
  */
 data class PipelineOptions(
+    val resourceName: String? = null,
     val prettyOutput: Boolean = false,
     val wrapOutput: Boolean = true,
     val workingDirectory: File? = null,
