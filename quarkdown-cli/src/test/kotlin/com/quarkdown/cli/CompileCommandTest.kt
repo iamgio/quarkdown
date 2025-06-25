@@ -68,8 +68,8 @@ class CompileCommandTest : TempDirectory() {
         return cliOptions to pipelineOptions
     }
 
-    private fun assertHtmlContentPresent() {
-        val outputDir = File(directory, "Quarkdown-test")
+    private fun assertHtmlContentPresent(directoryName: String = "Quarkdown-test") {
+        val outputDir = File(directory, directoryName)
         assertTrue(outputDir.exists())
         assertTrue(outputDir.isDirectory())
 
@@ -102,6 +102,13 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun `base with explicit html renderer`() = base("html")
+
+    @Test
+    fun `explicit output name`() {
+        val (_, pipelineOptions) = test("--out-name", "A new name")
+        assertEquals("A new name", pipelineOptions.resourceName)
+        assertHtmlContentPresent(directoryName = "A-new-name")
+    }
 
     @Test
     fun strict() {
@@ -138,8 +145,11 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
-    private fun checkPdf(expectedPages: Int = 3) {
-        val pdf = File(directory, "Quarkdown-test.pdf")
+    private fun checkPdf(
+        name: String = "Quarkdown-test.pdf",
+        expectedPages: Int = 3,
+    ) {
+        val pdf = File(directory, name)
         assertTrue(pdf.exists())
         assertFalse(File(directory, "Quarkdown-test").exists())
 
@@ -153,6 +163,13 @@ class CompileCommandTest : TempDirectory() {
         assumePdfEnvironmentInstalled()
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
+    }
+
+    @Test
+    fun `pdf with explicit output name`() {
+        assumePdfEnvironmentInstalled()
+        val (_, _) = test("--pdf", "--pdf-no-sandbox", "--out-name", "A new name")
+        checkPdf(name = "A-new-name.pdf")
     }
 
     @Test

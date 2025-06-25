@@ -8,6 +8,7 @@ import java.io.File
 
 /**
  * Read-only settings that affect different behaviors of a [Pipeline].
+ * @param resourceName name of the output resource, that overrides the value of `.docname` set in the document
  * @param prettyOutput whether the rendering stage should produce pretty output code
  * @param wrapOutput whether the rendered code should be wrapped in a template code.
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`,
@@ -25,6 +26,7 @@ import java.io.File
  *                   this is injected into JavaScript to communicate with the server, for example to enable dynamic reloading.
  */
 data class PipelineOptions(
+    val resourceName: String? = null,
     val prettyOutput: Boolean = false,
     val wrapOutput: Boolean = true,
     val workingDirectory: File? = null,

@@ -304,6 +304,10 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `-o <dir>` or `--output <dir>`: sets the directory of the output files. Defaults to `./output`.
 
+- `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
+  Defaults to the name of the document, set via [`.docname`](https://github.com/iamgio/quarkdown/wiki/document-metadata).  
+  *Note:* special characters will be replaced with dashes in the actual file name.
+
 - `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
 
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:

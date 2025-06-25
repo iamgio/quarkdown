@@ -179,7 +179,7 @@ class Pipeline(
         val resources: Set<OutputResource> = renderer.postRenderer.generateResources(rendered)
 
         // The output name of the final wrapped resource.
-        val outputName = context.documentInfo.name ?: "Untitled Quarkdown Document"
+        val outputName = options.resourceName ?: context.documentInfo.name ?: "Untitled Quarkdown Document"
 
         return renderer.postRenderer.wrapResources(outputName, resources)
     }

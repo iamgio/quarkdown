@@ -68,6 +68,15 @@ abstract class ExecuteCommand(
         ).default(File(DEFAULT_OUTPUT_DIRECTORY))
 
     /**
+     * Optional name of the output resource, to be located in [outputDirectory].
+     * If not set, defaults to the value of `.docname`.
+     */
+    private val resourceName: String? by option(
+        "--out-name",
+        help = "Name of the output resource, to be located in the output directory. Note: special characters will be sanitized to dashes.",
+    )
+
+    /**
      * Optional library directory.
      * If not set, the program looks for libraries in [DEFAULT_LIBRARY_DIRECTORY], relative to the executable JAR file location.
      */
@@ -167,6 +176,7 @@ abstract class ExecuteCommand(
      */
     fun createPipelineOptions(cliOptions: CliOptions) =
         PipelineOptions(
+            resourceName = resourceName,
             prettyOutput = prettyOutput,
             wrapOutput = !noWrap,
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
