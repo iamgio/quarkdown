@@ -270,6 +270,8 @@ Requirements:
 - Java 17 or higher
 - (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://github.com/iamgio/quarkdown/wiki/PDF-export) for details.
 
+&nbsp;
+
 ## Creating a project
 
 Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
@@ -278,6 +280,8 @@ to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio
 For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
 
 Alternatively, you may manually create a `.qd` source file and start from there.
+
+&nbsp;
 
 ## Compiling
 
@@ -302,7 +306,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
 
-- `-o <dir>` or `--output <dir>`: sets the directory of the output files. Defaults to `./output`.
+- `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./output`.
 
 - `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
   Defaults to the name of the document, set via [`.docname`](https://github.com/iamgio/quarkdown/wiki/document-metadata).  
