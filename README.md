@@ -12,7 +12,7 @@
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
   <br>
-  <strong>Download</strong>
+  <strong>Releases</strong>
   <br>
   <a href="https://github.com/iamgio/quarkdown/releases/tag/latest">Latest</a>
   &nbsp; | &nbsp;
