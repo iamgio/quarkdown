@@ -14,15 +14,15 @@ class HtmlIdentifierProvider private constructor(
     private val renderer: NodeRenderer,
 ) : IdentifierProvider<String> {
     /**
-     * Converts [this] string to a URI-like string removing special characters and replacing spaces with dashes.
+     * Converts [this] string to a URI-like string removing special characters and replacing whitespaces with dashes.
      * Example: "Hello, World!" -> "hello-world"
      * @return URI-like string
      */
     private fun String.toURIString() =
         this
             .lowercase()
-            .replace(" ", "-")
-            .replace("[^a-z0-9-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("[^\\p{L}\\p{N}-]".toRegex(), "")
 
     /**
      * Ensures that the string is a valid identifier for HTML elements:
