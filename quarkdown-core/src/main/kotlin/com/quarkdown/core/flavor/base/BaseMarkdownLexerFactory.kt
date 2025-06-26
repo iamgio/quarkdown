@@ -19,6 +19,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
                     comment,
                     blockQuote,
                     blockCode,
+                    footnoteDefinition,
                     linkDefinition,
                     fencesCode,
                     heading,
