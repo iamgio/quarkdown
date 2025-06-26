@@ -13,62 +13,62 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
     override fun interruptionRule(
         includeList: Boolean,
         includeTable: Boolean,
-    ): Regex {
-        return RegexBuilder("mmath|" + super.interruptionRule(includeList, includeTable).pattern)
+    ): Regex =
+        RegexBuilder("mmath|" + super.interruptionRule(includeList, includeTable).pattern)
             .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
             .build()
-    }
 
     /**
      * Three or more `<` characters not followed by any other character.
      * Indicates a page break.
      */
-    val pageBreak
-        get() =
-            TokenRegexPattern(
-                name = "PageBreak",
-                wrap = ::PageBreakToken,
-                regex =
-                    "^ {0,3}<{3,}(?=\\s*\$)"
-                        .toRegex(),
-            )
+    val pageBreak by lazy {
+        TokenRegexPattern(
+            name = "PageBreak",
+            wrap = ::PageBreakToken,
+            regex =
+                "^ {0,3}<{3,}(?=\\s*\$)"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Fenced content within triple dollar signs.
      * @see MultilineMathToken
      */
-    val multilineMath
-        get() =
-            TokenRegexPattern(
-                name = "MultilineMath",
-                wrap = ::MultilineMathToken,
-                regex =
-                    "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
-                        .toRegex(),
-            )
+    val multilineMath by lazy {
+        TokenRegexPattern(
+            name = "MultilineMath",
+            wrap = ::MultilineMathToken,
+            regex =
+                "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Fenced content within spaced dollar signs on the same line.
      * @see OnelineMathToken
      */
-    val onelineMath
-        get() =
-            TokenRegexPattern(
-                name = "OnelineMath",
-                wrap = ::OnelineMathToken,
-                regex =
-                    RegexBuilder("^ {0,3}math\\s*\$")
-                        .withReference("math", ONELINE_MATH_HELPER)
-                        .build(),
-            )
+    val onelineMath by lazy {
+        TokenRegexPattern(
+            name = "OnelineMath",
+            wrap = ::OnelineMathToken,
+            regex =
+                RegexBuilder("^ {0,3}math\\s*\$")
+                    .withReference("math", ONELINE_MATH_HELPER)
+                    .build(),
+        )
+    }
 
     /**
      * An isolated function call.
      * Function name prefixed by '.', followed by a sequence of arguments wrapped in curly braces
      * and an optional body, indented by 4 spaces like a list item body.
      */
-    val functionCall
-        get() = FunctionCallPatterns().blockFunctionCall
+    val functionCall by lazy {
+        FunctionCallPatterns().blockFunctionCall
+    }
 }
 
 /**
