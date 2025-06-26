@@ -17,7 +17,7 @@ import com.quarkdown.core.flavor.TreeIteratorFactory
  * And more.
  */
 object QuarkdownFlavor : MarkdownFlavor {
-    override val lexerFactory: LexerFactory = QuarkdownLexerFactory()
+    override val lexerFactory: LexerFactory = QuarkdownLexerFactory
     override val parserFactory: ParserFactory = QuarkdownParserFactory()
     override val rendererFactory: RendererFactory = QuarkdownRendererFactory()
     override val treeIteratorFactory: TreeIteratorFactory = QuarkdownTreeIteratorFactory()
