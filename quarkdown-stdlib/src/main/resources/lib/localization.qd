@@ -43,7 +43,7 @@
       - todo: タスク
       - tableofcontents: 目次
       - bibliography: 参考文献
-      - figure: 数値
+      - figure: 図
       - table: テーブル
     - Chinese
       - note: 注意
