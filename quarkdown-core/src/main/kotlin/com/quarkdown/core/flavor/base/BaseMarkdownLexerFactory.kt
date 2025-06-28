@@ -52,6 +52,7 @@ object BaseMarkdownLexerFactory : LexerFactory {
                 listOf(
                     diamondAutolink,
                     link,
+                    referenceFootnote,
                     referenceLink,
                     urlAutolink,
                 ) + patterns

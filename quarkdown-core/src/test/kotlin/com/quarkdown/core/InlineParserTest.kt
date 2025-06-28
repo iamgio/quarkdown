@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.inline.CriticalContent
 import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -145,6 +146,15 @@ class InlineParserTest {
                 assertNodeEquals(Text("ref"), reference.first())
             }
         }
+    }
+
+    @Test
+    fun referenceFootnote() {
+        val nodes = inlineIterator<ReferenceFootnote>(readSource("/parsing/inline/reffootnote.md"))
+
+        assertEquals("label", nodes.next().label)
+        assertEquals("1", nodes.next().label)
+        assertNodeEquals(Text("[^2]"), nodes.next().fallback())
     }
 
     @Test

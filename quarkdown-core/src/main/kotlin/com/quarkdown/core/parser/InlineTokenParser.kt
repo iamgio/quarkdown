@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -37,6 +38,7 @@ import com.quarkdown.core.lexer.tokens.InlineMathToken
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.LinkToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
+import com.quarkdown.core.lexer.tokens.ReferenceFootnoteToken
 import com.quarkdown.core.lexer.tokens.ReferenceImageToken
 import com.quarkdown.core.lexer.tokens.ReferenceLinkToken
 import com.quarkdown.core.lexer.tokens.StrikethroughToken
@@ -166,6 +168,14 @@ class InlineTokenParser(
         return ReferenceLink(
             label = label,
             reference = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
+            fallback = { Text(token.data.text) },
+        )
+    }
+
+    override fun visit(token: ReferenceFootnoteToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        return ReferenceFootnote(
+            label = groups.next(),
             fallback = { Text(token.data.text) },
         )
     }

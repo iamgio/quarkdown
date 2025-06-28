@@ -5,8 +5,8 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
- * Creation of a referenceable footnote definition.
- * @param label inline content of the referenceable label
+ * Creation of a footnote definition, referenceable by a [com.quarkdown.core.ast.base.inline.ReferenceFootnote].
+ * @param label inline content of the referenceable label, which should match that of the [com.quarkdown.core.ast.base.inline.ReferenceFootnote]s
  * @param text inline content of the footnote
  */
 class FootnoteDefinition(

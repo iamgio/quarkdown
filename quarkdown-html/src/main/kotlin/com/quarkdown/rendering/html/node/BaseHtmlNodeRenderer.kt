@@ -24,6 +24,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -232,6 +233,8 @@ open class BaseHtmlNodeRenderer(
 
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
+
+    override fun visit(node: ReferenceFootnote) = TODO("Not yet implemented")
 
     override fun visit(node: Image) =
         tagBuilder("img")

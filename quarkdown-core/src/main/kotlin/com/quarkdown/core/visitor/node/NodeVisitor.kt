@@ -23,6 +23,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -102,6 +103,8 @@ interface NodeVisitor<T> {
     fun visit(node: Link): T
 
     fun visit(node: ReferenceLink): T
+
+    fun visit(node: ReferenceFootnote): T
 
     fun visit(node: Image): T
 

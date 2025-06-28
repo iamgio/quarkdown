@@ -12,6 +12,7 @@ import com.quarkdown.core.lexer.tokens.EscapeToken
 import com.quarkdown.core.lexer.tokens.ImageToken
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.LinkToken
+import com.quarkdown.core.lexer.tokens.ReferenceFootnoteToken
 import com.quarkdown.core.lexer.tokens.ReferenceImageToken
 import com.quarkdown.core.lexer.tokens.ReferenceLinkToken
 import com.quarkdown.core.lexer.tokens.StrikethroughToken
@@ -161,6 +162,21 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 RegexBuilder("\\[(label)\\](?:\\[(ref)?\\])?")
                     .withReference("label", LABEL_HELPER)
                     .withReference("ref", BLOCK_LABEL_HELPER)
+                    .build(),
+        )
+    }
+
+    /**
+     * A reference whose label in brackets matches that of a footnote definition.
+     * @see ReferenceLinkToken
+     */
+    val referenceFootnote by lazy {
+        TokenRegexPattern(
+            name = "InlineReferenceFootnote",
+            wrap = ::ReferenceFootnoteToken,
+            regex =
+                RegexBuilder("\\[\\^(label)\\]")
+                    .withReference("label", LABEL_HELPER)
                     .build(),
         )
     }
