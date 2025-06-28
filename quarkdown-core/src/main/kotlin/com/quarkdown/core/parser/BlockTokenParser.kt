@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -184,7 +185,16 @@ class BlockTokenParser(
     }
 
     override fun visit(token: FootnoteDefinitionToken): Node {
-        TODO("Not yet implemented")
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        return FootnoteDefinition(
+            label = groups.next().trim(),
+            text =
+                groups
+                    .next()
+                    .trim()
+                    .toInline(),
+        )
     }
 
     /**

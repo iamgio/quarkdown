@@ -149,14 +149,12 @@ open class BaseMarkdownBlockTokenRegexPatterns {
      */
     private fun definitionPattern(
         inBrackets: String,
+        content: String,
         interruption: String,
     ): Regex =
-        RegexBuilder("^ {0,3}\\[$inBrackets\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *$interruption")
+        RegexBuilder("^ {0,3}\\[$inBrackets\\]: *(?:\\n *)?$content *$interruption")
             .withReference("label", "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+")
-            .withReference(
-                "title",
-                "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
-            ).build()
+            .build()
 
     /**
      * Creation of a referenceable link defined by label, url and optional title.
@@ -166,7 +164,18 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         TokenRegexPattern(
             name = "LinkDefinition",
             wrap = ::LinkDefinitionToken,
-            regex = definitionPattern(inBrackets = "(label)", interruption = "(?:\\n+|$)"),
+            regex =
+                definitionPattern(
+                    inBrackets = "(label)",
+                    content =
+                        RegexBuilder("([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))?")
+                            .withReference(
+                                "title",
+                                "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
+                            ).build()
+                            .pattern,
+                    interruption = "(?:\\n+|$)",
+                ),
         )
     }
 
@@ -181,7 +190,8 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             regex =
                 definitionPattern(
                     inBrackets = "\\^(label)",
-                    interruption = "(?:\\n(?!interruption)[^\\n]+)*",
+                    content = "",
+                    interruption = "(.+(?:\\n(?!${interruptionRule()})[^\\n]+)*)*",
                 ),
         )
     }

@@ -143,7 +143,6 @@ class LexerTest {
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<FootnoteDefinitionToken>(tokens.next())
-        assertIs<ParagraphToken>(tokens.next())
         assertIs<FootnoteDefinitionToken>(tokens.next())
         assertIs<TableToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())

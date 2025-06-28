@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -71,6 +72,8 @@ interface NodeVisitor<T> {
     fun visit(node: Heading): T
 
     fun visit(node: LinkDefinition): T
+
+    fun visit(node: FootnoteDefinition): T
 
     fun visit(node: OrderedList): T
 

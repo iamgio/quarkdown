@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -127,6 +128,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Heading) = buildTag("h${node.depth}", node.text)
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
+
+    override fun visit(node: FootnoteDefinition): CharSequence = TODO("Not yet implemented")
 
     override fun visit(node: OrderedList) =
         tagBuilder("ol", node.children)
