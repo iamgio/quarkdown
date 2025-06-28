@@ -47,36 +47,36 @@ open class BaseMarkdownBlockTokenRegexPatterns {
      * 4-spaces indented content.
      * @see BlockCodeToken
      */
-    val blockCode
-        get() =
-            TokenRegexPattern(
-                name = "BlockCode",
-                wrap = ::BlockCodeToken,
-                regex =
-                    "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
-                        .toRegex(),
-            )
+    val blockCode by lazy {
+        TokenRegexPattern(
+            name = "BlockCode",
+            wrap = ::BlockCodeToken,
+            regex =
+                "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
+                    .toRegex(),
+        )
+    }
 
     /**
      * `>`-beginning content.
      * @see BlockQuoteToken
      */
-    val blockQuote
-        get() =
-            TokenRegexPattern(
-                name = "BlockQuote",
-                wrap = ::BlockQuoteToken,
-                regex =
-                    RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
-                        .withReference("paragraph", paragraph.regex.pattern)
-                        .build(),
-            )
+    val blockQuote by lazy {
+        TokenRegexPattern(
+            name = "BlockQuote",
+            wrap = ::BlockQuoteToken,
+            regex =
+                RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
+                    .withReference("paragraph", paragraph.regex.pattern)
+                    .build(),
+        )
+    }
 
     /**
      * Any previously unmatched content (should not happen).
      * @see BlockTextToken
      */
-    val blockText =
+    val blockText by lazy {
         TokenRegexPattern(
             name = "BlockText",
             wrap = ::BlockTextToken,
@@ -84,59 +84,61 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 "^[^\\n]+"
                     .toRegex(),
         )
+    }
 
     /**
      * An ignored piece of content wrapped in `<!-- ... -->` (the amount of `-` can vary).
      * @see CommentToken
      */
-    val comment =
+    val comment by lazy {
         TokenRegexPattern(
             name = "BlockComment",
             wrap = ::CommentToken,
             regex = COMMENT_PATTERN,
         )
+    }
 
     /**
      * Fenced content within triple backticks or tildes, with an optional language tag.
      * @see FencesCodeToken
      */
-    val fencesCode
-        get() =
-            TokenRegexPattern(
-                name = "FencesCode",
-                wrap = ::FencesCodeToken,
-                regex =
-                    "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)(?s)(.+?)(\\k<fenceschar>{3,})[ \\t]*$"
-                        .toRegex(),
-            )
+    val fencesCode by lazy {
+        TokenRegexPattern(
+            name = "FencesCode",
+            wrap = ::FencesCodeToken,
+            regex =
+                "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)(?s)(.+?)(\\k<fenceschar>{3,})[ \\t]*$"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Content that begins by a variable amount of `#`s.
      * @see HeadingToken
      */
-    val heading
-        get() =
-            TokenRegexPattern(
-                name = "Heading",
-                wrap = ::HeadingToken,
-                regex =
-                    "^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*)(?:\\n+|$)"
-                        .toRegex(),
-            )
+    val heading by lazy {
+        TokenRegexPattern(
+            name = "Heading",
+            wrap = ::HeadingToken,
+            regex =
+                "^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*)(?:\\n+|$)"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Three or more bullets in sequence.
      * @see HorizontalRuleToken
      */
-    val horizontalRule
-        get() =
-            TokenRegexPattern(
-                name = "HorizontalRule",
-                wrap = ::HorizontalRuleToken,
-                regex =
-                    "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\R+|$)"
-                        .toRegex(),
-            )
+    val horizontalRule by lazy {
+        TokenRegexPattern(
+            name = "HorizontalRule",
+            wrap = ::HorizontalRuleToken,
+            regex =
+                "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\R+|$)"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Pattern builder for link definitions and footnote definitions.
@@ -160,51 +162,51 @@ open class BaseMarkdownBlockTokenRegexPatterns {
      * Creation of a referenceable link defined by label, url and optional title.
      * @see LinkDefinitionToken
      */
-    val linkDefinition
-        get() =
-            TokenRegexPattern(
-                name = "LinkDefinition",
-                wrap = ::LinkDefinitionToken,
-                regex = definitionPattern(inBrackets = "(label)", interruption = "(?:\\n+|$)"),
-            )
+    val linkDefinition by lazy {
+        TokenRegexPattern(
+            name = "LinkDefinition",
+            wrap = ::LinkDefinitionToken,
+            regex = definitionPattern(inBrackets = "(label)", interruption = "(?:\\n+|$)"),
+        )
+    }
 
     /**
      * Creation of a referenceable footnote defined by label and content.
      * @see FootnoteDefinitionToken
      */
-    val footnoteDefinition
-        get() =
-            TokenRegexPattern(
-                name = "FootnoteDefinition",
-                wrap = ::FootnoteDefinitionToken,
-                regex =
-                    definitionPattern(
-                        inBrackets = "\\^(label)",
-                        interruption = "(?:\\n(?!interruption)[^\\n]+)*",
-                    ),
-            )
+    val footnoteDefinition by lazy {
+        TokenRegexPattern(
+            name = "FootnoteDefinition",
+            wrap = ::FootnoteDefinitionToken,
+            regex =
+                definitionPattern(
+                    inBrackets = "\\^(label)",
+                    interruption = "(?:\\n(?!interruption)[^\\n]+)*",
+                ),
+        )
+    }
 
     /**
      * Item of a list.
      * @see ListItemToken
      */
-    val listItem
-        get() =
-            TokenRegexPattern(
-                name = "ListItem",
-                wrap = ::ListItemToken,
-                regex =
-                    RegexBuilder(
-                        "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
-                    ).withReference("bullet", BULLET_HELPER)
-                        .build(),
-            )
+    val listItem by lazy {
+        TokenRegexPattern(
+            name = "ListItem",
+            wrap = ::ListItemToken,
+            regex =
+                RegexBuilder(
+                    "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
+                ).withReference("bullet", BULLET_HELPER)
+                    .build(),
+        )
+    }
 
     /**
      * A blank line.
      * @see NewlineToken
      */
-    val newline =
+    val newline by lazy {
         TokenRegexPattern(
             name = "Newline",
             wrap = ::NewlineToken,
@@ -212,90 +214,91 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 "^(?: *(?:\\n|$))+"
                     .toRegex(),
         )
+    }
 
     /**
      * A numbered list.
      * @see OrderedListToken
      */
-    val orderedList
-        get() =
-            TokenRegexPattern(
-                name = "OrderedList",
-                wrap = ::OrderedListToken,
-                regex =
-                    listPattern(
-                        bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])",
-                        bulletContinuation = "\\d{1,9}\\k<orderedbull>",
-                    ),
-            )
+    val orderedList by lazy {
+        TokenRegexPattern(
+            name = "OrderedList",
+            wrap = ::OrderedListToken,
+            regex =
+                listPattern(
+                    bulletInitialization = "\\d{1,9}(?<orderedbull>[\\.)])",
+                    bulletContinuation = "\\d{1,9}\\k<orderedbull>",
+                ),
+        )
+    }
 
     /**
      * Plain text content.
      * @see ParagraphToken
      */
-    val paragraph
-        get() =
-            TokenRegexPattern(
-                name = "Paragraph",
-                wrap = ::ParagraphToken,
-                regex =
-                    RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
-                        .withReference("interruption", interruptionRule().pattern)
-                        .build(),
-            )
+    val paragraph by lazy {
+        TokenRegexPattern(
+            name = "Paragraph",
+            wrap = ::ParagraphToken,
+            regex =
+                RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
+                    .withReference("interruption", interruptionRule().pattern)
+                    .build(),
+        )
+    }
 
     /**
      * Text followed by a horizontal rule on a new line.
      * @see SetextHeadingToken
      */
-    val setextHeading
-        get() =
-            TokenRegexPattern(
-                name = "SetextHeading",
-                wrap = ::SetextHeadingToken,
-                regex =
-                    RegexBuilder("^((?:(?! {0,3}(?:bullet)).+\\R)+?) {0,3}(=+|-+) *(?:\\R+|$)")
-                        .withReference("bullet", BULLET_HELPER)
-                        .build(),
-            )
+    val setextHeading by lazy {
+        TokenRegexPattern(
+            name = "SetextHeading",
+            wrap = ::SetextHeadingToken,
+            regex =
+                RegexBuilder("^((?:(?! {0,3}(?:bullet)).+\\R)+?) {0,3}(=+|-+) *(?:\\R+|$)")
+                    .withReference("bullet", BULLET_HELPER)
+                    .build(),
+        )
+    }
 
     /**
      * GFM table with a header row, a delimiter row and multiple cell rows.
      * @see TableToken
      */
-    val table
-        get() =
-            TokenRegexPattern(
-                name = "Table",
-                wrap = ::TableToken,
-                regex =
-                    RegexBuilder(
-                        // Header
-                        "^ *([^\\n ].*)\\n" +
-                            // Align
-                            " {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)" +
-                            // Cells
-                            "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
-                    ).withReference("interruption", interruptionRule(includeTable = false).pattern)
-                        .withReference("|table", "")
-                        .build(),
-            )
+    val table by lazy {
+        TokenRegexPattern(
+            name = "Table",
+            wrap = ::TableToken,
+            regex =
+                RegexBuilder(
+                    // Header
+                    "^ *([^\\n ].*)\\n" +
+                        // Align
+                        " {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)" +
+                        // Cells
+                        "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
+                ).withReference("interruption", interruptionRule(includeTable = false).pattern)
+                    .withReference("|table", "")
+                    .build(),
+        )
+    }
 
     /**
      * A non-numbered list defined by the same kind of bullets.
      * @see UnorderedListToken
      */
-    val unorderedList
-        get() =
-            TokenRegexPattern(
-                name = "UnorderedList",
-                wrap = ::UnorderedListToken,
-                regex =
-                    listPattern(
-                        bulletInitialization = "(?<unorderedbull>[*+-])",
-                        bulletContinuation = "\\k<unorderedbull>",
-                    ),
-            )
+    val unorderedList by lazy {
+        TokenRegexPattern(
+            name = "UnorderedList",
+            wrap = ::UnorderedListToken,
+            regex =
+                listPattern(
+                    bulletInitialization = "(?<unorderedbull>[*+-])",
+                    bulletContinuation = "\\k<unorderedbull>",
+                ),
+        )
+    }
 
     /**
      * Generates a regex TokenRegexPattern that matches a whole list block.
