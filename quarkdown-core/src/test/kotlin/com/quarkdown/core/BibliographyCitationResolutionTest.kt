@@ -10,7 +10,7 @@ import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.hooks.reference.BibliographyCitationHook
+import com.quarkdown.core.context.hooks.reference.BibliographyCitationResolverHook
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,7 +41,7 @@ class BibliographyCitationResolutionTest {
 
     private fun traverse(root: Node) {
         ObservableAstIterator()
-            .attach(BibliographyCitationHook(context))
+            .attach(BibliographyCitationResolverHook(context))
             .traverse(root as NestableNode)
     }
 

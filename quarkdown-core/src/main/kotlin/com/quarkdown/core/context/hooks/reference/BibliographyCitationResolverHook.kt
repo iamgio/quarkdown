@@ -12,7 +12,7 @@ import com.quarkdown.core.context.MutableContext
  * that can be linked to an entry of a [Bibliography]
  * within a [BibliographyView].
  */
-class BibliographyCitationHook(
+class BibliographyCitationResolverHook(
     context: MutableContext,
 ) : ReferenceDefinitionResolverHook<BibliographyCitation, BibliographyView, Pair<BibliographyEntry, BibliographyView>>(context) {
     override fun collectReferences(iterator: ObservableAstIterator) = iterator.collectAll<BibliographyCitation>()
