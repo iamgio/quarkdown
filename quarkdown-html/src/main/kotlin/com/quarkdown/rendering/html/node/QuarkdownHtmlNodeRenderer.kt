@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.formatLocation
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
+import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
@@ -16,7 +17,6 @@ import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
-import com.quarkdown.core.ast.quarkdown.bibliography.getEntry
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -370,7 +370,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: BibliographyCitation): CharSequence {
         val (entry: BibliographyEntry, view: BibliographyView) =
-            node.getEntry(context) ?: return Text("[???]").accept(this)
+            node.getDefinition(context) ?: return Text("[???]").accept(this)
 
         val index = view.bibliography.indexOf(entry)
         val label = view.style.labelProvider.getLabel(entry, index)
