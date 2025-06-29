@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.rendering.NodeRenderer
 import com.quarkdown.core.util.toPlainText
@@ -39,6 +40,10 @@ class HtmlIdentifierProvider private constructor(
 
     override fun visit(heading: Heading) =
         (heading.customId ?: heading.text.toPlainText(renderer).toURIString())
+            .asValidId()
+
+    override fun visit(footnote: FootnoteDefinition): String =
+        "__footnote-${footnote.label.toURIString()}"
             .asValidId()
 
     companion object {

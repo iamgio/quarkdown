@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
@@ -65,6 +66,7 @@ import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
@@ -130,7 +132,18 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 
-    override fun visit(node: FootnoteDefinition): CharSequence = TODO("Not yet implemented")
+    override fun visit(node: FootnoteDefinition) =
+        buildTag("div") {
+            className("footnote-definition")
+            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
+
+            tag("sup") {
+                className("footnote-definition-label")
+                +node.label
+            }
+
+            +Paragraph(node.text)
+        }
 
     override fun visit(node: OrderedList) =
         tagBuilder("ol", node.children)

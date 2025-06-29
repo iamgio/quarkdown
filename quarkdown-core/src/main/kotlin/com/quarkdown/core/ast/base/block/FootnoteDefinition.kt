@@ -1,6 +1,8 @@
 package com.quarkdown.core.ast.base.block
 
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.attributes.id.Identifiable
+import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -12,6 +14,9 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class FootnoteDefinition(
     val label: String,
     override val text: InlineContent,
-) : TextNode {
+) : TextNode,
+    Identifiable {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
 }
