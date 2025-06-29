@@ -59,5 +59,5 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
      * @param definition the pair of a definition node and the definition itself
      * @return the definition to be associated with the reference
      */
-    protected abstract fun transformDefinitionPair(definition: Pair<DN, D>): D
+    protected open fun transformDefinitionPair(definition: Pair<DN, D>): D = definition.second
 }

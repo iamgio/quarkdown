@@ -29,6 +29,4 @@ class BibliographyCitationResolverHook(
                     .entries[reference.citationKey]
                     ?.let { bibliography to (it to bibliography) }
             }
-
-    override fun transformDefinitionPair(definition: Pair<BibliographyView, Pair<BibliographyEntry, BibliographyView>>) = definition.second
 }
