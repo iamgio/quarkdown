@@ -23,7 +23,7 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
         val definitions = collectDefinitions(iterator)
 
         iterator.onFinished {
-            references.forEachIndexed { index, reference ->
+            indexReferences(references).forEach { (index, reference) ->
                 val definition = findDefinitionPair(reference.reference, definitions, index)
                 definition?.let {
                     reference.setDefinition(context, transformDefinitionPair(it))
@@ -43,10 +43,19 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
     protected abstract fun collectDefinitions(iterator: ObservableAstIterator): List<DN>
 
     /**
+     * Assigns an index to each reference by their order in the list.
+     * The result indices will be input to [findDefinitionPair].
+     * @param references the list of references to index
+     * @return an iterable of indexed values, where each value is a pair of index and reference node
+     */
+    protected open fun indexReferences(references: List<ReferenceNode<R, D>>): Iterable<IndexedValue<ReferenceNode<R, D>>> =
+        references.withIndex()
+
+    /**
      * Given a reference and a list of definitions to search in, looks for a matching definition.
      * @param reference the reference to find the definition for
      * @param definitions the list of all definitions to search in
-     * @param index the index of the reference among all references of the same type
+     * @param index the index of the reference among all references of the same type, obtained from [indexReferences]
      * @return a pair of a definition node and the definition itself, if found
      */
     protected abstract fun findDefinitionPair(

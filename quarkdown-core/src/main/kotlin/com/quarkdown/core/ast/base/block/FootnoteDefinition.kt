@@ -47,7 +47,7 @@ fun FootnoteDefinition.getIndex(context: Context): Int? = context.attributes.of(
 
 /**
  * Registers the footnote index of this node within the document handled by [context],
- * according to the order of references to it.
+ * according to the order of references to it. It is not updated if an index is already set.
  * @param context context where footnote data is stored
  * @param index index of the footnote definition in the document, in order of reference
  */
@@ -55,6 +55,7 @@ fun FootnoteDefinition.setIndex(
     context: MutableContext,
     index: Int,
 ) {
+    if (getIndex(context) != null) return
     context.attributes.of(this) += FootnoteIndexProperty(index)
 }
 

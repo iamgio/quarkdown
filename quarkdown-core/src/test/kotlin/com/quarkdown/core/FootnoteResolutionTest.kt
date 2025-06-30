@@ -22,23 +22,25 @@ import kotlin.test.assertNull
 class FootnoteResolutionTest {
     private val context = MutableContext(QuarkdownFlavor)
 
-    private val definition =
+    private fun def(label: String) =
         FootnoteDefinition(
-            label = "footnote1",
-            text = buildInline { text("This is a footnote definition.") },
+            label = label,
+            text = buildInline { text("This is a footnote definition for $label.") },
         )
 
-    private val reference =
+    private fun ref(label: String) =
         ReferenceFootnote(
-            label = "footnote1",
-            fallback = { throw UnsupportedOperationException() },
+            label = label,
+            fallback = { throw UnsupportedOperationException("No fallback for $label") },
         )
 
-    private val invalidReference =
-        ReferenceFootnote(
-            label = "invalid",
-            fallback = { throw UnsupportedOperationException() },
-        )
+    private val definition1 = def("footnote1")
+    private val reference1 = ref("footnote1")
+
+    private val definition2 = def("footnote2")
+    private val reference2 = ref("footnote2")
+
+    private val invalidReference = ref("invalidFootnote")
 
     private fun traverse(root: Node) {
         ObservableAstIterator()
@@ -51,18 +53,18 @@ class FootnoteResolutionTest {
         val root =
             buildBlock {
                 root {
-                    +definition
-                    +reference
+                    +definition1
+                    +reference1
                 }
             }
 
         traverse(root)
 
         assertEquals(
-            definition,
-            reference.getDefinition(context),
+            definition1,
+            reference1.getDefinition(context),
         )
-        assertEquals(0, definition.getIndex(context))
+        assertEquals(0, definition1.getIndex(context))
     }
 
     @Test
@@ -70,18 +72,18 @@ class FootnoteResolutionTest {
         val root =
             buildBlock {
                 root {
-                    +reference
-                    +definition
+                    +reference1
+                    +definition1
                 }
             }
 
         traverse(root)
 
         assertEquals(
-            definition,
-            reference.getDefinition(context),
+            definition1,
+            reference1.getDefinition(context),
         )
-        assertEquals(0, definition.getIndex(context))
+        assertEquals(0, definition1.getIndex(context))
     }
 
     @Test
@@ -90,36 +92,24 @@ class FootnoteResolutionTest {
             buildBlock {
                 root {
                     +invalidReference
-                    +definition
+                    +definition1
                 }
             }
 
         traverse(root)
 
-        assertNull(reference.getDefinition(context))
-        assertNull(definition.getIndex(context))
+        assertNull(reference1.getDefinition(context))
+        assertNull(definition1.getIndex(context))
     }
 
     @Test
     fun `definitions in different order`() {
-        val reference2 =
-            ReferenceFootnote(
-                label = "footnote2",
-                fallback = { throw UnsupportedOperationException() },
-            )
-
-        val definition2 =
-            FootnoteDefinition(
-                label = "footnote2",
-                text = buildInline { text("This is another footnote definition.") },
-            )
-
         val root =
             buildBlock {
                 root {
                     +reference2
-                    +reference
-                    +definition
+                    +reference1
+                    +definition1
                     +definition2
                 }
             }
@@ -127,6 +117,32 @@ class FootnoteResolutionTest {
         traverse(root)
 
         assertEquals(0, definition2.getIndex(context))
-        assertEquals(1, definition.getIndex(context))
+        assertEquals(1, definition1.getIndex(context))
+    }
+
+    @Test
+    fun `multiple references to the same definition`() {
+        val root =
+            buildBlock {
+                root {
+                    +definition1
+                    +reference1
+                    +reference1
+
+                    +definition2
+                    +reference2
+                    +reference2
+                    +reference2
+                }
+            }
+
+        traverse(root)
+
+        assertEquals(
+            definition1,
+            reference1.getDefinition(context),
+        )
+        assertEquals(0, definition1.getIndex(context))
+        assertEquals(1, definition2.getIndex(context))
     }
 }
