@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.FootnoteDefinition
+import com.quarkdown.core.ast.base.block.getIndex
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
@@ -61,6 +62,7 @@ class FootnoteResolutionTest {
             definition,
             reference.getDefinition(context),
         )
+        assertEquals(0, definition.getIndex(context))
     }
 
     @Test
@@ -79,6 +81,7 @@ class FootnoteResolutionTest {
             definition,
             reference.getDefinition(context),
         )
+        assertEquals(0, definition.getIndex(context))
     }
 
     @Test
@@ -94,5 +97,36 @@ class FootnoteResolutionTest {
         traverse(root)
 
         assertNull(reference.getDefinition(context))
+        assertNull(definition.getIndex(context))
+    }
+
+    @Test
+    fun `definitions in different order`() {
+        val reference2 =
+            ReferenceFootnote(
+                label = "footnote2",
+                fallback = { throw UnsupportedOperationException() },
+            )
+
+        val definition2 =
+            FootnoteDefinition(
+                label = "footnote2",
+                text = buildInline { text("This is another footnote definition.") },
+            )
+
+        val root =
+            buildBlock {
+                root {
+                    +reference2
+                    +reference
+                    +definition
+                    +definition2
+                }
+            }
+
+        traverse(root)
+
+        assertEquals(0, definition2.getIndex(context))
+        assertEquals(1, definition.getIndex(context))
     }
 }

@@ -16,15 +16,15 @@ import com.quarkdown.core.context.MutableContext
  * @see ReferenceNode
  */
 abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
-    private val context: MutableContext,
+    protected val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         val references = collectReferences(iterator)
         val definitions = collectDefinitions(iterator)
 
         iterator.onFinished {
-            references.forEach { reference ->
-                val definition = findDefinitionPair(reference.reference, definitions)
+            references.forEachIndexed { index, reference ->
+                val definition = findDefinitionPair(reference.reference, definitions, index)
                 definition?.let {
                     reference.setDefinition(context, transformDefinitionPair(it))
                 }
@@ -46,11 +46,13 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
      * Given a reference and a list of definitions to search in, looks for a matching definition.
      * @param reference the reference to find the definition for
      * @param definitions the list of all definitions to search in
+     * @param index the index of the reference among all references of the same type
      * @return a pair of a definition node and the definition itself, if found
      */
     protected abstract fun findDefinitionPair(
         reference: R,
         definitions: List<DN>,
+        index: Int,
     ): Pair<DN, D>?
 
     /**

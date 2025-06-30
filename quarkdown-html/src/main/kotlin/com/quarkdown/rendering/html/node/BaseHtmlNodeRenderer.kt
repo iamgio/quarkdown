@@ -13,6 +13,7 @@ import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.base.block.Newline
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
+import com.quarkdown.core.ast.base.block.getIndex
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.ListItemVariantVisitor
 import com.quarkdown.core.ast.base.block.list.OrderedList
@@ -133,17 +134,26 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: LinkDefinition) = "" // Not rendered
 
     override fun visit(node: FootnoteDefinition) =
-        buildTag("div") {
-            className("footnote-definition")
-            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
-
-            tag("sup") {
-                className("footnote-definition-label")
-                +node.label
-            }
-
-            +Paragraph(node.text)
+        when (val index = node.getIndex(context)) {
+            null -> "" // The footnote is rendered only if it is linked to a reference
+            else -> buildFootnoteDefinition(node, index)
         }
+
+    private fun buildFootnoteDefinition(
+        node: FootnoteDefinition,
+        index: Int,
+    ) = buildTag("div") {
+        className("footnote-definition")
+        optionalAttribute("data-footnote-index", index)
+        optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
+
+        tag("sup") {
+            className("footnote-definition-label")
+            +index.toString()
+        }
+
+        +Paragraph(node.text)
+    }
 
     override fun visit(node: OrderedList) =
         tagBuilder("ol", node.children)

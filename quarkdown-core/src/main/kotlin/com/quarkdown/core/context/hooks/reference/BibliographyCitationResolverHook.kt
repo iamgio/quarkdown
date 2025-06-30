@@ -22,6 +22,7 @@ class BibliographyCitationResolverHook(
     override fun findDefinitionPair(
         reference: BibliographyCitation,
         definitions: List<BibliographyView>,
+        index: Int,
     ): Pair<BibliographyView, Pair<BibliographyEntry, BibliographyView>>? =
         definitions
             .firstNotNullOfOrNull { bibliography ->
