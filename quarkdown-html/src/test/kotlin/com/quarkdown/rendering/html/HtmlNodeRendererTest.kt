@@ -8,8 +8,10 @@ import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
+import com.quarkdown.core.ast.attributes.reference.setDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -20,6 +22,7 @@ import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.block.list.TaskListItemVariant
 import com.quarkdown.core.ast.base.block.list.UnorderedList
+import com.quarkdown.core.ast.base.block.setIndex
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Comment
 import com.quarkdown.core.ast.base.inline.CriticalContent
@@ -27,6 +30,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -317,6 +321,54 @@ class HtmlNodeRendererTest {
                     height = 100.px,
                 ),
             ).render(),
+        )
+    }
+
+    @Test
+    fun footnoteDefinition() {
+        val out = readParts("block/footnote.html")
+        val context = MutableContext(QuarkdownFlavor)
+
+        val definition =
+            FootnoteDefinition(
+                label = "label",
+                text = buildInline { text("Foo bar") },
+            )
+        definition.setIndex(context, 0)
+
+        assertEquals(
+            out.next(),
+            definition.render(context),
+        )
+    }
+
+    @Test
+    fun footnoteReference() {
+        val out = readParts("inline/reffootnote.html")
+        val context = MutableContext(QuarkdownFlavor)
+
+        val definition =
+            FootnoteDefinition(
+                label = "label",
+                text = buildInline { text("Foo bar") },
+            )
+        definition.setIndex(context, 0)
+
+        val reference =
+            ReferenceFootnote(
+                label = "label",
+                fallback = { Text("fallback") },
+            )
+
+        reference.setDefinition(context, definition)
+
+        assertEquals(
+            out.next(),
+            reference.render(context),
+        )
+        assertEquals(
+            out.next(),
+            reference.render(),
         )
     }
 
