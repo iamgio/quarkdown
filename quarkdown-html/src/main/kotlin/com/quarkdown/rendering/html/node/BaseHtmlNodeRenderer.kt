@@ -14,6 +14,7 @@ import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.base.block.Newline
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
+import com.quarkdown.core.ast.base.block.getFormattedIndex
 import com.quarkdown.core.ast.base.block.getIndex
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.ListItemVariantVisitor
@@ -134,26 +135,22 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 
-    override fun visit(node: FootnoteDefinition) =
-        when (val index = node.getIndex(context)) {
-            null -> "" // The footnote is rendered only if it is linked to a reference
-            else -> buildFootnoteDefinition(node, index)
+    override fun visit(node: FootnoteDefinition): CharSequence {
+        val index = node.getIndex(context) ?: return "" // The footnote is rendered only if it is linked to a reference
+        val formattedIndex = node.getFormattedIndex(context) ?: return ""
+
+        return buildTag("div") {
+            className("footnote-definition")
+            optionalAttribute("data-footnote-index", index)
+            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
+
+            tag("sup") {
+                className("footnote-definition-label")
+                +formattedIndex
+            }
+
+            +Paragraph(node.text)
         }
-
-    private fun buildFootnoteDefinition(
-        node: FootnoteDefinition,
-        index: Int,
-    ) = buildTag("div") {
-        className("footnote-definition")
-        optionalAttribute("data-footnote-index", index)
-        optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
-
-        tag("sup") {
-            className("footnote-definition-label")
-            +index.toString()
-        }
-
-        +Paragraph(node.text)
     }
 
     override fun visit(node: OrderedList) =
@@ -268,7 +265,7 @@ open class BaseHtmlNodeRenderer(
             val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(definition)
             tag("a") {
                 optionalAttribute("href", "#$definitionId")
-                +(definition.getIndex(context)?.toString() ?: "?")
+                +(definition.getFormattedIndex(context) ?: "?")
             }
         }
     }

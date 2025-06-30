@@ -6,6 +6,8 @@ import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.numbering.DecimalNumberingSymbol
+import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.property.Property
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -54,4 +56,20 @@ fun FootnoteDefinition.setIndex(
     index: Int,
 ) {
     context.attributes.of(this) += FootnoteIndexProperty(index)
+}
+
+/**
+ * Formats the index of this footnote definition according to the numbering format defined in the document,
+ * or a default numbering format if none is defined. The default format is `1, 2, 3, ...` (decimal numbering).
+ * @param context context where footnote data is stored
+ * @return formatted index of the footnote definition, or `null` if it is not linked to any reference
+ * @see getIndex
+ */
+fun FootnoteDefinition.getFormattedIndex(context: Context): String? {
+    val index = getIndex(context) ?: return null
+    val format =
+        context.documentInfo.numberingOrDefault?.footnotes
+            ?: NumberingFormat(DecimalNumberingSymbol)
+
+    return format.format(index + 1)
 }
