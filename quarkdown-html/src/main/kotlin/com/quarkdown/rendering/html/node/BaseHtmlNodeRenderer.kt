@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
@@ -257,7 +258,20 @@ open class BaseHtmlNodeRenderer(
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
 
-    override fun visit(node: ReferenceFootnote) = TODO("Not yet implemented")
+    override fun visit(node: ReferenceFootnote): CharSequence {
+        val definition: FootnoteDefinition =
+            node.getDefinition(context)
+                ?: return node.fallback().accept(this)
+
+        return buildTag("sup") {
+            className("footnote-reference")
+            val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(definition)
+            tag("a") {
+                optionalAttribute("href", "#$definitionId")
+                +(definition.getIndex(context)?.toString() ?: "?")
+            }
+        }
+    }
 
     override fun visit(node: Image) =
         tagBuilder("img")
