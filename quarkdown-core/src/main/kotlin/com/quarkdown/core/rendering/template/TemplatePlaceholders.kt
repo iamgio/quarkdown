@@ -99,8 +99,17 @@ object TemplatePlaceholders {
 
     /**
      * Horizontal content alignment of each page.
+     * This is applied globally to all elements in the document.
+     * For instance: start, center, end.
      */
-    const val HORIZONTAL_ALIGNMENT = "HALIGNMENT"
+    const val GLOBAL_HORIZONTAL_ALIGNMENT = "HALIGNMENT_GLOBAL"
+
+    /**
+     * Horizontal content alignment of each page.
+     * This is applied locally to selected elements in the document.
+     * For instance: justify.
+     */
+    const val LOCAL_HORIZONTAL_ALIGNMENT = "HALIGNMENT_LOCAL"
 
     /**
      * Line height of paragraphs.

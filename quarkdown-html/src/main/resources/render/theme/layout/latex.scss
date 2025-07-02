@@ -18,11 +18,14 @@
   --qd-paragraph-vertical-margin: 1.5em;
   --qd-line-height: 1.5;
   --qd-location-suffix: " ";
-  --qd-slides-horizontal-alignment: start;
   --qd-table-default-cell-alignment: start;
   --qd-quote-type-label-suffix: ". ";
   --qd-box-icon-baseline: -0.1em;
   --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
+}
+
+.quarkdown-slides {
+  --qd-horizontal-alignment-global: start;
 }
 
 @page {

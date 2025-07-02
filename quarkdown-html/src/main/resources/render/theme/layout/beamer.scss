@@ -17,7 +17,10 @@
   --qd-slides-code-block-font-size: 1.25em;
   --qd-block-margin: 32px;
   --qd-box-margin-multiplier: 1.2;
-  --qd-slides-horizontal-alignment: start;
+}
+
+.quarkdown-slides {
+  --qd-horizontal-alignment-global: start;
 }
 
 .quarkdown {

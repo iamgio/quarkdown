@@ -111,9 +111,14 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.COLUMN_COUNT,
                 pageFormat.columnCount,
             )
+            // Alignment can be global or local. See TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT for details.
             optionalValue(
-                TemplatePlaceholders.HORIZONTAL_ALIGNMENT,
-                pageFormat.alignment?.asCSS,
+                TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT,
+                pageFormat.alignment?.takeIf { it.isGlobal }?.asCSS,
+            )
+            optionalValue(
+                TemplatePlaceholders.LOCAL_HORIZONTAL_ALIGNMENT,
+                pageFormat.alignment?.takeIf { it.isLocal }?.asCSS,
             )
             optionalValue(
                 TemplatePlaceholders.PARAGRAPH_SPACING,

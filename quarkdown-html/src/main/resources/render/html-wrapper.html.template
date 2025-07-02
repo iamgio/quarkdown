@@ -53,11 +53,14 @@
     <style>
         body {
             [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
-            [[if:HALIGNMENT]]
-            --qd-slides-horizontal-alignment: [[HALIGNMENT]];
-            --qd-paged-horizontal-alignment: [[HALIGNMENT]];
-            text-align: [[HALIGNMENT]];
-            [[endif:HALIGNMENT]]
+            [[if:HALIGNMENT_LOCAL]]
+            --qd-horizontal-alignment-local: [[HALIGNMENT_LOCAL]] !important;
+            --qd-horizontal-alignment-global: unset !important;
+            [[endif:HALIGNMENT_LOCAL]]
+            [[if:HALIGNMENT_GLOBAL]]
+            --qd-horizontal-alignment-global: [[HALIGNMENT_GLOBAL]] !important;
+            --qd-horizontal-alignment-local: unset !important;
+            [[endif:HALIGNMENT_GLOBAL]]
             [[if:PAGEBORDERWIDTH]]
             --qd-page-content-border-width: [[PAGEBORDERWIDTH]];
             --qd-page-content-border-style: solid;
