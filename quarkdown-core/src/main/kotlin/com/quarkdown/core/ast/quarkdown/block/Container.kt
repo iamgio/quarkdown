@@ -59,13 +59,25 @@ class Container(
 
     /**
      * Possible alignment types of a [Container].
+     * @param isLocal whether this alignment should be applied only to specific element types in the document,
+     *                rather than globally to the entire document
      */
-    enum class TextAlignment : RenderRepresentable {
+    enum class TextAlignment(
+        val isLocal: Boolean = false,
+    ) : RenderRepresentable {
         START,
         CENTER,
         END,
-        JUSTIFY,
+        JUSTIFY(isLocal = true),
         ;
+
+        /**
+         * Whether this alignment is applied globally to the document. This is complementary to [isLocal].
+         * If true, it will be applied to all elements in the document.
+         * If false, it will only be applied to specific elements that support this alignment.
+         */
+        val isGlobal: Boolean
+            get() = !isLocal
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
 
