@@ -29,6 +29,22 @@ class PagedDocument extends QuarkdownDocument {
         });
     }
 
+    handleFootnotesPreRendering(definitions) {
+        // Paged.js requires footnotes to be <span> elements. A conversion is performed here.
+        Array.from(definitions).forEach(definition => {
+            const span = document.createElement('span');
+            // Copy attributes
+            Array.from(definition.attributes).forEach(attr => {
+                span.setAttribute(attr.name, attr.value);
+            });
+            span.innerHTML = definition.innerHTML;
+            definition.parentNode.replaceChild(span, definition);
+        });
+    }
+
+    handleFootnotesPostRendering(definitions) {
+    }
+
     getParentViewport(element) {
         return element.closest('.pagedjs_area');
     }

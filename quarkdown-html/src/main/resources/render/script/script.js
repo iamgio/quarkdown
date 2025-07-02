@@ -82,6 +82,20 @@ class QuarkdownDocument {
     }
 
     /**
+     * Handles or transforms footnotes in the pre-rendering execution queue.
+     * @param {NodeList} definitions - The footnote definitions to handle.
+     */
+    handleFootnotesPreRendering(definitions) {
+    }
+
+    /**
+     * Handles or transforms footnotes in the post-rendering execution queue.
+     * @param {NodeList} definitions - The footnote definitions to handle.
+     */
+    handleFootnotesPostRendering(definitions) {
+    }
+
+    /**
      * @returns {Element} The parent viewport of the given element,
      * such as the slide section in slides or the page area in paged.
      */
@@ -101,6 +115,8 @@ class QuarkdownDocument {
     populateExecutionQueue() {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
+        preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitions()));
+        postRenderingExecutionQueue.push(() => this.handleFootnotesPostRendering(getFootnoteDefinitions()));
         if (this.usesNavigationSidebar()) {
             postRenderingExecutionQueue.push(createSidebar);
         }
@@ -132,6 +148,13 @@ class PlainDocument extends QuarkdownDocument {
 }
 
 let doc = new PlainDocument(); // Overwritten externally by html-wrapper
+
+//
+// Footnotes.
+
+function getFootnoteDefinitions() {
+    return document.querySelectorAll('aside.footnote-definition');
+}
 
 //
 // Enables toggling of the collapsed/expanded state of inline elements.
