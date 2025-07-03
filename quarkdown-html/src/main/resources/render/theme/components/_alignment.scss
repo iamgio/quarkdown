@@ -2,7 +2,7 @@
   text-align: var(--qd-horizontal-alignment-global);
 
   // Local alignment (e.g. justification) is applied to specific elements instead of the whole document.
-  p, li, caption, figcaption {
+  p, li:not(li li, :has(> p)), caption, figcaption {
     text-align: var(--qd-horizontal-alignment-local);
   }
 }
