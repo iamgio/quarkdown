@@ -6,4 +6,9 @@
   grid-template-columns: auto auto;
   column-gap: 0.5em;
   row-gap: 1em;
+
+  .bibliography-entry-content {
+    // #123
+    break-inside: avoid;
+  }
 }
