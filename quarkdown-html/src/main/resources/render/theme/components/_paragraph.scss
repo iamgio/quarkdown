@@ -29,7 +29,16 @@ p {
   }
 }
 
-// Paragraph indentation cancelling
+// Paragraphs that don't expect indentation.
+figure p,
+.stack > p,
+.container[style*="text-align"] > p,
+.container[style*="justify-items"] > p,
+.mermaid p {
+  text-indent: 0 !important;
+}
+
+// First paragraphs may not expect indentation, depending on the locale or theme.
 p:first-child,
 h1 + p,
 h2 + p,
@@ -41,11 +50,6 @@ hr + p,
 figure + p,
 table + p,
 details > summary + p,
-.float + p,
-figure p,
-.stack > p,
-.container[style*="text-align"] > p,
-.container[style*="justify-items"] > p,
-.mermaid p {
-  text-indent: 0 !important;
+.float + p {
+  text-indent: var(--qd-first-paragraph-text-indent, 0) !important;
 }
