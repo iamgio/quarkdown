@@ -1,0 +1,285 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.quarkdown.stdlib//abs/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/abs.html
+$dokka.location:com.quarkdown.stdlib//align/#com.quarkdown.core.ast.quarkdown.block.Container.Alignment#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/align.html
+$dokka.location:com.quarkdown.stdlib//autoPageBreak/#com.quarkdown.core.context.MutableContext#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/autopagebreak.html
+$dokka.location:com.quarkdown.stdlib//bibliography/#com.quarkdown.core.context.MutableContext#kotlin.String#com.quarkdown.stdlib.BibliographyStyle#com.quarkdown.core.ast.InlineMarkdownContent?#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Bibliography/bibliography.html
+$dokka.location:com.quarkdown.stdlib//box/#com.quarkdown.core.context.Context#com.quarkdown.core.ast.InlineMarkdownContent?#com.quarkdown.core.ast.quarkdown.block.Box.Type#com.quarkdown.core.document.size.Size?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html
+$dokka.location:com.quarkdown.stdlib//capitalize/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/capitalize.html
+$dokka.location:com.quarkdown.stdlib//captionPosition/#com.quarkdown.core.context.Context#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html
+$dokka.location:com.quarkdown.stdlib//center/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/center.html
+$dokka.location:com.quarkdown.stdlib//cite/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Bibliography/cite.html
+$dokka.location:com.quarkdown.stdlib//clip/#com.quarkdown.core.ast.quarkdown.block.Clipped.Clip#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/clip.html
+$dokka.location:com.quarkdown.stdlib//code/#kotlin.String?#kotlin.Boolean#com.quarkdown.core.function.value.data.Range?#com.quarkdown.core.function.value.data.EvaluableString/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html
+$dokka.location:com.quarkdown.stdlib//collapse/#com.quarkdown.core.ast.InlineMarkdownContent#kotlin.Boolean#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/collapse.html
+$dokka.location:com.quarkdown.stdlib//collectionAverage/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/average.html
+$dokka.location:com.quarkdown.stdlib//collectionDistinct/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/distinct.html
+$dokka.location:com.quarkdown.stdlib//collectionFirst/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/first.html
+$dokka.location:com.quarkdown.stdlib//collectionGet/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]#kotlin.Int#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/getat.html
+$dokka.location:com.quarkdown.stdlib//collectionGroup/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/groupvalues.html
+$dokka.location:com.quarkdown.stdlib//collectionLast/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/last.html
+$dokka.location:com.quarkdown.stdlib//collectionReverse/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/reversed.html
+$dokka.location:com.quarkdown.stdlib//collectionSecond/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/second.html
+$dokka.location:com.quarkdown.stdlib//collectionSize/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/size.html
+$dokka.location:com.quarkdown.stdlib//collectionSorted/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]#com.quarkdown.core.function.value.data.Lambda?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/sorted.html
+$dokka.location:com.quarkdown.stdlib//collectionSumAll/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/sumall.html
+$dokka.location:com.quarkdown.stdlib//collectionThird/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/third.html
+$dokka.location:com.quarkdown.stdlib//column/#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html
+$dokka.location:com.quarkdown.stdlib//concatenate/#kotlin.String#kotlin.String#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/concatenate.html
+$dokka.location:com.quarkdown.stdlib//container/#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#kotlin.Boolean#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.misc.color.Color?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.BorderStyle?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.ast.quarkdown.block.Container.Alignment?#com.quarkdown.core.ast.quarkdown.block.Container.TextAlignment?#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment?#com.quarkdown.core.ast.MarkdownContent?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html
+$dokka.location:com.quarkdown.stdlib//cos/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/cos.html
+$dokka.location:com.quarkdown.stdlib//csv/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html
+$dokka.location:com.quarkdown.stdlib//currentPage/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/currentpage.html
+$dokka.location:com.quarkdown.stdlib//debug/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/debug.html
+$dokka.location:com.quarkdown.stdlib//dictionary/#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary/dictionary.html
+$dokka.location:com.quarkdown.stdlib//dictionaryGet/#kotlin.String#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.OutputValue[*]]#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary/get.html
+$dokka.location:com.quarkdown.stdlib//disableAutoPageBreak/#com.quarkdown.core.context.MutableContext/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/noautopagebreak.html
+$dokka.location:com.quarkdown.stdlib//disableNumbering/#com.quarkdown.core.context.Context/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/nonumbering.html
+$dokka.location:com.quarkdown.stdlib//divide/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/divide.html
+$dokka.location:com.quarkdown.stdlib//docAuthor/#com.quarkdown.core.context.Context#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/docauthor.html
+$dokka.location:com.quarkdown.stdlib//docAuthors/#com.quarkdown.core.context.Context#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.DictionaryValue[com.quarkdown.core.function.value.OutputValue[kotlin.String]]]?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/docauthors.html
+$dokka.location:com.quarkdown.stdlib//docLanguage/#com.quarkdown.core.context.Context#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/doclang.html
+$dokka.location:com.quarkdown.stdlib//docName/#com.quarkdown.core.context.Context#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/docname.html
+$dokka.location:com.quarkdown.stdlib//docType/#com.quarkdown.core.context.Context#com.quarkdown.core.document.DocumentType?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/doctype.html
+$dokka.location:com.quarkdown.stdlib//equals/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/equals.html
+$dokka.location:com.quarkdown.stdlib//error/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/error.html
+$dokka.location:com.quarkdown.stdlib//figure/#kotlin.String?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/figure.html
+$dokka.location:com.quarkdown.stdlib//float/#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/float.html
+$dokka.location:com.quarkdown.stdlib//footer/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/footer.html
+$dokka.location:com.quarkdown.stdlib//forEach/#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/foreach.html
+$dokka.location:com.quarkdown.stdlib//fragment/#com.quarkdown.core.ast.quarkdown.block.SlidesFragment.Behavior#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/fragment.html
+$dokka.location:com.quarkdown.stdlib//fullColumnSpan/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/fullspan.html
+$dokka.location:com.quarkdown.stdlib//function/#com.quarkdown.core.context.MutableContext#kotlin.String#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html
+$dokka.location:com.quarkdown.stdlib//functionExists/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/functionexists.html
+$dokka.location:com.quarkdown.stdlib//grid/#kotlin.Int#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html
+$dokka.location:com.quarkdown.stdlib//html/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/html.html
+$dokka.location:com.quarkdown.stdlib//if/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/if.html
+$dokka.location:com.quarkdown.stdlib//ifNot/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/ifnot.html
+$dokka.location:com.quarkdown.stdlib//ifPresent/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/ifpresent.html
+$dokka.location:com.quarkdown.stdlib//include/#com.quarkdown.core.context.MutableContext#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html
+$dokka.location:com.quarkdown.stdlib//includeAll/#com.quarkdown.core.context.MutableContext#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/includeall.html
+$dokka.location:com.quarkdown.stdlib//inlineCollapse/#com.quarkdown.core.ast.InlineMarkdownContent#com.quarkdown.core.ast.InlineMarkdownContent#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/textcollapse.html
+$dokka.location:com.quarkdown.stdlib//isEmpty/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/isempty.html
+$dokka.location:com.quarkdown.stdlib//isEven/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/iseven.html
+$dokka.location:com.quarkdown.stdlib//isGreater/#kotlin.Number#kotlin.Number#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/isgreater.html
+$dokka.location:com.quarkdown.stdlib//isLower/#kotlin.Number#kotlin.Number#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/islower.html
+$dokka.location:com.quarkdown.stdlib//isNone/#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/isnone.html
+$dokka.location:com.quarkdown.stdlib//isNotEmpty/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/isnotempty.html
+$dokka.location:com.quarkdown.stdlib//let/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/let.html
+$dokka.location:com.quarkdown.stdlib//libraries/#com.quarkdown.core.context.Context/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libraries.html
+$dokka.location:com.quarkdown.stdlib//libraryExists/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libexists.html
+$dokka.location:com.quarkdown.stdlib//libraryFunctions/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libfunctions.html
+$dokka.location:com.quarkdown.stdlib//localization/#com.quarkdown.core.context.MutableContext#kotlin.String#kotlin.Boolean#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.DictionaryValue[com.quarkdown.core.function.value.OutputValue[kotlin.String]]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Localization/localization.html
+$dokka.location:com.quarkdown.stdlib//localize/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Localization/localize.html
+$dokka.location:com.quarkdown.stdlib//log/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/log.html
+$dokka.location:com.quarkdown.stdlib//logn/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/logn.html
+$dokka.location:com.quarkdown.stdlib//loremIpsum/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/loremipsum.html
+$dokka.location:com.quarkdown.stdlib//lowercase/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/lowercase.html
+$dokka.location:com.quarkdown.stdlib//marker/#com.quarkdown.core.ast.InlineMarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/marker.html
+$dokka.location:com.quarkdown.stdlib//mermaid/#kotlin.String?#com.quarkdown.core.function.value.data.EvaluableString/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/mermaid.html
+$dokka.location:com.quarkdown.stdlib//multiply/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/multiply.html
+$dokka.location:com.quarkdown.stdlib//negate/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/negate.html
+$dokka.location:com.quarkdown.stdlib//node/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/node.html
+$dokka.location:com.quarkdown.stdlib//none/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/none.html
+$dokka.location:com.quarkdown.stdlib//not/#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/not.html
+$dokka.location:com.quarkdown.stdlib//numbered/#kotlin.String#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/numbered.html
+$dokka.location:com.quarkdown.stdlib//numbering/#com.quarkdown.core.context.Context#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.Value[kotlin.String]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/numbering.html
+$dokka.location:com.quarkdown.stdlib//otherwise/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/otherwise.html
+$dokka.location:com.quarkdown.stdlib//pageFormat/#com.quarkdown.core.context.Context#com.quarkdown.core.document.layout.page.PageSizeFormat?#com.quarkdown.core.document.layout.page.PageOrientation#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.misc.color.Color?#kotlin.Int?#com.quarkdown.core.ast.quarkdown.block.Container.TextAlignment?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html
+$dokka.location:com.quarkdown.stdlib//pageMarginContent/#com.quarkdown.core.document.layout.page.PageMarginPosition#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pagemargin.html
+$dokka.location:com.quarkdown.stdlib//pair/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection/pair.html
+$dokka.location:com.quarkdown.stdlib//paragraphStyle/#com.quarkdown.core.context.Context#kotlin.Number?#kotlin.Number?#kotlin.Number?#kotlin.Number?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/paragraphstyle.html
+$dokka.location:com.quarkdown.stdlib//pi/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/pi.html
+$dokka.location:com.quarkdown.stdlib//pow/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/pow.html
+$dokka.location:com.quarkdown.stdlib//range/#kotlin.Number?#kotlin.Number?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/range.html
+$dokka.location:com.quarkdown.stdlib//read/#com.quarkdown.core.context.Context#kotlin.String#com.quarkdown.core.function.value.data.Range/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/read.html
+$dokka.location:com.quarkdown.stdlib//rem/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/rem.html
+$dokka.location:com.quarkdown.stdlib//repeat/#kotlin.Int#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/repeat.html
+$dokka.location:com.quarkdown.stdlib//round/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/round.html
+$dokka.location:com.quarkdown.stdlib//row/#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html
+$dokka.location:com.quarkdown.stdlib//setSlidesConfiguration/#kotlin.Boolean?#kotlin.Boolean?#com.quarkdown.core.document.slides.Transition.Style?#com.quarkdown.core.document.slides.Transition.Speed/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html
+$dokka.location:com.quarkdown.stdlib//sin/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/sin.html
+$dokka.location:com.quarkdown.stdlib//sqrt/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/sqrt.html
+$dokka.location:com.quarkdown.stdlib//string/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/string.html
+$dokka.location:com.quarkdown.stdlib//subtract/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/subtract.html
+$dokka.location:com.quarkdown.stdlib//sum/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/sum.html
+$dokka.location:com.quarkdown.stdlib//table/#com.quarkdown.core.context.Context#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[kotlin.String]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/table.html
+$dokka.location:com.quarkdown.stdlib//tableColumn/#kotlin.Int#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablecolumn.html
+$dokka.location:com.quarkdown.stdlib//tableColumns/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablecolumns.html
+$dokka.location:com.quarkdown.stdlib//tableCompute/#kotlin.Int#com.quarkdown.core.function.value.data.Lambda#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablecompute.html
+$dokka.location:com.quarkdown.stdlib//tableFilter/#kotlin.Int#com.quarkdown.core.function.value.data.Lambda#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablefilter.html
+$dokka.location:com.quarkdown.stdlib//tableOfContents/#com.quarkdown.core.ast.InlineMarkdownContent?#kotlin.Int#com.quarkdown.core.ast.InlineMarkdownContent?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/tableofcontents.html
+$dokka.location:com.quarkdown.stdlib//tableSort/#kotlin.Int#com.quarkdown.stdlib.TableSortOrder#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablesort.html
+$dokka.location:com.quarkdown.stdlib//takeIf/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/takeif.html
+$dokka.location:com.quarkdown.stdlib//tan/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/tan.html
+$dokka.location:com.quarkdown.stdlib//texMacro/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/texmacro.html
+$dokka.location:com.quarkdown.stdlib//text/#com.quarkdown.core.ast.InlineMarkdownContent#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Size?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Weight?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Style?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Decoration?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Case?#com.quarkdown.core.ast.quarkdown.inline.TextTransformData.Variant?#com.quarkdown.core.misc.color.Color?#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/text.html
+$dokka.location:com.quarkdown.stdlib//theme/#com.quarkdown.core.context.Context#kotlin.String?#kotlin.String?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/theme.html
+$dokka.location:com.quarkdown.stdlib//toDo/#com.quarkdown.core.context.Context#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/todo.html
+$dokka.location:com.quarkdown.stdlib//totalPages/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/totalpages.html
+$dokka.location:com.quarkdown.stdlib//truncate/#kotlin.Number#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/truncate.html
+$dokka.location:com.quarkdown.stdlib//uppercase/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/uppercase.html
+$dokka.location:com.quarkdown.stdlib//variable/#com.quarkdown.core.context.MutableContext#kotlin.String#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/var.html
+$dokka.location:com.quarkdown.stdlib//whitespace/#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/whitespace.html
+$dokka.location:com.quarkdown.stdlib//xyChart/#kotlin.Boolean#kotlin.Boolean#kotlin.String?#com.quarkdown.core.function.value.data.Range?#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[*]]?#kotlin.String?#com.quarkdown.core.function.value.data.Range?#kotlin.String?#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html
+module:quarkdown-cli
+com.quarkdown.cli
+com.quarkdown.cli.creator
+com.quarkdown.cli.creator.command
+com.quarkdown.cli.creator.content
+com.quarkdown.cli.creator.template
+com.quarkdown.cli.exec
+com.quarkdown.cli.exec.strategy
+com.quarkdown.cli.lib
+com.quarkdown.cli.renderer
+com.quarkdown.cli.server
+com.quarkdown.cli.util
+com.quarkdown.cli.watcher
+module:quarkdown-core
+com.quarkdown.core
+com.quarkdown.core.ast
+com.quarkdown.core.ast.attributes
+com.quarkdown.core.ast.attributes.id
+com.quarkdown.core.ast.attributes.location
+com.quarkdown.core.ast.attributes.presence
+com.quarkdown.core.ast.base
+com.quarkdown.core.ast.base.block
+com.quarkdown.core.ast.base.block.list
+com.quarkdown.core.ast.base.inline
+com.quarkdown.core.ast.dsl
+com.quarkdown.core.ast.iterator
+com.quarkdown.core.ast.media
+com.quarkdown.core.ast.quarkdown
+com.quarkdown.core.ast.quarkdown.bibliography
+com.quarkdown.core.ast.quarkdown.block
+com.quarkdown.core.ast.quarkdown.block.list
+com.quarkdown.core.ast.quarkdown.block.toc
+com.quarkdown.core.ast.quarkdown.inline
+com.quarkdown.core.ast.quarkdown.invisible
+com.quarkdown.core.bibliography
+com.quarkdown.core.bibliography.bibtex
+com.quarkdown.core.bibliography.citation
+com.quarkdown.core.bibliography.style
+com.quarkdown.core.bibliography.style.dsl
+com.quarkdown.core.context
+com.quarkdown.core.context.hooks
+com.quarkdown.core.context.hooks.bibliography
+com.quarkdown.core.context.hooks.location
+com.quarkdown.core.context.hooks.presence
+com.quarkdown.core.context.localization
+com.quarkdown.core.context.toc
+com.quarkdown.core.document
+com.quarkdown.core.document.layout
+com.quarkdown.core.document.layout.caption
+com.quarkdown.core.document.layout.page
+com.quarkdown.core.document.layout.paragraph
+com.quarkdown.core.document.numbering
+com.quarkdown.core.document.size
+com.quarkdown.core.document.slides
+com.quarkdown.core.document.tex
+com.quarkdown.core.flavor
+com.quarkdown.core.flavor.base
+com.quarkdown.core.flavor.quarkdown
+com.quarkdown.core.function
+com.quarkdown.core.function.call
+com.quarkdown.core.function.call.binding
+com.quarkdown.core.function.call.validate
+com.quarkdown.core.function.error
+com.quarkdown.core.function.error.internal
+com.quarkdown.core.function.expression
+com.quarkdown.core.function.expression.visitor
+com.quarkdown.core.function.library
+com.quarkdown.core.function.library.loader
+com.quarkdown.core.function.reflect
+com.quarkdown.core.function.reflect.annotation
+com.quarkdown.core.function.value
+com.quarkdown.core.function.value.data
+com.quarkdown.core.function.value.factory
+com.quarkdown.core.function.value.output
+com.quarkdown.core.function.value.output.node
+com.quarkdown.core.lexer
+com.quarkdown.core.lexer.patterns
+com.quarkdown.core.lexer.regex
+com.quarkdown.core.lexer.regex.pattern
+com.quarkdown.core.lexer.tokens
+com.quarkdown.core.localization
+com.quarkdown.core.log
+com.quarkdown.core.media
+com.quarkdown.core.media.export
+com.quarkdown.core.media.storage
+com.quarkdown.core.media.storage.name
+com.quarkdown.core.media.storage.options
+com.quarkdown.core.misc.color
+com.quarkdown.core.misc.color.decoder
+com.quarkdown.core.parser
+com.quarkdown.core.parser.walker
+com.quarkdown.core.parser.walker.funcall
+com.quarkdown.core.pipeline
+com.quarkdown.core.pipeline.error
+com.quarkdown.core.pipeline.output
+com.quarkdown.core.property
+com.quarkdown.core.rendering
+com.quarkdown.core.rendering.representable
+com.quarkdown.core.rendering.tag
+com.quarkdown.core.rendering.template
+com.quarkdown.core.template
+com.quarkdown.core.util
+com.quarkdown.core.visitor.node
+com.quarkdown.core.visitor.token
+module:quarkdown-html
+com.quarkdown.rendering.html
+com.quarkdown.rendering.html.css
+com.quarkdown.rendering.html.extension
+com.quarkdown.rendering.html.node
+com.quarkdown.rendering.html.pdf
+com.quarkdown.rendering.html.post
+module:quarkdown-interaction
+com.quarkdown.interaction
+com.quarkdown.interaction.executable
+com.quarkdown.interaction.os
+module:quarkdown-quarkdoc
+com.quarkdown.quarkdoc.dokka
+com.quarkdown.quarkdoc.dokka.kdoc
+com.quarkdown.quarkdoc.dokka.page
+com.quarkdown.quarkdoc.dokka.signature
+com.quarkdown.quarkdoc.dokka.transformers
+com.quarkdown.quarkdoc.dokka.transformers.enumeration
+com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters
+com.quarkdown.quarkdoc.dokka.transformers.misc
+com.quarkdown.quarkdoc.dokka.transformers.module
+com.quarkdown.quarkdoc.dokka.transformers.name
+com.quarkdown.quarkdoc.dokka.transformers.optional
+com.quarkdown.quarkdoc.dokka.transformers.suppress
+com.quarkdown.quarkdoc.dokka.transformers.type
+com.quarkdown.quarkdoc.dokka.util
+module:quarkdown-quarkdoc-reader
+com.quarkdown.quarkdoc.reader
+com.quarkdown.quarkdoc.reader.dokka
+module:quarkdown-server
+com.quarkdown.server
+com.quarkdown.server.browser
+com.quarkdown.server.message
+com.quarkdown.server.stop
+module:quarkdown-stdlib
+com.quarkdown.stdlib
+com.quarkdown.stdlib.external
+com.quarkdown.stdlib.module.Bibliography
+com.quarkdown.stdlib.module.Collection
+com.quarkdown.stdlib.module.Data
+com.quarkdown.stdlib.module.Dictionary
+com.quarkdown.stdlib.module.Document
+com.quarkdown.stdlib.module.Ecosystem
+com.quarkdown.stdlib.module.Flow
+com.quarkdown.stdlib.module.Injection
+com.quarkdown.stdlib.module.Layout
+com.quarkdown.stdlib.module.Library
+com.quarkdown.stdlib.module.Localization
+com.quarkdown.stdlib.module.Logger
+com.quarkdown.stdlib.module.Logical
+com.quarkdown.stdlib.module.Math
+com.quarkdown.stdlib.module.Mermaid
+com.quarkdown.stdlib.module.Optionality
+com.quarkdown.stdlib.module.Slides
+com.quarkdown.stdlib.module.String
+com.quarkdown.stdlib.module.TableComputation
+com.quarkdown.stdlib.module.Text
