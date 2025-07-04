@@ -1,6 +1,7 @@
 package com.quarkdown.core.pipeline.output
 
 import com.quarkdown.core.pipeline.error.IOPipelineException
+import com.quarkdown.core.pipeline.output.LazyOutputArtifact.Companion.internal
 import kotlin.reflect.KClass
 
 /**
@@ -18,6 +19,15 @@ data class LazyOutputArtifact(
     override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(BinaryOutputArtifact(name, content(), type))
 
     companion object {
+        private fun readInternalBytes(
+            resource: String,
+            referenceClass: KClass<*> = LazyOutputArtifact::class,
+        ): List<Byte>? =
+            referenceClass.java
+                .getResource(resource)
+                ?.readBytes()
+                ?.toList()
+
         /**
          * Creates a [LazyOutputArtifact] whose content is extracted from an internal resource.
          * @param resource path to the internal resource
@@ -33,13 +43,24 @@ data class LazyOutputArtifact(
         ) = LazyOutputArtifact(
             name,
             content = {
-                referenceClass.java
-                    .getResource(resource)
-                    ?.readBytes()
-                    ?.toList()
+                readInternalBytes(resource, referenceClass)
                     ?: throw IOPipelineException("Resource $resource not found")
             },
             type,
         )
+
+        /**
+         * Like [internal], but reads the resource instantly and returns `null` if it does not exist.
+         * @see internal
+         */
+        fun internalOrNull(
+            resource: String,
+            name: String,
+            type: ArtifactType,
+            referenceClass: KClass<*> = LazyOutputArtifact::class,
+        ): LazyOutputArtifact? =
+            readInternalBytes(resource, referenceClass)?.let {
+                LazyOutputArtifact(name, content = { it }, type)
+            }
     }
 }

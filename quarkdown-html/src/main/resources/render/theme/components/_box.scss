@@ -1,3 +1,5 @@
+@use "_font";
+
 .quarkdown .box {
   width: 100%;
   border-radius: var(--qd-box-border-radius);
@@ -28,8 +30,8 @@
 
     > h4 {
       color: var(--box-header-foreground-color);
-      font-family: var(--qd-box-heading-font), serif;
       margin: 0;
+      @include font.global-font-family($kind: "box-heading");
     }
   }
 
