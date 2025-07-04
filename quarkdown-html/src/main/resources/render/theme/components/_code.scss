@@ -71,8 +71,11 @@
   // Code span + additional content
 
   .codespan-content {
-    display: inline-flex;
-    align-items: center;
+    // Has additional content.
+    &:has(:nth-child(2)) {
+      display: inline-flex;
+      align-items: center;
+    }
 
     .color-preview {
       width: 0.5em;
