@@ -266,42 +266,41 @@ class HtmlPostRendererTest {
         )
     }
 
+    private fun assertThemeGroupContains(
+        resources: Set<OutputResource>,
+        expectedThemes: Set<String>,
+        notExpectedThemes: Set<String> = emptySet(),
+    ) {
+        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
+        val themes = themeGroup.resources.map { it.name }
+        expectedThemes.forEach { assertTrue(it in themes) }
+        notExpectedThemes.forEach { assertFalse(it in themes) }
+
+        val theme = themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact
+
+        assertEquals(ArtifactType.CSS, theme.type)
+        expectedThemes.filter { it != "theme" }.forEach {
+            assertTrue("@import url('$it.css');" in theme.content)
+        }
+    }
+
+    private val plainHtml = "<html><head></head><body></body></html>"
+
     private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
         context.documentInfo.type = DocumentType.SLIDES
         context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
         context.attributes.markMathPresence()
 
         val postRenderer = HtmlPostRenderer(context)
-        val html = "<html><head></head><body></body></html>"
-
-        val resources = postRenderer.generateResources(html)
+        val resources = postRenderer.generateResources(plainHtml)
 
         block(resources)
 
         resources.filterIsInstance<TextOutputArtifact>().first { it.type == ArtifactType.HTML }.let {
-            assertEquals(html, it.content)
+            assertEquals(plainHtml, it.content)
         }
 
-        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
-
-        themeGroup.resources.map { it.name }.let { themes ->
-            assertTrue("darko" in themes)
-            assertTrue("minimal" in themes)
-            assertTrue("global" in themes)
-            assertTrue("theme" in themes)
-        }
-
-        (themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact).let {
-            assertEquals(ArtifactType.CSS, it.type)
-            assertEquals(
-                """
-                @import url('global.css');
-                @import url('minimal.css');
-                @import url('darko.css');
-                """.trimIndent(),
-                it.content,
-            )
-        }
+        assertThemeGroupContains(resources, setOf("darko", "minimal", "global", "theme"))
 
         val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
 
@@ -340,24 +339,41 @@ class HtmlPostRendererTest {
         val resources = postRenderer.generateResources(html)
         assertEquals(3, resources.size)
 
-        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
-        themeGroup.resources.map { it.name }.let { themes ->
-            assertTrue("paperwhite" in themes) // Default
-            assertTrue("latex" in themes) // Default
-            assertTrue("global" in themes)
-            assertTrue("theme" in themes)
-        }
+        assertThemeGroupContains(
+            resources,
+            setOf("paperwhite", "latex", "global", "theme"),
+            notExpectedThemes = setOf("zh"),
+        )
+    }
 
-        (themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact).let {
-            assertEquals(ArtifactType.CSS, it.type)
-            assertEquals(
-                """
-                @import url('global.css');
-                @import url('latex.css');
-                @import url('paperwhite.css');
-                """.trimIndent(),
-                it.content,
-            )
-        }
+    @Test
+    fun `resource generation, with specific localized theme`() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.documentInfo.locale = LocaleLoader.SYSTEM.find("zh-CN")
+
+        val postRenderer = HtmlPostRenderer(context)
+        val resources = postRenderer.generateResources(plainHtml)
+        assertEquals(3, resources.size)
+
+        assertThemeGroupContains(
+            resources,
+            setOf("paperwhite", "latex", "global", "theme", "zh"),
+        )
+    }
+
+    @Test
+    fun `resource generation, with missing localized theme`() {
+        val context = MutableContext(QuarkdownFlavor)
+        context.documentInfo.locale = LocaleLoader.SYSTEM.find("akan")
+
+        val postRenderer = HtmlPostRenderer(context)
+        val resources = postRenderer.generateResources(plainHtml)
+        assertEquals(3, resources.size)
+
+        assertThemeGroupContains(
+            resources,
+            expectedThemes = emptySet(),
+            notExpectedThemes = setOf("akan"),
+        )
     }
 }
