@@ -1,3 +1,5 @@
+@use "_font";
+
 @mixin content-area-border {
   border-width: var(--qd-page-content-border-width);
   border-color: var(--qd-page-content-border-color);
@@ -7,8 +9,8 @@
 
 body.quarkdown {
   color: var(--qd-main-color);
-  font-family: var(--qd-main-font), serif;
   font-size: var(--qd-main-font-size);
+  @include font.global-font-family();
 
   &:not(.quarkdown-paged), &.quarkdown-paged .pagedjs_page {
     background-color: var(--qd-background-color);

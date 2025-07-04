@@ -193,25 +193,39 @@ class HtmlPostRenderer(
      */
     private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?): Set<OutputResource> =
         buildSet {
+            fun getFullResourcePath(resourceSubPath: String): String = "/render/theme/$resourceSubPath.css"
+
             /**
+             * Pushes a new output artifact to the set if it exists.
              * @param resourceName name of the resource
              * @param resourcePath path of the resource starting from the theme folder, without extension
-             * @return a new output artifact from an internal resource
              */
             fun artifact(
                 resourceName: String,
                 resourcePath: String = resourceName,
-            ) = LazyOutputArtifact.internal(
-                resource = "/render/theme/$resourcePath.css",
-                // The name is not used here, as this artifact will be concatenated to others in generateResources.
-                name = resourceName,
-                type = ArtifactType.CSS,
-            )
+            ) {
+                val artifact =
+                    LazyOutputArtifact.internalOrNull(
+                        resource = getFullResourcePath(resourcePath),
+                        // The name is not used here, as this artifact will be concatenated to others in generateResources.
+                        name = resourceName,
+                        type = ArtifactType.CSS,
+                    )
+                if (artifact != null) {
+                    this += artifact
+                }
+            }
 
             // Pushing theme components.
-            this += artifact("global")
-            theme?.layout?.let { this += artifact(it, "layout/$it") }
-            theme?.color?.let { this += artifact(it, "color/$it") }
+            artifact("global")
+            theme?.layout?.let { artifact(it, "layout/$it") }
+            theme?.color?.let { artifact(it, "color/$it") }
+
+            // In case the active locale features its own theme components, add them as well.
+            // For example, Chinese typefaces (#105).
+            context.documentInfo.locale?.shortTag?.let {
+                artifact(it, "locale/$it")
+            }
 
             // A theme.css file contains only @import statements for each theme component
             // in order to link them into a single file that can be easily included in the main HTML file.
@@ -236,7 +250,7 @@ class HtmlPostRenderer(
              * @param resourceName name of the resource
              * @param resourcePath path of the resource starting from the theme folder, without extension
              */
-            fun pushArtifact(
+            fun artifact(
                 resourceName: String,
                 resourcePath: String = resourceName,
                 condition: Boolean = true,
@@ -251,13 +265,13 @@ class HtmlPostRenderer(
                     )
             }
 
-            pushArtifact("script")
-            pushArtifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
-            pushArtifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
-            pushArtifact("math", condition = context.attributes.hasMath)
-            pushArtifact("mermaid", condition = context.attributes.hasMermaidDiagram)
-            pushArtifact("code", condition = context.attributes.hasCode)
-            pushArtifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
+            artifact("script")
+            artifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
+            artifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
+            artifact("math", condition = context.attributes.hasMath)
+            artifact("mermaid", condition = context.attributes.hasMermaidDiagram)
+            artifact("code", condition = context.attributes.hasCode)
+            artifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
 
     override fun wrapResources(

@@ -49,6 +49,7 @@
   --qd-code-block-font-size: var(--qd-code-span-font-size); // Font size of code blocks in non-slides documents
   --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
   --qd-heading-font: inherit;
+  --qd-localized-font: ""; // Font for specific locales, e.g. Chinese (see locale/zh.scss)
 
   // Margins
   --qd-block-margin: 32px; // Margin of block elements
@@ -139,4 +140,3 @@
   --property-column-count: unset;
   --viewport-remaining-height: 50vh;
 }
-

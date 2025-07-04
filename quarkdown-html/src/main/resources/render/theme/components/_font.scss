@@ -1,0 +1,3 @@
+@mixin global-font-family($kind: "main") {
+  font-family: var(--qd-localized-font), var(--qd-#{$kind}-font), serif;
+}
