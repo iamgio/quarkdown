@@ -317,6 +317,10 @@ fun disableNumbering(
 /**
  * Sets the global style of paragraphs in the document.
  * If a value is unset, the default value supplied by the underlying renderer is used.
+ *
+ * The default value may also be affected by the current document locale, set via [docLanguage].
+ * For instance, the Chinese `zh` locale prefers a 2em indentation and no vertical spacing.
+ *
  * @param lineHeight height of each line, multiplied by the font size
  * @param letterSpacing whitespace between letters, multiplied by the font size
  * @param spacing whitespace between paragraphs, multiplied by the font size

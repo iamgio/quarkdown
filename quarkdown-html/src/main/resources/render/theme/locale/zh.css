@@ -1,3 +1,10 @@
+:root {
+  --qd-localized-font: "Noto Serif SC";
+  --qd-paragraph-text-indent: 2em;
+  --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
+  --qd-paragraph-vertical-margin: 0;
+}
+
 /*
 This is the Noto Serif Simplified Chinese font face.
 Source: https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&display=swap
@@ -898,7 +905,4 @@ Latin characters have been removed to reduce conflicts with the default font.
           U+70B9, U+7684,    /* 点, 的 */
           U+7F51,            /* 网 */
           U+FF0C, U+FF0E, U+FF1A; /* ，．： */
-}
-:root {
-  --qd-localized-font: "Noto Serif SC";
 }
