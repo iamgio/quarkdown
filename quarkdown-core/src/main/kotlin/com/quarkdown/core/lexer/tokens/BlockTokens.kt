@@ -8,7 +8,9 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  * A blank line.
  * @see com.quarkdown.core.ast.base.block.Newline
  */
-class NewlineToken(data: TokenData) : Token(data) {
+class NewlineToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -19,7 +21,9 @@ class NewlineToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Code
  */
-class BlockCodeToken(data: TokenData) : Token(data) {
+class BlockCodeToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -38,7 +42,9 @@ class BlockCodeToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Code
  */
-class FencesCodeToken(data: TokenData) : Token(data) {
+class FencesCodeToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -53,7 +59,9 @@ class FencesCodeToken(data: TokenData) : Token(data) {
  * $$$
  * @see com.quarkdown.core.ast.quarkdown.block.Math
  */
-class MultilineMathToken(data: TokenData) : Token(data) {
+class MultilineMathToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -66,7 +74,9 @@ class MultilineMathToken(data: TokenData) : Token(data) {
  * $ LaTeX expression $
  * @see com.quarkdown.core.ast.quarkdown.block.Math
  */
-class OnelineMathToken(data: TokenData) : Token(data) {
+class OnelineMathToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -81,7 +91,9 @@ class OnelineMathToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.HorizontalRule
  */
-class HorizontalRuleToken(data: TokenData) : Token(data) {
+class HorizontalRuleToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -95,7 +107,9 @@ class HorizontalRuleToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.quarkdown.block.PageBreak
  */
-class PageBreakToken(data: TokenData) : Token(data) {
+class PageBreakToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -106,7 +120,9 @@ class PageBreakToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Heading
  */
-class HeadingToken(data: TokenData) : Token(data) {
+class HeadingToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -122,7 +138,9 @@ class HeadingToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Heading
  */
-class SetextHeadingToken(data: TokenData) : Token(data) {
+class SetextHeadingToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -133,7 +151,24 @@ class SetextHeadingToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.LinkDefinition
  */
-class LinkDefinitionToken(data: TokenData) : Token(data) {
+class LinkDefinitionToken(
+    data: TokenData,
+) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Example:
+ * ```
+ * [^label]: Lorem ipsum
+ *   dolor sit
+ * amet.
+ * ```
+ * @see com.quarkdown.core.ast.base.block.FootnoteDefinition
+ */
+class FootnoteDefinitionToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -145,7 +180,9 @@ class LinkDefinitionToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.list.UnorderedList
  */
-class UnorderedListToken(data: TokenData) : Token(data) {
+class UnorderedListToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -157,7 +194,9 @@ class UnorderedListToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.list.OrderedList
  */
-class OrderedListToken(data: TokenData) : Token(data) {
+class OrderedListToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -171,7 +210,9 @@ class OrderedListToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.list.ListItem
  */
-class ListItemToken(data: TokenData) : Token(data) {
+class ListItemToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -189,7 +230,9 @@ class ListItemToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Table
  */
-class TableToken(data: TokenData) : Token(data) {
+class TableToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -202,14 +245,18 @@ class TableToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.Html
  */
-class HtmlToken(data: TokenData) : Token(data) {
+class HtmlToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see com.quarkdown.core.ast.base.block.Paragraph
  */
-class ParagraphToken(data: TokenData) : Token(data) {
+class ParagraphToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -220,13 +267,17 @@ class ParagraphToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.block.BlockQuote
  */
-class BlockQuoteToken(data: TokenData) : Token(data) {
+class BlockQuoteToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
 /**
  * @see com.quarkdown.core.ast.base.block.BlankNode
  */
-class BlockTextToken(data: TokenData) : Token(data) {
+class BlockTextToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }

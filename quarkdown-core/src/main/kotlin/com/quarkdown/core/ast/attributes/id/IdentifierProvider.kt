@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.attributes.id
 
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 
 /**
@@ -11,6 +12,8 @@ import com.quarkdown.core.ast.base.block.Heading
  */
 interface IdentifierProvider<T> {
     fun visit(heading: Heading): T
+
+    fun visit(footnote: FootnoteDefinition): T
 }
 
 /**

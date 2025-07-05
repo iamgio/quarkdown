@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -22,6 +23,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -72,6 +74,8 @@ interface NodeVisitor<T> {
 
     fun visit(node: LinkDefinition): T
 
+    fun visit(node: FootnoteDefinition): T
+
     fun visit(node: OrderedList): T
 
     fun visit(node: UnorderedList): T
@@ -99,6 +103,8 @@ interface NodeVisitor<T> {
     fun visit(node: Link): T
 
     fun visit(node: ReferenceLink): T
+
+    fun visit(node: ReferenceFootnote): T
 
     fun visit(node: Image): T
 

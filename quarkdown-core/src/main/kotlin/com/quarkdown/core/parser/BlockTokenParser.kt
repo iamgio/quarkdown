@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -32,6 +33,7 @@ import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
 import com.quarkdown.core.lexer.tokens.FencesCodeToken
+import com.quarkdown.core.lexer.tokens.FootnoteDefinitionToken
 import com.quarkdown.core.lexer.tokens.FunctionCallToken
 import com.quarkdown.core.lexer.tokens.HeadingToken
 import com.quarkdown.core.lexer.tokens.HorizontalRuleToken
@@ -64,12 +66,15 @@ private const val TABLE_ALIGNMENT_CHAR = ':'
  * A parser for block tokens.
  * @param context additional data to fill during the parsing process
  */
-class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<Node> {
+class BlockTokenParser(
+    private val context: MutableContext,
+) : BlockTokenVisitor<Node> {
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
-        this.tokenize()
+        this
+            .tokenize()
             .acceptAll(context.flavor.parserFactory.newParser(context))
 
     /**
@@ -77,20 +82,21 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
      *                based on this [flavor]'s specifics
      */
     private fun String.toInline(): InlineContent =
-        context.flavor.lexerFactory.newInlineLexer(this)
+        context.flavor.lexerFactory
+            .newInlineLexer(this)
             .tokenizeAndParse()
 
-    override fun visit(token: NewlineToken): Node {
-        return Newline
-    }
+    override fun visit(token: NewlineToken): Node = Newline
 
-    override fun visit(token: BlockCodeToken): Node {
-        return Code(
+    override fun visit(token: BlockCodeToken): Node =
+        Code(
             language = null,
             // Remove first indentation
-            content = token.data.text.replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "").trim(),
+            content =
+                token.data.text
+                    .replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "")
+                    .trim(),
         )
-    }
 
     override fun visit(token: FencesCodeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 4)
@@ -110,9 +116,7 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         return Math(expression = groups.next().trim())
     }
 
-    override fun visit(token: HorizontalRuleToken): Node {
-        return HorizontalRule
-    }
+    override fun visit(token: HorizontalRuleToken): Node = HorizontalRule
 
     /**
      * Splits a heading text and its custom ID from a raw text.
@@ -180,12 +184,26 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         )
     }
 
+    override fun visit(token: FootnoteDefinitionToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+
+        return FootnoteDefinition(
+            label = groups.next().trim(),
+            text =
+                groups
+                    .next()
+                    .trim()
+                    .toInline(),
+        )
+    }
+
     /**
      * Parses list items from a list [token].
      * @param token list token to extract the items from
      */
     private fun extractListItems(token: Token) =
-        context.flavor.lexerFactory.newListLexer(source = token.data.text)
+        context.flavor.lexerFactory
+            .newListLexer(source = token.data.text)
             .tokenizeAndParse()
             .dropLastWhile { it is Newline } // Remove trailing blank lines
 
@@ -196,7 +214,8 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
      * @param list list to set ownership for
      */
     private fun updateListItemsOwnership(list: ListBlock) {
-        list.children.asSequence()
+        list.children
+            .asSequence()
             .filterIsInstance<ListItem>()
             .forEach { it.owner = list }
     }
@@ -256,7 +275,10 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         groups.next() // Consume
         val task = groups.next() // Optional GFM task
 
-        val content = token.data.text.removePrefix(marker).removePrefix(task)
+        val content =
+            token.data.text
+                .removePrefix(marker)
+                .removePrefix(task)
         val lines = content.lineSequence()
 
         if (lines.none()) {
@@ -289,7 +311,11 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         /**
          * A temporary mutable [Table.Column].
          */
-        class MutableColumn(var alignment: Table.Alignment, val header: Table.Cell, val cells: MutableList<Table.Cell>)
+        class MutableColumn(
+            var alignment: Table.Alignment,
+            val header: Table.Cell,
+            val cells: MutableList<Table.Cell>,
+        )
 
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val columns = mutableListOf<MutableColumn>()
@@ -298,7 +324,9 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
          * Extracts the cells from a table row as raw strings.
          */
         fun splitRow(row: String): Sequence<String> =
-            row.split("(?<!\\\\)\\|".toRegex()).asSequence()
+            row
+                .split("(?<!\\\\)\\|".toRegex())
+                .asSequence()
                 .filter { it.isNotEmpty() }
                 .map { it.trim() }
 
@@ -337,15 +365,16 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         var caption: String? = null
 
         // Other rows.
-        groups.next().lineSequence()
+        groups
+            .next()
+            .lineSequence()
             .filterNot { it.isBlank() }
             .onEach { row ->
                 // Extract the caption if this is the caption row.
                 captionRegex.find(row)?.let { captionMatch ->
                     caption = captionMatch.groupValues.getOrNull(1)?.trimDelimiters()
                 }
-            }
-            .filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
+            }.filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
             .forEach { row ->
                 var cellCount = 0
                 // Push cell.
@@ -365,14 +394,16 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         )
     }
 
-    override fun visit(token: HtmlToken): Node {
-        return Html(
+    override fun visit(token: HtmlToken): Node =
+        Html(
             content = token.data.text.trim(),
         )
-    }
 
     override fun visit(token: ParagraphToken): Node {
-        val text = token.data.text.trim().toInline()
+        val text =
+            token.data.text
+                .trim()
+                .toInline()
 
         // If the paragraph only consists of a single child, it could be a special block.
         return when (val singleChild = text.singleOrNull()) {
@@ -385,7 +416,10 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
 
     override fun visit(token: BlockQuoteToken): Node {
         // Remove leading >
-        var text = token.data.text.replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "").trim()
+        var text =
+            token.data.text
+                .replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "")
+                .trim()
 
         // Blockquote type, if any. e.g. Tip, note, warning.
         val type: BlockQuote.Type? =
@@ -415,8 +449,12 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         // > - William Shakespeare
         val attribution: InlineContent? =
             (children.lastOrNull() as? UnorderedList)
-                ?.children?.singleOrNull()?.let { it as? ListItem } // Only lists with one item are considered.
-                ?.children?.firstOrNull()?.let { it as? TextNode } // Usually a paragraph.
+                ?.children
+                ?.singleOrNull()
+                ?.let { it as? ListItem } // Only lists with one item are considered.
+                ?.children
+                ?.firstOrNull()
+                ?.let { it as? TextNode } // Usually a paragraph.
                 ?.text // The text of the attribution, as inline content.
                 ?.also { children = children.dropLast(1) } // If found, the attribution is not part of the children.
 
@@ -427,13 +465,9 @@ class BlockTokenParser(private val context: MutableContext) : BlockTokenVisitor<
         )
     }
 
-    override fun visit(token: BlockTextToken): Node {
-        return BlankNode
-    }
+    override fun visit(token: BlockTextToken): Node = BlankNode
 
-    override fun visit(token: PageBreakToken): Node {
-        return PageBreak()
-    }
+    override fun visit(token: PageBreakToken): Node = PageBreak()
 
     override fun visit(token: FunctionCallToken): Node {
         val call =

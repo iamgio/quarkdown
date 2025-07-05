@@ -6,6 +6,7 @@ import com.quarkdown.core.context.hooks.LinkDefinitionRegistrationHook
 import com.quarkdown.core.context.hooks.presence.CodePresenceHook
 import com.quarkdown.core.context.hooks.presence.MathPresenceHook
 import com.quarkdown.core.context.hooks.presence.MermaidDiagramPresenceHook
+import com.quarkdown.core.context.hooks.reference.FootnoteResolverHook
 import com.quarkdown.core.flavor.TreeIteratorFactory
 
 /**
@@ -16,6 +17,8 @@ class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
         ObservableAstIterator()
             // Registers link definitions.
             .attach(LinkDefinitionRegistrationHook(context))
+            // Resolves footnotes.
+            .attach(FootnoteResolverHook(context))
             // Allows loading code libraries (e.g. highlight.js syntax highlighting)
             // if at least one code block is present.
             .attach(CodePresenceHook(context))

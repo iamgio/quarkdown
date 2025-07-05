@@ -7,6 +7,7 @@ import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
 import com.quarkdown.core.lexer.tokens.CommentToken
 import com.quarkdown.core.lexer.tokens.FencesCodeToken
+import com.quarkdown.core.lexer.tokens.FootnoteDefinitionToken
 import com.quarkdown.core.lexer.tokens.HeadingToken
 import com.quarkdown.core.lexer.tokens.HorizontalRuleToken
 import com.quarkdown.core.lexer.tokens.LinkDefinitionToken
@@ -140,7 +141,23 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     }
 
     /**
-     * Creation of a link reference defined by label, url and optional title.
+     * Pattern builder for link definitions and footnote definitions.
+     * @param inBrackets pattern for the label contained within the brackets
+     * @param interruption pattern for the interruption rule of the definition.
+     * For instance, link definitions are one-liners, while footnote definitions can be multiline
+     * and interrupted the same way as paragraphs.
+     */
+    private fun definitionPattern(
+        inBrackets: String,
+        content: String,
+        interruption: String,
+    ): Regex =
+        RegexBuilder("^ {0,3}\\[$inBrackets\\]: *(?:\\n *)?$content *$interruption")
+            .withReference("label", "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+")
+            .build()
+
+    /**
+     * Creation of a referenceable link defined by label, url and optional title.
      * @see LinkDefinitionToken
      */
     val linkDefinition by lazy {
@@ -148,12 +165,34 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "LinkDefinition",
             wrap = ::LinkDefinitionToken,
             regex =
-                RegexBuilder("^ {0,3}\\[(label)\\]: *(?:\\n *)?([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))? *(?:\\n+|$)")
-                    .withReference("label", "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+")
-                    .withReference(
-                        "title",
-                        "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
-                    ).build(),
+                definitionPattern(
+                    inBrackets = "(label)",
+                    content =
+                        RegexBuilder("([^<\\s][^\\s]*|<.*?>)(?:(?: +(?:\\n *)?| *\\n *)(title))?")
+                            .withReference(
+                                "title",
+                                "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
+                            ).build()
+                            .pattern,
+                    interruption = "(?:\\n+|$)",
+                ),
+        )
+    }
+
+    /**
+     * Creation of a referenceable footnote defined by label and content.
+     * @see FootnoteDefinitionToken
+     */
+    val footnoteDefinition by lazy {
+        TokenRegexPattern(
+            name = "FootnoteDefinition",
+            wrap = ::FootnoteDefinitionToken,
+            regex =
+                definitionPattern(
+                    inBrackets = "\\^(label)",
+                    content = "",
+                    interruption = "(.+(?:\\n(?!${interruptionRule()})[^\\n]+)*)*",
+                ),
         )
     }
 
