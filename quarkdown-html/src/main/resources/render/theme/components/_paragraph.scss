@@ -1,7 +1,5 @@
 .quarkdown.quarkdown {
   p {
-    line-height: var(--qd-line-height);
-    letter-spacing: var(--qd-letter-spacing);
     margin-top: 0;
     margin-bottom: 0;
     text-indent: var(--qd-paragraph-text-indent);
@@ -13,6 +11,11 @@
 
   &:not(.quarkdown-slides) p {
     hyphens: auto;
+  }
+
+  p, li {
+    line-height: var(--qd-line-height);
+    letter-spacing: var(--qd-letter-spacing);
   }
 }
 

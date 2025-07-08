@@ -323,7 +323,8 @@ fun disableNumbering(
  *
  * @param lineHeight height of each line, multiplied by the font size
  * @param letterSpacing whitespace between letters, multiplied by the font size
- * @param spacing whitespace between paragraphs, multiplied by the font size
+ * @param spacing whitespace between paragraphs, multiplied by the font size.
+ *                This also minorly affects whitespace around lists and between list items
  * @param indent whitespace at the start of each paragraph, multiplied by the font size.
  *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones
  * @wiki Paragraph style

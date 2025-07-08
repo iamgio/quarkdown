@@ -11,6 +11,12 @@
     margin-bottom: var(--qd-block-margin);
   }
 
+  .box {
+    $margin: calc(var(--qd-block-margin) * var(--qd-box-margin-multiplier));
+    margin-top: $margin;
+    margin-bottom: $margin;
+  }
+
   // Resets the margin of the first element in a page
   .pagedjs_page_content > div > *:first-child,
   .pagedjs_page_content > div > *[data-hidden]:first-child ~ *:nth-child(2) {

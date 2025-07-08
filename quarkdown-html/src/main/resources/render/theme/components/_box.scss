@@ -3,8 +3,6 @@
 .quarkdown .box {
   width: 100%;
   border-radius: var(--qd-box-border-radius);
-  margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
-  margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
   --box-background-color: transparent;
   --box-content-foreground-color: var(--qd-main-color);
   --box-header-foreground-color: var(--qd-main-color);

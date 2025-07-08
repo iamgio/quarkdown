@@ -1,5 +1,8 @@
 .quarkdown {
   ul, ol {
+    $margin: calc(var(--qd-paragraph-vertical-margin) * var(--qd-list-margin-multiplier));
+    margin-top: $margin;
+    margin-bottom: $margin;
     padding-left: 20px;
 
     &:has(> .task-list-item) {
@@ -8,14 +11,15 @@
   }
 
   li {
-    // Not loose
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    // Tight
+    --qd-list-item-margin-multiplier: 0.75;
+    $margin: calc(var(--qd-paragraph-vertical-margin) * var(--qd-list-margin-multiplier) * var(--qd-list-item-margin-multiplier));
+    margin-top: $margin;
+    margin-bottom: $margin;
 
     &:has(p) {
       // Loose
-      margin-top: 1em;
-      margin-bottom: 1em;
+      --qd-list-item-margin-multiplier: 1.5;
     }
 
     // If a list item has a custom bullet element, the actual content is wrapped in a container
