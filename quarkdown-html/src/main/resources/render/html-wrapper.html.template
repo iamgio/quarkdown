@@ -73,6 +73,8 @@
             --qd-page-content-border-color: [[PAGEBORDERCOLOR]];
             --qd-page-content-border-style: solid;
             [[endif:PAGEBORDERCOLOR]]
+            [[if:PARAGRAPHLINEHEIGHT]]--qd-line-height: [[PARAGRAPHLINEHEIGHT]];[[endif:PARAGRAPHLINEHEIGHT]]
+            [[if:PARAGRAPHLETTERSPACING]]--qd-letter-spacing: [[PARAGRAPHLETTERSPACING]];[[endif:PARAGRAPHLETTERSPACING]]
         }
 
         .page-break {
@@ -102,8 +104,6 @@
         }
 
         p {
-            [[if:PARAGRAPHLINEHEIGHT]]--qd-line-height: [[PARAGRAPHLINEHEIGHT]];[[endif:PARAGRAPHLINEHEIGHT]]
-            [[if:PARAGRAPHLETTERSPACING]]--qd-letter-spacing: [[PARAGRAPHLETTERSPACING]];[[endif:PARAGRAPHLETTERSPACING]]
             [[if:PARAGRAPHSPACING]]--qd-paragraph-vertical-margin: [[PARAGRAPHSPACING]];[[endif:PARAGRAPHSPACING]]
             [[if:PARAGRAPHINDENT]]--qd-paragraph-text-indent: [[PARAGRAPHINDENT]];[[endif:PARAGRAPHINDENT]]
         }
