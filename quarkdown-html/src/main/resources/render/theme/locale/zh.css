@@ -1,8 +1,11 @@
 :root {
   --qd-localized-font: "Noto Serif SC";
   --qd-paragraph-text-indent: 2em;
-  --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
   --qd-paragraph-vertical-margin: 0;
+}
+
+p {
+  --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
 }
 
 /*
