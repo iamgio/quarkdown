@@ -56,7 +56,7 @@
   --qd-paragraph-vertical-margin: var(--qd-block-margin); // Vertical margin of paragraphs preceded by a paragraph
   --qd-heading-margin: 40px 0 20px 0; // Margin of headings
   --qd-task-checkbox-margin-right: 0.9em; // Right margin of checkboxes in GFM task list items
-  --qd-list-margin-divider: 2.5; // --qd-paragraph-vertical-margin / this = list vertical margin
+  --qd-list-margin-multiplier: 0.4; // --qd-paragraph-vertical-margin * this = list vertical margin
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
 
   // Border
