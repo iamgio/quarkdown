@@ -4,8 +4,28 @@
   --qd-paragraph-vertical-margin: 0;
 }
 
-p {
+.quarkdown p {
   --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
+}
+
+.quarkdown :is(ul, ol) {
+  list-style-position: inside;
+}
+
+.quarkdown :is(ul, ol):not(li ul, li ol) {
+  padding-left: 0;
+}
+
+.quarkdown li {
+  text-indent: var(--qd-paragraph-text-indent);
+}
+
+.quarkdown li > :first-child {
+  text-indent: 0 !important;
+}
+
+.quarkdown li > :not(ul, ol):first-child {
+  display: inline;
 }
 
 /*
