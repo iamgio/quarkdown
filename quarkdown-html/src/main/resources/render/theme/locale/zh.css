@@ -1,8 +1,36 @@
 :root {
   --qd-localized-font: "Noto Serif SC";
   --qd-paragraph-text-indent: 2em;
-  --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
   --qd-paragraph-vertical-margin: 0;
+}
+
+.quarkdown p {
+  --qd-first-paragraph-text-indent: var(--qd-paragraph-text-indent);
+}
+
+.quarkdown :is(ul, ol) {
+  list-style-position: inside;
+}
+
+.quarkdown :is(ul, ol):not(li ul, li ol) {
+  padding-left: 0;
+}
+
+.quarkdown li:not(nav li) {
+  text-indent: var(--qd-paragraph-text-indent);
+}
+
+.quarkdown li > :first-child,
+.quarkdown li.task-list-item > div:nth-child(2) > :first-child {
+  text-indent: 0 !important;
+}
+
+li.task-list-item > input[type="checkbox"]:first-child:has(+ div) {
+  margin-left: calc(var(--qd-paragraph-text-indent) + 8px);
+}
+
+.quarkdown li:not(nav li) > :not(ul, ol):first-child {
+  display: inline;
 }
 
 /*
