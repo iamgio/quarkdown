@@ -32,5 +32,10 @@
         margin-top: $margin;
       }
     }
+
+    &:has(.mermaid) {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 }
