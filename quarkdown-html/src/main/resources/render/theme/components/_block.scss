@@ -1,7 +1,9 @@
 .quarkdown {
-  // In a multi-column layout, these elements span across all columns.
-  .full-column-span, h1, h2, h3, nav {
-    column-span: all;
+  &.multicolumn {
+    // In a multi-column layout, these elements span across all columns.
+    .full-column-span, h1, h2, h3, nav {
+      column-span: all;
+    }
   }
 
   // Vertical block spacing.

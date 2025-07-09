@@ -109,7 +109,7 @@
         }
     </style>
 </head>
-<body class="quarkdown quarkdown-[[DOCTYPE]]">
+<body class="quarkdown quarkdown-[[DOCTYPE]][[if:COLUMNCOUNT]] multicolumn[[endif:COLUMNCOUNT]]">
 [[if:SLIDES]]
 <div class="reveal">
     <div class="slides">
