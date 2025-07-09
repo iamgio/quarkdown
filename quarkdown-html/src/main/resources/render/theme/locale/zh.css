@@ -16,15 +16,20 @@
   padding-left: 0;
 }
 
-.quarkdown li {
+.quarkdown li:not(nav li) {
   text-indent: var(--qd-paragraph-text-indent);
 }
 
-.quarkdown li > :first-child {
+.quarkdown li > :first-child,
+.quarkdown li.task-list-item > div:nth-child(2) > :first-child {
   text-indent: 0 !important;
 }
 
-.quarkdown li > :not(ul, ol):first-child {
+li.task-list-item > input[type="checkbox"]:first-child:has(+ div) {
+  margin-left: calc(var(--qd-paragraph-text-indent) + 8px);
+}
+
+.quarkdown li:not(nav li) > :not(ul, ol):first-child {
   display: inline;
 }
 
