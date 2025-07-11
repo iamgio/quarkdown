@@ -254,11 +254,8 @@ scoop install quarkdown
 curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.sh | sudo env "PATH=$PATH" bash
 ```
 
-Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.
-
-Requirements:
-- Java 17 or higher
-- Node.js and npm
+Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
+If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager unless `--no-pm` is used. 
 
 ### Manual installation
 
