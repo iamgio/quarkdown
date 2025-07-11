@@ -18,6 +18,7 @@ import com.quarkdown.core.lexer.tokens.EmphasisToken
 import com.quarkdown.core.lexer.tokens.EntityToken
 import com.quarkdown.core.lexer.tokens.EscapeToken
 import com.quarkdown.core.lexer.tokens.FencesCodeToken
+import com.quarkdown.core.lexer.tokens.FootnoteDefinitionToken
 import com.quarkdown.core.lexer.tokens.FunctionCallToken
 import com.quarkdown.core.lexer.tokens.HeadingToken
 import com.quarkdown.core.lexer.tokens.HorizontalRuleToken
@@ -141,6 +142,8 @@ class LexerTest {
         assertIs<HorizontalRuleToken>(tokens.next())
         assertIs<LinkDefinitionToken>(tokens.next())
         assertIs<HorizontalRuleToken>(tokens.next())
+        assertIs<FootnoteDefinitionToken>(tokens.next())
+        assertIs<FootnoteDefinitionToken>(tokens.next())
         assertIs<TableToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
         assertIs<ParagraphToken>(tokens.next())

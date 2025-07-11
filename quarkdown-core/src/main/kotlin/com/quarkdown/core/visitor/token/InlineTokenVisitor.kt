@@ -12,6 +12,7 @@ import com.quarkdown.core.lexer.tokens.InlineMathToken
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.LinkToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
+import com.quarkdown.core.lexer.tokens.ReferenceFootnoteToken
 import com.quarkdown.core.lexer.tokens.ReferenceImageToken
 import com.quarkdown.core.lexer.tokens.ReferenceLinkToken
 import com.quarkdown.core.lexer.tokens.StrikethroughToken
@@ -40,6 +41,8 @@ interface InlineTokenVisitor<T> {
     fun visit(token: LinkToken): T
 
     fun visit(token: ReferenceLinkToken): T
+
+    fun visit(token: ReferenceFootnoteToken): T
 
     fun visit(token: DiamondAutolinkToken): T
 
