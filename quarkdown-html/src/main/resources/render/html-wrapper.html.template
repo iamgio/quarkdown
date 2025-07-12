@@ -7,7 +7,7 @@
     <script src="script/script.js"></script>
     [[if:PAGED]]
     <script>window.PagedConfig = {auto: false};</script>
-    <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+    <script src="https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js"></script>
     <script src="script/paged.js"></script>
     [[endif:PAGED]]
     [[if:SLIDES]]
