@@ -60,6 +60,16 @@ class InjectionTest {
     }
 
     @Test
+    fun `css from file`() {
+        execute(".css {.read {css/style.css}}") {
+            assertEquals(
+                "<style data-hidden=\"\">body {\n    background-color: orange;\n}</style>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `css properties`() {
         execute(
             """
