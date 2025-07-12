@@ -8,7 +8,7 @@
 @import url('https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-mono.css');
 
 :root {
-  --qd-main-font: "Computer Modern Serif", sans-serif;
+  --qd-main-font: 'Computer Modern Serif', sans-serif;
   --qd-main-font-size: 1rem;
   --qd-heading-margin: 1.4em 0 1em 0;
   --qd-code-font: "Latin Modern Mono", monospace;
@@ -18,11 +18,14 @@
   --qd-paragraph-vertical-margin: 1.5em;
   --qd-line-height: 1.5;
   --qd-location-suffix: " ";
-  --qd-slides-horizontal-alignment: start;
   --qd-table-default-cell-alignment: start;
   --qd-quote-type-label-suffix: ". ";
   --qd-box-icon-baseline: -0.1em;
   --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
+}
+
+.quarkdown-slides {
+  --qd-horizontal-alignment-global: start;
 }
 
 @page {
@@ -52,16 +55,8 @@
 
   blockquote {
     border-left: 2px solid;
-    padding: 4px 1.5em;
+    padding: 14px 1.5em;
     font-style: italic;
-
-    :first-child {
-      margin-top: 10px;
-    }
-
-    :last-child {
-      margin-bottom: 10px;
-    }
 
     .attribution {
       text-align: end;

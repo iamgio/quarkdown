@@ -1,7 +1,9 @@
 .quarkdown {
-  // In a multi-column layout, these elements span across all columns.
-  .full-column-span, h1, h2, h3, nav {
-    column-span: all;
+  &.multicolumn {
+    // In a multi-column layout, these elements span across all columns.
+    .full-column-span, h1, h2, h3, nav {
+      column-span: all;
+    }
   }
 
   // Vertical block spacing.
@@ -9,6 +11,12 @@
   hr, .stack:not(.stack .stack) {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
+  }
+
+  .box {
+    $margin: calc(var(--qd-block-margin) * var(--qd-box-margin-multiplier));
+    margin-top: $margin;
+    margin-bottom: $margin;
   }
 
   // Resets the margin of the first element in a page

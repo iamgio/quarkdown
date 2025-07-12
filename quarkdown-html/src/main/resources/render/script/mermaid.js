@@ -35,11 +35,12 @@ async function loadFromCacheOrRender(mermaid, element) {
 
 // Generates a percentage value for the width of the SVG based on its aspect ratio.
 function calculateNewDiagramScale(svg) {
-    const baseScale = 25;
-    return Math.min(
-        100,
-        baseScale * (svg.clientWidth * svg.clientWidth) / (svg.clientHeight * svg.clientHeight),
-    );
+    const baseScale = 0.075;
+    const minScale = 20;
+    const maxScale = 100;
+
+    const scale = baseScale * Math.max(svg.clientWidth, svg.clientHeight) + minScale;
+    return Math.min(maxScale, scale);
 }
 
 // Only after rendering the diagrams, resize and center some misaligned elements.

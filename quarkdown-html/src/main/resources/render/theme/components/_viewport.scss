@@ -1,3 +1,5 @@
+@use "_font";
+
 @mixin content-area-border {
   border-width: var(--qd-page-content-border-width);
   border-color: var(--qd-page-content-border-color);
@@ -7,9 +9,8 @@
 
 body.quarkdown {
   color: var(--qd-main-color);
-  font-family: var(--qd-main-font), serif;
   font-size: var(--qd-main-font-size);
-  text-align: var(--qd-horizontal-alignment);
+  @include font.global-font-family();
 
   &:not(.quarkdown-paged), &.quarkdown-paged .pagedjs_page {
     background-color: var(--qd-background-color);
@@ -21,16 +22,11 @@ body.quarkdown {
   }
 
   // Slides viewport
-  &.quarkdown-slides {
-    --qd-horizontal-alignment: var(--qd-slides-horizontal-alignment);
+  &.quarkdown-slides .reveal .slides {
+    @include content-area-border;
 
-    .reveal .slides {
-      @include content-area-border;
-
-      > :is(section, .pdf-page) {
-        text-align: var(--qd-slides-horizontal-alignment);
-        column-count: var(--property-column-count);
-      }
+    > section, .pdf-page {
+      column-count: var(--property-column-count);
     }
   }
 
@@ -51,7 +47,6 @@ body.quarkdown {
     }
 
     .pagedjs_page {
-      text-align: var(--qd-paged-horizontal-alignment);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
     }
 

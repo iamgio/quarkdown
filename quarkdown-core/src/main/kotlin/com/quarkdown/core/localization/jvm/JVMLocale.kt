@@ -25,4 +25,7 @@ internal data class JVMLocale(
 
     override val tag: String
         get() = jvmLocale.toLanguageTag()
+
+    override val shortTag: String
+        get() = jvmLocale.language
 }

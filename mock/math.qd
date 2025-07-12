@@ -14,3 +14,10 @@ f(x) = \begin{cases}
   -x, & \text{if } x < 0
 \end{cases}
 $$$
+
+.texmacro {\binomdef}
+  \frac{#1!}{#2!(#1 - #2)!}
+
+> Tip: Quarkdown supports TeX macros.
+>
+> $ \binom{n}{k} = \binomdef{n}{k} $

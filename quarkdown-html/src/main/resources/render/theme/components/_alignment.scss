@@ -1,0 +1,23 @@
+.quarkdown {
+  text-align: var(--qd-horizontal-alignment-global);
+
+  // Local alignment (e.g. justification) is applied to specific elements instead of the whole document (#123).
+  p:not(.page-margin-content p, .mermaid p),
+  li:not(nav li),
+  caption, figcaption {
+    text-align: var(--qd-horizontal-alignment-local);
+    text-align-last: var(--qd-horizontal-alignment-global, start);
+  }
+}
+
+.quarkdown-slides {
+  --qd-horizontal-alignment-global: center;
+
+  .reveal .slides > :is(section, .pdf-page) {
+    text-align: var(--qd-horizontal-alignment-global);
+  }
+}
+
+.quarkdown-plain, .quarkdown-paged {
+  --qd-horizontal-alignment-local: justify;
+}

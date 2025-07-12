@@ -1,7 +1,5 @@
 .quarkdown.quarkdown {
   p {
-    line-height: var(--qd-line-height);
-    letter-spacing: var(--qd-letter-spacing);
     margin-top: 0;
     margin-bottom: 0;
     text-indent: var(--qd-paragraph-text-indent);
@@ -13,6 +11,11 @@
 
   &:not(.quarkdown-slides) p {
     hyphens: auto;
+  }
+
+  p, li {
+    line-height: var(--qd-line-height);
+    letter-spacing: var(--qd-letter-spacing);
   }
 }
 
@@ -29,7 +32,16 @@ p {
   }
 }
 
-// Paragraph indentation cancelling
+// Paragraphs that don't expect indentation.
+figure p,
+.stack > p,
+.container[style*="text-align"] > p,
+.container[style*="justify-items"] > p,
+.mermaid p {
+  text-indent: 0 !important;
+}
+
+// First paragraphs may not expect indentation, depending on the locale or theme.
 p:first-child,
 h1 + p,
 h2 + p,
@@ -41,11 +53,6 @@ hr + p,
 figure + p,
 table + p,
 details > summary + p,
-.float + p,
-figure p,
-.stack > p,
-.container[style*="text-align"] > p,
-.container[style*="justify-items"] > p,
-.mermaid p {
-  text-indent: 0 !important;
+.float + p {
+  text-indent: var(--qd-first-paragraph-text-indent, 0) !important;
 }

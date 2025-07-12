@@ -1,8 +1,8 @@
+@use "_font";
+
 .quarkdown .box {
   width: 100%;
   border-radius: var(--qd-box-border-radius);
-  margin-top: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
-  margin-bottom: calc(var(--qd-box-margin-multiplier) * var(--qd-block-margin));
   --box-background-color: transparent;
   --box-content-foreground-color: var(--qd-main-color);
   --box-header-foreground-color: var(--qd-main-color);
@@ -28,8 +28,8 @@
 
     > h4 {
       color: var(--box-header-foreground-color);
-      font-family: var(--qd-box-heading-font), serif;
       margin: 0;
+      @include font.global-font-family($kind: "box-heading");
     }
   }
 
@@ -87,7 +87,7 @@
       display: flex;
       flex-direction: row;
       align-items: center; // Align icons
-      justify-content: var(--qd-horizontal-alignment);
+      justify-content: var(--qd-horizontal-alignment-global);
 
       &::before {
         content: $icon;
