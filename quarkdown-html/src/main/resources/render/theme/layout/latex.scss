@@ -55,16 +55,8 @@
 
   blockquote {
     border-left: 2px solid;
-    padding: 4px 1.5em;
+    padding: 14px 1.5em;
     font-style: italic;
-
-    :first-child {
-      margin-top: 10px;
-    }
-
-    :last-child {
-      margin-bottom: 10px;
-    }
 
     .attribution {
       text-align: end;
