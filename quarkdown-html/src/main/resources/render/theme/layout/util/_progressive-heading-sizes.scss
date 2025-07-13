@@ -1,21 +1,31 @@
 @mixin progressive-heading-sizes($multiplier: 1) {
   h1 {
-    font-size: 2.5rem * $multiplier;
+    $scale: 2.5 * $multiplier;
+    --h-font-scale: #{$scale};
+    font-size: #{$scale}em;
   }
 
   h2 {
-    font-size: 1.7rem * $multiplier;
+    $scale: 1.7 * $multiplier;
+    --h-font-scale: #{$scale};
+    font-size: #{$scale}em;
   }
 
   h3 {
-    font-size: 1.4rem * $multiplier;
+    $scale: 1.4 * $multiplier;
+    --h-font-scale: #{$scale};
+    font-size: #{$scale}em;
   }
 
   h4 {
-    font-size: 1.2rem * $multiplier;
+    $scale: 1.2 * $multiplier;
+    --h-font-scale: #{$scale};
+    font-size: #{$scale}em;
   }
 
   h5, h6 {
-    font-size: 1rem * $multiplier;
+    $scale: 1 * $multiplier;
+    --h-font-scale: #{$scale};
+    font-size: #{$scale}em;
   }
 }

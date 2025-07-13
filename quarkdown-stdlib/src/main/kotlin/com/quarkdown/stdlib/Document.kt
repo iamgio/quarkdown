@@ -400,6 +400,7 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
+ * @param fontSize font size of the text on each page
  * @param borderTop border width of the top content area of each page
  * @param borderRight border width of the right content area of each page
  * @param borderBottom border width of the bottom content area of each page
@@ -418,6 +419,7 @@ fun pageFormat(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
     @LikelyNamed margin: Sizes? = null,
+    @Name("fontsize") fontSize: Size? = null,
     @Name("bordertop") borderTop: Size? = null,
     @Name("borderright") borderRight: Size? = null,
     @Name("borderbottom") borderBottom: Size? = null,
@@ -435,9 +437,10 @@ fun pageFormat(
         this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
 
-        this.margin = margin
-        this.columnCount = columns?.takeIf { it > 0 }
-        this.alignment = alignment
+        this.margin = margin ?: this.margin
+        this.fontSize = fontSize ?: this.fontSize
+        this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
+        this.alignment = alignment ?: this.alignment
 
         val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
         if (hasBorder) {
