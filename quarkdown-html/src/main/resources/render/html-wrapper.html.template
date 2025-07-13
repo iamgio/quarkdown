@@ -50,8 +50,11 @@
     [[endif:MATH]]
 
     <style>
+        :root {
+            [[if:FONTSIZE]]font-size: [[FONTSIZE]];[[endif:FONTSIZE]]
+        }
+
         body {
-            [[if:FONTSIZE]]--qd-main-font-size: [[FONTSIZE]];[[endif:FONTSIZE]]
             [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
             [[if:HALIGNMENT_LOCAL]]
             --qd-horizontal-alignment-local: [[HALIGNMENT_LOCAL]] !important;
