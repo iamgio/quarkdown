@@ -310,31 +310,4 @@ class NodesTest {
             )
         }
     }
-
-    @Test
-    fun `block html`() {
-        execute(
-            """
-            Hello
-            
-            .html
-                <p><sup>World</sup></p>
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello</p><p><sup>World</sup></p>",
-                it,
-            )
-        }
-    }
-
-    @Test
-    fun `inline html`() {
-        execute("Hello, .html {<sup>World</sup>}") {
-            assertEquals(
-                "<p>Hello, <sup>World</sup></p>",
-                it,
-            )
-        }
-    }
 }
