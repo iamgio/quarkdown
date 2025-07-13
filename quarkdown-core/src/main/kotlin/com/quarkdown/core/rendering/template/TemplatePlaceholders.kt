@@ -93,6 +93,11 @@ object TemplatePlaceholders {
     const val PAGE_CONTENT_BORDER_COLOR = "PAGEBORDERCOLOR"
 
     /**
+     * Font size of the text on each page.
+     */
+    const val FONT_SIZE = "FONTSIZE"
+
+    /**
      * Number of columns on each page.
      */
     const val COLUMN_COUNT = "COLUMNCOUNT"

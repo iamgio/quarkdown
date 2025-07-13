@@ -100,6 +100,10 @@ class HtmlPostRenderer(
                 pageFormat.margin?.asCSS,
             )
             optionalValue(
+                TemplatePlaceholders.FONT_SIZE,
+                pageFormat.fontSize?.asCSS,
+            )
+            optionalValue(
                 TemplatePlaceholders.PAGE_CONTENT_BORDER_WIDTH,
                 pageFormat.contentBorderWidth?.asCSS,
             )
