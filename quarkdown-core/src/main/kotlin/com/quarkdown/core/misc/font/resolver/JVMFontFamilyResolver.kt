@@ -19,7 +19,7 @@ internal object JVMFontFamilyResolver : FontFamilyResolver {
             isSystemFont(nameOrPath) -> FontFamily.System(nameOrPath)
             else -> {
                 val media = ResolvableMedia(nameOrPath, workingDirectory)
-                FontFamily.Media(media)
+                FontFamily.Media(media, nameOrPath)
             }
         }
 }

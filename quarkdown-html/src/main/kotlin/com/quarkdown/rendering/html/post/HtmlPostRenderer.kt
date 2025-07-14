@@ -124,6 +124,7 @@ class HtmlPostRenderer(
                 TemplatePlaceholders.LOCAL_HORIZONTAL_ALIGNMENT,
                 pageFormat.alignment?.takeIf { it.isLocal }?.asCSS,
             )
+            // Paragraph styling.
             optionalValue(
                 TemplatePlaceholders.PARAGRAPH_SPACING,
                 document.layout.paragraphStyle.spacing
@@ -146,6 +147,21 @@ class HtmlPostRenderer(
                     ?.toString()
                     ?.plus("em"),
             )
+            // Fonts.
+            optionalValue(
+                TemplatePlaceholders.MAIN_FONT_FAMILY,
+                pageFormat.fontFamily?.id,
+            )
+            // Imports fonts in CSS as @font-face or @import rules.
+            iterable(
+                TemplatePlaceholders.FONT_FACES,
+                CssFontFacesImporter
+                    .ofNullables(
+                        context.mediaStorage,
+                        pageFormat.fontFamily,
+                    ).toSnippets(),
+            )
+            // Misc.
             iterable(
                 TemplatePlaceholders.TEX_MACROS,
                 mapToJsObjectEntries(context.documentInfo.tex.macros),

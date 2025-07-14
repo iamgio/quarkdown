@@ -8,7 +8,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 
 /**
- *
+ * Tests for resolving, loading and applying fonts.
  */
 class FontTest {
     @Test
