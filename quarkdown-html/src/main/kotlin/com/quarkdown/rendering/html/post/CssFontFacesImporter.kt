@@ -43,22 +43,6 @@ class CssFontFacesImporter(
      * @return one CSS import snippet per [FontFamily] in the list.
      */
     fun toSnippets(): List<String> = families.map(::toSnippet)
-
-    companion object {
-        /**
-         * Creates a new [CssFontFacesImporter] from a list of [FontFamily].
-         * @param mediaStorage the media storage to resolve media paths against.
-         * @param families the list of [FontFamily] to generate CSS rules for. `null` values are ignored.
-         */
-        fun ofNullables(
-            mediaStorage: ReadOnlyMediaStorage,
-            vararg families: FontFamily?,
-        ): CssFontFacesImporter =
-            CssFontFacesImporter(
-                families.filterNotNull(),
-                mediaStorage,
-            )
-    }
 }
 
 private class CssFontFaceImporterMediaVisitor(

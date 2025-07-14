@@ -390,6 +390,15 @@ fun texMacro(
  * If both [format] and [width] or [height] are set, the latter override the former.
  * If both [format] and [width] or [height] are unset, the default value is used.
  *
+ * Font families, such as [font], [headingFont] and [codeFont], can be loaded from any of the following sources:
+ * - From file (e.g. `path/to/font.ttf`)
+ * - From URL (e.g. `https://example.com/font.ttf`)
+ * - From system fonts (e.g. `Arial`, `Times New Roman`)
+ * - From Google Fonts (e.g. `GoogleFonts:Roboto`).
+ *
+ * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
+ * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
+ *
  * If any of [borderTop], [borderRight], [borderBottom], [borderLeft] or [borderColor] is set,
  * the border will be applied around the content area of each page.
  * If only [borderColor] is set, the border will be applied with a default width to each side.
@@ -402,10 +411,9 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
- * @param font main font family on each page.
- *             It can be either the name of a system font, a path or URL to a font file, or a Google font (`GoogleFonts:Name`)
- * @param headingFont font family of headings on each page.
- *                    It can be either the name of a system font, a path or URL to a font file, or a Google font (`GoogleFonts:Name`)
+ * @param font main font family of content on each page
+ * @param headingFont font family of headings on each page
+ * @param codeFont font family of code blocks and code spans on each page
  * @param fontSize font size of the text on each page
  * @param borderTop border width of the top content area of each page
  * @param borderRight border width of the right content area of each page
@@ -427,6 +435,7 @@ fun pageFormat(
     @LikelyNamed margin: Sizes? = null,
     @LikelyNamed font: String? = null,
     @Name("headingfont") headingFont: String? = null,
+    @Name("codefont") codeFont: String? = null,
     @Name("fontsize") fontSize: Size? = null,
     @Name("bordertop") borderTop: Size? = null,
     @Name("borderright") borderRight: Size? = null,
@@ -453,6 +462,7 @@ fun pageFormat(
         fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
         this.mainFontFamily = fontFamily(font) ?: this.mainFontFamily
         this.headingFontFamily = fontFamily(headingFont) ?: this.headingFontFamily
+        this.codeFontFamily = fontFamily(codeFont) ?: this.codeFontFamily
 
         val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
         if (hasBorder) {

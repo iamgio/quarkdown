@@ -148,23 +148,18 @@ class HtmlPostRenderer(
                     ?.plus("em"),
             )
             // Fonts.
-            optionalValue(
-                TemplatePlaceholders.MAIN_FONT_FAMILY,
-                pageFormat.mainFontFamily?.id,
-            )
-            optionalValue(
-                TemplatePlaceholders.HEADING_FONT_FAMILY,
-                pageFormat.headingFontFamily?.id,
-            )
-            // Imports fonts in CSS as @font-face or @import rules.
+            val fontFamilies =
+                mapOf(
+                    TemplatePlaceholders.MAIN_FONT_FAMILY to pageFormat.mainFontFamily,
+                    TemplatePlaceholders.HEADING_FONT_FAMILY to pageFormat.headingFontFamily,
+                    TemplatePlaceholders.CODE_FONT_FAMILY to pageFormat.codeFontFamily,
+                )
+            fontFamilies.forEach { (placeholder, fontFamily) -> optionalValue(placeholder, fontFamily?.id) }
+            // Imports fonts as @font-face or @import rules.
             iterable(
                 TemplatePlaceholders.FONT_FACES,
-                CssFontFacesImporter
-                    .ofNullables(
-                        context.mediaStorage,
-                        pageFormat.mainFontFamily,
-                        pageFormat.headingFontFamily,
-                    ).toSnippets(),
+                CssFontFacesImporter(fontFamilies.values.filterNotNull(), context.mediaStorage)
+                    .toSnippets(),
             )
             // Misc.
             iterable(
