@@ -8,6 +8,8 @@ import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.media.ResolvableMedia
+import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -15,6 +17,7 @@ import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
+import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -156,11 +159,115 @@ class HtmlPostRendererTest {
         )
     }
 
+    private val fontFamilyProcessor =
+        TemplateProcessor(
+            """
+            [[for:FONTFACE]]
+            [[FONTFACE]]
+            [[endfor:FONTFACE]]
+            
+            body {
+                [[if:MAINFONTFAMILY]]--qd-main-font: '[[MAINFONTFAMILY]]';[[endif:MAINFONTFAMILY]]
+            }
+            """.trimIndent(),
+        )
+
+    @Test
+    fun `system font`() {
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.System("Arial")
+        assertEquals(
+            """
+            @font-face { font-family: '63529059'; src: local('Arial'); }
+            
+            body {
+                --qd-main-font: '63529059';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
+    fun `local font, no media storage`() {
+        val workingDirectory = File("src/test/resources")
+        val path = "media/NotoSans-Regular.ttf"
+        val media = ResolvableMedia(path, workingDirectory)
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, path)
+        assertEquals(
+            """
+            @font-face { font-family: '${path.hashCode()}'; src: url('${File(workingDirectory, path).absolutePath}'); }
+            
+            body {
+                --qd-main-font: '${path.hashCode()}';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
+    fun `local font, with media storage`() {
+        val workingDirectory = File("src/test/resources")
+        val path = "media/NotoSans-Regular.ttf"
+        val file = File(workingDirectory, path)
+        val media = ResolvableMedia(path, workingDirectory)
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, path)
+        context.options.enableLocalMediaStorage = true
+        context.mediaStorage.register(path, media)
+        assertEquals(
+            """
+            @font-face { font-family: '${path.hashCode()}'; src: url('media/NotoSans-Regular@${file.hashCode()}.ttf'); }
+            
+            body {
+                --qd-main-font: '${path.hashCode()}';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
+    fun `remote font, no media storage`() {
+        val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
+        val media = ResolvableMedia(url)
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, url)
+        assertEquals(
+            """
+            @font-face { font-family: '${url.hashCode()}'; src: url('$url'); }
+            
+            body {
+                --qd-main-font: '${url.hashCode()}';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
+    fun `remote font, with media storage`() {
+        val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
+        val media = ResolvableMedia(url)
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, url)
+        context.options.enableRemoteMediaStorage = true
+        context.mediaStorage.register(url, media)
+        assertEquals(
+            """
+            @font-face { font-family: '${url.hashCode()}'; src: url('media/https-fonts.gstatic.com-s-notosans-v39-o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff'); }
+            
+            body {
+                --qd-main-font: '${url.hashCode()}';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
     @Test
     fun `semi-real`() {
         context.documentInfo.name = "Quarkdown"
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.System("Arial")
         context.attributes.markMathPresence()
 
         val postRenderer =
@@ -182,6 +289,10 @@ class HtmlPostRendererTest {
                         [[endif:MATH]]
                         <title>[[TITLE]]</title>
                         <style>
+                        [[for:FONTFACE]]
+                        [[FONTFACE]]
+                        [[endfor:FONTFACE]]
+                        
                         [[if:MATH]]
                         mjx-container {
                             margin: 0 0.3em;
@@ -216,6 +327,8 @@ class HtmlPostRendererTest {
                 <script src="...js"></script>
                 <title>Quarkdown</title>
                 <style>
+                @font-face { font-family: '63529059'; src: local('Arial'); }
+                
                 mjx-container {
                     margin: 0 0.3em;
                 }
@@ -237,17 +350,18 @@ class HtmlPostRendererTest {
 
     @Test
     fun real() {
-        context.documentInfo.name = "Quarkdown"
-        context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
-        context.documentInfo.type = DocumentType.SLIDES
-        context.attributes.markMathPresence()
         with(context.documentInfo) {
+            name = "Quarkdown"
+            locale = LocaleLoader.SYSTEM.fromName("english")
+            type = DocumentType.SLIDES
+            layout.pageFormat.fontFamily = FontFamily.System("Arial")
             layout.pageFormat.pageWidth = 8.5.inch
             layout.pageFormat.pageHeight = 11.0.inch
             layout.pageFormat.margin = Sizes(1.0.inch)
             tex.macros["\\R"] = "\\mathbb{R}"
             tex.macros["\\Z"] = "\\mathbb{Z}"
         }
+        context.attributes.markMathPresence()
 
         val postRenderer =
             HtmlPostRenderer(context) {

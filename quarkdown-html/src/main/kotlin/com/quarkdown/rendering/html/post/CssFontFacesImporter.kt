@@ -7,6 +7,11 @@ import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.core.misc.font.FontFamily
 
+private fun fontFaceSnippet(
+    name: String,
+    src: String,
+): String = "@font-face { font-family: '$name'; src: $src; }"
+
 /**
  * Generator of `@font-face` and `@import` CSS rules for a list of [FontFamily],
  * to be used in HTML post-rendering. It supports system, local, and remote media sources.
@@ -20,7 +25,10 @@ class CssFontFacesImporter(
 ) {
     private fun toSnippet(family: FontFamily): String =
         when (family) {
-            is FontFamily.System -> "@font-face { font-family: '${family.id}'; src: local('${family.name}'); }"
+            // local(name) for system fonts.
+            is FontFamily.System -> fontFaceSnippet(family.id.toString(), "local('${family.name}')")
+            // url(path) for local or remote media.
+            // If the media is stored, it will use the stored media path.
             is FontFamily.Media -> {
                 val storedMedia: StoredMedia? = mediaStorage.resolve(family.path)
                 family.media.accept(CssFontFaceImporterMediaVisitor(family, storedMedia))
@@ -54,7 +62,14 @@ private class CssFontFaceImporterMediaVisitor(
     private val storedMedia: StoredMedia?,
 ) : MediaVisitor<String> {
     override fun visit(media: LocalMedia) =
-        "@font-face { font-family: '${family.id}'; src: url('${storedMedia?.path ?: media.file.absolutePath}'); }"
+        fontFaceSnippet(
+            family.id.toString(),
+            "url('${storedMedia?.path ?: media.file.absolutePath}')",
+        )
 
-    override fun visit(media: RemoteMedia) = "@import url('${storedMedia?.path ?: media.url}');"
+    override fun visit(media: RemoteMedia) =
+        fontFaceSnippet(
+            family.id.toString(),
+            "url('${storedMedia?.path ?: media.url}')",
+        )
 }
