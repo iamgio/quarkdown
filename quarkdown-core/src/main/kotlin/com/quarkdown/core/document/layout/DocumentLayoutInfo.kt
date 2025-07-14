@@ -1,6 +1,7 @@
 package com.quarkdown.core.document.layout
 
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
+import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 
@@ -13,6 +14,7 @@ import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
  */
 data class DocumentLayoutInfo(
     val pageFormat: PageFormatInfo = PageFormatInfo(),
+    val font: FontInfo = FontInfo(),
     val paragraphStyle: ParagraphStyleInfo = ParagraphStyleInfo(),
     val captionPosition: CaptionPositionInfo = CaptionPositionInfo(),
 )

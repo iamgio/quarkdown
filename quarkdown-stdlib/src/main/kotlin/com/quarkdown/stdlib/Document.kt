@@ -57,6 +57,7 @@ val Document: Module =
         ::theme,
         ::numbering,
         ::disableNumbering,
+        ::font,
         ::paragraphStyle,
         ::captionPosition,
         ::texMacro,
@@ -317,6 +318,42 @@ fun disableNumbering(
 ) = numbering(context, emptyMap())
 
 /**
+ * Updates the global font configuration of the document.
+ *
+ * Font families can be loaded from any of the following sources:
+ * - From file (e.g. `path/to/font.ttf`)
+ * - From URL (e.g. `https://example.com/font.ttf`)
+ * - From system fonts (e.g. `Arial`, `Times New Roman`)
+ * - From Google Fonts (e.g. `GoogleFonts:Roboto`).
+ *
+ * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
+ * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
+ *
+ * @param main main font family of content on each page
+ * @param heading font family of headings on each page
+ * @param code font family of code blocks and code spans on each page
+ * @param size font size of the text on each page
+ */
+fun font(
+    @Injected context: MutableContext,
+    main: String? = null,
+    @LikelyNamed heading: String? = null,
+    @LikelyNamed code: String? = null,
+    @LikelyNamed size: Size? = null,
+): VoidValue {
+    fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
+
+    with(context.documentInfo.layout.font) {
+        this.mainFamily = fontFamily(main) ?: this.mainFamily
+        this.headingFamily = fontFamily(heading) ?: this.headingFamily
+        this.codeFamily = fontFamily(code) ?: this.codeFamily
+        this.size = size ?: this.size
+    }
+
+    return VoidValue
+}
+
+/**
  * Sets the global style of paragraphs in the document.
  * If a value is unset, the default value supplied by the underlying renderer is used.
  *
@@ -390,15 +427,6 @@ fun texMacro(
  * If both [format] and [width] or [height] are set, the latter override the former.
  * If both [format] and [width] or [height] are unset, the default value is used.
  *
- * Font families, such as [font], [headingFont] and [codeFont], can be loaded from any of the following sources:
- * - From file (e.g. `path/to/font.ttf`)
- * - From URL (e.g. `https://example.com/font.ttf`)
- * - From system fonts (e.g. `Arial`, `Times New Roman`)
- * - From Google Fonts (e.g. `GoogleFonts:Roboto`).
- *
- * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
- * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
- *
  * If any of [borderTop], [borderRight], [borderBottom], [borderLeft] or [borderColor] is set,
  * the border will be applied around the content area of each page.
  * If only [borderColor] is set, the border will be applied with a default width to each side.
@@ -411,10 +439,6 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
- * @param font main font family of content on each page
- * @param headingFont font family of headings on each page
- * @param codeFont font family of code blocks and code spans on each page
- * @param fontSize font size of the text on each page
  * @param borderTop border width of the top content area of each page
  * @param borderRight border width of the right content area of each page
  * @param borderBottom border width of the bottom content area of each page
@@ -455,14 +479,8 @@ fun pageFormat(
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
 
         this.margin = margin ?: this.margin
-        this.fontSize = fontSize ?: this.fontSize
         this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
         this.alignment = alignment ?: this.alignment
-
-        fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
-        this.mainFontFamily = fontFamily(font) ?: this.mainFontFamily
-        this.headingFontFamily = fontFamily(headingFont) ?: this.headingFontFamily
-        this.codeFontFamily = fontFamily(codeFont) ?: this.codeFontFamily
 
         val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
         if (hasBorder) {

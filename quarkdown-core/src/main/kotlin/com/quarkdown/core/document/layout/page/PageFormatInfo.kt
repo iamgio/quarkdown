@@ -4,7 +4,6 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.Color
-import com.quarkdown.core.misc.font.FontFamily
 
 /**
  * Mutable information about the format of all pages of a document.
@@ -12,10 +11,6 @@ import com.quarkdown.core.misc.font.FontFamily
  * @param pageWidth width of each page
  * @param pageHeight height of each page
  * @param margin blank space around the content of each page
- * @param mainFontFamily generic font family of content on each page
- * @param headingFontFamily font family of headings on each page
- * @param codeFontFamily font family of code blocks and code spans on each page
- * @param fontSize font size of the text on each page
  * @param contentBorderWidth width of the border around the content area of each page
  * @param contentBorderColor color of the border around the content area of each page
  * @param columnCount number of columns on each page. If set, the layout becomes multi-column
@@ -25,10 +20,6 @@ data class PageFormatInfo(
     var pageWidth: Size? = null,
     var pageHeight: Size? = null,
     var margin: Sizes? = null,
-    var mainFontFamily: FontFamily? = null,
-    var headingFontFamily: FontFamily? = null,
-    var codeFontFamily: FontFamily? = null,
-    var fontSize: Size? = null,
     var contentBorderWidth: Sizes? = null,
     var contentBorderColor: Color? = null,
     var columnCount: Int? = null,

@@ -100,10 +100,6 @@ class HtmlPostRenderer(
                 pageFormat.margin?.asCSS,
             )
             optionalValue(
-                TemplatePlaceholders.FONT_SIZE,
-                pageFormat.fontSize?.asCSS,
-            )
-            optionalValue(
                 TemplatePlaceholders.PAGE_CONTENT_BORDER_WIDTH,
                 pageFormat.contentBorderWidth?.asCSS,
             )
@@ -148,14 +144,19 @@ class HtmlPostRenderer(
                     ?.plus("em"),
             )
             // Fonts.
+            val fontConfiguration = document.layout.font
+            optionalValue(
+                TemplatePlaceholders.FONT_SIZE,
+                fontConfiguration.size?.asCSS,
+            )
             val fontFamilies =
                 mapOf(
-                    TemplatePlaceholders.MAIN_FONT_FAMILY to pageFormat.mainFontFamily,
-                    TemplatePlaceholders.HEADING_FONT_FAMILY to pageFormat.headingFontFamily,
-                    TemplatePlaceholders.CODE_FONT_FAMILY to pageFormat.codeFontFamily,
+                    TemplatePlaceholders.MAIN_FONT_FAMILY to fontConfiguration.mainFamily,
+                    TemplatePlaceholders.HEADING_FONT_FAMILY to fontConfiguration.headingFamily,
+                    TemplatePlaceholders.CODE_FONT_FAMILY to fontConfiguration.codeFamily,
                 )
             fontFamilies.forEach { (placeholder, fontFamily) -> optionalValue(placeholder, fontFamily?.id) }
-            // Imports fonts as @font-face or @import rules.
+            // Imports fonts via @font-face or @import rules.
             iterable(
                 TemplatePlaceholders.FONT_FACES,
                 CssFontFacesImporter(fontFamilies.values.filterNotNull(), context.mediaStorage)
