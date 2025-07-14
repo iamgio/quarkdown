@@ -15,7 +15,7 @@ class FontTest {
     fun `local font`() {
         val path = "font/NotoSans-Regular.ttf"
         execute(".pageformat font:{$path}") {
-            val fontFamily = documentInfo.layout.pageFormat.fontFamily
+            val fontFamily = documentInfo.layout.pageFormat.mainFontFamily
             val media = mediaStorage.resolve(path)
             assertIs<FontFamily.Media>(fontFamily)
             assertNotNull(media)

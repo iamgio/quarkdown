@@ -12,7 +12,8 @@ import com.quarkdown.core.misc.font.FontFamily
  * @param pageWidth width of each page
  * @param pageHeight height of each page
  * @param margin blank space around the content of each page
- * @param fontFamily font family of the text on each page
+ * @param mainFontFamily font family of the text on each page
+ * @param headingFontFamily font family of the headings on each page
  * @param fontSize font size of the text on each page
  * @param contentBorderWidth width of the border around the content area of each page
  * @param contentBorderColor color of the border around the content area of each page
@@ -23,7 +24,8 @@ data class PageFormatInfo(
     var pageWidth: Size? = null,
     var pageHeight: Size? = null,
     var margin: Sizes? = null,
-    var fontFamily: FontFamily? = null,
+    var mainFontFamily: FontFamily? = null,
+    var headingFontFamily: FontFamily? = null,
     var fontSize: Size? = null,
     var contentBorderWidth: Sizes? = null,
     var contentBorderColor: Color? = null,

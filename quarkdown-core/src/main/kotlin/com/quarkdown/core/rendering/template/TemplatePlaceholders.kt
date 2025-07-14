@@ -147,6 +147,11 @@ object TemplatePlaceholders {
     const val MAIN_FONT_FAMILY = "MAINFONTFAMILY"
 
     /**
+     * Font family to use in the document to use for headings.
+     */
+    const val HEADING_FONT_FAMILY = "HEADINGFONTFAMILY"
+
+    /**
      * Custom user-defined TeX macros.
      */
     const val TEX_MACROS = "TEXMACRO"

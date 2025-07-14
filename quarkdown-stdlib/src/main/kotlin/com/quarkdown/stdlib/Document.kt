@@ -38,6 +38,7 @@ import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.misc.color.Color
+import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.stdlib.internal.loadFontFamily
 
@@ -401,7 +402,10 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
- * @param font font family of the text on each page. It can be either the name of a system font, a path or URL to a font file.
+ * @param font main font family on each page.
+ *             It can be either the name of a system font, a path or URL to a font file, or a Google font (`GoogleFonts:Name`)
+ * @param headingFont font family of headings on each page.
+ *                    It can be either the name of a system font, a path or URL to a font file, or a Google font (`GoogleFonts:Name`)
  * @param fontSize font size of the text on each page
  * @param borderTop border width of the top content area of each page
  * @param borderRight border width of the right content area of each page
@@ -422,6 +426,7 @@ fun pageFormat(
     @LikelyNamed height: Size? = null,
     @LikelyNamed margin: Sizes? = null,
     @LikelyNamed font: String? = null,
+    @Name("headingfont") headingFont: String? = null,
     @Name("fontsize") fontSize: Size? = null,
     @Name("bordertop") borderTop: Size? = null,
     @Name("borderright") borderRight: Size? = null,
@@ -441,10 +446,13 @@ fun pageFormat(
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
 
         this.margin = margin ?: this.margin
-        this.fontFamily = font?.let { loadFontFamily(it, context) } ?: this.fontFamily
         this.fontSize = fontSize ?: this.fontSize
         this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
         this.alignment = alignment ?: this.alignment
+
+        fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
+        this.mainFontFamily = fontFamily(font) ?: this.mainFontFamily
+        this.headingFontFamily = fontFamily(headingFont) ?: this.headingFontFamily
 
         val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
         if (hasBorder) {

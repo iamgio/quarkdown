@@ -168,13 +168,14 @@ class HtmlPostRendererTest {
             
             body {
                 [[if:MAINFONTFAMILY]]--qd-main-font: '[[MAINFONTFAMILY]]';[[endif:MAINFONTFAMILY]]
+                [[if:HEADINGFONTFAMILY]]--qd-heading-font: '[[HEADINGFONTFAMILY]]';[[endif:HEADINGFONTFAMILY]]
             }
             """.trimIndent(),
         )
 
     @Test
     fun `system font`() {
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.System("Arial")
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.System("Arial")
         assertEquals(
             """
             @font-face { font-family: '63529059'; src: local('Arial'); }
@@ -192,7 +193,7 @@ class HtmlPostRendererTest {
         val workingDirectory = File("src/test/resources")
         val path = "media/NotoSans-Regular.ttf"
         val media = ResolvableMedia(path, workingDirectory)
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, path)
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.Media(media, path)
         assertEquals(
             """
             @font-face { font-family: '${path.hashCode()}'; src: url('${File(workingDirectory, path).absolutePath}'); }
@@ -211,7 +212,7 @@ class HtmlPostRendererTest {
         val path = "media/NotoSans-Regular.ttf"
         val file = File(workingDirectory, path)
         val media = ResolvableMedia(path, workingDirectory)
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, path)
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.Media(media, path)
         context.options.enableLocalMediaStorage = true
         context.mediaStorage.register(path, media)
         assertEquals(
@@ -230,7 +231,7 @@ class HtmlPostRendererTest {
     fun `remote font, no media storage`() {
         val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, url)
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.Media(media, url)
         assertEquals(
             """
             @font-face { font-family: '${url.hashCode()}'; src: url('$url'); }
@@ -247,7 +248,7 @@ class HtmlPostRendererTest {
     fun `remote font, with media storage`() {
         val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.Media(media, url)
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.Media(media, url)
         context.options.enableRemoteMediaStorage = true
         context.mediaStorage.register(url, media)
         assertEquals(
@@ -265,7 +266,7 @@ class HtmlPostRendererTest {
     @Test
     fun `google font`() {
         val name = "Karla"
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.GoogleFont(name)
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.GoogleFont(name)
         assertEquals(
             """
             @import url('https://fonts.googleapis.com/css2?family=$name&display=swap');
@@ -279,11 +280,29 @@ class HtmlPostRendererTest {
     }
 
     @Test
+    fun `main and heading fonts`() {
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.System("Arial")
+        context.documentInfo.layout.pageFormat.headingFontFamily = FontFamily.GoogleFont("Roboto")
+        assertEquals(
+            """
+            @font-face { font-family: '63529059'; src: local('Arial'); }
+            @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+            
+            body {
+                --qd-main-font: '63529059';
+                --qd-heading-font: 'Roboto';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
     fun `semi-real`() {
         context.documentInfo.name = "Quarkdown"
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
         context.documentInfo.type = DocumentType.SLIDES
-        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.System("Arial")
+        context.documentInfo.layout.pageFormat.mainFontFamily = FontFamily.System("Arial")
         context.attributes.markMathPresence()
 
         val postRenderer =
@@ -370,7 +389,7 @@ class HtmlPostRendererTest {
             name = "Quarkdown"
             locale = LocaleLoader.SYSTEM.fromName("english")
             type = DocumentType.SLIDES
-            layout.pageFormat.fontFamily = FontFamily.System("Arial")
+            layout.pageFormat.mainFontFamily = FontFamily.System("Arial")
             layout.pageFormat.pageWidth = 8.5.inch
             layout.pageFormat.pageHeight = 11.0.inch
             layout.pageFormat.margin = Sizes(1.0.inch)

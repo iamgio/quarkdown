@@ -150,7 +150,11 @@ class HtmlPostRenderer(
             // Fonts.
             optionalValue(
                 TemplatePlaceholders.MAIN_FONT_FAMILY,
-                pageFormat.fontFamily?.id,
+                pageFormat.mainFontFamily?.id,
+            )
+            optionalValue(
+                TemplatePlaceholders.HEADING_FONT_FAMILY,
+                pageFormat.headingFontFamily?.id,
             )
             // Imports fonts in CSS as @font-face or @import rules.
             iterable(
@@ -158,7 +162,8 @@ class HtmlPostRenderer(
                 CssFontFacesImporter
                     .ofNullables(
                         context.mediaStorage,
-                        pageFormat.fontFamily,
+                        pageFormat.mainFontFamily,
+                        pageFormat.headingFontFamily,
                     ).toSnippets(),
             )
             // Misc.
