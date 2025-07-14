@@ -20,7 +20,7 @@ class CssFontFacesImporter(
 ) {
     private fun toSnippet(family: FontFamily): String =
         when (family) {
-            is FontFamily.System -> "@font-face { font-family: '${family.path}'; src: local('${family.name}'); }"
+            is FontFamily.System -> "@font-face { font-family: '${family.id}'; src: local('${family.name}'); }"
             is FontFamily.Media -> {
                 val storedMedia: StoredMedia? = mediaStorage.resolve(family.path)
                 family.media.accept(CssFontFaceImporterMediaVisitor(family, storedMedia))
@@ -56,5 +56,5 @@ private class CssFontFaceImporterMediaVisitor(
     override fun visit(media: LocalMedia) =
         "@font-face { font-family: '${family.id}'; src: url('${storedMedia?.path ?: media.file.absolutePath}'); }"
 
-    override fun visit(media: RemoteMedia) = "@import url('${storedMedia?.path ?: media.url}');" // TODO use fixed id
+    override fun visit(media: RemoteMedia) = "@import url('${storedMedia?.path ?: media.url}');"
 }
