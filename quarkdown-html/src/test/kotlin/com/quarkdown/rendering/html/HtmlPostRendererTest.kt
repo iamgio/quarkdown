@@ -263,6 +263,22 @@ class HtmlPostRendererTest {
     }
 
     @Test
+    fun `google font`() {
+        val name = "Karla"
+        context.documentInfo.layout.pageFormat.fontFamily = FontFamily.GoogleFont(name)
+        assertEquals(
+            """
+            @import url('https://fonts.googleapis.com/css2?family=$name&display=swap');
+            
+            body {
+                --qd-main-font: '$name';
+            }
+            """.trimIndent(),
+            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+        )
+    }
+
+    @Test
     fun `semi-real`() {
         context.documentInfo.name = "Quarkdown"
         context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")

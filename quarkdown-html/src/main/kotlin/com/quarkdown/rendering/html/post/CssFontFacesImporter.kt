@@ -26,12 +26,16 @@ class CssFontFacesImporter(
     private fun toSnippet(family: FontFamily): String =
         when (family) {
             // local(name) for system fonts.
-            is FontFamily.System -> fontFaceSnippet(family.id.toString(), "local('${family.name}')")
+            is FontFamily.System -> fontFaceSnippet(family.id, "local('${family.name}')")
             // url(path) for local or remote media.
             // If the media is stored, it will use the stored media path.
             is FontFamily.Media -> {
                 val storedMedia: StoredMedia? = mediaStorage.resolve(family.path)
                 family.media.accept(CssFontFaceImporterMediaVisitor(family, storedMedia))
+            }
+            // @import for Google Fonts.
+            is FontFamily.GoogleFont -> {
+                "@import url('${family.path}&display=swap');"
             }
         }
 
@@ -63,13 +67,13 @@ private class CssFontFaceImporterMediaVisitor(
 ) : MediaVisitor<String> {
     override fun visit(media: LocalMedia) =
         fontFaceSnippet(
-            family.id.toString(),
+            family.id,
             "url('${storedMedia?.path ?: media.file.absolutePath}')",
         )
 
     override fun visit(media: RemoteMedia) =
         fontFaceSnippet(
-            family.id.toString(),
+            family.id,
             "url('${storedMedia?.path ?: media.url}')",
         )
 }
