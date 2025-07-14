@@ -333,6 +333,7 @@ fun disableNumbering(
  * @param heading font family of headings on each page
  * @param code font family of code blocks and code spans on each page
  * @param size font size of the text on each page
+ * @wiki Font configuration
  */
 fun font(
     @Injected context: MutableContext,
