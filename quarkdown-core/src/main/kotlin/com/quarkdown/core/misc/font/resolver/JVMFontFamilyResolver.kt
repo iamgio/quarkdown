@@ -18,12 +18,12 @@ internal object JVMFontFamilyResolver : FontFamilyResolver {
         workingDirectory: File?,
     ): FontFamily? =
         when {
-            isSystemFont(nameOrPath) -> FontFamily.System(nameOrPath)
-
             nameOrPath.startsWith(GOOGLE_FONTS_PREFIX) -> {
                 val fontName = nameOrPath.removePrefix(GOOGLE_FONTS_PREFIX)
                 FontFamily.GoogleFont(fontName)
             }
+
+            isSystemFont(nameOrPath) -> FontFamily.System(nameOrPath)
 
             else -> {
                 val media = ResolvableMedia(nameOrPath, workingDirectory)
