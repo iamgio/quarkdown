@@ -797,6 +797,22 @@ class HtmlNodeRendererTest {
                 children = children,
             ).render(),
         )
+
+        assertEquals(
+            out.next(),
+            Container(
+                textTransform =
+                    TextTransformData(
+                        size = TextTransformData.Size.LARGE,
+                        style = TextTransformData.Style.ITALIC,
+                        decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                        weight = TextTransformData.Weight.BOLD,
+                        case = TextTransformData.Case.UPPERCASE,
+                        variant = TextTransformData.Variant.SMALL_CAPS,
+                    ),
+                children = children,
+            ).render(),
+        )
     }
 
     @Test

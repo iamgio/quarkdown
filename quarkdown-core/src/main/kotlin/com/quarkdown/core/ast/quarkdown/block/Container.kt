@@ -2,6 +2,7 @@ package com.quarkdown.core.ast.quarkdown.block
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.Color
@@ -24,6 +25,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
  * @param textAlignment alignment of the text
+ * @param fontSize relative font size of the text
  * @param float floating position of the container within the subsequent content
  */
 class Container(
@@ -40,6 +42,7 @@ class Container(
     val cornerRadius: Sizes? = null,
     val alignment: Alignment? = null,
     val textAlignment: TextAlignment? = null,
+    val textTransform: TextTransformData? = null,
     val float: FloatAlignment? = null,
     override val children: List<Node>,
 ) : NestableNode {

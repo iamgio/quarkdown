@@ -14,6 +14,7 @@ import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrDefault
@@ -77,6 +78,12 @@ val Layout: Module =
  * @param cornerRadius corner (and border) radius. None if unset
  * @param alignment alignment of the content. Default if unset
  * @param textAlignment alignment of the text. [alignment] if unset
+ * @param fontSize relative font size of the text. Normal if unset
+ * @param fontWeight font weight of the text. Normal if unset
+ * @param fontStyle font style of the text. Normal if unset
+ * @param fontVariant font variant of the text. Normal if unset
+ * @param textDecoration text decoration of the text. None if unset
+ * @param textCase text case of the text. Normal if unset
  * @param float floating position of the container within the parent. Not floating if unset
  * @param body content to group
  * @return the new [Container] node
@@ -96,6 +103,12 @@ fun container(
     @Name("radius") cornerRadius: Sizes? = null,
     @LikelyNamed alignment: Container.Alignment? = null,
     @Name("textalignment") textAlignment: Container.TextAlignment? = alignment?.let(Container.TextAlignment::fromAlignment),
+    @Name("fontsize") fontSize: TextTransformData.Size? = null,
+    @Name("fontweight") fontWeight: TextTransformData.Weight? = null,
+    @Name("fontstyle") fontStyle: TextTransformData.Style? = null,
+    @Name("fontvariant") fontVariant: TextTransformData.Variant? = null,
+    @Name("textdecoration") textDecoration: TextTransformData.Decoration? = null,
+    @Name("textcase") textCase: TextTransformData.Case? = null,
     @LikelyNamed float: Container.FloatAlignment? = null,
     @LikelyBody body: MarkdownContent? = null,
 ) = Container(
@@ -112,6 +125,7 @@ fun container(
     cornerRadius,
     alignment,
     textAlignment,
+    TextTransformData(fontSize, fontWeight, fontStyle, textDecoration, textCase, fontVariant),
     float,
     body?.children ?: emptyList(),
 ).wrappedAsValue()

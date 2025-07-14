@@ -37,6 +37,7 @@ import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
@@ -54,6 +55,7 @@ import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
+import com.quarkdown.rendering.html.css.CssBuilder
 import com.quarkdown.rendering.html.css.asCSS
 
 /**
@@ -179,6 +181,7 @@ class QuarkdownHtmlNodeRenderer(
                 "container",
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
+                node.textTransform?.size?.asCSS, // e.g. 'size-small' class
             )
 
             +node.children
@@ -207,6 +210,7 @@ class QuarkdownHtmlNodeRenderer(
                 "justify-items" value node.alignment
                 "text-align" value node.textAlignment
                 "float" value node.float
+                node.textTransform?.let { textTransform(it) }
             }
         }
 
@@ -377,20 +381,23 @@ class QuarkdownHtmlNodeRenderer(
         return Text(label).accept(this)
     }
 
+    /**
+     * Applies the text transformation of [data] into [this] CSS builder.
+     */
+    private fun CssBuilder.textTransform(data: TextTransformData) {
+        "font-weight" value data.weight
+        "font-style" value data.style
+        "font-variant" value data.variant
+        "text-decoration" value data.decoration
+        "text-transform" value data.case
+        "color" value data.color
+    }
+
     override fun visit(node: TextTransform) =
         buildTag("span") {
-            +node.children
-
             className(node.data.size?.asCSS) // e.g. 'size-small' class
-
-            style {
-                "font-weight" value node.data.weight
-                "font-style" value node.data.style
-                "font-variant" value node.data.variant
-                "text-decoration" value node.data.decoration
-                "text-transform" value node.data.case
-                "color" value node.data.color
-            }
+            +node.children
+            style { textTransform(node.data) }
         }
 
     override fun visit(node: InlineCollapse) =
@@ -400,7 +407,7 @@ class QuarkdownHtmlNodeRenderer(
             attribute("data-full-text", buildMultiTag { +node.text })
             attribute("data-collapsed-text", buildMultiTag { +node.placeholder })
             attribute("data-collapsed", !node.isOpen)
-            +(if (node.isOpen) node.text else node.placeholder)
+            +if (node.isOpen) node.text else node.placeholder
         }
 
     // Invisible nodes
