@@ -29,6 +29,12 @@ val Data: Module =
     )
 
 /**
+ * @return the working directory of [this] context, if any
+ */
+internal val Context.workingDirectory: File?
+    get() = attachedPipeline?.options?.workingDirectory
+
+/**
  * @param path path of the file, relative or absolute (with extension)
  * @param requireExistance whether the corresponding file must exist
  * @return a [File] instance of the file located in [path].
@@ -40,8 +46,7 @@ internal fun file(
     path: String,
     requireExistance: Boolean = true,
 ): File {
-    val workingDirectory = context.attachedPipeline?.options?.workingDirectory
-    val file = IOUtils.resolvePath(path, workingDirectory)
+    val file = IOUtils.resolvePath(path, context.workingDirectory)
 
     if (requireExistance && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")

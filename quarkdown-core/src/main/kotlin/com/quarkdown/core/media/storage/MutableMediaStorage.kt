@@ -75,14 +75,26 @@ class MutableMediaStorage(
     }
 
     /**
+     * Registers a media by its path.
+     * @param path path to the media, either a file or a URL
+     * @param media media to register
+     * @return the [StoredMedia] associated with the media. If a media was already bound to the path, it is returned. Otherwise, the new [media] is returned.
+     */
+    fun register(
+        path: String,
+        media: Media,
+    ): StoredMedia? = bind(path, media)
+
+    /**
      * Registers a media by its path. The corresponding media is resolved lazily from the path.
      * @param path path to the media, either a file or a URL
      * @param workingDirectory directory to resolve the media from, in case the path is relative
      * @return the [StoredMedia] associated with the path. If a media was already bound to the path, it is returned. Otherwise, the new [media] is returned.
      * It may also return `null` if the media is not accepted into the storage.
+     * @see ResolvableMedia
      */
     fun register(
         path: String,
         workingDirectory: File?,
-    ): StoredMedia? = bind(path, ResolvableMedia(path, workingDirectory))
+    ): StoredMedia? = register(path, ResolvableMedia(path, workingDirectory))
 }

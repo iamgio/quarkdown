@@ -137,6 +137,26 @@ object TemplatePlaceholders {
     const val PARAGRAPH_INDENT = "PARAGRAPHINDENT"
 
     /**
+     * Font faces to load.
+     */
+    const val FONT_FACES = "FONTFACE"
+
+    /**
+     * Main font family to use in the document.
+     */
+    const val MAIN_FONT_FAMILY = "MAINFONTFAMILY"
+
+    /**
+     * Font family to use in the document to use for headings.
+     */
+    const val HEADING_FONT_FAMILY = "HEADINGFONTFAMILY"
+
+    /**
+     * Font family to use in the document to use for code blocks and code spans.
+     */
+    const val CODE_FONT_FAMILY = "CODEFONTFAMILY"
+
+    /**
      * Custom user-defined TeX macros.
      */
     const val TEX_MACROS = "TEXMACRO"
