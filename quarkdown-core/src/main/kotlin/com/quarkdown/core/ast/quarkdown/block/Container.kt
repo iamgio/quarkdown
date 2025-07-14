@@ -25,6 +25,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param cornerRadius border radius of the container
  * @param alignment alignment of the content
  * @param textAlignment alignment of the text
+ * @param textTransform transformation applied to the text content
  * @param fontSize relative font size of the text
  * @param float floating position of the container within the subsequent content
  */
