@@ -15,11 +15,8 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.rendering.withMedia
 import com.quarkdown.core.template.TemplateProcessor
-import com.quarkdown.rendering.html.css.asCSS
-import org.apache.commons.text.StringEscapeUtils
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -34,7 +31,7 @@ private val DEFAULT_THEME =
  * - PagedJS for page-based rendering (e.g. books);
  * - KaTeX for math rendering;
  * - HighlightJS for code highlighting.
- * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process
+ * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate].
  */
 class HtmlPostRenderer(
     private val context: Context,
@@ -47,134 +44,10 @@ class HtmlPostRenderer(
         ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
 
     override fun createTemplateProcessor() =
-        baseTemplateProcessor().apply {
-            // Local server port to communicate with.
-            optionalValue(
-                TemplatePlaceholders.SERVER_PORT,
-                context.attachedPipeline
-                    ?.options
-                    ?.serverPort,
-            )
-            // Document metadata.
-            val document = context.documentInfo
-            value(TemplatePlaceholders.TITLE, document.name ?: "Quarkdown")
-            optionalValue(TemplatePlaceholders.LANGUAGE, document.locale?.tag)
-            value(
-                TemplatePlaceholders.DOCUMENT_TYPE,
-                document.type.name.lowercase(),
-            )
-            // "Plain" document rendering.
-            conditional(TemplatePlaceholders.IS_PLAIN, document.type == DocumentType.PLAIN)
-            // "Paged" document rendering via PagesJS.
-            conditional(TemplatePlaceholders.IS_PAGED, document.type == DocumentType.PAGED)
-            // "Slides" document rendering via RevealJS.
-            conditional(TemplatePlaceholders.IS_SLIDES, document.type == DocumentType.SLIDES)
-            // HighlightJS is initialized only if needed.
-            conditional(
-                TemplatePlaceholders.HAS_CODE,
-                context.attributes.hasCode,
-            )
-            // Mermaid is initialized only if needed.
-            conditional(
-                TemplatePlaceholders.HAS_MERMAID_DIAGRAM,
-                context.attributes.hasMermaidDiagram,
-            )
-            // KaTeX is initialized only if needed.
-            conditional(
-                TemplatePlaceholders.HAS_MATH,
-                context.attributes.hasMath,
-            )
-            // Page format.
-            val pageFormat = document.layout.pageFormat
-            conditional(TemplatePlaceholders.HAS_PAGE_SIZE, pageFormat.hasSize)
-            optionalValue(
-                TemplatePlaceholders.PAGE_WIDTH,
-                pageFormat.pageWidth?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.PAGE_HEIGHT,
-                pageFormat.pageHeight?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.PAGE_MARGIN,
-                pageFormat.margin?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.PAGE_CONTENT_BORDER_WIDTH,
-                pageFormat.contentBorderWidth?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.PAGE_CONTENT_BORDER_COLOR,
-                pageFormat.contentBorderColor?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.COLUMN_COUNT,
-                pageFormat.columnCount,
-            )
-            // Alignment can be global or local. See TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT for details.
-            optionalValue(
-                TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT,
-                pageFormat.alignment?.takeIf { it.isGlobal }?.asCSS,
-            )
-            optionalValue(
-                TemplatePlaceholders.LOCAL_HORIZONTAL_ALIGNMENT,
-                pageFormat.alignment?.takeIf { it.isLocal }?.asCSS,
-            )
-            // Paragraph styling.
-            optionalValue(
-                TemplatePlaceholders.PARAGRAPH_SPACING,
-                document.layout.paragraphStyle.spacing
-                    ?.toString()
-                    ?.plus("em"),
-            )
-            optionalValue(
-                TemplatePlaceholders.PARAGRAPH_LINE_HEIGHT,
-                document.layout.paragraphStyle.lineHeight,
-            )
-            optionalValue(
-                TemplatePlaceholders.PARAGRAPH_LETTER_SPACING,
-                document.layout.paragraphStyle.letterSpacing
-                    ?.toString()
-                    ?.plus("em"),
-            )
-            optionalValue(
-                TemplatePlaceholders.PARAGRAPH_INDENT,
-                document.layout.paragraphStyle.indent
-                    ?.toString()
-                    ?.plus("em"),
-            )
-            // Fonts.
-            val fontConfiguration = document.layout.font
-            optionalValue(
-                TemplatePlaceholders.FONT_SIZE,
-                fontConfiguration.size?.asCSS,
-            )
-            val fontFamilies =
-                mapOf(
-                    TemplatePlaceholders.MAIN_FONT_FAMILY to fontConfiguration.mainFamily,
-                    TemplatePlaceholders.HEADING_FONT_FAMILY to fontConfiguration.headingFamily,
-                    TemplatePlaceholders.CODE_FONT_FAMILY to fontConfiguration.codeFamily,
-                )
-            fontFamilies.forEach { (placeholder, fontFamily) -> optionalValue(placeholder, fontFamily?.id) }
-            // Imports fonts via @font-face or @import rules.
-            iterable(
-                TemplatePlaceholders.FONT_FACES,
-                CssFontFacesImporter(fontFamilies.values.filterNotNull(), context.mediaStorage)
-                    .toSnippets(),
-            )
-            // Misc.
-            iterable(
-                TemplatePlaceholders.TEX_MACROS,
-                mapToJsObjectEntries(context.documentInfo.tex.macros),
-            )
-        }
-
-    private fun sanitizeJs(text: String): String = StringEscapeUtils.escapeEcmaScript(text)
-
-    private fun mapToJsObjectEntries(map: Map<String, String>): List<String> =
-        map.map { (key, value) ->
-            "\"${sanitizeJs(key)}\": \"${sanitizeJs(value)}\""
-        }
+        HtmlPostRendererTemplate(
+            baseTemplateProcessor(),
+            context,
+        ).create()
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
