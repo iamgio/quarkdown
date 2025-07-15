@@ -1,0 +1,43 @@
+.docname {Incorrect mermaid auto-scaling}
+.include {template/template.qd}
+
+.bulletin issue:{132} pr:{141} nextrelease:{1.6.3} relatedto:{Imprecise auto-scaling function in `mermaid.js`}
+
+.mermaid
+    sequenceDiagram
+    a-->>b: A
+    b-->>c: B
+    c-->>d: C
+    d-->>e: D
+    e-->>f: E
+
+.mermaid
+    sequenceDiagram
+    c->>s: REQUEST
+    s->>c: RESPONSE
+
+.mermaid
+    sequenceDiagram
+    c->>s: REQUEST
+    s->>c: RESPONSE
+    c->>s: REQUEST
+    s->>c: RESPONSE
+    c->>s: REQUEST
+    s->>c: RESPONSE
+    c->>s: REQUEST
+    s->>c: RESPONSE
+    c->>s: REQUEST
+    s->>c: RESPONSE
+
+.var {mockdir} {../../../../../mock/mermaid}
+
+.var {mockdiagrams}
+    - class
+    - flow
+    - git
+    - pie
+    - sequence
+
+.foreach {.mockdiagrams}
+    .mermaid
+        .read {.mockdir/.1.mmd}
