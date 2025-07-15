@@ -29,8 +29,6 @@
     c->>s: REQUEST
     s->>c: RESPONSE
 
-.var {mockdir} {../../../../../mock/mermaid}
-
 .var {mockdiagrams}
     - class
     - flow
@@ -40,4 +38,4 @@
 
 .foreach {.mockdiagrams}
     .mermaid
-        .read {.mockdir/.1.mmd}
+        .read {.mockdir/mermaid/.1.mmd}

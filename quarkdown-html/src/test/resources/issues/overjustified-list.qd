@@ -4,7 +4,9 @@
 
 .bulletin issue:{123} pr:{125} nextrelease:{1.6.2} relatedto:{Justification should be local rather than global}
 
-.repeat {3}
+<<<
+
+.repeat {4}
     .loremipsum
 
 - A B C D E

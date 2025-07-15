@@ -1,0 +1,12 @@
+.docname {Mirrored bibliography spanning over pages}
+.doctype {paged}
+.include {template/template.qd}
+
+.bulletin issue:{123} pr:{125} nextrelease:{1.6.2} relatedto:{Bibliography entry should not span over multiple pages}
+
+<<<
+
+.repeat {3}
+    .loremipsum
+
+.bibliography {data/bibliography/bibliography.bib}

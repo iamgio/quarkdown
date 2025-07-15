@@ -1,3 +1,5 @@
+.var {mockdir} {../../../../../mock}
+
 .function {bulletin}
   issue? pr? nextrelease? relatedto?:
   # .docname
