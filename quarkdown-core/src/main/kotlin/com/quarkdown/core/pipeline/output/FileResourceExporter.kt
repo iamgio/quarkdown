@@ -56,12 +56,18 @@ class FileResourceExporter(
      */
     override fun visit(artifact: TextOutputArtifact) =
         File(location, artifact.fullFileName).also {
-            if (write) it.writeText(artifact.content.toString())
+            if (write) {
+                it.parentFile?.mkdirs()
+                it.writeText(artifact.content.toString())
+            }
         }
 
     override fun visit(artifact: BinaryOutputArtifact) =
         File(location, artifact.fullFileName).also {
-            if (write) it.writeBytes(artifact.content.toByteArray())
+            if (write) {
+                it.parentFile?.mkdirs()
+                it.writeBytes(artifact.content.toByteArray())
+            }
         }
 
     /**

@@ -12,11 +12,9 @@ import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
-import java.io.FileNotFoundException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -27,6 +25,7 @@ import kotlin.test.assertTrue
 class CompileCommandTest : TempDirectory() {
     private val command = CompileCommand()
     private val main = File(directory, "main.qd")
+    private val outputDirectory = File(directory, "out")
 
     @BeforeTest
     fun setup() {
@@ -54,7 +53,7 @@ class CompileCommandTest : TempDirectory() {
         command.test(
             main.absolutePath,
             "-o",
-            directory.absolutePath,
+            outputDirectory.absolutePath,
             *additionalArgs,
         )
 
@@ -62,14 +61,14 @@ class CompileCommandTest : TempDirectory() {
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
         assertEquals(main, cliOptions.source)
-        assertEquals(directory, cliOptions.outputDirectory)
+        assertEquals(outputDirectory, cliOptions.outputDirectory)
         assertEquals(directory, pipelineOptions.workingDirectory)
 
         return cliOptions to pipelineOptions
     }
 
     private fun assertHtmlContentPresent(directoryName: String = "Quarkdown-test") {
-        val outputDir = File(directory, directoryName)
+        val outputDir = File(outputDirectory, directoryName)
         assertTrue(outputDir.exists())
         assertTrue(outputDir.isDirectory())
 
@@ -127,11 +126,14 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun clean() {
-        // The output directory is parent to the source file,
-        // hence cleaning it will also delete the source file.
-        assertFailsWith<FileNotFoundException> {
-            test("--clean")
-        }
+        val dummyFile =
+            File(outputDirectory, "dummy.txt").apply {
+                parentFile.mkdirs()
+                writeText("This is a dummy file.")
+            }
+        test("--clean")
+        assertHtmlContentPresent()
+        assertFalse(dummyFile.exists())
     }
 
     private fun assumePdfEnvironmentInstalled() {
@@ -149,9 +151,9 @@ class CompileCommandTest : TempDirectory() {
         name: String = "Quarkdown-test.pdf",
         expectedPages: Int = 3,
     ) {
-        val pdf = File(directory, name)
+        val pdf = File(outputDirectory, name)
         assertTrue(pdf.exists())
-        assertFalse(File(directory, "Quarkdown-test").exists())
+        assertFalse(File(outputDirectory, "Quarkdown-test").exists())
 
         Loader.loadPDF(pdf).use {
             assertEquals(expectedPages, it.numberOfPages)
@@ -178,6 +180,13 @@ class CompileCommandTest : TempDirectory() {
         main.writeText(main.readText().replace("paged", "plain") + "\n\n.repeat {100}\n\t.loremipsum")
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf(expectedPages = 1)
+    }
+
+    @Test
+    fun `clean pdf`() {
+        assumePdfEnvironmentInstalled()
+        test("--pdf", "--pdf-no-sandbox", "--clean")
+        checkPdf()
     }
 
     // #86
