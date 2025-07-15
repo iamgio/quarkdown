@@ -1,0 +1,8 @@
+.function {bulletin}
+  issue? pr? nextrelease? relatedto?:
+
+  .var {repo} {https://github.com/iamgio/quarkdown}
+
+  - **Opened in:** .issue::ifpresent {@lambda .text {#.1} url:{.repo/issues/.1}}
+  - **Fixed in:** .pr::ifpresent {@lambda .text {#.1} url:{.repo/pulls/.1}} (next release: .nextrelease)
+  - **Related to:** .relatedto 

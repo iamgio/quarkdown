@@ -1,0 +1,48 @@
+.docname {Math page overflow}
+.doctype {paged}
+.doclang {Chinese}
+.include {template/template.qd}
+
+.bulletin issue:{134} pr:{151} nextrelease:{1.7.0} relatedto:{`math.js` executing in post-rendering rather than pre-rendering}
+
+# AI基础知识
+
+## Introduction
+
+机器学习的任务有三类：
+- Regression：要找的函式,他的输出是一个数值
+- Classification:函式的输出,就是从设定好的选项裡面,选择一个当作输出
+- Structured Learning:机器產生有结构的东西的问题——学会创造
+
+一般步骤包括：
+1. Function with Unknown Parameters（建立Model）
+2. Define Loss from Training Data	(定义损失函数)
+3. Optimization（优化求解）
+
+### Model
+
+$ Sigmoid：y = c\frac{1}{{1+e^{-(b+wx_1)}}} $
+
+简单的非线性模型无法描述复杂的物理世界，利用若干个具有不同 $ w,b,c $ 的Sigmoid函数与一个常数参数的组合，可以模拟任何一个连续的曲线（非线性函数）。
+-  $ w $ 会改变**斜率**
+-  $ b $ 将 Sigmoid Function 左右移动
+-  $ c $ 改变高度
+
+拓展到多维特征：
+
+$ y=b+\sum_i sigmoid(b_i+\sum_j(w_{ij}x_j)) $
+
+- **TEST CONTENT 1**
+- **TEST CONTENT 2**
+- **TEST CONTENT 3**
+- **TEST CONTENT 4**
+- **TEST CONTENT 5**
+- **TEST CONTENT 6**
+- **TEST CONTENT 7**
+- **TEST CONTENT 8**
+- **TEST CONTENT 9**
+- **TEST CONTENT 10**
+  写成矩阵形式：
+
+.figure
+    .loremipsum
