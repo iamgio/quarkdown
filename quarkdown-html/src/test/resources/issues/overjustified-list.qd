@@ -1,0 +1,18 @@
+.docname {Overjustified list when spanning over pages}
+.doctype {paged}
+.include {template/template.qd}
+
+.bulletin issue:{123} pr:{125} nextrelease:{1.6.2} relatedto:{Justification should be local rather than global}
+
+.repeat {3}
+    .loremipsum
+
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
+- A B C D E
