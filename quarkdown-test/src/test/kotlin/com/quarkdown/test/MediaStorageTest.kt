@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
  */
 class MediaStorageTest {
     @Test
-    fun `media storage`() {
+    fun `local media, no media storage`() {
         execute(
             """
             This is the Quarkdown logo: ![Quarkdown](img/icon.png).                                 
@@ -20,7 +20,10 @@ class MediaStorageTest {
             assertEquals("<p>This is the Quarkdown logo: <img src=\"img/icon.png\" alt=\"Quarkdown\" />.</p>", it)
             assertEquals(0, mediaStorage.all.size)
         }
+    }
 
+    @Test
+    fun `local media, with media storage`() {
         execute(
             """
             This is the Quarkdown logo: ![Quarkdown](img/icon.png).                                 
@@ -31,7 +34,10 @@ class MediaStorageTest {
             // The file name is "media/icon-[encoded].png"
             assertEquals("\" alt=\"Quarkdown\" />.</p>", it.toString().substringAfter(".png"))
         }
+    }
 
+    @Test
+    fun `remote media, with media storage`() {
         execute(
             """
             .container
@@ -59,7 +65,10 @@ class MediaStorageTest {
 
             assertEquals(2, mediaStorage.all.size)
         }
+    }
 
+    @Test
+    fun `remote and local media, with local media storage only`() {
         execute(
             """
             ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)  
@@ -77,7 +86,10 @@ class MediaStorageTest {
 
             assertEquals(1, mediaStorage.all.size)
         }
+    }
 
+    @Test
+    fun `remote and local media, with media storage`() {
         execute(
             """
             [Banner]: https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg
