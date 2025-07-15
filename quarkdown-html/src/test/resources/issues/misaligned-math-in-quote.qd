@@ -1,0 +1,9 @@
+.docname {Misaligned math in quote}
+.doctype {paged}
+.include {template/template.qd}
+
+.bulletin issue:{144} pr:{145} nextrelease:{1.7.0} relatedto:{margin applied to `blockquote :first-child` and `:last-child` in `latex` theme}
+
+>  $ P_1 =  P_0 \times \frac{S_1}{S_0} $
+ 
+$ P_1 =  P_0 \times \frac{S_1}{S_0} $

@@ -1,5 +1,6 @@
 .function {bulletin}
   issue? pr? nextrelease? relatedto?:
+  # .docname
 
   .var {repo} {https://github.com/iamgio/quarkdown}
 
