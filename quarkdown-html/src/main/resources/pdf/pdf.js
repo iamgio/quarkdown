@@ -21,7 +21,10 @@ function createArgs() {
     const args = createArgs();
     console.log('Running with args: ' + args);
 
-    const browser = await puppeteer.launch({args: args});
+    const browser = await puppeteer.launch({
+        args: args,
+        headless: 'shell',
+    });
     const page = await browser.newPage();
 
     console.log('Connecting to ' + url);
