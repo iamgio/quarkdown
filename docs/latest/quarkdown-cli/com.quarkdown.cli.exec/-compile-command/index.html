@@ -1,0 +1,658 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>CompileCommand</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.7.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-cli/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-cli/main" data-filter=":quarkdown-cli/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-cli::com.quarkdown.cli.exec/CompileCommand///PointingToDeclaration//918969369">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-cli</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.cli.exec</a><span class="delimiter">/</span><span class="current">CompileCommand</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Compile</span><wbr><span><span>Command</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">CompileCommand</a> : <a href="../-execute-command/index.html">ExecuteCommand</a></div><p class="paragraph">Command to compile a Quarkdown file into an output.</p><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../com.quarkdown.cli.exec.strategy/-file-execution-strategy/index.html"><span>File</span><wbr><span>Execution</span><wbr><span><span>Strategy</span></span></a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="579601499%2FConstructors%2F918969369" anchor-label="CompileCommand" id="579601499%2FConstructors%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compile-command.html"><span>Compile</span><wbr><span><span>Command</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="579601499%2FConstructors%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="985153169%2FProperties%2F918969369" anchor-label="allowMultipleSubcommands" id="985153169%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#985153169%2FProperties%2F918969369"><span>allow</span><wbr><span>Multiple</span><wbr><span><span>Subcommands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="985153169%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#985153169%2FProperties%2F918969369">allowMultipleSubcommands</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1169986178%2FProperties%2F918969369" anchor-label="autoCompleteEnvvar" id="-1169986178%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1169986178%2FProperties%2F918969369"><span>auto</span><wbr><span>Complete</span><wbr><span><span>Envvar</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1169986178%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1169986178%2FProperties%2F918969369">autoCompleteEnvvar</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="883554468%2FProperties%2F918969369" anchor-label="commandName" id="883554468%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#883554468%2FProperties%2F918969369"><span>command</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="883554468%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#883554468%2FProperties%2F918969369">commandName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1029429046%2FProperties%2F918969369" anchor-label="currentContext" id="-1029429046%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1029429046%2FProperties%2F918969369"><span>current</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1029429046%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1029429046%2FProperties%2F918969369">currentContext</a><span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1514800506%2FProperties%2F918969369" anchor-label="helpTags" id="-1514800506%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1514800506%2FProperties%2F918969369"><span>help</span><wbr><span><span>Tags</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1514800506%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1514800506%2FProperties%2F918969369">helpTags</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1134881227%2FProperties%2F918969369" anchor-label="hiddenFromHelp" id="1134881227%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1134881227%2FProperties%2F918969369"><span>hidden</span><wbr><span>From</span><wbr><span><span>Help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1134881227%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1134881227%2FProperties%2F918969369">hiddenFromHelp</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="195594975%2FProperties%2F918969369" anchor-label="invokeWithoutSubcommand" id="195594975%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#195594975%2FProperties%2F918969369"><span>invoke</span><wbr><span>Without</span><wbr><span><span>Subcommand</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="195594975%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#195594975%2FProperties%2F918969369">invokeWithoutSubcommand</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-89995148%2FProperties%2F918969369" anchor-label="messages" id="-89995148%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-89995148%2FProperties%2F918969369"><span><span>messages</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-89995148%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-89995148%2FProperties%2F918969369">messages</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1671505373%2FProperties%2F918969369" anchor-label="printHelpOnEmptyArgs" id="-1671505373%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1671505373%2FProperties%2F918969369"><span>print</span><wbr><span>Help</span><wbr><span>On</span><wbr><span>Empty</span><wbr><span><span>Args</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1671505373%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1671505373%2FProperties%2F918969369">printHelpOnEmptyArgs</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1568021693%2FProperties%2F918969369" anchor-label="treatUnknownOptionsAsArgs" id="1568021693%2FProperties%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1568021693%2FProperties%2F918969369"><span>treat</span><wbr><span>Unknown</span><wbr><span>Options</span><wbr><span>As</span><wbr><span><span>Args</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1568021693%2FProperties%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1568021693%2FProperties%2F918969369">treatUnknownOptionsAsArgs</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-314074724%2FFunctions%2F918969369" anchor-label="aliases" id="-314074724%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-314074724%2FFunctions%2F918969369"><span><span>aliases</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-314074724%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-314074724%2FFunctions%2F918969369"><span class="token function">aliases</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1183625586%2FFunctions%2F918969369" anchor-label="allHelpParams" id="1183625586%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1183625586%2FFunctions%2F918969369"><span>all</span><wbr><span>Help</span><wbr><span><span>Params</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1183625586%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1183625586%2FFunctions%2F918969369"><span class="token function">allHelpParams</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="com.github.ajalt.clikt.output/HelpFormatter.ParameterHelp///PointingToDeclaration/">HelpFormatter.ParameterHelp</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-934244701%2FFunctions%2F918969369" anchor-label="commandHelp" id="-934244701%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-934244701%2FFunctions%2F918969369"><span>command</span><wbr><span><span>Help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-934244701%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-934244701%2FFunctions%2F918969369"><span class="token function"><strike>commandHelp</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1601571817%2FFunctions%2F918969369" anchor-label="commandHelpEpilog" id="1601571817%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1601571817%2FFunctions%2F918969369"><span>command</span><wbr><span>Help</span><wbr><span><span>Epilog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1601571817%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1601571817%2FFunctions%2F918969369"><span class="token function"><strike>commandHelpEpilog</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="70230306%2FFunctions%2F918969369" anchor-label="configureContext" id="70230306%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#70230306%2FFunctions%2F918969369"><span>configure</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="70230306%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#70230306%2FFunctions%2F918969369"><span class="token function">configureContext</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context.Builder///PointingToDeclaration/">Context.Builder</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1325566551%2FFunctions%2F918969369" anchor-label="createCliOptions" id="1325566551%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-execute-command/create-cli-options.html"><span>create</span><wbr><span>Cli</span><wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1325566551%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-execute-command/create-cli-options.html"><span class="token function">createCliOptions</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.cli/-cli-options/index.html">CliOptions</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="675107162%2FFunctions%2F918969369" anchor-label="createPipelineOptions" id="675107162%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-execute-command/create-pipeline-options.html"><span>create</span><wbr><span>Pipeline</span><wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="675107162%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../-execute-command/create-pipeline-options.html"><span class="token function">createPipelineOptions</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">cliOptions<span class="token operator">: </span><a href="../../com.quarkdown.cli/-cli-options/index.html">CliOptions</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.pipeline/-pipeline-options/index.html">PipelineOptions</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="335296728%2FFunctions%2F918969369" anchor-label="echo" id="335296728%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#349409083%2FFunctions%2F918969369"><span><span>echo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="335296728%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#349409083%2FFunctions%2F918969369"><span class="token function">echo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1925549273%2FFunctions%2F918969369"><span class="token function">echo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">trailingNewline<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">err<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="57180702%2FFunctions%2F918969369" anchor-label="echoFormattedHelp" id="57180702%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#57180702%2FFunctions%2F918969369"><span>echo</span><wbr><span>Formatted</span><wbr><span><span>Help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="57180702%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#57180702%2FFunctions%2F918969369"><span class="token function">echoFormattedHelp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/CliktError///PointingToDeclaration/">CliktError</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1347318567%2FFunctions%2F918969369" anchor-label="getFormattedHelp" id="1347318567%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1347318567%2FFunctions%2F918969369"><span>get</span><wbr><span>Formatted</span><wbr><span><span>Help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1347318567%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1347318567%2FFunctions%2F918969369"><span class="token function">getFormattedHelp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/CliktError///PointingToDeclaration/">CliktError</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1295811566%2FFunctions%2F918969369" anchor-label="help" id="-1295811566%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1295811566%2FFunctions%2F918969369"><span><span>help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1295811566%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1295811566%2FFunctions%2F918969369"><span class="token function">help</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1092020760%2FFunctions%2F918969369" anchor-label="helpEpilog" id="1092020760%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1092020760%2FFunctions%2F918969369"><span>help</span><wbr><span><span>Epilog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1092020760%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1092020760%2FFunctions%2F918969369"><span class="token function">helpEpilog</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="643849394%2FFunctions%2F918969369" anchor-label="issueMessage" id="643849394%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#643849394%2FFunctions%2F918969369"><span>issue</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="643849394%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#643849394%2FFunctions%2F918969369"><span class="token function">issueMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-879408264%2FFunctions%2F918969369" anchor-label="registerArgument" id="-879408264%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-879408264%2FFunctions%2F918969369"><span>register</span><wbr><span><span>Argument</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-879408264%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-879408264%2FFunctions%2F918969369"><span class="token function">registerArgument</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">argument<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.parameters.arguments/Argument///PointingToDeclaration/">Argument</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1884027110%2FFunctions%2F918969369" anchor-label="registeredArguments" id="1884027110%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1884027110%2FFunctions%2F918969369"><span>registered</span><wbr><span><span>Arguments</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1884027110%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1884027110%2FFunctions%2F918969369"><span class="token function">registeredArguments</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="com.github.ajalt.clikt.parameters.arguments/Argument///PointingToDeclaration/">Argument</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1434628002%2FFunctions%2F918969369" anchor-label="registeredOptions" id="-1434628002%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1434628002%2FFunctions%2F918969369"><span>registered</span><wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1434628002%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1434628002%2FFunctions%2F918969369"><span class="token function">registeredOptions</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="com.github.ajalt.clikt.parameters.options/Option///PointingToDeclaration/">Option</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1667561985%2FFunctions%2F918969369" anchor-label="registeredParameterGroups" id="-1667561985%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1667561985%2FFunctions%2F918969369"><span>registered</span><wbr><span>Parameter</span><wbr><span><span>Groups</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1667561985%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1667561985%2FFunctions%2F918969369"><span class="token function">registeredParameterGroups</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="com.github.ajalt.clikt.parameters.groups/ParameterGroup///PointingToDeclaration/">ParameterGroup</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-903330849%2FFunctions%2F918969369" anchor-label="registeredSubcommandNames" id="-903330849%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-903330849%2FFunctions%2F918969369"><span>registered</span><wbr><span>Subcommand</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-903330849%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-903330849%2FFunctions%2F918969369"><span class="token function">registeredSubcommandNames</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="620714484%2FFunctions%2F918969369" anchor-label="registeredSubcommands" id="620714484%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#620714484%2FFunctions%2F918969369"><span>registered</span><wbr><span><span>Subcommands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="620714484%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#620714484%2FFunctions%2F918969369"><span class="token function">registeredSubcommands</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="com.github.ajalt.clikt.core/CoreCliktCommand///PointingToDeclaration/">CoreCliktCommand</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1623143918%2FFunctions%2F918969369" anchor-label="registerOption" id="1623143918%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1536828074%2FFunctions%2F918969369"><span>register</span><wbr><span><span>Option</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1623143918%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#1536828074%2FFunctions%2F918969369"><span class="token function">registerOption</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">option<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/GroupableOption///PointingToDeclaration/">GroupableOption</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-141365424%2FFunctions%2F918969369"><span class="token function">registerOption</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">option<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.parameters.options/Option///PointingToDeclaration/">Option</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-696388142%2FFunctions%2F918969369" anchor-label="registerOptionGroup" id="-696388142%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-696388142%2FFunctions%2F918969369"><span>register</span><wbr><span>Option</span><wbr><span><span>Group</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-696388142%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-696388142%2FFunctions%2F918969369"><span class="token function">registerOptionGroup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">group<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.parameters.groups/ParameterGroup///PointingToDeclaration/">ParameterGroup</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="764974162%2FFunctions%2F918969369" anchor-label="resetContext" id="764974162%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#764974162%2FFunctions%2F918969369"><span>reset</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="764974162%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#764974162%2FFunctions%2F918969369"><span class="token function">resetContext</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parent<span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.github.ajalt.clikt.core/Context///PointingToDeclaration/">Context</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1469287998%2FFunctions%2F918969369" anchor-label="run" id="1469287998%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-execute-command/run.html"><span><span>run</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1469287998%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../-execute-command/run.html"><span class="token function">run</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1365705900%2FFunctions%2F918969369" anchor-label="toString" id="-1365705900%2FFunctions%2F918969369" data-filterable-set=":quarkdown-cli/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1365705900%2FFunctions%2F918969369"><span>to</span><wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1365705900%2FFunctions%2F918969369"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="../../com.quarkdown.cli.server/-start-web-server-command/index.html#-1365705900%2FFunctions%2F918969369"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
