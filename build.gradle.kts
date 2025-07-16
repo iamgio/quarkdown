@@ -183,7 +183,7 @@ tasks.named<CreateStartScripts>("startScripts") {
     // Prepends subscripts to the generated start scripts.
     doLast {
         val dir = file("scripts")
-        val scripts = sequenceOf("puppeteer-executable")
+        val scripts = sequenceOf("bootstrap")
 
         scripts.forEach { scriptName ->
             val unixPrefix = dir.resolve("$scriptName.sh").readText() + "\n"
