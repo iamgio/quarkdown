@@ -1,5 +1,3 @@
-#!/bin/bash
-
 if [ -n "$QD_NPM_PREFIX" ]; then
   export NODE_PATH="$QD_NPM_PREFIX/node_modules"
 fi

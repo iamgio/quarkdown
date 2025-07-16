@@ -1,5 +1,3 @@
-@echo off
-
 if defined QD_NPM_PREFIX (
     set "NODE_PATH=%QD_NPM_PREFIX%\node_modules"
 )
