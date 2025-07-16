@@ -1,1 +1,0 @@
-sourceset_dependencies = '{":quarkdown-cli/main":[],":quarkdown-stdlib/main":[],":quarkdown-html/main":[],":quarkdown-interaction/main":[],":quarkdown-core/main":[],":quarkdown-quarkdoc/main":[],":quarkdown-server/main":[],":quarkdown-quarkdoc-reader/main":[]}'
