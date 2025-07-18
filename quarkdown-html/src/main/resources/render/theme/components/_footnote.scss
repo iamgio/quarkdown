@@ -4,6 +4,10 @@
     flex-direction: row;
   }
 
+  .footnote-reference a {
+    text-decoration: none;
+  }
+
   .footnote-rule {
     border-top: 1px solid var(--qd-main-color);
     width: 40%;
