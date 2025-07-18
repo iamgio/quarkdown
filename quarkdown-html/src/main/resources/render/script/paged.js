@@ -29,20 +29,35 @@ class PagedDocument extends QuarkdownDocument {
         });
     }
 
-    handleFootnotesPreRendering(definitions) {
-        // Paged.js requires footnotes to be <span> elements. A conversion is performed here.
-        Array.from(definitions).forEach(definition => {
+    handleFootnotesPostRendering(definitions) {
+        definitions.forEach(definition => {
+            const pageArea = definition.closest('.pagedjs_area');
+            if (!pageArea) return;
+            const footnoteArea = pageArea.querySelector('.pagedjs_footnote_area > .pagedjs_footnote_content');
+            if (!footnoteArea) return;
+            const footnoteContent = footnoteArea.querySelector('.pagedjs_footnote_inner_content');
+            if (!footnoteContent) return;
+
+            // Moves the footnote definition to the footnote area, replacing <aside> with <span>.
             const span = document.createElement('span');
-            // Copy attributes
             Array.from(definition.attributes).forEach(attr => {
                 span.setAttribute(attr.name, attr.value);
             });
             span.innerHTML = definition.innerHTML;
-            definition.parentNode.replaceChild(span, definition);
-        });
-    }
+            footnoteContent.appendChild(span);
+            definition.remove();
 
-    handleFootnotesPostRendering(definitions) {
+            footnoteArea.classList.remove('pagedjs_footnote_empty');
+            footnoteContent.style.columnWidth = 'auto';
+            pageArea.style.setProperty('--pagedjs-footnotes-height', `${footnoteArea.scrollHeight}px`);
+
+            const footnoteRuleClassName = 'footnote-rule';
+            if (!footnoteArea.querySelector(`.${footnoteRuleClassName}`)) {
+                const footnoteRule = document.createElement('div');
+                footnoteRule.className = footnoteRuleClassName;
+                footnoteContent.insertAdjacentElement('afterbegin', footnoteRule);
+            }
+        });
     }
 
     getParentViewport(element) {

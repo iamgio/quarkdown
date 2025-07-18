@@ -1,20 +1,12 @@
-@page {
-  @footnote {
-    float: bottom;
+.quarkdown {
+  .footnote-definition {
+    display: flex;
+    flex-direction: row;
   }
-}
 
-.quarkdown .footnote-definition {
-  display: flex;
-  flex-direction: row;
-}
-
-.footnote-definition {
-  float: footnote;
-}
-
-::footnote-call {
-  //content: "";
-  // TODO fix this unwanted element being created. this is messing up the layout and is urgent
-  // TODO maybe attempt placing footnotes at the end of the page before they're computed
+  .footnote-rule {
+    border-top: 1px solid var(--qd-main-color);
+    width: 40%;
+    height: 4px;
+  }
 }
