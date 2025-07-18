@@ -28,7 +28,7 @@
 
 .quarkdown {
   @include progressive-heading-sizes($multiplier: 1.3);
-  @include progressive-heading-margins($bottomAddition: 0.4rem);
+  @include progressive-heading-margins($bottomAddition: 0.4em);
   @include minimal-tables;
   @include minimal-toc;
   @include minimal-footer;

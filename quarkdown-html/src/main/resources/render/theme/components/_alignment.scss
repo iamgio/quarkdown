@@ -3,10 +3,14 @@
 
   // Local alignment (e.g. justification) is applied to specific elements instead of the whole document (#123).
   p:not(.page-margin-content p, .mermaid p),
-  li:not(nav li),
-  caption, figcaption {
+  li:not(nav li) {
     text-align: var(--qd-horizontal-alignment-local);
     text-align-last: var(--qd-horizontal-alignment-global, start);
+  }
+
+  caption, figcaption {
+    text-align: var(--qd-horizontal-alignment-local);
+    text-align-last: center;
   }
 }
 
