@@ -29,28 +29,26 @@ class PagedDocument extends QuarkdownDocument {
         });
     }
 
-    handleFootnotesPostRendering(definitions) {
-        definitions.forEach(definition => {
-            const pageArea = definition.closest('.pagedjs_area');
+    // In paged documents, footnotes are placed in a special area at the bottom of each page reserved by paged.js.
+    // Useful context: https://github.com/pagedjs/pagedjs/issues/292
+    handleFootnotes(footnotes) {
+        footnotes.forEach(({definition, reference}) => {
+            const pageArea = this.getParentViewport(reference);
             if (!pageArea) return;
             const footnoteArea = pageArea.querySelector('.pagedjs_footnote_area > .pagedjs_footnote_content');
             if (!footnoteArea) return;
             const footnoteContent = footnoteArea.querySelector('.pagedjs_footnote_inner_content');
             if (!footnoteContent) return;
 
-            // Moves the footnote definition to the footnote area, replacing <aside> with <span>.
-            const span = document.createElement('span');
-            Array.from(definition.attributes).forEach(attr => {
-                span.setAttribute(attr.name, attr.value);
-            });
-            span.innerHTML = definition.innerHTML;
-            footnoteContent.appendChild(span);
+            // Moves the footnote definition to the footnote area.
             definition.remove();
+            footnoteContent.appendChild(definition);
 
             footnoteArea.classList.remove('pagedjs_footnote_empty');
             footnoteContent.style.columnWidth = 'auto';
             pageArea.style.setProperty('--pagedjs-footnotes-height', `${footnoteArea.scrollHeight}px`);
 
+            // Adds a rule to separate footnotes from the rest of the content.
             const footnoteRuleClassName = 'footnote-rule';
             if (!footnoteArea.querySelector(`.${footnoteRuleClassName}`)) {
                 const footnoteRule = document.createElement('div');

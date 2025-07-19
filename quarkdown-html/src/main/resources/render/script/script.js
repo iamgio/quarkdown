@@ -82,17 +82,10 @@ class QuarkdownDocument {
     }
 
     /**
-     * Handles or transforms footnotes in the pre-rendering execution queue.
-     * @param {NodeList} definitions - The footnote definitions to handle.
-     */
-    handleFootnotesPreRendering(definitions) {
-    }
-
-    /**
      * Handles or transforms footnotes in the post-rendering execution queue.
-     * @param {NodeList} definitions - The footnote definitions to handle.
+     * @param {{definition: Element, reference: Element}[]} footnotes footnote definitions and their first reference element.
      */
-    handleFootnotesPostRendering(definitions) {
+    handleFootnotes(footnotes) {
     }
 
     /**
@@ -113,10 +106,10 @@ class QuarkdownDocument {
      * Populates the execution queue with the necessary functions to be executed after the document is ready.
      */
     populateExecutionQueue() {
+        preRenderingExecutionQueue.push(() => moveFootnoteDefinitionsToEnd());
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
-        preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitions()));
-        postRenderingExecutionQueue.push(() => this.handleFootnotesPostRendering(getFootnoteDefinitions()));
+        postRenderingExecutionQueue.push(() => this.handleFootnotes(getFootnoteDefinitionsAndFirstReference()));
         if (this.usesNavigationSidebar()) {
             postRenderingExecutionQueue.push(createSidebar);
         }
@@ -152,8 +145,28 @@ let doc = new PlainDocument(); // Overwritten externally by html-wrapper
 //
 // Footnotes.
 
-function getFootnoteDefinitions() {
-    return document.querySelectorAll('aside.footnote-definition');
+/**
+ * @returns {{definition: Element, reference: Element}[]} the footnote definitions and their first non-null reference element.
+ */
+function getFootnoteDefinitionsAndFirstReference() {
+    const definitions = document.querySelectorAll('aside.footnote-definition');
+    // For each definition, gets the first reference to it.
+    // The rendered footnote will be placed in the first reference's page/section.
+    return Array.from(definitions).map(definition => {
+        const id = definition.id;
+        const reference = document.querySelector(`.footnote-reference[data-definition="${id}"]`);
+        return reference ? {definition, reference} : null;
+    }).filter(item => item !== null);
+}
+
+// Moves footnote definitions to the end of the document (performed in the pre-rendering stage).
+// This is needed because Quarkdown may render definitions in the middle of the document, and that would compromise 'following' (`+`) selectors.
+function moveFootnoteDefinitionsToEnd() {
+    const definitions = document.querySelectorAll('aside.footnote-definition');
+    definitions.forEach(definition => {
+        definition.remove();
+        document.body.appendChild(definition);
+    });
 }
 
 //
