@@ -109,7 +109,7 @@ class QuarkdownDocument {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
         postRenderingExecutionQueue.push(() => {
-            moveFootnoteDefinitionsToEnd(this.getParentViewport);
+            //moveFootnoteDefinitionsToEnd(this.getParentViewport);
             this.handleFootnotes(getFootnoteDefinitionsAndFirstReference());
         });
         if (this.usesNavigationSidebar()) {
@@ -165,9 +165,10 @@ function getFootnoteDefinitionsAndFirstReference() {
  * Moves footnote definitions to the end of the parent page viewport. This is performed in the post-rendering stage, where pages are already formed.
  * This is needed because Quarkdown may render definitions in the middle of the page, and that would compromise 'following' (`+`) selectors.
  * @param {function} parentElementFunction a function that takes a footnote definition and returns its parent viewport, such as its parent page.
+ * @param {Element} scope the scope in which to search for footnote definitions, defaults to the document body.
  */
-function moveFootnoteDefinitionsToEnd(parentElementFunction) {
-    const definitions = document.body.querySelectorAll('aside.footnote-definition');
+function moveFootnoteDefinitionsToEnd(parentElementFunction, scope = document.body) {
+    const definitions = scope.querySelectorAll(':scope aside.footnote-definition');
     definitions.forEach(definition => {
         const parent = parentElementFunction(definition);
         definition.remove();
