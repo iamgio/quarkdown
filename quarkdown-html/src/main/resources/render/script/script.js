@@ -136,10 +136,7 @@ class QuarkdownDocument {
     }
 }
 
-class PlainDocument extends QuarkdownDocument {
-}
-
-let doc = new PlainDocument(); // Overwritten externally by html-wrapper
+let doc = new QuarkdownDocument(); // Overwritten externally by html-wrapper
 
 //
 // Footnotes.

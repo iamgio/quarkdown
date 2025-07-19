@@ -160,6 +160,7 @@ class HtmlPostRenderer(
             }
 
             artifact("script")
+            artifact("plain", condition = context.documentInfo.type == DocumentType.PLAIN)
             artifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
             artifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
             artifact("math", condition = context.attributes.hasMath)
