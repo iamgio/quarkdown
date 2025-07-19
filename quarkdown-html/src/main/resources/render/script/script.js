@@ -106,10 +106,12 @@ class QuarkdownDocument {
      * Populates the execution queue with the necessary functions to be executed after the document is ready.
      */
     populateExecutionQueue() {
-        preRenderingExecutionQueue.push(() => moveFootnoteDefinitionsToEnd());
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
-        postRenderingExecutionQueue.push(() => this.handleFootnotes(getFootnoteDefinitionsAndFirstReference()));
+        postRenderingExecutionQueue.push(() => {
+            moveFootnoteDefinitionsToEnd(this.getParentViewport);
+            this.handleFootnotes(getFootnoteDefinitionsAndFirstReference());
+        });
         if (this.usesNavigationSidebar()) {
             postRenderingExecutionQueue.push(createSidebar);
         }
@@ -159,13 +161,17 @@ function getFootnoteDefinitionsAndFirstReference() {
     }).filter(item => item !== null);
 }
 
-// Moves footnote definitions to the end of the document (performed in the pre-rendering stage).
-// This is needed because Quarkdown may render definitions in the middle of the document, and that would compromise 'following' (`+`) selectors.
-function moveFootnoteDefinitionsToEnd() {
-    const definitions = document.querySelectorAll('aside.footnote-definition');
+/**
+ * Moves footnote definitions to the end of the parent page viewport. This is performed in the post-rendering stage, where pages are already formed.
+ * This is needed because Quarkdown may render definitions in the middle of the page, and that would compromise 'following' (`+`) selectors.
+ * @param {function} parentElementFunction a function that takes a footnote definition and returns its parent viewport, such as its parent page.
+ */
+function moveFootnoteDefinitionsToEnd(parentElementFunction) {
+    const definitions = document.body.querySelectorAll('aside.footnote-definition');
     definitions.forEach(definition => {
+        const parent = parentElementFunction(definition);
         definition.remove();
-        document.body.appendChild(definition);
+        parent.appendChild(definition);
     });
 }
 
