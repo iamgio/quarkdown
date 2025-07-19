@@ -1,0 +1,25 @@
+.quarkdown {
+  .footnote-definition {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .footnote-reference a {
+    text-decoration: none;
+  }
+
+  .footnote-rule {
+    border-top: 1px solid var(--qd-page-content-border-color);
+    width: 40%;
+    height: 4px;
+  }
+}
+
+.quarkdown-slides .footnote-area {
+  font-size: 0.8em;
+  margin-top: calc(2.5 * var(--qd-block-margin));
+}
+
+.quarkdown-plain .footnote-definition {
+  font-size: 0.7em;
+}

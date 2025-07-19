@@ -18,6 +18,16 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
+    handleFootnotes(footnotes) {
+        footnotes.forEach(({definition, reference}) => {
+            const page = this.getParentViewport(reference);
+            if (!page) return;
+
+            definition.remove();
+            getOrCreateFootnoteArea(page)?.appendChild(definition);
+        });
+    }
+
     getParentViewport(element) {
         return element.closest('.reveal .slides > :is(section, .pdf-page)');
     }

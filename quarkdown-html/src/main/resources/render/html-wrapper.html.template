@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>[[TITLE]]</title>
     <script src="script/script.js"></script>
+    [[if:PLAIN]]
+    <script src="script/plain.js"></script>
+    [[endif:PLAIN]]
     [[if:PAGED]]
     <script>window.PagedConfig = {auto: false};</script>
     <script src="https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js"></script>
@@ -21,6 +24,9 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="theme/theme.css">
     <script>
+        [[if:PLAIN]]
+        doc = new PlainDocument();
+        [[endif:PLAIN]]
         [[if:SLIDES]]
         doc = new SlidesDocument();
         [[endif:SLIDES]]
@@ -117,6 +123,13 @@
     </style>
 </head>
 <body class="quarkdown quarkdown-[[DOCTYPE]][[if:COLUMNCOUNT]] multicolumn[[endif:COLUMNCOUNT]]">
+[[if:PLAIN]]
+<aside id="margin-area-left" class="margin-area"></aside>
+<main>
+    [[CONTENT]]
+</main>
+<aside id="margin-area-right" class="margin-area"></aside>
+[[endif:PLAIN]]
 [[if:SLIDES]]
 <div class="reveal">
     <div class="slides">
@@ -124,9 +137,9 @@
     </div>
 </div>
 [[endif:SLIDES]]
-[[if:!SLIDES]]
+[[if:PAGED]]
 [[CONTENT]]
-[[endif:!SLIDES]]
+[[endif:PAGED]]
 [[if:MERMAID]]
 <script src="script/mermaid.js"></script>
 <script type="module">
