@@ -14,3 +14,8 @@
     height: 4px;
   }
 }
+
+.quarkdown-slides .footnote-area {
+  font-size: 0.8em;
+  margin-top: calc(2.5 * var(--qd-block-margin));
+}

@@ -167,18 +167,36 @@ function getFootnoteDefinitionsAndFirstReference(sorted = true) {
 }
 
 /**
- * Moves footnote definitions to the end of the parent page viewport. This is performed in the post-rendering stage, where pages are already formed.
- * This is needed because Quarkdown may render definitions in the middle of the page, and that would compromise 'following' (`+`) selectors.
- * @param {function} parentElementFunction a function that takes a footnote definition and returns its parent viewport, such as its parent page.
- * @param {Element} scope the scope in which to search for footnote definitions, defaults to the document body.
+ * Prepends a horizontal rule to separate footnotes from the rest of the content.
+ * @param {Element} footnoteArea the footnote area.
+ * @return {Element} the created footnote rule element, or the existing one if it already exists.
  */
-function moveFootnoteDefinitionsToEnd(parentElementFunction, scope = document.body) {
-    const definitions = scope.querySelectorAll(':scope aside.footnote-definition');
-    definitions.forEach(definition => {
-        const parent = parentElementFunction(definition);
-        definition.remove();
-        parent.appendChild(definition);
-    });
+function getOrCreateFootnoteRule(footnoteArea) {
+    const footnoteRuleClassName = 'footnote-rule';
+    const existingRule = footnoteArea.querySelector(`.${footnoteRuleClassName}`);
+    if (existingRule) return existingRule;
+
+    const rule = document.createElement('div');
+    rule.className = footnoteRuleClassName;
+    footnoteArea.insertAdjacentElement('afterbegin', rule)
+    return rule;
+}
+
+/**
+ * Appends a footnote area to the given page if it does not exist, or returns the existing one.
+ * @param {Element} page the page element to which the footnote area should be appended.
+ * @returns {Element} the footnote area element.
+ */
+function getOrCreateFootnoteArea(page) {
+    const className = 'footnote-area';
+    let footnoteArea = page.querySelector(`.${className}`);
+    if (footnoteArea) return footnoteArea;
+
+    footnoteArea = document.createElement('div');
+    footnoteArea.className = className;
+    page.appendChild(footnoteArea);
+    getOrCreateFootnoteRule(footnoteArea);
+    return footnoteArea;
 }
 
 //

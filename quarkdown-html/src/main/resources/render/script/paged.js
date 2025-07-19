@@ -75,13 +75,7 @@ class PagedDocument extends QuarkdownDocument {
             reference.style.height = 'auto';
             reference.style.display = 'inline';
 
-            // Adds a rule to separate footnotes from the rest of the content.
-            const footnoteRuleClassName = 'footnote-rule';
-            if (!footnoteArea.querySelector(`.${footnoteRuleClassName}`)) {
-                const footnoteRule = document.createElement('div');
-                footnoteRule.className = footnoteRuleClassName;
-                footnoteContent.insertAdjacentElement('afterbegin', footnoteRule);
-            }
+            createFootnoteRule(footnoteContent);
         });
     }
 
