@@ -168,6 +168,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
 
     /**
      * A reference whose label in brackets matches that of a footnote definition.
+     * It may also contain an optional all-in-one definition.
      * @see ReferenceLinkToken
      */
     val referenceFootnote by lazy {
@@ -175,8 +176,9 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineReferenceFootnote",
             wrap = ::ReferenceFootnoteToken,
             regex =
-                RegexBuilder("\\[\\^(label)\\]")
+                RegexBuilder("\\[\\^(label)definition\\]")
                     .withReference("label", LABEL_HELPER)
+                    .withReference("definition", "(?::[ \\t]*([^\\[\\]\\\\`]+?))?")
                     .build(),
         )
     }

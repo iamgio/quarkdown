@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceDefinitionFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
@@ -174,10 +175,26 @@ class InlineTokenParser(
 
     override fun visit(token: ReferenceFootnoteToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return ReferenceFootnote(
-            label = groups.next(),
-            fallback = { Text(token.data.text) },
-        )
+        val label = groups.next()
+        val definition = groups.nextOrNull()
+
+        return when {
+            // All-in-one case:
+            // Named: [^label: definition]
+            // Anonymous: [^: definition]
+            definition != null ->
+                ReferenceDefinitionFootnote(
+                    label.takeUnless { it.isBlank() } ?: context.newUuid(),
+                    definition = parseSubContent(definition),
+                )
+
+            // Reference only case.
+            else ->
+                ReferenceFootnote(
+                    label,
+                    fallback = { Text(token.data.text) },
+                )
+        }
     }
 
     override fun visit(token: DiamondAutolinkToken): Node {
@@ -212,7 +229,7 @@ class InlineTokenParser(
         fun toSize(raw: String?): Size? =
             try {
                 raw?.let(ValueFactory::size)?.unwrappedValue // Parses the value.
-            } catch (e: IllegalRawValueException) {
+            } catch (_: IllegalRawValueException) {
                 null
             }
 

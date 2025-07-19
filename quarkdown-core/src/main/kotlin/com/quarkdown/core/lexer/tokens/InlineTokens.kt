@@ -129,9 +129,15 @@ class ReferenceLinkToken(
 }
 
 /**
- * Example:
+ * Examples:
  * ```
  * [^label]
+ * ```
+ * ```
+ * [^label: definition]
+ * ```
+ * ```
+ * [^: definition]
  * ```
  * @see com.quarkdown.core.ast.base.inline.ReferenceFootnote
  */

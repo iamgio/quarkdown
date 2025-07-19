@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -214,6 +215,64 @@ class FootnoteTest {
                         index = 2,
                         content = "yet another note",
                     ),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one named definition and reference`() {
+        execute("a[^x] and b[^x: first definition] and c[^y: second definition] and d[^x]") {
+            assertEquals(
+                "<p>a" +
+                    referenceHtml("x", "1") +
+                    " and b" +
+                    referenceHtml("x", "1") +
+                    definitionHtml(
+                        label = "x",
+                        index = 0,
+                        content = "first definition",
+                    ) +
+                    " and c" +
+                    referenceHtml("y", "2") +
+                    definitionHtml(
+                        label = "y",
+                        index = 1,
+                        content = "second definition",
+                    ) +
+                    " and d" +
+                    referenceHtml("x", "1") +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one anonymous definition and reference`() {
+        var uuid = 0
+        val firstUuid = "2"
+        val secondUuid = "4"
+        execute(
+            "a[^: anonymous definition] and b[^: *another* anonymous definition]",
+            options = DEFAULT_OPTIONS.copy(uuidSupplier = { (++uuid * 2).toString() }),
+        ) {
+            assertEquals(
+                "<p>a" +
+                    referenceHtml(firstUuid, "1") +
+                    definitionHtml(
+                        label = firstUuid,
+                        index = 0,
+                        content = "anonymous definition",
+                    ) +
+                    " and b" +
+                    referenceHtml(secondUuid, "2") +
+                    definitionHtml(
+                        label = secondUuid,
+                        index = 1,
+                        content = "<em>another</em> anonymous definition",
+                    ) +
+                    "</p>",
                 it,
             )
         }

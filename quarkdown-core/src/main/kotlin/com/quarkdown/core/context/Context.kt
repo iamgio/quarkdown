@@ -112,6 +112,12 @@ interface Context {
     fun resolveUnchecked(call: FunctionCallNode): UncheckedFunctionCall<*>
 
     /**
+     * Generates a new UUID via [ContextOptions.uuidSupplier].
+     * @return a new UUID as a string
+     */
+    fun newUuid(): String = options.uuidSupplier()
+
+    /**
      * Localizes a string to this context's language (the locale set in [documentInfo]) by looking up a key in a localization table.
      * @param tableName name of the localization table, which must exist within [localizationTables]
      * @param key localization key to look up within the table

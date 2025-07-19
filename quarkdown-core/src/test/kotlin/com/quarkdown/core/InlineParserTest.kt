@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.inline.CriticalContent
 import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceDefinitionFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
@@ -23,11 +24,13 @@ import com.quarkdown.core.document.size.px
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.misc.color.Color
+import com.quarkdown.core.util.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * Parser tests for inline content.
@@ -155,6 +158,26 @@ class InlineParserTest {
         assertEquals("label", nodes.next().label)
         assertEquals("1", nodes.next().label)
         assertNodeEquals(Text("[^2]"), nodes.next().fallback())
+    }
+
+    @Test
+    fun `all-in-one reference footnote`() {
+        val nodes = inlineIterator<ReferenceDefinitionFootnote>(readSource("/parsing/inline/reffootnote-all-in-one.md"))
+
+        with(nodes.next()) {
+            assertEquals("abc", label)
+            assertEquals("this is a definition!", definition.toPlainText())
+        }
+        with(nodes.next()) {
+            assertTrue(
+                label.length ==
+                    java.util.UUID
+                        .randomUUID()
+                        .toString()
+                        .length,
+            )
+            assertEquals("this is an anonymous definition!", definition.toPlainText())
+        }
     }
 
     @Test
