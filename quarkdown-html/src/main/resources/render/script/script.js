@@ -108,10 +108,7 @@ class QuarkdownDocument {
     populateExecutionQueue() {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
-        postRenderingExecutionQueue.push(() => {
-            //moveFootnoteDefinitionsToEnd(this.getParentViewport);
-            this.handleFootnotes(getFootnoteDefinitionsAndFirstReference());
-        });
+        postRenderingExecutionQueue.push(() => this.handleFootnotes(getFootnoteDefinitionsAndFirstReference()));
         if (this.usesNavigationSidebar()) {
             postRenderingExecutionQueue.push(createSidebar);
         }
@@ -148,10 +145,18 @@ let doc = new PlainDocument(); // Overwritten externally by html-wrapper
 // Footnotes.
 
 /**
+ * @param {boolean} sorted whether to sort the footnote definitions by their index.
  * @returns {{definition: Element, reference: Element}[]} the footnote definitions and their first non-null reference element.
  */
-function getFootnoteDefinitionsAndFirstReference() {
-    const definitions = document.querySelectorAll('aside.footnote-definition');
+function getFootnoteDefinitionsAndFirstReference(sorted = true) {
+    let definitions = document.querySelectorAll('aside.footnote-definition');
+    if (sorted) {
+        definitions = Array.from(definitions).sort((a, b) => {
+            const indexA = parseInt(a.dataset.footnoteIndex);
+            const indexB = parseInt(b.dataset.footnoteIndex);
+            return indexA - indexB;
+        });
+    }
     // For each definition, gets the first reference to it.
     // The rendered footnote will be placed in the first reference's page/section.
     return Array.from(definitions).map(definition => {

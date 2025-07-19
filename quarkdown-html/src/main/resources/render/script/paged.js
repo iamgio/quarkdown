@@ -1,7 +1,7 @@
 class PagedDocument extends QuarkdownDocument {
     populateExecutionQueue() {
         super.populateExecutionQueue();
-        preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitionsAndFirstReference()));
+        preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitionsAndFirstReference(false)));
         postRenderingExecutionQueue.push(setColumnCount);
     }
 
