@@ -11,7 +11,7 @@ class FootnoteTest {
     private fun referenceHtml(
         label: String,
         formattedIndex: String,
-    ) = "<sup class=\"footnote-reference footnote-label\">" +
+    ) = "<sup class=\"footnote-reference footnote-label\" data-definition=\"__footnote-$label\">" +
         "<a href=\"#__footnote-$label\">$formattedIndex</a>" +
         "</sup>"
 

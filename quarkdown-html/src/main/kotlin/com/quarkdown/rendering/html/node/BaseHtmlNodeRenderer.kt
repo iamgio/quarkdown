@@ -263,6 +263,7 @@ open class BaseHtmlNodeRenderer(
         return buildTag("sup") {
             classNames("footnote-reference", "footnote-label")
             val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(definition)
+            attribute("data-definition", definitionId)
             tag("a") {
                 optionalAttribute("href", "#$definitionId")
                 +(definition.getFormattedIndex(context) ?: "?")
