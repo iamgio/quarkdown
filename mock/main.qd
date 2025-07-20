@@ -16,6 +16,7 @@
     - quotes.qd
     - boxes.qd
     - math.qd
+    - footnotes.qd
     - mermaid.qd
     - collapsibles.qd
     - errors.qd
