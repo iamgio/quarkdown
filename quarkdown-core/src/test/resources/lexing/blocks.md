@@ -55,6 +55,11 @@ multiline"
 
 ***
 
+[^footnote1]: one line
+
+[^footnote2]: multi
+line
+
 | foo | bar |
 |-----|-----|
 | abc | def |

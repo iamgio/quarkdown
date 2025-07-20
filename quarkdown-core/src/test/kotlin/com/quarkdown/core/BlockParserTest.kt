@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.LinkDefinition
@@ -385,6 +386,34 @@ class BlockParserTest {
             assertEquals("label", rawText)
             assertEquals("/url", url)
             assertEquals("Title", title)
+        }
+    }
+
+    @Test
+    fun footnoteDefinition() {
+        val nodes = blocksIterator<FootnoteDefinition>(readSource("/parsing/footnotedefinition.md"), assertType = false)
+
+        with(nodes.next()) {
+            assertEquals("Footnote on one line.", text.toPlainText())
+            assertEquals("1", label)
+        }
+        with(nodes.next()) {
+            assertEquals("Footnote on one line.", text.toPlainText())
+            assertEquals("*Footnote*", label)
+        }
+        with(nodes.next()) {
+            assertEquals("Footnote\non two lines.", text.toPlainText())
+            assertEquals("2", label)
+        }
+        with(nodes.next()) {
+            assertEquals("Footnote\n   on indented\n   lines.", text.toPlainText())
+            assertEquals("3", label)
+        }
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("Interrupted footnote", text.toPlainText())
+                assertEquals("int", label)
+            }
         }
     }
 

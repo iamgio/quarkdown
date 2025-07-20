@@ -2,15 +2,15 @@ package com.quarkdown.core
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
-import com.quarkdown.core.ast.quarkdown.bibliography.getEntry
 import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.hooks.bibliography.BibliographyCitationHook
+import com.quarkdown.core.context.hooks.reference.BibliographyCitationResolverHook
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,7 +41,7 @@ class BibliographyCitationResolutionTest {
 
     private fun traverse(root: Node) {
         ObservableAstIterator()
-            .attach(BibliographyCitationHook(context))
+            .attach(BibliographyCitationResolverHook(context))
             .traverse(root as NestableNode)
     }
 
@@ -59,7 +59,7 @@ class BibliographyCitationResolutionTest {
 
         assertEquals(
             bibliographyView.bibliography.entries[CITATION_KEY],
-            citation.getEntry(context)?.first,
+            citation.getDefinition(context)?.first,
         )
     }
 
@@ -77,7 +77,7 @@ class BibliographyCitationResolutionTest {
 
         assertEquals(
             bibliographyView.bibliography.entries[CITATION_KEY],
-            citation.getEntry(context)?.first,
+            citation.getDefinition(context)?.first,
         )
     }
 }

@@ -46,6 +46,7 @@ object QuarkdownLexerFactory : LexerFactory {
                     functionCall,
                     blockQuote,
                     blockCode,
+                    footnoteDefinition,
                     linkDefinition,
                     fencesCode,
                     multilineMath,

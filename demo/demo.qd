@@ -107,7 +107,7 @@ so that you'll feel at home typing code you're comfortable typing.
             .container textalignment:{center} width:{50%}
                 .source
 
-.sourceresult shrinkvertical:{50} animated:{yes}
+.sourceresult shrinkvertical:{35} animated:{yes}
     ### Diving into _Quarkdown_
     
     Somebody once said:
@@ -300,6 +300,22 @@ The Quarkdown flavor introduces new features to the standard Markdown syntax.
     > Tip: you might want to try it out. Feedback and suggestions are welcome!
 
     > Warning: it's a young project and some things may change in the near future.
+
+## Footnotes (standard)
+
+.sourceresult
+    Quarkdown[^qd] supports footnotes[^notes].  
+    Take advantage of footnotes[^notes] to dive deeper into concepts.
+
+    [^qd]: A modern *typesetting system*.
+
+    [^notes]: This is what a footnote looks like.
+
+## Footnotes (extension)
+
+.sourceresult
+    Quarkdown[^: A modern *typesetting system*.] supports footnotes[^notes2: This is what a footnote looks like.].  
+    Take advantage of footnotes[^notes2] to dive deeper into concepts.
 
 ## Quotation source
 

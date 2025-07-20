@@ -28,6 +28,11 @@ interface ContextOptions : MediaStorageOptions {
      * @see com.quarkdown.core.ast.attributes.location.LocationTrackableNode
      */
     val enableLocationAwareness: Boolean
+
+    /**
+     * Supplier of unique identifiers (UUIDs). For instance, UUIDs are generated for anonymous footnotes.
+     */
+    val uuidSupplier: () -> String
 }
 
 /**
@@ -46,6 +51,11 @@ data class MutableContextOptions(
     override var autoPageBreakHeadingMaxDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableLocationAwareness: Boolean = true,
+    override var uuidSupplier: () -> String = {
+        java.util.UUID
+            .randomUUID()
+            .toString()
+    },
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,
 ) : ContextOptions {

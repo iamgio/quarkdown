@@ -1,9 +1,12 @@
 package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -11,6 +14,8 @@ import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.base.block.Newline
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
+import com.quarkdown.core.ast.base.block.getFormattedIndex
+import com.quarkdown.core.ast.base.block.getIndex
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.ListItemVariantVisitor
 import com.quarkdown.core.ast.base.block.list.OrderedList
@@ -23,6 +28,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -60,9 +66,11 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.resolveOrFallback
 import com.quarkdown.core.rendering.UnsupportedRenderException
 import com.quarkdown.core.rendering.tag.TagNodeRenderer
+import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
@@ -93,7 +101,10 @@ open class BaseHtmlNodeRenderer(
 
     // Root
 
-    override fun visit(node: AstRoot) = node.children.joinToString(separator = "") { it.accept(this) }
+    override fun visit(node: AstRoot) =
+        buildMultiTag {
+            +node.children
+        }
 
     // Block
 
@@ -127,6 +138,25 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Heading) = buildTag("h${node.depth}", node.text)
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
+
+    override fun visit(node: FootnoteDefinition): CharSequence {
+        val index = node.getIndex(context) ?: return "" // The footnote is rendered only if it is linked to a reference
+        val formattedIndex = node.getFormattedIndex(context) ?: return ""
+
+        return buildTag("span") {
+            className("footnote-definition")
+            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
+            optionalAttribute("data-footnote-index", index)
+
+            tag("sup") {
+                className("footnote-label")
+                +formattedIndex
+            }
+            tag("span") {
+                +node.text
+            }
+        }
+    }
 
     override fun visit(node: OrderedList) =
         tagBuilder("ol", node.children)
@@ -229,6 +259,22 @@ open class BaseHtmlNodeRenderer(
 
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
+
+    override fun visit(node: ReferenceFootnote): CharSequence {
+        val definition: FootnoteDefinition =
+            node.getDefinition(context)
+                ?: return node.fallback().accept(this)
+
+        return buildTag("sup") {
+            classNames("footnote-reference", "footnote-label")
+            val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(definition)
+            attribute("data-definition", definitionId)
+            tag("a") {
+                optionalAttribute("href", "#$definitionId")
+                +(definition.getFormattedIndex(context) ?: "?")
+            }
+        }
+    }
 
     override fun visit(node: Image) =
         tagBuilder("img")

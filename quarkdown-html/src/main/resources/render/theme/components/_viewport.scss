@@ -17,8 +17,39 @@ body.quarkdown {
   }
 
   &.quarkdown-plain {
-    margin: 32px 15%;
-    column-count: var(--property-column-count);
+    display: flex;
+    flex-direction: row;
+    margin: 32px 0;
+
+    > main {
+      width: 100%;
+      column-count: var(--property-column-count);
+    }
+
+    > aside {
+      $width: 30vw;
+      max-width: #{$width};
+      width: #{$width};
+      margin: 0 12px;
+
+      &#margin-area-left {
+        margin-right: 24px;
+      }
+
+      &#margin-area-right {
+        margin-left: 24px;
+      }
+    }
+
+    @media screen and (max-width: 800px), print and (max-width: 1000px) {
+      aside#margin-area-left {
+        max-width: 0;
+      }
+
+      aside#margin-area-right:empty {
+        max-width: 0;
+      }
+    }
   }
 
   // Slides viewport
@@ -50,7 +81,7 @@ body.quarkdown {
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
     }
 
-    .pagedjs_page_content {
+    .pagedjs_area {
       @include content-area-border;
     }
   }

@@ -82,6 +82,13 @@ class QuarkdownDocument {
     }
 
     /**
+     * Handles or transforms footnotes in the post-rendering execution queue.
+     * @param {{definition: Element, reference: Element}[]} footnotes footnote definitions and their first reference element.
+     */
+    handleFootnotes(footnotes) {
+    }
+
+    /**
      * @returns {Element} The parent viewport of the given element,
      * such as the slide section in slides or the page area in paged.
      */
@@ -101,6 +108,7 @@ class QuarkdownDocument {
     populateExecutionQueue() {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
+        postRenderingExecutionQueue.push(() => this.handleFootnotes(getFootnoteDefinitionsAndFirstReference()));
         if (this.usesNavigationSidebar()) {
             postRenderingExecutionQueue.push(createSidebar);
         }
@@ -128,10 +136,72 @@ class QuarkdownDocument {
     }
 }
 
-class PlainDocument extends QuarkdownDocument {
+let doc = new QuarkdownDocument(); // Overwritten externally by html-wrapper
+
+//
+// Footnotes.
+
+/**
+ * @returns {NodeList} the footnote definitions in the document.
+ */
+function getFootnoteDefinitions() {
+    return document.querySelectorAll('.footnote-definition');
 }
 
-let doc = new PlainDocument(); // Overwritten externally by html-wrapper
+/**
+ * @param {boolean} sorted whether to sort the footnote definitions by their index.
+ * @returns {{definition: Element, reference: Element}[]} the footnote definitions and their first non-null reference element.
+ */
+function getFootnoteDefinitionsAndFirstReference(sorted = true) {
+    let definitions = getFootnoteDefinitions();
+    if (sorted) {
+        definitions = Array.from(definitions).sort((a, b) => {
+            const indexA = parseInt(a.dataset.footnoteIndex);
+            const indexB = parseInt(b.dataset.footnoteIndex);
+            return indexA - indexB;
+        });
+    }
+    // For each definition, gets the first reference to it.
+    // The rendered footnote will be placed in the first reference's page/section.
+    return Array.from(definitions).map(definition => {
+        const id = definition.id;
+        const reference = document.querySelector(`.footnote-reference[data-definition="${id}"]`);
+        return reference ? {definition, reference} : null;
+    }).filter(item => item !== null);
+}
+
+/**
+ * Prepends a horizontal rule to separate footnotes from the rest of the content.
+ * @param {Element} footnoteArea the footnote area.
+ * @return {Element} the created footnote rule element, or the existing one if it already exists.
+ */
+function getOrCreateFootnoteRule(footnoteArea) {
+    const footnoteRuleClassName = 'footnote-rule';
+    const existingRule = footnoteArea.querySelector(`.${footnoteRuleClassName}`);
+    if (existingRule) return existingRule;
+
+    const rule = document.createElement('div');
+    rule.className = footnoteRuleClassName;
+    footnoteArea.insertAdjacentElement('afterbegin', rule)
+    return rule;
+}
+
+/**
+ * Appends a footnote area to the given page if it does not exist, or returns the existing one.
+ * @param {Element} page the page element to which the footnote area should be appended.
+ * @returns {Element} the footnote area element.
+ */
+function getOrCreateFootnoteArea(page) {
+    const className = 'footnote-area';
+    let footnoteArea = page.querySelector(`.${className}`);
+    if (footnoteArea) return footnoteArea;
+
+    footnoteArea = document.createElement('div');
+    footnoteArea.className = className;
+    page.appendChild(footnoteArea);
+    getOrCreateFootnoteRule(footnoteArea);
+    return footnoteArea;
+}
 
 //
 // Enables toggling of the collapsed/expanded state of inline elements.

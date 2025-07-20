@@ -11,7 +11,9 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  * An escaped character.
  * Examples: `\#`, `\>`, ...
  */
-class EscapeToken(data: TokenData) : Token(data) {
+class EscapeToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -19,7 +21,9 @@ class EscapeToken(data: TokenData) : Token(data) {
  * An entity reference character.
  * Examples: `&nbsp;`, `&amp;`, `&copy;`, '&#35', `&#x22`, ...
  */
-class EntityToken(data: TokenData) : Token(data) {
+class EntityToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -28,7 +32,9 @@ class EntityToken(data: TokenData) : Token(data) {
  * Examples: `&`, `<`, `>`, `"`, `'`, ...
  * @see com.quarkdown.core.ast.base.inline.CriticalContent
  */
-class CriticalContentToken(data: TokenData) : Token(data) {
+class CriticalContentToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -42,7 +48,9 @@ class CriticalContentToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.CodeSpan
  */
-class CodeSpanToken(data: TokenData) : Token(data) {
+class CodeSpanToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -55,7 +63,9 @@ class CodeSpanToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.LineBreak
  */
-class LineBreakToken(data: TokenData) : Token(data) {
+class LineBreakToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -66,7 +76,9 @@ class LineBreakToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Link
  */
-class LinkToken(data: TokenData) : Token(data) {
+class LinkToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -77,7 +89,9 @@ class LinkToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Link
  */
-class DiamondAutolinkToken(data: TokenData) : Token(data) {
+class DiamondAutolinkToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -89,7 +103,9 @@ class DiamondAutolinkToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Link
  */
-class UrlAutolinkToken(data: TokenData) : Token(data) {
+class UrlAutolinkToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -106,7 +122,28 @@ class UrlAutolinkToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.ReferenceLink
  */
-class ReferenceLinkToken(data: TokenData) : Token(data) {
+class ReferenceLinkToken(
+    data: TokenData,
+) : Token(data) {
+    override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
+}
+
+/**
+ * Examples:
+ * ```
+ * [^label]
+ * ```
+ * ```
+ * [^label: definition]
+ * ```
+ * ```
+ * [^: definition]
+ * ```
+ * @see com.quarkdown.core.ast.base.inline.ReferenceFootnote
+ */
+class ReferenceFootnoteToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -117,7 +154,9 @@ class ReferenceLinkToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Image
  */
-class ImageToken(data: TokenData) : Token(data) {
+class ImageToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -134,7 +173,9 @@ class ImageToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.ReferenceImage
  */
-class ReferenceImageToken(data: TokenData) : Token(data) {
+class ReferenceImageToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -145,7 +186,9 @@ class ReferenceImageToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Comment
  */
-class CommentToken(data: TokenData) : Token(data) {
+class CommentToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -153,7 +196,9 @@ class CommentToken(data: TokenData) : Token(data) {
  * Text content.
  * @see com.quarkdown.core.ast.base.inline.Text
  */
-class PlainTextToken(data: TokenData) : Token(data) {
+class PlainTextToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -163,7 +208,10 @@ class PlainTextToken(data: TokenData) : Token(data) {
  * @param symbol symbol type
  * @see com.quarkdown.core.ast.quarkdown.inline.TextSymbol
  */
-class TextSymbolToken(data: TokenData, val symbol: TextSymbolReplacement) : Token(data) {
+class TextSymbolToken(
+    data: TokenData,
+    val symbol: TextSymbolReplacement,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -179,7 +227,9 @@ class TextSymbolToken(data: TokenData, val symbol: TextSymbolReplacement) : Toke
  * ```
  * @see com.quarkdown.core.ast.base.inline.Strong
  */
-class StrongToken(data: TokenData) : Token(data) {
+class StrongToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -193,7 +243,9 @@ class StrongToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Emphasis
  */
-class EmphasisToken(data: TokenData) : Token(data) {
+class EmphasisToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -207,7 +259,9 @@ class EmphasisToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.StrongEmphasis
  */
-class StrongEmphasisToken(data: TokenData) : Token(data) {
+class StrongEmphasisToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -218,7 +272,9 @@ class StrongEmphasisToken(data: TokenData) : Token(data) {
  * ```
  * @see com.quarkdown.core.ast.base.inline.Strikethrough
  */
-class StrikethroughToken(data: TokenData) : Token(data) {
+class StrikethroughToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }
 
@@ -233,6 +289,8 @@ class StrikethroughToken(data: TokenData) : Token(data) {
  * $ LaTeX expression $
  * @see com.quarkdown.core.ast.quarkdown.inline.MathSpan
  */
-class InlineMathToken(data: TokenData) : Token(data) {
+class InlineMathToken(
+    data: TokenData,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }

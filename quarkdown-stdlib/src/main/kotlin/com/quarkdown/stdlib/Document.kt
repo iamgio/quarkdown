@@ -280,7 +280,8 @@ fun theme(
  * Built-in keys are:
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
  * - `figures`, used for captioned images;
- * - `tables`, used for captioned tables.
+ * - `tables`, used for captioned tables;
+ * - `footnotes`, used for footnotes and references to them.
  * Any other key can be addressed by custom elements (see [numbered]).
  * @wiki Numbering
  */
@@ -301,6 +302,7 @@ fun numbering(
             headings = formats["headings"]?.let(::parse),
             figures = formats["figures"]?.let(::parse),
             tables = formats["tables"]?.let(::parse),
+            footnotes = formats["footnotes"]?.let(::parse),
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
 

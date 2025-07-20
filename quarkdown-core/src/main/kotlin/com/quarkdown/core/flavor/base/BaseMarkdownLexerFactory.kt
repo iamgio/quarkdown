@@ -22,6 +22,7 @@ object BaseMarkdownLexerFactory : LexerFactory {
                     comment,
                     blockQuote,
                     blockCode,
+                    footnoteDefinition,
                     linkDefinition,
                     fencesCode,
                     heading,
@@ -51,6 +52,7 @@ object BaseMarkdownLexerFactory : LexerFactory {
                 listOf(
                     diamondAutolink,
                     link,
+                    referenceFootnote,
                     referenceLink,
                     urlAutolink,
                 ) + patterns
