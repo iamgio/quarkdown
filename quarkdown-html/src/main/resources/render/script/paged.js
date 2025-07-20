@@ -75,7 +75,7 @@ class PagedDocument extends QuarkdownDocument {
             reference.style.height = 'auto';
             reference.style.display = 'inline';
 
-            createFootnoteRule(footnoteContent);
+            getOrCreateFootnoteRule(footnoteContent);
         });
     }
 
