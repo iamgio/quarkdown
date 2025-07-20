@@ -66,6 +66,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.resolveOrFallback
 import com.quarkdown.core.rendering.UnsupportedRenderException
 import com.quarkdown.core.rendering.tag.TagNodeRenderer
+import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.toPlainText
@@ -100,7 +101,10 @@ open class BaseHtmlNodeRenderer(
 
     // Root
 
-    override fun visit(node: AstRoot) = node.children.joinToString(separator = "") { it.accept(this) }
+    override fun visit(node: AstRoot) =
+        buildMultiTag {
+            +node.children
+        }
 
     // Block
 
