@@ -143,7 +143,7 @@ open class BaseHtmlNodeRenderer(
         val index = node.getIndex(context) ?: return "" // The footnote is rendered only if it is linked to a reference
         val formattedIndex = node.getFormattedIndex(context) ?: return ""
 
-        return buildTag("aside") {
+        return buildTag("span") {
             className("footnote-definition")
             optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
             optionalAttribute("data-footnote-index", index)
@@ -152,8 +152,9 @@ open class BaseHtmlNodeRenderer(
                 className("footnote-label")
                 +formattedIndex
             }
-
-            +Paragraph(node.text)
+            tag("span") {
+                +node.text
+            }
         }
     }
 

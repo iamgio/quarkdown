@@ -21,10 +21,10 @@ class FootnoteTest {
         index: Int,
         formattedIndex: String = (index + 1).toString(),
         content: String,
-    ) = "<aside class=\"footnote-definition\" id=\"__footnote-$label\" data-footnote-index=\"$index\">" +
+    ) = "<span class=\"footnote-definition\" id=\"__footnote-$label\" data-footnote-index=\"$index\">" +
         "<sup class=\"footnote-label\">$formattedIndex</sup>" +
-        "<p>$content</p>" +
-        "</aside>"
+        "<span>$content</span>" +
+        "</span>"
 
     @Test
     fun `fallback reference`() {

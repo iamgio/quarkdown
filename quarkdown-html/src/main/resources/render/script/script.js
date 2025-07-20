@@ -142,11 +142,18 @@ let doc = new QuarkdownDocument(); // Overwritten externally by html-wrapper
 // Footnotes.
 
 /**
+ * @returns {NodeList} the footnote definitions in the document.
+ */
+function getFootnoteDefinitions() {
+    return document.querySelectorAll('.footnote-definition');
+}
+
+/**
  * @param {boolean} sorted whether to sort the footnote definitions by their index.
  * @returns {{definition: Element, reference: Element}[]} the footnote definitions and their first non-null reference element.
  */
 function getFootnoteDefinitionsAndFirstReference(sorted = true) {
-    let definitions = document.querySelectorAll('aside.footnote-definition');
+    let definitions = getFootnoteDefinitions();
     if (sorted) {
         definitions = Array.from(definitions).sort((a, b) => {
             const indexA = parseInt(a.dataset.footnoteIndex);
