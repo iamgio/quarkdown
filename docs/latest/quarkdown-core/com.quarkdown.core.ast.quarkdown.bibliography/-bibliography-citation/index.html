@@ -96,7 +96,7 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.ast.quarkdown.bibliography</a><span class="delimiter">/</span><span class="current">BibliographyCitation</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Bibliography</span><wbr><span><span>Citation</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">BibliographyCitation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>citationKey<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="../../com.quarkdown.core.ast/-node/index.html">Node</a></div><p class="paragraph">Represents a citation to a bibliography entry.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>citation</span><wbr><span><span>Key</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the key used to identify the bibliography entry</p></div></div></div></div></div><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../get-entry.html"><span>get</span><wbr><span><span>Entry</span></span></a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">BibliographyCitation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>citationKey<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="../../com.quarkdown.core.ast.attributes.reference/-reference-node/index.html">ReferenceNode</a><span class="token operator">&lt;</span><a href="index.html">BibliographyCitation</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.bibliography/-bibliography-entry/index.html">BibliographyEntry</a><span class="token punctuation">, </span><a href="../-bibliography-view/index.html">BibliographyView</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div><p class="paragraph">Represents a citation to a bibliography entry.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>citation</span><wbr><span><span>Key</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the key used to identify the bibliography entry</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
@@ -137,6 +137,21 @@
               </div>
             </div>
           </div>
+<a data-name="-1205921511%2FProperties%2F1831116724" anchor-label="reference" id="-1205921511%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reference.html"><span><span>reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1205921511%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="reference.html">reference</a><span class="token operator">: </span><a href="index.html">BibliographyCitation</a></div><div class="brief "><p class="paragraph">The reference element to associate with the definition.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div data-togglable="FUNCTION">
@@ -156,17 +171,17 @@
               </div>
             </div>
           </div>
-<a data-name="-3318444%2FFunctions%2F1831116724" anchor-label="getEntry" id="-3318444%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+<a data-name="-1962674707%2FFunctions%2F1831116724" anchor-label="getDefinition" id="-1962674707%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../get-entry.html"><span>get</span><wbr><span><span>Entry</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-3318444%2FFunctions%2F1831116724"></span>
+                  <div><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html"><span>get</span><wbr><span><span>Definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1962674707%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">BibliographyCitation</a><span class="token punctuation">.</span><a href="../get-entry.html"><span class="token function">getEntry</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-context/index.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-resolved-bibliography-entry/index.html">ResolvedBibliographyEntry</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html">R</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html">D</a><span class="token operator">&gt; </span><a href="../../com.quarkdown.core.ast.attributes.reference/-reference-node/index.html">ReferenceNode</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html">R</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html"><span class="token function">getDefinition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-context/index.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.ast.attributes.reference/get-definition.html">D</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -186,17 +201,17 @@
               </div>
             </div>
           </div>
-<a data-name="263572005%2FFunctions%2F1831116724" anchor-label="setEntry" id="263572005%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+<a data-name="205073192%2FFunctions%2F1831116724" anchor-label="setDefinition" id="205073192%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../set-entry.html"><span>set</span><wbr><span><span>Entry</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="263572005%2FFunctions%2F1831116724"></span>
+                  <div><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html"><span>set</span><wbr><span><span>Definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="205073192%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">BibliographyCitation</a><span class="token punctuation">.</span><a href="../set-entry.html"><span class="token function">setEntry</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter ">entry<span class="token operator">: </span><a href="../-resolved-bibliography-entry/index.html">ResolvedBibliographyEntry</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Registers the given <a href="../set-entry.html">entry</a> as the bibliography entry associated with this citation node within the document handled by <a href="../set-entry.html">context</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">R</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">D</a><span class="token operator">&gt; </span><a href="../../com.quarkdown.core.ast.attributes.reference/-reference-node/index.html">ReferenceNode</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">R</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">D</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html"><span class="token function">setDefinition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter ">definition<span class="token operator">: </span><a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">D</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Registers the given <a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">definition</a> as the definition associated with <a href="../../../quarkdown-core/com.quarkdown.core.ast.attributes.reference/index.html">this</a> reference within the document handled by <a href="../../com.quarkdown.core.ast.attributes.reference/set-definition.html">context</a>.</p></div></div></div>
                 </div>
               </div>
             </div>

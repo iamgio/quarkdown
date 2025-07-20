@@ -145,6 +145,7 @@ com.quarkdown.core.ast.attributes
 com.quarkdown.core.ast.attributes.id
 com.quarkdown.core.ast.attributes.location
 com.quarkdown.core.ast.attributes.presence
+com.quarkdown.core.ast.attributes.reference
 com.quarkdown.core.ast.base
 com.quarkdown.core.ast.base.block
 com.quarkdown.core.ast.base.block.list
@@ -161,14 +162,13 @@ com.quarkdown.core.ast.quarkdown.inline
 com.quarkdown.core.ast.quarkdown.invisible
 com.quarkdown.core.bibliography
 com.quarkdown.core.bibliography.bibtex
-com.quarkdown.core.bibliography.citation
 com.quarkdown.core.bibliography.style
 com.quarkdown.core.bibliography.style.dsl
 com.quarkdown.core.context
 com.quarkdown.core.context.hooks
-com.quarkdown.core.context.hooks.bibliography
 com.quarkdown.core.context.hooks.location
 com.quarkdown.core.context.hooks.presence
+com.quarkdown.core.context.hooks.reference
 com.quarkdown.core.context.localization
 com.quarkdown.core.context.toc
 com.quarkdown.core.document
