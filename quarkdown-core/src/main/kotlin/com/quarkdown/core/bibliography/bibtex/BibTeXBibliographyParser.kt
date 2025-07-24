@@ -31,8 +31,7 @@ object BibTeXBibliographyParser : BibliographyParser {
 
     private fun org.jbibtex.Value.toSanitizedString(): String =
         toUserString()
-            .replace("\n", " ")
-            .replace("\r", " ")
+            .replace("\\R+".toRegex(), " ")
             .replace("(?<!\\\\)~".toRegex(), " ")
             .replace("(?<!\\\\)---".toRegex(), "—") // Em dash.
             .replace("(?<!\\\\)--".toRegex(), "–") // En dash.
