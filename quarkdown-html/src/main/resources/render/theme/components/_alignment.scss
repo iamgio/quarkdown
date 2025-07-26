@@ -20,6 +20,11 @@
   .reveal .slides > :is(section, .pdf-page) {
     text-align: var(--qd-horizontal-alignment-global);
   }
+
+  .speaker-notes {
+    --qd-horizontal-alignment-global: start;
+    --qd-horizontal-alignment-local: start;
+  }
 }
 
 .quarkdown-plain, .quarkdown-paged {

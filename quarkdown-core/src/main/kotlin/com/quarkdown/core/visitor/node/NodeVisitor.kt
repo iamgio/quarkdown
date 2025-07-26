@@ -44,6 +44,7 @@ import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
@@ -170,9 +171,11 @@ interface NodeVisitor<T> {
 
     fun visit(node: PageCounter): T
 
+    fun visit(node: BibliographyCitation): T
+
     fun visit(node: SlidesFragment): T
 
-    fun visit(node: BibliographyCitation): T
+    fun visit(node: SlidesSpeakerNote): T
 
     // Quarkdown invisible nodes
 

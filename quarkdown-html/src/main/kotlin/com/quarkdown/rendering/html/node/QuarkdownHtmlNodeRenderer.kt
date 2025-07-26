@@ -28,6 +28,7 @@ import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
@@ -367,11 +368,6 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: MathSpan) = buildTag("formula", node.expression)
 
-    override fun visit(node: SlidesFragment) =
-        tagBuilder("div", node.children)
-            .classNames("fragment", node.behavior.asCSS)
-            .build()
-
     override fun visit(node: BibliographyCitation): CharSequence {
         val (entry: BibliographyEntry, view: BibliographyView) =
             node.getDefinition(context) ?: return Text("[???]").accept(this)
@@ -380,6 +376,18 @@ class QuarkdownHtmlNodeRenderer(
         val label = view.style.labelProvider.getLabel(entry, index)
         return Text(label).accept(this)
     }
+
+    override fun visit(node: SlidesFragment) =
+        tagBuilder("div", node.children)
+            .classNames("fragment", node.behavior.asCSS)
+            .build()
+
+    override fun visit(node: SlidesSpeakerNote) =
+        buildTag("aside") {
+            className("notes")
+            hidden()
+            +node.children
+        }
 
     /**
      * Applies the text transformation of [data] into [this] CSS builder.
@@ -440,6 +448,9 @@ class QuarkdownHtmlNodeRenderer(
                 }
                 node.showControls?.let {
                     append("const slides_showControls = $it;")
+                }
+                node.showNotes?.let {
+                    append("const slides_showNotes = $it;")
                 }
                 node.transition?.let {
                     append("const slides_transitionStyle = '${it.style.asCSS}';")
