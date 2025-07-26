@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.slides.Transition
@@ -22,6 +23,7 @@ val Slides: Module =
     moduleOf(
         ::setSlidesConfiguration,
         ::fragment,
+        ::speakerNote,
     )
 
 /**
@@ -61,3 +63,18 @@ fun fragment(
     behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
     @LikelyBody content: MarkdownContent,
 ) = SlidesFragment(behavior, content.children).wrappedAsValue()
+
+/**
+ * Creates a speaker note for a `slides` document.
+ *
+ * Speaker notes are visible only to the presenter and not to the audience during a presentation.
+ * In Reveal.js, speaker notes are shown in the speaker view (enabled by pressing `S`).
+ * @param content the content of the note
+ * @return a new [SlidesSpeakerNote] node
+ * @wiki Slides speaker note
+ */
+@OnlyForDocumentType(DocumentType.SLIDES)
+@Name("speakernote")
+fun speakerNote(
+    @LikelyBody content: MarkdownContent,
+): NodeValue = SlidesSpeakerNote(content.children).wrappedAsValue()

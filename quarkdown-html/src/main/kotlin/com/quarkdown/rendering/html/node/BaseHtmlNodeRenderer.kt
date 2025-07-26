@@ -50,6 +50,7 @@ import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
@@ -360,9 +361,11 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: InlineCollapse): CharSequence = throw UnsupportedRenderException(node)
 
+    override fun visit(node: BibliographyCitation): CharSequence = throw UnsupportedRenderException(node)
+
     override fun visit(node: SlidesFragment): CharSequence = throw UnsupportedRenderException(node)
 
-    override fun visit(node: BibliographyCitation): CharSequence = throw UnsupportedRenderException(node)
+    override fun visit(node: SlidesSpeakerNote): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
 

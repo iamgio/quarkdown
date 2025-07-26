@@ -79,6 +79,7 @@ class SlidesDocument extends QuarkdownDocument {
             transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
             transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
             hash: true,
+            plugins: [RevealNotes],
         });
     }
 
