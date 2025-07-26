@@ -30,6 +30,7 @@ val Slides: Module =
  * Sets global properties that affect the behavior of a 'slides' document.
  * @param center whether slides should be centered vertically
  * @param showControls whether navigation controls should be shown
+ * @param showNotes whether speaker notes should be shown when not in speaker view
  * @param transitionStyle global transition style between slides
  * @param transitionSpeed global transition speed between slides
  * @return a new [SlidesConfigurationInitializer] node
@@ -40,12 +41,14 @@ val Slides: Module =
 fun setSlidesConfiguration(
     @LikelyNamed center: Boolean? = null,
     @Name("controls") showControls: Boolean? = null,
+    @Name("speakernotes") showNotes: Boolean? = null,
     @Name("transition") transitionStyle: Transition.Style? = null,
     @Name("speed") transitionSpeed: Transition.Speed = Transition.Speed.DEFAULT,
 ): NodeValue =
     SlidesConfigurationInitializer(
         center,
         showControls,
+        showNotes,
         transitionStyle?.let { Transition(it, transitionSpeed) },
     ).wrappedAsValue()
 

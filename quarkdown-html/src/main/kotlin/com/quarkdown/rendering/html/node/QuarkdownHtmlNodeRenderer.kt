@@ -449,6 +449,9 @@ class QuarkdownHtmlNodeRenderer(
                 node.showControls?.let {
                     append("const slides_showControls = $it;")
                 }
+                node.showNotes?.let {
+                    append("const slides_showNotes = $it;")
+                }
                 node.transition?.let {
                     append("const slides_transitionStyle = '${it.style.asCSS}';")
                     append("const slides_transitionSpeed = '${it.speed.asCSS}';")
