@@ -6,7 +6,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertTrue
 
 /**
- *
+ * Tests for the graph data structure.
  */
 class GraphTest {
     private val graph = DirectedGraph<Int>()

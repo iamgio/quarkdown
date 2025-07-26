@@ -13,6 +13,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.MutableContext
@@ -122,6 +123,19 @@ class InlineParserTest {
                     assertEquals(url, text)
                 }
                 assertNull(title)
+            }
+        }
+
+        assertFalse(nodes.hasNext())
+    }
+
+    @Test
+    fun subdocumentLink() {
+        val nodes = inlineIterator<SubdocumentLink>(readSource("/parsing/inline/subdocumentlink.md"))
+
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("path/to/file.qd", url)
             }
         }
 

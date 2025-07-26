@@ -3,6 +3,8 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 
+private const val DEFAULT_SUBDOCUMENT_URL_SUFFIX = ".qd"
+
 /**
  * Read-only properties that affect several behaviors of the document generation process,
  * and that can be altered through function calls through its [MutableContextOptions] implementation.
@@ -30,6 +32,12 @@ interface ContextOptions : MediaStorageOptions {
     val enableLocationAwareness: Boolean
 
     /**
+     * The suffix that, if matched by a link's URL, indicates that the link points to a Quarkdown subdocument.
+     * @see com.quarkdown.core.ast.base.inline.SubdocumentLink
+     */
+    val subdocumentUrlSuffix: String
+
+    /**
      * Supplier of unique identifiers (UUIDs). For instance, UUIDs are generated for anonymous footnotes.
      */
     val uuidSupplier: () -> String
@@ -51,6 +59,7 @@ data class MutableContextOptions(
     override var autoPageBreakHeadingMaxDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableLocationAwareness: Boolean = true,
+    override var subdocumentUrlSuffix: String = DEFAULT_SUBDOCUMENT_URL_SUFFIX,
     override var uuidSupplier: () -> String = {
         java.util.UUID
             .randomUUID()

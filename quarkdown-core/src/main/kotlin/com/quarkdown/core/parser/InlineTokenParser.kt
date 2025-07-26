@@ -2,6 +2,7 @@ package com.quarkdown.core.parser
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Comment
 import com.quarkdown.core.ast.base.inline.CriticalContent
@@ -16,6 +17,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
@@ -152,14 +154,20 @@ class InlineTokenParser(
 
     override fun visit(token: LineBreakToken): Node = LineBreak
 
-    override fun visit(token: LinkToken): Link {
+    override fun visit(token: LinkToken): LinkNode {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return Link(
-            label = parseLinkLabelSubContent(groups.next()),
-            url = groups.next().trim(),
-            // Removes leading and trailing delimiters.
-            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
-        )
+        val link =
+            Link(
+                label = parseLinkLabelSubContent(groups.next()),
+                url = groups.next().trim(),
+                // Removes leading and trailing delimiters.
+                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+            )
+        return when {
+            // If the URL points to a subdocument, it is a subdocument link.
+            link.url.endsWith(context.options.subdocumentUrlSuffix) -> SubdocumentLink(link)
+            else -> link
+        }
     }
 
     override fun visit(token: ReferenceLinkToken): ReferenceLink {

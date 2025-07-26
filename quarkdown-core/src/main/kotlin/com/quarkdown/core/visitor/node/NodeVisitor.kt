@@ -29,6 +29,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -104,6 +105,8 @@ interface NodeVisitor<T> {
     fun visit(node: Link): T
 
     fun visit(node: ReferenceLink): T
+
+    fun visit(node: SubdocumentLink): T
 
     fun visit(node: ReferenceFootnote): T
 

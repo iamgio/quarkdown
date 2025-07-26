@@ -34,6 +34,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
@@ -260,6 +261,8 @@ open class BaseHtmlNodeRenderer(
 
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
+
+    override fun visit(node: SubdocumentLink): CharSequence = TODO()
 
     override fun visit(node: ReferenceFootnote): CharSequence {
         val definition: FootnoteDefinition =

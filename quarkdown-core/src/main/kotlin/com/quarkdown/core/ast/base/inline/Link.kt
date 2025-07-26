@@ -17,7 +17,8 @@ class Link(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,
-) : LinkNode, TextNode {
+) : LinkNode,
+    TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override val text: InlineContent
