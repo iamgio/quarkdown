@@ -7,8 +7,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.orDefault
-import com.quarkdown.core.media.storage.options.MediaStorageOptions
-import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
@@ -35,29 +34,13 @@ private val DEFAULT_THEME =
  */
 class HtmlPostRenderer(
     private val context: Context,
-    private val baseTemplateProcessor: () -> TemplateProcessor = {
-        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template")
-    },
-) : PostRenderer {
-    // HTML requires local media to be resolved from the file system.
-    override val preferredMediaStorageOptions: MediaStorageOptions =
-        ReadOnlyMediaStorageOptions(enableLocalMediaStorage = true)
-
-    override fun createTemplateProcessor() =
-        HtmlPostRendererTemplate(
-            baseTemplateProcessor(),
-            context,
-        ).create()
-
+    private val baseTemplateProcessor: () -> TemplateProcessor = baseHtmlTemplateProcessor,
+    private val base: HtmlOnlyPostRenderer = HtmlOnlyPostRenderer(name = "index", context, baseTemplateProcessor),
+) : PostRenderer by base {
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
             // The main HTML resource.
-            this +=
-                TextOutputArtifact(
-                    name = "index",
-                    content = rendered,
-                    type = ArtifactType.HTML,
-                )
+            this.addAll(base.generateResources(rendered))
 
             // The user-set theme is merged with the default one
             // to fill in the missing components with the default ones.
@@ -168,6 +151,10 @@ class HtmlPostRenderer(
             artifact("code", condition = context.attributes.hasCode)
             artifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
+
+    override fun getSubdocumentPostRenderer(subdocument: Subdocument) =
+        // TODO transform name
+        HtmlOnlyPostRenderer(name = subdocument.name, this.context, this.baseTemplateProcessor)
 
     override fun wrapResources(
         name: String,

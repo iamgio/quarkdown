@@ -3,10 +3,12 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryRegistrant
+import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.media.storage.MutableMediaStorage
 
 /**
@@ -30,6 +32,8 @@ open class MutableContext(
 
     override val mediaStorage: MutableMediaStorage
         get() = super.mediaStorage as MutableMediaStorage
+
+    override var subdocumentGraph: Graph<Subdocument> = super.subdocumentGraph
 
     // Prevents function calls from being enqueued.
     private var lockFunctionCallEnqueuing = false

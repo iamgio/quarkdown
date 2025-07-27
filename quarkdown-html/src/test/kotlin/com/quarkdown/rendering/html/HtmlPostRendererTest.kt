@@ -30,6 +30,14 @@ import kotlin.test.assertTrue
 class HtmlPostRendererTest {
     private lateinit var context: MutableContext
 
+    private fun postRenderer(
+        template: String,
+        block: TemplateProcessor.() -> TemplateProcessor = { this },
+    ): HtmlPostRenderer =
+        HtmlPostRenderer(context, baseTemplateProcessor = {
+            TemplateProcessor(template).block()
+        })
+
     @BeforeTest
     fun setup() {
         context = MutableContext(QuarkdownFlavor)
@@ -37,10 +45,7 @@ class HtmlPostRendererTest {
 
     @Test
     fun empty() {
-        val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor("<html><head></head><body></body></html>")
-            }
+        val postRenderer = postRenderer("<html><head></head><body></body></html>")
         assertEquals(
             "<html><head></head><body></body></html>",
             postRenderer.createTemplateProcessor().process(),
@@ -50,11 +55,9 @@ class HtmlPostRendererTest {
     @Test
     fun `with content, single line`() {
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor("<html><head></head><body>[[CONTENT]]</body></html>")
-                    .content("<strong>Hello, world!</strong>")
+            postRenderer("<html><head></head><body>[[CONTENT]]</body></html>") {
+                content("<strong>Hello, world!</strong>")
             }
-
         assertEquals(
             "<html><head></head><body><strong>Hello, world!</strong></body></html>",
             postRenderer.createTemplateProcessor().process(),
@@ -64,14 +67,14 @@ class HtmlPostRendererTest {
     @Test
     fun `with content, multiline`() {
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor(
-                    """
-                    <body>
-                        [[CONTENT]]
-                    </body>
-                    """.trimIndent(),
-                ).content("<strong>Hello, world!</strong>")
+            postRenderer(
+                """
+                <body>
+                    [[CONTENT]]
+                </body>
+                """.trimIndent(),
+            ) {
+                content("<strong>Hello, world!</strong>")
             }
         assertEquals(
             """
@@ -87,9 +90,8 @@ class HtmlPostRendererTest {
     fun `with title`() {
         context.documentInfo.name = "Doc title"
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>")
-                    .content("<strong>Hello, world!</strong>")
+            postRenderer("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>") {
+                content("<strong>Hello, world!</strong>")
             }
         assertEquals(
             "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
@@ -101,9 +103,8 @@ class HtmlPostRendererTest {
     fun `math conditional`() {
         context.attributes.markMathPresence()
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor("<body>[[if:MATH]][[CONTENT]][[endif:MATH]]</body>")
-                    .content("<em>Hello, world!</em>")
+            postRenderer("<body>[[if:MATH]][[CONTENT]][[endif:MATH]]</body>") {
+                content("<em>Hello, world!</em>")
             }
         assertEquals(
             "<body><em>Hello, world!</em></body>",
@@ -114,16 +115,16 @@ class HtmlPostRendererTest {
     @Test
     fun `code conditional`() {
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor(
-                    """
-                    <body>
-                        [[if:!CODE]]
-                        [[CONTENT]]
-                        [[endif:!CODE]]
-                    </body>
-                    """.trimIndent(),
-                ).content("<em>Hello, world!</em>")
+            postRenderer(
+                """
+                <body>
+                    [[if:!CODE]]
+                    [[CONTENT]]
+                    [[endif:!CODE]]
+                </body>
+                """.trimIndent(),
+            ) {
+                content("<em>Hello, world!</em>")
             }
         assertEquals(
             "<body>\n    <em>Hello, world!</em>\n</body>",
@@ -135,19 +136,19 @@ class HtmlPostRendererTest {
     fun `slides conditional`() {
         context.documentInfo.type = DocumentType.PLAIN
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor(
-                    """
-                    <body>
-                        [[if:SLIDES]]
-                        <em>Hello, world!</em>
-                        [[endif:SLIDES]]
-                        [[if:!SLIDES]]
-                        <strong>Hello, world!</strong>
-                        [[endif:!SLIDES]]
-                    </body>
-                    """.trimIndent(),
-                ).content("Hello, world!")
+            postRenderer(
+                """
+                <body>
+                    [[if:SLIDES]]
+                    <em>Hello, world!</em>
+                    [[endif:SLIDES]]
+                    [[if:!SLIDES]]
+                    <strong>Hello, world!</strong>
+                    [[endif:!SLIDES]]
+                </body>
+                """.trimIndent(),
+            ) {
+                content("Hello, world!")
             }
         assertEquals(
             """
@@ -173,6 +174,9 @@ class HtmlPostRendererTest {
             """.trimIndent(),
         )
 
+    private fun fontFamilyProcessorResult() =
+        HtmlPostRenderer(context, baseTemplateProcessor = { fontFamilyProcessor }).createTemplateProcessor().process().trim()
+
     @Test
     fun `system font`() {
         context.documentInfo.layout.font.mainFamily = FontFamily.System("Arial")
@@ -184,7 +188,7 @@ class HtmlPostRendererTest {
                 --qd-main-font: '63529059';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
@@ -202,7 +206,7 @@ class HtmlPostRendererTest {
                 --qd-main-font: '${path.hashCode()}';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
@@ -223,13 +227,14 @@ class HtmlPostRendererTest {
                 --qd-main-font: '${path.hashCode()}';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
     @Test
     fun `remote font, no media storage`() {
-        val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
+        val url =
+            "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
         context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, url)
         assertEquals(
@@ -240,13 +245,14 @@ class HtmlPostRendererTest {
                 --qd-main-font: '${url.hashCode()}';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
     @Test
     fun `remote font, with media storage`() {
-        val url = "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
+        val url =
+            "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
         context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, url)
         context.options.enableRemoteMediaStorage = true
@@ -259,7 +265,7 @@ class HtmlPostRendererTest {
                 --qd-main-font: '${url.hashCode()}';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
@@ -275,7 +281,7 @@ class HtmlPostRendererTest {
                 --qd-main-font: '$name';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
@@ -293,7 +299,7 @@ class HtmlPostRendererTest {
                 --qd-heading-font: 'Roboto';
             }
             """.trimIndent(),
-            HtmlPostRenderer(context) { fontFamilyProcessor }.createTemplateProcessor().process().trim(),
+            fontFamilyProcessorResult(),
         )
     }
 
@@ -306,51 +312,51 @@ class HtmlPostRendererTest {
         context.attributes.markMathPresence()
 
         val postRenderer =
-            HtmlPostRenderer(context) {
-                TemplateProcessor(
-                    """
-                    <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
-                    <head>
-                        [[if:SLIDES]]
-                        <link rel="stylesheet" href="...css"></link>
-                        [[endif:SLIDES]]
-                        [[if:CODE]]
-                        <script src="...js"></script>
-                        <script src="...js"></script>
-                        [[endif:CODE]]
-                        [[if:MATH]]
-                        <script src="...js"></script>
-                        <script src="...js"></script>
-                        [[endif:MATH]]
-                        <title>[[TITLE]]</title>
-                        <style>
-                        [[for:FONTFACE]]
-                        [[FONTFACE]]
-                        [[endfor:FONTFACE]]
-                        
-                        [[if:MATH]]
-                        mjx-container {
-                            margin: 0 0.3em;
-                        }
-                        [[endif:MATH]]
-                        </style>
-                    </head>
-                    <body>
-                        [[if:SLIDES]]
-                        <div class="reveal">
-                            <div class="slides">
-                                [[CONTENT]]
-                            </div>
+            postRenderer(
+                """
+                <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
+                <head>
+                    [[if:SLIDES]]
+                    <link rel="stylesheet" href="...css"></link>
+                    [[endif:SLIDES]]
+                    [[if:CODE]]
+                    <script src="...js"></script>
+                    <script src="...js"></script>
+                    [[endif:CODE]]
+                    [[if:MATH]]
+                    <script src="...js"></script>
+                    <script src="...js"></script>
+                    [[endif:MATH]]
+                    <title>[[TITLE]]</title>
+                    <style>
+                    [[for:FONTFACE]]
+                    [[FONTFACE]]
+                    [[endfor:FONTFACE]]
+                    
+                    [[if:MATH]]
+                    mjx-container {
+                        margin: 0 0.3em;
+                    }
+                    [[endif:MATH]]
+                    </style>
+                </head>
+                <body>
+                    [[if:SLIDES]]
+                    <div class="reveal">
+                        <div class="slides">
+                            [[CONTENT]]
                         </div>
-                        <script src="slides.js"></script>
-                        [[endif:SLIDES]]
-                        [[if:!SLIDES]]
-                        [[CONTENT]]
-                        [[endif:!SLIDES]]
-                    </body>
-                    </html>
-                    """.trimIndent(),
-                ).content("<p><em>Hello, world!</em></p>")
+                    </div>
+                    <script src="slides.js"></script>
+                    [[endif:SLIDES]]
+                    [[if:!SLIDES]]
+                    [[CONTENT]]
+                    [[endif:!SLIDES]]
+                </body>
+                </html>
+                """.trimIndent(),
+            ) {
+                content("<p><em>Hello, world!</em></p>")
             }
 
         assertEquals(
@@ -399,11 +405,11 @@ class HtmlPostRendererTest {
         context.attributes.markMathPresence()
 
         val postRenderer =
-            HtmlPostRenderer(context) {
+            HtmlPostRenderer(context, baseTemplateProcessor = {
                 TemplateProcessor
                     .fromResourceName("/postrendering/html-test-wrapper.html")
                     .content("<p><em>Hello, world!</em></p>")
-            }
+            })
 
         assertEquals(
             javaClass

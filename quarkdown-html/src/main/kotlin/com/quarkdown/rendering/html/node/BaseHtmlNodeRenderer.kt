@@ -262,7 +262,7 @@ open class BaseHtmlNodeRenderer(
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
 
-    override fun visit(node: SubdocumentLink): CharSequence = TODO()
+    override fun visit(node: SubdocumentLink): CharSequence = "" // TODO
 
     override fun visit(node: ReferenceFootnote): CharSequence {
         val definition: FootnoteDefinition =

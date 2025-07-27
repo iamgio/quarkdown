@@ -6,11 +6,14 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.DirectedGraph
+import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocalizationKeyNotFoundException
 import com.quarkdown.core.localization.LocalizationLocaleNotFoundException
@@ -46,6 +49,8 @@ open class BaseContext(
     override val localizationTables = emptyMap<String, LocalizationTable>()
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
+
+    override val subdocumentGraph: Graph<Subdocument> = DirectedGraph()
 
     override fun getFunctionByName(name: String): Function<*>? =
         libraries

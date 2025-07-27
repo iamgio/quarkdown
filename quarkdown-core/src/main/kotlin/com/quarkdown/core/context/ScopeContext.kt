@@ -3,8 +3,10 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
 
@@ -13,10 +15,12 @@ import com.quarkdown.core.pipeline.Pipeline
  * Several properties are inherited from it.
  * @param parent context this scope was forked from
  */
-class ScopeContext(val parent: Context) : MutableContext(
-    flavor = parent.flavor,
-    libraries = emptySet(),
-) {
+class ScopeContext(
+    val parent: Context,
+) : MutableContext(
+        flavor = parent.flavor,
+        libraries = emptySet(),
+    ) {
     override val attachedPipeline: Pipeline?
         get() = parent.attachedPipeline
 
@@ -37,6 +41,12 @@ class ScopeContext(val parent: Context) : MutableContext(
 
     override val mediaStorage: MutableMediaStorage
         get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
+
+    override var subdocumentGraph: Graph<Subdocument>
+        get() = parent.subdocumentGraph
+        set(value) {
+            (parent as? MutableContext)?.subdocumentGraph = value
+        }
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],

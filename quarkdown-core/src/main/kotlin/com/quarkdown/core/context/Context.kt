@@ -8,11 +8,13 @@ import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleNotSetException
 import com.quarkdown.core.localization.LocalizationTables
@@ -79,6 +81,13 @@ interface Context {
      * @see com.quarkdown.core.context.hooks.MediaStorerHook
      */
     val mediaStorage: ReadOnlyMediaStorage
+
+    /**
+     * Directed graph of the subdocuments that are being processed.
+     * Each subdocument is a separate document file that can be rendered independently,
+     * and is referenced by a link from the main document or another subdocument.
+     */
+    val subdocumentGraph: Graph<Subdocument>
 
     /**
      * Looks up a function by name.
