@@ -20,7 +20,9 @@ class SubdocumentTest {
         subdocument: Subdocument,
     ): TextOutputArtifact {
         val resources = getSubResources(group)
-        val resource = resources.firstOrNull { it.name == subdocument.name } as? TextOutputArtifact
+        val resource =
+            resources.firstOrNull { it.name == subdocument.uniqueName }
+                as? TextOutputArtifact
         assertNotNull(resource)
         return resource
     }

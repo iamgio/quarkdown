@@ -153,8 +153,11 @@ class HtmlPostRenderer(
         }
 
     override fun getSubdocumentPostRenderer(subdocument: Subdocument) =
-        // TODO transform name
-        HtmlOnlyPostRenderer(name = subdocument.name, this.context, this.baseTemplateProcessor)
+        HtmlOnlyPostRenderer(
+            name = subdocument.uniqueName,
+            this.context,
+            this.baseTemplateProcessor,
+        )
 
     override fun wrapResources(
         name: String,
