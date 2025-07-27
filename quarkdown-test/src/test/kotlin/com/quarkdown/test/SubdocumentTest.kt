@@ -13,7 +13,14 @@ import kotlin.test.assertNotNull
  * Tests for subdocument generation.
  */
 class SubdocumentTest {
-    private val subdocument = Subdocument("subdoc1", reader = { "Subdoc1".reader() })
+    private fun subdoc(name: String) =
+        Subdocument(
+            name = name,
+            path = name,
+            reader = { "$name content".reader() },
+        )
+
+    private val subdoc1 = subdoc("subdoc1")
 
     private fun getResource(
         group: OutputResource?,
@@ -31,9 +38,9 @@ class SubdocumentTest {
     fun `root to subdocument`() {
         execute(
             source = "",
-            subdocumentGraph = { it.addVertex(subdocument).addEdge(Subdocument.ROOT, subdocument) },
+            subdocumentGraph = { it.addVertex(subdoc1).addEdge(Subdocument.ROOT, subdoc1) },
             outputResourceHook = { group ->
-                val resource = getResource(group, subdocument)
+                val resource = getResource(group, subdoc1)
                 assertContains(resource.content, "<html>")
             },
         ) {}
@@ -43,9 +50,9 @@ class SubdocumentTest {
     fun `context sharing to subdocument`() {
         execute(
             source = ".doctype {paged}",
-            subdocumentGraph = { it.addVertex(subdocument).addEdge(Subdocument.ROOT, subdocument) },
+            subdocumentGraph = { it.addVertex(subdoc1).addEdge(Subdocument.ROOT, subdoc1) },
             outputResourceHook = { group ->
-                val resource = getResource(group, subdocument)
+                val resource = getResource(group, subdoc1)
                 assertContains(resource.content, "paged")
             },
         ) {}
