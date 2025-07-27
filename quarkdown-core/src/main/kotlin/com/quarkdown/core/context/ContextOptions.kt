@@ -3,7 +3,7 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 
-private const val DEFAULT_SUBDOCUMENT_URL_SUFFIX = ".qd"
+private val DEFAULT_SUBDOCUMENT_URL_SUFFIXES = setOf(".qd", ".md")
 
 /**
  * Read-only properties that affect several behaviors of the document generation process,
@@ -32,10 +32,11 @@ interface ContextOptions : MediaStorageOptions {
     val enableLocationAwareness: Boolean
 
     /**
-     * The suffix that, if matched by a link's URL, indicates that the link points to a Quarkdown subdocument.
+     * The suffixes that, if matched by a link's URL, indicates that the link points to a Quarkdown subdocument.
      * @see com.quarkdown.core.ast.base.inline.SubdocumentLink
      */
-    val subdocumentUrlSuffix: String
+    val subdocumentUrlSuffixes: Set<String>
+        get() = DEFAULT_SUBDOCUMENT_URL_SUFFIXES
 
     /**
      * Supplier of unique identifiers (UUIDs). For instance, UUIDs are generated for anonymous footnotes.
@@ -53,13 +54,19 @@ fun Context.shouldAutoPageBreak(heading: Heading) =
         heading.depth <= this.options.autoPageBreakHeadingMaxDepth
 
 /**
+ * @return whether the given [url], which may also be a file path, points to a Quarkdown subdocument
+ * depending on its suffix (file extension).
+ */
+fun Context.isSubdocumentUrl(url: String): Boolean = options.subdocumentUrlSuffixes.any { url.endsWith(it, ignoreCase = true) }
+
+/**
  * Mutable [ContextOptions] implementation.
  */
 data class MutableContextOptions(
     override var autoPageBreakHeadingMaxDepth: Int = 1,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableLocationAwareness: Boolean = true,
-    override var subdocumentUrlSuffix: String = DEFAULT_SUBDOCUMENT_URL_SUFFIX,
+    override var subdocumentUrlSuffixes: Set<String> = DEFAULT_SUBDOCUMENT_URL_SUFFIXES,
     override var uuidSupplier: () -> String = {
         java.util.UUID
             .randomUUID()

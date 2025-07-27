@@ -22,6 +22,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.isSubdocumentUrl
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.function.value.factory.IllegalRawValueException
 import com.quarkdown.core.function.value.factory.ValueFactory
@@ -165,7 +166,7 @@ class InlineTokenParser(
             )
         return when {
             // If the URL points to a subdocument, it is a subdocument link.
-            link.url.endsWith(context.options.subdocumentUrlSuffix) -> SubdocumentLink(link)
+            context.isSubdocumentUrl(link.url) -> SubdocumentLink(link)
             else -> link
         }
     }
