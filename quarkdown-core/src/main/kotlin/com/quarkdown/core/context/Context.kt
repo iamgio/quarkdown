@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
@@ -94,6 +95,12 @@ interface Context {
      * and is referenced by a link from the main document or another subdocument.
      */
     val subdocumentGraph: Graph<Subdocument>
+
+    /**
+     * The file system relative to this context
+     * which can be used to access files starting from a certain working directory.
+     */
+    val fileSystem: FileSystem
 
     /**
      * Looks up a function by name.

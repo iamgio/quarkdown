@@ -1,5 +1,7 @@
 package com.quarkdown.core.document.sub
 
+import java.io.File
+
 private const val UNIQUE_NAME_FORMAT = "subdoc-%s@%d"
 
 /**
@@ -12,6 +14,7 @@ private const val UNIQUE_NAME_FORMAT = "subdoc-%s@%d"
 data class Subdocument(
     val name: String,
     val path: String,
+    val workingDirectory: File? = null,
     val content: () -> CharSequence,
 ) {
     /**

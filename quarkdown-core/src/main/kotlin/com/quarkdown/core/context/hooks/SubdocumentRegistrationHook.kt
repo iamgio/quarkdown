@@ -7,7 +7,6 @@ import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.log.Log
-import com.quarkdown.core.util.IOUtils
 
 /**
  * Hook that registers [Subdocument]s in the subdocument graph of [context].
@@ -21,7 +20,7 @@ class SubdocumentRegistrationHook(
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         iterator.on<SubdocumentLink> { link ->
-            val file = IOUtils.resolvePath(path = link.url, context.attachedPipeline?.options?.workingDirectory)
+            val file = context.fileSystem.resolve(path = link.url)
 
             if (failOnUnresolved && !file.exists()) {
                 Log.warn("Cannot find subdocument referenced by a link: $file")
@@ -32,6 +31,7 @@ class SubdocumentRegistrationHook(
                 Subdocument(
                     name = file.nameWithoutExtension,
                     path = file.absolutePath,
+                    workingDirectory = file.parentFile,
                     content = { file.readText() },
                 )
 

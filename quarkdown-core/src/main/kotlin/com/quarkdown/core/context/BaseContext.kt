@@ -5,6 +5,8 @@ import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
@@ -53,6 +55,12 @@ open class BaseContext(
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
     override val subdocumentGraph: Graph<Subdocument> = DirectedGraph()
+
+    override val fileSystem: FileSystem
+        get() {
+            val workingDirectory = subdocument.workingDirectory ?: attachedPipeline?.options?.workingDirectory
+            return SimpleFileSystem(workingDirectory)
+        }
 
     override fun getFunctionByName(name: String): Function<*>? =
         libraries
