@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
@@ -7,20 +8,28 @@ import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+
+private const val NON_EXISTENT_FUNCTION = "somenonexistentfunction"
 
 /**
  * Tests for subdocument generation.
  */
 class SubdocumentTest {
-    private fun subdoc(name: String) =
-        Subdocument(
-            name = name,
-            path = name,
-            content = { "$name content" },
-        )
+    private fun subdoc(
+        name: String,
+        content: String,
+    ) = Subdocument(
+        name = name,
+        path = name,
+        content = { content },
+    )
 
-    private val subdoc1 = subdoc("subdoc1")
+    private val simpleSubdoc = subdoc("subdoc1", content = "Content")
+    private val referenceToParentSubdoc = subdoc("subdoc2", content = ".$NON_EXISTENT_FUNCTION")
+    private val definitionSubdoc = subdoc("subdoc3", content = ".function {$NON_EXISTENT_FUNCTION}\n\thello")
 
     private fun getResource(
         group: OutputResource?,
@@ -38,22 +47,64 @@ class SubdocumentTest {
     fun `root to subdocument`() {
         execute(
             source = "",
-            subdocumentGraph = { it.addVertex(subdoc1).addEdge(Subdocument.ROOT, subdoc1) },
+            subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.ROOT, simpleSubdoc) },
             outputResourceHook = { group ->
-                val resource = getResource(group, subdoc1)
+                val resource = getResource(group, simpleSubdoc)
                 assertContains(resource.content, "<html>")
+                assertEquals(2, subdocumentGraph.vertices.size)
             },
         ) {}
     }
 
     @Test
-    fun `context sharing to subdocument`() {
+    fun `context should be shared to subdocument`() {
+        execute(
+            source =
+                """
+                .doctype {paged}
+                
+                .function {$NON_EXISTENT_FUNCTION}
+                  hello
+                """.trimIndent(),
+            subdocumentGraph = {
+                it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.ROOT, referenceToParentSubdoc)
+            },
+            outputResourceHook = { group ->
+                val resource = getResource(group, referenceToParentSubdoc)
+                assertEquals(DocumentType.PAGED, documentInfo.type)
+                assertContains(resource.content, "paged")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `context should not be shared from subdocument to parent`() {
         execute(
             source = ".doctype {paged}",
-            subdocumentGraph = { it.addVertex(subdoc1).addEdge(Subdocument.ROOT, subdoc1) },
-            outputResourceHook = { group ->
-                val resource = getResource(group, subdoc1)
-                assertContains(resource.content, "paged")
+            subdocumentGraph = { it.addVertex(definitionSubdoc).addEdge(Subdocument.ROOT, definitionSubdoc) },
+            outputResourceHook = {
+                assertEquals(DocumentType.PAGED, documentInfo.type)
+                assertNull(getFunctionByName(NON_EXISTENT_FUNCTION))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `simple subdocument from file`() {
+        execute(
+            source = "[1](subdoc/simple-1.qd)",
+            outputResourceHook = {
+                assertEquals(2, subdocumentGraph.vertices.size)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `root to gateway to 1 and 2`() {
+        execute(
+            source = "[Gateway](subdoc/gateway.qd)",
+            outputResourceHook = {
+                assertEquals(4, subdocumentGraph.vertices.size)
             },
         ) {}
     }
