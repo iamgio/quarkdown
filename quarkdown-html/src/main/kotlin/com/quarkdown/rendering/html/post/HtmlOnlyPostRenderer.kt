@@ -35,7 +35,7 @@ class HtmlOnlyPostRenderer(
             // The main HTML resource.
             this +=
                 TextOutputArtifact(
-                    name = name, // TODO sanitize
+                    name = name,
                     content = rendered,
                     type = ArtifactType.HTML,
                 )
