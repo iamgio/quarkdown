@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
+import com.quarkdown.core.ast.base.inline.getSubdocument
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
@@ -29,6 +30,15 @@ class SubdocumentRegistrationTest {
             ),
         )
 
+    private val link2 =
+        SubdocumentLink(
+            Link(
+                label = buildInline { text("Link") },
+                url = "subdocument1.qd",
+                title = null,
+            ),
+        )
+
     private fun traverse(root: Node) {
         context.subdocumentGraph = context.subdocumentGraph.addVertex(Subdocument.ROOT)
         ObservableAstIterator()
@@ -37,7 +47,7 @@ class SubdocumentRegistrationTest {
     }
 
     @Test
-    fun single() {
+    fun `root to 1`() {
         val root =
             buildBlock {
                 root {
@@ -50,6 +60,32 @@ class SubdocumentRegistrationTest {
         assertEquals(
             2,
             context.subdocumentGraph.vertices.size,
+        )
+        assertEquals(
+            link1.getSubdocument(context),
+            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).single(),
+        )
+    }
+
+    @Test
+    fun `root to 1 and 2`() {
+        val root =
+            buildBlock {
+                root {
+                    +link1
+                    +link2
+                }
+            }
+
+        traverse(root)
+
+        assertEquals(
+            3,
+            context.subdocumentGraph.vertices.size,
+        )
+        assertEquals(
+            2,
+            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).count(),
         )
     }
 }

@@ -83,7 +83,13 @@ interface Context {
     val mediaStorage: ReadOnlyMediaStorage
 
     /**
-     * Directed graph of the subdocuments that are being processed.
+     * The subdocument that is being processed by this context.
+     * A subdocument can be the root one or another referenced by a link.
+     */
+    val subdocument: Subdocument
+
+    /**
+     * Directed graph of the subdocuments that are part of the document complex.
      * Each subdocument is a separate document file that can be rendered independently,
      * and is referenced by a link from the main document or another subdocument.
      */
@@ -145,9 +151,10 @@ interface Context {
     ): String
 
     /**
+     * @param subdocument optional subdocument to fork the context for
      * @return a new scope context, forked from this context, with the same base inherited properties
      */
-    fun fork(): ScopeContext
+    fun fork(subdocument: Subdocument = this.subdocument): ScopeContext
 }
 
 /**

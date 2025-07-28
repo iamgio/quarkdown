@@ -14,12 +14,15 @@ import com.quarkdown.core.pipeline.Pipeline
  * A context that is the result of a fork from an original parent [Context].
  * Several properties are inherited from it.
  * @param parent context this scope was forked from
+ * @param subdocument the subdocument this context is processing
  */
 class ScopeContext(
     val parent: Context,
+    subdocument: Subdocument = parent.subdocument,
 ) : MutableContext(
         flavor = parent.flavor,
         libraries = emptySet(),
+        subdocument = subdocument,
     ) {
     override val attachedPipeline: Pipeline?
         get() = parent.attachedPipeline

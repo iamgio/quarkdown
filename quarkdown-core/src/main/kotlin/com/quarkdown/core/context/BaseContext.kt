@@ -31,11 +31,13 @@ import com.quarkdown.core.util.toPlainText
  * @param attributes attributes of the node tree, produced by the parsing stage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
+ * @param subdocument the subdocument this context is processing
  */
 open class BaseContext(
     override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
+    override val subdocument: Subdocument = Subdocument.ROOT,
 ) : Context {
     override val attachedPipeline: Pipeline?
         get() = Pipelines.getAttachedPipeline(this)
@@ -92,5 +94,5 @@ open class BaseContext(
             ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
-    override fun fork(): ScopeContext = ScopeContext(parent = this)
+    override fun fork(subdocument: Subdocument): ScopeContext = ScopeContext(parent = this, subdocument)
 }

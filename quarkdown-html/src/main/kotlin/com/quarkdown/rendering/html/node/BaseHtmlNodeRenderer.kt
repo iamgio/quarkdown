@@ -271,7 +271,7 @@ open class BaseHtmlNodeRenderer(
 
         return Link(
             label = node.label,
-            url = "${subdocument.uniqueName}.html",
+            url = "./${subdocument.uniqueName}.html",
             title = node.title,
         ).accept(this)
     }

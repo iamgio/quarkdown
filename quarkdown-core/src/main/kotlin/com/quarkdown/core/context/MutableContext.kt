@@ -16,14 +16,16 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
  * @param attributes attributes of the node tree, which can be manipulated on demand
+ * @param subdocument the subdocument this context is processing
  */
 open class MutableContext(
     flavor: MarkdownFlavor,
     libraries: Set<Library> = emptySet(),
     loadableLibraries: Set<Library> = emptySet(),
+    subdocument: Subdocument = Subdocument.ROOT,
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
-) : BaseContext(attributes, flavor, libraries) {
+) : BaseContext(attributes, flavor, libraries, subdocument) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
 
     override val loadableLibraries: MutableSet<Library> = (super.loadableLibraries + loadableLibraries).toMutableSet()
