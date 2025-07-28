@@ -25,7 +25,7 @@ class ScopeContext(
         subdocument = subdocument,
     ) {
     override val attachedPipeline: Pipeline?
-        get() = parent.attachedPipeline
+        get() = super.attachedPipeline ?: parent.attachedPipeline
 
     override val documentInfo: DocumentInfo
         get() = parent.documentInfo

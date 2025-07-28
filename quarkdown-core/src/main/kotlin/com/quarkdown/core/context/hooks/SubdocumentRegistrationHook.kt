@@ -32,7 +32,7 @@ class SubdocumentRegistrationHook(
                     name = file.nameWithoutExtension,
                     path = file.absolutePath,
                     workingDirectory = file.parentFile,
-                    content = { file.readText() },
+                    content = file.readText(),
                 )
 
             link.setSubdocument(context, subdocument)

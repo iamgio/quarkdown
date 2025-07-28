@@ -12,13 +12,13 @@ private const val UNIQUE_NAME_FORMAT = "subdoc-%s@%d"
  * @param workingDirectory the working directory to be used to resolve relative file paths
  * within the subdocument. Note that this is always `null` for the root subdocument, as it relies on
  * the pipeline's working directory. To get consistent results, rely on [com.quarkdown.core.context.file.FileSystem.workingDirectory].
- * @param content supplier of the subdocument content
+ * @param content the subdocument text content
  */
 data class Subdocument(
     val name: String,
     val path: String,
     val workingDirectory: File? = null,
-    val content: () -> CharSequence,
+    val content: CharSequence,
 ) {
     /**
      * A unique name for the subdocument, which reduces the risk of name collisions.
@@ -32,6 +32,6 @@ data class Subdocument(
          * The main document.
          * It has an empty file reference, and is used to represent the main document in the subdocument graph.
          */
-        val ROOT = Subdocument(name = "", path = "", content = { "" })
+        val ROOT = Subdocument(name = "", path = "", content = "")
     }
 }

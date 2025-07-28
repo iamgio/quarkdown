@@ -24,7 +24,7 @@ class SubdocumentTest {
     ) = Subdocument(
         name = name,
         path = name,
-        content = { content },
+        content = content,
     )
 
     private val simpleSubdoc = subdoc("subdoc1", content = "Content")
@@ -105,6 +105,16 @@ class SubdocumentTest {
             source = "[Gateway](subdoc/gateway.qd)",
             outputResourceHook = {
                 assertEquals(4, subdocumentGraph.vertices.size)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `circular, root to 1 to 2 to 1`() {
+        execute(
+            source = "[1](subdoc/circular-1.qd)",
+            outputResourceHook = {
+                assertEquals(3, subdocumentGraph.vertices.size)
             },
         ) {}
     }
