@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
 import kotlin.test.Test
@@ -29,7 +30,7 @@ class HtmlOutputResourceTest {
             enableMediaStorage = true,
             outputResourceHook = { group ->
                 val resources = getSubResources(group).map { it.name }
-                assertContains(resources, "media")
+                assertContains(resources, MEDIA_SUBDIRECTORY_NAME)
             },
         ) {}
     }

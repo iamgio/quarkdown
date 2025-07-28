@@ -9,6 +9,7 @@ import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
+import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
@@ -471,7 +472,7 @@ class HtmlPostRendererTest {
     fun `resource generation, no media`() =
         `resource generation` { resources ->
             assertEquals(3, resources.size)
-            assertFalse("media" in resources.map { it.name }) // Media storage is empty.
+            assertFalse(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
         }
 
     @Test
@@ -480,7 +481,7 @@ class HtmlPostRendererTest {
         context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
         `resource generation` { resources ->
             assertEquals(4, resources.size)
-            assertTrue("media" in resources.map { it.name }) // Media storage is empty.
+            assertTrue(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
         }
     }
 
