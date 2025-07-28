@@ -17,7 +17,7 @@ class SubdocumentTest {
         Subdocument(
             name = name,
             path = name,
-            reader = { "$name content".reader() },
+            content = { "$name content" },
         )
 
     private val subdoc1 = subdoc("subdoc1")
