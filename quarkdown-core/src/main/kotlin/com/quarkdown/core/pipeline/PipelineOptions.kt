@@ -13,7 +13,8 @@ import java.io.File
  * @param wrapOutput whether the rendered code should be wrapped in a template code.
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`,
  * with the actual content injected in `body`
- * @param workingDirectory the starting directory to use when resolving relative paths from function calls
+ * @param workingDirectory the starting directory to use when resolving relative paths from function calls.
+ * Note: subdocuments may have different working directories. For consistent results rely on [com.quarkdown.core.context.file.FileSystem.workingDirectory]
  * @param enableMediaStorage whether media storage should be enabled.
  * If enabled, media objects referenced in the document are copied to the output directory
  * and those elements that use them (e.g. images) automatically reference the new local path.

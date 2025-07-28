@@ -9,6 +9,9 @@ private const val UNIQUE_NAME_FORMAT = "subdoc-%s@%d"
  * and is referenced by a link from the main document or another subdocument.
  * @param name the name of the subdocument, without extension
  * @param path the absolute path to the subdocument file or resource
+ * @param workingDirectory the working directory to be used to resolve relative file paths
+ * within the subdocument. Note that this is always `null` for the root subdocument, as it relies on
+ * the pipeline's working directory. To get consistent results, rely on [com.quarkdown.core.context.file.FileSystem.workingDirectory].
  * @param content supplier of the subdocument content
  */
 data class Subdocument(
