@@ -15,6 +15,8 @@ import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+private const val RESOURCE_PATH = "src/test/resources/subdoc"
+
 /**
  * Tests for subdocument registration from [SubdocumentLink].
  */
@@ -25,7 +27,7 @@ class SubdocumentRegistrationTest {
         SubdocumentLink(
             Link(
                 label = buildInline { text("Link") },
-                url = "subdocument1.qd",
+                url = "$RESOURCE_PATH/subdoc-1.qd",
                 title = null,
             ),
         )
@@ -34,7 +36,7 @@ class SubdocumentRegistrationTest {
         SubdocumentLink(
             Link(
                 label = buildInline { text("Link") },
-                url = "subdocument1.qd",
+                url = "$RESOURCE_PATH/subdoc-2.qd",
                 title = null,
             ),
         )
@@ -42,7 +44,7 @@ class SubdocumentRegistrationTest {
     private fun traverse(root: Node) {
         context.subdocumentGraph = context.subdocumentGraph.addVertex(Subdocument.ROOT)
         ObservableAstIterator()
-            .attach(SubdocumentRegistrationHook(context, failOnUnresolved = false))
+            .attach(SubdocumentRegistrationHook(context))
             .traverse(root as NestableNode)
     }
 
@@ -85,6 +87,28 @@ class SubdocumentRegistrationTest {
         )
         assertEquals(
             2,
+            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).count(),
+        )
+    }
+
+    @Test
+    fun `root to 1 twice`() {
+        val root =
+            buildBlock {
+                root {
+                    +link1
+                    +link1
+                }
+            }
+
+        traverse(root)
+
+        assertEquals(
+            2,
+            context.subdocumentGraph.vertices.size,
+        )
+        assertEquals(
+            1,
             context.subdocumentGraph.getNeighbors(Subdocument.ROOT).count(),
         )
     }

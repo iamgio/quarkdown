@@ -12,17 +12,15 @@ import com.quarkdown.core.log.Log
  * Hook that registers [Subdocument]s in the subdocument graph of [context].
  * A subdocument is a separate document file that is referenced by a link from the main document or another subdocument.
  * @param context the context to attach this hook to
- * @param failOnUnresolved whether to skip unresolved links
  */
 class SubdocumentRegistrationHook(
     private val context: MutableContext,
-    private val failOnUnresolved: Boolean = true,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         iterator.on<SubdocumentLink> { link ->
             val file = context.fileSystem.resolve(path = link.url)
 
-            if (failOnUnresolved && !file.exists()) {
+            if (!file.exists()) {
                 Log.warn("Cannot find subdocument referenced by a link: $file")
                 return@on
             }
