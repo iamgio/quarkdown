@@ -34,4 +34,9 @@ interface Graph<T> {
         from: T,
         to: T,
     ): Graph<T>
+
+    /**
+     * @see addEdge
+     */
+    fun addEdge(pair: Pair<T, T>): Graph<T> = addEdge(from = pair.first, to = pair.second)
 }

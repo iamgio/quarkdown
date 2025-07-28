@@ -40,7 +40,7 @@ class SubdocumentRegistrationHook(
             context.subdocumentGraph =
                 context.subdocumentGraph
                     .addVertex(subdocument)
-                    .addEdge(Subdocument.ROOT, subdocument) // TODO edge from the current subdoc
+                    .addEdge(context.subdocument to subdocument)
         }
     }
 }
