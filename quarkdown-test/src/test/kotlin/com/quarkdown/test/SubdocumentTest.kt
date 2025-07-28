@@ -118,4 +118,14 @@ class SubdocumentTest {
             },
         ) {}
     }
+
+    @Test
+    fun `recursive, root to 1 recursively`() {
+        execute(
+            source = "[1](subdoc/recursive.qd)",
+            outputResourceHook = {
+                assertEquals(2, subdocumentGraph.vertices.size)
+            },
+        ) {}
+    }
 }

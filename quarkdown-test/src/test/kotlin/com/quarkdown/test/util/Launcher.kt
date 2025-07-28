@@ -5,7 +5,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.MutableContextOptions
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.graph.Graph
+import com.quarkdown.core.graph.VisitableOnceGraph
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
@@ -48,7 +48,7 @@ val DEFAULT_OPTIONS =
 fun execute(
     source: String,
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
-    subdocumentGraph: (Graph<Subdocument>) -> Graph<Subdocument> = { it },
+    subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
     useDummyLibraryDirectory: Boolean = false,
     errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),

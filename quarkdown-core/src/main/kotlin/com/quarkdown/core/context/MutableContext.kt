@@ -8,7 +8,7 @@ import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryRegistrant
-import com.quarkdown.core.graph.Graph
+import com.quarkdown.core.graph.VisitableOnceGraph
 import com.quarkdown.core.media.storage.MutableMediaStorage
 
 /**
@@ -35,7 +35,7 @@ open class MutableContext(
     override val mediaStorage: MutableMediaStorage
         get() = super.mediaStorage as MutableMediaStorage
 
-    override var subdocumentGraph: Graph<Subdocument> = super.subdocumentGraph
+    override var subdocumentGraph: VisitableOnceGraph<Subdocument> = super.subdocumentGraph
 
     // Prevents function calls from being enqueued.
     private var lockFunctionCallEnqueuing = false

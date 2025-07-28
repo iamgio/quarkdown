@@ -6,7 +6,8 @@ import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.graph.Graph
+import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.graph.visitableOnce
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
 
@@ -45,8 +46,8 @@ class ScopeContext(
     override val mediaStorage: MutableMediaStorage
         get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
 
-    override var subdocumentGraph: Graph<Subdocument>
-        get() = parent.subdocumentGraph
+    override var subdocumentGraph: VisitableOnceGraph<Subdocument>
+        get() = parent.subdocumentGraph as? VisitableOnceGraph ?: parent.subdocumentGraph.visitableOnce
         set(value) {
             (parent as? MutableContext)?.subdocumentGraph = value
         }

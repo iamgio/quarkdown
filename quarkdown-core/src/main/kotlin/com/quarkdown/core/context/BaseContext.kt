@@ -15,7 +15,8 @@ import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.graph.DirectedGraph
-import com.quarkdown.core.graph.Graph
+import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.graph.visitableOnce
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocalizationKeyNotFoundException
 import com.quarkdown.core.localization.LocalizationLocaleNotFoundException
@@ -54,7 +55,7 @@ open class BaseContext(
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
-    override val subdocumentGraph: Graph<Subdocument> = DirectedGraph()
+    override val subdocumentGraph: VisitableOnceGraph<Subdocument> = DirectedGraph<Subdocument>().visitableOnce
 
     override val fileSystem: FileSystem
         get() {
