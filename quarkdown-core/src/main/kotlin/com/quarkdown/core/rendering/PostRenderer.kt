@@ -1,7 +1,6 @@
 package com.quarkdown.core.rendering
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.template.TemplateProcessor
@@ -39,12 +38,6 @@ interface PostRenderer {
      * @return the generated output resources
      */
     fun generateResources(rendered: CharSequence): Set<OutputResource>
-
-    /**
-     * @param subdocument the subdocument for which to get the post-renderer
-     * @return the [PostRenderer] that is used to render the subdocument
-     */
-    fun getSubdocumentPostRenderer(subdocument: Subdocument): PostRenderer = this
 
     /**
      * Given the output [resources] produced by [generateResources], merges them into a single resource

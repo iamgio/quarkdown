@@ -7,7 +7,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.orDefault
-import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
@@ -151,13 +150,6 @@ class HtmlPostRenderer(
             artifact("code", condition = context.attributes.hasCode)
             artifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
-
-    override fun getSubdocumentPostRenderer(subdocument: Subdocument) =
-        HtmlOnlyPostRenderer(
-            name = subdocument.uniqueName,
-            this.context,
-            this.baseTemplateProcessor,
-        )
 
     override fun wrapResources(
         name: String,
