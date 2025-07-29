@@ -9,7 +9,11 @@ interface Graph<T> {
      * The set of vertices in the graph.
      */
     val vertices: Set<T>
-        get() = emptySet()
+
+    /**
+     * The set of edges in the graph, represented as pairs of vertices.
+     */
+    val edges: Set<Pair<T, T>>
 
     /**
      * @param vertex the vertex whose neighbors are to be retrieved.

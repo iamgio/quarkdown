@@ -26,7 +26,6 @@ sealed interface Subdocument {
      * This is a suitable name for output resources.
      */
     val uniqueName: String
-        get() = name
 
     /**
      * The root [Subdocument], which is the main document of the Quarkdown pipeline.
@@ -41,6 +40,9 @@ sealed interface Subdocument {
      */
     data object Root : Subdocument {
         override val name: String
+            get() = "($ROOT_NAME)"
+
+        override val uniqueName: String
             get() = ROOT_NAME
     }
 

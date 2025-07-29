@@ -47,6 +47,7 @@ import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -163,6 +164,8 @@ interface NodeVisitor<T> {
     fun visit(node: BibliographyView): T
 
     fun visit(node: MermaidDiagram): T
+
+    fun visit(node: SubdocumentGraph): T
 
     // Quarkdown inline
 

@@ -54,6 +54,7 @@ import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -363,6 +364,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: BibliographyView): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MermaidDiagram): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: SubdocumentGraph): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 

@@ -19,6 +19,13 @@ internal class JGraphAdapter<T>(
     override val vertices: Set<T>
         get() = graph.vertexSet()
 
+    override val edges: Set<Pair<T, T>>
+        get() =
+            graph
+                .edgeSet()
+                .map { edge -> graph.getEdgeSource(edge) to graph.getEdgeTarget(edge) }
+                .toSet()
+
     override fun getNeighbors(vertex: T): Sequence<T> =
         graph
             .outgoingEdgesOf(vertex)
