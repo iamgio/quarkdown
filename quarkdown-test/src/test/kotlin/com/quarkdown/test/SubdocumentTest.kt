@@ -21,7 +21,7 @@ class SubdocumentTest {
     private fun subdoc(
         name: String,
         content: String,
-    ) = Subdocument(
+    ) = Subdocument.Resource(
         name = name,
         path = name,
         content = content,
@@ -47,7 +47,7 @@ class SubdocumentTest {
     fun `root to subdocument`() {
         execute(
             source = "",
-            subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.ROOT, simpleSubdoc) },
+            subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             outputResourceHook = { group ->
                 val resource = getResource(group, simpleSubdoc)
                 assertContains(resource.content, "<html>")
@@ -67,7 +67,7 @@ class SubdocumentTest {
                   hello
                 """.trimIndent(),
             subdocumentGraph = {
-                it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.ROOT, referenceToParentSubdoc)
+                it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.Root, referenceToParentSubdoc)
             },
             outputResourceHook = { group ->
                 val resource = getResource(group, referenceToParentSubdoc)
@@ -81,7 +81,7 @@ class SubdocumentTest {
     fun `context should not be shared from subdocument to parent`() {
         execute(
             source = ".doctype {paged}",
-            subdocumentGraph = { it.addVertex(definitionSubdoc).addEdge(Subdocument.ROOT, definitionSubdoc) },
+            subdocumentGraph = { it.addVertex(definitionSubdoc).addEdge(Subdocument.Root, definitionSubdoc) },
             outputResourceHook = {
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertNull(getFunctionByName(NON_EXISTENT_FUNCTION))

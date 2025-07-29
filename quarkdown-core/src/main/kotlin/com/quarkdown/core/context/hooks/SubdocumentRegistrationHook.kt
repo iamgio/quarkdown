@@ -26,7 +26,7 @@ class SubdocumentRegistrationHook(
             }
 
             val subdocument =
-                Subdocument(
+                Subdocument.Resource(
                     name = file.nameWithoutExtension,
                     path = file.absolutePath,
                     workingDirectory = file.parentFile,

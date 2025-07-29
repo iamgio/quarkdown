@@ -40,7 +40,7 @@ open class BaseContext(
     override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
-    override val subdocument: Subdocument = Subdocument.ROOT,
+    override val subdocument: Subdocument = Subdocument.Root,
 ) : Context {
     override val attachedPipeline: Pipeline?
         get() = Pipelines.getAttachedPipeline(this)
@@ -59,7 +59,9 @@ open class BaseContext(
 
     override val fileSystem: FileSystem
         get() {
-            val workingDirectory = subdocument.workingDirectory ?: attachedPipeline?.options?.workingDirectory
+            val workingDirectory =
+                (subdocument as? Subdocument.Resource)?.workingDirectory
+                    ?: attachedPipeline?.options?.workingDirectory
             return SimpleFileSystem(workingDirectory)
         }
 

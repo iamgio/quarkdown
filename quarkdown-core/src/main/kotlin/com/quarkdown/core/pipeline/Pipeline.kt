@@ -3,6 +3,7 @@ package com.quarkdown.core.pipeline
 import com.quarkdown.core.ast.Document
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.function.call.FunctionCallNodeExpander
 import com.quarkdown.core.function.library.Library
@@ -166,6 +167,7 @@ class Pipeline(
     private fun generateSubdocumentResources(): Set<OutputResource> =
         context.subdocumentGraph
             .visitNeighbors(context.subdocument, update = { context.subdocumentGraph = it })
+            .filterIsInstance<Subdocument.Resource>()
             .mapNotNull { nextSubdocument ->
                 val subContext = context.fork(nextSubdocument)
                 copy(subContext).execute(nextSubdocument.content)

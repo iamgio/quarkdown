@@ -42,7 +42,7 @@ class SubdocumentRegistrationTest {
         )
 
     private fun traverse(root: Node) {
-        context.subdocumentGraph = context.subdocumentGraph.addVertex(Subdocument.ROOT)
+        context.subdocumentGraph = context.subdocumentGraph.addVertex(Subdocument.Root)
         ObservableAstIterator()
             .attach(SubdocumentRegistrationHook(context))
             .traverse(root as NestableNode)
@@ -65,7 +65,7 @@ class SubdocumentRegistrationTest {
         )
         assertEquals(
             link1.getSubdocument(context),
-            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).single(),
+            context.subdocumentGraph.getNeighbors(Subdocument.Root).single(),
         )
     }
 
@@ -87,7 +87,7 @@ class SubdocumentRegistrationTest {
         )
         assertEquals(
             2,
-            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).count(),
+            context.subdocumentGraph.getNeighbors(Subdocument.Root).count(),
         )
     }
 
@@ -109,7 +109,7 @@ class SubdocumentRegistrationTest {
         )
         assertEquals(
             1,
-            context.subdocumentGraph.getNeighbors(Subdocument.ROOT).count(),
+            context.subdocumentGraph.getNeighbors(Subdocument.Root).count(),
         )
     }
 }

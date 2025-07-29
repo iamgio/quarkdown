@@ -21,7 +21,7 @@ data class RenderingComponents(
      */
     fun forSubdocument(subdocument: Subdocument): RenderingComponents =
         when (subdocument) {
-            Subdocument.ROOT -> this
+            Subdocument.Root -> this
             else -> copy(postRenderer = postRenderer.getSubdocumentPostRenderer(subdocument))
         }
 }

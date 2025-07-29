@@ -22,7 +22,7 @@ open class MutableContext(
     flavor: MarkdownFlavor,
     libraries: Set<Library> = emptySet(),
     loadableLibraries: Set<Library> = emptySet(),
-    subdocument: Subdocument = Subdocument.ROOT,
+    subdocument: Subdocument = Subdocument.Root,
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
 ) : BaseContext(attributes, flavor, libraries, subdocument) {
