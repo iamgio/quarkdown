@@ -19,6 +19,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+private const val DEFAULT_OUTPUT_DIRECTORY_NAME = "Quarkdown-test"
+
 /**
  * Tests for the Quarkdown compile command `c`.
  */
@@ -27,26 +29,26 @@ class CompileCommandTest : TempDirectory() {
     private val main = File(directory, "main.qd")
     private val outputDirectory = File(directory, "out")
 
+    private val content =
+        """
+        .docname {Quarkdown test}
+        .doctype {paged}
+
+        Page 1
+        
+        <<<
+        
+        Page 2
+        
+        <<<
+        
+        Page 3
+        """.trimIndent()
+
     @BeforeTest
     fun setup() {
         super.reset()
-
-        main.writeText(
-            """
-            .docname {Quarkdown test}
-            .doctype {paged}
-
-            Page 1
-            
-            <<<
-            
-            Page 2
-            
-            <<<
-            
-            Page 3
-            """.trimIndent(),
-        )
+        main.writeText(content)
     }
 
     private fun test(vararg additionalArgs: String): Pair<CliOptions, PipelineOptions> {
@@ -67,7 +69,7 @@ class CompileCommandTest : TempDirectory() {
         return cliOptions to pipelineOptions
     }
 
-    private fun assertHtmlContentPresent(directoryName: String = "Quarkdown-test") {
+    private fun assertHtmlContentPresent(directoryName: String = DEFAULT_OUTPUT_DIRECTORY_NAME) {
         val outputDir = File(outputDirectory, directoryName)
         assertTrue(outputDir.exists())
         assertTrue(outputDir.isDirectory())
@@ -134,6 +136,51 @@ class CompileCommandTest : TempDirectory() {
         test("--clean")
         assertHtmlContentPresent()
         assertFalse(dummyFile.exists())
+    }
+
+    private fun setupSubdocuments(): List<File> {
+        main.writeText("$content\n\n[Subdoc 1](subdoc1.qd)\n\n[Subdoc 2](subdoc2.qd)")
+
+        return listOf(
+            File(directory, "subdoc1.qd").apply {
+                writeText(
+                    """
+                    This is a subdocument.
+                    """.trimIndent(),
+                )
+            },
+            File(directory, "subdoc2.qd").apply {
+                writeText(
+                    """
+                    This is another subdocument.
+                    """.trimIndent(),
+                )
+            },
+        )
+    }
+
+    @Test
+    fun `with subdocument`() {
+        setupSubdocuments()
+
+        val (_, _) = test()
+        assertHtmlContentPresent()
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1.html").exists())
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2.html").exists())
+    }
+
+    @Test
+    fun `with subdocument with minimized collisions`() {
+        val (subdoc1, subdoc2) = setupSubdocuments()
+
+        val (_, _) = test("--no-subdoc-collisions")
+        assertHtmlContentPresent()
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html").exists(),
+        )
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html").exists(),
+        )
     }
 
     private fun assumePdfEnvironmentInstalled() {

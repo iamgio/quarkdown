@@ -42,6 +42,7 @@ val DEFAULT_OPTIONS =
  * @param errorHandler error handler to use
  * @param enableMediaStorage whether the media storage system should be enabled.
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
+ * @param minimizeSubdocumentCollisions whether to minimize the risk of subdocument name collisions by using a hash-based name for subdocuments
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
  * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
  */
@@ -53,6 +54,7 @@ fun execute(
     useDummyLibraryDirectory: Boolean = false,
     errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
     enableMediaStorage: Boolean = false,
+    minimizeSubdocumentCollisions: Boolean = false,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
     hook: Context.(CharSequence) -> Unit,
 ) {
@@ -77,7 +79,7 @@ fun execute(
                 context.subdocumentGraph = subdocumentGraph(context.subdocumentGraph)
             },
             afterRendering = {
-                hook(context, it)
+                hook(readOnlyContext, it)
             },
         )
 
@@ -88,6 +90,7 @@ fun execute(
                 errorHandler = errorHandler,
                 workingDirectory = File(DATA_FOLDER),
                 enableMediaStorage = enableMediaStorage,
+                minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
             ),
             libraries = setOf(Stdlib.library),
             renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },

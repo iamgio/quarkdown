@@ -69,6 +69,7 @@ import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.resolveOrFallback
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.rendering.UnsupportedRenderException
 import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
@@ -272,7 +273,7 @@ open class BaseHtmlNodeRenderer(
 
         return Link(
             label = node.label,
-            url = "./${subdocument.uniqueName}.html",
+            url = "./${subdocument.getOutputFileName(context)}.html",
             title = node.title,
         ).accept(this)
     }

@@ -1,7 +1,9 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
@@ -9,6 +11,7 @@ import com.quarkdown.test.util.getSubResources
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -34,10 +37,11 @@ class SubdocumentTest {
     private fun getResource(
         group: OutputResource?,
         subdocument: Subdocument,
+        context: Context,
     ): TextOutputArtifact {
         val resources = getSubResources(group)
         val resource =
-            resources.firstOrNull { it.name == subdocument.uniqueName }
+            resources.firstOrNull { it.name == subdocument.getOutputFileName(context) }
                 as? TextOutputArtifact
         assertNotNull(resource)
         return resource
@@ -51,10 +55,25 @@ class SubdocumentTest {
             source = "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             outputResourceHook = { group ->
-                val resource = getResource(group, simpleSubdoc)
+                val resource = getResource(group, simpleSubdoc, this)
                 assertContains(resource.content, "<html>")
                 assertEquals(2, subdocumentGraph.vertices.size)
                 assertEquals(2, getTextResourceCount(group))
+                assertContains(getSubResources(group).map { it.name }, simpleSubdoc.name)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `collision-proof subdocument name`() {
+        execute(
+            source = "",
+            subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
+            minimizeSubdocumentCollisions = true,
+            outputResourceHook = { group ->
+                val resources = getSubResources(group).map { it.name }
+                assertContains(resources, simpleSubdoc.uniqueName)
+                assertFalse(simpleSubdoc.name in resources)
             },
         ) {}
     }
@@ -73,7 +92,7 @@ class SubdocumentTest {
                 it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.Root, referenceToParentSubdoc)
             },
             outputResourceHook = { group ->
-                val resource = getResource(group, referenceToParentSubdoc)
+                val resource = getResource(group, referenceToParentSubdoc, this)
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertContains(resource.content, "paged")
             },
@@ -100,7 +119,11 @@ class SubdocumentTest {
                 assertEquals(2, subdocumentGraph.vertices.size)
                 assertEquals(2, getTextResourceCount(it))
             },
-        ) {}
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<p><a href=\"./simple-1.html\">1</a></p>", it)
+            }
+        }
     }
 
     @Test

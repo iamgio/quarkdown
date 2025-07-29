@@ -21,6 +21,8 @@ import java.io.File
  * This doesn't take effect with the base Markdown flavor,
  * as the media architecture is defined by Quarkdown through a [com.quarkdown.core.context.hooks.MediaStorerHook].
  * If this is disabled, [MediaStorageOptions] are ignored.
+ * @param minimizeSubdocumentCollisions whether to subdocument files should be named in a way that minimizes the risk of name collisions.
+ * A collision-proof name is hash-based and less human-readable and user-friendly
  * @param mediaStorageOptionsOverrides rules that override the default behavior of the media storage system
  * @param errorHandler the error handler strategy to use when an error occurs in the pipeline, during the processing of a Quarkdown file
  * @param serverPort port to communicate with the local server on. If not set, no server communication is performed. In a practical scenario,
@@ -32,6 +34,7 @@ data class PipelineOptions(
     val wrapOutput: Boolean = true,
     val workingDirectory: File? = null,
     val enableMediaStorage: Boolean = true,
+    val minimizeSubdocumentCollisions: Boolean = false,
     val serverPort: Int? = null,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),
     val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
