@@ -39,7 +39,7 @@ class Pipeline(
     val readOnlyContext: Context
         get() = context
 
-    private val renderingComponents: RenderingComponents = renderer(context.flavor.rendererFactory, context)
+    private val renderingComponents: RenderingComponents by lazy { renderer(context.flavor.rendererFactory, context) }
 
     init {
         // In case the context is a scope context (e.g. for subdocuments),
