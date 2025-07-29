@@ -43,6 +43,8 @@ class SubdocumentTest {
         return resource
     }
 
+    private fun getTextResourceCount(group: OutputResource?): Int = getSubResources(group).filterIsInstance<TextOutputArtifact>().size
+
     @Test
     fun `root to subdocument`() {
         execute(
@@ -52,6 +54,7 @@ class SubdocumentTest {
                 val resource = getResource(group, simpleSubdoc)
                 assertContains(resource.content, "<html>")
                 assertEquals(2, subdocumentGraph.vertices.size)
+                assertEquals(2, getTextResourceCount(group))
             },
         ) {}
     }
@@ -95,6 +98,7 @@ class SubdocumentTest {
             source = "[1](subdoc/simple-1.qd)",
             outputResourceHook = {
                 assertEquals(2, subdocumentGraph.vertices.size)
+                assertEquals(2, getTextResourceCount(it))
             },
         ) {}
     }
@@ -105,6 +109,7 @@ class SubdocumentTest {
             source = "[Gateway](subdoc/gateway.qd)",
             outputResourceHook = {
                 assertEquals(4, subdocumentGraph.vertices.size)
+                assertEquals(4, getTextResourceCount(it))
             },
         ) {}
     }
@@ -115,6 +120,7 @@ class SubdocumentTest {
             source = "[1](subdoc/circular-1.qd)",
             outputResourceHook = {
                 assertEquals(3, subdocumentGraph.vertices.size)
+                assertEquals(3, getTextResourceCount(it))
             },
         ) {}
     }
@@ -125,6 +131,7 @@ class SubdocumentTest {
             source = "[1](subdoc/recursive.qd)",
             outputResourceHook = {
                 assertEquals(2, subdocumentGraph.vertices.size)
+                assertEquals(2, getTextResourceCount(it))
             },
         ) {}
     }
