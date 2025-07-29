@@ -11,6 +11,13 @@ import com.quarkdown.core.template.TemplateProcessor
 
 /**
  * A subset of [HtmlPostRenderer] that generates only the HTML output resources without any additional resources.
+ *
+ * It supports out of the box:
+ * - RevealJS for slides rendering;
+ * - PagedJS for page-based rendering (e.g. books);
+ * - KaTeX for math rendering;
+ * - HighlightJS for code highlighting.
+ *
  * @param name the name of the HTML output resource, without extension
  * @param context the rendering context
  * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate].

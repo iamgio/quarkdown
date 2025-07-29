@@ -186,7 +186,7 @@ class Pipeline(
         context.attributes.root = document
         context.subdocumentGraph = context.subdocumentGraph.addVertex(subdocument)
 
-        val renderer = this.renderer(context.flavor.rendererFactory, context).forSubdocument(subdocument)
+        val renderer = this.renderer(context.flavor.rendererFactory, context)
 
         // The chosen renderer has its own preferred media storage options.
         // For example, HTML requires local media to be accessible from the file system,

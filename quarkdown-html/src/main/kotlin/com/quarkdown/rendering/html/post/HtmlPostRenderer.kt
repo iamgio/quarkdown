@@ -25,11 +25,11 @@ private val DEFAULT_THEME =
     )
 
 /**
- * A [PostRenderer] that injects content into an HTML template, which supports out of the box:
- * - RevealJS for slides rendering;
- * - PagedJS for page-based rendering (e.g. books);
- * - KaTeX for math rendering;
- * - HighlightJS for code highlighting.
+ * A [PostRenderer] that injects content into an HTML template. This includes all the features of [HtmlOnlyPostRenderer], plus:
+ * - Theme components
+ * - Runtime scripts
+ * - Media resources
+ *
  * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate].
  */
 class HtmlPostRenderer(
