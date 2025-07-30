@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
@@ -24,6 +25,7 @@ import com.quarkdown.core.util.toPlainText
 val Text: Module =
     moduleOf(
         ::text,
+        ::lineBreak,
         ::code,
         ::loremIpsum,
     )
@@ -69,6 +71,14 @@ fun text(
         else -> transform
     }.wrappedAsValue()
 }
+
+/**
+ * Creates a line break. In standard Markdown, this is also achievable with two spaces at the end of a line,
+ * but this function provides a more explicit and unambiguous way to insert a line break.
+ * @return a [LineBreak] node
+ */
+@Name("br")
+fun lineBreak() = LineBreak.wrappedAsValue()
 
 /**
  * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
