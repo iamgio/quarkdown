@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
@@ -14,6 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 private const val NON_EXISTENT_FUNCTION = "somenonexistentfunction"
 
@@ -33,6 +35,7 @@ class SubdocumentTest {
     private val simpleSubdoc = subdoc("subdoc1", content = "Content")
     private val referenceToParentSubdoc = subdoc("subdoc2", content = ".$NON_EXISTENT_FUNCTION")
     private val definitionSubdoc = subdoc("subdoc3", content = ".function {$NON_EXISTENT_FUNCTION}\n\thello")
+    private val thirdPartySubdoc = subdoc("subdoc3", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
 
     private fun getResource(
         group: OutputResource?,
@@ -107,6 +110,17 @@ class SubdocumentTest {
             outputResourceHook = {
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertNull(getFunctionByName(NON_EXISTENT_FUNCTION))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `third-party presence should be shared from subdocument to parent`() {
+        execute(
+            source = "",
+            subdocumentGraph = { it.addVertex(thirdPartySubdoc).addEdge(Subdocument.Root, thirdPartySubdoc) },
+            outputResourceHook = {
+                assertTrue(attributes.hasMermaidDiagram)
             },
         ) {}
     }
