@@ -72,6 +72,7 @@ $dokka.location:com.quarkdown.stdlib//let/#com.quarkdown.core.function.value.Dyn
 $dokka.location:com.quarkdown.stdlib//libraries/#com.quarkdown.core.context.Context/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libraries.html
 $dokka.location:com.quarkdown.stdlib//libraryExists/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libexists.html
 $dokka.location:com.quarkdown.stdlib//libraryFunctions/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libfunctions.html
+$dokka.location:com.quarkdown.stdlib//lineBreak/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/br.html
 $dokka.location:com.quarkdown.stdlib//localization/#com.quarkdown.core.context.MutableContext#kotlin.String#kotlin.Boolean#kotlin.collections.Map[kotlin.String,com.quarkdown.core.function.value.DictionaryValue[com.quarkdown.core.function.value.OutputValue[kotlin.String]]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Localization/localization.html
 $dokka.location:com.quarkdown.stdlib//localize/#com.quarkdown.core.context.Context#kotlin.String#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Localization/localize.html
 $dokka.location:com.quarkdown.stdlib//log/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/log.html
