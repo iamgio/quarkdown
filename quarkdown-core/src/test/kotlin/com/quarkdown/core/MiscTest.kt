@@ -10,10 +10,10 @@ import com.quarkdown.core.document.numbering.NumberingFixedSymbol
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
-import com.quarkdown.core.pipeline.output.FileResourceExporter
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
 import com.quarkdown.core.util.StringCase
 import java.nio.file.Files
 import kotlin.test.Test

@@ -32,7 +32,7 @@ private val DEFAULT_THEME =
  * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate].
  */
 class HtmlPostRenderer(
-    private val context: Context,
+    val context: Context,
     private val baseTemplateProcessor: () -> TemplateProcessor = baseHtmlTemplateProcessor,
     private val base: HtmlOnlyPostRenderer = HtmlOnlyPostRenderer(name = "index", context, baseTemplateProcessor),
 ) : PostRenderer by base {
