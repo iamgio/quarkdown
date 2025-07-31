@@ -106,6 +106,7 @@ $dokka.location:com.quarkdown.stdlib//sin/#kotlin.Number/PointingToDeclaration/
 $dokka.location:com.quarkdown.stdlib//speakerNote/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/speakernote.html
 $dokka.location:com.quarkdown.stdlib//sqrt/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/sqrt.html
 $dokka.location:com.quarkdown.stdlib//string/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/string.html
+$dokka.location:com.quarkdown.stdlib//subdocumentGraph/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/subdocumentgraph.html
 $dokka.location:com.quarkdown.stdlib//subtract/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/subtract.html
 $dokka.location:com.quarkdown.stdlib//sum/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/sum.html
 $dokka.location:com.quarkdown.stdlib//table/#com.quarkdown.core.context.Context#kotlin.collections.Iterable[com.quarkdown.core.function.value.Value[kotlin.String]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/table.html
@@ -167,6 +168,7 @@ com.quarkdown.core.bibliography.bibtex
 com.quarkdown.core.bibliography.style
 com.quarkdown.core.bibliography.style.dsl
 com.quarkdown.core.context
+com.quarkdown.core.context.file
 com.quarkdown.core.context.hooks
 com.quarkdown.core.context.hooks.location
 com.quarkdown.core.context.hooks.presence
@@ -182,6 +184,7 @@ com.quarkdown.core.document.layout.paragraph
 com.quarkdown.core.document.numbering
 com.quarkdown.core.document.size
 com.quarkdown.core.document.slides
+com.quarkdown.core.document.sub
 com.quarkdown.core.document.tex
 com.quarkdown.core.flavor
 com.quarkdown.core.flavor.base
@@ -203,6 +206,7 @@ com.quarkdown.core.function.value.data
 com.quarkdown.core.function.value.factory
 com.quarkdown.core.function.value.output
 com.quarkdown.core.function.value.output.node
+com.quarkdown.core.graph
 com.quarkdown.core.lexer
 com.quarkdown.core.lexer.patterns
 com.quarkdown.core.lexer.regex
@@ -225,6 +229,7 @@ com.quarkdown.core.parser.walker.funcall
 com.quarkdown.core.pipeline
 com.quarkdown.core.pipeline.error
 com.quarkdown.core.pipeline.output
+com.quarkdown.core.pipeline.output.visitor
 com.quarkdown.core.property
 com.quarkdown.core.rendering
 com.quarkdown.core.rendering.representable
