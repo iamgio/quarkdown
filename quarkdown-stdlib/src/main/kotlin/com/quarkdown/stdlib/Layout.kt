@@ -255,8 +255,7 @@ fun grid(
  * Transposes content to landscape orientation by rotating it 90 degrees counter-clockwise.
  * This is useful for wide content, such as diagrams, that does not fit in the normal page orientation.
  *
- * Note that this is experimental in paged documents, where it's suggested that the content
- * provided by this function is the only content in the page, otherwise the page may not render correctly.
+ * This feature is experimental and may render inconsistently.
  * @param body content to transpose
  * @return the new [Landscape] node
  * @wiki Landscape content
