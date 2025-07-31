@@ -11,6 +11,7 @@ import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
+import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
@@ -50,6 +51,7 @@ val Layout: Module =
         ::row,
         ::column,
         ::grid,
+        ::landscape,
         ::fullColumnSpan,
         ::whitespace,
         ::clip,
@@ -248,6 +250,19 @@ fun grid(
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
     else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, gap, body)
 }
+
+/**
+ * Transposes content to landscape orientation by rotating it 90 degrees counter-clockwise.
+ * This is useful for wide content, such as diagrams, that does not fit in the normal page orientation.
+ *
+ * This feature is experimental and may render inconsistently.
+ * @param body content to transpose
+ * @return the new [Landscape] node
+ * @wiki Landscape content
+ */
+fun landscape(
+    @LikelyBody body: MarkdownContent,
+) = Landscape(body.children).wrappedAsValue()
 
 /**
  * If the document has a multi-column layout (set via [pageFormat]), makes content span across all columns in a multi-column layout.

@@ -40,6 +40,7 @@ import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
+import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
@@ -148,6 +149,8 @@ interface NodeVisitor<T> {
     fun visit(node: Stacked): T
 
     fun visit(node: Numbered): T
+
+    fun visit(node: Landscape): T
 
     fun visit(node: FullColumnSpan): T
 

@@ -1,0 +1,9 @@
+.quarkdown .landscape {
+  transform: rotate(-90deg) translateX(-100%);
+  transform-origin: top left;
+}
+
+.quarkdown-paged .landscape {
+  transform: rotate(-90deg) translateX(calc(-100% + var(--pagedjs-margin-top) / 2));
+  width: calc(var(--pagedjs-height-right) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom) - 60px) !important;
+}

@@ -248,6 +248,19 @@ function applyRemainingHeightProperties() {
 
 postRenderingExecutionQueue.push(applyRemainingHeightProperties);
 
+// Swaps width and height of landscape elements.
+function swapLandscapeSizes() {
+    const landscapeElements = document.querySelectorAll('.landscape');
+    landscapeElements.forEach(element => {
+        const width = element.clientWidth;
+        const height = element.getBoundingClientRect().height;
+        element.style.width = `${height}px`;
+        element.style.height = `${width}px`;
+    });
+}
+
+preRenderingExecutionQueue.push(swapLandscapeSizes);
+
 // General hash utility.
 function hashCode(str) {
     let hash = 0;
