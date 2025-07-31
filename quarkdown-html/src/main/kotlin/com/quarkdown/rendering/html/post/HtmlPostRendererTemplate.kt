@@ -11,6 +11,13 @@ import com.quarkdown.rendering.html.css.asCSS
 import org.apache.commons.text.StringEscapeUtils
 
 /**
+ * Supplier of the base [TemplateProcessor] for HTML post-rendering.
+ */
+val baseHtmlTemplateProcessor: () -> TemplateProcessor = {
+    TemplateProcessor.fromResourceName("/render/html-wrapper.html.template")
+}
+
+/**
  * Supplier of a [TemplateProcessor] that injects content and properties into an HTML template.
  * @see HtmlPostRenderer
  */

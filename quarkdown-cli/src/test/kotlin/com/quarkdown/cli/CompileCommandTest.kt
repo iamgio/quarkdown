@@ -19,6 +19,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+private const val DEFAULT_OUTPUT_DIRECTORY_NAME = "Quarkdown-test"
+
 /**
  * Tests for the Quarkdown compile command `c`.
  */
@@ -27,26 +29,26 @@ class CompileCommandTest : TempDirectory() {
     private val main = File(directory, "main.qd")
     private val outputDirectory = File(directory, "out")
 
+    private val content =
+        """
+        .docname {Quarkdown test}
+        .doctype {paged}
+
+        Page 1
+        
+        <<<
+        
+        Page 2
+        
+        <<<
+        
+        Page 3
+        """.trimIndent()
+
     @BeforeTest
     fun setup() {
         super.reset()
-
-        main.writeText(
-            """
-            .docname {Quarkdown test}
-            .doctype {paged}
-
-            Page 1
-            
-            <<<
-            
-            Page 2
-            
-            <<<
-            
-            Page 3
-            """.trimIndent(),
-        )
+        main.writeText(content)
     }
 
     private fun test(vararg additionalArgs: String): Pair<CliOptions, PipelineOptions> {
@@ -67,7 +69,7 @@ class CompileCommandTest : TempDirectory() {
         return cliOptions to pipelineOptions
     }
 
-    private fun assertHtmlContentPresent(directoryName: String = "Quarkdown-test") {
+    private fun assertHtmlContentPresent(directoryName: String = DEFAULT_OUTPUT_DIRECTORY_NAME) {
         val outputDir = File(outputDirectory, directoryName)
         assertTrue(outputDir.exists())
         assertTrue(outputDir.isDirectory())
@@ -136,6 +138,50 @@ class CompileCommandTest : TempDirectory() {
         assertFalse(dummyFile.exists())
     }
 
+    private fun setupSubdocuments(): List<File> {
+        main.writeText("$content\n\n[Subdoc 1](subdoc1.qd)\n\n[Subdoc 2](subdoc2.qd)")
+
+        return listOf(
+            File(directory, "subdoc1.qd").apply {
+                writeText("This is a subdocument.")
+            },
+            File(directory, "subdoc2.qd").apply {
+                writeText("This is another subdocument. [Subdoc 3](subdoc3.qd)")
+            },
+            File(directory, "subdoc3.qd").apply {
+                writeText("This is yet another subdocument.")
+            },
+        )
+    }
+
+    @Test
+    fun `with subdocument`() {
+        setupSubdocuments()
+
+        val (_, _) = test()
+        assertHtmlContentPresent()
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1.html").exists())
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2.html").exists())
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3.html").exists())
+    }
+
+    @Test
+    fun `with subdocument with minimized collisions`() {
+        val (subdoc1, subdoc2, subdoc3) = setupSubdocuments()
+
+        val (_, _) = test("--no-subdoc-collisions")
+        assertHtmlContentPresent()
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html").exists(),
+        )
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html").exists(),
+        )
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3@${subdoc3.absolutePath.hashCode()}.html").exists(),
+        )
+    }
+
     private fun assumePdfEnvironmentInstalled() {
         assumeTrue(Env.npmPrefix != null)
         assumeTrue(Env.nodePath != null)
@@ -148,12 +194,12 @@ class CompileCommandTest : TempDirectory() {
     }
 
     private fun checkPdf(
-        name: String = "Quarkdown-test.pdf",
+        name: String = "$DEFAULT_OUTPUT_DIRECTORY_NAME.pdf",
         expectedPages: Int = 3,
     ) {
         val pdf = File(outputDirectory, name)
         assertTrue(pdf.exists())
-        assertFalse(File(outputDirectory, "Quarkdown-test").exists())
+        assertFalse(File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME).exists())
 
         Loader.loadPDF(pdf).use {
             assertEquals(expectedPages, it.numberOfPages)
@@ -187,6 +233,21 @@ class CompileCommandTest : TempDirectory() {
         assumePdfEnvironmentInstalled()
         test("--pdf", "--pdf-no-sandbox", "--clean")
         checkPdf()
+    }
+
+    @Test
+    fun `pdf with subdocuments`() {
+        assumePdfEnvironmentInstalled()
+        setupSubdocuments()
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+
+        val pdfDir = File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME)
+        assertTrue(pdfDir.exists())
+        assertTrue(pdfDir.isDirectory)
+        assertTrue(pdfDir.resolve("subdoc1.pdf").exists())
+        assertTrue(pdfDir.resolve("subdoc2.pdf").exists())
+        assertTrue(pdfDir.resolve("subdoc3.pdf").exists())
+        assertEquals(4, pdfDir.listFiles()!!.size)
     }
 
     // #86

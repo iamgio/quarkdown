@@ -34,7 +34,9 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.base.inline.getSubdocument
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -52,6 +54,7 @@ import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -65,6 +68,8 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.resolveOrFallback
+import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.rendering.UnsupportedRenderException
 import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
@@ -261,6 +266,18 @@ open class BaseHtmlNodeRenderer(
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
 
+    override fun visit(node: SubdocumentLink): CharSequence {
+        val subdocument: Subdocument =
+            node.getSubdocument(context)
+                ?: return "[???]"
+
+        return Link(
+            label = node.label,
+            url = "./${subdocument.getOutputFileName(context)}.html",
+            title = node.title,
+        ).accept(this)
+    }
+
     override fun visit(node: ReferenceFootnote): CharSequence {
         val definition: FootnoteDefinition =
             node.getDefinition(context)
@@ -348,6 +365,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: BibliographyView): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MermaidDiagram): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: SubdocumentGraph): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 

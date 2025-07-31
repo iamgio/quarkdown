@@ -1,7 +1,14 @@
-package com.quarkdown.core.pipeline.output
+package com.quarkdown.core.pipeline.output.visitor
 
-import com.quarkdown.core.pipeline.output.FileResourceExporter.NameProvider.fileNameWithoutExtension
-import com.quarkdown.core.pipeline.output.FileResourceExporter.NameProvider.fullFileName
+import com.quarkdown.core.pipeline.output.ArtifactType
+import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.OutputArtifact
+import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.core.pipeline.output.OutputResourceGroup
+import com.quarkdown.core.pipeline.output.OutputResourceVisitor
+import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter.NameProvider.fileNameWithoutExtension
+import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter.NameProvider.fullFileName
 import com.quarkdown.core.util.sanitizeFileName
 import java.io.File
 

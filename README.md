@@ -326,6 +326,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 
+- `--no-subdoc-collisions`: makes generated subdocument file names collision-proof. [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments)
+
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
 &nbsp;

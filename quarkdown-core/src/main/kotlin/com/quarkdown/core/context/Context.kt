@@ -7,12 +7,15 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleNotSetException
 import com.quarkdown.core.localization.LocalizationTables
@@ -81,6 +84,25 @@ interface Context {
     val mediaStorage: ReadOnlyMediaStorage
 
     /**
+     * The subdocument that is being processed by this context.
+     * A subdocument can be the root one or another referenced by a link.
+     */
+    val subdocument: Subdocument
+
+    /**
+     * Directed graph of the subdocuments that are part of the document complex.
+     * Each subdocument is a separate document file that can be rendered independently,
+     * and is referenced by a link from the main document or another subdocument.
+     */
+    val subdocumentGraph: Graph<Subdocument>
+
+    /**
+     * The file system relative to this context
+     * which can be used to access files starting from a certain working directory.
+     */
+    val fileSystem: FileSystem
+
+    /**
      * Looks up a function by name.
      * @param name name of the function to look up, case-sensitive
      * @return the corresponding function, if it exists
@@ -136,9 +158,10 @@ interface Context {
     ): String
 
     /**
+     * @param subdocument optional subdocument to fork the context for
      * @return a new scope context, forked from this context, with the same base inherited properties
      */
-    fun fork(): ScopeContext
+    fun fork(subdocument: Subdocument = this.subdocument): ScopeContext
 }
 
 /**

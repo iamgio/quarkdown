@@ -15,7 +15,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineException
-import com.quarkdown.core.pipeline.output.saveTo
+import com.quarkdown.core.pipeline.output.visitor.saveTo
 import com.quarkdown.server.message.Reload
 import com.quarkdown.server.message.ServerMessage
 import kotlin.system.exitProcess

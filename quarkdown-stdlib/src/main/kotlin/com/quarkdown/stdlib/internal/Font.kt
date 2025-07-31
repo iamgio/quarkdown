@@ -3,7 +3,6 @@ package com.quarkdown.stdlib.internal
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.misc.font.resolver.FontFamilyResolver
-import com.quarkdown.stdlib.workingDirectory
 
 /**
  * Resolves a font family by its name or path, and registers it in the media storage if it's not a system font.
@@ -14,7 +13,7 @@ internal fun loadFontFamily(
     nameOrPath: String,
     context: MutableContext,
 ): FontFamily? {
-    val fontFamily = FontFamilyResolver.SYSTEM.resolve(nameOrPath, context.workingDirectory)
+    val fontFamily = FontFamilyResolver.SYSTEM.resolve(nameOrPath, context.fileSystem.workingDirectory)
     if (fontFamily is FontFamily.Media) {
         context.mediaStorage.register(nameOrPath, fontFamily.media)
     }

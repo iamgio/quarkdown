@@ -11,7 +11,10 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import java.io.File
 
-private const val MEDIA_SUBDIRECTORY_NAME = "media"
+/**
+ * The name of the media subdirectory in the output resources.
+ */
+const val MEDIA_SUBDIRECTORY_NAME = "media"
 
 /**
  * A media storage that can be modified with new entries.

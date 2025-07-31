@@ -22,7 +22,7 @@ import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.log.Log
-import com.quarkdown.core.pipeline.output.saveTo
+import com.quarkdown.core.pipeline.output.visitor.saveTo
 import java.io.File
 
 /**

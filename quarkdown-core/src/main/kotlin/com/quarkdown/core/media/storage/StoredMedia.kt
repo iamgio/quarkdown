@@ -1,7 +1,7 @@
 package com.quarkdown.core.media.storage
 
 import com.quarkdown.core.media.Media
-import com.quarkdown.core.pipeline.output.FileResourceExporter
+import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
 
 /**
  * A media file paired with a name, used in a [ReadOnlyMediaStorage].

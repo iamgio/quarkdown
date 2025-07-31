@@ -30,6 +30,7 @@ import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -51,6 +52,7 @@ import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
@@ -363,6 +365,23 @@ class QuarkdownHtmlNodeRenderer(
             classNames("mermaid", "fill-height")
             +escapeCriticalContent(node.code)
         }
+
+    override fun visit(node: SubdocumentGraph): CharSequence {
+        fun id(subdocument: Subdocument) = subdocument.name.hashCode()
+
+        val content =
+            "graph LR\n" +
+                context.subdocumentGraph.edges.joinToString("\n") { edge ->
+                    val from = edge.first
+                    val to = edge.second
+                    val (idFrom, idTo) = id(from) to id(to)
+                    val (nameFrom, nameTo) = from.name to to.name
+
+                    "$idFrom[\"$nameFrom\"] --> $idTo[\"$nameTo\"]"
+                }
+
+        return MermaidDiagram(content).accept(this)
+    }
 
     // Inline
 
