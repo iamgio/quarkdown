@@ -23,6 +23,7 @@ import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
+import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
@@ -238,6 +239,8 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
         }
 
+    override fun visit(node: Landscape) = div("landscape", node.children)
+
     override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
     override fun visit(node: Clipped) =
@@ -322,7 +325,7 @@ class QuarkdownHtmlNodeRenderer(
                     this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
                     linkUrlMapper = { item ->
-                        "#" + HtmlIdentifierProvider.Companion.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
                     },
                 )
             }
