@@ -43,7 +43,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">1.7.0
+        <div class="library-version" id="library-version">1.8.0
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
@@ -96,28 +96,24 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.post</a><span class="delimiter">/</span><span class="current">HtmlPostRenderer</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Html</span><wbr><span>Post</span><wbr><span><span>Renderer</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">HtmlPostRenderer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">baseTemplateProcessor<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator"> = </span>{
-        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template")
-    }</span></span><span class="token punctuation">)</span> : <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a></div><p class="paragraph">A <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a> that injects content into an HTML template, which supports out of the box:</p><ul><li><p class="paragraph">RevealJS for slides rendering;</p></li><li><p class="paragraph">PagedJS for page-based rendering (e.g. books);</p></li><li><p class="paragraph">KaTeX for math rendering;</p></li><li><p class="paragraph">HighlightJS for code highlighting.</p></li></ul><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>base</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the base <a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a> to inject with content and process via <a href="../-html-post-renderer-template/index.html">HtmlPostRendererTemplate</a>.</p></div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">HtmlPostRenderer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">baseTemplateProcessor<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator"> = </span>baseHtmlTemplateProcessor<span class="token punctuation">, </span></span><span class="parameter ">base<span class="token operator">: </span><a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a><span class="token operator"> = </span>HtmlOnlyPostRenderer(name = "index", context, baseTemplateProcessor)</span></span><span class="token punctuation">)</span> : <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a></div><p class="paragraph">A <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a> that injects content into an HTML template. This includes all the features of <a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a>, plus:</p><ul><li><p class="paragraph">Theme components</p></li><li><p class="paragraph">Runtime scripts</p></li><li><p class="paragraph">Media resources</p></li></ul><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>base</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the base <a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a> to inject with content and process via <a href="../-html-post-renderer-template/index.html">HtmlPostRendererTemplate</a>.</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="2103642849%2FConstructors%2F-203176000" anchor-label="HtmlPostRenderer" id="2103642849%2FConstructors%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+        <div class="table"><a data-name="239265908%2FConstructors%2F-203176000" anchor-label="HtmlPostRenderer" id="239265908%2FConstructors%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
           <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-html-post-renderer.html"><span>Html</span><wbr><span>Post</span><wbr><span><span>Renderer</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2103642849%2FConstructors%2F-203176000"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="239265908%2FConstructors%2F-203176000"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">baseTemplateProcessor<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator"> = </span>{
-        TemplateProcessor.fromResourceName("/render/html-wrapper.html.template")
-    }</span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">baseTemplateProcessor<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator"> = </span>baseHtmlTemplateProcessor<span class="token punctuation">, </span></span><span class="parameter ">base<span class="token operator">: </span><a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a><span class="token operator"> = </span>HtmlOnlyPostRenderer(name = "index", context, baseTemplateProcessor)</span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -126,17 +122,32 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="-1040045049%2FProperties%2F-203176000" anchor-label="preferredMediaStorageOptions" id="-1040045049%2FProperties%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+        <div class="table"><a data-name="-2017913090%2FProperties%2F-203176000" anchor-label="context" id="-2017913090%2FProperties%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="preferred-media-storage-options.html"><span>preferred</span><wbr><span>Media</span><wbr><span>Storage</span><wbr><span><span>Options</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1040045049%2FProperties%2F-203176000"></span>
+                  <div><a href="context.html"><span><span>context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2017913090%2FProperties%2F-203176000"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="preferred-media-storage-options.html">preferredMediaStorageOptions</a><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.media.storage.options/-media-storage-options/index.html">MediaStorageOptions</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="context.html">context</a><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1396102394%2FProperties%2F-203176000" anchor-label="preferredMediaStorageOptions" id="1396102394%2FProperties%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1396102394%2FProperties%2F-203176000"><span>preferred</span><wbr><span>Media</span><wbr><span>Storage</span><wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1396102394%2FProperties%2F-203176000"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#1396102394%2FProperties%2F-203176000">preferredMediaStorageOptions</a><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.media.storage.options/-media-storage-options/index.html">MediaStorageOptions</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -145,17 +156,17 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-2047409743%2FFunctions%2F-203176000" anchor-label="createTemplateProcessor" id="-2047409743%2FFunctions%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+        <div class="table"><a data-name="1954761950%2FFunctions%2F-203176000" anchor-label="createTemplateProcessor" id="1954761950%2FFunctions%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="create-template-processor.html"><span>create</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2047409743%2FFunctions%2F-203176000"></span>
+                  <div><a href="index.html#1954761950%2FFunctions%2F-203176000"><span>create</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1954761950%2FFunctions%2F-203176000"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="create-template-processor.html"><span class="token function">createTemplateProcessor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="index.html#1954761950%2FFunctions%2F-203176000"><span class="token function">createTemplateProcessor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a></div></div></div>
                 </div>
               </div>
             </div>
