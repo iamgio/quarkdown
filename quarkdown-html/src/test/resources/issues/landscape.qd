@@ -1,0 +1,34 @@
+.docname {Landscape bounds should respect the parent page}
+.doctype {paged}
+.include {template/template.qd}
+
+.bulletin nextrelease:{1.8.0}
+
+.landscape
+    # Title
+    
+    .repeat {4}
+        .loremipsum
+
+.landscape
+    # Title
+
+    .mermaid
+        graph LR
+            A-->B
+            B-->C
+            C-->D
+            D-->E
+            E-->F
+            F-->G
+            G-->H
+            H-->I
+            I-->L
+            L-->M
+    
+    .repeat {3}
+        .loremipsum
+
+<<<
+
+Regular text
