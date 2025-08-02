@@ -29,7 +29,5 @@ COPY --from=builder /app/build/distributions/quarkdown quarkdown
 ENV PATH="/app/quarkdown/bin:${PATH}"
 # Location of node_modules
 ENV QD_NPM_PREFIX="/home/pptruser"
-# Linux does not come with a usable Chrome sandbox
-ENV QD_NO_SANDBOX=""
 
 ENTRYPOINT ["quarkdown"]
