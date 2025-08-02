@@ -27,7 +27,5 @@ USER pptruser
 WORKDIR /app
 COPY --from=builder /app/build/distributions/quarkdown quarkdown
 ENV PATH="/app/quarkdown/bin:${PATH}"
-# Location of node_modules
-ENV QD_NPM_PREFIX="/home/pptruser"
 
 ENTRYPOINT ["quarkdown"]
