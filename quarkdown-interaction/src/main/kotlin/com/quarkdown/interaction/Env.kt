@@ -4,8 +4,16 @@ package com.quarkdown.interaction
  * Environment variables that may affect the `interaction` module.
  */
 object Env {
+    /**
+     * The prefix for NPM operations used by Quarkdown.
+     */
     const val QUARKDOWN_NPM_PREFIX = "QD_NPM_PREFIX"
     private const val NODE_PATH = "NODE_PATH"
+
+    /**
+     * Whether to disable the Chrome sandbox for PDF export.
+     */
+    const val NO_SANDBOX = "QD_NO_SANDBOX"
 
     private operator fun get(key: String): String? = System.getenv(key)
 
