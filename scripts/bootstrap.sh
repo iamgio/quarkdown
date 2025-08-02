@@ -16,6 +16,7 @@ if [ "$(uname)" = "Darwin" ]; then
   fi
 else
   # Linux
+  export QD_NO_SANDBOX=true # No Chrome sandbox on Linux
   if command -v google-chrome > /dev/null; then
     export BROWSER_CHROME="$(command -v google-chrome)"
   fi
