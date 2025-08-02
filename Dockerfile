@@ -15,17 +15,18 @@ WORKDIR build/distributions
 RUN unzip quarkdown.zip && rm quarkdown.zip
 
 # Run stage
-FROM ghcr.io/puppeteer/puppeteer:latest AS runner
+FROM ghcr.io/puppeteer/puppeteer:24.15.0 AS runner
 
 # Install JDK
 USER root
-RUN apt-get update && apt-get install -y openjdk-17-jdk
+RUN apt-get update && apt-get install -y openjdk-17-jdk \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
+USER pptruser
 WORKDIR /app
 COPY --from=builder /app/build/distributions/quarkdown quarkdown
 ENV PATH="/app/quarkdown/bin:${PATH}"
-# Location of headless Chrome
-ENV PUPPETEER_CACHE_DIR="/home/pptruser/.cache/puppeteer"
 # Location of node_modules
 ENV QD_NPM_PREFIX="/home/pptruser"
 # Linux does not come with a usable Chrome sandbox
