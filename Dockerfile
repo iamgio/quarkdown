@@ -29,3 +29,12 @@ COPY --from=builder /app/build/distributions/quarkdown quarkdown
 ENV PATH="/app/quarkdown/bin:${PATH}"
 
 ENTRYPOINT ["quarkdown"]
+
+LABEL org.opencontainers.image.vendor="Quarkdown"
+LABEL org.opencontainers.image.title="Quarkdown Docker image"
+LABEL org.opencontainers.image.description="Versatile Markdown-based typsetting system."
+LABEL org.opencontainers.image.authors="Giorgio Garofalo (iamgio) and contributors <info@quarkdown.com>"
+LABEL org.opencontainers.image.url="https://quarkdown.com"
+LABEL org.opencontainers.image.source="https://github.com/iamgio/quarkdown"
+LABEL org.opencontainers.image.documentation="https://quarkdown.com/docs/"
+LABEL org.opencontainers.image.licenses="GPL-3.0"
