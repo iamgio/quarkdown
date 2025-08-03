@@ -26,36 +26,8 @@ class FunctionCompletionSupplier(
             documentation = Either.forRight(extractor().extractContentAsMarkup())
             kind = CompletionItemKind.Function
             insertTextFormat = InsertTextFormat.Snippet
-            insertText = buildSnippet(this@toCompletionItem)
+            insertText = FunctionCallSnippet(this@toCompletionItem).getAsString()
         }
-
-    private fun buildSnippet(item: DocsWalker.Result<*>): String {
-        val params =
-            item
-                .extractor()
-                .extractFunctionParameters()
-                .filter { !it.isOptional || it.isLikelyBody }
-
-        return buildString {
-            append(item.name)
-            params.forEachIndexed { index, param ->
-                val snippetArg = "\${${index + 1}:${param.name}}"
-                when {
-                    param.isLikelyBody -> append("\n    $snippetArg")
-                    else -> {
-                        append(" ")
-                        if (param.isLikelyNamed) {
-                            append(param.name)
-                            append(QuarkdownPatterns.FunctionCall.NAMED_ARGUMENT_DELIMITER)
-                        }
-                        append(QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN)
-                        append(snippetArg)
-                        append(QuarkdownPatterns.FunctionCall.ARGUMENT_END)
-                    }
-                }
-            }
-        }
-    }
 
     override fun getCompletionItems(
         params: CompletionParams,
