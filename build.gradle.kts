@@ -169,6 +169,11 @@ tasks.distZip {
     archiveVersion.set("")
 }
 
+tasks.distTar {
+    dependsOn(quarkdocGenerate)
+    archiveVersion.set("")
+}
+
 tasks.build {
     dependsOn("shadowJar")
 }
