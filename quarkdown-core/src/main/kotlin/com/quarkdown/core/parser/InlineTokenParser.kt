@@ -56,11 +56,11 @@ import com.quarkdown.core.misc.color.decoder.HsvHslColorDecoder
 import com.quarkdown.core.misc.color.decoder.RgbColorDecoder
 import com.quarkdown.core.misc.color.decoder.RgbaColorDecoder
 import com.quarkdown.core.misc.color.decoder.decode
+import com.quarkdown.core.util.Escape
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.InlineTokenVisitor
-import org.apache.commons.text.StringEscapeUtils
 
 /**
  * ASCII of the character that replaces null characters,
@@ -135,7 +135,7 @@ class InlineTokenParser(
                 // Decimal (e.g. &#35)
                 entity.startsWith("#") -> groups.next().decodeToContent(radix = 10)
                 // HTML entity (e.g. &nbsp;)
-                else -> StringEscapeUtils.unescapeHtml4(token.data.text)
+                else -> Escape.Html.unescape(token.data.text)
             },
         )
     }

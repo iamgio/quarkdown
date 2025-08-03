@@ -76,11 +76,11 @@ import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
+import com.quarkdown.core.util.Escape
 import com.quarkdown.core.util.toPlainText
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS
-import org.apache.commons.text.StringEscapeUtils
 
 /**
  * A renderer for vanilla Markdown ([com.quarkdown.core.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
@@ -318,7 +318,7 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Text) = node.text
 
-    override fun visit(node: TextSymbol) = StringEscapeUtils.escapeHtml4(node.text)!! // e.g. © -> &copy;
+    override fun visit(node: TextSymbol) = Escape.Html.escape(node.text) // e.g. © -> &copy;
 
     override fun visit(node: CodeSpan) = buildTag("code", escapeCriticalContent(node.text))
 

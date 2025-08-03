@@ -7,8 +7,8 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.core.util.Escape
 import com.quarkdown.rendering.html.css.asCSS
-import org.apache.commons.text.StringEscapeUtils
 
 /**
  * Supplier of the base [TemplateProcessor] for HTML post-rendering.
@@ -185,7 +185,7 @@ class HtmlPostRendererTemplate(
         )
     }
 
-    private fun sanitizeJs(text: String): String = StringEscapeUtils.escapeEcmaScript(text)
+    private fun sanitizeJs(text: String): String = Escape.JavaScript.escape(text)
 
     private fun mapToJsObjectEntries(map: Map<String, String>): List<String> =
         map.map { (key, value) ->
