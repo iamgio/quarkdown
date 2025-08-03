@@ -90,7 +90,7 @@ class BoxesTest {
     fun `unsupported localization`() {
         execute(
             """
-            .doclang {japanese}
+            .doclang {akan}
             .box type:{warning}
               Hello, world!
             """.trimIndent(),
@@ -135,7 +135,7 @@ class BoxesTest {
     fun `to-do with fallback localization for unsupported locale`() {
         execute(
             """
-            .doclang {japanese}
+            .doclang {akan}
             .todo {Hello, world!}
             """.trimIndent(),
         ) {

@@ -37,7 +37,10 @@ import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.misc.color.Color
+import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.pipeline.error.IOPipelineException
+import com.quarkdown.stdlib.internal.loadFontFamily
 
 /**
  * `Document` stdlib module exporter.
@@ -54,6 +57,7 @@ val Document: Module =
         ::theme,
         ::numbering,
         ::disableNumbering,
+        ::font,
         ::paragraphStyle,
         ::captionPosition,
         ::texMacro,
@@ -276,7 +280,8 @@ fun theme(
  * Built-in keys are:
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
  * - `figures`, used for captioned images;
- * - `tables`, used for captioned tables.
+ * - `tables`, used for captioned tables;
+ * - `footnotes`, used for footnotes and references to them.
  * Any other key can be addressed by custom elements (see [numbered]).
  * @wiki Numbering
  */
@@ -297,6 +302,7 @@ fun numbering(
             headings = formats["headings"]?.let(::parse),
             figures = formats["figures"]?.let(::parse),
             tables = formats["tables"]?.let(::parse),
+            footnotes = formats["footnotes"]?.let(::parse),
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
 
@@ -314,10 +320,53 @@ fun disableNumbering(
 ) = numbering(context, emptyMap())
 
 /**
+ * Updates the global font configuration of the document.
+ *
+ * Font families can be loaded from any of the following sources:
+ * - From file (e.g. `path/to/font.ttf`)
+ * - From URL (e.g. `https://example.com/font.ttf`)
+ * - From system fonts (e.g. `Arial`, `Times New Roman`)
+ * - From Google Fonts (e.g. `GoogleFonts:Roboto`).
+ *
+ * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
+ * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
+ *
+ * @param main main font family of content on each page
+ * @param heading font family of headings on each page
+ * @param code font family of code blocks and code spans on each page
+ * @param size font size of the text on each page
+ * @wiki Font configuration
+ */
+fun font(
+    @Injected context: MutableContext,
+    main: String? = null,
+    @LikelyNamed heading: String? = null,
+    @LikelyNamed code: String? = null,
+    @LikelyNamed size: Size? = null,
+): VoidValue {
+    fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
+
+    with(context.documentInfo.layout.font) {
+        this.mainFamily = fontFamily(main) ?: this.mainFamily
+        this.headingFamily = fontFamily(heading) ?: this.headingFamily
+        this.codeFamily = fontFamily(code) ?: this.codeFamily
+        this.size = size ?: this.size
+    }
+
+    return VoidValue
+}
+
+/**
  * Sets the global style of paragraphs in the document.
  * If a value is unset, the default value supplied by the underlying renderer is used.
+ *
+ * The default value may also be affected by the current document locale, set via [docLanguage].
+ * For instance, the Chinese `zh` locale prefers a 2em indentation and no vertical spacing.
+ *
  * @param lineHeight height of each line, multiplied by the font size
- * @param spacing whitespace between paragraphs, multiplied by the font size
+ * @param letterSpacing whitespace between letters, multiplied by the font size
+ * @param spacing whitespace between paragraphs, multiplied by the font size.
+ *                This also minorly affects whitespace around lists and between list items
  * @param indent whitespace at the start of each paragraph, multiplied by the font size.
  *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones
  * @wiki Paragraph style
@@ -326,11 +375,13 @@ fun disableNumbering(
 fun paragraphStyle(
     @Injected context: Context,
     @Name("lineheight") lineHeight: Number? = null,
+    @Name("letterspacing") letterSpacing: Number? = null,
     @LikelyNamed spacing: Number? = null,
     @LikelyNamed indent: Number? = null,
 ): VoidValue {
     with(context.documentInfo.layout.paragraphStyle) {
         this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
+        this.letterSpacing = letterSpacing?.toDouble() ?: this.letterSpacing
         this.spacing = spacing?.toDouble() ?: this.spacing
         this.indent = indent?.toDouble() ?: this.indent
     }
@@ -374,9 +425,16 @@ fun texMacro(
 
 /**
  * Sets the format of the document.
- * If a value is `null`, the default value supplied by the underlying renderer is used.
- * If neither [format] nor [width] or [height] are `null`, the latter override the former.
- * If both [format] and [width] or [height] are `null`, the default value is used.
+ * If a value is unset, the default value supplied by the underlying renderer is used.
+ *
+ * If both [format] and [width] or [height] are set, the latter override the former.
+ * If both [format] and [width] or [height] are unset, the default value is used.
+ *
+ * If any of [borderTop], [borderRight], [borderBottom], [borderLeft] or [borderColor] is set,
+ * the border will be applied around the content area of each page.
+ * If only [borderColor] is set, the border will be applied with a default width to each side.
+ * Border is not supported in plain documents.
+ *
  * @param format standard size format of each page (overridden by [width] and [height])
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
@@ -384,6 +442,11 @@ fun texMacro(
  * @param width width of each page
  * @param height height of each page
  * @param margin blank space around the content of each page. Not supported in slides documents
+ * @param borderTop border width of the top content area of each page
+ * @param borderRight border width of the right content area of each page
+ * @param borderBottom border width of the bottom content area of each page
+ * @param borderLeft border width of the left content area of each page
+ * @param borderColor color of the border around the content area of each page
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment text alignment of the content on each page
@@ -391,12 +454,17 @@ fun texMacro(
  */
 @Name("pageformat")
 fun pageFormat(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @Name("size") format: PageSizeFormat? = null,
     @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
     @LikelyNamed margin: Sizes? = null,
+    @Name("bordertop") borderTop: Size? = null,
+    @Name("borderright") borderRight: Size? = null,
+    @Name("borderbottom") borderBottom: Size? = null,
+    @Name("borderleft") borderLeft: Size? = null,
+    @Name("bordercolor") borderColor: Color? = null,
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
@@ -409,9 +477,21 @@ fun pageFormat(
         this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
         this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
 
-        this.margin = margin
-        this.columnCount = columns?.takeIf { it > 0 }
-        this.alignment = alignment
+        this.margin = margin ?: this.margin
+        this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
+        this.alignment = alignment ?: this.alignment
+
+        val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
+        if (hasBorder) {
+            this.contentBorderWidth =
+                Sizes(
+                    top = borderTop ?: this.contentBorderWidth?.top ?: Size.ZERO,
+                    right = borderRight ?: this.contentBorderWidth?.right ?: Size.ZERO,
+                    bottom = borderBottom ?: this.contentBorderWidth?.bottom ?: Size.ZERO,
+                    left = borderLeft ?: this.contentBorderWidth?.left ?: Size.ZERO,
+                )
+        }
+        this.contentBorderColor = borderColor
     }
 
     return VoidValue
@@ -514,7 +594,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 
 /**
  * Generates a table of contents for the document.
- * @param title title of the table of contents. If unset, the default title is used
+ * @param title title of the table of contents. If unset, the default localized title is used
  * @param maxDepth maximum depth of the table of contents
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.

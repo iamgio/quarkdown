@@ -90,7 +90,7 @@ class TemplateProcessor(
      * @param text new text the template
      * @return a new [TemplateProcessor] with the same injections, and the new text
      */
-    fun copy(text: String) =
+    fun copy(text: String = this.text) =
         TemplateProcessor(
             text,
             values.toMutableMap(),

@@ -1,9 +1,11 @@
 package com.quarkdown.rendering.html.pdf
 
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.core.pipeline.output.saveTo
+import com.quarkdown.core.pipeline.output.visitor.copy
+import com.quarkdown.core.pipeline.output.visitor.saveTo
 import com.quarkdown.core.rendering.PostRenderer
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
@@ -26,7 +28,8 @@ class PdfHtmlPostRendererDecorator(
                 .toFile()
 
         val sourcesDirectory: File = OutputResourceGroup("sources", resources).saveTo(tempDirectory)
-        val out: File = tempDirectory.resolve("out.pdf")
+        val outName = postRenderer.context.subdocument.getOutputFileName(postRenderer.context)
+        val out: File = tempDirectory.resolve("$outName.pdf")
 
         HtmlPdfExporter(options).export(sourcesDirectory, out)
 
@@ -44,5 +47,15 @@ class PdfHtmlPostRendererDecorator(
     override fun wrapResources(
         name: String,
         resources: Set<OutputResource>,
-    ): OutputResource? = (resources.singleOrNull() as? BinaryOutputArtifact)?.copy(name = "$name.pdf")
+    ): OutputResource {
+        // Single output file.
+        resources.singleOrNull()?.let {
+            return it.copy(name = "$name.pdf")
+        }
+        // Multiple output files (e.g. subdocuments).
+        return OutputResourceGroup(
+            name = name,
+            resources = resources,
+        )
+    }
 }

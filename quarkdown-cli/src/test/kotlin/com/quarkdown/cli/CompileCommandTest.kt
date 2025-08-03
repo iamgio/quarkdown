@@ -5,54 +5,57 @@ import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
+import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
-import java.io.FileNotFoundException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+
+private const val DEFAULT_OUTPUT_DIRECTORY_NAME = "Quarkdown-test"
 
 /**
  * Tests for the Quarkdown compile command `c`.
  */
 class CompileCommandTest : TempDirectory() {
     private val command = CompileCommand()
-    private val main = File(directory, "main.qmd")
+    private val main = File(directory, "main.qd")
+    private val outputDirectory = File(directory, "out")
+
+    private val content =
+        """
+        .docname {Quarkdown test}
+        .doctype {paged}
+
+        Page 1
+        
+        <<<
+        
+        Page 2
+        
+        <<<
+        
+        Page 3
+        """.trimIndent()
 
     @BeforeTest
     fun setup() {
         super.reset()
-
-        main.writeText(
-            """
-            .docname {Quarkdown test}
-            .doctype {paged}
-
-            Page 1
-            
-            <<<
-            
-            Page 2
-            
-            <<<
-            
-            Page 3
-            """.trimIndent(),
-        )
+        main.writeText(content)
     }
 
     private fun test(vararg additionalArgs: String): Pair<CliOptions, PipelineOptions> {
         command.test(
             main.absolutePath,
             "-o",
-            directory.absolutePath,
+            outputDirectory.absolutePath,
             *additionalArgs,
         )
 
@@ -60,14 +63,14 @@ class CompileCommandTest : TempDirectory() {
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
         assertEquals(main, cliOptions.source)
-        assertEquals(directory, cliOptions.outputDirectory)
+        assertEquals(outputDirectory, cliOptions.outputDirectory)
         assertEquals(directory, pipelineOptions.workingDirectory)
 
         return cliOptions to pipelineOptions
     }
 
-    private fun assertHtmlContentPresent() {
-        val outputDir = File(directory, "Quarkdown-test")
+    private fun assertHtmlContentPresent(directoryName: String = DEFAULT_OUTPUT_DIRECTORY_NAME) {
+        val outputDir = File(outputDirectory, directoryName)
         assertTrue(outputDir.exists())
         assertTrue(outputDir.isDirectory())
 
@@ -102,6 +105,13 @@ class CompileCommandTest : TempDirectory() {
     fun `base with explicit html renderer`() = base("html")
 
     @Test
+    fun `explicit output name`() {
+        val (_, pipelineOptions) = test("--out-name", "A new name")
+        assertEquals("A new name", pipelineOptions.resourceName)
+        assertHtmlContentPresent(directoryName = "A-new-name")
+    }
+
+    @Test
     fun strict() {
         val (_, pipelineOptions) = test("--strict")
         assertHtmlContentPresent()
@@ -118,43 +128,158 @@ class CompileCommandTest : TempDirectory() {
 
     @Test
     fun clean() {
-        // The output directory is parent to the source file,
-        // hence cleaning it will also delete the source file.
-        assertFailsWith<FileNotFoundException> {
-            test("--clean")
+        val dummyFile =
+            File(outputDirectory, "dummy.txt").apply {
+                parentFile.mkdirs()
+                writeText("This is a dummy file.")
+            }
+        test("--clean")
+        assertHtmlContentPresent()
+        assertFalse(dummyFile.exists())
+    }
+
+    private fun setupSubdocuments(): List<File> {
+        main.writeText("$content\n\n[Subdoc 1](subdoc1.qd)\n\n[Subdoc 2](subdoc2.qd)")
+
+        return listOf(
+            File(directory, "subdoc1.qd").apply {
+                writeText("This is a subdocument.")
+            },
+            File(directory, "subdoc2.qd").apply {
+                writeText("This is another subdocument. [Subdoc 3](subdoc3.qd)")
+            },
+            File(directory, "subdoc3.qd").apply {
+                writeText("This is yet another subdocument.")
+            },
+        )
+    }
+
+    @Test
+    fun `with subdocument`() {
+        setupSubdocuments()
+
+        val (_, _) = test()
+        assertHtmlContentPresent()
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1.html").exists())
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2.html").exists())
+        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3.html").exists())
+    }
+
+    @Test
+    fun `with subdocument with minimized collisions`() {
+        val (subdoc1, subdoc2, subdoc3) = setupSubdocuments()
+
+        val (_, _) = test("--no-subdoc-collisions")
+        assertHtmlContentPresent()
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html").exists(),
+        )
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html").exists(),
+        )
+        assertTrue(
+            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3@${subdoc3.absolutePath.hashCode()}.html").exists(),
+        )
+    }
+
+    private fun assumePdfEnvironmentInstalled() {
+        assumeTrue(Env.npmPrefix != null)
+        assumeTrue(Env.nodePath != null)
+        val node = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory)
+        assumeTrue(node.isValid)
+        with(NpmWrapper(NpmWrapper.defaultPath)) {
+            assumeTrue(isValid)
+            assumeTrue(isInstalled(node, PuppeteerNodeModule))
         }
     }
 
-    private fun checkPdf() {
-        val pdf = File(directory, "Quarkdown-test.pdf")
+    private fun checkPdf(
+        name: String = "$DEFAULT_OUTPUT_DIRECTORY_NAME.pdf",
+        expectedPages: Int = 3,
+    ) {
+        val pdf = File(outputDirectory, name)
         assertTrue(pdf.exists())
-        assertFalse(File(directory, "Quarkdown-test").exists())
+        assertFalse(File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME).exists())
 
         Loader.loadPDF(pdf).use {
-            assertEquals(3, it.numberOfPages)
+            assertEquals(expectedPages, it.numberOfPages)
         }
     }
 
     @Test
     fun pdf() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
+    fun `pdf with explicit output name`() {
+        assumePdfEnvironmentInstalled()
+        val (_, _) = test("--pdf", "--pdf-no-sandbox", "--out-name", "A new name")
+        checkPdf(name = "A-new-name.pdf")
+    }
+
+    @Test
+    fun `single-page pdf`() {
+        assumePdfEnvironmentInstalled()
+        main.writeText(main.readText().replace("paged", "plain") + "\n\n.repeat {100}\n\t.loremipsum")
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+        checkPdf(expectedPages = 1)
+    }
+
+    @Test
+    fun `clean pdf`() {
+        assumePdfEnvironmentInstalled()
+        test("--pdf", "--pdf-no-sandbox", "--clean")
+        checkPdf()
+    }
+
+    @Test
+    fun `pdf with subdocuments`() {
+        assumePdfEnvironmentInstalled()
+        setupSubdocuments()
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+
+        val pdfDir = File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME)
+        assertTrue(pdfDir.exists())
+        assertTrue(pdfDir.isDirectory)
+        assertTrue(pdfDir.resolve("subdoc1.pdf").exists())
+        assertTrue(pdfDir.resolve("subdoc2.pdf").exists())
+        assertTrue(pdfDir.resolve("subdoc3.pdf").exists())
+        assertEquals(4, pdfDir.listFiles()!!.size)
+    }
+
+    // #86
+    @Test
+    fun `pdf with toc and id starting with digit`() {
+        assumePdfEnvironmentInstalled()
+        main.writeText(
+            """
+            .docname {Quarkdown test}
+            .doctype {paged}
+            .doclang {en}
+
+            .tableofcontents
+            
+            # 1 Test
+            """.trimIndent(),
+        )
+
+        val (_, _) = test("--pdf", "--pdf-no-sandbox")
+        checkPdf(expectedPages = 2)
+    }
+
+    @Test
     fun `pdf via explicit html-pdf`() {
+        assumePdfEnvironmentInstalled()
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
     }
 
     @Test
     fun `pdf with node and npm set`() {
-        assumeTrue(NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory).isValid)
-        assumeTrue(NpmWrapper(NpmWrapper.defaultPath).isValid)
-
+        assumePdfEnvironmentInstalled()
         val (_, _) =
             test(
                 "--pdf",

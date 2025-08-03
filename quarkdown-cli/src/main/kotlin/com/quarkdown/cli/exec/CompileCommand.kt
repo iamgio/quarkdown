@@ -3,13 +3,13 @@ package com.quarkdown.cli.exec
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.file
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
+import com.quarkdown.interaction.Env
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
@@ -17,7 +17,7 @@ import java.io.File
  * Command to compile a Quarkdown file into an output.
  * @see FileExecutionStrategy
  */
-class CompileCommand : ExecuteCommand("c") {
+class CompileCommand : ExecuteCommand("compile") {
     /**
      * Quarkdown source file to process.
      */
@@ -38,12 +38,8 @@ class CompileCommand : ExecuteCommand("c") {
     private val noPdfSandbox: Boolean by option(
         "--pdf-no-sandbox",
         help = "(Unsafe) Disable Chrome sandbox for PDF export",
-    ).flag().validate {
-        when {
-            it && !exportPdf -> Log.warn("--pdf-no-sandbox flag is ignored because --pdf flag is not set.")
-            it -> Log.warn("Disabling Chrome sandbox for PDF export. This is potentially unsafe.")
-        }
-    }
+        envvar = Env.NO_SANDBOX,
+    ).flag()
 
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(

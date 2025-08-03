@@ -1,0 +1,41 @@
+.quarkdown {
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  figure, .mermaid {
+    text-align: center;
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // Each figure could display its caption on top or bottom
+
+    > :not(figcaption) {
+      order: 1;
+    }
+
+    > figcaption {
+      $margin: 0.5em;
+
+      &.caption-top {
+        order: 0;
+        margin-bottom: $margin;
+      }
+
+      &.caption-bottom {
+        order: 2;
+        margin-top: $margin;
+      }
+    }
+
+    &:has(.mermaid) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}

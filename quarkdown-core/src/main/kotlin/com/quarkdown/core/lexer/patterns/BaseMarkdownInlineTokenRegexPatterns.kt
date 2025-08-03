@@ -12,6 +12,7 @@ import com.quarkdown.core.lexer.tokens.EscapeToken
 import com.quarkdown.core.lexer.tokens.ImageToken
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.LinkToken
+import com.quarkdown.core.lexer.tokens.ReferenceFootnoteToken
 import com.quarkdown.core.lexer.tokens.ReferenceImageToken
 import com.quarkdown.core.lexer.tokens.ReferenceLinkToken
 import com.quarkdown.core.lexer.tokens.StrikethroughToken
@@ -27,143 +28,160 @@ open class BaseMarkdownInlineTokenRegexPatterns {
      * A backslash followed by a punctuation character.
      * @see EscapeToken
      */
-    val escape
-        get() =
-            TokenRegexPattern(
-                name = "InlineEscape",
-                wrap = ::EscapeToken,
-                regex =
-                    "\\\\([!\"#\$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])"
-                        .toRegex(),
-            )
+    val escape by lazy {
+        TokenRegexPattern(
+            name = "InlineEscape",
+            wrap = ::EscapeToken,
+            regex =
+                "\\\\([!\"#\$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])"
+                    .toRegex(),
+        )
+    }
 
     /**
      * A text entity: `&#10`, `&xFF`, `&nbsp;`.
      * @see EntityToken
      */
-    val entity
-        get() =
-            TokenRegexPattern(
-                name = "InlineEntity",
-                wrap = ::EntityToken,
-                regex =
-                    "&(#(\\d+)|#x([0-9A-Fa-f]+)|\\w+);?"
-                        .toRegex(),
-            )
+    val entity by lazy {
+        TokenRegexPattern(
+            name = "InlineEntity",
+            wrap = ::EntityToken,
+            regex =
+                "&(#(\\d+)|#x([0-9A-Fa-f]+)|\\w+);?"
+                    .toRegex(),
+        )
+    }
 
     /**
      * Characters that require attention in the rendering stage.
      * @see CriticalContentToken
      */
-    val criticalContent
-        get() =
-            TokenRegexPattern(
-                name = "InlineCriticalContent",
-                wrap = ::CriticalContentToken,
-                regex =
-                    "[&<>\"']"
-                        .toRegex(),
-            )
+    val criticalContent by lazy {
+        TokenRegexPattern(
+            name = "InlineCriticalContent",
+            wrap = ::CriticalContentToken,
+            regex =
+                "[&<>\"']"
+                    .toRegex(),
+        )
+    }
 
     /**
      * An inline fragment of code wrapped by sequences of backticks of the same length.
      * @see CodeSpanToken
      */
-    val codeSpan
-        get() =
-            TokenRegexPattern(
-                name = "InlineCodeSpan",
-                wrap = ::CodeSpanToken,
-                regex =
-                    "(?<!`)(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
-                        .toRegex(),
-            )
+    val codeSpan by lazy {
+        TokenRegexPattern(
+            name = "InlineCodeSpan",
+            wrap = ::CodeSpanToken,
+            regex =
+                "(?<!`)(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
+                    .toRegex(),
+        )
+    }
 
     /**
      * A hard line break given by two or more spaces at the end of the line.
      * @see LineBreakToken
      */
-    val lineBreak
-        get() =
-            TokenRegexPattern(
-                name = "InlineLineBreak",
-                wrap = ::LineBreakToken,
-                regex =
-                    "( {2,}|\\\\)\\R(?!\\s*\$)"
-                        .toRegex(),
-            )
+    val lineBreak by lazy {
+        TokenRegexPattern(
+            name = "InlineLineBreak",
+            wrap = ::LineBreakToken,
+            regex =
+                "( {2,}|\\\\)\\R(?!\\s*\$)"
+                    .toRegex(),
+        )
+    }
 
     /**
      * A link with its label in square brackets and its URL and optional title in parentheses,
      * without spaces in-between.
      * @see LinkToken
      */
-    val link
-        get() =
-            TokenRegexPattern(
-                name = "InlineLink",
-                wrap = ::LinkToken,
-                regex =
-                    RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
-                        .withReference("label", LABEL_HELPER)
-                        .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
-                        .withReference("title", DELIMITED_TITLE_HELPER)
-                        .build(),
-            )
+    val link by lazy {
+        TokenRegexPattern(
+            name = "InlineLink",
+            wrap = ::LinkToken,
+            regex =
+                RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
+                    .withReference("label", LABEL_HELPER)
+                    .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
+                    .withReference("title", DELIMITED_TITLE_HELPER)
+                    .build(),
+        )
+    }
 
     /**
      * A URL wrapped in angle brackets.
      * @see DiamondAutolinkToken
      */
-    val diamondAutolink
-        get() =
-            TokenRegexPattern(
-                name = "InlineDiamondAutolink",
-                wrap = ::DiamondAutolinkToken,
-                regex =
-                    RegexBuilder("<(scheme:[^\\s\\x00-\\x1f<>]*|email)>")
-                        .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
-                        .withReference(
-                            "email",
-                            "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
-                                "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
-                        ).build(),
-            )
+    val diamondAutolink by lazy {
+        TokenRegexPattern(
+            name = "InlineDiamondAutolink",
+            wrap = ::DiamondAutolinkToken,
+            regex =
+                RegexBuilder("<(scheme:[^\\s\\x00-\\x1f<>]*|email)>")
+                    .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
+                    .withReference(
+                        "email",
+                        "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
+                            "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
+                    ).build(),
+        )
+    }
 
     /**
      * A plain URL.
      * @see UrlAutolinkToken
      */
-    val urlAutolink
-        get() =
-            TokenRegexPattern(
-                name = "InlineUrlAutolink",
-                wrap = ::UrlAutolinkToken,
-                regex =
-                    RegexBuilder("url|email")
-                        .withReference("url", "((?:ftp|https?):\\/\\/|www\\.)(?:[a-zA-Z0-9\\-]+\\.?)+[^\\s<]*")
-                        .withReference(
-                            "email",
-                            "[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])",
-                        ).build(),
-            )
+    val urlAutolink by lazy {
+        TokenRegexPattern(
+            name = "InlineUrlAutolink",
+            wrap = ::UrlAutolinkToken,
+            regex =
+                RegexBuilder("url|email")
+                    .withReference("url", "((?:ftp|https?):\\/\\/|www\\.)(?:[a-zA-Z0-9\\-]+\\.?)+[^\\s<]*")
+                    .withReference(
+                        "email",
+                        "[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])",
+                    ).build(),
+        )
+    }
 
     /**
      * A link whose reference in brackets matches that of a link definition,
      * with an optional label in brackets at the beginning.
      * @see ReferenceLinkToken
      */
-    val referenceLink
-        get() =
-            TokenRegexPattern(
-                name = "InlineReferenceLink",
-                wrap = ::ReferenceLinkToken,
-                regex =
-                    RegexBuilder("\\[(label)\\](?:\\[(ref)?\\])?")
-                        .withReference("label", LABEL_HELPER)
-                        .withReference("ref", BLOCK_LABEL_HELPER)
-                        .build(),
-            )
+    val referenceLink by lazy {
+        TokenRegexPattern(
+            name = "InlineReferenceLink",
+            wrap = ::ReferenceLinkToken,
+            regex =
+                RegexBuilder("\\[(label)\\](?:\\[(ref)?\\])?")
+                    .withReference("label", LABEL_HELPER)
+                    .withReference("ref", BLOCK_LABEL_HELPER)
+                    .build(),
+        )
+    }
+
+    /**
+     * A reference whose label in brackets matches that of a footnote definition.
+     * It may also contain an optional all-in-one definition.
+     * @see ReferenceLinkToken
+     */
+    val referenceFootnote by lazy {
+        TokenRegexPattern(
+            name = "InlineReferenceFootnote",
+            wrap = ::ReferenceFootnoteToken,
+            regex =
+                RegexBuilder("\\[\\^(label)definition\\]")
+                    .withReference("label", LABEL_HELPER)
+                    .withReference("definition", "(?::[ \\t]*([^\\[\\]\\\\`]+?))?")
+                    .build(),
+        )
+    }
 
     /**
      * An image, same as a link preceded by a `!`.
@@ -172,60 +190,50 @@ open class BaseMarkdownInlineTokenRegexPatterns {
      * @see ImageToken
      * @see link
      */
-    val image
-        get() =
-            TokenRegexPattern(
-                name = "InlineImage",
-                wrap = ::ImageToken,
-                regex =
-                    RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<imgwidth>.+?)(?:sizedivider(?<imgheight>.+?))?")
-                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
-                        .withReference("link", link.regex.pattern)
-                        .build(),
-                groupNames = listOf("imgwidth", "imgheight"),
-            )
+    val image by lazy {
+        TokenRegexPattern(
+            name = "InlineImage",
+            wrap = ::ImageToken,
+            regex =
+                RegexBuilder("!(?:\\(imgsize\\))?link")
+                    .withReference("imgsize", "(?<imgwidth>.+?)(?:sizedivider(?<imgheight>.+?))?")
+                    .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
+                    .withReference("link", link.regex.pattern)
+                    .build(),
+            groupNames = listOf("imgwidth", "imgheight"),
+        )
+    }
 
     /**
      * An image that references a link definition, same as a reference link preceded by a `!`.
      * @see ReferenceImageToken
      * @see referenceLink
      */
-    val referenceImage
-        get() =
-            TokenRegexPattern(
-                name = "InlineReferenceImage",
-                wrap = ::ReferenceImageToken,
-                regex =
-                    RegexBuilder("!(?:\\(imgsize\\))?link")
-                        .withReference("imgsize", "(?<refimgwidth>.+?)(?:sizedivider(?<refimgheight>.+?))?")
-                        .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
-                        .withReference("link", referenceLink.regex.pattern)
-                        .build(),
-                groupNames = listOf("refimgwidth", "refimgheight"),
-            )
-
-    /*val text
-        get() =
-            TokenRegexPattern(
-                name = "InlineText",
-                wrap = ::InlineTextToken,
-                regex =
-                    "(`+|[^`])(?:(?= {2,}\\n)|[\\s\\S]*?(?:(?=[\\\\<!\\[`]|\\b_|\$)|[^ ](?= {2,}\\n)))"
-                        .toRegex(),
-            )*/
+    val referenceImage by lazy {
+        TokenRegexPattern(
+            name = "InlineReferenceImage",
+            wrap = ::ReferenceImageToken,
+            regex =
+                RegexBuilder("!(?:\\(imgsize\\))?link")
+                    .withReference("imgsize", "(?<refimgwidth>.+?)(?:sizedivider(?<refimgheight>.+?))?")
+                    .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
+                    .withReference("link", referenceLink.regex.pattern)
+                    .build(),
+            groupNames = listOf("refimgwidth", "refimgheight"),
+        )
+    }
 
     /**
      * An ignored piece of content wrapped in `<!-- ... -->` (the amount of `-` can vary).
      * @see CommentToken
      */
-    val comment
-        get() =
-            TokenRegexPattern(
-                name = "InlineComment",
-                wrap = ::CommentToken,
-                regex = COMMENT_PATTERN,
-            )
+    val comment by lazy {
+        TokenRegexPattern(
+            name = "InlineComment",
+            wrap = ::CommentToken,
+            regex = COMMENT_PATTERN,
+        )
+    }
 
     // https://spec.commonmark.org/0.31.2/#emphasis-and-strong-emphasis
 
@@ -233,85 +241,85 @@ open class BaseMarkdownInlineTokenRegexPatterns {
      * Content wrapped in single asterisks, following CommonMark emphasis guidelines.
      * @see EmphasisToken
      */
-    val emphasisAsterisk
-        get() =
-            TokenRegexPattern(
-                name = "InlineEmphasisAsterisk",
-                wrap = ::EmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
-            )
+    val emphasisAsterisk by lazy {
+        TokenRegexPattern(
+            name = "InlineEmphasisAsterisk",
+            wrap = ::EmphasisToken,
+            regex = delimiteredPattern(startDelimiter = "\\*", endDelimiter = "\\*+", strict = false),
+        )
+    }
 
     /**
      * Content wrapped in single underscored, following CommonMark emphasis guidelines.
      * @see EmphasisToken
      */
-    val emphasisUnderscore
-        get() =
-            TokenRegexPattern(
-                name = "InlineEmphasisUnderscore",
-                wrap = ::EmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
-            )
+    val emphasisUnderscore by lazy {
+        TokenRegexPattern(
+            name = "InlineEmphasisUnderscore",
+            wrap = ::EmphasisToken,
+            regex = delimiteredPattern(startDelimiter = "_", endDelimiter = "_+", strict = true),
+        )
+    }
 
     /**
      * Content wrapped in double asterisks, following CommonMark emphasis guidelines.
      * @see StrongToken
      */
-    val strongAsterisk
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongAsterisk",
-                wrap = ::StrongToken,
-                regex = delimiteredPattern(startDelimiter = "\\*{2}", endDelimiter = "\\*{2,}", strict = false),
-            )
+    val strongAsterisk by lazy {
+        TokenRegexPattern(
+            name = "InlineStrongAsterisk",
+            wrap = ::StrongToken,
+            regex = delimiteredPattern(startDelimiter = "\\*{2}", endDelimiter = "\\*{2,}", strict = false),
+        )
+    }
 
     /**
      * Content wrapped in double underscores, following CommonMark emphasis guidelines.
      * @see StrongToken
      */
-    val strongUnderscore
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongUnderscore",
-                wrap = ::StrongToken,
-                regex = delimiteredPattern(startDelimiter = "_{2}", endDelimiter = "_{2,}", strict = true),
-            )
+    val strongUnderscore by lazy {
+        TokenRegexPattern(
+            name = "InlineStrongUnderscore",
+            wrap = ::StrongToken,
+            regex = delimiteredPattern(startDelimiter = "_{2}", endDelimiter = "_{2,}", strict = true),
+        )
+    }
 
     /**
      * Content wrapped in triple asterisks, following CommonMark emphasis guidelines.
      * @see StrongEmphasisToken
      */
-    val strongEmphasisAsterisk
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongEmphasisAsterisk",
-                wrap = ::StrongEmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "\\*{3}", endDelimiter = "\\*{3,}", strict = false),
-            )
+    val strongEmphasisAsterisk by lazy {
+        TokenRegexPattern(
+            name = "InlineStrongEmphasisAsterisk",
+            wrap = ::StrongEmphasisToken,
+            regex = delimiteredPattern(startDelimiter = "\\*{3}", endDelimiter = "\\*{3,}", strict = false),
+        )
+    }
 
     /**
      * Content wrapped in triple underscores, following CommonMark emphasis guidelines.
      * @see StrongEmphasisToken
      */
-    val strongEmphasisUnderscore
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrongEmphasisUnderscore",
-                wrap = ::StrongEmphasisToken,
-                regex = delimiteredPattern(startDelimiter = "_{3}", endDelimiter = "_{3,}", strict = true),
-            )
+    val strongEmphasisUnderscore by lazy {
+        TokenRegexPattern(
+            name = "InlineStrongEmphasisUnderscore",
+            wrap = ::StrongEmphasisToken,
+            regex = delimiteredPattern(startDelimiter = "_{3}", endDelimiter = "_{3,}", strict = true),
+        )
+    }
 
     /**
      * Content wrapped in double tildes, following CommonMark emphasis guidelines.
      * @see StrikethroughToken
      */
-    val strikethrough
-        get() =
-            TokenRegexPattern(
-                name = "InlineStrikethrough",
-                wrap = ::StrikethroughToken,
-                regex = delimiteredPattern("~{2}", strict = false),
-            )
+    val strikethrough by lazy {
+        TokenRegexPattern(
+            name = "InlineStrikethrough",
+            wrap = ::StrikethroughToken,
+            regex = delimiteredPattern("~{2}", strict = false),
+        )
+    }
 }
 
 private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"

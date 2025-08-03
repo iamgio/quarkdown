@@ -18,6 +18,16 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
+    handleFootnotes(footnotes) {
+        footnotes.forEach(({definition, reference}) => {
+            const page = this.getParentViewport(reference);
+            if (!page) return;
+
+            definition.remove();
+            getOrCreateFootnoteArea(page)?.appendChild(definition);
+        });
+    }
+
     getParentViewport(element) {
         return element.closest('.reveal .slides > :is(section, .pdf-page)');
     }
@@ -66,9 +76,11 @@ class SlidesDocument extends QuarkdownDocument {
             // If the center property is not explicitly set, it defaults to true unless the `--reveal-center-vertically` CSS variable of `:root` is set to `false`.
             center: typeof slides_center !== undef ? slides_center : getComputedStyle(document.documentElement).getPropertyValue('--reveal-center-vertically') !== 'false',
             controls: typeof slides_showControls !== undef ? slides_showControls : true,
+            showNotes: typeof slides_showNotes !== undef ? slides_showNotes : false,
             transition: typeof slides_transitionStyle !== undef ? slides_transitionStyle : 'slide',
             transitionSpeed: typeof slides_transitionSpeed !== undef ? slides_transitionSpeed : 'default',
             hash: true,
+            plugins: [RevealNotes],
         });
     }
 

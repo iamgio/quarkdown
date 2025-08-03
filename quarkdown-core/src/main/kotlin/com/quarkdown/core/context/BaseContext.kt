@@ -5,12 +5,18 @@ import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.DirectedGraph
+import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.graph.visitableOnce
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocalizationKeyNotFoundException
 import com.quarkdown.core.localization.LocalizationLocaleNotFoundException
@@ -28,11 +34,13 @@ import com.quarkdown.core.util.toPlainText
  * @param attributes attributes of the node tree, produced by the parsing stage
  * @param flavor Markdown flavor used for this pipeline. It specifies how to produce the needed components
  * @param libraries loaded libraries to look up functions from
+ * @param subdocument the subdocument this context is processing
  */
 open class BaseContext(
     override val attributes: AstAttributes,
     override val flavor: MarkdownFlavor,
     override val libraries: Set<Library> = emptySet(),
+    override val subdocument: Subdocument = Subdocument.Root,
 ) : Context {
     override val attachedPipeline: Pipeline?
         get() = Pipelines.getAttachedPipeline(this)
@@ -46,6 +54,16 @@ open class BaseContext(
     override val localizationTables = emptyMap<String, LocalizationTable>()
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
+
+    override val subdocumentGraph: VisitableOnceGraph<Subdocument> = DirectedGraph<Subdocument>().visitableOnce
+
+    override val fileSystem: FileSystem
+        get() {
+            val workingDirectory =
+                (subdocument as? Subdocument.Resource)?.workingDirectory
+                    ?: attachedPipeline?.options?.workingDirectory
+            return SimpleFileSystem(workingDirectory)
+        }
 
     override fun getFunctionByName(name: String): Function<*>? =
         libraries
@@ -87,5 +105,5 @@ open class BaseContext(
             ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
-    override fun fork(): ScopeContext = ScopeContext(parent = this)
+    override fun fork(subdocument: Subdocument): ScopeContext = ScopeContext(parent = this, subdocument)
 }

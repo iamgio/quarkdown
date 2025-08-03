@@ -6,25 +6,32 @@ import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.formatLocation
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
+import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.CodeSpan
+import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
+import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -33,9 +40,12 @@ import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
+import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.bibliography.BibliographyEntry
+import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
@@ -43,11 +53,13 @@ import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
+import com.quarkdown.rendering.html.css.CssBuilder
 import com.quarkdown.rendering.html.css.asCSS
 
 /**
@@ -173,6 +185,7 @@ class QuarkdownHtmlNodeRenderer(
                 "container",
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
+                node.textTransform?.size?.asCSS,
             )
 
             +node.children
@@ -201,6 +214,7 @@ class QuarkdownHtmlNodeRenderer(
                 "justify-items" value node.alignment
                 "text-align" value node.textAlignment
                 "float" value node.float
+                node.textTransform?.let { textTransform(it) }
             }
         }
 
@@ -224,6 +238,8 @@ class QuarkdownHtmlNodeRenderer(
         buildMultiTag {
             +node.children
         }
+
+    override fun visit(node: Landscape) = div("landscape", node.children)
 
     override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
@@ -303,18 +319,49 @@ class QuarkdownHtmlNodeRenderer(
                 customId = "table-of-contents",
             )
 
-            // Content
+            // Content.
             +buildTag("nav") {
                 +node.convertToListNode(
                     this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
                     linkUrlMapper = { item ->
-                        "#" + HtmlIdentifierProvider.Companion.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
                     },
                 )
             }
         }
     }
+
+    override fun visit(node: BibliographyView) =
+        buildMultiTag {
+            // Localized title.
+            val titleText = context.localizeOrNull(key = "bibliography")
+
+            // Title heading. Its content is either the node's user-set title or a default localized one.
+            val title = node.title ?: titleText?.let { buildInline { text(it) } }
+            title?.let {
+                +Heading(
+                    depth = 1,
+                    text = it,
+                    isDecorative = node.isTitleDecorative,
+                )
+            }
+
+            // Content.
+            +buildTag("div") {
+                classNames("bibliography", "bibliography-${node.style.name}")
+                node.bibliography.entries.values.mapIndexed { index, entry ->
+                    tag("span") {
+                        className("bibliography-entry-label")
+                        +node.style.labelProvider.getLabel(entry, index)
+                    }
+                    tag("span") {
+                        className("bibliography-entry-content")
+                        +node.style.contentProvider.getContent(entry)
+                    }
+                }
+            }
+        }
 
     override fun visit(node: MermaidDiagram) =
         buildTag("pre") {
@@ -322,29 +369,65 @@ class QuarkdownHtmlNodeRenderer(
             +escapeCriticalContent(node.code)
         }
 
+    override fun visit(node: SubdocumentGraph): CharSequence {
+        fun id(subdocument: Subdocument) = subdocument.name.hashCode()
+
+        val content =
+            "graph LR\n" +
+                context.subdocumentGraph.edges.joinToString("\n") { edge ->
+                    val from = edge.first
+                    val to = edge.second
+                    val (idFrom, idTo) = id(from) to id(to)
+                    val (nameFrom, nameTo) = from.name to to.name
+
+                    "$idFrom[\"$nameFrom\"] --> $idTo[\"$nameTo\"]"
+                }
+
+        return MermaidDiagram(content).accept(this)
+    }
+
     // Inline
 
     override fun visit(node: MathSpan) = buildTag("formula", node.expression)
 
-    override fun visit(node: SlidesFragment): CharSequence =
+    override fun visit(node: BibliographyCitation): CharSequence {
+        val (entry: BibliographyEntry, view: BibliographyView) =
+            node.getDefinition(context) ?: return Text("[???]").accept(this)
+
+        val index = view.bibliography.indexOf(entry)
+        val label = view.style.labelProvider.getLabel(entry, index)
+        return Text(label).accept(this)
+    }
+
+    override fun visit(node: SlidesFragment) =
         tagBuilder("div", node.children)
             .classNames("fragment", node.behavior.asCSS)
             .build()
 
+    override fun visit(node: SlidesSpeakerNote) =
+        buildTag("aside") {
+            className("notes")
+            hidden()
+            +node.children
+        }
+
+    /**
+     * Applies the text transformation of [data] into [this] CSS builder.
+     */
+    private fun CssBuilder.textTransform(data: TextTransformData) {
+        "font-weight" value data.weight
+        "font-style" value data.style
+        "font-variant" value data.variant
+        "text-decoration" value data.decoration
+        "text-transform" value data.case
+        "color" value data.color
+    }
+
     override fun visit(node: TextTransform) =
         buildTag("span") {
-            +node.children
-
             className(node.data.size?.asCSS) // e.g. 'size-small' class
-
-            style {
-                "font-weight" value node.data.weight
-                "font-style" value node.data.style
-                "font-variant" value node.data.variant
-                "text-decoration" value node.data.decoration
-                "text-transform" value node.data.case
-                "color" value node.data.color
-            }
+            +node.children
+            style { textTransform(node.data) }
         }
 
     override fun visit(node: InlineCollapse) =
@@ -354,7 +437,7 @@ class QuarkdownHtmlNodeRenderer(
             attribute("data-full-text", buildMultiTag { +node.text })
             attribute("data-collapsed-text", buildMultiTag { +node.placeholder })
             attribute("data-collapsed", !node.isOpen)
-            +(if (node.isOpen) node.text else node.placeholder)
+            +if (node.isOpen) node.text else node.placeholder
         }
 
     // Invisible nodes
@@ -388,6 +471,9 @@ class QuarkdownHtmlNodeRenderer(
                 node.showControls?.let {
                     append("const slides_showControls = $it;")
                 }
+                node.showNotes?.let {
+                    append("const slides_showNotes = $it;")
+                }
                 node.transition?.let {
                     append("const slides_transitionStyle = '${it.style.asCSS}';")
                     append("const slides_transitionSpeed = '${it.speed.asCSS}';")
@@ -418,7 +504,7 @@ class QuarkdownHtmlNodeRenderer(
                 .optionalAttribute(
                     "id",
                     // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider.Companion
+                    HtmlIdentifierProvider
                         .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),

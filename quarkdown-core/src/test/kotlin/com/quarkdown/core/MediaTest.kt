@@ -11,6 +11,7 @@ import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.MediaVisitor
 import com.quarkdown.core.media.RemoteMedia
 import com.quarkdown.core.media.ResolvableMedia
+import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
@@ -25,14 +26,14 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private const val WORKING_DIR_PATH = "src/test/resources"
-private const val LOCAL_DIR = "media"
+private const val LOCAL_DIR = MEDIA_SUBDIRECTORY_NAME
 private const val LOCAL_ICON = "$LOCAL_DIR/icon.png"
 private const val LOCAL_BANNER = "$LOCAL_DIR/banner.png"
 private const val REMOTE_IMAGE = "https://example.com/image.jpg"
 private const val REMOTE_LOGO = "https://iamgio.eu/quarkdown/img/logo-light.svg"
 private const val REMOTE_LOGO_OUT_NAME = "https-iamgio.eu-quarkdown-img-logo-light.svg"
 private const val INVALID_PATH = "nonexistent"
-private const val OUT_DIR = "media"
+private const val OUT_DIR = MEDIA_SUBDIRECTORY_NAME
 private const val OUT_PATH_1 = "$OUT_DIR/path1/logo.png"
 private const val OUT_PATH_2 = "$OUT_DIR/path2/logo.png"
 

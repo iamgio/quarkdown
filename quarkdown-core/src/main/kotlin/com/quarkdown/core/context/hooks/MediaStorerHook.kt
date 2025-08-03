@@ -28,7 +28,7 @@ class MediaStorerHook(
     constructor(context: MutableContext) : this(
         context.mediaStorage,
         context.attributes,
-        context.attachedPipeline?.options?.workingDirectory,
+        context.fileSystem.workingDirectory,
     )
 
     /**

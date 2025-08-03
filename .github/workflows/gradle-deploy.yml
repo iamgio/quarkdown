@@ -29,7 +29,7 @@ jobs:
       uses: burrunan/gradle-cache-action@v3
       with:
         job-id: main
-        arguments: build distZip
+        arguments: distZip
 
     - name: Echo output files
       run: ls -d "$PWD/build/"*
@@ -47,7 +47,7 @@ jobs:
         git push origin +latest
 
     - name: Create devbuild release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v2.2.2
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         tag_name: "latest"
@@ -57,7 +57,7 @@ jobs:
         files: build/distributions/quarkdown.zip
 
     - name: Create release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v2.2.2
       if: github.ref_type == 'tag'
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
@@ -84,6 +84,22 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build/docs
         destination_dir: docs/latest
+
+    # Bump Homebrew
+    - uses: mislav/bump-homebrew-formula-action@v3
+      if: github.ref_type == 'tag'
+      with:
+        formula-name: quarkdown
+        homebrew-tap: 'quarkdown-labs/homebrew-quarkdown'
+      env:
+        COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+
+    # Bump Scoop
+    - uses: iamgio/quarkdown/.github/actions/bump-scoop@main
+      if: github.ref_type == 'tag'
+      with:
+        version: ${{ github.ref_name }}
+        committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
   dependency-submission:
 

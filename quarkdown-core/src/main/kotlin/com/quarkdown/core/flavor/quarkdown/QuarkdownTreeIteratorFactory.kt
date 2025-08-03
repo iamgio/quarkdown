@@ -7,6 +7,7 @@ import com.quarkdown.core.context.hooks.TableOfContentsGeneratorHook
 import com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
 import com.quarkdown.core.context.hooks.location.LocationAwarenessHook
 import com.quarkdown.core.context.hooks.location.NumberedEvaluatorHook
+import com.quarkdown.core.context.hooks.reference.BibliographyCitationResolverHook
 import com.quarkdown.core.flavor.TreeIteratorFactory
 import com.quarkdown.core.flavor.base.BaseMarkdownTreeIteratorFactory
 
@@ -21,6 +22,7 @@ class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
             .attach(LocationAwareLabelStorerHook(context))
             .attach(NumberedEvaluatorHook(context))
             .attach(TableOfContentsGeneratorHook(context))
+            .attach(BibliographyCitationResolverHook(context))
             .apply {
                 if (context.attachedPipeline?.options?.enableMediaStorage == true) {
                     attach(MediaStorerHook(context))

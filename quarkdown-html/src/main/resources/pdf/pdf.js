@@ -21,7 +21,10 @@ function createArgs() {
     const args = createArgs();
     console.log('Running with args: ' + args);
 
-    const browser = await puppeteer.launch({args: args});
+    const browser = await puppeteer.launch({
+        args: args,
+        headless: 'shell',
+    });
     const page = await browser.newPage();
 
     console.log('Connecting to ' + url);
@@ -33,10 +36,28 @@ function createArgs() {
     console.log('Connected. Waiting for page to be ready.');
     await page.waitForFunction('isReady()');
 
-    await page.pdf({
+    const body = await page.$('body');
+
+    // Plain documents render as a single-page PDF.
+    const isSinglePage = await body.evaluate(bodyElement => bodyElement.classList.contains('quarkdown-plain'));
+    const singlePageHeightPadding = 100; // Additional height added to single-page PDFs. If not enough, an additional page will be incorrectly generated.
+    const singlePageHeightMultiplier = 1.03;
+
+    const pdfOptions = {
         path: outputFile,
-        preferCSSPageSize: true,
         printBackground: true,
-    });
+        preferCSSPageSize: true,
+        ...(
+            isSinglePage
+                ? {height: (await getClientHeight(body)) * singlePageHeightMultiplier + singlePageHeightPadding + 'px'}
+                : {}
+        ),
+    };
+    await page.pdf(pdfOptions);
+
     await browser.close();
 })();
+
+async function getClientHeight(body) {
+    return body.evaluate(bodyElement => bodyElement.clientHeight);
+}

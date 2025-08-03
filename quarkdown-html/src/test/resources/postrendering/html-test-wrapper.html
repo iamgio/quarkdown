@@ -28,9 +28,17 @@
     <script src="...js"></script>
     [[endif:MATH]]
     <style>
+        [[for:FONTFACE]]
+        [[FONTFACE]]
+        [[endfor:FONTFACE]]
+
         @page {
             [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
+        }
+
+        body {
+            [[if:MAINFONTFAMILY]]--qd-main-font: '[[MAINFONTFAMILY]]';[[endif:MAINFONTFAMILY]]
         }
     </style>
 </head>

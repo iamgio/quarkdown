@@ -38,4 +38,10 @@ interface Locale {
      * For instance, `en-US` for US English and `it` for Italian.
      */
     val tag: String
+
+    /**
+     * Short tag of the locale.
+     * For instance, `en` for English and `it` for Italian.
+     */
+    val shortTag: String
 }

@@ -1,0 +1,54 @@
+// Emulates rem sizing, while allowing for em scaling.
+@function derive-size($rem-size) {
+  @return calc($rem-size / var(--h-font-scale, 1.5));
+}
+
+@mixin progressive-heading-margins($bottomAddition: 0) {
+  h1 {
+    line-height: derive-size(3.25em);
+    margin-bottom: derive-size(1.625em + $bottomAddition);
+  }
+
+  h2 {
+    line-height: derive-size(2em);
+    margin-top: derive-size(3em);
+  }
+
+  h3 {
+    margin-top: derive-size(2.5em);
+  }
+
+  h4 {
+    margin-top: derive-size(2em);
+  }
+
+  h5 {
+    margin-top: derive-size(1.8em);
+  }
+
+  h6 {
+    margin-top: derive-size(2.5rem);
+  }
+
+  h3, h4, h5, h6 {
+    line-height: derive-size(1.625em);
+  }
+
+  h1 + h2 {
+    margin-top: derive-size(1.625em);
+  }
+
+  h2 + h3,
+  h3 + h4,
+  h4 + h5 {
+    margin-top: derive-size(0.8em);
+  }
+
+  h5 + h6 {
+    margin-top: derive-size(0.8rem);
+  }
+
+  h2, h3, h4, h5, h6 {
+    margin-bottom: derive-size(0.8em + $bottomAddition);
+  }
+}

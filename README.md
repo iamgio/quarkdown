@@ -12,7 +12,7 @@
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
   <br>
-  <strong>Download</strong>
+  <strong>Releases</strong>
   <br>
   <a href="https://github.com/iamgio/quarkdown/releases/tag/latest">Latest</a>
   &nbsp; | &nbsp;
@@ -105,7 +105,7 @@ Check the [wiki](https://github.com/iamgio/quarkdown/wiki) to learn more about t
 
 <h2 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo" target="_blank">here</a></h3>
 <p align="center">
-Built with Quarkdown itself — <a href="demo/demo.qmd" target="_blank"><strong>source code</strong></a>
+Built with Quarkdown itself — <a href="demo/demo.qd" target="_blank"><strong>source code</strong></a>
 <br><br>
 <em>(Desktop view is suggested)</em>
 </p>
@@ -233,12 +233,41 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
+### Homebrew (Linux/macOS)
+
+```shell
+brew tap quarkdown-labs/quarkdown
+brew install quarkdown-labs/quarkdown/quarkdown
+```
+
+### Scoop (Windows)
+
+```shell
+scoop bucket add java
+scoop bucket add quarkdown https://github.com/quarkdown-labs/scoop-quarkdown          
+scoop install quarkdown
+```
+
+### Install script (Linux/macOS)
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.sh | sudo env "PATH=$PATH" bash
+```
+
+Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
+If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager unless `--no-pm` is used. 
+
+### Manual installation
+
 Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
 
-- The `bin` directory contains the executable scripts. Optionally, adding it to your `PATH` allows you to access Quarkdown more easily.
-- The `lib/qmd` directory contains `.qmd` libraries that can be imported into a project.
+Optionally, adding `<install_dir>/bin` it to your `PATH` allows you to access Quarkdown more easily.
 
-Java 17 or higher is required. All major operating systems are supported.
+Requirements:
+- Java 17 or higher
+- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://github.com/iamgio/quarkdown/wiki/PDF-export) for details.
+
+&nbsp;
 
 ## Creating a project
 
@@ -247,11 +276,13 @@ to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio
 
 For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
 
-Alternatively, you may manually create a `.qmd` source file and start from there.
+Alternatively, you may manually create a `.qd` source file and start from there.
+
+&nbsp;
 
 ## Compiling
 
-Running **`quarkdown c file.qmd`** will compile the given file and save the output to file.
+Running **`quarkdown c file.qd`** will compile the given file and save the output to file.
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
@@ -272,9 +303,13 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
 
-- `-o <dir>` or `--output <dir>`: sets the directory of the output files. Defaults to `./output`.
+- `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./output`.
 
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qmd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+- `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
+  Defaults to the name of the document, set via [`.docname`](https://github.com/iamgio/quarkdown/wiki/document-metadata).  
+  *Note:* special characters will be replaced with dashes in the actual file name.
+
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
 
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
@@ -290,6 +325,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 - `--strict`: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
 
 - `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
+
+- `--no-subdoc-collisions`: makes generated subdocument file names collision-proof. [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments)
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
@@ -310,7 +347,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 ***Mock***, written in Quarkdown, is a comprehensive collection of visual elements offered by the language,
 making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
-- The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qmd -p`.
+- The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qd -p`.
 - The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
 
 ## Contributing
@@ -322,8 +359,14 @@ Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to kn
 A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
 
 <p align="center">
+  <a href="https://falconer.ai"><img src="https://media.licdn.com/dms/image/sync/v2/D5627AQEv-rlp3aPoUg/articleshare-shrink_800/articleshare-shrink_800/0/1742584632918?e=2147483647&v=beta&t=TlKe3D56q8e7V-G4j26cX3MV5nhza3Jhwy2O3yg20dE" alt="Falconer" width="350"></a>
+</p>
+
+<p align="center">
   <a href="https://github.com/LunaBluee"><img src="https://avatars.githubusercontent.com/u/145209701?v=4" alt="LunaBluee" width="35"></a>&nbsp;
   <a href="https://github.com/dcopia"><img src="https://avatars.githubusercontent.com/u/162327812?v=4" alt="dcopia" width="35"></a>
+  <a href="https://github.com/Pallandos"><img src="https://avatars.githubusercontent.com/u/146179143?v=4" alt="Pallandos" width="35"></a>
+  <a href="https://github.com/imogenxingren"><img src="https://avatars.githubusercontent.com/u/36161957?v=4" alt="imogenxingren" width="35"></a>
 </p>
 
 ## Concept

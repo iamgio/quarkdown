@@ -4,6 +4,7 @@ import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
 import com.quarkdown.core.lexer.tokens.FencesCodeToken
+import com.quarkdown.core.lexer.tokens.FootnoteDefinitionToken
 import com.quarkdown.core.lexer.tokens.FunctionCallToken
 import com.quarkdown.core.lexer.tokens.HeadingToken
 import com.quarkdown.core.lexer.tokens.HorizontalRuleToken
@@ -38,6 +39,8 @@ interface BlockTokenVisitor<T> {
     fun visit(token: SetextHeadingToken): T
 
     fun visit(token: LinkDefinitionToken): T
+
+    fun visit(token: FootnoteDefinitionToken): T
 
     fun visit(token: UnorderedListToken): T
 

@@ -3,6 +3,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -48,6 +49,7 @@ fun dictionary(
  * @return value corresponding to the given key, or [NOT_FOUND] if the key is not present
  */
 @Name("get")
+@LikelyChained
 fun dictionaryGet(
     key: String,
     @Name("from") dictionary: Map<String, OutputValue<*>>,

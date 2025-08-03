@@ -2,11 +2,16 @@
 
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.BibliographySamples.article
+import com.quarkdown.core.BibliographySamples.book
+import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
+import com.quarkdown.core.ast.attributes.reference.setDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -17,6 +22,7 @@ import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.block.list.TaskListItemVariant
 import com.quarkdown.core.ast.base.block.list.UnorderedList
+import com.quarkdown.core.ast.base.block.setIndex
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Comment
 import com.quarkdown.core.ast.base.inline.CriticalContent
@@ -24,6 +30,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
@@ -33,6 +40,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -48,6 +56,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.attachMockPipeline
+import com.quarkdown.core.bibliography.Bibliography
+import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
@@ -311,6 +321,54 @@ class HtmlNodeRendererTest {
                     height = 100.px,
                 ),
             ).render(),
+        )
+    }
+
+    @Test
+    fun footnoteDefinition() {
+        val out = readParts("block/footnote.html")
+        val context = MutableContext(QuarkdownFlavor)
+
+        val definition =
+            FootnoteDefinition(
+                label = "label",
+                text = buildInline { text("Foo bar") },
+            )
+        definition.setIndex(context, 0)
+
+        assertEquals(
+            out.next(),
+            definition.render(context),
+        )
+    }
+
+    @Test
+    fun footnoteReference() {
+        val out = readParts("inline/reffootnote.html")
+        val context = MutableContext(QuarkdownFlavor)
+
+        val definition =
+            FootnoteDefinition(
+                label = "label",
+                text = buildInline { text("Foo bar") },
+            )
+        definition.setIndex(context, 0)
+
+        val reference =
+            ReferenceFootnote(
+                label = "label",
+                fallback = { Text("fallback") },
+            )
+
+        reference.setDefinition(context, definition)
+
+        assertEquals(
+            out.next(),
+            reference.render(context),
+        )
+        assertEquals(
+            out.next(),
+            reference.render(),
         )
     }
 
@@ -791,6 +849,22 @@ class HtmlNodeRendererTest {
                 children = children,
             ).render(),
         )
+
+        assertEquals(
+            out.next(),
+            Container(
+                textTransform =
+                    TextTransformData(
+                        size = TextTransformData.Size.LARGE,
+                        style = TextTransformData.Style.ITALIC,
+                        decoration = TextTransformData.Decoration.STRIKETHROUGH,
+                        weight = TextTransformData.Weight.BOLD,
+                        case = TextTransformData.Case.UPPERCASE,
+                        variant = TextTransformData.Variant.SMALL_CAPS,
+                    ),
+                children = children,
+            ).render(),
+        )
     }
 
     @Test
@@ -956,6 +1030,29 @@ class HtmlNodeRendererTest {
             TextTransform(
                 TextTransformData(),
                 listOf(Text("Foo")),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun bibliography() {
+        val out = readParts("quarkdown/bibliography.html")
+
+        assertEquals(
+            out.next(),
+            BibliographyView(
+                title = buildInline { text("Bibliography (plain)") },
+                bibliography = Bibliography(listOf(article, book, misc)),
+                style = BibliographyStyle.Plain,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            BibliographyView(
+                title = buildInline { text("Bibliography (ieeetr)") },
+                bibliography = Bibliography(listOf(article, book, misc)),
+                style = BibliographyStyle.Ieeetr,
             ).render(),
         )
     }

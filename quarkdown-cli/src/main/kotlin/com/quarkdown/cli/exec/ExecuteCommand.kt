@@ -28,10 +28,10 @@ const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
  * Name of the default directory to load libraries from.
- * The default value is relative to the executable JAR file location, and points to the `lib/qmd` directory of the distribution archive.
+ * The default value is relative to the executable JAR file location, and points to the `lib/qd` directory of the distribution archive.
  * It can be overridden by the user.
  */
-val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qmd"
+val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qd"
 
 /**
  * Template for Quarkdown commands that launch a complete pipeline and produce output files.
@@ -66,6 +66,15 @@ abstract class ExecuteCommand(
             canBeFile = false,
             canBeDir = true,
         ).default(File(DEFAULT_OUTPUT_DIRECTORY))
+
+    /**
+     * Optional name of the output resource, to be located in [outputDirectory].
+     * If not set, defaults to the value of `.docname`.
+     */
+    private val resourceName: String? by option(
+        "--out-name",
+        help = "Name of the output resource, to be located in the output directory. Note: special characters will be sanitized to dashes.",
+    )
 
     /**
      * Optional library directory.
@@ -117,6 +126,15 @@ abstract class ExecuteCommand(
     private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
 
     /**
+     * When enabled, risk of subdocument name collisions is minimized by using a hash-based name for subdocuments,
+     * which is less human-readable.
+     */
+    private val minimizeSubdocumentCollisions: Boolean by option(
+        "--no-subdoc-collisions",
+        help = "Minimize the risk of subdocument name collisions by using a hash-based name for subdocuments",
+    ).flag()
+
+    /**
      * When enabled, the program communicates with the local server to dynamically reload the requested resources.
      */
     protected val preview: Boolean by option("-p", "--preview", help = "Open or reload content after compiling").flag()
@@ -143,7 +161,7 @@ abstract class ExecuteCommand(
     /**
      * Path to the npm executable, needed for PDF export.
      */
-    protected val npmPath: String by option("--npm-path", help = "Path to the npm executable")
+    private val npmPath: String by option("--npm-path", help = "Path to the npm executable")
         .default(NpmWrapper.defaultPath)
 
     /**
@@ -167,10 +185,12 @@ abstract class ExecuteCommand(
      */
     fun createPipelineOptions(cliOptions: CliOptions) =
         PipelineOptions(
+            resourceName = resourceName,
             prettyOutput = prettyOutput,
             wrapOutput = !noWrap,
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
             enableMediaStorage = !noMediaStorage,
+            minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
             serverPort = serverPort.takeIf { preview },
             mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
             errorHandler =

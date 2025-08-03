@@ -13,6 +13,8 @@ import com.quarkdown.cli.server.StartWebServerCommand
  * Main command of Quarkdown CLI, which delegates to subcommands.
  */
 class QuarkdownCommand : CliktCommand() {
+    override fun aliases() = mapOf("c" to listOf(CompileCommand().commandName))
+
     override fun run() {}
 }
 

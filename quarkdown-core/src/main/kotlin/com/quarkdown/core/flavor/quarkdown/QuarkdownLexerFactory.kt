@@ -11,8 +11,10 @@ import com.quarkdown.core.lexer.tokens.PlainTextToken
 /**
  * [QuarkdownFlavor] lexer factory.
  */
-class QuarkdownLexerFactory : LexerFactory {
-    private val base = BaseMarkdownLexerFactory()
+object QuarkdownLexerFactory : LexerFactory {
+    private val blockPatterns = QuarkdownBlockTokenRegexPatterns()
+    private val inlinePatterns = QuarkdownInlineTokenRegexPatterns()
+    private val base = BaseMarkdownLexerFactory
 
     /**
      * Inserts patterns of Quarkdown's inline extensions into the base inline lexer (produced by [BaseMarkdownLexerFactory]).
@@ -21,7 +23,7 @@ class QuarkdownLexerFactory : LexerFactory {
     private fun StandardRegexLexer.insertInlineExtensions(): Lexer {
         // New inline patterns introduced by this flavor on top of the base patterns.
         val inlineExtensions =
-            with(QuarkdownInlineTokenRegexPatterns()) {
+            with(inlinePatterns) {
                 listOf(
                     inlineFunctionCall,
                     inlineMath,
@@ -36,7 +38,7 @@ class QuarkdownLexerFactory : LexerFactory {
     }
 
     override fun newBlockLexer(source: CharSequence): Lexer =
-        with(QuarkdownBlockTokenRegexPatterns()) {
+        with(blockPatterns) {
             StandardRegexLexer(
                 source,
                 listOf(
@@ -44,6 +46,7 @@ class QuarkdownLexerFactory : LexerFactory {
                     functionCall,
                     blockQuote,
                     blockCode,
+                    footnoteDefinition,
                     linkDefinition,
                     fencesCode,
                     multilineMath,
@@ -72,7 +75,7 @@ class QuarkdownLexerFactory : LexerFactory {
         source: CharSequence,
         allowBlockFunctionCalls: Boolean,
     ): Lexer =
-        with(QuarkdownInlineTokenRegexPatterns()) {
+        with(inlinePatterns) {
             // A function call argument contains textual content (string/number/...)
             // and possibly other nested function calls.
             StandardRegexLexer(

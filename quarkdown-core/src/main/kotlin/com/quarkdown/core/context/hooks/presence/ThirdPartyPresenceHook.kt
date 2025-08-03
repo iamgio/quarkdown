@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.MutableContext
 
@@ -49,12 +50,13 @@ class MathPresenceHook(
 /**
  * Hook that marks the presence of code elements in the [context]'s attributes
  * if at least one [Code] block is present in the document.
- * @see com.quarkdown.core.ast.attributes.presence.CodePresenceProperty
+ * @see com.quarkdown.core.ast.attributes.presence.MermaidDiagramPresenceProperty
  */
 class MermaidDiagramPresenceHook(
     private val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         iterator.on<MermaidDiagram> { context.attributes.markMermaidDiagramPresence() }
+        iterator.on<SubdocumentGraph> { context.attributes.markMermaidDiagramPresence() }
     }
 }

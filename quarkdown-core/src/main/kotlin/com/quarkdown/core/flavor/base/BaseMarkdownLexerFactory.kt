@@ -10,15 +10,19 @@ import com.quarkdown.core.lexer.tokens.PlainTextToken
 /**
  * [BaseMarkdownFlavor] lexer factory.
  */
-class BaseMarkdownLexerFactory : LexerFactory {
+object BaseMarkdownLexerFactory : LexerFactory {
+    private val blockPatterns = BaseMarkdownBlockTokenRegexPatterns()
+    private val inlinePatterns = BaseMarkdownInlineTokenRegexPatterns()
+
     override fun newBlockLexer(source: CharSequence): StandardRegexLexer =
-        with(BaseMarkdownBlockTokenRegexPatterns()) {
+        with(blockPatterns) {
             StandardRegexLexer(
                 source,
                 listOf(
                     comment,
                     blockQuote,
                     blockCode,
+                    footnoteDefinition,
                     linkDefinition,
                     fencesCode,
                     heading,
@@ -35,7 +39,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
         }
 
     override fun newListLexer(source: CharSequence): StandardRegexLexer =
-        with(BaseMarkdownBlockTokenRegexPatterns()) {
+        with(blockPatterns) {
             StandardRegexLexer(
                 source,
                 listOf(listItem, newline),
@@ -44,10 +48,11 @@ class BaseMarkdownLexerFactory : LexerFactory {
 
     override fun newInlineLexer(source: CharSequence): StandardRegexLexer =
         newLinkLabelInlineLexer(source).updatePatterns { patterns ->
-            with(BaseMarkdownInlineTokenRegexPatterns()) {
+            with(inlinePatterns) {
                 listOf(
                     diamondAutolink,
                     link,
+                    referenceFootnote,
                     referenceLink,
                     urlAutolink,
                 ) + patterns
@@ -55,7 +60,7 @@ class BaseMarkdownLexerFactory : LexerFactory {
         }
 
     override fun newLinkLabelInlineLexer(source: CharSequence): StandardRegexLexer =
-        with(BaseMarkdownInlineTokenRegexPatterns()) {
+        with(inlinePatterns) {
             StandardRegexLexer(
                 source,
                 listOf(

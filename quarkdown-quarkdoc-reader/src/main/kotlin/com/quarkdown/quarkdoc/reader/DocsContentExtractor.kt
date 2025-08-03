@@ -11,7 +11,7 @@ interface DocsContentExtractor {
     fun extractContent(): String?
 
     /**
-     * @return the parameters of the function that this documentation resource describes, if available
+     * @return the function data that this documentation resource describes, if it is about a function
      */
-    fun extractFunctionParameters(): List<DocsParameter>
+    fun extractFunctionData(): DocsFunction?
 }

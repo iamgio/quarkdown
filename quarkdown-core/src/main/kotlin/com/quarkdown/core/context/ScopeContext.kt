@@ -3,8 +3,11 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.document.DocumentInfo
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.graph.visitableOnce
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
 
@@ -12,13 +15,18 @@ import com.quarkdown.core.pipeline.Pipeline
  * A context that is the result of a fork from an original parent [Context].
  * Several properties are inherited from it.
  * @param parent context this scope was forked from
+ * @param subdocument the subdocument this context is processing
  */
-class ScopeContext(val parent: Context) : MutableContext(
-    flavor = parent.flavor,
-    libraries = emptySet(),
-) {
+class ScopeContext(
+    val parent: Context,
+    subdocument: Subdocument = parent.subdocument,
+) : MutableContext(
+        flavor = parent.flavor,
+        libraries = emptySet(),
+        subdocument = subdocument,
+    ) {
     override val attachedPipeline: Pipeline?
-        get() = parent.attachedPipeline
+        get() = super.attachedPipeline ?: parent.attachedPipeline
 
     override val documentInfo: DocumentInfo
         get() = parent.documentInfo
@@ -37,6 +45,12 @@ class ScopeContext(val parent: Context) : MutableContext(
 
     override val mediaStorage: MutableMediaStorage
         get() = parent.mediaStorage as? MutableMediaStorage ?: MutableMediaStorage(options)
+
+    override var subdocumentGraph: VisitableOnceGraph<Subdocument>
+        get() = parent.subdocumentGraph as? VisitableOnceGraph ?: parent.subdocumentGraph.visitableOnce
+        set(value) {
+            (parent as? MutableContext)?.subdocumentGraph = value
+        }
 
     /**
      * If no matching function is found among this [ScopeContext]'s own [libraries],

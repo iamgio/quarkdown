@@ -1,0 +1,58 @@
+.quarkdown.quarkdown {
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-indent: var(--qd-paragraph-text-indent);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &:not(.quarkdown-slides) p {
+    hyphens: auto;
+  }
+
+  p, li {
+    line-height: var(--qd-line-height);
+    letter-spacing: var(--qd-letter-spacing);
+  }
+}
+
+p {
+  $valid-paragraph: 'p:not(.stack > p):not(.page-margin-content > p)';
+
+  // Spacing between two sibling paragraphs
+  + #{$valid-paragraph},
+    // Spacing between two sibling paragraphs with a floating element in-between
+  + .quarkdown .float + #{$valid-paragraph},
+    // Spacing between the paragraph and its floating element sibling
+  + .quarkdown .float:has(+ #{$valid-paragraph}) {
+    margin-top: var(--qd-paragraph-vertical-margin) !important;
+  }
+}
+
+// Paragraphs that don't expect indentation.
+figure p,
+.stack > p,
+.container[style*="text-align"] > p,
+.container[style*="justify-items"] > p,
+.mermaid p {
+  text-indent: 0 !important;
+}
+
+// First paragraphs may not expect indentation, depending on the locale or theme.
+p:first-child,
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p,
+hr + p,
+figure + p,
+table + p,
+details > summary + p,
+.float + p {
+  text-indent: var(--qd-first-paragraph-text-indent, 0) !important;
+}

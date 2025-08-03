@@ -1,6 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
+import com.quarkdown.quarkdoc.dokka.page.LikelyChainedPageTransformer
 import com.quarkdown.quarkdoc.dokka.page.WikiLinkPageTransformer
 import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumParameterEntryListerTransformer
@@ -136,10 +137,19 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
+     * Generates a new section for likely chained functions.
+     */
+    val likelyChainedPageTransformer by extending {
+        CoreExtensions.pageTransformer providing ::LikelyChainedPageTransformer
+    }
+
+    /**
      * Generates a new section for the `@wiki` documentation tag with a link to the corresponding wiki page.
      */
     val wikiLinkPageTransformer by extending {
-        CoreExtensions.pageTransformer providing ::WikiLinkPageTransformer
+        CoreExtensions.pageTransformer providing ::WikiLinkPageTransformer order {
+            after(likelyChainedPageTransformer)
+        }
     }
 
     /**

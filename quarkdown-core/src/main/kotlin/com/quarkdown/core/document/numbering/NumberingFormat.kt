@@ -29,6 +29,8 @@ import com.quarkdown.core.util.StringCase
 data class NumberingFormat(
     val symbols: List<NumberingSymbol>,
 ) {
+    constructor(vararg symbols: NumberingSymbol) : this(symbols.toList())
+
     /**
      * The size of the subset of [symbols] which contribute towards the dynamic numbering.
      * @see NumberingCounterSymbol
@@ -102,6 +104,13 @@ data class NumberingFormat(
             }
         }
     }
+
+    /**
+     * Formats a single level of numbering. Use case: footnotes, which don't expect a nested structure.
+     * @param level level to format
+     * @see format
+     */
+    fun format(level: Int): String = format(SectionLocation(listOf(level)))
 
     companion object {
         /**

@@ -1,0 +1,13 @@
+[[if:NAME]]# [[NAME]][[endif:NAME]]
+
+Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the starting point of your document.
+
+- To compile this document, please `cd` to this file's parent directory and run:  
+  `quarkdown c [[MAINFILE]].qd`
+
+- To enable live preview, run:  
+  `quarkdown c [[MAINFILE]].qd -p -w`
+
+For further information and guides, please check out the [official wiki](https://github.com/iamgio/quarkdown/wiki).
+
+!(50%)[Quarkdown](image/logo.png)

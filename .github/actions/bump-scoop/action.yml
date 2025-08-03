@@ -1,0 +1,66 @@
+name: "Bump Scoop Manifest"
+description: "Update Scoop bucket manifest with a new version"
+
+inputs:
+  version:
+    description: "Version string to update (e.g. 1.5.0)"
+    required: true
+    type: string
+  committer_token:
+    description: "Personal Access Token to push to the bucket"
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Set version variable
+      run: |
+        VERSION="${{ inputs.version }}"
+        VERSION="${VERSION#v}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq unzip curl
+      shell: bash
+
+    - name: Checkout Scoop bucket repo
+      uses: actions/checkout@v3
+      with:
+        repository: "quarkdown-labs/scoop-quarkdown"
+        token: ${{ inputs.committer_token }}
+
+    - name: Update manifest version and URL
+      run: |
+        jq --arg ver "$VERSION" \
+           '.version = $ver |
+            .url = "https://github.com/iamgio/quarkdown/releases/download/v" + $ver + "/quarkdown.zip"'  \
+           bucket/quarkdown.json > bucket/tmp.json
+        mv bucket/tmp.json bucket/quarkdown.json
+      shell: bash
+
+    - name: Download release zip for checksum
+      run: |
+        curl -L -o quarkdown.zip "https://github.com/iamgio/quarkdown/releases/download/v$VERSION/quarkdown.zip"
+      shell: bash
+
+    - name: Calculate SHA256 checksum and update manifest
+      run: |
+        SHASUM=$(shasum -a 256 quarkdown.zip | cut -d " " -f 1)
+        jq --arg shasum "$SHASUM" '.hash = $shasum' bucket/quarkdown.json > bucket/tmp.json
+        mv bucket/tmp.json bucket/quarkdown.json
+      shell: bash
+
+    - name: Commit and push updated manifest
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add bucket/quarkdown.json
+        git diff --cached --quiet || git commit -m "Bump to $VERSION"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ inputs.committer_token }}
+      shell: bash

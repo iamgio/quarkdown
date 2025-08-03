@@ -1,0 +1,16 @@
+.quarkdown .container {
+  display: inline-block;
+
+  &.fullwidth {
+    display: block;
+  }
+
+  &:not(.fullwidth):not(.clip > .container) :only-child {
+    margin: 0;
+  }
+
+  > .stack {
+    width: 100%;
+    height: 100%;
+  }
+}

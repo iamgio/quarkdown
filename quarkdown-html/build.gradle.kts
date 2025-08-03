@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("io.miret.etienne.sass") version "1.5.2"
 }
 
 dependencies {
@@ -9,5 +10,14 @@ dependencies {
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-server"))
-    implementation("org.apache.commons:commons-text:1.13.0")
+}
+
+tasks.compileSass {
+    val dir = projectDir.resolve("src/main/resources/render/theme")
+    sourceDir = dir
+    outputDir = dir
+}
+
+tasks.processResources {
+    dependsOn(tasks.compileSass)
 }

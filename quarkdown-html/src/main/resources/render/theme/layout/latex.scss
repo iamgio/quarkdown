@@ -1,0 +1,99 @@
+/* Inspired by latex-css https://github.com/vincentdoerig/latex-css */
+
+@use "util/progressive-heading-margins" as *;
+@use "util/progressive-heading-sizes" as *;
+@use "util/latex-tables" as *;
+@use "util/latex-toc" as *;
+@import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
+@import url('https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-mono.css');
+
+:root {
+  --qd-main-font: 'Computer Modern Serif', sans-serif;
+  --qd-main-font-size: 1rem;
+  --qd-heading-margin: 1.4em 0 1em 0;
+  --qd-code-font: "Latin Modern Mono", monospace;
+  --qd-code-span-font-size: 0.93em;
+  --qd-slides-code-block-font-size: 1.5em;
+  --qd-block-margin: 1.8em;
+  --qd-paragraph-vertical-margin: 1.5em;
+  --qd-line-height: 1.5;
+  --qd-location-suffix: " ";
+  --qd-table-default-cell-alignment: start;
+  --qd-quote-type-label-suffix: ". ";
+  --qd-box-icon-baseline: -0.1em;
+  --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
+}
+
+.quarkdown-slides {
+  --qd-horizontal-alignment-global: start;
+}
+
+@page {
+  margin: 0.85in;
+}
+
+.quarkdown {
+  @include progressive-heading-margins;
+  @include progressive-heading-sizes;
+  @include latex-tables;
+  @include latex-toc;
+
+  // Numbering
+  [data-location]::before {
+    padding-right: 0.85rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  blockquote {
+    border-left: 2px solid;
+    padding: 14px 1.5em;
+    font-style: italic;
+
+    .attribution {
+      text-align: end;
+    }
+
+    // Tip, note, warning, ...
+    &[class] {
+      font-style: normal;
+    }
+  }
+
+  .box.callout {
+    border-color: var(--box-header-background-color) !important;
+    border-left: 2px solid;
+    border-radius: 8px 8px 8px 0;
+
+    > .box-content {
+      background-color: var(--qd-background-color);
+    }
+
+    &:not(:has(> header)) {
+      border-top: 16px solid;
+    }
+  }
+
+  .codespan-content {
+    border-radius: 8px;
+    background: none !important;
+
+    .color-preview {
+      margin: 0 0.3em 0 0.4em;
+      border-radius: 3px;
+    }
+  }
+
+  h1#table-of-contents {
+    text-align: start;
+  }
+}
+

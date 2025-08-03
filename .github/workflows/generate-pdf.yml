@@ -2,7 +2,7 @@ name: PDF generation via Puppeteer
 
 on:
   push:
-    branches: [ "main" ]
+    tags: [ "v*" ]
     paths-ignore:
       - '*.md'
       - '**/README.md'
@@ -41,7 +41,7 @@ jobs:
 
     - name: Compile Mock as PDF
       run: |
-        for generated in $(ls mock/generated_*.qmd); do
+        for generated in $(ls mock/generated_*.qd); do
           ./build/distributions/quarkdown/bin/quarkdown c $generated -o pdf/mock --pdf --pdf-no-sandbox
         done
         ls -d $PWD/pdf/*
@@ -66,6 +66,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git checkout generated
+        mkdir -p pdf/mock
         cp -r temp/mock/* pdf/mock
         rm -rf temp
         git add temp

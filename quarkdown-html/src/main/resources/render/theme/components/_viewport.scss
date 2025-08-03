@@ -1,0 +1,88 @@
+@use "_font";
+
+@mixin content-area-border {
+  border-width: var(--qd-page-content-border-width);
+  border-color: var(--qd-page-content-border-color);
+  border-style: var(--qd-page-content-border-style);
+  box-sizing: border-box;
+}
+
+body.quarkdown {
+  color: var(--qd-main-color);
+  font-size: var(--qd-main-font-size);
+  @include font.global-font-family();
+
+  &:not(.quarkdown-paged), &.quarkdown-paged .pagedjs_page {
+    background-color: var(--qd-background-color);
+  }
+
+  &.quarkdown-plain {
+    display: flex;
+    flex-direction: row;
+    margin: 32px 0;
+
+    > main {
+      width: 100%;
+      column-count: var(--property-column-count);
+    }
+
+    > aside {
+      $width: 30vw;
+      max-width: #{$width};
+      width: #{$width};
+      margin: 0 12px;
+
+      &#margin-area-left {
+        margin-right: 24px;
+      }
+
+      &#margin-area-right {
+        margin-left: 24px;
+      }
+    }
+
+    @media screen and (max-width: 800px), print and (max-width: 1000px) {
+      aside#margin-area-left {
+        max-width: 0;
+      }
+
+      aside#margin-area-right:empty {
+        max-width: 0;
+      }
+    }
+  }
+
+  // Slides viewport
+  &.quarkdown-slides .reveal .slides {
+    @include content-area-border;
+
+    > section, .pdf-page {
+      column-count: var(--property-column-count);
+    }
+  }
+
+  // Paged viewport
+  &.quarkdown-paged {
+    background-color: lightgray;
+
+    // Paged rendering is not yet complete
+    &:not(:has(.pagedjs_page)) {
+      opacity: 0;
+    }
+
+    .pagedjs_pages {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3mm;
+    }
+
+    .pagedjs_page {
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+    }
+
+    .pagedjs_area {
+      @include content-area-border;
+    }
+  }
+}

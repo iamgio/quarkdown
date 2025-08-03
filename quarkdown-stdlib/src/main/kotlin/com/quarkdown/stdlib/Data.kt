@@ -14,7 +14,6 @@ import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.wrappedAsValue
-import com.quarkdown.core.util.IOUtils
 import com.quarkdown.core.util.normalizeLineSeparators
 import java.io.File
 
@@ -40,8 +39,7 @@ internal fun file(
     path: String,
     requireExistance: Boolean = true,
 ): File {
-    val workingDirectory = context.attachedPipeline?.options?.workingDirectory
-    val file = IOUtils.resolvePath(path, workingDirectory)
+    val file = context.fileSystem.resolve(path)
 
     if (requireExistance && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")

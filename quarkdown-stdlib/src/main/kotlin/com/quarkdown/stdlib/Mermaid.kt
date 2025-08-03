@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagramFigure
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
@@ -25,11 +26,12 @@ val Mermaid: Module =
     moduleOf(
         ::mermaid,
         ::xyChart,
+        ::subdocumentGraph,
     )
 
 private fun mermaidFigure(
     caption: String?,
-    @LikelyBody code: String,
+    code: String,
 ) = MermaidDiagramFigure(
     MermaidDiagram(code),
     caption,
@@ -153,7 +155,7 @@ private fun StringBuilder.axis(
  *               They can be a list of points, which will be plotted as a single line,
  *               or a list of lists of points, which will be plotted as multiple lines.
  * @return the generated diagram node
- * @throws IllegalArgumentException if both [xrange] and [xtags] are set
+ * @throws IllegalArgumentException if both [xAxisRange] and [xAxisTags] are set
  * @wiki XY chart
  */
 @Name("xychart")
@@ -194,3 +196,18 @@ fun xyChart(
     val code = "xychart-beta\n" + content.indent("\t")
     return mermaidFigure(caption, code)
 }
+
+/**
+ * Displays a directed graph of subdocuments within the document.
+ *
+ * A subdocument is an independent unit of content, usually contained in a separate file,
+ * that can be linked to from the main document or other subdocuments.
+ *
+ * This graph visualizes the relationships between subdocuments,
+ * showing how they are connected through links.
+ *
+ * @return a new [SubdocumentGraph] node
+ * @wiki Subdocuments
+ */
+@Name("subdocumentgraph")
+fun subdocumentGraph() = SubdocumentGraph().wrappedAsValue()

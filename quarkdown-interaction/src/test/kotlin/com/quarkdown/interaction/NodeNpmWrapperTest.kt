@@ -10,7 +10,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 private fun npm() = NpmWrapper(NpmWrapper.defaultPath)
 
@@ -73,29 +72,10 @@ class NodeNpmWrapperTest {
 
     @Test
     fun `nonexisting module not installed`() {
+        val node = node(workingDirectory = directory)
         val npm = npm()
         val module = NodeModule("quarkdown-nonexisting-module-xyz")
         assumeTrue(npm.isValid)
-        assertFalse(npm.isInstalled(module))
-    }
-
-    @Test
-    fun `puppeteer not linked`() {
-        val node = node(workingDirectory = directory)
-        assumeTrue(node.isValid)
-        assertEquals(false, node.isLinked(PuppeteerNodeModule))
-    }
-
-    @Test
-    fun `install puppeteer`() {
-        val node = node(workingDirectory = directory)
-        val npm = npm()
-        assumeTrue(node.isValid)
-        assumeTrue(npm.isValid)
-        npm.install(PuppeteerNodeModule)
-        assertTrue(npm.isInstalled(PuppeteerNodeModule))
-        assertFalse(node.isLinked(PuppeteerNodeModule))
-        npm.link(node, PuppeteerNodeModule)
-        assertTrue(node.isLinked(PuppeteerNodeModule))
+        assertFalse(npm.isInstalled(node, module))
     }
 }

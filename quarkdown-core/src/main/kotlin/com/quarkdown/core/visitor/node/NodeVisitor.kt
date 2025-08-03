@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -22,25 +23,32 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
+import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
+import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
+import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -70,6 +78,8 @@ interface NodeVisitor<T> {
 
     fun visit(node: LinkDefinition): T
 
+    fun visit(node: FootnoteDefinition): T
+
     fun visit(node: OrderedList): T
 
     fun visit(node: UnorderedList): T
@@ -97,6 +107,10 @@ interface NodeVisitor<T> {
     fun visit(node: Link): T
 
     fun visit(node: ReferenceLink): T
+
+    fun visit(node: SubdocumentLink): T
+
+    fun visit(node: ReferenceFootnote): T
 
     fun visit(node: Image): T
 
@@ -136,6 +150,8 @@ interface NodeVisitor<T> {
 
     fun visit(node: Numbered): T
 
+    fun visit(node: Landscape): T
+
     fun visit(node: FullColumnSpan): T
 
     fun visit(node: Clipped): T
@@ -148,7 +164,11 @@ interface NodeVisitor<T> {
 
     fun visit(node: TableOfContentsView): T
 
+    fun visit(node: BibliographyView): T
+
     fun visit(node: MermaidDiagram): T
+
+    fun visit(node: SubdocumentGraph): T
 
     // Quarkdown inline
 
@@ -160,7 +180,11 @@ interface NodeVisitor<T> {
 
     fun visit(node: PageCounter): T
 
+    fun visit(node: BibliographyCitation): T
+
     fun visit(node: SlidesFragment): T
+
+    fun visit(node: SlidesSpeakerNote): T
 
     // Quarkdown invisible nodes
 

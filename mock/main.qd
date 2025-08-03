@@ -1,0 +1,27 @@
+<!-- Change here to test a different theme -->
+.theme {paperwhite} layout:{latex}
+<!-- Change here to paged/slides/plain to test a different document type -->
+.doctype {paged}
+
+.includeall
+    - setup.qd
+    - headings.qd
+    - paragraphs.qd
+    - lists.qd
+    - images.qd
+    - tables.qd
+    - code.qd
+    - textformatting.qd
+    - colorpreview.qd
+    - quotes.qd
+    - boxes.qd
+    - math.qd
+    - footnotes.qd
+    - mermaid.qd
+    - collapsibles.qd
+    - errors.qd
+    - separators.qd
+    - alignment.qd
+    - stacks.qd
+    - bibliography.qd
+    - localization.qd

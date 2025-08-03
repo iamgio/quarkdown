@@ -10,16 +10,17 @@ import com.quarkdown.core.document.numbering.NumberingFixedSymbol
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
-import com.quarkdown.core.pipeline.output.FileResourceExporter
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
 import com.quarkdown.core.util.StringCase
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -232,6 +233,14 @@ class MiscTest {
                         .readBytes(),
                 )
             }
+
+        LazyOutputArtifact
+            .internalOrNull(
+                resource = "nonexisting.png",
+                name = "artifact.png",
+                type = ArtifactType.AUTO,
+                referenceClass = this::class,
+            ).let { assertNull(it) }
 
         val group =
             OutputResourceGroup(

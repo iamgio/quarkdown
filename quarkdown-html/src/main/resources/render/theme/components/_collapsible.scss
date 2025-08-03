@@ -1,0 +1,16 @@
+.quarkdown {
+  details summary, .collapsible-text[data-collapsed="true"] {
+    cursor: pointer;
+  }
+
+  details summary {
+    margin-bottom: var(--qd-paragraph-vertical-margin);
+  }
+
+  .inline-collapse[data-collapsed="true"] {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--qd-collapsed-text-color);
+    border-bottom: 3px dotted color-mix(in srgb, var(--qd-collapsed-text-color) 28%, transparent);
+  }
+}

@@ -1,0 +1,58 @@
+<!-- stdlib localization table -->
+
+.localization name:{std}
+    - English
+      - note: Note
+      - tip: Tip
+      - warning: Warning
+      - important: Important
+      - error: Error
+      - todo: To do
+      - tableofcontents: Table of Contents
+      - bibliography: References
+      - figure: Figure
+      - table: Table
+    - Italian
+      - note: Nota
+      - tip: Consiglio
+      - warning: Attenzione
+      - important: Importante
+      - error: Errore
+      - todo: Da fare
+      - tableofcontents: Indice
+      - bibliography: Riferimenti
+      - figure: Figura
+      - table: Tabella
+    - German
+      - note: Hinweis
+      - tip: Tip
+      - warning: Warnung
+      - important: Wichtig
+      - error: Fehler
+      - todo: Aufgabe
+      - tableofcontents: Inhaltsverzeichnis
+      - bibliography: Literaturverzeichnis
+      - figure: Abbildung
+      - table: Tabelle
+    - Japanese
+      - note: ノート
+      - tip: ヒント
+      - warning: 警告
+      - important: 重要
+      - error: エラー
+      - todo: タスク
+      - tableofcontents: 目次
+      - bibliography: 参考文献
+      - figure: 図
+      - table: テーブル
+    - Chinese
+      - note: 注意
+      - tip: 提示
+      - warning: 警告
+      - important: 重要
+      - error: 错误
+      - todo: 待办
+      - tableofcontents: 目录
+      - bibliography: 参考文献
+      - figure: 图
+      - table: 表

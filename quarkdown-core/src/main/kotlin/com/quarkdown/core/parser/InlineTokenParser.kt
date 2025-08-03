@@ -2,6 +2,7 @@ package com.quarkdown.core.parser
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Comment
 import com.quarkdown.core.ast.base.inline.CriticalContent
@@ -9,15 +10,19 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.ReferenceDefinitionFootnote
+import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.isSubdocumentUrl
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.function.value.factory.IllegalRawValueException
 import com.quarkdown.core.function.value.factory.ValueFactory
@@ -37,6 +42,7 @@ import com.quarkdown.core.lexer.tokens.InlineMathToken
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.LinkToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
+import com.quarkdown.core.lexer.tokens.ReferenceFootnoteToken
 import com.quarkdown.core.lexer.tokens.ReferenceImageToken
 import com.quarkdown.core.lexer.tokens.ReferenceLinkToken
 import com.quarkdown.core.lexer.tokens.StrikethroughToken
@@ -50,11 +56,11 @@ import com.quarkdown.core.misc.color.decoder.HsvHslColorDecoder
 import com.quarkdown.core.misc.color.decoder.RgbColorDecoder
 import com.quarkdown.core.misc.color.decoder.RgbaColorDecoder
 import com.quarkdown.core.misc.color.decoder.decode
+import com.quarkdown.core.util.Escape
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.InlineTokenVisitor
-import org.apache.commons.text.StringEscapeUtils
 
 /**
  * ASCII of the character that replaces null characters,
@@ -129,7 +135,7 @@ class InlineTokenParser(
                 // Decimal (e.g. &#35)
                 entity.startsWith("#") -> groups.next().decodeToContent(radix = 10)
                 // HTML entity (e.g. &nbsp;)
-                else -> StringEscapeUtils.unescapeHtml4(token.data.text)
+                else -> Escape.Html.unescape(token.data.text)
             },
         )
     }
@@ -149,14 +155,20 @@ class InlineTokenParser(
 
     override fun visit(token: LineBreakToken): Node = LineBreak
 
-    override fun visit(token: LinkToken): Link {
+    override fun visit(token: LinkToken): LinkNode {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return Link(
-            label = parseLinkLabelSubContent(groups.next()),
-            url = groups.next().trim(),
-            // Removes leading and trailing delimiters.
-            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
-        )
+        val link =
+            Link(
+                label = parseLinkLabelSubContent(groups.next()),
+                url = groups.next().trim(),
+                // Removes leading and trailing delimiters.
+                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+            )
+        return when {
+            // If the URL points to a subdocument, it is a subdocument link.
+            context.isSubdocumentUrl(link.url) -> SubdocumentLink(link)
+            else -> link
+        }
     }
 
     override fun visit(token: ReferenceLinkToken): ReferenceLink {
@@ -168,6 +180,30 @@ class InlineTokenParser(
             reference = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
             fallback = { Text(token.data.text) },
         )
+    }
+
+    override fun visit(token: ReferenceFootnoteToken): Node {
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val label = groups.next()
+        val definition = groups.nextOrNull()
+
+        return when {
+            // All-in-one case:
+            // Named: [^label: definition]
+            // Anonymous: [^: definition]
+            definition != null ->
+                ReferenceDefinitionFootnote(
+                    label.takeUnless { it.isBlank() } ?: context.newUuid(),
+                    definition = parseSubContent(definition),
+                )
+
+            // Reference only case.
+            else ->
+                ReferenceFootnote(
+                    label,
+                    fallback = { Text(token.data.text) },
+                )
+        }
     }
 
     override fun visit(token: DiamondAutolinkToken): Node {
@@ -202,7 +238,7 @@ class InlineTokenParser(
         fun toSize(raw: String?): Size? =
             try {
                 raw?.let(ValueFactory::size)?.unwrappedValue // Parses the value.
-            } catch (e: IllegalRawValueException) {
+            } catch (_: IllegalRawValueException) {
                 null
             }
 

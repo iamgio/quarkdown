@@ -28,10 +28,17 @@ class DokkaReaderTest {
         )
     }
 
+    private fun extractFunctionData(resourceName: String): DocsFunction {
+        val fullHtml = javaClass.getResourceAsStream(resourceName)!!.bufferedReader().readText()
+        return DokkaHtmlContentExtractor(fullHtml).extractFunctionData()!!
+    }
+
     @Test
     fun `simple parameter extractor`() {
-        val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
-        val parameter = DokkaHtmlContentExtractor(fullHtml).extractFunctionParameters().first { it.name == "string" }
+        val function = extractFunctionData("/content/lowercase.html")
+        val parameter = function.parameters.first { it.name == "string" }
+        assertEquals("lowercase", function.name)
+        assertFalse(function.isLikelyChained)
         assertEquals(
             "<p class=\"paragraph\">string to convert</p>",
             parameter.description,
@@ -43,10 +50,11 @@ class DokkaReaderTest {
 
     @Test
     fun `long parameter extractor`() {
-        val fullHtml = javaClass.getResourceAsStream("/content/container.html")!!.bufferedReader().readText()
-        val parameters = DokkaHtmlContentExtractor(fullHtml).extractFunctionParameters()
-        val backgroundParameter = parameters.first { it.name == "background" }
-        val bodyParameter = parameters.first { it.name == "body" }
+        val function = extractFunctionData("/content/container.html")
+        val backgroundParameter = function.parameters.first { it.name == "background" }
+        val bodyParameter = function.parameters.first { it.name == "body" }
+        assertEquals("container", function.name)
+        assertFalse(function.isLikelyChained)
         assertEquals(
             """
             <dl>
@@ -65,6 +73,13 @@ class DokkaReaderTest {
         assertTrue(bodyParameter.isOptional)
         assertTrue(bodyParameter.isLikelyBody)
         assertFalse(bodyParameter.isLikelyNamed)
+    }
+
+    @Test
+    fun `likely chained function extractor`() {
+        val function = extractFunctionData("/content/isnone.html")
+        assertEquals("isnone", function.name)
+        assertTrue(function.isLikelyChained)
     }
 
     /**

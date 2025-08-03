@@ -1,0 +1,13 @@
+.quarkdown {
+  .katex.katex {
+    font-size: 1.1em;
+    margin: 0 .1em;
+  }
+
+  .katex-display {
+    // By swapping margin and padding,
+    // we can ensure Quarkdown containers (e.g. stacks) do not remove the formula's margin.
+    margin: 0;
+    padding: 1em 0;
+  }
+}

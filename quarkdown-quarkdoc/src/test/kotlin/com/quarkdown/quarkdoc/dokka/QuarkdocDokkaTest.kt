@@ -135,6 +135,11 @@ open class QuarkdocDokkaTest(
         block = block,
     )
 
+    protected fun getText(html: String) =
+        Jsoup
+            .parse(html)
+            .text()
+
     /**
      * @param html the HTML content to parse
      * @return the function signature as text

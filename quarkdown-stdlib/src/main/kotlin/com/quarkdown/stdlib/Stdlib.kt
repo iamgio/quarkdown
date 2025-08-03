@@ -39,14 +39,15 @@ object Stdlib : LibraryExporter {
                         Slides +
                         Ecosystem +
                         Injection +
-                        Mermaid,
+                        Mermaid +
+                        Bibliography,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.
                         afterRegisteringLibraries = {
                             includeResource(
                                 this.readOnlyContext,
-                                javaClass.getResourceAsStream("/lib/localization.qmd")!!.reader(),
+                                javaClass.getResourceAsStream("/lib/localization.qd")!!.reader(),
                             )
                         },
                     ),

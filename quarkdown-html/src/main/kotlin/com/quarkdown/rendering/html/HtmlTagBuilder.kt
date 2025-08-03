@@ -159,8 +159,10 @@ class HtmlTagBuilder(
         }
 
     override fun append(content: CharSequence) {
-        super.content.append(content)
-        if (pretty) super.content.append("\n")
+        when {
+            pretty -> super.content.append(content.trimEnd()).append("\n")
+            else -> super.content.append(content)
+        }
     }
 
     /**

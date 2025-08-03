@@ -94,10 +94,10 @@ class TablesTest {
             | Topic                                                                        | Description                                                                                                                               |
             |------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
             | [link 1](./practical-lion-recognition)                    | Describes the directory structure and exactly how tigers and lions are often mistaken for jaguars by application developers |
-            | [link2/stuff/and more](./picnic-control-1.md)             | Provides a worked example that shows how picnics can be controlled at a den, pack and organization level                                |
-            | [link3/production and stuff](./example-stuff.md)                    | Provides a worked example that shows                                                        |
-            | [link4](internal-Service-Structure.md)                            | Describes the internal components of the  and how they work                                                    |
-            | [Link5 is established](identity.md)                                   | Describes how user and workloads identities                                                               | 
+            | [link2/stuff/and more](./picnic-control-1.xy)             | Provides a worked example that shows how picnics can be controlled at a den, pack and organization level                                |
+            | [link3/production and stuff](./example-stuff.xy)                    | Provides a worked example that shows                                                        |
+            | [link4](internal-Service-Structure.xy)                            | Describes the internal components of the  and how they work                                                    |
+            | [Link5 is established](identity.xy)                                   | Describes how user and workloads identities                                                               | 
             | Link the sixth                                                                 | Description of the externally accessible REST and gRPC API                                                                                |
             | And the seventh                                                        |  the source code for the different components are laid out                                |
             """.trimIndent(),

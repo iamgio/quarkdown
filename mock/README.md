@@ -9,5 +9,7 @@ making it ideal for exploring and understanding its key features — all while p
 
 This document is also a great theme testing site.
 
-To compile and open in browser: `quarkdown c mock/main.qmd -p`.  
-Add `-w` to enable live reloading.
+To compile: `quarkdown c mock/main.qd`
+
+- Add `-p` to open in-browser. Add `-p -w` to enable live reloading.
+- Add `--pdf` to compile to PDF.
