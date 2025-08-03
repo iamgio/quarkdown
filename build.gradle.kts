@@ -188,6 +188,7 @@ tasks.test {
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
+    classpath = files("lib/*") // Fixes the 'Input line is too long' error on Windows.
     // Prepends subscripts to the generated start scripts.
     doLast {
         val dir = file("scripts")
