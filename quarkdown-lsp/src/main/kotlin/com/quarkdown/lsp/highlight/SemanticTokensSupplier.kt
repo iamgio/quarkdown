@@ -9,7 +9,7 @@ interface SemanticTokensSupplier {
     /**
      * Generates a list of simplified semantic tokens, which will be converted to full semantic tokens later.
      * @param params the parameters for the semantic tokens request
-     * @param text the current text content of the document
+     * @param text the current text content of the document, with normalized line separators
      * @return a list of semantic tokens that can be used for highlighting
      */
     fun getTokens(

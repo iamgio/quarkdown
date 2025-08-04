@@ -1,5 +1,6 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.highlight.SemanticTokenData
 import com.quarkdown.lsp.highlight.SemanticTokensEncoder
@@ -38,9 +39,13 @@ class QuarkdownTextDocumentService(
      */
     private val documents = mutableMapOf<String, String>()
 
+    private fun getDocumentText(document: TextDocumentIdentifier): String =
+        documents[document.uri]
+            ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
+
     override fun didOpen(didOpenTextDocumentParams: DidOpenTextDocumentParams) {
         server.log(
-            "Operation '" + "text/didOpen" +
+            "Operation 'text/didOpen'" +
                 "' {fileUri: '" + didOpenTextDocumentParams.textDocument.uri + "'} opened",
         )
 
@@ -50,7 +55,7 @@ class QuarkdownTextDocumentService(
 
     override fun didChange(didChangeTextDocumentParams: DidChangeTextDocumentParams) {
         server.log(
-            "Operation '" + "text/didChange" +
+            "Operation 'text/didChange'" +
                 "' {fileUri: '" + didChangeTextDocumentParams.textDocument.uri + "'} Changed",
         )
 
@@ -60,7 +65,7 @@ class QuarkdownTextDocumentService(
 
     override fun didClose(didCloseTextDocumentParams: DidCloseTextDocumentParams) {
         server.log(
-            "Operation '" + "text/didClose" +
+            "Operation 'text/didClose'" +
                 "' {fileUri: '" + didCloseTextDocumentParams.textDocument.uri + "'} Closed",
         )
 
@@ -74,14 +79,11 @@ class QuarkdownTextDocumentService(
         )
     }
 
-    private fun getDocumentText(document: TextDocumentIdentifier): String =
-        documents[document.uri] ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
-
     override fun completion(params: CompletionParams): CompletionResult {
         val text = getDocumentText(params.textDocument)
 
         return CompletableFuture.supplyAsync {
-            server.log("Operation '" + "text/completion")
+            server.log("Operation 'text/completion'")
 
             val completions =
                 completionSuppliers
@@ -96,7 +98,9 @@ class QuarkdownTextDocumentService(
 
     override fun semanticTokensFull(params: SemanticTokensParams): CompletableFuture<SemanticTokens> {
         server.log("Operation 'text/semanticTokens/full'")
-        val text = getDocumentText(params.textDocument)
+
+        // Lexers replace line endings with LF, so it's normalized here too to ensure consistency.
+        val text = getDocumentText(params.textDocument).normalizeLineSeparators().toString()
 
         val tokens: List<SemanticTokenData> =
             this.tokensSuppliers

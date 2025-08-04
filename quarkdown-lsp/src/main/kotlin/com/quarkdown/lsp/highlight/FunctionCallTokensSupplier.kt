@@ -1,5 +1,8 @@
 package com.quarkdown.lsp.highlight
 
+import com.quarkdown.core.lexer.patterns.FunctionCallPatterns
+import com.quarkdown.core.lexer.regex.StandardRegexLexer
+import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
 import org.eclipse.lsp4j.SemanticTokensParams
 
 /**
@@ -10,14 +13,17 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
         params: SemanticTokensParams,
         text: String,
     ): List<SimpleTokenData> {
-        val regex = Regex("""\.\w+""")
-        return regex
-            .findAll(text)
-            .map { match ->
-                SimpleTokenData(
-                    range = match.range,
-                    type = TokenType.FUNCTION_CALL,
-                )
-            }.toList()
+        val pattern: TokenRegexPattern = FunctionCallPatterns().inlineFunctionCall
+        val lexer = StandardRegexLexer(text, listOf(pattern))
+
+        return lexer.tokenize().mapNotNull { token ->
+            val result = token.data.walkerResult ?: return@mapNotNull null
+            val start = token.data.position.first
+            val end = start + result.endIndex
+            SimpleTokenData(
+                range = start until end,
+                type = TokenType.FUNCTION_CALL,
+            )
+        }
     }
 }
