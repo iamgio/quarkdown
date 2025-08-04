@@ -36,8 +36,8 @@ class QuarkdownLanguageServer(
         QuarkdownTextDocumentService(
             this,
             CompletionSuppliersFactory(this).default(),
-            HoverSuppliersFactory(this).default(),
             SemanticTokensSuppliersFactory(this).default(),
+            HoverSuppliersFactory(this).default(),
         )
 
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
