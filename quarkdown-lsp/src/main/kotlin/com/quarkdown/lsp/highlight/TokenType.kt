@@ -12,9 +12,20 @@ enum class TokenType(
      *
      * ```
      * .function
+     *  ^^^^^^^^
      * ```
      */
-    FUNCTION_CALL("function"),
+    FUNCTION_CALL_IDENTIFIER("function"),
+
+    /**
+     * A named parameter in a function call.
+     *
+     * ```
+     * .function parameter:{...}
+     *           ^^^^^^^^^^
+     * ```
+     */
+    FUNCTION_CALL_NAMED_PARAMETER("typeParameter"),
     ;
 
     /**
