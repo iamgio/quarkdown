@@ -2,6 +2,7 @@ package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
 import com.quarkdown.lsp.highlight.SemanticTokensSuppliersFactory
+import com.quarkdown.lsp.highlight.TokenType
 import com.quarkdown.lsp.hover.HoverSuppliersFactory
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import org.eclipse.lsp4j.CompletionOptions
@@ -54,7 +55,7 @@ class QuarkdownLanguageServer(
         // TODO
         val legend =
             SemanticTokensLegend(
-                listOf("function", "variable", "class"),
+                TokenType.legend,
                 listOf("declaration", "readonly"),
             )
 

@@ -1,8 +1,10 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSupplier
+import com.quarkdown.lsp.highlight.SemanticTokenData
 import com.quarkdown.lsp.highlight.SemanticTokensEncoder
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
+import com.quarkdown.lsp.highlight.toSemanticData
 import com.quarkdown.lsp.hover.HoverSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
@@ -96,7 +98,11 @@ class QuarkdownTextDocumentService(
         server.log("Operation 'text/semanticTokens/full'")
         val text = getDocumentText(params.textDocument)
 
-        val tokens = this.tokensSuppliers.flatMap { it.getTokens(params, text) }
+        val tokens: List<SemanticTokenData> =
+            this.tokensSuppliers
+                .flatMap { it.getTokens(params, text) }
+                .map { it.toSemanticData(text) }
+
         val encoded = SemanticTokensEncoder.encode(tokens)
         val result = SemanticTokens(encoded)
 
