@@ -72,15 +72,11 @@ class QuarkdownTextDocumentService(
         )
     }
 
-    private fun getDocumentText(document: TextDocumentIdentifier): String? =
+    private fun getDocumentText(document: TextDocumentIdentifier): String =
         documents[document.uri] ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
 
-    private fun emptyCompletion(): CompletionResult = CompletableFuture.completedFuture(Either.forRight(CompletionList(false, emptyList())))
-
     override fun completion(params: CompletionParams): CompletionResult {
-        val text =
-            getDocumentText(params.textDocument)
-                ?: return emptyCompletion()
+        val text = getDocumentText(params.textDocument)
 
         return CompletableFuture.supplyAsync {
             server.log("Operation '" + "text/completion")
@@ -96,10 +92,19 @@ class QuarkdownTextDocumentService(
     override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
         CompletableFuture.completedFuture(unresolved)
 
+    override fun semanticTokensFull(params: SemanticTokensParams): CompletableFuture<SemanticTokens> {
+        server.log("Operation 'text/semanticTokens/full'")
+        val text = getDocumentText(params.textDocument)
+
+        val tokens = this.tokensSuppliers.flatMap { it.getTokens(params, text) }
+        val encoded = SemanticTokensEncoder.encode(tokens)
+        val result = SemanticTokens(encoded)
+
+        return CompletableFuture.completedFuture(result)
+    }
+
     override fun hover(params: HoverParams): CompletableFuture<Hover?>? {
-        val text =
-            getDocumentText(params.textDocument)
-                ?: return CompletableFuture.completedFuture(null)
+        val text = getDocumentText(params.textDocument)
 
         server.log("Operation '" + "text/hover")
 
@@ -111,18 +116,5 @@ class QuarkdownTextDocumentService(
                 ?: return CompletableFuture.completedFuture(null)
 
         return CompletableFuture.completedFuture(hover)
-    }
-
-    override fun semanticTokensFull(params: SemanticTokensParams?): CompletableFuture<SemanticTokens> {
-        server.log("Operation 'text/semanticTokens/full'")
-        val text =
-            params?.textDocument?.let(::getDocumentText)
-                ?: return CompletableFuture.completedFuture(SemanticTokens(emptyList()))
-
-        val tokens = this.tokensSuppliers.flatMap { it.getTokens(params, text) }
-        val encoded = SemanticTokensEncoder.encode(tokens)
-        val result = SemanticTokens(encoded)
-
-        return CompletableFuture.completedFuture(result)
     }
 }

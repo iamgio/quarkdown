@@ -51,10 +51,11 @@ class QuarkdownLanguageServer(
         get() = quarkdownDirectory?.resolve("docs")?.takeIf { it.isDirectory }
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
+        // TODO
         val legend =
             SemanticTokensLegend(
-                listOf("function", "variable", "class"), // token types
-                listOf("declaration", "readonly"), // modifiers
+                listOf("function", "variable", "class"),
+                listOf("declaration", "readonly"),
             )
 
         val serverCaps =
