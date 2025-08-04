@@ -17,10 +17,19 @@ enum class TokenType(
     FUNCTION_CALL("function"),
     ;
 
+    /**
+     * The index of this token type in the semantic token legend.
+     * This is used to encode the token type.
+     */
     val index: Int
         get() = ordinal
 
     companion object {
+        /**
+         * The semantic token legend, which maps token types to their names.
+         * This is used in the LSP to provide a legend for semantic tokens
+         * which can then be referenced via their [index].
+         */
         val legend: List<String> = entries.map { it.legendName }
     }
 }
