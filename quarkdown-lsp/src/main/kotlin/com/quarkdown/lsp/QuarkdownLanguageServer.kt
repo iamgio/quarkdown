@@ -1,6 +1,7 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.highlight.SemanticTokensSuppliersFactory
 import com.quarkdown.lsp.hover.HoverSuppliersFactory
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import org.eclipse.lsp4j.CompletionOptions
@@ -8,6 +9,8 @@ import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
 import org.eclipse.lsp4j.MessageParams
 import org.eclipse.lsp4j.MessageType
+import org.eclipse.lsp4j.SemanticTokensLegend
+import org.eclipse.lsp4j.SemanticTokensWithRegistrationOptions
 import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.TextDocumentSyncKind
 import org.eclipse.lsp4j.jsonrpc.messages.Either
@@ -33,6 +36,7 @@ class QuarkdownLanguageServer(
             this,
             CompletionSuppliersFactory(this).default(),
             HoverSuppliersFactory(this).default(),
+            SemanticTokensSuppliersFactory(this).default(),
         )
 
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
@@ -47,11 +51,18 @@ class QuarkdownLanguageServer(
         get() = quarkdownDirectory?.resolve("docs")?.takeIf { it.isDirectory }
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
+        val legend =
+            SemanticTokensLegend(
+                listOf("function", "variable", "class"), // token types
+                listOf("declaration", "readonly"), // modifiers
+            )
+
         val serverCaps =
             ServerCapabilities().apply {
                 textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
                 completionProvider = CompletionOptions(true, listOf(QuarkdownPatterns.FunctionCall.BEGIN))
                 hoverProvider = Either.forLeft(true)
+                semanticTokensProvider = SemanticTokensWithRegistrationOptions(legend, true, null)
             }
         val response = InitializeResult(serverCaps)
 

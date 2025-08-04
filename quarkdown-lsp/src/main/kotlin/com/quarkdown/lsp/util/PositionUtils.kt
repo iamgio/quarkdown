@@ -22,3 +22,27 @@ fun Position.getByPatternContaining(
         .firstOrNull { it.range.contains(character) }
         ?.value
 }
+
+/**
+ * Converts a character offset in the text to a [Position].
+ * @param text the text content to search in
+ * @param offset the character offset to convert
+ * @return the [Position] corresponding to the given offset
+ */
+fun offsetToPosition(
+    text: String,
+    offset: Int,
+): Position {
+    var line = 0
+    var lastLineStart = 0
+
+    for (i in 0 until offset) {
+        if (text[i] == '\n') {
+            line++
+            lastLineStart = i + 1
+        }
+    }
+
+    val character = offset - lastLineStart
+    return Position(line, character)
+}

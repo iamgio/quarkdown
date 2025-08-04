@@ -1,6 +1,8 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSupplier
+import com.quarkdown.lsp.highlight.SemanticTokensEncoder
+import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.hover.HoverSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
@@ -11,6 +13,8 @@ import org.eclipse.lsp4j.DidOpenTextDocumentParams
 import org.eclipse.lsp4j.DidSaveTextDocumentParams
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
+import org.eclipse.lsp4j.SemanticTokens
+import org.eclipse.lsp4j.SemanticTokensParams
 import org.eclipse.lsp4j.TextDocumentIdentifier
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.TextDocumentService
@@ -25,6 +29,7 @@ class QuarkdownTextDocumentService(
     private val server: QuarkdownLanguageServer,
     private val completionSuppliers: List<CompletionSupplier>,
     private val hoverSuppliers: List<HoverSupplier>,
+    private val tokensSuppliers: List<SemanticTokensSupplier>,
 ) : TextDocumentService {
     /**
      * Maps document URIs to their text content.
@@ -106,5 +111,18 @@ class QuarkdownTextDocumentService(
                 ?: return CompletableFuture.completedFuture(null)
 
         return CompletableFuture.completedFuture(hover)
+    }
+
+    override fun semanticTokensFull(params: SemanticTokensParams?): CompletableFuture<SemanticTokens> {
+        server.log("Operation 'text/semanticTokens/full'")
+        val text =
+            params?.textDocument?.let(::getDocumentText)
+                ?: return CompletableFuture.completedFuture(SemanticTokens(emptyList()))
+
+        val tokens = this.tokensSuppliers.flatMap { it.getTokens(params, text) }
+        val encoded = SemanticTokensEncoder.encode(tokens)
+        val result = SemanticTokens(encoded)
+
+        return CompletableFuture.completedFuture(result)
     }
 }
