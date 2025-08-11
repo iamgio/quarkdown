@@ -25,7 +25,7 @@ enum class TokenType(
      *           ^^^^^^^^^^
      * ```
      */
-    FUNCTION_CALL_NAMED_PARAMETER("typeParameter"),
+    FUNCTION_CALL_NAMED_PARAMETER("parameter"),
     ;
 
     /**
