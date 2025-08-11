@@ -22,6 +22,7 @@ object ValueQualifier {
      */
     fun getTokenType(text: String): TokenType? =
         when {
+            text.isBlank() -> null
             isType { boolean(text) } -> TokenType.BOOLEAN
             isType { number(text) } -> TokenType.NUMBER
             isType { sizes(text) } -> TokenType.SIZE

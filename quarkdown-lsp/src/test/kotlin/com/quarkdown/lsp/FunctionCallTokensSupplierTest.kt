@@ -109,6 +109,8 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_BEGIN, 10..11)
             assertNext(TYPE_NAME, 11..18)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 19..20)
+            // The argument content "arg1" is now recognized as an enum value
+            assertNext(TokenType.ENUM, 20..24)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
         }
     }
@@ -121,6 +123,7 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAMED_PARAMETER, 19..23)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 23..24)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
+            assertNext(TokenType.ENUM, 25..29)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 29..30)
         }
     }
@@ -131,10 +134,12 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_BEGIN, 10..11)
             assertNext(TYPE_NAME, 11..18)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 19..20)
+            assertNext(TokenType.ENUM, 20..24)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
             assertNext(TYPE_NAMED_PARAMETER, 26..30)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 30..31)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 31..32)
+            assertNext(TokenType.ENUM, 32..36)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 36..37)
         }
     }
@@ -146,19 +151,23 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAME, 1..8)
             // First positional argument.
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 9..10)
+            assertNext(TokenType.ENUM, 10..16)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17)
             // Second positional argument.
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 18..19)
+            assertNext(TokenType.ENUM, 19..25)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 25..26)
             // First named argument.
             assertNext(TYPE_NAMED_PARAMETER, 27..37)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 37..38)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 38..39)
+            assertNext(TokenType.ENUM, 39..45)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 45..46)
             // Second named argument.
             assertNext(TYPE_NAMED_PARAMETER, 47..58)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 58..59)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 59..60)
+            // The argument content "value with {nested}" is not recognized as any specific value type.
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 79..80)
             // Note: Nested braces within arguments are not tokenized separately.
         }
@@ -213,7 +222,6 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 21..22)
-            // Note: The argument content itself is not tokenized as a semantic token.
             // Note: Nested braces within arguments are not tokenized separately.
         }
     }
@@ -262,13 +270,95 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAMED_PARAMETER, 7..13)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 13..14)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 14..15)
+            assertNext(TokenType.ENUM, 15..21)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 21..22)
             // The tokenizer identifies "named" as a named parameter.
             assertNext(TYPE_NAMED_PARAMETER, 23..28)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 28..29)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 29..30)
+            assertNext(TokenType.ENUM, 30..35)
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 35..36)
-            // Note: Neither inline argument content nor body argument content are tokenized as semantic tokens.
+            // Note: Body argument content is not tokenized as semantic tokens.
+        }
+    }
+
+    // Value types
+
+    @Test
+    fun `boolean argument`() {
+        tokenize(".func param:{yes}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.BOOLEAN, 13..16)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17)
+        }
+    }
+
+    @Test
+    fun `number argument`() {
+        tokenize(".func param:{42}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.NUMBER, 13..15)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 15..16)
+        }
+    }
+
+    @Test
+    fun `size argument`() {
+        tokenize(".func param:{10px}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.SIZE, 13..17)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 17..18)
+        }
+    }
+
+    @Test
+    fun `sizes argument`() {
+        tokenize(".func param:{10px 20px 10in 50%}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.SIZE, 13..31)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 31..32)
+        }
+    }
+
+    @Test
+    fun `range argument`() {
+        tokenize(".func param:{1..5}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.RANGE, 13..17)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 17..18)
+        }
+    }
+
+    @Test
+    fun `enum argument`() {
+        tokenize(".func param:{spacebetween}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TokenType.ENUM, 13..25)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 25..26)
         }
     }
 }

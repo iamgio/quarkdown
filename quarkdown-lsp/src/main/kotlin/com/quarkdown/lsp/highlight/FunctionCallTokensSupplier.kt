@@ -103,7 +103,7 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
             // .function {...}
             //            ^^^
             FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME ->
-                ValueQualifier.getTokenType(match.text)
+                ValueQualifier.getTokenType(match.text.trim())
 
             else -> null
         }
