@@ -5,7 +5,7 @@ import com.quarkdown.lsp.util.offsetToPosition
 /**
  * A simplified version of a semantic token, used for initial processing.
  * This can be converted to a full semantic token via [toSemanticData].
- * @param range the character range of the token in the text
+ * @param range the character range, inclusive, of the token in the text
  * @param type the type of the token, which is an index into the semantic token legend
  */
 data class SimpleTokenData(
@@ -36,7 +36,7 @@ data class SemanticTokenData(
  */
 fun SimpleTokenData.toSemanticData(text: String): SemanticTokenData {
     val start = range.first
-    val end = range.last + 1
+    val end = range.endInclusive
 
     val pos = offsetToPosition(text, start)
     val length = end - start

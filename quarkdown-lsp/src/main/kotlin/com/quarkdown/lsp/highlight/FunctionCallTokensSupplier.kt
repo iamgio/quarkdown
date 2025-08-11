@@ -34,7 +34,7 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
                 // which produces nested tokens for each part of the call (e.g. name and parameters).
                 // A semantic token is created for each eligible part.
                 result.tokens
-                    .filter { it.offset <= result.endIndex }
+                    .takeWhile { it.offset < result.endIndex }
                     .mapNotNull { match ->
                         val start = token.data.position.first + match.offset
 
@@ -45,7 +45,7 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
 
                         SimpleTokenData(
                             type = tokenToSemanticType(match) ?: return@mapNotNull null,
-                            range = start until (start + match.length),
+                            range = start..(start + match.length),
                         )
                     }.toList()
             }
