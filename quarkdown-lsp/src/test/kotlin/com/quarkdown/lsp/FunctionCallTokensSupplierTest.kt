@@ -21,6 +21,9 @@ private val TYPE_NAMED_PARAMETER = TokenType.FUNCTION_CALL_NAMED_PARAMETER
 // Token type of the ':' separator between a named parameter and its value.
 private val TYPE_NAMED_PARAMETER_SEPARATOR = TokenType.FUNCTION_CALL_NAMED_PARAMETER
 
+// Token type of the '{' and '}' brackets of a function call argument.
+private val TYPE_INLINE_ARGUMENT_DELIMITER = TokenType.FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER
+
 /**
  * Tests for tokenization of function calls.
  */
@@ -105,6 +108,8 @@ class FunctionCallTokensSupplierTest {
         tokenize("some text .funcall {arg1} some other text.") {
             assertNext(TYPE_BEGIN, 10..11)
             assertNext(TYPE_NAME, 11..18)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 19..20)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
         }
     }
 
@@ -115,6 +120,8 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAME, 11..18)
             assertNext(TYPE_NAMED_PARAMETER, 19..23)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 23..24)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 29..30)
         }
     }
 
@@ -123,8 +130,12 @@ class FunctionCallTokensSupplierTest {
         tokenize("some text .funcall {arg1} name:{arg2} some other text.") {
             assertNext(TYPE_BEGIN, 10..11)
             assertNext(TYPE_NAME, 11..18)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 19..20)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 24..25)
             assertNext(TYPE_NAMED_PARAMETER, 26..30)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 30..31)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 31..32)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 36..37)
         }
     }
 
@@ -134,11 +145,22 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_BEGIN, 0..1)
             assertNext(TYPE_NAME, 1..8)
             // First positional argument.
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 9..10)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17)
+            // Second positional argument.
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 18..19)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 25..26)
+            // First named argument.
             assertNext(TYPE_NAMED_PARAMETER, 27..37)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 37..38)
-            // Second positional argument.
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 38..39)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 45..46)
+            // Second named argument.
             assertNext(TYPE_NAMED_PARAMETER, 47..58)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 58..59)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 59..60)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 79..80)
+            // Note: Nested braces within arguments are not tokenized separately.
         }
     }
 
@@ -157,10 +179,16 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAME, 1..2)
             assertNext(TYPE_NAMED_PARAMETER, 3..4) // a
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 4..5) // :
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 5..6) // {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 7..8) // }
             assertNext(TYPE_NAMED_PARAMETER, 9..10) // b
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 10..11) // :
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 11..12) // {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13) // }
             assertNext(TYPE_NAMED_PARAMETER, 14..15) // c
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 15..16) // :
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17) // {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 18..19) // }
             assertNext(TYPE_BEGIN, 21..22) // .
             assertNext(TYPE_NAME, 22..23) // y
         }
@@ -183,7 +211,10 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAME, 1..5)
             assertNext(TYPE_NAMED_PARAMETER, 6..11)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 21..22)
             // Note: The argument content itself is not tokenized as a semantic token.
+            // Note: Nested braces within arguments are not tokenized separately.
         }
     }
 
@@ -194,6 +225,8 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAME, 1..5)
             assertNext(TYPE_NAMED_PARAMETER, 6..11)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 12..13)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 42..43)
             // Note: The escaped characters in the argument are not tokenized separately.
         }
     }
@@ -228,9 +261,13 @@ class FunctionCallTokensSupplierTest {
             // The tokenizer identifies "param1" as a named parameter.
             assertNext(TYPE_NAMED_PARAMETER, 7..13)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 13..14)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 14..15)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 21..22)
             // The tokenizer identifies "named" as a named parameter.
             assertNext(TYPE_NAMED_PARAMETER, 23..28)
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 28..29)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 29..30)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 35..36)
             // Note: Neither inline argument content nor body argument content are tokenized as semantic tokens.
         }
     }

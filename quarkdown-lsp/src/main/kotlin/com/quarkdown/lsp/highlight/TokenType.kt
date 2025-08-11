@@ -26,6 +26,16 @@ enum class TokenType(
      * ```
      */
     FUNCTION_CALL_NAMED_PARAMETER("parameter"),
+
+    /**
+     * Delimiters of an inline argument in a function call.
+     *
+     * ```
+     * .function {...}
+     *           ^   ^
+     * ```
+     */
+    FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER("keyword"),
     ;
 
     /**

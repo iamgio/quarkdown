@@ -10,6 +10,8 @@ private const val FUNCTION_CALL_BEGIN_TOKEN_NAME = "begin"
 private const val FUNCTION_CALL_IDENTIFIER_TOKEN_NAME = "identifier"
 private const val FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME = "argumentNameDelimiter"
 private const val FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
+private const val FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME = "argumentBegin"
+private const val FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME = "argumentEnd"
 
 /**
  * Supplier for semantic tokens that highlight function calls.
@@ -90,6 +92,11 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
             //                    ^
             FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME ->
                 TokenType.FUNCTION_CALL_NAMED_PARAMETER
+
+            // .function {...}
+            //           ^   ^
+            FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME, FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME ->
+                TokenType.FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER
 
             else -> null
         }
