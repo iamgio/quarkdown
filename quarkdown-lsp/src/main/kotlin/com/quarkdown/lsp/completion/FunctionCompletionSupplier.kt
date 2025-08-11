@@ -2,7 +2,7 @@ package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.documentation.extractContentAsMarkup
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
-import com.quarkdown.lsp.util.getChar
+import com.quarkdown.lsp.util.sliceFromDelimiterToPosition
 import com.quarkdown.quarkdoc.reader.DocsWalker
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
@@ -33,16 +33,17 @@ class FunctionCompletionSupplier(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> {
-        val isFunctionCall = params.position.getChar(text)?.toString() == QuarkdownPatterns.FunctionCall.BEGIN
-
-        if (!isFunctionCall) {
-            return emptyList()
-        }
+        // Function name that is being completed.
+        val partialName =
+            sliceFromDelimiterToPosition(text, params.position, delimiter = QuarkdownPatterns.FunctionCall.BEGIN)
+                ?.takeIf { it.all(Char::isLetterOrDigit) }
+                ?: return emptyList()
 
         return DokkaHtmlWalker(docsDirectory)
             .walk()
             .filter { it.isInModule }
             .map { it.toCompletionItem() }
+            .filter { it.label.startsWith(partialName, ignoreCase = true) }
             .toList()
     }
 }
