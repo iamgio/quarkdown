@@ -36,6 +36,55 @@ enum class TokenType(
      * ```
      */
     FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER("keyword"),
+
+    /**
+     * A number value.
+     *
+     * ```
+     * 20
+     * ```
+     */
+    NUMBER("number"),
+
+    /**
+     * A range value.
+     *
+     * ```
+     * 10..20
+     * ```
+     *
+     * @see com.quarkdown.core.function.value.data.Range
+     */
+    RANGE("number"),
+
+    /**
+     * A boolean value.
+     *
+     * ```
+     * yes/true/no/false
+     * ```
+     */
+    BOOLEAN("keyword"),
+
+    /**
+     * A size value or a list of sizes.
+     *
+     * ```
+     * 10px 20em 5px 2in
+     * ```
+     *
+     * @see com.quarkdown.core.document.size.Sizes
+     */
+    SIZE("property"),
+
+    /**
+     * An enum value.
+     *
+     * ```
+     * spacebetween
+     * ```
+     */
+    ENUM("enum"),
     ;
 
     /**

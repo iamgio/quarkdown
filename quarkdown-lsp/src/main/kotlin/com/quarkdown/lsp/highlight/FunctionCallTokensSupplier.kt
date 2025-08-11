@@ -6,12 +6,14 @@ import com.quarkdown.core.lexer.regex.StandardRegexLexer
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
 import org.eclipse.lsp4j.SemanticTokensParams
 
+// Names of the tokens of the function call grammar (see core/FunctionCallGrammar).
 private const val FUNCTION_CALL_BEGIN_TOKEN_NAME = "begin"
 private const val FUNCTION_CALL_IDENTIFIER_TOKEN_NAME = "identifier"
 private const val FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME = "argumentNameDelimiter"
 private const val FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME = "argumentBegin"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME = "argumentEnd"
+private const val FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
 
 /**
  * Supplier for semantic tokens that highlight function calls.
@@ -97,6 +99,11 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
             //           ^   ^
             FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME, FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME ->
                 TokenType.FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER
+
+            // .function {...}
+            //            ^^^
+            FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME ->
+                ValueQualifier.getTokenType(match.text)
 
             else -> null
         }
