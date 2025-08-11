@@ -22,7 +22,7 @@ private val TYPE_NAMED_PARAMETER = TokenType.FUNCTION_CALL_NAMED_PARAMETER
 private val TYPE_NAMED_PARAMETER_SEPARATOR = TokenType.FUNCTION_CALL_NAMED_PARAMETER
 
 /**
- *
+ * Tests for tokenization of function calls.
  */
 class FunctionCallTokensSupplierTest {
     private val supplier = FunctionCallTokensSupplier()
@@ -129,13 +129,27 @@ class FunctionCallTokensSupplierTest {
     }
 
     @Test
-    fun `multiline function call with named parameters`() {
+    fun `function call with multiple positional and named arguments`() {
+        tokenize(".funcall {value1} {value2} firstnamed:{value3} secondnamed:{value with {nested}}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..8)
+            // First positional argument.
+            assertNext(TYPE_NAMED_PARAMETER, 27..37)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 37..38)
+            // Second positional argument.
+            assertNext(TYPE_NAMED_PARAMETER, 47..58)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 58..59)
+        }
+    }
+
+    @Test
+    fun `multiline function call`() {
         tokenize(
             """
             .x a:{
             } b:{} c:{
             }
-            
+
             .y
             """.trimIndent().normalizeLineSeparators().toString(),
         ) {
@@ -149,6 +163,75 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 15..16) // :
             assertNext(TYPE_BEGIN, 21..22) // .
             assertNext(TYPE_NAME, 22..23) // y
+        }
+    }
+
+    @Test
+    fun `chained function calls`() {
+        tokenize(".func1::func2") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..6)
+            // In chained function calls, the second function name is tokenized as a named parameter.
+            assertNext(TYPE_NAMED_PARAMETER, 8..13)
+        }
+    }
+
+    @Test
+    fun `function call with nested braces in argument`() {
+        tokenize(".func param:{{nested}}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            // Note: The argument content itself is not tokenized as a semantic token.
+        }
+    }
+
+    @Test
+    fun `function call with escaped characters`() {
+        tokenize(".func param:{content with \\{ escaped brace}") {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_NAMED_PARAMETER, 6..11)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 11..12)
+            // Note: The escaped characters in the argument are not tokenized separately.
+        }
+    }
+
+    @Test
+    fun `function call with body argument`() {
+        tokenize(
+            """
+            .blockfunc
+              This is a body argument
+              that spans multiple lines
+                with different indentation
+            """.trimIndent().normalizeLineSeparators().toString(),
+        ) {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..10)
+            // Note: The body argument content itself is not tokenized as semantic tokens.
+        }
+    }
+
+    @Test
+    fun `function call with mixed inline and body arguments`() {
+        tokenize(
+            """
+            .mixed param1:{inline} named:{value}
+              This is a body argument
+              following inline arguments
+            """.trimIndent().normalizeLineSeparators().toString(),
+        ) {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..6)
+            // The tokenizer identifies "param1" as a named parameter.
+            assertNext(TYPE_NAMED_PARAMETER, 7..13)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 13..14)
+            // The tokenizer identifies "named" as a named parameter.
+            assertNext(TYPE_NAMED_PARAMETER, 23..28)
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 28..29)
+            // Note: Neither inline argument content nor body argument content are tokenized as semantic tokens.
         }
     }
 }
