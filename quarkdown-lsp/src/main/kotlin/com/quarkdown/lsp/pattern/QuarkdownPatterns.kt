@@ -37,6 +37,11 @@ object QuarkdownPatterns {
         const val NAMED_ARGUMENT_DELIMITER = FunctionCallGrammar.NAMED_ARGUMENT_DELIMITER
 
         /**
+         * Default/suggested indentation for the body argument of a function call.
+         */
+        const val CONVENTIONAL_BODY_INDENT = "    "
+
+        /**
          * The pattern that matches the identifier in a function call, preceded by [BEGIN] (unmatched).
          */
         val identifierInCall: Regex = "(?<=${Regex.escape(BEGIN)})(${IDENTIFIER.pattern})".toRegex()

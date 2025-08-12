@@ -59,6 +59,13 @@ class FunctionCompletionSupplierTest {
         completions
             .filter { it.label == CSV_FUNCTION }
             .forEach { assertEquals(DATA_MODULE, it.detail) }
+
+        // Verifies the insertion snippet is correct.
+        val alignCompletion = completions.first { it.label == ALIGN_FUNCTION }
+        assertEquals(
+            "align {\${1:alignment}}\n    \${2:body}",
+            alignCompletion.insertText,
+        )
     }
 
     @Test

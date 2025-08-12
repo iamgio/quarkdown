@@ -28,7 +28,7 @@ internal class FunctionNameCompletionSupplier(
             documentation = Either.forRight(extractor().extractContentAsMarkup())
             kind = CompletionItemKind.Function
             insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallSnippet(this@toCompletionItem).getAsString()
+            insertText = FunctionCallInsertionSnippet.forFunction(this@toCompletionItem)
         }
 
     override fun getCompletionItems(

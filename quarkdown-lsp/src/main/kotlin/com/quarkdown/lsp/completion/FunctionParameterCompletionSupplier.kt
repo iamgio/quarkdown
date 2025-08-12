@@ -5,7 +5,6 @@ import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.parser.walker.WalkerParsingResult
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.lsp.documentation.htmlToMarkup
-import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
@@ -36,10 +35,7 @@ internal class FunctionParameterCompletionSupplier(
             documentation = Either.forRight(description.htmlToMarkup())
             kind = CompletionItemKind.Field
             insertTextFormat = InsertTextFormat.Snippet
-            insertText =
-                with(QuarkdownPatterns.FunctionCall) {
-                    "$name$NAMED_ARGUMENT_DELIMITER$ARGUMENT_BEGIN\${1:}$ARGUMENT_END "
-                }
+            insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)
         }
 
     override fun getCompletionItems(
