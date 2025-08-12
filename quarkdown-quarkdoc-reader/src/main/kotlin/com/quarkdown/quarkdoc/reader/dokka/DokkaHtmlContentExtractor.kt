@@ -24,7 +24,7 @@ class DokkaHtmlContentExtractor(
             .parse(html)
             .selectFirst("#main .content")
             ?.apply {
-                selectFirst(".top-right-position:has(.copy-icon)")?.remove()
+                select(".top-right-position:has(.copy-icon)").remove()
             }?.outerHtml()
 
     override fun extractFunctionData(): DocsFunction? {
