@@ -1,9 +1,7 @@
 package com.quarkdown.lsp.highlight
 
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
-import com.quarkdown.core.lexer.patterns.FunctionCallPatterns
-import com.quarkdown.core.lexer.regex.StandardRegexLexer
-import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
+import com.quarkdown.core.flavor.quarkdown.QuarkdownLexerFactory
 import org.eclipse.lsp4j.SemanticTokensParams
 
 // Names of the tokens of the function call grammar (see core/FunctionCallGrammar).
@@ -23,8 +21,7 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
         params: SemanticTokensParams,
         text: String,
     ): List<SimpleTokenData> {
-        val pattern: TokenRegexPattern = FunctionCallPatterns().inlineFunctionCall
-        val lexer = StandardRegexLexer(text, listOf(pattern))
+        val lexer = QuarkdownLexerFactory.newInlineFunctionCallLexer(text)
 
         // When a function call argument is met, its content is enqueued
         // and its semantic tokens are extracted at the end of the main tokenization.

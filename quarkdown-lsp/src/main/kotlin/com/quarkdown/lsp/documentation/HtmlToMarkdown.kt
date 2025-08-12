@@ -49,9 +49,11 @@ object HtmlToMarkdown {
 }
 
 /**
+ * @return [this] HTML content converted to [MarkupContent]
+ */
+fun String.htmlToMarkup(): MarkupContent? = MarkupContent(MarkupKind.MARKDOWN, HtmlToMarkdown.convert(this))
+
+/**
  * @return the content extracted from the documentation as [MarkupContent], or `null` if no content is available
  */
-fun DocsContentExtractor.extractContentAsMarkup(): MarkupContent? =
-    extractContent()
-        ?.let(HtmlToMarkdown::convert)
-        ?.let { MarkupContent(MarkupKind.MARKDOWN, it) }
+fun DocsContentExtractor.extractContentAsMarkup(): MarkupContent? = extractContent()?.htmlToMarkup()

@@ -1,49 +1,48 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.lsp.documentation.extractContentAsMarkup
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.util.sliceFromDelimiterToPosition
-import com.quarkdown.quarkdoc.reader.DocsWalker
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionParams
-import org.eclipse.lsp4j.InsertTextFormat
-import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
 
 /**
- * Provider of completion items for function calls.
+ * Provider of completion items for function calls,
+ * which acts as a proxy for [FunctionNameCompletionSupplier] and [FunctionParameterCompletionSupplier]
+ * depending on the context of the completion request.
  * @property docsDirectory the directory containing the documentation files
  */
 class FunctionCompletionSupplier(
-    private val docsDirectory: File,
+    docsDirectory: File,
 ) : CompletionSupplier {
-    private fun DocsWalker.Result<*>.toCompletionItem() =
-        CompletionItem().apply {
-            label = name
-            detail = moduleName
-            documentation = Either.forRight(extractor().extractContentAsMarkup())
-            kind = CompletionItemKind.Function
-            insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallSnippet(this@toCompletionItem).getAsString()
-        }
+    // Completion for function names.
+    private val nameCompletionSupplier =
+        FunctionNameCompletionSupplier(docsDirectory)
+
+    // Completion for function parameters.
+    private val parameterCompletionSupplier =
+        FunctionParameterCompletionSupplier(docsDirectory)
 
     override fun getCompletionItems(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> {
-        // Function name that is being completed.
-        val partialName =
-            sliceFromDelimiterToPosition(text, params.position, delimiter = QuarkdownPatterns.FunctionCall.BEGIN)
-                ?.takeIf { it.all(Char::isLetterOrDigit) }
+        val begin = QuarkdownPatterns.FunctionCall.BEGIN
+
+        // Function snippet that is being completed.
+        val snippet: String =
+            sliceFromDelimiterToPosition(text, params.position, delimiter = begin)
                 ?: return emptyList()
 
-        return DokkaHtmlWalker(docsDirectory)
-            .walk()
-            .filter { it.isInModule }
-            .map { it.toCompletionItem() }
-            .filter { it.label.startsWith(partialName, ignoreCase = true) }
-            .toList()
+        return when {
+            // The function name is being completed.
+            snippet.all { it.isLetterOrDigit() } ->
+                nameCompletionSupplier.getCompletionItems(params, snippet)
+
+            // A function parameter is maybe being completed.
+            // This is determined through tokenization of the complete function call.
+            else ->
+                parameterCompletionSupplier.getCompletionItems(params, begin + snippet)
+        }
     }
 }
