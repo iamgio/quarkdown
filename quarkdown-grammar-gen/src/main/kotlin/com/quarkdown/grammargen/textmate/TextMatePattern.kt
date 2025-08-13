@@ -11,6 +11,20 @@ import com.quarkdown.grammargen.GrammarNamedPattern
 data class TextMatePattern(
     override val name: String,
     override val pattern: TokenRegexPattern,
+    val captures: Set<PatternCapture> = emptySet(),
 ) : GrammarNamedPattern
 
+/**
+ * A capture in a TextMate pattern.
+ * @param index the index of the capture group in the regex
+ * @param name the TextMate scope name for this capture
+ */
+data class PatternCapture(
+    val index: Int,
+    val name: String,
+)
+
 internal infix fun TokenRegexPattern.textMate(name: String): TextMatePattern = TextMatePattern(name, this)
+
+internal infix fun TextMatePattern.capturing(capture: Pair<Int, String>): TextMatePattern =
+    this.copy(captures = this.captures + PatternCapture(capture.first, capture.second))

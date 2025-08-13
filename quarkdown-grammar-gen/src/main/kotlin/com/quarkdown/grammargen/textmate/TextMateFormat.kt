@@ -34,6 +34,22 @@ class TextMateFormat : GrammarFormat<TextMatePattern> {
         pattern: TextMatePattern,
         isLast: Boolean,
     ): String =
-        """{ "name": "${pattern.name}", "match": "${Escape.Json.escape(pattern.pattern.regex.pattern)}" }""" +
-            if (isLast) "" else ","
+        buildString {
+            append("{ ")
+            append("\"name\": \"${pattern.name}\"")
+            append(", ")
+            append("\"match\": \"${Escape.Json.escape(pattern.pattern.regex.pattern)}\"")
+            if (pattern.captures.isNotEmpty()) {
+                append(", ")
+                append("\"captures\": { ")
+                append(
+                    pattern.captures.joinToString(", ") { capture ->
+                        "\"${capture.index}\": { \"name\": \"${capture.name}\" }"
+                    },
+                )
+                append(" }")
+            }
+            append(" }")
+            if (!isLast) append(",")
+        }
 }
