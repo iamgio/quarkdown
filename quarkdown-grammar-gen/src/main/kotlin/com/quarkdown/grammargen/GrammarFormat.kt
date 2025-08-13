@@ -18,14 +18,5 @@ interface GrammarFormat<P : GrammarNamedPattern> {
      */
     fun createPatterns(): List<P>
 
-    /**
-     * Converts a pattern to its source code representation.
-     * @param pattern the pattern to convert
-     * @param isLast whether this is the last pattern in the list (for formatting purposes).
-     * @return the source code representation of the pattern
-     */
-    fun patternToSource(
-        pattern: P,
-        isLast: Boolean,
-    ): String
+    fun createContent(): String
 }

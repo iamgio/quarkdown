@@ -14,14 +14,15 @@ object GrammarGen {
     fun <P : GrammarNamedPattern> generate(format: GrammarFormat<P>): String {
         val patterns = format.createPatterns()
         val templateProcessor = format.baseTemplateProcessor
-        val patternSources =
+        /*val patternSources =
             patterns.mapIndexed { index, pattern ->
                 val isLast = index == patterns.lastIndex
                 format.patternToSource(pattern, isLast)
-            }
+            }*/
 
         return templateProcessor
-            .iterable(PATTERNS_PLACEHOLDER, patternSources)
+            .content(format.createContent())
+            // .iterable(PATTERNS_PLACEHOLDER, patternSources)
             .process()
             .toString()
     }

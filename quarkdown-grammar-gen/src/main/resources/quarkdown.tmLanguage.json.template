@@ -2,10 +2,6 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Quarkdown",
   "scopeName": "text.quarkdown",
-  "patterns": [
-    [[for:PATTERN]]
-    [[PATTERN]]
-    [[endfor:PATTERN]]
-  ],
-  "fileTypes": ["qd"]
+  "fileTypes": ["qd"],
+  [[CONTENT]]
 }
