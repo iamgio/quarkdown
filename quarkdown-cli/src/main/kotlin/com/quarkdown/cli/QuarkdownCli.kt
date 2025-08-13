@@ -6,7 +6,6 @@ import com.github.ajalt.clikt.core.subcommands
 import com.quarkdown.cli.creator.command.CreateProjectCommand
 import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.cli.exec.ReplCommand
-import com.quarkdown.cli.grammargen.GrammarGenCommand
 import com.quarkdown.cli.lsp.LanguageServerCommand
 import com.quarkdown.cli.server.StartWebServerCommand
 
@@ -27,5 +26,4 @@ fun main(args: Array<String>) =
             StartWebServerCommand(),
             CreateProjectCommand(),
             LanguageServerCommand(),
-            GrammarGenCommand(),
         ).main(args)

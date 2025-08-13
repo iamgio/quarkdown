@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-stdlib"))
     implementation(project(":quarkdown-lsp"))
-    implementation(project(":quarkdown-grammar-gen"))
     implementation("com.github.ajalt.clikt:clikt:5.0.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("io.methvin:directory-watcher:0.19.0")

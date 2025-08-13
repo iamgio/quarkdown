@@ -1,7 +1,0 @@
-{
-  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "Quarkdown",
-  "scopeName": "text.quarkdown",
-  "fileTypes": ["qd"],
-  [[CONTENT]]
-}
