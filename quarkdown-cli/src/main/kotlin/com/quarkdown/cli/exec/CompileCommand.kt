@@ -6,11 +6,12 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
+import com.quarkdown.cli.server.BrowserLaunchers.browserChoice
 import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
-import com.quarkdown.server.browser.DefaultBrowserLauncher
+import com.quarkdown.server.browser.BrowserLauncher
 import java.io.File
 
 /**
@@ -40,6 +41,15 @@ class CompileCommand : ExecuteCommand("compile") {
         help = "(Unsafe) Disable Chrome sandbox for PDF export",
         envvar = Env.NO_SANDBOX,
     ).flag()
+
+    /**
+     * Optional browser to open the served file in, if preview is enabled.
+     */
+    private val browser: BrowserLauncher? by option(
+        "-b",
+        "--browser",
+        help = "Browser to open the preview in",
+    ).browserChoice()
 
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
@@ -74,7 +84,7 @@ class CompileCommand : ExecuteCommand("compile") {
             WebServerOptions(
                 port = super.serverPort,
                 targetFile = directory,
-                browserLauncher = DefaultBrowserLauncher(),
+                browserLauncher = browser,
             ),
         )
     }

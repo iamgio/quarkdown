@@ -315,6 +315,14 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
   - `html`
   - `html-pdf` (equivalent to `-r html --pdf`)
 
+- `-b <browser>` or `--browser <browser>`: sets the browser to launch the preview with. Defaults to `default`. Accepted values:
+  - `default`
+  - `none`
+  - `chrome`
+  - `chromium`
+  - `firefox`
+  - `edge` (Windows only)
+
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
 - `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,

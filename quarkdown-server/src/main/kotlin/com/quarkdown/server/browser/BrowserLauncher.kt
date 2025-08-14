@@ -5,6 +5,11 @@ package com.quarkdown.server.browser
  */
 interface BrowserLauncher {
     /**
+     * Indicates whether the browser is valid and can be launched.
+     */
+    val isValid: Boolean
+
+    /**
      * Launches a URL in the specified browser.
      * @param url URL to launch
      */
