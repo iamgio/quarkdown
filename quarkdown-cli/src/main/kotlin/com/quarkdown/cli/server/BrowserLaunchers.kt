@@ -36,7 +36,7 @@ internal object BrowserLaunchers {
      */
     fun OptionWithValues<String?, String, String>.browserChoice(default: BrowserLauncher? = null) =
         choice(choices, ignoreCase = true)
-            .apply { if (default != null) default(default) }
+            .run { default?.let { default(it) } ?: this }
             .validate {
                 require(it.isValid) {
                     "The specified browser (${it::class.simpleName}) cannot be launched " +

@@ -9,7 +9,6 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.server.BrowserLaunchers.browserChoice
 import com.quarkdown.server.LocalFileWebServer
 import com.quarkdown.server.browser.BrowserLauncher
-import com.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
 /**
@@ -43,7 +42,7 @@ class StartWebServerCommand : CliktCommand(name = "start") {
         "-b",
         "--browser",
         help = "Browser to open the served file in",
-    ).browserChoice(default = DefaultBrowserLauncher())
+    ).browserChoice()
 
     override fun run() {
         val options = WebServerOptions(port, targetFile, browser)
