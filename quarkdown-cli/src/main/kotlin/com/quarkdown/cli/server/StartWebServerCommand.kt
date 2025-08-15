@@ -2,12 +2,13 @@ package com.quarkdown.cli.server
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
+import com.quarkdown.cli.server.BrowserLaunchers.browserChoice
 import com.quarkdown.server.LocalFileWebServer
+import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
@@ -36,12 +37,16 @@ class StartWebServerCommand : CliktCommand(name = "start") {
         .default(DEFAULT_SERVER_PORT)
 
     /**
-     * Whether to open the served file in the default browser.
+     * Optional browser to open the served file in.
      */
-    private val open: Boolean by option("-o", "--open", help = "Open the served file in the default browser").flag()
+    private val browser: BrowserLauncher? by option(
+        "-b",
+        "--browser",
+        help = "Browser to open the served file in",
+    ).browserChoice(default = DefaultBrowserLauncher())
 
     override fun run() {
-        val options = WebServerOptions(port, targetFile, DefaultBrowserLauncher().takeIf { open })
+        val options = WebServerOptions(port, targetFile, browser)
         WebServerStarter.start(options)
     }
 }
