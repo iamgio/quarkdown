@@ -291,11 +291,21 @@ function getScrollHeight() {
     return document.documentElement.scrollHeight - window.innerHeight;
 }
 
+// Whether the document is scrolled to the bottom (returns true also if the content fits in the viewport).
+function isScrolledToBottom() {
+    const scrollableHeight = document.documentElement.scrollHeight;
+    const viewportHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    // If content fits in viewport or scrolled to bottom.
+    return scrollableHeight <= viewportHeight || scrollY >= getScrollHeight();
+}
+
 // Saves scroll position.
 function saveScrollPosition() {
     history.scrollRestoration = "manual";
     sessionStorage.setItem(scrollYStorageKey, window.scrollY.toString());
-    sessionStorage.setItem(stickyToEndStorageKey, (window.scrollY >= getScrollHeight()).toString());
+    sessionStorage.setItem(stickyToEndStorageKey, isScrolledToBottom().toString());
 }
 
 // Restores scroll position. Even if called multiple times, it will only restore the first time.
