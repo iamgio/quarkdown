@@ -12,6 +12,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
 import com.quarkdown.server.browser.BrowserLauncher
+import com.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
 
 /**
@@ -49,7 +50,7 @@ class CompileCommand : ExecuteCommand("compile") {
         "-b",
         "--browser",
         help = "Browser to open the preview in",
-    ).browserChoice()
+    ).browserChoice(default = DefaultBrowserLauncher())
 
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
