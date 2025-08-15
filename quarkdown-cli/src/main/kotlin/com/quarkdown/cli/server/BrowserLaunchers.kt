@@ -33,14 +33,18 @@ internal object BrowserLaunchers {
 
     /**
      * Provides a validated choice of browser launchers for the CLI.
+     * @param default the default browser launcher to use if no choice is made
+     * @param shouldValidate whether the choice should be validated
      */
-    fun OptionWithValues<String?, String, String>.browserChoice(default: BrowserLauncher? = null) =
-        choice(choices, ignoreCase = true)
-            .run { default?.let { default(it) } ?: this }
-            .validate {
-                require(it.isValid) {
-                    "The specified browser (${it::class.simpleName}) cannot be launched " +
-                        "because it is either not installed, not loaded in the environment (BROWSER_<NAME>), or unsupported."
-                }
+    fun OptionWithValues<String?, String, String>.browserChoice(
+        default: BrowserLauncher? = null,
+        shouldValidate: () -> Boolean = { true },
+    ) = choice(choices, ignoreCase = true)
+        .run { default?.let { default(it) } ?: this }
+        .validate {
+            require(!shouldValidate() || it.isValid) {
+                "The specified browser (${it::class.simpleName}) cannot be launched " +
+                    "because it is either not installed, not loaded in the environment (BROWSER_<NAME>), or unsupported."
             }
+        }
 }

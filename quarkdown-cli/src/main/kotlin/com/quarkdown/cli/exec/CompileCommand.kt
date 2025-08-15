@@ -50,7 +50,7 @@ class CompileCommand : ExecuteCommand("compile") {
         "-b",
         "--browser",
         help = "Browser to open the preview in",
-    ).browserChoice(default = DefaultBrowserLauncher())
+    ).browserChoice(default = DefaultBrowserLauncher(), shouldValidate = { preview })
 
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
