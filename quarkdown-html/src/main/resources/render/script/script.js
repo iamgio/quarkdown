@@ -311,10 +311,10 @@ function saveScrollPosition() {
 // Restores scroll position. Even if called multiple times, it will only restore the first time.
 // If the last session was scrolled to the end, it will scroll to the end of the new document ignoring the actual coordinates.
 function restoreScrollPosition() {
-    if (scrollRestored || !storedScrollY) return;
+    if (scrollRestored || !(storedScrollY || stickyToEnd)) return;
 
     const y = stickyToEnd ? getScrollHeight() : storedScrollY;
-    console.log("Restoring scroll position to", y, "sticky to end = ", stickyToEnd);
+    console.log("Restoring scroll position to", y, "sticky to end =", stickyToEnd);
     scrollRestored = true;
     requestAnimationFrame(() => {
         window.scrollTo({top: y, behavior: "auto"});
