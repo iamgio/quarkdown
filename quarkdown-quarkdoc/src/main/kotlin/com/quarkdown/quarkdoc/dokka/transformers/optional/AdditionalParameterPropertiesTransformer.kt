@@ -6,6 +6,8 @@ import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.factory.ValueFactory.enum
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
+import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
+import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.DefaultValue
 import org.jetbrains.dokka.model.doc.A
@@ -59,6 +61,7 @@ class AdditionalParameterPropertiesTransformer(
                 this +=
                     Li(
                         listOf(
+                            scrapingAnchor(Anchors.LIKELY_BODY),
                             Text("Likely a "),
                             A(
                                 listOf(
@@ -73,6 +76,7 @@ class AdditionalParameterPropertiesTransformer(
                 this +=
                     Li(
                         listOf(
+                            scrapingAnchor(Anchors.OPTIONAL),
                             Text("Optional"),
                         ),
                     )
@@ -81,6 +85,7 @@ class AdditionalParameterPropertiesTransformer(
                 this +=
                     Li(
                         listOf(
+                            scrapingAnchor(Anchors.LIKELY_NAMED),
                             Text("Likely "),
                             A(
                                 listOf(
@@ -89,6 +94,7 @@ class AdditionalParameterPropertiesTransformer(
                                 params = mapOf("href" to NAMED_PARAMETER_WIKI_URL),
                             ),
                         ),
+                        params = mapOf("id" to "named-parameter"),
                     )
             }
         }.takeUnless { it.isEmpty() }

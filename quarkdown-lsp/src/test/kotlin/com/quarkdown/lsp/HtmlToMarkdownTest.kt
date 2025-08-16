@@ -1,5 +1,6 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.lsp.documentation.HtmlToMarkdown
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,8 +15,8 @@ class HtmlToMarkdownTest {
         val md = javaClass.getResourceAsStream("/html-to-markdown/align.md")!!.bufferedReader().use { it.readText() }
 
         assertEquals(
-            md,
-            HtmlToMarkdown.convert(html),
+            md.normalizeLineSeparators(),
+            HtmlToMarkdown.convert(html).normalizeLineSeparators(),
         )
     }
 }
