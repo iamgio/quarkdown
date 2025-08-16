@@ -4,11 +4,24 @@ import com.quarkdown.quarkdoc.reader.DocsWalker
 import java.io.File
 
 /**
+ * A directory with this name is a Quarkdown module.
+ */
+private const val MODULE_DIR_NAME = "module"
+
+/**
  * Recursive walker of Dokka HTML files.
  */
 class DokkaHtmlWalker(
     private val root: File,
 ) : DocsWalker<DokkaHtmlContentExtractor> {
+    // e.g. com.quarkdown.stdlib.module.String/lowercase.html => String
+    private val File.quarkdownModuleName: String?
+        get() =
+            parentFile.name
+                .split('.')
+                .takeIf { it.getOrNull(it.size - 2) == MODULE_DIR_NAME }
+                ?.lastOrNull()
+
     /**
      * Recursively scans Dokka HTML files in the given root directory.
      */
@@ -22,7 +35,7 @@ class DokkaHtmlWalker(
             .map { file ->
                 DocsWalker.Result(
                     name = file.nameWithoutExtension,
-                    moduleName = file.parentFile.name,
+                    moduleName = file.quarkdownModuleName,
                     extractor = { DokkaHtmlContentExtractor(file.readText()) },
                 )
             }

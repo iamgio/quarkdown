@@ -12,7 +12,10 @@ import com.github.h0tk3y.betterParse.parser.toParsedOrThrow
  * @param grammar the grammar that defines the parsing rules
  * @see WalkerParsingResult
  */
-open class WalkerParser<T>(private val source: CharSequence, private val grammar: Grammar<T>) {
+open class WalkerParser<T>(
+    private val source: CharSequence,
+    private val grammar: Grammar<T>,
+) {
     /**
      * Parses the [source] string into an output object according to the [grammar]-defined rules.
      * The parser interrupts when it reaches the end of the source string or when it encounters a syntax error.
@@ -25,6 +28,6 @@ open class WalkerParser<T>(private val source: CharSequence, private val grammar
 
         val endIndex = tokens[parsed.nextPosition]?.offset ?: source.length
         val remainder = source.substring(endIndex)
-        return WalkerParsingResult(parsed.value, endIndex, remainder)
+        return WalkerParsingResult(parsed.value, endIndex, tokens, remainder)
     }
 }

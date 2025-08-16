@@ -15,17 +15,16 @@ import kotlin.test.assertTrue
 class DokkaReaderTest {
     @Test
     fun `html extractor`() {
-        val subContentRange = 114..143
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
+        val extractedHtml = javaClass.getResourceAsStream("/extract/lowercase.html")!!.bufferedReader().readText()
+
+        fun String.withoutWhitespace(): String = replace("\\s+".toRegex(), "")
+
         assertEquals(
-            fullHtml
-                .lines()
-                .subList(subContentRange.first, subContentRange.last)
-                .joinToString("\n")
-                .replace("\\s+".toRegex(), ""),
+            extractedHtml.withoutWhitespace(),
             DokkaHtmlContentExtractor(fullHtml)
                 .extractContent()
-                ?.replace("\\s+".toRegex(), ""),
+                ?.withoutWhitespace(),
         )
     }
 
@@ -95,7 +94,7 @@ class DokkaReaderTest {
         resourceNames: List<String>,
     ): File {
         val tempDir = createTempDirectory().toFile()
-        val moduleDir = tempDir.resolve("com/quarkdown/stdlib/module/$moduleName").apply { mkdirs() }
+        val moduleDir = tempDir.resolve("com.quarkdown.stdlib.module.$moduleName").apply { mkdirs() }
         resourceNames.forEach { name ->
             javaClass.getResourceAsStream("/content/$name")!!.use { input ->
                 moduleDir.resolve(name).outputStream().use { output ->
@@ -117,10 +116,12 @@ class DokkaReaderTest {
         results[0].let {
             assertEquals("lowercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
         results[1].let {
             assertEquals("uppercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
     }
 }
