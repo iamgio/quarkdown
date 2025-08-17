@@ -1,25 +1,20 @@
 package com.quarkdown.quarkdoc.dokka.util
 
+import com.quarkdown.quarkdoc.dokka.kdoc.DocTagBuilder
 import com.quarkdown.quarkdoc.reader.anchors.AnchorsHtml
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
-import org.jetbrains.dokka.model.doc.A
-import org.jetbrains.dokka.model.doc.DocTag
 
 // Utilities for facilitating scraping of documentation content via quarkdoc-reader.
 
 /**
  * Creates an anchor element at documentation level for scraping purposes, which marks a specific section of documentation.
  * @param anchor the name of the anchor to create
- * @return an [com.quarkdown.quarkdoc.reader.anchors.Anchors] anchor element as a [DocTag]
+ * @receiver the [DocTagBuilder] to add the anchor to
  */
-fun scrapingAnchor(anchor: String): DocTag {
+fun DocTagBuilder.scrapingAnchor(anchor: String) {
     assert(AnchorsHtml.ANCHOR_TAG == "a")
-    return A(
-        params =
-            mapOf(
-                AnchorsHtml.ANCHOR_ATTRIBUTE to AnchorsHtml.toAnchorAttribute(anchor),
-            ),
-    )
+    assert(AnchorsHtml.ANCHOR_ATTRIBUTE == "href")
+    link(address = AnchorsHtml.toAnchorAttribute(anchor)) {}
 }
 
 /**
