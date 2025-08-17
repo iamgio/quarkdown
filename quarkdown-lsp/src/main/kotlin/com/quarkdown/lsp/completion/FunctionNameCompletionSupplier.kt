@@ -38,7 +38,7 @@ internal class FunctionNameCompletionSupplier(
         DokkaHtmlWalker(docsDirectory)
             .walk()
             .filter { it.isInModule }
+            .filter { it.name.startsWith(text, ignoreCase = true) }
             .map { it.toCompletionItem() }
-            .filter { it.label.startsWith(text, ignoreCase = true) }
             .toList()
 }

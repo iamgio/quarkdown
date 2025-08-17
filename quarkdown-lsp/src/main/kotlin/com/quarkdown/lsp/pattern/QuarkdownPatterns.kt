@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.pattern
 
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
+import com.quarkdown.lsp.pattern.QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN
 import com.quarkdown.lsp.pattern.QuarkdownPatterns.FunctionCall.BEGIN
 
 /**
@@ -45,5 +46,12 @@ object QuarkdownPatterns {
          * The pattern that matches the identifier in a function call, preceded by [BEGIN] (unmatched).
          */
         val identifierInCall: Regex = "(?<=${Regex.escape(BEGIN)})(${IDENTIFIER.pattern})".toRegex()
+
+        /**
+         * The pattern that matches an optional value (represented by an identifier pattern) in an incomplete inline argument,
+         * preceded by [ARGUMENT_BEGIN] (unmatched) and followed by the end of the string.
+         */
+        val optionalValueInArgument: Regex =
+            "(?<=${Regex.escape(ARGUMENT_BEGIN)})\\s*(${IDENTIFIER.pattern})?$".toRegex()
     }
 }

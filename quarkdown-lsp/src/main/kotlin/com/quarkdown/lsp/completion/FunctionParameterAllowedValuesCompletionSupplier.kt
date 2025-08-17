@@ -1,14 +1,12 @@
 package com.quarkdown.lsp.completion
 
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
-import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.InsertTextFormat
-import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
 
 /**
@@ -39,7 +37,6 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
         return parameter.allowedValues?.map {
             CompletionItem().apply {
                 label = it
-                documentation = Either.forRight(parameter.description.htmlToMarkup())
                 kind = CompletionItemKind.Value
                 insertTextFormat = InsertTextFormat.Snippet
             }

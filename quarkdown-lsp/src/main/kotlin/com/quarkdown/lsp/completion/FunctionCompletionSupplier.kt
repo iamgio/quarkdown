@@ -47,7 +47,7 @@ class FunctionCompletionSupplier(
                 nameCompletionSupplier.getCompletionItems(params, snippet)
 
             // The value of an inline function parameter is being completed.
-            snippet.trimEnd().endsWith(QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN) ->
+            QuarkdownPatterns.FunctionCall.optionalValueInArgument.containsMatchIn(snippet) ->
                 parameterValuesCompletionSupplier.getCompletionItems(params, begin + snippet)
 
             // A function parameter is maybe being completed.
