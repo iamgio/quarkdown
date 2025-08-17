@@ -58,15 +58,6 @@ enum class TokenType(
     RANGE("number"),
 
     /**
-     * A boolean value.
-     *
-     * ```
-     * yes/true/no/false
-     * ```
-     */
-    BOOLEAN("keyword"),
-
-    /**
      * A size value or a list of sizes.
      *
      * ```
@@ -75,7 +66,16 @@ enum class TokenType(
      *
      * @see com.quarkdown.core.document.size.Sizes
      */
-    SIZE("property"),
+    SIZE("number"),
+
+    /**
+     * A boolean value.
+     *
+     * ```
+     * yes/true/no/false
+     * ```
+     */
+    BOOLEAN("keyword"),
 
     /**
      * An enum value.
