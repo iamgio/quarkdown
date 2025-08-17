@@ -24,12 +24,12 @@ object QuarkdownPatterns {
         /**
          * The character that begins an inline argument.
          */
-        const val ARGUMENT_BEGIN = FunctionCallGrammar.ARGUMENT_BEGIN
+        const val ARGUMENT_BEGIN = FunctionCallGrammar.ARGUMENT_BEGIN.toString()
 
         /**
          * The character that ends an inline argument.
          */
-        const val ARGUMENT_END = FunctionCallGrammar.ARGUMENT_END
+        const val ARGUMENT_END = FunctionCallGrammar.ARGUMENT_END.toString()
 
         /**
          * The character that delimits a named argument.

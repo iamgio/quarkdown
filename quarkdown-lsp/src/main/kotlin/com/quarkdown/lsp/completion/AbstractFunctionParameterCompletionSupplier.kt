@@ -4,39 +4,35 @@ import com.quarkdown.core.flavor.quarkdown.QuarkdownLexerFactory
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.parser.walker.WalkerParsingResult
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
-import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.quarkdoc.reader.DocsFunction
-import com.quarkdown.quarkdoc.reader.DocsParameter
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionParams
-import org.eclipse.lsp4j.InsertTextFormat
-import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
-
-private const val REQUIRED = "required"
 
 /**
  * Provides completion items for function parameters in function calls by scanning documentation files.
  * This supplier is proxied by [FunctionCompletionSupplier] and expects already-sliced text.
  * @param docsDirectory the directory containing the documentation files to extract function data from
+ * @see FunctionParameterNameCompletionSupplier
+ * @see FunctionParameterAllowedValuesCompletionSupplier
  */
-internal class FunctionParameterCompletionSupplier(
+internal abstract class AbstractFunctionParameterCompletionSupplier(
     private val docsDirectory: File,
 ) : CompletionSupplier {
     /**
-     * Converts a [DocsParameter] to a [CompletionItem] for use in parameter completion.
+     * Generates completion items for function parameters based on the provided function data and call context.
+     * @param call the parsed function call
+     * @param function the documentation data for the function being called
+     * @param remainder the text that is being completed, typically the argument name or value that is not part
+     * of a complete valid function call. For example, let `|` be the cursor position in the text,
+     * `.function par|am:{...}` would have its `remainder` as `am:{...}`.
      */
-    private fun DocsParameter.toCompletionItem() =
-        CompletionItem().apply {
-            label = name
-            detail = if (!isOptional) REQUIRED else null
-            documentation = Either.forRight(description.htmlToMarkup())
-            kind = CompletionItemKind.Field
-            insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)
-        }
+    protected abstract fun getCompletionItems(
+        call: WalkedFunctionCall,
+        function: DocsFunction,
+        remainder: String,
+    ): List<CompletionItem>
 
     override fun getCompletionItems(
         params: CompletionParams,
@@ -51,16 +47,7 @@ internal class FunctionParameterCompletionSupplier(
         // Looking up the function data from the documentation to extract available parameters to complete.
         val function: DocsFunction = getFunctionData(call.name) ?: return emptyList()
 
-        val parameters: Sequence<DocsParameter> =
-            function
-                .parameters
-                .asSequence()
-                .filter { it.name.startsWith(remainder) }
-                .filter { param -> call.arguments.none { arg -> arg.name == param.name } } // Exclude already present parameters
-
-        return parameters
-            .map { it.toCompletionItem() }
-            .toList()
+        return getCompletionItems(call, function, remainder.toString())
     }
 
     /**

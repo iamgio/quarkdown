@@ -61,7 +61,14 @@ class QuarkdownLanguageServer(
         val serverCaps =
             ServerCapabilities().apply {
                 textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
-                completionProvider = CompletionOptions(true, listOf(QuarkdownPatterns.FunctionCall.BEGIN))
+                completionProvider =
+                    CompletionOptions(
+                        true,
+                        listOf(
+                            QuarkdownPatterns.FunctionCall.BEGIN,
+                            QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN,
+                        ),
+                    )
                 hoverProvider = Either.forLeft(true)
                 semanticTokensProvider = SemanticTokensWithRegistrationOptions(legend, true, null)
             }
