@@ -6,6 +6,11 @@ import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import com.quarkdown.quarkdoc.reader.DocsWalker
 
+// Constants for the LSP snippet format.
+private const val INSERTION_START = "\${"
+private const val INSERTION_DELIMITER = ":"
+private const val INSERTION_END = "}"
+
 /**
  * Provider of function call snippets for completion, supported by the LSP.
  * @param function the function to generate the snippet from
@@ -23,12 +28,17 @@ object FunctionCallInsertionSnippet {
         return buildString {
             append(function.name)
             params.forEachIndexed { index, param ->
-                val insertion = "\${${index + 1}:${param.name}}"
-
                 if (!param.isLikelyBody) {
                     append(" ")
                 }
-                append(forParameter(param, alwaysNamed = false, insertion = insertion))
+                append(
+                    forParameter(
+                        param,
+                        alwaysNamed = false,
+                        insertionIndex = index + 1,
+                        insertionPlaceholder = param.name,
+                    ),
+                )
             }
         }
     }
@@ -50,15 +60,40 @@ object FunctionCallInsertionSnippet {
      *
      * @param parameter the parameter to generate the snippet from
      * @param alwaysNamed whether the parameter should always be treated as named if inline
-     * @param insertion the insertion text to use in the snippet. Defaults to an empty placeholder.
+     * @param insertionIndex the index of the insertion point in the snippet
+     * @param insertionPlaceholder the placeholder text to insert at the insertion point
      * @return the function parameter snippet
      */
     fun forParameter(
         parameter: DocsParameter,
         alwaysNamed: Boolean,
-        insertion: String = "\${1:}",
+        insertionIndex: Int = 1,
+        insertionPlaceholder: String = "",
     ): String =
         with(QuarkdownPatterns.FunctionCall) {
+            // If the parameter has fixed values, generates a snippet with a|b|c as the placeholder.
+            val valuesPlaceholder: String? = parameter.allowedValues?.joinToString(separator = "|")
+            // The actual insertion.
+            // If there are fixed values, the result will be `a|b|c` if the placeholder is empty,
+            // or `placeholder (a|b|c)` otherwise.
+            val insertion =
+                buildString {
+                    append(INSERTION_START)
+                    append(insertionIndex)
+                    append(INSERTION_DELIMITER)
+                    append(insertionPlaceholder)
+                    valuesPlaceholder?.let {
+                        if (insertionPlaceholder.isEmpty()) {
+                            append(it)
+                        } else {
+                            append(" (")
+                            append(it)
+                            append(")")
+                        }
+                    }
+                    append(INSERTION_END)
+                }
+
             when {
                 parameter.isLikelyBody ->
                     "\n" + CONVENTIONAL_BODY_INDENT + insertion
