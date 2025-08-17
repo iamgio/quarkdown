@@ -14,6 +14,7 @@ import kotlin.test.assertTrue
 
 private const val ALIGN_FUNCTION = "align"
 private const val CLIP_FUNCTION = "clip"
+private const val COLUMN_FUNCTION = "column"
 private const val CSV_FUNCTION = "csv"
 
 private const val LAYOUT_MODULE = "Layout"
@@ -43,12 +44,13 @@ class FunctionCompletionSupplierTest {
     fun `completions at beginning of function call`() {
         val text = "hello ."
         val completions = getCompletions(text, Position(0, text.length))
-        assertEquals(3, completions.size)
+        assertEquals(4, completions.size)
 
         // Verifies the expected function names are present.
         val labels = completions.map { it.label }.toSet()
         assertContains(labels, ALIGN_FUNCTION)
         assertContains(labels, CLIP_FUNCTION)
+        assertContains(labels, COLUMN_FUNCTION)
         assertContains(labels, CSV_FUNCTION)
 
         // Verifies module names are correct.
@@ -61,10 +63,26 @@ class FunctionCompletionSupplierTest {
             .forEach { assertEquals(DATA_MODULE, it.detail) }
 
         // Verifies the insertion snippet is correct.
+
+        // Only mandatory parameters.
         val alignCompletion = completions.first { it.label == ALIGN_FUNCTION }
         assertEquals(
-            "align {\${1:alignment}}\n    \${2:body}",
+            "align {\${1:alignment}} \n    \${2:body}",
             alignCompletion.insertText,
+        )
+
+        // One optional parameter.
+        val csvCompletion = completions.first { it.label == CSV_FUNCTION }
+        assertEquals(
+            "csv {\${1:path}} ",
+            csvCompletion.insertText,
+        )
+
+        // Only optional parameters + body.
+        val columnCompletion = completions.first { it.label == COLUMN_FUNCTION }
+        assertEquals(
+            "column \${1:}\n    \${2:body}",
+            columnCompletion.insertText,
         )
     }
 
