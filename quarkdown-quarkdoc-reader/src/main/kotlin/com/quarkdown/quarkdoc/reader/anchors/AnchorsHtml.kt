@@ -25,15 +25,20 @@ object AnchorsHtml {
     fun toAnchorAttribute(anchor: String): String = "#anchor__$anchor"
 
     /**
-     * Checks if the given [element] has an anchor with the specified [anchor] name.
-     * @param anchor the anchor name to check for
-     * @param element the element to check
-     * @return whether the element contains the anchor, even if nested
+     * @return the HTML selector for an anchor with the specified [anchor] name
      */
-    fun hasAnchor(
+    private fun anchorToSelector(anchor: String): String = "$ANCHOR_TAG[$ANCHOR_ATTRIBUTE='${toAnchorAttribute(anchor)}']"
+
+    /**
+     * Gets the element of the anchor with the specified [anchor] name within the given [element], if the anchor exists.
+     * @param anchor the anchor name to look for
+     * @param element the element to search in
+     * @return the element of the anchor, or `null` if not found
+     */
+    fun getAnchorElement(
         anchor: String,
         element: Element,
-    ) = element.selectFirst("$ANCHOR_TAG[$ANCHOR_ATTRIBUTE='${toAnchorAttribute(anchor)}']") != null
+    ): Element? = element.selectFirst(anchorToSelector(anchor))
 
     /**
      * Removes all anchors from the given [element].
@@ -50,9 +55,22 @@ object AnchorsHtml {
 }
 
 /**
- * @see [AnchorsHtml.toAnchorAttribute]
+ * @see [AnchorsHtml.getAnchorElement]
  */
-fun Element.hasAnchor(anchor: String): Boolean = AnchorsHtml.hasAnchor(anchor, this)
+fun Element.getAnchorElement(anchor: String): Element? = AnchorsHtml.getAnchorElement(anchor, this)
+
+/**
+ * @return the next sibling element of the anchor with the specified [anchor] name, or `null` if not found or no next sibling exists
+ * @see [AnchorsHtml.getAnchorElement]
+ */
+fun Element.getAnchorNextElement(anchor: String): Element? = getAnchorElement(anchor)?.nextElementSibling()
+
+/**
+ * Checks if the given element has an anchor with the specified [anchor] name.
+ * @param anchor the anchor name to check for
+ * @return whether the element contains the anchor, even if nested
+ */
+fun Element.hasAnchor(anchor: String): Boolean = getAnchorElement(anchor) != null
 
 /**
  * @see [AnchorsHtml.stripAnchors]

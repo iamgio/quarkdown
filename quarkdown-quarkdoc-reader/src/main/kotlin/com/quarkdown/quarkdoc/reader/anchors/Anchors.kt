@@ -24,4 +24,9 @@ object Anchors {
      * Name of the anchor for likely chained functions.
      */
     const val LIKELY_CHAINED = "likely-chained"
+
+    /**
+     * Name of the anchor for optionally present enum values of a parameter.
+     */
+    const val VALUES = "values"
 }

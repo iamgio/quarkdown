@@ -5,8 +5,10 @@ import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -46,6 +48,7 @@ class DokkaReaderTest {
         assertFalse(parameter.isOptional)
         assertFalse(parameter.isLikelyBody)
         assertFalse(parameter.isLikelyNamed)
+        assertNull(parameter.allowedValues)
     }
 
     @Test
@@ -80,6 +83,13 @@ class DokkaReaderTest {
         val function = extractFunctionData("/content/isnone.html")
         assertEquals("isnone", function.name)
         assertTrue(function.isLikelyChained)
+    }
+
+    @Test
+    fun `allowed parameter values extractor`() {
+        val function = extractFunctionData("/content/container.html")
+        val parameter = function.parameters.first { it.name == "alignment" }
+        assertContains(parameter.allowedValues!!, "center")
     }
 
     /**

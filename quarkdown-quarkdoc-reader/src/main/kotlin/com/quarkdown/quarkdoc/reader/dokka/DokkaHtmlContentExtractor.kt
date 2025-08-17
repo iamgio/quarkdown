@@ -4,6 +4,7 @@ import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import com.quarkdown.quarkdoc.reader.anchors.Anchors
+import com.quarkdown.quarkdoc.reader.anchors.getAnchorNextElement
 import com.quarkdown.quarkdoc.reader.anchors.hasAnchor
 import com.quarkdown.quarkdoc.reader.anchors.stripAnchors
 import org.jsoup.Jsoup
@@ -47,7 +48,6 @@ class DokkaHtmlContentExtractor(
     private fun rowToParameter(row: Element): DocsParameter? {
         val name = row.children().firstOrNull()?.text() ?: return null
         val content = row.selectFirst(".title")
-        val descriptionHtml = content?.html() ?: ""
 
         return DocsParameter(
             name = name,
@@ -55,6 +55,11 @@ class DokkaHtmlContentExtractor(
             isOptional = row.hasAnchor(Anchors.OPTIONAL),
             isLikelyNamed = row.hasAnchor(Anchors.LIKELY_NAMED),
             isLikelyBody = row.hasAnchor(Anchors.LIKELY_BODY),
+            allowedValues =
+                row
+                    .getAnchorNextElement(Anchors.VALUES)
+                    ?.select("li")
+                    ?.map { it.text() },
         )
     }
 
