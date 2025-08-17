@@ -11,6 +11,9 @@ private const val INSERTION_START = "\${"
 private const val INSERTION_DELIMITER = ":"
 private const val INSERTION_END = "}"
 
+// Suffix after each inline argument.
+private const val INLINE_ARGUMENT_SUFFIX = " "
+
 /**
  * Provider of function call snippets for completion, supported by the LSP.
  * @param function the function to generate the snippet from
@@ -24,21 +27,31 @@ object FunctionCallInsertionSnippet {
      */
     fun forFunction(function: DocsFunction): String {
         val params = function.parameters.filter { !it.isOptional || it.isLikelyBody }
+        var insertionIndex = 1
 
         return buildString {
             append(function.name)
+            append(" ")
             params.forEachIndexed { index, param ->
-                if (!param.isLikelyBody) {
-                    append(" ")
+                // If the parameter is a body parameter, but at least one inline parameter is optional,
+                // an additional insertion point is added to improve the user experience,
+                // allowing the user to continue typing inline parameters and then switch to the body parameter.
+                if (param.isLikelyBody && index != function.parameters.lastIndex) {
+                    append(INSERTION_START)
+                    append(insertionIndex)
+                    append(INSERTION_DELIMITER)
+                    append(INSERTION_END)
+                    insertionIndex++
                 }
                 append(
                     forParameter(
                         param,
                         alwaysNamed = false,
-                        insertionIndex = index + 1,
+                        insertionIndex = insertionIndex,
                         insertionPlaceholder = param.name,
                     ),
                 )
+                insertionIndex++
             }
         }
     }
@@ -94,15 +107,19 @@ object FunctionCallInsertionSnippet {
                     append(INSERTION_END)
                 }
 
+            // {abc}
+            val inlineArgument = ARGUMENT_BEGIN + insertion + ARGUMENT_END + INLINE_ARGUMENT_SUFFIX
+
             when {
                 parameter.isLikelyBody ->
                     "\n" + CONVENTIONAL_BODY_INDENT + insertion
 
+                // name:{abc}
                 alwaysNamed || parameter.isLikelyNamed ->
-                    parameter.name + NAMED_ARGUMENT_DELIMITER + ARGUMENT_BEGIN + insertion + ARGUMENT_END
+                    parameter.name + NAMED_ARGUMENT_DELIMITER + inlineArgument
 
                 else ->
-                    ARGUMENT_BEGIN + insertion + ARGUMENT_END
+                    inlineArgument
             }
         }
 }
