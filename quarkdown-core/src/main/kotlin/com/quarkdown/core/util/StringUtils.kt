@@ -34,6 +34,16 @@ fun String.takeUntilLastOccurrence(string: String): String {
 }
 
 /**
+ * @return a substring of [this] string from [startIndex] to [endIndex] if the indices are within bounds.
+ *         If [startIndex] is less than 0, the actual start index is 0.
+ *         If [endIndex] is greater than the length of the string, the actual end index is the length of the string.
+ */
+fun String.substringWithinBounds(
+    startIndex: Int,
+    endIndex: Int,
+): String = substring(startIndex.coerceAtLeast(0), endIndex.coerceAtMost(length))
+
+/**
  * @return [this] string without the first and last characters, if possible
  */
 fun String.trimDelimiters(): String = if (length >= 2) substring(1, length - 1) else this
@@ -89,6 +99,6 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
 fun String.toURLOrNull(): URL? =
     try {
         URL(this)
-    } catch (e: MalformedURLException) {
+    } catch (_: MalformedURLException) {
         null
     }

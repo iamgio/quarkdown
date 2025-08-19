@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.util
 
+import com.quarkdown.core.util.substringWithinBounds
 import org.eclipse.lsp4j.Position
 
 /**
@@ -7,6 +8,12 @@ import org.eclipse.lsp4j.Position
  * @return the character at the specified position, or null if the position is out of bounds
  */
 fun Position.getChar(text: String): Char? = text.lines().getOrNull(line)?.getOrNull(character - 1)
+
+/**
+ * @param text the text content to search in
+ * @return the substring from the start of the line, up to the specified position, or `null` if the position is out of bounds
+ */
+fun Position.getLineUntilPosition(text: String): String? = text.lines()[line].substringWithinBounds(0, character)
 
 /**
  * @param text the text content to search in

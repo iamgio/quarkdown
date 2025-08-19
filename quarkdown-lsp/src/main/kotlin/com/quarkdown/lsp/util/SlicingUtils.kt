@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.util
 
+import com.quarkdown.core.util.substringWithinBounds
 import org.eclipse.lsp4j.Position
 
 /**
@@ -21,8 +22,8 @@ fun sliceFromDelimiterToPosition(
         text
             .lines()
             .getOrNull(position.line)
-            ?.takeIf { position.character > 0 }
-            ?.substring(0, position.character)
+            ?.takeIf { position.character >= 0 }
+            ?.substringWithinBounds(0, position.character)
             ?: return null
 
     // Extracts the text between the last occurrence of the delimiter and the position.

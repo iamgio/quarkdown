@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.completion
 
+import com.quarkdown.core.util.substringWithinBounds
 import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.quarkdoc.reader.DocsFunction
@@ -32,15 +33,43 @@ internal class FunctionParameterNameCompletionSupplier(
             insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)
         }
 
+    /**
+     * Transforms the cursor index to the index of the last whitespace before the cursor,
+     * so that the returned index is always part of the function call.
+     *
+     * Note that, by design, an inline argument without both delimiters is not part of the function call.
+     */
+    override fun transformIndex(
+        cursorIndex: Int,
+        text: String,
+    ): Int? =
+        text
+            .substringWithinBounds(0, cursorIndex)
+            .indexOfLast { it.isWhitespace() }
+            .takeIf { it >= 0 }
+
+    /**
+     * Transforms the text to only consider the part before the (transformed) cursor,
+     * ignoring any text after the cursor.
+     */
+    override fun transformText(
+        cursorIndex: Int,
+        text: String,
+    ): String = text.substringWithinBounds(0, cursorIndex) // Only consider the text before the cursor
+
     override fun getCompletionItems(
         call: FunctionCall,
         function: DocsFunction,
         cursorIndex: Int,
-    ): List<CompletionItem> = emptyList()
-        /*function.parameters
+    ): List<CompletionItem> {
+        val remainder = call.parserResult.remainder.trim()
+        val arguments = call.parserResult.value.arguments
+
+        return function.parameters
             .asSequence()
             .filter { it.name.startsWith(remainder) }
-            .filter { param -> call.arguments.none { arg -> arg.name == param.name } } // Exclude already present parameters
+            .filter { param -> arguments.none { arg -> arg.name == param.name } } // Exclude already present parameters
             .map { it.toCompletionItem() }
-            .toList()*/
+            .toList()
+    }
 }

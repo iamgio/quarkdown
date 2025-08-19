@@ -68,7 +68,7 @@ class FunctionCompletionSupplierTest {
         // Only mandatory parameters.
         val alignCompletion = completions.first { it.label == ALIGN_FUNCTION }
         assertEquals(
-            "align {\${1:alignment}} \n    \${2:body}",
+            "align {\${1:alignment (start|center|end)}} \n    \${2:body}",
             alignCompletion.insertText,
         )
 
@@ -121,6 +121,15 @@ class FunctionCompletionSupplierTest {
 
         assertFalse(BODY_PARAMETER in completions)
         assertEquals(ALIGNMENT_PARAMETER, completions.single())
+    }
+
+    @Test
+    fun `parameter completions after line break`() {
+        val text = "abc\n\n.$ALIGN_FUNCTION "
+        val position = Position(2, text.lines().last().length)
+        val completions = getCompletions(text, position).map { it.label }
+
+        assertContains(completions, ALIGNMENT_PARAMETER)
     }
 
     @Test

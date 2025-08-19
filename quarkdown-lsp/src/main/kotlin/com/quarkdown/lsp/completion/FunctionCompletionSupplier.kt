@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
+import com.quarkdown.lsp.util.getLineUntilPosition
 import com.quarkdown.lsp.util.sliceFromDelimiterToPosition
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
@@ -36,18 +37,20 @@ class FunctionCompletionSupplier(
     ): List<CompletionItem> {
         val begin = QuarkdownPatterns.FunctionCall.BEGIN
 
-        // Function snippet that is being completed.
-        val snippet: String =
+        // Function snippet that is being completed, obtained by backtracking from the cursor position.
+        // This is a lightweight approach to avoid invoking the full tokenizer,
+        // but cannot be relied on for all cases, such as nested function calls.
+        val snippet: String? =
             sliceFromDelimiterToPosition(text, params.position, delimiter = begin)
-                ?: return emptyList()
 
         return when {
             // The function name is being completed.
-            snippet.all { it.isLetterOrDigit() } ->
+            snippet != null && snippet.all { it.isLetterOrDigit() } ->
                 nameCompletionSupplier.getCompletionItems(params, snippet)
 
             // The value of an inline function parameter is being completed.
-            QuarkdownPatterns.FunctionCall.optionalValueInArgument.containsMatchIn(snippet) ->
+            QuarkdownPatterns.FunctionCall.optionalValueInArgument
+                .containsMatchIn(params.position.getLineUntilPosition(text) ?: "") ->
                 parameterValuesCompletionSupplier.getCompletionItems(params, text)
 
             // A function parameter is maybe being completed.
