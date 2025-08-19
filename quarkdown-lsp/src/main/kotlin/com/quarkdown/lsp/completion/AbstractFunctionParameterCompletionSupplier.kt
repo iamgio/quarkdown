@@ -1,11 +1,11 @@
 package com.quarkdown.lsp.completion
 
+import com.quarkdown.lsp.documentation.findDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
 import com.quarkdown.quarkdoc.reader.DocsFunction
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 import java.io.File
@@ -74,26 +74,20 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
                 .getAtSourceIndex(transformedIndex)
                 ?: return emptyList()
 
-        // The parsed function call associated with the token.
-        val result = call.parserResult
-        val parsedCall = result.value
-
         // Looking up the function data from the documentation to extract available parameters to complete.
-        val function: DocsFunction = getFunctionData(parsedCall.name) ?: return emptyList()
+        val function: DocsFunction = getFunctionData(call) ?: return emptyList()
 
         return getCompletionItems(call, function, transformedIndex)
     }
 
     /**
-     * Retrieves the function data for the given function name from the documentation.
-     * @param functionName the name of the function to retrieve data for
+     * Retrieves the function data for the given function call from the documentation.
+     * @param call the function call to extract documentation for
      * @return the [DocsFunction] if found
      */
-    private fun getFunctionData(functionName: String): DocsFunction? =
-        DokkaHtmlWalker(docsDirectory)
-            .walk()
-            .filter { it.isInModule }
-            .find { it.name == functionName }
+    private fun getFunctionData(call: FunctionCall): DocsFunction? =
+        call
+            .findDocumentation(docsDirectory)
             ?.extractor()
             ?.extractFunctionData()
 }

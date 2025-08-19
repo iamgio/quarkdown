@@ -1,9 +1,11 @@
 package com.quarkdown.lsp.hover
 
 import com.quarkdown.lsp.documentation.extractContentAsMarkup
-import com.quarkdown.lsp.pattern.QuarkdownPatterns
-import com.quarkdown.lsp.util.getByPatternContaining
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
+import com.quarkdown.lsp.documentation.findDocumentation
+import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
+import com.quarkdown.lsp.tokenizer.getAtSourceIndex
+import com.quarkdown.lsp.util.toOffset
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
 import java.io.File
@@ -19,14 +21,16 @@ class FunctionDocumentationHoverSupplier(
         params: HoverParams,
         text: String,
     ): Hover? {
-        val function =
-            params.position.getByPatternContaining(QuarkdownPatterns.FunctionCall.identifierInCall, text)
+        // Gets the function call at the specified hover position.
+        val index = params.position.toOffset(text)
+        val call: FunctionCall =
+            FunctionCallTokenizer().getFunctionCalls(text).getAtSourceIndex(index)
                 ?: return null
 
+        // Returns the documentation to display in the hover.
         val documentation =
-            DokkaHtmlWalker(docsDirectory)
-                .walk()
-                .find { it.name == function }
+            call
+                .findDocumentation(docsDirectory)
                 ?.extractor()
                 ?: return null
 
