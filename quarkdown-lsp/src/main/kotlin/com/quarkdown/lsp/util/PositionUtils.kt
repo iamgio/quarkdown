@@ -46,3 +46,16 @@ fun offsetToPosition(
     val character = offset - lastLineStart
     return Position(line, character)
 }
+
+/**
+ * Converts a [Position] to a character offset (index) in the text.
+ * @param text the text content to search in
+ * @return the character offset corresponding to the given position, or -1 if the position is out of bounds
+ */
+fun Position.toOffset(text: String): Int {
+    val lines = text.lines()
+    if (line < 0 || line >= lines.size) return -1
+    val lineText = lines[line]
+    if (character < 0 || character > lineText.length) return -1
+    return lines.take(line).sumOf { it.length + 1 } + character // +1 for the newline character
+}

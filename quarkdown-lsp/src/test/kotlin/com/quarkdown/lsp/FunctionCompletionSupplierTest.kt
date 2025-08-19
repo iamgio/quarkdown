@@ -22,6 +22,7 @@ private const val DATA_MODULE = "Data"
 
 private const val ALIGNMENT_PARAMETER = "alignment"
 private const val BODY_PARAMETER = "body"
+private const val CAPTION_PARAMETER = "caption"
 
 /**
  * Tests for the completion of function calls.
@@ -136,5 +137,39 @@ class FunctionCompletionSupplierTest {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{center} $BODY_PARAMETER:{content} "
         val completions = getCompletions(text, Position(0, text.length))
         assertTrue(completions.isEmpty())
+    }
+
+    @Test
+    fun `parameter completions in nested function call`() {
+        val text = "hello .func {.$ALIGN_FUNCTION al}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertEquals(ALIGNMENT_PARAMETER, completions.single())
+    }
+
+    @Test
+    fun `parameter completions with nested function call`() {
+        val text = "hello .$CSV_FUNCTION {.func {arg}} capt"
+        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+
+        assertEquals(CAPTION_PARAMETER, completions.single())
+    }
+
+    @Test
+    fun `parameter value, empty argument`() {
+        val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertContains(completions, "start")
+        assertContains(completions, "center")
+        assertContains(completions, "end")
+    }
+
+    @Test
+    fun `parameter value, partial argument`() {
+        val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{cen}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertEquals(completions.single(), "center")
     }
 }

@@ -1,7 +1,7 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.lsp.documentation.htmlToMarkup
+import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
@@ -33,14 +33,14 @@ internal class FunctionParameterNameCompletionSupplier(
         }
 
     override fun getCompletionItems(
-        call: WalkedFunctionCall,
+        call: FunctionCall,
         function: DocsFunction,
-        remainder: String,
-    ): List<CompletionItem> =
-        function.parameters
+        cursorIndex: Int,
+    ): List<CompletionItem> = emptyList()
+        /*function.parameters
             .asSequence()
             .filter { it.name.startsWith(remainder) }
             .filter { param -> call.arguments.none { arg -> arg.name == param.name } } // Exclude already present parameters
             .map { it.toCompletionItem() }
-            .toList()
+            .toList()*/
 }

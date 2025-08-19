@@ -1,9 +1,9 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.core.flavor.quarkdown.QuarkdownLexerFactory
-import com.quarkdown.core.lexer.Token
-import com.quarkdown.core.parser.walker.WalkerParsingResult
-import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
+import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
+import com.quarkdown.lsp.tokenizer.getAtSourceIndex
+import com.quarkdown.lsp.util.toOffset
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
@@ -12,7 +12,7 @@ import java.io.File
 
 /**
  * Provides completion items for function parameters in function calls by scanning documentation files.
- * This supplier is proxied by [FunctionCompletionSupplier] and expects already-sliced text.
+ * This supplier is proxied by [FunctionCompletionSupplier].
  * @param docsDirectory the directory containing the documentation files to extract function data from
  * @see FunctionParameterNameCompletionSupplier
  * @see FunctionParameterAllowedValuesCompletionSupplier
@@ -24,43 +24,33 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
      * Generates completion items for function parameters based on the provided function data and call context.
      * @param call the parsed function call
      * @param function the documentation data for the function being called
-     * @param remainder the text that is being completed, typically the argument name or value that is not part
-     * of a complete valid function call. For example, let `|` be the cursor position in the text,
-     * `.function par|am:{...}` would have its `remainder` as `am:{...}`.
+     * @param cursorIndex the index of the cursor in the source text
      */
     protected abstract fun getCompletionItems(
-        call: WalkedFunctionCall,
+        call: FunctionCall,
         function: DocsFunction,
-        remainder: String,
+        cursorIndex: Int,
     ): List<CompletionItem>
 
     override fun getCompletionItems(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> {
+        val index = params.position.toOffset(text)
+        val call: FunctionCall =
+            FunctionCallTokenizer()
+                .getFunctionCalls(text)
+                .getAtSourceIndex(index)
+                ?: return emptyList()
+
         // The parsed function call associated with the token.
-        val result: WalkerParsingResult<*> = getParsedFunctionCall(text) ?: return emptyList()
-        val call = result.value as? WalkedFunctionCall ?: return emptyList()
-        // The remainder text is the argument that is being completed, and it's not part of the parsed function call.
-        val remainder = result.remainder.trim()
+        val result = call.parserResult
+        val parsedCall = result.value
 
         // Looking up the function data from the documentation to extract available parameters to complete.
-        val function: DocsFunction = getFunctionData(call.name) ?: return emptyList()
+        val function: DocsFunction = getFunctionData(parsedCall.name) ?: return emptyList()
 
-        return getCompletionItems(call, function, remainder.toString())
-    }
-
-    /**
-     * Parses the function call from the given text.
-     * This completion supplier is proxied by [FunctionCompletionSupplier],
-     * and it's ensured that the text matches a function call.
-     * @param text the text to parse
-     * @return the parsed function call, or `null` if parsing fails
-     */
-    private fun getParsedFunctionCall(text: String): WalkerParsingResult<*>? {
-        val lexer = QuarkdownLexerFactory.newInlineFunctionCallLexer(text)
-        val token: Token = lexer.tokenize().singleOrNull() ?: return null
-        return token.data.walkerResult
+        return getCompletionItems(call, function, index)
     }
 
     /**

@@ -48,12 +48,12 @@ class FunctionCompletionSupplier(
 
             // The value of an inline function parameter is being completed.
             QuarkdownPatterns.FunctionCall.optionalValueInArgument.containsMatchIn(snippet) ->
-                parameterValuesCompletionSupplier.getCompletionItems(params, begin + snippet)
+                parameterValuesCompletionSupplier.getCompletionItems(params, text)
 
             // A function parameter is maybe being completed.
             // This is determined through tokenization of the complete function call.
             else ->
-                parameterNameCompletionSupplier.getCompletionItems(params, begin + snippet)
+                parameterNameCompletionSupplier.getCompletionItems(params, text)
         }
     }
 }

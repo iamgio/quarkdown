@@ -1,7 +1,8 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
-import com.quarkdown.lsp.pattern.QuarkdownPatterns
+import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.tokenizer.FunctionCallToken
+import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
@@ -18,28 +19,68 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
     docsDirectory: File,
 ) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
     override fun getCompletionItems(
-        call: WalkedFunctionCall,
+        call: FunctionCall,
         function: DocsFunction,
-        remainder: String,
+        cursorIndex: Int,
     ): List<CompletionItem> {
-        val parameterName: String =
-            QuarkdownPatterns.FunctionCall.IDENTIFIER
-                .find(remainder)
-                ?.groupValues
-                ?.firstOrNull()
-                ?: return emptyList()
+        // If a value is partially present, it can be completed.
+        // If no value is present, all allowed values are returned.
+        val value: String =
+            call
+                .getTokenAtSourceIndex(cursorIndex)
+                ?.takeIf { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_VALUE }
+                ?.lexeme
+                ?.trim()
+                ?: ""
 
+        // The name of the parameter that refers to the value being completed.
+        // For example, in `.row alignment:{...}`, the parameter name is `alignment`.
+        val parameterName: String = getParameterName(call.tokens, cursorIndex) ?: return emptyList()
+
+        // The parameter data looked up from documentation.
         val parameter: DocsParameter =
             function.parameters
                 .find { it.name == parameterName }
                 ?: return emptyList()
 
-        return parameter.allowedValues?.map {
-            CompletionItem().apply {
-                label = it
-                kind = CompletionItemKind.Value
-                insertTextFormat = InsertTextFormat.Snippet
+        return parameter.allowedValues
+            ?.filter { it.startsWith(value) }
+            ?.map {
+                CompletionItem().apply {
+                    label = it
+                    kind = CompletionItemKind.Value
+                    insertTextFormat = InsertTextFormat.Snippet
+                }
             }
-        } ?: emptyList()
+            ?: emptyList()
+    }
+
+    /**
+     * Extracts the name of the parameter being completed based on the cursor position.
+     * It iterates through the tokens of the function call and identifies the parameter name
+     * based on the token type and its range.
+     * @param tokens the list of tokens in the function call
+     * @param cursorIndex the index of the cursor in the source text (which is supposed to be in the argument value)
+     * @return the name of the parameter, if any
+     */
+    private fun getParameterName(
+        tokens: List<FunctionCallToken>,
+        cursorIndex: Int,
+    ): String? {
+        // The last seen parameter name.
+        // If it comes immediately before the value being completed, it is returned.
+        var name: String? = null
+
+        for (token in tokens) {
+            if (cursorIndex in token.range) {
+                return name
+            }
+            if (token.type == FunctionCallToken.Type.PARAMETER_NAME) {
+                name = token.lexeme
+            } else if (token.type == FunctionCallToken.Type.INLINE_ARGUMENT_END) {
+                name = null
+            }
+        }
+        return name
     }
 }
