@@ -16,5 +16,5 @@ class CompletionSubservice(
         text: String,
     ): List<CompletionItem> =
         completionSuppliers
-            .flatMap { it.getCompletionItems(params, text) }
+            .flatMap { it.getCompletionItems(params, text.toString()) }
 }

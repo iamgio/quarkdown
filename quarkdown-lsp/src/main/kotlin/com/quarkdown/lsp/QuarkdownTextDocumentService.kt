@@ -1,5 +1,6 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.hover.HoverSupplier
@@ -52,8 +53,11 @@ class QuarkdownTextDocumentService(
                 "' {fileUri: '" + didOpenTextDocumentParams.textDocument.uri + "'} opened",
         )
 
+        // The text is stored and line endings are normalized to LF to ensure consistency with the protocol.
         documents[didOpenTextDocumentParams.textDocument.uri] =
             didOpenTextDocumentParams.textDocument.text
+                .normalizeLineSeparators()
+                .toString()
     }
 
     override fun didChange(didChangeTextDocumentParams: DidChangeTextDocumentParams) {
