@@ -20,7 +20,7 @@ internal class FunctionNameCompletionSupplier(
     private val docsDirectory: File,
 ) : CompletionSupplier {
     /**
-     * Converts a [com.quarkdown.quarkdoc.reader.DocsWalker.Result] to a [org.eclipse.lsp4j.CompletionItem] for use in function name completion.
+     * Converts a [DocumentedFunction] to a [CompletionItem] for use in function name completion.
      */
     private fun toCompletionItem(function: DocumentedFunction) =
         CompletionItem().apply {

@@ -22,7 +22,7 @@ internal class FunctionParameterNameCompletionSupplier(
     docsDirectory: File,
 ) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
     /**
-     * Converts a [com.quarkdown.quarkdoc.reader.DocsParameter] to a [org.eclipse.lsp4j.CompletionItem] for use in parameter completion.
+     * Converts a [DocsParameter] to a [CompletionItem] for use in parameter completion.
      */
     private fun DocsParameter.toCompletionItem() =
         CompletionItem().apply {
