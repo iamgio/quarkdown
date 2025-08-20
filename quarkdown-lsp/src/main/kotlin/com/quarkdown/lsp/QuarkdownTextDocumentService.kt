@@ -41,10 +41,10 @@ class QuarkdownTextDocumentService(
     /**
      * Maps document URIs to their text content.
      */
-    private val documents = mutableMapOf<String, String>()
+    private val documents = mutableMapOf<String, CharSequence>()
 
     private fun getDocumentText(document: TextDocumentIdentifier): String =
-        documents[document.uri]
+        documents[document.uri]?.toString()
             ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
 
     override fun didOpen(didOpenTextDocumentParams: DidOpenTextDocumentParams) {
@@ -55,9 +55,7 @@ class QuarkdownTextDocumentService(
 
         // The text is stored and line endings are normalized to LF to ensure consistency with the protocol.
         documents[didOpenTextDocumentParams.textDocument.uri] =
-            didOpenTextDocumentParams.textDocument.text
-                .normalizeLineSeparators()
-                .toString()
+            didOpenTextDocumentParams.textDocument.text.normalizeLineSeparators()
     }
 
     override fun didChange(didChangeTextDocumentParams: DidChangeTextDocumentParams) {
@@ -67,7 +65,11 @@ class QuarkdownTextDocumentService(
         )
 
         documents[didChangeTextDocumentParams.textDocument.uri] =
-            didChangeTextDocumentParams.contentChanges.firstOrNull()?.text ?: ""
+            didChangeTextDocumentParams.contentChanges
+                .firstOrNull()
+                ?.text
+                ?.normalizeLineSeparators()
+                ?: ""
     }
 
     override fun didClose(didCloseTextDocumentParams: DidCloseTextDocumentParams) {
