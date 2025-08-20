@@ -1,16 +1,14 @@
 package com.quarkdown.lsp.documentation
 
+import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
+import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.tokenizer.FunctionCall
-import com.quarkdown.quarkdoc.reader.DocsWalker
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlContentExtractor
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import java.io.File
 
-fun FunctionCall.findDocumentation(docsDirectory: File): DocsWalker.Result<DokkaHtmlContentExtractor>? {
+fun FunctionCall.getDocumentation(docsDirectory: File): DocumentedFunction? {
     val functionName = this.parserResult.value.name
 
-    return DokkaHtmlWalker(docsDirectory)
-        .walk()
-        .filter { it.isInModule }
+    return CacheableFunctionCatalogue
+        .getCatalogue(docsDirectory)
         .find { it.name == functionName }
 }

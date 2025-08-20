@@ -1,10 +1,8 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.lsp.completion.FunctionCallInsertionSnippet.forFunction
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
-import com.quarkdown.quarkdoc.reader.DocsWalker
 
 // Constants for the LSP snippet format.
 private const val INSERTION_START = "\${"
@@ -54,14 +52,6 @@ object FunctionCallInsertionSnippet {
                 insertionIndex++
             }
         }
-    }
-
-    /**
-     * @see forFunction(DocsFunction)
-     */
-    fun forFunction(function: DocsWalker.Result<*>): String {
-        val data = function.extractor().extractFunctionData() ?: return ""
-        return forFunction(data)
     }
 
     /**

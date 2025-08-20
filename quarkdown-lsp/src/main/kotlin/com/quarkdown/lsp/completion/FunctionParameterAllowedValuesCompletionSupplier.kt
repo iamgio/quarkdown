@@ -1,9 +1,9 @@
 package com.quarkdown.lsp.completion
 
+import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
-import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
@@ -20,7 +20,7 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
 ) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
     override fun getCompletionItems(
         call: FunctionCall,
-        function: DocsFunction,
+        function: DocumentedFunction,
         cursorIndex: Int,
     ): List<CompletionItem> {
         // If a value is partially present, it can be completed.
@@ -39,7 +39,7 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
 
         // The parameter data looked up from documentation.
         val parameter: DocsParameter =
-            function.parameters
+            function.data.parameters
                 .find { it.name == parameterName }
                 ?: return emptyList()
 

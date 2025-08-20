@@ -1,7 +1,7 @@
 package com.quarkdown.lsp.hover
 
-import com.quarkdown.lsp.documentation.extractContentAsMarkup
-import com.quarkdown.lsp.documentation.findDocumentation
+import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
@@ -28,12 +28,10 @@ class FunctionDocumentationHoverSupplier(
                 ?: return null
 
         // Returns the documentation to display in the hover.
-        val documentation =
-            call
-                .findDocumentation(docsDirectory)
-                ?.extractor()
+        val function: DocumentedFunction =
+            call.getDocumentation(docsDirectory)
                 ?: return null
 
-        return Hover(documentation.extractContentAsMarkup())
+        return Hover(function.documentationAsMarkup)
     }
 }

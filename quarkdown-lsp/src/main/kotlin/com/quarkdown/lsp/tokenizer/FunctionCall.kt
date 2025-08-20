@@ -57,10 +57,22 @@ data class FunctionCallToken(
     }
 }
 
+/**
+ * Finds the innermost function call that contains the specified index
+ * (relative to the source code the function call was tokenized from).
+ * @param index the source index to search for
+ * @return the innermost function call containing the index, if any
+ */
 fun Iterable<FunctionCall>.getAtSourceIndex(index: Int): FunctionCall? =
     this
         .asSequence()
         .sortedBy { it.range.last - it.range.first } // Sorting by length, making sure to target innermost calls over their parent.
         .firstOrNull { index in it.range }
 
+/**
+ * Finds the token within a function call that contains the specified index
+ * (relative to the source code the function call was tokenized from).
+ * @param index the source index to search for
+ * @return the token at the specified index, if any
+ */
 fun FunctionCall.getTokenAtSourceIndex(index: Int): FunctionCallToken? = this.tokens.find { index in it.range }

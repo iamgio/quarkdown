@@ -1,8 +1,8 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.lsp.documentation.extractContentAsMarkup
+import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
+import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.quarkdoc.reader.DocsWalker
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
 import org.eclipse.lsp4j.CompletionParams
@@ -21,24 +21,23 @@ internal class FunctionNameCompletionSupplier(
     /**
      * Converts a [DocsWalker.Result] to a [CompletionItem] for use in function name completion.
      */
-    private fun DocsWalker.Result<*>.toCompletionItem() =
+    private fun toCompletionItem(function: DocumentedFunction) =
         CompletionItem().apply {
-            label = name
-            detail = moduleName
-            documentation = Either.forRight(extractor().extractContentAsMarkup())
+            label = function.name
+            detail = function.rawData.moduleName
+            documentation = Either.forRight(function.documentationAsMarkup)
             kind = CompletionItemKind.Function
             insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallInsertionSnippet.forFunction(this@toCompletionItem)
+            insertText = FunctionCallInsertionSnippet.forFunction(function.data)
         }
 
     override fun getCompletionItems(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> =
-        DokkaHtmlWalker(docsDirectory)
-            .walk()
-            .filter { it.isInModule }
-            .filter { it.name.startsWith(text, ignoreCase = true) }
-            .map { it.toCompletionItem() }
+        CacheableFunctionCatalogue
+            .getCatalogue(docsDirectory)
+            .filter { it.data.name.startsWith(text, ignoreCase = true) }
+            .map(::toCompletionItem)
             .toList()
 }

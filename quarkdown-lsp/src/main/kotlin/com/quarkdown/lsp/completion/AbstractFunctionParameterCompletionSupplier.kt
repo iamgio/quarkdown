@@ -1,11 +1,11 @@
 package com.quarkdown.lsp.completion
 
-import com.quarkdown.lsp.documentation.findDocumentation
+import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
-import com.quarkdown.quarkdoc.reader.DocsFunction
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 import java.io.File
@@ -28,7 +28,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
      */
     protected abstract fun getCompletionItems(
         call: FunctionCall,
-        function: DocsFunction,
+        function: DocumentedFunction,
         cursorIndex: Int,
     ): List<CompletionItem>
 
@@ -75,19 +75,8 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
                 ?: return emptyList()
 
         // Looking up the function data from the documentation to extract available parameters to complete.
-        val function: DocsFunction = getFunctionData(call) ?: return emptyList()
+        val function: DocumentedFunction = call.getDocumentation(docsDirectory) ?: return emptyList()
 
         return getCompletionItems(call, function, transformedIndex)
     }
-
-    /**
-     * Retrieves the function data for the given function call from the documentation.
-     * @param call the function call to extract documentation for
-     * @return the [DocsFunction] if found
-     */
-    private fun getFunctionData(call: FunctionCall): DocsFunction? =
-        call
-            .findDocumentation(docsDirectory)
-            ?.extractor()
-            ?.extractFunctionData()
 }

@@ -1,9 +1,9 @@
 package com.quarkdown.lsp.completion
 
 import com.quarkdown.core.util.substringWithinBounds
+import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.lsp.tokenizer.FunctionCall
-import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
@@ -59,13 +59,13 @@ internal class FunctionParameterNameCompletionSupplier(
 
     override fun getCompletionItems(
         call: FunctionCall,
-        function: DocsFunction,
+        function: DocumentedFunction,
         cursorIndex: Int,
     ): List<CompletionItem> {
         val remainder = call.parserResult.remainder.trim()
         val arguments = call.parserResult.value.arguments
 
-        return function.parameters
+        return function.data.parameters
             .asSequence()
             .filter { it.name.startsWith(remainder) }
             .filter { param -> arguments.none { arg -> arg.name == param.name } } // Exclude already present parameters

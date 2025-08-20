@@ -1,5 +1,6 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
 import com.quarkdown.lsp.highlight.SemanticTokensSuppliersFactory
 import com.quarkdown.lsp.highlight.TokenType
@@ -22,6 +23,7 @@ import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
 import java.io.File
 import java.util.concurrent.CompletableFuture
+import kotlin.concurrent.thread
 import kotlin.system.exitProcess
 
 /**
@@ -73,6 +75,11 @@ class QuarkdownLanguageServer(
                 semanticTokensProvider = SemanticTokensWithRegistrationOptions(legend, true, null)
             }
         val response = InitializeResult(serverCaps)
+
+        // Caching the available function catalogue for improved performance.
+        thread {
+            docsDirectory?.let(CacheableFunctionCatalogue::storeCatalogue)
+        }
 
         return CompletableFuture.completedFuture(response)
     }
