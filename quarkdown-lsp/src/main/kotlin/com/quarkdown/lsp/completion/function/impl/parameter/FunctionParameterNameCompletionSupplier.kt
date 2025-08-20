@@ -1,7 +1,8 @@
-package com.quarkdown.lsp.completion
+package com.quarkdown.lsp.completion.function.impl.parameter
 
 import com.quarkdown.core.util.substringWithinBounds
 import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
 import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.quarkdoc.reader.DocsParameter
@@ -21,7 +22,7 @@ internal class FunctionParameterNameCompletionSupplier(
     docsDirectory: File,
 ) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
     /**
-     * Converts a [DocsParameter] to a [CompletionItem] for use in parameter completion.
+     * Converts a [com.quarkdown.quarkdoc.reader.DocsParameter] to a [org.eclipse.lsp4j.CompletionItem] for use in parameter completion.
      */
     private fun DocsParameter.toCompletionItem() =
         CompletionItem().apply {

@@ -1,14 +1,11 @@
 package com.quarkdown.lsp.highlight
 
-import com.quarkdown.lsp.QuarkdownLanguageServer
+import com.quarkdown.lsp.highlight.function.FunctionCallTokensSupplier
 
 /**
  * Factory for creating a list of [SemanticTokensSupplier]s.
- * @property server the Quarkdown language server instance
  */
-class SemanticTokensSuppliersFactory(
-    private val server: QuarkdownLanguageServer,
-) {
+class SemanticTokensSuppliersFactory {
     /**
      * @return the default list of [SemanticTokensSupplier] instances
      */

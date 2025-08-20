@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion
+package com.quarkdown.lsp.completion.function.impl.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.tokenizer.FunctionCall

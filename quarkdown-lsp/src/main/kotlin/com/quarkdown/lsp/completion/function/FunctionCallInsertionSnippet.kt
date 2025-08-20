@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion
+package com.quarkdown.lsp.completion.function
 
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.quarkdoc.reader.DocsFunction

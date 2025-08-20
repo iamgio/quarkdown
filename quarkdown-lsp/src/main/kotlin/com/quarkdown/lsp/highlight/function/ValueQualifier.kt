@@ -1,8 +1,9 @@
-package com.quarkdown.lsp.highlight
+package com.quarkdown.lsp.highlight.function
 
 import com.quarkdown.core.function.toQuarkdownNamingFormat
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.factory.ValueFactory
+import com.quarkdown.lsp.highlight.TokenType
 
 /**
  * Utility for determining the token type of Quarkdown values in their raw string form.
@@ -12,13 +13,13 @@ object ValueQualifier {
     /**
      * Identifies the semantic token type of the given text.
      * Supported types are, in order of precedence:
-     * - Boolean ([ValueFactory.boolean])
-     * - Number ([ValueFactory.number])
-     * - Sizes ([ValueFactory.sizes])
-     * - Range ([ValueFactory.range])
+     * - Boolean ([com.quarkdown.core.function.value.factory.ValueFactory.boolean])
+     * - Number ([com.quarkdown.core.function.value.factory.ValueFactory.number])
+     * - Sizes ([com.quarkdown.core.function.value.factory.ValueFactory.sizes])
+     * - Range ([com.quarkdown.core.function.value.factory.ValueFactory.range])
      * - Enum
      * @param text the text to categorize, e.g. the content of a function call argument
-     * @return the appropriate [TokenType] for the text, or `null` if the text doesn't match any known value type
+     * @return the appropriate [com.quarkdown.lsp.highlight.TokenType] for the text, or `null` if the text doesn't match any known value type
      */
     fun getTokenType(text: String): TokenType? =
         when {

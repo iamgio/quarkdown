@@ -1,5 +1,9 @@
-package com.quarkdown.lsp.completion
+package com.quarkdown.lsp.completion.function
 
+import com.quarkdown.lsp.completion.CompletionSupplier
+import com.quarkdown.lsp.completion.function.impl.name.FunctionNameCompletionSupplier
+import com.quarkdown.lsp.completion.function.impl.parameter.FunctionParameterAllowedValuesCompletionSupplier
+import com.quarkdown.lsp.completion.function.impl.parameter.FunctionParameterNameCompletionSupplier
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.util.getLineUntilPosition
 import com.quarkdown.lsp.util.sliceFromDelimiterToPosition

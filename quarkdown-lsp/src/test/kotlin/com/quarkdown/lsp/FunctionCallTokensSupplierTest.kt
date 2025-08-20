@@ -1,9 +1,9 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.core.util.normalizeLineSeparators
-import com.quarkdown.lsp.highlight.FunctionCallTokensSupplier
 import com.quarkdown.lsp.highlight.SimpleTokenData
 import com.quarkdown.lsp.highlight.TokenType
+import com.quarkdown.lsp.highlight.function.FunctionCallTokensSupplier
 import org.eclipse.lsp4j.SemanticTokensParams
 import kotlin.test.Test
 import kotlin.test.assertEquals

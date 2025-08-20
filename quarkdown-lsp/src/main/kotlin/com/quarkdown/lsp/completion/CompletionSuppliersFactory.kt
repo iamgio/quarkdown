@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.QuarkdownLanguageServer
+import com.quarkdown.lsp.completion.function.FunctionCompletionSupplier
 
 /**
  * Factory for creating a list of [CompletionSupplier]s.

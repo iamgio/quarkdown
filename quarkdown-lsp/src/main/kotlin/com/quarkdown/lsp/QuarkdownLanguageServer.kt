@@ -38,7 +38,7 @@ class QuarkdownLanguageServer(
         QuarkdownTextDocumentService(
             this,
             CompletionSuppliersFactory(this).default(),
-            SemanticTokensSuppliersFactory(this).default(),
+            SemanticTokensSuppliersFactory().default(),
             HoverSuppliersFactory(this).default(),
         )
 

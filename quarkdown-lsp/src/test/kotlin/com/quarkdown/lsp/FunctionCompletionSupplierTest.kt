@@ -1,6 +1,6 @@
 package com.quarkdown.lsp
 
-import com.quarkdown.lsp.completion.FunctionCompletionSupplier
+import com.quarkdown.lsp.completion.function.FunctionCompletionSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 import org.eclipse.lsp4j.Position

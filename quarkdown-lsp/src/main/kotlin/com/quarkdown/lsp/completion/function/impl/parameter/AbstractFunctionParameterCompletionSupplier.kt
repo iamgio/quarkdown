@@ -1,6 +1,7 @@
-package com.quarkdown.lsp.completion
+package com.quarkdown.lsp.completion.function.impl.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
@@ -12,7 +13,7 @@ import java.io.File
 
 /**
  * Provides completion items for function parameters in function calls by scanning documentation files.
- * This supplier is proxied by [FunctionCompletionSupplier].
+ * This supplier is proxied by [com.quarkdown.lsp.completion.function.FunctionCompletionSupplier].
  * @param docsDirectory the directory containing the documentation files to extract function data from
  * @see FunctionParameterNameCompletionSupplier
  * @see FunctionParameterAllowedValuesCompletionSupplier

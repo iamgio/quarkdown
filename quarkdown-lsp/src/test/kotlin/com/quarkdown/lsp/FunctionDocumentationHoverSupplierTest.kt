@@ -1,6 +1,6 @@
 package com.quarkdown.lsp
 
-import com.quarkdown.lsp.hover.FunctionDocumentationHoverSupplier
+import com.quarkdown.lsp.hover.function.FunctionDocumentationHoverSupplier
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
 import org.eclipse.lsp4j.Position

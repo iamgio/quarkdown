@@ -1,7 +1,8 @@
-package com.quarkdown.lsp.hover
+package com.quarkdown.lsp.hover.function
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.documentation.getDocumentation
+import com.quarkdown.lsp.hover.HoverSupplier
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
