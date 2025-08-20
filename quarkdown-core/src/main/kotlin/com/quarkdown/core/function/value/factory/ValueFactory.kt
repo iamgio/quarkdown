@@ -128,7 +128,7 @@ object ValueFactory {
         val rawString = raw.toString()
 
         // Matches 'x..y', where both x and y are optional integers.
-        val regex = "(\\d+)?..(\\d+)?".toRegex()
+        val regex = "(\\d+)?\\.\\.(\\d+)?".toRegex()
 
         // If the raw value does not represent a range, an error is thrown.
         if (!regex.matches(rawString)) {
