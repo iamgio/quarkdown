@@ -9,6 +9,7 @@ import com.quarkdown.core.util.offset
 // Names of the tokens of the function call grammar (see core/FunctionCallGrammar).
 private const val FUNCTION_CALL_BEGIN_TOKEN_NAME = "begin"
 private const val FUNCTION_CALL_IDENTIFIER_TOKEN_NAME = "identifier"
+private const val FUNCTION_CALL_CHAINING_SEPARATOR_NAME = "chainSeparator"
 private const val FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME = "argumentNameDelimiter"
 private const val FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME = "argumentBegin"
@@ -45,6 +46,7 @@ class FunctionCallTokenizer {
                 val start = token.data.position.first
                 val end = start + result.endIndex
 
+                var lastToken: FunctionCallToken.Type? = null
                 // Function call are special tokens, as they are processed by a walker
                 // which produces nested tokens for each part of the call (e.g. name and parameters).
                 // A semantic token is created for each eligible part.
@@ -59,8 +61,9 @@ class FunctionCallTokenizer {
                                 tokenizationQueue += start to match.text
                             }
 
+                            lastToken = tokenMatchToType(match, lastToken)
                             FunctionCallToken(
-                                type = tokenMatchToType(match) ?: return@mapNotNull null,
+                                type = lastToken ?: return@mapNotNull null,
                                 range = start..(start + match.length),
                                 lexeme = match.text,
                             )
@@ -110,16 +113,30 @@ class FunctionCallTokenizer {
      * @param match The token match to map to a type
      * @return The corresponding [FunctionCallToken.Type], or `null` if the token should be ignored
      */
-    private fun tokenMatchToType(match: TokenMatch): FunctionCallToken.Type? =
+    private fun tokenMatchToType(
+        match: TokenMatch,
+        previous: FunctionCallToken.Type?,
+    ): FunctionCallToken.Type? =
         when (match.type.name) {
             // .function
             // ^
             FUNCTION_CALL_BEGIN_TOKEN_NAME -> FunctionCallToken.Type.BEGIN
 
-            // .function parameter:{...}
-            //  ^^^^^^^^ ^^^^^^^^^ (depending on the index)
+            // .function::function parameter:{...}
+            //  ^^^^^^^^  ^^^^^^^^ ^^^^^^^^^ (depending on the last token)
             FUNCTION_CALL_IDENTIFIER_TOKEN_NAME ->
-                if (match.tokenIndex == 1) FunctionCallToken.Type.FUNCTION_NAME else FunctionCallToken.Type.PARAMETER_NAME
+                when (previous) {
+                    FunctionCallToken.Type.BEGIN, FunctionCallToken.Type.CHAINING_SEPARATOR ->
+                        FunctionCallToken.Type.FUNCTION_NAME
+
+                    else ->
+                        FunctionCallToken.Type.PARAMETER_NAME
+                }
+
+            // .function::function
+            //          ^^
+            FUNCTION_CALL_CHAINING_SEPARATOR_NAME ->
+                FunctionCallToken.Type.CHAINING_SEPARATOR
 
             // .function parameter:{...}
             //                    ^

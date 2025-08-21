@@ -6,6 +6,7 @@ import com.quarkdown.lsp.highlight.TokenType
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.BEGIN
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.BODY_ARGUMENT
+import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.CHAINING_SEPARATOR
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.FUNCTION_NAME
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_END
@@ -40,6 +41,9 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
             when (type) {
                 BEGIN, FUNCTION_NAME ->
                     TokenType.FUNCTION_CALL_IDENTIFIER
+
+                CHAINING_SEPARATOR ->
+                    TokenType.FUNCTION_CALL_CHAINING_SEPARATOR
 
                 PARAMETER_NAME, NAMED_PARAMETER_DELIMITER ->
                     TokenType.FUNCTION_CALL_NAMED_PARAMETER

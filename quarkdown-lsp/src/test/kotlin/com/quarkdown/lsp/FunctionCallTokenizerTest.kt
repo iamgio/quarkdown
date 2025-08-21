@@ -5,6 +5,7 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -84,6 +85,51 @@ class FunctionCallTokenizerTest {
         val endToken = tokens.find { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_END }
         assertNotNull(endToken)
         assertEquals(QuarkdownPatterns.FunctionCall.ARGUMENT_END, endToken.lexeme)
+    }
+
+    @Test
+    fun `function call with chaining`() {
+        val text = ".function1::function2"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val tokens = call.tokens.iterator()
+
+        assertEquals(FunctionCallToken.Type.BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.FUNCTION_NAME, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.CHAINING_SEPARATOR, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.FUNCTION_NAME, tokens.next().type)
+        assertFalse(tokens.hasNext())
+    }
+
+    @Test
+    fun `function call with chaining and args`() {
+        val text = ".function1 {arg} name:{arg}::function2 {arg}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val tokens = call.tokens.iterator()
+
+        assertEquals(FunctionCallToken.Type.BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.FUNCTION_NAME, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_VALUE, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.PARAMETER_NAME, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.NAMED_PARAMETER_DELIMITER, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_VALUE, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.CHAINING_SEPARATOR, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.FUNCTION_NAME, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_VALUE, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, tokens.next().type)
+        assertFalse(tokens.hasNext())
     }
 
     @Test

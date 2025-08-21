@@ -15,6 +15,9 @@ private val TYPE_BEGIN = TokenType.FUNCTION_CALL_IDENTIFIER
 // Token type of the function call name.
 private val TYPE_NAME = TokenType.FUNCTION_CALL_IDENTIFIER
 
+// Token type of the function call chaining separator.
+private val TYPE_CHAINING_SEPARATOR = TokenType.FUNCTION_CALL_CHAINING_SEPARATOR
+
 // Token type of the named parameter in a function call.
 private val TYPE_NAMED_PARAMETER = TokenType.FUNCTION_CALL_NAMED_PARAMETER
 
@@ -208,8 +211,8 @@ class FunctionCallTokensSupplierTest {
         tokenize(".func1::func2") {
             assertNext(TYPE_BEGIN, 0..1)
             assertNext(TYPE_NAME, 1..6)
-            // In chained function calls, the second function name is tokenized as a named parameter.
-            assertNext(TYPE_NAMED_PARAMETER, 8..13)
+            assertNext(TYPE_CHAINING_SEPARATOR, 6..8)
+            assertNext(TYPE_NAME, 8..13)
         }
     }
 

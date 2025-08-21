@@ -31,11 +31,14 @@ data class FunctionCallToken(
      * Represents the different types of tokens that can appear in a function call.
      */
     enum class Type {
-        /** The beginning of a function call (typically '.') */
+        /** The beginning of a function call (typically `.`) */
         BEGIN,
 
         /** The name of the function being called. */
         FUNCTION_NAME,
+
+        /** The separator for chaining function calls. */
+        CHAINING_SEPARATOR,
 
         /** The name of a parameter in a named parameter. */
         PARAMETER_NAME,

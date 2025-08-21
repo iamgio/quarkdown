@@ -18,6 +18,16 @@ enum class TokenType(
     FUNCTION_CALL_IDENTIFIER("function"),
 
     /**
+     * A function call chaining separator.
+     *
+     * ```
+     * .function1::function2
+     *           ^^
+     * ```
+     */
+    FUNCTION_CALL_CHAINING_SEPARATOR("keyword"),
+
+    /**
      * A named parameter in a function call.
      *
      * ```
