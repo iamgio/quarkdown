@@ -35,13 +35,17 @@ fun String.takeUntilLastOccurrence(string: String): String {
 
 /**
  * @return a substring of [this] string from [startIndex] to [endIndex] if the indices are within bounds.
- *         If [startIndex] is less than 0, the actual start index is 0.
- *         If [endIndex] is greater than the length of the string, the actual end index is the length of the string.
+ * If [startIndex] is less than 0, the actual start index is 0.
+ * If [endIndex] is greater than the length of the string or less than the start index,
+ * the actual end index is the length of the string.
  */
-fun String.substringWithinBounds(
+fun CharSequence.substringWithinBounds(
     startIndex: Int,
     endIndex: Int,
-): String = substring(startIndex.coerceAtLeast(0), endIndex.coerceAtMost(length))
+): String {
+    val start = startIndex.coerceAtLeast(0)
+    return substring(start, endIndex.coerceAtMost(length).coerceAtLeast(start))
+}
 
 /**
  * @return [this] string without the first and last characters, if possible

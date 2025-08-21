@@ -37,7 +37,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
      * Transforms the cursor index to a suitable index for processing.
      * This can be overridden to adjust how the cursor index is interpreted.
      * @param cursorIndex the original cursor index in the text
-     * @param text the text being processed (before [transformText])
+     * @param text the text being processed
      * @return the transformed cursor index, or null if no valid index can be determined
      */
     protected open fun transformIndex(
@@ -45,39 +45,26 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
         text: String,
     ): Int? = cursorIndex
 
-    /**
-     * Transforms the text to a suitable format for processing.
-     * This can be overridden to adjust how the text is interpreted.
-     * @param cursorIndex the index of the cursor in the text (after [transformIndex])
-     * @param text the original text being processed
-     * @return the transformed text
-     */
-    protected open fun transformText(
-        cursorIndex: Int,
-        text: String,
-    ): String = text
-
     override fun getCompletionItems(
         params: CompletionParams,
         text: String,
     ): List<CompletionItem> {
-        val index = params.position.toOffset(text)
-
-        // The text that contains the function call.
-        val transformedText = transformText(index, text)
         // The index of the cursor in the source text.
-        val transformedIndex =
-            transformIndex(index, transformedText) ?: return emptyList()
+        val index =
+            params.position
+                .toOffset(text)
+                .let { transformIndex(it, text) }
+                ?: return emptyList()
 
         val call: FunctionCall =
             FunctionCallTokenizer()
-                .getFunctionCalls(transformedText)
-                .getAtSourceIndex(transformedIndex)
+                .getFunctionCalls(text)
+                .getAtSourceIndex(index)
                 ?: return emptyList()
 
         // Looking up the function data from the documentation to extract available parameters to complete.
         val function: DocumentedFunction = call.getDocumentation(docsDirectory) ?: return emptyList()
 
-        return getCompletionItems(call, function, transformedIndex)
+        return getCompletionItems(call, function, index)
     }
 }

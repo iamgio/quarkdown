@@ -49,21 +49,19 @@ internal class FunctionParameterNameCompletionSupplier(
             .indexOfLast { it.isWhitespace() }
             .takeIf { it >= 0 }
 
-    /**
-     * Transforms the text to only consider the part before the (transformed) cursor,
-     * ignoring any text after the cursor.
-     */
-    override fun transformText(
-        cursorIndex: Int,
-        text: String,
-    ): String = text.substringWithinBounds(0, cursorIndex) // Only consider the text before the cursor
-
     override fun getCompletionItems(
         call: FunctionCall,
         function: DocumentedFunction,
         cursorIndex: Int,
     ): List<CompletionItem> {
-        val remainder = call.parserResult.remainder.trim()
+        // The remainder of the function call before the cursor position.
+        // For example, if the function call being completed is `.function param`,
+        // the remainder is `param`.
+        val remainder =
+            call.parserResult.remainder
+                .substringWithinBounds(0, call.parserResult.endIndex - cursorIndex)
+                .trim()
+
         val arguments = call.parserResult.value.arguments
 
         return function.data.parameters

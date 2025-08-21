@@ -168,6 +168,19 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
+    fun `parameter completions in the middle of parameter list`() {
+        val suffix = " x:{arg}"
+        val text = "hello .$ALIGN_FUNCTION $suffix"
+        val completions = getCompletions(text, Position(0, text.length - suffix.length)).map { it.label }
+
+        // hello .align  x:{arg}
+
+        assertEquals(2, completions.size)
+        assertContains(completions, ALIGNMENT_PARAMETER)
+        assertContains(completions, BODY_PARAMETER)
+    }
+
+    @Test
     fun `parameter completions with partial parameter name`() {
         val text = "hello .$ALIGN_FUNCTION align"
         val completions = getCompletions(text, Position(0, text.length)).map { it.label }
