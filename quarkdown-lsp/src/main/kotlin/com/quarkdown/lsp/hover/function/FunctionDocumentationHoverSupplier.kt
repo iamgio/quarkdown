@@ -4,8 +4,10 @@ import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.hover.HoverSupplier
 import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
+import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
@@ -28,9 +30,14 @@ class FunctionDocumentationHoverSupplier(
             FunctionCallTokenizer().getFunctionCalls(text).getAtSourceIndex(index)
                 ?: return null
 
+        val nameToken: FunctionCallToken? =
+            call
+                .getTokenAtSourceIndex(index)
+                ?.takeIf { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+
         // Returns the documentation to display in the hover.
         val function: DocumentedFunction =
-            call.getDocumentation(docsDirectory)
+            call.getDocumentation(docsDirectory, nameToken?.lexeme)
                 ?: return null
 
         return Hover(function.documentationAsMarkup)

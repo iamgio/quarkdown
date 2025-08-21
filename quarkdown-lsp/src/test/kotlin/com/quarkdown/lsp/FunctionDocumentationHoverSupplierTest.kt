@@ -4,8 +4,8 @@ import com.quarkdown.lsp.hover.function.FunctionDocumentationHoverSupplier
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
 import org.eclipse.lsp4j.Position
-import org.junit.Test
 import java.io.File
+import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -58,6 +58,26 @@ class FunctionDocumentationHoverSupplierTest {
         val text = "This is a test with a .$ALIGN_FUNCTION {center} call."
         val position = Position(0, text.indexOf("center"))
         assertNotNull(getHover(text, position))
+    }
+
+    @Test
+    fun `hover over chained function call`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION::$CSV_FUNCTION {arg}"
+
+        val csvHover = getHover(text, Position(0, text.length - 1))
+        val alignHover = getHover(text, Position(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2))
+
+        assertNotNull(csvHover)
+        assertContains(
+            csvHover.contents.right.value,
+            CSV_FUNCTION,
+        )
+
+        assertNotNull(alignHover)
+        assertContains(
+            alignHover.contents.right.value,
+            ALIGN_FUNCTION,
+        )
     }
 
     @Test
