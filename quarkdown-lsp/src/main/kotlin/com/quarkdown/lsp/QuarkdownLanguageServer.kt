@@ -68,6 +68,7 @@ class QuarkdownLanguageServer(
                         true,
                         listOf(
                             QuarkdownPatterns.FunctionCall.BEGIN,
+                            QuarkdownPatterns.FunctionCall.CHAIN_SEPARATOR,
                             QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN,
                         ),
                     )

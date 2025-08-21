@@ -5,8 +5,8 @@ import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.TextDocumentIdentifier
-import org.junit.Test
 import java.io.File
+import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -39,6 +39,21 @@ class FunctionCompletionSupplierTest {
         val textDocument = TextDocumentIdentifier(testDocumentUri)
         val params = CompletionParams(textDocument, position)
         return supplier.getCompletionItems(params, text)
+    }
+
+    @Test
+    fun `no completions at empty position`() {
+        val text = ""
+        val completions = getCompletions(text, Position(0, 0))
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
+    fun `no completions in invalid function call position`() {
+        val text = "hello."
+        val position = Position(0, text.length)
+        val completions = getCompletions(text, position)
+        assertTrue(completions.isEmpty())
     }
 
     @Test
@@ -92,6 +107,7 @@ class FunctionCompletionSupplierTest {
         val text = "hello .ali"
         val completions = getCompletions(text, Position(0, text.length))
 
+        println(completions.map { it.label })
         assertEquals(1, completions.size)
         assertEquals(ALIGN_FUNCTION, completions.first().label)
         assertEquals(LAYOUT_MODULE, completions.first().detail)
