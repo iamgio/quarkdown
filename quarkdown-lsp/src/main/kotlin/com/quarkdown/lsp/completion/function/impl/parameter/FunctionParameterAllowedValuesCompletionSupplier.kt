@@ -3,6 +3,7 @@ package com.quarkdown.lsp.completion.function.impl.parameter
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
+import com.quarkdown.lsp.tokenizer.findMatchingTokenBeforeIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
@@ -59,6 +60,9 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
      * Extracts the name of the parameter being completed based on the cursor position.
      * It iterates through the tokens of the function call and identifies the parameter name
      * based on the token type and its range.
+     *
+     * For example, consider the function call `.row alignment:{|}` with the cursor at `|`,
+     * then this function will return `alignment` as the parameter name.
      * @param tokens the list of tokens in the function call
      * @param cursorIndex the index of the cursor in the source text (which is supposed to be in the argument value)
      * @return the name of the parameter, if any
@@ -66,21 +70,11 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
     private fun getParameterName(
         tokens: List<FunctionCallToken>,
         cursorIndex: Int,
-    ): String? {
-        // The last seen parameter name.
-        // If it comes immediately before the value being completed, it is returned.
-        var name: String? = null
-
-        for (token in tokens) {
-            if (cursorIndex in token.range) {
-                return name
-            }
-            if (token.type == FunctionCallToken.Type.PARAMETER_NAME) {
-                name = token.lexeme
-            } else if (token.type == FunctionCallToken.Type.INLINE_ARGUMENT_END) {
-                name = null
-            }
-        }
-        return name
-    }
+    ): String? =
+        tokens
+            .findMatchingTokenBeforeIndex(
+                beforeIndex = cursorIndex,
+                matchType = FunctionCallToken.Type.PARAMETER_NAME,
+                reset = setOf(FunctionCallToken.Type.INLINE_ARGUMENT_END),
+            )?.lexeme
 }
