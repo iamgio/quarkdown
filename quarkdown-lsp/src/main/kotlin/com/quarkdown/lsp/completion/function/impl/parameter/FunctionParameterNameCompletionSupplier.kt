@@ -5,6 +5,7 @@ import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
 import com.quarkdown.lsp.documentation.htmlToMarkup
 import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.util.remainderUntilIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
@@ -57,10 +58,7 @@ internal class FunctionParameterNameCompletionSupplier(
         // The remainder of the function call before the cursor position.
         // For example, if the function call being completed is `.function param`,
         // the remainder is `param`.
-        val remainder =
-            call.parserResult.remainder
-                .substringWithinBounds(0, call.parserResult.endIndex - cursorIndex)
-                .trim()
+        val remainder = call.parserResult.remainderUntilIndex(cursorIndex).trim()
 
         val arguments = call.parserResult.value.arguments
 
