@@ -9,8 +9,15 @@ private const val INSERTION_START = "\${"
 private const val INSERTION_DELIMITER = ":"
 private const val INSERTION_END = "}"
 
-// Suffix after each inline argument.
+/**
+ * Suffix after each inline argument.
+ */
 private const val INLINE_ARGUMENT_SUFFIX = " "
+
+/**
+ * If the inserted function is a chained call, the parameter with this index is ignored in the snippet.
+ */
+private const val SKIPPED_PARAMETER_INDEX_IN_CHAINED_CALL = 0
 
 /**
  * Provider of function call snippets for completion, supported by the LSP.
@@ -18,13 +25,33 @@ private const val INLINE_ARGUMENT_SUFFIX = " "
  */
 object FunctionCallInsertionSnippet {
     /**
+     * Filters the parameters of a function to include only:
+     * - Those that are non-optional (except for the body argument)
+     * - The first parameter in a chained call
+     */
+    private fun filterParameters(
+        parameters: List<DocsParameter>,
+        chained: Boolean,
+    ): List<DocsParameter> =
+        parameters.filterIndexed { index, param ->
+            if (index == SKIPPED_PARAMETER_INDEX_IN_CHAINED_CALL && chained) {
+                // Skips the first parameter if it's a chaining separator.
+                return@filterIndexed false
+            }
+            !param.isOptional || param.isLikelyBody
+        }
+
+    /**
      * Generates a snippet for the function call in the accepted format by the LSP.
      * The snippet includes the function name and its non-optional parameters.
      * @param function the function to generate the snippet from
      * @return the function call snippet
      */
-    fun forFunction(function: DocsFunction): String {
-        val params = function.parameters.filter { !it.isOptional || it.isLikelyBody }
+    fun forFunction(
+        function: DocsFunction,
+        chained: Boolean,
+    ): String {
+        val params = filterParameters(function.parameters, chained)
         var insertionIndex = 1
 
         return buildString {

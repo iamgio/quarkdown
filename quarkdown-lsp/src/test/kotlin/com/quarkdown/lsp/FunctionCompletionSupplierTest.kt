@@ -122,9 +122,15 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `name completion in chain for empty name`() {
         val text = "hello .$ALIGN_FUNCTION::"
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, Position(0, text.length))
+        assertEquals(4, completions.size)
+    }
 
-        println(completions)
+    @Test
+    fun `name completion in chain with args`() {
+        val text = "hello .$ALIGN_FUNCTION {arg}::"
+        val completions = getCompletions(text, Position(0, text.length))
+        assertEquals(4, completions.size)
     }
 
     @Test
@@ -136,6 +142,19 @@ class FunctionCompletionSupplierTest {
         assertContains(completions, CSV_FUNCTION)
         assertContains(completions, COLUMN_FUNCTION)
         assertContains(completions, CLIP_FUNCTION)
+    }
+
+    @Test
+    fun `name completion in chain should skip first parameter`() {
+        val text = "hello .$ALIGN_FUNCTION::cs"
+        val completions = getCompletions(text, Position(0, text.length))
+
+        assertEquals(1, completions.size)
+
+        val completion = completions.single()
+        assertEquals(CSV_FUNCTION, completion.label)
+        // The call is chained, so the first parameter (which should be the path) is skipped.
+        assertEquals(CSV_FUNCTION, completion.insertText.trim())
     }
 
     @Test

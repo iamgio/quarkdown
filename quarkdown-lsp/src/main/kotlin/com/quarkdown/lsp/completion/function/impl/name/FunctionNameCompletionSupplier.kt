@@ -45,26 +45,34 @@ internal class FunctionNameCompletionSupplier(
 
     /**
      * Converts a [DocumentedFunction] to a [CompletionItem] for use in function name completion.
+     * @param function the documented function to convert
+     * @param chained whether the function is chained call, hence the first parameter should not be included in the snippet
      */
-    private fun toCompletionItem(function: DocumentedFunction) =
-        CompletionItem().apply {
-            label = function.name
-            detail = function.rawData.moduleName
-            documentation = Either.forRight(function.documentationAsMarkup)
-            kind = CompletionItemKind.Function
-            insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallInsertionSnippet.forFunction(function.data)
-        }
+    private fun toCompletionItem(
+        function: DocumentedFunction,
+        chained: Boolean,
+    ) = CompletionItem().apply {
+        label = function.name
+        detail = function.rawData.moduleName
+        documentation = Either.forRight(function.documentationAsMarkup)
+        kind = CompletionItemKind.Function
+        insertTextFormat = InsertTextFormat.Snippet
+        insertText = FunctionCallInsertionSnippet.forFunction(function.data, chained)
+    }
 
     /**
      * @param snippet the function name snippet to match against, such as "al" in "align"
+     * @param chained whether the function is a chained call
      * @return completion items for function names that match the given snippet
      */
-    private fun getItems(snippet: String): List<CompletionItem> =
+    private fun getItems(
+        snippet: String,
+        chained: Boolean,
+    ): List<CompletionItem> =
         CacheableFunctionCatalogue
             .getCatalogue(docsDirectory)
             .filter { it.data.name.startsWith(snippet, ignoreCase = true) }
-            .map(::toCompletionItem)
+            .map { toCompletionItem(it, chained) }
             .toList()
 
     override fun getCompletionItems(
@@ -89,7 +97,7 @@ internal class FunctionNameCompletionSupplier(
             callPattern.find(line)?.value
                 ?: return emptyList()
 
-        return getItems(snippet)
+        return getItems(snippet, chained = false)
     }
 
     /**
@@ -124,6 +132,6 @@ internal class FunctionNameCompletionSupplier(
                 ?.removeSuffix(MOCK_IDENFIFIER_SUFFIX)
                 ?: return emptyList()
 
-        return getItems(snippet)
+        return getItems(snippet, chained = true)
     }
 }
