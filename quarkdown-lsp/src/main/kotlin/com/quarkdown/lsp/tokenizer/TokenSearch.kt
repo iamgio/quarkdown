@@ -15,10 +15,10 @@ package com.quarkdown.lsp.tokenizer
  * - [FunctionCallToken.Type.INLINE_ARGUMENT_END] as the reset type
  * will return the token for `param2` (the last parameter name before the cursor).
  *
- * @param beforeIndex The index before which to search for the matching token.
- * @param matchType The type of token to match.
- * @param reset A set of token types that will reset the match if encountered.
- * @return The last matching token before the specified index, or null if no match is found.
+ * @param beforeIndex the index before which to search for the matching token
+ * @param matchType the type of token to match
+ * @param reset a set of token types that will reset the match if encountered
+ * @return the last matching token before the specified index, or `null` if no match is found
  */
 fun List<FunctionCallToken>.findMatchingTokenBeforeIndex(
     beforeIndex: Int,
@@ -28,12 +28,13 @@ fun List<FunctionCallToken>.findMatchingTokenBeforeIndex(
     var match: FunctionCallToken? = null
 
     for (token in this) {
+        if (token.type == matchType) {
+            match = token
+        }
         if (beforeIndex in token.range) {
             return match
         }
-        if (token.type == matchType) {
-            match = token
-        } else if (token.type in reset) {
+        if (token.type in reset) {
             match = null
         }
     }

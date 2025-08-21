@@ -42,6 +42,15 @@ class QuarkdownLanguageServer(
             HoverSuppliersFactory(this).default(),
         )
 
+    private val completionTriggers =
+        with(QuarkdownPatterns.FunctionCall) {
+            listOf(
+                BEGIN,
+                CHAIN_SEPARATOR.last().toString(),
+                ARGUMENT_BEGIN,
+            )
+        }
+
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
 
     private lateinit var client: LanguageClient
@@ -63,15 +72,7 @@ class QuarkdownLanguageServer(
         val serverCaps =
             ServerCapabilities().apply {
                 textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
-                completionProvider =
-                    CompletionOptions(
-                        true,
-                        listOf(
-                            QuarkdownPatterns.FunctionCall.BEGIN,
-                            QuarkdownPatterns.FunctionCall.CHAIN_SEPARATOR,
-                            QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN,
-                        ),
-                    )
+                completionProvider = CompletionOptions(true, completionTriggers)
                 hoverProvider = Either.forLeft(true)
                 semanticTokensProvider = SemanticTokensWithRegistrationOptions(legend, true, null)
             }

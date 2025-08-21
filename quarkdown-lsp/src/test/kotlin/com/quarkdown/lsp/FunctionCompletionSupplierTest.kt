@@ -49,6 +49,13 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
+    fun `no completions outside function call`() {
+        val text = "hello world"
+        val completions = getCompletions(text, Position(0, text.length))
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
     fun `no completions in invalid function call position`() {
         val text = "hello."
         val position = Position(0, text.length)
@@ -103,21 +110,32 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
-    fun `completions in middle of function name`() {
+    fun `name completions for partial function name`() {
         val text = "hello .ali"
         val completions = getCompletions(text, Position(0, text.length))
 
-        println(completions.map { it.label })
         assertEquals(1, completions.size)
         assertEquals(ALIGN_FUNCTION, completions.first().label)
         assertEquals(LAYOUT_MODULE, completions.first().detail)
     }
 
     @Test
-    fun `no completions outside function call`() {
-        val text = "hello world"
-        val completions = getCompletions(text, Position(0, text.length))
-        assertTrue(completions.isEmpty())
+    fun `name completion in chain for empty name`() {
+        val text = "hello .$ALIGN_FUNCTION::"
+        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+
+        println(completions)
+    }
+
+    @Test
+    fun `name completion in chain for partial function name`() {
+        val text = "hello .$ALIGN_FUNCTION::c"
+        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+
+        assertEquals(3, completions.size)
+        assertContains(completions, CSV_FUNCTION)
+        assertContains(completions, COLUMN_FUNCTION)
+        assertContains(completions, CLIP_FUNCTION)
     }
 
     @Test
