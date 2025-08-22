@@ -23,6 +23,7 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
         call: FunctionCall,
         function: DocumentedFunction,
         cursorIndex: Int,
+        originalCursorIndex: Int,
     ): List<CompletionItem> {
         // If a value is partially present, it can be completed.
         // If no value is present, all allowed values are returned.

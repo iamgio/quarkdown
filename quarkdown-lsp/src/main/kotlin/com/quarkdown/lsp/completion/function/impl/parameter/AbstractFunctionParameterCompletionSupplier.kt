@@ -26,11 +26,13 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
      * @param call the parsed function call
      * @param function the documentation data for the function being called
      * @param cursorIndex the index of the cursor in the source text
+     * @param originalCursorIndex the original index of the cursor in the source text before any transformations via [transformIndex]
      */
     protected abstract fun getCompletionItems(
         call: FunctionCall,
         function: DocumentedFunction,
         cursorIndex: Int,
+        originalCursorIndex: Int,
     ): List<CompletionItem>
 
     /**
@@ -50,21 +52,18 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
         text: String,
     ): List<CompletionItem> {
         // The index of the cursor in the source text.
-        val index =
-            params.position
-                .toOffset(text)
-                .let { transformIndex(it, text) }
-                ?: return emptyList()
+        val index = params.position.toOffset(text)
+        val transformedIndex = transformIndex(index, text) ?: return emptyList()
 
         val call: FunctionCall =
             FunctionCallTokenizer()
                 .getFunctionCalls(text)
-                .getAtSourceIndex(index)
+                .getAtSourceIndex(transformedIndex)
                 ?: return emptyList()
 
         // Looking up the function data from the documentation to extract available parameters to complete.
         val function: DocumentedFunction = call.getDocumentation(docsDirectory) ?: return emptyList()
 
-        return getCompletionItems(call, function, index)
+        return getCompletionItems(call, function, transformedIndex, index)
     }
 }

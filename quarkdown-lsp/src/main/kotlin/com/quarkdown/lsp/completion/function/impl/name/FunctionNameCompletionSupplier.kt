@@ -1,6 +1,5 @@
 package com.quarkdown.lsp.completion.function.impl.name
 
-import com.quarkdown.core.util.substringWithinBounds
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.CompletionSupplier
@@ -13,6 +12,7 @@ import com.quarkdown.lsp.tokenizer.findMatchingTokenBeforeIndex
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.getLineUntilPosition
+import com.quarkdown.lsp.util.remainderUntilIndex
 import com.quarkdown.lsp.util.toOffset
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
@@ -20,13 +20,6 @@ import org.eclipse.lsp4j.CompletionParams
 import org.eclipse.lsp4j.InsertTextFormat
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
-
-/**
- * The lexer does not recognize function calls without a function name,
- * hence, to provide completions, this mock identifier is appended to
- * trick the lexer into recognizing a function call.
- */
-private const val MOCK_IDENFIFIER_SUFFIX = "a"
 
 /**
  * Provides completion items for function names in function calls by scanning documentation files.
@@ -110,28 +103,57 @@ internal class FunctionNameCompletionSupplier(
     ): List<CompletionItem> {
         val index = params.position.toOffset(text)
 
-        // The text until the cursor position, with the mock identifier appended.
-        val mockText = text.substringWithinBounds(0, index) + MOCK_IDENFIFIER_SUFFIX
-
         // The call at the cursor position.
-        val call: FunctionCall? = FunctionCallTokenizer().getFunctionCalls(mockText).getAtSourceIndex(index)
+        val call: FunctionCall =
+            FunctionCallTokenizer()
+                .getFunctionCalls(text)
+                .getAtSourceIndex(index - QuarkdownPatterns.FunctionCall.CHAIN_SEPARATOR.length)
+                ?: return emptyList()
 
         // Making sure the cursor is completing a chained function call name.
-        call?.tokens?.findMatchingTokenBeforeIndex(
-            index,
-            FunctionCallToken.Type.CHAINING_SEPARATOR,
-            reset = setOf(FunctionCallToken.Type.FUNCTION_NAME),
-        ) ?: return emptyList()
+        if (!isCompletableChainedCall(call, index)) {
+            return emptyList()
+        }
 
         // The function name snippet to complete.
         val snippet =
             call
-                .getTokenAtSourceIndex(index + MOCK_IDENFIFIER_SUFFIX.length)
+                .getTokenAtSourceIndex(index)
                 ?.takeIf { it.type == FunctionCallToken.Type.FUNCTION_NAME }
                 ?.lexeme
-                ?.removeSuffix(MOCK_IDENFIFIER_SUFFIX)
-                ?: return emptyList()
+                ?: ""
 
         return getItems(snippet, chained = true)
+    }
+
+    /**
+     * Checks if the cursor is positioned in a function call chain that can be completed.
+     * This means the cursor is either immediately after a chain separator or at a function name after a chain separator.
+     * @param call the function call at the cursor position
+     * @param index the index of the cursor in the source text
+     * @return whether the cursor is positioned in a completable chained call
+     */
+    private fun isCompletableChainedCall(
+        call: FunctionCall,
+        index: Int,
+    ): Boolean {
+        // Case 1:
+        // the cursor is at the beginning of a chained function call, so the chain separator
+        // is not yet part of the call, since the identifier (function name) is missing.
+        // For this reason, the separator will be in the remainder.
+        if (call.remainderUntilIndex(index) == QuarkdownPatterns.FunctionCall.CHAIN_SEPARATOR) {
+            return true
+        }
+
+        // Case 2:
+        // the chain separator is already part of the call, so we check
+        // if the token *before* the cursor is a chain separator.
+        call.tokens.findMatchingTokenBeforeIndex(
+            index,
+            FunctionCallToken.Type.CHAINING_SEPARATOR,
+            reset = setOf(FunctionCallToken.Type.FUNCTION_NAME),
+        ) ?: return false
+
+        return true
     }
 }

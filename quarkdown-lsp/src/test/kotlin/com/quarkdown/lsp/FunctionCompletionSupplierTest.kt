@@ -145,6 +145,14 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
+    fun `name completion in chain with other content`() {
+        val suffix = " abc"
+        val text = "hello .$ALIGN_FUNCTION::$suffix"
+        val completions = getCompletions(text, Position(0, text.length - suffix.length))
+        assertEquals(4, completions.size)
+    }
+
+    @Test
     fun `name completion in chain should skip first parameter`() {
         val text = "hello .$ALIGN_FUNCTION::cs"
         val completions = getCompletions(text, Position(0, text.length))
@@ -173,8 +181,6 @@ class FunctionCompletionSupplierTest {
         val text = "hello .$ALIGN_FUNCTION $suffix"
         val completions = getCompletions(text, Position(0, text.length - suffix.length)).map { it.label }
 
-        // hello .align  x:{arg}
-
         assertEquals(2, completions.size)
         assertContains(completions, ALIGNMENT_PARAMETER)
         assertContains(completions, BODY_PARAMETER)
@@ -192,8 +198,19 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions after line break`() {
         val text = "abc\n\n.$ALIGN_FUNCTION "
-        val position = Position(2, text.lines().last().length)
+        val position = Position(text.lines().lastIndex, text.lines().last().length)
         val completions = getCompletions(text, position).map { it.label }
+
+        assertContains(completions, ALIGNMENT_PARAMETER)
+    }
+
+    @Test
+    fun `parameter completions before and after line break`() {
+        val text = "abc\n\n.$ALIGN_FUNCTION \n\ndef"
+        val position = Position(2, text.lines()[2].length)
+        val completions = getCompletions(text, position).map { it.label }
+
+        // abc\\.align \\def
 
         assertContains(completions, ALIGNMENT_PARAMETER)
     }

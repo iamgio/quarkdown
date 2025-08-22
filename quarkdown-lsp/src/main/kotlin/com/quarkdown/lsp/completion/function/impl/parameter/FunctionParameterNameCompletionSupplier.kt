@@ -1,6 +1,5 @@
 package com.quarkdown.lsp.completion.function.impl.parameter
 
-import com.quarkdown.core.util.substringWithinBounds
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
 import com.quarkdown.lsp.documentation.htmlToMarkup
@@ -46,7 +45,7 @@ internal class FunctionParameterNameCompletionSupplier(
         text: String,
     ): Int? =
         text
-            .substringWithinBounds(0, cursorIndex)
+            .substring(0, cursorIndex)
             .indexOfLast { it.isWhitespace() }
             .takeIf { it >= 0 }
 
@@ -54,11 +53,12 @@ internal class FunctionParameterNameCompletionSupplier(
         call: FunctionCall,
         function: DocumentedFunction,
         cursorIndex: Int,
+        originalCursorIndex: Int,
     ): List<CompletionItem> {
         // The remainder of the function call before the cursor position.
         // For example, if the function call being completed is `.function param`,
         // the remainder is `param`.
-        val remainder = call.parserResult.remainderUntilIndex(cursorIndex).trim()
+        val remainder = call.remainderUntilIndex(originalCursorIndex)?.trim() ?: ""
 
         val arguments = call.parserResult.value.arguments
 
