@@ -1,18 +1,12 @@
 package com.quarkdown.lsp.completion.function.impl.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
-import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
-import com.quarkdown.lsp.documentation.htmlToMarkup
+import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
+import com.quarkdown.lsp.completion.toCompletionItem
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.util.remainderUntilIndex
-import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionItemKind
-import org.eclipse.lsp4j.InsertTextFormat
-import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.io.File
-
-private const val REQUIRED = "required"
 
 /**
  * Provides completion items for function parameter names. For example, let `|` be the cursor position in the text,
@@ -20,20 +14,7 @@ private const val REQUIRED = "required"
  */
 internal class FunctionParameterNameCompletionSupplier(
     docsDirectory: File,
-) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
-    /**
-     * Converts a [DocsParameter] to a [CompletionItem] for use in parameter completion.
-     */
-    private fun DocsParameter.toCompletionItem() =
-        CompletionItem().apply {
-            label = name
-            detail = if (!isOptional) REQUIRED else null
-            documentation = Either.forRight(description.htmlToMarkup())
-            kind = CompletionItemKind.Field
-            insertTextFormat = InsertTextFormat.Snippet
-            insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)
-        }
-
+) : AbstractFunctionCompletionSupplier(docsDirectory) {
     /**
      * Transforms the cursor index to the index of the last whitespace before the cursor,
      * so that the returned index is always part of the function call.
@@ -43,18 +24,19 @@ internal class FunctionParameterNameCompletionSupplier(
     override fun transformIndex(
         cursorIndex: Int,
         text: String,
-    ): Int? =
+    ): Int =
         text
             .substring(0, cursorIndex)
             .indexOfLast { it.isWhitespace() }
-            .takeIf { it >= 0 }
 
     override fun getCompletionItems(
         call: FunctionCall,
-        function: DocumentedFunction,
+        function: DocumentedFunction?,
         cursorIndex: Int,
         originalCursorIndex: Int,
     ): List<CompletionItem> {
+        if (function == null) return emptyList()
+
         // The remainder of the function call before the cursor position.
         // For example, if the function call being completed is `.function param`,
         // the remainder is `param`.

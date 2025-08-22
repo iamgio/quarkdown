@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion.function.impl.parameter
+package com.quarkdown.lsp.completion.function
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.CompletionSupplier
@@ -12,17 +12,16 @@ import org.eclipse.lsp4j.CompletionParams
 import java.io.File
 
 /**
- * Provides completion items for function parameters in function calls by scanning documentation files.
- * This supplier is proxied by [com.quarkdown.lsp.completion.function.FunctionCompletionSupplier].
+ * Provides completion items for function calls by scanning documentation files.
  * @param docsDirectory the directory containing the documentation files to extract function data from
- * @see FunctionParameterNameCompletionSupplier
- * @see FunctionParameterAllowedValuesCompletionSupplier
+ * @see com.quarkdown.lsp.completion.function.impl.parameter
+ * @see com.quarkdown.lsp.completion.function.impl.name
  */
-internal abstract class AbstractFunctionParameterCompletionSupplier(
-    private val docsDirectory: File,
+abstract class AbstractFunctionCompletionSupplier(
+    protected val docsDirectory: File,
 ) : CompletionSupplier {
     /**
-     * Generates completion items for function parameters based on the provided function data and call context.
+     * Generates completion items based on the provided function data and call context.
      * @param call the parsed function call
      * @param function the documentation data for the function being called
      * @param cursorIndex the index of the cursor in the source text
@@ -30,7 +29,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
      */
     protected abstract fun getCompletionItems(
         call: FunctionCall,
-        function: DocumentedFunction,
+        function: DocumentedFunction?,
         cursorIndex: Int,
         originalCursorIndex: Int,
     ): List<CompletionItem>
@@ -45,7 +44,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
     protected open fun transformIndex(
         cursorIndex: Int,
         text: String,
-    ): Int? = cursorIndex
+    ): Int = cursorIndex
 
     override fun getCompletionItems(
         params: CompletionParams,
@@ -53,7 +52,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
     ): List<CompletionItem> {
         // The index of the cursor in the source text.
         val index = params.position.toOffset(text)
-        val transformedIndex = transformIndex(index, text) ?: return emptyList()
+        val transformedIndex = transformIndex(index, text).takeIf { it >= 0 } ?: return emptyList()
 
         val call: FunctionCall =
             FunctionCallTokenizer()
@@ -62,7 +61,7 @@ internal abstract class AbstractFunctionParameterCompletionSupplier(
                 ?: return emptyList()
 
         // Looking up the function data from the documentation to extract available parameters to complete.
-        val function: DocumentedFunction = call.getDocumentation(docsDirectory) ?: return emptyList()
+        val function: DocumentedFunction? = call.getDocumentation(docsDirectory)
 
         return getCompletionItems(call, function, transformedIndex, index)
     }

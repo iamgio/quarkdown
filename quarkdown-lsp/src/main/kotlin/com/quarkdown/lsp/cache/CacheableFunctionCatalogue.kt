@@ -51,4 +51,17 @@ object CacheableFunctionCatalogue {
         this.catalogue[docsDirectory]?.asSequence()
             ?: storeCatalogue(docsDirectory).let { this.catalogue[docsDirectory] }?.asSequence()
             ?: emptySequence()
+
+    /**
+     * Searches for functions whose names start with the given query string, case-insensitively.
+     * @param docsDirectory the directory containing the documentation files
+     * @param nameQuery the query string to search for
+     * @return a sequence of documented functions matching the query
+     */
+    fun searchAll(
+        docsDirectory: DocsDirectory,
+        nameQuery: String,
+    ): Sequence<DocumentedFunction> =
+        getCatalogue(docsDirectory)
+            .filter { it.data.name.startsWith(nameQuery, ignoreCase = true) }
 }

@@ -1,14 +1,14 @@
 package com.quarkdown.lsp.completion.function.impl.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
+import com.quarkdown.lsp.completion.toCompletionItem
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.findMatchingTokenBeforeIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionItemKind
-import org.eclipse.lsp4j.InsertTextFormat
 import java.io.File
 
 /**
@@ -18,13 +18,15 @@ import java.io.File
  */
 internal class FunctionParameterAllowedValuesCompletionSupplier(
     docsDirectory: File,
-) : AbstractFunctionParameterCompletionSupplier(docsDirectory) {
+) : AbstractFunctionCompletionSupplier(docsDirectory) {
     override fun getCompletionItems(
         call: FunctionCall,
-        function: DocumentedFunction,
+        function: DocumentedFunction?,
         cursorIndex: Int,
         originalCursorIndex: Int,
     ): List<CompletionItem> {
+        if (function == null) return emptyList()
+
         // If a value is partially present, it can be completed.
         // If no value is present, all allowed values are returned.
         val value: String =
@@ -47,13 +49,7 @@ internal class FunctionParameterAllowedValuesCompletionSupplier(
 
         return parameter.allowedValues
             ?.filter { it.startsWith(value) }
-            ?.map {
-                CompletionItem().apply {
-                    label = it
-                    kind = CompletionItemKind.Value
-                    insertTextFormat = InsertTextFormat.Snippet
-                }
-            }
+            ?.map { it.toCompletionItem() }
             ?: emptyList()
     }
 
