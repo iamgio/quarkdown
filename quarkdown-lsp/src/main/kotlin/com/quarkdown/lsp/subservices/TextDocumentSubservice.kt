@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.subservices
 
+import com.quarkdown.lsp.TextDocument
 import org.eclipse.lsp4j.services.TextDocumentService
 
 /**
@@ -13,11 +14,11 @@ interface TextDocumentSubservice<P, O> {
     /**
      * Processes the given parameters and text to produce an output.
      * @param params the parameters for the operation
-     * @param text the text of the current document
+     * @param document the current document
      * @return the output of the operation
      */
     fun process(
         params: P,
-        text: String,
+        document: TextDocument,
     ): O
 }

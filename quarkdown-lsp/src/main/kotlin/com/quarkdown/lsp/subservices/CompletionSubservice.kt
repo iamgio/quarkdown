@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.subservices
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
@@ -13,8 +14,8 @@ class CompletionSubservice(
 ) : TextDocumentSubservice<CompletionParams, List<CompletionItem>> {
     override fun process(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem> =
         completionSuppliers
-            .flatMap { it.getCompletionItems(params, text.toString()) }
+            .flatMap { it.getCompletionItems(params, document) }
 }

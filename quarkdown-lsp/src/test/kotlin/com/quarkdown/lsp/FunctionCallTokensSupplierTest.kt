@@ -39,7 +39,7 @@ class FunctionCallTokensSupplierTest {
         block: Iterator<SimpleTokenData>.() -> Unit = {},
     ): Iterator<SimpleTokenData> =
         supplier
-            .getTokens(params, text)
+            .getTokens(params, TextDocument(text))
             .iterator()
             .also { tokens ->
                 block(tokens)

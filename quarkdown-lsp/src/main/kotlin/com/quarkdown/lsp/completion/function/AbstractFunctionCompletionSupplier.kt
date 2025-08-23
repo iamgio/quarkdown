@@ -1,10 +1,10 @@
 package com.quarkdown.lsp.completion.function
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
-import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
 import org.eclipse.lsp4j.CompletionItem
@@ -48,15 +48,17 @@ abstract class AbstractFunctionCompletionSupplier(
 
     override fun getCompletionItems(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem> {
+        val text = document.text
+
         // The index of the cursor in the source text.
         val index = params.position.toOffset(text)
         val transformedIndex = transformIndex(index, text).takeIf { it >= 0 } ?: return emptyList()
 
         val call: FunctionCall =
-            FunctionCallTokenizer()
-                .getFunctionCalls(text)
+            document.cacheOrCompute
+                .functionCalls
                 .getAtSourceIndex(transformedIndex)
                 ?: return emptyList()
 

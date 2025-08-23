@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.completion
 
+import com.quarkdown.lsp.TextDocument
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 
@@ -13,11 +14,11 @@ interface CompletionSupplier {
     /**
      * Generates a list of completion items.
      * @param params the parameters for the completion request, including the position in the document
-     * @param text the current text content of the document
+     * @param document the current document
      * @return a list of completion items that can be suggested
      */
     fun getCompletionItems(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem>
 }

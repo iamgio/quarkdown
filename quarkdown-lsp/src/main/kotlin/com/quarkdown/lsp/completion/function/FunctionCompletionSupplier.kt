@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.completion.function
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.completion.function.impl.name.FunctionNameCompletionSupplier
 import com.quarkdown.lsp.completion.function.impl.parameter.FunctionParameterAllowedValuesCompletionSupplier
@@ -36,23 +37,23 @@ class FunctionCompletionSupplier(
 
     override fun getCompletionItems(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem> {
         nameCompletionSupplier
-            .getCompletionItems(params, text)
+            .getCompletionItems(params, document)
             .takeIf { it.isNotEmpty() }
             ?.let { return it }
 
         return when {
             // The value of an inline function parameter is being completed.
             QuarkdownPatterns.FunctionCall.optionalValueInArgument
-                .containsMatchIn(params.position.getLineUntilPosition(text) ?: "") ->
-                parameterValuesCompletionSupplier.getCompletionItems(params, text)
+                .containsMatchIn(params.position.getLineUntilPosition(document.text) ?: "") ->
+                parameterValuesCompletionSupplier.getCompletionItems(params, document)
 
             // A function parameter is maybe being completed.
             // This is determined through tokenization of the complete function call.
             else ->
-                parameterNameCompletionSupplier.getCompletionItems(params, text)
+                parameterNameCompletionSupplier.getCompletionItems(params, document)
         }
     }
 }

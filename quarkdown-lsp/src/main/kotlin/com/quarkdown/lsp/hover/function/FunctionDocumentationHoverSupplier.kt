@@ -1,11 +1,11 @@
 package com.quarkdown.lsp.hover.function
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.hover.HoverSupplier
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
-import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
@@ -22,12 +22,16 @@ class FunctionDocumentationHoverSupplier(
 ) : HoverSupplier {
     override fun getHover(
         params: HoverParams,
-        text: String,
+        document: TextDocument,
     ): Hover? {
+        val text = document.text
+
         // Gets the function call at the specified hover position.
         val index = params.position.toOffset(text)
         val call: FunctionCall =
-            FunctionCallTokenizer().getFunctionCalls(text).getAtSourceIndex(index)
+            document.cacheOrCompute
+                .functionCalls
+                .getAtSourceIndex(index)
                 ?: return null
 
         val nameToken: FunctionCallToken? =

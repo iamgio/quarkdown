@@ -38,7 +38,8 @@ class FunctionCompletionSupplierTest {
     ): List<CompletionItem> {
         val textDocument = TextDocumentIdentifier(testDocumentUri)
         val params = CompletionParams(textDocument, position)
-        return supplier.getCompletionItems(params, text)
+        val document = TextDocument(text = text)
+        return supplier.getCompletionItems(params, document)
     }
 
     @Test

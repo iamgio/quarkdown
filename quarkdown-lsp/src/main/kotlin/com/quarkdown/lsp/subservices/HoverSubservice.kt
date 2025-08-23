@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.subservices
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.hover.HoverSupplier
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
@@ -14,10 +15,10 @@ class HoverSubservice(
 ) : TextDocumentSubservice<HoverParams, Hover?> {
     override fun process(
         params: HoverParams,
-        text: String,
+        document: TextDocument,
     ): Hover? =
         hoverSuppliers
             .asSequence()
-            .mapNotNull { it.getHover(params, text) }
+            .mapNotNull { it.getHover(params, document) }
             .firstOrNull()
 }

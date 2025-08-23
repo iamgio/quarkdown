@@ -41,10 +41,36 @@ class QuarkdownTextDocumentService(
     /**
      * Maps document URIs to their text content.
      */
-    private val documents = mutableMapOf<String, CharSequence>()
+    private val documents = mutableMapOf<String, TextDocument>()
 
-    private fun getDocumentText(document: TextDocumentIdentifier): String =
-        documents[document.uri]?.toString()
+    /**
+     * Adds or updates a document in the internal URI association map.
+     * @param uri the URI of the document
+     * @param text the text content of the document
+     * @param invalidateCache whether to invalidate any cached data associated with the document
+     */
+    private fun putDocument(
+        uri: String,
+        text: CharSequence,
+        invalidateCache: Boolean = false,
+    ) {
+        // Line endings are normalized to LF to ensure consistency.
+        val text = text.normalizeLineSeparators().toString()
+        val current = documents[uri]
+
+        documents[uri] = current
+            ?.copy(text = text, cache = if (invalidateCache) null else current.cache)
+            ?: TextDocument(
+                text = text,
+                setActive = { documents[uri] = this },
+            )
+    }
+
+    /**
+     * @return the document associated with the given identifier
+     */
+    private fun getDocument(document: TextDocumentIdentifier): TextDocument =
+        documents[document.uri]
             ?: throw IllegalArgumentException("No document found for URI: ${document.uri}")
 
     override fun didOpen(didOpenTextDocumentParams: DidOpenTextDocumentParams) {
@@ -52,48 +78,39 @@ class QuarkdownTextDocumentService(
             "Operation 'text/didOpen'" +
                 "' {fileUri: '" + didOpenTextDocumentParams.textDocument.uri + "'} opened",
         )
-
-        // The text is stored and line endings are normalized to LF to ensure consistency with the protocol.
-        documents[didOpenTextDocumentParams.textDocument.uri] =
-            didOpenTextDocumentParams.textDocument.text.normalizeLineSeparators()
+        putDocument(didOpenTextDocumentParams.textDocument.uri, didOpenTextDocumentParams.textDocument.text)
     }
 
     override fun didChange(didChangeTextDocumentParams: DidChangeTextDocumentParams) {
-        server.log(
-            "Operation 'text/didChange'" +
-                " {fileUri: '" + didChangeTextDocumentParams.textDocument.uri + "'} Changed",
-        )
+        server.log("Operation 'text/didChange'")
 
-        documents[didChangeTextDocumentParams.textDocument.uri] =
+        putDocument(
+            didChangeTextDocumentParams.textDocument.uri,
             didChangeTextDocumentParams.contentChanges
                 .firstOrNull()
                 ?.text
                 ?.normalizeLineSeparators()
-                ?: ""
+                ?: "",
+            invalidateCache = true,
+        )
     }
 
     override fun didClose(didCloseTextDocumentParams: DidCloseTextDocumentParams) {
-        server.log(
-            "Operation 'text/didClose'" +
-                "' {fileUri: '" + didCloseTextDocumentParams.textDocument.uri + "'} Closed",
-        )
+        server.log("Operation 'text/didClose'")
 
         documents.remove(didCloseTextDocumentParams.textDocument.uri)
     }
 
     override fun didSave(didSaveTextDocumentParams: DidSaveTextDocumentParams) {
-        server.log(
-            "Operation '" + "text/didSave" +
-                "' {fileUri: '" + didSaveTextDocumentParams.textDocument.uri + "'} Saved",
-        )
+        server.log("Operation 'text/didSave'")
     }
 
     override fun completion(params: CompletionParams): CompletionResult {
-        val text = getDocumentText(params.textDocument)
+        val document = getDocument(params.textDocument)
 
         return CompletableFuture.supplyAsync {
             server.log("Operation 'text/completion'")
-            Either.forLeft(completionService.process(params, text))
+            Either.forLeft(completionService.process(params, document))
         }
     }
 
@@ -101,16 +118,16 @@ class QuarkdownTextDocumentService(
         CompletableFuture.completedFuture(unresolved)
 
     override fun semanticTokensFull(params: SemanticTokensParams): CompletableFuture<SemanticTokens> {
-        val text = getDocumentText(params.textDocument)
         server.log("Operation 'text/semanticTokens/full'")
 
-        return CompletableFuture.completedFuture(semanticTokensService.process(params, text))
+        val document = getDocument(params.textDocument)
+        return CompletableFuture.completedFuture(semanticTokensService.process(params, document))
     }
 
     override fun hover(params: HoverParams): CompletableFuture<Hover?>? {
-        val text = getDocumentText(params.textDocument)
         server.log("Operation 'text/hover'")
 
-        return CompletableFuture.completedFuture(hoverService.process(params, text))
+        val document = getDocument(params.textDocument)
+        return CompletableFuture.completedFuture(hoverService.process(params, document))
     }
 }

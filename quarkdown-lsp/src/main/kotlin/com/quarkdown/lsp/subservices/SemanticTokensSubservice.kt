@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.subservices
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.highlight.SemanticTokenData
 import com.quarkdown.lsp.highlight.SemanticTokensEncoder
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
@@ -16,12 +17,12 @@ class SemanticTokensSubservice(
 ) : TextDocumentSubservice<SemanticTokensParams, SemanticTokens> {
     override fun process(
         params: SemanticTokensParams,
-        text: String,
+        document: TextDocument,
     ): SemanticTokens {
         val tokens: List<SemanticTokenData> =
             this.tokensSuppliers
-                .flatMap { it.getTokens(params, text) }
-                .map { it.toSemanticData(text) }
+                .flatMap { it.getTokens(params, document) }
+                .map { it.toSemanticData(document.text) }
 
         val encoded = SemanticTokensEncoder.encode(tokens)
         return SemanticTokens(encoded)

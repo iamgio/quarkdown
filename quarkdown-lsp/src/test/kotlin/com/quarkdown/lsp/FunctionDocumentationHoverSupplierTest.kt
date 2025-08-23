@@ -29,7 +29,8 @@ class FunctionDocumentationHoverSupplierTest {
     ): Hover? {
         val params = HoverParams()
         params.position = position
-        return supplier.getHover(params, text)
+        val document = TextDocument(text = text)
+        return supplier.getHover(params, document)
     }
 
     @Test

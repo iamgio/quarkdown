@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.completion.function.impl.name
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
@@ -27,8 +28,9 @@ class RegularFunctionNameCompletionSupplier(
 
     override fun getCompletionItems(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem> {
+        val text = document.text
         val line = params.position.getLineUntilPosition(text) ?: return emptyList()
 
         // The name of the function call at the cursor position to complete.

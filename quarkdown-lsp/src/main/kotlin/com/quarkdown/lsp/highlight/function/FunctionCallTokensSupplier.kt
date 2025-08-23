@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.highlight.function
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.highlight.SimpleTokenData
 import com.quarkdown.lsp.highlight.TokenType
@@ -13,7 +14,6 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_END
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_VALUE
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.NAMED_PARAMETER_DELIMITER
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.PARAMETER_NAME
-import com.quarkdown.lsp.tokenizer.FunctionCallTokenizer
 import org.eclipse.lsp4j.SemanticTokensParams
 
 /**
@@ -22,10 +22,10 @@ import org.eclipse.lsp4j.SemanticTokensParams
 class FunctionCallTokensSupplier : SemanticTokensSupplier {
     override fun getTokens(
         params: SemanticTokensParams,
-        text: String,
+        document: TextDocument,
     ): Iterable<SimpleTokenData> =
-        FunctionCallTokenizer()
-            .getFunctionCalls(text)
+        document.cacheOrCompute
+            .functionCalls
             .asSequence()
             .flatMap { it.tokens }
             .map { it.toSimpleTokenData() }

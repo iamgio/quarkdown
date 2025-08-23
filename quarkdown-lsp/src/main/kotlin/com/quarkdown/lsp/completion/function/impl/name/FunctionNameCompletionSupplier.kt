@@ -1,5 +1,6 @@
 package com.quarkdown.lsp.completion.function.impl.name
 
+import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
@@ -27,8 +28,8 @@ internal class FunctionNameCompletionSupplier(
 
     override fun getCompletionItems(
         params: CompletionParams,
-        text: String,
+        document: TextDocument,
     ): List<CompletionItem> =
-        fromBegin.getCompletionItems(params, text).takeIf { it.isNotEmpty() }
-            ?: fromChain.getCompletionItems(params, text)
+        fromBegin.getCompletionItems(params, document).takeIf { it.isNotEmpty() }
+            ?: fromChain.getCompletionItems(params, document)
 }
