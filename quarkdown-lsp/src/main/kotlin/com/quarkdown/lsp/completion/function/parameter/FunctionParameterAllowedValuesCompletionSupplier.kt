@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion.function.impl.parameter
+package com.quarkdown.lsp.completion.function.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
@@ -16,7 +16,7 @@ import java.io.File
  * For example, let `|` be the cursor position in the text,
  * `.row alignment:{|` will provide allowed values for the `alignment` parameter of the `row` function.
  */
-internal class FunctionParameterAllowedValuesCompletionSupplier(
+class FunctionParameterAllowedValuesCompletionSupplier(
     docsDirectory: File,
 ) : AbstractFunctionCompletionSupplier(docsDirectory) {
     override fun getCompletionItems(

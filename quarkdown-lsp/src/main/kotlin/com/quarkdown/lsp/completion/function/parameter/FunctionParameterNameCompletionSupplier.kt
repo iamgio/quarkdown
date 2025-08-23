@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion.function.impl.parameter
+package com.quarkdown.lsp.completion.function.parameter
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
@@ -12,7 +12,7 @@ import java.io.File
  * Provides completion items for function parameter names. For example, let `|` be the cursor position in the text,
  * `.function pa|` will provide names for parameters starting with `pa`.
  */
-internal class FunctionParameterNameCompletionSupplier(
+class FunctionParameterNameCompletionSupplier(
     docsDirectory: File,
 ) : AbstractFunctionCompletionSupplier(docsDirectory) {
     /**

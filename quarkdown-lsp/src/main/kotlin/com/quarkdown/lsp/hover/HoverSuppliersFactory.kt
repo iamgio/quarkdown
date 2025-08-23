@@ -7,13 +7,12 @@ import com.quarkdown.lsp.hover.function.FunctionDocumentationHoverSupplier
  * Factory for creating a list of [HoverSupplier]s.
  * @param server the Quarkdown language server instance
  */
-class HoverSuppliersFactory(
-    private val server: QuarkdownLanguageServer,
-) {
+object HoverSuppliersFactory {
     /**
+     * @param server the Quarkdown language server instance
      * @return the default list of [HoverSupplier] instances
      */
-    fun default() =
+    fun default(server: QuarkdownLanguageServer) =
         listOf(
             FunctionDocumentationHoverSupplier(
                 docsDirectory = server.docsDirectory ?: error("Docs directory not available"),

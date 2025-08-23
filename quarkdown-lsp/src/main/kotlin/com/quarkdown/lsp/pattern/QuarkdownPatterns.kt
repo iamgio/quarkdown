@@ -3,7 +3,6 @@ package com.quarkdown.lsp.pattern
 import com.quarkdown.core.lexer.patterns.FUNCTION_CALL_PATTERN_BEFORE
 import com.quarkdown.core.lexer.regex.RegexBuilder
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
-import com.quarkdown.lsp.pattern.QuarkdownPatterns.FunctionCall.ARGUMENT_BEGIN
 import com.quarkdown.lsp.pattern.QuarkdownPatterns.FunctionCall.BEGIN
 
 /**
@@ -59,12 +58,5 @@ object QuarkdownPatterns {
                 .withReference("chain", Regex.escape(CHAIN_SEPARATOR))
                 .withReference("identifier", IDENTIFIER.pattern)
                 .build()
-
-        /**
-         * The pattern that matches an optional value (represented by an identifier pattern) in an incomplete inline argument,
-         * preceded by [ARGUMENT_BEGIN] (unmatched) and followed by the end of the string.
-         */
-        val optionalValueInArgument: Regex =
-            "(?<=${Regex.escape(ARGUMENT_BEGIN)})\\s*($IDENTIFIER)?$".toRegex()
     }
 }

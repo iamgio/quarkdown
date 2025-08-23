@@ -37,9 +37,9 @@ class QuarkdownLanguageServer(
     private val textDocumentService: TextDocumentService =
         QuarkdownTextDocumentService(
             this,
-            CompletionSuppliersFactory(this).default(),
-            SemanticTokensSuppliersFactory().default(),
-            HoverSuppliersFactory(this).default(),
+            CompletionSuppliersFactory.default(this),
+            SemanticTokensSuppliersFactory.default(),
+            HoverSuppliersFactory.default(this),
         )
 
     private val completionTriggers =

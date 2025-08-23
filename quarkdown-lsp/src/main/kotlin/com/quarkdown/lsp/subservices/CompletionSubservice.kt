@@ -7,6 +7,7 @@ import org.eclipse.lsp4j.CompletionParams
 
 /**
  * Subservice for handling completion requests.
+ * Only the first non-empty result from the suppliers is returned.
  * @param completionSuppliers suppliers of completion items
  */
 class CompletionSubservice(
@@ -17,5 +18,8 @@ class CompletionSubservice(
         document: TextDocument,
     ): List<CompletionItem> =
         completionSuppliers
-            .flatMap { it.getCompletionItems(params, document) }
+            .asSequence()
+            .map { it.getCompletionItems(params, document) }
+            .firstOrNull { it.isNotEmpty() }
+            ?: emptyList()
 }

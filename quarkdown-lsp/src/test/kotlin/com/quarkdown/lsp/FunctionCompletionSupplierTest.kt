@@ -1,6 +1,7 @@
 package com.quarkdown.lsp
 
-import com.quarkdown.lsp.completion.function.FunctionCompletionSupplier
+import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.subservices.CompletionSubservice
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionParams
 import org.eclipse.lsp4j.Position
@@ -29,7 +30,7 @@ private const val CAPTION_PARAMETER = "caption"
  */
 class FunctionCompletionSupplierTest {
     private val docsDirectory = File("src/test/resources/docs")
-    private val supplier = FunctionCompletionSupplier(docsDirectory)
+    private val suppliers = CompletionSuppliersFactory.functions(docsDirectory)
     private val testDocumentUri = "file:///test.qd"
 
     private fun getCompletions(
@@ -39,7 +40,7 @@ class FunctionCompletionSupplierTest {
         val textDocument = TextDocumentIdentifier(testDocumentUri)
         val params = CompletionParams(textDocument, position)
         val document = TextDocument(text = text)
-        return supplier.getCompletionItems(params, document)
+        return CompletionSubservice(suppliers).process(params, document)
     }
 
     @Test

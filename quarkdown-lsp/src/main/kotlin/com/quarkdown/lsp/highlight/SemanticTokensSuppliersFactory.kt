@@ -5,7 +5,7 @@ import com.quarkdown.lsp.highlight.function.FunctionCallTokensSupplier
 /**
  * Factory for creating a list of [SemanticTokensSupplier]s.
  */
-class SemanticTokensSuppliersFactory {
+object SemanticTokensSuppliersFactory {
     /**
      * @return the default list of [SemanticTokensSupplier] instances
      */

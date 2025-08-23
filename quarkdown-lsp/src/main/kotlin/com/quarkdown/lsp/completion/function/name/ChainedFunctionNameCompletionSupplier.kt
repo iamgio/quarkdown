@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion.function.impl.name
+package com.quarkdown.lsp.completion.function.name
 
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.cache.DocumentedFunction

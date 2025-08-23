@@ -1,4 +1,4 @@
-package com.quarkdown.lsp.completion.function.impl.name
+package com.quarkdown.lsp.completion.function.name
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
@@ -17,7 +17,7 @@ import java.io.File
  * @see RegularFunctionNameCompletionSupplier for `.xyz` style completions
  * @see ChainedFunctionNameCompletionSupplier for `.abc::xyz` style completions
  */
-internal class FunctionNameCompletionSupplier(
+class FunctionNameCompletionSupplier(
     private val docsDirectory: File,
 ) : CompletionSupplier {
     // Completion for function names right after the function begin token ('.').
