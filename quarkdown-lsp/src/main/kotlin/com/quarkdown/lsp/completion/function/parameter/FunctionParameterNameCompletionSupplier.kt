@@ -4,6 +4,7 @@ import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
 import com.quarkdown.lsp.tokenizer.FunctionCall
+import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.remainderUntilIndex
 import org.eclipse.lsp4j.CompletionItem
 import java.io.File
@@ -36,6 +37,8 @@ class FunctionParameterNameCompletionSupplier(
         originalCursorIndex: Int,
     ): List<CompletionItem> {
         if (function == null) return emptyList()
+        // Parameter names are only completed when the parameter name is being typed, so it's not yet part of the function call.
+        if (call.getTokenAtSourceIndex(originalCursorIndex) != null) return emptyList()
 
         // The remainder of the function call before the cursor position.
         // For example, if the function call being completed is `.function param`,

@@ -212,8 +212,6 @@ class FunctionCompletionSupplierTest {
         val position = Position(2, text.lines()[2].length)
         val completions = getCompletions(text, position).map { it.label }
 
-        // abc\\.align \\def
-
         assertContains(completions, ALIGNMENT_PARAMETER)
     }
 
@@ -250,10 +248,27 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
+    fun `parameter completions should not happen in empty values`() {
+        val text = "hello .$CSV_FUNCTION {}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
+    fun `parameter completions should not happen in partial values`() {
+        val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{$BODY_PARAMETER}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
     fun `parameter value, empty argument`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{}"
         val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
 
+        assertEquals(3, completions.size)
         assertContains(completions, "start")
         assertContains(completions, "center")
         assertContains(completions, "end")
