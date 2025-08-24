@@ -53,4 +53,10 @@ object Escape {
 
         override fun unescape(input: String): String = StringEscapeUtils.unescapeEcmaScript(input)
     }
+
+    object Json : EscapeTarget, UnescapeTarget {
+        override fun escape(input: String): String = StringEscapeUtils.escapeJson(input)
+
+        override fun unescape(input: String): String = StringEscapeUtils.unescapeJson(input)
+    }
 }

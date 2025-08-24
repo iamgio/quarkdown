@@ -28,3 +28,10 @@ data class WalkedFunctionArgument(
     val name: String?,
     val value: String,
 )
+
+/**
+ * @return the last function call in the chain of this [WalkedFunctionCall].
+ * If this call is not chained, it returns itself.
+ */
+val WalkedFunctionCall.lastChainedCall: WalkedFunctionCall
+    get() = generateSequence(this) { it.next }.last()

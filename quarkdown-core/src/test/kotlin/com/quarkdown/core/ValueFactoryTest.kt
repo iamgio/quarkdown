@@ -75,6 +75,7 @@ class ValueFactoryTest {
         assertEquals(32.95.px, ValueFactory.size("32.95").unwrappedValue)
         assertFails { ValueFactory.size("px") }
         assertFails { ValueFactory.size("abc") }
+        assertFails { ValueFactory.size("3abc") }
         assertFails { ValueFactory.size("10.10.2cm") }
         assertFails { ValueFactory.size("--10cm") }
         assertFails { ValueFactory.size("") }
@@ -124,6 +125,7 @@ class ValueFactoryTest {
         )
 
         assertFails { ValueFactory.sizes("10px 12px 8px") }
+        assertFails { ValueFactory.sizes("2xy") }
     }
 
     @Test

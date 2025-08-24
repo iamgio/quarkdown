@@ -19,6 +19,7 @@ data class DocsFunction(
  * @param isOptional whether the parameter is optional
  * @param isLikelyNamed whether the parameter is likely to be passed as a named parameter
  * @param isLikelyBody whether the parameter is likely to be passed as a body parameter
+ * @param allowedValues the allowed enum values for the parameter, or `null` if not applicable
  */
 data class DocsParameter(
     val name: String,
@@ -26,4 +27,5 @@ data class DocsParameter(
     val isOptional: Boolean,
     val isLikelyNamed: Boolean,
     val isLikelyBody: Boolean,
+    val allowedValues: List<String>?,
 )

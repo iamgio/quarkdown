@@ -617,4 +617,16 @@ object ValueFactory {
                 ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
         }
     }
+
+    /**
+     * Executes the given block and returns its result, or `null` if the conversion fails.
+     * @param block the block to execute, which may throw `IllegalRawValueException`
+     * @return the result of the block, or `null` if an exception occurs
+     */
+    fun <T : Value<*>> tryOrNull(block: ValueFactory.() -> T): T? =
+        try {
+            block()
+        } catch (_: IllegalRawValueException) {
+            null
+        }
 }

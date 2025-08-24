@@ -470,14 +470,21 @@ class BlockTokenParser(
     override fun visit(token: PageBreakToken): Node = PageBreak()
 
     override fun visit(token: FunctionCallToken): Node {
-        val call =
-            token.data.walkerResult?.value as? WalkedFunctionCall
+        val result =
+            token.data.walkerResult
                 ?: throw IllegalStateException("Function call walker result not found.")
+
+        val call = result.value as WalkedFunctionCall
+
+        // The range of the function call in the source code.
+        // Note: the end index is provided by the walker, not the lexer.
+        val sourceRangeStart = token.data.position.start
+        val sourceRangeEnd = sourceRangeStart + result.endIndex
+        val sourceRange = sourceRangeStart..sourceRangeEnd
 
         // The syntax-only information held by the walked function call is converted to a context-aware function call node.
         // Function chaining is also handled here, delegated to the refiner.
-
-        val callNode = FunctionCallRefiner(context, call, token.isBlock).toNode()
+        val callNode = FunctionCallRefiner(context, call, token.isBlock, sourceRange).toNode()
 
         // Enqueuing the function call, in order to expand it in the next stage of the pipeline.
         context.register(callNode)

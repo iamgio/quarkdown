@@ -40,6 +40,8 @@ val Math: Module =
 // Basic operations
 
 /**
+ * @param a first operand
+ * @param b second operand
  * @return arithmetic floating-point sum of [a] and [b]
  */
 @LikelyChained
@@ -49,6 +51,8 @@ fun sum(
 ) = NumberValue(a.toFloat() + b.toFloat())
 
 /**
+ * @param a first operand
+ * @param b second operand
  * @return arithmetic floating-point subtraction of [a] and [b]
  */
 @LikelyChained
@@ -58,6 +62,8 @@ fun subtract(
 ) = NumberValue(a.toFloat() - b.toFloat())
 
 /**
+ * @param a first operand
+ * @param b second operand
  * @return arithmetic floating-point multiplication of [a] and [b]
  */
 @LikelyChained
@@ -67,6 +73,8 @@ fun multiply(
 ) = NumberValue(a.toFloat() * b.toFloat())
 
 /**
+ * @param a first operand
+ * @param b second operand
  * @return arithmetic floating-point division of [a] and [b]
  */
 @LikelyChained
@@ -76,6 +84,8 @@ fun divide(
 ) = NumberValue(a.toFloat() / b.toFloat())
 
 /**
+ * @param a first operand
+ * @param b second operand
  * @return remainder of the arithmetic floating-point division of [a] and [b]
  */
 @LikelyChained
@@ -139,17 +149,20 @@ fun logn(x: Number) = kotlin.math.ln(x.toFloat()).let(::NumberValue)
 fun pi() = NumberValue(PI)
 
 /**
- * @return sine of the angle [x] given in radians.
+ * @param x angle in radians
+ * @return sine of the angle [x]
  */
 fun sin(x: Number) = NumberValue(kotlin.math.sin(x.toFloat()))
 
 /**
- * @return cosine of the angle [x] given in radians.
+ * @param x angle in radians
+ * @return cosine of the angle [x]
  */
 fun cos(x: Number) = NumberValue(kotlin.math.cos(x.toFloat()))
 
 /**
- * @return tangent of the angle [x] given in radians.
+ * @param x angle in radians
+ * @return tangent of the angle [x]
  */
 fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
 
@@ -193,6 +206,7 @@ fun round(x: Number): NumberValue =
 // Misc
 
 /**
+ * @param x number to check
  * @return whether the integer value of [x] is an even number
  */
 @Name("iseven")
@@ -207,8 +221,8 @@ fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
  * does not allow for dynamic evaluation, hence both ends must be literals.
  * This function allows evaluating ends dynamically: for instance, `.range from:{1} to:{.sum {1} {2}}`.
  * Floating-point numbers are truncated to integers.
- * @property start start of the range (inclusive). If `null`, the range is infinite on the left end
- * @property end end of the range (inclusive). If `null`, the range is infinite on the right end. [end] > [start]
+ * @param start start of the range (inclusive). If unset, the range is infinite on the left end
+ * @param end end of the range (inclusive). If unset, the range is infinite on the right end. [end] > [start]
  */
 fun range(
     @Name("from") start: Number? = null,

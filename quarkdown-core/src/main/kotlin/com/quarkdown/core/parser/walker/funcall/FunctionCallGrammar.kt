@@ -11,6 +11,8 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.lexer.token
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.parser.BlockTokenParser
+import com.quarkdown.core.parser.walker.GrammarUtils.balancedDelimitersMatch
+import com.quarkdown.core.parser.walker.GrammarUtils.unescapedMatch
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ARGUMENT_BEGIN
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ARGUMENT_END
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.IDENTIFIER_PATTERN
@@ -77,30 +79,6 @@ class FunctionCallGrammar(
     }
 
     /**
-     * Matches a character if it is not escaped.
-     * @param string the string to match
-     * @param position the position of the character to match
-     * @param char the character to match
-     * @param onMatch optional action to perform if the character is matched
-     * @return 1 if the character is matched and not preceded by an escape character, 0 otherwise
-     */
-    private fun unescapedMatch(
-        string: CharSequence,
-        position: Int,
-        char: Char,
-        onMatch: () -> Unit = {},
-    ): Int =
-        when {
-            string[position] != char -> 0
-            string.getOrNull(position - 1) != '\\' -> {
-                onMatch()
-                1
-            }
-
-            else -> 0
-        }
-
-    /**
      * Token that matches the content of an inline (= non-body) argument.
      * This token has the highest priority in the grammar: if [inArg] is `true`,
      * this is the only viable token to match and other syntax rules are ignored.
@@ -108,23 +86,19 @@ class FunctionCallGrammar(
     private val argContent by token { string, position ->
         if (!inArg) return@token 0
 
-        var depth = 0
-        for (x in position until string.length) {
-            when {
-                // Unescaped argument begin character {
-                unescapedMatch(string, x, ARGUMENT_BEGIN) != 0 -> depth++
-                // Unescaped argument end character }
-                // This leads to the end of the argument if the delimiters are balanced.
-                unescapedMatch(string, x, ARGUMENT_END) != 0 -> {
-                    if (depth == 0) {
-                        inArg = false
-                        return@token x - position
-                    }
-                    depth--
-                }
-            }
+        val length =
+            balancedDelimitersMatch(
+                string,
+                position,
+                ARGUMENT_BEGIN,
+                ARGUMENT_END,
+            )
+
+        if (length > 0) {
+            inArg = false
         }
-        0
+
+        length
     }
 
     /**

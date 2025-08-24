@@ -23,7 +23,8 @@ class FunctionCallPatterns {
                 wrap = { FunctionCallToken(it, isBlock = false) },
                 // The name of the function prefixed by a dot.
                 regex =
-                    RegexBuilder("(?<=^|\\s|[^a-zA-Z0-9.\\\\])(?=begin(name))")
+                    RegexBuilder("(?<=before)(?=begin(name))")
+                        .withReference("before", FUNCTION_CALL_PATTERN_BEFORE)
                         .withReference("begin", "\\" + FunctionCallGrammar.BEGIN)
                         .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
                         .build(),
@@ -56,3 +57,8 @@ class FunctionCallPatterns {
                 walker = { FunctionCallWalkerParser(it, allowsBody = true) },
             )
 }
+
+/**
+ * Accepted pattern before a function call.
+ */
+const val FUNCTION_CALL_PATTERN_BEFORE = "^|\\s|[^a-zA-Z0-9.\\\\]"
