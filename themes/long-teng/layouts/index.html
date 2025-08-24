@@ -83,102 +83,12 @@
         </div>
     </header>
 
-    <!--
-    <section id="user-trust">
-        <div class="padding-vertical padding-xxhuge">
-            <div class="z-3">
-                <div class="page-padding">
-                    <div class="container-large">
-                        <div class="grid-12col-base is-align-bottom">
-                            <div id="w-node-_19ea42c6-8f34-1041-d1a8-ebfb2d3d272f-2d3d2728">
-                                <div class="max-width-56rem">
-                                    <div is-round="false" color="light" class="caption">
-                                        <div class="caption-medium">{{ $userTrust.Params.title }}</div>
-                                    </div>
-                                    <div class="spacer-xxxsmall"></div>
-                                    <div class="text-color-base-dark">
-                                        <h1 class="heading-large">
-                                            <span>{{ $userTrust.Params.trusted_count }}</span>
-                                        </h1>
-                                        <h2 class="heading-medium">
-                                            <span>{{ $userTrust.Params.websites_created }}</span>
-                                        </h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section id="overview" class="page-padding" aria-labelledby="what-is-quarkdown">
+        <div class="container-large padding-xxxlarge padding-vertical">
+            <article class="rich-text-large" itemscope itemtype="https://schema.org/SoftwareApplication">
+                {{ partial "overview.html" . }}
+            </article>
         </div>
     </section>
-
-    <section id="how-to">
-        <div class="padding-vertical padding-large">
-            <div class="page-padding">
-                <div class="container-large">
-                    <div class="position-relative">
-                        <div class="padding-top padding-xhuge">
-                            <div class="text-color-white">
-                                <div class="text-align-center">
-                                    <div is-round="false" color="dark" class="caption">
-                                        <div class="caption-medium">{{ $howToPage.Params.subtitle }}</div>
-                                    </div>
-                                    <div class="spacer-xsmall"></div>
-                                    <h2 class="heading-large">{{ $howToPage.Params.title }}</h2>
-                                </div>
-                                <div class="spacer-xxxlarge"></div>
-                                <div>
-                                    <div class="tab-container">
-                                        <div class="tab_component-wrapper">
-                                            <div class="grid-1col w-tabs">
-                                                <div class="grid-4col is-gap-1rem is-2col-tablet w-tab-menu" role="tablist">
-                                                    {{ range $step := $howToPage.Params.steps }}
-
-                                                    {{ $parts := split $step " | " }}
-                                                    {{ $step_number := strings.TrimSpace (index $parts 0) }}
-                                                    {{ $title := strings.TrimSpace (index $parts 1) }}
-                                                    {{ $description := strings.TrimSpace (index $parts 2) }}
-
-
-                                                    <a class="product-tour-tab_link-wrap w-inline-block w-tab-link active w--current">
-                                                        <div class="z-1">
-                                                            <div class="text-color-white">
-                                                                <div class="flex-horizontal gap-1rem">
-                                                                    <div class="marketing-icon is-small is-indigo is-indigo-600">
-                                                                        <div class="paragraph-large is-medium">{{ $step_number }}</div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h3 class="paragraph-xlarge is-medium">{{ $title }}</h3>
-                                                                        <div class="spacer-tiny"></div>
-                                                                        <p class="label-regular">{{ $description }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    {{ end }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hide-mobile-landscape">
-                            <div class="spacer-xxxlarge"></div>
-                        </div>
-                    </div>
-                    <div class="container-xlarge-background border-radius-huge-corner border-radius-xlarge background-black">
-                        <img src="{{ "img/how-to-bg.webp" | absURL }}" alt="" class="background-cover-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    -->
-
-    <div color="" vertical="false" class="divider"></div>
-
 </main>
 {{ end }}

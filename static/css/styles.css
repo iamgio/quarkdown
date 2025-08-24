@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 :root {
     --main: #2A4F3B;
@@ -18,8 +19,8 @@
     max-height: none;
 }
 
-body {
-    overflow: hidden !important;
+.background-image-container {
+    z-index: -99999;
 }
 
 .page-wrapper {
@@ -27,6 +28,11 @@ body {
     flex-direction: column;
     height: 100vh;
     max-height: 100vh;
+}
+
+#overview {
+    background-color: var(--base-white);
+    z-index: 99999;
 }
 
 footer.footer-section {
@@ -162,4 +168,70 @@ nav .logo-wrapper img {
 .button-secondary:hover {
     background: var(--indigo-400);
     color: var(--base-white);
+}
+
+article p {
+    margin: var(--base-spacing-tiny) 0;
+}
+
+article :is(h1, h2, strong) {
+    position: relative;
+    z-index: 99;
+}
+
+article :is(h1, h2) {
+    display: inline-block;
+    padding: 0 .2rem;
+}
+
+/* Colored fake underline */
+article :is(h1, h2, strong:not(pre strong))::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+    height: 30%;
+    background: color-mix(in srgb, var(--indigo-400) 15%, transparent);
+    z-index: -1;
+}
+
+article h2 {
+    margin-bottom: var(--base-spacing-medium);
+}
+
+article h3 {
+    margin-top: var(--base-spacing-large);
+    margin-bottom: var(--base-spacing-small);
+}
+
+article p {
+    font-size: 1rem;
+}
+
+pre {
+    background-color: color-mix(in srgb, var(--indigo-300) 12%, var(--base-white));
+    border-radius: 6px;
+    padding: .6rem 1rem;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--indigo-800) 12%, transparent);
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--indigo-300) 30%, transparent);
+    border-bottom-color: var(--indigo-300);
+    border-width: 1px 1px 2px 1px;
+}
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .9rem;
+}
+
+.code-overview {
+    align-items: flex-start !important;
+}
+
+@media screen and (max-width: 767px) {
+    .code-overview {
+        flex-wrap: wrap;
+        gap: var(--base-spacing-tiny) !important;
+    }
 }
