@@ -19,8 +19,7 @@ object CompletionSuppliersFactory {
      * @param server the Quarkdown language server instance
      * @return the default list of [CompletionSupplier] instances
      */
-    fun default(server: QuarkdownLanguageServer): List<CompletionSupplier> =
-        this.functions(docsDirectory = server.docsDirectory ?: error("Docs directory not available"))
+    fun default(server: QuarkdownLanguageServer): List<CompletionSupplier> = this.functions(docsDirectory = server.docsDirectoryOrThrow())
 
     /**
      * @param docsDirectory the directory containing the documentation files
