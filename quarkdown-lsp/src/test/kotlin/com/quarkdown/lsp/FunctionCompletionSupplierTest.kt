@@ -264,7 +264,7 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
-    fun `parameter value, empty argument`() {
+    fun `parameter value by name, empty argument`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{}"
         val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
 
@@ -275,10 +275,26 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
-    fun `parameter value, partial argument`() {
+    fun `parameter value by name, partial argument`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{cen}"
         val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
 
         assertEquals(completions.single(), "center")
+    }
+
+    @Test
+    fun `parameter value by position, partial argument`() {
+        val text = "hello .$ALIGN_FUNCTION {cen}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertEquals(completions.single(), "center")
+    }
+
+    @Test
+    fun `parameter value by position should not be preceded by named arguments`() {
+        val text = "hello .$ALIGN_FUNCTION x:{} {cen}"
+        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+
+        assertTrue(completions.isEmpty())
     }
 }

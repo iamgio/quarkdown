@@ -199,11 +199,17 @@ class FunctionCallGrammar(
             -optional(whitespace) and
                 // Optional named argument.
                 optional(identifier and -argumentNameDelimiter) and
-                -argumentBegin and
+                argumentBegin and
                 // Argument content.
-                optional(argContent map { it.text.trimIndent().trim() }) and
-                -argumentEnd
-        ) map { (name, value) -> WalkedFunctionArgument(name?.text, value ?: "") }
+                optional(argContent) and
+                argumentEnd
+        ) map { (name, begin, value, end) ->
+            WalkedFunctionArgument(
+                name = name?.text,
+                value = value?.text?.trimIndent()?.trim() ?: "",
+                range = begin.offset until (end.offset + end.length),
+            )
+        }
 
     /**
      * Parses a body argument.
@@ -212,7 +218,11 @@ class FunctionCallGrammar(
     private val bodyArgumentParser =
         bodyArgContent map { value ->
             value.text.takeUnless { it.isBlank() }?.let {
-                WalkedFunctionArgument(null, it.trimIndent().trimEnd())
+                WalkedFunctionArgument(
+                    name = null,
+                    value = it.trimIndent().trimEnd(),
+                    range = value.offset until (value.offset + value.length),
+                )
             }
         }
 
