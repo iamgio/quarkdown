@@ -259,6 +259,10 @@ code {
     text-align: end;
 }
 
+.installation a {
+    text-decoration: none;
+}
+
 .installation pre {
     width: 55vw;
     overflow-x: auto;
