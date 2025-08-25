@@ -2,6 +2,7 @@ package com.quarkdown.lsp.subservices
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.diagnostics.DiagnosticsSupplier
+import com.quarkdown.lsp.diagnostics.toLspDiagnostic
 import org.eclipse.lsp4j.Diagnostic
 
 /**
@@ -14,5 +15,8 @@ class DiagnosticsSubservice(
     override fun process(
         params: Any?,
         document: TextDocument,
-    ): List<Diagnostic> = diagnosticsSuppliers.flatMap { it.getDiagnostics(document) }
+    ): List<Diagnostic> =
+        diagnosticsSuppliers
+            .flatMap { it.getDiagnostics(document) }
+            .map { it.toLspDiagnostic(document.text) }
 }

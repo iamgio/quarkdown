@@ -3,10 +3,8 @@ package com.quarkdown.lsp.diagnostics.function
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.diagnostics.DiagnosticsSupplier
-import com.quarkdown.lsp.util.offsetToPosition
-import org.eclipse.lsp4j.Diagnostic
+import com.quarkdown.lsp.diagnostics.SimpleDiagnostic
 import org.eclipse.lsp4j.DiagnosticSeverity
-import org.eclipse.lsp4j.Range
 import java.io.File
 
 /**
@@ -15,15 +13,14 @@ import java.io.File
 class FunctionParameterValueDiagnosticsSupplier(
     private val docsDirectory: File,
 ) : DiagnosticsSupplier {
-    override fun getDiagnostics(document: TextDocument): List<Diagnostic> {
-        val text = document.text
+    override fun getDiagnostics(document: TextDocument): List<SimpleDiagnostic> {
         val calls = document.functionCalls
         return calls.map {
-            Diagnostic().apply {
-                range = Range(offsetToPosition(text, it.range.start), offsetToPosition(text, it.range.endInclusive))
-                message = "Testing"
-                severity = DiagnosticSeverity.Warning
-            }
+            SimpleDiagnostic(
+                range = it.range,
+                message = "Testing",
+                severity = DiagnosticSeverity.Warning,
+            )
         }
     }
 }
