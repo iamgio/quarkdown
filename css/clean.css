@@ -498,6 +498,10 @@ img {
     display: flex
 }
 
+.flex-grow > * {
+    width: 100%;
+}
+
 .text-color-white {
     color: var(--white);
     -webkit-text-stroke-color: var(--base-white)
