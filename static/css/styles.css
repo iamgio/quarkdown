@@ -201,7 +201,7 @@ article a {
 }
 
 .section-dark article a {
-    color: var(--indigo-100);
+    color: var(--indigo-400);
 }
 
 pre {
