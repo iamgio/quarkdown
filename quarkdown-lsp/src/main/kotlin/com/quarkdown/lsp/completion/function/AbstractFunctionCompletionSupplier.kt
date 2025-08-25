@@ -2,6 +2,7 @@ package com.quarkdown.lsp.completion.function
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
@@ -57,8 +58,7 @@ abstract class AbstractFunctionCompletionSupplier(
         val transformedIndex = transformIndex(index, text).takeIf { it >= 0 } ?: return emptyList()
 
         val call: FunctionCall =
-            document.cacheOrCompute
-                .functionCalls
+            document.functionCalls
                 .getAtSourceIndex(transformedIndex)
                 ?: return emptyList()
 

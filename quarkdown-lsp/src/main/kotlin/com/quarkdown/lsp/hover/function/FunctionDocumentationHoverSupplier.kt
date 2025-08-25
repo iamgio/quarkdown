@@ -2,6 +2,7 @@ package com.quarkdown.lsp.hover.function
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
+import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.hover.HoverSupplier
 import com.quarkdown.lsp.tokenizer.FunctionCall
@@ -29,8 +30,7 @@ class FunctionDocumentationHoverSupplier(
         // Gets the function call at the specified hover position.
         val index = params.position.toOffset(text)
         val call: FunctionCall =
-            document.cacheOrCompute
-                .functionCalls
+            document.functionCalls
                 .getAtSourceIndex(index)
                 ?: return null
 

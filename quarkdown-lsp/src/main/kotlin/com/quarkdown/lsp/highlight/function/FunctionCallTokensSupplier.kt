@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.highlight.function
 
 import com.quarkdown.lsp.TextDocument
+import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.highlight.SimpleTokenData
 import com.quarkdown.lsp.highlight.TokenType
@@ -24,8 +25,7 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
         params: SemanticTokensParams,
         document: TextDocument,
     ): Iterable<SimpleTokenData> =
-        document.cacheOrCompute
-            .functionCalls
+        document.functionCalls
             .asSequence()
             .flatMap { it.tokens }
             .map { it.toSimpleTokenData() }

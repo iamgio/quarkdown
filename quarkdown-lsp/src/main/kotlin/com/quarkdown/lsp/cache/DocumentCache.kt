@@ -29,3 +29,10 @@ data class DocumentCache(
         }
     }
 }
+
+/**
+ * The list of function calls from a [TextDocument]'s cache,
+ * computing and updating the cache if necessary.
+ */
+val TextDocument.functionCalls: List<FunctionCall>
+    get() = this.cacheOrCompute.functionCalls
