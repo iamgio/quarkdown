@@ -43,18 +43,6 @@ footer.footer-section {
     color: var(--base-white);
 }
 
-@media screen and (max-width: 767px) {
-    footer .label-regular {
-        font-size: .4rem;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    footer .label-regular {
-        font-size: .35rem;
-    }
-}
-
 main > .divider {
     display: none;
 }
