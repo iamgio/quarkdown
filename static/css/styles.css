@@ -30,28 +30,17 @@
     max-height: 100vh;
 }
 
-#overview {
-    background-color: var(--base-white);
+section {
     z-index: 99999;
 }
 
 footer.footer-section {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     padding: .9rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: .8;
-    /*background: linear-gradient(90deg, transparent 10%, var(--indigo-400), var(--main), var(--indigo-400), transparent 90%);*/
-    background-color: transparent;
-    color: var(--main);
-}
-
-footer .label-regular {
-    font-size: .6rem;
+    background-color: var(--main);
+    color: var(--base-white);
 }
 
 @media screen and (max-width: 767px) {
@@ -170,6 +159,15 @@ nav .logo-wrapper img {
     color: var(--base-white);
 }
 
+section.section-light {
+    background-color: var(--base-white);
+}
+
+section.section-dark {
+    background-color: color-mix(in srgb, var(--indigo-100) 5%, transparent);
+    /*color: var(--base-white);*/
+}
+
 article p {
     margin: var(--base-spacing-tiny) 0;
 }
@@ -179,20 +177,20 @@ article :is(h1, h2, strong) {
     z-index: 99;
 }
 
-article :is(h1, h2) {
+article :is(h1, h2):not(.no-decoration) {
     display: inline-block;
     padding: 0 .2rem;
 }
 
 /* Colored fake underline */
-article :is(h1, h2, strong:not(pre strong))::before {
+article :is(h1, h2, strong:not(pre strong)):not(.no-decoration)::before {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     bottom: 10%;
     height: 30%;
-    background: color-mix(in srgb, var(--indigo-400) 15%, transparent);
+    background: color-mix(in srgb, var(--indigo-300) 15%, transparent);
     z-index: -1;
 }
 
@@ -201,12 +199,21 @@ article h2 {
 }
 
 article h3 {
-    margin-top: var(--base-spacing-large);
+    margin-top: var(--base-spacing-xxlarge);
     margin-bottom: var(--base-spacing-small);
 }
 
 article p {
     font-size: 1rem;
+}
+
+article a {
+    color: var(--main);
+    text-decoration: underline;
+}
+
+.section-dark article a {
+    color: var(--indigo-100);
 }
 
 pre {
@@ -219,6 +226,11 @@ pre {
     border-bottom-color: var(--indigo-300);
     border-width: 1px 1px 2px 1px;
 }
+
+/*.section-dark pre {
+    background-color: color-mix(in srgb, var(--grey-700) 40%, black);
+    border-color: var(--grey-500)
+}*/
 
 code {
     font-family: 'JetBrains Mono', monospace;
@@ -234,4 +246,20 @@ code {
         flex-wrap: wrap;
         gap: var(--base-spacing-tiny) !important;
     }
+}
+
+.installation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0 var(--base-spacing-medium);
+}
+
+.installation p {
+    text-align: end;
+}
+
+.installation pre {
+    width: 55vw;
+    overflow-x: auto;
 }

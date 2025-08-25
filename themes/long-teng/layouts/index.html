@@ -83,10 +83,17 @@
         </div>
     </header>
 
-    <section id="overview" class="page-padding" aria-labelledby="what-is-quarkdown">
+    <section class="section-light page-padding" aria-labelledby="overview">
         <div class="container-large padding-xxxlarge padding-vertical">
             <article class="rich-text-large" itemscope itemtype="https://schema.org/SoftwareApplication">
                 {{ partial "overview.html" . }}
+            </article>
+        </div>
+    </section>
+    <section class="section-dark" aria-labelledby="getting-started">
+        <div class="container-large padding-xxxlarge padding-vertical">
+            <article class="rich-text-large" itemscope itemtype="https://schema.org/SoftwareApplication">
+                {{ partial "getting-started.html" . }}
             </article>
         </div>
     </section>
