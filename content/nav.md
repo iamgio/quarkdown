@@ -3,7 +3,7 @@ title: "Quarkdown"
 logo_link: "https://quarkdown.com/"
 logo_image: "img/logo.svg"
 right_links:
-  - "Docs, https://quarkdown.com/docs"
+  - "Docs, /docs"
   - "Wiki, https://github.com/iamgio/quarkdown/wiki"
   - "Discuss, https://github.com/iamgio/quarkdown/discussions?discussions_q="
 buttons: []
