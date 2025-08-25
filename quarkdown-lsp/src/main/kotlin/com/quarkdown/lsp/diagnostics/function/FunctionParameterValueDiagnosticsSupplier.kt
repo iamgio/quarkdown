@@ -7,6 +7,7 @@ import com.quarkdown.lsp.diagnostics.SimpleDiagnostic
 import com.quarkdown.lsp.diagnostics.cause.DiagnosticCause
 import com.quarkdown.lsp.diagnostics.cause.UnallowedValueDiagnosticCause
 import com.quarkdown.lsp.documentation.getDocumentation
+import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.util.getParameterAtSourceIndex
@@ -33,8 +34,11 @@ class FunctionParameterValueDiagnosticsSupplier(
             val parameter: DocsParameter =
                 call.getParameterAtSourceIndex(documentation.data, token.range.start) ?: return@forEach
 
+            // The value of the argument.
+            val value = token.lexeme.trim()
+
             // Validating the value against the parameter.
-            validate(parameter, token.lexeme)?.let {
+            validate(parameter, value)?.let {
                 diagnostics += SimpleDiagnostic(token.range, it)
             }
         }
@@ -53,6 +57,11 @@ class FunctionParameterValueDiagnosticsSupplier(
         value: String,
     ): DiagnosticCause? =
         when {
+            // No diagnostics available if function calls are present in the value.
+            QuarkdownPatterns.FunctionCall.identifierInCall in value ->
+                null
+
+            // If there are allowed values, checks if the value is among them.
             parameter.allowedValues?.let { value in it } == false ->
                 UnallowedValueDiagnosticCause(parameter, value)
 

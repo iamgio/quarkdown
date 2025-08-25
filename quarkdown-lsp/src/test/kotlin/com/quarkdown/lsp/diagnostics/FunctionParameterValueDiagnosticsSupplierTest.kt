@@ -4,8 +4,8 @@ import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
 import org.eclipse.lsp4j.DiagnosticSeverity
 import org.eclipse.lsp4j.TextDocumentIdentifier
-import org.junit.Test
 import java.io.File
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -67,5 +67,17 @@ class FunctionParameterValueDiagnosticsSupplierTest {
         val text = "hello .$ALIGN_FUNCTION {cen}"
         val diagnostics = getDiagnostics(text)
         assertEquals(1, diagnostics.size)
+    }
+
+    @Test
+    fun `no diagnostics for value of nested function call`() {
+        val text = "hello .$ALIGN_FUNCTION {.func}"
+        assertTrue(getDiagnostics(text).isEmpty())
+    }
+
+    @Test
+    fun `no diagnostics for value containing nested function call`() {
+        val text = "hello .$ALIGN_FUNCTION {a .func b}"
+        assertTrue(getDiagnostics(text).isEmpty())
     }
 }
