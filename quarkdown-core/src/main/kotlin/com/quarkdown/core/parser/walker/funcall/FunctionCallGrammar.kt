@@ -207,7 +207,7 @@ class FunctionCallGrammar(
             WalkedFunctionArgument(
                 name = name?.text,
                 value = value?.text?.trimIndent()?.trim() ?: "",
-                range = begin.offset until (end.offset + end.length),
+                range = begin.offset until end.offset + end.length,
             )
         }
 
@@ -221,7 +221,7 @@ class FunctionCallGrammar(
                 WalkedFunctionArgument(
                     name = null,
                     value = it.trimIndent().trimEnd(),
-                    range = value.offset until (value.offset + value.length),
+                    range = value.offset until value.offset + value.length,
                 )
             }
         }
