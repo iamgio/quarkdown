@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.diagnostics
 
 import com.quarkdown.lsp.QuarkdownLanguageServer
+import com.quarkdown.lsp.diagnostics.function.FunctionDuplicateParameterNameDiagnosticsSupplier
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
 import com.quarkdown.lsp.diagnostics.function.FunctionUnresolvedParameterNameDiagnosticsSupplier
 
@@ -17,6 +18,7 @@ object DiagnosticsSuppliersFactory {
         return listOf(
             FunctionParameterValueDiagnosticsSupplier(docsDirectory),
             FunctionUnresolvedParameterNameDiagnosticsSupplier(docsDirectory),
+            FunctionDuplicateParameterNameDiagnosticsSupplier(),
         )
     }
 }
