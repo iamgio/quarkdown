@@ -1,30 +1,21 @@
 package com.quarkdown.lsp.diagnostics
 
-import com.quarkdown.lsp.TextDocument
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
 import org.eclipse.lsp4j.DiagnosticSeverity
-import org.eclipse.lsp4j.TextDocumentIdentifier
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
-private const val ALIGN_FUNCTION = "align"
-private const val ALIGNMENT_PARAMETER = "alignment"
 
 /**
  * Tests for the diagnostics supplier for function calls.
  */
 class FunctionParameterValueDiagnosticsSupplierTest {
-    private val docsDirectory = File("src/test/resources/docs")
-    private val supplier = FunctionParameterValueDiagnosticsSupplier(docsDirectory)
-    private val testDocumentUri = "file:///test.qd"
+    private val supplier = FunctionParameterValueDiagnosticsSupplier(DOCS_DIRECTORY)
 
-    private fun getDiagnostics(text: String): List<SimpleDiagnostic> {
-        val textDocument = TextDocumentIdentifier(testDocumentUri)
-        val document = TextDocument(text = text)
-        return supplier.getDiagnostics(document)
-    }
+    private fun getDiagnostics(text: String): List<SimpleDiagnostic> = DiagnosticsTestUtils.getDiagnostics(text, supplier)
 
     @Test
     fun `no diagnostics in empty text`() {
