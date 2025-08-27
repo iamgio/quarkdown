@@ -244,7 +244,7 @@ brew install quarkdown-labs/quarkdown/quarkdown
 
 ```shell
 scoop bucket add java
-scoop bucket add quarkdown https://github.com/quarkdown-labs/scoop-quarkdown          
+scoop bucket add quarkdown https://github.com/quarkdown-labs/scoop-quarkdown
 scoop install quarkdown
 ```
 
