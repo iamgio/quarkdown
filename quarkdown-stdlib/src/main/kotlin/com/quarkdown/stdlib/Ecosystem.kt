@@ -49,9 +49,10 @@ internal fun includeResource(
 /**
  * This function has two behaviors:
  * - Reads a Quarkdown file and includes its parsed content in the current document.
- * - Loads a library into the current context. Loadable libraries are fetched from the library folder (`--libs` option).
+ * - Loads a library into the current context. Loadable libraries are fetched from the library folder (`--libs` CLI option).
  *
  * The context of the main file is shared to the sub-file and vice versa, allowing for sharing of variables, functions and other declarations.
+ *
  * @param path either a path (relative or absolute with extension) to the file to include, or the name of a loadable library
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
  * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated
@@ -72,7 +73,7 @@ fun include(
 /**
  * Performs a bulk include of the given paths via [include].
  * @param paths paths to the files or library names to include
- * @return a [GeneralCollectionValue] containing the output of the included files
+ * @return a collection containing the output of the included files
  * @throws IllegalArgumentException if any of the loaded sources cannot be evaluated
  * @see include for information about file inclusion
  * @wiki Including other Quarkdown files

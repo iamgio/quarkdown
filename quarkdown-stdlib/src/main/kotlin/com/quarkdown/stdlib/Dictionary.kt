@@ -43,6 +43,7 @@ fun dictionary(
 ): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
 
 /**
+ * Gets a value from a dictionary by its key.
  * @param key key to get the value of
  * @param dictionary dictionary to get the value from
  * @param fallback value to return if the key is not present. If unset, `false` is returned.

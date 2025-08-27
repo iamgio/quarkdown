@@ -65,7 +65,6 @@ private fun mergeLocalizationTables(
 /**
  * Defines and registers a new localization table, whose entries are key-value pairs for each locale and defined by a Markdown dictionary.
  *
- * Example:
  * ```
  * .localization {mytable}
  *     - English
@@ -75,9 +74,11 @@ private fun mergeLocalizationTables(
  *         - morning: Buongiorno
  *         - evening: Buonasera
  * ```
+ *
  * The localization entries can then be accessed via the [localize] function, after setting the document language via [docLanguage]:
+ *
  * ```
- * .doclang {english}
+ * .doclang {English}
  *
  * .localize {mytable:morning} <!-- Good morning -->
  * ```
@@ -85,6 +86,7 @@ private fun mergeLocalizationTables(
  * If [merge] is set to true, it can be used to expand an existing localization table.
  *
  * Example, extending stdlib's localization table:
+ *
  * ```
  * .doclang {fr-CA}
  *
@@ -95,6 +97,7 @@ private fun mergeLocalizationTables(
  * .box type:{warning}
  *     Box content
  * ```
+ *
  * In this example, the warning box will automatically feature the "Avertissement" title,
  * since the `std:warning` localization key is accessed by the `.box` function.
  *
@@ -137,7 +140,6 @@ fun localization(
 /**
  * Localizes a key from a pre-existing localization table (defined via [localization]).
  *
- * Example:
  * ```
  * .localize {mytable:key}
  * ```

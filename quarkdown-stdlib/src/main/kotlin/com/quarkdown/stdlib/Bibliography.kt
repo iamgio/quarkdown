@@ -45,6 +45,7 @@ enum class BibliographyStyle(
  * @param decorativeTitle whether the title, if present, should be a decorative heading,
  *                        which does not trigger automatic page breaks.
  * @return a wrapped [BibliographyView] node
+ * @see cite to cite bibliography entries
  * @wiki Bibliography
  */
 fun bibliography(

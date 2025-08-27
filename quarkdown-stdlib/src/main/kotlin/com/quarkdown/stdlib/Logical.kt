@@ -19,6 +19,8 @@ val Logical: Module =
     )
 
 /**
+ * @param a first number to compare
+ * @param b second number to compare
  * @param equals whether the comparison should be 'lower or equals' instead
  * @return whether `a < b` (or `<=` if [equals] is `true`)
  */
@@ -37,6 +39,8 @@ fun isLower(
 )
 
 /**
+ * @param a first number to compare
+ * @param b second number to compare
  * @param equals whether the comparison should be 'greater or equals' instead
  * @return whether `a > b` (or `>=` if [equals] is `true`)
  */
@@ -55,6 +59,9 @@ fun isGreater(
 )
 
 /**
+ * Compares two values for equality.
+ * @param a first value to compare
+ * @param b second value to compare
  * @return whether [a] and [b] have equal content
  */
 @Name("equals")
@@ -65,6 +72,8 @@ fun equals(
 ) = BooleanValue(a == b || a.unwrappedValue == b.unwrappedValue)
 
 /**
+ * Negates a boolean value.
+ * @param value boolean value to negate
  * @return the negation of [value]
  */
 @LikelyChained

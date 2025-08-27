@@ -22,6 +22,18 @@ val Injection: Module =
 /**
  * Creates an HTML element, which is rendered as-is without any additional processing or escaping,
  * as long as the rendering target supports HTML.
+ *
+ * ```html
+ * .html
+ *     <div class="my-container">
+ *       My HTML container
+ *     </div>
+ * ```
+ *
+ * ```markdown
+ * **Hello** .html {<em>world</em>}!
+ * ```
+ *
  * @param content raw HTML content to inject
  * @return a new [Html] node
  * @wiki HTML
@@ -35,8 +47,7 @@ fun html(
  * The content is wrapped in a `<style>` tag and rendered as-is,
  * without any additional processing or escaping, as long as the rendering target supports HTML.
  *
- * Example:
- * ```
+ * ```css
  * .css
  *   body {
  *     background-color: green !important;
@@ -57,11 +68,11 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
 
 /**
  * Overrides the value of Quarkdown CSS properties.
+ *
  * Each entry corresponds to a Quarkdown CSS property name and its value.
  * The names will be prefixed with `--qd-` to match the Quarkdown CSS variable naming convention.
  *
- * For example:
- * ```
+ * ```yaml
  * .cssproperties
  *   - background-color: green
  *   - main-font-size: 20px
@@ -72,7 +83,8 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
  *
  * The content is wrapped in a `<style>` tag and rendered as-is,
  * without any additional processing or escaping, as long as the rendering target supports HTML.
- * @param properties a map of CSS property names and their values
+ *
+ * @param properties a dictionary of CSS property names and their values
  * @return a new [Html] node representing the style element
  * @wiki CSS
  */

@@ -84,8 +84,9 @@ fun read(
 }
 
 /**
+ * Loads a CSV file and returns its content as a display-ready table.
  * @param path path of the CSV file (with extension) to show
- * @param caption caption of the table, if any
+ * @param caption optional caption of the table. If set, the table will be numbered according to the current [numbering] format
  * @return a table whose content is loaded from the file located in [path]
  * @wiki File data
  */

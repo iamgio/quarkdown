@@ -27,9 +27,11 @@ val String: Module =
 
 /**
  * Creates a string.
+ *
  * If [value] is delimited by `"` characters, they are removed
  * and the wrapped string is not trimmed, as opposed to what usually happens
  * through Quarkdown's parser.
+ *
  * Example: `"  Hello, World!  "` -> `  Hello, World!  `
  * @param value string to wrap
  * @return a new string value
@@ -42,7 +44,17 @@ fun string(value: String) =
 
 /**
  * Concatenates two strings if a condition is met.
- * Example: `Hello, ` and `World!` -> `Hello, World!`
+ *
+ * ```
+ * .concatenate {abc} with:{def} <!-- abcdef -->
+ * ```
+ *
+ * ```
+ * .var {condition} {no}
+ *
+ * .concatenate {abc} with:{def} if:{.condition} <!-- abc -->
+ * ```
+ *
  * @param a first string
  * @param b second string
  * @param condition if true, concatenates `a` and `b`
@@ -61,7 +73,9 @@ fun concatenate(
 
 /**
  * Converts a string to uppercase.
+ *
  * Example: `Hello, World!` -> `HELLO, WORLD!
+ *
  * @param string string to convert
  * @return a new uppercase string
  */
@@ -70,7 +84,9 @@ fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
 
 /**
  * Converts a string to lowercase.
+ *
  * Example: `Hello, World!` -> `hello, world!`
+ *
  * @param string string to convert
  * @return a new lowercase string
  */
@@ -79,7 +95,9 @@ fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
 
 /**
  * Capitalizes the first character of a string.
+ *
  * Example: `hello, world!` -> `Hello, world!`
+ *
  * @param string string to capitalize
  * @return a new string with the first character capitalized
  */
@@ -88,6 +106,7 @@ fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsVal
 
 /**
  * Checks if a string is empty.
+ *
  * @param string string to check
  * @return `true` if the string is empty, `false` otherwise
  */
@@ -97,6 +116,7 @@ fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
 
 /**
  * Checks if a string is not empty.
+ *
  * @param string string to check
  * @return `true` if the string is not empty, `false` otherwise
  * @see isEmpty

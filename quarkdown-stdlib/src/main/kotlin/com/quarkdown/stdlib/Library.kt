@@ -26,7 +26,6 @@ val Library: Module =
  * @param context context to search in
  * @param name name of the library, case-insensitive
  * @return library with the given name, if it exists
-
  */
 private fun findLibrary(
     context: Context,
@@ -34,6 +33,8 @@ private fun findLibrary(
 ): Library? = context.libraries.find { it.name.equals(name, ignoreCase = true) }
 
 /**
+ * Checks whether a library with the given name is registered in [context].
+ *
  * @param name name of the library, case-insensitive
  * @return whether a library with the given name is registered in [context]
  */
@@ -44,6 +45,8 @@ fun libraryExists(
 ) = BooleanValue(findLibrary(context, name) != null)
 
 /**
+ * Checks whether a function with the given name is registered in [context].
+ *
  * @param name name of the function, case-insensitive
  * @return whether a function with the given name is registered in [context]
  */
@@ -54,6 +57,8 @@ fun functionExists(
 ) = BooleanValue(context.getFunctionByName(name) != null)
 
 /**
+ * Lists the names of all libraries loaded in [context].
+ *
  * @return an unordered collection of the loaded libraries' names
  */
 fun libraries(
@@ -66,8 +71,10 @@ fun libraries(
 )
 
 /**
+ * Lists the names of all functions exposed by the library with the given name.
+ *
  * @param libraryName name of the library, case-insensitive
- * @return unordered set of functions exposed by the library
+ * @return unordered set of functions exposed by the library, or an empty one if the library is not found
  */
 @Name("libfunctions")
 fun libraryFunctions(

@@ -50,7 +50,7 @@ private fun quarkdownIndexToKotlin(index: Int) = index - INDEX_STARTS_AT
 /**
  * @param index index of the element to get (starting at 0)
  * @param collection collection to get the element from
- * @param fallback value to return if the index is out of bounds. If unset, `none` is returned.
+ * @param fallback value to return if the index is out of bounds. If unset, [none] is returned.
  * @return element at the given index, or [fallback] if the index is out of bounds
  */
 private fun nativeCollectionGet(
@@ -63,7 +63,7 @@ private fun nativeCollectionGet(
  * @param collection collection to get the element from
  * @param index index of the element to get **(starting at 1)**
  * @param fallback value to return if the index is out of bounds. If unset, `false` is returned.
- * @return element at the given index, or [NOT_FOUND] if the index is out of bounds
+ * @return element at the given index, or [none] if the index is out of bounds
  */
 @Name("getat")
 @LikelyChained
@@ -75,7 +75,7 @@ fun collectionGet(
 
 /**
  * @param collection collection to get the first element from
- * @return first element of the collection, or [NOT_FOUND] if the collection is empty
+ * @return first element of the collection, or [none] if the collection is empty
  */
 @Name("first")
 @LikelyChained
@@ -85,7 +85,7 @@ fun collectionFirst(
 
 /**
  * @param collection collection to get the second element from
- * @return second element of the collection, or [NOT_FOUND] if the collection has less than 2 elements
+ * @return second element of the collection, or [none] if the collection has less than 2 elements
  */
 @Name("second")
 @LikelyChained
@@ -95,7 +95,7 @@ fun collectionSecond(
 
 /**
  * @param collection collection to get the third element from
- * @return third element of the collection, or [NOT_FOUND] if the collection has less than 3 elements
+ * @return third element of the collection, or [none] if the collection has less than 3 elements
  */
 @Name("third")
 @LikelyChained
@@ -105,7 +105,7 @@ fun collectionThird(
 
 /**
  * @param collection collection to get the last element from
- * @return last element of the collection, or [NOT_FOUND] if the collection is empty
+ * @return last element of the collection, or [none] if the collection is empty
  */
 @Name("last")
 @LikelyChained

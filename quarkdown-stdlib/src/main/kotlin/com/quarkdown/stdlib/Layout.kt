@@ -66,7 +66,9 @@ val Layout: Module =
 
 /**
  * A general-purpose container that groups content.
- * Any layout rules (e.g. from [align], [row], [column], [grid]) are ignored inside this container.
+ *
+ * Any active layout rules inherited by the parent (e.g. from [align], [row], [column], [grid]) are reset inside this container.
+ *
  * @param width width of the container. No constraint if unset
  * @param height height of the container. No constraint if unset
  * @param fullWidth whether the container should take up the full width of the parent. Overridden by [width]. False if unset
@@ -134,6 +136,7 @@ fun container(
 
 /**
  * Aligns content and text within its parent.
+ *
  * @param alignment content alignment anchor and text alignment
  * @param body content to center
  * @return the new aligned [Container] node
@@ -152,6 +155,7 @@ fun align(
 
 /**
  * Centers content and text within its parent.
+ *
  * @param body content to center
  * @return the new aligned [Container] node
  * @see align
@@ -163,6 +167,7 @@ fun center(
 
 /**
  * Turns content into a floating element, allowing subsequent content to wrap around it.
+ *
  * @param alignment floating position
  * @param body content to float
  * @return the new floating [Container] node
@@ -198,6 +203,7 @@ private fun stack(
 
 /**
  * Stacks content horizontally.
+ *
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
@@ -214,6 +220,7 @@ fun row(
 
 /**
  * Stacks content vertically.
+ *
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
@@ -230,7 +237,9 @@ fun column(
 
 /**
  * Stacks content in a grid layout.
- * Each child is placed in a cell in a row, and a row ends when its cell count reaches [columnCount].
+ *
+ * Each child is placed in a cell, and a row of cells ends when its cell count reaches [columnCount].
+ *
  * @param columnCount positive number of columns
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
@@ -266,7 +275,9 @@ fun landscape(
 
 /**
  * If the document has a multi-column layout (set via [pageFormat]), makes content span across all columns in a multi-column layout.
+ *
  * If the document has a single-column layout, the effect is the same as [container].
+ *
  * @param body content to span across all columns
  * @return the new [FullColumnSpan] span node
  * @wiki Multi-column layout
@@ -277,9 +288,11 @@ fun fullColumnSpan(
 ) = FullColumnSpan(body.children).wrappedAsValue()
 
 /**
- * An empty square that adds whitespace to the layout.
- * If at least one of the dimensions is set, the square will have a fixed size.
- * If both dimensions are unset, a blank character is used, which can be useful for spacing and adding line breaks.
+ * An empty rectangle that adds whitespace to the layout.
+ *
+ * If at least one of the dimensions is set, the rectangle will have a fixed size.
+ * If both dimensions are unset, a blank character (`&nbsp;`) is used, which can be useful for spacing and adding line breaks.
+ *
  * @param width width of the square. If unset, it defaults to zero
  * @param height height of the square. If unset, it defaults to zero
  * @return the new [Whitespace] node
@@ -291,6 +304,7 @@ fun whitespace(
 
 /**
  * Applies a clipping path to its content.
+ *
  * @param clip clip type to apply
  * @param body content to clip
  * @return the new [Clipped] block
@@ -302,7 +316,8 @@ fun clip(
 ) = Clipped(clip, body.children).wrappedAsValue()
 
 /**
- * Inserts content in a box.
+ * Inserts content in a styled box.
+ *
  * @param title box title. If unset:
  * - If the locale ([docLanguage]) is set and supported, the title is localized according to the box [type]
  * - Otherwise, the box is untitled
@@ -341,8 +356,10 @@ fun box(
 }
 
 /**
- * Creates a _to do_ box, to mark content that needs to be done later, and logs it.
+ * Creates a _to do_ box, to mark content that needs to be done later, and also logs it to stdout.
+ *
  * The title is localized according to the current locale ([docLanguage]), or English as a fallback.
+ *
  * @param body content to show in the box
  * @return the new box node
  */
@@ -363,8 +380,10 @@ fun toDo(
 
 /**
  * Inserts content in a collapsible block, whose content can be hidden or shown by interacting with it.
+ *
  * @param title title of the block
  * @param open whether the block is open at the beginning
+ * @param body content of the block when expanded
  * @return the new [Collapse] node
  * @wiki Collapsible
  */
@@ -376,6 +395,7 @@ fun collapse(
 
 /**
  * Inserts content in a collapsible text span, whose content can be expanded or collapsed by interacting with it.
+ *
  * @param full content to show when the node is expanded
  * @param short content to show when the node is collapsed
  * @param open whether the block is open at the beginning
@@ -391,6 +411,7 @@ fun inlineCollapse(
 
 /**
  * Inserts content in a figure block, which features an optional caption and can be numbered according to the `figures` numbering rules.
+ *
  * @param caption optional caption of the figure
  * @param body content of the figure
  * @return the new [Figure] node
@@ -406,6 +427,21 @@ fun figure(
 /**
  * Node that can be numbered depending on its location in the document
  * and the amount of occurrences according to its [key].
+ *
+ * The numbering format can be set via [numbering] by specifying a format for the given [key].
+ *
+ * ```
+ * .numbering
+ *     - headings: 1.1
+ *     - greetings: 1.a
+ *
+ * # Title 1
+ *
+ * .numbered {greetings}
+ *     number:
+ *     Hello! This block has the number .number, which is `1.a`. The next one will be `1.b`.
+ * ```
+ *
  * @param key name to group (and count) numbered nodes
  * @param body content, with the formatted location of this element (as a string) as an argument
  * @return the new [Numbered] node
@@ -428,10 +464,11 @@ fun numbered(
 /**
  * Creates a table out of a collection of columns.
  *
- * The following example joins 5 columns:
+ * The following example joins 5 columns via [repeat]:
+ *
  * ```
  * .table
- *     .foreach {1..5}
+ *     .repeat {5}
  *         | Header .1 |
  *         |-----------|
  *         |  Cell .1  |

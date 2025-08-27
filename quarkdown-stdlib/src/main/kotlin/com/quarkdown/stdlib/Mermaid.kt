@@ -39,6 +39,21 @@ private fun mermaidFigure(
 
 /**
  * Creates a Mermaid diagram.
+ *
+ * ```
+ * .mermaid
+ *     graph TD
+ *         A --> B
+ *         B --> C
+ * ```
+ *
+ * Content can also be loaded from a file via [read]:
+ *
+ * ```
+ * .mermaid
+ *     .read {path/to/diagram.mmd}
+ * ```
+ *
  * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
  * @param code the Mermaid code of the diagram
  * @return a new [MermaidDiagramFigure] node
@@ -118,6 +133,7 @@ private fun StringBuilder.axis(
  * Creates a chart diagram on the XY plane.
  *
  * The following example plots 4 points at (1, 5), (2, 2), (3, 4), (4, 10), connected by a line:
+ *
  * ```
  * .xychart
  *   - 5
@@ -127,20 +143,27 @@ private fun StringBuilder.axis(
  * ```
  *
  * Multiple lines can be plotted by supplying a list of lists of points. Each list will be plotted as a separate line:
+ *
  * ```
  * .xychart
- *   - |
- *     - 5
+ *   - - 5
  *     - 8
  *     - 3
- *   - |
- *     - 3
+ *   - - 3
  *     - 5
  *     - 10
- *   - |
- *     - 8
+ *   - - 8
  *     - 3
  *     - 5
+ * ```
+ *
+ * Complex plottings can be achieved by manipulating collections, for instance via [forEach] or [repeat]:
+ *
+ * ```
+ * .xychart
+ *     .repeat {100}
+ *         n:
+ *         .n::pow {2}::divide {100}
  * ```
  *
  * @param showLines whether to draw lines

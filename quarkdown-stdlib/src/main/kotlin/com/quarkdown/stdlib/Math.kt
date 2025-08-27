@@ -215,11 +215,14 @@ fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
 
 /**
  * Creates a range of numbers, which can also be iterated through.
+ *
  * The behavior of an open range is delegated to the consumer.
  * For instance, using a left-open range with [forEach] will make the loop start from 1.
+ *
  * The difference between this function and the built-in `..` operator is that the latter
  * does not allow for dynamic evaluation, hence both ends must be literals.
  * This function allows evaluating ends dynamically: for instance, `.range from:{1} to:{.sum {1} {2}}`.
+ *
  * Floating-point numbers are truncated to integers.
  * @param start start of the range (inclusive). If unset, the range is infinite on the left end
  * @param end end of the range (inclusive). If unset, the range is infinite on the right end. [end] > [start]

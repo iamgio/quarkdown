@@ -32,6 +32,7 @@ val Text: Module =
 
 /**
  * Creates an inline text node with specified formatting and transformation.
+ *
  * @param text inline content to transform
  * @param size font size, or default if not specified
  * @param weight font weight, or default if not specified
@@ -86,8 +87,9 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  * hence it can be used - for example - in combination with [read] to load code from file.
  *
  * Example of a code block loaded from file via [read]:
+ *
  * ```
- * .code {kotlin} focus:{2..5}
+ * .code lang:{kotlin} focus:{2..5}
  *     .read {snippet.kt}
  * ```
  *
