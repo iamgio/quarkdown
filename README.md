@@ -259,13 +259,19 @@ If missing, Java 17, Node.js and npm will be installed automatically using the s
 
 ### Manual installation
 
-Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) or build it with `gradlew distZip`, and unzip it.
+<details>
+<summary>Instructions for manual installation</summary>
 
-Optionally, adding `<install_dir>/bin` it to your `PATH` allows you to access Quarkdown more easily.
+Download `quarkdown.zip` from the [latest stable release](https://github.com/iamgio/quarkdown/releases/latest) and unzip it,
+or build it with `gradlew installDist`.
+
+Optionally, adding `<install_dir>/bin` to your `PATH` allows you easier access Quarkdown.
 
 Requirements:
 - Java 17 or higher
 - (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://github.com/iamgio/quarkdown/wiki/PDF-export) for details.
+
+</details>
 
 &nbsp;
 
