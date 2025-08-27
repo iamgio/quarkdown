@@ -395,3 +395,8 @@ an elementary particle that is a major constituent of matter: they give life to 
 while also being one of the lightest objects in existence.
 
 This is, indeed, the concept **Quarkdown** is built upon. 
+
+## License
+
+By default, Quarkdown and its modules are licensed under [GNU GPLv3](./LICENSE), except for modules that include their own `LICENSE` file:
+the CLI (`quarkdown-cli`) and Language Server (`quarkdown-lsp`) modules and binaries are licensed under GNU AGPLv3.

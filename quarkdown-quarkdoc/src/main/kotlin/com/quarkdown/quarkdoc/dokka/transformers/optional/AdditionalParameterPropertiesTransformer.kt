@@ -4,15 +4,15 @@ import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.factory.ValueFactory.enum
+import com.quarkdown.quarkdoc.dokka.kdoc.buildDocTags
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
+import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
+import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.DefaultValue
-import org.jetbrains.dokka.model.doc.A
 import org.jetbrains.dokka.model.doc.Dl
 import org.jetbrains.dokka.model.doc.DocTag
-import org.jetbrains.dokka.model.doc.Li
-import org.jetbrains.dokka.model.doc.Text
 import org.jetbrains.dokka.model.doc.Ul
 import org.jetbrains.dokka.plugability.DokkaContext
 
@@ -54,42 +54,26 @@ class AdditionalParameterPropertiesTransformer(
      * which lists the enum entries of the given [enum].
      */
     override fun createNewDocumentation(value: ParameterProperties): List<DocTag> =
-        buildList {
+        buildDocTags {
             if (value.isLikelyBody) {
-                this +=
-                    Li(
-                        listOf(
-                            Text("Likely a "),
-                            A(
-                                listOf(
-                                    Text("body argument"),
-                                ),
-                                params = mapOf("href" to BODY_PARAMETER_WIKI_URL),
-                            ),
-                        ),
-                    )
+                listItem {
+                    scrapingAnchor(Anchors.LIKELY_BODY)
+                    text("Likely a ")
+                    link(address = BODY_PARAMETER_WIKI_URL, "body argument")
+                }
             }
             if (value.isOptional) {
-                this +=
-                    Li(
-                        listOf(
-                            Text("Optional"),
-                        ),
-                    )
+                listItem {
+                    scrapingAnchor(Anchors.OPTIONAL)
+                    text("Optional")
+                }
             }
             if (value.isLikelyNamed) {
-                this +=
-                    Li(
-                        listOf(
-                            Text("Likely "),
-                            A(
-                                listOf(
-                                    Text("named"),
-                                ),
-                                params = mapOf("href" to NAMED_PARAMETER_WIKI_URL),
-                            ),
-                        ),
-                    )
+                listItem {
+                    scrapingAnchor(Anchors.LIKELY_NAMED)
+                    text("Likely ")
+                    link(address = NAMED_PARAMETER_WIKI_URL, "named")
+                }
             }
         }.takeUnless { it.isEmpty() }
             ?.let {

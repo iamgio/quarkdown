@@ -95,4 +95,17 @@ object QuarkdownLexerFactory : LexerFactory {
                 fillTokenType = ::PlainTextToken,
             )
         }
+
+    /**
+     * Creates a lexer for inline function calls.
+     * This lexer is mainly used for function call completion and highlighting in the LSP.
+     * @param source the source text to tokenize
+     * @return a lexer that recognizes inline function calls
+     *         (block arguments are not included, as they are part of block function calls)
+     */
+    fun newInlineFunctionCallLexer(source: CharSequence): Lexer =
+        StandardRegexLexer(
+            source,
+            listOf(inlinePatterns.inlineFunctionCall),
+        )
 }

@@ -23,8 +23,17 @@ data class WalkedFunctionCall(
  * Structured data produced by [FunctionCallWalkerParser] which represents a function call argument.
  * @param name the name of the argument, if the argument is named
  * @param value the raw value of the argument
+ * @param range the range of the argument value (including delimiters) in the source text
  */
 data class WalkedFunctionArgument(
     val name: String?,
     val value: String,
+    val range: IntRange,
 )
+
+/**
+ * @return the last function call in the chain of this [WalkedFunctionCall].
+ * If this call is not chained, it returns itself.
+ */
+val WalkedFunctionCall.lastChainedCall: WalkedFunctionCall
+    get() = generateSequence(this) { it.next }.last()

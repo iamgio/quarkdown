@@ -957,6 +957,7 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("function", name)
             assertEquals(0, arguments.size)
+            assertEquals(0..9, sourceRange)
         }
 
         with(nodes.next()) {
@@ -966,6 +967,7 @@ class BlockParserTest {
             assertEquals("arg2", arguments[1].value.unwrappedValue)
             assertFalse(arguments[0].isBody)
             assertFalse(arguments[1].isBody)
+            assertEquals(11..34, sourceRange)
         }
 
         with(nodes.next()) {
@@ -1010,6 +1012,7 @@ class BlockParserTest {
                 "body content\nbody **content**",
                 arguments.first().value.unwrappedValue,
             )
+            assertEquals(130..176, sourceRange)
         }
 
         with(nodes.next()) {

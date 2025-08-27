@@ -5,8 +5,10 @@ import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -15,17 +17,16 @@ import kotlin.test.assertTrue
 class DokkaReaderTest {
     @Test
     fun `html extractor`() {
-        val subContentRange = 114..143
         val fullHtml = javaClass.getResourceAsStream("/content/lowercase.html")!!.bufferedReader().readText()
+        val extractedHtml = javaClass.getResourceAsStream("/extract/lowercase.html")!!.bufferedReader().readText()
+
+        fun String.withoutWhitespace(): String = replace("\\s+".toRegex(), "")
+
         assertEquals(
-            fullHtml
-                .lines()
-                .subList(subContentRange.first, subContentRange.last)
-                .joinToString("\n")
-                .replace("\\s+".toRegex(), ""),
+            extractedHtml.withoutWhitespace(),
             DokkaHtmlContentExtractor(fullHtml)
                 .extractContent()
-                ?.replace("\\s+".toRegex(), ""),
+                ?.withoutWhitespace(),
         )
     }
 
@@ -47,6 +48,7 @@ class DokkaReaderTest {
         assertFalse(parameter.isOptional)
         assertFalse(parameter.isLikelyBody)
         assertFalse(parameter.isLikelyNamed)
+        assertNull(parameter.allowedValues)
     }
 
     @Test
@@ -83,6 +85,13 @@ class DokkaReaderTest {
         assertTrue(function.isLikelyChained)
     }
 
+    @Test
+    fun `allowed parameter values extractor`() {
+        val function = extractFunctionData("/content/container.html")
+        val parameter = function.parameters.first { it.name == "alignment" }
+        assertContains(parameter.allowedValues!!, "center")
+    }
+
     /**
      * Copies content/{capitalize.html, lowercase.html, uppercase.html, index.html} to a temp directory
      * in order to simulate the structure of a Dokka-generated module.
@@ -95,7 +104,7 @@ class DokkaReaderTest {
         resourceNames: List<String>,
     ): File {
         val tempDir = createTempDirectory().toFile()
-        val moduleDir = tempDir.resolve("com/quarkdown/stdlib/module/$moduleName").apply { mkdirs() }
+        val moduleDir = tempDir.resolve("com.quarkdown.stdlib.module.$moduleName").apply { mkdirs() }
         resourceNames.forEach { name ->
             javaClass.getResourceAsStream("/content/$name")!!.use { input ->
                 moduleDir.resolve(name).outputStream().use { output ->
@@ -117,10 +126,12 @@ class DokkaReaderTest {
         results[0].let {
             assertEquals("lowercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
         results[1].let {
             assertEquals("uppercase", it.name)
             assertEquals("String", it.moduleName)
+            assertTrue(it.isInModule)
         }
     }
 }

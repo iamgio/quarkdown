@@ -1,17 +1,14 @@
 package com.quarkdown.quarkdoc.dokka.transformers.enumeration
 
 import com.quarkdown.core.function.toQuarkdownNamingFormat
+import com.quarkdown.quarkdoc.dokka.kdoc.buildDocTags
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters.QuarkdocEnumAdapters
+import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
+import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.DParameter
-import org.jetbrains.dokka.model.doc.CodeInline
 import org.jetbrains.dokka.model.doc.DocTag
-import org.jetbrains.dokka.model.doc.DocumentationLink
-import org.jetbrains.dokka.model.doc.H4
-import org.jetbrains.dokka.model.doc.Li
-import org.jetbrains.dokka.model.doc.Text
-import org.jetbrains.dokka.model.doc.Ul
 import org.jetbrains.dokka.plugability.DokkaContext
 
 /**
@@ -27,31 +24,19 @@ class EnumParameterEntryListerTransformer(
     override fun extractValue(parameter: DParameter): QuarkdocEnum? = parameter.type.driOrNull?.let(QuarkdocEnumAdapters::fromDRI)
 
     override fun createNewDocumentation(value: QuarkdocEnum): List<DocTag> =
-        listOf(
-            H4(
-                listOf(
-                    Text("Values"),
-                ),
-            ),
-            Ul(
-                value.entries.map { entry ->
-                    Li(
-                        listOf(
-                            DocumentationLink(
-                                dri = entry.dri,
-                                listOf(
-                                    CodeInline(
-                                        listOf(
-                                            Text(entry.name.toQuarkdownNamingFormat()),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    )
-                },
-            ),
-        )
+        buildDocTags {
+            h4 { text("Values") }
+            scrapingAnchor(Anchors.VALUES)
+            unorderedList {
+                value.entries.forEach { entry ->
+                    listItem {
+                        link(dri = entry.dri) {
+                            codeInline(entry.name.toQuarkdownNamingFormat())
+                        }
+                    }
+                }
+            }
+        }
 
     override fun mergeDocumentationContent(
         old: List<DocTag>,
