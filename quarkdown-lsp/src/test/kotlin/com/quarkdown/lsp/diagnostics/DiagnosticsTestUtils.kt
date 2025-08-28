@@ -10,6 +10,9 @@ object DiagnosticsTestUtils {
     const val ALIGN_FUNCTION = "align"
     const val ALIGNMENT_PARAMETER = "alignment"
 
+    const val CSV_FUNCTION = "csv"
+    const val PATH_PARAMETER = "path"
+
     val DOCS_DIRECTORY = File("src/test/resources/docs")
 
     /**

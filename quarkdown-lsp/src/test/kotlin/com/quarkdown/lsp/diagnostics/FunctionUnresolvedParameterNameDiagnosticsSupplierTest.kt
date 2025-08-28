@@ -2,7 +2,9 @@ package com.quarkdown.lsp.diagnostics
 
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.PATH_PARAMETER
 import com.quarkdown.lsp.diagnostics.function.FunctionUnresolvedParameterNameDiagnosticsSupplier
 import org.eclipse.lsp4j.DiagnosticSeverity
 import kotlin.test.Test
@@ -82,5 +84,23 @@ class FunctionUnresolvedParameterNameDiagnosticsSupplierTest {
     fun `no diagnostics for positional parameters`() {
         val text = "hello .$ALIGN_FUNCTION {center}"
         assertTrue(getDiagnostics(text).isEmpty())
+    }
+
+    @Test
+    fun `chained calls should assign diagnose only for their own parameters`() {
+        val text = "hello .$CSV_FUNCTION $PATH_PARAMETER:{arg}::$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{}"
+        val diagnostics = getDiagnostics(text)
+
+        assertTrue(diagnostics.isEmpty())
+    }
+
+    @Test
+    fun `chained calls should diagnose unresolved parameters`() {
+        val text =
+            "hello .$CSV_FUNCTION $PATH_PARAMETER:{arg} $INVALID_PARAMETER:{arg}::" +
+                "$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{} $INVALID_PARAMETER:{}"
+        val diagnostics = getDiagnostics(text)
+
+        assertEquals(2, diagnostics.size)
     }
 }

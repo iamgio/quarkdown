@@ -9,6 +9,7 @@ import com.quarkdown.lsp.diagnostics.cause.UnresolvedParameterNameDiagnosticCaus
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
+import com.quarkdown.lsp.util.tokensByChainedCall
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import java.io.File
 
@@ -21,19 +22,32 @@ class FunctionUnresolvedParameterNameDiagnosticsSupplier(
 ) : DiagnosticsSupplier {
     override fun getDiagnostics(document: TextDocument): List<SimpleDiagnostic> = document.functionCalls.flatMap(::getDiagnostics)
 
-    private fun getDiagnostics(call: FunctionCall): List<SimpleDiagnostic> {
-        val function = call.getDocumentation(this.docsDirectory) ?: return emptyList()
+    private fun getDiagnostics(call: FunctionCall): List<SimpleDiagnostic> =
+        call.tokensByChainedCall
+            .flatMap { (functionName, tokens) ->
+                val function = getDocumentation(this.docsDirectory, functionName) ?: return@flatMap emptyList()
+                validateTokens(function.data, tokens)
+            }.toList()
 
-        return call.tokens
+    /**
+     * Validates the list of tokens associated with a function call against the function's parameters.
+     * @param function the function whose parameters are to be validated against
+     * @param tokens the list of tokens to validate
+     * @return a list of [SimpleDiagnostic]s for any unresolved parameter names found in the tokens
+     */
+    private fun validateTokens(
+        function: DocsFunction,
+        tokens: List<FunctionCallToken>,
+    ): List<SimpleDiagnostic> =
+        tokens
             .asSequence()
             .filter { it.type == FunctionCallToken.Type.PARAMETER_NAME }
             .mapNotNull { token ->
                 val parameterName = token.lexeme.trim()
-                validate(function.data, parameterName)?.let { cause ->
+                validate(function, parameterName)?.let { cause ->
                     SimpleDiagnostic(token.range, cause)
                 }
             }.toList()
-    }
 
     /**
      * Validates a parameter name against a function to extract any diagnostics about unresolved parameter names.

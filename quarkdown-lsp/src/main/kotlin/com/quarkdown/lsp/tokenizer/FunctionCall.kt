@@ -2,6 +2,7 @@ package com.quarkdown.lsp.tokenizer
 
 import com.quarkdown.core.parser.walker.WalkerParsingResult
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
+import com.quarkdown.core.parser.walker.funcall.lastChainedCall
 
 /**
  * A function call in Quarkdown source code.
@@ -13,7 +14,15 @@ data class FunctionCall(
     val range: IntRange,
     val tokens: List<FunctionCallToken>,
     val parserResult: WalkerParsingResult<WalkedFunctionCall>,
-)
+) {
+    /**
+     * The name of the last function in a chain of function calls.
+     *
+     * For example, in `.func1 param:{value1}::func2 param:{value2}`, this would be `func2`.
+     */
+    val lastChainedName: String
+        get() = parserResult.value.lastChainedCall.name
+}
 
 /**
  * A token within a function call which represents a specific part of the function call syntax

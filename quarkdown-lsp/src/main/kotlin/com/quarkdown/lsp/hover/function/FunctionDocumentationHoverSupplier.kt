@@ -34,6 +34,8 @@ class FunctionDocumentationHoverSupplier(
                 .getAtSourceIndex(index)
                 ?: return null
 
+        // If the hover position is over a function name in the chain, shows documentation for that specific function.
+        // Otherwise, shows documentation for the last function in the chain.
         val nameToken: FunctionCallToken? =
             call
                 .getTokenAtSourceIndex(index)
@@ -41,7 +43,7 @@ class FunctionDocumentationHoverSupplier(
 
         // Returns the documentation to display in the hover.
         val function: DocumentedFunction =
-            call.getDocumentation(docsDirectory, nameToken?.lexeme)
+            getDocumentation(docsDirectory, nameToken?.lexeme ?: call.lastChainedName)
                 ?: return null
 
         return Hover(function.documentationAsMarkup)
