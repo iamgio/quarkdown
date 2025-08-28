@@ -84,4 +84,20 @@ class FunctionDuplicateParameterNameDiagnosticsSupplierTest {
 
         assertEquals(2, diagnostics.size)
     }
+
+    @Test
+    fun `same parameter names in different chained calls are not duplicates`() {
+        val text = "hello .firstfunc param:{value}::secondfunc param:{value}"
+        val diagnostics = getDiagnostics(text)
+
+        assertTrue(diagnostics.isEmpty())
+    }
+
+    @Test
+    fun `same parameter names in the same chained calls are duplicates`() {
+        val text = "hello .firstfunc firstparam:{value} firstparam:{value}::secondfunc secondparam:{value} secondparam:{value}"
+        val diagnostics = getDiagnostics(text)
+
+        assertEquals(4, diagnostics.size)
+    }
 }
