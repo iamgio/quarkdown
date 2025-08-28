@@ -1,26 +1,20 @@
 package com.quarkdown.lsp.diagnostics.function
 
-import com.quarkdown.lsp.TextDocument
-import com.quarkdown.lsp.cache.functionCalls
-import com.quarkdown.lsp.diagnostics.DiagnosticsSupplier
+import com.quarkdown.lsp.diagnostics.AbstractFunctionCallDiagnosticsSupplier
 import com.quarkdown.lsp.diagnostics.SimpleDiagnostic
 import com.quarkdown.lsp.diagnostics.cause.DuplicateParameterNameDiagnosticCause
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
-import com.quarkdown.lsp.util.tokensByChainedCall
 
 /**
  * A diagnostics supplier that checks for duplicate function parameter names in function calls.
  */
-class FunctionDuplicateParameterNameDiagnosticsSupplier : DiagnosticsSupplier {
-    override fun getDiagnostics(document: TextDocument): List<SimpleDiagnostic> = document.functionCalls.flatMap(::getDiagnostics)
-
-    private fun getDiagnostics(call: FunctionCall): List<SimpleDiagnostic> =
-        call.tokensByChainedCall
-            .flatMap { (_, tokens) -> validate(tokens) }
-            .toList()
-
-    private fun validate(tokens: List<FunctionCallToken>): List<SimpleDiagnostic> =
+class FunctionDuplicateParameterNameDiagnosticsSupplier : AbstractFunctionCallDiagnosticsSupplier() {
+    override fun getDiagnostics(
+        functionName: String,
+        tokens: List<FunctionCallToken>,
+        call: FunctionCall,
+    ): List<SimpleDiagnostic> =
         tokens
             .asSequence()
             .filter { it.type == FunctionCallToken.Type.PARAMETER_NAME }

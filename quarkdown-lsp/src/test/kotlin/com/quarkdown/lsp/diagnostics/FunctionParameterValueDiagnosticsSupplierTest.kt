@@ -2,6 +2,7 @@ package com.quarkdown.lsp.diagnostics
 
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
 import org.eclipse.lsp4j.DiagnosticSeverity
@@ -70,5 +71,11 @@ class FunctionParameterValueDiagnosticsSupplierTest {
     fun `no diagnostics for value containing nested function call`() {
         val text = "hello .$ALIGN_FUNCTION {a .func b}"
         assertTrue(getDiagnostics(text).isEmpty())
+    }
+
+    @Test
+    fun `chained calls should assign parameters correctly`() {
+        val text = "hello .$ALIGN_FUNCTION {cen}::$CSV_FUNCTION {}"
+        assertEquals(1, getDiagnostics(text).size)
     }
 }
