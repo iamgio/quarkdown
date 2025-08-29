@@ -20,6 +20,6 @@ interface BrowserLauncher {
      * @param port port to launch
      */
     fun launchLocal(port: Int) {
-        launch("http://localhost:$port")
+        launch("http://localhost:$port/live/index.html")
     }
 }

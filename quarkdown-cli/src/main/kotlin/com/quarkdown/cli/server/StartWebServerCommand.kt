@@ -9,6 +9,8 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.server.BrowserLaunchers.browserChoice
 import com.quarkdown.server.LocalFileWebServer
 import com.quarkdown.server.browser.BrowserLauncher
+import com.quarkdown.server.message.Reload
+import com.quarkdown.server.message.ServerMessageSession
 import java.io.File
 
 /**
@@ -17,7 +19,8 @@ import java.io.File
 const val DEFAULT_SERVER_PORT = 8089
 
 /**
- * Command to start a web server serving a local file.
+ * Command to start a web server serving a local file,
+ * allowing for live reloading.
  * @see LocalFileWebServer
  */
 class StartWebServerCommand : CliktCommand(name = "start") {
@@ -46,6 +49,12 @@ class StartWebServerCommand : CliktCommand(name = "start") {
 
     override fun run() {
         val options = WebServerOptions(port, targetFile, browser)
-        WebServerStarter.start(options)
+        val session =
+            ServerMessageSession(
+                port = port,
+                endpoint = Reload.endpoint,
+            )
+
+        WebServerStarter.start(options, session)
     }
 }
