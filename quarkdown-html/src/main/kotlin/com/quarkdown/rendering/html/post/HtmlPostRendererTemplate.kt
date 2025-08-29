@@ -33,7 +33,6 @@ class HtmlPostRendererTemplate(
      */
     fun create(): TemplateProcessor =
         base.copy().apply {
-            serverPort()
             documentMetadata()
             thirdParty()
             pageFormat()
@@ -196,18 +195,6 @@ class HtmlPostRendererTemplate(
         iterable(
             TemplatePlaceholders.TEX_MACROS,
             mapToJsObjectEntries(context.documentInfo.tex.macros),
-        )
-    }
-
-    /**
-     * Local server port to communicate with.
-     */
-    private fun TemplateProcessor.serverPort() {
-        optionalValue(
-            TemplatePlaceholders.SERVER_PORT,
-            context.attachedPipeline
-                ?.options
-                ?.serverPort,
         )
     }
 }

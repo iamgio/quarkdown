@@ -2,12 +2,17 @@ package com.quarkdown.server
 
 import com.quarkdown.server.stop.KtorStoppableAdapter
 import com.quarkdown.server.stop.Stoppable
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ServerReady
 import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.netty.Netty
+import io.ktor.server.response.respondFile
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.pingPeriod
@@ -30,6 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Web server that:
  * - Serves local file at [targetFile];
+ * - Supports live preview of HTML files at `/live/{file...}`.
  * - Supports live-reloading via WebSockets at `/reload`.
  * @param targetFile file to serve
  */
@@ -73,10 +79,53 @@ class LocalFileWebServer(
             monitor.subscribe(ServerReady) { onReady(KtorStoppableAdapter(this)) }
 
             routing {
-                // Serve the target file directly at the root path
-                staticFiles("/", targetFile)
+                // Serves the target file directly at the root path.
+                staticFiles(ServerEndpoints.ROOT, targetFile)
 
-                webSocket("/reload") {
+                // Endpoint to serve files HTML files with WebSockets-based live preview support.
+                get(ServerEndpoints.LIVE_PREVIEW + "/{file...}") {
+                    val segments = call.parameters.getAll("file")?.takeIf { it.isNotEmpty() } ?: listOf("index.html")
+                    val path = segments.joinToString("/") // e.g. file.html or subdir/file.html
+                    val file = targetFile.resolve(path)
+
+                    if (!file.exists() || !file.isFile) {
+                        call.respond(HttpStatusCode.NotFound, null)
+                        return@get
+                    }
+
+                    if (file.extension.lowercase() == "html") {
+                        val websocketsScriptContent = javaClass.getResource("/script/websockets.js")!!.readText()
+
+                        // Since we are one level deep in /live/, we need to adjust the relative path to the source file.
+                        val sourceFile = "../${file.name}"
+
+                        val style =
+                            "position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;" +
+                                "margin: 0; padding: 0; overflow: hidden; z-index: 999999;"
+                        val html =
+                            """
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                            </head>
+                            <body>
+                            <iframe id="content-frame" src="$sourceFile" style="$style"></iframe>
+                            <script>
+                            $websocketsScriptContent
+                            
+                            startWebSockets("localhost:$port")
+                            </script>
+                            </body>
+                            """.trimIndent()
+                        call.respondText(html, ContentType.Text.Html)
+                    } else if (file.exists()) {
+                        // For non-HTML files.
+                        call.respondFile(file)
+                    }
+                }
+
+                // WebSocket endpoint to reload live preview clients.
+                webSocket(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
                     val connectionId = "connection-${connectionCounter.incrementAndGet()}"
 
                     try {

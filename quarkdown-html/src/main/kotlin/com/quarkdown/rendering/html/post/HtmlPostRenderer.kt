@@ -148,7 +148,6 @@ class HtmlPostRenderer(
             artifact("math", condition = context.attributes.hasMath)
             artifact("mermaid", condition = context.attributes.hasMermaidDiagram)
             artifact("code", condition = context.attributes.hasCode)
-            artifact("websockets", condition = context.attachedPipeline?.options?.useServer == true)
         }
 
     override fun wrapResources(

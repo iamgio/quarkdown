@@ -11,9 +11,9 @@ import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
+import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
-import com.quarkdown.server.message.Reload
 import com.quarkdown.server.message.ServerMessageSession
 import java.io.File
 
@@ -60,7 +60,7 @@ class CompileCommand : ExecuteCommand("compile") {
     private val reloadSession: ServerMessageSession by lazy {
         ServerMessageSession(
             port = super.serverPort,
-            endpoint = Reload.endpoint,
+            endpoint = ServerEndpoints.RELOAD_LIVE_PREVIEW,
         )
     }
 
@@ -97,6 +97,7 @@ class CompileCommand : ExecuteCommand("compile") {
                 port = super.serverPort,
                 targetFile = directory,
                 browserLauncher = browser,
+                preferLivePreviewUrl = super.preview && super.watch,
             ),
             reloadSession,
         )

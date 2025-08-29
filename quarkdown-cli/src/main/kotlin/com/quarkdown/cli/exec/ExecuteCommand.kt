@@ -143,7 +143,7 @@ abstract class ExecuteCommand(
      * When enabled, the program watches for file changes and automatically recompiles the source.
      * If [preview] is enabled as well, this allows for live reloading.
      */
-    private val watch: Boolean by option("-w", "--watch", help = "Watch for file changes").flag()
+    protected val watch: Boolean by option("-w", "--watch", help = "Watch for file changes").flag()
 
     /**
      * Port to communicate with the local server on if [preview] is enabled.

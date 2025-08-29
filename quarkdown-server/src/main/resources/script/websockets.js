@@ -1,5 +1,10 @@
 // Component that enables communication with a server through WebSockets.
 
+function reload() {
+    const iframe = document.getElementById('content-frame');
+    iframe?.contentWindow?.location?.reload();
+}
+
 function startWebSockets(serverUrl) {
     startReloadWebSocket(serverUrl);
 }
@@ -26,5 +31,5 @@ function createWebSocket(serverUrl, endpoint, onMessage) {
 
 // WebSocket that reloads the page when a message is received.
 function startReloadWebSocket(serverUrl) {
-    createWebSocket(serverUrl, 'reload', () => location.reload());
+    createWebSocket(serverUrl, 'reload', reload);
 }
