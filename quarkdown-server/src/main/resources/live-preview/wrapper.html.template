@@ -4,18 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quarkdown Live Preview</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .frame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: white;
+            transform: translateZ(0);
+        }
+
+        .content-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            z-index: 999999;
+            background-color: white;
+            transition: opacity 0.3s ease-in-out;
+            will-change: opacity, transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .hidden {
+            opacity: 0;
+            z-index: 999998;
+            pointer-events: none;
+        }
+
+        .visible {
+            opacity: 1;
+            z-index: 999999;
+            pointer-events: auto;
+        }
+    </style>
 </head>
 <body>
-<iframe id="content-frame" src="[[SRCFILE]]"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>
+<div class="frame-container">
+    <iframe id="frame-a" class="content-frame visible" src="[[SRCFILE]]"></iframe>
+    <iframe id="frame-b" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
+</div>
 <script>
-    /**
-     * Reloads the preview.
-     */
-    function reload() {
-        const iframe = document.getElementById('content-frame');
-        iframe?.contentWindow?.location?.reload();
-    }
+    // WebSockets
 
     /**
      * Starts a WebSocket connection to the specified server and endpoint.
@@ -51,6 +103,85 @@
         startWebSocket(serverUrl, 'reload', reload);
     }
 
-    startReloadWebSocket("localhost:[[SERVERPORT]]")
+    // Double frame buffering
+
+    let activeFrame = 'a';
+    let loadingFrame = 'b';
+
+    /**
+     * Toggles the visibility class of a frame
+     * @param {HTMLElement} frame - The frame element
+     * @param {boolean} isVisible - Whether the frame should be visible
+     */
+    function setFrameVisibility(frame, isVisible) {
+        if (isVisible) {
+            frame.classList.remove('hidden');
+            frame.classList.add('visible');
+        } else {
+            frame.classList.remove('visible');
+            frame.classList.add('hidden');
+        }
+    }
+
+    /**
+     * Forces a reflow on an element to ensure CSS changes are applied
+     * @param {HTMLElement} element - The element to force reflow on
+     */
+    function forceReflow(element) {
+        void element.offsetWidth;
+    }
+
+    /**
+     * Reloads the preview using double buffering to prevent flashing.
+     * Ensures the frame is properly prepared before reloading.
+     */
+    function reload() {
+        // Determine which frame to reload (the currently hidden one)
+        loadingFrame = activeFrame === 'a' ? 'b' : 'a';
+        const frameToReload = document.getElementById(`frame-${loadingFrame}`);
+
+        // Make sure the frame to reload is properly hidden
+        setFrameVisibility(frameToReload, false);
+
+        // Force browser to apply the hidden state
+        forceReflow(frameToReload);
+
+        // Set up the load event before reloading
+        frameToReload.onload = swapFrames;
+
+        // Reload the hidden frame
+        frameToReload?.contentWindow?.location?.reload();
+    }
+
+    /**
+     * Swaps the visibility of the frames after the hidden one has loaded.
+     * Adds a small delay to ensure content is fully rendered before transition.
+     * Synchronizes scroll position between frames.
+     */
+    function swapFrames() {
+        // Get references to both frames
+        const currentFrame = document.getElementById(`frame-${activeFrame}`);
+        const newFrame = document.getElementById(`frame-${loadingFrame}`);
+
+        // Add a small delay to ensure content is fully rendered
+        setTimeout(() => {
+            // First, prepare the new frame but keep it hidden
+            setFrameVisibility(newFrame, false);
+
+            // Force a reflow to ensure CSS changes are applied
+            forceReflow(newFrame);
+
+            // Now make the transition - show new frame, hide current frame
+            setFrameVisibility(newFrame, true);
+            setFrameVisibility(currentFrame, false);
+
+            // Update the active frame
+            activeFrame = loadingFrame;
+        }, 50); // 50ms delay to ensure content is rendered
+
+        // Remove the onload handler to prevent multiple swaps
+        newFrame.onload = null;
+    }
 </script>
+<script>startReloadWebSocket("localhost:[[SERVERPORT]]")</script>
 </body>
