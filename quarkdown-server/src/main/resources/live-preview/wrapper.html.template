@@ -49,6 +49,10 @@
         }
 
         .hidden {
+            opacity: .5;
+        }
+
+        .hidden {
             opacity: 0;
             z-index: 999998;
             pointer-events: none;
@@ -59,9 +63,25 @@
             z-index: 999999;
             pointer-events: auto;
         }
+
+        .debug .frame-container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .debug .content-frame {
+            position: relative;
+            width: 50%;
+            border: 2px solid red;
+        }
+
+        .debug .hidden {
+            opacity: .5;
+        }
     </style>
 </head>
-<body>
+<body class="debug">
+<!-- Double frame buffer makes preview updates smoother -->
 <div class="frame-container">
     <iframe id="frame-a" class="content-frame visible" src="[[SRCFILE]]"></iframe>
     <iframe id="frame-b" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
@@ -103,10 +123,54 @@
         startWebSocket(serverUrl, 'reload', reload);
     }
 
-    // Double frame buffering
+    // Double frame buffering management.
 
     let activeFrame = 'a';
     let loadingFrame = 'b';
+
+    let scrollX = 0;
+    let scrollY = 0;
+    let isScrollStickyToBottom = false;
+
+    /**
+     * @returns {boolean} Whether the scroll position is at the veryt bottom of the page
+     */
+    function isScrolledToBottom(activeFrame) {
+        const frameWindow = activeFrame.contentWindow;
+        if (!frameWindow) return false;
+
+        const scrollableHeight = frameWindow.document.body.scrollHeight;
+        const viewportHeight = frameWindow.innerHeight;
+        const scrollY = frameWindow.scrollY || 0;
+
+        // If content fits in viewport or scrolled to bottom.
+        return scrollableHeight <= viewportHeight || scrollY >= scrollableHeight - viewportHeight - 1;
+    }
+
+    /**
+     * Synchronizes scroll of the given frame to the stored scroll position.
+     * If the user is scrolled to the bottom, keeps them at the bottom after reload.
+     * Otherwise, restores the previous scroll position.
+     * @param {HTMLIFrameElement} frame - The frame element
+     */
+    function syncScrollPosition(frame) {
+        const y = isScrollStickyToBottom ? frame.contentWindow.document.body.scrollHeight : scrollY;
+        frame.contentWindow.scrollTo(scrollX, y);
+    }
+
+    /**
+     * Sets up scroll event listeners on the active frame to sync scroll position to the buffered frame.
+     * @param {HTMLIFrameElement} active - The currently active frame
+     */
+    function setupScrollSync(active) {
+        active.contentWindow.onscroll = () => {
+            if (active?.contentWindow?.scrollY) {
+                scrollX = active.contentWindow.scrollX;
+                scrollY = active.contentWindow.scrollY;
+                isScrollStickyToBottom = isScrolledToBottom(active);
+            }
+        };
+    }
 
     /**
      * Toggles the visibility class of a frame
@@ -124,15 +188,7 @@
     }
 
     /**
-     * Forces a reflow on an element to ensure CSS changes are applied
-     * @param {HTMLElement} element - The element to force reflow on
-     */
-    function forceReflow(element) {
-        void element.offsetWidth;
-    }
-
-    /**
-     * Reloads the preview using double buffering to prevent flashing.
+     * Reloads the preview using double buffering to prevent flickering.
      * Ensures the frame is properly prepared before reloading.
      */
     function reload() {
@@ -140,46 +196,41 @@
         loadingFrame = activeFrame === 'a' ? 'b' : 'a';
         const frameToReload = document.getElementById(`frame-${loadingFrame}`);
 
-        // Make sure the frame to reload is properly hidden
+        // Make sure the frame to reload is properly hidden.
         setFrameVisibility(frameToReload, false);
 
-        // Force browser to apply the hidden state
-        forceReflow(frameToReload);
-
-        // Set up the load event before reloading
+        // Set up the load event before reloading.
         frameToReload.onload = swapFrames;
 
-        // Reload the hidden frame
+        // Reload the hidden frame.
         frameToReload?.contentWindow?.location?.reload();
     }
 
     /**
-     * Swaps the visibility of the frames after the hidden one has loaded.
-     * Adds a small delay to ensure content is fully rendered before transition.
-     * Synchronizes scroll position between frames.
+     * Swaps the visibility of the frames after the hidden one has loaded and synchronizes scroll position between frames.
      */
     function swapFrames() {
-        // Get references to both frames
         const currentFrame = document.getElementById(`frame-${activeFrame}`);
         const newFrame = document.getElementById(`frame-${loadingFrame}`);
 
-        // Add a small delay to ensure content is fully rendered
+        // Reset handlers.
+        currentFrame.contentWindow.onscroll = null;
+        newFrame.contentWindow.onscroll = null;
+
+        // Swap frame visibility.
+        setFrameVisibility(newFrame, true);
+        setFrameVisibility(currentFrame, false);
+
+        // Update the active frame.
+        activeFrame = loadingFrame;
+
+        // Set up scroll synchronization.
+        // TODO avoid delay, look for callbacks.
         setTimeout(() => {
-            // First, prepare the new frame but keep it hidden
-            setFrameVisibility(newFrame, false);
+            syncScrollPosition(newFrame);
+            setupScrollSync(newFrame);
+        }, 100);
 
-            // Force a reflow to ensure CSS changes are applied
-            forceReflow(newFrame);
-
-            // Now make the transition - show new frame, hide current frame
-            setFrameVisibility(newFrame, true);
-            setFrameVisibility(currentFrame, false);
-
-            // Update the active frame
-            activeFrame = loadingFrame;
-        }, 50); // 50ms delay to ensure content is rendered
-
-        // Remove the onload handler to prevent multiple swaps
         newFrame.onload = null;
     }
 </script>

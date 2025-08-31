@@ -272,59 +272,6 @@ function hashCode(str) {
 }
 
 //
-// Scroll position restoration.
-
-// The last scroll position.
-const scrollYStorageKey = "scrollY";
-const storedScrollY = +sessionStorage.getItem(scrollYStorageKey);
-
-// Whether the last session was scrolled to the end.
-// If so, the new document will be scrolled to the end as well, ignoring the actual scroll position.
-const stickyToEndStorageKey = "stickyToEnd";
-const stickyToEnd = sessionStorage.getItem(stickyToEndStorageKey) === "true";
-
-// Whether the scroll position has already been restored.
-let scrollRestored = false;
-
-// The maximum scroll position that can be restored.
-function getScrollHeight() {
-    return document.documentElement.scrollHeight - window.innerHeight;
-}
-
-// Whether the document is scrolled to the bottom (returns true also if the content fits in the viewport).
-function isScrolledToBottom() {
-    const scrollableHeight = document.documentElement.scrollHeight;
-    const viewportHeight = window.innerHeight;
-    const scrollY = window.scrollY;
-
-    // If content fits in viewport or scrolled to bottom.
-    return scrollableHeight <= viewportHeight || scrollY >= getScrollHeight();
-}
-
-// Saves scroll position.
-function saveScrollPosition() {
-    history.scrollRestoration = "manual";
-    sessionStorage.setItem(scrollYStorageKey, window.scrollY.toString());
-    sessionStorage.setItem(stickyToEndStorageKey, isScrolledToBottom().toString());
-}
-
-// Restores scroll position. Even if called multiple times, it will only restore the first time.
-// If the last session was scrolled to the end, it will scroll to the end of the new document ignoring the actual coordinates.
-function restoreScrollPosition() {
-    if (scrollRestored || !(storedScrollY || stickyToEnd)) return;
-
-    const y = stickyToEnd ? getScrollHeight() : storedScrollY;
-    console.log("Restoring scroll position to", y, "sticky to end =", stickyToEnd);
-    scrollRestored = true;
-    requestAnimationFrame(() => {
-        window.scrollTo({top: y, behavior: "auto"});
-    });
-}
-
-window.addEventListener("beforeunload", saveScrollPosition);
-postRenderingExecutionQueue.push(restoreScrollPosition)
-
-//
 // Page chunker.
 
 // Utility that splits content into chunks based on page break elements.

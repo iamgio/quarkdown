@@ -111,11 +111,11 @@ class PagedDocument extends QuarkdownDocument {
 
     setupAfterReadyHook() {
         class PagedAfterReadyHandler extends Paged.Handler {
-            afterPageLayout(page) {
+            /*afterPageLayout(page) {
                 if (storedScrollY && page.getBoundingClientRect().top > storedScrollY) {
                     restoreScrollPosition()
                 }
-            }
+            }*/
 
             afterRendered() {
                 postRenderingExecutionQueue.execute().then();
