@@ -1,5 +1,6 @@
 package com.quarkdown.server.endpoints
 
+import com.quarkdown.core.template.TemplateProcessor
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
@@ -11,6 +12,9 @@ import java.io.File
  * Default file to serve if none is specified
  */
 private const val DEFAULT_FILE = "index.html"
+
+private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "SRCFILE"
+private const val TEMPLATE_SERVER_PORT_PLACEHOLDER = "SERVERPORT"
 
 /**
  * Handler of the live preview endpoint (`/live/<file>`) which serves static files relative to a target file or directory.
@@ -62,28 +66,14 @@ class LivePreviewEndpoint(
         targetFile: File,
         serverPort: Int,
     ): String {
-        val websocketsScriptContent = LivePreviewEndpoint::class.java.getResource("/script/websockets.js")!!.readText()
-
         // Since we are one level deep in /live/, we need to adjust the relative path to the source file.
         val sourceFile = "../${targetFile.name}"
 
-        val style =
-            "position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;" +
-                "margin: 0; padding: 0; overflow: hidden; z-index: 999999;"
-
-        return """
-            <!DOCTYPE html>
-            <html>
-            <head>
-            </head>
-            <body>
-            <iframe id="content-frame" src="$sourceFile" style="$style"></iframe>
-            <script>
-            $websocketsScriptContent
-            
-            startWebSockets("localhost:$serverPort")
-            </script>
-            </body>
-            """.trimIndent()
+        return TemplateProcessor
+            .fromResourceName("/live-preview/wrapper.html.template", referenceClass = javaClass)
+            .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, sourceFile)
+            .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, serverPort.toString())
+            .process()
+            .toString()
     }
 }

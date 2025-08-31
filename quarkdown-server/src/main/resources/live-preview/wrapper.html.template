@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quarkdown Live Preview</title>
+</head>
+<body>
+<iframe id="content-frame" src="[[SRCFILE]]"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; margin: 0; padding: 0; overflow: hidden; z-index: 999999;"></iframe>
+<script>
+    /**
+     * Reloads the preview.
+     */
+    function reload() {
+        const iframe = document.getElementById('content-frame');
+        iframe?.contentWindow?.location?.reload();
+    }
+
+    /**
+     * Starts a WebSocket connection to the specified server and endpoint.
+     * @param {string} serverUrl - The server URL (e.g., `localhost:8080`).
+     * @param {string} endpoint - The WebSocket endpoint (e.g., `reload`).
+     * @param {function} onMessage - The callback function to handle incoming messages.
+     * @returns {WebSocket} The WebSocket instance.
+     */
+    function startWebSocket(serverUrl, endpoint, onMessage) {
+        const socket = new WebSocket(`ws://${serverUrl}/${endpoint}`);
+
+        socket.addEventListener('open', () => {
+            console.log('Connected to server ' + socket.url);
+        });
+
+        socket.addEventListener("message", onMessage);
+
+        socket.addEventListener('close', (event) => {
+            console.log(`WebSocket closed: Code=${event.code}, Reason=${event.reason}`);
+        });
+
+        socket.addEventListener("error", (error) => {
+            console.error("WebSocket error:", error);
+        });
+
+        return socket;
+    }
+
+    /**
+     * Starts the WebSocket that reload the content when a message is received.
+     */
+    function startReloadWebSocket(serverUrl) {
+        startWebSocket(serverUrl, 'reload', reload);
+    }
+
+    startReloadWebSocket("localhost:[[SERVERPORT]]")
+</script>
+</body>

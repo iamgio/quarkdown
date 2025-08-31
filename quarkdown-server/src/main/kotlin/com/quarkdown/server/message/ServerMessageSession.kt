@@ -1,5 +1,6 @@
 package com.quarkdown.server.message
 
+import com.quarkdown.core.log.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.cio.endpoint
@@ -55,7 +56,7 @@ class ServerMessageSession(
             onReady()
             session!!.incoming.consumeEach { }
         } catch (e: Exception) {
-            System.err.println("WebSocket closed with exception: ${e.message}")
+            Log.error("WebSocket closed with exception: ${e.message}")
         } finally {
             close()
         }
