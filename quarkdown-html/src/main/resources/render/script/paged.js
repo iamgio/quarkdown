@@ -1,5 +1,8 @@
 class PagedDocument extends QuarkdownDocument {
     populateExecutionQueue() {
+        preRenderingExecutionQueue.push(() => document.body.style.opacity = '0');
+        postRenderingExecutionQueue.push(() => document.body.style.opacity = '1');
+
         super.populateExecutionQueue();
         preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitionsAndFirstReference(false)));
         postRenderingExecutionQueue.push(setColumnCount);
@@ -108,12 +111,6 @@ class PagedDocument extends QuarkdownDocument {
 
     setupAfterReadyHook() {
         class PagedAfterReadyHandler extends Paged.Handler {
-            afterPageLayout(page) {
-                if (storedScrollY && page.getBoundingClientRect().top > storedScrollY) {
-                    restoreScrollPosition()
-                }
-            }
-
             afterRendered() {
                 postRenderingExecutionQueue.execute().then();
             }

@@ -2,7 +2,9 @@ package com.quarkdown.cli.watcher
 
 import io.methvin.watcher.DirectoryChangeEvent
 import java.io.File
+import java.nio.file.Path
 import kotlin.concurrent.thread
+import kotlin.io.path.extension
 
 private typealias JDirectoryWatcher = io.methvin.watcher.DirectoryWatcher
 
@@ -40,18 +42,23 @@ class DirectoryWatcher(
         /**
          * Creates a new [DirectoryWatcher].
          * @param directory directory to watch
-         * @param exclude files or directories to exclude from watching
+         * @param excludeFiles files or directories to exclude from watching
+         * @param exclude general function to exclude files or directories from watching, for example temporary IDE files
          * @param onChange function to call when a change is detected
          */
         private fun create(
             directory: File,
-            exclude: List<File> = emptyList(),
+            excludeFiles: List<File> = emptyList(),
+            exclude: (Path) -> Boolean = { it.extension.endsWith("~") },
             onChange: (DirectoryChangeEvent) -> Unit,
         ) = JDirectoryWatcher
             .builder()
             .path(directory.toPath())
             .listener {
-                if (exclude.none { file -> it.path().startsWith(file.absolutePath) }) {
+                val acceptByPath = !exclude(it.path())
+                val acceptByFiles = excludeFiles.none { file -> it.path().startsWith(file.absolutePath) }
+
+                if (acceptByPath && acceptByFiles) {
                     onChange(it)
                 }
             }.build()
@@ -67,6 +74,10 @@ class DirectoryWatcher(
             directory: File,
             exclude: File?,
             onChange: (DirectoryChangeEvent) -> Unit,
-        ) = create(directory, exclude?.let(::listOf) ?: emptyList(), onChange)
+        ) = create(
+            directory,
+            excludeFiles = exclude?.let(::listOf) ?: emptyList(),
+            onChange = onChange,
+        )
     }
 }

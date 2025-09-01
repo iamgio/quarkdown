@@ -11,8 +11,10 @@ import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
+import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
+import com.quarkdown.server.message.ServerMessageSession
 import java.io.File
 
 /**
@@ -52,6 +54,16 @@ class CompileCommand : ExecuteCommand("compile") {
         help = "Browser to open the preview in",
     ).browserChoice(default = DefaultBrowserLauncher(), shouldValidate = { preview })
 
+    /**
+     * Session to communicate with the server in order to trigger reloads of the preview.
+     */
+    private val reloadSession: ServerMessageSession by lazy {
+        ServerMessageSession(
+            port = super.serverPort,
+            endpoint = ServerEndpoints.RELOAD_LIVE_PREVIEW,
+        )
+    }
+
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
             source = source,
@@ -72,21 +84,22 @@ class CompileCommand : ExecuteCommand("compile") {
         }
 
         if (super.preview) {
-            launchServer(outcome.directory)
+            runServerCommunication(outcome.directory)
         }
     }
 
-    private fun launchServer(directory: File) {
+    private fun runServerCommunication(directory: File) {
         // Communicates with the server to reload the requested resources.
         // If enabled and the server is not running, also starts the server
-        // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -o`).
+        // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -b default`).
         runServerCommunication(
-            startServerOnFailedConnection = true,
             WebServerOptions(
                 port = super.serverPort,
                 targetFile = directory,
                 browserLauncher = browser,
+                preferLivePreviewUrl = super.preview && super.watch,
             ),
+            reloadSession,
         )
     }
 }

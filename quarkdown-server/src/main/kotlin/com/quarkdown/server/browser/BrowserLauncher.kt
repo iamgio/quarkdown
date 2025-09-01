@@ -18,8 +18,12 @@ interface BrowserLauncher {
     /**
      * Launches a `localhost:<port>` in the specified browser.
      * @param port port to launch
+     * @param endpoint endpoint to launch, defaults to `/`
      */
-    fun launchLocal(port: Int) {
-        launch("http://localhost:$port")
+    fun launchLocal(
+        port: Int,
+        endpoint: String = "/",
+    ) {
+        launch("http://localhost:$port$endpoint")
     }
 }

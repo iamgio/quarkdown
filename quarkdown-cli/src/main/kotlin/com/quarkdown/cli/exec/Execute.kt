@@ -16,8 +16,9 @@ import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.output.visitor.saveTo
-import com.quarkdown.server.message.Reload
 import com.quarkdown.server.message.ServerMessage
+import com.quarkdown.server.message.ServerMessageSession
+import java.io.IOException
 import kotlin.system.exitProcess
 
 /**
@@ -72,26 +73,28 @@ fun runQuarkdown(
 
 /**
  * Communicates with the server to reload the requested resources.
- * If the server is not running, starts it if [startServerOnFailedConnection] is `true`
- * and tries to communicate again.
- * @param options information of the web server
- * @param startServerOnFailedConnection whether to start the server if the connection fails
+ * If the session is not active, starts the server.
+ * @param options information to start the web server
+ * @param session the session to communicate with the server to handle preview reloads
  */
 fun runServerCommunication(
-    startServerOnFailedConnection: Boolean,
     options: WebServerOptions,
+    session: ServerMessageSession,
 ) {
-    // If enabled, communicates with the server to reload the requested resources, for instance in the browser.
+    if (!session.isConnected) {
+        Log.info("Starting server...")
+        WebServerStarter.start(options, session, onSessionReady = {
+            runServerCommunication(options, session)
+        })
+        return
+    }
+
+    // Sends a reload message to the server.
     try {
-        ServerMessage(Reload).send(port = options.port)
-    } catch (e: Exception) {
+        ServerMessage().send(session)
+        return
+    } catch (e: IOException) {
         Log.error("Could not communicate with the server on port ${options.port}: ${e.message}")
         Log.debug(e)
-
-        if (startServerOnFailedConnection) {
-            Log.info("Starting server...")
-            WebServerStarter.start(options)
-            runServerCommunication(startServerOnFailedConnection = false, options)
-        }
     }
 }

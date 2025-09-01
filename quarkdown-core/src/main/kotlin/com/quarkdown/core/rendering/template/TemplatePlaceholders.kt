@@ -23,11 +23,6 @@ object TemplatePlaceholders {
     const val LANGUAGE = "LANG"
 
     /**
-     * Port of the local server port to communicate with.
-     */
-    const val SERVER_PORT = "SERVERPORT"
-
-    /**
      * Whether block codes are used and highlighting-related scripts should be loaded.
      */
     const val HAS_CODE = "CODE"
