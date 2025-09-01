@@ -251,14 +251,19 @@
         frameToReload?.contentWindow?.location?.reload();
     }
 
-    // When rendering is completed in the iframe, syncs scroll position.
-    messageListeners.set('postRenderingCompleted', () => {
+    /**
+     * Synchronizes the scroll position of the currently active frame.
+     */
+    function syncActiveScroll() {
         const frame = getActiveFrame();
         if (frame && frame.contentWindow) {
             syncScrollPosition(frame);
             setupScrollSync(frame);
         }
-    });
+    }
+
+    // When rendering is completed in the iframe, syncs scroll position.
+    messageListeners.set('postRenderingCompleted', syncActiveScroll);
 </script>
 <script>startReloadWebSocket("localhost:[[SERVERPORT]]")</script>
 </body>
