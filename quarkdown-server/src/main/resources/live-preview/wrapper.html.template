@@ -83,8 +83,8 @@
 <body>
 <!-- Double frame buffer makes preview updates smoother -->
 <div class="frame-container">
-    <iframe id="frame-a" class="content-frame visible" src="[[SRCFILE]]"></iframe>
-    <iframe id="frame-b" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
+    <iframe id="frame-0" class="content-frame visible" src="[[SRCFILE]]"></iframe>
+    <iframe id="frame-1" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
 </div>
 <script data-name="websockets">
     /**
@@ -135,8 +135,10 @@
     });
 </script>
 <script data-name="double-buffering">
-    let activeFrame = 'a';
-    let loadingFrame = 'b';
+    const NUM_FRAMES = 2;
+
+    let activeFrameId = 0;
+    let inactiveFrameId = 1;
 
     let scrollX = 0;
     let scrollY = 0;
@@ -146,14 +148,14 @@
      * @returns {HTMLIFrameElement} The frame element which is currently active (visible).
      */
     function getActiveFrame() {
-        return document.getElementById(`frame-${activeFrame}`);
+        return document.getElementById(`frame-${activeFrameId}`);
     }
 
     /**
      * @returns {HTMLIFrameElement} The frame element which is currently inactive (hidden).
      */
     function getInactiveFrame() {
-        return document.getElementById(`frame-${loadingFrame}`);
+        return document.getElementById(`frame-${inactiveFrameId}`);
     }
 
     /**
@@ -202,12 +204,14 @@
      * @param {boolean} isVisible - Whether the frame should be visible
      */
     function setFrameVisibility(frame, isVisible) {
+        const visible = 'visible';
+        const hidden = 'hidden';
         if (isVisible) {
-            frame.classList.remove('hidden');
-            frame.classList.add('visible');
+            frame.classList.remove(hidden);
+            frame.classList.add(visible);
         } else {
-            frame.classList.remove('visible');
-            frame.classList.add('hidden');
+            frame.classList.remove(visible);
+            frame.classList.add(hidden);
         }
     }
 
@@ -228,7 +232,7 @@
         setFrameVisibility(currentFrame, false);
 
         // Update the active frame.
-        activeFrame = loadingFrame;
+        activeFrameId = inactiveFrameId;
     }
 </script>
 <script data-name="reload">
@@ -237,18 +241,17 @@
      * Ensures the frame is properly prepared before reloading.
      */
     function reload() {
-        // Determine which frame to reload (the currently hidden one)
-        loadingFrame = activeFrame === 'a' ? 'b' : 'a';
-        const frameToReload = getInactiveFrame();
+        inactiveFrameId = (activeFrameId + 1) % NUM_FRAMES;
+        const nextFrame = getInactiveFrame();
 
         // Make sure the frame to reload is properly hidden.
-        setFrameVisibility(frameToReload, false);
+        setFrameVisibility(nextFrame, false);
 
         // Set up the load event before reloading.
-        frameToReload.onload = swapFrames;
+        nextFrame.onload = swapFrames;
 
         // Reload the hidden frame.
-        frameToReload?.contentWindow?.location?.reload();
+        nextFrame?.contentWindow?.location?.reload();
     }
 
     /**
