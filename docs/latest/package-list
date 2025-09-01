@@ -293,6 +293,7 @@ com.quarkdown.quarkdoc.reader.dokka
 module:quarkdown-server
 com.quarkdown.server
 com.quarkdown.server.browser
+com.quarkdown.server.endpoints
 com.quarkdown.server.message
 com.quarkdown.server.stop
 module:quarkdown-stdlib

@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>endpoint</title>
+    <title>LivePreviewEndpoint</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -92,12 +92,55 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-server::com.quarkdown.server.message/ServerMessageType/endpoint/#/PointingToDeclaration//1314577368">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-server</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.server.message</a><span class="delimiter">/</span><a href="index.html">ServerMessageType</a><span class="delimiter">/</span><span class="current">endpoint</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-server::com.quarkdown.server.endpoints/LivePreviewEndpoint///PointingToDeclaration//1314577368">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-server</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.server.endpoints</a><span class="delimiter">/</span><span class="current">LivePreviewEndpoint</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>endpoint</span></span></h1>
+    <h1 class="cover"><span>Live</span><wbr><span>Preview</span><wbr><span><span>Endpoint</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">LivePreviewEndpoint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">origin<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a></span></span><span class="token punctuation">)</span></div><p class="paragraph">Handler of the live preview endpoint (<code class="lang-kotlin">/live/&lt;file&gt;</code>) which serves static files relative to a target file or directory. Additionally, for HTML files, it serves a wrapper HTML that includes a WebSocket script + iframe for live previewing.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>origin</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the root directory from which files are served</p></div></div></div></div></div></div></div>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="endpoint.html">endpoint</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><p class="paragraph">URL endpoint that the message should be sent to.</p></div></div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-474665237%2FConstructors%2F1314577368" anchor-label="LivePreviewEndpoint" id="-474665237%2FConstructors%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-live-preview-endpoint.html"><span>Live</span><wbr><span>Preview</span><wbr><span><span>Endpoint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-474665237%2FConstructors%2F1314577368"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">origin<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="717945007%2FFunctions%2F1314577368" anchor-label="handleRequest" id="717945007%2FFunctions%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="handle-request.html"><span>handle</span><wbr><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="717945007%2FFunctions%2F1314577368"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="handle-request.html"><span class="token function">handleRequest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">call<span class="token operator">: </span><span data-unresolved-link="io.ktor.server.application/ApplicationCall///PointingToDeclaration/">ApplicationCall</span><span class="token punctuation">, </span></span><span class="parameter ">port<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Handles a request to the live preview endpoint, by serving the requested file or a wrapper HTML for live preview.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
