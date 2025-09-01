@@ -80,15 +80,13 @@
         }
     </style>
 </head>
-<body class="debug">
+<body>
 <!-- Double frame buffer makes preview updates smoother -->
 <div class="frame-container">
     <iframe id="frame-a" class="content-frame visible" src="[[SRCFILE]]"></iframe>
     <iframe id="frame-b" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
 </div>
-<script>
-    // WebSockets
-
+<script data-name="websockets">
     /**
      * Starts a WebSocket connection to the specified server and endpoint.
      * @param {string} serverUrl - The server URL (e.g., `localhost:8080`).
@@ -122,15 +120,41 @@
     function startReloadWebSocket(serverUrl) {
         startWebSocket(serverUrl, 'reload', reload);
     }
+</script>
+<script data-name="messaging">
+    // Scalable message listener registry, with event type as the key and the handler function as the value.
+    const messageListeners = new Map();
 
-    // Double frame buffering management.
+    // Listens for messages from the iframe content.
+    window.addEventListener('message', (event) => {
+        const data = event.data;
+        if (!data || data.source !== 'quarkdown') return;
 
+        const listener = messageListeners.get(data.event);
+        listener?.(data);
+    });
+</script>
+<script data-name="double-buffering">
     let activeFrame = 'a';
     let loadingFrame = 'b';
 
     let scrollX = 0;
     let scrollY = 0;
     let isScrollStickyToBottom = false;
+
+    /**
+     * @returns {HTMLIFrameElement} The frame element which is currently active (visible).
+     */
+    function getActiveFrame() {
+        return document.getElementById(`frame-${activeFrame}`);
+    }
+
+    /**
+     * @returns {HTMLIFrameElement} The frame element which is currently inactive (hidden).
+     */
+    function getInactiveFrame() {
+        return document.getElementById(`frame-${loadingFrame}`);
+    }
 
     /**
      * @returns {boolean} Whether the scroll position is at the veryt bottom of the page
@@ -188,13 +212,34 @@
     }
 
     /**
+     * Swaps the visibility of the frames after the hidden one has loaded and synchronizes scroll position between frames.
+     */
+    function swapFrames() {
+        const currentFrame = getActiveFrame();
+        const newFrame = getInactiveFrame();
+
+        // Reset handlers.
+        currentFrame.contentWindow.onscroll = null;
+        newFrame.contentWindow.onscroll = null;
+        newFrame.onload = null;
+
+        // Swap frame visibility.
+        setFrameVisibility(newFrame, true);
+        setFrameVisibility(currentFrame, false);
+
+        // Update the active frame.
+        activeFrame = loadingFrame;
+    }
+</script>
+<script data-name="reload">
+    /**
      * Reloads the preview using double buffering to prevent flickering.
      * Ensures the frame is properly prepared before reloading.
      */
     function reload() {
         // Determine which frame to reload (the currently hidden one)
         loadingFrame = activeFrame === 'a' ? 'b' : 'a';
-        const frameToReload = document.getElementById(`frame-${loadingFrame}`);
+        const frameToReload = getInactiveFrame();
 
         // Make sure the frame to reload is properly hidden.
         setFrameVisibility(frameToReload, false);
@@ -206,33 +251,15 @@
         frameToReload?.contentWindow?.location?.reload();
     }
 
-    /**
-     * Swaps the visibility of the frames after the hidden one has loaded and synchronizes scroll position between frames.
-     */
-    function swapFrames() {
-        const currentFrame = document.getElementById(`frame-${activeFrame}`);
-        const newFrame = document.getElementById(`frame-${loadingFrame}`);
-
-        // Reset handlers.
-        currentFrame.contentWindow.onscroll = null;
-        newFrame.contentWindow.onscroll = null;
-
-        // Swap frame visibility.
-        setFrameVisibility(newFrame, true);
-        setFrameVisibility(currentFrame, false);
-
-        // Update the active frame.
-        activeFrame = loadingFrame;
-
-        // Set up scroll synchronization.
-        // TODO avoid delay, look for callbacks.
-        setTimeout(() => {
-            syncScrollPosition(newFrame);
-            setupScrollSync(newFrame);
-        }, 100);
-
-        newFrame.onload = null;
-    }
+    // When rendering is completed in the iframe, syncs scroll position.
+    messageListeners.set('postRenderingCompleted', () => {
+        const frame = getActiveFrame();
+        if (frame && frame.contentWindow) {
+            syncScrollPosition(frame);
+            setupScrollSync(frame);
+        }
+    });
 </script>
 <script>startReloadWebSocket("localhost:[[SERVERPORT]]")</script>
 </body>
+</html>

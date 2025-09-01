@@ -24,7 +24,7 @@ class AsyncExecutionQueue {
 // The document is elaborated only after this queue is executed.
 const preRenderingExecutionQueue = new AsyncExecutionQueue();
 // Queue of actions to be executed after the document has been rendered in its final form.
-const postRenderingExecutionQueue = new AsyncExecutionQueue();
+const postRenderingExecutionQueue = new AsyncExecutionQueue(() => notifyLivePreview('postRenderingCompleted'));
 
 /**
  * Returns whether the document is finalized and ready.
@@ -137,6 +137,23 @@ class QuarkdownDocument {
 }
 
 let doc = new QuarkdownDocument(); // Overwritten externally by html-wrapper
+
+//
+// Communication with the live preview wrapper.
+
+/**
+ * Sends a message to the parent window (if any) to notify about an event.
+ * @param {string} event the event name
+ * @param {object} data additional data to send with the event
+ */
+function notifyLivePreview(event, data = {}) {
+    if (!window.parent || window.parent === window) return;
+    try {
+        window.parent.postMessage({source: 'quarkdown', event, ...data, timestamp: Date.now()}, '*');
+    } catch (e) {
+        console.error('Failed to post message to parent', e);
+    }
+}
 
 //
 // Footnotes.
