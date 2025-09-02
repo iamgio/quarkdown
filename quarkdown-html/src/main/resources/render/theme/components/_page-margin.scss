@@ -1,23 +1,14 @@
-
 .quarkdown {
-  // Footer
-  .page-margin-bottom-center, .page-margin-top-center {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-
-    > * {
-      width: 100%;
-      text-align: center;
-    }
-  }
-
-  // Other margins
   .page-margin-content:not(.quarkdown-paged .page-margin-content) {
     // Paged documents have dedicated areas for each margin. Others use fixed positions.
     position: fixed;
     background-color: var(--qd-background-color);
     z-index: 9999;
+  }
+
+  &.quarkdown-slides .page-margin-content {
+    // 'fixed' is not acceptable for slides PDF (#189).
+    position: absolute !important;
   }
 
   .pagedjs_margin-left-top, .pagedjs_margin-right-top {
@@ -103,6 +94,18 @@
   .pagedjs_page .page-margin-content {
     // Removes translations from the margin content of paged documents
     transform: none;
+  }
+
+  // Footer
+  .page-margin-bottom-center, .page-margin-top-center {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+    > * {
+      width: 100%;
+      text-align: center;
+    }
   }
 
   // Experimental fix: Chrome export-to-PDF adds a colored strip to the bottom area.
