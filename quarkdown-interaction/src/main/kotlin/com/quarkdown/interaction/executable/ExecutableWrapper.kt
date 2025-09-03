@@ -65,6 +65,8 @@ abstract class ExecutableWrapper {
 
         process.waitFor()
 
+        Log.debug("Command `$path ${args.joinToString()}` exited with code ${process.exitValue()}. Output:\n$output")
+
         if (process.exitValue() != 0) {
             throw IllegalStateException("Command failed with non-zero exit code:\n$output")
         }

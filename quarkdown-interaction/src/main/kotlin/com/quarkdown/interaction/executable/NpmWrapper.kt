@@ -33,9 +33,7 @@ class NpmWrapper(
     override val isValid: Boolean
         get() =
             try {
-                launchAndGetOutput("--version").trim().let {
-                    it.isNotBlank() && it.lines().size == 1
-                }
+                launchAndGetOutput("--version").isNotBlank()
             } catch (_: Exception) {
                 false
             }
@@ -52,7 +50,12 @@ class NpmWrapper(
         module: NodeModule,
     ): Boolean =
         try {
-            launchAndGetOutput("list", module.name, *globalPrefixArgs, workingDirectory = node.workingDirectory).contains(module.name)
+            launchAndGetOutput(
+                "list",
+                module.name,
+                *globalPrefixArgs,
+                workingDirectory = node.workingDirectory,
+            ).contains(module.name)
         } catch (_: Exception) {
             false
         }
