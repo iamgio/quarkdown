@@ -212,6 +212,7 @@ fun tableSort(
  * @param column index of the column (starting from 1)
  * @param filter a lambda function that returns a boolean value. When `true`, the rows is to be kept.
  * The lambda accepts a single argument, which is the cell value of the column.
+ * @param content table to filter
  * @return the filtered [Table] node
  * @wiki Table manipulation
  */
@@ -258,6 +259,7 @@ fun tableFilter(
  * @param column index of the column (starting from 1)
  * @param compute a lambda function that returns any value, which is the output of the computation.
  * The lambda accepts a single argument, which is the ordered collection of cell values of the column.
+ * @param content table to compute on
  * @return the computed [Table] node, of size `columns * (rows + 1)`
  * @wiki Table manipulation
  */
