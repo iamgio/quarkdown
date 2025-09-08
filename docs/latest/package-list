@@ -267,6 +267,7 @@ com.quarkdown.lsp.highlight
 com.quarkdown.lsp.highlight.function
 com.quarkdown.lsp.hover
 com.quarkdown.lsp.hover.function
+com.quarkdown.lsp.ontype
 com.quarkdown.lsp.pattern
 com.quarkdown.lsp.subservices
 com.quarkdown.lsp.tokenizer
