@@ -5,9 +5,11 @@ import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.diagnostics.DiagnosticsSupplier
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.hover.HoverSupplier
+import com.quarkdown.lsp.ontype.OnTypeFormattingEditSupplier
 import com.quarkdown.lsp.subservices.CompletionSubservice
 import com.quarkdown.lsp.subservices.DiagnosticsSubservice
 import com.quarkdown.lsp.subservices.HoverSubservice
+import com.quarkdown.lsp.subservices.OnTypeFormattingSubservice
 import com.quarkdown.lsp.subservices.SemanticTokensSubservice
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
@@ -17,11 +19,13 @@ import org.eclipse.lsp4j.DidChangeTextDocumentParams
 import org.eclipse.lsp4j.DidCloseTextDocumentParams
 import org.eclipse.lsp4j.DidOpenTextDocumentParams
 import org.eclipse.lsp4j.DidSaveTextDocumentParams
+import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
 import org.eclipse.lsp4j.Hover
 import org.eclipse.lsp4j.HoverParams
 import org.eclipse.lsp4j.SemanticTokens
 import org.eclipse.lsp4j.SemanticTokensParams
 import org.eclipse.lsp4j.TextDocumentIdentifier
+import org.eclipse.lsp4j.TextEdit
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.TextDocumentService
 import java.util.concurrent.CompletableFuture
@@ -38,11 +42,13 @@ class QuarkdownTextDocumentService(
     tokensSuppliers: List<SemanticTokensSupplier>,
     hoverSuppliers: List<HoverSupplier>,
     diagnosticsSuppliers: List<DiagnosticsSupplier>,
+    formattingSuppliers: List<OnTypeFormattingEditSupplier>,
 ) : TextDocumentService {
     private val completionService = CompletionSubservice(completionSuppliers)
     private val semanticTokensService = SemanticTokensSubservice(tokensSuppliers)
     private val hoverService = HoverSubservice(hoverSuppliers)
     private val diagnosticsService = DiagnosticsSubservice(diagnosticsSuppliers)
+    private val onTypeFormattingService = OnTypeFormattingSubservice(formattingSuppliers)
 
     /**
      * Maps document URIs to their text content.
@@ -154,5 +160,12 @@ class QuarkdownTextDocumentService(
 
         val document = getDocument(params.textDocument)
         return CompletableFuture.completedFuture(hoverService.process(params, document))
+    }
+
+    override fun onTypeFormatting(params: DocumentOnTypeFormattingParams): CompletableFuture<List<TextEdit?>?>? {
+        server.log("Operation 'text/onTypeFormatting'")
+
+        val document = getDocument(params.textDocument)
+        return CompletableFuture.completedFuture(onTypeFormattingService.process(params, document))
     }
 }

@@ -6,9 +6,11 @@ import com.quarkdown.lsp.diagnostics.DiagnosticsSuppliersFactory
 import com.quarkdown.lsp.highlight.SemanticTokensSuppliersFactory
 import com.quarkdown.lsp.highlight.TokenType
 import com.quarkdown.lsp.hover.HoverSuppliersFactory
+import com.quarkdown.lsp.ontype.OnTypeFormattingSuppliersFactory
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.Diagnostic
+import org.eclipse.lsp4j.DocumentOnTypeFormattingOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
 import org.eclipse.lsp4j.MessageParams
@@ -44,6 +46,7 @@ class QuarkdownLanguageServer(
             SemanticTokensSuppliersFactory.default(),
             HoverSuppliersFactory.default(this),
             DiagnosticsSuppliersFactory.default(this),
+            OnTypeFormattingSuppliersFactory.default(),
         )
 
     private val completionTriggers =
@@ -54,6 +57,8 @@ class QuarkdownLanguageServer(
                 ARGUMENT_BEGIN,
             )
         }
+
+    private val onTypeFormattingOptions = DocumentOnTypeFormattingOptions("\n")
 
     private val workspaceService: WorkspaceService = QuarkdownWorkspaceService(this)
 
@@ -85,6 +90,7 @@ class QuarkdownLanguageServer(
                 completionProvider = CompletionOptions(true, completionTriggers)
                 hoverProvider = Either.forLeft(true)
                 semanticTokensProvider = SemanticTokensWithRegistrationOptions(legend, true, null)
+                documentOnTypeFormattingProvider = onTypeFormattingOptions
             }
         val response = InitializeResult(serverCaps)
 

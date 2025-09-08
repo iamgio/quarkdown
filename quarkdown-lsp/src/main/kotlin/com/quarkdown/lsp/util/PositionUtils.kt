@@ -4,16 +4,22 @@ import com.quarkdown.core.util.substringWithinBounds
 import org.eclipse.lsp4j.Position
 
 /**
+ * @param line the line number (0-based)
+ * @return the line at the specified index, or null if the index is out of bounds
+ */
+fun String.getLine(line: Int): String? = lines().getOrNull(line)
+
+/**
  * @param text the text content to search in
  * @return the character at the specified position, or null if the position is out of bounds
  */
-fun Position.getChar(text: String): Char? = text.lines().getOrNull(line)?.getOrNull(character - 1)
+fun Position.getChar(text: String): Char? = text.getLine(line)?.getOrNull(character - 1)
 
 /**
  * @param text the text content to search in
  * @return the substring from the start of the line, up to the specified position, or `null` if the position is out of bounds
  */
-fun Position.getLineUntilPosition(text: String): String? = text.lines()[line].substringWithinBounds(0, character)
+fun Position.getLineUntilPosition(text: String): String? = text.getLine(line)?.substringWithinBounds(0, character)
 
 /**
  * @param text the text content to search in
