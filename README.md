@@ -8,6 +8,7 @@
   <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
   <a href="https://quarkdown.com/docs"><img alt="Docs" src="https://img.shields.io/badge/docs-read-blue"></a>
   <a href="https://github.com/iamgio/quarkdown/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/iamgio/quarkdown?color=mediumseagreen"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode"><img alt="Visual Studio Code Extension Version" src="https://img.shields.io/visual-studio-marketplace/v/quarkdown.quarkdown-vscode?label=vscode"></a>
   <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br>
@@ -87,13 +88,14 @@ You can even create awesome libraries for everyone to use.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
-Combined with live preview and :zap: fast compilation speed, Quarkdown simply gets the work done.
+Combined with live preview, :zap: fast compilation speed and a powerful [VS Code extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode), Quarkdown simply gets the work done.
 
 &nbsp;
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/video/livepreview.gif" alt="Live preview" />
+<img src="https://raw.githubusercontent.com/quarkdown-labs/quarkdown-vscode/refs/heads/project-files/live-preview.gif" alt="Live preview" />
 </p>
+
 
 &nbsp;
 
