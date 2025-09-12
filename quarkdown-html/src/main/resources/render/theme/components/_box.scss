@@ -36,12 +36,12 @@
   > .box-content {
     color: var(--box-content-foreground-color);
 
-    > *:first-child, li:first-child > p:first-child {
-      margin-top: 8px;
+    > :first-child {
+      margin-top: var(--qd-box-content-vertical-padding);
     }
 
-    *:last-child, li:last-child > p:last-child {
-      margin-bottom: 8px;
+    > :last-child {
+      margin-bottom: var(--qd-box-content-vertical-padding);
     }
 
     ul, ol {
