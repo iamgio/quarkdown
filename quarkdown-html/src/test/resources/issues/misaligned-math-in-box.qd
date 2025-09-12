@@ -1,0 +1,9 @@
+.docname {Misaligned math in box}
+.include {template/template.qd}
+
+.bulletin issue:{193} pr:{195} nextrelease:{1.9.1} relatedto:{margin applied to `box-content :last-child`}
+
+.box {title} type:{note}
+    $ A_{sub}^{super} $
+
+$ A_{sub}^{super} $
