@@ -6,6 +6,7 @@ class PagedDocument extends QuarkdownDocument {
         super.populateExecutionQueue();
         preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitionsAndFirstReference(false)));
         postRenderingExecutionQueue.push(setColumnCount);
+        postRenderingExecutionQueue.push(fixSplitCodeBlocks)
     }
 
     copyPageMarginInitializers() {
@@ -129,4 +130,27 @@ function setColumnCount() {
     document.querySelectorAll('.pagedjs_page_content > div').forEach(content => {
         content.style.columnCount = columnCount;
     });
+}
+
+// Fixes code blocks that were split into multiple blocks due to page breaks.
+// 1. The first line of the split code is missing indentation, which is contained in the last line of the previous block.
+function fixSplitCodeBlocks() {
+    // Splits code blocks have the attribute `data-split-from`, where its value is the `data-ref` attribute of the code block it was split from.
+    const splitCodeBlocks = document.querySelectorAll('code[data-split-from]');
+
+    splitCodeBlocks.forEach(code => {
+        // Lookups the original code block.
+        const fromRef = code.getAttribute('data-split-from');
+        if (!fromRef) return;
+
+        const from = document.querySelector(`code[data-ref="${fromRef}"]`);
+        if (!from) return;
+
+        // The indentation of the first line is contained in the last line of the original code block.
+        const fromLastLine = from.innerText.split('\n').pop();
+        if (!fromLastLine) return;
+        const indentation = fromLastLine.match(/\s*$/)?.[0] || '';
+
+        code.innerHTML = indentation + code.innerHTML;
+    })
 }
