@@ -1,0 +1,19 @@
+.docname {Split code blocks should keep indentation and line numbers}
+.doctype {paged}
+.include {template/template.qd}
+
+.bulletin issue:{194} pr:{196} nextrelease:{1.9.1} relatedto:{paged.js not transferring indentation}
+
+<<<
+
+.repeat {5}
+    .loremipsum
+
+```javascript
+function a() {
+    const x = 0;
+    const y = 0;
+    const z = 0;
+    return x + y + z;
+}
+```
