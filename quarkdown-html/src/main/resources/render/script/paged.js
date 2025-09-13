@@ -6,6 +6,12 @@ class PagedDocument extends QuarkdownDocument {
         super.populateExecutionQueue();
         preRenderingExecutionQueue.push(() => this.handleFootnotesPreRendering(getFootnoteDefinitionsAndFirstReference(false)));
         postRenderingExecutionQueue.push(setColumnCount);
+
+        postRenderingExecutionQueue.push(() => {
+            const splitCodeBlocks = getSplitCodeBlocks();
+            fixSplitCodeBlockFirstLineIndentation(splitCodeBlocks);
+            setTimeout(() => fixSplitCodeBlockLineNumbers(splitCodeBlocks), 0); // Must execute after the highlighting is done.
+        });
     }
 
     copyPageMarginInitializers() {
@@ -128,5 +134,57 @@ function setColumnCount() {
 
     document.querySelectorAll('.pagedjs_page_content > div').forEach(content => {
         content.style.columnCount = columnCount;
+    });
+}
+
+/**
+ * Returns all code blocks that were split due to page breaks, as pairs of the original code block and the split code block.
+ * @returns {{from: Element, split: Element}[]} An array of objects containing the original code block (`from`) and the split code block (`split`).
+ */
+function getSplitCodeBlocks() {
+    const splitCodeBlocks = [];
+
+    // Splits code blocks have the attribute `data-split-from`, where its value
+    // is the `data-ref` attribute of the code block it was split from.
+    document.querySelectorAll('code[data-split-from]').forEach(split => {
+        const fromRef = split.getAttribute('data-split-from');
+        if (!fromRef) return;
+
+        const from = document.querySelector(`code[data-ref="${fromRef}"]`);
+        if (!from) return;
+
+        splitCodeBlocks.push({from, split});
+    });
+
+    return splitCodeBlocks;
+}
+
+// Fixes indentation of the first line of code blocks that were split into multiple blocks due to page breaks.
+// The first line of the split code is missing indentation, which is contained in the last line of the previous block.
+function fixSplitCodeBlockFirstLineIndentation(splitCodeBlocks) {
+    splitCodeBlocks.forEach(({from, split}) => {
+        // The indentation of the first line is contained in the last line of the original code block.
+        const fromLastLine = from.innerText.split('\n').pop();
+        if (!fromLastLine) return;
+        const indentation = fromLastLine.match(/\s*$/)?.[0] || '';
+
+        split.innerHTML = indentation + split.innerHTML;
+    })
+}
+
+// Fixes line numbers of code blocks that were split into multiple blocks due to page breaks.
+// The line numbers of the split code block start from 1, but should continue from the last line number of the previous block.
+function fixSplitCodeBlockLineNumbers(splitCodeBlocks) {
+    const lineNumberAttribute = 'data-line-number';
+
+    splitCodeBlocks.forEach(({from, split}) => {
+        const lines = from.querySelectorAll(`[${lineNumberAttribute}]`);
+        const lastLineNumber = Array.from(lines).pop()?.getAttribute(lineNumberAttribute) || '0';
+
+        split.querySelectorAll(`[${lineNumberAttribute}]`).forEach(line => {
+            const lineNumber = line.getAttribute(lineNumberAttribute);
+            if (!lineNumber) return;
+            line.setAttribute(lineNumberAttribute, (parseInt(lineNumber) + parseInt(lastLineNumber)).toString());
+        });
     });
 }
