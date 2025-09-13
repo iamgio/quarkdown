@@ -106,14 +106,12 @@
         }
 
         body.quarkdown-slides .reveal {
-            [[if:PAGESIZE]]
-            width: [[PAGEWIDTH]];
-            height: [[PAGEHEIGHT]];
-            [[endif:PAGESIZE]]
+            [[if:PAGEWIDTH]]width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
+            [[if:PAGEHEIGHT]]height: [[PAGEHEIGHT]];[[endif:PAGEHEIGHT]]
         }
 
         @page {
-            [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
+            size: [[if:PAGEWIDTH]][[PAGEWIDTH]][[endif:PAGEWIDTH]][[if:!PAGEWIDTH]]auto[[endif:!PAGEWIDTH]] [[if:PAGEHEIGHT]][[PAGEHEIGHT]][[endif:PAGEHEIGHT]][[if:!PAGEHEIGHT]]auto[[endif:!PAGEHEIGHT]];
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
             [[if:PLAIN]][[if:!PAGEMARGIN]]margin: 0;[[endif:!PAGEMARGIN]][[endif:PLAIN]]
         }

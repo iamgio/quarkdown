@@ -1,16 +1,20 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 
 /**
  * Type of produced document, which affects its post-rendering stage.
  * @param preferredOrientation the preferred orientation of the document, to apply if not overridden by the user
+ * @param defaultPageFormat the default page format to apply, if not overridden by the user
  * @param defaultNumbering the default numbering formats to apply, if not overridden by the user
  */
 enum class DocumentType(
     val preferredOrientation: PageOrientation,
+    val defaultPageFormat: PageFormatInfo? = null,
     val defaultNumbering: DocumentNumbering? = null,
 ) {
     /**
@@ -24,11 +28,19 @@ enum class DocumentType(
      */
     PAGED(
         PageOrientation.PORTRAIT,
-        DocumentNumbering(
-            headings = NumberingFormat.fromString("1.1.1"),
-            figures = NumberingFormat.fromString("1.1"),
-            tables = NumberingFormat.fromString("1.1"),
-        ),
+        defaultPageFormat =
+            with(PageSizeFormat.A4.getBounds(PageOrientation.PORTRAIT)) {
+                PageFormatInfo(
+                    pageWidth = width,
+                    pageHeight = height,
+                )
+            },
+        defaultNumbering =
+            DocumentNumbering(
+                headings = NumberingFormat.fromString("1.1.1"),
+                figures = NumberingFormat.fromString("1.1"),
+                tables = NumberingFormat.fromString("1.1"),
+            ),
     ),
 
     /**

@@ -58,11 +58,6 @@ object TemplatePlaceholders {
     const val IS_SLIDES = "SLIDES"
 
     /**
-     * Whether the document has a fixed size.
-     */
-    const val HAS_PAGE_SIZE = "PAGESIZE"
-
-    /**
      * Width of the document.
      */
     const val PAGE_WIDTH = "PAGEWIDTH"
