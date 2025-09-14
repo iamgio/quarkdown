@@ -33,7 +33,7 @@
         [[endfor:FONTFACE]]
 
         @page {
-            [[if:PAGESIZE]]size: [[PAGEWIDTH]] [[PAGEHEIGHT]];[[endif:PAGESIZE]]
+            size: [[if:PAGEWIDTH]][[PAGEWIDTH]][[endif:PAGEWIDTH]][[if:!PAGEWIDTH]]auto[[endif:!PAGEWIDTH]] [[if:PAGEHEIGHT]][[PAGEHEIGHT]][[endif:PAGEHEIGHT]][[if:!PAGEHEIGHT]]auto[[endif:!PAGEHEIGHT]];
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
         }
 

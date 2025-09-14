@@ -398,7 +398,6 @@ class HtmlPostRendererTest {
             type = DocumentType.SLIDES
             layout.font.mainFamily = FontFamily.System("Arial")
             layout.pageFormat.pageWidth = 8.5.inch
-            layout.pageFormat.pageHeight = 11.0.inch
             layout.pageFormat.margin = Sizes(1.0.inch)
             tex.macros["\\R"] = "\\mathbb{R}"
             tex.macros["\\Z"] = "\\mathbb{Z}"
