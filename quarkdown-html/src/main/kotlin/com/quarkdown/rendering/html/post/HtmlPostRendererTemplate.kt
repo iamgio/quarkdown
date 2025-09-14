@@ -8,6 +8,8 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.core.util.Escape
+import com.quarkdown.core.util.get
+import com.quarkdown.core.util.withDefault
 import com.quarkdown.rendering.html.css.asCSS
 
 /**
@@ -87,41 +89,40 @@ class HtmlPostRendererTemplate(
      * @see com.quarkdown.core.document.layout.page.PageFormatInfo
      */
     private fun TemplateProcessor.pageFormat() {
-        val pageFormat = document.layout.pageFormat
+        val pageFormat = document.layout.pageFormat.withDefault(document.type.defaultPageFormat)
 
-        conditional(TemplatePlaceholders.HAS_PAGE_SIZE, pageFormat.hasSize)
         optionalValue(
             TemplatePlaceholders.PAGE_WIDTH,
-            pageFormat.pageWidth?.asCSS,
+            pageFormat.get { pageWidth }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.PAGE_HEIGHT,
-            pageFormat.pageHeight?.asCSS,
+            pageFormat.get { pageHeight }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.PAGE_MARGIN,
-            pageFormat.margin?.asCSS,
+            pageFormat.get { margin }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.PAGE_CONTENT_BORDER_WIDTH,
-            pageFormat.contentBorderWidth?.asCSS,
+            pageFormat.get { contentBorderWidth }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.PAGE_CONTENT_BORDER_COLOR,
-            pageFormat.contentBorderColor?.asCSS,
+            pageFormat.get { contentBorderColor }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.COLUMN_COUNT,
-            pageFormat.columnCount,
+            pageFormat.get { columnCount },
         )
         // Alignment can be global or local. See TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT for details.
         optionalValue(
             TemplatePlaceholders.GLOBAL_HORIZONTAL_ALIGNMENT,
-            pageFormat.alignment?.takeIf { it.isGlobal }?.asCSS,
+            pageFormat.get { alignment }?.takeIf { it.isGlobal }?.asCSS,
         )
         optionalValue(
             TemplatePlaceholders.LOCAL_HORIZONTAL_ALIGNMENT,
-            pageFormat.alignment?.takeIf { it.isLocal }?.asCSS,
+            pageFormat.get { alignment }?.takeIf { it.isLocal }?.asCSS,
         )
     }
 
