@@ -24,11 +24,11 @@
       content: target-counter(attr(href), page);
       float: right;
     }
-
-    // ToC is scrollable in slides
-    @at-root .quarkdown-slides#{&} {
-      overflow-y: scroll;
-      max-height: 50vh;
-    }
   }
+}
+
+// ToC is scrollable in slides (not in PDF view)
+.quarkdown-slides nav:not(.pdf-page nav) {
+  overflow-y: scroll;
+  max-height: 50vh;
 }
