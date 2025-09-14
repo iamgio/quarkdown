@@ -28,4 +28,4 @@ fun <T : Defaultable> T.withDefault(default: T?): Defaulted<T> = Defaulted(this,
  * @param valueProvider function to extract a value from [T]
  * @return the provided value, or the default if not present. `null` if neither is present
  */
-operator fun <T : Defaultable, V> Defaulted<T>.get(valueProvider: T.() -> V?): V? = valueProvider(value) ?: default?.valueProvider()
+inline fun <T : Defaultable, V> Defaulted<T>.get(valueProvider: T.() -> V?): V? = valueProvider(value) ?: default?.valueProvider()
