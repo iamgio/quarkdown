@@ -227,6 +227,12 @@
         newFrame.contentWindow.onscroll = null;
         newFrame.onload = null;
 
+        // (#199) If the URL has changed (e.g. different slide, subdocument, etc.), update the hidden frame's URL to match.
+        const activeUrl = currentFrame.contentWindow.location.href;
+        if (newFrame.src !== activeUrl) {
+            newFrame.src = activeUrl;
+        }
+
         // Swap frame visibility.
         setFrameVisibility(newFrame, true);
         setFrameVisibility(currentFrame, false);
