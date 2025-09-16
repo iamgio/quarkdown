@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("com.quarkdown.automerge") version "1.1.0"
     `java-test-fixtures`
 }
 
