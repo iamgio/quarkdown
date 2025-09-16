@@ -36,6 +36,7 @@ interface LocaleLoader {
         /**
          * Default system [LocaleLoader] implementation.
          */
-        val SYSTEM: LocaleLoader = JVMLocaleLoader
+        val SYSTEM: LocaleLoader
+            get() = JVMLocaleLoader
     }
 }
