@@ -20,6 +20,7 @@ import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
+import com.quarkdown.core.document.numbering.merge
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.loader.Module
@@ -354,8 +355,17 @@ fun theme(
  *
  * Sample numbering strings are `1.1.1`, `1.A.a`, `A.A`.
  *
+ * ```yaml
+ * .numbering
+ *     - headings: 1.1
+ *     - figures: 1.a
+ * ```
+ *
  * If this function is *not* called, the default numbering format is picked depending on the document type.
  *
+ * @param merge if true, merges the given formats with the current ones (including defaults),
+ * so that unspecified formats are kept unchanged.
+ * If false, completely overrides the current formats, so that unspecified formats are disabled.
  * @param formats dictionary of numbering formats for different element types.
  * Built-in keys are:
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
@@ -367,6 +377,7 @@ fun theme(
  */
 fun numbering(
     @Injected context: Context,
+    @LikelyNamed merge: Boolean = true,
     @LikelyBody formats: Map<String, Value<String>>,
 ): VoidValue {
     fun parse(format: Value<String>): NumberingFormat =
@@ -377,7 +388,7 @@ fun numbering(
             else -> NumberingFormat.fromString(unwrapped)
         }
 
-    context.documentInfo.numbering =
+    val numbering =
         DocumentNumbering(
             headings = formats["headings"]?.let(::parse),
             figures = formats["figures"]?.let(::parse),
@@ -385,6 +396,13 @@ fun numbering(
             footnotes = formats["footnotes"]?.let(::parse),
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
+
+    context.documentInfo.numbering =
+        if (merge) {
+            numbering.merge(context.documentInfo.numberingOrDefault)
+        } else {
+            numbering
+        }
 
     return VoidValue
 }
@@ -397,7 +415,7 @@ fun numbering(
 @Name("nonumbering")
 fun disableNumbering(
     @Injected context: Context,
-) = numbering(context, emptyMap())
+) = numbering(context, merge = false, formats = emptyMap())
 
 /**
  * Updates the global font configuration of the document.

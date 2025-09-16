@@ -1,5 +1,6 @@
 package com.quarkdown.core.document.numbering
 
+import com.quarkdown.automerge.annotations.Mergeable
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
@@ -14,6 +15,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceFootnote
  * @param footnotes format for [FootnoteDefinition] and [ReferenceFootnote]s
  * @param extra extra, dynamic formats for custom elements (e.g. [com.quarkdown.core.ast.quarkdown.block.Numbered])
  */
+@Mergeable
 data class DocumentNumbering(
     val headings: NumberingFormat? = null,
     val figures: NumberingFormat? = null,

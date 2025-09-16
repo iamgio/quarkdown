@@ -411,6 +411,88 @@ class NumberingTest {
     }
 
     @Test
+    fun `numbering merging`() {
+        execute(
+            """
+            .noautopagebreak
+            
+            .numbering
+                - figures: a
+                
+            .numbering
+                - headings: 1.1
+            
+            # A
+            
+            ![](img.png "")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<figure id=\"figure-a\"><img src=\"img.png\" alt=\"\" title=\"\" />" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"a\"></figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbering merging, from default numbering`() {
+        execute(
+            """
+            .doctype {paged}
+            .noautopagebreak
+            
+            .numbering
+                - figures: 1.a
+                
+            # A
+            
+            ![](img.png "")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<figure id=\"figure-1.a\"><img src=\"img.png\" alt=\"\" title=\"\" />" +
+                    "<figcaption class=\"caption-bottom\" data-element-label=\"1.a\"></figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbering override, no merging`() {
+        execute(
+            """
+            .noautopagebreak
+            
+            .numbering
+                - figures: a
+                
+            .numbering merge:{no}
+                - headings: 1.1
+            
+            # A
+            
+            ![](img.png "")
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<figure><img src=\"img.png\" alt=\"\" title=\"\" />" +
+                    "<figcaption class=\"caption-bottom\"></figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `mermaid diagram numbered as figure`() {
         execute(
             """
