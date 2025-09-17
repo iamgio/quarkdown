@@ -22,6 +22,8 @@ import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.layout.page.merge
+import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
+import com.quarkdown.core.document.layout.paragraph.merge
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.numbering.merge
@@ -490,18 +492,28 @@ fun font(
  */
 @Name("paragraphstyle")
 fun paragraphStyle(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @Name("lineheight") lineHeight: Number? = null,
     @Name("letterspacing") letterSpacing: Number? = null,
     @LikelyNamed spacing: Number? = null,
     @LikelyNamed indent: Number? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.paragraphStyle) {
-        this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
-        this.letterSpacing = letterSpacing?.toDouble() ?: this.letterSpacing
-        this.spacing = spacing?.toDouble() ?: this.spacing
-        this.indent = indent?.toDouble() ?: this.indent
-    }
+    val currentStyle = context.documentInfo.layout.paragraphStyle
+
+    val style =
+        ParagraphStyleInfo(
+            lineHeight = lineHeight?.toDouble(),
+            letterSpacing = letterSpacing?.toDouble(),
+            spacing = spacing?.toDouble(),
+            indent = indent?.toDouble(),
+        )
+
+    // Update global paragraph style.
+    context.documentInfo =
+        context.documentInfo.copy(
+            layout = context.documentInfo.layout.copy(paragraphStyle = style.merge(currentStyle)),
+        )
+
     return VoidValue
 }
 
