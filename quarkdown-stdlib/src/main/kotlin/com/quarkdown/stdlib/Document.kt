@@ -14,10 +14,13 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
+import com.quarkdown.core.document.layout.page.merge
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.numbering.merge
@@ -585,31 +588,34 @@ fun pageFormat(
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.pageFormat) {
-        // If, for instance, the document is landscape and the given format is portrait,
-        // the format is converted to landscape.
-        val formatBounds = format?.getBounds(orientation)
+    val currentFormat = context.documentInfo.layout.pageFormat
 
-        // Width and/or height override the format size if both are not null.
-        this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
-        this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
+    // If, for instance, the document is landscape and the given format is portrait,
+    // the format is converted to landscape.
+    val formatBounds = format?.getBounds(orientation)
 
-        this.margin = margin ?: this.margin
-        this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
-        this.alignment = alignment ?: this.alignment
+    // Whether at least one border property is set.
+    val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
 
-        val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
-        if (hasBorder) {
-            this.contentBorderWidth =
+    val format =
+        PageFormatInfo(
+            pageWidth = width ?: formatBounds?.width,
+            pageHeight = height ?: formatBounds?.height,
+            margin = margin,
+            columnCount = columns?.takeIf { it > 0 },
+            alignment = alignment,
+            contentBorderWidth =
                 Sizes(
-                    top = borderTop ?: this.contentBorderWidth?.top ?: Size.ZERO,
-                    right = borderRight ?: this.contentBorderWidth?.right ?: Size.ZERO,
-                    bottom = borderBottom ?: this.contentBorderWidth?.bottom ?: Size.ZERO,
-                    left = borderLeft ?: this.contentBorderWidth?.left ?: Size.ZERO,
-                )
-        }
-        this.contentBorderColor = borderColor
-    }
+                    top = borderTop ?: currentFormat.contentBorderWidth?.top ?: Size.ZERO,
+                    right = borderRight ?: currentFormat.contentBorderWidth?.right ?: Size.ZERO,
+                    bottom = borderBottom ?: currentFormat.contentBorderWidth?.bottom ?: Size.ZERO,
+                    left = borderLeft ?: currentFormat.contentBorderWidth?.left ?: Size.ZERO,
+                ).takeIf { hasBorder },
+            contentBorderColor = borderColor,
+        )
+
+    val layout: DocumentLayoutInfo = context.documentInfo.layout.copy(pageFormat = format.merge(currentFormat))
+    context.documentInfo = context.documentInfo.copy(layout = layout)
 
     return VoidValue
 }
