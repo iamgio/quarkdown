@@ -1,7 +1,6 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.quarkdown.block.Container
-import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
@@ -641,10 +640,10 @@ class StandaloneFunctionTest {
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun setDocumentName(
-        @Injected context: Context,
+        @Injected context: MutableContext,
         name: String,
     ): VoidValue {
-        context.documentInfo.name = name
+        context.documentInfo = context.documentInfo.copy(name = name)
         return VoidValue
     }
 
@@ -702,7 +701,7 @@ class StandaloneFunctionTest {
         documentType: DocumentType,
     ): FunctionCall<T> {
         val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo.type = documentType
+        context.documentInfo = context.documentInfo.copy(type = documentType)
         val adapter = KFunctionAdapter(function)
         return FunctionCall(adapter, emptyList(), context)
     }

@@ -19,6 +19,7 @@ import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
 import com.quarkdown.core.context.hooks.location.LocationAwarenessHook
+import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
@@ -169,9 +170,12 @@ class TreeTraversalTest {
         fun getLabels(format: String): List<String> {
             val context = MutableContext(QuarkdownFlavor)
 
-            context.documentInfo.numbering =
-                DocumentNumbering(
-                    figures = NumberingFormat.fromString(format),
+            context.documentInfo =
+                DocumentInfo(
+                    numbering =
+                        DocumentNumbering(
+                            figures = NumberingFormat.fromString(format),
+                        ),
                 )
 
             ObservableAstIterator()
@@ -226,12 +230,15 @@ class TreeTraversalTest {
 
         val context = MutableContext(QuarkdownFlavor)
 
-        context.documentInfo.numbering =
-            DocumentNumbering(
-                extra =
-                    mapOf(
-                        "key1" to NumberingFormat.fromString("1.1"),
-                        "key2" to NumberingFormat.fromString("A"),
+        context.documentInfo =
+            context.documentInfo.copy(
+                numbering =
+                    DocumentNumbering(
+                        extra =
+                            mapOf(
+                                "key1" to NumberingFormat.fromString("1.1"),
+                                "key2" to NumberingFormat.fromString("A"),
+                            ),
                     ),
             )
 

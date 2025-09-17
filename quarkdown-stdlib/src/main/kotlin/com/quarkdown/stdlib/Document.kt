@@ -80,16 +80,16 @@ val Document: Module =
  * @param value (optional) value to assign to a document info field
  * @return the result of [get], wrapped in a [StringValue], if [value] is `null`. [VoidValue] otherwise
  */
-private fun <T> Context.modifyOrEchoDocumentInfo(
+private fun <T> MutableContext.modifyOrEchoDocumentInfo(
     value: T?,
     get: DocumentInfo.() -> OutputValue<*>,
-    set: DocumentInfo.(T) -> Unit,
+    set: DocumentInfo.(T) -> DocumentInfo,
 ): OutputValue<*> {
     if (value == null) {
         return get(this.documentInfo)
     }
 
-    set(this.documentInfo, value)
+    this.documentInfo = set(this.documentInfo, value)
     return VoidValue
 }
 
@@ -113,7 +113,7 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
  */
 @Name("doctype")
 fun docType(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     type: DocumentType? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
@@ -123,7 +123,7 @@ fun docType(
                 .lowercase()
                 .wrappedAsValue()
         },
-        set = { this.type = it },
+        set = { copy(type = it) },
     )
 
 /**
@@ -146,13 +146,13 @@ fun docType(
  */
 @Name("docname")
 fun docName(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     name: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         name,
         get = { (this.name ?: "").wrappedAsValue() },
-        set = { this.name = it },
+        set = { copy(name = it) },
     )
 
 /**
@@ -178,13 +178,13 @@ fun docName(
  */
 @Name("docauthor")
 fun docAuthor(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     author: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         author,
         get = { (this.authors.firstOrNull()?.name ?: "").wrappedAsValue() },
-        set = { this.authors += DocumentAuthor(name = it) },
+        set = { copy(authors = authors + DocumentAuthor(name = it)) },
     )
 
 /**
@@ -224,7 +224,7 @@ fun docAuthor(
  */
 @Name("docauthors")
 fun docAuthors(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     authors: Map<String, DictionaryValue<OutputValue<String>>>? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
@@ -242,14 +242,15 @@ fun docAuthors(
         },
         set = {
             // Map<String, Map<String, String>> -> List<(String, Map<String, String>)>
-            this.authors.addAll(
-                it.map { (name, info) ->
-                    DocumentAuthor(
-                        name = name,
-                        info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
-                    )
-                },
-            )
+            val authors =
+                this.authors +
+                    it.map { (name, info) ->
+                        DocumentAuthor(
+                            name = name,
+                            info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
+                        )
+                    }
+            copy(authors = authors)
         },
     )
 
@@ -285,16 +286,18 @@ fun docAuthors(
  */
 @Name("doclang")
 fun docLanguage(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     locale: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         locale,
         get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
         set = {
-            this.locale =
-                LocaleLoader.SYSTEM.find(it)
-                    ?: throw IllegalArgumentException("Locale $it not found")
+            copy(
+                locale =
+                    LocaleLoader.SYSTEM.find(it)
+                        ?: throw IllegalArgumentException("Locale $it not found"),
+            )
         },
     )
 
@@ -315,7 +318,7 @@ fun docLanguage(
  * @wiki Themes
  */
 fun theme(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     color: String? = null,
     @LikelyNamed layout: String? = null,
 ): VoidValue {
@@ -327,12 +330,14 @@ fun theme(
             ?: throw IOPipelineException("Theme $theme not found")
     }
 
-    // Update global theme.
-    context.documentInfo.theme =
+    val theme =
         DocumentTheme(
             color = color?.lowercase()?.also { checkExistance("color/$it") },
             layout = layout?.lowercase()?.also { checkExistance("layout/$it") },
         )
+
+    // Update global theme.
+    context.documentInfo = context.documentInfo.copy(theme = theme)
 
     return VoidValue
 }
@@ -376,7 +381,7 @@ fun theme(
  * @wiki Numbering
  */
 fun numbering(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @LikelyNamed merge: Boolean = true,
     @LikelyBody formats: Map<String, Value<String>>,
 ): VoidValue {
@@ -397,12 +402,15 @@ fun numbering(
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
 
-    context.documentInfo.numbering =
-        if (merge) {
-            numbering.merge(context.documentInfo.numberingOrDefault)
-        } else {
-            numbering
-        }
+    context.documentInfo =
+        context.documentInfo.copy(
+            numbering =
+                if (merge) {
+                    numbering.merge(context.documentInfo.numberingOrDefault)
+                } else {
+                    numbering
+                },
+        )
 
     return VoidValue
 }
@@ -414,7 +422,7 @@ fun numbering(
  */
 @Name("nonumbering")
 fun disableNumbering(
-    @Injected context: Context,
+    @Injected context: MutableContext,
 ) = numbering(context, merge = false, formats = emptyMap())
 
 /**
