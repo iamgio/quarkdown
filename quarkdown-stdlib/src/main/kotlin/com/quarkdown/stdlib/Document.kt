@@ -29,6 +29,7 @@ import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.numbering.merge
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -553,10 +554,18 @@ fun captionPosition(
  */
 @Name("texmacro")
 fun texMacro(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     name: String,
     @LikelyBody macro: String,
-) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
+) = VoidValue.also {
+    val texInfo: TexInfo =
+        context.documentInfo.tex.copy(
+            macros =
+                context.documentInfo.tex.macros + (name to macro),
+        )
+
+    context.documentInfo = context.documentInfo.copy(tex = texInfo)
+}
 
 /**
  * Sets the page layout format of the document.

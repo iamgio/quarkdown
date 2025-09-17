@@ -26,7 +26,10 @@ class HtmlSecurityTest {
         expectedResult: String,
     ) {
         val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo.tex.macros[name] = content
+
+        context.documentInfo =
+            context.documentInfo.copy(tex = context.documentInfo.tex.copy(macros = mapOf(name to content)))
+
         val postRenderer = HtmlPostRenderer(context, ::texMacrosTemplateProcessor)
 
         assertEquals(
