@@ -14,8 +14,9 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.font.FontInfo
+import com.quarkdown.core.document.layout.font.merge
 import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
@@ -455,12 +456,19 @@ fun font(
 ): VoidValue {
     fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
 
-    with(context.documentInfo.layout.font) {
-        this.mainFamily = fontFamily(main) ?: this.mainFamily
-        this.headingFamily = fontFamily(heading) ?: this.headingFamily
-        this.codeFamily = fontFamily(code) ?: this.codeFamily
-        this.size = size ?: this.size
-    }
+    val fontInfo =
+        FontInfo(
+            mainFamily = fontFamily(main),
+            headingFamily = fontFamily(heading),
+            codeFamily = fontFamily(code),
+            size = size,
+        )
+
+    // Update global font info.
+    context.documentInfo =
+        context.documentInfo.copy(
+            layout = context.documentInfo.layout.copy(font = fontInfo.merge(context.documentInfo.layout.font)),
+        )
 
     return VoidValue
 }
@@ -614,8 +622,11 @@ fun pageFormat(
             contentBorderColor = borderColor,
         )
 
-    val layout: DocumentLayoutInfo = context.documentInfo.layout.copy(pageFormat = format.merge(currentFormat))
-    context.documentInfo = context.documentInfo.copy(layout = layout)
+    // Update global page format.
+    context.documentInfo =
+        context.documentInfo.copy(
+            layout = context.documentInfo.layout.copy(pageFormat = format.merge(currentFormat)),
+        )
 
     return VoidValue
 }
