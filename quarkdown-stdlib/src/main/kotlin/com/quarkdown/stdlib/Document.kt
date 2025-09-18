@@ -15,6 +15,8 @@ import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
+import com.quarkdown.core.document.layout.caption.merge
 import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.font.merge
 import com.quarkdown.core.document.layout.page.PageFormatInfo
@@ -527,16 +529,25 @@ fun paragraphStyle(
  */
 @Name("captionposition")
 fun captionPosition(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @LikelyNamed default: CaptionPosition? = null,
     @LikelyNamed figures: CaptionPosition? = null,
     @LikelyNamed tables: CaptionPosition? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.captionPosition) {
-        this.default = default ?: this.default
-        this.figures = figures ?: this.figures
-        this.tables = tables ?: this.tables
-    }
+    val currentPosition = context.documentInfo.layout.captionPosition
+    val position =
+        CaptionPositionInfo(
+            default = default ?: currentPosition.default,
+            figures = figures,
+            tables = tables,
+        )
+
+    // Update global caption position.
+    context.documentInfo =
+        context.documentInfo.copy(
+            layout = context.documentInfo.layout.copy(captionPosition = position.merge(currentPosition)),
+        )
+
     return VoidValue
 }
 

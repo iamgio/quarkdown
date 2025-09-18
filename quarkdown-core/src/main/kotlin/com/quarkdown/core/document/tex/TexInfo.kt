@@ -5,5 +5,5 @@ package com.quarkdown.core.document.tex
  * @param macros custom user-defined macros to be used in math expressions
  */
 data class TexInfo(
-    val macros: Map<String, String> = mutableMapOf(),
+    val macros: Map<String, String> = emptyMap(),
 )
