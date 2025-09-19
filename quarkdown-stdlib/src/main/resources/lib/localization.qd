@@ -56,3 +56,14 @@
       - bibliography: 参考文献
       - figure: 图
       - table: 表
+    - French
+      - note: Note
+      - tip: Astuce
+      - warning: Attention
+      - important: Important
+      - error: Erreur
+      - todo: À faire
+      - tableofcontents: Table des matières
+      - biblioraphy: Sources
+      - figure: Figure
+      - table: Tableau

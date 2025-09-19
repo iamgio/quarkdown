@@ -29,6 +29,12 @@
         - lemma: 引理
         - theorem: 定理
         - proof: 证明
+    - French
+        - abstract: Résumé
+        - definition: Définition
+        - lemma: Lemme
+        - theorem: Théorème
+        - proof: Preuve
 
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 
