@@ -21,7 +21,7 @@ import com.quarkdown.core.localization.Locale
 data class DocumentInfo(
     val type: DocumentType = DocumentType.PLAIN,
     val name: String? = null,
-    val authors: List<DocumentAuthor> = mutableListOf(),
+    val authors: List<DocumentAuthor> = emptyList(),
     val locale: Locale? = null,
     val numbering: DocumentNumbering? = null,
     val theme: DocumentTheme? = null,
