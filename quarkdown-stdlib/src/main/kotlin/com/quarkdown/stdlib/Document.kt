@@ -84,22 +84,24 @@ val Document: Module =
     )
 
 /**
- * If [value] is not `null`, it updates document information (according to [set]).
+ * If [value] is not `null`, it updates document information (according to [modify]).
  * Document information is fetched from [this] context via [Context.documentInfo].
  * If it's `null`, the needed value (according to [get]) from the current document is returned.
  * @param value (optional) value to assign to a document info field
+ * @param get function to fetch the needed value from [DocumentInfo] if [value] is `null`
+ * @param modify function to modify [DocumentInfo] if [value] is not `null` (returns the modified copy)
  * @return the result of [get], wrapped in a [StringValue], if [value] is `null`. [VoidValue] otherwise
  */
 private fun <T> MutableContext.modifyOrEchoDocumentInfo(
     value: T?,
     get: DocumentInfo.() -> OutputValue<*>,
-    set: DocumentInfo.(T) -> DocumentInfo,
+    modify: DocumentInfo.(T) -> DocumentInfo,
 ): OutputValue<*> {
     if (value == null) {
         return get(this.documentInfo)
     }
 
-    this.documentInfo = set(this.documentInfo, value)
+    this.documentInfo = modify(this.documentInfo, value)
     return VoidValue
 }
 
@@ -133,7 +135,7 @@ fun docType(
                 .lowercase()
                 .wrappedAsValue()
         },
-        set = { copy(type = it) },
+        modify = { copy(type = it) },
     )
 
 /**
@@ -162,7 +164,7 @@ fun docName(
     context.modifyOrEchoDocumentInfo(
         name,
         get = { (this.name ?: "").wrappedAsValue() },
-        set = { copy(name = it) },
+        modify = { copy(name = it) },
     )
 
 /**
@@ -194,7 +196,7 @@ fun docAuthor(
     context.modifyOrEchoDocumentInfo(
         author,
         get = { (this.authors.firstOrNull()?.name ?: "").wrappedAsValue() },
-        set = { copy(authors = authors + DocumentAuthor(name = it)) },
+        modify = { copy(authors = authors + DocumentAuthor(name = it)) },
     )
 
 /**
@@ -250,7 +252,7 @@ fun docAuthors(
                 },
             )
         },
-        set = {
+        modify = {
             // Map<String, Map<String, String>> -> List<(String, Map<String, String>)>
             val authors =
                 this.authors +
@@ -302,7 +304,7 @@ fun docLanguage(
     context.modifyOrEchoDocumentInfo(
         locale,
         get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
-        set = {
+        modify = {
             copy(
                 locale =
                     LocaleLoader.SYSTEM.find(it)
