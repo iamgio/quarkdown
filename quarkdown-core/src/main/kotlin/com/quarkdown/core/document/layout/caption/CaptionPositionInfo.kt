@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.layout.caption
 
-import com.quarkdown.automerge.annotations.Mergeable
+import com.quarkdown.amber.annotations.Mergeable
 
 /**
  * Immutable information about the position of captions of [com.quarkdown.core.ast.quarkdown.CaptionableNode] nodes in a document.

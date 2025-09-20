@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.layout.font
 
-import com.quarkdown.automerge.annotations.Mergeable
+import com.quarkdown.amber.annotations.Mergeable
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.misc.font.FontFamily
 

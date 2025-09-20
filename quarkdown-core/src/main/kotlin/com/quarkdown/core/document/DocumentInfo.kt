@@ -1,5 +1,6 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.amber.annotations.NestedData
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.tex.TexInfo
@@ -16,6 +17,7 @@ import com.quarkdown.core.localization.Locale
  * @param numbering formats to apply to element numbering across the document
  * @param pageFormat format of the pages of the document
  */
+@NestedData
 data class DocumentInfo(
     val type: DocumentType = DocumentType.PLAIN,
     val name: String? = null,

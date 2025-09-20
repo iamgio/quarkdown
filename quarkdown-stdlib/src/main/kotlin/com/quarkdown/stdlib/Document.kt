@@ -14,6 +14,7 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.layout.caption.merge
@@ -470,10 +471,7 @@ fun font(
         )
 
     // Update global font info.
-    context.documentInfo =
-        context.documentInfo.copy(
-            layout = context.documentInfo.layout.copy(font = fontInfo.merge(context.documentInfo.layout.font)),
-        )
+    context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo.merge(context.documentInfo.layout.font))
 
     return VoidValue
 }
@@ -512,10 +510,7 @@ fun paragraphStyle(
         )
 
     // Update global paragraph style.
-    context.documentInfo =
-        context.documentInfo.copy(
-            layout = context.documentInfo.layout.copy(paragraphStyle = style.merge(currentStyle)),
-        )
+    context.documentInfo = context.documentInfo.deepCopy(layoutParagraphStyle = style.merge(currentStyle))
 
     return VoidValue
 }
@@ -543,10 +538,7 @@ fun captionPosition(
         )
 
     // Update global caption position.
-    context.documentInfo =
-        context.documentInfo.copy(
-            layout = context.documentInfo.layout.copy(captionPosition = position.merge(currentPosition)),
-        )
+    context.documentInfo = context.documentInfo.deepCopy(layoutCaptionPosition = position.merge(currentPosition))
 
     return VoidValue
 }
@@ -655,10 +647,7 @@ fun pageFormat(
         )
 
     // Update global page format.
-    context.documentInfo =
-        context.documentInfo.copy(
-            layout = context.documentInfo.layout.copy(pageFormat = format.merge(currentFormat)),
-        )
+    context.documentInfo = context.documentInfo.deepCopy(layoutPageFormat = format.merge(currentFormat))
 
     return VoidValue
 }

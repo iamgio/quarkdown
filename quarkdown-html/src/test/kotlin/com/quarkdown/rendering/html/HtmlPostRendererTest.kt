@@ -5,6 +5,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
@@ -45,10 +46,7 @@ class HtmlPostRendererTest {
         })
 
     private fun setFontInfo(fontInfo: FontInfo) {
-        context.documentInfo =
-            context.documentInfo.copy(
-                layout = context.documentInfo.layout.copy(font = fontInfo),
-            )
+        context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo)
     }
 
     @BeforeTest

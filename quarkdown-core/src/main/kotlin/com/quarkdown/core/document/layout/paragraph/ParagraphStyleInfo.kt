@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.layout.paragraph
 
-import com.quarkdown.automerge.annotations.Mergeable
+import com.quarkdown.amber.annotations.Mergeable
 
 /**
  * Immutable information about the style of paragraphs in a document.

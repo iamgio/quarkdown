@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
@@ -27,8 +28,7 @@ class HtmlSecurityTest {
     ) {
         val context = MutableContext(QuarkdownFlavor)
 
-        context.documentInfo =
-            context.documentInfo.copy(tex = context.documentInfo.tex.copy(macros = mapOf(name to content)))
+        context.documentInfo = context.documentInfo.deepCopy(texMacros = mapOf(name to content))
 
         val postRenderer = HtmlPostRenderer(context, ::texMacrosTemplateProcessor)
 
