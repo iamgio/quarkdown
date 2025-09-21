@@ -72,6 +72,10 @@
     }
   }
 
+  .cross-reference {
+    font-style: italic;
+  }
+
   #{location-selectors.$location-heading}::before {
     opacity: .3;
     font-weight: normal;
