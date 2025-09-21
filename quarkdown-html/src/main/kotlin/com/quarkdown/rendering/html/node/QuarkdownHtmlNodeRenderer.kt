@@ -8,6 +8,7 @@ import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
+import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
@@ -403,8 +404,14 @@ class QuarkdownHtmlNodeRenderer(
         val reference =
             buildTag("span") {
                 className("cross-reference")
-                if (definition is LocationTrackableNode) {
-                    withLocationLabel(definition)
+
+                when (definition) {
+                    is LocationTrackableNode if definition.getLocationLabel(context) != null ->
+                        withLocationLabel(definition)
+                    // If no location is available, use the target's text if possible.
+                    is TextNode -> +definition.text
+                    // Fallback: raw reference ID.
+                    else -> +node.referenceId
                 }
                 if (definition is LocalizedKind) {
                     withLocalizedKind(definition)
