@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
@@ -99,6 +100,16 @@ class QuarkdownHtmlNodeRenderer(
         )
 
     /**
+     * Adds a `data-localized-kind` attribute to the localizable node.
+     * The kind name is localized according to the current locale.
+     */
+    private fun HtmlTagBuilder.withLocalizedKind(node: LocalizedKind) =
+        optionalAttribute(
+            "data-localized-kind",
+            context.localizeOrNull(key = node.kindLocalizationKey),
+        )
+
+    /**
      * Retrieves the location-based label of the [node], displays an optional caption preceded by the label, and also applies the label as its ID.
      * The label is pre-formatted according to the current [NumberingFormat].
      *
@@ -112,19 +123,15 @@ class QuarkdownHtmlNodeRenderer(
      * @see CaptionableNode
      * @see getLocationLabel to retrieve the numbered label
      */
-    private fun HtmlTagBuilder.numberedCaption(
-        node: CaptionableNode,
+    private fun <T> HtmlTagBuilder.numberedCaption(
+        node: T,
         captionTagName: String,
-        kindLocalizationKey: String,
-        idPrefix: String = kindLocalizationKey,
+        idPrefix: String = node.kindLocalizationKey,
         position: CaptionPosition,
-    ): HtmlTagBuilder {
-        // The location-based, numbering format dependent identifier of the node, e.g. 1.1.
-        val locationTrackable = node as? LocationTrackableNode
-
-        return this.apply {
+    ): HtmlTagBuilder where T : CaptionableNode, T : LocationTrackableNode, T : LocalizedKind =
+        this.apply {
             // The label is set as the ID of the element.
-            val label = locationTrackable?.getLocationLabel(context)
+            val label = node.getLocationLabel(context)
             label?.let { optionalAttribute("id", "$idPrefix-$it") }
 
             node.caption?.let { caption ->
@@ -133,13 +140,12 @@ class QuarkdownHtmlNodeRenderer(
 
                     +escapeCriticalContent(caption)
 
-                    locationTrackable?.let { withLocationLabel(it) }
+                    withLocationLabel(node)
+                    withLocalizedKind(node)
                     // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
-                    optionalAttribute("data-localized-kind", context.localizeOrNull(key = kindLocalizationKey))
                 }
             }
         }
-    }
 
     // Quarkdown node rendering
 
@@ -155,8 +161,7 @@ class QuarkdownHtmlNodeRenderer(
             // Figure ID, e.g. 1.1, based on the current numbering format.
             this.numberedCaption(
                 node,
-                "figcaption",
-                kindLocalizationKey = "figure",
+                captionTagName = "figcaption",
                 position =
                     context.documentInfo.layout.captionPosition
                         .getOrDefault(CaptionPositionInfo::figures),
@@ -401,7 +406,9 @@ class QuarkdownHtmlNodeRenderer(
                 if (definition is LocationTrackableNode) {
                     withLocationLabel(definition)
                 }
-                // optionalAttribute("data-localized-kind", "x") TODO
+                if (definition is LocalizedKind) {
+                    withLocalizedKind(definition)
+                }
             }
 
         return when (anchorId) {
@@ -578,8 +585,7 @@ class QuarkdownHtmlNodeRenderer(
             .apply {
                 numberedCaption(
                     node,
-                    "caption",
-                    kindLocalizationKey = "table",
+                    captionTagName = "caption",
                     position =
                         context.documentInfo.layout.captionPosition
                             .getOrDefault(CaptionPositionInfo::tables),

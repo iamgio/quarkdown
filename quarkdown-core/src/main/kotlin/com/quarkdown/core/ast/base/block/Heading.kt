@@ -3,6 +3,8 @@ package com.quarkdown.core.ast.base.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
+import com.quarkdown.core.ast.attributes.localization.LocalizedKind
+import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.Heading.Companion.marker
@@ -27,10 +29,14 @@ class Heading(
 ) : TextNode,
     Identifiable,
     LocationTrackableNode,
-    CrossReferenceableNode {
+    CrossReferenceableNode,
+    LocalizedKind {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
+
+    override val kindLocalizationKey: String
+        get() = LocalizedKindKeys.HEADING
 
     /**
      * Decorative headings are not assigned a location and are not counted.

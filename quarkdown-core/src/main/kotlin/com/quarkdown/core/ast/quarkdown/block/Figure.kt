@@ -2,6 +2,8 @@ package com.quarkdown.core.ast.quarkdown.block
 
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.SingleChildNestableNode
+import com.quarkdown.core.ast.attributes.localization.LocalizedKind
+import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
@@ -17,7 +19,11 @@ abstract class Figure<T : Node>(
     override val child: T,
 ) : SingleChildNestableNode<T>,
     LocationTrackableNode,
-    CaptionableNode {
+    CaptionableNode,
+    LocalizedKind {
+    override val kindLocalizationKey: String
+        get() = LocalizedKindKeys.FIGURE
+
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }
 
