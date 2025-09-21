@@ -67,6 +67,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.resolveOrFallback
 import com.quarkdown.core.document.sub.Subdocument
@@ -382,6 +383,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: TextTransform): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: InlineCollapse): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: CrossReference): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: BibliographyCitation): CharSequence = throw UnsupportedRenderException(node)
 

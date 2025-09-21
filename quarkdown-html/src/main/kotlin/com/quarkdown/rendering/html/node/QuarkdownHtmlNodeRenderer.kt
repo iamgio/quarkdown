@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.formatLocation
@@ -44,6 +45,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.ast.quarkdown.reference.CrossReference
+import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
@@ -389,6 +392,36 @@ class QuarkdownHtmlNodeRenderer(
     // Inline
 
     override fun visit(node: MathSpan) = buildTag("formula", node.expression)
+
+    override fun visit(node: CrossReference): CharSequence {
+        val fallback = { Text("[???]").accept(this) }
+
+        val definition: CrossReferenceableNode = node.getDefinition(context) ?: return fallback()
+        val label =
+            (definition as? LocationTrackableNode)?.getLocationLabel(context)
+        // (definition as? LocationTrackableNode)?.getLocation(context)?.toString()
+
+        // The target node could have an ID. If so, the reference is a link to that node.
+        val anchorId = (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
+
+        val reference =
+            buildTag("span") {
+                className("cross-reference")
+                // +label
+                optionalAttribute("data-element-label", label)
+                // optionalAttribute("data-localized-kind", "x") TODO
+            }
+
+        return when (anchorId) {
+            null -> reference // No linkable ID.
+            else ->
+                buildTag("a") {
+                    // ID available: link to the target.
+                    attribute("href", "#$anchorId")
+                    +reference
+                }
+        }
+    }
 
     override fun visit(node: BibliographyCitation): CharSequence {
         val (entry: BibliographyEntry, view: BibliographyView) =
