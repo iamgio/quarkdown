@@ -4,6 +4,7 @@
 @use "util/progressive-heading-sizes" as *;
 @use "util/latex-tables" as *;
 @use "util/latex-toc" as *;
+@use "../components/util/location-selectors" as location-selctors;
 @import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
 @import url('https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-mono.css');
 
@@ -38,8 +39,8 @@
   @include latex-tables;
   @include latex-toc;
 
-  // Numbering
-  [data-location]::before {
+  // Numbering of headings and list items.
+  #{location-selctors.$location-heading}::before {
     padding-right: 0.85rem;
   }
 

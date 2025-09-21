@@ -1,3 +1,5 @@
+@use "../../components/util/location-selectors" as location-selectors;
+
 @mixin minimal-toc {
   nav {
     ol {
@@ -19,7 +21,7 @@
     }
 
     // Location markers
-    [data-location]::before {
+    #{location-selectors.$location-element}::before {
       opacity: .5;
     }
   }

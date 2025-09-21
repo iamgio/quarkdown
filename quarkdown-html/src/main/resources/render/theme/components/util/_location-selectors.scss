@@ -1,0 +1,11 @@
+@use "heading-selectors" as *;
+
+// Selector for elements that can contain location information.
+// This may be, for instance, a figure, table, heading.
+// Location is generically displayed in a caption.
+// Headings and list items display location as a prefix instead. See $location-heading.
+$location-element: [data-location];
+
+// Selector for elements that display location as a prefix instead of in a caption,
+// such as headings and list items.
+$location-heading: "#{$location-element}:is(#{$headings}, li)";

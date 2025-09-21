@@ -3,6 +3,7 @@
 @use "util/minimal-tables" as *;
 @use "util/minimal-toc" as *;
 @use "util/minimal-footer" as *;
+@use "../components/util/location-selectors" as location-selectors;
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import url('https://fonts.googleapis.com/css?family=Inter');
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
@@ -71,7 +72,7 @@
     }
   }
 
-  [data-location]::before {
+  #{location-selectors.$location-heading}::before {
     opacity: .3;
     font-weight: normal;
     margin-right: 0.4em;
