@@ -71,8 +71,10 @@
   --qd-line-height: 1.5;
   --qd-letter-spacing: normal;
   --qd-paragraph-text-indent: none; // Paragraph indentation (with LaTeX policies)
-  --qd-location-suffix: ". "; // Suffix for element (e.g. headings) location numbering
-  --qd-caption-label-suffix: ": "; // Suffix for labels (e.g. Figure 1.1: ...) in captions
+
+  // Location labels
+  --qd-heading-label-suffix: ". "; // Suffix for heading labels, such as location numbering (e.g. the last `.` in `1.1. Heading`)
+  --qd-caption-label-suffix: ": "; // Suffix for labels in captions (e.g. the `:` in `Figure 1.1: ...`)
 
   // Global horizontal alignment of content.
   // This is applied to all elements in the document.

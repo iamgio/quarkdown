@@ -5,7 +5,6 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
-import com.quarkdown.core.ast.attributes.location.formatLocation
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
@@ -54,7 +53,6 @@ import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
-import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
@@ -94,16 +92,11 @@ class QuarkdownHtmlNodeRenderer(
      * Adds a `data-location` attribute to the location-trackable node, if its location is available.
      * The location is formatted according to [format].
      */
-    private fun HtmlTagBuilder.location(
-        node: LocationTrackableNode,
-        format: (DocumentNumbering) -> NumberingFormat?,
-    ) = optionalAttribute(
-        "data-location",
-        node
-            .takeIf { context.options.enableLocationAwareness } // Location lookup could be disabled by settings.
-            ?.formatLocation(context, format)
-            ?.takeUnless { it.isEmpty() },
-    )
+    private fun HtmlTagBuilder.withLocationLabel(node: LocationTrackableNode) =
+        optionalAttribute(
+            "data-location",
+            node.getLocationLabel(context)?.takeUnless { it.isEmpty() },
+        )
 
     /**
      * Retrieves the location-based label of the [node], displays an optional caption preceded by the label, and also applies the label as its ID.
@@ -127,10 +120,11 @@ class QuarkdownHtmlNodeRenderer(
         position: CaptionPosition,
     ): HtmlTagBuilder {
         // The location-based, numbering format dependent identifier of the node, e.g. 1.1.
-        val label = (node as? LocationTrackableNode)?.getLocationLabel(context)
+        val locationTrackable = node as? LocationTrackableNode
 
         return this.apply {
             // The label is set as the ID of the element.
+            val label = locationTrackable?.getLocationLabel(context)
             label?.let { optionalAttribute("id", "$idPrefix-$it") }
 
             node.caption?.let { caption ->
@@ -138,8 +132,8 @@ class QuarkdownHtmlNodeRenderer(
                     className("caption-${position.asCSS}")
 
                     +escapeCriticalContent(caption)
-                    // The label is set as an attribute for styling.
-                    optionalAttribute("data-element-label", label)
+
+                    locationTrackable?.let { withLocationLabel(it) }
                     // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
                     optionalAttribute("data-localized-kind", context.localizeOrNull(key = kindLocalizationKey))
                 }
@@ -397,9 +391,6 @@ class QuarkdownHtmlNodeRenderer(
         val fallback = { Text("[???]").accept(this) }
 
         val definition: CrossReferenceableNode = node.getDefinition(context) ?: return fallback()
-        val label =
-            (definition as? LocationTrackableNode)?.getLocationLabel(context)
-        // (definition as? LocationTrackableNode)?.getLocation(context)?.toString()
 
         // The target node could have an ID. If so, the reference is a link to that node.
         val anchorId = (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
@@ -407,8 +398,9 @@ class QuarkdownHtmlNodeRenderer(
         val reference =
             buildTag("span") {
                 className("cross-reference")
-                // +label
-                optionalAttribute("data-element-label", label)
+                if (definition is LocationTrackableNode) {
+                    withLocationLabel(definition)
+                }
                 // optionalAttribute("data-localized-kind", "x") TODO
             }
 
@@ -541,7 +533,7 @@ class QuarkdownHtmlNodeRenderer(
                         .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
-                ).location(node, DocumentNumbering::headings)
+                ).withLocationLabel(node)
                 .build()
 
         return buildMultiTag {
@@ -626,5 +618,5 @@ class QuarkdownHtmlNodeRenderer(
             }
         }
 
-    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { location(variant.target, variant.format) }
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { withLocationLabel(variant.target) }
 }

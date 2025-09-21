@@ -1,23 +1,22 @@
-.quarkdown {
-  // Elements that contain location data display it accordingly
-  [data-location]::before {
-    content: attr(data-location) var(--qd-location-suffix);
+.quarkdown [data-location] {
+  --qd-label-suffix: var(--qd-caption-label-suffix);
+
+  // Headings and list items use a different suffix.
+  &:is(h1, h2, h3, h4, h5, h6, li) {
+    --qd-label-suffix: var(--qd-heading-label-suffix);
   }
 
-  // Location data in a list item replaces its marker
-  li[data-location] {
+  // Location data in a list item replaces its marker.
+  &:is(li) {
     list-style-type: none;
   }
 
-  // Elements with a label, e.g. "Figure 1.1"
-  [data-element-label] {
-    &::before {
-      content: attr(data-localized-kind) " " attr(data-element-label) var(--qd-caption-label-suffix);
-    }
+  // e.g. "Figure 1.1" instead of "Figure 1.1: " if the caption is empty.
+  &:empty {
+    --qd-label-suffix: "";
+  }
 
-    // "Figure 1.1" instead of "Figure 1.1: " if the caption is empty
-    &:empty {
-      --qd-caption-label-suffix: "";
-    }
+  &::before {
+    content: attr(data-localized-kind) " " attr(data-location) var(--qd-label-suffix);
   }
 }

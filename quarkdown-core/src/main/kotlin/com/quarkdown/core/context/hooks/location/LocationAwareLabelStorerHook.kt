@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.ast.attributes.location.getLocation
 import com.quarkdown.core.ast.attributes.location.setLocationLabel
+import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
@@ -46,6 +47,9 @@ class LocationAwareLabelStorerHook(
     private val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
+        if (!context.options.enableLocationAwareness) return
+
+        updateHeadingLabels(iterator)
         updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
         updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
 
@@ -57,7 +61,30 @@ class LocationAwareLabelStorerHook(
     }
 
     /**
+     * Updates labels of [Heading] nodes based on their location in the document and the heading numbering format.
+     *
+     * The location, stored by [LocationAwarenessHook], is applied as a label as long as
+     * its accuracy does not exceed that of the heading numbering format.
+     * @param iterator iterator to attach the hook to
+     */
+    private fun updateHeadingLabels(iterator: ObservableAstIterator) {
+        val format = context.documentInfo.numberingOrDefault?.headings ?: return
+
+        iterator.on<Heading> { node ->
+            val location = node.getLocation(context) ?: return@on
+            if (location.depth <= format.accuracy) {
+                node.setLocationLabel(context, format.format(location))
+            }
+        }
+    }
+
+    /**
      * Updates labels of elements of type [T] based on their location in the document and the given numbering format.
+     *
+     * Let, for example, the numbering format for figures be `1.1` (= accuracy 2).
+     * Then, the location at accuracy 1 is retrieved (`accuracy - 1`) and the last level is reserved for the element's own index,
+     * incremented each time an element is found at the same location.
+     *
      * @param formatSupplier numbering format used to generate the labels for this type of element,
      * supplied by [context]'s document numbering settings
      * @param iterator iterator to attach the hook to
@@ -84,7 +111,7 @@ class LocationAwareLabelStorerHook(
         iterator.on<T> { node ->
             if (!filter(node)) return@on
 
-            // A location has to be already stored for the given node (see LocationAwarenessHook)
+            // A location has to be already stored for the given node (see LocationAwarenessHook).
             val location = node.getLocation(context) ?: return@on
 
             // The location of the element is trimmed to the desired accuracy.
@@ -93,10 +120,10 @@ class LocationAwareLabelStorerHook(
                     when {
                         // If the location has more nested levels than the accuracy, it is trimmed.
                         // e.g. Location: `2.1.0.1`, Accuracy: 2 -> Result: `2.1`
-                        location.levels.size > accuracy -> location.levels.take(accuracy)
+                        location.depth > accuracy -> location.levels.take(accuracy)
                         // If the location has less nested levels than the accuracy, it is padded with zeroes.
                         // e.g. Location: `2.1`, Accuracy: 4 -> Result: `2.1.0.0`
-                        location.levels.size < accuracy -> location.levels + Array(accuracy - location.levels.size) { 0 }
+                        location.depth < accuracy -> location.levels + Array(accuracy - location.levels.size) { 0 }
                         // Location levels and accuracy match.
                         else -> location.levels
                     },
