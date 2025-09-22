@@ -33,7 +33,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineEscape",
             wrap = ::EscapeToken,
             regex =
-                "\\\\([!\"#\$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])"
+                "\\\\([!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])"
                     .toRegex(),
         )
     }
@@ -89,7 +89,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineLineBreak",
             wrap = ::LineBreakToken,
             regex =
-                "( {2,}|\\\\)\\R(?!\\s*\$)"
+                "( {2,}|\\\\)\\R(?!\\s*$)"
                     .toRegex(),
         )
     }
@@ -125,7 +125,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                     .withReference("scheme", "[a-zA-Z][a-zA-Z0-9+.-]{1,31}")
                     .withReference(
                         "email",
-                        "[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
+                        "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?" +
                             "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])",
                     ).build(),
         )
@@ -231,7 +231,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
         TokenRegexPattern(
             name = "InlineComment",
             wrap = ::CommentToken,
-            regex = COMMENT_PATTERN,
+            regex = PatternHelpers.COMMENT,
         )
     }
 

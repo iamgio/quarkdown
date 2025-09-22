@@ -46,7 +46,7 @@ import com.quarkdown.core.function.value.factory.ValueFactory.range
 import com.quarkdown.core.function.value.factory.ValueFactory.safeExpression
 import com.quarkdown.core.function.value.factory.ValueFactory.size
 import com.quarkdown.core.lexer.Lexer
-import com.quarkdown.core.lexer.patterns.COMMENT_PATTERN
+import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
@@ -319,9 +319,9 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): MarkdownContentValue =
-        when {
-            raw is MarkdownContent -> MarkdownContentValue(raw)
-            raw is DynamicValue && raw.unwrappedValue is String -> blockMarkdown(raw.unwrappedValue, context)
+        when (raw) {
+            is MarkdownContent -> MarkdownContentValue(raw)
+            is DynamicValue if raw.unwrappedValue is String -> blockMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
                     context.flavor.lexerFactory.newBlockLexer(raw.toString()),
@@ -340,9 +340,9 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): InlineMarkdownContentValue =
-        when {
-            raw is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
-            raw is DynamicValue && raw.unwrappedValue is String -> inlineMarkdown(raw.unwrappedValue, context)
+        when (raw) {
+            is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
+            is DynamicValue if raw.unwrappedValue is String -> inlineMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
                     context.flavor.lexerFactory.newInlineLexer(raw.toString()),
@@ -393,7 +393,7 @@ object ValueFactory {
         try {
             val range = range(raw)
             return range.unwrappedValue.toCollection()
-        } catch (ignored: IllegalRawValueException) {
+        } catch (_: IllegalRawValueException) {
             // The raw value is not a range.
         }
 
@@ -531,13 +531,13 @@ object ValueFactory {
         raw: Any,
         context: Context,
     ): Expression? {
-        when {
-            raw is DynamicValue && raw.unwrappedValue is String -> return expression(raw.unwrappedValue, context)
-            raw is Expression -> return raw
+        when (raw) {
+            is DynamicValue if raw.unwrappedValue is String -> return expression(raw.unwrappedValue, context)
+            is Expression -> return raw
         }
 
         // Strip comments.
-        val rawCode = raw.toString().replace(COMMENT_PATTERN, "")
+        val rawCode = raw.toString().replace(PatternHelpers.COMMENT, "")
 
         if (rawCode.isEmpty()) return DynamicValue("")
 

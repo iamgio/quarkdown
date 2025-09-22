@@ -53,7 +53,6 @@ import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
-import com.quarkdown.core.util.takeUntilLastOccurrence
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
 
@@ -118,22 +117,6 @@ class BlockTokenParser(
 
     override fun visit(token: HorizontalRuleToken): Node = HorizontalRule
 
-    /**
-     * Splits a heading text and its custom ID from a raw text.
-     * `Heading {#custom-id}` -> `Heading`, `custom-id`
-     * @param text heading text
-     * @return a pair of the heading text and its custom ID
-     */
-    private fun splitHeadingTextAndId(text: String): Pair<String, String?> {
-        val customIdMatch = "\\s+\\{#([^}]+)}\$".toRegex().find(text)
-        val customId = customIdMatch?.groupValues?.get(1) // {#custom-id} -> custom-id
-
-        // Trim the custom ID from the text.
-        val trimmedText = customIdMatch?.let { text.removeSuffix(it.value) } ?: text
-
-        return trimmedText to customId
-    }
-
     override fun visit(token: HeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
@@ -142,9 +125,8 @@ class BlockTokenParser(
         // e.g. ###! Heading => the heading is decorative, meaning it's not part of the document structure.
         val isDecorative = groups.next() == "!"
 
-        val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
-        // Heading {#custom-id} -> Heading, custom-id
-        val (text, customId) = splitHeadingTextAndId(rawText)
+        val text = groups.next().trim()
+        val customId = token.data.namedGroups["headingcustomid"]?.trim()
 
         return Heading(
             depth,
@@ -157,9 +139,8 @@ class BlockTokenParser(
     override fun visit(token: SetextHeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
-        val rawText = groups.next().trim()
-        // Heading {#custom-id} -> Heading, custom-id
-        val (text, customId) = splitHeadingTextAndId(rawText)
+        val text = groups.next().trim()
+        val customId = token.data.namedGroups["setextcustomid"]?.trim()
 
         return Heading(
             text = text.toInline(),
