@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
+import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
@@ -130,5 +131,26 @@ class CrossReferenceResolutionTest {
         traverse(root)
         assertEquals(definition2, reference1.getDefinition(context))
         assertEquals(definition1, reference2.getDefinition(context))
+    }
+
+    @Test
+    fun `reference before definition (figures)`() {
+        val definition =
+            buildBlock {
+                figure {
+                    image("image.png", referenceId = ID) { text("An image") }
+                }
+            } as ImageFigure
+        val reference = CrossReference(ID)
+        val root =
+            buildBlock {
+                root {
+                    +reference
+                    +definition
+                }
+            }
+
+        traverse(root)
+        assertEquals(definition, reference.getDefinition(context))
     }
 }

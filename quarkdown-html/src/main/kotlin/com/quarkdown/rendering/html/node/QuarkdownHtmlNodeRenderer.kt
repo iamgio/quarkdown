@@ -408,7 +408,9 @@ class QuarkdownHtmlNodeRenderer(
                 when (definition) {
                     is LocationTrackableNode if definition.getLocationLabel(context) != null ->
                         withLocationLabel(definition)
-                    // If no location is available, use the target's text if possible.
+                    // If no label is available, use the caption if possible.
+                    is CaptionableNode if definition.caption != null -> +definition.caption!!
+                    // Fallback: use the target's text if possible.
                     is TextNode -> +definition.text
                     // Fallback: raw reference ID.
                     else -> +node.referenceId

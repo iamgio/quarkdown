@@ -30,6 +30,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -208,6 +209,7 @@ class InlineParserTest {
 
             assertNull(width)
             assertNull(height)
+            assertNull(referenceId)
         }
 
         repeat(2) {
@@ -221,6 +223,7 @@ class InlineParserTest {
 
                 assertNull(width)
                 assertNull(height)
+                assertNull(referenceId)
             }
         }
 
@@ -282,6 +285,20 @@ class InlineParserTest {
             assertEquals(70.percent, width)
             assertNull(height)
         }
+
+        with(nodes.next()) {
+            assertNull(width)
+            assertNull(height)
+            assertNull(link.title)
+            assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertNotNull(width)
+            assertNotNull(height)
+            assertNotNull(link.title)
+            assertEquals("custom-id", referenceId)
+        }
     }
 
     @Test
@@ -297,6 +314,7 @@ class InlineParserTest {
 
             assertNull(width)
             assertNull(height)
+            assertNull(referenceId)
         }
 
         repeat(2) {
@@ -332,6 +350,18 @@ class InlineParserTest {
 
             assertEquals(150.px, width)
             assertNull(height)
+        }
+
+        with(nodes.next()) {
+            assertNull(width)
+            assertNull(height)
+            assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertNotNull(width)
+            assertNotNull(height)
+            assertEquals("custom-id", referenceId)
         }
     }
 

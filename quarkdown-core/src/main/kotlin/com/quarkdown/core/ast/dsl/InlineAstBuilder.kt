@@ -62,8 +62,9 @@ class InlineAstBuilder : AstBuilder() {
         title: String? = null,
         width: Size? = null,
         height: Size? = null,
+        referenceId: String? = null,
         label: InlineAstBuilder.() -> Unit = {},
-    ) = +Image(Link(buildInline(label), url, title), width, height)
+    ) = +Image(Link(buildInline(label), url, title), width, height, referenceId)
 
     /**
      * @see InlineCollapse

@@ -28,3 +28,7 @@
 !(50% 5%)[foo](/img)
 
 !(70%)[foo](/img)
+
+![foo](/img) {#custom-id}
+
+!(150x100)[foo](/img "Title") {#custom-id}

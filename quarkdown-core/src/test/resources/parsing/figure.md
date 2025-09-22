@@ -13,3 +13,5 @@
 !(100 50mm)[Label](/url)
 
 !(_*10px)[Label](/url)
+
+![Label](/url) {#custom-id}

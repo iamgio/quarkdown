@@ -7,18 +7,22 @@ import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
+import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
  * A block which displays a single child, with an optional caption.
  * If the caption is provided, the block is numbered.
  * @param child wrapped child
+ * @param referenceId optional ID that can be cross-referenced via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  * @param T type of the wrapped child node
  */
 abstract class Figure<T : Node>(
     override val child: T,
+    override val referenceId: String? = null,
 ) : SingleChildNestableNode<T>,
     LocationTrackableNode,
+    CrossReferenceableNode,
     CaptionableNode,
     LocalizedKind {
     override val kindLocalizationKey: String
@@ -34,7 +38,7 @@ abstract class Figure<T : Node>(
  */
 class ImageFigure(
     child: Image,
-) : Figure<Image>(child) {
+) : Figure<Image>(child, child.referenceId) {
     /**
      * Caption of the image, if any. This matches the image title.
      */

@@ -883,6 +883,7 @@ class BlockParserTest {
                 child,
             )
             assertNull(caption)
+            assertNull(referenceId)
         }
 
         with(nodes.next()) {
@@ -947,6 +948,10 @@ class BlockParserTest {
                 }.first(),
                 child,
             )
+        }
+
+        with(nodes.next()) {
+            assertEquals("custom-id", referenceId)
         }
     }
 

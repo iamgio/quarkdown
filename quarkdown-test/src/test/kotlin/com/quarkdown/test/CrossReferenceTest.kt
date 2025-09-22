@@ -148,4 +148,108 @@ class CrossReferenceTest {
             )
         }
     }
+
+    @Test
+    fun `reference after definition (figure, no caption)`() {
+        execute(
+            """
+            ![My Image](img.png) {#my-fig}
+            
+            See .ref {my-fig}.
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure><img src=\"img.png\" alt=\"My Image\" /></figure>" +
+                    "<p>See <span class=\"cross-reference\">my-fig</span>.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `reference after definition (figure, with caption)`() {
+        execute(
+            """
+            ![My Image](img.png "The caption") {#my-fig}
+            
+            See .ref {my-fig}.
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure><img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
+                    "<figcaption class=\"caption-bottom\">The caption</figcaption></figure>" +
+                    "<p>See <span class=\"cross-reference\">The caption</span>.</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `multiple references to the same definition (figure)`() {
+        execute(
+            """
+            See .ref {my-fig} and .ref {my-fig}.
+            
+            ![My Image](img.png) {#my-fig}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\">my-fig</span> and " +
+                    "<span class=\"cross-reference\">my-fig</span>.</p>" +
+                    "<figure><img src=\"img.png\" alt=\"My Image\" /></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered references (figure)`() {
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+                - figures: a
+            
+            See .ref {my-fig}.
+            
+            ![My Image](img.png "The caption") {#my-fig}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"a\"></span>.</p>" +
+                    "<figure id=\"figure-a\">" +
+                    "<img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"a\">The caption</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `localized numbered references (figure)`() {
+        execute(
+            """
+            .noautopagebreak
+            .doclang {en}
+            .numbering
+                - figures: a
+            
+            See .ref {my-fig}.
+            
+            ![My Image](img.png "The caption") {#my-fig}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"a\" data-localized-kind=\"Figure\"></span>.</p>" +
+                    "<figure id=\"figure-a\">" +
+                    "<img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"a\" data-localized-kind=\"Figure\">The caption</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
 }
