@@ -39,7 +39,11 @@ object RgbaColorDecoder : ColorDecoder {
         val match = Regex("rgba\\((\\d{1,3}), ?(\\d{1,3}), ?(\\d{1,3}), ?([0-9.]+)\\)").find(raw) ?: return null
         val (r, g, b) = extractRGBComponents(match)
 
-        val a = match.destructured.component4().toDoubleOrNull()?.takeIf { it <= Color.MAX_ALPHA }
+        val a =
+            match.destructured
+                .component4()
+                .toDoubleOrNull()
+                ?.takeIf { it <= Color.MAX_ALPHA }
 
         return if (r != null && g != null && b != null && a != null) {
             Color(r, g, b, a)

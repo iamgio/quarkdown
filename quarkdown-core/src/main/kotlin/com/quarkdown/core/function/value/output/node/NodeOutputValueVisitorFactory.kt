@@ -10,7 +10,9 @@ import com.quarkdown.core.function.value.output.OutputValueVisitorFactory
  * into [Node]s that can be appended to the AST.
  * @param context current context
  */
-class NodeOutputValueVisitorFactory(private val context: Context) : OutputValueVisitorFactory<Node> {
+class NodeOutputValueVisitorFactory(
+    private val context: Context,
+) : OutputValueVisitorFactory<Node> {
     /**
      * @return a visitor that maps the output of a block function call into a block [Node]
      */

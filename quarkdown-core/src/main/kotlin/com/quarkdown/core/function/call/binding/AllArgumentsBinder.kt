@@ -10,7 +10,9 @@ import com.quarkdown.core.function.error.InvalidArgumentCountException
  * @see RegularArgumentsBinder
  * @see InjectedArgumentsBinder
  */
-class AllArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinder {
+class AllArgumentsBinder(
+    private val call: FunctionCall<*>,
+) : ArgumentsBinder {
     /**
      * Joins the results of the subsets of regular ([RegularArgumentsBinder])
      * and injected ([InjectedArgumentsBinder]) arguments.

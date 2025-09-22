@@ -15,7 +15,10 @@ import com.quarkdown.core.function.value.output.OutputValueVisitor
  * @see com.quarkdown.core.function.reflect.DynamicValueConverter
  */
 @NoAutoArgumentUnwrapping
-data class DynamicValue(override val unwrappedValue: Any?) : InputValue<Any?>, OutputValue<Any?> {
+data class DynamicValue(
+    override val unwrappedValue: Any?,
+) : InputValue<Any?>,
+    OutputValue<Any?> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)

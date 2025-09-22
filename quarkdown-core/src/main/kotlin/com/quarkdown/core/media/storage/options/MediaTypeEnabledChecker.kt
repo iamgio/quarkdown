@@ -8,7 +8,9 @@ import com.quarkdown.core.media.RemoteMedia
  * Checks whether a media type is enabled in [options].
  * @param options media storage rules
  */
-class MediaTypeEnabledChecker(private val options: MediaStorageOptions) : MediaVisitor<Boolean> {
+class MediaTypeEnabledChecker(
+    private val options: MediaStorageOptions,
+) : MediaVisitor<Boolean> {
     override fun visit(media: LocalMedia) =
         options.enableLocalMediaStorage
             // Should not happen, but it's best to throw an error to avoid ambiguous behavior.

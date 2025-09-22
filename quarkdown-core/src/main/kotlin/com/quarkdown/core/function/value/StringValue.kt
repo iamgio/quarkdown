@@ -10,7 +10,9 @@ import com.quarkdown.core.function.value.output.OutputValueVisitor
  */
 data class StringValue(
     override val unwrappedValue: String,
-) : InputValue<String>, OutputValue<String>, AdaptableValue<InlineMarkdownContentValue> {
+) : InputValue<String>,
+    OutputValue<String>,
+    AdaptableValue<InlineMarkdownContentValue> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)

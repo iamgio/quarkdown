@@ -8,7 +8,9 @@ import com.quarkdown.core.context.MutableContext
  * in order to be looked up later.
  * @param context context to push libraries to
  */
-class LibraryRegistrant(private val context: MutableContext) {
+class LibraryRegistrant(
+    private val context: MutableContext,
+) {
     /**
      * Registers a new single library, allowing it to be looked up by functions
      * and its [Library.onLoad] action is executed.

@@ -5,4 +5,6 @@ package com.quarkdown.core.document.numbering
  * such as the dots `.`, in the format `1.A.a`.
  * @param value fixed character to be used
  */
-data class NumberingFixedSymbol(val value: Char) : NumberingSymbol
+data class NumberingFixedSymbol(
+    val value: Char,
+) : NumberingSymbol

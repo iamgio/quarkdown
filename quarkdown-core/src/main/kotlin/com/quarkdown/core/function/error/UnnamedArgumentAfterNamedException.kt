@@ -8,8 +8,9 @@ import com.quarkdown.core.function.call.FunctionCallArgument
  * @param call the invalid call
  * @see FunctionCallArgument.isNamed
  */
-class UnnamedArgumentAfterNamedException(call: FunctionCall<*>) :
-    InvalidFunctionCallException(
+class UnnamedArgumentAfterNamedException(
+    call: FunctionCall<*>,
+) : InvalidFunctionCallException(
         call,
         reason = "all arguments following a named argument must be named as well",
     )

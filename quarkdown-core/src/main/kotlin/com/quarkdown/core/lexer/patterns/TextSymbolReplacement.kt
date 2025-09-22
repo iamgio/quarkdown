@@ -8,7 +8,10 @@ import com.quarkdown.core.lexer.tokens.TextSymbolToken
  * @param result symbol that the sequence is replaced with
  * @param regex regex pattern that matches the sequence to be replaced
  */
-enum class TextSymbolReplacement(val result: Char, val regex: Regex) {
+enum class TextSymbolReplacement(
+    val result: Char,
+    val regex: Regex,
+) {
     /**
      * `(C)` -> `©`
      */

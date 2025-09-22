@@ -5,6 +5,6 @@ package com.quarkdown.core.lexer.regex.pattern
  * @return a single [Regex] that captures all groups.
  */
 fun Iterable<NamedRegexPattern>.groupify(): Regex =
-    this.joinToString(separator = "|") { pattern ->
+    joinToString(separator = "|") { pattern ->
         "(?<${pattern.name}>${pattern.regex})"
     }.toRegex(setOf(RegexOption.MULTILINE, RegexOption.IGNORE_CASE))

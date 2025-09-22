@@ -10,6 +10,8 @@ import com.quarkdown.core.ast.base.block.list.ListItemVariantVisitor
  * This property has an effect only when using a Quarkdown renderer.
  * @param isFocused whether the item is focused.
  */
-data class FocusListItemVariant(val isFocused: Boolean) : ListItemVariant {
+data class FocusListItemVariant(
+    val isFocused: Boolean,
+) : ListItemVariant {
     override fun <T> accept(visitor: ListItemVariantVisitor<T>) = visitor.visit(this)
 }

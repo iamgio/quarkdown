@@ -9,7 +9,9 @@ import com.quarkdown.core.function.value.output.OutputValueVisitor
  * @param F type of the first element
  * @param S type of the second element
  */
-data class PairValue<F : OutputValue<*>, S : OutputValue<*>>(private val pairUnwrappedValue: Pair<F, S>) : IterableValue<OutputValue<*>> {
+data class PairValue<F : OutputValue<*>, S : OutputValue<*>>(
+    private val pairUnwrappedValue: Pair<F, S>,
+) : IterableValue<OutputValue<*>> {
     /**
      * A list of the two elements.
      */

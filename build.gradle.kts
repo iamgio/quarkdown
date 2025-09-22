@@ -8,7 +8,7 @@ import java.time.Year
 plugins {
     kotlin("jvm") version "2.2.20"
     id("org.jetbrains.dokka") version "2.0.0"
-    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     id("com.gradleup.shadow") version "8.3.6"
     id("com.github.ben-manes.versions") version "0.52.0"
     application
@@ -72,7 +72,7 @@ application {
 }
 
 ktlint {
-    version.set("1.5.0")
+    version.set("1.7.1")
 }
 
 // Dokka

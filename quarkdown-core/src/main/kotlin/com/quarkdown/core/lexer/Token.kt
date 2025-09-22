@@ -7,7 +7,9 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  * A token can be parsed into a [com.quarkdown.core.ast.Node].
  * @param data the wrapped token
  */
-abstract class Token(val data: TokenData) {
+abstract class Token(
+    val data: TokenData,
+) {
     /**
      * Accepts a visitor.
      * @param T output type of the visitor

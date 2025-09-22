@@ -8,7 +8,9 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * Weakly emphasized content.
  * @param text content
  */
-class Emphasis(override val text: InlineContent) : TextNode {
+class Emphasis(
+    override val text: InlineContent,
+) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -16,7 +18,9 @@ class Emphasis(override val text: InlineContent) : TextNode {
  * Strongly emphasized content.
  * @param text content
  */
-class Strong(override val text: InlineContent) : TextNode {
+class Strong(
+    override val text: InlineContent,
+) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -24,7 +28,9 @@ class Strong(override val text: InlineContent) : TextNode {
  * Heavily emphasized content.
  * @param text content
  */
-class StrongEmphasis(override val text: InlineContent) : TextNode {
+class StrongEmphasis(
+    override val text: InlineContent,
+) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
@@ -32,6 +38,8 @@ class StrongEmphasis(override val text: InlineContent) : TextNode {
  * Strikethrough content.
  * @param text content
  */
-class Strikethrough(override val text: InlineContent) : TextNode {
+class Strikethrough(
+    override val text: InlineContent,
+) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

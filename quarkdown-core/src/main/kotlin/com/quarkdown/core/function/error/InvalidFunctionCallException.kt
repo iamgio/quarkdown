@@ -18,32 +18,31 @@ open class InvalidFunctionCallException(
     val call: FunctionCall<*>,
     reason: String? = null,
     includeArguments: Boolean = true,
-) :
-    FunctionException(
-            richMessage =
-                buildInline {
-                    text("Cannot call function ${call.function.name}")
-                    // If the signature is too long, it is collapsed by default and can be expanded by the user.
+) : FunctionException(
+        richMessage =
+            buildInline {
+                text("Cannot call function ${call.function.name}")
+                // If the signature is too long, it is collapsed by default and can be expanded by the user.
+                autoCollapse(
+                    text = call.function.signatureAsString(includeName = false),
+                    maxLength = TEXT_AUTOCOLLAPSE_MAX_LENGTH,
+                )
+
+                if (includeArguments) {
+                    text(" with arguments ")
+                    // The same applies to arguments.
                     autoCollapse(
-                        text = call.function.signatureAsString(includeName = false),
+                        text = call.arguments.asString(),
                         maxLength = TEXT_AUTOCOLLAPSE_MAX_LENGTH,
                     )
+                }
 
-                    if (includeArguments) {
-                        text(" with arguments ")
-                        // The same applies to arguments.
-                        autoCollapse(
-                            text = call.arguments.asString(),
-                            maxLength = TEXT_AUTOCOLLAPSE_MAX_LENGTH,
-                        )
-                    }
-
-                    reason?.let {
-                        text(": ")
-                        lineBreak()
-                        emphasis { text(it) }
-                    }
-                },
-            code = BAD_FUNCTION_CALL_EXIT_CODE,
-            function = call.function,
-        )
+                reason?.let {
+                    text(": ")
+                    lineBreak()
+                    emphasis { text(it) }
+                }
+            },
+        code = BAD_FUNCTION_CALL_EXIT_CODE,
+        function = call.function,
+    )

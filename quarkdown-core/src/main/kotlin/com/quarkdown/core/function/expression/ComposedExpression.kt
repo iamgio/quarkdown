@@ -15,6 +15,8 @@ import com.quarkdown.core.function.expression.visitor.ExpressionVisitor
  *
  * @param expressions sub-expressions
  */
-data class ComposedExpression(val expressions: List<Expression>) : Expression {
+data class ComposedExpression(
+    val expressions: List<Expression>,
+) : Expression {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }

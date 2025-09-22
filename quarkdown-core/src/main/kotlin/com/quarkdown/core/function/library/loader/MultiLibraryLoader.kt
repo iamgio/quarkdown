@@ -11,12 +11,12 @@ class MultiLibraryLoader<S>(
     private val name: String,
     private val loader: LibraryLoader<S>,
 ) : LibraryLoader<Set<S>> {
-    override fun load(source: Set<S>): Library {
-        return Library(
+    override fun load(source: Set<S>): Library =
+        Library(
             this.name,
-            source.asSequence()
+            source
+                .asSequence()
                 .flatMap { loader.load(it).functions }
                 .toSet(),
         )
-    }
 }

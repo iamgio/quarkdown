@@ -13,4 +13,6 @@ package com.quarkdown.core.function.reflect.annotation
  * @param name custom function name
  */
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.VALUE_PARAMETER)
-annotation class Name(val name: String)
+annotation class Name(
+    val name: String,
+)

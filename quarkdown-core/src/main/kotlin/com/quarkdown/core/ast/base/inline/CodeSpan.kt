@@ -24,5 +24,7 @@ class CodeSpan(
      * For instance, this content may be assigned to a [CodeSpan] if its text holds information about a color's hex.
      * @param color color data
      */
-    data class ColorContent(val color: Color) : ContentInfo
+    data class ColorContent(
+        val color: Color,
+    ) : ContentInfo
 }
