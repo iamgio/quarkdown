@@ -8,7 +8,10 @@ import kotlin.math.floor
 /**
  * An immutable numeric [Value].
  */
-data class NumberValue(private val rawUnwrappedValue: Number) : InputValue<Number>, OutputValue<Number> {
+data class NumberValue(
+    private val rawUnwrappedValue: Number,
+) : InputValue<Number>,
+    OutputValue<Number> {
     /**
      * [rawUnwrappedValue] adapted to either [Int] or [Float] depending on its value.
      */

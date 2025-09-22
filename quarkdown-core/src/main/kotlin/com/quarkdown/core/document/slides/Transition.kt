@@ -8,7 +8,10 @@ import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
  * @param style transition type
  * @param speed speed of the transition
  */
-data class Transition(val style: Style, val speed: Speed = Speed.DEFAULT) {
+data class Transition(
+    val style: Style,
+    val speed: Speed = Speed.DEFAULT,
+) {
     /**
      * Transition types.
      */

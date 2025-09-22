@@ -9,7 +9,9 @@ import com.quarkdown.core.rendering.NodeRenderer
  * by using a DSL-like approach provided by [TagBuilder].
  * @param context rendering context
  */
-abstract class TagNodeRenderer<B : TagBuilder>(val context: Context) : NodeRenderer {
+abstract class TagNodeRenderer<B : TagBuilder>(
+    val context: Context,
+) : NodeRenderer {
     /**
      * Whether the output code should be pretty.
      */

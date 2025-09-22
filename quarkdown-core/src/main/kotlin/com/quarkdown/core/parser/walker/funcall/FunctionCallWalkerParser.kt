@@ -9,7 +9,10 @@ import com.quarkdown.core.parser.walker.WalkerParser
  * @see WalkedFunctionCall
  * @see WalkerParser
  */
-class FunctionCallWalkerParser(source: CharSequence, allowsBody: Boolean) : WalkerParser<WalkedFunctionCall>(
-    source,
-    FunctionCallGrammar(allowsBody),
-)
+class FunctionCallWalkerParser(
+    source: CharSequence,
+    allowsBody: Boolean,
+) : WalkerParser<WalkedFunctionCall>(
+        source,
+        FunctionCallGrammar(allowsBody),
+    )

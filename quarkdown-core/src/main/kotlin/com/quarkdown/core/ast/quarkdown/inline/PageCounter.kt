@@ -9,7 +9,9 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * a placeholder is used at rendering time.
  * @param target whether the counter should display the current or total page number
  */
-class PageCounter(val target: Target) : Node {
+class PageCounter(
+    val target: Target,
+) : Node {
     enum class Target {
         /**
          * The current page number.

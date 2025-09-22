@@ -15,7 +15,9 @@ import com.quarkdown.core.function.value.factory.ValueFactory
  * @param context context of the function
  * @see NodeOutputValueVisitor
  */
-class BlockNodeOutputValueVisitor(private val context: Context) : NodeOutputValueVisitor() {
+class BlockNodeOutputValueVisitor(
+    private val context: Context,
+) : NodeOutputValueVisitor() {
     // Proxy used to convert inline values to block values.
     private val inline = InlineNodeOutputValueVisitor(context)
 

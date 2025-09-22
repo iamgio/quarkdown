@@ -16,7 +16,10 @@ private const val DEFAULT_LOWER_BOUND_INDEX = 1
  * @property start start of the range (inclusive). If `null`, the range is infinite on the left end
  * @property end end of the range (inclusive). If `null`, the range is infinite on the right end. [end] > [start]
  */
-data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
+data class Range(
+    val start: Int?,
+    val end: Int?,
+) : Iterable<NumberValue> {
     /**
      * @return whether the range is infinite, i.e. both [start] and [end] are `null`
      */
@@ -48,7 +51,8 @@ data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
             throw IllegalStateException("Cannot iterate through an endless range.")
         }
 
-        return toIntRange(lowerBound = DEFAULT_LOWER_BOUND_INDEX, upperBound = end).asSequence()
+        return toIntRange(lowerBound = DEFAULT_LOWER_BOUND_INDEX, upperBound = end)
+            .asSequence()
             .map(::NumberValue)
             .iterator()
     }
@@ -92,6 +96,4 @@ data class Range(val start: Int?, val end: Int?) : Iterable<NumberValue> {
  * @return sublist of [this] list, starting from [range]'s start (starting from 1) and ending at [range]'s end (both inclusive).
  *         If any of the bounds is `null`, it is replaced by the list's start or end index respectively
  */
-fun <T> List<T>.subList(range: Range): List<T> {
-    return subList(range.start?.minus(DEFAULT_LOWER_BOUND_INDEX) ?: 0, range.end ?: this.size)
-}
+fun <T> List<T>.subList(range: Range): List<T> = subList(range.start?.minus(DEFAULT_LOWER_BOUND_INDEX) ?: 0, range.end ?: this.size)

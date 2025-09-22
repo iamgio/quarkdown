@@ -11,4 +11,6 @@ import com.quarkdown.core.function.value.factory.ValueFactory
  * @param content unwrapped string content, already evaluated
  * @see ValueFactory.evaluableString
  */
-data class EvaluableString(val content: String)
+data class EvaluableString(
+    val content: String,
+)

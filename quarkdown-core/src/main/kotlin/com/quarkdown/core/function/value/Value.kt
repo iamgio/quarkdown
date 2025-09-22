@@ -17,7 +17,9 @@ sealed interface Value<T> {
  * An immutable value wrapper that is used in function parameters and function call arguments.
  * When used as an [Expression], its evaluated value is the same as its static wrapped value
  */
-sealed interface InputValue<T> : Value<T>, Expression
+sealed interface InputValue<T> :
+    Value<T>,
+    Expression
 
 /**
  * An immutable value wrapper that is used in function outputs.

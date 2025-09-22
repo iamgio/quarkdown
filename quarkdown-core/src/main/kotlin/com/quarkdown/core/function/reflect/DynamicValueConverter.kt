@@ -20,7 +20,9 @@ import kotlin.reflect.full.isSubclassOf
  * to a specific, statically defined [Value] type that can be used as an input for a function call argument.
  * @param value the dynamic value to convert to a typed value
  */
-class DynamicValueConverter(private val value: DynamicValue) {
+class DynamicValueConverter(
+    private val value: DynamicValue,
+) {
     /**
      * @param type target type to convert this dynamic value to.
      * This type is unwrapped (e.g. if [type] is `String`, the output is of type `StringValue`)
@@ -89,4 +91,7 @@ class DynamicValueConverter(private val value: DynamicValue) {
  */
 @Target(AnnotationTarget.FUNCTION)
 @Repeatable
-annotation class FromDynamicType(val unwrappedType: KClass<*>, val requiresContext: Boolean = false)
+annotation class FromDynamicType(
+    val unwrappedType: KClass<*>,
+    val requiresContext: Boolean = false,
+)

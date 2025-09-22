@@ -8,7 +8,9 @@ import com.quarkdown.core.ast.base.block.Heading
  * A summary of the document's structure. Each item links to a section.
  * @param items root sections in the document
  */
-data class TableOfContents(val items: List<Item>) {
+data class TableOfContents(
+    val items: List<Item>,
+) {
     /**
      * An item in the table of contents, usually associated to a section of the document.
      * @param text text of the item

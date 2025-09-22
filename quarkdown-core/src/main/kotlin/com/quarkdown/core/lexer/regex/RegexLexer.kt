@@ -60,7 +60,8 @@ abstract class RegexLexer(
 
             // Groups with a name, defined by the pattern.
             val namedGroups =
-                pattern.groupNames.asSequence()
+                pattern.groupNames
+                    .asSequence()
                     .map { it to result.groups[it] }
                     .filterNotNullValues()
                     .toMap()
@@ -68,7 +69,8 @@ abstract class RegexLexer(
             // Regular groups that are not named.
             // They don't contain values from namedGroups
             val groups =
-                result.groups.asSequence()
+                result.groups
+                    .asSequence()
                     .filterNotNull()
                     // Named groups don't appear in regular groups.
                     .filterNot { namedGroups.containsValue(it) }

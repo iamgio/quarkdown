@@ -9,7 +9,9 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param symbol processed symbol (e.g. `©`)
  * @see com.quarkdown.core.lexer.patterns.TextSymbolReplacement
  */
-class TextSymbol(private val symbol: Char) : PlainTextNode {
+class TextSymbol(
+    private val symbol: Char,
+) : PlainTextNode {
     /**
      * @return [symbol] as a string
      */

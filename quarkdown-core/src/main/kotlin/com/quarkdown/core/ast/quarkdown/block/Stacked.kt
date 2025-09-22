@@ -49,7 +49,9 @@ class Stacked(
      * A layout that stacks nodes in a grid.
      * @param columnCount number of columns
      */
-    data class Grid(val columnCount: Int) : Layout {
+    data class Grid(
+        val columnCount: Int,
+    ) : Layout {
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
     }
 

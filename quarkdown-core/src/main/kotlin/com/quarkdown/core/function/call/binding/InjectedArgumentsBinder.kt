@@ -10,7 +10,9 @@ import com.quarkdown.core.function.reflect.InjectedValue
  * @param call function call to bind arguments for
  * @see FunctionParameter.isInjected
  */
-class InjectedArgumentsBinder(private val call: FunctionCall<*>) : ArgumentsBinder {
+class InjectedArgumentsBinder(
+    private val call: FunctionCall<*>,
+) : ArgumentsBinder {
     override fun createBindings(parameters: List<FunctionParameter<*>>) =
         parameters.associateWith {
             val value = InjectedValue.fromType(it.type, call)

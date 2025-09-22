@@ -6,7 +6,9 @@ import com.quarkdown.core.util.replace
  * A builder for [Regex] patterns.
  * @param baseRegex initial pattern
  */
-class RegexBuilder(baseRegex: String) {
+class RegexBuilder(
+    baseRegex: String,
+) {
     private val pattern = StringBuilder(baseRegex)
 
     /**

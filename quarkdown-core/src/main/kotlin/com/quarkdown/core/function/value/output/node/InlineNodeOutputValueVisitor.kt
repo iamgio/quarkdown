@@ -16,7 +16,9 @@ import com.quarkdown.core.function.value.factory.ValueFactory
  * @param context context of the function
  * @see NodeOutputValueVisitor
  */
-class InlineNodeOutputValueVisitor(private val context: Context) : NodeOutputValueVisitor() {
+class InlineNodeOutputValueVisitor(
+    private val context: Context,
+) : NodeOutputValueVisitor() {
     override fun visit(value: StringValue) = Text(value.unwrappedValue)
 
     override fun visit(value: NumberValue) = Text(value.unwrappedValue.toString())

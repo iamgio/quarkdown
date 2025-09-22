@@ -16,9 +16,7 @@ object Pipelines {
      * @return the pipeline attached to [context], if it exists.
      *         A context can only have up to one attached pipeline.
      */
-    fun getAttachedPipeline(context: Context): Pipeline? {
-        return pipelines[context]
-    }
+    fun getAttachedPipeline(context: Context): Pipeline? = pipelines[context]
 
     /**
      * Attaches a pipeline to a context.

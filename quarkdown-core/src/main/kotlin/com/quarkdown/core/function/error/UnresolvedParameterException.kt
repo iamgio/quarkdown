@@ -9,8 +9,10 @@ import com.quarkdown.core.function.call.FunctionCallArgument
  * @param call the invalid call
  * @see FunctionCallArgument.isNamed
  */
-class UnresolvedParameterException(argument: FunctionCallArgument, call: FunctionCall<*>) :
-    InvalidFunctionCallException(
+class UnresolvedParameterException(
+    argument: FunctionCallArgument,
+    call: FunctionCall<*>,
+) : InvalidFunctionCallException(
         call,
         reason = "cannot find parameter ${argument.name}, which was referenced by a named argument",
     )

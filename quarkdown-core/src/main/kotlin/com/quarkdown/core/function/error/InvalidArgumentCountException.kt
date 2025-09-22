@@ -8,8 +8,9 @@ import com.quarkdown.core.pipeline.error.PipelineException
  * An exception thrown if the amount of arguments and mandatory parameters of a function call does not match.
  * @param call the invalid call
  */
-class InvalidArgumentCountException(call: FunctionCall<*>) :
-    InvalidFunctionCallException(
+class InvalidArgumentCountException(
+    call: FunctionCall<*>,
+) : InvalidFunctionCallException(
         call,
         reason = "expected ${call.function.parameters.size} arguments, but ${call.arguments.size} found",
     )
@@ -19,8 +20,10 @@ class InvalidArgumentCountException(call: FunctionCall<*>) :
  * @param argumentCount given argument count
  * @param parameterCount expected parameter count
  */
-class InvalidLambdaArgumentCountException(argumentCount: Int, parameterCount: Int) :
-    PipelineException(
+class InvalidLambdaArgumentCountException(
+    argumentCount: Int,
+    parameterCount: Int,
+) : PipelineException(
         "Lambda expects $parameterCount arguments, but $argumentCount found",
         BAD_FUNCTION_CALL_EXIT_CODE,
     )

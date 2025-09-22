@@ -90,7 +90,5 @@ object DebugFormatter {
      * @param libraries libraries to format
      * @return formatted string
      */
-    fun formatLibraries(libraries: Iterable<Library>): String {
-        return libraries.joinToString { "${it.name} (${it.functions.size} functions)" }
-    }
+    fun formatLibraries(libraries: Iterable<Library>): String = libraries.joinToString { "${it.name} (${it.functions.size} functions)" }
 }

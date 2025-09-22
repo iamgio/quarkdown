@@ -39,7 +39,9 @@ data object DecimalNumberingSymbol : NumberingCounterSymbol {
  * A numbering strategy that counts items as letters of the latin alphabet: `0, A, B, C, ...`
  * @param case whether the letters should be uppercase or lowercase
  */
-data class AlphaNumberingSymbol(val case: StringCase) : NumberingCounterSymbol {
+data class AlphaNumberingSymbol(
+    val case: StringCase,
+) : NumberingCounterSymbol {
     override val supportedRange: IntRange
         get() = 1..'Z' - 'A' + 1
 
@@ -50,7 +52,9 @@ data class AlphaNumberingSymbol(val case: StringCase) : NumberingCounterSymbol {
  * A numbering strategy that counts items as Roman numerals: `0, I, II, III, ...`
  * @param case whether the letters should be uppercase or lowercase
  */
-data class RomanNumberingSymbol(val case: StringCase) : NumberingCounterSymbol {
+data class RomanNumberingSymbol(
+    val case: StringCase,
+) : NumberingCounterSymbol {
     // Provided by the romannumerals4j library: https://github.com/fracpete/romannumerals4j
     private val format = RomanNumeralFormat()
 

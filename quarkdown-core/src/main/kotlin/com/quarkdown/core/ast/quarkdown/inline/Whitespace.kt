@@ -10,6 +10,9 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param width width of the whitespace
  * @param height height of the whitespace
  */
-class Whitespace(val width: Size?, val height: Size?) : Node {
+class Whitespace(
+    val width: Size?,
+    val height: Size?,
+) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }

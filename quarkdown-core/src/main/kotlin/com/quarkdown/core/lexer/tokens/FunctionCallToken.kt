@@ -17,6 +17,9 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  * @param isBlock whether the function call is a block (opposite: inline)
  * @see com.quarkdown.core.ast.FunctionCallNode
  */
-class FunctionCallToken(data: TokenData, val isBlock: Boolean) : Token(data) {
+class FunctionCallToken(
+    data: TokenData,
+    val isBlock: Boolean,
+) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }

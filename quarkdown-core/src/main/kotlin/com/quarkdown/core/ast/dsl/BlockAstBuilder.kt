@@ -83,9 +83,7 @@ class BlockAstBuilder : AstBuilder() {
  * @return the built nodes
  * @see BlockAstBuilder
  */
-fun buildBlocks(block: BlockAstBuilder.() -> Unit): List<Node> {
-    return BlockAstBuilder().apply(block).build()
-}
+fun buildBlocks(block: BlockAstBuilder.() -> Unit): List<Node> = BlockAstBuilder().apply(block).build()
 
 /**
  * Begins a DSL block for building a single block node.
@@ -94,6 +92,5 @@ fun buildBlocks(block: BlockAstBuilder.() -> Unit): List<Node> {
  * @throws IllegalStateException if the result of [buildBlocks] is empty
  * @see BlockAstBuilder
  */
-fun buildBlock(block: BlockAstBuilder.() -> Unit): Node {
-    return buildBlocks(block).firstOrNull() ?: throw IllegalStateException("buildBlock requires at least one node")
-}
+fun buildBlock(block: BlockAstBuilder.() -> Unit): Node =
+    buildBlocks(block).firstOrNull() ?: throw IllegalStateException("buildBlock requires at least one node")
