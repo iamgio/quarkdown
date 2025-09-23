@@ -368,8 +368,11 @@ class NumberingTest {
                 it,
             )
         }
+    }
 
-        // Non-captioned elements are not counted.
+    @Test
+    fun `non-captioned figures are not numbered`() {
+        // Non-captioned tables are numbered since v1.10.
         execute(
             """
             .noautopagebreak
@@ -397,14 +400,15 @@ class NumberingTest {
             assertEquals(
                 "<h1>A</h1>" +
                     "<figure><img src=\"img.png\" alt=\"\" /></figure>" +
-                    "<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
-                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody></table>" +
+                    "<table id=\"table-1.1\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\" data-location=\"1.1\"></caption></table>" +
                     "<figure id=\"figure-1.1\"><img src=\"img.png\" alt=\"\" title=\"Caption\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.1\">Caption</figcaption>" +
                     "</figure>" +
-                    "<table id=\"table-1.1\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
+                    "<table id=\"table-1.2\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
-                    "<caption class=\"caption-bottom\" data-location=\"1.1\">Caption</caption></table>",
+                    "<caption class=\"caption-bottom\" data-location=\"1.2\">Caption</caption></table>",
                 it,
             )
         }
