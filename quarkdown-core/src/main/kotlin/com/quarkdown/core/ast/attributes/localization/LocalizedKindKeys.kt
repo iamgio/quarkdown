@@ -7,6 +7,11 @@ package com.quarkdown.core.ast.attributes.localization
  */
 object LocalizedKindKeys {
     /**
+     * @see com.quarkdown.core.ast.base.block.Code
+     */
+    const val CODE_BLOCK = "listing"
+
+    /**
      * @see com.quarkdown.core.ast.quarkdown.block.Figure
      */
     const val FIGURE = "figure"

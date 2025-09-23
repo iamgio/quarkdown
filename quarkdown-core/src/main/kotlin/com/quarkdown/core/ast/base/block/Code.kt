@@ -1,6 +1,9 @@
 package com.quarkdown.core.ast.base.block
 
-import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.localization.LocalizedKind
+import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -16,6 +19,12 @@ class Code(
     val language: String?,
     val showLineNumbers: Boolean = true,
     val focusedLines: Range? = null,
-) : Node {
+    override val caption: String? = null,
+) : LocationTrackableNode,
+    CaptionableNode,
+    LocalizedKind {
+    override val kindLocalizationKey: String
+        get() = LocalizedKindKeys.CODE_BLOCK
+
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

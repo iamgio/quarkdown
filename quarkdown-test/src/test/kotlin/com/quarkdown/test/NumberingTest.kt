@@ -411,6 +411,45 @@ class NumberingTest {
     }
 
     @Test
+    fun `code block numbering`() {
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+                - code: 1.1
+            
+            # A
+            
+            ```kotlin
+            val a = 1
+            ```
+            
+            ```python
+            a = 1
+            ```
+            
+            # B
+            
+            ```
+            val a = 1
+            ```
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1>A</h1>" +
+                    "<figure id=\"listing-1.1\"><pre><code class=\"language-kotlin\">val a = 1</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"1.1\"></figcaption></figure>" +
+                    "<figure id=\"listing-1.2\"><pre><code class=\"language-python\">a = 1</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"1.2\"></figcaption></figure>" +
+                    "<h1>B</h1><figure id=\"listing-2.1\"><pre><code>val a = 1</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"2.1\"></figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `numbering merging`() {
         execute(
             """
@@ -563,6 +602,7 @@ class NumberingTest {
                 - headings: none
                 - figures: 1.1
                 - tables: 1.a
+                - code: a
             
             # A
             
@@ -572,6 +612,10 @@ class NumberingTest {
             |---|---|---|
             | D | E | F |
             (Caption)
+            
+            ```
+            val a = 1
+            ```
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
@@ -584,7 +628,10 @@ class NumberingTest {
                     "<table id=\"table-1.a\"><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead>" +
                     "<tbody><tr><td>D</td><td>E</td><td>F</td></tr></tbody>" +
                     "<caption class=\"caption-bottom\" data-location=\"1.a\" data-localized-kind=\"Tabella\">" +
-                    "Caption</caption></table>",
+                    "Caption</caption></table>" +
+                    "<figure id=\"listing-a\"><pre><code>val a = 1</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"a\" data-localized-kind=\"Listato\">" +
+                    "</figcaption></figure>",
                 it,
             )
         }

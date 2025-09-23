@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.ast.attributes.location.getLocation
 import com.quarkdown.core.ast.attributes.location.setLocationLabel
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.iterator.AstIteratorHook
@@ -52,6 +53,7 @@ class LocationAwareLabelStorerHook(
         updateHeadingLabels(iterator)
         updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
         updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
+        updateLabels<Code>(DocumentNumbering::codeBlocks, iterator)
 
         // Updates the labels of Numbered nodes, which are grouped by their key.
         // 'extra' numbering formats can be set via the `.numbering` function.

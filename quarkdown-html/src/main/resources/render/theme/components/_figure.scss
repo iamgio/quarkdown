@@ -33,9 +33,17 @@
       }
     }
 
-    &:has(.mermaid) {
+    &:has(> pre, .mermaid) {
       margin-left: 0;
       margin-right: 0;
+    }
+
+    &:has(.caption-top) > pre {
+      margin-top: 0;
+    }
+
+    &:has(.caption-bottom) > pre {
+      margin-bottom: 0;
     }
   }
 }

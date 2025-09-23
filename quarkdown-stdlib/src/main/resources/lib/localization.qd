@@ -12,6 +12,7 @@
       - bibliography: References
       - figure: Figure
       - table: Table
+      - listing: Listing
       - section: Section
     - Italian
       - note: Nota
@@ -24,6 +25,7 @@
       - bibliography: Riferimenti
       - figure: Figura
       - table: Tabella
+      - listing: Listato
       - section: Sezione
     - German
       - note: Hinweis
@@ -36,6 +38,7 @@
       - bibliography: Literaturverzeichnis
       - figure: Abbildung
       - table: Tabelle
+      - listing: Listing
       - section: Abschnitt
     - Japanese
       - note: ノート
@@ -48,6 +51,7 @@
       - bibliography: 参考文献
       - figure: 図
       - table: テーブル
+      - listing: リスト
       - section: セクション
     - Chinese
       - note: 注意
@@ -60,6 +64,7 @@
       - bibliography: 参考文献
       - figure: 图
       - table: 表
+      - listing: 代码
       - section: 章节
     - French
       - note: Note
@@ -72,4 +77,5 @@
       - biblioraphy: Sources
       - figure: Figure
       - table: Tableau
+      - listing: Listing
       - section: Section

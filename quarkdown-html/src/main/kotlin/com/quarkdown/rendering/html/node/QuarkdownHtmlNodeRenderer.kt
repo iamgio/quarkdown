@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.CodeSpan
@@ -118,33 +119,39 @@ class QuarkdownHtmlNodeRenderer(
      *
      * @param node node to display the caption, and apply the ID, for
      * @param captionTagName tag name of the caption element. E.g. "figcaption" for figures, "caption" for tables
-     * @param kindLocalizationKey localization key for the kind of the element. E.g. "figure" for figures, "table" for tables.
-     * It allows localizing the kind name depending on the current locale.
      * @param idPrefix prefix for the ID. For instance, the prefix `figure` lets the ID be `figure-X.Y`, where `X.Y` is the label.
+     * @param positionProvider position of the caption relative to the content
+     * @param requiresCaption whether [CaptionableNode.caption] is explictly required to show the element.
+     *                        If `true` and no caption is set, nothing is shown
      * @see CaptionableNode
      * @see getLocationLabel to retrieve the numbered label
      */
     private fun <T> HtmlTagBuilder.numberedCaption(
         node: T,
-        captionTagName: String,
+        captionTagName: String = "figcaption",
         idPrefix: String = node.kindLocalizationKey,
-        position: CaptionPosition,
+        positionProvider: CaptionPositionInfo.() -> CaptionPosition?,
     ): HtmlTagBuilder where T : CaptionableNode, T : LocationTrackableNode, T : LocalizedKind =
         this.apply {
+            val position =
+                context.documentInfo.layout.captionPosition
+                    .getOrDefault(positionProvider)
+
             // The label is set as the ID of the element.
             val label = node.getLocationLabel(context)
             label?.let { optionalAttribute("id", "$idPrefix-$it") }
 
-            node.caption?.let { caption ->
-                +buildTag(captionTagName) {
-                    className("caption-${position.asCSS}")
+            if (node.caption == null && label == null) {
+                // No caption and no label: nothing to show.
+                return@apply
+            }
 
-                    +escapeCriticalContent(caption)
+            +buildTag(captionTagName) {
+                className("caption-${position.asCSS}")
+                withLocationLabel(node)
+                withLocalizedKind(node)
 
-                    withLocationLabel(node)
-                    withLocalizedKind(node)
-                    // Localized name of the element (e.g. `figure` -> `Figure` for English locale).
-                }
+                node.caption?.let { +escapeCriticalContent(it) }
             }
         }
 
@@ -158,15 +165,7 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: Figure<*>) =
         buildTag("figure") {
             +node.child
-
-            // Figure ID, e.g. 1.1, based on the current numbering format.
-            this.numberedCaption(
-                node,
-                captionTagName = "figcaption",
-                position =
-                    context.documentInfo.layout.captionPosition
-                        .getOrDefault(CaptionPositionInfo::figures),
-            )
+            numberedCaption(node, positionProvider = { figures })
         }
 
     // An empty div that acts as a page break.
@@ -394,9 +393,7 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: MathSpan) = buildTag("formula", node.expression)
 
     override fun visit(node: CrossReference): CharSequence {
-        val fallback = { Text("[???]").accept(this) }
-
-        val definition: CrossReferenceableNode = node.getDefinition(context) ?: return fallback()
+        val definition: CrossReferenceableNode = node.getDefinition(context) ?: return Text("[???]").accept(this)
 
         // The target node could have an ID. If so, the reference is a link to that node.
         val anchorId = (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
@@ -595,11 +592,22 @@ class QuarkdownHtmlNodeRenderer(
                 numberedCaption(
                     node,
                     captionTagName = "caption",
-                    position =
-                        context.documentInfo.layout.captionPosition
-                            .getOrDefault(CaptionPositionInfo::tables),
+                    positionProvider = { tables },
                 )
             }.build()
+
+    override fun visit(node: Code): String {
+        val block = super.visit(node)
+
+        // If the code is numbered or has a caption, it is wrapped in a figure.
+        if (node.caption == null && node.getLocationLabel(context) == null) {
+            return block
+        }
+        return buildTag("figure") {
+            +block
+            numberedCaption(node, positionProvider = { codeBlocks })
+        }
+    }
 
     // A code span can contain additional content, such as a color preview.
     override fun visit(node: CodeSpan): String {
