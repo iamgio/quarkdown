@@ -104,7 +104,7 @@ fun code(
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
-    @Name("id") referenceId: String? = null,
+    @Name("ref") referenceId: String? = null,
     @LikelyBody code: EvaluableString,
 ): NodeValue =
     Code(
