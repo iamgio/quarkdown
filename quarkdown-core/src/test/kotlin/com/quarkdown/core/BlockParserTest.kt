@@ -437,15 +437,18 @@ class BlockParserTest {
     fun table() {
         val nodes = blocksIterator<Table>(readSource("/parsing/table.md"))
 
-        with(nodes.next().columns.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertNull(caption)
+            assertNull(referenceId)
+            val columns = columns.iterator()
+            with(columns.next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertNodeEquals(Text("foo"), header.text.first())
                 assertEquals(2, cells.size)
                 assertNodeEquals(Text("abc"), cells[0].text.first())
                 assertNodeEquals(Text("ghi"), cells[1].text.first())
             }
-            with(next()) {
+            with(columns.next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertNodeEquals(Text("bar"), header.text.first())
                 assertEquals(2, cells.size)
@@ -525,6 +528,7 @@ class BlockParserTest {
         repeat(2) {
             with(nodes.next()) {
                 assertEquals("Table caption", caption)
+                assertNull(referenceId)
 
                 val columns = columns.iterator()
                 with(columns.next()) {
@@ -542,6 +546,16 @@ class BlockParserTest {
 
                 assertFalse(columns.hasNext())
             }
+        }
+
+        with(nodes.next()) {
+            assertNull(caption)
+            assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertEquals("Table caption", caption)
+            assertEquals("custom-id", referenceId)
         }
 
         assertFalse(nodes.hasNext())

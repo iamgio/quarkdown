@@ -23,7 +23,9 @@ val Reference: Module =
  *
  * - Headings (`# Heading {#id}`)
  * - Figures (`![Alt](image.png "Caption"){#id}`)
+ * - Tables
  * - Code blocks (`lang {#id} ...`)
+ * - Custom numbered blocks (`.numbered {key} ref:{id}`)
  *
  * The reference is successfully resolved if the ID matches that of a referenceable node in the document:
  *
@@ -33,6 +35,7 @@ val Reference: Module =
  *
  * @param id the reference ID of the target node being referenced
  * @return a [CrossReference] to the target node
+ * @wiki Cross-reference
  */
 @Name("ref")
 fun reference(id: String) = CrossReference(id).wrappedAsValue()

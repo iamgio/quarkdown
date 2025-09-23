@@ -34,3 +34,15 @@ bar | baz
 | M N O | P Q R |
 "Table caption"
 | S T U | V W X |
+
+| A B C | D E F |
+|-------|-------|
+| G H I | J K L |
+| M N O | P Q R |
+{#custom-id}
+
+| A B C | D E F |
+|-------|-------|
+| G H I | J K L |
+| M N O | P Q R |
+"Table caption" {#custom-id}

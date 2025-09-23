@@ -39,7 +39,7 @@ class CaptionTest {
     }
 
     @Test
-    fun table() {
+    fun `table, one row`() {
         execute(
             """
             | Header 1 | Header 2 | Header 3 |
@@ -53,6 +53,32 @@ class CaptionTest {
                     "<th>Header 3</th></tr></thead><tbody><tr><td>Cell 1</td>" +
                     "<td align=\"center\">Cell 2</td><td>Cell 3</td></tr></tbody>" +
                     "<caption class=\"caption-bottom\">Table caption</caption></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table, three rows, caption on top`() {
+        execute(
+            """
+            .captionposition tables:{top}
+            
+            | Header 1 | Header 2 | Header 3 |
+            |----------|:--------:|----------|
+            | Cell 1   | Cell 2   | Cell 3   |
+            | Cell 4   | Cell 5   | Cell 6   |
+            | Cell 7   | Cell 8   | Cell 9   |
+            "Table caption"
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th>Header 1</th><th align=\"center\">Header 2</th>" +
+                    "<th>Header 3</th></tr></thead><tbody><tr><td>Cell 1</td>" +
+                    "<td align=\"center\">Cell 2</td><td>Cell 3</td></tr>" +
+                    "<tr><td>Cell 4</td><td align=\"center\">Cell 5</td><td>Cell 6</td></tr>" +
+                    "<tr><td>Cell 7</td><td align=\"center\">Cell 8</td><td>Cell 9</td></tr></tbody>" +
+                    "<caption class=\"caption-top\">Table caption</caption></table>",
                 it,
             )
         }

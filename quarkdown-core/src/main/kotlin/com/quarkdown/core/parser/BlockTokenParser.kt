@@ -28,7 +28,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.acceptAll
-import com.quarkdown.core.lexer.patterns.DELIMITED_TITLE_HELPER
+import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
@@ -341,13 +341,18 @@ class BlockTokenParser(
                 }
         }
 
-        // Quarkdown extension: a table may have a caption.
-        // A caption is located at the end of the table, after a line break,
-        // wrapped by a delimiter, the same way as a link/image title.
+        // Quarkdown extension: a table may have metadata.
+        // A caption is located at the end of the table, after a line break, wrapped by a delimiter, the same way as a link/image title.
         // "This is a caption", 'This is a caption', (This is a caption)
-        val captionRegex = Regex("^\\s*($DELIMITED_TITLE_HELPER)\\s*$")
-        // The found caption of the table, if any.
+        // A custom ID, e.g. {#custom-id}, can be set for cross-referencing.
+        val titlePattern = PatternHelpers.DELIMITED_TITLE
+        val customIdPattern = PatternHelpers.customId("table")
+        val metadataRegex = Regex("^[ \\t]*($titlePattern)?[ \\t]*$customIdPattern?[ \\t]*$")
+
+        // The found caption and custom ID (reference ID) of the table, if any.
+        var metadataFound = false
         var caption: String? = null
+        var customId: String? = null
 
         // Other rows.
         groups
@@ -355,11 +360,21 @@ class BlockTokenParser(
             .lineSequence()
             .filterNot { it.isBlank() }
             .onEach { row ->
-                // Extract the caption if this is the caption row.
-                captionRegex.find(row)?.let { captionMatch ->
-                    caption = captionMatch.groupValues.getOrNull(1)?.trimDelimiters()
+                // Extract the metadata if this is the metadata row.
+                metadataRegex.find(row)?.let { metadataMatch ->
+                    metadataFound = true
+                    caption =
+                        metadataMatch.groupValues
+                            .getOrNull(1)
+                            ?.takeIf { it.isNotBlank() }
+                            ?.trimDelimiters()
+                    customId =
+                        metadataMatch.groupValues
+                            .getOrNull(2)
+                            ?.takeIf { it.isNotBlank() }
+                            ?.trim()
                 }
-            }.filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
+            }.filterNot { metadataFound } // The metadata row is at the end of the table and not part of the table itself.
             .forEach { row ->
                 var cellCount = 0
                 // Push cell.
@@ -375,7 +390,8 @@ class BlockTokenParser(
 
         return Table(
             columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
-            caption,
+            caption = caption,
+            referenceId = customId,
         )
     }
 

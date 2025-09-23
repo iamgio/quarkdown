@@ -7,6 +7,14 @@ internal object PatternHelpers {
     /** Bullet point for unordered and ordered lists. */
     const val BULLET = "[*+-]|\\d{1,9}[\\.)]"
 
+    /**
+     * Title enclosed in delimiters.
+     * - `"This is a title"`
+     * - `'This is a title'`
+     * - `(This is a title)`
+     */
+    const val DELIMITED_TITLE = """"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)"""
+
     /** Comments */
     val COMMENT = "<!--(-?>|[\\s\\S]*?-->)".toRegex()
 

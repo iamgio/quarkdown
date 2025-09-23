@@ -254,6 +254,63 @@ class CrossReferenceTest {
     }
 
     @Test
+    fun `reference before definition (table)`() {
+        execute(
+            """
+            See .ref {my-table}.
+            
+            | Header 1 | Header 2 |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            {#my-table}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\">my-table</span>.</p>" +
+                    "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `localized numbered references (table)`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+                - tables: i
+            
+            See .ref {my-table} and .ref {my-other-table}.
+            
+            | Header 1 | Header 2 |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            "" {#my-table}
+            
+            | Header 1 | Header 2 |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            "My caption" {#my-other-table}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"i\" data-localized-kind=\"Table\"></span> " +
+                    "and <span class=\"cross-reference\" data-location=\"ii\" data-localized-kind=\"Table\"></span>.</p>" +
+                    "<table id=\"table-i\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\" data-location=\"i\" data-localized-kind=\"Table\"></caption></table>" +
+                    "<table id=\"table-ii\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\" data-location=\"ii\" data-localized-kind=\"Table\">My caption</caption></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `reference before definition (code block)`() {
         execute(
             """
@@ -276,7 +333,6 @@ class CrossReferenceTest {
     fun `localized numbered references (code block)`() {
         execute(
             """
-            .noautopagebreak
             .doclang {en}
             .numbering
                 - code: I

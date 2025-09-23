@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
@@ -148,6 +149,30 @@ class CrossReferenceResolutionTest {
                 root {
                     +reference
                     +definition
+                }
+            }
+
+        traverse(root)
+        assertEquals(definition, reference.getDefinition(context))
+    }
+
+    @Test
+    fun `reference after definition (tables)`() {
+        val definition =
+            buildBlock {
+                table(referenceId = ID) {
+                    column(header = { text("Header") }) {
+                        cell { text("Cell 1") }
+                        cell { text("Cell 2") }
+                    }
+                }
+            } as Table
+        val reference = CrossReference(ID)
+        val root =
+            buildBlock {
+                root {
+                    +definition
+                    +reference
                 }
             }
 

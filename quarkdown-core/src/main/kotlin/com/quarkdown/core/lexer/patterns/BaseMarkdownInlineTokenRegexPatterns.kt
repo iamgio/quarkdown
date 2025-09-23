@@ -107,7 +107,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                     .withReference("label", LABEL_HELPER)
                     .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
-                    .withReference("title", DELIMITED_TITLE_HELPER)
+                    .withReference("title", PatternHelpers.DELIMITED_TITLE)
                     .build(),
         )
     }
@@ -330,10 +330,6 @@ private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
-
-// "This is a title", 'This is a title', (This is a title)
-internal const val DELIMITED_TITLE_HELPER =
-    "\"(?:\\\\\"?|[^\"\\\\])*\"|'(?:\\\\'?|[^'\\\\])*'|\\((?:\\\\\\)?|[^)\\\\])*\\)"
 
 // Width and height separator in images.
 private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*1, 1cm*1cm, 1 1, 1cm 1cm, 1x1 but not 1cmx1cm
