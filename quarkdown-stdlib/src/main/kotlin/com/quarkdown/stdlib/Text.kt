@@ -97,19 +97,22 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  * @param showLineNumbers whether to show line numbers
  * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
  * Note: HTML rendering requires [showLineNumbers] to be enabled.
+ * @param referenceId optional identifier for cross-referencing this code block elsewhere via [reference]
  * @param code code content
  */
 fun code(
     @Name("lang") language: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
+    @Name("id") referenceId: String? = null,
     @LikelyBody code: EvaluableString,
 ): NodeValue =
     Code(
-        code.content,
-        language,
-        showLineNumbers,
-        focusedLines,
+        content = code.content,
+        language = language,
+        showLineNumbers = showLineNumbers,
+        focusedLines = focusedLines,
+        referenceId = referenceId,
     ).wrappedAsValue()
 
 /**

@@ -23,6 +23,7 @@ val Reference: Module =
  *
  * - Headings (`# Heading {#id}`)
  * - Figures (`![Alt](image.png "Caption"){#id}`)
+ * - Code blocks (` ```java {#id} ... ``` `)
  *
  * The reference is successfully resolved if the ID matches that of a referenceable node in the document:
  *
