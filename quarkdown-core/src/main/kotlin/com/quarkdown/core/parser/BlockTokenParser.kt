@@ -100,10 +100,12 @@ class BlockTokenParser(
     override fun visit(token: FencesCodeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val language = token.data.namedGroups["fencescodelang"]
+        val caption = token.data.namedGroups["fencescodecaption"]?.trim()
         val referenceId = token.data.namedGroups["fencescodecustomid"]?.trim()
 
         return Code(
             language = language?.takeIf { it.isNotBlank() }?.trim(),
+            caption = caption?.trimDelimiters(),
             referenceId = referenceId,
             content = groups.next().trim(),
         )

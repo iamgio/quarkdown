@@ -38,6 +38,11 @@ Code line 1
 let x;
 ```
 
+```text "The caption"
+Code line 1
+Code line 2
+```
+
 ```text {#custom-id}
 Code line 1
 Code line 2
@@ -49,6 +54,11 @@ Code line 2
 ```
 
 ```{#custom-id}
+Code line 1
+Code line 2
+```
+
+```text "The caption" {#custom-id}
 Code line 1
 Code line 2
 ```

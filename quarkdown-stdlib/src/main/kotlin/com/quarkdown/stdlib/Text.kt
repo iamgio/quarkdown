@@ -94,6 +94,7 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  * ```
  *
  * @param language optional language of the code
+ * @param caption optional caption
  * @param showLineNumbers whether to show line numbers
  * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
  * Note: HTML rendering requires [showLineNumbers] to be enabled.
@@ -102,6 +103,7 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  */
 fun code(
     @Name("lang") language: String? = null,
+    @LikelyNamed caption: String? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
     @Name("ref") referenceId: String? = null,
@@ -112,6 +114,7 @@ fun code(
         language = language,
         showLineNumbers = showLineNumbers,
         focusedLines = focusedLines,
+        caption = caption,
         referenceId = referenceId,
     ).wrappedAsValue()
 

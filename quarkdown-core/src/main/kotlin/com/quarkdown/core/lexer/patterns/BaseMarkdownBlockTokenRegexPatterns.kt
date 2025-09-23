@@ -34,7 +34,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         includeList: Boolean = true,
         includeTable: Boolean = true,
     ): Regex =
-        RegexBuilder("hr|heading|blockquote|fences|list|html|table| +\\n")
+        RegexBuilder("hr|heading|blockquote|fences|list|table| +\\n")
             .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
             .withReference("fences", "^ {0,3}((`{3,})|(~{3,}))[^\\n]*\\n")
@@ -108,13 +108,17 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "FencesCode",
             wrap = ::FencesCodeToken,
             regex =
-                RegexBuilder("^ {0,3}fencesstart[ \\t]*lang?[ \\t]*customid?$(?s)(.+?)fencesend[ \\t]*$")
-                    .withReference("fencesstart", "(?<fenceschar>[`~]){3,}")
+                RegexBuilder(
+                    "^ {0,3}fencesstart[ \\t]*lang?[ \\t]*caption?[ \\t]*customid?$" +
+                        "(?s)(.+?)" +
+                        "fencesend[ \\t]*$",
+                ).withReference("fencesstart", "(?<fenceschar>[`~]){3,}")
                     .withReference("fencesend", "\\k<fenceschar>{3,}")
                     .withReference("lang", "(?<fencescodelang>.+?)")
+                    .withReference("caption", "(?<fencescodecaption>${PatternHelpers.DELIMITED_TITLE})")
                     .withReference("customid", customId("fencescode"))
                     .build(),
-            groupNames = listOf("fenceschar", "fencescodelang", "fencescodecustomid"),
+            groupNames = listOf("fenceschar", "fencescodelang", "fencescodecaption", "fencescodecustomid"),
         )
     }
 
