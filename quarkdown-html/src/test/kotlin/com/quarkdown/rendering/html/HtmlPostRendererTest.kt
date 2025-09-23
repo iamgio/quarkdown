@@ -2,10 +2,16 @@ package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.deepCopy
+import com.quarkdown.core.document.layout.DocumentLayoutInfo
+import com.quarkdown.core.document.layout.font.FontInfo
+import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.size.inch
+import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
@@ -38,6 +44,10 @@ class HtmlPostRendererTest {
         HtmlPostRenderer(context, baseTemplateProcessor = {
             TemplateProcessor(template).block()
         })
+
+    private fun setFontInfo(fontInfo: FontInfo) {
+        context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo)
+    }
 
     @BeforeTest
     fun setup() {
@@ -89,7 +99,7 @@ class HtmlPostRendererTest {
 
     @Test
     fun `with title`() {
-        context.documentInfo.name = "Doc title"
+        context.documentInfo = DocumentInfo(name = "Doc title")
         val postRenderer =
             postRenderer("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>") {
                 content("<strong>Hello, world!</strong>")
@@ -135,7 +145,7 @@ class HtmlPostRendererTest {
 
     @Test
     fun `slides conditional`() {
-        context.documentInfo.type = DocumentType.PLAIN
+        context.documentInfo = DocumentInfo(type = DocumentType.PLAIN)
         val postRenderer =
             postRenderer(
                 """
@@ -176,11 +186,15 @@ class HtmlPostRendererTest {
         )
 
     private fun fontFamilyProcessorResult() =
-        HtmlPostRenderer(context, baseTemplateProcessor = { fontFamilyProcessor }).createTemplateProcessor().process().trim()
+        HtmlPostRenderer(context, baseTemplateProcessor = { fontFamilyProcessor })
+            .createTemplateProcessor()
+            .process()
+            .trim()
 
     @Test
     fun `system font`() {
-        context.documentInfo.layout.font.mainFamily = FontFamily.System("Arial")
+        setFontInfo(FontInfo(mainFamily = FontFamily.System("Arial")))
+
         assertEquals(
             """
             @font-face { font-family: '63529059'; src: local('Arial'); }
@@ -198,7 +212,9 @@ class HtmlPostRendererTest {
         val workingDirectory = File("src/test/resources")
         val path = "media/NotoSans-Regular.ttf"
         val media = ResolvableMedia(path, workingDirectory)
-        context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, path)
+
+        setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, path)))
+
         assertEquals(
             """
             @font-face { font-family: '${path.hashCode()}'; src: url('${File(workingDirectory, path).absolutePath}'); }
@@ -217,9 +233,12 @@ class HtmlPostRendererTest {
         val path = "media/NotoSans-Regular.ttf"
         val file = File(workingDirectory, path)
         val media = ResolvableMedia(path, workingDirectory)
-        context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, path)
+
+        setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, path)))
+
         context.options.enableLocalMediaStorage = true
         context.mediaStorage.register(path, media)
+
         assertEquals(
             """
             @font-face { font-family: '${path.hashCode()}'; src: url('media/NotoSans-Regular@${file.hashCode()}.ttf'); }
@@ -237,7 +256,9 @@ class HtmlPostRendererTest {
         val url =
             "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
-        context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, url)
+
+        setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, url)))
+
         assertEquals(
             """
             @font-face { font-family: '${url.hashCode()}'; src: url('$url'); }
@@ -255,9 +276,12 @@ class HtmlPostRendererTest {
         val url =
             "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
         val media = ResolvableMedia(url)
-        context.documentInfo.layout.font.mainFamily = FontFamily.Media(media, url)
+
+        setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, url)))
+
         context.options.enableRemoteMediaStorage = true
         context.mediaStorage.register(url, media)
+
         assertEquals(
             """
             @font-face { font-family: '${url.hashCode()}'; src: url('media/https-fonts.gstatic.com-s-notosans-v39-o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff'); }
@@ -273,7 +297,9 @@ class HtmlPostRendererTest {
     @Test
     fun `google font`() {
         val name = "Karla"
-        context.documentInfo.layout.font.mainFamily = FontFamily.GoogleFont(name)
+
+        setFontInfo(FontInfo(mainFamily = FontFamily.GoogleFont(name)))
+
         assertEquals(
             """
             @import url('https://fonts.googleapis.com/css2?family=$name&display=swap');
@@ -288,8 +314,13 @@ class HtmlPostRendererTest {
 
     @Test
     fun `main and heading fonts`() {
-        context.documentInfo.layout.font.mainFamily = FontFamily.System("Arial")
-        context.documentInfo.layout.font.headingFamily = FontFamily.GoogleFont("Roboto")
+        setFontInfo(
+            FontInfo(
+                mainFamily = FontFamily.System("Arial"),
+                headingFamily = FontFamily.GoogleFont("Roboto"),
+            ),
+        )
+
         assertEquals(
             """
             @font-face { font-family: '63529059'; src: local('Arial'); }
@@ -306,10 +337,13 @@ class HtmlPostRendererTest {
 
     @Test
     fun `semi-real`() {
-        context.documentInfo.name = "Quarkdown"
-        context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("english")
-        context.documentInfo.type = DocumentType.SLIDES
-        context.documentInfo.layout.font.mainFamily = FontFamily.System("Arial")
+        context.documentInfo =
+            DocumentInfo(
+                name = "Quarkdown",
+                locale = LocaleLoader.SYSTEM.fromName("english"),
+                type = DocumentType.SLIDES,
+                layout = DocumentLayoutInfo(font = FontInfo(mainFamily = FontFamily.System("Arial"))),
+            )
         context.attributes.markMathPresence()
 
         val postRenderer =
@@ -392,16 +426,18 @@ class HtmlPostRendererTest {
 
     @Test
     fun real() {
-        with(context.documentInfo) {
-            name = "Quarkdown"
-            locale = LocaleLoader.SYSTEM.fromName("english")
-            type = DocumentType.SLIDES
-            layout.font.mainFamily = FontFamily.System("Arial")
-            layout.pageFormat.pageWidth = 8.5.inch
-            layout.pageFormat.margin = Sizes(1.0.inch)
-            tex.macros["\\R"] = "\\mathbb{R}"
-            tex.macros["\\Z"] = "\\mathbb{Z}"
-        }
+        context.documentInfo =
+            DocumentInfo(
+                name = "Quarkdown",
+                locale = LocaleLoader.SYSTEM.fromName("english"),
+                type = DocumentType.SLIDES,
+                layout =
+                    DocumentLayoutInfo(
+                        font = FontInfo(mainFamily = FontFamily.System("Arial")),
+                        pageFormat = PageFormatInfo(pageWidth = 8.5.inch, margin = Sizes(1.0.inch)),
+                    ),
+                tex = TexInfo(macros = mutableMapOf("\\R" to "\\mathbb{R}", "\\Z" to "\\mathbb{Z}")),
+            )
         context.attributes.markMathPresence()
 
         val postRenderer =
@@ -442,8 +478,11 @@ class HtmlPostRendererTest {
     private val plainHtml = "<html><head></head><body></body></html>"
 
     private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
-        context.documentInfo.type = DocumentType.SLIDES
-        context.documentInfo.theme = DocumentTheme(color = "darko", layout = "minimal")
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                theme = DocumentTheme(color = "darko", layout = "minimal"),
+            )
         context.attributes.markMathPresence()
 
         val postRenderer = HtmlPostRenderer(context)
@@ -504,7 +543,7 @@ class HtmlPostRendererTest {
     @Test
     fun `resource generation, with specific localized theme`() {
         val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo.locale = LocaleLoader.SYSTEM.find("zh-CN")
+        context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("zh-CN"))
 
         val postRenderer = HtmlPostRenderer(context)
         val resources = postRenderer.generateResources(plainHtml)
@@ -519,7 +558,7 @@ class HtmlPostRendererTest {
     @Test
     fun `resource generation, with missing localized theme`() {
         val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo.locale = LocaleLoader.SYSTEM.find("akan")
+        context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("akan"))
 
         val postRenderer = HtmlPostRenderer(context)
         val resources = postRenderer.generateResources(plainHtml)

@@ -4,6 +4,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.localization.localizeOrDefault
 import com.quarkdown.core.context.localization.localizeOrNull
+import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
@@ -40,7 +41,7 @@ class LocalizationTest {
             )
 
         return MutableContext(QuarkdownFlavor).apply {
-            documentInfo.locale = locale
+            documentInfo = DocumentInfo(locale = locale)
             localizationTables["mytable"] = table
         }
     }

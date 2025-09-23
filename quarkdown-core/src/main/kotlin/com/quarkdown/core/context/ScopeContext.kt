@@ -28,8 +28,11 @@ class ScopeContext(
     override val attachedPipeline: Pipeline?
         get() = super.attachedPipeline ?: parent.attachedPipeline
 
-    override val documentInfo: DocumentInfo
+    override var documentInfo: DocumentInfo
         get() = parent.documentInfo
+        set(value) {
+            (parent as? MutableContext)?.documentInfo = value
+        }
 
     override val options: MutableContextOptions
         get() = parent.options as? MutableContextOptions ?: MutableContextOptions()

@@ -1,13 +1,14 @@
 package com.quarkdown.core.document
 
+import com.quarkdown.amber.annotations.NestedData
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.localization.Locale
 
 /**
- * Mutable information about the final artifact.
- * This data is mutated by library functions `.docname`, `.docauthor`, etc.
+ * Immutable information about the document.
+ * This data is updated by library functions `.docname`, `.docauthor`, etc., by overwriting [com.quarkdown.core.context.MutableContext.documentInfo].
  * @param type type of the document
  * @param name name of the document, if specified
  * @param authors authors of the document, if specified
@@ -16,13 +17,14 @@ import com.quarkdown.core.localization.Locale
  * @param numbering formats to apply to element numbering across the document
  * @param pageFormat format of the pages of the document
  */
+@NestedData
 data class DocumentInfo(
-    var type: DocumentType = DocumentType.PLAIN,
-    var name: String? = null,
-    val authors: MutableList<DocumentAuthor> = mutableListOf(),
-    var locale: Locale? = null,
-    var numbering: DocumentNumbering? = null,
-    var theme: DocumentTheme? = null,
+    val type: DocumentType = DocumentType.PLAIN,
+    val name: String? = null,
+    val authors: List<DocumentAuthor> = emptyList(),
+    val locale: Locale? = null,
+    val numbering: DocumentNumbering? = null,
+    val theme: DocumentTheme? = null,
     val tex: TexInfo = TexInfo(),
     val layout: DocumentLayoutInfo = DocumentLayoutInfo(),
 ) {

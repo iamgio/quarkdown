@@ -3,6 +3,7 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
@@ -27,6 +28,8 @@ open class MutableContext(
     override val options: MutableContextOptions = MutableContextOptions(),
 ) : BaseContext(attributes, flavor, libraries, subdocument) {
     override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
+
+    override var documentInfo: DocumentInfo = super.documentInfo
 
     override val loadableLibraries: MutableSet<Library> = (super.loadableLibraries + loadableLibraries).toMutableSet()
 
