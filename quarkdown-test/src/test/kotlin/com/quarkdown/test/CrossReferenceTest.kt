@@ -252,4 +252,60 @@ class CrossReferenceTest {
             )
         }
     }
+
+    @Test
+    fun `reference before definition (code block)`() {
+        execute(
+            """
+            See .ref {my-code}.
+            
+            ```kotlin {#my-code}
+            println("Hello, World!")
+            ```
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\">my-code</span>.</p>" +
+                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `localized numbered references (code block)`() {
+        execute(
+            """
+            .noautopagebreak
+            .doclang {en}
+            .numbering
+                - code: I
+            
+            See .ref {my-code} and .ref {my-other-code}.
+            
+            ```kotlin {#my-code}
+            println("Hello, World!")
+            ```
+            
+            ```kotlin {#my-other-code}
+            println(
+                "Hello, World!"
+            )
+            ```
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"I\" data-localized-kind=\"Listing\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"II\" data-localized-kind=\"Listing\"></span>.</p>" +
+                    "<figure id=\"listing-I\"><pre><code class=\"language-kotlin\">" +
+                    "println(&quot;Hello, World!&quot;)</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"I\" data-localized-kind=\"Listing\"></figcaption></figure>" +
+                    "<figure id=\"listing-II\"><pre><code class=\"language-kotlin\">" +
+                    "println(\n    &quot;Hello, World!&quot;\n)</code></pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"II\" data-localized-kind=\"Listing\"></figcaption></figure>",
+                it,
+            )
+        }
+    }
 }

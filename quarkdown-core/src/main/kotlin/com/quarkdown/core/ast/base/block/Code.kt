@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
+import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -13,6 +14,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param language optional syntax language
  * @param showLineNumbers whether to show line numbers
  * @param focusedLines range of lines to focus on. No lines are focused if `null`
+ * @param caption optional caption
+ * @param referenceId optional ID for cross-referencing via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  */
 class Code(
     val content: String,
@@ -20,7 +23,9 @@ class Code(
     val showLineNumbers: Boolean = true,
     val focusedLines: Range? = null,
     override val caption: String? = null,
+    override val referenceId: String? = null,
 ) : LocationTrackableNode,
+    CrossReferenceableNode,
     CaptionableNode,
     LocalizedKind {
     override val kindLocalizationKey: String

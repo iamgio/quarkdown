@@ -108,12 +108,13 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "FencesCode",
             wrap = ::FencesCodeToken,
             regex =
-                RegexBuilder("^ {0,3}fencesstart[ \\t]*lang?$(?s)(.+?)fencesend[ \\t]*$")
+                RegexBuilder("^ {0,3}fencesstart[ \\t]*lang?[ \\t]*customid?$(?s)(.+?)fencesend[ \\t]*$")
                     .withReference("fencesstart", "(?<fenceschar>[`~]){3,}")
                     .withReference("fencesend", "\\k<fenceschar>{3,}")
                     .withReference("lang", "(?<fencescodelang>.+?)")
+                    .withReference("customid", customId("fencescode"))
                     .build(),
-            groupNames = listOf("fenceschar", "fencescodelang"),
+            groupNames = listOf("fenceschar", "fencescodelang", "fencescodecustomid"),
         )
     }
 

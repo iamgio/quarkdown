@@ -188,19 +188,21 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("Code", content)
-            assertEquals(null, language)
+            assertNull(language)
+            assertNull(caption)
+            assertNull(referenceId)
         }
         with(nodes.next()) {
             assertEquals("Code", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\n    Code line 2", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code", content)
@@ -221,6 +223,20 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("let x;", content)
             assertEquals("ecmascript 6", language)
+            assertNull(caption)
+            assertNull(referenceId)
+        }
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("Code line 1\nCode line 2", content)
+                assertEquals("text", language)
+                assertEquals("custom-id", referenceId)
+            }
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2", content)
+            assertEquals("{#custom-id}", language)
+            assertNull(referenceId)
         }
     }
 

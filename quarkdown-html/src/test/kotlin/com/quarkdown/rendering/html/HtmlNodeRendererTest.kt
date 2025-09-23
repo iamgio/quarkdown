@@ -479,6 +479,10 @@ class HtmlNodeRendererTest {
             out.next(),
             Code("class Point {\n    ...\n}", language = "java", focusedLines = Range(null, 1)).render(),
         )
+        assertEquals(
+            out.next(),
+            Code("class Point {\n    ...\n}", language = "java", caption = "A Java code example.").render(),
+        )
     }
 
     @Test

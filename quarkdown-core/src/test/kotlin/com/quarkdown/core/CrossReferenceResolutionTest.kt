@@ -3,6 +3,7 @@ package com.quarkdown.core
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.getDefinition
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
@@ -141,6 +142,27 @@ class CrossReferenceResolutionTest {
                     image("image.png", referenceId = ID) { text("An image") }
                 }
             } as ImageFigure
+        val reference = CrossReference(ID)
+        val root =
+            buildBlock {
+                root {
+                    +reference
+                    +definition
+                }
+            }
+
+        traverse(root)
+        assertEquals(definition, reference.getDefinition(context))
+    }
+
+    @Test
+    fun `reference before definition (code blocks)`() {
+        val definition =
+            Code(
+                content = "println(\"Hello, World!\")",
+                language = "kotlin",
+                referenceId = ID,
+            )
         val reference = CrossReference(ID)
         val root =
             buildBlock {
