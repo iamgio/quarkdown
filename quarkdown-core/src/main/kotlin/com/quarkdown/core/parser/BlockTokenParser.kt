@@ -90,7 +90,7 @@ class BlockTokenParser(
     override fun visit(token: BlockCodeToken): Node =
         Code(
             language = null,
-            // Remove first indentation
+            // Removes first indentation.
             content =
                 token.data.text
                     .replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "")
@@ -98,9 +98,11 @@ class BlockTokenParser(
         )
 
     override fun visit(token: FencesCodeToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 4)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val language = token.data.namedGroups["fencescodelang"]
+
         return Code(
-            language = groups.next().takeIf { it.isNotBlank() }?.trim(),
+            language = language?.takeIf { it.isNotBlank() }?.trim(),
             content = groups.next().trim(),
         )
     }
