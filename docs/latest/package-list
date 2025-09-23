@@ -1,7 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.quarkdown.stdlib//autoPageBreak/#com.quarkdown.core.context.MutableContext#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/autopagebreak.html
-$dokka.location:com.quarkdown.stdlib//captionPosition/#com.quarkdown.core.context.MutableContext#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/captionposition.html
+$dokka.location:com.quarkdown.stdlib//captionPosition/#com.quarkdown.core.context.MutableContext#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?#com.quarkdown.core.document.layout.caption.CaptionPosition?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/captionposition.html
 $dokka.location:com.quarkdown.stdlib//collectionAverage/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/average.html
 $dokka.location:com.quarkdown.stdlib//collectionDistinct/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/distinct.html
 $dokka.location:com.quarkdown.stdlib//collectionFirst/#kotlin.collections.Iterable[com.quarkdown.core.function.value.OutputValue[*]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/first.html
@@ -44,6 +44,7 @@ $dokka.location:com.quarkdown.stdlib//loremIpsum/#/PointingToDeclaration/quarkd
 $dokka.location:com.quarkdown.stdlib//pageFormat/#com.quarkdown.core.context.MutableContext#com.quarkdown.core.document.layout.page.PageSizeFormat?#com.quarkdown.core.document.layout.page.PageOrientation#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Sizes?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.document.size.Size?#com.quarkdown.core.misc.color.Color?#kotlin.Int?#com.quarkdown.core.ast.quarkdown.block.Container.TextAlignment?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/pageformat.html
 $dokka.location:com.quarkdown.stdlib//pageMarginContent/#com.quarkdown.core.document.layout.page.PageMarginPosition#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/pagemargin.html
 $dokka.location:com.quarkdown.stdlib//paragraphStyle/#com.quarkdown.core.context.MutableContext#kotlin.Number?#kotlin.Number?#kotlin.Number?#kotlin.Number?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/paragraphstyle.html
+$dokka.location:com.quarkdown.stdlib//reference/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/ref.html
 $dokka.location:com.quarkdown.stdlib//setSlidesConfiguration/#kotlin.Boolean?#kotlin.Boolean?#kotlin.Boolean?#com.quarkdown.core.document.slides.Transition.Style?#com.quarkdown.core.document.slides.Transition.Speed/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/slides.html
 $dokka.location:com.quarkdown.stdlib//speakerNote/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/speakernote.html
 $dokka.location:com.quarkdown.stdlib//subdocumentGraph/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib/subdocumentgraph.html
@@ -78,6 +79,7 @@ com.quarkdown.core
 com.quarkdown.core.ast
 com.quarkdown.core.ast.attributes
 com.quarkdown.core.ast.attributes.id
+com.quarkdown.core.ast.attributes.localization
 com.quarkdown.core.ast.attributes.location
 com.quarkdown.core.ast.attributes.presence
 com.quarkdown.core.ast.attributes.reference
@@ -95,6 +97,7 @@ com.quarkdown.core.ast.quarkdown.block.list
 com.quarkdown.core.ast.quarkdown.block.toc
 com.quarkdown.core.ast.quarkdown.inline
 com.quarkdown.core.ast.quarkdown.invisible
+com.quarkdown.core.ast.quarkdown.reference
 com.quarkdown.core.bibliography
 com.quarkdown.core.bibliography.bibtex
 com.quarkdown.core.bibliography.style
