@@ -308,4 +308,31 @@ class CrossReferenceTest {
             )
         }
     }
+
+    @Test
+    fun `custom numbered blocks`() {
+        execute(
+            """
+            .numbering
+                - myblock: a
+            
+            See .ref {block1} and .ref {block2}.
+            
+            .numbered {myblock} ref:{block1}
+                Block .1
+            
+            .numbered {myblock} ref:{block2}
+                Block .1
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"a\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"b\"></span>.</p>" +
+                    "<p>Block a</p>" +
+                    "<p>Block b</p>",
+                it,
+            )
+        }
+    }
 }

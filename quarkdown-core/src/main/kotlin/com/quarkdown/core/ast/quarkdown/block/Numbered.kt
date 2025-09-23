@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.SectionLocation
+import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -24,16 +25,19 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * which appends an error box (the same produced from the expander) to [children].
  * From the user's perspective, this does not have any effect.
  * @param key name to group (and count) numbered nodes
+ * @param referenceId optional ID for cross-referencing via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  * @param childrenSupplier supplier of the node content given the evaluated [SectionLocation], formatted according to the active [DocumentNumbering]
  * @see com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook for storing locations
- * @see com.quarkdown.core.context.hooks.location.NumberedEvaluatorHook for evaluating [childrenSupplier]
+ * @see com.quarkdown.core.context.hooks.location.NumberedEvaluatorHook for evaluating [location] and [childrenSupplier]
  * @see com.quarkdown.core.document.numbering.NumberingFormat
  */
 class Numbered(
     val key: String,
+    override val referenceId: String? = null,
     internal val childrenSupplier: (location: String) -> List<Node>,
 ) : NestableNode,
-    LocationTrackableNode {
+    LocationTrackableNode,
+    CrossReferenceableNode {
     override var children: List<Node> = emptyList()
 
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)

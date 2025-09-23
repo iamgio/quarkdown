@@ -443,16 +443,21 @@ fun figure(
  * ```
  *
  * @param key name to group (and count) numbered nodes
+ * @param referenceId optional ID for cross-referencing via [reference]
  * @param body content, with the formatted location of this element (as a string) as an argument
  * @return the new [Numbered] node
  * @wiki Numbering
  */
 fun numbered(
     @LikelyNamed key: String,
+    @Name("ref") referenceId: String? = null,
     @LikelyBody body: Lambda,
 ): NodeValue {
     val node =
-        Numbered(key) { number ->
+        Numbered(
+            key,
+            referenceId = referenceId,
+        ) { number ->
             body
                 .invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue())
                 .unwrappedValue
