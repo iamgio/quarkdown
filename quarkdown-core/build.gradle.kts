@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("com.quarkdown.amber") version "2.1.2"
+    id("com.quarkdown.amber") version "2.1.3"
     `java-test-fixtures`
 }
 
