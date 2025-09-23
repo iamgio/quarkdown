@@ -31,7 +31,7 @@ class NumberingTest {
         numbering: DocumentNumbering,
     ): List<String> {
         val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo.numbering = numbering
+        context.documentInfo = context.documentInfo.copy(numbering = numbering)
 
         ObservableAstIterator()
             .attach(LocationAwarenessHook(context))

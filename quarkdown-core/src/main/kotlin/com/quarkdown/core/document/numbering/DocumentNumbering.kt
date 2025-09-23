@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.numbering
 
-import com.quarkdown.automerge.annotations.Mergeable
+import com.quarkdown.amber.annotations.Mergeable
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading

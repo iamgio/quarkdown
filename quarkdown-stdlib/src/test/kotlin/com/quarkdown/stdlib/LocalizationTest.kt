@@ -2,8 +2,12 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.function.value.DictionaryValue
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * [Localization] module tests.
@@ -13,42 +17,31 @@ class LocalizationTest {
 
     @BeforeTest
     fun setup() {
-        context.documentInfo.locale = LocaleLoader.SYSTEM.fromName("English")!!
+        context.documentInfo = context.documentInfo.copy(locale = LocaleLoader.SYSTEM.fromName("English")!!)
     }
-/*
+
     @Test
     fun `localization table`() {
         localization(
             context,
             "mytable",
-            MarkdownContent(
-                buildBlocks {
-                    unorderedList(loose = false) {
-                        listItem {
-                            paragraph { text("English") }
-                            unorderedList(loose = false) {
-                                listItem {
-                                    paragraph { text("morning: Good morning") }
-                                }
-                                listItem {
-                                    paragraph { text("evening: Good evening") }
-                                }
-                            }
-                        }
-                        listItem {
-                            paragraph { text("Italian") }
-                            unorderedList(loose = false) {
-                                listItem {
-                                    paragraph { text("morning: Buongiorno") }
-                                }
-                                listItem {
-                                    paragraph { text("evening: Buonasera") }
-                                }
-                            }
-                        }
-                    }
-                },
-            ),
+            contents =
+                mapOf(
+                    "English" to
+                        DictionaryValue(
+                            mutableMapOf(
+                                "morning" to "Good morning".wrappedAsValue(),
+                                "evening" to "Good evening".wrappedAsValue(),
+                            ),
+                        ),
+                    "Italian" to
+                        DictionaryValue(
+                            mutableMapOf(
+                                "morning" to "Buongiorno".wrappedAsValue(),
+                                "evening" to "Buonasera".wrappedAsValue(),
+                            ),
+                        ),
+                ),
         )
 
         assertEquals(1, context.localizationTables.size)
@@ -58,5 +51,5 @@ class LocalizationTest {
         assertEquals("Buongiorno", table[LocaleLoader.SYSTEM.fromName("Italian")!!]!!["morning"])
 
         assertEquals("Good evening", context.localize("mytable", "evening"))
-    }*/
+    }
 }

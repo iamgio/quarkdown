@@ -14,15 +14,25 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.caption.CaptionPosition
+import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
+import com.quarkdown.core.document.layout.caption.merge
+import com.quarkdown.core.document.layout.font.FontInfo
+import com.quarkdown.core.document.layout.font.merge
+import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSizeFormat
+import com.quarkdown.core.document.layout.page.merge
+import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
+import com.quarkdown.core.document.layout.paragraph.merge
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.numbering.merge
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.function.library.loader.Module
 import com.quarkdown.core.function.library.loader.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -74,22 +84,24 @@ val Document: Module =
     )
 
 /**
- * If [value] is not `null`, it updates document information (according to [set]).
+ * If [value] is not `null`, it updates document information (according to [modify]).
  * Document information is fetched from [this] context via [Context.documentInfo].
  * If it's `null`, the needed value (according to [get]) from the current document is returned.
  * @param value (optional) value to assign to a document info field
+ * @param get function to fetch the needed value from [DocumentInfo] if [value] is `null`
+ * @param modify function to modify [DocumentInfo] if [value] is not `null` (returns the modified copy)
  * @return the result of [get], wrapped in a [StringValue], if [value] is `null`. [VoidValue] otherwise
  */
-private fun <T> Context.modifyOrEchoDocumentInfo(
+private fun <T> MutableContext.modifyOrEchoDocumentInfo(
     value: T?,
     get: DocumentInfo.() -> OutputValue<*>,
-    set: DocumentInfo.(T) -> Unit,
+    modify: DocumentInfo.(T) -> DocumentInfo,
 ): OutputValue<*> {
     if (value == null) {
         return get(this.documentInfo)
     }
 
-    set(this.documentInfo, value)
+    this.documentInfo = modify(this.documentInfo, value)
     return VoidValue
 }
 
@@ -113,7 +125,7 @@ private fun <T> Context.modifyOrEchoDocumentInfo(
  */
 @Name("doctype")
 fun docType(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     type: DocumentType? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
@@ -123,7 +135,7 @@ fun docType(
                 .lowercase()
                 .wrappedAsValue()
         },
-        set = { this.type = it },
+        modify = { copy(type = it) },
     )
 
 /**
@@ -146,13 +158,13 @@ fun docType(
  */
 @Name("docname")
 fun docName(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     name: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         name,
         get = { (this.name ?: "").wrappedAsValue() },
-        set = { this.name = it },
+        modify = { copy(name = it) },
     )
 
 /**
@@ -178,13 +190,13 @@ fun docName(
  */
 @Name("docauthor")
 fun docAuthor(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     author: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         author,
         get = { (this.authors.firstOrNull()?.name ?: "").wrappedAsValue() },
-        set = { this.authors += DocumentAuthor(name = it) },
+        modify = { copy(authors = authors + DocumentAuthor(name = it)) },
     )
 
 /**
@@ -224,7 +236,7 @@ fun docAuthor(
  */
 @Name("docauthors")
 fun docAuthors(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     authors: Map<String, DictionaryValue<OutputValue<String>>>? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
@@ -240,16 +252,17 @@ fun docAuthors(
                 },
             )
         },
-        set = {
+        modify = {
             // Map<String, Map<String, String>> -> List<(String, Map<String, String>)>
-            this.authors.addAll(
-                it.map { (name, info) ->
-                    DocumentAuthor(
-                        name = name,
-                        info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
-                    )
-                },
-            )
+            val authors =
+                this.authors +
+                    it.map { (name, info) ->
+                        DocumentAuthor(
+                            name = name,
+                            info = info.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue },
+                        )
+                    }
+            copy(authors = authors)
         },
     )
 
@@ -285,16 +298,18 @@ fun docAuthors(
  */
 @Name("doclang")
 fun docLanguage(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     locale: String? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         locale,
         get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
-        set = {
-            this.locale =
-                LocaleLoader.SYSTEM.find(it)
-                    ?: throw IllegalArgumentException("Locale $it not found")
+        modify = {
+            copy(
+                locale =
+                    LocaleLoader.SYSTEM.find(it)
+                        ?: throw IllegalArgumentException("Locale $it not found"),
+            )
         },
     )
 
@@ -315,7 +330,7 @@ fun docLanguage(
  * @wiki Themes
  */
 fun theme(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     color: String? = null,
     @LikelyNamed layout: String? = null,
 ): VoidValue {
@@ -327,12 +342,14 @@ fun theme(
             ?: throw IOPipelineException("Theme $theme not found")
     }
 
-    // Update global theme.
-    context.documentInfo.theme =
+    val theme =
         DocumentTheme(
             color = color?.lowercase()?.also { checkExistance("color/$it") },
             layout = layout?.lowercase()?.also { checkExistance("layout/$it") },
         )
+
+    // Update global theme.
+    context.documentInfo = context.documentInfo.copy(theme = theme)
 
     return VoidValue
 }
@@ -377,7 +394,7 @@ fun theme(
  * @wiki Numbering
  */
 fun numbering(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @LikelyNamed merge: Boolean = true,
     @LikelyBody formats: Map<String, Value<String>>,
 ): VoidValue {
@@ -399,12 +416,15 @@ fun numbering(
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
 
-    context.documentInfo.numbering =
-        if (merge) {
-            numbering.merge(context.documentInfo.numberingOrDefault)
-        } else {
-            numbering
-        }
+    context.documentInfo =
+        context.documentInfo.copy(
+            numbering =
+                if (merge) {
+                    numbering.merge(context.documentInfo.numberingOrDefault)
+                } else {
+                    numbering
+                },
+        )
 
     return VoidValue
 }
@@ -416,7 +436,7 @@ fun numbering(
  */
 @Name("nonumbering")
 fun disableNumbering(
-    @Injected context: Context,
+    @Injected context: MutableContext,
 ) = numbering(context, merge = false, formats = emptyMap())
 
 /**
@@ -446,12 +466,16 @@ fun font(
 ): VoidValue {
     fun fontFamily(name: String?): FontFamily? = name?.let { loadFontFamily(it, context) }
 
-    with(context.documentInfo.layout.font) {
-        this.mainFamily = fontFamily(main) ?: this.mainFamily
-        this.headingFamily = fontFamily(heading) ?: this.headingFamily
-        this.codeFamily = fontFamily(code) ?: this.codeFamily
-        this.size = size ?: this.size
-    }
+    val fontInfo =
+        FontInfo(
+            mainFamily = fontFamily(main),
+            headingFamily = fontFamily(heading),
+            codeFamily = fontFamily(code),
+            size = size,
+        )
+
+    // Update global font info.
+    context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo.merge(context.documentInfo.layout.font))
 
     return VoidValue
 }
@@ -473,18 +497,25 @@ fun font(
  */
 @Name("paragraphstyle")
 fun paragraphStyle(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @Name("lineheight") lineHeight: Number? = null,
     @Name("letterspacing") letterSpacing: Number? = null,
     @LikelyNamed spacing: Number? = null,
     @LikelyNamed indent: Number? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.paragraphStyle) {
-        this.lineHeight = lineHeight?.toDouble() ?: this.lineHeight
-        this.letterSpacing = letterSpacing?.toDouble() ?: this.letterSpacing
-        this.spacing = spacing?.toDouble() ?: this.spacing
-        this.indent = indent?.toDouble() ?: this.indent
-    }
+    val currentStyle = context.documentInfo.layout.paragraphStyle
+
+    val style =
+        ParagraphStyleInfo(
+            lineHeight = lineHeight?.toDouble(),
+            letterSpacing = letterSpacing?.toDouble(),
+            spacing = spacing?.toDouble(),
+            indent = indent?.toDouble(),
+        )
+
+    // Update global paragraph style.
+    context.documentInfo = context.documentInfo.deepCopy(layoutParagraphStyle = style.merge(currentStyle))
+
     return VoidValue
 }
 
@@ -498,18 +529,24 @@ fun paragraphStyle(
  */
 @Name("captionposition")
 fun captionPosition(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     @LikelyNamed default: CaptionPosition? = null,
     @LikelyNamed figures: CaptionPosition? = null,
     @LikelyNamed tables: CaptionPosition? = null,
     @Name("code") codeBlocks: CaptionPosition? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.captionPosition) {
-        this.default = default ?: this.default
-        this.figures = figures ?: this.figures
-        this.tables = tables ?: this.tables
-        this.codeBlocks = codeBlocks ?: this.codeBlocks
-    }
+    val currentPosition = context.documentInfo.layout.captionPosition
+    val position =
+        CaptionPositionInfo(
+            default = default ?: currentPosition.default,
+            figures = figures,
+            tables = tables,
+            codeBlocks = codeBlocks,
+        )
+
+    // Update global caption position.
+    context.documentInfo = context.documentInfo.deepCopy(layoutCaptionPosition = position.merge(currentPosition))
+
     return VoidValue
 }
 
@@ -527,10 +564,18 @@ fun captionPosition(
  */
 @Name("texmacro")
 fun texMacro(
-    @Injected context: Context,
+    @Injected context: MutableContext,
     name: String,
     @LikelyBody macro: String,
-) = VoidValue.also { context.documentInfo.tex.macros[name] = macro }
+) = VoidValue.also {
+    val texInfo: TexInfo =
+        context.documentInfo.tex.copy(
+            macros =
+                context.documentInfo.tex.macros + (name to macro),
+        )
+
+    context.documentInfo = context.documentInfo.copy(tex = texInfo)
+}
 
 /**
  * Sets the page layout format of the document.
@@ -582,31 +627,34 @@ fun pageFormat(
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
-    with(context.documentInfo.layout.pageFormat) {
-        // If, for instance, the document is landscape and the given format is portrait,
-        // the format is converted to landscape.
-        val formatBounds = format?.getBounds(orientation)
+    val currentFormat = context.documentInfo.layout.pageFormat
 
-        // Width and/or height override the format size if both are not null.
-        this.pageWidth = width ?: formatBounds?.width ?: this.pageWidth
-        this.pageHeight = height ?: formatBounds?.height ?: this.pageHeight
+    // If, for instance, the document is landscape and the given format is portrait,
+    // the format is converted to landscape.
+    val formatBounds = format?.getBounds(orientation)
 
-        this.margin = margin ?: this.margin
-        this.columnCount = columns?.takeIf { it > 0 } ?: this.columnCount
-        this.alignment = alignment ?: this.alignment
+    // Whether at least one border property is set.
+    val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
 
-        val hasBorder = borderTop != null || borderRight != null || borderBottom != null || borderLeft != null
-        if (hasBorder) {
-            this.contentBorderWidth =
+    val format =
+        PageFormatInfo(
+            pageWidth = width ?: formatBounds?.width,
+            pageHeight = height ?: formatBounds?.height,
+            margin = margin,
+            columnCount = columns?.takeIf { it > 0 },
+            alignment = alignment,
+            contentBorderWidth =
                 Sizes(
-                    top = borderTop ?: this.contentBorderWidth?.top ?: Size.ZERO,
-                    right = borderRight ?: this.contentBorderWidth?.right ?: Size.ZERO,
-                    bottom = borderBottom ?: this.contentBorderWidth?.bottom ?: Size.ZERO,
-                    left = borderLeft ?: this.contentBorderWidth?.left ?: Size.ZERO,
-                )
-        }
-        this.contentBorderColor = borderColor
-    }
+                    top = borderTop ?: currentFormat.contentBorderWidth?.top ?: Size.ZERO,
+                    right = borderRight ?: currentFormat.contentBorderWidth?.right ?: Size.ZERO,
+                    bottom = borderBottom ?: currentFormat.contentBorderWidth?.bottom ?: Size.ZERO,
+                    left = borderLeft ?: currentFormat.contentBorderWidth?.left ?: Size.ZERO,
+                ).takeIf { hasBorder },
+            contentBorderColor = borderColor,
+        )
+
+    // Update global page format.
+    context.documentInfo = context.documentInfo.deepCopy(layoutPageFormat = format.merge(currentFormat))
 
     return VoidValue
 }

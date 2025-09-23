@@ -10,8 +10,8 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Container
-import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCallArgument
@@ -64,10 +64,10 @@ class FunctionNodeExpansionTest {
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun setAndEchoDocumentName(
-        @Injected context: Context,
+        @Injected context: MutableContext,
         name: String,
     ): StringValue {
-        context.documentInfo.name = name
+        context.documentInfo = context.documentInfo.copy(name = name)
         return StringValue(context.documentInfo.name!!)
     }
 
@@ -376,7 +376,7 @@ class FunctionNodeExpansionTest {
 
     @Test
     fun `invalid document type`() {
-        context.documentInfo.type = DocumentType.SLIDES
+        context.documentInfo = DocumentInfo(type = DocumentType.SLIDES)
         val node =
             FunctionCallNode(
                 context,
