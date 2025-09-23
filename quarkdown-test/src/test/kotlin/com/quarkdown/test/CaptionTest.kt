@@ -85,6 +85,39 @@ class CaptionTest {
     }
 
     @Test
+    fun `code block`() {
+        execute(
+            """
+            ```javascript "Logging code"
+            console.log("Hello, world!");
+            ```
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure><pre><code class=\"language-javascript\">console.log(&quot;Hello, world!&quot;);</code></pre>" +
+                    "<figcaption class=\"caption-bottom\">Logging code</figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `code block, from function`() {
+        execute(
+            """
+            .code lang:{javascript} caption:{Logging code}
+                console.log("Hello, world!");
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<figure><pre><code class=\"language-javascript\">console.log(&quot;Hello, world!&quot;);</code></pre>" +
+                    "<figcaption class=\"caption-bottom\">Logging code</figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `all captions on top`() {
         execute(
             """

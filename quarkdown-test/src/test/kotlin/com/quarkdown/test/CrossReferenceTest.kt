@@ -330,6 +330,24 @@ class CrossReferenceTest {
     }
 
     @Test
+    fun `reference before definition (code block from function)`() {
+        execute(
+            """
+            See .ref {my-code}.
+            
+            .code lang:{kotlin} ref:{my-code}
+                println("Hello, World!")
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\">my-code</span>.</p>" +
+                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `localized numbered references (code block)`() {
         execute(
             """
