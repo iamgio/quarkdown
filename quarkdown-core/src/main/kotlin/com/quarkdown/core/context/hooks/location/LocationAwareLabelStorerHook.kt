@@ -52,7 +52,7 @@ class LocationAwareLabelStorerHook(
 
         updateHeadingLabels(iterator)
         updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
-        updateLabels<Table>(DocumentNumbering::tables, iterator, filter = { it.caption != null })
+        updateLabels<Table>(DocumentNumbering::tables, iterator)
         updateLabels<Code>(DocumentNumbering::codeBlocks, iterator)
 
         // Updates the labels of Numbered nodes, which are grouped by their key.

@@ -287,7 +287,7 @@ class CrossReferenceTest {
             | Header 1 | Header 2 |
             |----------|----------|
             | Cell 1   | Cell 2   |
-            "" {#my-table}
+            {#my-table}
             
             | Header 1 | Header 2 |
             |----------|----------|
