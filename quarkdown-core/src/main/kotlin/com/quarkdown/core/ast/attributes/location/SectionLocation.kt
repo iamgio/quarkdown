@@ -14,4 +14,14 @@ package com.quarkdown.core.ast.attributes.location
  */
 data class SectionLocation(
     val levels: List<Int>,
-)
+) {
+    /**
+     * The depth of this location, i.e., the number of levels it contains.
+     * Example: the location `[1, 1]` has a depth of `2`.
+     *
+     * This is related to [com.quarkdown.core.document.numbering.NumberingFormat.accuracy]
+     * in order to determine whether a location can be used as a label.
+     */
+    val depth: Int
+        get() = levels.size
+}

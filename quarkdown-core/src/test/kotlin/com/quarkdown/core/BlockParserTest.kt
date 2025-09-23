@@ -188,19 +188,21 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("Code", content)
-            assertEquals(null, language)
+            assertNull(language)
+            assertNull(caption)
+            assertNull(referenceId)
         }
         with(nodes.next()) {
             assertEquals("Code", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\n    Code line 2", content)
-            assertEquals(null, language)
+            assertNull(language)
         }
         with(nodes.next()) {
             assertEquals("Code", content)
@@ -221,6 +223,20 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("let x;", content)
             assertEquals("ecmascript 6", language)
+            assertNull(caption)
+            assertNull(referenceId)
+        }
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("Code line 1\nCode line 2", content)
+                assertEquals("text", language)
+                assertEquals("custom-id", referenceId)
+            }
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2", content)
+            assertEquals("{#custom-id}", language)
+            assertNull(referenceId)
         }
     }
 
@@ -421,15 +437,18 @@ class BlockParserTest {
     fun table() {
         val nodes = blocksIterator<Table>(readSource("/parsing/table.md"))
 
-        with(nodes.next().columns.iterator()) {
-            with(next()) {
+        with(nodes.next()) {
+            assertNull(caption)
+            assertNull(referenceId)
+            val columns = columns.iterator()
+            with(columns.next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertNodeEquals(Text("foo"), header.text.first())
                 assertEquals(2, cells.size)
                 assertNodeEquals(Text("abc"), cells[0].text.first())
                 assertNodeEquals(Text("ghi"), cells[1].text.first())
             }
-            with(next()) {
+            with(columns.next()) {
                 assertEquals(Table.Alignment.NONE, alignment)
                 assertNodeEquals(Text("bar"), header.text.first())
                 assertEquals(2, cells.size)
@@ -509,6 +528,7 @@ class BlockParserTest {
         repeat(2) {
             with(nodes.next()) {
                 assertEquals("Table caption", caption)
+                assertNull(referenceId)
 
                 val columns = columns.iterator()
                 with(columns.next()) {
@@ -526,6 +546,16 @@ class BlockParserTest {
 
                 assertFalse(columns.hasNext())
             }
+        }
+
+        with(nodes.next()) {
+            assertNull(caption)
+            assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertEquals("Table caption", caption)
+            assertEquals("custom-id", referenceId)
         }
 
         assertFalse(nodes.hasNext())
@@ -883,6 +913,7 @@ class BlockParserTest {
                 child,
             )
             assertNull(caption)
+            assertNull(referenceId)
         }
 
         with(nodes.next()) {
@@ -947,6 +978,10 @@ class BlockParserTest {
                 }.first(),
                 child,
             )
+        }
+
+        with(nodes.next()) {
+            assertEquals("custom-id", referenceId)
         }
     }
 

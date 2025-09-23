@@ -69,7 +69,10 @@ class BlockAstBuilder : AstBuilder() {
      * @see Table
      * @see TableAstBuilder
      */
-    fun table(block: TableAstBuilder.() -> Unit) = +Table(TableAstBuilder().apply(block).columns)
+    fun table(
+        referenceId: String? = null,
+        block: TableAstBuilder.() -> Unit,
+    ) = +Table(TableAstBuilder().apply(block).columns, referenceId = referenceId)
 
     /**
      * @see ImageFigure

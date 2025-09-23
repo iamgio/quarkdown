@@ -58,6 +58,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
+import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 
 /**
  * A visitor for [com.quarkdown.core.ast.Node]s.
@@ -179,6 +180,8 @@ interface NodeVisitor<T> {
     fun visit(node: InlineCollapse): T
 
     fun visit(node: PageCounter): T
+
+    fun visit(node: CrossReference): T
 
     fun visit(node: BibliographyCitation): T
 

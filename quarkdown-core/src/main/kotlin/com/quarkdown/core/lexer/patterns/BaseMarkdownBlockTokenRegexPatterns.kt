@@ -1,5 +1,6 @@
 package com.quarkdown.core.lexer.patterns
 
+import com.quarkdown.core.lexer.patterns.PatternHelpers.customId
 import com.quarkdown.core.lexer.regex.RegexBuilder
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
@@ -94,7 +95,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         TokenRegexPattern(
             name = "BlockComment",
             wrap = ::CommentToken,
-            regex = COMMENT_PATTERN,
+            regex = PatternHelpers.COMMENT,
         )
     }
 
@@ -107,8 +108,13 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "FencesCode",
             wrap = ::FencesCodeToken,
             regex =
-                "^ {0,3}((?<fenceschar>[`~]){3,})($|\\s*.+$)(?s)(.+?)(\\k<fenceschar>{3,})[ \\t]*$"
-                    .toRegex(),
+                RegexBuilder("^ {0,3}fencesstart[ \\t]*lang?[ \\t]*customid?$(?s)(.+?)fencesend[ \\t]*$")
+                    .withReference("fencesstart", "(?<fenceschar>[`~]){3,}")
+                    .withReference("fencesend", "\\k<fenceschar>{3,}")
+                    .withReference("lang", "(?<fencescodelang>.+?)")
+                    .withReference("customid", customId("fencescode"))
+                    .build(),
+            groupNames = listOf("fenceschar", "fencescodelang", "fencescodecustomid"),
         )
     }
 
@@ -121,8 +127,11 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "Heading",
             wrap = ::HeadingToken,
             regex =
-                "^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*)(?:\\n+|$)"
-                    .toRegex(),
+                RegexBuilder("^ {0,3}(#{1,6})(!?)(?=\\s|$)(.*?)customid?trailing(?:\\n+|$)")
+                    .withReference("customid", customId("heading"))
+                    .withReference("trailing", "\\s*#*") // Trailing #s are ignored
+                    .build(),
+            groupNames = listOf("headingcustomid"),
         )
     }
 
@@ -207,7 +216,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             regex =
                 RegexBuilder(
                     "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
-                ).withReference("bullet", BULLET_HELPER)
+                ).withReference("bullet", PatternHelpers.BULLET)
                     .build(),
         )
     }
@@ -266,9 +275,12 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "SetextHeading",
             wrap = ::SetextHeadingToken,
             regex =
-                RegexBuilder("^((?:(?! {0,3}(?:bullet)).+\\R)+?) {0,3}(=+|-+) *(?:\\R+|$)")
-                    .withReference("bullet", BULLET_HELPER)
+                RegexBuilder("^(?:(?:(?! {0,3}(?:bullet))(.+?)customid?\\R)+?)bar *(?:\\R+|$)")
+                    .withReference("bullet", PatternHelpers.BULLET)
+                    .withReference("bar", " {0,3}(=+|-+)")
+                    .withReference("customid", customId("setext"))
                     .build(),
+            groupNames = listOf("setextcustomid"),
         )
     }
 
@@ -328,9 +340,3 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             .build()
     }
 }
-
-// Helper expressions
-
-private const val BULLET_HELPER = "[*+-]|\\d{1,9}[\\.)]"
-
-internal val COMMENT_PATTERN = "<!--(-?>|[\\s\\S]*?-->)".toRegex()

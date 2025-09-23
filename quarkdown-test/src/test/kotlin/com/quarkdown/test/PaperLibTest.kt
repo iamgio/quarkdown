@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -38,6 +39,7 @@ class PaperLibTest {
                 This is my definition.
             """.trimIndent(),
             loadableLibraries = setOf("paper"),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals("<p><strong>Definizione A.</strong> This is my definition.</p>", it)
         }
@@ -60,6 +62,7 @@ class PaperLibTest {
                 And this is my proof.
             """.trimIndent(),
             loadableLibraries = setOf("paper"),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
                 "<p><strong>Theorem 0.1.</strong> This is my theorem.</p>" +
@@ -88,6 +91,7 @@ class PaperLibTest {
                 This is my proof.
             """.trimIndent(),
             loadableLibraries = setOf("paper"),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
                 "<p><strong>Proof a:</strong> This is my proof.</p>" +
@@ -143,6 +147,7 @@ class PaperLibTest {
                 This is another problem.
             """.trimIndent(),
             loadableLibraries = setOf("paper"),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
                 "<p><strong>Problem a.</strong> This is my problem.</p>" +

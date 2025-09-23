@@ -3,6 +3,7 @@
 @use "util/minimal-tables" as *;
 @use "util/minimal-toc" as *;
 @use "util/minimal-footer" as *;
+@use "../components/util/location-selectors" as location-selectors;
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import url('https://fonts.googleapis.com/css?family=Inter');
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
@@ -17,7 +18,7 @@
   --qd-block-margin: 1.8em;
   --qd-line-height: 1.6;
   --qd-code-line-height: 1.85;
-  --qd-location-suffix: "";
+  --qd-heading-label-suffix: "";
   --qd-box-border-radius: 10px;
   --qd-box-icon-baseline: 0.1em;
 }
@@ -71,7 +72,11 @@
     }
   }
 
-  [data-location]::before {
+  .cross-reference {
+    font-style: italic;
+  }
+
+  #{location-selectors.$location-heading}::before {
     opacity: .3;
     font-weight: normal;
     margin-right: 0.4em;

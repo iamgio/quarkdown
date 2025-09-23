@@ -388,6 +388,7 @@ fun theme(
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
  * - `figures`, used for captioned images;
  * - `tables`, used for captioned tables;
+ * - `code`, used for code blocks;
  * - `footnotes`, used for footnotes and references to them.
  * Any other key can be addressed by custom elements (see [numbered]).
  * @wiki Numbering
@@ -410,6 +411,7 @@ fun numbering(
             headings = formats["headings"]?.let(::parse),
             figures = formats["figures"]?.let(::parse),
             tables = formats["tables"]?.let(::parse),
+            codeBlocks = formats["code"]?.let(::parse),
             footnotes = formats["footnotes"]?.let(::parse),
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),
         )
@@ -522,6 +524,7 @@ fun paragraphStyle(
  * @param default the default position for all captions. Defaults to bottom
  * @param figures caption position for figures. If set, overrides [default] for figures
  * @param tables caption position for tables. If set, overrides [default] for tables
+ * @param codeBlocks caption position for code blocks. If set, overrides [default] for code blocks
  * @wiki Caption position
  */
 @Name("captionposition")
@@ -530,6 +533,7 @@ fun captionPosition(
     @LikelyNamed default: CaptionPosition? = null,
     @LikelyNamed figures: CaptionPosition? = null,
     @LikelyNamed tables: CaptionPosition? = null,
+    @Name("code") codeBlocks: CaptionPosition? = null,
 ): VoidValue {
     val currentPosition = context.documentInfo.layout.captionPosition
     val position =
@@ -537,6 +541,7 @@ fun captionPosition(
             default = default ?: currentPosition.default,
             figures = figures,
             tables = tables,
+            codeBlocks = codeBlocks,
         )
 
     // Update global caption position.

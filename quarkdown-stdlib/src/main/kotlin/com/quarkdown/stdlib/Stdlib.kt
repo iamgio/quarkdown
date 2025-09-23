@@ -40,6 +40,7 @@ object Stdlib : LibraryExporter {
                         Ecosystem +
                         Injection +
                         Mermaid +
+                        Reference +
                         Bibliography,
                 ).withHooks(
                     PipelineHooks(

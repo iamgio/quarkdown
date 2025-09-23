@@ -3,9 +3,12 @@ package com.quarkdown.core.ast.base.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
+import com.quarkdown.core.ast.attributes.localization.LocalizedKind
+import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.Heading.Companion.marker
+import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -16,7 +19,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param isDecorative whether this heading is decorative.
  *                     A decorative heading does not trigger automatic page breaks and is not counted in the document's hierarchy
  *                     and is not numbered.
- * @param customId optional custom ID. If `null`, the ID is automatically generated
+ * @param customId optional custom ID. If `null`, the ID is automatically generated. If not `null`, the ID is used for cross-referencing.
  */
 class Heading(
     val depth: Int,
@@ -25,16 +28,27 @@ class Heading(
     val customId: String? = null,
 ) : TextNode,
     Identifiable,
-    LocationTrackableNode {
+    LocationTrackableNode,
+    CrossReferenceableNode,
+    LocalizedKind {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
+
+    override val kindLocalizationKey: String
+        get() = LocalizedKindKeys.HEADING
 
     /**
      * Decorative headings are not assigned a location and are not counted.
      */
     override val canTrackLocation: Boolean
         get() = !isDecorative
+
+    /**
+     * If the heading has a custom ID, it can be used for cross-referencing.
+     */
+    override val referenceId: String?
+        get() = this.customId
 
     /**
      * @return whether this heading is a marker

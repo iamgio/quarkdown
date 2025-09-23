@@ -28,7 +28,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.acceptAll
-import com.quarkdown.core.lexer.patterns.DELIMITED_TITLE_HELPER
+import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
@@ -53,7 +53,6 @@ import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
-import com.quarkdown.core.util.takeUntilLastOccurrence
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
 
@@ -91,7 +90,7 @@ class BlockTokenParser(
     override fun visit(token: BlockCodeToken): Node =
         Code(
             language = null,
-            // Remove first indentation
+            // Removes first indentation.
             content =
                 token.data.text
                     .replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "")
@@ -99,9 +98,13 @@ class BlockTokenParser(
         )
 
     override fun visit(token: FencesCodeToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 4)
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val language = token.data.namedGroups["fencescodelang"]
+        val referenceId = token.data.namedGroups["fencescodecustomid"]?.trim()
+
         return Code(
-            language = groups.next().takeIf { it.isNotBlank() }?.trim(),
+            language = language?.takeIf { it.isNotBlank() }?.trim(),
+            referenceId = referenceId,
             content = groups.next().trim(),
         )
     }
@@ -118,22 +121,6 @@ class BlockTokenParser(
 
     override fun visit(token: HorizontalRuleToken): Node = HorizontalRule
 
-    /**
-     * Splits a heading text and its custom ID from a raw text.
-     * `Heading {#custom-id}` -> `Heading`, `custom-id`
-     * @param text heading text
-     * @return a pair of the heading text and its custom ID
-     */
-    private fun splitHeadingTextAndId(text: String): Pair<String, String?> {
-        val customIdMatch = "\\s+\\{#([^}]+)}\$".toRegex().find(text)
-        val customId = customIdMatch?.groupValues?.get(1) // {#custom-id} -> custom-id
-
-        // Trim the custom ID from the text.
-        val trimmedText = customIdMatch?.let { text.removeSuffix(it.value) } ?: text
-
-        return trimmedText to customId
-    }
-
     override fun visit(token: HeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
@@ -142,9 +129,8 @@ class BlockTokenParser(
         // e.g. ###! Heading => the heading is decorative, meaning it's not part of the document structure.
         val isDecorative = groups.next() == "!"
 
-        val rawText = groups.next().trim().takeUntilLastOccurrence(" #") // Remove trailing # characters.
-        // Heading {#custom-id} -> Heading, custom-id
-        val (text, customId) = splitHeadingTextAndId(rawText)
+        val text = groups.next().trim()
+        val customId = token.data.namedGroups["headingcustomid"]?.trim()
 
         return Heading(
             depth,
@@ -157,9 +143,8 @@ class BlockTokenParser(
     override fun visit(token: SetextHeadingToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
 
-        val rawText = groups.next().trim()
-        // Heading {#custom-id} -> Heading, custom-id
-        val (text, customId) = splitHeadingTextAndId(rawText)
+        val text = groups.next().trim()
+        val customId = token.data.namedGroups["setextcustomid"]?.trim()
 
         return Heading(
             text = text.toInline(),
@@ -356,13 +341,18 @@ class BlockTokenParser(
                 }
         }
 
-        // Quarkdown extension: a table may have a caption.
-        // A caption is located at the end of the table, after a line break,
-        // wrapped by a delimiter, the same way as a link/image title.
+        // Quarkdown extension: a table may have metadata.
+        // A caption is located at the end of the table, after a line break, wrapped by a delimiter, the same way as a link/image title.
         // "This is a caption", 'This is a caption', (This is a caption)
-        val captionRegex = Regex("^\\s*($DELIMITED_TITLE_HELPER)\\s*$")
-        // The found caption of the table, if any.
+        // A custom ID, e.g. {#custom-id}, can be set for cross-referencing.
+        val titlePattern = PatternHelpers.DELIMITED_TITLE
+        val customIdPattern = PatternHelpers.customId("table")
+        val metadataRegex = Regex("^[ \\t]*($titlePattern)?[ \\t]*$customIdPattern?[ \\t]*$")
+
+        // The found caption and custom ID (reference ID) of the table, if any.
+        var metadataFound = false
         var caption: String? = null
+        var customId: String? = null
 
         // Other rows.
         groups
@@ -370,11 +360,21 @@ class BlockTokenParser(
             .lineSequence()
             .filterNot { it.isBlank() }
             .onEach { row ->
-                // Extract the caption if this is the caption row.
-                captionRegex.find(row)?.let { captionMatch ->
-                    caption = captionMatch.groupValues.getOrNull(1)?.trimDelimiters()
+                // Extract the metadata if this is the metadata row.
+                metadataRegex.find(row)?.let { metadataMatch ->
+                    metadataFound = true
+                    caption =
+                        metadataMatch.groupValues
+                            .getOrNull(1)
+                            ?.takeIf { it.isNotBlank() }
+                            ?.trimDelimiters()
+                    customId =
+                        metadataMatch.groupValues
+                            .getOrNull(2)
+                            ?.takeIf { it.isNotBlank() }
+                            ?.trim()
                 }
-            }.filterNot { caption != null } // The caption row is at the end of the table and not part of the table itself.
+            }.filterNot { metadataFound } // The metadata row is at the end of the table and not part of the table itself.
             .forEach { row ->
                 var cellCount = 0
                 // Push cell.
@@ -390,7 +390,8 @@ class BlockTokenParser(
 
         return Table(
             columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
-            caption,
+            caption = caption,
+            referenceId = customId,
         )
     }
 

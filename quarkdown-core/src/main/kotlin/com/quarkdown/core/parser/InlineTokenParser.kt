@@ -248,15 +248,17 @@ class InlineTokenParser(
     override fun visit(token: ImageToken): Node {
         val link = visit(LinkToken(token.data))
         val (width, height) = extractImageSize("img", token.data)
+        val referenceId = token.data.namedGroups["imgcustomid"]?.trim()
 
-        return Image(link, width, height)
+        return Image(link, width, height, referenceId)
     }
 
     override fun visit(token: ReferenceImageToken): Node {
         val link = visit(ReferenceLinkToken(token.data))
         val (width, height) = extractImageSize("refimg", token.data)
+        val referenceId = token.data.namedGroups["refimgcustomid"]?.trim()
 
-        return ReferenceImage(link, width, height)
+        return ReferenceImage(link, width, height, referenceId)
     }
 
     override fun visit(token: CodeSpanToken): Node {
