@@ -40,6 +40,7 @@ enum class DocumentType(
                 headings = NumberingFormat.fromString("1.1.1"),
                 figures = NumberingFormat.fromString("1.1"),
                 tables = NumberingFormat.fromString("1.1"),
+                math = NumberingFormat.fromString("(1)"),
             ),
     ),
 
