@@ -23,4 +23,17 @@
       list-style-type: none;
     }
   }
+
+  #{selectors.$location-math} {
+    // Math formulas display location differently.
+    position: relative;
+
+    &::before {
+      content: attr(data-location);
+      position: absolute;
+      inset-inline-end: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }

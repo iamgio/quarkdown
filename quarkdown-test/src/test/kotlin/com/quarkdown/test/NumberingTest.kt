@@ -415,6 +415,33 @@ class NumberingTest {
     }
 
     @Test
+    fun `math numbering`() {
+        // A reference ID is required for numbering equations.
+        execute(
+            """
+            .numbering
+                - equations: (1)
+            
+            $ E=mc^2 $ {#my-id}
+            
+            $ E=mc^2 $
+            
+            $$$ {#_}
+            E=mc^2
+            $$$
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<formula data-block=\"\" data-location=\"(1)\">E=mc^2</formula>" +
+                    "<formula data-block=\"\">E=mc^2</formula>" +
+                    "<formula data-block=\"\" data-location=\"(2)\">E=mc^2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `code block numbering`() {
         execute(
             """

@@ -4,7 +4,7 @@
 Let $ F(u) $ be the *Fourier Transform* of the function $ f(x) $.
 
 #### Block
-$ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
+$ F(u) = \int_{-\infty}^{\infty} f(x) e^{-2 \pi i u x} dx $
 
 #### Multiline block
 
@@ -14,6 +14,10 @@ f(x) = \begin{cases}
   -x, & \text{if } x < 0
 \end{cases}
 $$$
+
+#### Numbered block
+
+$ E = mc^2 $ {#_}
 
 .texmacro {\binomdef}
   \frac{#1!}{#2!(#1 - #2)!}

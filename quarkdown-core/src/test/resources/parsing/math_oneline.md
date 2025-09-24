@@ -10,3 +10,5 @@ $ Not math: this is inline math $
 $ Not math  $
 
 $ Not math $ some text
+
+$ Math expression $ {#custom-id}

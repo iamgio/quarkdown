@@ -179,6 +179,7 @@ class QuarkdownHtmlNodeRenderer(
         buildTag("formula") {
             +node.expression
             attribute("data-block", "")
+            optionalAttribute("data-location", node.getLocationLabel(context))
         }
 
     override fun visit(node: Container) =

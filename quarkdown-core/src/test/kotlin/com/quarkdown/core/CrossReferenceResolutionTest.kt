@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.block.ImageFigure
+import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.location.LocationAwareLabelStorerHook
@@ -188,6 +189,22 @@ class CrossReferenceResolutionTest {
                 language = "kotlin",
                 referenceId = ID,
             )
+        val reference = CrossReference(ID)
+        val root =
+            buildBlock {
+                root {
+                    +reference
+                    +definition
+                }
+            }
+
+        traverse(root)
+        assertEquals(definition, reference.getDefinition(context))
+    }
+
+    @Test
+    fun `reference before definition (math)`() {
+        val definition = Math("E = mc^2", referenceId = ID)
         val reference = CrossReference(ID)
         val root =
             buildBlock {

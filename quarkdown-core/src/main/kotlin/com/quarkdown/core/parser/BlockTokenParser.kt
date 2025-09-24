@@ -112,13 +112,23 @@ class BlockTokenParser(
     }
 
     override fun visit(token: MultilineMathToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 3)
-        return Math(expression = groups.next().trim())
+        val groups = token.data.groups.iterator(consumeAmount = 2)
+        val customId = token.data.namedGroups["multilinemathcustomid"]?.trim()
+
+        return Math(
+            expression = groups.next().trim(),
+            referenceId = customId,
+        )
     }
 
     override fun visit(token: OnelineMathToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        return Math(expression = groups.next().trim())
+        val customId = token.data.namedGroups["onelinemathcustomid"]?.trim()
+
+        return Math(
+            expression = groups.next().trim(),
+            referenceId = customId,
+        )
     }
 
     override fun visit(token: HorizontalRuleToken): Node = HorizontalRule

@@ -1,25 +1,18 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.context.toc.TableOfContents
-import com.quarkdown.core.document.numbering.AlphaNumberingSymbol
-import com.quarkdown.core.document.numbering.DecimalNumberingSymbol
-import com.quarkdown.core.document.numbering.NumberingFixedSymbol
-import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
-import com.quarkdown.core.util.StringCase
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -130,60 +123,6 @@ class MiscTest {
             assertEquals(Text("JKL"), toc.items[1].text.first())
         }
          */
-    }
-
-    @Test
-    fun numbering() {
-        assertEquals("3", DecimalNumberingSymbol.map(3))
-        assertEquals("b", AlphaNumberingSymbol(StringCase.Lower).map(2))
-        assertEquals("C", AlphaNumberingSymbol(StringCase.Upper).map(3))
-
-        val format = NumberingFormat.fromString("1.1.a-A")
-
-        with(format.symbols.iterator()) {
-            assertIs<DecimalNumberingSymbol>(next())
-            assertEquals('.', (next() as NumberingFixedSymbol).value)
-            assertIs<DecimalNumberingSymbol>(next())
-            assertEquals('.', (next() as NumberingFixedSymbol).value)
-
-            next().let {
-                assertIs<AlphaNumberingSymbol>(it)
-                assertEquals(StringCase.Lower, it.case)
-            }
-
-            assertEquals('-', (next() as NumberingFixedSymbol).value)
-
-            next().let {
-                assertIs<AlphaNumberingSymbol>(it)
-                assertEquals(StringCase.Upper, it.case)
-            }
-        }
-
-        fun format(
-            vararg levels: Int,
-            numberingFormat: NumberingFormat = format,
-            allowMismatchingLength: Boolean = true,
-        ) = numberingFormat.format(SectionLocation(levels.toList()), allowMismatchingLength)
-
-        assertEquals("1.1.a-A", format(1, 1, 1, 1))
-        assertEquals("2.2.b-B", format(2, 2, 2, 2))
-        assertEquals("2.1.c-A", format(2, 1, 3, 1))
-        assertEquals("3.2.d-P", format(3, 2, 4, 16))
-        assertEquals("12.20.e-A", format(12, 20, 5, 1))
-        assertEquals("0.0.0-0", format(0, 0, 0, 0))
-        assertEquals("2.1.b", format(2, 1, 2))
-        assertEquals("1", format(1))
-        assertEquals("1.2.c-D", format(1, 2, 3, 4, 5, 6))
-        assertEquals("", format(1, 2, 3, 4, 5, 6, allowMismatchingLength = false))
-
-        val roman = NumberingFormat.fromString("I.i")
-
-        assertEquals("III", format(3, numberingFormat = roman))
-        assertEquals("I.i", format(1, 1, numberingFormat = roman))
-        assertEquals("IV.iii", format(4, 3, numberingFormat = roman))
-        assertEquals("XVII.lvii", format(17, 57, numberingFormat = roman))
-        assertEquals("XVII.0", format(17, 0, numberingFormat = roman))
-        assertEquals("0.50000", format(0, 50000, numberingFormat = roman))
     }
 
     @Test

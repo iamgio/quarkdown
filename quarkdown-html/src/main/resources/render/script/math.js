@@ -4,7 +4,7 @@ preRenderingExecutionQueue.push(() => {
     formulas.forEach((formula) => {
         const isBlock = formula.dataset.block === '';
         const math = formula.textContent;
-        formula.outerHTML = katex.renderToString(math, {
+        formula.innerHTML = katex.renderToString(math, {
             throwOnError: false,
             displayMode: isBlock,
             macros: texMacros || {},
