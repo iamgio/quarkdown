@@ -109,10 +109,18 @@ class NumberingFormatTest {
     }
 
     @Test
-    fun `roman numeral formatting with zero values`() {
+    fun `roman numeral formatting with unallowed values`() {
         val roman = NumberingFormat.fromString("I.i")
 
         assertEquals("XVII.0", roman.format(17, 0))
         assertEquals("0.50000", roman.format(0, 50000))
+    }
+
+    @Test
+    fun `trailing fixed symbol`() {
+        val format = NumberingFormat.fromString("(1.1)")
+
+        assertEquals("(2.3)", format.format(2, 3))
+        assertEquals("(1", format.format(1))
     }
 }

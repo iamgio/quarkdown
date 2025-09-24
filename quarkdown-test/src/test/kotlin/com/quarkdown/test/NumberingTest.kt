@@ -419,7 +419,7 @@ class NumberingTest {
         execute(
             """
             .numbering
-                - equations: 1
+                - equations: (1)
             
             $ E=mc^2 $
             
@@ -430,8 +430,8 @@ class NumberingTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<formula data-block=\"\" data-location=\"1\">E=mc^2</formula>" +
-                    "<formula data-block=\"\" data-location=\"2\">E=mc^2</formula>",
+                "<formula data-block=\"\" data-location=\"(1)\">E=mc^2</formula>" +
+                    "<formula data-block=\"\" data-location=\"(2)\">E=mc^2</formula>",
                 it,
             )
         }

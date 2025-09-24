@@ -59,8 +59,13 @@ data class NumberingFormat(
      * Converts the numbering format into a string.
      * For example, the [NumberingFormat] `1.A.a` would format the levels `1, 1, 0` as `2.B.a`.
      *
-     * In case [SectionLocation.levels] and [symbols] have different lengths, the output will be truncated to the shortest of the two:
+     * In case [SectionLocation.levels] and [symbols] have different lengths, (i.e. [SectionLocation.depth] is different from [accuracy]),
+     * the output will be truncated to the shortest of the two:
      * for example, `1.A.a` formats the levels `1, 1, 0, 0` as `2.B.a`, and the levels `1, 1` as `2.B`.
+     *
+     * In case depth is less than accuracy, trailing fixed symbols are ignored.
+     * For example, the format `(1.1)` will format correctly the levels `1, 2` as `(1.2)`,
+     * but `1` will be wrongly truncated to `(1`.
      *
      * @param location location to format.
      * For example, when it comes to numbering headings, the level `[1, 1, 0]` correspond to:
@@ -87,10 +92,11 @@ data class NumberingFormat(
         }
 
         val levels = location.levels.iterator()
+        val builder = StringBuilder()
 
-        return symbols.joinToString(separator = "") { symbol ->
-            // Case levels.length < symbols.length: ignore the remaining symbols.
-            if (!levels.hasNext()) return@joinToString ""
+        for (symbol in symbols) {
+            // Case levels.length < symbols.length: ignore the remaining symbols, except if accuracy and depth match.
+            if (!levels.hasNext() && accuracy != location.depth) break
 
             // Appending the corresponding symbol.
             when (symbol) {
@@ -101,8 +107,10 @@ data class NumberingFormat(
                 }
                 // Fixed symbols are directly appended as-is.
                 is NumberingFixedSymbol -> symbol.value.toString()
-            }
+            }.let(builder::append)
         }
+
+        return builder.toString()
     }
 
     /**
