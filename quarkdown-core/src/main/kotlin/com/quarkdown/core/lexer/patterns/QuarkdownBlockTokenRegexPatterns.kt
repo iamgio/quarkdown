@@ -41,13 +41,19 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             name = "MultilineMath",
             wrap = ::MultilineMathToken,
             regex =
-                "^ {0,3}(\\\${3,})((.|\\s)+?)(\\\${3,})"
-                    .toRegex(),
+                RegexBuilder("^ {0,3}header((.|\\s)+?)fencesend[ \\t]*$")
+                    .withReference("header", "fencesstart[ \\t]*customid?[ \\t]*$")
+                    .withReference("fencesstart", "\\\${3,}")
+                    .withReference("fencesend", "\\\${3,}")
+                    .withReference("customid", PatternHelpers.customId("multilinemath"))
+                    .build(),
+            groupNames = listOf("multilinemathcustomid"),
         )
     }
 
     /**
-     * Fenced content within spaced dollar signs on the same line.
+     * Fenced content within spaced dollar signs on the same line,
+     * with optional custom ID for cross-referencing.
      * @see OnelineMathToken
      */
     val onelineMath by lazy {
@@ -55,9 +61,11 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             name = "OnelineMath",
             wrap = ::OnelineMathToken,
             regex =
-                RegexBuilder("^ {0,3}math\\s*\$")
+                RegexBuilder("^ {0,3}math[ \\t]*customid?[ \\t]*$")
                     .withReference("math", ONELINE_MATH_HELPER)
+                    .withReference("customid", PatternHelpers.customId("onelinemath"))
                     .build(),
+            groupNames = listOf("onelinemathcustomid"),
         )
     }
 

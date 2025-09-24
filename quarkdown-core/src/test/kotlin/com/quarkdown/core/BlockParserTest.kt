@@ -259,7 +259,13 @@ class BlockParserTest {
         repeat(3) {
             assertEquals("Math expression", nodes.next().expression)
         }
+
         assertEquals("Line 1\nLine 2", nodes.next().expression)
+
+        with(nodes.next()) {
+            assertEquals("Line 1\nLine 2", expression)
+            assertEquals("custom-id", referenceId)
+        }
     }
 
     @Test
@@ -268,6 +274,11 @@ class BlockParserTest {
 
         repeat(2) {
             assertEquals("Math expression", nodes.next().expression)
+        }
+
+        with(nodes.next()) {
+            assertEquals("Math expression", expression)
+            assertEquals("custom-id", referenceId)
         }
     }
 

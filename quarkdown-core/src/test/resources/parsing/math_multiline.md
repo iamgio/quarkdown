@@ -21,3 +21,8 @@ $$$
 Line 1
 Line 2
 $$$
+
+$$$ {#custom-id}
+Line 1
+Line 2
+$$$
