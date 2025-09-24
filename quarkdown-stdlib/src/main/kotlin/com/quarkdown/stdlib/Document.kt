@@ -388,6 +388,7 @@ fun theme(
  * - `headings`, used for headings (titles) and [tableOfContents] entries;
  * - `figures`, used for captioned images;
  * - `tables`, used for captioned tables;
+ * - `equations`, used for math blocks;
  * - `code`, used for code blocks;
  * - `footnotes`, used for footnotes and references to them.
  * Any other key can be addressed by custom elements (see [numbered]).
@@ -411,6 +412,7 @@ fun numbering(
             headings = formats["headings"]?.let(::parse),
             figures = formats["figures"]?.let(::parse),
             tables = formats["tables"]?.let(::parse),
+            math = formats["equations"]?.let(::parse),
             codeBlocks = formats["code"]?.let(::parse),
             footnotes = formats["footnotes"]?.let(::parse),
             extra = formats.map { (key, value) -> key to parse(value) }.toMap(),

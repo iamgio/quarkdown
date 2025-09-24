@@ -415,6 +415,29 @@ class NumberingTest {
     }
 
     @Test
+    fun `math numbering`() {
+        execute(
+            """
+            .numbering
+                - equations: 1
+            
+            $ E=mc^2 $
+            
+            $$$
+            E=mc^2
+            $$$
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<formula data-block=\"\" data-location=\"1\">E=mc^2</formula>" +
+                    "<formula data-block=\"\" data-location=\"2\">E=mc^2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `code block numbering`() {
         execute(
             """

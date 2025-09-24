@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.numbering.DocumentNumbering
@@ -53,6 +54,7 @@ class LocationAwareLabelStorerHook(
         updateHeadingLabels(iterator)
         updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
         updateLabels<Table>(DocumentNumbering::tables, iterator)
+        updateLabels<Math>(DocumentNumbering::math, iterator)
         updateLabels<Code>(DocumentNumbering::codeBlocks, iterator)
 
         // Updates the labels of Numbered nodes, which are grouped by their key.

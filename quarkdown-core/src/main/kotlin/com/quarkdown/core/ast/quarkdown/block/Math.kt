@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -11,6 +12,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class Math(
     val expression: String,
     override val referenceId: String? = null,
-) : CrossReferenceableNode {
+) : LocationTrackableNode,
+    CrossReferenceableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

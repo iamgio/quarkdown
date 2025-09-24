@@ -311,6 +311,33 @@ class CrossReferenceTest {
     }
 
     @Test
+    fun `numbered references (math)`() {
+        execute(
+            """
+            .numbering
+                - equations: 1
+                
+            See .ref {my-math} and .ref {my-other-math}.
+            
+            $ E = mc^2 $ {#my-math}
+            
+            $$$ {#my-other-math}
+            E = mc^2
+            $$$
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>" +
+                    "<formula data-block=\"\" data-location=\"1\">E = mc^2</formula>" +
+                    "<formula data-block=\"\" data-location=\"2\">E = mc^2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `reference before definition (code block)`() {
         execute(
             """

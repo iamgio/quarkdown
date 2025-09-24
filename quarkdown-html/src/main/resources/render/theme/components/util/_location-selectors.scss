@@ -9,3 +9,7 @@ $location-element: [data-location];
 // Selector for elements that display location as a prefix instead of in a caption,
 // such as headings and list items.
 $location-heading: "#{$location-element}:is(#{$headings}, li)";
+
+// Selector for math elements that can contain location information.
+// The location is displayed differently to other elements.
+$location-math: "formula#{$location-element}";
