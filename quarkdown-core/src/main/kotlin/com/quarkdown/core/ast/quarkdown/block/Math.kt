@@ -6,6 +6,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
  * A math (TeX) block.
+ *
+ * A math block can be cross-referenced and can be numbered, as long as it has a [referenceId].
  * @param expression expression content
  * @param referenceId optional reference id for cross-referencing via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  */
