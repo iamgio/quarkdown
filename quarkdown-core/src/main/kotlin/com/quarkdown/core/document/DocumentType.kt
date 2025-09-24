@@ -21,7 +21,13 @@ enum class DocumentType(
      * A document whose rendered content is not altered by the post-rendering stage.
      * Plain Markdown is often used as plain (e.g. READMEs).
      */
-    PLAIN(PageOrientation.PORTRAIT),
+    PLAIN(
+        PageOrientation.PORTRAIT,
+        defaultNumbering =
+            DocumentNumbering(
+                math = NumberingFormat.fromString("(1)"),
+            ),
+    ),
 
     /**
      * A document that is split into pages of mostly text content: books, articles, papers, etc.
