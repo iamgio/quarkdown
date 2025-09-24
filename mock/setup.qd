@@ -4,6 +4,9 @@
 .pageformat borderbottom:{1px} bordercolor:{grey}
 .include {paper}
 
+.numbering
+    - equations: (1)
+
 .function {conditionalpagebreak}
 	ontype:
 	.if {.doctype::equals {.ontype}}
