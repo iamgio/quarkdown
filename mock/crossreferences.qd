@@ -1,0 +1,24 @@
+# Cross-references {#cross-references}
+
+.ref {cross-references} shows various examples of cross-references.
+For instance, the Quarkdown icon shown in .ref {qd-icon} features a circular design.
+
+![Quarkdown icon](images/icon.svg "The Quarkdown icon") {#qd-icon}
+
+In mathematics, a circle with center at $ (a, b) $ and radius $ r $ is defined by .ref {circle-eq}:
+
+$ (x - a)^2 + (y - b)^2 = r^2 $ {#circle-eq}
+
+.ref {circle-eq} is a special case of the more general equation .ref {ellipse-eq}, which defines an ellipse.
+
+$ \frac{(x - a)^2}{r_x^2} + \frac{(y - b)^2}{r_y^2} = 1 $ {#ellipse-eq}
+
+An ellipse is not a polygon. .ref {polygons} shows polygons and their properties.
+
+| Polygon       | Sides | Internal angle sum |
+|---------------|-------|--------------------|
+| Triangle      | 3     | 180°               |
+| Quadrilateral | 4     | 360°               |
+| Pentagon      | 5     | 540°               |
+| Hexagon       | 6     | 720°               |
+{#polygons}
