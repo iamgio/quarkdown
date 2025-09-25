@@ -5,14 +5,19 @@
 .code lang:{java}
 	.read {code/Wrapper.java}
 
-#### Focus
+#### With caption
 
-.code lang:{java} focus:{4..6}
+.code lang:{java} caption:{A wrapper class}
 	.read {code/Wrapper.java}
 
 <<<
 
-#### No line numbers
+#### Focused
+
+.code lang:{java} focus:{4..6}
+	.read {code/Wrapper.java}
+
+#### Without line numbers
 
 .code lang:{java} linenumbers:{no}
 	.read {code/Wrapper.java}
