@@ -62,7 +62,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             wrap = ::OnelineMathToken,
             regex =
                 RegexBuilder("^ {0,3}math[ \\t]*customid?[ \\t]*$")
-                    .withReference("math", ONELINE_MATH_HELPER)
+                    .withReference("math", PatternHelpers.ONELINE_MATH)
                     .withReference("customid", PatternHelpers.customId("onelinemath"))
                     .build(),
             groupNames = listOf("onelinemathcustomid"),
@@ -78,9 +78,3 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
         FunctionCallPatterns().blockFunctionCall
     }
 }
-
-/**
- * Pattern of one-line fenced content between two dollar signs.
- * The spacing between the dollar signs and the inner content must be of one unit.
- */
-const val ONELINE_MATH_HELPER = "\\\$[ \\t](.+?)(?<![ \\t])[ \\t]\\\$"

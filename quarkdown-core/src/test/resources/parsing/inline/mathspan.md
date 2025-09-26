@@ -15,3 +15,5 @@ Text,$ Math expression $
 Text$ Not math expression $ text
 
 $ Math $expression $ text
+
+$ Math $ abc $ expression $

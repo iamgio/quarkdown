@@ -276,6 +276,9 @@ class BlockParserTest {
             assertEquals("Math expression", nodes.next().expression)
         }
 
+        assertEquals($$"Math $expression", nodes.next().expression)
+        assertEquals("Math expression$", nodes.next().expression)
+
         with(nodes.next()) {
             assertEquals("Math expression", expression)
             assertEquals("custom-id", referenceId)

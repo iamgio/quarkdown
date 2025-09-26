@@ -15,7 +15,22 @@ internal object PatternHelpers {
      */
     const val DELIMITED_TITLE = """"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)"""
 
-    /** Comments */
+    /**
+     * Pattern of one-line fenced content between two dollar signs,
+     * which is used for [com.quarkdown.core.lexer.tokens.OnelineMathToken] and [com.quarkdown.core.lexer.tokens.InlineMathToken]
+     * The spacing between the dollar signs and the inner content must be of one unit.
+     *
+     * Inner dollar signs are included in the content as long as they are not adjacent to whitespace or non-word characters.
+     */
+    const val ONELINE_MATH =
+        // Starting delimiter.
+        "\\$[ \\t]" +
+            // Ungreedy content: stop at the first delimiter wrapped by whitespace.
+            "((?:[^$\\n]|[^\\s]\\$|\\$[^\\s])+?)" +
+            // Ending delimiter.
+            "(?<![ \\t])[ \\t]\\$"
+
+    /** Comments. */
     val COMMENT = "<!--(-?>|[\\s\\S]*?-->)".toRegex()
 
     /**
