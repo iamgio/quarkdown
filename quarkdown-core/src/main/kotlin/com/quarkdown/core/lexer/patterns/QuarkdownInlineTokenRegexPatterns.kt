@@ -24,8 +24,8 @@ class QuarkdownInlineTokenRegexPatterns : BaseMarkdownInlineTokenRegexPatterns()
             name = "InlineMath",
             wrap = ::InlineMathToken,
             regex =
-                RegexBuilder("(?<=^|\\s|\\W)math(?=\$|\\s|\\W)")
-                    .withReference("math", ONELINE_MATH_HELPER)
+                RegexBuilder("(?<=^|\\s|\\W)math(?=$|\\s|\\W)")
+                    .withReference("math", PatternHelpers.ONELINE_MATH)
                     .build(),
         )
     }

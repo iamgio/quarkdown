@@ -5,9 +5,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for TeX integration.
+ * Tests for math nodes and TeX integration.
  */
-class TexTest {
+class MathTest {
     @Test
     fun `inline math`() {
         execute("Hello $ \\frac {x} {2} $") {
@@ -19,10 +19,31 @@ class TexTest {
     }
 
     @Test
+    fun `multiple inline math in the same paragraph`() {
+        execute("$ \\frac {x} {2} $ and $ \\sqrt {x + 1} $") {
+            assertEquals(
+                "<p><formula>\\frac {x} {2}</formula> and <formula>\\sqrt {x + 1}</formula></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `one-line block math`() {
         execute("$ \\frac {x} {2} $") {
             assertEquals(
                 "<formula data-block=\"\">\\frac {x} {2}</formula>",
+                it,
+            )
+            assertEquals(0, documentInfo.tex.macros.size)
+        }
+    }
+
+    @Test
+    fun `one-line block math with inner dollar sign`() {
+        execute("$ \\frac {x} {2}$ $") {
+            assertEquals(
+                "<formula data-block=\"\">\\frac {x} {2}$</formula>",
                 it,
             )
             assertEquals(0, documentInfo.tex.macros.size)

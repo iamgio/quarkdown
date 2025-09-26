@@ -522,6 +522,9 @@ class InlineParserTest {
         repeat(7) {
             assertEquals("Math expression", nodes.next().expression)
         }
-        assertEquals("Math \$expression", nodes.next().expression)
+        assertEquals($$"Math $expression", nodes.next().expression)
+        assertEquals("Math", nodes.next().expression)
+        assertEquals("expression", nodes.next().expression)
+        assertFalse(nodes.hasNext())
     }
 }
