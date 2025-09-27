@@ -60,8 +60,7 @@ class CreateProjectCommand : CliktCommand("create") {
         .enum<DocumentType> { it.quarkdownName }
         .prompt(
             "Document type (${DocumentType.entries.joinToString("/") { it.quarkdownName }})",
-            default = DocumentType.PAGED,
-            showDefault = false,
+            default = DocumentType.PLAIN,
         )
 
     private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
