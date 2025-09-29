@@ -40,6 +40,7 @@ val Reference: Module =
  *   |--------|--------|
  *   | Cell   | Cell   |
  *   {#id}
+ *   ```
  *
  * - Code blocks
  *
