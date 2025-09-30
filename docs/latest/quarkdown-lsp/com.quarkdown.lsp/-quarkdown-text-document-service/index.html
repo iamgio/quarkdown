@@ -1,0 +1,849 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>QuarkdownTextDocumentService</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.10.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-lsp/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-lsp/main" data-filter=":quarkdown-lsp/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-lsp::com.quarkdown.lsp/QuarkdownTextDocumentService///PointingToDeclaration//-248931646">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-lsp</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.lsp</a><span class="delimiter">/</span><span class="current">QuarkdownTextDocumentService</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Quarkdown</span><wbr><span>Text</span><wbr><span>Document</span><wbr><span><span>Service</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">QuarkdownTextDocumentService</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">server<span class="token operator">: </span><a href="../-quarkdown-language-server/index.html">QuarkdownLanguageServer</a><span class="token punctuation">, </span></span><span class="parameter ">completionSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.completion/-completion-supplier/index.html">CompletionSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">tokensSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.highlight/-semantic-tokens-supplier/index.html">SemanticTokensSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">hoverSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.hover/-hover-supplier/index.html">HoverSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">diagnosticsSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.diagnostics/-diagnostics-supplier/index.html">DiagnosticsSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">formattingSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.ontype/-on-type-formatting-edit-supplier/index.html">OnTypeFormattingEditSupplier</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.eclipse.lsp4j.services/TextDocumentService///PointingToDeclaration/">TextDocumentService</span></div><p class="paragraph">Service for handling text document operations in the Quarkdown Language Server.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-289826332%2FConstructors%2F-248931646" anchor-label="QuarkdownTextDocumentService" id="-289826332%2FConstructors%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-quarkdown-text-document-service.html"><span>Quarkdown</span><wbr><span>Text</span><wbr><span>Document</span><wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-289826332%2FConstructors%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">server<span class="token operator">: </span><a href="../-quarkdown-language-server/index.html">QuarkdownLanguageServer</a><span class="token punctuation">, </span></span><span class="parameter ">completionSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.completion/-completion-supplier/index.html">CompletionSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">tokensSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.highlight/-semantic-tokens-supplier/index.html">SemanticTokensSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">hoverSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.hover/-hover-supplier/index.html">HoverSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">diagnosticsSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.diagnostics/-diagnostics-supplier/index.html">DiagnosticsSupplier</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">formattingSuppliers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.lsp.ontype/-on-type-formatting-edit-supplier/index.html">OnTypeFormattingEditSupplier</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-793908460%2FFunctions%2F-248931646" anchor-label="callHierarchyIncomingCalls" id="-793908460%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-793908460%2FFunctions%2F-248931646"><span>call</span><wbr><span>Hierarchy</span><wbr><span>Incoming</span><wbr><span><span>Calls</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-793908460%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-793908460%2FFunctions%2F-248931646"><span class="token function">callHierarchyIncomingCalls</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyIncomingCallsParams///PointingToDeclaration/">CallHierarchyIncomingCallsParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyIncomingCall///PointingToDeclaration/">CallHierarchyIncomingCall</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-584215520%2FFunctions%2F-248931646" anchor-label="callHierarchyOutgoingCalls" id="-584215520%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-584215520%2FFunctions%2F-248931646"><span>call</span><wbr><span>Hierarchy</span><wbr><span>Outgoing</span><wbr><span><span>Calls</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-584215520%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-584215520%2FFunctions%2F-248931646"><span class="token function">callHierarchyOutgoingCalls</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyOutgoingCallsParams///PointingToDeclaration/">CallHierarchyOutgoingCallsParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyOutgoingCall///PointingToDeclaration/">CallHierarchyOutgoingCall</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="842502462%2FFunctions%2F-248931646" anchor-label="codeAction" id="842502462%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#842502462%2FFunctions%2F-248931646"><span>code</span><wbr><span><span>Action</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="842502462%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#842502462%2FFunctions%2F-248931646"><span class="token function">codeAction</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CodeActionParams///PointingToDeclaration/">CodeActionParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/Command///PointingToDeclaration/">Command</span><span class="token punctuation">, </span><span data-unresolved-link="org.eclipse.lsp4j/CodeAction///PointingToDeclaration/">CodeAction</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1299255314%2FFunctions%2F-248931646" anchor-label="codeLens" id="-1299255314%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1299255314%2FFunctions%2F-248931646"><span>code</span><wbr><span><span>Lens</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1299255314%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1299255314%2FFunctions%2F-248931646"><span class="token function">codeLens</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CodeLensParams///PointingToDeclaration/">CodeLensParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/CodeLens///PointingToDeclaration/">CodeLens</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1258603252%2FFunctions%2F-248931646" anchor-label="colorPresentation" id="-1258603252%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1258603252%2FFunctions%2F-248931646"><span>color</span><wbr><span><span>Presentation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1258603252%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1258603252%2FFunctions%2F-248931646"><span class="token function">colorPresentation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/ColorPresentationParams///PointingToDeclaration/">ColorPresentationParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/ColorPresentation///PointingToDeclaration/">ColorPresentation</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1723931214%2FFunctions%2F-248931646" anchor-label="completion" id="1723931214%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="completion.html"><span><span>completion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1723931214%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="completion.html"><span class="token function">completion</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">params<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CompletionParams///PointingToDeclaration/">CompletionParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../quarkdown-lsp/com.quarkdown.lsp/-completion-result/index.html">CompletionResult</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="717711596%2FFunctions%2F-248931646" anchor-label="declaration" id="717711596%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#717711596%2FFunctions%2F-248931646"><span><span>declaration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="717711596%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#717711596%2FFunctions%2F-248931646"><span class="token function">declaration</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DeclarationParams///PointingToDeclaration/">DeclarationParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/Location///PointingToDeclaration/">Location</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/LocationLink///PointingToDeclaration/">LocationLink</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2136488862%2FFunctions%2F-248931646" anchor-label="definition" id="2136488862%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2136488862%2FFunctions%2F-248931646"><span><span>definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2136488862%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2136488862%2FFunctions%2F-248931646"><span class="token function">definition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DefinitionParams///PointingToDeclaration/">DefinitionParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/Location///PointingToDeclaration/">Location</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/LocationLink///PointingToDeclaration/">LocationLink</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="98817883%2FFunctions%2F-248931646" anchor-label="diagnostic" id="98817883%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#98817883%2FFunctions%2F-248931646"><span><span>diagnostic</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="98817883%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#98817883%2FFunctions%2F-248931646"><span class="token function">diagnostic</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentDiagnosticParams///PointingToDeclaration/">DocumentDiagnosticParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/DocumentDiagnosticReport///PointingToDeclaration/">DocumentDiagnosticReport</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56694534%2FFunctions%2F-248931646" anchor-label="didChange" id="56694534%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="did-change.html"><span>did</span><wbr><span><span>Change</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56694534%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="did-change.html"><span class="token function">didChange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">didChangeTextDocumentParams<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DidChangeTextDocumentParams///PointingToDeclaration/">DidChangeTextDocumentParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1566505420%2FFunctions%2F-248931646" anchor-label="didClose" id="1566505420%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="did-close.html"><span>did</span><wbr><span><span>Close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1566505420%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="did-close.html"><span class="token function">didClose</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">didCloseTextDocumentParams<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DidCloseTextDocumentParams///PointingToDeclaration/">DidCloseTextDocumentParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-152820858%2FFunctions%2F-248931646" anchor-label="didOpen" id="-152820858%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="did-open.html"><span>did</span><wbr><span><span>Open</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-152820858%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="did-open.html"><span class="token function">didOpen</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">didOpenTextDocumentParams<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DidOpenTextDocumentParams///PointingToDeclaration/">DidOpenTextDocumentParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-252039322%2FFunctions%2F-248931646" anchor-label="didSave" id="-252039322%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="did-save.html"><span>did</span><wbr><span><span>Save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-252039322%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="did-save.html"><span class="token function">didSave</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">didSaveTextDocumentParams<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DidSaveTextDocumentParams///PointingToDeclaration/">DidSaveTextDocumentParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-531673812%2FFunctions%2F-248931646" anchor-label="documentColor" id="-531673812%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-531673812%2FFunctions%2F-248931646"><span>document</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-531673812%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-531673812%2FFunctions%2F-248931646"><span class="token function">documentColor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentColorParams///PointingToDeclaration/">DocumentColorParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/ColorInformation///PointingToDeclaration/">ColorInformation</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1965406324%2FFunctions%2F-248931646" anchor-label="documentHighlight" id="-1965406324%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1965406324%2FFunctions%2F-248931646"><span>document</span><wbr><span><span>Highlight</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1965406324%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1965406324%2FFunctions%2F-248931646"><span class="token function">documentHighlight</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentHighlightParams///PointingToDeclaration/">DocumentHighlightParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentHighlight///PointingToDeclaration/">DocumentHighlight</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1317407898%2FFunctions%2F-248931646" anchor-label="documentLink" id="1317407898%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1317407898%2FFunctions%2F-248931646"><span>document</span><wbr><span><span>Link</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1317407898%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1317407898%2FFunctions%2F-248931646"><span class="token function">documentLink</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentLinkParams///PointingToDeclaration/">DocumentLinkParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/DocumentLink///PointingToDeclaration/">DocumentLink</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-350575420%2FFunctions%2F-248931646" anchor-label="documentLinkResolve" id="-350575420%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-350575420%2FFunctions%2F-248931646"><span>document</span><wbr><span>Link</span><wbr><span><span>Resolve</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-350575420%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-350575420%2FFunctions%2F-248931646"><span class="token function">documentLinkResolve</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentLink///PointingToDeclaration/">DocumentLink</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/DocumentLink///PointingToDeclaration/">DocumentLink</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1493164130%2FFunctions%2F-248931646" anchor-label="documentSymbol" id="-1493164130%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1493164130%2FFunctions%2F-248931646"><span>document</span><wbr><span><span>Symbol</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1493164130%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1493164130%2FFunctions%2F-248931646"><span class="token function">documentSymbol</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentSymbolParams///PointingToDeclaration/">DocumentSymbolParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SymbolInformation///PointingToDeclaration/">SymbolInformation</span><span class="token punctuation">, </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentSymbol///PointingToDeclaration/">DocumentSymbol</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1424732069%2FFunctions%2F-248931646" anchor-label="foldingRange" id="-1424732069%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1424732069%2FFunctions%2F-248931646"><span>folding</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1424732069%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1424732069%2FFunctions%2F-248931646"><span class="token function">foldingRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/FoldingRangeRequestParams///PointingToDeclaration/">FoldingRangeRequestParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/FoldingRange///PointingToDeclaration/">FoldingRange</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1809362977%2FFunctions%2F-248931646" anchor-label="formatting" id="-1809362977%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1809362977%2FFunctions%2F-248931646"><span><span>formatting</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1809362977%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1809362977%2FFunctions%2F-248931646"><span class="token function">formatting</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentFormattingParams///PointingToDeclaration/">DocumentFormattingParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/TextEdit///PointingToDeclaration/">TextEdit</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1941157906%2FFunctions%2F-248931646" anchor-label="hover" id="-1941157906%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hover.html"><span><span>hover</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1941157906%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="hover.html"><span class="token function">hover</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">params<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/HoverParams///PointingToDeclaration/">HoverParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/Hover///PointingToDeclaration/">Hover</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1119219168%2FFunctions%2F-248931646" anchor-label="implementation" id="1119219168%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1119219168%2FFunctions%2F-248931646"><span><span>implementation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1119219168%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1119219168%2FFunctions%2F-248931646"><span class="token function">implementation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/ImplementationParams///PointingToDeclaration/">ImplementationParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/Location///PointingToDeclaration/">Location</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/LocationLink///PointingToDeclaration/">LocationLink</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1687931028%2FFunctions%2F-248931646" anchor-label="inlayHint" id="-1687931028%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1687931028%2FFunctions%2F-248931646"><span>inlay</span><wbr><span><span>Hint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1687931028%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1687931028%2FFunctions%2F-248931646"><span class="token function">inlayHint</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/InlayHintParams///PointingToDeclaration/">InlayHintParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/InlayHint///PointingToDeclaration/">InlayHint</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-814912340%2FFunctions%2F-248931646" anchor-label="inlineValue" id="-814912340%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-814912340%2FFunctions%2F-248931646"><span>inline</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-814912340%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-814912340%2FFunctions%2F-248931646"><span class="token function">inlineValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/InlineValueParams///PointingToDeclaration/">InlineValueParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/InlineValue///PointingToDeclaration/">InlineValue</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1859535672%2FFunctions%2F-248931646" anchor-label="linkedEditingRange" id="-1859535672%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1859535672%2FFunctions%2F-248931646"><span>linked</span><wbr><span>Editing</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1859535672%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1859535672%2FFunctions%2F-248931646"><span class="token function">linkedEditingRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/LinkedEditingRangeParams///PointingToDeclaration/">LinkedEditingRangeParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/LinkedEditingRanges///PointingToDeclaration/">LinkedEditingRanges</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="95296908%2FFunctions%2F-248931646" anchor-label="moniker" id="95296908%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#95296908%2FFunctions%2F-248931646"><span><span>moniker</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="95296908%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#95296908%2FFunctions%2F-248931646"><span class="token function">moniker</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/MonikerParams///PointingToDeclaration/">MonikerParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/Moniker///PointingToDeclaration/">Moniker</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-154331985%2FFunctions%2F-248931646" anchor-label="onTypeFormatting" id="-154331985%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="on-type-formatting.html"><span>on</span><wbr><span>Type</span><wbr><span><span>Formatting</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-154331985%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="on-type-formatting.html"><span class="token function">onTypeFormatting</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">params<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentOnTypeFormattingParams///PointingToDeclaration/">DocumentOnTypeFormattingParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/TextEdit///PointingToDeclaration/">TextEdit</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-872820092%2FFunctions%2F-248931646" anchor-label="prepareCallHierarchy" id="-872820092%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-872820092%2FFunctions%2F-248931646"><span>prepare</span><wbr><span>Call</span><wbr><span><span>Hierarchy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-872820092%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-872820092%2FFunctions%2F-248931646"><span class="token function">prepareCallHierarchy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyPrepareParams///PointingToDeclaration/">CallHierarchyPrepareParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CallHierarchyItem///PointingToDeclaration/">CallHierarchyItem</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1329874548%2FFunctions%2F-248931646" anchor-label="prepareRename" id="-1329874548%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1329874548%2FFunctions%2F-248931646"><span>prepare</span><wbr><span><span>Rename</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1329874548%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1329874548%2FFunctions%2F-248931646"><span class="token function">prepareRename</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/PrepareRenameParams///PointingToDeclaration/">PrepareRenameParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either3///PointingToDeclaration/">Either3</span><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/Range///PointingToDeclaration/">Range</span><span class="token punctuation">, </span><span data-unresolved-link="org.eclipse.lsp4j/PrepareRenameResult///PointingToDeclaration/">PrepareRenameResult</span><span class="token punctuation">, </span><span data-unresolved-link="org.eclipse.lsp4j/PrepareRenameDefaultBehavior///PointingToDeclaration/">PrepareRenameDefaultBehavior</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1570207492%2FFunctions%2F-248931646" anchor-label="prepareTypeHierarchy" id="1570207492%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1570207492%2FFunctions%2F-248931646"><span>prepare</span><wbr><span>Type</span><wbr><span><span>Hierarchy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1570207492%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1570207492%2FFunctions%2F-248931646"><span class="token function">prepareTypeHierarchy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchyPrepareParams///PointingToDeclaration/">TypeHierarchyPrepareParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchyItem///PointingToDeclaration/">TypeHierarchyItem</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1819908185%2FFunctions%2F-248931646" anchor-label="rangeFormatting" id="-1819908185%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1819908185%2FFunctions%2F-248931646"><span>range</span><wbr><span><span>Formatting</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1819908185%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1819908185%2FFunctions%2F-248931646"><span class="token function">rangeFormatting</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/DocumentRangeFormattingParams///PointingToDeclaration/">DocumentRangeFormattingParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/TextEdit///PointingToDeclaration/">TextEdit</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-775593969%2FFunctions%2F-248931646" anchor-label="references" id="-775593969%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-775593969%2FFunctions%2F-248931646"><span><span>references</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-775593969%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-775593969%2FFunctions%2F-248931646"><span class="token function">references</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/ReferenceParams///PointingToDeclaration/">ReferenceParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/Location///PointingToDeclaration/">Location</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1208477496%2FFunctions%2F-248931646" anchor-label="rename" id="-1208477496%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1208477496%2FFunctions%2F-248931646"><span><span>rename</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1208477496%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1208477496%2FFunctions%2F-248931646"><span class="token function">rename</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/RenameParams///PointingToDeclaration/">RenameParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/WorkspaceEdit///PointingToDeclaration/">WorkspaceEdit</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1245358370%2FFunctions%2F-248931646" anchor-label="resolveCodeAction" id="-1245358370%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1245358370%2FFunctions%2F-248931646"><span>resolve</span><wbr><span>Code</span><wbr><span><span>Action</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1245358370%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1245358370%2FFunctions%2F-248931646"><span class="token function">resolveCodeAction</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CodeAction///PointingToDeclaration/">CodeAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CodeAction///PointingToDeclaration/">CodeAction</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1099826830%2FFunctions%2F-248931646" anchor-label="resolveCodeLens" id="1099826830%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1099826830%2FFunctions%2F-248931646"><span>resolve</span><wbr><span>Code</span><wbr><span><span>Lens</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1099826830%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1099826830%2FFunctions%2F-248931646"><span class="token function">resolveCodeLens</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CodeLens///PointingToDeclaration/">CodeLens</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CodeLens///PointingToDeclaration/">CodeLens</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1475214396%2FFunctions%2F-248931646" anchor-label="resolveCompletionItem" id="-1475214396%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resolve-completion-item.html"><span>resolve</span><wbr><span>Completion</span><wbr><span><span>Item</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1475214396%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="resolve-completion-item.html"><span class="token function">resolveCompletionItem</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">unresolved<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/CompletionItem///PointingToDeclaration/">CompletionItem</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/CompletionItem///PointingToDeclaration/">CompletionItem</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="49557004%2FFunctions%2F-248931646" anchor-label="resolveInlayHint" id="49557004%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#49557004%2FFunctions%2F-248931646"><span>resolve</span><wbr><span>Inlay</span><wbr><span><span>Hint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="49557004%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#49557004%2FFunctions%2F-248931646"><span class="token function">resolveInlayHint</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/InlayHint///PointingToDeclaration/">InlayHint</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/InlayHint///PointingToDeclaration/">InlayHint</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="828901282%2FFunctions%2F-248931646" anchor-label="selectionRange" id="828901282%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#828901282%2FFunctions%2F-248931646"><span>selection</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="828901282%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#828901282%2FFunctions%2F-248931646"><span class="token function">selectionRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SelectionRangeParams///PointingToDeclaration/">SelectionRangeParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SelectionRange///PointingToDeclaration/">SelectionRange</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-281738505%2FFunctions%2F-248931646" anchor-label="semanticTokensFull" id="-281738505%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="semantic-tokens-full.html"><span>semantic</span><wbr><span>Tokens</span><wbr><span><span>Full</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-281738505%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="semantic-tokens-full.html"><span class="token function">semanticTokensFull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">params<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokensParams///PointingToDeclaration/">SemanticTokensParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokens///PointingToDeclaration/">SemanticTokens</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-99695011%2FFunctions%2F-248931646" anchor-label="semanticTokensFullDelta" id="-99695011%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-99695011%2FFunctions%2F-248931646"><span>semantic</span><wbr><span>Tokens</span><wbr><span>Full</span><wbr><span><span>Delta</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-99695011%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-99695011%2FFunctions%2F-248931646"><span class="token function">semanticTokensFullDelta</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokensDeltaParams///PointingToDeclaration/">SemanticTokensDeltaParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokens///PointingToDeclaration/">SemanticTokens</span><span class="token punctuation">, </span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokensDelta///PointingToDeclaration/">SemanticTokensDelta</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1325554100%2FFunctions%2F-248931646" anchor-label="semanticTokensRange" id="-1325554100%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1325554100%2FFunctions%2F-248931646"><span>semantic</span><wbr><span>Tokens</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1325554100%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1325554100%2FFunctions%2F-248931646"><span class="token function">semanticTokensRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokensRangeParams///PointingToDeclaration/">SemanticTokensRangeParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SemanticTokens///PointingToDeclaration/">SemanticTokens</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1426283276%2FFunctions%2F-248931646" anchor-label="signatureHelp" id="1426283276%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1426283276%2FFunctions%2F-248931646"><span>signature</span><wbr><span><span>Help</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1426283276%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1426283276%2FFunctions%2F-248931646"><span class="token function">signatureHelp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SignatureHelpParams///PointingToDeclaration/">SignatureHelpParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/SignatureHelp///PointingToDeclaration/">SignatureHelp</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="509859690%2FFunctions%2F-248931646" anchor-label="typeDefinition" id="509859690%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#509859690%2FFunctions%2F-248931646"><span>type</span><wbr><span><span>Definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="509859690%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#509859690%2FFunctions%2F-248931646"><span class="token function">typeDefinition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/TypeDefinitionParams///PointingToDeclaration/">TypeDefinitionParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j.jsonrpc.messages/Either///PointingToDeclaration/">Either</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/Location///PointingToDeclaration/">Location</span><span class="token operator">&gt;</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="org.eclipse.lsp4j/LocationLink///PointingToDeclaration/">LocationLink</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1188790868%2FFunctions%2F-248931646" anchor-label="typeHierarchySubtypes" id="-1188790868%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1188790868%2FFunctions%2F-248931646"><span>type</span><wbr><span>Hierarchy</span><wbr><span><span>Subtypes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1188790868%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1188790868%2FFunctions%2F-248931646"><span class="token function">typeHierarchySubtypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchySubtypesParams///PointingToDeclaration/">TypeHierarchySubtypesParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchyItem///PointingToDeclaration/">TypeHierarchyItem</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2111505996%2FFunctions%2F-248931646" anchor-label="typeHierarchySupertypes" id="2111505996%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2111505996%2FFunctions%2F-248931646"><span>type</span><wbr><span>Hierarchy</span><wbr><span><span>Supertypes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2111505996%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2111505996%2FFunctions%2F-248931646"><span class="token function">typeHierarchySupertypes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchySupertypesParams///PointingToDeclaration/">TypeHierarchySupertypesParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/TypeHierarchyItem///PointingToDeclaration/">TypeHierarchyItem</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-322998754%2FFunctions%2F-248931646" anchor-label="willSave" id="-322998754%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-322998754%2FFunctions%2F-248931646"><span>will</span><wbr><span><span>Save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-322998754%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-322998754%2FFunctions%2F-248931646"><span class="token function">willSave</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/WillSaveTextDocumentParams///PointingToDeclaration/">WillSaveTextDocumentParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1152456327%2FFunctions%2F-248931646" anchor-label="willSaveWaitUntil" id="-1152456327%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1152456327%2FFunctions%2F-248931646"><span>will</span><wbr><span>Save</span><wbr><span>Wait</span><wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1152456327%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1152456327%2FFunctions%2F-248931646"><span class="token function">willSaveWaitUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/WillSaveTextDocumentParams///PointingToDeclaration/">WillSaveTextDocumentParams</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/TextEdit///PointingToDeclaration/">TextEdit</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
