@@ -30,12 +30,14 @@
 4. [Comparison](#comparison)
 5. [Getting started](#getting-started)
     1. [Installation](#installation)
-    2. [Creating a project](#creating-a-project)
-    3. [Compiling](#compiling)
+    2. [Quickstart](#quickstart-)
+    3. [Creating a project](#creating-a-project)
+    4. [Compiling](#compiling)
 6. [Mock document](#mock-document)
 7. [Contributing](#contributing)
 8. [Sponsors](#sponsors)
 9. [Concept](#concept)
+10. [License](#license)
 
 &nbsp;
 
@@ -88,7 +90,8 @@ You can even create awesome libraries for everyone to use.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
-Combined with live preview, :zap: fast compilation speed and a powerful [VS Code extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode), Quarkdown simply gets the work done.
+Combined with live preview, :zap: fast compilation speed and a powerful [VS Code extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode), Quarkdown simply gets the work done,
+whether it's an academic paper, book, knowledge base or interactive presentation.
 
 &nbsp;
 
@@ -96,20 +99,16 @@ Combined with live preview, :zap: fast compilation speed and a powerful [VS Code
 <img src="https://raw.githubusercontent.com/quarkdown-labs/quarkdown-vscode/refs/heads/project-files/live-preview.gif" alt="Live preview" />
 </p>
 
-
-&nbsp;
-
-Check the [wiki](https://github.com/iamgio/quarkdown/wiki) to learn more about the language and its features.
-
 &nbsp;
 
 ---
 
-<h2 align="center">Check out the demo presentation <a href="https://iamgio.eu/quarkdown/demo" target="_blank">here</a></h3>
+<h2 align="center">Looking for something?</h2>
 <p align="center">
-Built with Quarkdown itself — <a href="demo/demo.qd" target="_blank"><strong>source code</strong></a>
-<br><br>
-<em>(Desktop view is suggested)</em>
+  <strong>
+    Check out the <a href="https://github.com/iamgio/quarkdown/wiki" target="_blank">wiki</a>
+  </strong>
+  to get started and learn more about the language and its features!
 </p>
 
 ---
@@ -134,18 +133,17 @@ Built with Quarkdown itself — <a href="demo/demo.qd" target="_blank"><strong>s
 # Targets
 
 - **HTML**
-  - :white_check_mark: Plain output (default)
-  - :white_check_mark: Slides <sup>via [reveal.js](https://revealjs.com)</sup>
-  - :white_check_mark: Paged (books, articles) <sup>via [paged.js](https://pagedjs.org)</sup>  
-    *Paged documents require a webserver to render in the browser. See the [`-p`](#options) option below.*
+  - :white_check_mark: Plain output - continuous flow like Notion/Obsidian.
+  - :white_check_mark: Slides <sup>via [reveal.js](https://revealjs.com)</sup> - check out the [demo presentation](https://iamgio.eu/quarkdown/demo)!
+  - :white_check_mark: Paged (books, articles) <sup>via [paged.js](https://pagedjs.org)</sup> - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock)!
 
 - **PDF**
   - :white_check_mark: All document types and features supported by HTML are also supported when exporting to PDF.
-  - Check the wiki's [PDF export](https://github.com/iamgio/quarkdown/wiki/pdf-export) page to learn more.
 
-The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-metadata) within the source itself:
-- `.doctype {slides}`
+The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-types) within the source itself:
+- `.doctype {plain}`
 - `.doctype {paged}`
+- `.doctype {slides}`
 
 # Comparison
 
@@ -277,9 +275,15 @@ Requirements:
 
 &nbsp;
 
+## Quickstart 🆕
+
+New user? You'll find **everything you need** in the **[Quickstart guide](https://github.com/iamgio/quarkdown/wiki/quickstart)** to bring life to your first document!
+
+&nbsp;
+
 ## Creating a project
 
-Running **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
+**`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
 to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
 
 For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
