@@ -133,15 +133,20 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 # Targets
 
 - **HTML**
-  - :white_check_mark: Plain output - continuous flow like Notion/Obsidian.
-  - :white_check_mark: Slides <sup>via [reveal.js](https://revealjs.com)</sup> - check out the [demo presentation](https://iamgio.eu/quarkdown/demo)!
-  - :white_check_mark: Paged (books, articles) <sup>via [paged.js](https://pagedjs.org)</sup> - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock)!
+  - [X] **Plain**  
+    Continuous flow like Notion/Obsidian, perfect for knowledge management.
+
+  - [X] **Paged** <sup>via [paged.js](https://pagedjs.org)</sup>  
+    Perfect for papers, articles and books - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock)!
+
+  - [X] **Slides** <sup>via [reveal.js](https://revealjs.com)</sup>  
+    Perfect for interactive presentations - check out the [demo presentation](https://iamgio.eu/quarkdown/demo)!
 
 - **PDF**
-  - :white_check_mark: All document types and features supported by HTML are also supported when exporting to PDF.
+  - [X] All document types and features supported by HTML are also supported when exporting to PDF.
 
 The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-types) within the source itself:
-- `.doctype {plain}`
+- `.doctype {plain}` (default)
 - `.doctype {paged}`
 - `.doctype {slides}`
 
