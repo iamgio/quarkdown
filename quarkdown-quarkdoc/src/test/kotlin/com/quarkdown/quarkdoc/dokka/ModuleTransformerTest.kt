@@ -1,6 +1,6 @@
 package com.quarkdown.quarkdoc.dokka
 
-import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
 import kotlin.test.Test
@@ -12,8 +12,8 @@ import kotlin.test.assertEquals
  */
 class ModuleTransformerTest :
     QuarkdocDokkaTest(
-        imports = listOf(MultiFunctionLibraryLoader::class, VoidValue::class),
-        stringImports = listOf("${MultiFunctionLibraryLoader::class.java.`package`.name}.Module"),
+        imports = listOf(QuarkdownModule::class, VoidValue::class),
+        stringImports = listOf(QuarkdownModule::class.java.packageName + ".*"),
     ) {
     @Test
     fun `two modules`() {
@@ -21,12 +21,12 @@ class ModuleTransformerTest :
             mapOf(
                 "M1.kt" to
                     """
-                    val Module1: Module = moduleOf(::aFunction)
+                    val Module1: QuarkdownModule = moduleOf(::aFunction)
                     fun aFunction() = VoidValue
                     """.trimIndent(),
                 "M2.kt" to
                     """
-                    val Module2: Module = moduleOf(::bFunction)
+                    val Module2: QuarkdownModule = moduleOf(::bFunction)
                     fun bFunction() = VoidValue
                     """.trimIndent(),
             )
@@ -47,12 +47,12 @@ class ModuleTransformerTest :
             mapOf(
                 "M1.kt" to
                     """
-                    val Module1: Module = moduleOf(::aFunction)
+                    val Module1: QuarkdownModule = moduleOf(::aFunction)
                     fun aFunction() = VoidValue
                     """.trimIndent(),
                 "M2.kt" to
                     """
-                    val Module2: Module = moduleOf(::bFunction)
+                    val Module2: QuarkdownModule = moduleOf(::bFunction)
                     fun bFunction() = VoidValue
                     """.trimIndent(),
                 "leftover.kt" to "object leftover {}",
@@ -73,7 +73,7 @@ class ModuleTransformerTest :
             (1..moduleCount).associate {
                 "M$it.kt" to
                     """
-                    val Module$it: Module = moduleOf(::someFunction$it)
+                    val Module$it: QuarkdownModule = moduleOf(::someFunction$it)
                     fun someFunction$it() = VoidValue
                     """.trimIndent()
             }
