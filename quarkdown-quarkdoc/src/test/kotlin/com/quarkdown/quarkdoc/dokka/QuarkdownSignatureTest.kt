@@ -1,6 +1,6 @@
 package com.quarkdown.quarkdoc.dokka
 
-import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.VoidValue
 import kotlin.test.Test
@@ -11,8 +11,8 @@ import kotlin.test.assertEquals
  */
 class QuarkdownSignatureTest :
     QuarkdocDokkaTest(
-        imports = listOf(MultiFunctionLibraryLoader::class, VoidValue::class, DynamicValue::class),
-        stringImports = listOf("${MultiFunctionLibraryLoader::class.java.`package`.name}.Module"),
+        imports = listOf(QuarkdownModule::class, VoidValue::class, DynamicValue::class),
+        stringImports = listOf(QuarkdownModule::class.java.packageName + ".*"),
     ) {
     /**
      * @param functionCode the code of the function to test. Its name must be equal to [functionName]
@@ -28,7 +28,7 @@ class QuarkdownSignatureTest :
             mapOf(
                 "TestModule.kt" to
                     """
-                    val TestModule: Module = moduleOf(::$functionName)
+                    val TestModule: QuarkdownModule = moduleOf(::$functionName)
                     $functionCode
                     """.trimIndent(),
             )

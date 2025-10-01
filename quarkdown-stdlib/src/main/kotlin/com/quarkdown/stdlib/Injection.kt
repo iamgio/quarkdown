@@ -1,8 +1,8 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Html
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.Value
@@ -12,7 +12,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * `Injection` stdlib module exporter.
  * This module handles code injection of different languages.
  */
-val Injection: Module =
+val Injection: QuarkdownModule =
     moduleOf(
         ::html,
         ::css,

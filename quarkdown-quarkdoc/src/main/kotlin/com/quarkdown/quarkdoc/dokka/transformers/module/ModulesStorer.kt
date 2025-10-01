@@ -1,17 +1,12 @@
 package com.quarkdown.quarkdoc.dokka.transformers.module
 
-import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocDocumentableReplacerTransformer
 import com.quarkdown.quarkdoc.dokka.util.isOfType
 import com.quarkdown.quarkdoc.dokka.util.sourcePaths
 import org.jetbrains.dokka.model.DProperty
 import org.jetbrains.dokka.model.GenericTypeConstructor
-import org.jetbrains.dokka.model.TypeAliased
 import org.jetbrains.dokka.plugability.DokkaContext
-
-// Cannot retrieve Module's class as it's typealiased.
-private const val MODULE_CLASS_NAME = "Module"
-private val MODULE_PACKAGE_NAME = MultiFunctionLibraryLoader::class.java.`package`.name
 
 /**
  * Transformer that, instead of performing transformations,
@@ -22,9 +17,8 @@ class ModulesStorer(
     context: DokkaContext,
 ) : QuarkdocDocumentableReplacerTransformer(context) {
     private fun isModuleDefinition(property: DProperty): Boolean {
-        val typeAlias = property.type as? TypeAliased ?: return false
-        val type = typeAlias.typeAlias as? GenericTypeConstructor ?: return false
-        return type.dri.isOfType(MODULE_PACKAGE_NAME, MODULE_CLASS_NAME)
+        val type = property.type as? GenericTypeConstructor ?: return false
+        return type.dri.isOfType<QuarkdownModule>()
     }
 
     override fun transformProperty(property: DProperty): AnyWithChanges<DProperty> {

@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -13,7 +13,7 @@ import com.quarkdown.core.function.value.OutputValue
  * `Dictionary` stdlib module exporter.
  * This module handles map-like dictionaries.
  */
-val Dictionary: Module =
+val Dictionary: QuarkdownModule =
     moduleOf(
         ::dictionary,
         ::dictionaryGet,

@@ -21,27 +21,27 @@ object Stdlib : LibraryExporter {
         get() =
             MultiFunctionLibraryLoader(name = "stdlib")
                 .load(
-                    Document +
-                        Layout +
-                        Text +
-                        Math +
-                        Logical +
-                        String +
-                        Collection +
-                        Dictionary +
-                        Optionality +
-                        Logger +
-                        Flow +
-                        TableComputation +
-                        Data +
-                        Localization +
-                        Library +
-                        Slides +
-                        Ecosystem +
-                        Injection +
-                        Mermaid +
-                        Reference +
-                        Bibliography,
+                    Document,
+                    Layout,
+                    Text,
+                    Math,
+                    Logical,
+                    String,
+                    Collection,
+                    Dictionary,
+                    Optionality,
+                    Logger,
+                    Flow,
+                    TableComputation,
+                    Data,
+                    Localization,
+                    Library,
+                    Slides,
+                    Ecosystem,
+                    Injection,
+                    Mermaid,
+                    Reference,
+                    Bibliography,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.

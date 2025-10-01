@@ -22,8 +22,8 @@ import com.quarkdown.core.context.localization.localizeOrDefault
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -42,7 +42,7 @@ import com.quarkdown.core.util.toPlainText
  * `Layout` stdlib module exporter.
  * This module handles position and shape of an element.
  */
-val Layout: Module =
+val Layout: QuarkdownModule =
     moduleOf(
         ::container,
         ::align,

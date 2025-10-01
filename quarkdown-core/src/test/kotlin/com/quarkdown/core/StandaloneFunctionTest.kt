@@ -19,6 +19,7 @@ import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
 import com.quarkdown.core.function.expression.ComposedExpression
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.KFunctionAdapter
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
@@ -740,7 +741,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `library loader`() {
-        val library = MultiFunctionLibraryLoader("MyLib").load(setOf(::greetWithArgs, ::greetNoArgs, ::sum))
+        val library = MultiFunctionLibraryLoader("MyLib").load(moduleOf(::greetWithArgs, ::greetNoArgs, ::sum))
 
         assertEquals("MyLib", library.name)
         assertEquals(3, library.functions.size)

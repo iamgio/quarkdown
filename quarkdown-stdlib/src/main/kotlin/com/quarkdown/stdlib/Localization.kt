@@ -2,8 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -22,7 +22,7 @@ import com.quarkdown.core.localization.LocalizationTable
  * `Localization` stdlib module exporter.
  * This module handles localization-related features.
  */
-val Localization: Module =
+val Localization: QuarkdownModule =
     moduleOf(
         ::localization,
         ::localize,

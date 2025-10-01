@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
@@ -24,7 +24,7 @@ internal const val INDEX_STARTS_AT = 1
  * `Collection` stdlib module exporter.
  * This module handles iterable collections.
  */
-val Collection: Module =
+val Collection: QuarkdownModule =
     moduleOf(
         ::collectionGet,
         ::collectionFirst,

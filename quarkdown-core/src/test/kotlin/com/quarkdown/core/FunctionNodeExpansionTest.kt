@@ -18,6 +18,7 @@ import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.call.FunctionCallNodeExpander
 import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
@@ -87,7 +88,7 @@ class FunctionNodeExpansionTest {
 
         val library =
             MultiFunctionLibraryLoader("lib").load(
-                setOf(
+                moduleOf(
                     ::sum,
                     ::myFunction,
                     ::echoBoolean,

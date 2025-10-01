@@ -33,8 +33,8 @@ import com.quarkdown.core.document.numbering.merge
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.tex.TexInfo
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -58,7 +58,7 @@ import com.quarkdown.stdlib.internal.loadFontFamily
  * This module handles document information and details.
  * @see com.quarkdown.core.document.DocumentInfo
  */
-val Document: Module =
+val Document: QuarkdownModule =
     moduleOf(
         ::docType,
         ::docName,

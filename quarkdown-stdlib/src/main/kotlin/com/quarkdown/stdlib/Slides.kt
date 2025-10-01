@@ -6,8 +6,8 @@ import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.slides.Transition
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -19,7 +19,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * `Slides` stdlib module exporter.
  * This module handles slides properties.
  */
-val Slides: Module =
+val Slides: QuarkdownModule =
     moduleOf(
         ::setSlidesConfiguration,
         ::fragment,
