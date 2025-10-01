@@ -2,8 +2,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -14,7 +14,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * `Library` stdlib module exporter.
  * This module handles loaded libraries and their functions.
  */
-val Library: Module =
+val Library: QuarkdownModule =
     moduleOf(
         ::libraryExists,
         ::functionExists,

@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -17,7 +17,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * `Optionality` stdlib module exporter.
  * This module handles `None` values to express optional values.
  */
-val Optionality: Module =
+val Optionality: QuarkdownModule =
     moduleOf(
         ::none,
         ::isNone,

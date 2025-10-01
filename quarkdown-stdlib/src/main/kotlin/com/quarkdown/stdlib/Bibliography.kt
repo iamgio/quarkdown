@@ -5,8 +5,8 @@ import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -19,7 +19,7 @@ import com.quarkdown.core.bibliography.style.BibliographyStyle as CoreBibliograp
  * This module handles bibliographies and citations.
  * @see com.quarkdown.core.bibliography.Bibliography
  */
-val Bibliography: Module =
+val Bibliography: QuarkdownModule =
     moduleOf(
         ::bibliography,
         ::cite,

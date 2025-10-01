@@ -1,8 +1,8 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.wrappedAsValue
 
@@ -11,7 +11,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  * This module handles cross-references.
  * @see com.quarkdown.core.ast.quarkdown.reference
  */
-val Reference: Module =
+val Reference: QuarkdownModule =
     moduleOf(
         ::reference,
     )

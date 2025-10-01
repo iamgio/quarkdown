@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.log.Log
 
@@ -9,7 +9,7 @@ import com.quarkdown.core.log.Log
  * `Logger` stdlib module exporter.
  * This module contains logging utility.
  */
-val Logger: Module =
+val Logger: QuarkdownModule =
     moduleOf(
         ::log,
         ::debug,

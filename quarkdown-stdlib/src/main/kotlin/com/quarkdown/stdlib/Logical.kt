@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -10,7 +10,7 @@ import com.quarkdown.core.function.value.DynamicValue
 /**
  * `Logical` stdlib module exporter.
  */
-val Logical: Module =
+val Logical: QuarkdownModule =
     moduleOf(
         ::isLower,
         ::isGreater,

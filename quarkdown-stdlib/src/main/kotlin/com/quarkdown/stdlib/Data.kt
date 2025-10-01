@@ -4,8 +4,8 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -21,7 +21,7 @@ import java.io.File
  * `Data` stdlib module exporter.
  * This module handles content fetched from external resources.
  */
-val Data: Module =
+val Data: QuarkdownModule =
     moduleOf(
         ::read,
         ::csv,

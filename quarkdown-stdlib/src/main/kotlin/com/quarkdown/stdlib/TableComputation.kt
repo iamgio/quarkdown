@@ -4,8 +4,8 @@ import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -24,7 +24,7 @@ import com.quarkdown.core.util.toPlainText
  * beyond basic data representation.
  * It adds dynamic operations like sorting, filtering, calculations.
  */
-val TableComputation: Module =
+val TableComputation: QuarkdownModule =
     moduleOf(
         ::tableSort,
         ::tableFilter,

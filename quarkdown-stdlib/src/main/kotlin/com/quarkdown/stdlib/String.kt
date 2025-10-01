@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.loader.Module
-import com.quarkdown.core.function.library.loader.moduleOf
+import com.quarkdown.core.function.library.module.QuarkdownModule
+import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.StringValue
@@ -14,7 +14,7 @@ import com.quarkdown.core.util.trimDelimiters
  * `String` stdlib module exporter.
  * This module handles string manipulation.
  */
-val String: Module =
+val String: QuarkdownModule =
     moduleOf(
         ::string,
         ::concatenate,
