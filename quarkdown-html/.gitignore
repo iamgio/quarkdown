@@ -1,3 +1,7 @@
+# Esbuild
+src/main/resources/render/script/bundle.js
+src/main/resources/render/script/bundle.js.map
+
 # Sass
 
 src/main/resources/render/theme/**/*.css

@@ -1,0 +1,15 @@
+{
+  "name": "quarkdown-html",
+  "version": "1.0.0",
+  "description": "Browser runtime for quarkdown-html",
+  "license": "GPL-3.0",
+  "author": "Giorgio Garofalo & Quarkdown contributors",
+  "type": "commonjs",
+  "main": "src/main/typescript/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.10"
+  }
+}

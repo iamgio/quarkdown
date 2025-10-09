@@ -18,6 +18,33 @@ tasks.compileSass {
     outputDir = dir
 }
 
+val npmInstall =
+    tasks.register<Exec>("npmInstall") {
+        group = "build"
+        description = "Runs dependencies via npm"
+        commandLine("npm", "install")
+    }
+
+val bundleTypeScript =
+    tasks.register<Exec>("bundleTypeScript") {
+        group = "build"
+        description = "Bundles TypeScript files using esbuild"
+
+        // Make sure npm install runs first
+        dependsOn(npmInstall)
+
+        commandLine(
+            "npx",
+            "esbuild",
+            "src/main/typescript/index.ts",
+            "--bundle",
+            "--platform=browser",
+            "--outfile=src/main/resources/render/script/bundle.js",
+            "--sourcemap",
+        )
+    }
+
 tasks.processResources {
     dependsOn(tasks.compileSass)
+    dependsOn(bundleTypeScript)
 }
