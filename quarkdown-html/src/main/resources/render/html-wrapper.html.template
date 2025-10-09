@@ -4,17 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>[[TITLE]]</title>
-    <script src="script/script.js"></script>
-    [[if:PLAIN]]
-    <script src="script/plain.js"></script>
-    [[endif:PLAIN]]
+    <script src="script/quarkdown.js"></script>
     [[if:PAGED]]
     <script>window.PagedConfig = {auto: false};</script>
     <script src="https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js"></script>
-    <script src="script/paged.js"></script>
     [[endif:PAGED]]
     [[if:SLIDES]]
-    <script src="script/slides.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/plugin/notes/notes.js"></script>
@@ -26,27 +21,25 @@
     <link rel="stylesheet" href="theme/theme.css">
     <script>
         [[if:PLAIN]]
-        doc = new PlainDocument();
+        const doc = new PlainDocument();
         [[endif:PLAIN]]
         [[if:SLIDES]]
-        doc = new SlidesDocument();
+        const doc = new SlidesDocument();
         [[endif:SLIDES]]
         [[if:PAGED]]
-        doc = new PagedDocument();
+        const doc = new PagedDocument();
         [[endif:PAGED]]
-        doc.prepare();
+        prepare(doc);
     </script>
     [[if:CODE]]
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
     <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
-    <script src="script/code.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
     [[endif:CODE]]
     [[if:MATH]]
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
-    <script src="script/math.js"></script>
     <script>
         const texMacros = {
             [[for:TEXMACRO]]
@@ -140,7 +133,6 @@
 [[CONTENT]]
 [[endif:PAGED]]
 [[if:MERMAID]]
-<script src="script/mermaid.js"></script>
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     initMermaid(mermaid);

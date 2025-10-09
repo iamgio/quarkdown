@@ -1,6 +1,6 @@
 # Esbuild
-src/main/resources/render/script/bundle.js
-src/main/resources/render/script/bundle.js.map
+src/main/resources/render/script/quarkdown.js
+src/main/resources/render/script/quarkdown.js.map
 
 # Sass
 

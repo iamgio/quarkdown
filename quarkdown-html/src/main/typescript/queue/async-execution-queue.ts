@@ -18,24 +18,13 @@
  */
 export class AsyncExecutionQueue {
     /** Array of async functions waiting to be executed */
-    private queue: Array<() => Promise<void>>;
+    private queue: Array<() => Promise<void>> = [];
 
     /** Callback function executed after all queued functions complete */
-    private readonly onExecute: () => void;
+    private onComplete: Array<() => void> = [];
 
     /** Flag indicating whether the queue has been executed and completed */
     private completed: boolean = false;
-
-    /**
-     * Creates a new AsyncExecutionQueue instance.
-     *
-     * @param onExecute - Optional callback function that will be called after all
-     *                   queued functions have been executed. Defaults to a no-op function.
-     */
-    constructor(onExecute: () => void = () => {}) {
-        this.queue = [];
-        this.onExecute = onExecute;
-    }
 
     /**
      * Adds an asynchronous function to the execution queue.
@@ -60,6 +49,15 @@ export class AsyncExecutionQueue {
     }
 
     /**
+     * Registers a callback to be called after all queued functions have executed.
+     *
+     * @param fn - A function to be called once after `execute()` completes
+     */
+    addOnComplete(fn: () => void) {
+        this.onComplete.push(fn);
+    }
+
+    /**
      * Executes all queued functions in parallel and clears the queue.
      *
      * This method uses Promise.all() to run all queued functions concurrently,
@@ -71,7 +69,7 @@ export class AsyncExecutionQueue {
     async execute(): Promise<void> {
         await Promise.all(this.queue.map(async fn => fn()));
         this.queue = [];
-        if (this.onExecute) this.onExecute();
+        this.onComplete?.forEach(fn => fn());
         this.completed = true;
     }
 

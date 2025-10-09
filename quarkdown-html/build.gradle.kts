@@ -39,7 +39,7 @@ val bundleTypeScript =
             "src/main/typescript/index.ts",
             "--bundle",
             "--platform=browser",
-            "--outfile=src/main/resources/render/script/bundle.js",
+            "--outfile=src/main/resources/render/script/quarkdown.js",
             "--sourcemap",
         )
     }
