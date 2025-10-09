@@ -82,6 +82,15 @@ class QuarkdownDocument {
     }
 
     /**
+     * To be run after the document is ready.
+     * This takes `.last-heading` elements and, according to its `data-depth` attribute,
+     * injects the content of the target element into each page.
+     * The target element is the last element matching the selector, prior to the `.last-heading` element.
+     */
+    copyPersistentHeadings() {
+    }
+
+    /**
      * Handles or transforms footnotes in the post-rendering execution queue.
      * @param {{definition: Element, reference: Element}[]} footnotes footnote definitions and their first reference element.
      */
@@ -107,6 +116,7 @@ class QuarkdownDocument {
      */
     populateExecutionQueue() {
         postRenderingExecutionQueue.push(() => this.copyPageMarginInitializers());
+        postRenderingExecutionQueue.push(() => this.copyPersistentHeadings());
         postRenderingExecutionQueue.push(() => this.updatePageNumberElements());
         postRenderingExecutionQueue.push(() => this.handleFootnotes(getFootnoteDefinitionsAndFirstReference()));
         if (this.usesNavigationSidebar()) {

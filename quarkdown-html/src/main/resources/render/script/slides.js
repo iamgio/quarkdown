@@ -18,6 +18,35 @@ class SlidesDocument extends QuarkdownDocument {
         });
     }
 
+    copyPersistentHeadings() {
+        // TODO this is a prototype. Reuse for paged documents as well
+        const lastHeadingPerDepth = [];
+        const minLevel = 1;
+        const maxLevel = 6;
+
+        const slides = document.querySelectorAll('.reveal .slides > :is(section, div)');
+        const backgrounds = document.querySelectorAll('.reveal .backgrounds > .slide-background');
+
+        slides.forEach((slide, index) => {
+            // Find the highest level heading in the slide (h1 to h6).
+            for (let level = minLevel; level <= maxLevel; level++) {
+                const headings = slide.querySelectorAll('h' + level);
+                if (headings.length > 0) {
+                    lastHeadingPerDepth[level - 1] = headings[headings.length - 1].innerHTML;
+                    lastHeadingPerDepth.length = level; // Remove lower level headings.
+                }
+            }
+
+            const background = backgrounds[index];
+            if (!background) return;
+            const lastHeadingElements = Array.of(...background.querySelectorAll('.last-heading'), ...slide.querySelectorAll('.last-heading'));
+            lastHeadingElements.forEach(lastHeading => {
+                const depth = parseInt(lastHeading.dataset.depth);
+                lastHeading.innerHTML = lastHeadingPerDepth[depth - 1] || '';
+            });
+        });
+    }
+
     handleFootnotes(footnotes) {
         footnotes.forEach(({definition, reference}) => {
             const page = this.getParentViewport(reference);

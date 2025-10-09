@@ -40,6 +40,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertToListNode
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -498,6 +499,12 @@ class QuarkdownHtmlNodeRenderer(
                     PageCounter.Target.TOTAL -> "total-page-number"
                 },
             )
+        }
+
+    override fun visit(node: LastHeading) =
+        buildTag("span") {
+            className("last-heading")
+            attribute("data-depth", node.depth)
         }
 
     override fun visit(node: SlidesConfigurationInitializer): CharSequence =
