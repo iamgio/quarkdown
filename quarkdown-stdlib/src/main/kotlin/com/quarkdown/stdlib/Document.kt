@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.context.Context
@@ -77,6 +78,7 @@ val Document: QuarkdownModule =
         ::footer,
         ::currentPage,
         ::totalPages,
+        ::lastHeading,
         ::autoPageBreak,
         ::disableAutoPageBreak,
         ::marker,
@@ -723,6 +725,22 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
+
+/**
+ * Displays the last heading encountered before the current position, of the given [depth].
+ *
+ * If no such heading is found, nothing is displayed.
+ *
+ * This can be particularly useful in headers and footers, to show the current section of the document.
+ *
+ * @param depth the depth of the last [Heading] to match (1-6)
+ * @return a new [LastHeading] node
+ * @throws IllegalArgumentException if [depth] is not a positive value
+ * @see pageMarginContent
+ * @wiki Persistent headings
+ */
+@Name("lastheading")
+fun lastHeading(depth: Int) = LastHeading(depth).wrappedAsValue()
 
 /**
  * Sets a new automatic page break threshold when a heading is found:
