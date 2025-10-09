@@ -6,7 +6,7 @@ import {createSidebar} from "../../sidebar/sidebar";
  * Executes after document rendering is complete.
  * @see createSidebar
  */
-export class SidebarDocumentHandler extends DocumentHandler {
+export class Sidebar extends DocumentHandler {
     onPostRendering(): void {
         createSidebar();
     }

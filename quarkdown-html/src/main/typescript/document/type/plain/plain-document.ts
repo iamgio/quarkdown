@@ -1,6 +1,6 @@
 import {QuarkdownDocument} from "../../quarkdown-document";
 import {DocumentHandler} from "../../document-handler";
-import {SidebarDocumentHandler} from "../../handlers/sidebar-document-handler";
+import {Sidebar} from "../../handlers/sidebar";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../../queue/execution-queues";
 
 /**
@@ -33,7 +33,7 @@ export class PlainDocument implements QuarkdownDocument {
 
     getHandlers(): DocumentHandler[] {
         return [
-            new SidebarDocumentHandler(this),
+            new Sidebar(this),
         ];
     }
 }
