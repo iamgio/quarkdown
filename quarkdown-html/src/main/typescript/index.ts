@@ -5,6 +5,7 @@ import {PlainDocument} from "./document/type/plain-document";
 import {prepare} from "./document/quarkdown-document";
 import {notifyLivePreview} from "./live/live-preview";
 import {SlidesDocument} from "./document/type/slides-document";
+import {PagedDocument} from "./document/type/paged-document";
 
 /**
  * Returns whether the document is finalized and ready.
@@ -23,4 +24,5 @@ const context = window as any;
 context.isReady = isReady;
 context.prepare = prepare;
 context.PlainDocument = PlainDocument;
+context.PagedDocument = PagedDocument;
 context.SlidesDocument = SlidesDocument;
