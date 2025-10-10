@@ -1,14 +1,20 @@
 import {DocumentHandler} from "../../document-handler";
 
 /**
+ * Abstract base class for document handlers that manage page margin content.
+ * Collects page margin initializers during pre-rendering and positions them appropriately
+ * on each page in the final document based on the document type.
  */
 export abstract class PageMarginsDocumentHandler extends DocumentHandler {
+    /** Array of page margin initializer elements collected from the document */
     protected pageMarginInitializers: HTMLElement[] = [];
 
+    /**
+     * Collects all page margin content initializers and removes them from the document.
+     * This prevents them from being displayed before proper positioning.
+     */
     onPreRendering() {
         this.pageMarginInitializers = Array.from(document.querySelectorAll('.page-margin-content'));
-
-        // Removing them from the document to prevent display before rendering.
         this.pageMarginInitializers.forEach(initializer => initializer.remove());
     }
 

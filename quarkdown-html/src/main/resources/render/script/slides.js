@@ -19,7 +19,7 @@ class SlidesDocument extends QuarkdownDocument {
     }
 
     copyPersistentHeadings() {
-        // TODO this is a prototype. Reuse for paged documents as well
+        // this is a prototype. Reuse for paged documents as well
         const lastHeadingPerDepth = [];
         const minLevel = 1;
         const maxLevel = 6;

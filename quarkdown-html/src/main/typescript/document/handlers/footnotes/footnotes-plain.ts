@@ -32,7 +32,7 @@ export class FootnotesPlain extends FootnotesDocumentHandler {
         if (!rightMarginArea) return;
         rightMarginArea.innerHTML = '';
 
-        this.footnotes.forEach(({definition, reference}) => {
+        this.footnotes.forEach(({reference, definition}) => {
             definition.remove();
             definition.style.marginTop =
                 Math.max(

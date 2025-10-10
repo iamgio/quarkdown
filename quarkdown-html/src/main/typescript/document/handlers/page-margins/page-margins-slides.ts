@@ -1,19 +1,24 @@
 import {PageMarginsDocumentHandler} from "./page-margins-document-handler";
 
+/**
+ * Page margins handler for slides documents, which copies page margin content to all slide backgrounds.
+ *
+ * @example
+ * A page margin initializer like:
+ * ```html
+ * <div class="page-margin-content-initializer page-margin-bottom-center">Hello</div>
+ * ```
+ *
+ * will be copied to each section background as:
+ *
+ * ```html
+ * <div class="page-margin-content page-margin-bottom-center">Hello</div>
+ * ```
+ */
 export class PageMarginsSlides extends PageMarginsDocumentHandler {
     /**
-     * Copy the content of each global page margin initializer to the background of each section.
-     *
-     * @example
-     * ```html
-     * <div class="page-margin-content-initializer page-margin-bottom-center">Hello</div>
-     * ```
-     *
-     * will be copied to section as:
-     *
-     * ```html
-     * <div class="page-margin-content page-margin-bottom-center">Hello</div>
-     * ```
+     * Copies all page margin initializers to every slide background.
+     * Each initializer is cloned and appended to all slide backgrounds.
      */
     onPostRendering() {
         this.pageMarginInitializers.forEach(initializer => {
