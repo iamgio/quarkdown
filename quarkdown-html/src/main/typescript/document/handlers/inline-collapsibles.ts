@@ -9,9 +9,9 @@ import {DocumentHandler} from "../document-handler";
 export class InlineCollapsibles extends DocumentHandler {
     onPostRendering() {
         // Add click event listener to the collapsible spans.
-        const collapsibles = document.querySelectorAll('.inline-collapse');
+        const collapsibles = document.querySelectorAll<HTMLElement>('.inline-collapse');
         collapsibles.forEach((span) => {
-            span.addEventListener('click', () => this.toggleCollapse(span as HTMLElement));
+            span.addEventListener('click', () => this.toggleCollapse(span));
         });
     }
 

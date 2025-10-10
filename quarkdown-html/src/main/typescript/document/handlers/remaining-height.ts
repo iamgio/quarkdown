@@ -8,7 +8,7 @@ import {DocumentHandler} from "../document-handler";
  */
 export class RemainingHeight extends DocumentHandler {
     onPostRendering() {
-        const fillHeightElements = document.querySelectorAll('.fill-height');
+        const fillHeightElements = document.querySelectorAll<HTMLElement>('.fill-height');
 
         fillHeightElements.forEach(element => {
             const contentArea = super.quarkdownDocument.getParentViewport(element)
@@ -16,7 +16,7 @@ export class RemainingHeight extends DocumentHandler {
             const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
 
             // Inject CSS variable.
-            (element as HTMLElement).style.setProperty('--viewport-remaining-height', `${remainingHeight}px`);
+            element.style.setProperty('--viewport-remaining-height', `${remainingHeight}px`);
         });
     }
 }
