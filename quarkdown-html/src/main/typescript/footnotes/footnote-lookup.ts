@@ -26,7 +26,7 @@ function getFootnoteFirstReference(definitionId: string): HTMLElement | null {
  * @param sorted - Whether to sort definitions by footnote index (default: true)
  * @returns Array of footnote pairs, linking definitions to their first references
  */
-export function getFootnoteDefinitionsAndFirstReference(sorted = true): FootnotePair[] {
+export function getFootnoteDefinitionsAndFirstReference(sorted: boolean = true): FootnotePair[] {
     const definitions: HTMLElement[] = getFootnoteDefinitions(sorted);
 
     // For each definition, gets the first reference to it.

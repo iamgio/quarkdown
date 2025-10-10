@@ -13,6 +13,11 @@ export abstract class DocumentHandler {
     }
 
     /**
+     * Optional initialization hook called when the handler is created.
+     */
+    init?(): void
+
+    /**
      * Hook called before document rendering begins,
      * via the pre-rendering execution queue.
      */
@@ -30,6 +35,7 @@ export abstract class DocumentHandler {
      * post-rendering handlers are added to the post-rendering queue.
      */
     pushToQueue() {
+        this.init?.();
         if (this.onPreRendering) {
             preRenderingExecutionQueue.push(() => this.onPreRendering!());
         }

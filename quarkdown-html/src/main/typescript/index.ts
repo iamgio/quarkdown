@@ -1,7 +1,7 @@
 // Main entry point for the quarkdown-html runtime.
 
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "./queue/execution-queues";
-import {PlainDocument} from "./document/type/plain/plain-document";
+import {PlainDocument} from "./document/type/plain-document";
 import {prepare} from "./document/quarkdown-document";
 import {notifyLivePreview} from "./live/live-preview";
 
