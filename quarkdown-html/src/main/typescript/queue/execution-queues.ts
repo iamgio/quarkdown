@@ -6,4 +6,4 @@ import {AsyncExecutionQueue} from "./async-execution-queue";
 export const preRenderingExecutionQueue = new AsyncExecutionQueue();
 
 // Queue of actions to be executed after the document has been rendered in its final form.
-export const postRenderingExecutionQueue = new AsyncExecutionQueue()//() => notifyLivePreview('postRenderingCompleted'));
+export const postRenderingExecutionQueue = new AsyncExecutionQueue();

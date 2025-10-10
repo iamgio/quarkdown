@@ -3,6 +3,7 @@
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "./queue/execution-queues";
 import {PlainDocument} from "./document/type/plain/plain-document";
 import {prepare} from "./document/quarkdown-document";
+import {notifyLivePreview} from "./live/live-preview";
 
 /**
  * Returns whether the document is finalized and ready.
@@ -13,6 +14,10 @@ function isReady(): boolean {
     return preRenderingExecutionQueue.isCompleted() && postRenderingExecutionQueue.isCompleted();
 }
 
+// Notify the live preview that the document is ready after pre-rendering tasks are done.
+postRenderingExecutionQueue.addOnComplete(() => notifyLivePreview('postRenderingCompleted'));
+
+// Expose the API to the global context.
 const context = window as any;
 context.isReady = isReady;
 context.prepare = prepare;
