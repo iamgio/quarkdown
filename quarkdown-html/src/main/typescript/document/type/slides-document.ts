@@ -3,6 +3,7 @@ import {DocumentHandler} from "../document-handler";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
 import {PageChunker} from "../../chunker/page-chunker";
 import {PageNumbersSlides} from "../handlers/page-numbers/page-numbers-slides";
+import {PageMarginsSlides} from "../handlers/page-margins/page-margins-slides";
 
 declare const Reveal: typeof import("reveal.js"); // global Reveal at runtime
 declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
@@ -68,6 +69,7 @@ export class SlidesDocument implements QuarkdownDocument {
 
     getHandlers(): DocumentHandler[] {
         return [
+            new PageMarginsSlides(this),
             new PageNumbersSlides(this),
         ];
     }
