@@ -1,9 +1,11 @@
 import {DocumentHandler} from "./document-handler";
-import {InlineCollapsiblesDocumentHandler} from "./handlers/inline-collapsibles";
+import {InlineCollapsibles} from "./handlers/inline-collapsibles";
 import {QuarkdownDocument} from "./quarkdown-document";
 
 /** Global document handlers that apply to all documents. */
-export const globalHandlers: (doc: QuarkdownDocument) => DocumentHandler[] =
-    doc => [
-        new InlineCollapsiblesDocumentHandler(doc),
-    ];
+export function getGlobalHandlers(document: QuarkdownDocument): DocumentHandler[] {
+    return [
+        new InlineCollapsibles(document),
+        // TODO continue re-implementing script.js
+    ]
+}

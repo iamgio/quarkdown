@@ -1,6 +1,6 @@
 import {DocumentHandler} from "./document-handler";
 import {preRenderingExecutionQueue} from "../queue/execution-queues";
-import {globalHandlers} from "./global-handlers";
+import {getGlobalHandlers} from "./global-handlers";
 
 /**
  * Core interface for Quarkdown document types.
@@ -40,7 +40,7 @@ export interface QuarkdownDocument {
  * @param document - The document to prepare for rendering
  */
 export function prepare(document: QuarkdownDocument): void {
-    const handlers = [...globalHandlers(document), ...document.getHandlers()];
+    const handlers = [...getGlobalHandlers(document), ...document.getHandlers()];
     handlers.forEach(handler => handler.pushToQueue());
 
     document.setupPreRenderingHook();
