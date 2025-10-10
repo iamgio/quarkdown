@@ -1,6 +1,8 @@
 import {QuarkdownDocument} from "../quarkdown-document";
 import {DocumentHandler} from "../document-handler";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
+import {Sidebar} from "../handlers/sidebar";
+import {PageNumbersPaged} from "../handlers/page-numbers/page-numbers-paged";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -36,6 +38,9 @@ export class PagedDocument implements QuarkdownDocument {
     }
 
     getHandlers(): DocumentHandler[] {
-        return [];
+        return [
+            new Sidebar(this),
+            new PageNumbersPaged(this),
+        ];
     }
 }
