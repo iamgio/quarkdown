@@ -509,21 +509,24 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: SlidesConfigurationInitializer): CharSequence =
         buildTag("script") {
-            // Inject properties that are read by the slides.js script after the document is loaded.
+            hidden()
+            // Injects properties that are read at runtime after the document is loaded.
             +buildString {
+                append("window.slidesConfig = {")
                 node.centerVertically?.let {
-                    append("const slides_center = $it;")
+                    append("center: $it,")
                 }
                 node.showControls?.let {
-                    append("const slides_showControls = $it;")
+                    append("showControls: $it,")
                 }
                 node.showNotes?.let {
-                    append("const slides_showNotes = $it;")
+                    append("showNotes: $it,")
                 }
                 node.transition?.let {
-                    append("const slides_transitionStyle = '${it.style.asCSS}';")
-                    append("const slides_transitionSpeed = '${it.speed.asCSS}';")
+                    append("transitionStyle: '${it.style.asCSS}',")
+                    append("transitionSpeed: '${it.speed.asCSS}',")
                 }
+                append("};")
             }
         }
 

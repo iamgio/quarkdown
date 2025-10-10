@@ -39,7 +39,9 @@ val bundleTypeScript =
             "src/main/typescript/index.ts",
             "--bundle",
             "--platform=browser",
+            "--format=iife",
             "--outfile=src/main/resources/render/script/quarkdown.js",
+            "--external:reveal.js",
             "--sourcemap",
         )
     }
