@@ -14,7 +14,7 @@ export interface QuarkdownDocument {
      * @param element - The element to find the parent viewport for
      * @returns The parent viewport element, if any
      */
-    getParentViewport(element: Element): Element | undefined;
+    getParentViewport(element: Element): HTMLElement | undefined;
 
     /** Sets up the hook that executed the pre-rendering queue. */
     setupPreRenderingHook(): void;

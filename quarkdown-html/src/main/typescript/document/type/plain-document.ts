@@ -12,7 +12,7 @@ export class PlainDocument implements QuarkdownDocument {
     /**
      * @returns The document element
      */
-    getParentViewport(_element: Element): Element | undefined {
+    getParentViewport(_element: Element): HTMLElement | undefined {
         return document.documentElement;
     }
 

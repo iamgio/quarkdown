@@ -25,8 +25,8 @@ export class SlidesDocument implements QuarkdownDocument {
     /**
      * @returns The parent slide element of the given element.
      */
-    getParentViewport(element: Element): Element | undefined {
-        return element.closest(".reveal .slides > :is(section, .pdf-page)") || undefined;
+    getParentViewport(element: Element): HTMLElement | undefined {
+        return element.closest<HTMLElement>(".reveal .slides > :is(section, .pdf-page)") || undefined;
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded */

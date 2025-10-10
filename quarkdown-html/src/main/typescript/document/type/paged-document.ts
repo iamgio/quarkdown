@@ -4,6 +4,7 @@ import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../que
 import {Sidebar} from "../handlers/sidebar";
 import {PageNumbersPaged} from "../handlers/page-numbers/page-numbers-paged";
 import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
+import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -14,8 +15,8 @@ export class PagedDocument implements QuarkdownDocument {
     /**
      * @returns The parent page of the given element.
      */
-    getParentViewport(element: Element): Element | undefined {
-        return element.closest('.pagedjs_area') || undefined;
+    getParentViewport(element: Element): HTMLElement | undefined {
+        return element.closest<HTMLElement>('.pagedjs_area')!// || undefined;
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded. */
@@ -43,6 +44,7 @@ export class PagedDocument implements QuarkdownDocument {
             new Sidebar(this),
             new PageMarginsPaged(this),
             new PageNumbersPaged(this),
+            new FootnotesPaged(this),
         ];
     }
 }
