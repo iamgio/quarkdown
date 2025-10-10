@@ -1,5 +1,8 @@
+import com.github.gradle.node.npm.task.NpxTask
+
 plugins {
     kotlin("jvm")
+    id("com.github.node-gradle.node") version "7.1.0"
     id("io.miret.etienne.sass") version "1.5.2"
 }
 
@@ -18,32 +21,26 @@ tasks.compileSass {
     outputDir = dir
 }
 
-val npmInstall =
-    tasks.register<Exec>("npmInstall") {
-        group = "build"
-        description = "Runs dependencies via npm"
-        commandLine("npm", "install")
-    }
-
 val bundleTypeScript =
-    tasks.register<Exec>("bundleTypeScript") {
+    tasks.register<NpxTask>("bundleTypeScript") {
         group = "build"
         description = "Bundles TypeScript files using esbuild"
 
         // Make sure npm install runs first
-        dependsOn(npmInstall)
+        dependsOn(tasks.npmInstall)
 
-        commandLine(
-            "npx",
-            "esbuild",
-            "src/main/typescript/index.ts",
-            "--bundle",
-            "--platform=browser",
-            "--format=iife",
-            "--outfile=src/main/resources/render/script/quarkdown.js",
-            "--external:reveal.js",
-            "--external:pagedjs",
-            "--sourcemap",
+        command.set("esbuild")
+        args.set(
+            listOf(
+                "src/main/typescript/index.ts",
+                "--bundle",
+                "--platform=browser",
+                "--format=iife",
+                "--outfile=src/main/resources/render/script/quarkdown.js",
+                "--external:reveal.js",
+                "--external:pagedjs",
+                "--sourcemap",
+            ),
         )
     }
 
