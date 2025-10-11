@@ -31,7 +31,7 @@ export class PageNumbersPaged extends PageNumbersDocumentHandler {
     /**
      * Updates both total and current page numbers after rendering completes.
      */
-    onPostRendering() {
+    async onPostRendering() {
         const pages = document.querySelectorAll<HTMLElement>('.pagedjs_page')
         this.updateTotalPageNumbers(pages);
         this.updateCurrentPageNumbers(pages);

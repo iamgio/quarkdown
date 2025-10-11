@@ -27,7 +27,7 @@ export class FootnotesPlain extends FootnotesDocumentHandler {
      * Renders footnotes in the right margin area, positioned to align with their references.
      * Removes footnotes from their original locations and repositions them in the margin.
      */
-    onPostRendering() {
+    async onPostRendering() {
         const rightMarginArea = plain.getRightMarginArea();
         if (!rightMarginArea) return;
         rightMarginArea.innerHTML = '';

@@ -13,7 +13,7 @@ export abstract class PageMarginsDocumentHandler extends DocumentHandler {
      * Collects all page margin content initializers and removes them from the document.
      * This prevents them from being displayed before proper positioning.
      */
-    onPreRendering() {
+    async onPreRendering() {
         this.pageMarginInitializers = Array.from(document.querySelectorAll('.page-margin-content'));
         this.pageMarginInitializers.forEach(initializer => initializer.remove());
     }
@@ -23,5 +23,5 @@ export abstract class PageMarginsDocumentHandler extends DocumentHandler {
      * this function is responsible for injecting page margin content
      * into the document at appropriate locations on each page.
      */
-    abstract onPostRendering(): void;
+    abstract onPostRendering(): Promise<void>;
 }

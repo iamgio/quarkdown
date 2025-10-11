@@ -20,7 +20,7 @@ export class PageMarginsSlides extends PageMarginsDocumentHandler {
      * Copies all page margin initializers to every slide background.
      * Each initializer is cloned and appended to all slide backgrounds.
      */
-    onPostRendering() {
+    async onPostRendering() {
         this.pageMarginInitializers.forEach(initializer => {
             const pageMargin = document.createElement('div');
             pageMargin.className = initializer.className;

@@ -38,13 +38,13 @@ export abstract class DocumentHandler {
      * Hook called before document rendering begins,
      * via the pre-rendering execution queue.
      */
-    onPreRendering?(): void
+    async onPreRendering?(): Promise<void>
 
     /**
      * Hook called after document rendering completes,
      * via the post-rendering execution queue.
      */
-    onPostRendering?(): void
+    async onPostRendering?(): Promise<void>
 
     /**
      * Pushes this handler's lifecycle methods to the appropriate execution queues.
@@ -54,10 +54,10 @@ export abstract class DocumentHandler {
     pushToQueue() {
         this.init?.();
         if (this.onPreRendering) {
-            preRenderingExecutionQueue.push(() => this.onPreRendering!());
+            preRenderingExecutionQueue.pushAsync(() => this.onPreRendering!());
         }
         if (this.onPostRendering) {
-            postRenderingExecutionQueue.push(() => this.onPostRendering!());
+            postRenderingExecutionQueue.pushAsync(() => this.onPostRendering!());
         }
     }
 }

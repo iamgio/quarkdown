@@ -7,7 +7,7 @@ import {createSidebar} from "../../sidebar/sidebar";
  * @see createSidebar
  */
 export class Sidebar extends DocumentHandler {
-    onPostRendering(): void {
+    async onPostRendering() {
         createSidebar();
     }
 }

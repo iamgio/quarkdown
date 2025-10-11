@@ -103,7 +103,7 @@ export class SplitCodeBlocksFixPaged extends DocumentHandler {
      * The setTimeout is necessary because syntax highlighting may modify the DOM
      * after initial rendering, potentially affecting line number attributes.
      */
-    onPostRendering() {
+    async onPostRendering() {
         const splitCodeBlocks = this.getSplitCodeBlocks();
         this.fixSplitCodeBlockFirstLineIndentation(splitCodeBlocks);
         setTimeout(() => this.fixSplitCodeBlockLineNumbers(splitCodeBlocks), 0); // Must execute after the highlighting is done.

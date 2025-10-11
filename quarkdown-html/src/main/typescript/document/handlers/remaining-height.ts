@@ -11,7 +11,7 @@ export class RemainingHeight extends DocumentHandler {
         const fillHeightElements = document.querySelectorAll<HTMLElement>('.fill-height');
 
         fillHeightElements.forEach(element => {
-            const contentArea = super.quarkdownDocument.getParentViewport(element)
+            const contentArea = this.quarkdownDocument.getParentViewport(element)
             if (!contentArea) return;
             const remainingHeight = contentArea.getBoundingClientRect().bottom - element.getBoundingClientRect().top;
 

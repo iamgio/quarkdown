@@ -5,7 +5,7 @@ import {FootnotesDocumentHandler} from "./footnotes-document-handler";
  * Footnote handler for slides documents that renders footnotes at the bottom of the slide.
  */
 export class FootnotesSlides extends FootnotesDocumentHandler {
-    onPostRendering() {
+    async onPostRendering() {
         this.footnotes.forEach(({reference, definition}) => {
             const page = this.quarkdownDocument.getParentViewport(reference);
             if (!page) return;

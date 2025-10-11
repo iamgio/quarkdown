@@ -26,7 +26,7 @@ declare global {
  * content is processed before document rendering is finalized.
  */
 export class MathRenderer extends DocumentHandler {
-    onPreRendering() {
+    async onPreRendering() {
         const texMacros = window.texMacros;
         const formulas = document.querySelectorAll<HTMLElement>('formula');
 

@@ -21,7 +21,7 @@ export class PageMarginsPaged extends PageMarginsDocumentHandler {
     /**
      * Copies all page margin initializers to every page, in the margin areas.
      */
-    onPostRendering() {
+    async onPostRendering() {
         this.pageMarginInitializers.forEach(initializer => {
             const marginContent = document.createElement('div');
             marginContent.className = "pagedjs_margin-content";

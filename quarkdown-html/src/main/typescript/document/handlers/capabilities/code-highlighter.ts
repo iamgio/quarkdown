@@ -29,7 +29,7 @@ export class CodeHighlighter extends DocumentHandler {
         hljs.addPlugin(new CopyButtonPlugin());
     }
 
-    onPostRendering() {
+    async onPostRendering() {
         hljs.highlightAll();
         this.initLineNumbers();
     }

@@ -15,8 +15,8 @@ export class FootnotesPaged extends FootnotesDocumentHandler {
      * After rendering, `handleFootnotes` will remove this space and place
      * the footnote definition in the footnote area, balancing the layout.
      */
-    onPreRendering() {
-        super.onPreRendering();
+    async onPreRendering() {
+        await super.onPreRendering();
         this.footnotes.forEach(({reference, definition}) =>{
             reference.style.display = 'block';
             reference.style.height = definition.scrollHeight + 'px';
@@ -33,8 +33,8 @@ export class FootnotesPaged extends FootnotesDocumentHandler {
      *
      * Useful context: https://github.com/pagedjs/pagedjs/issues/292
      */
-    onPostRendering() {
-        super.onPreRendering(); // Reloads footnotes pairs, since the DOM changed due to paged.js processing.
+    async onPostRendering() {
+        await super.onPreRendering(); // Reloads footnotes pairs, since the DOM changed due to paged.js processing.
         this.footnotes.forEach(({reference, definition}) => {
             const pageArea = this.quarkdownDocument.getParentViewport(reference);
             console.log(document)

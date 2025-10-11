@@ -10,7 +10,7 @@ export abstract class FootnotesDocumentHandler extends DocumentHandler {
     /** Footnote pairs (reference + definition) collected during pre-rendering. */
     protected footnotes: FootnotePair[] = [];
 
-    onPreRendering() {
+    async onPreRendering() {
         this.footnotes = getFootnoteDefinitionsAndFirstReference();
     }
 }

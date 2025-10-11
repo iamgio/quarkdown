@@ -11,7 +11,7 @@ import {DocumentHandler} from "../../document-handler";
  * For non-paged documents, the column count is applied directly via CSS instead (see _viewport.scss).
  */
 export class ColumnCountPaged extends DocumentHandler {
-    onPostRendering() {
+    async onPostRendering() {
         const columnCount = getComputedStyle(document.body).getPropertyValue('--qd-column-count')?.trim()
         if (!columnCount || columnCount === '') return; // No value set.
 

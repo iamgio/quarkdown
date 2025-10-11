@@ -35,7 +35,7 @@ export class PageNumbersSlides extends PageNumbersDocumentHandler {
     /**
      * Updates both total and current page numbers after rendering completes.
      */
-    onPostRendering() {
+    async onPostRendering() {
         this.updateTotalPageNumbers();
         this.updateCurrentPageNumbers();
     }
