@@ -59,7 +59,7 @@
             [[if:HEADINGFONTFAMILY]]--qd-heading-font: '[[HEADINGFONTFAMILY]]';[[endif:HEADINGFONTFAMILY]]
             [[if:CODEFONTFAMILY]]--qd-code-font: '[[CODEFONTFAMILY]]';[[endif:CODEFONTFAMILY]]
             [[if:FONTSIZE]]--qd-main-font-size: [[FONTSIZE]];[[endif:FONTSIZE]]
-            [[if:COLUMNCOUNT]]--property-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
+            [[if:COLUMNCOUNT]]--qd-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
             [[if:HALIGNMENT_LOCAL]]
             --qd-horizontal-alignment-local: [[HALIGNMENT_LOCAL]] !important;
             --qd-horizontal-alignment-global: unset !important;
