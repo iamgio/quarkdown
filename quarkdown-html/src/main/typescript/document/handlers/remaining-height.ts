@@ -7,7 +7,7 @@ import {DocumentHandler} from "../document-handler";
  * the available space in the viewport.
  */
 export class RemainingHeight extends DocumentHandler {
-    onPostRendering() {
+    async onPostRendering() {
         const fillHeightElements = document.querySelectorAll<HTMLElement>('.fill-height');
 
         fillHeightElements.forEach(element => {

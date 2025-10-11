@@ -16,6 +16,7 @@
     "pagedjs": "^0.4.3",
     "katex": "^0.16.23",
     "@types/katex": "^0.16.3",
-    "highlight.js": "^11.11.1"
+    "highlight.js": "^11.11.1",
+    "mermaid": "^11.12.0"
   }
 }

@@ -40,6 +40,10 @@
         }
     </script>
     [[endif:MATH]]
+    [[if:MERMAID]]
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>capabilities.mermaid = true;</script>
+    [[endif:MERMAID]]
 
     <style>
         [[for:FONTFACE]]
@@ -136,11 +140,5 @@
 [[if:PAGED]]
 [[CONTENT]]
 [[endif:PAGED]]
-[[if:MERMAID]]
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    initMermaid(mermaid);
-</script>
-[[endif:MERMAID]]
 </body>
 </html>

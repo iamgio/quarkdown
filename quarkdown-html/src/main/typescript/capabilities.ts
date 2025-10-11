@@ -18,4 +18,10 @@ export const capabilities = {
      * @see MathRenderer
      */
     math: false,
+
+    /**
+     * Whether to include the Mermaid diagram document handler for rendering diagrams.
+     * @see DiagramRenderer
+     */
+    mermaid: false,
 }

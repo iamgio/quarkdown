@@ -41,6 +41,7 @@ val bundleTypeScript =
                 "--external:pagedjs",
                 "--external:katex",
                 "--external:highlight.js",
+                "--external:mermaid",
                 "--sourcemap",
             ),
         )
