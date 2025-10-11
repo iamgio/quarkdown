@@ -23,15 +23,13 @@ declare const CopyButtonPlugin: { new(...args: any[]): any };
  */
 export class CodeHighlighter extends DocumentHandler {
     init() {
-        hljs.addPlugin({
-            'after:highlight': () => window.setTimeout(this.focusCodeLines, 1)
-        });
         hljs.addPlugin(new CopyButtonPlugin());
     }
 
     async onPostRendering() {
         hljs.highlightAll();
         this.initLineNumbers();
+        this.focusCodeLines();
     }
 
     /**
@@ -85,8 +83,8 @@ export class CodeHighlighter extends DocumentHandler {
      * @returns An object containing the parsed start and end line numbers
      */
     private extractFocusRange(codeBlock: HTMLElement): { start: number; end: number } {
-        const start = parseInt(codeBlock.getAttribute('data-focus-start') || '0');
-        const end = parseInt(codeBlock.getAttribute('data-focus-end') || '0');
+        const start = parseInt(codeBlock.dataset.focusStart || '0');
+        const end = parseInt(codeBlock.dataset.focusEnd || '0');
 
         return { start, end };
     }
@@ -98,10 +96,10 @@ export class CodeHighlighter extends DocumentHandler {
      * @param focusRange Object containing start and end line numbers
      */
     private applyFocusToLines(codeBlock: HTMLElement, focusRange: { start: number; end: number }) {
-        const lines = codeBlock.querySelectorAll('.hljs-ln-line');
+        const lines = codeBlock.querySelectorAll<HTMLElement>('.hljs-ln-line');
 
         lines.forEach(line => {
-            const lineNumber = parseInt(line.getAttribute('data-line-number') || '0');
+            const lineNumber = parseInt(line.dataset.lineNumber || '0');
 
             if (this.isLineInFocusRange(lineNumber, focusRange)) {
                 line.classList.add('focused');
