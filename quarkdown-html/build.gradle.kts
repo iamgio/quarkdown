@@ -40,6 +40,7 @@ val bundleTypeScript =
                 "--external:reveal.js",
                 "--external:pagedjs",
                 "--external:katex",
+                "--external:highlight.js",
                 "--sourcemap",
             ),
         )

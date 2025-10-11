@@ -8,6 +8,12 @@
  */
 export const capabilities = {
     /**
+     * Whether to include the code highlighter document handler for syntax highlighting in code blocks.
+     * @see CodeHighlighter
+     */
+    code: false,
+
+    /**
      * Whether to include the math document handler for rendering mathematical formulas.
      * @see MathRenderer
      */

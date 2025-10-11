@@ -15,6 +15,7 @@
     "@types/reveal.js": "^5.2.1",
     "pagedjs": "^0.4.3",
     "katex": "^0.16.23",
-    "@types/katex": "^0.16.3"
+    "@types/katex": "^0.16.3",
+    "highlight.js": "^11.11.1"
   }
 }
