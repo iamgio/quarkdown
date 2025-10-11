@@ -5,6 +5,7 @@ import {Sidebar} from "../handlers/sidebar";
 import {PageNumbersPaged} from "../handlers/page-numbers/page-numbers-paged";
 import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
 import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
+import {SplitCodeBlocksFixPaged} from "../handlers/paged/split-code-blocks-fix-paged";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -45,6 +46,7 @@ export class PagedDocument implements QuarkdownDocument {
             new PageMarginsPaged(this),
             new PageNumbersPaged(this),
             new FootnotesPaged(this),
+            new SplitCodeBlocksFixPaged(this),
         ];
     }
 }
