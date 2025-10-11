@@ -1,4 +1,4 @@
-import {DocumentHandler} from "./document-handler";
+import {ConditionalDocumentHandler, DocumentHandler, filterConditionalHandlers} from "./document-handler";
 import {preRenderingExecutionQueue} from "../queue/execution-queues";
 import {getGlobalHandlers} from "./global-handlers";
 
@@ -29,9 +29,9 @@ export interface QuarkdownDocument {
     initializeRendering(): void;
 
     /**
-     * @returns Array of document handlers that apply to this document
+     * @returns Array of document handlers that apply to this document.
      */
-    getHandlers(): DocumentHandler[]
+    getHandlers(): ConditionalDocumentHandler[]
 }
 
 /**
@@ -40,7 +40,9 @@ export interface QuarkdownDocument {
  * @param document - The document to prepare for rendering
  */
 export function prepare(document: QuarkdownDocument): void {
-    const handlers = [...getGlobalHandlers(document), ...document.getHandlers()];
+    const handlers: DocumentHandler[] =
+        filterConditionalHandlers([...getGlobalHandlers(document), ...document.getHandlers()]);
+
     handlers.forEach(handler => handler.pushToQueue());
 
     document.setupPreRenderingHook();

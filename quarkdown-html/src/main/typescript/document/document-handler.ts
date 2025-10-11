@@ -2,6 +2,23 @@ import {QuarkdownDocument} from "./quarkdown-document";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../queue/execution-queues";
 
 /**
+ * Type representing either a `DocumentHandler` instance or a boolean flag.
+ * Used for conditional inclusion of document handlers.
+ * Only `DocumentHandler` instances are retained for processing.
+ * @see filterConditionalHandlers
+ */
+export type ConditionalDocumentHandler = DocumentHandler | boolean;
+
+/**
+ * Filters an array of `ConditionalDocumentHandler` to retain only actual `DocumentHandler` instances.
+ * @param handlers - Array of `ConditionalDocumentHandler` (either `DocumentHandler` or boolean)
+ * @returns Array of `DocumentHandler` instances
+ */
+export function filterConditionalHandlers(handlers: ConditionalDocumentHandler[]): DocumentHandler[] {
+    return handlers.filter((handler): handler is DocumentHandler => handler instanceof DocumentHandler);
+}
+
+/**
  * Source of an event or action related to document processing,
  * with hooks for pre-rendering and post-rendering phases.
  */

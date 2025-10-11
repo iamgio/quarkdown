@@ -1,14 +1,15 @@
-import {DocumentHandler} from "./document-handler";
+import {ConditionalDocumentHandler} from "./document-handler";
 import {InlineCollapsibles} from "./handlers/inline-collapsibles";
 import {QuarkdownDocument} from "./quarkdown-document";
 import {RemainingHeight} from "./handlers/remaining-height";
-import {Math} from "./handlers/math";
+import {MathRenderer} from "./handlers/capabilities/math-renderer";
+import {capabilities} from "../capabilities";
 
 /** Global document handlers that apply to all documents. */
-export function getGlobalHandlers(document: QuarkdownDocument): DocumentHandler[] {
+export function getGlobalHandlers(document: QuarkdownDocument): ConditionalDocumentHandler[] {
     return [
         new InlineCollapsibles(document),
         new RemainingHeight(document),
-        new Math(document),
+        capabilities.math && new MathRenderer(document),
     ]
 }

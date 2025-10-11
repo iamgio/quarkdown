@@ -1,5 +1,6 @@
 // Main entry point for the quarkdown-html runtime.
 
+import {capabilities} from "./capabilities";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "./queue/execution-queues";
 import {PlainDocument} from "./document/type/plain-document";
 import {prepare} from "./document/quarkdown-document";
@@ -22,6 +23,7 @@ postRenderingExecutionQueue.addOnComplete(() => notifyLivePreview('postRendering
 // Expose the API to the global context.
 const context = window as any;
 context.isReady = isReady;
+context.quarkdownCapabilities = capabilities;
 context.prepare = prepare;
 context.PlainDocument = PlainDocument;
 context.PagedDocument = PagedDocument;

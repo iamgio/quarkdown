@@ -1,4 +1,4 @@
-import {DocumentHandler} from "../document-handler";
+import {DocumentHandler} from "../../document-handler";
 
 /**
  * Type declaration for the KaTeX library used for rendering mathematical formulas.
@@ -25,7 +25,7 @@ declare global {
  * The handler operates during the pre-rendering phase to ensure mathematical
  * content is processed before document rendering is finalized.
  */
-export class Math extends DocumentHandler {
+export class MathRenderer extends DocumentHandler {
     onPreRendering() {
         const texMacros = window.texMacros;
         const formulas = document.querySelectorAll<HTMLElement>('formula');
