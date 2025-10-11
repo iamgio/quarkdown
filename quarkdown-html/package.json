@@ -13,6 +13,8 @@
     "esbuild": "^0.25.10",
     "reveal.js": "^5.2.1",
     "@types/reveal.js": "^5.2.1",
-    "pagedjs": "^0.4.3"
+    "pagedjs": "^0.4.3",
+    "katex": "^0.16.23",
+    "@types/katex": "^0.16.3"
   }
 }

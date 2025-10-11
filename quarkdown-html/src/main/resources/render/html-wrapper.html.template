@@ -19,18 +19,6 @@
     [[endif:SLIDES]]
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="theme/theme.css">
-    <script>
-        [[if:PLAIN]]
-        const doc = new PlainDocument();
-        [[endif:PLAIN]]
-        [[if:SLIDES]]
-        const doc = new SlidesDocument();
-        [[endif:SLIDES]]
-        [[if:PAGED]]
-        const doc = new PagedDocument();
-        [[endif:PAGED]]
-        prepare(doc);
-    </script>
     [[if:CODE]]
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
@@ -41,7 +29,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
     <script>
-        const texMacros = {
+        window.texMacros = {
             [[for:TEXMACRO]]
             [[TEXMACRO]],
             [[endfor:TEXMACRO]]
@@ -113,6 +101,18 @@
             [[if:PARAGRAPHINDENT]]--qd-paragraph-text-indent: [[PARAGRAPHINDENT]];[[endif:PARAGRAPHINDENT]]
         }
     </style>
+    <script>
+        [[if:PLAIN]]
+        const doc = new PlainDocument();
+        [[endif:PLAIN]]
+        [[if:SLIDES]]
+        const doc = new SlidesDocument();
+        [[endif:SLIDES]]
+        [[if:PAGED]]
+        const doc = new PagedDocument();
+        [[endif:PAGED]]
+        prepare(doc);
+    </script>
 </head>
 <body class="quarkdown quarkdown-[[DOCTYPE]][[if:COLUMNCOUNT]] multicolumn[[endif:COLUMNCOUNT]]">
 [[if:PLAIN]]
