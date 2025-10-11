@@ -5,6 +5,7 @@ import {PageChunker} from "../../chunker/page-chunker";
 import {PageNumbersSlides} from "../handlers/page-numbers/page-numbers-slides";
 import {PageMarginsSlides} from "../handlers/page-margins/page-margins-slides";
 import {FootnotesSlides} from "../handlers/footnotes/footnotes-slides";
+import {PersistentHeadingsSlides} from "../handlers/persistent-headings/persistent-headings-slides";
 
 declare const Reveal: typeof import("reveal.js"); // global Reveal at runtime
 declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
@@ -73,6 +74,7 @@ export class SlidesDocument implements QuarkdownDocument {
             new PageMarginsSlides(this),
             new PageNumbersSlides(this),
             new FootnotesSlides(this),
+            new PersistentHeadingsSlides(this),
         ];
     }
 }

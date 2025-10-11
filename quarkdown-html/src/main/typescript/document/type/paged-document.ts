@@ -8,6 +8,7 @@ import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
 import {SplitCodeBlocksFixPaged} from "../handlers/paged/split-code-blocks-fix-paged";
 import {ColumnCountPaged} from "../handlers/paged/column-count-paged";
 import {ShowOnReady} from "../show-on-ready";
+import {PersistentHeadingsPaged} from "../handlers/persistent-headings/persistent-headings-paged";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -49,6 +50,7 @@ export class PagedDocument implements QuarkdownDocument {
             new PageMarginsPaged(this),
             new PageNumbersPaged(this),
             new FootnotesPaged(this),
+            new PersistentHeadingsPaged(this),
             new ColumnCountPaged(this),
             new SplitCodeBlocksFixPaged(this),
         ];
