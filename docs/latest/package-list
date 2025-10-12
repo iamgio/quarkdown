@@ -69,6 +69,7 @@ $dokka.location:com.quarkdown.stdlib//isLower/#kotlin.Number#kotlin.Number#kotli
 $dokka.location:com.quarkdown.stdlib//isNone/#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/isnone.html
 $dokka.location:com.quarkdown.stdlib//isNotEmpty/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.String/isnotempty.html
 $dokka.location:com.quarkdown.stdlib//landscape/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/landscape.html
+$dokka.location:com.quarkdown.stdlib//lastHeading/#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/lastheading.html
 $dokka.location:com.quarkdown.stdlib//let/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/let.html
 $dokka.location:com.quarkdown.stdlib//libraries/#com.quarkdown.core.context.Context/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libraries.html
 $dokka.location:com.quarkdown.stdlib//libraryExists/#com.quarkdown.core.context.Context#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Library/libexists.html
