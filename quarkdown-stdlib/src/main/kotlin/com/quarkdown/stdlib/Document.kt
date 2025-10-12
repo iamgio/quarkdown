@@ -728,15 +728,55 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 
 /**
- * Displays the last heading encountered before the current position, of the given [depth].
+ * Displays the last heading, of the given [depth], encountered in the current page.
  *
- * If no such heading is found, nothing is displayed.
+ * ```markdown
+ * # The heading
  *
- * This can be particularly useful in headers and footers, to show the current section of the document.
+ * .lastheading depth:{1} <!-- Displays "The heading" -->
+ * ```
+ *
+ * If the current page does not contain any, the last heading of the previous page is used instead, continuing backwards until a heading is found.
+ * If, ultimately, no such heading is found in the whole document, nothing is displayed.
+ *
+ * ```markdown
+ * <!-- Page 1 -->
+ *
+ * # Heading 1
+ *
+ * ## Heading 2
+ *
+ * <!-- Page 2 -->
+ *
+ * .lastheading depth:{2} <!-- Displays "Heading 2" -->
+ * ```
+ *
+ * This can be particularly useful in combination with [pageMarginContent], to show the current section of the document:
+ *
+ * ```
+ * .pagemargin {bottomcenter}
+ *     .lastheading depth:{1}
+ * ```
+ *
+ * Note that encountering a heading of lesser depth than [depth] resets the current last heading.
+ * For instance:
+ *
+ * ```markdown
+ * <!-- Page 1 -->
+ *
+ * # Heading 1
+ *
+ * ## Heading 2
+ *
+ * <!-- Page 2 -->
+ *
+ * # Heading 3
+ *
+ * .lastheading depth:{2} <!-- Empty -->
+ * ```
  *
  * @param depth the depth of the last [Heading] to match (1-6)
  * @return a new [LastHeading] node
- * @throws IllegalArgumentException if [depth] is not a positive value
  * @see pageMarginContent
  * @wiki Persistent headings
  */
