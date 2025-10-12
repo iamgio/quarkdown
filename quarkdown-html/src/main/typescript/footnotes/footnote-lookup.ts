@@ -32,6 +32,6 @@ export function getFootnoteDefinitionsAndFirstReference(sorted: boolean = true):
     // For each definition, gets the first reference to it.
     return definitions.map(definition => {
         const reference = getFootnoteFirstReference(definition.id);
-        return reference ? new FootnotePair(reference, definition) : null;
+        return reference ? {reference, definition} : null;
     }).filter(item => item !== null);
 }
