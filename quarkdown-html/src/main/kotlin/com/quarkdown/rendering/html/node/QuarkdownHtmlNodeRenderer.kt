@@ -503,6 +503,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: LastHeading) =
         buildTag("span") {
+            // Since pagination is performed at runtime, the last heading must be retrieved at runtime as well.
             className("last-heading")
             attribute("data-depth", node.depth)
         }

@@ -51,6 +51,7 @@ import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -1035,6 +1036,16 @@ class HtmlNodeRendererTest {
                 TextTransformData(),
                 listOf(Text("Foo")),
             ).render(),
+        )
+    }
+
+    @Test
+    fun `last heading`() {
+        val out = readParts("quarkdown/lastheading.html")
+
+        assertEquals(
+            out.next(),
+            LastHeading(depth = 3).render(),
         )
     }
 
