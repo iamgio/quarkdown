@@ -20,7 +20,8 @@ export class MermaidRenderer extends DocumentHandler {
 
     /** Processes all Mermaid diagrams in the document. */
     async onPreRendering() {
-        const renderPromises = Array.from(document.querySelectorAll<HTMLElement>('.mermaid')).map(
+        const diagrams = document.querySelectorAll<HTMLElement>('.mermaid:not([data-processed])');
+        const renderPromises = Array.from(diagrams).map(
             (element) => this.loadFromCacheOrRender(element)
         );
         await Promise.all(renderPromises)

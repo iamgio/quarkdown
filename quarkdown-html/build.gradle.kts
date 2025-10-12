@@ -1,3 +1,5 @@
+
+import com.github.gradle.node.npm.task.NpmTask
 import com.github.gradle.node.npm.task.NpxTask
 
 plugins {
@@ -50,4 +52,16 @@ val bundleTypeScript =
 tasks.processResources {
     dependsOn(tasks.compileSass)
     dependsOn(bundleTypeScript)
+}
+
+val npmTest =
+    tasks.register<NpmTask>("npmTest") {
+        group = "verification"
+        description = "Runs npm tests"
+        dependsOn(tasks.npmInstall)
+        args.set(listOf("run", "test:run"))
+    }
+
+tasks.test {
+    dependsOn(npmTest)
 }
