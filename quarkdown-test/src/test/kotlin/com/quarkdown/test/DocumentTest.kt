@@ -134,7 +134,7 @@ class DocumentTest {
                     "<tbody><tr><td>country</td><td><p>Italy</p></td></tr></tbody></table></td></tr>" +
                     "</tbody>" +
                     "</table>" +
-                    "<h1>iamgio</h1>" +
+                    "<h1 data-decorative=\"\">iamgio</h1>" +
                     "<p>slides</p>" +
                     "<p>English</p>",
                 it,

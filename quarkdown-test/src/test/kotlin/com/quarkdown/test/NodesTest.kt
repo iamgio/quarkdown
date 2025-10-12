@@ -20,7 +20,7 @@ class NodesTest {
         }
 
         execute("#! Title") {
-            assertEquals("<h1>Title</h1>", it)
+            assertEquals("<h1 data-decorative=\"\">Title</h1>", it)
         }
 
         execute("#### .sum {3} {2}") {

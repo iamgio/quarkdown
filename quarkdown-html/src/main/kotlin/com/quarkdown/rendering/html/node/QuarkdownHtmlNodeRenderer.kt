@@ -558,7 +558,8 @@ class QuarkdownHtmlNodeRenderer(
                         .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
-                ).withLocationLabel(node)
+                ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
+                .withLocationLabel(node)
                 .build()
 
         return buildMultiTag {

@@ -52,7 +52,7 @@ class BibliographyTest {
     fun `localized bibliography title`() {
         execute(".doclang {en}\n$BIBLIOGRAPHY_CALL") {
             assertEquals(
-                "<h1>" +
+                "<h1 data-decorative=\"\">" +
                     "References" +
                     "</h1>" +
                     PLAIN_BIBLIOGRAPHY_OUTPUT,
@@ -65,7 +65,7 @@ class BibliographyTest {
     fun `custom bibliography title`() {
         execute("$BIBLIOGRAPHY_CALL title:{My bibliography}") {
             assertEquals(
-                "<h1>" +
+                "<h1 data-decorative=\"\">" +
                     "My bibliography" +
                     "</h1>" +
                     PLAIN_BIBLIOGRAPHY_OUTPUT,

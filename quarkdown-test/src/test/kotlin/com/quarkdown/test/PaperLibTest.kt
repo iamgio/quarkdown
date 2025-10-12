@@ -177,13 +177,13 @@ class PaperLibTest {
             assertContains(
                 it,
                 "<div class=\"container fullwidth\" style=\"justify-items: center; text-align: center;\">" +
-                    "<h4>Abstract</h4>" +
+                    "<h4 data-decorative=\"\">Abstract</h4>" +
                     "</div>",
             )
             assertContains(
                 it,
                 "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
-                    "<h4>Abstract</h4>" +
+                    "<h4 data-decorative=\"\">Abstract</h4>" +
                     "</div>",
             )
         }

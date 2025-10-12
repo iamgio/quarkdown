@@ -35,9 +35,9 @@ export abstract class PersistentHeadingsDocumentHandler extends DocumentHandler 
      * @param container - The DOM element to scan for headings
      */
     private overwriteLastHeadings(container: Element) {
-        // Find the highest level heading in the slide (h1 to h6).
+        // Find the highest level non-decorative heading in the container (h1 to h6).
         for (let depth = MIN_HEADING_LEVEL; depth <= MAX_HEADING_LEVEL; depth++) {
-            const headings = container.querySelectorAll('h' + depth);
+            const headings = container.querySelectorAll(`h${depth}:not([data-decorative])`);
             if (headings.length > 0) {
                 this.lastHeadingPerDepth[depth - 1] = headings[headings.length - 1].innerHTML;
                 this.lastHeadingPerDepth.length = depth; // Remove lower level headings.

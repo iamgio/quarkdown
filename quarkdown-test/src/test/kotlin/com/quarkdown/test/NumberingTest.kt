@@ -99,7 +99,7 @@ class NumberingTest {
             assertEquals(
                 "<h1 data-location=\"1\">A</h1>" +
                     "<h2 data-location=\"1.1\">A/1</h2>" +
-                    "<h1>Nope!</h1>" +
+                    "<h1 data-decorative=\"\">Nope!</h1>" +
                     "<h1 data-location=\"2\">B</h1>" +
                     "<h1 data-location=\"3\">C</h1>" +
                     "<h2 data-location=\"3.1\">C/1</h2>" +

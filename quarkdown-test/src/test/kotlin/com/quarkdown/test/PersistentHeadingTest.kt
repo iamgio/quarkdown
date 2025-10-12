@@ -27,4 +27,24 @@ class PersistentHeadingTest {
             )
         }
     }
+
+    @Test
+    fun `with emphasis, in margin content`() {
+        execute(
+            """
+            .pagemargin {topcenter}
+                *.lastheading depth:{2}*
+            
+            ## Heading
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"page-margin-content page-margin-top-center\">" +
+                    "<p><em><span class=\"last-heading\" data-depth=\"2\"></span></em></p>" +
+                    "</div>" +
+                    "<h2>Heading</h2>",
+                it,
+            )
+        }
+    }
 }

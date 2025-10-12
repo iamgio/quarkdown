@@ -112,7 +112,7 @@ class TableOfContentsTest {
                     "<li><a href=\"#abc\">ABC</a></li>" +
                     "<li><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
-                    "<h2 id=\"ignored-from-toc\">Ignored from TOC</h2>" +
+                    "<h2 id=\"ignored-from-toc\" data-decorative=\"\">Ignored from TOC</h2>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"def\">DEF</h1>" +
                     "<p>Hello</p>",
