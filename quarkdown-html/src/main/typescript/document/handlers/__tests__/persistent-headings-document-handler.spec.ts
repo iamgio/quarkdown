@@ -1,13 +1,10 @@
 import {describe, expect, it} from 'vitest';
-import {
-    PersistentHeadingsDocumentHandler
-} from '../../../../document/handlers/persistent-headings/persistent-headings-document-handler';
+import {PersistentHeadingsDocumentHandler} from "../persistent-headings/persistent-headings-document-handler";
 
 class DummyDoc {}
 
 class Concrete extends PersistentHeadingsDocumentHandler {
   public applyProxy(params: { sourceContainer: Element; targetContainers: Element[] }) {
-    // @ts-expect-error access to protected method for testing
     return this.apply(params);
   }
 }
