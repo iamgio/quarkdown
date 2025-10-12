@@ -1,17 +1,28 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 /**
  * Tests for persistent headings via [com.quarkdown.core.ast.quarkdown.inline.LastHeading].
  */
 class PersistentHeadingTest {
     @Test
+    fun `unavailable in plain documents`() {
+        assertFailsWith<InvalidFunctionCallException> {
+            execute(".lastheading depth:{2}") { }
+        }
+    }
+
+    @Test
     fun `in margin content`() {
         execute(
             """
+            .doctype {paged}
+            
             .pagemargin {topcenter}
                 .lastheading depth:{2}
             
@@ -32,6 +43,8 @@ class PersistentHeadingTest {
     fun `with emphasis, in margin content`() {
         execute(
             """
+             .doctype {slides}
+            
             .pagemargin {topcenter}
                 *.lastheading depth:{2}*
             
