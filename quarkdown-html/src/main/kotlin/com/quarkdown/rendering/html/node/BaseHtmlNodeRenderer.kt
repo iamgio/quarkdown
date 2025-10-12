@@ -60,6 +60,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
@@ -375,6 +376,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageCounter): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: LastHeading): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: SlidesConfigurationInitializer): CharSequence = throw UnsupportedRenderException(node)
 

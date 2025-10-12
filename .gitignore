@@ -36,6 +36,12 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 ##############################
+## NPM
+##############################
+node_modules/
+npm-debug.log
+
+##############################
 ## IntelliJ
 ##############################
 out/

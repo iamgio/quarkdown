@@ -1,3 +1,7 @@
+# Esbuild
+src/main/resources/render/script/quarkdown.js
+src/main/resources/render/script/quarkdown.js.map
+
 # Sass
 
 src/main/resources/render/theme/**/*.css

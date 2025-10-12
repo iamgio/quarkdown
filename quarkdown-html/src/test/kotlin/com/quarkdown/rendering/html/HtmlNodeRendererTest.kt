@@ -51,6 +51,7 @@ import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -508,6 +509,7 @@ class HtmlNodeRendererTest {
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
+        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar")), isDecorative = true).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Text("Foo bar")), customId = "my-id").render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noIdNoPageBreak))
@@ -1035,6 +1037,16 @@ class HtmlNodeRendererTest {
                 TextTransformData(),
                 listOf(Text("Foo")),
             ).render(),
+        )
+    }
+
+    @Test
+    fun `last heading`() {
+        val out = readParts("quarkdown/lastheading.html")
+
+        assertEquals(
+            out.next(),
+            LastHeading(depth = 3).render(),
         )
     }
 

@@ -34,7 +34,7 @@ function createArgs() {
     await page.content();
 
     console.log('Connected. Waiting for page to be ready.');
-    await page.waitForFunction('isReady()');
+    await page.waitForFunction('window.isReady()');
 
     const body = await page.$('body');
 

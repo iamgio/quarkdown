@@ -59,7 +59,10 @@ class HtmlToPdfTest {
             </head>
             <body>
                 <h1>Hello, Quarkdown!</h1>
-                <script>function isReady() { return true; }</script>
+                <script>
+                function isReady() { return true; }
+                window.isReady = isReady;
+                </script>
             </body>
             </html>
             """.trimIndent(),

@@ -1,0 +1,58 @@
+import {QuarkdownDocument} from "../quarkdown-document";
+import {DocumentHandler} from "../document-handler";
+import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
+import {Sidebar} from "../handlers/sidebar";
+import {PageNumbersPaged} from "../handlers/page-numbers/page-numbers-paged";
+import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
+import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
+import {SplitCodeBlocksFixPaged} from "../handlers/paged/split-code-blocks-fix-paged";
+import {ColumnCountPaged} from "../handlers/paged/column-count-paged";
+import {ShowOnReady} from "../show-on-ready";
+import {PersistentHeadingsPaged} from "../handlers/persistent-headings/persistent-headings-paged";
+
+declare const Paged: typeof import("pagedjs"); // global Paged at runtime
+
+/**
+ * Paged document implementation for paged.js media.
+ */
+export class PagedDocument implements QuarkdownDocument {
+    /**
+     * @returns The parent page of the given element.
+     */
+    getParentViewport(element: Element): HTMLElement | undefined {
+        return element.closest<HTMLElement>('.pagedjs_area')!// || undefined;
+    }
+
+    /** Sets up pre-rendering to execute when DOM content is loaded. */
+    setupPreRenderingHook() {
+        document.addEventListener("DOMContentLoaded", async () => await preRenderingExecutionQueue.execute());
+    }
+
+    /** Sets up post-rendering to execute when paged.js is ready. */
+    setupPostRenderingHook(): void {
+        class PagedAfterReadyHandler extends Paged.Handler {
+            afterRendered() {
+                postRenderingExecutionQueue.execute().then();
+            }
+        }
+        Paged.registerHandlers(PagedAfterReadyHandler);
+    }
+
+    /** Initializes paged.js rendering. */
+    initializeRendering(): void {
+        (window as any).PagedPolyfill?.preview().then();
+    }
+
+    getHandlers(): DocumentHandler[] {
+        return [
+            new Sidebar(this),
+            new ShowOnReady(this),
+            new PageMarginsPaged(this),
+            new PageNumbersPaged(this),
+            new FootnotesPaged(this),
+            new PersistentHeadingsPaged(this),
+            new ColumnCountPaged(this),
+            new SplitCodeBlocksFixPaged(this),
+        ];
+    }
+}

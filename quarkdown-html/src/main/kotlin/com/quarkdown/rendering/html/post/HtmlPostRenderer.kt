@@ -1,11 +1,7 @@
 package com.quarkdown.rendering.html.post
 
-import com.quarkdown.core.ast.attributes.presence.hasCode
-import com.quarkdown.core.ast.attributes.presence.hasMath
-import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
-import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.orDefault
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
@@ -120,35 +116,14 @@ class HtmlPostRenderer(
      * @return a set that contains an output artifact for each required script component
      */
     private fun retrieveScriptComponentsArtifacts(): Set<OutputResource> =
-        buildSet {
-            /**
-             * Appends a new output artifact to the set if [condition] is true.
-             * @param resourceName name of the resource
-             * @param resourcePath path of the resource starting from the theme folder, without extension
-             */
-            fun artifact(
-                resourceName: String,
-                resourcePath: String = resourceName,
-                condition: Boolean = true,
-            ) {
-                if (!condition) return
-                this +=
-                    LazyOutputArtifact.internal(
-                        resource = "/render/script/$resourcePath.js",
-                        // The name is not used here, as this artifact will be concatenated to others in generateResources.
-                        name = resourceName,
-                        type = ArtifactType.JAVASCRIPT,
-                    )
-            }
-
-            artifact("script")
-            artifact("plain", condition = context.documentInfo.type == DocumentType.PLAIN)
-            artifact("slides", condition = context.documentInfo.type == DocumentType.SLIDES)
-            artifact("paged", condition = context.documentInfo.type == DocumentType.PAGED)
-            artifact("math", condition = context.attributes.hasMath)
-            artifact("mermaid", condition = context.attributes.hasMermaidDiagram)
-            artifact("code", condition = context.attributes.hasCode)
-        }
+        setOf(
+            LazyOutputArtifact.internal(
+                resource = "/render/script/quarkdown.js",
+                // The name is not used here, as this artifact will be concatenated to others in generateResources.
+                name = "quarkdown",
+                type = ArtifactType.JAVASCRIPT,
+            ),
+        )
 
     override fun wrapResources(
         name: String,

@@ -40,6 +40,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertToListNode
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -500,23 +501,33 @@ class QuarkdownHtmlNodeRenderer(
             )
         }
 
+    override fun visit(node: LastHeading) =
+        buildTag("span") {
+            // Since pagination is performed at runtime, the last heading must be retrieved at runtime as well.
+            className("last-heading")
+            attribute("data-depth", node.depth)
+        }
+
     override fun visit(node: SlidesConfigurationInitializer): CharSequence =
         buildTag("script") {
-            // Inject properties that are read by the slides.js script after the document is loaded.
+            hidden()
+            // Injects properties that are read at runtime after the document is loaded.
             +buildString {
+                append("window.slidesConfig = {")
                 node.centerVertically?.let {
-                    append("const slides_center = $it;")
+                    append("center: $it,")
                 }
                 node.showControls?.let {
-                    append("const slides_showControls = $it;")
+                    append("showControls: $it,")
                 }
                 node.showNotes?.let {
-                    append("const slides_showNotes = $it;")
+                    append("showNotes: $it,")
                 }
                 node.transition?.let {
-                    append("const slides_transitionStyle = '${it.style.asCSS}';")
-                    append("const slides_transitionSpeed = '${it.speed.asCSS}';")
+                    append("transitionStyle: '${it.style.asCSS}',")
+                    append("transitionSpeed: '${it.speed.asCSS}',")
                 }
+                append("};")
             }
         }
 
@@ -547,7 +558,8 @@ class QuarkdownHtmlNodeRenderer(
                         .of(renderer = this)
                         .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                         ?.getId(node),
-                ).withLocationLabel(node)
+                ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
+                .withLocationLabel(node)
                 .build()
 
         return buildMultiTag {

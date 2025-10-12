@@ -1,0 +1,26 @@
+{
+  "name": "quarkdown-html",
+  "version": "1.0.0",
+  "description": "Browser runtime for quarkdown-html",
+  "license": "GPL-3.0",
+  "author": "Giorgio Garofalo & Quarkdown contributors",
+  "type": "commonjs",
+  "main": "src/main/typescript/index.ts",
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.10",
+    "reveal.js": "^5.2.1",
+    "@types/reveal.js": "^5.2.1",
+    "pagedjs": "^0.4.3",
+    "katex": "^0.16.23",
+    "@types/katex": "^0.16.3",
+    "highlight.js": "^11.11.1",
+    "mermaid": "^11.12.0",
+    "vitest": "^3.2.4",
+    "happy-dom": "^20.0.0",
+    "@types/node": "^24.7.2"
+  }
+}

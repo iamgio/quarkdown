@@ -12,6 +12,9 @@
 .footer
 	Quarkdown
 	
+.pagemargin {bottomleft}
+    *.lastheading depth:{1}*
+
 .pagemargin {bottomright}
 	.currentpage
 

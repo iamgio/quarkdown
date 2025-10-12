@@ -23,7 +23,7 @@ body.quarkdown {
 
     > main {
       width: 100%;
-      column-count: var(--property-column-count);
+      column-count: var(--qd-column-count);
     }
 
     > aside {
@@ -57,7 +57,7 @@ body.quarkdown {
     @include content-area-border;
 
     > section, .pdf-page {
-      column-count: var(--property-column-count);
+      column-count: var(--qd-column-count);
     }
   }
 

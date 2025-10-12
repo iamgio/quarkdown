@@ -72,6 +72,9 @@
   --qd-letter-spacing: normal;
   --qd-paragraph-text-indent: none; // Paragraph indentation (with LaTeX policies)
 
+  // Misc
+  --qd-column-count: unset; // Number of columns for multi-column layout
+
   // Location labels
   --qd-heading-label-suffix: ". "; // Suffix for heading labels, such as location numbering (e.g. the last `.` in `1.1. Heading`)
   --qd-caption-label-suffix: ": "; // Suffix for labels in captions (e.g. the `:` in `Figure 1.1: ...`)
@@ -143,6 +146,5 @@
   --r-heading-margin: var(--qd-heading-margin);
 
   // Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values.
-  --property-column-count: unset;
   --viewport-remaining-height: 50vh;
 }

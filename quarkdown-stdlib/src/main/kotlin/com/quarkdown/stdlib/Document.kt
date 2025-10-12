@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
+import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
 import com.quarkdown.core.context.Context
@@ -39,6 +40,7 @@ import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OutputValue
@@ -77,6 +79,7 @@ val Document: QuarkdownModule =
         ::footer,
         ::currentPage,
         ::totalPages,
+        ::lastHeading,
         ::autoPageBreak,
         ::disableAutoPageBreak,
         ::marker,
@@ -723,6 +726,63 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
+
+/**
+ * Displays the last heading, of the given [depth], encountered in the current page.
+ *
+ * ```markdown
+ * # The heading
+ *
+ * .lastheading depth:{1} <!-- Displays "The heading" -->
+ * ```
+ *
+ * If the current page does not contain any, the last heading of the previous page is used instead, continuing backwards until a heading is found.
+ * If, ultimately, no such heading is found in the whole document, nothing is displayed.
+ *
+ * ```markdown
+ * <!-- Page 1 -->
+ *
+ * # Heading 1
+ *
+ * ## Heading 2
+ *
+ * <!-- Page 2 -->
+ *
+ * .lastheading depth:{2} <!-- Displays "Heading 2" -->
+ * ```
+ *
+ * This can be particularly useful in combination with [pageMarginContent], to show the current section of the document:
+ *
+ * ```
+ * .pagemargin {bottomcenter}
+ *     .lastheading depth:{1}
+ * ```
+ *
+ * Note that encountering a heading of lesser depth than [depth] resets the current last heading.
+ * For instance:
+ *
+ * ```markdown
+ * <!-- Page 1 -->
+ *
+ * # Heading 1
+ *
+ * ## Heading 2
+ *
+ * <!-- Page 2 -->
+ *
+ * # Heading 3
+ *
+ * .lastheading depth:{2} <!-- Empty -->
+ * ```
+ *
+ * @param depth the depth of the last [Heading] to match (1-6)
+ * @return a new [LastHeading] node
+ * @see pageMarginContent
+ * @wiki Persistent headings
+ */
+@NotForDocumentType(DocumentType.PLAIN)
+@Name("lastheading")
+fun lastHeading(depth: Int) = LastHeading(depth).wrappedAsValue()
 
 /**
  * Sets a new automatic page break threshold when a heading is found:

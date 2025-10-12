@@ -497,13 +497,7 @@ class HtmlPostRendererTest {
         assertThemeGroupContains(resources, setOf("darko", "minimal", "global", "theme"))
 
         val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
-
-        scriptGroup.resources.map { it.name }.let { scripts ->
-            assertTrue("script" in scripts)
-            assertTrue("slides" in scripts)
-            assertTrue("math" in scripts)
-            assertFalse("code" in scripts)
-        }
+        assertEquals("quarkdown", scriptGroup.resources.single().name)
     }
 
     @Test
