@@ -18,14 +18,14 @@ class EmojiTest {
     @Test
     fun `emoji with skin tone`() {
         execute(".emoji {waving-hand~medium-dark}") {
-            assertEquals("</p>\uD83D\uDC4B\uD83C\uDFFF</p>", it)
+            assertEquals("</p>\uD83D\uDC4B\uD83C\uDFFE</p>", it)
         }
     }
 
     @Test
     fun `emoji with two skin tones`() {
         execute(".emoji {people-holding-hands~medium-light,medium-dark}") {
-            assertEquals("<p>\uD83E\uDDD1\uD83C\uDFFE\u200D\uD83E\uDDD1\uD83C\uDFFF</p>", it)
+            assertEquals("<p>\uD83C\uDFFC\u200D\uD83E\uDD1D</p>", it)
         }
     }
 
