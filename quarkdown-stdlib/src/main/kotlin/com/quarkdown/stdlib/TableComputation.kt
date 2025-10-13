@@ -1,11 +1,14 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
@@ -15,6 +18,7 @@ import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OrderedCollectionValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.Lambda
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.toPlainText
 
@@ -31,6 +35,7 @@ val TableComputation: QuarkdownModule =
         ::tableCompute,
         ::tableColumn,
         ::tableColumns,
+        ::generateTableByRows,
     )
 
 /**
@@ -364,4 +369,79 @@ fun tableColumns(
             val (_, _, values) = getTableColumn(table, index + INDEX_STARTS_AT)
             values.map(::DynamicValue).wrappedAsValue()
         }.wrappedAsValue()
+}
+
+/**
+ * Generates a table from a list of rows, where each row is a list of cell values.
+ * Optionally, headers can be provided for the columns.
+ *
+ * Example:
+ * ```
+ * .var {headers}
+ *    - Name
+ *    - Age
+ *    - City
+ *
+ * .newtablebyrows {.headers}
+ *   - - John
+ *     - 25
+ *     - NY
+ *   - - Lisa
+ *     - 32
+ *     - LA
+ *   - - Mike
+ *     - 19
+ *     - CHI
+ * ```
+ *
+ * Result:
+ * ```
+ * | Name | Age | City |
+ * |------|-----|------|
+ * | John | 25  | NY   |
+ * | Lisa | 32  | LA   |
+ * | Mike | 19  | CHI  |
+ * ```
+ *
+ * @param context the current context, injected automatically
+ * @param headers optional list of headers for the columns. If not provided, no headers are used.
+ * @param rows list of rows, where each row is an iterable of cell values.
+ * Rows can have varying lengths; missing cells will be filled with empty content.
+ * @return the generated [Table] node
+ * @wiki Table manipulation
+ */
+@Name("tablebyrows")
+fun generateTableByRows(
+    @Injected context: Context,
+    headers: List<OutputValue<*>> = emptyList(),
+    rows: List<IterableValue<out OutputValue<*>>>,
+): NodeValue {
+    if (rows.isEmpty()) return Table(emptyList()).wrappedAsValue()
+
+    fun valueToInlineContent(value: OutputValue<*>?): InlineContent =
+        value
+            ?.unwrappedValue
+            ?.let { ValueFactory.inlineMarkdown(it, context).unwrappedValue.children }
+            ?: emptyList()
+
+    val columnCount = rows.maxOf { it.unwrappedValue.toList().size }
+    val columns =
+        List(columnCount) {
+            val header = headers.getOrNull(it)
+            Table.MutableColumn(
+                alignment = Table.Alignment.NONE,
+                header = Table.Cell(valueToInlineContent(header)),
+                cells = mutableListOf(),
+            )
+        }
+
+    for (row in rows) {
+        repeat(columnCount) { i ->
+            val row = row.unwrappedValue.toList().getOrNull(i)
+            columns[i].cells += Table.Cell(valueToInlineContent(row))
+        }
+    }
+
+    return Table(columns.map { it.toColumn() })
+        .wrappedAsValue()
 }

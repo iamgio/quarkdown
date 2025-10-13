@@ -305,17 +305,8 @@ class BlockTokenParser(
     }
 
     override fun visit(token: TableToken): Node {
-        /**
-         * A temporary mutable [Table.Column].
-         */
-        class MutableColumn(
-            var alignment: Table.Alignment,
-            val header: Table.Cell,
-            val cells: MutableList<Table.Cell>,
-        )
-
         val groups = token.data.groups.iterator(consumeAmount = 2)
-        val columns = mutableListOf<MutableColumn>()
+        val columns = mutableListOf<Table.MutableColumn>()
 
         /**
          * Extracts the cells from a table row as raw strings.
@@ -334,7 +325,7 @@ class BlockTokenParser(
 
         // Header row.
         parseRow(groups.next()).forEach {
-            columns += MutableColumn(Table.Alignment.NONE, it, mutableListOf())
+            columns += Table.MutableColumn(Table.Alignment.NONE, it, mutableListOf())
         }
 
         // Delimiter row (defines alignment).
@@ -401,7 +392,7 @@ class BlockTokenParser(
             }
 
         return Table(
-            columns = columns.map { Table.Column(it.alignment, it.header, it.cells) },
+            columns = columns.map { it.toColumn() },
             caption = caption,
             referenceId = customId,
         )

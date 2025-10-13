@@ -205,4 +205,59 @@ class TableComputationTest {
             assertEquals("<p><strong>76</strong></p>", it)
         }
     }
+
+    @Test
+    fun `generation by rows, no headers`() {
+        execute(
+            """
+            .tablebyrows
+                - - John
+                  - 25
+                  - NY
+                - - Lisa
+                  - 32
+                  - LA
+                - - Mike
+                  - 19
+                  - CHI
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                htmlTable(john + lisa + mike)
+                    .replace(
+                        "<thead><tr><th>Name</th><th>Age</th><th>City</th></tr></thead>",
+                        "<thead><tr><th></th><th></th><th></th></tr></thead>",
+                    ),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `generation by rows, with headers`() {
+        execute(
+            """
+            .var {headers}
+                - Name
+                - Age
+                - City
+                  
+            .tablebyrows {.headers}
+                - - John
+                  - 25
+                  - NY
+                - - Lisa
+                  - 32
+                  - LA
+                - - Mike
+                  - 19
+                  - CHI
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                htmlTable(john + lisa + mike),
+                it,
+            )
+        }
+    }
 }

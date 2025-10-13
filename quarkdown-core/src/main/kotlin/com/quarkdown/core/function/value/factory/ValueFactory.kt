@@ -321,6 +321,7 @@ object ValueFactory {
     ): MarkdownContentValue =
         when (raw) {
             is MarkdownContent -> MarkdownContentValue(raw)
+            is Node -> MarkdownContentValue(MarkdownContent(listOf(raw)))
             is DynamicValue if raw.unwrappedValue is String -> blockMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
@@ -342,6 +343,7 @@ object ValueFactory {
     ): InlineMarkdownContentValue =
         when (raw) {
             is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
+            is Node -> InlineMarkdownContentValue(InlineMarkdownContent(listOf(raw)))
             is DynamicValue if raw.unwrappedValue is String -> inlineMarkdown(raw.unwrappedValue, context)
             else ->
                 markdown(
