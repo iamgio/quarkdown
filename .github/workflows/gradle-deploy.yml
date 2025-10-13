@@ -31,11 +31,11 @@ jobs:
         job-id: main
         arguments: distZip
 
-    - name: Unzip distribution (keeping the zip file) and set to PATH
+    - name: Unzip distribution (keeping the zip file)
       run: |
         mkdir -p build/unzipped
         unzip -q build/distributions/quarkdown.zip -d build/unzipped
-        echo "$PWD/build/unzipped/quarkdown-$GITHUB_SHA/bin" >> $GITHUB_PATH
+        echo "$PWD/build/unzipped/quarkdown/bin" >> $GITHUB_PATH
 
     - name: Echo output files
       run: ls -d "$PWD/build/"*
