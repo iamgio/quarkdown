@@ -17,6 +17,9 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.toPlainText
+import org.kodein.emoji.Emoji
+import org.kodein.emoji.EmojiTemplateCatalog
+import org.kodein.emoji.list
 
 /**
  * `Text` stdlib module exporter.
@@ -27,6 +30,7 @@ val Text: QuarkdownModule =
         ::text,
         ::lineBreak,
         ::code,
+        ::emoji,
         ::loremIpsum,
     )
 
@@ -117,6 +121,22 @@ fun code(
         caption = caption,
         referenceId = referenceId,
     ).wrappedAsValue()
+
+private val emojiCatalog by lazy { EmojiTemplateCatalog(Emoji.list().also { println(it.map { "$it ${it.details.aliases}\n" }) }) }
+
+/**
+ * Inserts an emoji by its shortcode, e.g., `smile`.
+ *
+ * An emoji can be described with:
+ *
+ * - A simple short-code: `.emoji {wink}` produces 😉
+ * - A short-code with one skin tone: `.emoji {waving-hand~medium-dark}` produces 👋🏾
+ * - A short-code with two skin tones: :people-holding-hands~medium-light,medium-dark: produces 🧑🏼‍🤝‍🧑🏾
+ *
+ * @param shortcode the shortcode of the emoji to insert (without colons)
+ * @return the emoji as a string, or the shortcode as plain text, surrounded by colons, if not found
+ */
+fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wrappedAsValue()
 
 /**
  * @return a fixed Lorem Ipsum text.
