@@ -110,7 +110,7 @@ jobs:
     # Emoji cheat sheet generation via Quarkdown
 
     - name: Generate emoji list
-      run: quarkdown c .github/workflows/generate-emoji-list/generate.qd -o build/emoji-list --nowrap
+      run: quarkdown c .github/workflows/generate-emoji-list/generate.qd -o build/qd --nowrap
 
     - name: Setup gh-pages-src branch for emoji list commit
       run: |
@@ -119,9 +119,9 @@ jobs:
         # prepending {{ define "main" }} and appending {{ end }} to the file.
         {
           echo '{{ define "main" }}'
-          cat build/emoji-list
+          cat build/qd/emoji-list/index.html
           echo '{{ end }}'
-        } > layout/docs/emoji-list.html
+        } > layouts/docs/emoji-list.html
 
     - name: Commit emoji list to gh-pages-src branch
       uses: stefanzweifel/git-auto-commit-action@v7
