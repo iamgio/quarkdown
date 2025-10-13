@@ -1,0 +1,45 @@
+table {
+    width: 100%;
+    margin: 8rem auto;
+    max-width: 900px;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th,
+table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+table th:first-child {
+    text-align: center;
+}
+
+table td:first-child {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+table code {
+    background-color: #f1f3f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+    color: #d73a49;
+}

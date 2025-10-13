@@ -1,12 +1,13 @@
 {{ $nav := .Site.GetPage "nav" }}
+{{ $baseDir := .Params.baseDir | default "" }}
 
 <nav id="nav" class="navbar">
     <div class="navbar_container">
         <div class="z-9999 flex-child-fixed" style="margin-top: -5px;">
             <div class="navbar_logo-dark">
-                <a href="/" aria-current="page" class="logo-medium w-inline-block">
+                <a href="{{ if $baseDir }}{{ print $baseDir }}{{ else }}/{{ end }}" aria-current="page" class="logo-medium w-inline-block">
                     <div class="logo-wrapper">
-                        <img width="auto" alt="{{ .Site.Title }} Logo" src="{{ "img/logo.svg" | absURL }}" loading="eager" class="height-inherit">
+                        <img width="auto" alt="{{ .Site.Title }} Logo" src="{{ print $baseDir "img/logo.svg" | absURL }}" loading="eager" class="height-inherit">
                     </div>
                 </a>
             </div>
@@ -71,7 +72,7 @@
 
                 <div class="buttonwrapper is-navbar">
                     <a class="icon-16 nav-icon" href="https://github.com/iamgio/quarkdown">
-                        <img src="img/github.svg" alt="GitHub Logo" class="github-logo">
+                        <img src="{{ print $baseDir "img/github.svg" | absURL }}" alt="GitHub Logo" class="github-logo">
                     </a>
                 </div>
 

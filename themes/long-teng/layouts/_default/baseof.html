@@ -16,12 +16,17 @@
     <meta itemprop="operatingSystem" content="Cross-platform">
     <meta itemprop="applicationCategory" content="DeveloperApplication" />
     
-    <link href="{{ "css/clean.css" | absURL }}" rel="stylesheet" type="text/css">
-    <link href="{{ "img/fav.png" | absURL }}" rel="shortcut icon" type="image/x-icon">
-    <link href="{{ "img/fav.png" | absURL }}" rel="icon" type="image/x-icon" sizes="48x48">
+    {{ $baseDir := .Params.baseDir | default "" }}
+    <link href="{{ print $baseDir "css/clean.css" | absURL }}" rel="stylesheet" type="text/css">
+    <link href="{{ print $baseDir "img/fav.png" | absURL }}" rel="shortcut icon" type="image/x-icon">
+    <link href="{{ print $baseDir "img/fav.png" | absURL }}" rel="icon" type="image/x-icon" sizes="48x48">
     <link href="{{ .Permalink }}" rel="canonical">
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
-    <link rel="apple-touch-icon" href="{{ "img/fav.png" | absURL }}">
+    <link href="{{ print $baseDir "css/styles.css" }}" rel="stylesheet" type="text/css">
+    <link rel="apple-touch-icon" href="{{ print $baseDir "img/fav.png" | absURL }}">
+    {{ $stylesheet := .Params.stylesheet }}
+    {{ if $stylesheet }}
+    <link href="{{ print $baseDir "css/" $stylesheet }}" rel="stylesheet" type="text/css">
+    {{ end }}
 </head>
 <body>
 <div class="page-wrapper">
@@ -34,7 +39,8 @@
 <!-- Toast Element -->
 <div id="toast" class="toast"></div>
 
-<script src="{{ "js/main.js" | absURL }}" type="application/javascript"></script>
+{{ $baseDir := .Params.baseDir | default "" }}
+<script src="{{ print $baseDir "js/main.js" | absURL }}" type="application/javascript"></script>
 
 </body>
 </html>
