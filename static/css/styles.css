@@ -12,6 +12,7 @@
     --indigo-600: color-mix(in srgb, var(--main) 30%, #176917);
     --indigo-700: var(--indigo-100);
     --indigo-800: var(--main);
+    --light-background: rgb(219, 233, 218);
 }
 
 .main-wrapper, .background-image-container {
