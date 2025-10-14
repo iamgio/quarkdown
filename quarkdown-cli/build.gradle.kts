@@ -20,3 +20,18 @@ dependencies {
 application {
     mainClass.set("com.quarkdown.cli.QuarkdownCliKt")
 }
+
+// Writes the project version to a file in the resources directory, so it can be accessed at runtime.
+val writeVersionFile by tasks.registering {
+    val version = project.parent?.version ?: "unknown"
+    val versionFile = "version.txt"
+    val outputFile = layout.projectDirectory.file("src/main/resources/$versionFile").asFile
+
+    doLast {
+        outputFile.writeText(version.toString())
+    }
+}
+
+tasks.processResources {
+    dependsOn(writeVersionFile)
+}
