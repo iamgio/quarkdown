@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -27,6 +28,7 @@ val Text: QuarkdownModule =
         ::text,
         ::lineBreak,
         ::code,
+        ::codeSpan,
         ::loremIpsum,
     )
 
@@ -117,6 +119,15 @@ fun code(
         caption = caption,
         referenceId = referenceId,
     ).wrappedAsValue()
+
+/**
+ * Creates an inline code span.
+ * Equivalent to backticks in standard Markdown, but also accepts function calls within its [text] argument.
+ * @param text code content
+ * @return a [CodeSpan] node
+ */
+@Name("codespan")
+fun codeSpan(text: String) = CodeSpan(text).wrappedAsValue()
 
 /**
  * @return a fixed Lorem Ipsum text.

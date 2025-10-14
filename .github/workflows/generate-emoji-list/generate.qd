@@ -1,0 +1,10 @@
+.docname {emoji-list}
+
+.var {headers}
+    - Emoji
+    - Code
+
+.tablebyrows {.headers}
+    .foreach {.allemojis}
+        emoji code:
+        .pair {.emoji} {.code::codespan}

@@ -31,6 +31,12 @@ jobs:
         job-id: main
         arguments: distZip
 
+    - name: Unzip distribution (keeping the zip file)
+      run: |
+        mkdir -p build/unzipped
+        unzip -q build/distributions/quarkdown.zip -d build/unzipped
+        echo "$PWD/build/unzipped/quarkdown/bin" >> $GITHUB_PATH
+
     - name: Echo output files
       run: ls -d "$PWD/build/"*
 
@@ -84,6 +90,10 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build/docs
         destination_dir: docs/latest
+
+    - name: Update emoji list
+      uses: iamgio/quarkdown/.github/actions/update-emoji-list@main
+      if: github.ref_type == 'tag'
 
     # Bump Homebrew
     - uses: mislav/bump-homebrew-formula-action@v3

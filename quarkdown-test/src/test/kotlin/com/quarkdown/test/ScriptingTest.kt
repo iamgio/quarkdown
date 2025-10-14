@@ -816,4 +816,30 @@ class ScriptingTest {
             )
         }
     }
+
+    @Test
+    fun `all emojis to table`() {
+        execute(
+            """
+            .var {headers}
+                - Emoji
+                - Code
+            
+            .tablebyrows {.headers}
+                .foreach {.allemojis}
+                    emoji code:
+                    .pair {.emoji} {.code::codespan}
+            """.trimIndent(),
+        ) {
+            val out =
+                "<table><thead><tr><th>Emoji</th><th>Code</th></tr></thead><tbody>" +
+                    "<tr><td>\uD83D\uDE00</td><td><span class=\"codespan-content\"><code>smile</code></span></td></tr>" +
+                    "<tr><td>\uD83D\uDE03</td><td><span class=\"codespan-content\"><code>smile-with-big-eyes</code></span></td></tr>" +
+                    "<tr><td>\uD83D\uDE04</td><td><span class=\"codespan-content\"><code>grin</code></span></td></tr><tr>"
+            assertEquals(
+                out,
+                it.toString().substring(0, out.length),
+            )
+        }
+    }
 }

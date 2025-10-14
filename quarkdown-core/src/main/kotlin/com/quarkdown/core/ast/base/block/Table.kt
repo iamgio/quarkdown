@@ -55,6 +55,20 @@ class Table(
     )
 
     /**
+     * A mutable [Table.Column] which can be built incrementally.
+     */
+    data class MutableColumn(
+        var alignment: Table.Alignment,
+        val header: Table.Cell,
+        val cells: MutableList<Table.Cell>,
+    ) {
+        /**
+         * @return an immutable [Table.Column] with the current state of this mutable column
+         */
+        fun toColumn(): Table.Column = Table.Column(alignment, header, cells.toList())
+    }
+
+    /**
      * A single cell of a table.
      * @param text content
      */
