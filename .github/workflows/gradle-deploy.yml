@@ -91,6 +91,10 @@ jobs:
         publish_dir: ./build/docs
         destination_dir: docs/latest
 
+    - name: Update emoji list
+      uses: iamgio/quarkdown/.github/actions/update-emoji-list@main
+      if: github.ref_type == 'tag'
+
     # Bump Homebrew
     - uses: mislav/bump-homebrew-formula-action@v3
       if: github.ref_type == 'tag'
@@ -106,9 +110,6 @@ jobs:
       with:
         version: ${{ github.ref_name }}
         committer_token: ${{ secrets.COMMITTER_TOKEN }}
-
-    - name: Update emoji list
-      uses: iamgio/quarkdown/.github/actions/update-emoji-list@workflow-test
 
   dependency-submission:
 
