@@ -107,29 +107,8 @@ jobs:
         version: ${{ github.ref_name }}
         committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
-    # Emoji cheat sheet generation via Quarkdown
-
-    - name: Generate emoji list
-      run: quarkdown c .github/workflows/generate-emoji-list/generate.qd -o build/qd --nowrap
-
-    - name: Setup gh-pages-src branch for emoji list commit
-      run: |
-        git checkout gh-pages-src
-        # Copy built emoji list to layout/docs/emoji-list.html, suitable for inclusion in Hugo site,
-        # prepending {{ define "main" }} and appending {{ end }} to the file.
-        {
-          echo '{{ define "main" }}'
-          cat build/qd/emoji-list/index.html
-          echo '{{ end }}'
-        } > layouts/docs/emoji-list.html
-
-    - name: Commit emoji list to gh-pages-src branch
-      uses: stefanzweifel/git-auto-commit-action@v7
-      with:
-        commit_message: "chore: update emoji list"
-        commit_user_name: "github-actions"
-        commit_user_email: "github-actions[bot]@users.noreply.github.com"
-        file_pattern: layouts/docs/emoji-list.html
+    - name: Update emoji list
+      uses: iamgio/quarkdown/.github/actions/update-emoji-list@workflow-test
 
   dependency-submission:
 
