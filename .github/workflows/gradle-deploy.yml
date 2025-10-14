@@ -129,7 +129,7 @@ jobs:
         commit_message: "chore: update emoji list"
         commit_user_name: "github-actions"
         commit_user_email: "github-actions[bot]@users.noreply.github.com"
-        file_pattern: layout/docs/emoji-list.html
+        file_pattern: layouts/docs/emoji-list.html
 
   dependency-submission:
 
