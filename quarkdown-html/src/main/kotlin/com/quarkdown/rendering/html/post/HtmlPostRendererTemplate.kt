@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.core.util.Escape
@@ -162,26 +163,38 @@ class HtmlPostRendererTemplate(
      * @see com.quarkdown.core.document.layout.font.FontInfo
      */
     private fun TemplateProcessor.fonts() {
-        val fontConfiguration = document.layout.font
-        val fontFamilies =
+        val fontConfigurations = document.layout.fonts
+
+        val fontFamilies: Map<String, List<FontFamily?>> =
             mapOf(
-                TemplatePlaceholders.MAIN_FONT_FAMILY to fontConfiguration.mainFamily,
-                TemplatePlaceholders.HEADING_FONT_FAMILY to fontConfiguration.headingFamily,
-                TemplatePlaceholders.CODE_FONT_FAMILY to fontConfiguration.codeFamily,
+                TemplatePlaceholders.MAIN_FONT_FAMILY to fontConfigurations.map { it.mainFamily },
+                TemplatePlaceholders.HEADING_FONT_FAMILY to fontConfigurations.map { it.headingFamily },
+                TemplatePlaceholders.CODE_FONT_FAMILY to fontConfigurations.map { it.codeFamily },
             )
 
         // Font families.
-        fontFamilies.forEach { (placeholder, fontFamily) -> optionalValue(placeholder, fontFamily?.id) }
+        fontFamilies.forEach { (placeholder, fontFamilies) ->
+            optionalValue(
+                placeholder,
+                fontFamilies
+                    .reversed() // Later configurations have higher priority.
+                    .mapNotNull { it?.id }
+                    .takeIf { it.isNotEmpty() }
+                    ?.joinToString(", ") { "'$it'" },
+            )
+        }
         // Font size.
         optionalValue(
             TemplatePlaceholders.FONT_SIZE,
-            fontConfiguration.size?.asCSS,
+            fontConfigurations.lastOrNull { it.size != null }?.size?.asCSS,
         )
         // Imports fonts via @font-face or @import rules.
         iterable(
             TemplatePlaceholders.FONT_FACES,
-            CssFontFacesImporter(fontFamilies.values.filterNotNull(), context.mediaStorage)
-                .toSnippets(),
+            CssFontFacesImporter(
+                families = fontFamilies.values.flatten().filterNotNull(),
+                context.mediaStorage,
+            ).toSnippets(),
         )
     }
 
