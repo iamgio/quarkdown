@@ -1,12 +1,12 @@
 @use "util/heading-selectors" as *;
-@use "_font";
+@use "font";
 
 .quarkdown {
   #{$headings} {
     color: var(--qd-heading-color);
     margin: var(--qd-heading-margin);
     text-transform: none !important;
-    @include font.global-font-family($kind: "heading");
+    @include font.global-font-family-with-main-fallback($kind: "heading");
   }
 
   &.quarkdown-slides section > :is(#{$headings}):first-child {

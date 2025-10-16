@@ -1,0 +1,20 @@
+.docname {Multiple font configurations for different glyph sets}
+.include {template/template.qd}
+
+.bulletin issue:{215} pr:{226} nextrelease:{1.11.0} relatedto:{Font configurations are not stackable}
+
+.font {GoogleFonts:Ma Shan Zheng} heading:{GoogleFonts:ZCOOL QingKe HuangYou}
+.font {GoogleFonts:Karla} heading:{GoogleFonts:BBH Sans Hegarty}
+
+## 混合文字示例 — Lorem Ipsum Test
+
+Lorem ipsum dolor sit amet，世界如梦，consectetur adipiscing elit，风起云涌，sed
+do eiusmod tempor incididunt ut labore et dolore magna aliqua。
+
+.box {Box title 世界如梦} type:{note}
+    Lorem ipsum dolor sit amet，世界如梦，consectetur adipiscing elit，风起云涌。
+
+```python
+def hello():
+    print("Hello, 世界如梦")
+```

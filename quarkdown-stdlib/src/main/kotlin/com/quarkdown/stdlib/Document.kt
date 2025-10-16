@@ -20,7 +20,6 @@ import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.layout.caption.merge
 import com.quarkdown.core.document.layout.font.FontInfo
-import com.quarkdown.core.document.layout.font.merge
 import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
@@ -456,6 +455,18 @@ fun disableNumbering(
  * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
  * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
  *
+ * This function can be called multiple times to add multiple font configurations.
+ * Latter configurations have higher priority. This can be useful to specify fallback fonts for different glyphs.
+ * The following example applies the `Inter` font for Latin characters, and the `Ma Shan Zheng` font for Chinese characters.
+ * This happens because `Inter` does not support Chinese glyphs, so the renderer falls back to the next configuration.
+ *
+ * ```
+ * .font {GoogleFonts:Ma Shan Zheng}
+ * .font {GoogleFonts:Inter}
+ * ```
+ *
+ * The [size] parameter does not stack instead, and only the last specified size is used among all configurations.
+ *
  * @param main main font family of content on each page
  * @param heading font family of headings on each page. Overrides [main] for headings if set
  * @param code font family of code blocks and code spans on each page. Overrides [main] for code if set
@@ -480,7 +491,7 @@ fun font(
         )
 
     // Update global font info.
-    context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo.merge(context.documentInfo.layout.font))
+    context.documentInfo = context.documentInfo.deepCopy(layoutFonts = context.documentInfo.layout.fonts + fontInfo)
 
     return VoidValue
 }

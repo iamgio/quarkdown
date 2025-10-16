@@ -1,3 +1,44 @@
-@mixin global-font-family($kind: "main") {
-  font-family: var(--qd-localized-font), var(--qd-#{$kind}-font), serif;
+// Returns a CSS value for font-family, with fallbacks. Hierarchy of fallbacks:
+// 1. Custom font (set by user): `--qd-<kind>-custom-font`
+// 2. Localized font (set by locale): `--qd-<kind>-localized-font`
+// 3. Base font (set by theme): `--qd-<kind>-font`
+// 4. Fallback font (set by caller): `$fallback`
+@function get-global-font-family-value($kind: "main", $fallback: serif) {
+  $custom: --qd-#{$kind}-custom-font;
+  $localized: --qd-#{$kind}-localized-font;
+  $base: --qd-#{$kind}-font;
+
+  @return var($custom,
+          var($localized,
+                  var($base, $fallback)
+          )
+  ),
+  var($localized, var($base, $fallback)),
+  var($base, $fallback),
+  $fallback;
+}
+
+// Returns a CSS value for font-family, with fallbacks.
+// Follows the same hierarchy as `get-global-font-family-value`,
+// but uses the "main" font hierarchy as the final fallback.
+@function get-global-font-family-value-with-main-fallback($kind) {
+  @return get-global-font-family-value(
+          $kind,
+          get-global-font-family-value("main", serif)
+  );
+}
+
+@mixin global-font-family($kind: "main", $fallback: serif) {
+  font-family: get-global-font-family-value($kind, $fallback);
+}
+
+@mixin global-font-family-with-main-fallback($kind) {
+  font-family: get-global-font-family-value-with-main-fallback($kind);
+}
+
+@mixin global-font-family-with-heading-fallback($kind) {
+  font-family: get-global-font-family-value(
+          $kind,
+          get-global-font-family-value-with-main-fallback("heading")
+  );
 }

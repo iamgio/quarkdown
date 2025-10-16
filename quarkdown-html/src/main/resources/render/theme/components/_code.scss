@@ -1,6 +1,8 @@
+@use "font";
+
 .quarkdown {
   code {
-    font-family: var(--qd-code-font), monospace;
+    @include font.global-font-family("code", monospace);
     text-align: start;
 
     &:not(pre code) {

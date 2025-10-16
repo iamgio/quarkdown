@@ -37,7 +37,8 @@ figure p,
 .stack > p,
 .container[style*="text-align"] > p,
 .container[style*="justify-items"] > p,
-.mermaid p {
+.mermaid p,
+.page-margin-content p {
   text-indent: 0 !important;
 }
 

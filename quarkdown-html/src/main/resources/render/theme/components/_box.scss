@@ -29,7 +29,7 @@
     > h4 {
       color: var(--box-header-foreground-color);
       margin: 0;
-      @include font.global-font-family($kind: "box-heading");
+      @include font.global-font-family-with-heading-fallback($kind: "box-heading");
     }
   }
 

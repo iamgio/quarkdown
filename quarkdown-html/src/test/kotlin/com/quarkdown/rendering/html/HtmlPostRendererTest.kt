@@ -45,8 +45,8 @@ class HtmlPostRendererTest {
             TemplateProcessor(template).block()
         })
 
-    private fun setFontInfo(fontInfo: FontInfo) {
-        context.documentInfo = context.documentInfo.deepCopy(layoutFont = fontInfo)
+    private fun setFontInfo(vararg fontInfo: FontInfo) {
+        context.documentInfo = context.documentInfo.deepCopy(layoutFonts = fontInfo.toList())
     }
 
     @BeforeTest
@@ -179,8 +179,8 @@ class HtmlPostRendererTest {
             [[endfor:FONTFACE]]
             
             body {
-                [[if:MAINFONTFAMILY]]--qd-main-font: '[[MAINFONTFAMILY]]';[[endif:MAINFONTFAMILY]]
-                [[if:HEADINGFONTFAMILY]]--qd-heading-font: '[[HEADINGFONTFAMILY]]';[[endif:HEADINGFONTFAMILY]]
+                [[if:MAINFONTFAMILY]]--qd-main-font: [[MAINFONTFAMILY]];[[endif:MAINFONTFAMILY]]
+                [[if:HEADINGFONTFAMILY]]--qd-heading-font: [[HEADINGFONTFAMILY]];[[endif:HEADINGFONTFAMILY]]
             }
             """.trimIndent(),
         )
@@ -336,13 +336,43 @@ class HtmlPostRendererTest {
     }
 
     @Test
+    fun `multiple font configurations`() {
+        setFontInfo(
+            FontInfo(mainFamily = FontFamily.System("Arial")),
+            FontInfo(mainFamily = FontFamily.GoogleFont("Roboto"), headingFamily = FontFamily.GoogleFont("Noto Sans")),
+            FontInfo(mainFamily = FontFamily.GoogleFont("Source Code Pro")),
+        )
+
+        assertEquals(
+            """
+            @font-face { font-family: '63529059'; src: local('Arial'); }
+            @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+            
+            body {
+                --qd-main-font: 'Source Code Pro', 'Roboto', '63529059';
+                --qd-heading-font: 'Noto Sans';
+            }
+            """.trimIndent(),
+            fontFamilyProcessorResult(),
+        )
+    }
+
+    @Test
     fun `semi-real`() {
         context.documentInfo =
             DocumentInfo(
                 name = "Quarkdown",
                 locale = LocaleLoader.SYSTEM.fromName("english"),
                 type = DocumentType.SLIDES,
-                layout = DocumentLayoutInfo(font = FontInfo(mainFamily = FontFamily.System("Arial"))),
+                layout =
+                    DocumentLayoutInfo(
+                        fonts =
+                            listOf(
+                                FontInfo(mainFamily = FontFamily.System("Arial")),
+                            ),
+                    ),
             )
         context.attributes.markMathPresence()
 
@@ -433,7 +463,11 @@ class HtmlPostRendererTest {
                 type = DocumentType.SLIDES,
                 layout =
                     DocumentLayoutInfo(
-                        font = FontInfo(mainFamily = FontFamily.System("Arial")),
+                        fonts =
+                            listOf(
+                                FontInfo(mainFamily = FontFamily.System("Arial")),
+                                FontInfo(mainFamily = FontFamily.System("Impact")),
+                            ),
                         pageFormat = PageFormatInfo(pageWidth = 8.5.inch, margin = Sizes(1.0.inch)),
                     ),
                 tex = TexInfo(macros = mutableMapOf("\\R" to "\\mathbb{R}", "\\Z" to "\\mathbb{Z}")),
