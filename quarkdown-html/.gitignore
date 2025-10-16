@@ -5,5 +5,4 @@ src/main/resources/render/script/quarkdown.js.map
 # Sass
 
 src/main/resources/render/theme/**/*.css
-!src/main/resources/render/theme/locale/*.css
 src/main/resources/render/theme/**/*.css.map

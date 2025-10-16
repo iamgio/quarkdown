@@ -1,5 +1,5 @@
 @use "util/heading-selectors" as *;
-@use "_font";
+@use "font";
 
 .quarkdown {
   #{$headings} {
