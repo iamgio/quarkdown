@@ -44,13 +44,13 @@
 
   // Fonts
   --qd-main-font: inherit;
+  --qd-heading-font: inherit;
+  --qd-box-heading-font: inherit;
   --qd-main-font-size: 1em;
   --qd-code-font: monospace;
-  --qd-box-heading-font: var(--qd-main-font); // Font of box headers
   --qd-code-span-font-size: var(--qd-main-font-size);
   --qd-code-block-font-size: var(--qd-code-span-font-size); // Font size of code blocks in non-slides documents
   --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
-  --qd-heading-font: inherit;
 
   // Localized fonts, which override the base fonts for specific locales (e.g. Chinese, see locale/zh.scss).
   // Avoid overwriting these elsewhere.
