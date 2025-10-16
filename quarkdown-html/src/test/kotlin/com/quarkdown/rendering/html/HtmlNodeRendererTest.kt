@@ -1026,8 +1026,8 @@ class HtmlNodeRendererTest {
                 ),
                 children =
                     buildInline {
-                        text("Foo")
-                        emphasis { text("bar") }
+                        emphasis { text("Foo") }
+                        text("bar")
                     },
             ).render(),
         )
