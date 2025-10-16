@@ -89,6 +89,7 @@ val Layout: QuarkdownModule =
  * @param textDecoration text decoration of the text. None if unset
  * @param textCase text case of the text. Normal if unset
  * @param float floating position of the container within the parent. Not floating if unset
+ * @param className CSS class name to apply to the container, if supported by the renderer. None if unset
  * @param body content to group
  * @return the new [Container] node
  * @wiki Container
@@ -114,6 +115,7 @@ fun container(
     @Name("textdecoration") textDecoration: TextTransformData.Decoration? = null,
     @Name("textcase") textCase: TextTransformData.Case? = null,
     @LikelyNamed float: Container.FloatAlignment? = null,
+    @Name("classname") className: String? = null,
     @LikelyBody body: MarkdownContent? = null,
 ) = Container(
     width,
@@ -131,6 +133,7 @@ fun container(
     textAlignment,
     TextTransformData(fontSize, fontWeight, fontStyle, textDecoration, textCase, fontVariant),
     float,
+    className,
     body?.children ?: emptyList(),
 ).wrappedAsValue()
 

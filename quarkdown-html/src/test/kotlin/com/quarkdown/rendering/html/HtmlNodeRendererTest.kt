@@ -859,6 +859,15 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             Container(
+                float = Container.FloatAlignment.END,
+                className = "custom-class",
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            Container(
                 textTransform =
                     TextTransformData(
                         size = TextTransformData.Size.LARGE,

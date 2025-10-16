@@ -190,6 +190,7 @@ class QuarkdownHtmlNodeRenderer(
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
                 node.textTransform?.size?.asCSS,
+                node.className,
             )
 
             +node.children

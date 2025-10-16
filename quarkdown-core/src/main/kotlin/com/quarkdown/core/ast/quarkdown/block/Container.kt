@@ -28,6 +28,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param textTransform transformation applied to the text content
  * @param fontSize relative font size of the text
  * @param float floating position of the container within the subsequent content
+ * @param className custom class name for the container, useful for applying custom styles, if supported by the renderer
  */
 class Container(
     val width: Size? = null,
@@ -45,6 +46,7 @@ class Container(
     val textAlignment: TextAlignment? = null,
     val textTransform: TextTransformData? = null,
     val float: FloatAlignment? = null,
+    val className: String? = null,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
