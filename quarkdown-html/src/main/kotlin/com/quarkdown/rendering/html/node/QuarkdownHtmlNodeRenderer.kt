@@ -466,7 +466,10 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: TextTransform) =
         buildTag("span") {
-            className(node.data.size?.asCSS) // e.g. 'size-small' class
+            classNames(
+                node.data.size?.asCSS, // e.g. 'size-small' class
+                node.className,
+            )
             +node.children
             style { textTransform(node.data) }
         }

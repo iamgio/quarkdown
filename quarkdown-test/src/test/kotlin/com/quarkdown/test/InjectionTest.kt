@@ -86,4 +86,28 @@ class InjectionTest {
             )
         }
     }
+
+    @Test
+    fun `css with custom class elements`() {
+        execute(
+            """
+            .container classname:{my-custom}
+                Content
+                
+            Hi .text {content} classname:{my-custom}
+            
+            .css
+                .my-custom {
+                    color: red;
+                }
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"container my-custom\"><p>Content</p></div>" +
+                    "<p>Hi <span class=\"my-custom\">content</span></p>" +
+                    "<style data-hidden=\"\">.my-custom {\n    color: red;\n}</style>",
+                it,
+            )
+        }
+    }
 }

@@ -195,9 +195,11 @@ class TextTransformData(
 /**
  * A portion of text with a specific visual transformation.
  * @param data transformation the text undergoes
+ * @param className custom class name for the element, useful for applying custom styles, if supported by the renderer
  */
 class TextTransform(
     val data: TextTransformData,
+    val className: String? = null,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
