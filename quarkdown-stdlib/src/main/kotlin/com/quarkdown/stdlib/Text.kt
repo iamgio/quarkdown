@@ -43,7 +43,8 @@ val Text: QuarkdownModule =
  * @param case text case, or default if not specified
  * @param variant font variant, or default if not specified
  * @param color text color, or default if not specified
- * @param url optional URL to link the text to. If empty (but specified), the URL will match the text content.
+ * @param url optional URL to link the text to. If empty (but specified), the URL will match the text content
+ * @param className CSS class name to apply to the element, if supported by the renderer. None if not specified.
  */
 fun text(
     text: InlineMarkdownContent,
@@ -55,10 +56,12 @@ fun text(
     @LikelyNamed variant: TextTransformData.Variant? = null,
     @LikelyNamed color: Color? = null,
     @LikelyNamed url: String? = null,
+    @Name("classname") className: String? = null,
 ): NodeValue {
     val transform =
         TextTransform(
             TextTransformData(size, weight, style, decoration, case, variant, color),
+            className,
             text.children,
         )
 

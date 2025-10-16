@@ -1011,7 +1011,7 @@ class HtmlNodeRendererTest {
                     style = TextTransformData.Style.ITALIC,
                     decoration = TextTransformData.Decoration.STRIKETHROUGH,
                 ),
-                listOf(Text("Foo")),
+                children = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1024,7 +1024,11 @@ class HtmlNodeRendererTest {
                     decoration = TextTransformData.Decoration.UNDEROVERLINE,
                     variant = TextTransformData.Variant.SMALL_CAPS,
                 ),
-                listOf(Emphasis(listOf(Text("Foo"))), Text("bar")),
+                children =
+                    buildInline {
+                        text("Foo")
+                        emphasis { text("bar") }
+                    },
             ).render(),
         )
 
@@ -1036,7 +1040,7 @@ class HtmlNodeRendererTest {
                     decoration = TextTransformData.Decoration.ALL,
                     color = Color(255, 0, 0),
                 ),
-                listOf(Text("Foo")),
+                children = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1044,7 +1048,16 @@ class HtmlNodeRendererTest {
             out.next(),
             TextTransform(
                 TextTransformData(),
-                listOf(Text("Foo")),
+                children = buildInline { text("Foo") },
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(size = TextTransformData.Size.LARGE),
+                className = "custom-class",
+                children = buildInline { text("Foo") },
             ).render(),
         )
     }

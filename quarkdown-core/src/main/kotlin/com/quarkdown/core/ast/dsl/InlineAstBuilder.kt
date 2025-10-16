@@ -38,7 +38,7 @@ class InlineAstBuilder : AstBuilder() {
     fun text(
         text: String,
         transform: TextTransformData,
-    ) = +TextTransform(transform, buildInline { text(text) })
+    ) = +TextTransform(transform, children = buildInline { text(text) })
 
     /**
      * @see Link
