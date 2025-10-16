@@ -1,3 +1,8 @@
 @mixin global-font-family($kind: "main", $fallback: serif) {
-  font-family: var(--qd-#{$kind}-custom-font, var(--qd-#{$kind}-font, $fallback)), $fallback;
+  $custom-family: --qd-#{$kind}-custom-font;
+  $base-family: --qd-#{$kind}-font;
+  font-family:
+          var($custom-family, var($base-family, $fallback)),
+          var($base-family, $fallback),
+          $fallback;
 }
