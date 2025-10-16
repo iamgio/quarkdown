@@ -1,8 +1,9 @@
-@mixin global-font-family($kind: "main", $fallback: serif) {
+@function get-global-font-family-value($kind: "main", $fallback: serif) {
   $custom: --qd-#{$kind}-custom-font;
   $localized: --qd-#{$kind}-localized-font;
   $base: --qd-#{$kind}-font;
-  font-family: var($custom,
+
+  @return var($custom,
           var($localized,
                   var($base, $fallback)
           )
@@ -10,4 +11,15 @@
   var($localized, var($base, $fallback)),
   var($base, $fallback),
   $fallback;
+}
+
+@mixin global-font-family($kind: "main", $fallback: serif) {
+  font-family: get-global-font-family-value($kind, $fallback);
+}
+
+@mixin global-font-family-with-main-fallback($kind) {
+  font-family: get-global-font-family-value(
+                  $kind,
+                  get-global-font-family-value("main", serif)
+  );
 }
