@@ -52,6 +52,18 @@
   --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
   --qd-heading-font: inherit;
 
+  // Localized fonts, which override the base fonts for specific locales (e.g. Chinese, see locale/zh.scss).
+  // Avoid overwriting these elsewhere.
+  --qd-main-localized-font: unset;
+  --qd-heading-localized-font: unset;
+  --qd-code-localized-font: unset;
+
+  // Custom fonts, which override both base and localized fonts.
+  // These are set by the user via the `.font` function. Avoid overwriting these.
+  --qd-main-custom-font: unset;
+  --qd-heading-custom-font: unset;
+  --qd-code-custom-font: unset;
+
   // Margins
   --qd-block-margin: 2em; // Margin of block elements
   --qd-paragraph-vertical-margin: var(--qd-block-margin); // Vertical margin of paragraphs preceded by a paragraph
