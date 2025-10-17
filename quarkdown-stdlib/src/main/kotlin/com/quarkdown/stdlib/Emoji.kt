@@ -31,7 +31,7 @@ private val emojiCatalog by lazy { EmojiTemplateCatalog(allEmojis) }
  *
  * - A simple short-code: `.emoji {wink}` produces 😉
  * - A short-code with one skin tone: `.emoji {waving-hand~medium-dark}` produces 👋🏾
- * - A short-code with two skin tones: :people-holding-hands~medium-light,medium-dark: produces 🧑🏼‍🤝‍🧑🏾
+ * - A short-code with two skin tones: `.emoji {people-holding-hands~medium-light,medium-dark}` produces 🧑🏼‍🤝‍🧑🏾
  *
  * A complete list of shortcodes can be found at [quarkdown.com/docs/emoji-list](https://quarkdown.com/docs/emoji-list).
  *
