@@ -484,7 +484,7 @@ fun numbered(
  *
  * @param subTables independent tables (as Markdown sources) that will be parsed and joined together into a single table
  * @return a new [Table] node
- * @wiki Table generator
+ * @wiki Table generation
  */
 fun table(
     @Injected context: Context,
