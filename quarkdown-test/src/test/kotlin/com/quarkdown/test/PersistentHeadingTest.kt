@@ -30,7 +30,8 @@ class PersistentHeadingTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div class=\"page-margin-content page-margin-top-center\">" +
+                "<div class=\"page-margin-content page-margin-top-center\" " +
+                    "data-on-left-page=\"top-center\" data-on-right-page=\"top-center\">" +
                     "<span class=\"last-heading\" data-depth=\"2\"></span>" +
                     "</div>" +
                     "<h2>Heading</h2>",
@@ -52,7 +53,8 @@ class PersistentHeadingTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div class=\"page-margin-content page-margin-top-center\">" +
+                "<div class=\"page-margin-content page-margin-top-center\" " +
+                    "data-on-left-page=\"top-center\" data-on-right-page=\"top-center\">" +
                     "<p><em><span class=\"last-heading\" data-depth=\"2\"></span></em></p>" +
                     "</div>" +
                     "<h2>Heading</h2>",

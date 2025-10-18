@@ -487,9 +487,16 @@ class QuarkdownHtmlNodeRenderer(
     // Invisible nodes
 
     override fun visit(node: PageMarginContentInitializer) =
-        // HTML content.
-        // In slides and paged documents, these elements are copied to each page through the slides.js or paged.js script.
-        div("page-margin-content page-margin-${node.position.asCSS}", node.children)
+        // In slides and paged documents, these elements are copied to each page in post-processing.
+        buildTag("div") {
+            classNames(
+                "page-margin-content",
+                "page-margin-${node.position.asCSS}",
+            )
+            attribute("data-on-left-page", node.position.forLeftPage.asCSS)
+            attribute("data-on-right-page", node.position.forRightPage.asCSS)
+            +node.children
+        }
 
     override fun visit(node: PageCounter) =
         // The current or total page number.
