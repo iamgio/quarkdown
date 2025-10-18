@@ -12,10 +12,10 @@
 .footer
 	Quarkdown
 	
-.pagemargin {bottomleft}
+.pagemargin {bottominside}
     *.lastheading depth:{1}*
 
-.pagemargin {bottomright}
+.pagemargin {bottomoutside}
 	.currentpage
 
 .center
