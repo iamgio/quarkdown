@@ -408,7 +408,7 @@ fun tableColumns(
  * @param rows list of rows, where each row is an iterable of cell values.
  * Rows can have varying lengths; missing cells will be filled with empty content.
  * @return the generated [Table] node
- * @wiki Table manipulation
+ * @wiki Table generation
  */
 @Name("tablebyrows")
 fun generateTableByRows(
