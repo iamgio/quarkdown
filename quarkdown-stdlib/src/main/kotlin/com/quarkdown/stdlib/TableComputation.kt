@@ -382,7 +382,7 @@ fun tableColumns(
  *    - Age
  *    - City
  *
- * .newtablebyrows {.headers}
+ * .tablebyrows {.headers}
  *   - - John
  *     - 25
  *     - NY
