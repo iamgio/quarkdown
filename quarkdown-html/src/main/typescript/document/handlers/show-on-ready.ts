@@ -1,4 +1,4 @@
-import {DocumentHandler} from "./document-handler";
+import {DocumentHandler} from "../document-handler";
 
 /**
  * A document handler that hides the body until the document is fully rendered.

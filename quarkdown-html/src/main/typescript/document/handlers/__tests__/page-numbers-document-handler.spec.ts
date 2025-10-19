@@ -1,10 +1,10 @@
 import {describe, expect, it} from 'vitest';
-import {PageNumbersDocumentHandler} from "../page-numbers/page-numbers-document-handler";
+import {PageNumbers} from "../page-numbers";
 
 class DummyDoc {
 }
 
-class Concrete extends PageNumbersDocumentHandler {
+class Concrete extends PageNumbers {
 }
 
 describe('PageNumbersDocumentHandler', () => {
