@@ -21,12 +21,13 @@ export function filterConditionalHandlers(handlers: ConditionalDocumentHandler[]
 /**
  * Source of an event or action related to document processing,
  * with hooks for pre-rendering and post-rendering phases.
+ * @template TDoc - The type of Quarkdown document this handler manages
  */
-export abstract class DocumentHandler {
+export abstract class DocumentHandler<TDoc extends QuarkdownDocument = QuarkdownDocument> {
     /**
      * @param quarkdownDocument - The document instance this handler manages
      */
-    constructor(protected readonly quarkdownDocument: QuarkdownDocument) {
+    constructor(protected readonly quarkdownDocument: TDoc) {
     }
 
     /**

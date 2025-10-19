@@ -1,26 +1,34 @@
-import {QuarkdownDocument} from "../quarkdown-document";
 import {DocumentHandler} from "../document-handler";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
 import {Sidebar} from "../handlers/sidebar";
-import {PageNumbersPaged} from "../handlers/page-numbers/page-numbers-paged";
 import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
 import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
 import {SplitCodeBlocksFixPaged} from "../handlers/paged/split-code-blocks-fix-paged";
 import {ColumnCountPaged} from "../handlers/paged/column-count-paged";
-import {ShowOnReady} from "../show-on-ready";
 import {PersistentHeadingsPaged} from "../handlers/persistent-headings/persistent-headings-paged";
+import {PageNumbers} from "../handlers/page-numbers";
+import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
+import {ShowOnReady} from "../handlers/show-on-ready";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
 /**
  * Paged document implementation for paged.js media.
  */
-export class PagedDocument implements QuarkdownDocument {
+export class PagedDocument implements PagedLikeQuarkdownDocument {
     /**
      * @returns The parent page of the given element.
      */
     getParentViewport(element: Element): HTMLElement | undefined {
-        return element.closest<HTMLElement>('.pagedjs_area')!// || undefined;
+        return element.closest<HTMLElement>('.pagedjs_area') || undefined;
+    }
+
+    getPages(): HTMLElement[] {
+        return Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
+    }
+
+    getPageNumber(page: HTMLElement): number {
+        return parseInt(page.dataset.pageNumber || "0");
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded. */
@@ -35,6 +43,7 @@ export class PagedDocument implements QuarkdownDocument {
                 postRenderingExecutionQueue.execute().then();
             }
         }
+
         Paged.registerHandlers(PagedAfterReadyHandler);
     }
 
@@ -48,7 +57,7 @@ export class PagedDocument implements QuarkdownDocument {
             new Sidebar(this),
             new ShowOnReady(this),
             new PageMarginsPaged(this),
-            new PageNumbersPaged(this),
+            new PageNumbers(this),
             new FootnotesPaged(this),
             new PersistentHeadingsPaged(this),
             new ColumnCountPaged(this),
