@@ -5,7 +5,7 @@ class DummyDoc {
 }
 
 class Concrete extends PageMarginsDocumentHandler {
-    async onPostRendering(): Promise<void> {
+    apply() {
         // no-op for test
     }
 }
