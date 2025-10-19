@@ -10,6 +10,9 @@ import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown
 declare const Reveal: typeof import("reveal.js"); // global Reveal at runtime
 declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
 
+const SLIDE_SELECTOR = ".reveal .slides > :is(section, .pdf-page)";
+const BACKGROUND_SELECTOR = ".reveal :is(.backgrounds, .slides > .pdf-page) > .slide-background";
+
 /**
  * A Reveal.js slide page, consisting of the slide and its background.
  */
@@ -32,23 +35,22 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
      * @returns The parent slide element of the given element.
      */
     getParentViewport(element: Element): HTMLElement | undefined {
-        return element.closest<HTMLElement>(".reveal .slides > :is(section, .pdf-page)") || undefined;
+        return element.closest<HTMLElement>(SLIDE_SELECTOR) || undefined;
     }
 
     getPages(): SlidesPage[] {
-        const slides = document.querySelector<HTMLElement>(".reveal .slides");
-        const backgrounds = document.querySelector<HTMLElement>(".reveal .backgrounds");
+        const slides = document.querySelectorAll<HTMLElement>(SLIDE_SELECTOR);
+        const backgrounds = document.querySelectorAll<HTMLElement>(BACKGROUND_SELECTOR);
         if (!slides || !backgrounds) return [];
 
-        return Array.from(slides.children).map((slide, index) => {
-            const background = backgrounds.children[index] as HTMLElement | undefined;
-            const slideElement = slide as HTMLElement;
+        return Array.from(slides).map((slide, index) => {
+            const background = backgrounds[index]
 
             return {
-                slide: slideElement,
+                slide: slide,
                 background: background || document.createElement('div'), // Fallback for missing background
                 querySelectorAll(query: string): NodeListOf<HTMLElement> {
-                    const slideResults = slideElement.querySelectorAll<HTMLElement>(query);
+                    const slideResults = slide.querySelectorAll<HTMLElement>(query);
                     const bgResults = background?.querySelectorAll<HTMLElement>(query) || [];
                     return new Set([...slideResults, ...bgResults]) as unknown as NodeListOf<HTMLElement>;
                 }

@@ -50,7 +50,6 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      */
     async onPostRendering() {
         const pages = this.quarkdownDocument.getPages();
-        console.log("Updating page numbers...", pages[0]);
         this.updateTotalPageNumbers(pages);
         this.updateCurrentPageNumbers(pages);
     }
