@@ -1,4 +1,5 @@
 import {PageMarginsDocumentHandler} from "./page-margins-document-handler";
+import {SlidesPage} from "../../type/slides-document";
 
 /**
  * Page margins handler for slides documents, which copies page margin content to all slide backgrounds.
@@ -17,20 +18,14 @@ import {PageMarginsDocumentHandler} from "./page-margins-document-handler";
  */
 export class PageMarginsSlides extends PageMarginsDocumentHandler {
     /**
-     * Copies all page margin initializers to every slide background.
-     * Each initializer is cloned and appended to all slide backgrounds.
+     * Copies all page margin initializers to the slide background.
      */
-    async onPostRendering() {
-        this.pageMarginInitializers.forEach(initializer => {
-            const pageMargin = document.createElement('div');
-            pageMargin.className = initializer.className;
-            pageMargin.innerHTML = initializer.innerHTML;
+    apply(initializer: HTMLElement, page: SlidesPage, marginPositionName: string) {
+        // Append the page margin to all slide backgrounds.
+        const pageMargin = document.createElement('div');
+        this.pushMarginClassList(pageMargin, initializer, marginPositionName);
+        pageMargin.innerHTML = initializer.innerHTML;
 
-            // Append the page margin to all slide backgrounds.
-            const slideBackgrounds = document.querySelectorAll('.slide-background');
-            slideBackgrounds.forEach(slideBackground => {
-                slideBackground.appendChild(pageMargin.cloneNode(true));
-            });
-        });
+        page.background.appendChild(pageMargin);
     }
 }

@@ -13,7 +13,7 @@ declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
 /**
  * A Reveal.js slide page, consisting of the slide and its background.
  */
-type SlidesPage = { slide: HTMLElement, background: HTMLElement } & QuarkdownPage;
+export type SlidesPage = { slide: HTMLElement, background: HTMLElement } & QuarkdownPage;
 
 /**
  * Slides document implementation for Reveal.js presentations.
@@ -61,6 +61,11 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
         if (!slide.parentElement) return 0;
         const index = Array.from(slide.parentElement.children).indexOf(slide)
         return index + 1;
+    }
+
+    getPageType(page: SlidesPage): "left" | "right" {
+        const pageNumber = this.getPageNumber(page);
+        return (pageNumber % 2 === 0) ? "left" : "right";
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded */

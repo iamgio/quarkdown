@@ -31,6 +31,10 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return parseInt(page.dataset.pageNumber || "0");
     }
 
+    getPageType(page: HTMLElement): "left" | "right" {
+        return page.classList.contains("pagedjs_right_page") ? "right" : "left";
+    }
+
     /** Sets up pre-rendering to execute when DOM content is loaded. */
     setupPreRenderingHook() {
         document.addEventListener("DOMContentLoaded", async () => await preRenderingExecutionQueue.execute());

@@ -24,4 +24,10 @@ export interface PagedLikeQuarkdownDocument<TPage extends QuarkdownPage = HTMLEl
      * @returns The page number (1-based)
      */
     getPageNumber(page: TPage): number;
+
+    /**
+     * @param page - The page to get the type for
+     * @returns The page type ('left' or 'right')
+     */
+    getPageType(page: TPage): 'left' | 'right';
 }
