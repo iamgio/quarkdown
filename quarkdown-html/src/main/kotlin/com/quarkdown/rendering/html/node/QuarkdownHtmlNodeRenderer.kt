@@ -313,6 +313,15 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
+        // Filter items based on whether to include unnumbered headings.
+        val filteredItems =
+            if (node.includeUnnumbered) {
+                tableOfContents.items
+            } else {
+                // Only include items with numbered headings (canTrackLocation == true).
+                tableOfContents.items.filter { (it.target as? Heading)?.canTrackLocation != false }
+            }
+
         return buildMultiTag {
             // Localized title.
             val titleText = context.localizeOrNull(key = "tableofcontents")
@@ -328,7 +337,7 @@ class QuarkdownHtmlNodeRenderer(
             +buildTag("nav") {
                 +node.convertToListNode(
                     this@QuarkdownHtmlNodeRenderer,
-                    tableOfContents.items,
+                    filteredItems,
                     linkUrlMapper = { item ->
                         "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
                     },
