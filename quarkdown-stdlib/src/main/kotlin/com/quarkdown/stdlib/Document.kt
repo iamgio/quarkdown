@@ -867,10 +867,12 @@ fun tableOfContents(
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
+    @Name("includebibliography") includeBibliography: Boolean = false,
 ): NodeValue =
     TableOfContentsView(
         title?.children,
         maxDepth,
         focusedItem?.children,
         includeUnnumbered,
+        includeBibliography,
     ).wrappedAsValue()

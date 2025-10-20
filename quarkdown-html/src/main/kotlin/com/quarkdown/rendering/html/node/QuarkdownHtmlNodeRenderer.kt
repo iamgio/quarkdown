@@ -55,6 +55,7 @@ import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
+import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.NumberingFormat
@@ -62,6 +63,7 @@ import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
+import com.quarkdown.core.util.flattenedChildren
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.CssBuilder
@@ -314,13 +316,77 @@ class QuarkdownHtmlNodeRenderer(
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
         // Filter items based on whether to include unnumbered headings.
-        val filteredItems =
+        var filteredItems =
             if (node.includeUnnumbered) {
                 tableOfContents.items
             } else {
                 // Only include items with numbered headings (canTrackLocation == true).
                 tableOfContents.items.filter { (it.target as? Heading)?.canTrackLocation != false }
             }
+
+        // Optionally include Bibliography as a ToC item if present in the document.
+        if (node.includeBibliography) {
+            // Find the first BibliographyView node in the AST to sync title and id.
+            val root = context.attributes.root
+            val flat = root?.flattenedChildren()
+            val bibliographyView = flat?.firstOrNull { it is BibliographyView } as BibliographyView?
+
+            if (bibliographyView != null) {
+                // Use the actual rendered title inline content if provided, else fallback to localized default.
+                val bibliographyTitleInline =
+                    bibliographyView.title
+                        ?: context
+                            .localizeOrNull(key = "bibliography")
+                            ?.let {
+                                buildInline { text(it) }
+                            }
+
+                if (bibliographyTitleInline != null) {
+                    val bibliographyHeading =
+                        Heading(
+                            depth = 1,
+                            text = bibliographyTitleInline,
+                            isDecorative = bibliographyView.isTitleDecorative,
+                        )
+
+                    // Avoid duplicates: compute anchor id and skip if an item with same anchor already exists.
+                    val provider = HtmlIdentifierProvider.of(this)
+                    val bibliographyId = provider.getId(bibliographyHeading)
+                    val existingIds = filteredItems.mapNotNull { (it.target as? Identifiable)?.accept(provider) }.toSet()
+
+                    if (bibliographyId !in existingIds) {
+                        // Insert the bibliography item according to document order.
+                        // Compare the index of the BibliographyView with the indices of the ToC item targets (Heading) in the flattened AST.
+                        val biblioIndex = flat?.indexOf(bibliographyView) ?: -1
+
+                        // Pair each item with its AST index; if not found, keep Int.MAX_VALUE to push it to the end.
+                        val itemsWithIndex =
+                            filteredItems.map { item ->
+                                val idx =
+                                    (item.target as? Node)
+                                        ?.let { t -> flat?.indexOf(t) }
+                                        ?: Int.MAX_VALUE
+                                item to idx
+                            }
+
+                        // Find the first item that appears after the bibliography in the document.
+                        val insertionPos = itemsWithIndex.indexOfFirst { (_, idx) -> idx > biblioIndex }
+
+                        val bibliographyItem = TableOfContents.Item(bibliographyHeading)
+                        filteredItems =
+                            if (insertionPos == -1) {
+                                // No later item found: append at the end.
+                                filteredItems + bibliographyItem
+                            } else {
+                                // Insert before the first later item.
+                                val before = filteredItems.subList(0, insertionPos)
+                                val after = filteredItems.subList(insertionPos, filteredItems.size)
+                                before + bibliographyItem + after
+                            }
+                    }
+                }
+            }
+        }
 
         return buildMultiTag {
             // Localized title.
@@ -354,11 +420,13 @@ class QuarkdownHtmlNodeRenderer(
             // Title heading. Its content is either the node's user-set title or a default localized one.
             val title = node.title ?: titleText?.let { buildInline { text(it) } }
             title?.let {
-                +Heading(
-                    depth = 1,
-                    text = it,
-                    isDecorative = node.isTitleDecorative,
-                )
+                val heading =
+                    Heading(
+                        depth = 1,
+                        text = it,
+                        isDecorative = node.isTitleDecorative,
+                    )
+                +heading
             }
 
             // Content.
