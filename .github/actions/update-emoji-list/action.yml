@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Generate emoji list
-      run: quarkdown c .github/workflows/generate-emoji-list/generate.qd -o build/qd --nowrap
+      run: quarkdown c .github/actions/update-emoji-list/generate.qd -o build/qd-ci --nowrap
       shell: bash
 
     - name: Setup gh-pages-src branch for emoji list commit
@@ -15,7 +15,7 @@ runs:
         # prepending {{ define "main" }} and appending {{ end }} to the file.
         {
           echo '{{ define "main" }}'
-          cat build/qd/emoji-list/index.html
+          cat build/qd-ci/emoji-list/index.html
           echo '{{ end }}'
         } > layouts/docs/emoji-list.html
       shell: bash
