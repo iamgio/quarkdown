@@ -1,8 +1,8 @@
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.ByteArrayOutputStream
 import java.time.Year
 
 plugins {
@@ -15,31 +15,7 @@ plugins {
 }
 
 group = "com.quarkdown"
-
-// Fetch the project version from the latest v* git tag
-val lastVersionTag: String? by lazy {
-    try {
-        exec {
-            commandLine("git", "fetch", "--tags", "-f")
-        }
-        val stdout = ByteArrayOutputStream()
-        exec {
-            commandLine("git", "describe", "--tags", "--match", "v*", "--abbrev=0")
-            standardOutput = stdout
-        }
-        stdout.toString().trim().removePrefix("v")
-    } catch (_: Exception) {
-        null
-    }
-}
-
-version = lastVersionTag ?: "0.0.0"
-
-tasks.register("printVersion") {
-    doLast {
-        println(project.version)
-    }
-}
+version = file("version.txt").readText().trim()
 
 allprojects {
     repositories {
@@ -224,5 +200,11 @@ tasks.withType<DependencyUpdatesTask> {
         sequenceOf("alpha", "beta", "preview", "-m", "-rc").any {
             candidate.version.contains(it, ignoreCase = true)
         }
+    }
+}
+
+tasks.register("printVersion") {
+    doLast {
+        println(project.version)
     }
 }
