@@ -14,10 +14,12 @@ class TableOfContentsGeneratorHook(
     private val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        val headings = iterator.collect<Heading> { it.canTrackLocation }
+        // Collect all headings.
+        val headings = iterator.collectAll<Heading>()
 
         // Generation.
         iterator.onFinished {
+            // Base ToC from headings only; bibliography injection handled later in renderer with option flag.
             context.attributes.tableOfContents = TableOfContents.generate(headings.asSequence())
         }
     }

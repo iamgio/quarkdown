@@ -1,6 +1,7 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.inline.Link
@@ -38,7 +39,14 @@ fun TableOfContentsView.convertToListNode(
                 // Recursively include sub-items.
                 item.subItems
                     .filter { it.depth <= view.maxDepth }
-                    .takeIf { it.isNotEmpty() }
+                    .let { subItems ->
+                        // Filter unnumbered headings if needed.
+                        if (!view.includeUnnumbered) {
+                            subItems.filter { (it.target as? Heading)?.canTrackLocation != false }
+                        } else {
+                            subItems
+                        }
+                    }.takeIf { it.isNotEmpty() }
                     ?.let { this += convertToListNode(renderer, it, linkUrlMapper) }
             }
 
@@ -56,7 +64,8 @@ fun TableOfContentsView.convertToListNode(
                                 // If the target node's location can be tracked,
                                 // the list item displays its location.
                                 // Since the targets are usually headings, thus location trackable, this is applied.
-                                if (it.target is LocationTrackableNode) {
+                                // Only add location variant for numbered headings.
+                                if (it.target is LocationTrackableNode && it.target.canTrackLocation) {
                                     this += LocationTargetListItemVariant(it.target, DocumentNumbering::headings)
                                 }
                             },
