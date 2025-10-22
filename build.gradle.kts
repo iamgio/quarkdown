@@ -1,5 +1,4 @@
 
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Year
@@ -183,24 +182,26 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+tasks.register("printVersion") {
+    doLast {
+        println(project.version)
+    }
+}
+
+// Dependency updates
+
 allprojects {
-    tasks.withType<DependencyUpdatesTask> {
+    tasks.dependencyUpdates {
         rejectVersionIf {
             Regex("[.-](alpha|beta|rc|cr|m|preview|b|ea)", RegexOption.IGNORE_CASE) in candidate.version
         }
     }
-}
 
-tasks.useLatestVersions {
-    updateBlacklist =
-        listOf(
-            "org.jetbrains.kotlin",
-            "org.jetbrains.dokka",
-        )
-}
-
-tasks.register("printVersion") {
-    doLast {
-        println(project.version)
+    tasks.useLatestVersions {
+        updateBlacklist =
+            listOf(
+                "org.jetbrains.kotlin",
+                "org.jetbrains.dokka",
+            )
     }
 }
