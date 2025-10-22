@@ -10,7 +10,8 @@ plugins {
     id("org.jetbrains.dokka") version "2.0.0"
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
     id("com.gradleup.shadow") version "8.3.6"
-    id("com.github.ben-manes.versions") version "0.52.0"
+    id("com.github.ben-manes.versions") version "0.53.0"
+    id("se.patrikerdes.use-latest-versions") version "0.2.19"
     application
 }
 
@@ -26,6 +27,8 @@ allprojects {
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "com.github.ben-manes.versions")
+    apply(plugin = "se.patrikerdes.use-latest-versions")
 }
 
 // Fat JAR / Distribution dependencies
