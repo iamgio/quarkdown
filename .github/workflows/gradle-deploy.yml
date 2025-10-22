@@ -25,6 +25,20 @@ jobs:
       with:
         full-checkout: true
 
+    # Writes the new version (tag name without the leading 'v') to version.txt
+    - name: Bump version
+      if: github.ref_type == 'tag'
+      run: echo "${GITHUB_REF_NAME#v}" > version.txt
+
+    - name: Commit version bump
+      uses: stefanzweifel/git-auto-commit-action@v7
+      if: github.ref_type == 'tag'
+      with:
+        commit_message: "chore: bump version to ${GITHUB_REF_NAME#v}"
+        commit_user_name: "github-actions"
+        commit_user_email: "github-actions[bot]@users.noreply.github.com"
+        file_pattern: version.txt
+
     - name: Build distribution
       uses: burrunan/gradle-cache-action@v3
       with:
