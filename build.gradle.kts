@@ -183,12 +183,20 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<DependencyUpdatesTask> {
-    rejectVersionIf {
-        sequenceOf("alpha", "beta", "preview", "-m", "-rc").any {
-            candidate.version.contains(it, ignoreCase = true)
+allprojects {
+    tasks.withType<DependencyUpdatesTask> {
+        rejectVersionIf {
+            Regex("[.-](alpha|beta|rc|cr|m|preview|b|ea)", RegexOption.IGNORE_CASE) in candidate.version
         }
     }
+}
+
+tasks.useLatestVersions {
+    updateBlacklist =
+        listOf(
+            "org.jetbrains.kotlin",
+            "org.jetbrains.dokka",
+        )
 }
 
 tasks.register("printVersion") {
