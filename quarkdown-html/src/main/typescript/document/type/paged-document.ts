@@ -5,10 +5,10 @@ import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
 import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
 import {SplitCodeBlocksFixPaged} from "../handlers/paged/split-code-blocks-fix-paged";
 import {ColumnCountPaged} from "../handlers/paged/column-count-paged";
-import {PersistentHeadingsPaged} from "../handlers/persistent-headings/persistent-headings-paged";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
+import {PersistentHeadings} from "../handlers/persistent-headings";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -62,8 +62,8 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             new ShowOnReady(this),
             new PageMarginsPaged(this),
             new PageNumbers(this),
+            new PersistentHeadings(this),
             new FootnotesPaged(this),
-            new PersistentHeadingsPaged(this),
             new ColumnCountPaged(this),
             new SplitCodeBlocksFixPaged(this),
         ];

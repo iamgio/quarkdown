@@ -3,9 +3,9 @@ import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../que
 import {PageChunker} from "../../chunker/page-chunker";
 import {PageMarginsSlides} from "../handlers/page-margins/page-margins-slides";
 import {FootnotesSlides} from "../handlers/footnotes/footnotes-slides";
-import {PersistentHeadingsSlides} from "../handlers/persistent-headings/persistent-headings-slides";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
+import {PersistentHeadings} from "../handlers/persistent-headings";
 
 declare const Reveal: typeof import("reveal.js"); // global Reveal at runtime
 declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
@@ -52,7 +52,7 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
                 querySelectorAll(query: string): NodeListOf<HTMLElement> {
                     const slideResults = slide.querySelectorAll<HTMLElement>(query);
                     const bgResults = background?.querySelectorAll<HTMLElement>(query) || [];
-                    return new Set([...slideResults, ...bgResults]) as unknown as NodeListOf<HTMLElement>;
+                    return [...slideResults, ...Array.from(bgResults)] as unknown as NodeListOf<HTMLElement>;
                 }
             };
         });
@@ -113,8 +113,8 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
         return [
             new PageMarginsSlides(this),
             new PageNumbers(this),
+            new PersistentHeadings(this),
             new FootnotesSlides(this),
-            new PersistentHeadingsSlides(this),
         ];
     }
 }
