@@ -25,7 +25,7 @@ class DummyDoc implements PagedLikeQuarkdownDocument {
         preRenderingExecutionQueue.execute().then();
     }
 
-    getPageNumber(page: HTMLElement): number {
+    getPageNumber(_: HTMLElement): number {
         return 0;
     }
 
