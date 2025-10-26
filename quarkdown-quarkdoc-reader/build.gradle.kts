@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.jsoup:jsoup:1.20.1")
+    implementation("org.jsoup:jsoup:1.21.2")
 }
 
 tasks.test {

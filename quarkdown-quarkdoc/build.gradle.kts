@@ -17,5 +17,5 @@ dependencies {
     implementation("org.jetbrains.dokka:dokka-base:$dokkaVersion")
     testImplementation("org.jetbrains.dokka:dokka-test-api:$dokkaTestVersion")
     testImplementation("org.jetbrains.dokka:dokka-base-test-utils:$dokkaTestVersion")
-    testImplementation("org.jsoup:jsoup:1.20.1")
+    testImplementation("org.jsoup:jsoup:1.21.2")
 }
