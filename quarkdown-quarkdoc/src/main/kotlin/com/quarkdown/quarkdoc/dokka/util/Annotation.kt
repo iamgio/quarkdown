@@ -36,9 +36,10 @@ fun <E : Enum<*>> Annotations.Annotation.parameterToEnumArray(
     paramName: String,
     valueOf: (String) -> E,
 ): List<E> =
-    (this.params[paramName] as ArrayValue)
-        .value
-        .asSequence()
-        .filterIsInstance<EnumValue>()
-        .map { it.toEnum(valueOf) }
-        .toList()
+    (this.params[paramName] as? ArrayValue)
+        ?.value
+        ?.asSequence()
+        ?.filterIsInstance<EnumValue>()
+        ?.map { it.toEnum(valueOf) }
+        ?.toList()
+        ?: emptyList()
