@@ -1,7 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
-import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.inline.Link
@@ -38,16 +37,13 @@ fun TableOfContentsView.convertToListNode(
 
                 // Recursively include sub-items.
                 item.subItems
+                    .asSequence()
+                    // Filter out sub-items that exceed the maximum depth.
                     .filter { it.depth <= view.maxDepth }
-                    .let { subItems ->
-                        // Filter unnumbered headings if needed.
-                        if (!view.includeUnnumbered) {
-                            subItems.filter { (it.target as? Heading)?.canTrackLocation != false }
-                        } else {
-                            subItems
-                        }
-                    }.takeIf { it.isNotEmpty() }
-                    ?.let { this += convertToListNode(renderer, it, linkUrlMapper) }
+                    // Filter unnumbered headings out if they are excluded.
+                    .filter { view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true }
+                    .takeIf { it.any() }
+                    ?.let { this += convertToListNode(renderer, it.toList(), linkUrlMapper) }
             }
 
         return OrderedList(
