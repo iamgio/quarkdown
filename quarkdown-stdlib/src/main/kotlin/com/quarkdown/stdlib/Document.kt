@@ -853,11 +853,11 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  * @param title title of the table of contents. If unset, the default localized title is used
  * @param maxDepth maximum depth of the table of contents.
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
+ * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
+ *                          By default, only numbered headings are included.
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
- * @param includeUnnumbered if set to `true`, unnumbered (decorative) headings are also included in the table of contents.
- *                          By default, only numbered headings are included.
  * @return a [TableOfContents] node
  * @wiki Table of contents
  */
@@ -865,12 +865,12 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 fun tableOfContents(
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
-    @Name("focus") focusedItem: InlineMarkdownContent? = null,
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
+    @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue =
     TableOfContentsView(
         title?.children,
         maxDepth,
-        focusedItem?.children,
         includeUnnumbered,
+        focusedItem?.children,
     ).wrappedAsValue()
