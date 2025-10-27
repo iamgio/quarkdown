@@ -189,6 +189,43 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `include unnumbered headings in table of contents`() {
+        // Include unnumbered headings
+        execute(
+            """
+            .tableofcontents includeunnumbered:{true}
+            
+            # ABC
+            
+            ##! Unnumbered X
+            
+            # DEF
+            
+            ## Y
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"table-of-contents\"></h1>" +
+                    "<nav><ol>" +
+                    "<li><a href=\"#abc\">ABC</a>" +
+                    "<ol><li><a href=\"#unnumbered-x\">Unnumbered X</a></li></ol></li>" +
+                    "<li><a href=\"#def\">DEF</a>" +
+                    "<ol><li><a href=\"#y\">Y</a></li></ol></li>" +
+                    "</ol></nav>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h2 id=\"unnumbered-x\" data-decorative=\"\">Unnumbered X</h2>" +
+                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"y\">Y</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents focus`() {
         // Focus
         execute(

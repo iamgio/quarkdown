@@ -37,9 +37,13 @@ fun TableOfContentsView.convertToListNode(
 
                 // Recursively include sub-items.
                 item.subItems
+                    .asSequence()
+                    // Filter out sub-items that exceed the maximum depth.
                     .filter { it.depth <= view.maxDepth }
-                    .takeIf { it.isNotEmpty() }
-                    ?.let { this += convertToListNode(renderer, it, linkUrlMapper) }
+                    // Filter unnumbered headings out if they are excluded.
+                    .filter { view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true }
+                    .takeIf { it.any() }
+                    ?.let { this += convertToListNode(renderer, it.toList(), linkUrlMapper) }
             }
 
         return OrderedList(
@@ -56,7 +60,8 @@ fun TableOfContentsView.convertToListNode(
                                 // If the target node's location can be tracked,
                                 // the list item displays its location.
                                 // Since the targets are usually headings, thus location trackable, this is applied.
-                                if (it.target is LocationTrackableNode) {
+                                // Only add location variant for numbered headings.
+                                if (it.target is LocationTrackableNode && it.target.canTrackLocation) {
                                     this += LocationTargetListItemVariant(it.target, DocumentNumbering::headings)
                                 }
                             },

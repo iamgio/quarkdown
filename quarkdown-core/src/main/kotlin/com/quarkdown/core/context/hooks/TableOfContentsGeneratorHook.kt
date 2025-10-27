@@ -14,7 +14,8 @@ class TableOfContentsGeneratorHook(
     private val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        val headings = iterator.collect<Heading> { it.canTrackLocation }
+        // Collect all headings, including decorative (unnumbered) ones.
+        val headings = iterator.collectAll<Heading>()
 
         // Generation.
         iterator.onFinished {
