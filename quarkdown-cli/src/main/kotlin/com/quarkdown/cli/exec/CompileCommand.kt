@@ -6,8 +6,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
-import com.quarkdown.cli.server.BrowserLaunchers.browserChoice
 import com.quarkdown.cli.server.WebServerOptions
+import com.quarkdown.cli.server.browserLauncherOption
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
@@ -48,11 +48,10 @@ class CompileCommand : ExecuteCommand("compile") {
     /**
      * Optional browser to open the served file in, if preview is enabled.
      */
-    private val browser: BrowserLauncher? by option(
-        "-b",
-        "--browser",
-        help = "Browser to open the preview in",
-    ).browserChoice(default = DefaultBrowserLauncher(), shouldValidate = { preview })
+    private val browser: BrowserLauncher? by browserLauncherOption(
+        default = DefaultBrowserLauncher(),
+        shouldValidate = { preview },
+    )
 
     /**
      * Session to communicate with the server in order to trigger reloads of the preview.
