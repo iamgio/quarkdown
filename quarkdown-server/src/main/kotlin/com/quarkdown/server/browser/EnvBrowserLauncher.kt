@@ -7,33 +7,35 @@ package com.quarkdown.server.browser
 private const val ENV_PREFIX = "BROWSER_"
 
 /**
- * Launcher of browsers whose path is stored in environment variables (`BROWSER_<env>`).
+ * Launcher of browsers whose path is stored in environment variables (`BROWSER_<env>`)
+ * passing the URL as the first argument to the browser executable.
  *
- * @property env the environment variable suffix (e.g., "chrome" for BROWSER_CHROME).
- * @property envValue the resolved environment variable value if set.
+ * @param env the environment variable suffix (e.g., `chrome` for `BROWSER_CHROME`).
+ * @param envLookup function to look up environment variable values.
+ *                  If different from `System::getenv`, it can be used for testing purposes
  */
-abstract class EnvBrowserLauncher(
+class EnvBrowserLauncher(
     private val env: String,
+    private val envLookup: (String) -> String?,
 ) : BrowserLauncher {
+    /**
+     * The name of the environment variable for the browser.
+     */
+    val envName: String
+        get() = ENV_PREFIX + env.uppercase()
+
     /**
      * The value of the environment variable for the browser, if set.
      */
-    protected val envValue: String?
-        get() = System.getenv(ENV_PREFIX + env.uppercase())
-}
+    private val envValue: String? by lazy {
+        this.envLookup(envName)
+    }
 
-/**
- * Simple implementation of [EnvBrowserLauncher] that launches a browser if the environment variable is set,
- * passing the URL as the first argument to the browser executable.
- */
-open class SimpleEnvBrowserLauncher(
-    env: String,
-) : EnvBrowserLauncher(env) {
     override val isValid: Boolean
-        get() = super.envValue != null && super.envValue!!.isNotBlank()
+        get() = this.envValue.isNullOrBlank().not()
 
     override fun launch(url: String) {
-        val browserPath = super.envValue!!
+        val browserPath = this.envValue!!
         val command = arrayOf(browserPath, url)
         Runtime.getRuntime().exec(command)
     }
