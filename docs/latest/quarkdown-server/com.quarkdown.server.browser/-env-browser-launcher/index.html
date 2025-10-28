@@ -96,24 +96,24 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-server</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.server.browser</a><span class="delimiter">/</span><span class="current">EnvBrowserLauncher</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Env</span><wbr><span>Browser</span><wbr><span><span>Launcher</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">EnvBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="../-browser-launcher/index.html">BrowserLauncher</a></div><p class="paragraph">Launcher of browsers whose path is stored in environment variables (<code class="lang-kotlin">BROWSER_&lt;env&gt;</code>).</p><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-simple-env-browser-launcher/index.html">SimpleEnvBrowserLauncher</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">EnvBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">envLookup<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <a href="../-browser-launcher/index.html">BrowserLauncher</a></div><p class="paragraph">Launcher of browsers whose path is stored in environment variables (<code class="lang-kotlin">BROWSER_&lt;env&gt;</code>) passing the URL as the first argument to the browser executable.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>env</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the environment variable suffix (e.g., <code class="lang-kotlin">chrome</code> for <code class="lang-kotlin">BROWSER_CHROME</code>).</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>env</span><wbr><span><span>Lookup</span></span></u></div></span></div><div><div class="title"><p class="paragraph">function to look up environment variable values.     If different from <code class="lang-kotlin">System::getenv</code>, it can be used for testing purposes</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="-320309049%2FConstructors%2F1314577368" anchor-label="EnvBrowserLauncher" id="-320309049%2FConstructors%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+        <div class="table"><a data-name="2136136217%2FConstructors%2F1314577368" anchor-label="EnvBrowserLauncher" id="2136136217%2FConstructors%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
           <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-env-browser-launcher.html"><span>Env</span><wbr><span>Browser</span><wbr><span><span>Launcher</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-320309049%2FConstructors%2F1314577368"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2136136217%2FConstructors%2F1314577368"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">envLookup<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -122,17 +122,32 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="7535361%2FProperties%2F1314577368" anchor-label="isValid" id="7535361%2FProperties%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+        <div class="table"><a data-name="-834586902%2FProperties%2F1314577368" anchor-label="envName" id="-834586902%2FProperties%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-browser-launcher/is-valid.html"><span>is</span><wbr><span><span>Valid</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="7535361%2FProperties%2F1314577368"></span>
+                  <div><a href="env-name.html"><span>env</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-834586902%2FProperties%2F1314577368"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="../-browser-launcher/is-valid.html">isValid</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Indicates whether the browser is valid and can be launched.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="env-name.html">envName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The name of the environment variable for the browser.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-993764272%2FProperties%2F1314577368" anchor-label="isValid" id="-993764272%2FProperties%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-valid.html"><span>is</span><wbr><span><span>Valid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-993764272%2FProperties%2F1314577368"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="is-valid.html">isValid</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Indicates whether the browser is valid and can be launched.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -141,17 +156,17 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-383963952%2FFunctions%2F1314577368" anchor-label="launch" id="-383963952%2FFunctions%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+        <div class="table"><a data-name="-69988449%2FFunctions%2F1314577368" anchor-label="launch" id="-69988449%2FFunctions%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-browser-launcher/launch.html"><span><span>launch</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-383963952%2FFunctions%2F1314577368"></span>
+                  <div><a href="launch.html"><span><span>launch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-69988449%2FFunctions%2F1314577368"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-browser-launcher/launch.html"><span class="token function">launch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Launches a URL in the specified browser.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="launch.html"><span class="token function">launch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">url<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Launches a URL in the specified browser.</p></div></div></div>
                 </div>
               </div>
             </div>
