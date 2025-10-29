@@ -7,6 +7,7 @@ import com.quarkdown.core.lexer.tokens.NewlineToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
+import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.visitor.token.TokenVisitor
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.assertIs
@@ -70,10 +71,14 @@ inline fun <reified T : Node> nodesIterator(
  * Attaches a mock pipeline to a context for tests only, which does not support rendering.
  * @param options options of the pipeline
  */
-fun MutableContext.attachMockPipeline(options: PipelineOptions = PipelineOptions()) =
-    Pipeline(
-        this,
-        options,
-        libraries = emptySet(),
-        renderer = { _, _ -> throw UnsupportedOperationException() },
-    )
+fun MutableContext.attachMockPipeline(options: PipelineOptions = PipelineOptions()): Pipeline {
+    val pipeline =
+        Pipeline(
+            this,
+            options,
+            libraries = emptySet(),
+            renderer = { _, _ -> throw UnsupportedOperationException() },
+        )
+    Pipelines.attach(this, pipeline)
+    return pipeline
+}
