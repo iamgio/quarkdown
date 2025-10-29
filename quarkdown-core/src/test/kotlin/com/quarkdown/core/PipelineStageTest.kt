@@ -32,7 +32,7 @@ private class ToStringStage : PipelineStage<Int, String> {
 class PipelineStageTest {
     private val context = MutableContext(QuarkdownFlavor)
     private val pipeline = context.attachMockPipeline()
-    private val data = SharedPipelineData(pipeline, context, "Source")
+    private val data = SharedPipelineData(pipeline, context)
 
     @Test
     fun `stage processed once`() {
@@ -69,5 +69,3 @@ class PipelineStageTest {
         assertEquals("6", output)
     }
 }
-
-// figure out how to remove Pipeline#parse and similar, pr

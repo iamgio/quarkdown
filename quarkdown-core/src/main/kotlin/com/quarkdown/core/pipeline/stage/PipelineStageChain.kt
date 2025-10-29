@@ -11,12 +11,10 @@ import com.quarkdown.core.pipeline.Pipeline
  *
  * @param pipeline the pipeline instance executing the stages
  * @param context the mutable context containing state and configuration
- * @param source the original source text being processed
  */
 data class SharedPipelineData(
     val pipeline: Pipeline,
     val context: MutableContext,
-    val source: CharSequence,
 )
 
 /**
@@ -35,7 +33,7 @@ data class SharedPipelineData(
  *
  * @param next the next pipeline stage to execute after this one
  * @return a new pipeline stage that executes this stage followed by the next stage
- * @see Pipeline.chain
+ * @see com.quarkdown.core.pipeline.PipelineChainFactory
  */
 infix fun <A, B, C> PipelineStage<A, B>.then(next: PipelineStage<B, C>): PipelineStage<A, C> =
     object : PipelineStage<A, C> {
