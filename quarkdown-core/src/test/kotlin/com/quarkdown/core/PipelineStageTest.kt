@@ -69,3 +69,5 @@ class PipelineStageTest {
         assertEquals("6", output)
     }
 }
+
+// figure out how to remove Pipeline#parse and similar, pr
