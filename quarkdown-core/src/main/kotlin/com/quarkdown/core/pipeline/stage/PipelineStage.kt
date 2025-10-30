@@ -87,3 +87,14 @@ interface PipelineStage<I, O> {
         pipeline.libraries.forEach { library -> library.hooks?.let(::invokeHook) }
     }
 }
+
+/**
+ * Utility function to execute a pipeline stage that takes `Unit` as input.
+ *
+ * This is a convenience function for pipeline stages that don't require any input
+ * other than the shared pipeline data.
+ *
+ * @param data shared data that is passed between pipeline stages
+ * @return the output of the pipeline stage
+ */
+fun <O> PipelineStage<Unit, O>.execute(data: SharedPipelineData): O = execute(Unit, data)
