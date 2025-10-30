@@ -1,5 +1,6 @@
 package com.quarkdown.core.function.value.factory
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.Node
@@ -46,10 +47,16 @@ import com.quarkdown.core.function.value.factory.ValueFactory.range
 import com.quarkdown.core.function.value.factory.ValueFactory.safeExpression
 import com.quarkdown.core.function.value.factory.ValueFactory.size
 import com.quarkdown.core.lexer.Lexer
+import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
+import com.quarkdown.core.pipeline.stage.PipelineStage
+import com.quarkdown.core.pipeline.stage.SharedPipelineData
+import com.quarkdown.core.pipeline.stage.then
+import com.quarkdown.core.pipeline.stages.FunctionCallExpansionStage
+import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.util.iterator
 
 /**
@@ -294,17 +301,16 @@ object ValueFactory {
 
         context as MutableContext
 
-        // Convert string input to parsed AST.
+        val sharedData = SharedPipelineData(pipeline = pipeline, context = context)
 
-        fun parse() = pipeline.parse(lexer.tokenize(), context)
+        val parsing: PipelineStage<List<Token>, AstRoot> =
+            if (expandFunctionCalls) {
+                ParsingStage then FunctionCallExpansionStage
+            } else {
+                ParsingStage
+            }
 
-        // If function calls should not be expanded, then they are not enqueued.
-        val root = if (expandFunctionCalls) parse() else context.lockFunctionCallEnqueuing { parse() }
-
-        if (expandFunctionCalls) {
-            // In case the AST contains nested function calls, they are immediately expanded.
-            pipeline.expandFunctionCalls(root)
-        }
+        val root: AstRoot = parsing.execute(lexer.tokenize(), sharedData)
 
         return MarkdownContentValue(MarkdownContent(root.children))
     }

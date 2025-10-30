@@ -75,7 +75,7 @@ fun execute(
 
     val hooks =
         PipelineHooks(
-            afterTreeVisiting = {
+            afterTreeTraversal = {
                 context.subdocumentGraph = subdocumentGraph(context.subdocumentGraph)
             },
             afterRendering = {

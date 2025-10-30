@@ -2,10 +2,10 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.value.data.Range
-import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.util.toPlainText
 import java.io.File
@@ -27,7 +27,7 @@ class DataTest {
     fun setup() {
         // Attach a mock pipeline to the context, in order to set a working directory for the function calls to use.
         val options = PipelineOptions(workingDirectory = File(DATA_FOLDER))
-        Pipeline(context, options, emptySet(), { _, _ -> throw UnsupportedOperationException() })
+        context.attachMockPipeline(options)
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.UnorderedList
+import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
@@ -20,8 +21,6 @@ import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.output.node.BlockNodeOutputValueVisitor
 import com.quarkdown.core.function.value.output.node.InlineNodeOutputValueVisitor
 import com.quarkdown.core.function.value.wrappedAsValue
-import com.quarkdown.core.pipeline.Pipeline
-import com.quarkdown.core.pipeline.PipelineOptions
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -38,8 +37,7 @@ class FlowTest {
 
     @BeforeTest
     fun setup() {
-        // Mock attached pipeline to parse nested Markdown.
-        Pipeline(context, PipelineOptions(), emptySet(), renderer = { _, _ -> throw UnsupportedOperationException() })
+        context.attachMockPipeline()
     }
 
     private fun call(
