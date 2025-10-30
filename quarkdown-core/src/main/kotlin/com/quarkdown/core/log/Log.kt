@@ -3,6 +3,7 @@ package com.quarkdown.core.log
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.core.config.Configurator
 
 /**
  * Bridge for logging utilities.
@@ -43,4 +44,11 @@ object Log {
     fun warn(message: Any) = logger.warn(message)
 
     fun error(message: Any) = logger.error(message)
+
+    /**
+     * Disables all logging.
+     */
+    fun disableLogging() {
+        Configurator.setRootLevel(Level.OFF)
+    }
 }

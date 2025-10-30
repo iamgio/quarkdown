@@ -1,5 +1,6 @@
 package com.quarkdown.cli
 
+import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.pipeline.PipelineOptions
@@ -51,13 +52,14 @@ class CompileCommandTest : TempDirectory() {
         main.writeText(content)
     }
 
-    private fun test(vararg additionalArgs: String): Pair<CliOptions, PipelineOptions> {
-        command.test(
-            main.absolutePath,
-            "-o",
-            outputDirectory.absolutePath,
-            *additionalArgs,
-        )
+    private fun test(vararg additionalArgs: String): Triple<CliOptions, PipelineOptions, CliktCommandTestResult> {
+        val result =
+            command.test(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                *additionalArgs,
+            )
 
         val cliOptions = command.createCliOptions()
         val pipelineOptions = command.createPipelineOptions(cliOptions)
@@ -66,7 +68,7 @@ class CompileCommandTest : TempDirectory() {
         assertEquals(outputDirectory, cliOptions.outputDirectory)
         assertEquals(directory, pipelineOptions.workingDirectory)
 
-        return cliOptions to pipelineOptions
+        return Triple(cliOptions, pipelineOptions, result)
     }
 
     private fun assertHtmlContentPresent(directoryName: String = DEFAULT_OUTPUT_DIRECTORY_NAME) {
@@ -89,6 +91,7 @@ class CompileCommandTest : TempDirectory() {
         assertHtmlContentPresent()
 
         assertFalse(cliOptions.clean)
+        assertFalse(cliOptions.pipe)
 
         pipelineOptions.let {
             assertFalse(it.prettyOutput)
@@ -138,6 +141,33 @@ class CompileCommandTest : TempDirectory() {
         assertFalse(dummyFile.exists())
     }
 
+    @Test
+    fun pipe() {
+        val pipeStdout = java.io.ByteArrayOutputStream()
+        val nonPipeStdout = java.io.ByteArrayOutputStream()
+        val originalOut = System.out
+
+        try {
+            System.setOut(java.io.PrintStream(pipeStdout))
+            val (cliOptions) = test("--pipe")
+            assertTrue(cliOptions.pipe)
+
+            val output = pipeStdout.toString()
+            assertTrue(output.contains("Page 1"))
+            assertTrue(output.contains("Page 2"))
+            assertTrue(output.contains("Page 3"))
+            assertFalse(outputDirectory.exists())
+
+            System.setOut(java.io.PrintStream(nonPipeStdout))
+            test()
+            val outputNonPipe = nonPipeStdout.toString()
+            assertFalse(outputNonPipe.contains("Page 1"))
+            assert(output.length > outputNonPipe.length)
+        } finally {
+            System.setOut(originalOut)
+        }
+    }
+
     private fun setupSubdocuments(): List<File> {
         main.writeText("$content\n\n[Subdoc 1](subdoc1.qd)\n\n[Subdoc 2](subdoc2.qd)")
 
@@ -158,7 +188,7 @@ class CompileCommandTest : TempDirectory() {
     fun `with subdocument`() {
         setupSubdocuments()
 
-        val (_, _) = test()
+        test()
         assertHtmlContentPresent()
         assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1.html").exists())
         assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2.html").exists())
@@ -169,7 +199,7 @@ class CompileCommandTest : TempDirectory() {
     fun `with subdocument with minimized collisions`() {
         val (subdoc1, subdoc2, subdoc3) = setupSubdocuments()
 
-        val (_, _) = test("--no-subdoc-collisions")
+        test("--no-subdoc-collisions")
         assertHtmlContentPresent()
         assertTrue(
             outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html").exists(),

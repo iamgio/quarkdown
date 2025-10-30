@@ -22,12 +22,16 @@ object PipelineInitialization {
      * Initializes a [Pipeline] with the given [flavor].
      * @param flavor flavor to use across the pipeline
      * @param loadableLibraryExporters exporters of external libraries that can be loaded by the user
+     * @param options options that define the behavior of the pipeline
+     * @param printOutput whether to output the rendered result to standard output, suitable for piping
+     * @param renderer function that provides the rendering components given a renderer factory and context
      * @return the new pipeline
      */
     fun init(
         flavor: MarkdownFlavor,
         loadableLibraryExporters: Set<LibraryExporter>,
         options: PipelineOptions,
+        printOutput: Boolean,
         renderer: (RendererFactory, Context) -> RenderingComponents,
     ): Pipeline {
         // Libraries to load.
@@ -47,7 +51,9 @@ object PipelineInitialization {
                     Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
                 },
                 afterRendering = { output ->
-                    Log.info(output)
+                    if (printOutput) {
+                        println(output)
+                    }
                 },
             )
 
