@@ -10,9 +10,7 @@ import com.quarkdown.core.rendering.wrap
  * Pipeline stage responsible for post-processing the rendered output.
  *
  * This stage takes a [CharSequence] (produced by the [RenderingStage]) as input and
- * produces a [CharSequence] as output.
- *
- * If post-processing is enabled, it wraps the rendered content into a template using a [PostRenderer].
+ * produces a [CharSequence] as output, wrapping the rendered content into a template using a [PostRenderer].
  */
 class PostRenderingStage(
     private val postRenderer: PostRenderer,
@@ -22,10 +20,5 @@ class PostRenderingStage(
     override fun process(
         input: CharSequence,
         data: SharedPipelineData,
-    ): CharSequence =
-        if (data.pipeline.options.wrapOutput) {
-            this.postRenderer.wrap(input)
-        } else {
-            input
-        }
+    ): CharSequence = this.postRenderer.wrap(input)
 }

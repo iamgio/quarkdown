@@ -3,6 +3,7 @@ package com.quarkdown.core.pipeline
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.then
+import com.quarkdown.core.pipeline.stage.thenOptionally
 import com.quarkdown.core.pipeline.stages.AttachmentStage
 import com.quarkdown.core.pipeline.stages.AttributesUpdateStage
 import com.quarkdown.core.pipeline.stages.FunctionCallExpansionStage
@@ -30,6 +31,7 @@ object PipelineChainFactory {
     fun fullChain(
         source: CharSequence,
         renderingComponents: RenderingComponents,
+        options: PipelineOptions,
     ): PipelineStage<Unit, Set<OutputResource>> =
         AttachmentStage then
             LibrariesRegistrationStage then
@@ -38,7 +40,7 @@ object PipelineChainFactory {
             AttributesUpdateStage(preferredMediaStorageOptions = renderingComponents.postRenderer.preferredMediaStorageOptions) then
             FunctionCallExpansionStage then
             TreeTraversalStage then
-            RenderingStage(renderingComponents.nodeRenderer) then
-            PostRenderingStage(renderingComponents.postRenderer) then
+            RenderingStage(renderingComponents.nodeRenderer) thenOptionally
+            PostRenderingStage(renderingComponents.postRenderer).takeIf { options.wrapOutput } then
             ResourceGenerationStage(renderingComponents.postRenderer)
 }

@@ -54,7 +54,7 @@ import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
-import com.quarkdown.core.pipeline.stage.then
+import com.quarkdown.core.pipeline.stage.thenOptionally
 import com.quarkdown.core.pipeline.stages.FunctionCallExpansionStage
 import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.util.iterator
@@ -304,11 +304,7 @@ object ValueFactory {
         val sharedData = SharedPipelineData(pipeline = pipeline, context = context)
 
         val parsing: PipelineStage<List<Token>, AstRoot> =
-            if (expandFunctionCalls) {
-                ParsingStage then FunctionCallExpansionStage
-            } else {
-                ParsingStage
-            }
+            ParsingStage thenOptionally FunctionCallExpansionStage.takeIf { expandFunctionCalls }
 
         val root: AstRoot = parsing.execute(lexer.tokenize(), sharedData)
 

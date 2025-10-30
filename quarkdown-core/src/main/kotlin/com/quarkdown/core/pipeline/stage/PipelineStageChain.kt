@@ -1,22 +1,5 @@
 package com.quarkdown.core.pipeline.stage
 
-import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.pipeline.Pipeline
-
-/**
- * Shared data that is passed between pipeline stages during execution.
- *
- * This data is passed to each stage's [PipelineStage.process] method, allowing stages
- * to access and modify shared state as needed.
- *
- * @param pipeline the pipeline instance executing the stages
- * @param context the mutable context containing state and configuration
- */
-data class SharedPipelineData(
-    val pipeline: Pipeline,
-    val context: MutableContext,
-)
-
 /**
  * Chains two pipeline stages together to form a new pipeline stage.
  *
@@ -46,4 +29,17 @@ infix fun <A, B, C> PipelineStage<A, B>.then(next: PipelineStage<B, C>): Pipelin
             val intermediate = this@then.execute(input, data)
             return next.execute(intermediate, data)
         }
+    }
+
+/**
+ * Conditionally chains this pipeline stage with [next] if it is not null.
+ *
+ * - If [next] is not null, this behaves like [then], chaining the stages together.
+ * - If [next] is null, this stage is returned unchanged.
+ */
+infix fun <A, B> PipelineStage<A, B>.thenOptionally(next: PipelineStage<B, B>?): PipelineStage<A, B> =
+    if (next != null) {
+        this then next
+    } else {
+        this
     }
