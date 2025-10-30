@@ -65,8 +65,11 @@ class CompileCommandTest : TempDirectory() {
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
         assertEquals(main, cliOptions.source)
-        assertEquals(outputDirectory, cliOptions.outputDirectory)
         assertEquals(directory, pipelineOptions.workingDirectory)
+        assertEquals(
+            outputDirectory.takeUnless { cliOptions.pipe },
+            cliOptions.outputDirectory,
+        )
 
         return Triple(cliOptions, pipelineOptions, result)
     }
@@ -202,13 +205,22 @@ class CompileCommandTest : TempDirectory() {
         test("--no-subdoc-collisions")
         assertHtmlContentPresent()
         assertTrue(
-            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html").exists(),
+            outputDirectory
+                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+                .resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html")
+                .exists(),
         )
         assertTrue(
-            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html").exists(),
+            outputDirectory
+                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+                .resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html")
+                .exists(),
         )
         assertTrue(
-            outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3@${subdoc3.absolutePath.hashCode()}.html").exists(),
+            outputDirectory
+                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+                .resolve("subdoc3@${subdoc3.absolutePath.hashCode()}.html")
+                .exists(),
         )
     }
 

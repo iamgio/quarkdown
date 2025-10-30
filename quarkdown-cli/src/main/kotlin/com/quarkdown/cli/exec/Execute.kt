@@ -68,7 +68,7 @@ fun runQuarkdown(
         // Pipeline execution and output resource retrieving.
         val resource = executionStrategy.execute(pipeline)
         // Exports the generated resources to file if enabled in options.
-        val childDirectory = outputDirectory?.takeUnless { cliOptions.pipe }?.let { resource?.saveTo(it) }
+        val childDirectory = outputDirectory?.let { resource?.saveTo(it) }
 
         return ExecutionOutcome(resource, childDirectory, pipeline)
     } catch (e: PipelineException) {

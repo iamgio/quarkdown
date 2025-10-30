@@ -70,9 +70,16 @@ class CompileCommand : ExecuteCommand("compile") {
         )
     }
 
+    /**
+     * Finalizes the CLI options before execution.
+     * - Sets the source file
+     * - Disables file output when in pipe mode
+     * - Sets PDF export options
+     */
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
             source = source,
+            outputDirectory = original.outputDirectory.takeUnless { pipe },
             pipe = pipe,
             exportPdf = exportPdf,
             noPdfSandbox = noPdfSandbox,
