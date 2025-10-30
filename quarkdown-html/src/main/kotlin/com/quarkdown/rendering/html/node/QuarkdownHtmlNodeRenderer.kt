@@ -38,7 +38,7 @@ import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
-import com.quarkdown.core.ast.quarkdown.block.toc.convertToListNode
+import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -326,7 +326,8 @@ class QuarkdownHtmlNodeRenderer(
 
             // Content.
             +buildTag("nav") {
-                +node.convertToListNode(
+                +convertTableOfContentsToListNode(
+                    node,
                     this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
                     linkUrlMapper = { item ->

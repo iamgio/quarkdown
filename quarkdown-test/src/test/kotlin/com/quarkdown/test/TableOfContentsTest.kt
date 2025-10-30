@@ -193,11 +193,14 @@ class TableOfContentsTest {
         // Include unnumbered headings
         execute(
             """
+            .noautopagebreak
             .tableofcontents includeunnumbered:{true}
+            
+            #! Unnumbered 1
             
             # ABC
             
-            ##! Unnumbered X
+            ##! Unnumbered 2
             
             # DEF
             
@@ -206,18 +209,17 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\"></h1>" +
+                "<h1 id=\"table-of-contents\"></h1>" +
                     "<nav><ol>" +
+                    "<li><a href=\"#unnumbered-1\">Unnumbered 1</a></li>" +
                     "<li><a href=\"#abc\">ABC</a>" +
-                    "<ol><li><a href=\"#unnumbered-x\">Unnumbered X</a></li></ol></li>" +
+                    "<ol><li><a href=\"#unnumbered-2\">Unnumbered 2</a></li></ol></li>" +
                     "<li><a href=\"#def\">DEF</a>" +
                     "<ol><li><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></nav>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h1 id=\"unnumbered-1\" data-decorative=\"\">Unnumbered 1</h1>" +
                     "<h1 id=\"abc\">ABC</h1>" +
-                    "<h2 id=\"unnumbered-x\" data-decorative=\"\">Unnumbered X</h2>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
+                    "<h2 id=\"unnumbered-2\" data-decorative=\"\">Unnumbered 2</h2>" +
                     "<h1 id=\"def\">DEF</h1>" +
                     "<h2 id=\"y\">Y</h2>",
                 it,

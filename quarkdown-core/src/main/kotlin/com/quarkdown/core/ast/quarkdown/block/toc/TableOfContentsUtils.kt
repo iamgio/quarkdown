@@ -12,46 +12,58 @@ import com.quarkdown.core.util.stripRichContent
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
+ * Filters [TableOfContents.Item]s based on the given [TableOfContentsView]'s configuration:
+ * - Items that exceed the maximum depth are filtered out.
+ * - Unnumbered items are filtered out if [TableOfContentsView.includeUnnumbered] is `false`.
+ * @returns a sequence of filtered [TableOfContents.Item]s.
+ */
+private fun filterTableOfContentsItems(
+    view: TableOfContentsView,
+    items: List<TableOfContents.Item>,
+): Sequence<TableOfContents.Item> =
+    items
+        .asSequence()
+        // Items that exceed the maximum depth.
+        .filter { it.depth <= view.maxDepth }
+        // Unnumbered items unless included.
+        .filter { view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true }
+
+/**
  * Converts a table of contents to a renderable [OrderedList].
  * @param renderer renderer to use to render items
- * @param items ToC items [this] view should contain
+ * @param items ToC items [view] contains, prior to filtering
  * @param linkUrlMapper function that obtains the URL to send to when a ToC item is interacted with
  */
-fun TableOfContentsView.convertToListNode(
+fun convertTableOfContentsToListNode(
+    view: TableOfContentsView,
     renderer: NodeVisitor<CharSequence>,
     items: List<TableOfContents.Item>,
     linkUrlMapper: (TableOfContents.Item) -> String,
-): OrderedList =
-    let { view ->
-        // Gets the content of an inner TOC item.
-        fun getTableOfContentsItemContent(item: TableOfContents.Item) =
-            buildList {
-                // A link to the target heading.
-                this +=
-                    Link(
-                        // Rich content is ignored.
-                        item.text.stripRichContent(renderer),
-                        url = linkUrlMapper(item),
-                        title = null,
-                    )
+): OrderedList {
+    // Gets the content of an inner (nested, level 2+ headings) ToC item.
+    fun getNestedItemContent(item: TableOfContents.Item) =
+        listOfNotNull(
+            Link(
+                // Rich content of the heading is ignored in the ToC entry.
+                item.text.stripRichContent(renderer),
+                url = linkUrlMapper(item),
+                title = null,
+            ),
+            // Recursively include sub-items.
+            filterTableOfContentsItems(view, item.subItems)
+                .takeIf { it.any() }
+                ?.let { convertTableOfContentsToListNode(view, renderer, it.toList(), linkUrlMapper) },
+        )
 
-                // Recursively include sub-items.
-                item.subItems
-                    .asSequence()
-                    // Filter out sub-items that exceed the maximum depth.
-                    .filter { it.depth <= view.maxDepth }
-                    // Filter unnumbered headings out if they are excluded.
-                    .filter { view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true }
-                    .takeIf { it.any() }
-                    ?.let { this += convertToListNode(renderer, it.toList(), linkUrlMapper) }
-            }
-
-        return OrderedList(
-            startIndex = 1,
-            isLoose = true,
-            children =
-                items.map {
+    // Level 1 headings.
+    return OrderedList(
+        startIndex = 1,
+        isLoose = true,
+        children =
+            filterTableOfContentsItems(view, items)
+                .map {
                     ListItem(
+                        children = getNestedItemContent(it),
                         variants =
                             buildList {
                                 // When at least one item is focused, the other items are less visible.
@@ -65,8 +77,7 @@ fun TableOfContentsView.convertToListNode(
                                     this += LocationTargetListItemVariant(it.target, DocumentNumbering::headings)
                                 }
                             },
-                        children = getTableOfContentsItemContent(it),
                     )
-                },
-        )
-    }
+                }.toList(),
+    )
+}
