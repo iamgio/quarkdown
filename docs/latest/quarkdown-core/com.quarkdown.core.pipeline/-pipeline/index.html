@@ -96,7 +96,7 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.pipeline</a><span class="delimiter">/</span><span class="current">Pipeline</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Pipeline</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Pipeline</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>options<span class="token operator">: </span><a href="../-pipeline-options/index.html">PipelineOptions</a><span class="token punctuation">, </span></span><span class="parameter ">libraries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">renderer<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../com.quarkdown.core.flavor/-renderer-factory/index.html">RendererFactory</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../com.quarkdown.core.rendering/-rendering-components/index.html">RenderingComponents</a><span class="token punctuation">, </span></span><span class="parameter ">hooks<span class="token operator">: </span><a href="../-pipeline-hooks/index.html">PipelineHooks</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><p class="paragraph">A representation of the sequential set of actions to perform in order to produce an output artifact from a raw source. Each component of the pipeline takes an input from the output of the previous one.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">initial context data shared across this pipeline, which will is filled with useful information     that are handed over to other stages of this pipeline.     This allows gathering information on-the-fly without additional visits of the whole tree</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>libraries</span></span></u></div></span></div><div><div class="title"><p class="paragraph">libraries to load and look up functions from</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>renderer</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the renderer implementation to use, produced by the flavor's <a href="../../com.quarkdown.core.flavor/-renderer-factory/index.html">RendererFactory</a>     with the output attributes of the parser as an argument</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>hooks</span></span></u></div></span></div><div><div class="title"><p class="paragraph">optional actions to run after each stage has been completed</p></div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Pipeline</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>options<span class="token operator">: </span><a href="../-pipeline-options/index.html">PipelineOptions</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>libraries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">renderer<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../com.quarkdown.core.flavor/-renderer-factory/index.html">RendererFactory</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../com.quarkdown.core.rendering/-rendering-components/index.html">RenderingComponents</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>hooks<span class="token operator">: </span><a href="../-pipeline-hooks/index.html">PipelineHooks</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><p class="paragraph">A representation of the sequential set of actions to perform in order to produce an output artifact from a raw source. Each component of the pipeline takes an input from the output of the previous one.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">initial context data shared across this pipeline, which will is filled with useful information     that are handed over to other stages of this pipeline.     This allows gathering information on-the-fly without additional visits of the whole tree</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>libraries</span></span></u></div></span></div><div><div class="title"><p class="paragraph">libraries to load and look up functions from</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>renderer</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the renderer implementation to use, produced by the flavor's <a href="../../com.quarkdown.core.flavor/-renderer-factory/index.html">RendererFactory</a>     with the output attributes of the parser as an argument</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>hooks</span></span></u></div></span></div><div><div class="title"><p class="paragraph">optional actions to run after each stage has been completed</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -122,7 +122,37 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="2135531083%2FProperties%2F1831116724" anchor-label="options" id="2135531083%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="863524985%2FProperties%2F1831116724" anchor-label="hooks" id="863524985%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="hooks.html"><span><span>hooks</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="863524985%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="hooks.html">hooks</a><span class="token operator">: </span><a href="../-pipeline-hooks/index.html">PipelineHooks</a><span class="token operator">?</span><span class="token operator"> = </span>null</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1871042640%2FProperties%2F1831116724" anchor-label="libraries" id="-1871042640%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="libraries.html"><span><span>libraries</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1871042640%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="libraries.html">libraries</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2135531083%2FProperties%2F1831116724" anchor-label="options" id="2135531083%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -156,7 +186,22 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-451584950%2FFunctions%2F1831116724" anchor-label="execute" id="-451584950%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="-24387790%2FFunctions%2F1831116724" anchor-label="copy" id="-24387790%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="copy.html"><span><span>copy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24387790%2FFunctions%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="copy.html"><span class="token function">copy</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token operator"> = </span>this.context</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Pipeline</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-451584950%2FFunctions%2F1831116724" anchor-label="execute" id="-451584950%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -166,52 +211,22 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="execute.html"><span class="token function">execute</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Executes the pipeline and calls the given <a href="../../../quarkdown-core/com.quarkdown.core.pipeline/-pipeline/hooks.html">hooks</a> after each stage.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="execute.html"><span class="token function">execute</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Executes the pipeline and calls the given <a href="hooks.html">hooks</a> after each stage.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1575073370%2FFunctions%2F1831116724" anchor-label="expandFunctionCalls" id="1575073370%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+<a data-name="-1872406012%2FFunctions%2F1831116724" anchor-label="executeUnwrapped" id="-1872406012%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="expand-function-calls.html"><span>expand</span><wbr><span>Function</span><wbr><span><span>Calls</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1575073370%2FFunctions%2F1831116724"></span>
+                  <div><a href="execute-unwrapped.html"><span>execute</span><wbr><span><span>Unwrapped</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1872406012%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="expand-function-calls.html"><span class="token function">expandFunctionCalls</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">document<span class="token operator">: </span><a href="../../com.quarkdown.core.ast/-document/index.html">Document</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Executes queued function calls and expands their content based on their output.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1372404320%2FFunctions%2F1831116724" anchor-label="parse" id="1372404320%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
-          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="parse.html"><span><span>parse</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1372404320%2FFunctions%2F1831116724"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse.html"><span class="token function">parse</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tokens<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.lexer/-token/index.html">Token</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><a href="../../com.quarkdown.core.context/-mutable-context/index.html">MutableContext</a><span class="token operator"> = </span>this.context</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.ast/-document/index.html">Document</a></div><div class="brief "><p class="paragraph">Parses a list of tokens into an Abstract Syntax Tree.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-893719320%2FFunctions%2F1831116724" anchor-label="tokenize" id="-893719320%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
-          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="tokenize.html"><span><span>tokenize</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-893719320%2FFunctions%2F1831116724"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="tokenize.html"><span class="token function">tokenize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.lexer/-token/index.html">Token</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Splits the source code into tokens.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="execute-unwrapped.html"><span class="token function">executeUnwrapped</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Executes the pipeline and calls the given <a href="hooks.html">hooks</a> after each stage.</p></div></div></div>
                 </div>
               </div>
             </div>

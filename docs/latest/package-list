@@ -241,6 +241,8 @@ com.quarkdown.core.pipeline
 com.quarkdown.core.pipeline.error
 com.quarkdown.core.pipeline.output
 com.quarkdown.core.pipeline.output.visitor
+com.quarkdown.core.pipeline.stage
+com.quarkdown.core.pipeline.stages
 com.quarkdown.core.property
 com.quarkdown.core.rendering
 com.quarkdown.core.rendering.representable
