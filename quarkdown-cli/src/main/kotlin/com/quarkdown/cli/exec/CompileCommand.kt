@@ -103,9 +103,9 @@ class CompileCommand : ExecuteCommand("compile") {
     private fun logCompletion(output: File) {
         if (super.preview && this::stopwatch.isInitialized) {
             val elapsed = stopwatch.elapsedMillis()
-            Log.info("✔ Completed in ${elapsed}ms")
+            Log.success("in ${elapsed}ms")
         } else {
-            Log.info("✔ Completed @ ${output.absolutePath}")
+            Log.success("@ ${output.absolutePath}")
         }
     }
 

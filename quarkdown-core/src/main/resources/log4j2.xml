@@ -4,8 +4,9 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout>
                 <LevelPatternSelector defaultPattern="%m%n">
-                    <PatternMatch key="warn" pattern="[!] %m%n" />
-                    <PatternMatch key="debug" pattern="[%p] %m%n" />
+                    <PatternMatch key="WARN" pattern="[!] %m%n" />
+                    <PatternMatch key="SUCCESS" pattern="%style{[%d{HH:mm}]}{white} %style{Success}{green} %m%n" />
+                    <PatternMatch key="DEBUG" pattern="[%p] %m%n" />
                 </LevelPatternSelector>
             </PatternLayout>
             <Filters>
