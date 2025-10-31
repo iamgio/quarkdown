@@ -24,6 +24,7 @@ jobs:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
       with:
         full-checkout: true
+        checkout-token: ${{ secrets.COMMITTER_TOKEN }}
 
     # Writes the new version (tag name without the leading 'v') to version.txt
     - name: Bump version

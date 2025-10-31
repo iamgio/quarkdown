@@ -5,6 +5,10 @@ inputs:
     description: "If true, fetches full history and tags. Defaults to false."
     required: false
     default: 'false'
+  checkout-token:
+    description: "Token used to checkout the repository. Defaults to GITHUB_TOKEN."
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -14,7 +18,7 @@ runs:
       with:
         fetch-depth: ${{ inputs.full-checkout && '0' || '1' }}
         fetch-tags: ${{ inputs.full-checkout }}
-        token: ${{ secrets.COMMITTER_TOKEN || secrets.GITHUB_TOKEN || github.token }}
+        token: ${{ inputs.checkout-token != '' && inputs.checkout-token || github.token }}
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
