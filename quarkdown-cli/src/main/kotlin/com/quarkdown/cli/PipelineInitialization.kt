@@ -50,7 +50,8 @@ object PipelineInitialization {
                 afterParsing = { document ->
                     Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
                 },
-                afterRendering = { output ->
+                afterAllRendering = { output ->
+                    Log.debug { "Final Output:\n$output" }
                     if (printOutput) {
                         println(output)
                     }

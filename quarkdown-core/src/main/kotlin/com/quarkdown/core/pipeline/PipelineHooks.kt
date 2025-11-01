@@ -3,6 +3,7 @@ package com.quarkdown.core.pipeline
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.lexer.Token
+import com.quarkdown.core.pipeline.output.OutputResource
 
 /**
  * Actions to run after each stage of a [Pipeline] has been completed.
@@ -13,6 +14,9 @@ import com.quarkdown.core.lexer.Token
  * @param afterTreeTraversal action to run after the produced AST has been visited
  * @param afterRendering action to run after the rendered output code has been generated (output code as an argument)
  * @param afterPostRendering action to run after the rendered output code has been manipulated (e.g. wrapped) (output code as an argument)
+ * @param afterAllRendering action to run after all rendering has been completed.
+ *                          It usually matches with [afterPostRendering].
+ *                          If post-rendering is disabled, it will match with [afterRendering] instead.
  * @see Pipeline
  */
 data class PipelineHooks(
@@ -23,4 +27,6 @@ data class PipelineHooks(
     val afterTreeTraversal: Pipeline.(AstRoot) -> Unit = {},
     val afterRendering: Pipeline.(CharSequence) -> Unit = {},
     val afterPostRendering: Pipeline.(CharSequence) -> Unit = {},
+    val afterAllRendering: Pipeline.(CharSequence) -> Unit = {},
+    val afterGeneratingResources: Pipeline.(Set<OutputResource>) -> Unit = {},
 )

@@ -152,10 +152,12 @@ class CompileCommandTest : TempDirectory() {
 
         try {
             System.setOut(java.io.PrintStream(pipeStdout))
-            val (cliOptions) = test("--pipe")
+            val (cliOptions, pipelineOptions) = test("--pipe")
             assertTrue(cliOptions.pipe)
+            assertTrue(pipelineOptions.wrapOutput)
 
             val output = pipeStdout.toString()
+            assertTrue(output.contains("<!DOCTYPE html>"))
             assertTrue(output.contains("Page 1"))
             assertTrue(output.contains("Page 2"))
             assertTrue(output.contains("Page 3"))
@@ -166,6 +168,27 @@ class CompileCommandTest : TempDirectory() {
             val outputNonPipe = nonPipeStdout.toString()
             assertFalse(outputNonPipe.contains("Page 1"))
             assert(output.length > outputNonPipe.length)
+        } finally {
+            System.setOut(originalOut)
+        }
+    }
+
+    @Test
+    fun `pipe, no wrap`() {
+        val pipeStdout = java.io.ByteArrayOutputStream()
+        val originalOut = System.out
+
+        try {
+            System.setOut(java.io.PrintStream(pipeStdout))
+            val (cliOptions, pipelineOptions) = test("--pipe", "--nowrap")
+            assertTrue(cliOptions.pipe)
+            assertFalse(pipelineOptions.wrapOutput)
+
+            val output = pipeStdout.toString()
+            assertFalse(output.contains("<!DOCTYPE html>"))
+            assertTrue(output.contains("Page 1"))
+            assertTrue(output.contains("Page 2"))
+            assertTrue(output.contains("Page 3"))
         } finally {
             System.setOut(originalOut)
         }

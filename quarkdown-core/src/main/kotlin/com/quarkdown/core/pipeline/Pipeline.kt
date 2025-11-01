@@ -20,6 +20,7 @@ import com.quarkdown.core.rendering.RenderingComponents
  * @param renderer supplier of the renderer implementation to use, produced by the flavor's [RendererFactory]
  *                 with the output attributes of the parser as an argument
  * @param hooks optional actions to run after each stage has been completed
+ * @see PipelineChainFactory for standard pipeline stage chains
  */
 class Pipeline(
     private val context: MutableContext,
