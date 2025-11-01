@@ -45,7 +45,7 @@ class PuppeteerPdfGeneratorScript(
             .withScanner()
             .attemptStartUntilPortAvailable(STARTING_SERVER_PORT) { server, port ->
                 this.port = port
-                Log.info("PDF server is ready on port $port.")
+                Log.info("PDF server is ready on port $port. Please wait...")
                 try {
                     runScript()
                     Log.info("PDF generated successfully.")

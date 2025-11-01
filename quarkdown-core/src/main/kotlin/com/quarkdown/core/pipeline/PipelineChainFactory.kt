@@ -4,6 +4,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.then
 import com.quarkdown.core.pipeline.stage.thenOptionally
+import com.quarkdown.core.pipeline.stages.AfterAllRenderingPeek
 import com.quarkdown.core.pipeline.stages.AttachmentStage
 import com.quarkdown.core.pipeline.stages.AttributesUpdateStage
 import com.quarkdown.core.pipeline.stages.FunctionCallExpansionStage
@@ -42,5 +43,6 @@ object PipelineChainFactory {
             TreeTraversalStage then
             RenderingStage(renderingComponents.nodeRenderer) thenOptionally
             PostRenderingStage(renderingComponents.postRenderer).takeIf { options.wrapOutput } then
+            AfterAllRenderingPeek then
             ResourceGenerationStage(renderingComponents.postRenderer)
 }
