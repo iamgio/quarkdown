@@ -350,6 +350,9 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `--strict`: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
 
+- `--nowrap`: prevents the rendered output from being wrapped in a full document structure.
+  If enabled in HTML rendering, only the inner content of the `<body>` tag is produced.
+
 - `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
 
