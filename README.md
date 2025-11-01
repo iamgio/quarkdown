@@ -340,6 +340,8 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
   - `chromium`
   - `firefox`
   - `edge` (Windows only)
+  - Any other name, backed by the `BROWSER_<NAME>` environment variable
+  - A full path to a browser executable
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
