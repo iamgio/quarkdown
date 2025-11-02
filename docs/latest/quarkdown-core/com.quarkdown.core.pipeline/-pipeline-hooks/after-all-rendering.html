@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>exportPdf</title>
+    <title>afterAllRendering</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-cli/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-cli/main" data-filter=":quarkdown-cli/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-cli::com.quarkdown.cli/CliOptions/exportPdf/#/PointingToDeclaration//918969369">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-cli</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.cli</a><span class="delimiter">/</span><a href="index.html">CliOptions</a><span class="delimiter">/</span><span class="current">exportPdf</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.pipeline/PipelineHooks/afterAllRendering/#/PointingToDeclaration//1831116724">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.pipeline</a><span class="delimiter">/</span><a href="index.html">PipelineHooks</a><span class="delimiter">/</span><span class="current">afterAllRendering</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>export</span><wbr><span><span>Pdf</span></span></h1>
+    <h1 class="cover"><span>after</span><wbr><span>All</span><wbr><span><span>Rendering</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="export-pdf.html">exportPdf</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-cli/main" data-filterable-set=":quarkdown-cli/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>export</span><wbr><span><span>Pdf</span></span></u></div></span></div><div><div class="title"><p class="paragraph">whether to generate a PDF file</p></div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="after-all-rendering.html">afterAllRendering</a><span class="token operator">: </span><a href="../-pipeline/index.html">Pipeline</a><span class="token punctuation">.</span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>after</span><wbr><span>All</span><wbr><span><span>Rendering</span></span></u></div></span></div><div><div class="title"><p class="paragraph">action to run after all rendering has been completed.     It usually matches with <a href="after-post-rendering.html">afterPostRendering</a>.     If post-rendering is disabled, it will match with <a href="after-rendering.html">afterRendering</a> instead.</p></div></div></div></div></div></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
