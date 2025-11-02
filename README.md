@@ -345,12 +345,18 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
 
-- `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
-  but it should be disabled in production as the results might be visually affected.
+- `--pipe`: outputs the generated content to stdout instead of saving it to file and suppresses other logs,
+  useful for piping to other commands.
 
 - `--clean`: deletes the content of the output directory before producing new files. Destructive operation.
 
 - `--strict`: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
+
+- `--nowrap`: prevents the rendered output from being wrapped in a full document structure.
+  If enabled in HTML rendering, only the inner content of the `<body>` tag is produced.
+
+- `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
+  but it should be disabled in production as the results might be visually affected.
 
 - `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 

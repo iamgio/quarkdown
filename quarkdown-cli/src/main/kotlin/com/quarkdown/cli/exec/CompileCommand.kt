@@ -8,6 +8,7 @@ import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.server.WebServerOptions
 import com.quarkdown.cli.server.browserLauncherOption
+import com.quarkdown.cli.util.MillisStopwatch
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
@@ -46,6 +47,12 @@ class CompileCommand : ExecuteCommand("compile") {
     ).flag()
 
     /**
+     * When enabled, the rendered content (NOT post-rendered) is printed to stdout and nothing else is logged,
+     * suitable for piping the output to other commands.
+     */
+    private val pipe: Boolean by option("--pipe", help = "Print only the rendered content to stdout").flag()
+
+    /**
      * Optional browser to open the served file in, if preview is enabled.
      */
     private val browser: BrowserLauncher? by browserLauncherOption(
@@ -63,24 +70,61 @@ class CompileCommand : ExecuteCommand("compile") {
         )
     }
 
+    /**
+     * Finalizes the CLI options before execution.
+     * - Sets the source file
+     * - Disables file output when in pipe mode
+     * - Sets PDF export options
+     */
     override fun finalizeCliOptions(original: CliOptions) =
         original.copy(
             source = source,
-            noPdfSandbox = noPdfSandbox,
+            outputDirectory = original.outputDirectory.takeUnless { pipe },
+            pipe = pipe,
             exportPdf = exportPdf,
+            noPdfSandbox = noPdfSandbox,
         )
 
+    /**
+     * Stopwatch to measure the duration of the compilation.
+     */
+    @get:Synchronized @set:Synchronized
+    private lateinit var stopwatch: MillisStopwatch
+
     override fun createExecutionStrategy(cliOptions: CliOptions) = FileExecutionStrategy(source)
+
+    override fun preExecute(
+        cliOptions: CliOptions,
+        pipelineOptions: PipelineOptions,
+    ) {
+        this.stopwatch = MillisStopwatch()
+    }
+
+    private fun logCompletion(output: File) {
+        if (super.preview && this::stopwatch.isInitialized) {
+            val elapsed = stopwatch.elapsedMillis()
+            Log.success("in ${elapsed}ms")
+        } else {
+            Log.success("@ ${output.absolutePath}")
+        }
+    }
 
     override fun postExecute(
         outcome: ExecutionOutcome,
         cliOptions: CliOptions,
         pipelineOptions: PipelineOptions,
     ) {
+        if (cliOptions.pipe) {
+            // No action needed when in pipe mode.
+            return
+        }
+
         if (outcome.directory == null) {
             Log.warn("Unexpected null output directory during compilation post-processing")
             return
         }
+
+        this.logCompletion(output = outcome.directory)
 
         if (super.preview) {
             runServerCommunication(outcome.directory)

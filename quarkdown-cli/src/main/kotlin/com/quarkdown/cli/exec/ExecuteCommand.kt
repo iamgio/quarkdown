@@ -175,6 +175,7 @@ abstract class ExecuteCommand(
             libraryDirectory,
             renderer,
             clean,
+            pipe = false,
             nodePath,
             npmPath,
         ).let(::finalizeCliOptions)
@@ -204,6 +205,11 @@ abstract class ExecuteCommand(
         val cliOptions = this.createCliOptions()
         val pipelineOptions = this.createPipelineOptions(cliOptions)
 
+        // If pipe mode is enabled, all logging is disabled, so that only the rendered content is printed to stdout.
+        if (cliOptions.pipe) {
+            Log.disableLogging()
+        }
+
         // If file watching is enabled, a file change triggers the pipeline execution again.
         cliOptions.takeIf { watch }?.source?.absoluteFile?.parentFile?.let { sourceDirectory ->
             Log.info("Watching for file changes in source directory: $sourceDirectory")
@@ -221,16 +227,27 @@ abstract class ExecuteCommand(
 
     /**
      * Executes the Quarkdown pipeline: compiles and generates output files.
-     * If enabled, it also sends a message to the webserver.
+     * [preExecute] and [postExecute] are called before and after the execution respectively.
      */
     private fun execute(
         cliOptions: CliOptions,
         pipelineOptions: PipelineOptions,
     ) {
+        this.preExecute(cliOptions, pipelineOptions)
+
         // Executes the Quarkdown pipeline.
         val outcome: ExecutionOutcome = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
 
         this.postExecute(outcome, cliOptions, pipelineOptions)
+    }
+
+    /**
+     * Executes actions before the execution of the pipeline starts.
+     */
+    protected open fun preExecute(
+        cliOptions: CliOptions,
+        pipelineOptions: PipelineOptions,
+    ) {
     }
 
     /**

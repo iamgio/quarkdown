@@ -3,6 +3,7 @@ package com.quarkdown.core.pipeline.stages
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.pipeline.Pipeline
+import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
@@ -24,7 +25,7 @@ import com.quarkdown.core.rendering.PostRenderer
 class ResourceGenerationStage(
     private val postRenderer: PostRenderer,
 ) : PipelineStage<CharSequence, Set<OutputResource>> {
-    override val hook = null
+    override val hook = PipelineHooks::afterGeneratingResources
 
     override fun process(
         input: CharSequence,

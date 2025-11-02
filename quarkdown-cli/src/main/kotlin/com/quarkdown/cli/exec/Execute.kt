@@ -47,7 +47,14 @@ fun runQuarkdown(
 
     // The pipeline that contains all the stages to go through,
     // from the source input to the final output.
-    val pipeline: Pipeline = PipelineInitialization.init(flavor, libraries, pipelineOptions, cliOptions.renderer)
+    val pipeline: Pipeline =
+        PipelineInitialization.init(
+            flavor,
+            libraries,
+            pipelineOptions,
+            printOutput = cliOptions.pipe,
+            cliOptions.renderer,
+        )
 
     // Output directory to save the generated resources in.
     val outputDirectory = cliOptions.outputDirectory
