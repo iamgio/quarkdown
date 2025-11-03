@@ -13,6 +13,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param content code content
  * @param language optional syntax language
  * @param showLineNumbers whether to show line numbers
+ * @param highlight whether to apply syntax highlighting
  * @param focusedLines range of lines to focus on. No lines are focused if `null`
  * @param caption optional caption
  * @param referenceId optional ID for cross-referencing via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
@@ -21,6 +22,7 @@ class Code(
     val content: String,
     val language: String?,
     val showLineNumbers: Boolean = true,
+    val highlight: Boolean = true,
     val focusedLines: Range? = null,
     override val caption: String? = null,
     override val referenceId: String? = null,

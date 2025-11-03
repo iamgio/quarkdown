@@ -464,6 +464,7 @@ class HtmlNodeRendererTest {
         val out = readParts("block/code.html")
 
         assertEquals(out.next(), Code("Code", language = null, showLineNumbers = true).render())
+        assertEquals(out.next(), Code("Code", language = null, highlight = false).render())
         assertEquals(out.next(), Code("Code", language = null, showLineNumbers = false).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = null, showLineNumbers = true).render())
         assertEquals(out.next(), Code("class Point {\n    ...\n}", language = "java", showLineNumbers = false).render())

@@ -127,6 +127,8 @@ open class BaseHtmlNodeRenderer(
                 classNames(
                     // Sets the code language.
                     node.language?.let { "language-$it" },
+                    // Disables syntax highlighting.
+                    "no-highlight".takeUnless { node.highlight },
                     // Disables line numbers.
                     "nohljsln".takeUnless { node.showLineNumbers },
                     // Focuses certain lines.
