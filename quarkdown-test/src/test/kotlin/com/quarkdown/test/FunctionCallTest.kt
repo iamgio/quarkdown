@@ -153,14 +153,10 @@ class FunctionCallTest {
         }
 
         execute(".if {yes}\n\t.column alignment:{x}\n\t\tHi", errorHandler = BasePipelineErrorHandler()) {
-            assertTrue(
-                Regex(
-                    ".+?<header><h4>Error: column</h4></header>" +
-                        ".+?<p>" +
-                        "Cannot call function column.+?No such element 'x' among values \\[.+?]" +
-                        "</p>.+",
-                ).matches(it),
-            )
+            assertContains(it, "<header><h4>Error: column</h4></header>")
+            assertContains(it, "Cannot call function column")
+            assertContains(it, "No such element 'x' among values [")
+            assertContains(it, "<pre><code class=\"no-highlight nohljsln\">.column alignment:{x}\n\tHi</code></pre>")
         }
     }
 }
