@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>FunctionRuntimeException</title>
+    <title>FunctionCallRuntimeException</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -92,28 +92,28 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-core::com.quarkdown.core.function.error/FunctionRuntimeException///PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.function.error</a><span class="delimiter">/</span><span class="current">FunctionRuntimeException</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-core::com.quarkdown.core.function.error/FunctionCallRuntimeException///PointingToDeclaration//1831116724">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.function.error</a><span class="delimiter">/</span><span class="current">FunctionCallRuntimeException</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Function</span><wbr><span>Runtime</span><wbr><span><span>Exception</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">FunctionRuntimeException</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="../../com.quarkdown.core.function/-function/index.html">Function</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>cause<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-throwable/index.html">Throwable</a></span></span><span class="token punctuation">)</span> : <a href="../-function-exception/index.html">FunctionException</a></div><p class="paragraph">An exception thrown when an error occurs inside a called function.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>source</span></span></u></div></span></div><div><div class="title"><p class="paragraph">function that threw the error</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>cause</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the error cause</p></div></div></div></div></div></div></div>
+    <h1 class="cover"><span>Function</span><wbr><span>Call</span><wbr><span>Runtime</span><wbr><span><span>Exception</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">FunctionCallRuntimeException</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>call<span class="token operator">: </span><a href="../../com.quarkdown.core.function.call/-function-call/index.html">FunctionCall</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>cause<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-throwable/index.html">Throwable</a></span></span><span class="token punctuation">)</span> : <a href="../-invalid-function-call-exception/index.html">InvalidFunctionCallException</a></div><p class="paragraph">An exception thrown when an error occurs inside a called function, which may wrap another exception as its cause, such as an <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html">IllegalStateException</a>.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>call</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the function call that caused the error</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>cause</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the error cause</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
-        <div class="table"><a data-name="-1695632523%2FConstructors%2F1831116724" anchor-label="FunctionRuntimeException" id="-1695632523%2FConstructors%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="629486495%2FConstructors%2F1831116724" anchor-label="FunctionCallRuntimeException" id="629486495%2FConstructors%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-function-runtime-exception.html"><span>Function</span><wbr><span>Runtime</span><wbr><span><span>Exception</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1695632523%2FConstructors%2F1831116724"></span>
+                  <div><a href="-function-call-runtime-exception.html"><span>Function</span><wbr><span>Call</span><wbr><span>Runtime</span><wbr><span><span>Exception</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="629486495%2FConstructors%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="../../com.quarkdown.core.function/-function/index.html">Function</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">cause<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-throwable/index.html">Throwable</a></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">call<span class="token operator">: </span><a href="../../com.quarkdown.core.function.call/-function-call/index.html">FunctionCall</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">cause<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-throwable/index.html">Throwable</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -122,12 +122,27 @@
       </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="-1464052125%2FProperties%2F1831116724" anchor-label="cause" id="-1464052125%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="1653747747%2FProperties%2F1831116724" anchor-label="call" id="1653747747%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-invalid-function-call-exception/call.html"><span><span>call</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1653747747%2FProperties%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../-invalid-function-call-exception/call.html">call</a><span class="token operator">: </span><a href="../../com.quarkdown.core.function.call/-function-call/index.html">FunctionCall</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1774178469%2FProperties%2F1831116724" anchor-label="cause" id="1774178469%2FProperties%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="cause.html"><span><span>cause</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1464052125%2FProperties%2F1831116724"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1774178469%2FProperties%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
