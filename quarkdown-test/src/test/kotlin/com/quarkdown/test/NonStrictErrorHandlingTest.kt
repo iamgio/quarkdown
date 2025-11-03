@@ -71,4 +71,47 @@ class NonStrictErrorHandlingTest {
             assertContains(it, ".csv {nonexistent}</code></pre>")
         }
     }
+
+    @Test
+    fun `multiple layers of nesting`() {
+        execute(
+            """
+            .container
+                a
+
+                .row alignment:{center}
+                    .if {invalid}
+                        b
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "<div class=\"container\"><p>a</p>")
+            assertContains(it, "<h4>Error: if</h4>")
+            assertContains(it, "Cannot call function if")
+            assertContains(it, ".if {invalid}")
+        }
+    }
+
+    @Test
+    fun `long source snippet should be folded`() {
+        execute(
+            """
+            .sum {1}
+                1
+                2
+                3
+                4
+                5
+                6
+                7
+                8
+                9
+                10
+                11
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "9\n... (2 more lines)")
+        }
+    }
 }

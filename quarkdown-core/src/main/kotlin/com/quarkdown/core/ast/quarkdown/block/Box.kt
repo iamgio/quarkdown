@@ -11,7 +11,13 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
+import com.quarkdown.core.util.takeLines
 import com.quarkdown.core.visitor.node.NodeVisitor
+
+/**
+ * Maximum number of source text lines to show in an error box.
+ */
+private const val ERROR_MAX_SOURCE_TEXT_LINES = 10
 
 /**
  * A generic box that contains content.
@@ -101,7 +107,7 @@ class Box(
                     +Paragraph(message)
                     sourceText?.let {
                         +Code(
-                            it.toString(),
+                            it.takeLines(ERROR_MAX_SOURCE_TEXT_LINES, addOmittedLinesSuffix = true),
                             language = null,
                             highlight = false,
                             showLineNumbers = false,

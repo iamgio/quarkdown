@@ -66,6 +66,30 @@ fun CharSequence.indent(indent: String) =
     }
 
 /**
+ * @param count number of lines to take
+ * @param addOmittedLinesSuffix whether to add a suffix indicating how many lines were omitted
+ * @return the first [count] lines of [this] string, plus an optional `... (N more lines)` suffix
+ */
+fun CharSequence.takeLines(
+    count: Int,
+    addOmittedLinesSuffix: Boolean,
+): String {
+    if (!addOmittedLinesSuffix) {
+        return this.lines().take(count).joinToString(separator = "\n")
+    }
+
+    val lines = this.lines()
+    return if (lines.size <= count) {
+        this.toString()
+    } else {
+        buildString {
+            lines.take(count).forEach { appendLine(it) }
+            appendLine("... (${lines.size - count} more lines)")
+        }
+    }
+}
+
+/**
  * An optimized way to replace all occurrences of [oldValue] with [newValue] in a [StringBuilder].
  * @return this builder
  */
