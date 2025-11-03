@@ -43,7 +43,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">1.11.0
+        <div class="library-version" id="library-version">1.12.0
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
@@ -142,7 +142,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-env-browser-launcher/index.html">EnvBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="-browser-launcher/index.html">BrowserLauncher</a></div><div class="brief "><p class="paragraph">Launcher of browsers whose path is stored in environment variables (<code class="lang-kotlin">BROWSER_&lt;env&gt;</code>).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-env-browser-launcher/index.html">EnvBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">envLookup<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <a href="-browser-launcher/index.html">BrowserLauncher</a></div><div class="brief "><p class="paragraph">Launcher of browsers whose path is stored in environment variables (<code class="lang-kotlin">BROWSER_&lt;env&gt;</code>) passing the URL as the first argument to the browser executable.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -162,17 +162,17 @@
               </div>
             </div>
           </div>
-<a data-name="1548782453%2FClasslikes%2F1314577368" anchor-label="SimpleEnvBrowserLauncher" id="1548782453%2FClasslikes%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+<a data-name="-1800169283%2FClasslikes%2F1314577368" anchor-label="PathBrowserLauncher" id="-1800169283%2FClasslikes%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-simple-env-browser-launcher/index.html"><span>Simple</span><wbr><span>Env</span><wbr><span>Browser</span><wbr><span><span>Launcher</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1548782453%2FClasslikes%2F1314577368"></span>
+                  <div><a href="-path-browser-launcher/index.html"><span>Path</span><wbr><span>Browser</span><wbr><span><span>Launcher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1800169283%2FClasslikes%2F1314577368"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-simple-env-browser-launcher/index.html">SimpleEnvBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">env<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="-env-browser-launcher/index.html">EnvBrowserLauncher</a></div><div class="brief "><p class="paragraph">Simple implementation of <a href="-env-browser-launcher/index.html">EnvBrowserLauncher</a> that launches a browser if the environment variable is set, passing the URL as the first argument to the browser executable.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-path-browser-launcher/index.html">PathBrowserLauncher</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">path<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></span></span><span class="token punctuation">)</span> : <a href="-browser-launcher/index.html">BrowserLauncher</a></div><div class="brief "><p class="paragraph">Browser launcher that uses a specific file system path to launch the browser.</p></div></div></div>
                 </div>
               </div>
             </div>
