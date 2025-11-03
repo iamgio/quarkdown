@@ -23,6 +23,7 @@ import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
  * @param context context of the function call
  * @param call walked function call to refine
  * @param isBlock whether the function call is a block
+ * @param sourceText if available, the source code of the whole function call
  * @param sourceRange if available, the range of the function call in the source code
  * @param initialArguments initial arguments to add to the function call (used internally for chaining)
  */
@@ -30,6 +31,7 @@ class FunctionCallRefiner(
     private val context: Context,
     private val call: WalkedFunctionCall,
     private val isBlock: Boolean,
+    private val sourceText: CharSequence?,
     private val sourceRange: IntRange?,
     private val initialArguments: List<FunctionCallArgument> = emptyList(),
 ) {
@@ -72,7 +74,7 @@ class FunctionCallRefiner(
      * Refines the walked function [call] into a [FunctionCallNode].
      */
     fun toNode(): FunctionCallNode {
-        val node = FunctionCallNode(context, call.name, extractArguments(), isBlock, sourceRange)
+        val node = FunctionCallNode(context, call.name, extractArguments(), isBlock, sourceText, sourceRange)
 
         // Chaining: if this function call (A) is chained with another one (B),
         // then the result node is B(A).
@@ -80,7 +82,7 @@ class FunctionCallRefiner(
             val call: UncheckedFunctionCall<*> = context.resolveUnchecked(node) // A
             val initialArguments = listOf(FunctionCallArgument(call)) // A as an argument for B
 
-            val refiner = FunctionCallRefiner(context, next, isBlock, sourceRange, initialArguments) // B(A)
+            val refiner = FunctionCallRefiner(context, next, isBlock, sourceText, sourceRange, initialArguments) // B(A)
             return refiner.toNode()
         }
 

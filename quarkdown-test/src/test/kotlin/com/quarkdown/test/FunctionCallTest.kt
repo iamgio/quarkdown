@@ -137,7 +137,9 @@ class FunctionCallTest {
                     "(a, 3)" +
                     "</span>: <br />" +
                     "<em>Not a numeric value: a</em>" +
-                    "</p></div></div>",
+                    "</p>" +
+                    "<pre><code class=\"no-highlight nohljsln\">.sum {a} {3}</code></pre>" +
+                    "</div></div>",
                 it,
             )
         }

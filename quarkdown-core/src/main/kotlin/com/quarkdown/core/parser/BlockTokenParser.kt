@@ -485,10 +485,11 @@ class BlockTokenParser(
         val sourceRangeStart = token.data.position.start
         val sourceRangeEnd = sourceRangeStart + result.endIndex
         val sourceRange = sourceRangeStart..sourceRangeEnd
+        val sourceText = result.sourceText
 
         // The syntax-only information held by the walked function call is converted to a context-aware function call node.
         // Function chaining is also handled here, delegated to the refiner.
-        val callNode = FunctionCallRefiner(context, call, token.isBlock, sourceRange).toNode()
+        val callNode = FunctionCallRefiner(context, call, token.isBlock, sourceText, sourceRange).toNode()
 
         // Enqueuing the function call, in order to expand it in the next stage of the pipeline.
         context.register(callNode)

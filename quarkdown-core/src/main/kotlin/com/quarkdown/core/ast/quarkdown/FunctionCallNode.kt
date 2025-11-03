@@ -13,6 +13,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param name name of the function to call
  * @param arguments arguments to call the function with
  * @param isBlock whether this function call is an isolated block (opposite: inline)
+ * @param sourceText if available, the source code of the whole function call
  * @param sourceRange if available, the range of the function call in the source code
  */
 class FunctionCallNode(
@@ -20,6 +21,7 @@ class FunctionCallNode(
     val name: String,
     val arguments: List<FunctionCallArgument>,
     val isBlock: Boolean,
+    val sourceText: CharSequence? = null,
     val sourceRange: IntRange? = null,
 ) : NestableNode {
     override val children: MutableList<Node> = mutableListOf()

@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.error.FunctionException
+import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.core.util.toPlainText
 
 /**
@@ -31,7 +32,16 @@ fun PipelineException.asNode(errorHandler: PipelineErrorHandler): Node {
     val sourceFunction = (this as? FunctionException)?.function
 
     return errorHandler.handle(this, sourceFunction) {
-        Box.error(richMessage, title = sourceFunction?.name)
+        Box.error(
+            message = this.richMessage,
+            title = sourceFunction?.name,
+            sourceText =
+                (this as? InvalidFunctionCallException)
+                    ?.call
+                    ?.sourceNode
+                    ?.sourceText
+                    ?.trim(),
+        )
     }
 }
 

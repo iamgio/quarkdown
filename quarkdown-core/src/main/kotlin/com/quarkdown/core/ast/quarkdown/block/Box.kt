@@ -3,7 +3,9 @@ package com.quarkdown.core.ast.quarkdown.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Paragraph
+import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.misc.color.Color
@@ -65,13 +67,13 @@ class Box(
 
     companion object {
         /**
-         * A box that shows an error message with a monospaced text content.
-         * @param message error message to display
+         * A box that shows an error content with a monospaced text content.
+         * @param content error message to display
          * @param title additional error title
          * @return a box containing the error message
          */
         fun error(
-            message: InlineContent,
+            content: List<Node>,
             title: String? = null,
         ) = Box(
             title =
@@ -79,7 +81,34 @@ class Box(
                     text("Error" + if (title != null) ": $title" else "")
                 },
             type = Type.ERROR,
-            children = listOf(Paragraph(message)),
+            children = content,
         )
+
+        /**
+         * A box that shows an error content with an optional source code snippet.
+         * @param message error message to display
+         * @param title additional error title
+         * @param sourceText optional source code snippet to display
+         * @return a box containing the error message
+         */
+        fun error(
+            message: InlineContent,
+            title: String? = null,
+            sourceText: CharSequence?,
+        ): Box {
+            val content =
+                buildBlocks {
+                    +Paragraph(message)
+                    sourceText?.let {
+                        +Code(
+                            it.toString(),
+                            language = null,
+                            highlight = false,
+                            showLineNumbers = false,
+                        )
+                    }
+                }
+            return error(content, title)
+        }
     }
 }
