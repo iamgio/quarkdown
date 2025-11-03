@@ -33,6 +33,5 @@ const val IO_ERROR_EXIT_CODE = 70
 
 /**
  * Exit code when a runtime error occurs.
- * @see com.quarkdown.core.function.error.FunctionRuntimeException
  */
 const val RUNTIME_ERROR_EXIT_CODE = 71

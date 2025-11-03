@@ -34,14 +34,14 @@ data class FunctionCall<T : OutputValue<*>>(
     /**
      * Checks the call validity and calls the function.
      * @return the function output
-     * @throws Exception if [Function.validate] does not succeed
+     * @throws Exception if the validation through [Function.validators] does not succeed
      */
     fun execute(): T {
         this.validate()
 
         // Allows binding each argument to its parameter.
         val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
-        return function.invoke(bindings).also(onComplete)
+        return function.invoke(bindings, this).also(onComplete)
     }
 
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)

@@ -2,10 +2,10 @@ package com.quarkdown.core.function.reflect
 
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.binding.ArgumentBindings
 import com.quarkdown.core.function.call.validate.FunctionCallValidator
-import com.quarkdown.core.function.error.FunctionException
-import com.quarkdown.core.function.error.FunctionRuntimeException
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NoAutoArgumentUnwrapping
@@ -15,6 +15,7 @@ import com.quarkdown.core.function.reflect.annotation.toValidator
 import com.quarkdown.core.function.value.InputValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.log.Log
+import com.quarkdown.core.pipeline.error.PipelineException
 import java.lang.reflect.InvocationTargetException
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
@@ -56,8 +57,8 @@ class KFunctionAdapter<T : OutputValue<*>>(
                 function.findAnnotation<NotForDocumentType>()?.toValidator<T>()?.let(::add)
             }
 
-    override val invoke: (ArgumentBindings) -> T
-        get() = { bindings ->
+    override val invoke: (ArgumentBindings, FunctionCall<T>) -> T
+        get() = { bindings, call ->
             val args =
                 bindings.asSequence().associate { (parameter, argument) ->
                     // Corresponding KParameter.
@@ -81,11 +82,9 @@ class KFunctionAdapter<T : OutputValue<*>>(
                 // and handled accordingly by the pipeline's function expander component.
                 Log.debug("(expected, received): " + args.map { it.key.type to it.value })
 
-                // If the exception comes from a nested function call, the source function is retrieved.
-                // Otherwise, this function becomes the source.
-                val source: Function<*> = (e.targetException as? FunctionException)?.function ?: this
-
-                throw FunctionRuntimeException(source, e.targetException)
+                // If the exception comes from a nested function call, it is rethrown to go up the stack.
+                throw e.targetException as? PipelineException
+                    ?: FunctionCallRuntimeException(call, e.targetException)
             }
         }
 }

@@ -3,13 +3,21 @@ package com.quarkdown.core.ast.quarkdown.block
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Paragraph
+import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
+import com.quarkdown.core.util.takeLines
 import com.quarkdown.core.visitor.node.NodeVisitor
+
+/**
+ * Maximum number of source text lines to show in an error box.
+ */
+private const val ERROR_MAX_SOURCE_TEXT_LINES = 10
 
 /**
  * A generic box that contains content.
@@ -65,13 +73,13 @@ class Box(
 
     companion object {
         /**
-         * A box that shows an error message with a monospaced text content.
-         * @param message error message to display
+         * A box that shows an error content with a monospaced text content.
+         * @param content error message to display
          * @param title additional error title
          * @return a box containing the error message
          */
         fun error(
-            message: InlineContent,
+            content: List<Node>,
             title: String? = null,
         ) = Box(
             title =
@@ -79,7 +87,34 @@ class Box(
                     text("Error" + if (title != null) ": $title" else "")
                 },
             type = Type.ERROR,
-            children = listOf(Paragraph(message)),
+            children = content,
         )
+
+        /**
+         * A box that shows an error content with an optional source code snippet.
+         * @param message error message to display
+         * @param title additional error title
+         * @param sourceText optional source code snippet to display
+         * @return a box containing the error message
+         */
+        fun error(
+            message: InlineContent,
+            title: String? = null,
+            sourceText: CharSequence?,
+        ): Box {
+            val content =
+                buildBlocks {
+                    +Paragraph(message)
+                    sourceText?.let {
+                        +Code(
+                            it.takeLines(ERROR_MAX_SOURCE_TEXT_LINES, addOmittedLinesSuffix = true),
+                            language = null,
+                            highlight = false,
+                            showLineNumbers = false,
+                        )
+                    }
+                }
+            return error(content, title)
+        }
     }
 }

@@ -27,7 +27,8 @@ open class WalkerParser<T>(
         val parsed = result.toParsedOrThrow()
 
         val endIndex = tokens[parsed.nextPosition]?.offset ?: source.length
+        val sourceText = source.substring(0, endIndex)
         val remainder = source.substring(endIndex)
-        return WalkerParsingResult(parsed.value, endIndex, tokens, remainder)
+        return WalkerParsingResult(parsed.value, endIndex, tokens, sourceText, remainder)
     }
 }

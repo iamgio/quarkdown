@@ -30,8 +30,11 @@ interface Function<T : OutputValue<*>> {
      * Function that maps the input arguments into an output value.
      * Arguments and [parameters] compliance in terms of matching types and count is not checked here.
      * The [ArgumentBindings] allow looking up argument values by their parameter.
+     *
+     * - [ArgumentBindings]: bindings between parameters and arguments for the function call
+     * - [FunctionCall]: the function call that triggered this invocation
      */
-    val invoke: (ArgumentBindings) -> T
+    val invoke: (ArgumentBindings, FunctionCall<T>) -> T
 }
 
 /**
@@ -42,7 +45,7 @@ data class SimpleFunction<T : OutputValue<*>>(
     override val name: String,
     override val parameters: List<FunctionParameter<*>>,
     override val validators: List<FunctionCallValidator<T>> = emptyList(),
-    override val invoke: (ArgumentBindings) -> T,
+    override val invoke: (ArgumentBindings, FunctionCall<T>) -> T,
 ) : Function<T>
 
 fun Function<*>.signatureAsString(includeName: Boolean = true) =

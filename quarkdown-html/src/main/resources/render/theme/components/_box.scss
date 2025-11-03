@@ -140,5 +140,18 @@
     --box-content-foreground-color: var(--qd-error-foreground-color);
     --box-header-foreground-color: var(--qd-error-foreground-color);
     --box-header-background-color: rgba(0, 0, 0, .1);
+
+    &, p {
+      text-align: start !important;
+    }
+
+    pre {
+      background-color: var(--box-header-background-color);
+      padding: 12px;
+
+      code {
+        color: var(--box-header-foreground-color);
+      }
+    }
   }
 }

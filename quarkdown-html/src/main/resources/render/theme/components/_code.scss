@@ -13,7 +13,7 @@
   pre {
     min-width: 20%;
 
-    &:not(.stack > pre) {
+    &:not(.stack > pre, .box pre) {
       min-width: 100%;
     }
   }

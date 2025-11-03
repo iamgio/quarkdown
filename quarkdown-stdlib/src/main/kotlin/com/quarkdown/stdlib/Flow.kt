@@ -296,7 +296,7 @@ fun function(
 
     // The custom function itself.
     val function =
-        SimpleFunction(name, parameters) { bindings ->
+        SimpleFunction(name, parameters) { bindings, _ ->
             // Retrieving arguments from the function call.
             // `None` is used as a default value if the argument for an optional parameter is not provided.
             val args: List<Value<*>> = parameters.map { bindings[it]?.value ?: NoneValue }

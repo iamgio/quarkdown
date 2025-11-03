@@ -61,13 +61,13 @@ class StandaloneFunctionTest {
             SimpleFunction(
                 name = "greet",
                 parameters = emptyList(),
-            ) {
-                ValueFactory.string("Hello")
+            ) { _, call ->
+                ValueFactory.string("Hello, ${call.function.name}")
             }
 
         val call = FunctionCall(function, arguments = emptyList())
 
-        assertEquals("Hello", call.execute().unwrappedValue)
+        assertEquals("Hello, greet", call.execute().unwrappedValue)
     }
 
     @Test
@@ -80,7 +80,7 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) { bindings ->
+            ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
                 val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
@@ -105,7 +105,7 @@ class StandaloneFunctionTest {
             SimpleFunction(
                 name = "person",
                 parameters = emptyList(),
-            ) {
+            ) { _, _ ->
                 ValueFactory.string("A")
             }
 
@@ -117,7 +117,7 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) { bindings ->
+            ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
                 val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
@@ -148,7 +148,7 @@ class StandaloneFunctionTest {
             SimpleFunction(
                 name = "person",
                 parameters = emptyList(),
-            ) {
+            ) { _, _ ->
                 ValueFactory.string("A")
             }
 
@@ -160,7 +160,7 @@ class StandaloneFunctionTest {
                         FunctionParameter("to", StringValue::class, index = 0),
                         FunctionParameter("from", StringValue::class, index = 1),
                     ),
-            ) { bindings ->
+            ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
                 val from = bindings.arg<String>("from")
                 ValueFactory.string("Hello $to from $from")
@@ -201,7 +201,7 @@ class StandaloneFunctionTest {
                 name = "greet",
                 parameters = emptyList(),
                 validators = listOf(validator),
-            ) {
+            ) { _, _ ->
                 canCall = false
                 ValueFactory.string("Hello")
             }
