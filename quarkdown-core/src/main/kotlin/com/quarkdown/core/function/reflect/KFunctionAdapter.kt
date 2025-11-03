@@ -2,9 +2,10 @@ package com.quarkdown.core.function.reflect
 
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.binding.ArgumentBindings
 import com.quarkdown.core.function.call.validate.FunctionCallValidator
-import com.quarkdown.core.function.error.FunctionRuntimeException
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NoAutoArgumentUnwrapping
@@ -56,8 +57,8 @@ class KFunctionAdapter<T : OutputValue<*>>(
                 function.findAnnotation<NotForDocumentType>()?.toValidator<T>()?.let(::add)
             }
 
-    override val invoke: (ArgumentBindings) -> T
-        get() = { bindings ->
+    override val invoke: (ArgumentBindings, FunctionCall<T>) -> T
+        get() = { bindings, call ->
             val args =
                 bindings.asSequence().associate { (parameter, argument) ->
                     // Corresponding KParameter.
@@ -83,7 +84,7 @@ class KFunctionAdapter<T : OutputValue<*>>(
 
                 // If the exception comes from a nested function call, it is rethrown to go up the stack.
                 throw e.targetException as? PipelineException
-                    ?: FunctionRuntimeException(this, e.targetException)
+                    ?: FunctionCallRuntimeException(call, e.targetException)
             }
         }
 }

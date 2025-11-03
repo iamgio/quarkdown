@@ -1,6 +1,6 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.function.error.FunctionRuntimeException
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.core.function.error.MismatchingArgumentTypeException
 import com.quarkdown.test.util.execute
@@ -450,7 +450,7 @@ class ScriptingTest {
 
         execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{0}") { assertEquals("<p>201</p>", it) }
 
-        assertFailsWith<FunctionRuntimeException> {
+        assertFailsWith<FunctionCallRuntimeException> {
             execute(".pow {8} to:{2}::multiply by:{.pi}::truncate decimals:{-1}") {}
         }
 

@@ -9,7 +9,7 @@ import com.quarkdown.cli.server.WebServerStarter
 import com.quarkdown.cli.util.cleanDirectory
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.function.error.FunctionRuntimeException
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.library.LibraryExporter
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
@@ -72,7 +72,7 @@ fun runQuarkdown(
 
         return ExecutionOutcome(resource, childDirectory, pipeline)
     } catch (e: PipelineException) {
-        val targetException = (e as? FunctionRuntimeException)?.cause ?: e
+        val targetException = (e as? FunctionCallRuntimeException)?.cause ?: e
         targetException.printStackTrace()
         exitProcess(e.code)
     }

@@ -48,7 +48,7 @@ open class Lambda(
                         SimpleFunction(
                             parameterName,
                             parameters = emptyList(),
-                        ) {
+                        ) { _, _ ->
                             // Value associated to the lambda argument.
                             DynamicValue(argument.unwrappedValue)
                         }
