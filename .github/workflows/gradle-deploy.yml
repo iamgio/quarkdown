@@ -39,6 +39,7 @@ jobs:
         commit_user_name: "github-actions"
         commit_user_email: "github-actions[bot]@users.noreply.github.com"
         file_pattern: version.txt
+        branch: main
 
     - name: Build distribution
       uses: burrunan/gradle-cache-action@v3
