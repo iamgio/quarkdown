@@ -10,6 +10,7 @@ runs:
 
     - name: Setup gh-pages-src branch for emoji list commit
       run: |
+        git stash
         git checkout gh-pages-src
         # Copy built emoji list to layout/docs/emoji-list.html, suitable for inclusion in Hugo site,
         # prepending {{ define "main" }} and appending {{ end }} to the file.
