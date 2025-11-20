@@ -313,9 +313,11 @@ class BlockTokenParser(
          */
         fun splitRow(row: String): Sequence<String> =
             row
+                .trim()
+                .removePrefix("|")
+                .removeSuffix("|")
                 .split("(?<!\\\\)\\|".toRegex())
                 .asSequence()
-                .filter { it.isNotEmpty() }
                 .map { it.trim() }
 
         /**

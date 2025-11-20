@@ -86,6 +86,45 @@ class TablesTest {
         }
     }
 
+    @Test
+    fun `table with empty header`() {
+        execute(
+            """
+            |          | Header 2 |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            | Cell 3   | Cell 4   |
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th></th><th>Header 2</th></tr></thead>" +
+                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr>" +
+                    "<tr><td>Cell 3</td><td>Cell 4</td></tr></tbody></table>",
+                it,
+            )
+        }
+    }
+
+    // #244
+    @Test
+    fun `table with empty headers`() {
+        execute(
+            """
+            |          |          |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            | Cell 3   | Cell 4   |
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th></th><th></th></tr></thead>" +
+                    "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr>" +
+                    "<tr><td>Cell 3</td><td>Cell 4</td></tr></tbody></table>",
+                it,
+            )
+        }
+    }
+
     // #40
     @Test
     fun `unformatted table`() {
