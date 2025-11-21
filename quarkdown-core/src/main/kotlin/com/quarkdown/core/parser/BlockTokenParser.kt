@@ -307,15 +307,18 @@ class BlockTokenParser(
     override fun visit(token: TableToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
         val columns = mutableListOf<Table.MutableColumn>()
+        val separator = "|"
 
         /**
          * Extracts the cells from a table row as raw strings.
          */
         fun splitRow(row: String): Sequence<String> =
             row
-                .split("(?<!\\\\)\\|".toRegex())
+                .trim()
+                .removePrefix(separator)
+                .removeSuffix(separator)
+                .split(Regex("(?<!\\\\)" + Regex.escape(separator)))
                 .asSequence()
-                .filter { it.isNotEmpty() }
                 .map { it.trim() }
 
         /**

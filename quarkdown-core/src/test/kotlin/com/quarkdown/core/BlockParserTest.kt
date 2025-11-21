@@ -551,6 +551,23 @@ class BlockParserTest {
             assertFalse(hasNext())
         }
 
+        with(nodes.next()) {
+            // this is a 3-column table with only empty header and cells.
+            assertNull(caption)
+            assertNull(referenceId)
+            repeat(3) {
+                val column = columns.iterator().next()
+                assertEquals(Table.Alignment.NONE, column.alignment)
+                assertTrue(column.header.text.isEmpty())
+                assertTrue(
+                    column.cells
+                        .first()
+                        .text
+                        .isEmpty(),
+                )
+            }
+        }
+
         repeat(2) {
             with(nodes.next()) {
                 assertEquals("Table caption", caption)
