@@ -20,16 +20,15 @@ interface LexerFactory {
 
     /**
      * @param source raw input
+     * @param variant the variant of inline lexer to create, affecting which tokens are recognized.
+     * For example, link labels don't recognize link tokens,
+     * so the [InlineLexerVariant.LINK_LABEL] variant can be used
      * @return a new [Lexer] instance that tokenizes inline content
      */
-    fun newInlineLexer(source: CharSequence): Lexer
-
-    /**
-     * @param source raw input
-     * @return a new [Lexer] instance that tokenizes inline content within a link label
-     *         (e.g. nested links are not allowed)
-     */
-    fun newLinkLabelInlineLexer(source: CharSequence): Lexer
+    fun newInlineLexer(
+        source: CharSequence,
+        variant: InlineLexerVariant = InlineLexerVariant.NORMAL,
+    ): Lexer
 
     /**
      * @param source raw input
@@ -40,4 +39,12 @@ interface LexerFactory {
         source: CharSequence,
         allowBlockFunctionCalls: Boolean,
     ): Lexer
+}
+
+/**
+ * Variants of inline lexers.
+ */
+enum class InlineLexerVariant {
+    NORMAL,
+    LINK_LABEL,
 }

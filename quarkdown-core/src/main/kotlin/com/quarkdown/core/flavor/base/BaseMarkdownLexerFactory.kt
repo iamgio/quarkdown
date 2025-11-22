@@ -1,5 +1,6 @@
 package com.quarkdown.core.flavor.base
 
+import com.quarkdown.core.flavor.InlineLexerVariant
 import com.quarkdown.core.flavor.LexerFactory
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.patterns.BaseMarkdownBlockTokenRegexPatterns
@@ -46,24 +47,30 @@ object BaseMarkdownLexerFactory : LexerFactory {
             )
         }
 
-    override fun newInlineLexer(source: CharSequence): StandardRegexLexer =
-        newLinkLabelInlineLexer(source).updatePatterns { patterns ->
-            with(inlinePatterns) {
-                listOf(
-                    diamondAutolink,
-                    link,
-                    referenceFootnote,
-                    referenceLink,
-                    urlAutolink,
-                ) + patterns
-            }
-        }
-
-    override fun newLinkLabelInlineLexer(source: CharSequence): StandardRegexLexer =
+    override fun newInlineLexer(
+        source: CharSequence,
+        variant: InlineLexerVariant,
+    ): StandardRegexLexer =
         with(inlinePatterns) {
+            val acceptLinks = variant != InlineLexerVariant.LINK_LABEL
+
+            val linkPatterns =
+                if (acceptLinks) {
+                    arrayOf(
+                        diamondAutolink,
+                        link,
+                        referenceFootnote,
+                        referenceLink,
+                        urlAutolink,
+                    )
+                } else {
+                    emptyArray()
+                }
+
             StandardRegexLexer(
                 source,
                 listOf(
+                    *linkPatterns,
                     lineBreak,
                     codeSpan,
                     escape,

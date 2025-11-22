@@ -1,5 +1,6 @@
 package com.quarkdown.core.flavor.quarkdown
 
+import com.quarkdown.core.flavor.InlineLexerVariant
 import com.quarkdown.core.flavor.LexerFactory
 import com.quarkdown.core.flavor.base.BaseMarkdownLexerFactory
 import com.quarkdown.core.lexer.Lexer
@@ -31,7 +32,7 @@ object QuarkdownLexerFactory : LexerFactory {
                 )
             }
 
-        // The last pattern is the critical content one, which should always last.
+        // The last pattern is the critical content one, which should always be last.
         return this.updatePatterns { patterns ->
             patterns.dropLast(1) + inlineExtensions + patterns.last()
         }
@@ -67,9 +68,10 @@ object QuarkdownLexerFactory : LexerFactory {
 
     override fun newListLexer(source: CharSequence): Lexer = base.newListLexer(source)
 
-    override fun newInlineLexer(source: CharSequence): Lexer = base.newInlineLexer(source).insertInlineExtensions()
-
-    override fun newLinkLabelInlineLexer(source: CharSequence): Lexer = base.newLinkLabelInlineLexer(source).insertInlineExtensions()
+    override fun newInlineLexer(
+        source: CharSequence,
+        variant: InlineLexerVariant,
+    ): Lexer = base.newInlineLexer(source, variant).insertInlineExtensions()
 
     override fun newExpressionLexer(
         source: CharSequence,

@@ -24,6 +24,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.isSubdocumentUrl
 import com.quarkdown.core.document.size.Size
+import com.quarkdown.core.flavor.InlineLexerVariant
 import com.quarkdown.core.function.value.factory.IllegalRawValueException
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.lexer.Lexer
@@ -100,7 +101,7 @@ class InlineTokenParser(
      */
     private fun parseLinkLabelSubContent(source: CharSequence) =
         context.flavor.lexerFactory
-            .newLinkLabelInlineLexer(source)
+            .newInlineLexer(source, variant = InlineLexerVariant.LINK_LABEL)
             .tokenizeAndParse()
 
     override fun visit(token: EscapeToken): Node {
