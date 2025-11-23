@@ -60,6 +60,7 @@ jobs:
     - name: Push to generated branch
       run: |
         mv pdf temp
+        git stash
         git add temp
         git fetch
         LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
