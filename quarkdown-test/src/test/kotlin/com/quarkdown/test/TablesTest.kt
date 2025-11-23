@@ -125,6 +125,32 @@ class TablesTest {
         }
     }
 
+    // #241
+    @Test
+    fun `cell separator in code spans is not skipped, and can be escaped`() {
+        execute(
+            """
+            |1 | 2| 3|
+            |--|--|--|
+            | a|a\|b|c|
+            | `a | a` | `b` |
+            | `a \| a` | `b` |
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead>" +
+                    "<tr><th>1</th><th>2</th><th>3</th></tr>" +
+                    "</thead><tbody>" +
+                    "<tr><td>a</td><td>a|b</td><td>c</td></tr>" +
+                    "<tr><td>`a</td><td>a`</td><td><span class=\"codespan-content\"><code>b</code></span></td></tr>" +
+                    "<tr><td><span class=\"codespan-content\"><code>a | a</code></span></td>" +
+                    "<td><span class=\"codespan-content\"><code>b</code></span></td><td></td></tr>" +
+                    "</tbody></table>",
+                it,
+            )
+        }
+    }
+
     // #40
     @Test
     fun `unformatted table`() {

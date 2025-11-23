@@ -319,6 +319,7 @@ class BlockTokenParser(
                 .removeSuffix(separator)
                 .split(Regex("(?<!\\\\)" + Regex.escape(separator)))
                 .asSequence()
+                .map { it.replace("\\$separator", separator) } // Unescaping separators (#241)
                 .map { it.trim() }
 
         /**
