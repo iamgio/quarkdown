@@ -1,11 +1,16 @@
 name: Update Emoji List
 description: Generates emoji list using Quarkdown and commits it to the gh-pages-src branch
+inputs:
+  quarkdown-path:
+    description: 'Path to the Quarkdown executable'
+    required: true
+    default: 'quarkdown'
 
 runs:
   using: composite
   steps:
     - name: Generate emoji list
-      run: quarkdown c .github/actions/update-emoji-list/generate.qd -o build/qd-ci --nowrap
+      run: ${{ inputs.quarkdown-path }} c .github/actions/update-emoji-list/generate.qd -o build/qd-ci --nowrap
       shell: bash
 
     - name: Setup gh-pages-src branch for emoji list commit

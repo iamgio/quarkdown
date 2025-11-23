@@ -127,6 +127,8 @@ jobs:
     - name: Update emoji list
       uses: iamgio/quarkdown/.github/actions/update-emoji-list@main
       if: github.ref_type == 'tag'
+      with:
+        quarkdown-path: ./build/unzipped/quarkdown/bin/quarkdown
 
   dependency-submission:
 
