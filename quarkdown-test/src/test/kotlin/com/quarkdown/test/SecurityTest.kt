@@ -2,12 +2,26 @@ package com.quarkdown.test
 
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 /**
  * Tests for possible security issues.
  */
 class SecurityTest {
+    @Test
+    fun `authors injection`() {
+        execute(
+            """
+            .docauthors
+                - "><script>alert('XSS')</script>
+            """.trimIndent(),
+            afterPostRenderingHook = {
+                assertContains(it, "<meta name=\"author\" content=\"&rdquo;&gt;&lt;script&gt;alert(&rsquo;XSS&rsquo;)&lt;/script&gt;\">")
+            },
+        ) {}
+    }
+
     @Test
     fun `mermaid injection`() {
         execute(
