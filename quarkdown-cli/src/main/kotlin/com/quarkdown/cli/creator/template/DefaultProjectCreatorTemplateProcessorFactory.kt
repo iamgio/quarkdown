@@ -22,6 +22,8 @@ class DefaultProjectCreatorTemplateProcessorFactory(
             TemplateProcessor.fromResourceName(TEMPLATE).apply {
                 optionalValue(NAME, info.name)
                 optionalValue(DESCRIPTION, info.description)
+                conditional(KEYWORDS, info.keywords.isNotEmpty())
+                iterable(KEYWORDS, info.keywords)
                 conditional(AUTHORS, info.authors.isNotEmpty())
                 iterable(AUTHORS, info.authors.map { it.name })
                 optionalValue(TYPE, info.type.quarkdownName)

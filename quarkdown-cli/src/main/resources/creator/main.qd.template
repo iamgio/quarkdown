@@ -6,6 +6,13 @@
 .theme[[if:COLORTHEME]] {[[COLORTHEME]]}[[endif:COLORTHEME]][[if:LAYOUTTHEME]] layout:{[[LAYOUTTHEME]]}[[endif:LAYOUTTHEME]]
 [[endif:THEME]]
 
+[[if:KEYWORDS]]
+.dockeywords
+[[for:KEYWORDS]]
+  - [[KEYWORDS]]
+[[endfor:KEYWORDS]]
+[[endif:KEYWORDS]]
+
 [[if:AUTHORS]]
 .docauthors
 [[for:AUTHORS]]

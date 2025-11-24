@@ -25,6 +25,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
      * @param fixedMainFileName whether to use a fixed main file name
      * @param directory directory to create the project in
      * @param includeDescription whether to include the description argument
+     * @param includeKeywords whether to include the keywords argument
      * @return content of the main file
      */
     private fun test(
@@ -32,6 +33,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
         fixedMainFileName: Boolean = true,
         directory: File = super.directory,
         includeDescription: Boolean = true,
+        includeKeywords: Boolean = true,
     ): String {
         // resolve(".") tests the canonical path instead of the actual one.
         command.test(
@@ -51,6 +53,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
             "--layout-theme",
             "latex",
             *additionalArgs,
+            *if (includeKeywords) arrayOf("--keywords", "testing,slides, quarkdown") else emptyArray(),
             *if (fixedMainFileName) arrayOf("--main-file", "main") else emptyArray(),
         )
         assertTrue(directory.exists())
@@ -63,6 +66,9 @@ class ProjectCreatorCommandTest : TempDirectory() {
         assertTrue(main.startsWith(".docname {test}"))
         if (includeDescription) {
             assertTrue(".docdescription {A test document for slides}" in main)
+        }
+        if (includeKeywords) {
+            assertTrue(".dockeywords\n  - testing\n  - slides\n  - quarkdown" in main)
         }
         assertTrue("- Aaa" in main)
         assertTrue("- Bbb" in main)
@@ -103,5 +109,11 @@ class ProjectCreatorCommandTest : TempDirectory() {
     fun `empty description`() {
         val main = test(includeDescription = false)
         assertTrue(".docdescription" !in main)
+    }
+
+    @Test
+    fun `no keywords`() {
+        val main = test(includeKeywords = false)
+        assertTrue(".dockeywords" !in main)
     }
 }

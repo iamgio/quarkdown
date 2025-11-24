@@ -70,6 +70,28 @@ class ProjectCreatorTest {
         assertEquals(".docname {Test}\n.docdescription {A test document}\n.doctype {plain}", resources.first().textContent)
     }
 
+    @Test
+    fun `only keywords`() {
+        val creator = projectCreator(DocumentInfo(keywords = listOf("kotlin", "testing")))
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(
+            ".doctype {plain}\n\n.dockeywords\n  - kotlin\n  - testing",
+            resources.first().textContent,
+        )
+    }
+
+    @Test
+    fun `name and keywords`() {
+        val creator = projectCreator(DocumentInfo(name = "Test", keywords = listOf("kotlin", "documentation")))
+        val resources = creator.createResources()
+        assertEquals(1, resources.size)
+        assertEquals(
+            ".docname {Test}\n.doctype {plain}\n\n.dockeywords\n  - kotlin\n  - documentation",
+            resources.first().textContent,
+        )
+    }
+
     private val singleAuthor: MutableList<DocumentAuthor>
         get() = mutableListOf(DocumentAuthor("Giorgio"))
 
@@ -186,12 +208,13 @@ class ProjectCreatorTest {
     }
 
     @Test
-    fun `name, description, locale, theme and author`() {
+    fun `name, description, keywords, locale, theme and author`() {
         val creator =
             projectCreator(
                 DocumentInfo(
                     name = "Comprehensive Test",
                     description = "A comprehensive test document",
+                    keywords = listOf("test", "kotlin", "quarkdown"),
                     locale = LocaleLoader.SYSTEM.find("en")!!,
                     theme = DocumentTheme(color = "dark", layout = "minimal"),
                     authors = singleAuthor,
@@ -206,6 +229,11 @@ class ProjectCreatorTest {
             .doctype {plain}
             .doclang {English}
             .theme {dark} layout:{minimal}
+
+            .dockeywords
+              - test
+              - kotlin
+              - quarkdown
 
             .docauthors
               - Giorgio

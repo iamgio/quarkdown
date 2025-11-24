@@ -66,6 +66,16 @@ class CreateProjectCommand : CliktCommand("create") {
     private val description: String by option("--description", help = "Document description")
         .prompt("Document description (optional)")
 
+    private val keywordsRaw: String? by option("--keywords", help = "Document keywords (comma-separated)")
+
+    private val keywords: List<String> by lazy {
+        keywordsRaw
+            ?.split(",")
+            ?.filter { it.isNotBlank() }
+            ?.map { it.trim() }
+            ?: emptyList()
+    }
+
     private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
 
     private val languageRaw: String? by option("--lang", help = "Document language")
@@ -93,6 +103,7 @@ class CreateProjectCommand : CliktCommand("create") {
             name = name?.takeUnless { it.isBlank() } ?: directory.name,
             description = description.takeUnless { it.isBlank() },
             authors = authors.toMutableList(),
+            keywords = keywords,
             type = type,
             locale = language,
             theme = DocumentTheme(colorTheme, layoutTheme),
