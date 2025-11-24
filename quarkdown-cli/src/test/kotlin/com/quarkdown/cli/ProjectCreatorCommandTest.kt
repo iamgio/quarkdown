@@ -19,11 +19,20 @@ class ProjectCreatorCommandTest : TempDirectory() {
         super.reset()
     }
 
+    /**
+     * Runs the command with the given arguments and verifies the created files.
+     * @param additionalArgs additional command line arguments to pass
+     * @param fixedMainFileName whether to use a fixed main file name
+     * @param directory directory to create the project in
+     * @param includeDescription whether to include the description argument
+     * @return content of the main file
+     */
     private fun test(
         additionalArgs: Array<String> = emptyArray(),
         fixedMainFileName: Boolean = true,
         directory: File = super.directory,
-    ) {
+        includeDescription: Boolean = true,
+    ): String {
         // resolve(".") tests the canonical path instead of the actual one.
         command.test(
             directory.resolve(".").absolutePath,
@@ -33,6 +42,8 @@ class ProjectCreatorCommandTest : TempDirectory() {
             "Aaa, Bbb,Ccc",
             "--type",
             "slides",
+            "--description",
+            if (includeDescription) "A test document for slides" else "",
             "--lang",
             "en",
             "--color-theme",
@@ -44,20 +55,23 @@ class ProjectCreatorCommandTest : TempDirectory() {
         )
         assertTrue(directory.exists())
 
-        println(directory.listFiles()!!.map { it.name })
-
         val mainFileName = (if (fixedMainFileName) "main" else directory.name) + ".qd"
 
         assertTrue(mainFileName in directory.listFiles()!!.map { it.name })
 
         val main = directory.listFiles()!!.first { it.name == mainFileName }.readText()
         assertTrue(main.startsWith(".docname {test}"))
+        if (includeDescription) {
+            assertTrue(".docdescription {A test document for slides}" in main)
+        }
         assertTrue("- Aaa" in main)
         assertTrue("- Bbb" in main)
         assertTrue("- Ccc" in main)
         assertTrue(".doctype {slides}" in main)
         assertTrue(".doclang {English}" in main)
         assertTrue(".theme {darko} layout:{latex}" in main)
+
+        return main
     }
 
     @Test
@@ -83,5 +97,11 @@ class ProjectCreatorCommandTest : TempDirectory() {
     fun `default empty`() {
         test(arrayOf("--empty"))
         assertEquals(1, directory.listFiles()!!.size)
+    }
+
+    @Test
+    fun `empty description`() {
+        val main = test(includeDescription = false)
+        assertTrue(".docdescription" !in main)
     }
 }

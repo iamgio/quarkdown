@@ -63,6 +63,9 @@ class CreateProjectCommand : CliktCommand("create") {
             default = DocumentType.PLAIN,
         )
 
+    private val description: String by option("--description", help = "Document description")
+        .prompt("Document description (optional)")
+
     private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
 
     private val languageRaw: String? by option("--lang", help = "Document language")
@@ -88,6 +91,7 @@ class CreateProjectCommand : CliktCommand("create") {
     private fun createDocumentInfo() =
         DocumentInfo(
             name = name?.takeUnless { it.isBlank() } ?: directory.name,
+            description = description.takeUnless { it.isBlank() },
             authors = authors.toMutableList(),
             type = type,
             locale = language,

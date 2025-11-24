@@ -5,6 +5,7 @@ package com.quarkdown.cli.creator.template
  */
 object ProjectCreatorTemplatePlaceholders {
     const val NAME = "NAME"
+    const val DESCRIPTION = "DESCRIPTION"
     const val AUTHORS = "AUTHORS"
     const val TYPE = "TYPE"
     const val LANGUAGE = "LANG"
