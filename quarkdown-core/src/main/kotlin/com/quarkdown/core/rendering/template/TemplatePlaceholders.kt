@@ -18,6 +18,11 @@ object TemplatePlaceholders {
     const val TITLE = "TITLE"
 
     /**
+     * Authors of the document.
+     */
+    const val AUTHORS = "AUTHORS"
+
+    /**
      * Language of the document.
      */
     const val LANGUAGE = "LANG"

@@ -44,7 +44,8 @@ val DEFAULT_OPTIONS =
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
  * @param minimizeSubdocumentCollisions whether to minimize the risk of subdocument name collisions by using a hash-based name for subdocuments
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
- * @param hook action run after rendering. Parameters are the pipeline context and the rendered source
+ * @param afterPostRenderingHook action run after post-rendering. Parameters are the pipeline context and the post-rendered result
+ * @param afterRenderingHook action run after rendering. Parameters are the pipeline context and the rendered result
  */
 fun execute(
     source: String,
@@ -56,7 +57,8 @@ fun execute(
     enableMediaStorage: Boolean = false,
     minimizeSubdocumentCollisions: Boolean = false,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
-    hook: Context.(CharSequence) -> Unit,
+    afterPostRenderingHook: Context.(CharSequence) -> Unit = {},
+    afterRenderingHook: Context.(CharSequence) -> Unit,
 ) {
     val context =
         MutableContext(
@@ -79,7 +81,10 @@ fun execute(
                 context.subdocumentGraph = subdocumentGraph(context.subdocumentGraph)
             },
             afterRendering = {
-                hook(readOnlyContext, it)
+                afterRenderingHook(readOnlyContext, it)
+            },
+            afterPostRendering = {
+                afterPostRenderingHook(readOnlyContext, it)
             },
         )
 
