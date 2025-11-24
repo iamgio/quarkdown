@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
@@ -106,6 +107,19 @@ class HtmlPostRendererTest {
             }
         assertEquals(
             "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `with authors`() {
+        context.documentInfo =
+            DocumentInfo(
+                authors = listOf(DocumentAuthor("Alice"), DocumentAuthor("Bob")),
+            )
+        val postRenderer = postRenderer("<head><meta name=\"author\" content=\"[[AUTHORS]]\"></head>")
+        assertEquals(
+            "<head><meta name=\"author\" content=\"Alice, Bob\"></head>",
             postRenderer.createTemplateProcessor().process(),
         )
     }
@@ -381,6 +395,9 @@ class HtmlPostRendererTest {
                 """
                 <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
                 <head>
+                    [[if:AUTHORS]]
+                    <meta name="author" content="[[AUTHORS]]"></meta>
+                    [[endif:AUTHORS]]
                     [[if:SLIDES]]
                     <link rel="stylesheet" href="...css"></link>
                     [[endif:SLIDES]]
@@ -459,6 +476,12 @@ class HtmlPostRendererTest {
         context.documentInfo =
             DocumentInfo(
                 name = "Quarkdown",
+                authors =
+                    listOf(
+                        DocumentAuthor("Ab Cd"),
+                        DocumentAuthor("Ef Gh"),
+                        DocumentAuthor("Ij Kl"),
+                    ),
                 locale = LocaleLoader.SYSTEM.fromName("english"),
                 type = DocumentType.SLIDES,
                 layout =

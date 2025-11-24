@@ -4,6 +4,9 @@
 <head>
     <meta name="generator" content="Quarkdown">
     <meta charset="UTF-8">
+    [[if:AUTHORS]]
+    <meta name="author" content="[[AUTHORS]]">
+    [[endif:AUTHORS]]
     <title>[[TITLE]]</title>
     <script src="script/quarkdown.js"></script>
     <script>const capabilities = window.quarkdownCapabilities</script>
