@@ -28,6 +28,11 @@ object TemplatePlaceholders {
     const val DESCRIPTION = "DESCRIPTION"
 
     /**
+     * Keywords of the document.
+     */
+    const val KEYWORDS = "KEYWORDS"
+
+    /**
      * Language of the document.
      */
     const val LANGUAGE = "LANG"

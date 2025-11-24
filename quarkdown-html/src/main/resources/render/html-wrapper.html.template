@@ -7,6 +7,9 @@
     [[if:DESCRIPTION]]
     <meta name="description" content="[[DESCRIPTION]]">
     [[endif:DESCRIPTION]]
+    [[if:KEYWORDS]]
+    <meta name="keywords" content="[[KEYWORDS]]">
+    [[endif:KEYWORDS]]
     [[if:AUTHORS]]
     <meta name="author" content="[[AUTHORS]]">
     [[endif:AUTHORS]]

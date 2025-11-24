@@ -10,12 +10,13 @@ import com.quarkdown.core.localization.Locale
  * Immutable information about the document.
  * This data is updated by library functions `.docname`, `.docauthor`, etc., by overwriting [com.quarkdown.core.context.MutableContext.documentInfo].
  * @param type type of the document
- * @param authors authors of the document, if specified
  * @param name name of the document, if specified
  * @param description description of the document, if specified
- * @param theme theme of the document, if specified
+ * @param authors authors of the document, if specified
+ * @param keywords keywords of the document, if specified
  * @param locale language of the document
  * @param numbering formats to apply to element numbering across the document
+ * @param theme theme of the document, if specified
  * @param pageFormat format of the pages of the document
  */
 @NestedData
@@ -24,6 +25,7 @@ data class DocumentInfo(
     val name: String? = null,
     val description: String? = null,
     val authors: List<DocumentAuthor> = emptyList(),
+    val keywords: List<String> = emptyList(),
     val locale: Locale? = null,
     val numbering: DocumentNumbering? = null,
     val theme: DocumentTheme? = null,

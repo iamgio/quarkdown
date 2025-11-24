@@ -49,10 +49,21 @@ class HtmlPostRendererTemplate(
      * @see com.quarkdown.core.document.DocumentInfo
      */
     private fun TemplateProcessor.documentMetadata() {
-        value(TemplatePlaceholders.TITLE, document.name ?: "Quarkdown")
+        value(
+            TemplatePlaceholders.TITLE,
+            document.name?.let(Escape.Html::escape)
+                ?: "Quarkdown",
+        )
         optionalValue(
             TemplatePlaceholders.DESCRIPTION,
             document.description?.let(Escape.Html::escape),
+        )
+        optionalValue(
+            TemplatePlaceholders.KEYWORDS,
+            document.keywords
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString()
+                ?.let(Escape.Html::escape),
         )
         optionalValue(
             TemplatePlaceholders.AUTHORS,
