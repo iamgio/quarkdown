@@ -403,6 +403,7 @@ class HtmlPostRendererTest {
         context.documentInfo =
             DocumentInfo(
                 name = "Quarkdown",
+                description = "The Quarkdown typesetting system",
                 locale = LocaleLoader.SYSTEM.fromName("english"),
                 type = DocumentType.SLIDES,
                 layout =
@@ -420,6 +421,9 @@ class HtmlPostRendererTest {
                 """
                 <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
                 <head>
+                    [[if:DESCRIPTION]]
+                    <meta name="description" content="[[DESCRIPTION]]">
+                    [[endif:DESCRIPTION]]
                     [[if:AUTHORS]]
                     <meta name="author" content="[[AUTHORS]]"></meta>
                     [[endif:AUTHORS]]
@@ -470,6 +474,7 @@ class HtmlPostRendererTest {
             """
             <html lang="en">
             <head>
+                <meta name="description" content="The Quarkdown typesetting system">
                 <link rel="stylesheet" href="...css"></link>
                 <script src="...js"></script>
                 <script src="...js"></script>
