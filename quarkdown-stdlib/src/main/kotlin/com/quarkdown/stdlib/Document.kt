@@ -63,6 +63,7 @@ val Document: QuarkdownModule =
     moduleOf(
         ::docType,
         ::docName,
+        ::docDescription,
         ::docAuthor,
         ::docAuthors,
         ::docLanguage,
@@ -167,6 +168,36 @@ fun docName(
         name,
         get = { (this.name ?: "").wrappedAsValue() },
         modify = { copy(name = it) },
+    )
+
+/**
+ * If [description] is specified, sets the document description to that value.
+ *
+ * In HTML, descriptions are exported to SEO-friendly meta tags.
+ *
+ * ```
+ * .docdescription {This is a sample document}
+ * ```
+ *
+ * If it's unset, the current description of the document is returned.
+ *
+ * ```
+ * The current document description is .docdescription
+ * ```
+ *
+ * @param description optional description to assign to the document
+ * @return the current document description if [description] is unset, nothing otherwise
+ * @wiki Document metadata
+ */
+@Name("docdescription")
+fun docDescription(
+    @Injected context: MutableContext,
+    description: String? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        description,
+        get = { (this.description ?: "").wrappedAsValue() },
+        modify = { copy(description = it) },
     )
 
 /**

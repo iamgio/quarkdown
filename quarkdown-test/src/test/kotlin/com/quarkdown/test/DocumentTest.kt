@@ -34,6 +34,7 @@ class DocumentTest {
             assertEquals(DocumentType.PLAIN, documentInfo.type)
             assertNull(documentInfo.name)
             assertEquals(0, documentInfo.authors.size)
+            assertNull(documentInfo.description)
             assertNull(documentInfo.locale)
             assertNull(documentInfo.layout.pageFormat.pageWidth)
             assertNull(documentInfo.layout.pageFormat.margin)
@@ -48,6 +49,7 @@ class DocumentTest {
         execute(
             """
             .docname {My Quarkdown document}
+            .docdescription {A comprehensive guide to Quarkdown}
             .docauthors
               - iamgio
                 - website: https://iamgio.eu
@@ -64,6 +66,7 @@ class DocumentTest {
             """.trimIndent(),
         ) {
             assertEquals("My Quarkdown document", documentInfo.name)
+            assertEquals("A comprehensive guide to Quarkdown", documentInfo.description)
             assertEquals(
                 listOf(
                     DocumentAuthor("iamgio", mapOf("website" to "https://iamgio.eu")),
@@ -112,20 +115,26 @@ class DocumentTest {
             .doctype {slides}
             .doclang {english}
             
+            .docdescription
+                A comprehensive guide to Quarkdown
+
             .docname .text {.docname} size:{tiny}.
-            
+
+            .docdescription
+
             .docauthors
-            
+
             #! .docauthor
-            
+
             .doctype
-            
+
             .doclang
             """.trimIndent(),
         ) {
             assertEquals(
                 "<p>My Quarkdown document " +
                     "<span class=\"size-tiny\">My Quarkdown document</span>.</p>" +
+                    "<p>A comprehensive guide to Quarkdown</p>" +
                     "<table>" +
                     "<thead><tr><th>Key</th><th>Value</th></tr></thead>" +
                     "<tbody>" +

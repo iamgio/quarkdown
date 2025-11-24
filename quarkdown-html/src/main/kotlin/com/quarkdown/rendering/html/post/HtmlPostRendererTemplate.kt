@@ -51,10 +51,15 @@ class HtmlPostRendererTemplate(
     private fun TemplateProcessor.documentMetadata() {
         value(TemplatePlaceholders.TITLE, document.name ?: "Quarkdown")
         optionalValue(
+            TemplatePlaceholders.DESCRIPTION,
+            document.description?.let(Escape.Html::escape),
+        )
+        optionalValue(
             TemplatePlaceholders.AUTHORS,
-            Escape.Html
-                .escape(document.authors.joinToString { it.name })
-                .takeIf { it.isNotEmpty() },
+            document.authors
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString { it.name }
+                ?.let(Escape.Html::escape),
         )
         optionalValue(TemplatePlaceholders.LANGUAGE, document.locale?.tag)
         value(
