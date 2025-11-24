@@ -41,6 +41,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.value.DictionaryValue
+import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
@@ -66,6 +67,7 @@ val Document: QuarkdownModule =
         ::docDescription,
         ::docAuthor,
         ::docAuthors,
+        ::docKeywords,
         ::docLanguage,
         ::theme,
         ::numbering,
@@ -296,6 +298,42 @@ fun docAuthors(
                         )
                     }
             copy(authors = authors)
+        },
+    )
+
+/**
+ * If [keywords] is specified, sets the document keywords to those values.
+ * In HTML, keywords are exported to SEO-friendly meta tags.
+ *
+ * ```
+ * .dockeywords
+ *   - quarkdown
+ *   - markdown
+ *   - documentation
+ * ```
+ *
+ * If it's unset, the current keywords of the document are returned as a list.
+ *
+ * ```
+ * .foreach {.dockeywords}
+ *     keyword:
+ *     .keyword
+ * ```
+ *
+ * @param keywordsString optional space-separated keywords to assign to the document
+ * @return the current document keywords if [keywordsString] is unset, nothing otherwise
+ * @wiki Document metadata
+ */
+@Name("dockeywords")
+fun docKeywords(
+    @Injected context: MutableContext,
+    keywords: Iterable<DynamicValue>? = null,
+): OutputValue<*> =
+    context.modifyOrEchoDocumentInfo(
+        keywords,
+        get = { this.keywords.map(::StringValue).wrappedAsValue() },
+        modify = {
+            copy(keywords = it.map { value -> value.unwrappedValue.toString() }.toList())
         },
     )
 

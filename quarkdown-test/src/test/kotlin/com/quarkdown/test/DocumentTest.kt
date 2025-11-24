@@ -35,6 +35,7 @@ class DocumentTest {
             assertNull(documentInfo.name)
             assertEquals(0, documentInfo.authors.size)
             assertNull(documentInfo.description)
+            assertTrue(documentInfo.keywords.isEmpty())
             assertNull(documentInfo.locale)
             assertNull(documentInfo.layout.pageFormat.pageWidth)
             assertNull(documentInfo.layout.pageFormat.margin)
@@ -50,6 +51,12 @@ class DocumentTest {
             """
             .docname {My Quarkdown document}
             .docdescription {A comprehensive guide to Quarkdown}
+            
+            .dockeywords
+              - documentation
+              - markdown
+              - typesetting
+            
             .docauthors
               - iamgio
                 - website: https://iamgio.eu
@@ -67,6 +74,7 @@ class DocumentTest {
         ) {
             assertEquals("My Quarkdown document", documentInfo.name)
             assertEquals("A comprehensive guide to Quarkdown", documentInfo.description)
+            assertEquals(listOf("documentation", "markdown", "typesetting"), documentInfo.keywords)
             assertEquals(
                 listOf(
                     DocumentAuthor("iamgio", mapOf("website" to "https://iamgio.eu")),
@@ -109,12 +117,18 @@ class DocumentTest {
         execute(
             """
             .docname {My Quarkdown document}
+            
+            .dockeywords
+              - quarkdown
+              - markdown
+              - documentation
+            
             .docauthors
               - iamgio
                 - country: Italy
             .doctype {slides}
             .doclang {english}
-            
+
             .docdescription
                 A comprehensive guide to Quarkdown
 
@@ -129,6 +143,8 @@ class DocumentTest {
             .doctype
 
             .doclang
+            
+            .dockeywords
             """.trimIndent(),
         ) {
             assertEquals(
@@ -145,7 +161,8 @@ class DocumentTest {
                     "</table>" +
                     "<h1 data-decorative=\"\">iamgio</h1>" +
                     "<p>slides</p>" +
-                    "<p>English</p>",
+                    "<p>English</p>" +
+                    "<ol><li><p>quarkdown</p></li><li><p>markdown</p></li><li><p>documentation</p></li></ol>",
                 it,
             )
         }
