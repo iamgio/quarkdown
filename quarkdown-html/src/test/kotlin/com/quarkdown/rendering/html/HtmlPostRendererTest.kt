@@ -185,6 +185,31 @@ class HtmlPostRendererTest {
         )
     }
 
+    @Test
+    fun `with meta viewport, non-slides`() {
+        val postRenderer =
+            postRenderer(
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]\">",
+            )
+        assertEquals(
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
+    @Test
+    fun `with meta viewport, slides`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.SLIDES)
+        val postRenderer =
+            postRenderer(
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]\">",
+            )
+        assertEquals(
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">",
+            postRenderer.createTemplateProcessor().process(),
+        )
+    }
+
     private val fontFamilyProcessor =
         TemplateProcessor(
             """

@@ -7,6 +7,7 @@
     [[if:AUTHORS]]
     <meta name="author" content="[[AUTHORS]]">
     [[endif:AUTHORS]]
+    <meta name="viewport" content="width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]">
     <title>[[TITLE]]</title>
     <script src="script/quarkdown.js"></script>
     <script>const capabilities = window.quarkdownCapabilities</script>
@@ -15,7 +16,6 @@
     <script src="https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js"></script>
     [[endif:PAGED]]
     [[if:SLIDES]]
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/plugin/notes/notes.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reset.css">
