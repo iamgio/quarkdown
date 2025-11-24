@@ -1,4 +1,5 @@
 [[if:NAME]].docname {[[NAME]]}[[endif:NAME]]
+[[if:DESCRIPTION]].docdescription {[[DESCRIPTION]]}[[endif:DESCRIPTION]]
 [[if:TYPE]].doctype {[[TYPE]]}[[endif:TYPE]]
 [[if:LANG]].doclang {[[LANG]]}[[endif:LANG]]
 [[if:THEME]]
