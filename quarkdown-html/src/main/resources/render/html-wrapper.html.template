@@ -2,6 +2,7 @@
 <!--suppress ALL -->
 <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
 <head>
+    <meta name="generator" content="Quarkdown">
     <meta charset="UTF-8">
     <title>[[TITLE]]</title>
     <script src="script/quarkdown.js"></script>
