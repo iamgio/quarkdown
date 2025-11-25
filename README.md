@@ -242,7 +242,6 @@ The desired document type can be set by calling the [`.doctype` function](https:
 ### Homebrew (Linux/macOS)
 
 ```shell
-brew tap quarkdown-labs/quarkdown
 brew install quarkdown-labs/quarkdown/quarkdown
 ```
 
@@ -261,7 +260,9 @@ curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/h
 ```
 
 Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
-If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager unless `--no-pm` is used. 
+If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager unless `--no-pm` is used.
+
+For more installation options, check out [get-quarkdown](https://github.com/quarkdown-labs/get-quarkdown).
 
 ### Manual installation
 
