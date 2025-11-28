@@ -1,3 +1,5 @@
+@use "util/media-queries" as media-queries;
+
 .quarkdown {
   .page-margin-content:not(.quarkdown-paged .page-margin-content) {
     // Paged documents have dedicated areas for each margin. Others use fixed positions.
@@ -109,7 +111,7 @@
   }
 
   // Experimental fix: Chrome export-to-PDF adds a colored strip to the bottom area.
-  @media print {
+  @include media-queries.print {
     .pagedjs_margin, .pagedjs_margin-bottom, .pagedjs_margin-bottom-left-corner-holder, .pagedjs_margin-bottom-right-corner-holder {
       background-color: var(--qd-background-color);
     }

@@ -1,0 +1,40 @@
+// Media query utilities and breakpoints.
+
+$mobile-breakpoint: 800px;
+$non-mobile-breakpoint: $mobile-breakpoint + 1px;
+$narrow-print-breakpoint: 1000px;
+
+// Targets mobile screens.
+// @param $orNarrowPrint - if true, also targets narrow print media.
+@mixin mobile($orNarrowPrint: false) {
+  @if $orNarrowPrint {
+    @media screen and (max-width: $mobile-breakpoint), print and (max-width: $narrow-print-breakpoint) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $mobile-breakpoint) {
+      @content;
+    }
+  }
+}
+
+// Targets non-mobile screens.
+// @param $orPrint - if true, also targets print media on screen (paged viewports, but *not* PDFs).
+@mixin non-mobile($orNonPrintPaged: false) {
+  @if $orNonPrintPaged == false {
+    @media screen and (min-width: $non-mobile-breakpoint) {
+      @content;
+    }
+  } @else {
+    @media screen and (min-width: $non-mobile-breakpoint), pagedjs-ignore {
+      @content;
+    }
+  }
+}
+
+// Targets print media.
+@mixin print {
+  @media print {
+    @content;
+  }
+}
