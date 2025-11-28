@@ -1,4 +1,5 @@
 @use "_font";
+@use "util/media-queries" as media-queries;
 
 @mixin content-area-border {
   border-width: var(--qd-page-content-border-width);
@@ -45,8 +46,8 @@ body.quarkdown {
       }
     }
 
-    // Mobile responsiveness
-    @media screen and (max-width: 800px), print and (max-width: 1000px) {
+    // Responsiveness
+    @include media-queries.mobile($orNarrowPrint: true) {
       // The right margin area may have footnotes
       aside#margin-area-left, aside#margin-area-right:empty {
         max-width: 0;

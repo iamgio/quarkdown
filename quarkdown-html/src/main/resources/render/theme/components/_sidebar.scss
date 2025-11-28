@@ -1,5 +1,7 @@
 // Navigation sidebar (not part of the document)
 
+@use "util/media-queries" as media-queries;
+
 $max-level: 3;
 $level-width: 9px;
 
@@ -78,13 +80,19 @@ $level-width: 9px;
   }
 }
 
-@media print {
+@include media-queries.print {
   .sidebar {
     display: none;
   }
 }
 
-@media screen and (min-aspect-ratio: 1.3), pagedjs-ignore {
+@include media-queries.mobile {
+  .sidebar {
+    display: none;
+  }
+}
+
+@include media-queries.non-mobile($orNonPrintPaged: true) {
   .sidebar {
     display: block !important;
   }
