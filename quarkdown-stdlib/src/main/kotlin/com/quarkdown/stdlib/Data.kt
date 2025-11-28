@@ -9,8 +9,10 @@ import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.StringValue
+import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -24,6 +26,7 @@ import java.io.File
 val Data: QuarkdownModule =
     moduleOf(
         ::read,
+        ::listFiles,
         ::csv,
     )
 
@@ -81,6 +84,41 @@ fun read(
         .subList(lineRange)
         .joinToString("\n")
         .wrappedAsValue()
+}
+
+/**
+ * Lists the files located in a directory.
+ * @param path path of the directory to list files from
+ * @param fullPath whether to return the absolute path of each file, rather than just the file name
+ * @return an unordered collection of string values, each representing a file located in the directory, with extension
+ * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory
+ * @wiki File data
+ */
+@Name("listfiles")
+fun listFiles(
+    @Injected context: Context,
+    path: String,
+    @Name("fullpath") fullPath: Boolean = false,
+): IterableValue<StringValue> {
+    val directory = file(context, path)
+
+    if (!directory.exists()) {
+        throw IllegalArgumentException("Directory $directory does not exist.")
+    }
+    if (!directory.isDirectory) {
+        throw IllegalArgumentException("Path $directory is not a directory.")
+    }
+
+    val files =
+        directory
+            .listFiles()
+            ?.asSequence()
+            ?.map { if (fullPath) it.absolutePath else it.name }
+            ?.map(::StringValue)
+            ?.toSet()
+            ?: emptySet()
+
+    return UnorderedCollectionValue(files)
 }
 
 /**
