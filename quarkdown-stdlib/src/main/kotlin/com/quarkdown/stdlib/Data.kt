@@ -11,6 +11,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
+import com.quarkdown.core.function.value.OrderedCollectionValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.data.Range
@@ -87,9 +88,31 @@ fun read(
 }
 
 /**
+ * Criterion to sort files by.
+ * @param sort lambda that sorts a sequence of files
+ * @see listFiles
+ */
+enum class FileSorting(
+    val sort: (Sequence<File>) -> Sequence<File>,
+) {
+    /** No sorting is applied. */
+    NONE({ files -> files }),
+
+    /** Files are sorted by name in ascending order. */
+    NAME({ files -> files.sortedBy { it.name } }),
+
+    /** Files are sorted by last modified date in descending order. */
+    MOST_RECENT({ files -> files.sortedBy { it.lastModified() } }),
+
+    /** Files are sorted by last modified date in ascending order. */
+    LEAST_RECENT({ files -> files.sortedByDescending { it.lastModified() } }),
+}
+
+/**
  * Lists the files located in a directory.
  * @param path path of the directory to list files from
  * @param fullPath whether to return the absolute path of each file, rather than just the file name
+ * @param sortBy criterion to sort the files by
  * @return an unordered collection of string values, each representing a file located in the directory, with extension
  * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory
  * @wiki File data
@@ -99,6 +122,7 @@ fun listFiles(
     @Injected context: Context,
     path: String,
     @Name("fullpath") fullPath: Boolean = false,
+    @Name("sortby") sortBy: FileSorting = FileSorting.NONE,
 ): IterableValue<StringValue> {
     val directory = file(context, path)
 
@@ -113,12 +137,15 @@ fun listFiles(
         directory
             .listFiles()
             ?.asSequence()
+            ?.let(sortBy.sort)
             ?.map { if (fullPath) it.absolutePath else it.name }
             ?.map(::StringValue)
-            ?.toSet()
-            ?: emptySet()
+            ?: emptySequence()
 
-    return UnorderedCollectionValue(files)
+    return when {
+        sortBy == FileSorting.NONE -> UnorderedCollectionValue(files.toSet())
+        else -> OrderedCollectionValue(files.toList())
+    }
 }
 
 /**
