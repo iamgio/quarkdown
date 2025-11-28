@@ -16,6 +16,7 @@ body.quarkdown {
     background-color: var(--qd-background-color);
   }
 
+  // Plain viewport
   &.quarkdown-plain {
     display: flex;
     flex-direction: row;
@@ -30,24 +31,26 @@ body.quarkdown {
       $width: 30vw;
       max-width: #{$width};
       width: #{$width};
-      margin: 0 12px;
+
+      --aside-outer-margin: 12px;
+      --aside-inner-margin: calc(var(--aside-outer-margin) * 2);
+      margin: 0 var(--aside-outer-margin);
 
       &#margin-area-left {
-        margin-right: 24px;
+        margin-right: var(--aside-inner-margin);
       }
 
       &#margin-area-right {
-        margin-left: 24px;
+        margin-left: var(--aside-inner-margin);
       }
     }
 
+    // Mobile responsiveness
     @media screen and (max-width: 800px), print and (max-width: 1000px) {
-      aside#margin-area-left {
+      // The right margin area may have footnotes
+      aside#margin-area-left, aside#margin-area-right:empty {
         max-width: 0;
-      }
-
-      aside#margin-area-right:empty {
-        max-width: 0;
+        --aside-inner-margin: 8px;
       }
     }
   }
