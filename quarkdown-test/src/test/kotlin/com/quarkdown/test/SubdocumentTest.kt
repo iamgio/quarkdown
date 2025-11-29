@@ -55,7 +55,7 @@ class SubdocumentTest {
     @Test
     fun `root to subdocument`() {
         execute(
-            source = "",
+            "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             outputResourceHook = { group ->
                 val resource = getResource(group, simpleSubdoc, this)
@@ -70,7 +70,7 @@ class SubdocumentTest {
     @Test
     fun `collision-proof subdocument name`() {
         execute(
-            source = "",
+            "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             minimizeSubdocumentCollisions = true,
             outputResourceHook = { group ->
@@ -84,13 +84,12 @@ class SubdocumentTest {
     @Test
     fun `context should be shared to subdocument`() {
         execute(
-            source =
-                """
-                .doctype {paged}
-                
-                .function {$NON_EXISTENT_FUNCTION}
-                  hello
-                """.trimIndent(),
+            """
+            .doctype {paged}
+            
+            .function {$NON_EXISTENT_FUNCTION}
+              hello
+            """.trimIndent(),
             subdocumentGraph = {
                 it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.Root, referenceToParentSubdoc)
             },
@@ -105,7 +104,7 @@ class SubdocumentTest {
     @Test
     fun `context should not be shared from subdocument to parent`() {
         execute(
-            source = ".doctype {paged}",
+            ".doctype {paged}",
             subdocumentGraph = { it.addVertex(definitionSubdoc).addEdge(Subdocument.Root, definitionSubdoc) },
             outputResourceHook = {
                 assertEquals(DocumentType.PAGED, documentInfo.type)
@@ -117,7 +116,7 @@ class SubdocumentTest {
     @Test
     fun `third-party presence should be shared from subdocument to parent`() {
         execute(
-            source = "",
+            "",
             subdocumentGraph = { it.addVertex(thirdPartySubdoc).addEdge(Subdocument.Root, thirdPartySubdoc) },
             outputResourceHook = {
                 assertTrue(attributes.hasMermaidDiagram)
@@ -127,49 +126,89 @@ class SubdocumentTest {
 
     @Test
     fun `simple subdocument from file`() {
-        execute(
-            source = "[1](subdoc/simple-1.qd)",
-            outputResourceHook = {
-                assertEquals(2, subdocumentGraph.vertices.size)
-                assertEquals(2, getTextResourceCount(it))
-            },
-        ) {
-            if (subdocument == Subdocument.Root) {
-                assertEquals("<p><a href=\"./simple-1.html\">1</a></p>", it)
+        arrayOf(
+            "The link is: [1](subdoc/simple-1.qd)",
+            "The link is: .subdocument {subdoc/simple-1.qd} label:{1}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument == Subdocument.Root) {
+                    assertEquals("<p>The link is: <a href=\"./simple-1.html\">1</a></p>", it)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `empty label subdocument from file`() {
+        arrayOf(
+            "The link is: [](subdoc/simple-1.qd)",
+            "The link is: .subdocument {subdoc/simple-1.qd}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument == Subdocument.Root) {
+                    assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                }
             }
         }
     }
 
     @Test
     fun `root to gateway to 1 and 2`() {
-        execute(
-            source = "[Gateway](subdoc/gateway.qd)",
-            outputResourceHook = {
-                assertEquals(4, subdocumentGraph.vertices.size)
-                assertEquals(4, getTextResourceCount(it))
-            },
-        ) {}
+        arrayOf(
+            "[Gateway](subdoc/gateway.qd)",
+            ".subdocument {subdoc/gateway.qd} label:{Gateway}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(4, subdocumentGraph.vertices.size)
+                    assertEquals(4, getTextResourceCount(it))
+                },
+            ) {}
+        }
     }
 
     @Test
     fun `circular, root to 1 to 2 to 1`() {
-        execute(
-            source = "[1](subdoc/circular-1.qd)",
-            outputResourceHook = {
-                assertEquals(3, subdocumentGraph.vertices.size)
-                assertEquals(3, getTextResourceCount(it))
-            },
-        ) {}
+        arrayOf(
+            "[1](subdoc/circular-1.qd)",
+            ".subdocument {subdoc/circular-1.qd} label:{1}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(3, subdocumentGraph.vertices.size)
+                    assertEquals(3, getTextResourceCount(it))
+                },
+            ) {}
+        }
     }
 
     @Test
     fun `recursive, root to 1 recursively`() {
-        execute(
-            source = "[1](subdoc/recursive.qd)",
-            outputResourceHook = {
-                assertEquals(2, subdocumentGraph.vertices.size)
-                assertEquals(2, getTextResourceCount(it))
-            },
-        ) {}
+        arrayOf(
+            "[1](subdoc/recursive.qd)",
+            ".subdocument {subdoc/recursive.qd} label:{1}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {}
+        }
     }
 }
