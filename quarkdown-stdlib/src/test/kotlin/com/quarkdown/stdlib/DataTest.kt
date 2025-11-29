@@ -12,9 +12,11 @@ import com.quarkdown.stdlib.internal.Ordering
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 private const val DATA_FOLDER = "src/test/resources/data"
 private const val LIST_FILES_FOLDER = "listfiles"
@@ -152,21 +154,28 @@ class DataTest {
     fun `list files unsorted`() {
         val files = listFiles(context, LIST_FILES_FOLDER)
         val names = files.unwrappedValue.map { it.unwrappedValue }.toSet()
-        assertEquals(setOf("a.txt", "b.txt", "c.txt"), names)
+        assertEquals(setOf("a.txt", "b.txt", "c.txt", "d"), names)
     }
 
     @Test
     fun `list files sorted by name ascending`() {
         val files = listFiles(context, LIST_FILES_FOLDER, sortBy = FileSorting.NAME)
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
-        assertEquals(listOf("a.txt", "b.txt", "c.txt"), names)
+        assertEquals(listOf("a.txt", "b.txt", "c.txt", "d"), names)
     }
 
     @Test
     fun `list files sorted by name descending`() {
         val files = listFiles(context, LIST_FILES_FOLDER, sortBy = FileSorting.NAME, order = Ordering.DESCENDING)
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
-        assertEquals(listOf("c.txt", "b.txt", "a.txt"), names)
+        assertEquals(listOf("d", "c.txt", "b.txt", "a.txt"), names)
+    }
+
+    @Test
+    fun `list non-directory files`() {
+        val files = listFiles(context, LIST_FILES_FOLDER, listDirectories = false, sortBy = FileSorting.NAME)
+        val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
+        assertEquals(listOf("a.txt", "b.txt", "c.txt"), names)
     }
 
     @Test
@@ -174,9 +183,14 @@ class DataTest {
         val files = listFiles(context, LIST_FILES_FOLDER, fullPath = true, sortBy = FileSorting.NAME)
         val paths = files.unwrappedValue.map { it.unwrappedValue }.toList()
         paths.forEach { path ->
-            assert(path.contains(LIST_FILES_FOLDER))
-            assert(path.endsWith("a.txt") || path.endsWith("b.txt") || path.endsWith("c.txt"))
-            assert(File(path).isAbsolute)
+            assertContains(path, LIST_FILES_FOLDER)
+            assertTrue(
+                path.endsWith("a.txt") ||
+                    path.endsWith("b.txt") ||
+                    path.endsWith("c.txt") ||
+                    path.endsWith("d"),
+            )
+            assertTrue(File(path).isAbsolute)
         }
     }
 

@@ -115,8 +115,10 @@ enum class FileSorting(
 /**
  * Lists the files located in a directory.
  * @param path path of the directory to list files from
+ * @param listDirectories whether to include directories in the listing
  * @param fullPath whether to return the absolute path of each file, rather than just the file name
  * @param sortBy criterion to sort the files by
+ * @param order order to sort the files in
  * @return an unordered collection of string values, each representing a file located in the directory, with extension
  * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory
  * @wiki File data
@@ -125,6 +127,7 @@ enum class FileSorting(
 fun listFiles(
     @Injected context: Context,
     path: String,
+    @Name("directories") listDirectories: Boolean = true,
     @Name("fullpath") fullPath: Boolean = false,
     @Name("sortby") sortBy: FileSorting = FileSorting.NONE,
     @LikelyNamed order: Ordering = Ordering.ASCENDING,
@@ -142,6 +145,7 @@ fun listFiles(
         directory
             .listFiles()
             ?.asSequence()
+            ?.filter { listDirectories || it.isFile }
             ?.let { sortBy.sort(it, order) }
             ?.map { if (fullPath) it.absolutePath else it.name }
             ?.map(::StringValue)
