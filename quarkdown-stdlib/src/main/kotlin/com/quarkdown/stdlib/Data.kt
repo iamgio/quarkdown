@@ -31,6 +31,7 @@ val Data: QuarkdownModule =
     moduleOf(
         ::read,
         ::listFiles,
+        ::fileName,
         ::csv,
     )
 
@@ -155,6 +156,25 @@ fun listFiles(
         sortBy == FileSorting.NONE -> UnorderedCollectionValue(files.toSet())
         else -> OrderedCollectionValue(files.toList())
     }
+}
+
+/**
+ * Retrieves the name of a file located in [path].
+ * @param path path of the file (with extension)
+ * @param includeExtension whether to include the file extension in the name
+ * @return the name of the file located in [path]
+ * @throws IllegalArgumentException if the file does not exist
+ * @wiki File data
+ */
+@Name("filename")
+fun fileName(
+    @Injected context: Context,
+    path: String,
+    @Name("extension") includeExtension: Boolean = true,
+): StringValue {
+    val file = file(context, path)
+    val name = if (includeExtension) file.name else file.nameWithoutExtension
+    return StringValue(name)
 }
 
 /**

@@ -203,4 +203,21 @@ class DataTest {
     fun `list files on a file instead of directory`() {
         assertFails { listFiles(context, "test.txt") }
     }
+
+    @Test
+    fun `get file name with extension`() {
+        val name = fileName(context, "listfiles/a.txt", includeExtension = true)
+        assertEquals("a.txt", name.unwrappedValue)
+    }
+
+    @Test
+    fun `get file name without extension`() {
+        val name = fileName(context, "listfiles/a.txt", includeExtension = false)
+        assertEquals("a", name.unwrappedValue)
+    }
+
+    @Test
+    fun `get file name non-existent file`() {
+        assertFails { fileName(context, "listfiles/nonexistent.txt") }
+    }
 }
