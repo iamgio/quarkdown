@@ -21,6 +21,8 @@ import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.stdlib.internal.Ordering
+import com.quarkdown.stdlib.internal.sortedBy
 
 /**
  * `TableComputation` stdlib module exporter.
@@ -37,31 +39,6 @@ val TableComputation: QuarkdownModule =
         ::tableColumns,
         ::generateTableByRows,
     )
-
-/**
- * The sorting order for a table column.
- * @see [tableSort]
- */
-enum class TableSortOrder {
-    ASCENDING,
-    DESCENDING,
-    ;
-
-    /**
-     * Applies the sorting order to a sequence of items.
-     * @param sequence the sequence to sort
-     * @param by the function to extract the sorting key from each item
-     * @return the sorted sequence
-     */
-    fun <T, R : Comparable<R>> apply(
-        sequence: Sequence<T>,
-        by: (T) -> R,
-    ): Sequence<T> =
-        when (this) {
-            ASCENDING -> sequence.sortedBy(by)
-            DESCENDING -> sequence.sortedByDescending(by)
-        }
-}
 
 /**
  * Finds a table nested in a given content.
@@ -176,7 +153,7 @@ private fun reconstructTable(
 @Name("tablesort")
 fun tableSort(
     @Name("column") columnIndex: Int,
-    order: TableSortOrder = TableSortOrder.ASCENDING,
+    order: Ordering = Ordering.ASCENDING,
     @Name("table") @LikelyBody content: MarkdownContent,
 ): NodeValue {
     val (table, _, values) = findTableColumn(content, columnIndex)
@@ -186,7 +163,7 @@ fun tableSort(
         values
             .asSequence()
             .withIndex()
-            .let { order.apply(it) { item -> item.value } }
+            .sortedBy(order) { item -> item.value }
             .map { it.index }
             .toList()
 
