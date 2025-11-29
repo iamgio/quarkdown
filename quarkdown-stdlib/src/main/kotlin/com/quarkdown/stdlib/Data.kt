@@ -18,6 +18,9 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.stdlib.internal.Ordering
+import com.quarkdown.stdlib.internal.Sorting
+import com.quarkdown.stdlib.internal.sortedBy
 import java.io.File
 
 /**
@@ -93,19 +96,20 @@ fun read(
  * @see listFiles
  */
 enum class FileSorting(
-    val sort: (Sequence<File>) -> Sequence<File>,
-) {
+    override val sort: (Sequence<File>, Ordering) -> Sequence<File>,
+) : Sorting<File> {
     /** No sorting is applied. */
-    NONE({ files -> files }),
+    NONE({ files, _ -> files }),
 
-    /** Files are sorted by name in ascending order. */
-    NAME({ files -> files.sortedBy { it.name } }),
+    /** Files are sorted by name. */
+    NAME({ files, ordering ->
+        files.sortedBy(ordering) { it.name.lowercase() }
+    }),
 
-    /** Files are sorted by last modified date in descending order. */
-    MOST_RECENT({ files -> files.sortedBy { it.lastModified() } }),
-
-    /** Files are sorted by last modified date in ascending order. */
-    LEAST_RECENT({ files -> files.sortedByDescending { it.lastModified() } }),
+    /** Files are sorted by last modified date. */
+    LAST_MODIFIED({ files, ordering ->
+        files.sortedBy(ordering) { it.lastModified() }
+    }),
 }
 
 /**
@@ -123,6 +127,7 @@ fun listFiles(
     path: String,
     @Name("fullpath") fullPath: Boolean = false,
     @Name("sortby") sortBy: FileSorting = FileSorting.NONE,
+    @LikelyNamed order: Ordering = Ordering.ASCENDING,
 ): IterableValue<StringValue> {
     val directory = file(context, path)
 
@@ -137,7 +142,7 @@ fun listFiles(
         directory
             .listFiles()
             ?.asSequence()
-            ?.let(sortBy.sort)
+            ?.let { sortBy.sort(it, order) }
             ?.map { if (fullPath) it.absolutePath else it.name }
             ?.map(::StringValue)
             ?: emptySequence()
