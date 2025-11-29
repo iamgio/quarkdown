@@ -51,6 +51,7 @@ $dokka.location:com.quarkdown.stdlib//emoji/#kotlin.String/PointingToDeclaration
 $dokka.location:com.quarkdown.stdlib//equals/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.DynamicValue/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logical/equals.html
 $dokka.location:com.quarkdown.stdlib//error/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Logger/error.html
 $dokka.location:com.quarkdown.stdlib//figure/#kotlin.String?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/figure.html
+$dokka.location:com.quarkdown.stdlib//fileName/#com.quarkdown.core.context.Context#kotlin.String#kotlin.Boolean/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/filename.html
 $dokka.location:com.quarkdown.stdlib//float/#com.quarkdown.core.ast.quarkdown.block.Container.FloatAlignment#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/float.html
 $dokka.location:com.quarkdown.stdlib//font/#com.quarkdown.core.context.MutableContext#kotlin.String?#kotlin.String?#kotlin.String?#com.quarkdown.core.document.size.Size?/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/font.html
 $dokka.location:com.quarkdown.stdlib//footer/#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/footer.html
