@@ -152,28 +152,48 @@ class DataTest {
 
     @Test
     fun `list files unsorted`() {
-        val files = listFiles(context, LIST_FILES_FOLDER)
+        val files = listFiles(context, LIST_FILES_FOLDER, fullPath = false)
         val names = files.unwrappedValue.map { it.unwrappedValue }.toSet()
         assertEquals(setOf("a.txt", "b.txt", "c.txt", "d"), names)
     }
 
     @Test
     fun `list files sorted by name ascending`() {
-        val files = listFiles(context, LIST_FILES_FOLDER, sortBy = FileSorting.NAME)
+        val files =
+            listFiles(
+                context,
+                LIST_FILES_FOLDER,
+                fullPath = false,
+                sortBy = FileSorting.NAME,
+            )
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
         assertEquals(listOf("a.txt", "b.txt", "c.txt", "d"), names)
     }
 
     @Test
     fun `list files sorted by name descending`() {
-        val files = listFiles(context, LIST_FILES_FOLDER, sortBy = FileSorting.NAME, order = Ordering.DESCENDING)
+        val files =
+            listFiles(
+                context,
+                LIST_FILES_FOLDER,
+                fullPath = false,
+                sortBy = FileSorting.NAME,
+                order = Ordering.DESCENDING,
+            )
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
         assertEquals(listOf("d", "c.txt", "b.txt", "a.txt"), names)
     }
 
     @Test
     fun `list non-directory files`() {
-        val files = listFiles(context, LIST_FILES_FOLDER, listDirectories = false, sortBy = FileSorting.NAME)
+        val files =
+            listFiles(
+                context,
+                LIST_FILES_FOLDER,
+                listDirectories = false,
+                fullPath = false,
+                sortBy = FileSorting.NAME,
+            )
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
         assertEquals(listOf("a.txt", "b.txt", "c.txt"), names)
     }

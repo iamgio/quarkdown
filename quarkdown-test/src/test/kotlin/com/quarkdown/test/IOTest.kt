@@ -20,7 +20,7 @@ class IOTest {
 
     @Test
     fun `list files`() {
-        execute(".listfiles {include} sortby:{name} order:{descending}") {
+        execute(".listfiles {include} sortby:{name} order:{descending} fullpath:{no}") {
             assertEquals(
                 "<ol>" +
                     (7 downTo 1).joinToString(separator = "") { n -> "<li><p>include-$n.md</p></li>" } +

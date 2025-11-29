@@ -122,6 +122,7 @@ enum class FileSorting(
  * @param order order to sort the files in
  * @return an unordered collection of string values, each representing a file located in the directory, with extension
  * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory
+ * @see fileName to exclude the extension from file names
  * @wiki File data
  */
 @Name("listfiles")
@@ -129,7 +130,7 @@ fun listFiles(
     @Injected context: Context,
     path: String,
     @Name("directories") listDirectories: Boolean = true,
-    @Name("fullpath") fullPath: Boolean = false,
+    @Name("fullpath") fullPath: Boolean = true,
     @Name("sortby") sortBy: FileSorting = FileSorting.NONE,
     @LikelyNamed order: Ordering = Ordering.ASCENDING,
 ): IterableValue<StringValue> {
