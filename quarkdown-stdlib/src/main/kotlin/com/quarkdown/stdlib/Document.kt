@@ -320,14 +320,14 @@ fun docAuthors(
  *     .keyword
  * ```
  *
- * @param keywordsString optional space-separated keywords to assign to the document
+ * @param keywords optional collection of keywords to assign to the document
  * @return the current document keywords if [keywordsString] is unset, nothing otherwise
  * @wiki Document metadata
  */
 @Name("dockeywords")
 fun docKeywords(
     @Injected context: MutableContext,
-    keywords: Iterable<DynamicValue>? = null,
+    @LikelyBody keywords: Iterable<DynamicValue>? = null,
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         keywords,
