@@ -9,6 +9,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -210,5 +211,25 @@ class SubdocumentTest {
                 },
             ) {}
         }
+    }
+
+    @Test
+    fun `all from directory`() {
+        execute(
+            """
+            .foreach {.listfiles {subdoc} sortby:{name}}
+                path:
+                .path::subdocument label:{.path::filename extension:{no}}
+            """.trimIndent(),
+            outputResourceHook = {
+                val files = File(fileSystem.workingDirectory, "subdoc").listFiles()!!
+                assertEquals(files.size + 1, subdocumentGraph.vertices.size) // +1 for root
+
+                files.forEach { file ->
+                    val subdocName = file.nameWithoutExtension
+                    assertTrue(subdocumentGraph.vertices.any { vertex -> vertex.name.startsWith(subdocName) })
+                }
+            },
+        ) {}
     }
 }
