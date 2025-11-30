@@ -1,5 +1,8 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineMarkdownContent
+import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.module.QuarkdownModule
@@ -14,6 +17,7 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.stdlib.internal.asString
 import java.io.Reader
 
@@ -25,6 +29,7 @@ val Ecosystem: QuarkdownModule =
     moduleOf(
         ::include,
         ::includeAll,
+        ::subdocument,
     )
 
 /**
@@ -86,3 +91,28 @@ fun includeAll(
     paths
         .map { include(context, it.asString()) }
         .let(::GeneralCollectionValue)
+
+/**
+ * Creates a link to a subdocument located at the given [path].
+ *
+ * This is an alias to the link syntax, `[Label](path)`, with more freedom:
+ * - Function calls are supported, whereas the link syntax only supports static paths.
+ * - The link syntax recognizes subdocuments only by their file extension (`.qd` or `.md`).
+ *
+ * @param path path to the subdocument
+ * @param label optional label for the link.
+ *              If not provided, this function will just add the subdocument to the document graph, without displaying a link.
+ * @return a [SubdocumentLink] node, which may be hidden if [label] is not provided
+ * @wiki Subdocuments
+ */
+fun subdocument(
+    path: String,
+    label: InlineMarkdownContent? = null,
+): NodeValue =
+    SubdocumentLink(
+        Link(
+            label = label?.children ?: emptyList(),
+            url = path,
+            title = null,
+        ),
+    ).wrappedAsValue()
