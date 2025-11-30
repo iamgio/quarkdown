@@ -264,6 +264,10 @@ If missing, Java 17, Node.js and npm will be installed automatically using the s
 
 For more installation options, check out [get-quarkdown](https://github.com/quarkdown-labs/get-quarkdown).
 
+### GitHub Actions
+
+See [setup-quarkdown](https://github.com/quarkdown-labs/setup-quarkdown) to easily integrate Quarkdown into your GitHub Actions workflows.
+
 ### Manual installation
 
 <details>
