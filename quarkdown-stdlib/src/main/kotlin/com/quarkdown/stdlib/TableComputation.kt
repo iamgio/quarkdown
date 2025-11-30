@@ -21,6 +21,7 @@ import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.toPlainText
+import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.sortedBy
 
@@ -125,6 +126,8 @@ private fun reconstructTable(
 /**
  * Sorts a table based on the values of a column.
  *
+ * The sorting is done alphanumerically, hence, for example, `$120` > `$30`, as opposed to the usual lexicographical order.
+ *
  * Example:
  * ```
  * .tablesort {2}
@@ -163,7 +166,7 @@ fun tableSort(
         values
             .asSequence()
             .withIndex()
-            .sortedBy(order) { item -> item.value }
+            .sortedBy(order, AlphanumericComparator) { item -> item.value }
             .map { it.index }
             .toList()
 

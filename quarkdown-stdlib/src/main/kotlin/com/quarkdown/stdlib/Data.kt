@@ -18,6 +18,7 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.Sorting
 import com.quarkdown.stdlib.internal.sortedBy
@@ -104,7 +105,7 @@ enum class FileSorting(
 
     /** Files are sorted by name. */
     NAME({ files, ordering ->
-        files.sortedBy(ordering) { it.name.lowercase() }
+        files.sortedBy(ordering, AlphanumericComparator) { it.name.lowercase() }
     }),
 
     /** Files are sorted by last modified date. */
