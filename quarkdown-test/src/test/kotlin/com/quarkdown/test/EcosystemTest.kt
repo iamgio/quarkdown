@@ -5,6 +5,7 @@ import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertTrue
 
 private const val OUTPUT_1 = "<h1>Title</h1><p>Some <em>text</em>.</p>"
 private const val OUTPUT_3 = "<h2>Included</h2><pre><code>code\ncode</code></pre>"
@@ -202,6 +203,18 @@ class EcosystemTest {
                 "$OUTPUT_1$OUTPUT_3<p>Hello, world!</p>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `bulk-include all from directory`() {
+        execute(
+            """
+            .noautopagebreak
+            .includeall {.listfiles {include} sortby:{name}}
+            """.trimIndent(),
+        ) {
+            assertTrue(it.startsWith(OUTPUT_1 + OUTPUT_3))
         }
     }
 }
