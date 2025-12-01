@@ -53,6 +53,20 @@ class SortingTest {
     }
 
     @Test
+    fun `sortedBy with AlphanumericComparator`() {
+        val sequence = sequenceOf("$120", "$30", "$5", "$1000")
+        val sorted = sequence.sortedBy(Ordering.ASCENDING, AlphanumericComparator) { it }
+        assertEquals(listOf("$5", "$30", "$120", "$1000"), sorted.toList())
+    }
+
+    @Test
+    fun `sortedBy with AlphanumericComparator descending`() {
+        val sequence = sequenceOf("item2", "item10", "item1", "item20")
+        val sorted = sequence.sortedBy(Ordering.DESCENDING, AlphanumericComparator) { it }
+        assertEquals(listOf("item20", "item10", "item2", "item1"), sorted.toList())
+    }
+
+    @Test
     fun `sorting interface implementation`() {
         val stringSorting =
             object : Sorting<String> {

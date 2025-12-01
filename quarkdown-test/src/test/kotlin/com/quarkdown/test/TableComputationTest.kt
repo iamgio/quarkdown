@@ -11,14 +11,16 @@ import kotlin.test.assertEquals
 class TableComputationTest {
     private val table =
         """
-        | Name | Age | City |
-        |------|-----|------|
-        | John | 25  | NY   |
-        | Lisa | 32  | LA   |
-        | Mike | 19  | CHI  |
+        | Name    | Age | City |
+        |---------|-----|------|
+        | John    | 25  | NY   |
+        | Barbara | 102  | SF   |
+        | Lisa    | 32  | LA   |
+        | Mike    | 19  | CHI  |
         """.trimIndent().indent("\t")
 
     private val john = "<tr><td>John</td><td>25</td><td>NY</td></tr>"
+    private val barbara = "<tr><td>Barbara</td><td>102</td><td>SF</td></tr>"
     private val lisa = "<tr><td>Lisa</td><td>32</td><td>LA</td></tr>"
     private val mike = "<tr><td>Mike</td><td>19</td><td>CHI</td></tr>"
 
@@ -34,7 +36,7 @@ class TableComputationTest {
     fun `plain sorting, ascending`() {
         execute(".tablesort column:{2}\n$table") {
             assertEquals(
-                htmlTable(mike + john + lisa),
+                htmlTable(mike + john + lisa + barbara),
                 it,
             )
         }
@@ -44,7 +46,7 @@ class TableComputationTest {
     fun `plain sorting, descending`() {
         execute(".tablesort column:{2} order:{descending}\n$table") {
             assertEquals(
-                htmlTable(lisa + john + mike),
+                htmlTable(barbara + lisa + john + mike),
                 it,
             )
         }
@@ -54,7 +56,7 @@ class TableComputationTest {
     fun `plain filtering`() {
         execute(".tablefilter {2} {@lambda x: .x::isgreater {20}}\n$table") {
             assertEquals(
-                htmlTable(john + lisa),
+                htmlTable(john + barbara + lisa),
                 it,
             )
         }
@@ -65,8 +67,8 @@ class TableComputationTest {
         execute(".tablecompute {2} {@lambda x: .x::sumall}\n$table") {
             assertEquals(
                 htmlTable(
-                    john + lisa + mike +
-                        "<tr><td></td><td>76</td><td></td></tr>",
+                    john + barbara + lisa + mike +
+                        "<tr><td></td><td>178</td><td></td></tr>",
                 ),
                 it,
             )
@@ -78,8 +80,8 @@ class TableComputationTest {
         execute(".tablecompute {2} {@lambda .1::average::round}\n$table") {
             assertEquals(
                 htmlTable(
-                    john + lisa + mike +
-                        "<tr><td></td><td>25</td><td></td></tr>",
+                    john + barbara + lisa + mike +
+                        "<tr><td></td><td>44</td><td></td></tr>",
                 ),
                 it,
             )
@@ -95,8 +97,8 @@ class TableComputationTest {
         ) {
             assertEquals(
                 htmlTable(
-                    mike + john + lisa +
-                        "<tr><td></td><td>25</td><td></td></tr>",
+                    mike + john + lisa + barbara +
+                        "<tr><td></td><td>44</td><td></td></tr>",
                 ),
                 it,
             )
@@ -169,6 +171,7 @@ class TableComputationTest {
         ) {
             assertEquals(
                 "<p>Cell = 25</p>" +
+                    "<p>Cell = 102</p>" +
                     "<p>Cell = 32</p>" +
                     "<p>Cell = 19</p>",
                 it,
