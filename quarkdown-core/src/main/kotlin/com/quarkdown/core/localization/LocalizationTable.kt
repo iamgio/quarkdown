@@ -7,6 +7,11 @@ package com.quarkdown.core.localization
 typealias LocalizationTables = Map<String, LocalizationTable>
 
 /**
+ * A mutable variant of [LocalizationTables].
+ */
+typealias MutableLocalizationTables = MutableMap<String, LocalizationTable>
+
+/**
  * A table that enables localization by storing localization entries for specific [Locale]s.
  * @see com.quarkdown.core.context.Context.localize
  */
