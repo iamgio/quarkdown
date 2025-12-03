@@ -19,10 +19,20 @@
       }
     }
 
-    li a::after {
-      // ToC page counter on supported targets
-      content: target-counter(attr(href), page);
-      float: right;
+    li {
+      // Hide list markers for all items
+      list-style-type: none;
+
+      // Add left padding to unnumbered items to align with numbered items' text
+      &:not([data-location]) {
+        padding-left: 1.7em;
+      }
+
+      a::after {
+        // ToC page counter on supported targets
+        content: target-counter(attr(href), page);
+        float: right;
+      }
     }
   }
 }
