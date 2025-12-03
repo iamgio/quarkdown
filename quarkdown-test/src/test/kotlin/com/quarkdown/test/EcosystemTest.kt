@@ -123,6 +123,20 @@ class EcosystemTest {
     }
 
     @Test
+    fun `'read' call from updated working directory`() {
+        execute(
+            """
+            .include {include/include-8.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Line 1\nLine 2\n\nLine 3</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `include library`() {
         // Load library named 'hello' from libraries/hello.qd
         execute(

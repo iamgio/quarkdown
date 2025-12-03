@@ -5,6 +5,9 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.SharedContext
+import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -70,9 +73,14 @@ fun include(
     // Load library by name if it exists.
     context.loadLibrary(path)?.let { return VoidValue }
 
-    // Include file content.
+    // File lookup
     val file = file(context, path)
-    return includeResource(context, file.bufferedReader())
+
+    // Shared context initialization with updated working directory.
+    val newFileSystem: FileSystem = SimpleFileSystem(file.parentFile)
+    val newContext: Context = SharedContext(context, newFileSystem)
+
+    return includeResource(newContext, file.bufferedReader())
 }
 
 /**

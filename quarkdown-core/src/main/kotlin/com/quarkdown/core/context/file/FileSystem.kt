@@ -24,7 +24,11 @@ interface FileSystem {
     fun resolve(path: String): File
 }
 
-internal data class SimpleFileSystem(
+/**
+ * A simple [FileSystem] implementation that resolves paths
+ * based on an optional working directory.
+ */
+data class SimpleFileSystem(
     override val workingDirectory: File? = null,
 ) : FileSystem {
     override fun resolve(path: String): File = IOUtils.resolvePath(path, workingDirectory)
