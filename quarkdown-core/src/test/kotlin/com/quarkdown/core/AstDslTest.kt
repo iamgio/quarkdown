@@ -18,6 +18,7 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
+import com.quarkdown.core.context.file.SimpleFileSystem
 import kotlin.test.Test
 
 /**
@@ -102,6 +103,7 @@ class AstDslTest {
                                                             listOf(Strong(listOf(Text("alt")))),
                                                             url = "url",
                                                             title = "title",
+                                                            fileSystem = SimpleFileSystem(),
                                                         ),
                                                     width = null,
                                                     height = null,
