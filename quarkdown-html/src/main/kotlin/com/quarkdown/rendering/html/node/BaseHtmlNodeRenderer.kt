@@ -302,7 +302,7 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Image) =
         tagBuilder("img")
-            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.getResolvedUrl(context))
+            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.getResolvedUrl(context))
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .style {

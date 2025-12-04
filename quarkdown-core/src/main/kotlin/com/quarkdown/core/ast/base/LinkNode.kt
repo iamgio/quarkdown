@@ -2,6 +2,7 @@ package com.quarkdown.core.ast.base
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.context.file.FileSystem
 
 /**
  * A general link node.
@@ -23,4 +24,10 @@ interface LinkNode : Node {
      * Optional title.
      */
     val title: String?
+
+    /**
+     * Optional file system where this link is defined, used for resolving relative paths.
+     * @see com.quarkdown.core.context.hooks.LinkUrlResolverHook
+     */
+    val fileSystem: FileSystem?
 }

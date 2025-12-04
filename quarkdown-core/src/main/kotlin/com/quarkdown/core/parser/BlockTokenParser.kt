@@ -178,6 +178,7 @@ class BlockTokenParser(
             url = groups.next().trim(),
             // Remove first and last character
             title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+            fileSystem = context.fileSystem,
         )
     }
 

@@ -179,6 +179,20 @@ class EcosystemTest {
     }
 
     @Test
+    fun `relative-path reference image from updated working directory`() {
+        execute(
+            """
+            .include {include/include-12.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"images/picture.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `include library`() {
         // Load library named 'hello' from libraries/hello.qd
         execute(

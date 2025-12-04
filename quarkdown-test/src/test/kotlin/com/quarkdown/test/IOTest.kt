@@ -20,7 +20,7 @@ class IOTest {
 
     @Test
     fun `list files`() {
-        val numFiles = 11
+        val numFiles = 12
         execute(".listfiles {include} sortby:{name} order:{descending} fullpath:{no}") {
             assertEquals(
                 "<ol>" +

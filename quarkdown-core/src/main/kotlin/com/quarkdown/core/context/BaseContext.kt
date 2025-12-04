@@ -1,6 +1,7 @@
 package com.quarkdown.core.context
 
 import com.quarkdown.core.ast.attributes.AstAttributes
+import com.quarkdown.core.ast.attributes.link.getResolvedUrl
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceLink
@@ -74,7 +75,7 @@ open class BaseContext(
     override fun resolve(reference: ReferenceLink): LinkNode? =
         attributes.linkDefinitions
             .firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
-            ?.let { Link(reference.label, it.url, it.title) }
+            ?.let { Link(reference.label, it.getResolvedUrl(this), it.title, it.fileSystem) }
             ?.also { link ->
                 reference.onResolve.forEach { action -> action(link) }
             }

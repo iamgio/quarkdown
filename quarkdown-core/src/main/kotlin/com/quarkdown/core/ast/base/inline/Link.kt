@@ -19,7 +19,7 @@ class Link(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,
-    val fileSystem: FileSystem? = null,
+    override val fileSystem: FileSystem? = null,
 ) : LinkNode,
     TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
