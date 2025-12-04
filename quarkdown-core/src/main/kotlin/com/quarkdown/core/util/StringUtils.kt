@@ -130,3 +130,9 @@ fun String.toURLOrNull(): URL? =
     } catch (_: MalformedURLException) {
         null
     }
+
+/**
+ * Whether [this] string is a valid URL.
+ */
+val String.isURL: Boolean
+    get() = toURLOrNull() != null

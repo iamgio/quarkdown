@@ -137,6 +137,48 @@ class EcosystemTest {
     }
 
     @Test
+    fun `relative-path image from updated working directory`() {
+        execute(
+            """
+            .include {include/include-9.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `absolute-path image from updated working directory should not be updated`() {
+        execute(
+            """
+            .include {include/include-10.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"/img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `url image from updated working directory should not be updated`() {
+        execute(
+            """
+            .include {include/include-11.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"https://example.com/img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `include library`() {
         // Load library named 'hello' from libraries/hello.qd
         execute(

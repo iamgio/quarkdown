@@ -7,7 +7,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -77,7 +76,7 @@ fun include(
     val file = file(context, path)
 
     // Shared context initialization with updated working directory.
-    val newFileSystem: FileSystem = SimpleFileSystem(file.parentFile)
+    val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory = file.parentFile)
     val newContext: Context = SharedContext(context, newFileSystem)
 
     return includeResource(newContext, file.bufferedReader())

@@ -20,10 +20,11 @@ class IOTest {
 
     @Test
     fun `list files`() {
+        val numFiles = 11
         execute(".listfiles {include} sortby:{name} order:{descending} fullpath:{no}") {
             assertEquals(
                 "<ol>" +
-                    (7 downTo 1).joinToString(separator = "") { n -> "<li><p>include-$n.md</p></li>" } +
+                    (numFiles downTo 1).joinToString(separator = "") { n -> "<li><p>include-$n.md</p></li>" } +
                     "</ol>",
                 it,
             )
