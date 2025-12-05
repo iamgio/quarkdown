@@ -164,6 +164,7 @@ class InlineTokenParser(
                 url = groups.next().trim(),
                 // Removes leading and trailing delimiters.
                 title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+                fileSystem = context.fileSystem,
             )
         return when {
             // If the URL points to a subdocument, it is a subdocument link.

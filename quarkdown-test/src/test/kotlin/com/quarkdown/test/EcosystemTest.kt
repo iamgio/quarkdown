@@ -3,12 +3,14 @@ package com.quarkdown.test
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
 
-private const val OUTPUT_1 = "<h1>Title</h1><p>Some <em>text</em>.</p>"
-private const val OUTPUT_3 = "<h2>Included</h2><pre><code>code\ncode</code></pre>"
+private const val OUTPUT_BASIC_SOURCE = "<h1>Title</h1><p>Some <em>text</em>.</p>"
+private const val OUTPUT_FUNCTION_WITH_CONTENT = "<h2>Included</h2><pre><code>code\ncode</code></pre>"
+private const val OUTPUT_ABSOLUTE_IMAGE = "<p>img: <img src=\"/img/icon.png\" alt=\"img\" /></p>"
 
 /**
  * Tests for including files and libraries.
@@ -19,13 +21,20 @@ class EcosystemTest {
         execute(
             """
             .noautopagebreak
-            .include {include/include-1.md}
+            .include {include/basic-source.md}
             """.trimIndent(),
         ) {
             assertEquals(
-                OUTPUT_1,
+                OUTPUT_BASIC_SOURCE,
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `include source with stdlib call`() {
+        execute(".include {include/stdlib-call.md}") {
+            assertContains(it, "Lorem ipsum")
         }
     }
 
@@ -33,7 +42,7 @@ class EcosystemTest {
     fun `include function from source`() {
         execute(
             """
-            .include {include/include-2.md}
+            .include {include/function-definition.md}
             .hello {world}
             """.trimIndent(),
         ) {
@@ -47,11 +56,11 @@ class EcosystemTest {
             """
             .noautopagebreak
             # Main
-            .include {include/include-3.md}
+            .include {include/function-with-content.md}
             """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Main</h1>$OUTPUT_3",
+                "<h1>Main</h1>$OUTPUT_FUNCTION_WITH_CONTENT",
                 it,
             )
         }
@@ -64,7 +73,7 @@ class EcosystemTest {
             .function {hello}
                 x:
                 Hello, .x!
-            .include {include/include-4.md}
+            .include {include/shared-function-usage.md}
             """.trimIndent(),
         ) {
             assertEquals(
@@ -80,7 +89,7 @@ class EcosystemTest {
             """
             .noautopagebreak
             # Main
-            .include {include/include-5.md}
+            .include {include/transitive-include.md}
             """.trimIndent(),
         ) {
             assertEquals(
@@ -96,7 +105,7 @@ class EcosystemTest {
         assertFails {
             execute(
                 """
-                .sum {.include {include/include-6.md}} {3}
+                .sum {.include {include/dynamic-value.md}} {3}
                 """.trimIndent(),
             ) {}
         }
@@ -106,7 +115,7 @@ class EcosystemTest {
     fun `mutate included data`() {
         execute(
             """
-            .include {include/include-7.md}
+            .include {include/mutable-data.md}
             
             .saygreeting
             
@@ -117,6 +126,76 @@ class EcosystemTest {
         ) {
             assertEquals(
                 "<p>Hi</p><p>Hello</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `'read' call from updated working directory`() {
+        execute(
+            """
+            .include {include/read-relative-path.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Line 1\nLine 2\n\nLine 3</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `relative-path image from updated working directory`() {
+        execute(
+            """
+            .include {include/relative-image.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `absolute-path image from updated working directory should not be updated`() {
+        execute(
+            """
+            .include {include/absolute-image.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"/img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `url image from updated working directory should not be updated`() {
+        execute(
+            """
+            .include {include/url-image.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"https://example.com/img/icon.png\" alt=\"img\" /></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `relative-path reference image from updated working directory`() {
+        execute(
+            """
+            .include {include/reference-image.md}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>img: <img src=\"images/picture.png\" alt=\"img\" /></p>",
                 it,
             )
         }
@@ -174,14 +253,14 @@ class EcosystemTest {
         execute(
             """
             .noautopagebreak
-            .include {include/include-1.md}
-            .include {include/include-3.md}
+            .include {include/basic-source.md}
+            .include {include/function-with-content.md}
             
             .hello {world}
             """.trimIndent(),
         ) {
             assertEquals(
-                "$OUTPUT_1$OUTPUT_3<p>Hello, world!</p>",
+                "$OUTPUT_BASIC_SOURCE$OUTPUT_FUNCTION_WITH_CONTENT<p>Hello, world!</p>",
                 it,
             )
         }
@@ -193,14 +272,14 @@ class EcosystemTest {
             """
             .noautopagebreak
             .includeall
-                - include/include-1.md
-                - include/include-3.md
+                - include/basic-source.md
+                - include/function-with-content.md
             
             .hello {world}
             """.trimIndent(),
         ) {
             assertEquals(
-                "$OUTPUT_1$OUTPUT_3<p>Hello, world!</p>",
+                "$OUTPUT_BASIC_SOURCE$OUTPUT_FUNCTION_WITH_CONTENT<p>Hello, world!</p>",
                 it,
             )
         }
@@ -214,7 +293,7 @@ class EcosystemTest {
             .includeall {.listfiles {include} sortby:{name}}
             """.trimIndent(),
         ) {
-            assertTrue(it.startsWith(OUTPUT_1 + OUTPUT_3))
+            assertTrue(it.startsWith(OUTPUT_ABSOLUTE_IMAGE + OUTPUT_BASIC_SOURCE))
         }
     }
 }

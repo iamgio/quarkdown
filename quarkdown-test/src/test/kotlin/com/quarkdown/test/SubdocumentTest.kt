@@ -166,6 +166,46 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `stdlib call in subdocument from file`() {
+        arrayOf(
+            "[Lorem](subdoc/stdlib-call.qd)",
+            ".subdocument {subdoc/stdlib-call.qd} label:{Lorem}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `stdlib call in included file from subdocument`() {
+        arrayOf(
+            "[Include](subdoc/include-stdlib.qd)",
+            ".subdocument {subdoc/include-stdlib.qd} label:{Include}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `root to gateway to 1 and 2`() {
         arrayOf(
             "[Gateway](subdoc/gateway.qd)",

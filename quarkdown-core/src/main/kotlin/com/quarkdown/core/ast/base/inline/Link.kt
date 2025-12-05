@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -12,11 +13,13 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param label inline content of the displayed label
  * @param url URL this link points to
  * @param title optional title
+ * @param fileSystem optional file system where this link is defined, used for resolving relative paths
  */
 class Link(
     override val label: InlineContent,
     override val url: String,
     override val title: String?,
+    override val fileSystem: FileSystem? = null,
 ) : LinkNode,
     TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
