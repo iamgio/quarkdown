@@ -159,6 +159,7 @@ com.quarkdown.core
 com.quarkdown.core.ast
 com.quarkdown.core.ast.attributes
 com.quarkdown.core.ast.attributes.id
+com.quarkdown.core.ast.attributes.link
 com.quarkdown.core.ast.attributes.localization
 com.quarkdown.core.ast.attributes.location
 com.quarkdown.core.ast.attributes.presence
