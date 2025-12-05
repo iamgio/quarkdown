@@ -3,6 +3,7 @@ package com.quarkdown.test
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
@@ -27,6 +28,13 @@ class EcosystemTest {
                 OUTPUT_BASIC_SOURCE,
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `include source with stdlib call`() {
+        execute(".include {include/stdlib-call.md}") {
+            assertContains(it, "Lorem ipsum")
         }
     }
 
