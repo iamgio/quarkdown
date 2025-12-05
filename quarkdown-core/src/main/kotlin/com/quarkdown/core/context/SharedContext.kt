@@ -1,6 +1,7 @@
 package com.quarkdown.core.context
 
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.function.Function
 
 /**
  * A context that shares all of its properties with its parent [MutableContext].
@@ -26,4 +27,6 @@ open class SharedContext(
     override val localizationTables by parent::localizationTables
     override val mediaStorage by parent::mediaStorage
     override var subdocumentGraph by parent::subdocumentGraph
+
+    override fun getFunctionByName(name: String): Function<*>? = parent.getFunctionByName(name)
 }

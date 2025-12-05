@@ -146,6 +146,26 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `empty label subdocument from file`() {
+        arrayOf(
+            "The link is: [](subdoc/simple-1.qd)",
+            "The link is: .subdocument {subdoc/simple-1.qd}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument == Subdocument.Root) {
+                    assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                }
+            }
+        }
+    }
+
+    @Test
     fun `stdlib call in subdocument from file`() {
         arrayOf(
             "[Lorem](subdoc/stdlib-call.qd)",
@@ -166,10 +186,10 @@ class SubdocumentTest {
     }
 
     @Test
-    fun `empty label subdocument from file`() {
+    fun `stdlib call in included file from subdocument`() {
         arrayOf(
-            "The link is: [](subdoc/simple-1.qd)",
-            "The link is: .subdocument {subdoc/simple-1.qd}",
+            "[Include](subdoc/include-stdlib.qd)",
+            ".subdocument {subdoc/include-stdlib.qd} label:{Include}",
         ).forEach { source ->
             execute(
                 source,
@@ -178,8 +198,8 @@ class SubdocumentTest {
                     assertEquals(2, getTextResourceCount(it))
                 },
             ) {
-                if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
                 }
             }
         }
