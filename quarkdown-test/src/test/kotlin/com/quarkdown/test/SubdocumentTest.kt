@@ -146,6 +146,26 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `stdlib call in subdocument from file`() {
+        arrayOf(
+            "[Lorem](subdoc/stdlib-call.qd)",
+            ".subdocument {subdoc/stdlib-call.qd} label:{Lorem}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `empty label subdocument from file`() {
         arrayOf(
             "The link is: [](subdoc/simple-1.qd)",
