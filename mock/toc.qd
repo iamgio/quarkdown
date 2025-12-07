@@ -1,0 +1,29 @@
+.doctype {paged}
+.docname {TOC mixed numbering test}
+.docauthor {Mock Author}
+
+.tableofcontents includeunnumbered:{true}
+
+# Introduction
+Short overview of the document.
+
+#! Unnumbered Section
+
+This section appears in the TOC but has no number.
+
+# Method
+## Data Collection
+Content
+## Model
+Content
+
+#! Results
+
+Appears in the TOC without a number.
+
+# Discussion
+Main text
+
+#! Appendix
+
+Appendix content
