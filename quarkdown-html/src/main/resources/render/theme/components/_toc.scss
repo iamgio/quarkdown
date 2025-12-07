@@ -18,11 +18,39 @@
         padding-left: 0;
       }
     }
+  }
 
-    li a::after {
-      // ToC page counter on supported targets
-      content: target-counter(attr(href), page);
-      float: right;
+  nav[data-role="table-of-contents"] {
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+
+      &::before {
+        margin-right: 0.5rem;
+      }
+
+      a {
+        display: flex;
+        flex-grow: 1;
+        gap: 0.5rem;
+        align-items: baseline;
+
+        .toc-page-number {
+          margin-left: auto;
+          font-variant-numeric: tabular-nums;
+
+          &:empty,
+          &[data-empty] {
+            display: none;
+          }
+        }
+      }
+
+      ol {
+        flex-basis: 100%;
+        width: 100%;
+      }
     }
   }
 }

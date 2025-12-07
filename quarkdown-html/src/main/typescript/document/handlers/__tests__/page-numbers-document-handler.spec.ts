@@ -41,6 +41,7 @@ class Concrete extends PageNumbers {
 
 describe('PageNumbersDocumentHandler', () => {
     it('respects page number reset markers when numbering pages', async () => {
+        document.body.className = 'quarkdown quarkdown-paged';
         document.body.innerHTML = `
       <div class="pagedjs_page" data-page-number="1">
         <span class="current-page-number">X</span>
@@ -63,5 +64,62 @@ describe('PageNumbersDocumentHandler', () => {
         expect(pages.map(page => page.dataset.displayPageNumber)).toEqual(['1', '10', '11']);
         const totals = Array.from(document.querySelectorAll('.total-page-number'));
         expect(totals.length).toBe(0);
+    });
+
+    it('injects reset-aware numbers into table of contents entries for paged documents', async () => {
+        document.body.className = 'quarkdown quarkdown-paged';
+        document.body.innerHTML = `
+      <div class="pagedjs_page" data-page-number="1">
+        <div class="pagedjs_area">
+          <h1 id="table-of-contents">Contents</h1>
+          <nav data-role="table-of-contents">
+            <ol>
+              <li><a href="#section-1">Section 1</a></li>
+              <li><a href="#section-2">Section 2</a></li>
+            </ol>
+          </nav>
+          <h2 id="section-1">Section 1</h2>
+          <span class="current-page-number">X</span>
+        </div>
+      </div>
+      <div class="pagedjs_page" data-page-number="2">
+        <div class="pagedjs_area">
+          <span class="page-number-reset" data-start="5"></span>
+          <h2 id="section-2">Section 2</h2>
+          <span class="current-page-number">Y</span>
+        </div>
+      </div>`;
+
+        const pages = Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
+        const handler = new Concrete(new DummyDocument(pages));
+
+        await handler.onPostRendering();
+
+        const numbers = Array.from(document.querySelectorAll<HTMLSpanElement>('.toc-page-number')).map(span => span.textContent);
+        expect(numbers).toEqual(['1', '5']);
+    });
+
+    it('omits TOC page numbers for non-paged documents', async () => {
+        document.body.className = 'quarkdown';
+        document.body.innerHTML = `
+      <div class="pagedjs_page" data-page-number="1">
+        <div class="pagedjs_area">
+          <h1 id="table-of-contents">Contents</h1>
+          <nav data-role="table-of-contents">
+            <ol>
+              <li><a href="#section-1">Section 1</a></li>
+            </ol>
+          </nav>
+          <h2 id="section-1">Section 1</h2>
+          <span class="current-page-number">X</span>
+        </div>
+      </div>`;
+
+        const pages = Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
+        const handler = new Concrete(new DummyDocument(pages));
+
+        await handler.onPostRendering();
+
+        expect(document.querySelector('.toc-page-number')).toBeNull();
     });
 });

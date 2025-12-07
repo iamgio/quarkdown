@@ -327,6 +327,7 @@ class QuarkdownHtmlNodeRenderer(
 
             // Content.
             +buildTag("nav") {
+                attribute("data-role", "table-of-contents")
                 +convertTableOfContentsToListNode(
                     node,
                     this@QuarkdownHtmlNodeRenderer,

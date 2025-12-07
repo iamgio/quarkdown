@@ -90,11 +90,79 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
+     * Updates table of contents entries so they display the logical (reset-aware) page numbers.
+     * Only runs for paged documents; other document types keep their TOC without page numbers (Option B).
+     */
+    private updateTableOfContentsPageNumbers() {
+        if (!document.body.classList.contains('quarkdown-paged')) {
+            return;
+        }
+
+        const tocNavs = Array.from(document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]'));
+        if (tocNavs.length === 0) {
+            return;
+        }
+
+        tocNavs.forEach(nav => {
+            nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(link => {
+                const targetId = this.getAnchorTargetId(link);
+                const displayNumber = targetId ? this.getDisplayNumberForTarget(targetId) : undefined;
+                this.setTocPageNumber(link, displayNumber);
+            });
+        });
+    }
+
+    private getAnchorTargetId(link: HTMLAnchorElement): string | undefined {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) {
+            return undefined;
+        }
+
+        let decoded: string;
+        try {
+            decoded = decodeURIComponent(href);
+        } catch {
+            return undefined;
+        }
+
+        const id = decoded.slice(1);
+        return id.length > 0 ? id : undefined;
+    }
+
+    private getDisplayNumberForTarget(targetId: string): string | undefined {
+        const target = document.getElementById(targetId);
+        if (!target) {
+            return undefined;
+        }
+
+        const hostPage = target.closest<HTMLElement>('.pagedjs_page');
+        return hostPage?.dataset.displayPageNumber;
+    }
+
+    private setTocPageNumber(link: HTMLAnchorElement, value?: string) {
+        let badge = link.querySelector<HTMLElement>('.toc-page-number');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'toc-page-number';
+            link.appendChild(badge);
+        }
+
+        if (value) {
+            badge.innerText = value;
+            badge.removeAttribute('data-empty');
+        } else {
+            badge.innerText = '';
+            badge.setAttribute('data-empty', '');
+        }
+    }
+
+    /**
      * Updates both total and current page numbers after rendering completes.
      */
     async onPostRendering() {
         const pages = this.quarkdownDocument.getPages();
         this.updateTotalPageNumbers(pages);
         this.updateCurrentPageNumbers(pages);
+        this.updateTableOfContentsPageNumbers();
     }
 }
