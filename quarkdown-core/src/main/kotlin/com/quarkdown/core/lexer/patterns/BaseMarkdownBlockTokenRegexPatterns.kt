@@ -109,7 +109,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             wrap = ::FencesCodeToken,
             regex =
                 RegexBuilder(
-                    "^ {0,3}fencesstart[ \\t]*lang?[ \\t]*caption?[ \\t]*customid?$" +
+                    "^( {0,3})fencesstart[ \\t]*lang?[ \\t]*caption?[ \\t]*customid?$" +
                         "(?s)(.+?)" +
                         "fencesend[ \\t]*$",
                 ).withReference("fencesstart", "(?<fenceschar>[`~]){3,}")
