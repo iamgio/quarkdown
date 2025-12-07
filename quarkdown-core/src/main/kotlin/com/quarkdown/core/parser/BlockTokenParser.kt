@@ -99,15 +99,26 @@ class BlockTokenParser(
 
     override fun visit(token: FencesCodeToken): Node {
         val groups = token.data.groups.iterator(consumeAmount = 2)
+        val initialSpaces = groups.next().length // Amount of spaces before the fence.
         val language = token.data.namedGroups["fencescodelang"]
         val caption = token.data.namedGroups["fencescodecaption"]?.trim()
         val referenceId = token.data.namedGroups["fencescodecustomid"]?.trim()
+
+        // Removes, at most, the initial spaces from each line (GFM #101).
+        val content =
+            groups
+                .next()
+                .lineSequence()
+                .map { it.replace("^ {0,$initialSpaces}".toRegex(), "") }
+                .joinToString(separator = "\n")
+                .removePrefix("\n")
+                .removeSuffix("\n")
 
         return Code(
             language = language?.takeIf { it.isNotBlank() }?.trim(),
             caption = caption?.trimDelimiters(),
             referenceId = referenceId,
-            content = groups.next().trim(),
+            content = content,
         )
     }
 
