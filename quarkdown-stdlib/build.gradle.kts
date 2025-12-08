@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation(testFixtures(project(":quarkdown-core")))
     implementation(project(":quarkdown-core"))
     implementation("se.sawano.java:alphanumeric-comparator:2.0.0")

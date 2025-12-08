@@ -1,5 +1,7 @@
 package com.quarkdown.core
 
+import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.lexer.Lexer
@@ -23,6 +25,16 @@ fun assertNodeEquals(
 ) = assertThat(actual)
     .usingRecursiveComparison()
     .isEqualTo(expected)!!
+
+/**
+ * Asserts that the contents of two inline content nodes are equal.
+ * @param expected expected node
+ * @param actual actual node
+ */
+fun assertNodeEquals(
+    expected: InlineContent,
+    actual: InlineContent,
+) = assertNodeEquals(AstRoot(expected), AstRoot(actual))
 
 /**
  * Reads the text content of a test resource.
