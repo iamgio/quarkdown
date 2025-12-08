@@ -10,6 +10,7 @@ import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.localization.MutableLocalizationTables
 import com.quarkdown.core.media.storage.MutableMediaStorage
 
 /**
@@ -33,7 +34,7 @@ open class MutableContext(
 
     override val loadableLibraries: MutableSet<Library> = (super.loadableLibraries + loadableLibraries).toMutableSet()
 
-    override val localizationTables = super.localizationTables.toMutableMap()
+    override val localizationTables: MutableLocalizationTables = super.localizationTables.toMutableMap()
 
     override val mediaStorage: MutableMediaStorage
         get() = super.mediaStorage as MutableMediaStorage
@@ -70,6 +71,8 @@ open class MutableContext(
         super.resolve(call)?.also {
             it.onComplete = { attributes.functionCalls.remove(call) }
         }
+
+    override fun fork(subdocument: Subdocument): ScopeContext = ScopeContext(parent = this, subdocument)
 
     /**
      * Loads a loadable library by name and registers it in the context.

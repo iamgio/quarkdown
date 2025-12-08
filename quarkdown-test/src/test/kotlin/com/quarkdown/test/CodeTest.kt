@@ -81,6 +81,28 @@ class CodeTest {
         }
     }
 
+    // #259
+    @Test
+    fun `indented block`() {
+        execute(
+            """
+            - indented context .br
+                ```
+                aaaa
+                bbbb
+                cccc
+                ```
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<ul><li>indented context <br />" +
+                    "<pre><code>aaaa\nbbbb\ncccc</code></pre>" +
+                    "</li></ul>",
+                it,
+            )
+        }
+    }
+
     // #32
     @Test
     fun `long block`() {
