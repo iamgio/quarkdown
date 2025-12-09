@@ -36,7 +36,9 @@ class SubdocumentTest {
     private val simpleSubdoc = subdoc("subdoc1", content = "Content")
     private val referenceToParentSubdoc = subdoc("subdoc2", content = ".$NON_EXISTENT_FUNCTION")
     private val definitionSubdoc = subdoc("subdoc3", content = ".function {$NON_EXISTENT_FUNCTION}\n\thello")
-    private val thirdPartySubdoc = subdoc("subdoc3", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
+    private val thirdPartySubdoc = subdoc("subdoc4", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
+    private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
+    private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
 
     private fun getResource(
         group: OutputResource?,
@@ -121,6 +123,36 @@ class SubdocumentTest {
             subdocumentGraph = { it.addVertex(thirdPartySubdoc).addEdge(Subdocument.Root, thirdPartySubdoc) },
             outputResourceHook = {
                 assertTrue(attributes.hasMermaidDiagram)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `subdocument inherits parent's document info`() {
+        execute(
+            ".docname {My doc}",
+            subdocumentGraph = { it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc) },
+            outputResourceHook = { group ->
+                val subdocResource = getResource(group, echoDocumentNameSubdoc, this)
+                assertEquals("My doc", group?.name)
+                assertEquals("My doc", documentInfo.name)
+                assertContains(subdocResource.content, "<title>My doc</title>")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `subdocument should not share document info modifications with parent`() {
+        execute(
+            ".docname {Parent doc}",
+            subdocumentGraph = { it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc) },
+            outputResourceHook = { group ->
+                val mainResource = getResource(group, Subdocument.Root, this)
+                val subdocResource = getResource(group, modifyAndEchoDocumentNameSubdoc, this)
+                assertEquals("Parent doc", group?.name)
+                assertEquals("Parent doc", documentInfo.name)
+                assertContains(mainResource.content, "<title>Parent doc</title>")
+                assertContains(subdocResource.content, "<title>Changed name</title>")
             },
         ) {}
     }

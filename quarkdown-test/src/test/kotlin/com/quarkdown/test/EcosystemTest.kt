@@ -39,6 +39,18 @@ class EcosystemTest {
     }
 
     @Test
+    fun `modify document info from included source`() {
+        execute(
+            """
+            .include {include/document-info-modification.md}
+            """.trimIndent(),
+        ) {
+            assertEquals("Modified Title", documentInfo.name)
+            assertEquals("it", documentInfo.locale?.shortTag)
+        }
+    }
+
+    @Test
     fun `include function from source`() {
         execute(
             """

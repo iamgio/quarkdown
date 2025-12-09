@@ -106,6 +106,5 @@ open class BaseContext(
             ?: throw LocalizationKeyNotFoundException(tableName, locale, key)
     }
 
-    override fun fork(subdocument: Subdocument): ScopeContext =
-        throw UnsupportedOperationException("Forking is not supported in BaseContext")
+    override fun fork(): ScopeContext = throw UnsupportedOperationException("Forking is not supported in BaseContext")
 }

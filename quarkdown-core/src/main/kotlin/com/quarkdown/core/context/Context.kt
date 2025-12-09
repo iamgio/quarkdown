@@ -158,10 +158,9 @@ interface Context {
     ): String
 
     /**
-     * @param subdocument optional subdocument to fork the context for
-     * @return a new scope context, forked from this context, with the same base inherited properties
+     * @return a new scope context, forked from this context, that shares several base properties
      */
-    fun fork(subdocument: Subdocument = this.subdocument): ScopeContext
+    fun fork(): ScopeContext
 }
 
 /**
