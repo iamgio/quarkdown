@@ -1,7 +1,9 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.assertNodeEquals
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
@@ -146,6 +148,58 @@ class DataTest {
                 assertEquals("121", next().text.toPlainText())
                 assertEquals("158", next().text.toPlainText())
                 assertEquals("175", next().text.toPlainText())
+            }
+        }
+    }
+
+    @Test
+    fun `csv table, as plain text cells`() {
+        val path = "drinks.csv"
+        val table = csv(context, path, mode = CsvParsingMode.PLAIN).unwrappedValue
+        assertIs<Table>(table)
+
+        val columns = table.columns.iterator()
+        with(columns.next()) {
+            assertEquals("Name", (header.text.first() as Text).text)
+            with(cells.iterator()) {
+                assertEquals("Alice", (next().text.first() as Text).text)
+                assertEquals("Bob", (next().text.first() as Text).text)
+            }
+        }
+        with(columns.next()) {
+            assertEquals("*Favorite* drink", (header.text.first() as Text).text)
+            with(cells.iterator()) {
+                assertEquals("**Coffee**", (next().text.first() as Text).text)
+                assertEquals("***Pepsi***", (next().text.first() as Text).text)
+            }
+        }
+    }
+
+    @Test
+    fun `csv table, as markdown cells`() {
+        val path = "drinks.csv"
+        val table = csv(context, path, mode = CsvParsingMode.MARKDOWN).unwrappedValue
+        assertIs<Table>(table)
+
+        val columns = table.columns.iterator()
+        with(columns.next()) {
+            assertEquals("Name", (header.text.first() as Text).text)
+            with(cells.iterator()) {
+                assertEquals("Alice", (next().text.first() as Text).text)
+                assertEquals("Bob", (next().text.first() as Text).text)
+            }
+        }
+        with(columns.next()) {
+            assertNodeEquals(
+                buildInline {
+                    emphasis { text("Favorite") }
+                    text(" drink")
+                },
+                header.text,
+            )
+            with(cells.iterator()) {
+                assertNodeEquals(buildInline { strong { text("Coffee") } }, next().text)
+                assertNodeEquals(buildInline { strongEmphasis { text("Pepsi") } }, next().text)
             }
         }
     }

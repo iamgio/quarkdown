@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Strong
+import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
@@ -27,6 +28,11 @@ class InlineAstBuilder : AstBuilder() {
      * @see Emphasis
      */
     fun emphasis(block: InlineAstBuilder.() -> Unit) = +Emphasis(buildInline(block))
+
+    /**
+     * @see StrongEmphasis
+     */
+    fun strongEmphasis(block: InlineAstBuilder.() -> Unit) = +StrongEmphasis(buildInline(block))
 
     /**
      * @see Text

@@ -107,11 +107,17 @@ class TableComputationTest {
 
     @Test
     fun csv() {
-        execute(".csv {csv/people.csv}") {
-            assertEquals(
-                htmlTable(john + lisa + mike),
-                it,
-            )
+        arrayOf(
+            ".csv {csv/people.csv}",
+            ".csv {csv/people.csv} mode:{plain}",
+            ".csv {csv/people.csv} mode:{markdown}",
+        ).forEach { source ->
+            execute(source) {
+                assertEquals(
+                    htmlTable(john + lisa + mike),
+                    it,
+                )
+            }
         }
     }
 
@@ -123,6 +129,21 @@ class TableComputationTest {
                     john + lisa + mike,
                     caption = "People",
                 ),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `csv with markup and function calls`() {
+        execute(".csv {csv/sums.csv} mode:{markdown}") {
+            assertEquals(
+                "<table><thead>" +
+                    "<tr><th></th><th>1</th><th>2</th><th>3</th></tr></thead><tbody>" +
+                    "<tr><td><strong>1</strong></td><td>2</td><td>3</td><td>4</td></tr>" +
+                    "<tr><td><strong>2</strong></td><td>3</td><td>4</td><td>5</td></tr>" +
+                    "<tr><td><strong>3</strong></td><td>4</td><td>5</td><td>6</td></tr>" +
+                    "</tbody></table>",
                 it,
             )
         }
