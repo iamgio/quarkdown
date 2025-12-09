@@ -66,14 +66,15 @@ class TextTest {
         execute(
             """
             > This is a **"quote"** with 'text *replacement*'.  
-            > This is a feature of Quarkdown - the Turing complete Markdown - by iamgio (C) 2024.
+            > This is a feature of Quarkdown--the Turing complete Markdown--by iamgio (C) 2024 - all rights reserved.
             > => Quarkdown != other Markdown flavors... <-
             """.trimIndent(),
         ) {
             assertEquals(
                 "<blockquote><p>" +
                     "This is a <strong>&ldquo;quote&rdquo;</strong> with &lsquo;text <em>replacement</em>&rsquo;.<br />" +
-                    "This is a feature of Quarkdown &mdash; the Turing complete Markdown &mdash; by iamgio &copy; 2024.\n" +
+                    "This is a feature of Quarkdown&mdash;the Turing complete Markdown&mdash;by iamgio &copy; 2024 " +
+                    "&ndash; all rights reserved.\n" +
                     "&rArr; Quarkdown &ne; other Markdown flavors&hellip; &larr;" +
                     "</p></blockquote>",
                 it,
