@@ -72,7 +72,7 @@ open class MutableContext(
             it.onComplete = { attributes.functionCalls.remove(call) }
         }
 
-    override fun fork(subdocument: Subdocument): ScopeContext = ScopeContext(parent = this, subdocument)
+    override fun fork(): ScopeContext = ScopeContext(parent = this)
 
     /**
      * Loads a loadable library by name and registers it in the context.
