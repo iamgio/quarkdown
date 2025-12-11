@@ -1,37 +1,25 @@
 <!-- Page number reset demonstration document -->
 .theme {paperwhite}
 .doctype {paged}
-
 .pagemargin {bottomcenter}
-	Default footer · Page .currentpage / .totalpages
+	Page .currentpage
 
 Use the automatically generated contents below to verify that table entries pick up reset-aware page numbers.
 
 .tableofcontents includeunnumbered:{true}
 
-.pagemargin {bottomcenter}
-    .text{}
-
 # Page Number Reset Demo
 .resetpagenumber startFrom:{1}
-.pagemargin {bottomcenter}
-	Default footer · Page .currentpage / .totalpages
 
 This mini document showcases `.currentpage`, `.totalpages`, and the new `.resetpagenumber` command.
 
 <<<
-
-.pagemargin {bottomcenter}
-	Second page footer .currentpage
 
 ## Second Page (still sequential)
 
 The numbering here should continue naturally from the first page.
 
 <<<
-
-.pagemargin {bottomcenter}
-	Footer after reset marker .currentpage
 
 ## Reset Page Number
 
@@ -44,9 +32,6 @@ Reset page number is .currentpage
 ```
 
 <<<
-
-.pagemargin {bottomcenter}
-	Footer after reset continuation .currentpage / .totalpages
 
 ## Post-reset Continuation
 
