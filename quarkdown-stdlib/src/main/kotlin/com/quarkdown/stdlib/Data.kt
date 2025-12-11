@@ -206,7 +206,7 @@ enum class CsvParsingMode(
 fun csv(
     @Injected context: Context,
     path: String,
-    mode: CsvParsingMode = CsvParsingMode.PLAIN,
+    @LikelyNamed mode: CsvParsingMode = CsvParsingMode.PLAIN,
     @LikelyNamed caption: String? = null,
 ): NodeValue {
     val file = file(context, path)
