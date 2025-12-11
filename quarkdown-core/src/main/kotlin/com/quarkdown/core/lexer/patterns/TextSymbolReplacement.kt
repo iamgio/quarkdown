@@ -28,11 +28,16 @@ enum class TextSymbolReplacement(
     TRADEMARK('™', "\\(TM\\)".toRegex()),
 
     /**
-     * `-` -> `—`
+     * `--` -> `—`
+     */
+    EM_DASH('—', "--".toRegex()),
+
+    /**
+     * `-` -> `–`
      *
      * It must be surrounded by a word character and a space on both sides.
      */
-    EM_DASH('—', "(?<=\\w\\s)-(?=\\s\\w)".toRegex()),
+    EN_DASH('–', "(?<=\\w\\s)-(?=\\s\\w)".toRegex()),
 
     /**
      * `...` -> `…`

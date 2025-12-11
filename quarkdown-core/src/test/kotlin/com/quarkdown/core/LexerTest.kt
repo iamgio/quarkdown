@@ -394,6 +394,8 @@ class LexerTest {
         assertIs<PlainTextToken>(tokens.next())
         assertSymbolEquals(TextSymbolReplacement.SINGLE_LEFT_ARROW)
         assertIs<PlainTextToken>(tokens.next())
+        assertSymbolEquals(TextSymbolReplacement.EN_DASH)
+        assertIs<PlainTextToken>(tokens.next())
         assertSymbolEquals(TextSymbolReplacement.ELLIPSIS)
         assertIs<PlainTextToken>(tokens.next()) // Soft line break
         assertSymbolEquals(TextSymbolReplacement.TYPOGRAPHIC_LEFT_APOSTROPHE)
