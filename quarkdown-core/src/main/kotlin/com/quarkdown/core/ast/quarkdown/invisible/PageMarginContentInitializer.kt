@@ -22,5 +22,10 @@ class PageMarginContentInitializer(
         private val counter = AtomicInteger()
 
         private fun nextIdentifier() = "page-margin-${counter.incrementAndGet()}"
+
+        @JvmStatic
+        fun resetCounter() {
+            counter.set(0)
+        }
     }
 }
