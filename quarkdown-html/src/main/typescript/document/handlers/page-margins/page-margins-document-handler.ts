@@ -9,16 +9,23 @@ import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../../paged-like-quarkd
  * In case of `outside`/`inside` positions, the `data-on-left-page` and `data-on-right-page` may differ.
  */
 export abstract class PageMarginsDocumentHandler extends DocumentHandler<PagedLikeQuarkdownDocument<any>> {
-    /** Array of page margin initializer elements collected from the document */
-    protected pageMarginInitializers: HTMLElement[] = [];
+    /** Map of margin id -> initializer element */
+    protected pageMarginInitializers: Map<string, HTMLElement> = new Map();
 
     /**
      * Collects all page margin content initializers and removes them from the document.
      * This prevents them from being displayed before proper positioning.
      */
     async onPreRendering() {
-        this.pageMarginInitializers = Array.from(document.querySelectorAll('.page-margin-content'));
-        this.pageMarginInitializers.forEach(initializer => initializer.remove());
+        this.pageMarginInitializers.clear();
+
+        Array.from(document.querySelectorAll<HTMLElement>('.page-margin-content')).forEach(initializer => {
+            const identifier = initializer.dataset.marginId;
+            if (identifier) {
+                this.pageMarginInitializers.set(identifier, initializer);
+            }
+            initializer.remove();
+        });
     }
 
     /**
@@ -27,8 +34,24 @@ export abstract class PageMarginsDocumentHandler extends DocumentHandler<PagedLi
      * into the document at appropriate locations on each page.
      */
     async onPostRendering() {
+        const activeByPosition = new Map<string, HTMLElement>();
+
         this.quarkdownDocument.getPages().forEach(page => {
-            this.pageMarginInitializers.forEach(initializer => {
+            const switches = Array.from(page.querySelectorAll<HTMLElement>('.page-margin-switch'));
+
+            switches.forEach(pageSwitch => {
+                const identifier = pageSwitch.dataset.marginId;
+                if (!identifier) return;
+                const initializer = this.pageMarginInitializers.get(identifier);
+                if (!initializer) return;
+
+                const position = initializer.dataset.marginPosition;
+                if (!position) return;
+
+                activeByPosition.set(position, initializer);
+            });
+
+            activeByPosition.forEach(initializer => {
                 const marginPositionName = this.getMarginPositionName(initializer, page);
                 if (!marginPositionName) return;
 
