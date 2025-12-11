@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.id.getId
+import com.quarkdown.core.ast.attributes.link.getResolvedUrl
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
@@ -302,7 +303,7 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Image) =
         tagBuilder("img")
-            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.url)
+            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.getResolvedUrl(context))
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title)
             .style {

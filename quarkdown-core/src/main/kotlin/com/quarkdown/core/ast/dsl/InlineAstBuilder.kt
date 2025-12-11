@@ -7,10 +7,12 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Strong
+import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
+import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.document.size.Size
 
 /**
@@ -26,6 +28,11 @@ class InlineAstBuilder : AstBuilder() {
      * @see Emphasis
      */
     fun emphasis(block: InlineAstBuilder.() -> Unit) = +Emphasis(buildInline(block))
+
+    /**
+     * @see StrongEmphasis
+     */
+    fun strongEmphasis(block: InlineAstBuilder.() -> Unit) = +StrongEmphasis(buildInline(block))
 
     /**
      * @see Text
@@ -64,7 +71,12 @@ class InlineAstBuilder : AstBuilder() {
         height: Size? = null,
         referenceId: String? = null,
         label: InlineAstBuilder.() -> Unit = {},
-    ) = +Image(Link(buildInline(label), url, title), width, height, referenceId)
+    ) = +Image(
+        Link(buildInline(label), url, title, fileSystem = SimpleFileSystem()),
+        width,
+        height,
+        referenceId,
+    )
 
     /**
      * @see InlineCollapse

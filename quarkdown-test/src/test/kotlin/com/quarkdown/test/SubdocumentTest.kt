@@ -36,7 +36,9 @@ class SubdocumentTest {
     private val simpleSubdoc = subdoc("subdoc1", content = "Content")
     private val referenceToParentSubdoc = subdoc("subdoc2", content = ".$NON_EXISTENT_FUNCTION")
     private val definitionSubdoc = subdoc("subdoc3", content = ".function {$NON_EXISTENT_FUNCTION}\n\thello")
-    private val thirdPartySubdoc = subdoc("subdoc3", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
+    private val thirdPartySubdoc = subdoc("subdoc4", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
+    private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
+    private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
 
     private fun getResource(
         group: OutputResource?,
@@ -126,6 +128,36 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `subdocument inherits parent's document info`() {
+        execute(
+            ".docname {My doc}",
+            subdocumentGraph = { it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc) },
+            outputResourceHook = { group ->
+                val subdocResource = getResource(group, echoDocumentNameSubdoc, this)
+                assertEquals("My doc", group?.name)
+                assertEquals("My doc", documentInfo.name)
+                assertContains(subdocResource.content, "<title>My doc</title>")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `subdocument should not share document info modifications with parent`() {
+        execute(
+            ".docname {Parent doc}",
+            subdocumentGraph = { it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc) },
+            outputResourceHook = { group ->
+                val mainResource = getResource(group, Subdocument.Root, this)
+                val subdocResource = getResource(group, modifyAndEchoDocumentNameSubdoc, this)
+                assertEquals("Parent doc", group?.name)
+                assertEquals("Parent doc", documentInfo.name)
+                assertContains(mainResource.content, "<title>Parent doc</title>")
+                assertContains(subdocResource.content, "<title>Changed name</title>")
+            },
+        ) {}
+    }
+
+    @Test
     fun `simple subdocument from file`() {
         arrayOf(
             "The link is: [1](subdoc/simple-1.qd)",
@@ -160,6 +192,46 @@ class SubdocumentTest {
             ) {
                 if (subdocument == Subdocument.Root) {
                     assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `stdlib call in subdocument from file`() {
+        arrayOf(
+            "[Lorem](subdoc/stdlib-call.qd)",
+            ".subdocument {subdoc/stdlib-call.qd} label:{Lorem}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `stdlib call in included file from subdocument`() {
+        arrayOf(
+            "[Include](subdoc/include-stdlib.qd)",
+            ".subdocument {subdoc/include-stdlib.qd} label:{Include}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getTextResourceCount(it))
+                },
+            ) {
+                if (subdocument != Subdocument.Root) {
+                    assertContains(it, "Lorem ipsum")
                 }
             }
         }

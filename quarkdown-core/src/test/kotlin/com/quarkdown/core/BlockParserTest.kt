@@ -205,6 +205,10 @@ class BlockParserTest {
             assertNull(language)
         }
         with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2\n Code line 3\n  Code line 4", content)
+            assertNull(language)
+        }
+        with(nodes.next()) {
             assertEquals("Code", content)
             assertEquals("text", language)
         }

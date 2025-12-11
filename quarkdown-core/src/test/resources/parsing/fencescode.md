@@ -16,6 +16,13 @@ Code line 1
     Code line 2
 ```
 
+  ```
+ Code line 1
+  Code line 2
+   Code line 3
+    Code line 4
+ ```
+
 ```text
 Code
 ```

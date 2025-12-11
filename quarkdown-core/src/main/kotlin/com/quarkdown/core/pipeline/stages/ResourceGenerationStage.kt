@@ -1,6 +1,7 @@
 package com.quarkdown.core.pipeline.stages
 
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.SubdocumentContext
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
@@ -52,7 +53,7 @@ class ResourceGenerationStage(
             .asSequence()
             .filterIsInstance<Subdocument.Resource>()
             .flatMap { nextSubdocument ->
-                val subContext = context.fork(nextSubdocument)
+                val subContext = SubdocumentContext(parent = context, subdocument = nextSubdocument)
                 pipeline.copy(subContext).executeUnwrapped(nextSubdocument.content)
             }.toSet()
 }

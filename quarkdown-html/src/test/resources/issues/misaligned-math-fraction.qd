@@ -1,0 +1,8 @@
+.docname {Misaligned math fraction}
+.include {template/template.qd}
+
+.bulletin issue:{263} pr:{-} nextrelease:{1.13.0} relatedto:{`text-align-last` affecting `formula`}
+
+inline: $ \frac{123}{12412323} $
+
+$ \frac{123}{12412323} $
