@@ -59,6 +59,17 @@ function createActiveStateChecker(
 }
 
 /**
+ * Retrieves all h1, h2, and h3 header elements that are not marked as decorative.
+ *
+ * @returns An array of header elements
+ */
+function getHeadings(): HTMLElement[] {
+    const selection = document.querySelectorAll<HTMLElement>('h1, h2, h3');
+    return Array.from(selection)
+        .filter(header => !header.hasAttribute('data-decorative'));
+}
+
+/**
  * Processes all header elements and creates navigation items with active state tracking.
  *
  * @param sidebarList - The list element to append navigation items to
@@ -72,7 +83,7 @@ function populateNavigationItems(sidebarList: HTMLOListElement): void {
         currentActiveListItem = item;
     };
 
-    document.querySelectorAll('h1, h2, h3').forEach(header => {
+    getHeadings().forEach(header => {
         const listItem = createNavigationItem(header);
         sidebarList.appendChild(listItem);
 

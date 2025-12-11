@@ -1,8 +1,9 @@
 package com.quarkdown.stdlib
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.block.Table
-import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
@@ -16,6 +17,7 @@ import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.stdlib.internal.AlphanumericComparator
@@ -180,8 +182,23 @@ fun fileName(
 }
 
 /**
+ * Strategies to parse CSV cell content.
+ * @param transform function that transforms the cell content string into parsed content
+ */
+enum class CsvParsingMode(
+    val transform: (String, Context) -> InlineContent,
+) {
+    /** Cell content is treated as plain text. */
+    PLAIN({ text, _ -> buildInline { text(text) } }),
+
+    /** Cell content is treated as inline Quarkdown. */
+    MARKDOWN({ text, context -> ValueFactory.inlineMarkdown(text, context).unwrappedValue.children }),
+}
+
+/**
  * Loads a CSV file and returns its content as a display-ready table.
  * @param path path of the CSV file (with extension) to show
+ * @param mode mode to handle the content of each cell and header (plain or Markdown)
  * @param caption optional caption of the table. If set, the table will be numbered according to the current [numbering] format
  * @return a table whose content is loaded from the file located in [path]
  * @wiki File data
@@ -189,32 +206,38 @@ fun fileName(
 fun csv(
     @Injected context: Context,
     path: String,
+    @LikelyNamed mode: CsvParsingMode = CsvParsingMode.PLAIN,
     @LikelyNamed caption: String? = null,
 ): NodeValue {
     val file = file(context, path)
-    val columns = mutableMapOf<String, MutableList<String>>()
+    val columns = mutableListOf<Table.MutableColumn>()
 
     // CSV is read row-by-row, while the Table is built by columns.
     csvReader().open(file) {
         readAllWithHeaderAsSequence()
-            .flatMap { it.entries }
-            .forEach { (header, content) ->
-                val cells = columns.computeIfAbsent(header) { mutableListOf() }
-                cells += content
+            .forEach { row ->
+                row.entries.forEachIndexed { index, (header, content) ->
+                    val cell = mode.transform(content.trim(), context).let(Table::Cell)
+
+                    if (index < columns.size) {
+                        // Adding cell to existing column.
+                        columns[index].cells += cell
+                    } else {
+                        // Pushing new column.
+                        val headerCell = mode.transform(header.trim(), context).let(Table::Cell)
+                        columns +=
+                            Table.MutableColumn(
+                                alignment = Table.Alignment.NONE,
+                                header = headerCell,
+                                cells = mutableListOf(cell),
+                            )
+                    }
+                }
             }
     }
 
-    val table =
-        Table(
-            columns.map { (header, cells) ->
-                Table.Column(
-                    Table.Alignment.NONE,
-                    Table.Cell(listOf(Text(header.trim()))),
-                    cells.map { cell -> Table.Cell(listOf(Text(cell.trim()))) },
-                )
-            },
-            caption,
-        )
-
-    return table.wrappedAsValue()
+    return Table(
+        columns.map { it.toColumn() },
+        caption,
+    ).wrappedAsValue()
 }

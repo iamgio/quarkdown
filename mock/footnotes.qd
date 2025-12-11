@@ -4,19 +4,19 @@ The search for planets beyond our solar system - exoplanets - has transformed mo
 Ever since the first confirmed detection of an exoplanet orbiting a sun-like star in 1995[^pegasi], astronomers have cataloged thousands more, revealing an incredible diversity of worlds.
 
 Many exoplanets are found using the transit method, where astronomers detect a slight dip in a star's brightness when a planet passes in front of it[^transit: The transit method was used extensively by NASA's *Kepler* mission.].
-This method, popularized by missions like *Kepler*, has uncovered planets of all sizes - from Earth-like rocky worlds to gas giants larger than Jupiter.
+This method, popularized by missions like *Kepler*, has uncovered planets of all sizes--from Earth-like rocky worlds to gas giants larger than Jupiter.
 
 Another technique is the radial velocity method, which detects the gravitational wobble a planet induces in its host star[^doppler].
 This was how the first exoplanet, 51 Pegasi b, was confirmed[^pegasi].
 Combining both transit and radial velocity data allows scientists to estimate a planet's density and composition.
 
 Surprisingly, many exoplanets challenge our understanding of planetary systems.
-Hot Jupiters, for example, are massive gas giants orbiting extremely close to their stars - something not seen in our own solar system[^: Hot Jupiters are believed to have migrated inward from their original formation zone.].
+Hot Jupiters, for example, are massive gas giants orbiting extremely close to their stars--something not seen in our own solar system[^: Hot Jupiters are believed to have migrated inward from their original formation zone.].
 These discoveries force astronomers to refine models of planetary formation and migration[^doppler].
 
 With next-generation telescopes like the James Webb Space Telescope (JWST), scientists hope to study the atmospheres of distant exoplanets in greater detail[^transit].
-By analyzing the starlight passing through a planet's atmosphere during a transit, researchers can search for signatures of water, methane, or even biosignatures - potential signs of life.
+By analyzing the starlight passing through a planet's atmosphere during a transit, researchers can search for signatures of water, methane, or even biosignatures--potential signs of life.
 
-[^pegasi]: Mayor & Queloz, 1995 - discovery of *51 Pegasi b*.
+[^pegasi]: Mayor & Queloz, 1995--discovery of *51 Pegasi b*.
 
 [^doppler]: Radial velocity method measures the Doppler shift in a star's spectrum.

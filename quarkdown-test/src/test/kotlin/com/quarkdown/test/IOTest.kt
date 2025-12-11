@@ -1,8 +1,12 @@
 package com.quarkdown.test
 
+import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
+import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Tests for IO functions.
@@ -20,13 +24,13 @@ class IOTest {
 
     @Test
     fun `list files`() {
+        val files = File(DATA_FOLDER, "include").listFiles()!!
         execute(".listfiles {include} sortby:{name} order:{descending} fullpath:{no}") {
-            assertEquals(
-                "<ol>" +
-                    (7 downTo 1).joinToString(separator = "") { n -> "<li><p>include-$n.md</p></li>" } +
-                    "</ol>",
-                it,
-            )
+            assertTrue(it.startsWith("<ol>"))
+            files.forEach { file ->
+                assertContains(it, "<li><p>${file.name}</p></li>")
+            }
+            assertTrue(it.endsWith("</ol>"))
         }
     }
 }

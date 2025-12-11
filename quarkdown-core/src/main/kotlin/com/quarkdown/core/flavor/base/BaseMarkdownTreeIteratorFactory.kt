@@ -3,6 +3,7 @@ package com.quarkdown.core.flavor.base
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.LinkDefinitionRegistrationHook
+import com.quarkdown.core.context.hooks.LinkUrlResolverHook
 import com.quarkdown.core.context.hooks.SubdocumentRegistrationHook
 import com.quarkdown.core.context.hooks.presence.CodePresenceHook
 import com.quarkdown.core.context.hooks.presence.MathPresenceHook
@@ -20,6 +21,8 @@ class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
             .attach(LinkDefinitionRegistrationHook(context))
             // Registers subdocuments.
             .attach(SubdocumentRegistrationHook(context))
+            // Resolves local URLs/paths for links and images loaded from different base paths.
+            .attach(LinkUrlResolverHook(context))
             // Resolves footnotes.
             .attach(FootnoteResolverHook(context))
             // Allows loading code libraries (e.g. highlight.js syntax highlighting)

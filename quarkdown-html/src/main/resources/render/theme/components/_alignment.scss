@@ -12,6 +12,12 @@
     text-align: var(--qd-horizontal-alignment-local);
     text-align-last: center;
   }
+
+  // #263
+  formula {
+    text-align: initial;
+    text-align-last: initial;
+  }
 }
 
 .quarkdown-slides {

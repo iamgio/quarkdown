@@ -17,7 +17,7 @@ import com.quarkdown.stdlib.Stdlib
 import java.io.File
 
 // Folder to retrieve test data from.
-private const val DATA_FOLDER = "src/test/resources/data"
+const val DATA_FOLDER = "src/test/resources/data"
 
 // Folder to retrieve 'dummy' libraries from, relative to the data folder.
 private const val LOCAL_LIBRARY_DIRECTORY = "libraries"

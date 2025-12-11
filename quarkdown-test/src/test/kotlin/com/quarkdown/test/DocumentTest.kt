@@ -167,4 +167,18 @@ class DocumentTest {
             )
         }
     }
+
+    @Test
+    fun `document info modification from scope`() {
+        execute(
+            """
+            .docname {Original Name}
+            
+            .if {yes}
+                .docname {Modified Name}
+            """.trimIndent(),
+        ) {
+            assertEquals("Modified Name", documentInfo.name)
+        }
+    }
 }
