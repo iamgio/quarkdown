@@ -58,6 +58,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 
@@ -195,6 +196,8 @@ interface NodeVisitor<T> {
     // Quarkdown invisible nodes
 
     fun visit(node: PageMarginContentInitializer): T
+
+    fun visit(node: PageNumberReset): T
 
     fun visit(node: SlidesConfigurationInitializer): T
 }

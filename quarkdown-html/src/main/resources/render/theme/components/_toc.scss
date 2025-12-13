@@ -11,6 +11,8 @@
     text-align: start;
 
     ol {
+      flex-basis: 100%;
+      width: 100%;
       list-style-position: inside;
       margin: 0 0 0 1em;
 
@@ -19,10 +21,25 @@
       }
     }
 
-    li a::after {
-      // ToC page counter on supported targets
-      content: target-counter(attr(href), page);
-      float: right;
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+
+      a {
+        display: flex;
+        flex-grow: 1;
+        align-items: baseline;
+
+        .toc-page-number {
+          margin-left: auto;
+          font-variant-numeric: tabular-nums;
+
+          &:empty, &[data-empty] {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

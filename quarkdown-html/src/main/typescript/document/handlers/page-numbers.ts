@@ -1,9 +1,11 @@
 import {DocumentHandler} from "../document-handler";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
+import {getAnchorTargetId} from "../../util/id";
 
 /**
  * Abstract base class for document handlers that manage page numbering.
- * Provides utility methods to find and update page number elements in documents.
+ * Provides utility methods to find and update page number elements in documents,
+ * including support for page number resets and displaying page numbers in tables of contents.
  */
 export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>> {
     /**
@@ -24,6 +26,13 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
+     * Finds all page number reset markers contained in the given page.
+     */
+    private getPageNumberResetMarkers(page: QuarkdownPage): HTMLElement[] {
+        return Array.from(page.querySelectorAll('.page-number-reset'));
+    }
+
+    /**
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
@@ -34,15 +43,60 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
-     * Updates all current page number elements with their respective page indices.
+     * Updates all current page number elements with their respective (possibly reset) page numbers.
      */
     private updateCurrentPageNumbers(pages: QuarkdownPage[]) {
+        let pageNumber = 1;
         pages.forEach(page => {
-            const number = this.quarkdownDocument.getPageNumber(page);
-            this.getCurrentPageNumberElements(page).forEach(pageNumber => {
-                pageNumber.innerText = number.toString();
+            // Checking for reset markers on the current page. In that case, the page number is directly updated.
+            const resetMarkers = this.getPageNumberResetMarkers(page);
+            resetMarkers.forEach(marker => {
+                const requested = parseInt(marker.dataset.start || '1', 10);
+                if (Number.isFinite(requested) && requested > 0) {
+                    pageNumber = requested;
+                }
+            });
+
+            // Applying the page number within the page.
+            this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
+                pageNumberElement.innerText = pageNumber.toString();
+                this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
+            });
+
+            pageNumber += 1;
+        });
+    }
+
+    /**
+     * Updates table of contents entries so they display the logical (reset-aware) page numbers.
+     */
+    private updateTableOfContentsPageNumbers() {
+        const tocs = document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]');
+        tocs.forEach(nav => {
+            nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
+                const targetId = getAnchorTargetId(anchor);
+                const target = targetId ? document.getElementById(targetId) : undefined;
+                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
         });
+    }
+
+    /**
+     * Sets or updates the page number badge within a table of contents entry.
+     * @param anchor - The anchor element representing the TOC entry
+     * @param value - The page number to set (if undefined, the badge will be created but left empty)
+     */
+    private setTableOfContentsPageNumber(anchor: HTMLAnchorElement, value?: string) {
+        let badge = anchor.querySelector<HTMLElement>('.toc-page-number');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'toc-page-number';
+            anchor.appendChild(badge);
+        }
+        if (value) {
+            badge.innerText = value;
+        }
     }
 
     /**
@@ -52,5 +106,6 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
         const pages = this.quarkdownDocument.getPages();
         this.updateTotalPageNumbers(pages);
         this.updateCurrentPageNumbers(pages);
+        this.updateTableOfContentsPageNumbers();
     }
 }
