@@ -812,17 +812,19 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 /**
  * Resets the logical page number counter.
  *
- * The next page that contains this command is assigned [startFrom] as its displayed number.
- * This affects features that read page numbers at rendering time (e.g. `.currentpage`).
+ * The page that contains this command is assigned [startFrom] as its displayed number.
+ * This affects features that read page numbers, such as [currentPage].
  *
- * ```markdown
+ * ```
  * .resetpagenumber start:{5}
  * ```
  *
  * @param startFrom page number to assign to the page where this command appears, defaults to 1
  */
 @Name("resetpagenumber")
-fun resetPageNumber(startFrom: Int = 1): NodeValue = PageNumberReset(startFrom).wrappedAsValue()
+fun resetPageNumber(
+    @Name("start") startFrom: Int = 1,
+): NodeValue = PageNumberReset(startFrom).wrappedAsValue()
 
 /**
  * Displays the last heading, of the given [depth], encountered in the current page.
