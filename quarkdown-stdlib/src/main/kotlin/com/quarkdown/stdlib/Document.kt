@@ -8,6 +8,7 @@ import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.toc.TableOfContents
@@ -79,6 +80,7 @@ val Document: QuarkdownModule =
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
+        ::resetPageNumber,
         ::currentPage,
         ::totalPages,
         ::lastHeading,
@@ -806,6 +808,23 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
+
+/**
+ * Resets the logical page number counter.
+ *
+ * The page that contains this command is assigned [startFrom] as its displayed number.
+ * This affects features that read page numbers, such as [currentPage].
+ *
+ * ```
+ * .resetpagenumber start:{5}
+ * ```
+ *
+ * @param startFrom page number to assign to the page where this function appears
+ */
+@Name("resetpagenumber")
+fun resetPageNumber(
+    @Name("start") startFrom: Int = 1,
+): NodeValue = PageNumberReset(startFrom).wrappedAsValue()
 
 /**
  * Displays the last heading, of the given [depth], encountered in the current page.

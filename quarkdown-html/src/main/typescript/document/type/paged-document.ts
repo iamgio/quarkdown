@@ -27,12 +27,25 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
     }
 
-    getPageNumber(page: HTMLElement): number {
-        return parseInt(page.dataset.pageNumber || "0");
+    getPage(element: HTMLElement): HTMLElement | undefined {
+        return element.closest<HTMLElement>('.pagedjs_page') || undefined;
+    }
+
+    getPageNumber(page: HTMLElement, includeDisplayNumbers: boolean = true): number {
+        console.log("Getting page number for page:", page.dataset);
+        return parseInt(
+            (includeDisplayNumbers ? page.dataset.displayPageNumber : undefined)
+            ?? page.dataset.pageNumber
+            ?? "0"
+        );
     }
 
     getPageType(page: HTMLElement): "left" | "right" {
         return page.classList.contains("pagedjs_right_page") ? "right" : "left";
+    }
+
+    setDisplayPageNumber(page: HTMLElement, pageNumber: number) {
+        page.setAttribute("data-display-page-number", pageNumber.toString());
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded. */

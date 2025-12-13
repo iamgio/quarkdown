@@ -47,6 +47,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
@@ -326,6 +327,7 @@ class QuarkdownHtmlNodeRenderer(
 
             // Content.
             +buildTag("nav") {
+                attribute("data-role", "table-of-contents")
                 +convertTableOfContentsToListNode(
                     node,
                     this@QuarkdownHtmlNodeRenderer,
@@ -497,6 +499,13 @@ class QuarkdownHtmlNodeRenderer(
             attribute("data-on-left-page", node.position.forLeftPage.asCSS)
             attribute("data-on-right-page", node.position.forRightPage.asCSS)
             +node.children
+        }
+
+    override fun visit(node: PageNumberReset) =
+        buildTag("div") {
+            className("page-number-reset")
+            attribute("data-start", node.startFrom)
+            hidden()
         }
 
     override fun visit(node: PageCounter) =
