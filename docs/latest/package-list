@@ -110,6 +110,7 @@ $dokka.location:com.quarkdown.stdlib//read/#com.quarkdown.core.context.Context#k
 $dokka.location:com.quarkdown.stdlib//reference/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Reference/ref.html
 $dokka.location:com.quarkdown.stdlib//rem/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/rem.html
 $dokka.location:com.quarkdown.stdlib//repeat/#kotlin.Int#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/repeat.html
+$dokka.location:com.quarkdown.stdlib//resetPageNumber/#kotlin.Int/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html
 $dokka.location:com.quarkdown.stdlib//round/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/round.html
 $dokka.location:com.quarkdown.stdlib//row/#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html
 $dokka.location:com.quarkdown.stdlib//setSlidesConfiguration/#kotlin.Boolean?#kotlin.Boolean?#kotlin.Boolean?#com.quarkdown.core.document.slides.Transition.Style?#com.quarkdown.core.document.slides.Transition.Speed/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html
