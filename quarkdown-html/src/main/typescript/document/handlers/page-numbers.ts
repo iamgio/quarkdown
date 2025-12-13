@@ -1,9 +1,11 @@
 import {DocumentHandler} from "../document-handler";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
+import {getAnchorTargetId} from "../../util/id";
 
 /**
  * Abstract base class for document handlers that manage page numbering.
- * Provides utility methods to find and update page number elements in documents.
+ * Provides utility methods to find and update page number elements in documents,
+ * including support for page number resets and displaying page numbers in tables of contents.
  */
 export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>> {
     /**
@@ -31,41 +33,6 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
-     * Computes the logical page number for each page, applying reset markers when encountered.
-     */
-    private computeDisplayNumbers(pages: QuarkdownPage[]): number[] {
-        let nextNumber = 1;
-        return pages.map(page => {
-            const markers = this.getPageNumberResetMarkers(page);
-            if (markers.length > 0) {
-                const lastMarker = markers[markers.length - 1];
-                const requested = parseInt(lastMarker.dataset.start || '1', 10);
-                nextNumber = Number.isFinite(requested) && requested > 0 ? requested : 1;
-            }
-
-            const displayNumber = nextNumber;
-            nextNumber += 1;
-            return displayNumber;
-        });
-    }
-
-    /**
-     * Stores the computed display number on the underlying DOM node for later consumers (e.g. TOC).
-     */
-    private setDisplayNumberMetadata(page: QuarkdownPage, value: number) {
-        const asHTMLElement = page as HTMLElement;
-        if (asHTMLElement?.dataset) {
-            asHTMLElement.dataset.displayPageNumber = value.toString();
-            return;
-        }
-
-        const asSlidesPage = page as { slide?: HTMLElement };
-        if (asSlidesPage.slide) {
-            asSlidesPage.slide.dataset.displayPageNumber = value.toString();
-        }
-    }
-
-    /**
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
@@ -79,80 +46,56 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      * Updates all current page number elements with their respective (possibly reset) page numbers.
      */
     private updateCurrentPageNumbers(pages: QuarkdownPage[]) {
-        const displayNumbers = this.computeDisplayNumbers(pages);
-        pages.forEach((page, index) => {
-            const number = displayNumbers[index];
-            this.setDisplayNumberMetadata(page, number);
-            this.getCurrentPageNumberElements(page).forEach(pageNumber => {
-                pageNumber.innerText = number.toString();
+        let pageNumber = 1;
+        pages.forEach(page => {
+            // Checking for reset markers on the current page. In that case, the page number is directly updated.
+            const resetMarkers = this.getPageNumberResetMarkers(page);
+            resetMarkers.forEach(marker => {
+                const requested = parseInt(marker.dataset.start || '1', 10);
+                if (Number.isFinite(requested) && requested > 0) {
+                    pageNumber = requested;
+                }
             });
+
+            // Applying the page number within the page.
+            this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
+                pageNumberElement.innerText = pageNumber.toString();
+                this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
+            });
+
+            pageNumber += 1;
         });
     }
 
     /**
      * Updates table of contents entries so they display the logical (reset-aware) page numbers.
-     * Only runs for paged documents; other document types keep their TOC without page numbers (Option B).
      */
     private updateTableOfContentsPageNumbers() {
-        if (!document.body.classList.contains('quarkdown-paged')) {
-            return;
-        }
-
-        const tocNavs = Array.from(document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]'));
-        if (tocNavs.length === 0) {
-            return;
-        }
-
-        tocNavs.forEach(nav => {
-            nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(link => {
-                const targetId = this.getAnchorTargetId(link);
-                const displayNumber = targetId ? this.getDisplayNumberForTarget(targetId) : undefined;
-                this.setTocPageNumber(link, displayNumber);
+        const tocs = document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]');
+        tocs.forEach(nav => {
+            nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
+                const targetId = getAnchorTargetId(anchor);
+                const target = targetId ? document.getElementById(targetId) : undefined;
+                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
         });
     }
 
-    private getAnchorTargetId(link: HTMLAnchorElement): string | undefined {
-        const href = link.getAttribute('href');
-        if (!href || !href.startsWith('#')) {
-            return undefined;
-        }
-
-        let decoded: string;
-        try {
-            decoded = decodeURIComponent(href);
-        } catch {
-            return undefined;
-        }
-
-        const id = decoded.slice(1);
-        return id.length > 0 ? id : undefined;
-    }
-
-    private getDisplayNumberForTarget(targetId: string): string | undefined {
-        const target = document.getElementById(targetId);
-        if (!target) {
-            return undefined;
-        }
-
-        const hostPage = target.closest<HTMLElement>('.pagedjs_page');
-        return hostPage?.dataset.displayPageNumber;
-    }
-
-    private setTocPageNumber(link: HTMLAnchorElement, value?: string) {
-        let badge = link.querySelector<HTMLElement>('.toc-page-number');
+    /**
+     * Sets or updates the page number badge within a table of contents entry.
+     * @param anchor - The anchor element representing the TOC entry
+     * @param value - The page number to set (if undefined, the badge will be created but left empty)
+     */
+    private setTableOfContentsPageNumber(anchor: HTMLAnchorElement, value?: string) {
+        let badge = anchor.querySelector<HTMLElement>('.toc-page-number');
         if (!badge) {
             badge = document.createElement('span');
             badge.className = 'toc-page-number';
-            link.appendChild(badge);
+            anchor.appendChild(badge);
         }
-
         if (value) {
             badge.innerText = value;
-            badge.removeAttribute('data-empty');
-        } else {
-            badge.innerText = '';
-            badge.setAttribute('data-empty', '');
         }
     }
 
