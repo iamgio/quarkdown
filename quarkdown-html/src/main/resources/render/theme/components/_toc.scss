@@ -11,6 +11,8 @@
     text-align: start;
 
     ol {
+      flex-basis: 100%;
+      width: 100%;
       list-style-position: inside;
       margin: 0 0 0 1em;
 
@@ -18,38 +20,25 @@
         padding-left: 0;
       }
     }
-  }
 
-  nav[data-role="table-of-contents"] {
     li {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
 
-      &::before {
-        margin-right: 0.5rem;
-      }
-
       a {
         display: flex;
         flex-grow: 1;
-        gap: 0.5rem;
         align-items: baseline;
 
         .toc-page-number {
           margin-left: auto;
           font-variant-numeric: tabular-nums;
 
-          &:empty,
-          &[data-empty] {
+          &:empty, &[data-empty] {
             display: none;
           }
         }
-      }
-
-      ol {
-        flex-basis: 100%;
-        width: 100%;
       }
     }
   }

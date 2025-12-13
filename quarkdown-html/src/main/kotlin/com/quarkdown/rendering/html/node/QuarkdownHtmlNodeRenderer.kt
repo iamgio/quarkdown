@@ -502,11 +502,10 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(node: PageNumberReset) =
-        buildTag("span") {
+        buildTag("div") {
             className("page-number-reset")
             attribute("data-start", node.startFrom)
-            attribute("aria-hidden", true)
-            attribute("hidden", "")
+            hidden()
         }
 
     override fun visit(node: PageCounter) =
