@@ -819,7 +819,7 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
  * .resetpagenumber start:{5}
  * ```
  *
- * @param startFrom page number to assign to the page where this command appears, defaults to 1
+ * @param startFrom page number to assign to the page where this function appears
  */
 @Name("resetpagenumber")
 fun resetPageNumber(
