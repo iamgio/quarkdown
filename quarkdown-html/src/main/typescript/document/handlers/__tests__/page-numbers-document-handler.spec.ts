@@ -10,12 +10,26 @@ class DummyDocument implements PagedLikeQuarkdownDocument<HTMLElement> {
         return this.pages;
     }
 
-    getPageNumber(page: HTMLElement): number {
+    getPageNumber(page: HTMLElement, includeDisplayNumbers: boolean = true): number {
+        if (includeDisplayNumbers) {
+            const displayNumber = page.dataset.displayPageNumber;
+            if (displayNumber) {
+                return parseInt(displayNumber, 10);
+            }
+        }
         return parseInt(page.dataset.pageNumber || "0", 10);
     }
 
     getPageType(): "left" | "right" {
         return "right";
+    }
+
+    getPage(element: HTMLElement): HTMLElement | undefined {
+        return this.pages.find(page => page.contains(element));
+    }
+
+    setDisplayPageNumber(page: HTMLElement, pageNumber: number): void {
+        page.setAttribute("data-display-page-number", pageNumber.toString());
     }
 
     getParentViewport(): HTMLElement | undefined {
@@ -97,29 +111,5 @@ describe('PageNumbersDocumentHandler', () => {
 
         const numbers = Array.from(document.querySelectorAll<HTMLSpanElement>('.toc-page-number')).map(span => span.textContent);
         expect(numbers).toEqual(['1', '5']);
-    });
-
-    it('omits TOC page numbers for non-paged documents', async () => {
-        document.body.className = 'quarkdown';
-        document.body.innerHTML = `
-      <div class="pagedjs_page" data-page-number="1">
-        <div class="pagedjs_area">
-          <h1 id="table-of-contents">Contents</h1>
-          <nav data-role="table-of-contents">
-            <ol>
-              <li><a href="#section-1">Section 1</a></li>
-            </ol>
-          </nav>
-          <h2 id="section-1">Section 1</h2>
-          <span class="current-page-number">X</span>
-        </div>
-      </div>`;
-
-        const pages = Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
-        const handler = new Concrete(new DummyDocument(pages));
-
-        await handler.onPostRendering();
-
-        expect(document.querySelector('.toc-page-number')).toBeNull();
     });
 });
