@@ -1,0 +1,36 @@
+# This workflow updates the emoji list on the gh-pages-src branch.
+
+name: Update emoji list
+
+on:
+  schedule:
+    # Runs every Sunday at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update-emoji-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+        with:
+          full-checkout: true
+          checkout-token: ${{ secrets.COMMITTER_TOKEN }}
+
+      - name: Build distribution
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          job-id: main
+          arguments: distZip
+
+      - name: Unzip distribution
+        run: |
+          mkdir -p build/unzipped
+          unzip -q build/distributions/quarkdown.zip -d build/unzipped
+          echo "$PWD/build/unzipped/quarkdown/bin" >> $GITHUB_PATH
+
+      - name: Update emoji list
+        uses: iamgio/quarkdown/.github/actions/update-emoji-list@main
+        with:
+          quarkdown-path: ./build/unzipped/quarkdown/bin/quarkdown

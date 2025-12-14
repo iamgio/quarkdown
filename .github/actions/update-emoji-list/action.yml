@@ -15,13 +15,16 @@ runs:
 
     - name: Setup gh-pages-src branch for emoji list commit
       run: |
-        git stash
+        # Save the generated emoji list before switching branches
+        cp build/qd-ci/emoji-list/index.html /tmp/emoji-list.html
+        git stash || true
+        git fetch origin gh-pages-src
         git checkout gh-pages-src
         # Copy built emoji list to layout/docs/emoji-list.html, suitable for inclusion in Hugo site,
         # prepending {{ define "main" }} and appending {{ end }} to the file.
         {
           echo '{{ define "main" }}'
-          cat build/qd-ci/emoji-list/index.html
+          cat /tmp/emoji-list.html
           echo '{{ end }}'
         } > layouts/docs/emoji-list.html
       shell: bash
