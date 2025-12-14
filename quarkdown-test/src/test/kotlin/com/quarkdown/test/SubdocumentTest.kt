@@ -6,6 +6,7 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
@@ -17,6 +18,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+
+private const val INDEX = "index"
 
 private const val NON_EXISTENT_FUNCTION = "somenonexistentfunction"
 
@@ -40,20 +43,37 @@ class SubdocumentTest {
     private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
     private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
 
+    /**
+     * Retrieves the resource for the given [subdocument] from the [group].
+     *
+     * - If [subdocument] is the root, retrieves `index.html`.
+     * - Otherwise, retrieves the `index.html` from the corresponding subdocument group.
+     */
     private fun getResource(
         group: OutputResource?,
         subdocument: Subdocument,
         context: Context,
     ): TextOutputArtifact {
-        val resources = getSubResources(group)
-        val resource =
-            resources.firstOrNull { it.name == subdocument.getOutputFileName(context) }
-                as? TextOutputArtifact
+        val subdocumentGroup =
+            if (subdocument == Subdocument.Root) {
+                group as OutputResourceGroup
+            } else {
+                val resources = getSubResources(group)
+                resources.firstOrNull { it.name == subdocument.getOutputFileName(context) }
+                    as? OutputResourceGroup
+            }
+        assertNotNull(subdocumentGroup)
+
+        val resource = subdocumentGroup.resources.first { it.name == INDEX } as? TextOutputArtifact
         assertNotNull(resource)
         return resource
     }
 
-    private fun getTextResourceCount(group: OutputResource?): Int = getSubResources(group).filterIsInstance<TextOutputArtifact>().size
+    private fun getSubdocumentResourceCount(group: OutputResource?): Int =
+        getSubResources(group)
+            .count {
+                it.name == INDEX || (it is OutputResourceGroup && it.resources.any { res -> res.name == INDEX })
+            }
 
     @Test
     fun `root to subdocument`() {
@@ -64,7 +84,7 @@ class SubdocumentTest {
                 val resource = getResource(group, simpleSubdoc, this)
                 assertContains(resource.content, "<html>")
                 assertEquals(2, subdocumentGraph.vertices.size)
-                assertEquals(2, getTextResourceCount(group))
+                assertEquals(2, getSubdocumentResourceCount(group))
                 assertContains(getSubResources(group).map { it.name }, simpleSubdoc.name)
             },
         ) {}
@@ -131,7 +151,9 @@ class SubdocumentTest {
     fun `subdocument inherits parent's document info`() {
         execute(
             ".docname {My doc}",
-            subdocumentGraph = { it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc) },
+            subdocumentGraph = {
+                it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc)
+            },
             outputResourceHook = { group ->
                 val subdocResource = getResource(group, echoDocumentNameSubdoc, this)
                 assertEquals("My doc", group?.name)
@@ -145,7 +167,9 @@ class SubdocumentTest {
     fun `subdocument should not share document info modifications with parent`() {
         execute(
             ".docname {Parent doc}",
-            subdocumentGraph = { it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc) },
+            subdocumentGraph = {
+                it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc)
+            },
             outputResourceHook = { group ->
                 val mainResource = getResource(group, Subdocument.Root, this)
                 val subdocResource = getResource(group, modifyAndEchoDocumentNameSubdoc, this)
@@ -166,12 +190,13 @@ class SubdocumentTest {
             execute(
                 source,
                 outputResourceHook = {
+                    println(subdocumentGraph.vertices)
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1.html\">1</a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1\">1</a></p>", it)
                 }
             }
         }
@@ -187,11 +212,11 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1\"></a></p>", it)
                 }
             }
         }
@@ -207,7 +232,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument != Subdocument.Root) {
@@ -227,7 +252,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument != Subdocument.Root) {
@@ -247,7 +272,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(4, subdocumentGraph.vertices.size)
-                    assertEquals(4, getTextResourceCount(it))
+                    assertEquals(4, getSubdocumentResourceCount(it))
                 },
             ) {}
         }
@@ -263,7 +288,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(3, subdocumentGraph.vertices.size)
-                    assertEquals(3, getTextResourceCount(it))
+                    assertEquals(3, getSubdocumentResourceCount(it))
                 },
             ) {}
         }
@@ -279,7 +304,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {}
         }

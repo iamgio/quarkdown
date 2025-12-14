@@ -30,7 +30,7 @@ class HtmlSecurityTest {
 
         context.documentInfo = context.documentInfo.deepCopy(texMacros = mapOf(name to content))
 
-        val postRenderer = HtmlPostRenderer(context, ::texMacrosTemplateProcessor)
+        val postRenderer = HtmlPostRenderer(context, baseTemplateProcessor = ::texMacrosTemplateProcessor)
 
         assertEquals(
             expectedResult,
