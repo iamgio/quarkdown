@@ -13,6 +13,11 @@ object TemplatePlaceholders {
     const val CONTENT = "CONTENT"
 
     /**
+     * Path to the root of the document from the current location.
+     */
+    const val ROOT_PATH = "ROOTPATH"
+
+    /**
      * Title of the document.
      */
     const val TITLE = "TITLE"

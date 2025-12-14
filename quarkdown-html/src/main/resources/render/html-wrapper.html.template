@@ -15,7 +15,7 @@
     [[endif:AUTHORS]]
     <meta name="viewport" content="width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]">
     <title>[[TITLE]]</title>
-    <script src="script/quarkdown.js"></script>
+    <script src="[[ROOTPATH]]/script/quarkdown.js"></script>
     <script>const capabilities = window.quarkdownCapabilities</script>
     [[if:PAGED]]
     <script>window.PagedConfig = {auto: false};</script>
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/theme/white.css">
     [[endif:SLIDES]]
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="theme/theme.css">
+    <link rel="stylesheet" href="[[ROOTPATH]]/theme/theme.css">
     [[if:CODE]]
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
