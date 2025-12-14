@@ -9,14 +9,17 @@
 	.if {.doctype::equals {.ontype}}
 		<<<
 
+.function {initnumbering}
+	.resetpagenumber
+
+	.pagemargin {bottominside}
+		*.lastheading depth:{1}*
+	
+	.pagemargin {bottomoutside}
+		.currentpage
+
 .footer
 	Quarkdown
-	
-.pagemargin {bottominside}
-    *.lastheading depth:{1}*
-
-.pagemargin {bottomoutside}
-	.currentpage
 
 .center
 	#! .docname
