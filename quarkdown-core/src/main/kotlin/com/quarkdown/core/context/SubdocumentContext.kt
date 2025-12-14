@@ -36,7 +36,6 @@ open class SubdocumentContext(
     override val attributes by parent::attributes
     override val loadableLibraries by parent::loadableLibraries
     override val localizationTables by parent::localizationTables
-    override val mediaStorage by parent::mediaStorage
     override var subdocumentGraph by parent::subdocumentGraph
 
     /**
