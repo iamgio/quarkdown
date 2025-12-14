@@ -9,53 +9,52 @@ import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../../paged-like-quarkd
  * In case of `outside`/`inside` positions, the `data-on-left-page` and `data-on-right-page` may differ.
  */
 export abstract class PageMarginsDocumentHandler extends DocumentHandler<PagedLikeQuarkdownDocument<any>> {
-    /** Map of margin id -> initializer element */
-    protected pageMarginInitializers: Map<string, HTMLElement> = new Map();
 
     /**
-     * Collects all page margin content initializers and removes them from the document.
+     * @param page The page or element to get initializers from
+     * @return An array of page margin initializer elements within the given page
+     */
+    private selectPageMarginInitializers(page: QuarkdownPage | HTMLElement): HTMLElement[] {
+        return Array.from(page.querySelectorAll('.page-margin-content'));
+    }
+
+    /**
+     * Collects all page margin content initializers and hides them from the document.
      * This prevents them from being displayed before proper positioning.
      */
     async onPreRendering() {
-        this.pageMarginInitializers.clear();
-
-        Array.from(document.querySelectorAll<HTMLElement>('.page-margin-content')).forEach(initializer => {
-            const identifier = initializer.dataset.marginId;
-            if (identifier) {
-                this.pageMarginInitializers.set(identifier, initializer);
-            }
-            initializer.remove();
-        });
+        this.selectPageMarginInitializers(document.body)
+            .forEach(initializer => initializer.style.display = 'none');
     }
 
     /**
      * Called after the main rendering process is complete,
      * this function is responsible for injecting page margin content
      * into the document at appropriate locations on each page.
+     *
+     * It processes each page, and stores active margin initializers.
+     * Since #281, a page margin begins appearing from the page where the initializer is defined,
+     * and continues to appear on subsequent pages unless overridden.
      */
     async onPostRendering() {
         const activeByPosition = new Map<string, HTMLElement>();
 
         this.quarkdownDocument.getPages().forEach(page => {
-            const switches = Array.from(page.querySelectorAll<HTMLElement>('.page-margin-switch'));
+            // The initializers defined on this page.
+            const localInitializers = this.selectPageMarginInitializers(page);
 
-            switches.forEach(pageSwitch => {
-                const identifier = pageSwitch.dataset.marginId;
-                if (!identifier) return;
-                const initializer = this.pageMarginInitializers.get(identifier);
-                if (!initializer) return;
-
-                const position = initializer.dataset.marginPosition;
-                if (!position) return;
-
-                activeByPosition.set(position, initializer);
+            // Update active initializers for this page.
+            localInitializers.forEach(initializer => {
+                activeByPosition.set(initializer.className, initializer);
+                initializer.remove();
             });
 
-            activeByPosition.forEach(initializer => {
+            // Apply all active initializers to this page.
+            activeByPosition.forEach((initializer: HTMLElement) => {
                 const marginPositionName = this.getMarginPositionName(initializer, page);
-                if (!marginPositionName) return;
-
-                this.apply(initializer, page, marginPositionName);
+                if (marginPositionName) {
+                    this.apply(initializer, page, marginPositionName);
+                }
             });
         });
     }

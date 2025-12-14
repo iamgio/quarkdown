@@ -491,25 +491,14 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: PageMarginContentInitializer) =
         // In slides and paged documents, these elements are copied to each page in post-processing.
-        buildMultiTag {
-            +buildTag("div") {
-                classNames(
-                    "page-margin-content",
-                    "page-margin-${node.position.asCSS}",
-                )
-                attribute("data-margin-id", node.identifier)
-                attribute("data-margin-position", node.position.asCSS)
-                attribute("data-on-left-page", node.position.forLeftPage.asCSS)
-                attribute("data-on-right-page", node.position.forRightPage.asCSS)
-                +node.children
-            }
-
-            +buildTag("span") {
-                className("page-margin-switch")
-                attribute("data-margin-id", node.identifier)
-                attribute("aria-hidden", true)
-                attribute("hidden", "")
-            }
+        buildTag("div") {
+            classNames(
+                "page-margin-content",
+                "page-margin-${node.position.asCSS}",
+            )
+            attribute("data-on-left-page", node.position.forLeftPage.asCSS)
+            attribute("data-on-right-page", node.position.forRightPage.asCSS)
+            +node.children
         }
 
     override fun visit(node: PageNumberReset) =
