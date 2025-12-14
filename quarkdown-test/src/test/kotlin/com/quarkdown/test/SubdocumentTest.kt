@@ -1,25 +1,19 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
-import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
-import com.quarkdown.core.document.sub.getOutputFileName
-import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import com.quarkdown.test.util.getSubdocumentResource
+import com.quarkdown.test.util.getSubdocumentResourceCount
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-
-private const val INDEX = "index"
 
 private const val NON_EXISTENT_FUNCTION = "somenonexistentfunction"
 
@@ -43,45 +37,13 @@ class SubdocumentTest {
     private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
     private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
 
-    /**
-     * Retrieves the resource for the given [subdocument] from the [group].
-     *
-     * - If [subdocument] is the root, retrieves `index.html`.
-     * - Otherwise, retrieves the `index.html` from the corresponding subdocument group.
-     */
-    private fun getResource(
-        group: OutputResource?,
-        subdocument: Subdocument,
-        context: Context,
-    ): TextOutputArtifact {
-        val subdocumentGroup =
-            if (subdocument == Subdocument.Root) {
-                group as OutputResourceGroup
-            } else {
-                val resources = getSubResources(group)
-                resources.firstOrNull { it.name == subdocument.getOutputFileName(context) }
-                    as? OutputResourceGroup
-            }
-        assertNotNull(subdocumentGroup)
-
-        val resource = subdocumentGroup.resources.first { it.name == INDEX } as? TextOutputArtifact
-        assertNotNull(resource)
-        return resource
-    }
-
-    private fun getSubdocumentResourceCount(group: OutputResource?): Int =
-        getSubResources(group)
-            .count {
-                it.name == INDEX || (it is OutputResourceGroup && it.resources.any { res -> res.name == INDEX })
-            }
-
     @Test
     fun `root to subdocument`() {
         execute(
             "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             outputResourceHook = { group ->
-                val resource = getResource(group, simpleSubdoc, this)
+                val resource = getSubdocumentResource(group, simpleSubdoc, this)
                 assertContains(resource.content, "<html>")
                 assertEquals(2, subdocumentGraph.vertices.size)
                 assertEquals(2, getSubdocumentResourceCount(group))
@@ -117,7 +79,7 @@ class SubdocumentTest {
                 it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.Root, referenceToParentSubdoc)
             },
             outputResourceHook = { group ->
-                val resource = getResource(group, referenceToParentSubdoc, this)
+                val resource = getSubdocumentResource(group, referenceToParentSubdoc, this)
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertContains(resource.content, "paged")
             },
@@ -155,7 +117,7 @@ class SubdocumentTest {
                 it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc)
             },
             outputResourceHook = { group ->
-                val subdocResource = getResource(group, echoDocumentNameSubdoc, this)
+                val subdocResource = getSubdocumentResource(group, echoDocumentNameSubdoc, this)
                 assertEquals("My doc", group?.name)
                 assertEquals("My doc", documentInfo.name)
                 assertContains(subdocResource.content, "<title>My doc</title>")
@@ -171,8 +133,8 @@ class SubdocumentTest {
                 it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc)
             },
             outputResourceHook = { group ->
-                val mainResource = getResource(group, Subdocument.Root, this)
-                val subdocResource = getResource(group, modifyAndEchoDocumentNameSubdoc, this)
+                val mainResource = getSubdocumentResource(group, Subdocument.Root, this)
+                val subdocResource = getSubdocumentResource(group, modifyAndEchoDocumentNameSubdoc, this)
                 assertEquals("Parent doc", group?.name)
                 assertEquals("Parent doc", documentInfo.name)
                 assertContains(mainResource.content, "<title>Parent doc</title>")
