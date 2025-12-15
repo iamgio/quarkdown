@@ -15,4 +15,7 @@ open class ScopeContext(
     ) {
     // A scope context shares the parent's document info.
     override var documentInfo by parent::documentInfo
+
+    // Media registered in a scope is pushed to the parent's media storage.
+    override val mediaStorage by parent::mediaStorage
 }

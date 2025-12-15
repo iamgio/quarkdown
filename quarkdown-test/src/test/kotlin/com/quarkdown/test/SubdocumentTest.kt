@@ -1,20 +1,17 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
-import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
-import com.quarkdown.core.document.sub.getOutputFileName
-import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import com.quarkdown.test.util.getSubdocumentResource
+import com.quarkdown.test.util.getSubdocumentResourceCount
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -40,31 +37,16 @@ class SubdocumentTest {
     private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
     private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
 
-    private fun getResource(
-        group: OutputResource?,
-        subdocument: Subdocument,
-        context: Context,
-    ): TextOutputArtifact {
-        val resources = getSubResources(group)
-        val resource =
-            resources.firstOrNull { it.name == subdocument.getOutputFileName(context) }
-                as? TextOutputArtifact
-        assertNotNull(resource)
-        return resource
-    }
-
-    private fun getTextResourceCount(group: OutputResource?): Int = getSubResources(group).filterIsInstance<TextOutputArtifact>().size
-
     @Test
     fun `root to subdocument`() {
         execute(
             "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
             outputResourceHook = { group ->
-                val resource = getResource(group, simpleSubdoc, this)
+                val resource = getSubdocumentResource(group, simpleSubdoc, this)
                 assertContains(resource.content, "<html>")
                 assertEquals(2, subdocumentGraph.vertices.size)
-                assertEquals(2, getTextResourceCount(group))
+                assertEquals(2, getSubdocumentResourceCount(group))
                 assertContains(getSubResources(group).map { it.name }, simpleSubdoc.name)
             },
         ) {}
@@ -97,7 +79,7 @@ class SubdocumentTest {
                 it.addVertex(referenceToParentSubdoc).addEdge(Subdocument.Root, referenceToParentSubdoc)
             },
             outputResourceHook = { group ->
-                val resource = getResource(group, referenceToParentSubdoc, this)
+                val resource = getSubdocumentResource(group, referenceToParentSubdoc, this)
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertContains(resource.content, "paged")
             },
@@ -131,9 +113,11 @@ class SubdocumentTest {
     fun `subdocument inherits parent's document info`() {
         execute(
             ".docname {My doc}",
-            subdocumentGraph = { it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc) },
+            subdocumentGraph = {
+                it.addVertex(echoDocumentNameSubdoc).addEdge(Subdocument.Root, echoDocumentNameSubdoc)
+            },
             outputResourceHook = { group ->
-                val subdocResource = getResource(group, echoDocumentNameSubdoc, this)
+                val subdocResource = getSubdocumentResource(group, echoDocumentNameSubdoc, this)
                 assertEquals("My doc", group?.name)
                 assertEquals("My doc", documentInfo.name)
                 assertContains(subdocResource.content, "<title>My doc</title>")
@@ -145,10 +129,12 @@ class SubdocumentTest {
     fun `subdocument should not share document info modifications with parent`() {
         execute(
             ".docname {Parent doc}",
-            subdocumentGraph = { it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc) },
+            subdocumentGraph = {
+                it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc)
+            },
             outputResourceHook = { group ->
-                val mainResource = getResource(group, Subdocument.Root, this)
-                val subdocResource = getResource(group, modifyAndEchoDocumentNameSubdoc, this)
+                val mainResource = getSubdocumentResource(group, Subdocument.Root, this)
+                val subdocResource = getSubdocumentResource(group, modifyAndEchoDocumentNameSubdoc, this)
                 assertEquals("Parent doc", group?.name)
                 assertEquals("Parent doc", documentInfo.name)
                 assertContains(mainResource.content, "<title>Parent doc</title>")
@@ -166,12 +152,13 @@ class SubdocumentTest {
             execute(
                 source,
                 outputResourceHook = {
+                    println(subdocumentGraph.vertices)
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1.html\">1</a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1\">1</a></p>", it)
                 }
             }
         }
@@ -187,11 +174,11 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1.html\"></a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1\"></a></p>", it)
                 }
             }
         }
@@ -207,7 +194,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument != Subdocument.Root) {
@@ -227,7 +214,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {
                 if (subdocument != Subdocument.Root) {
@@ -247,7 +234,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(4, subdocumentGraph.vertices.size)
-                    assertEquals(4, getTextResourceCount(it))
+                    assertEquals(4, getSubdocumentResourceCount(it))
                 },
             ) {}
         }
@@ -263,7 +250,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(3, subdocumentGraph.vertices.size)
-                    assertEquals(3, getTextResourceCount(it))
+                    assertEquals(3, getSubdocumentResourceCount(it))
                 },
             ) {}
         }
@@ -279,7 +266,7 @@ class SubdocumentTest {
                 source,
                 outputResourceHook = {
                     assertEquals(2, subdocumentGraph.vertices.size)
-                    assertEquals(2, getTextResourceCount(it))
+                    assertEquals(2, getSubdocumentResourceCount(it))
                 },
             ) {}
         }

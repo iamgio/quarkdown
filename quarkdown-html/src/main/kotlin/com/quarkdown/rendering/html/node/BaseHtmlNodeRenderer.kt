@@ -280,7 +280,7 @@ open class BaseHtmlNodeRenderer(
 
         return Link(
             label = node.label,
-            url = "./${subdocument.getOutputFileName(context)}.html",
+            url = "./${subdocument.getOutputFileName(context)}",
             title = node.title,
         ).accept(this)
     }

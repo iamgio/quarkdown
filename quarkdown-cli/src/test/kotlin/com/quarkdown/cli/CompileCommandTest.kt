@@ -86,6 +86,12 @@ class CompileCommandTest : TempDirectory() {
         }
     }
 
+    private fun subdocumentExists(name: String): Boolean =
+        outputDirectory
+            .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+            .resolve(name)
+            .let { it.exists() && it.isDirectory() }
+
     private fun base(explicitRenderer: String? = null) {
         val (cliOptions, pipelineOptions) =
             explicitRenderer?.let { test("--render", it) }
@@ -216,9 +222,9 @@ class CompileCommandTest : TempDirectory() {
 
         test()
         assertHtmlContentPresent()
-        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc1.html").exists())
-        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc2.html").exists())
-        assertTrue(outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME).resolve("subdoc3.html").exists())
+        assertTrue(subdocumentExists("subdoc1"))
+        assertTrue(subdocumentExists("subdoc2"))
+        assertTrue(subdocumentExists("subdoc3"))
     }
 
     @Test
@@ -227,24 +233,9 @@ class CompileCommandTest : TempDirectory() {
 
         test("--no-subdoc-collisions")
         assertHtmlContentPresent()
-        assertTrue(
-            outputDirectory
-                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
-                .resolve("subdoc1@${subdoc1.absolutePath.hashCode()}.html")
-                .exists(),
-        )
-        assertTrue(
-            outputDirectory
-                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
-                .resolve("subdoc2@${subdoc2.absolutePath.hashCode()}.html")
-                .exists(),
-        )
-        assertTrue(
-            outputDirectory
-                .resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
-                .resolve("subdoc3@${subdoc3.absolutePath.hashCode()}.html")
-                .exists(),
-        )
+        assertTrue(subdocumentExists("subdoc1@${subdoc1.absolutePath.hashCode()}"))
+        assertTrue(subdocumentExists("subdoc2@${subdoc2.absolutePath.hashCode()}"))
+        assertTrue(subdocumentExists("subdoc3@${subdoc3.absolutePath.hashCode()}"))
     }
 
     private fun assumePdfEnvironmentInstalled() {

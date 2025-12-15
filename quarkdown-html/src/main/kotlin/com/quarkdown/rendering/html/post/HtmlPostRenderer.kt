@@ -3,14 +3,15 @@ package com.quarkdown.rendering.html.post
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.orDefault
-import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.rendering.withMedia
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.rendering.html.post.resources.MediaPostRendererResource
+import com.quarkdown.rendering.html.post.resources.PostRendererResource
+import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
+import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
+import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -25,105 +26,35 @@ private val DEFAULT_THEME =
  * - Runtime scripts
  * - Media resources
  *
- * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate].
+ * @param context the [Context] of the document being rendered
+ * @param relativePathToRoot relative path from the current document to the root document, used to correctly link resources
+ * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate]
+ * @param base the base [HtmlOnlyPostRenderer] to delegate HTML generation to
+ * @param resourcesProvider supplier of the set of [PostRendererResource] to include in the output. Delegation to [base] is always included
  */
 class HtmlPostRenderer(
     val context: Context,
+    relativePathToRoot: String = ".",
     private val baseTemplateProcessor: () -> TemplateProcessor = baseHtmlTemplateProcessor,
-    private val base: HtmlOnlyPostRenderer = HtmlOnlyPostRenderer(name = "index", context, baseTemplateProcessor),
+    private val base: HtmlOnlyPostRenderer = HtmlOnlyPostRenderer(context, baseTemplateProcessor, relativePathToRoot = relativePathToRoot),
+    private val resourcesProvider: () -> Set<PostRendererResource> =
+        {
+            setOf(
+                ThemePostRendererResource(
+                    theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
+                    locale = context.documentInfo.locale,
+                ),
+                ScriptPostRendererResource(),
+                MediaPostRendererResource(context.mediaStorage),
+            )
+        },
 ) : PostRenderer by base {
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
-            // The main HTML resource.
-            this.addAll(base.generateResources(rendered))
-
-            // The user-set theme is merged with the default one
-            // to fill in the missing components with the default ones.
-            val theme = context.documentInfo.theme.orDefault(DEFAULT_THEME)
-            // A group of CSS theme resources is added to the output resources.
-            // Theme components (global style, color scheme and layout format) are stored in a single group (directory)
-            // and linked via @import statements in a theme.css file.
-            this +=
-                OutputResourceGroup(
-                    name = "theme",
-                    resources = retrieveThemeComponentsArtifacts(theme),
-                )
-
-            // A group of JS script resources is added to the output resources.
-            // Only the strictly required scripts are included, depending on the document's characteristics.
-            this +=
-                OutputResourceGroup(
-                    name = "script",
-                    resources = retrieveScriptComponentsArtifacts(),
-                )
-        }.withMedia(context)
-
-    /**
-     * @param theme theme to get the artifacts for
-     * @return a set that contains an output artifact for each non-null theme component of [theme]
-     *         (e.g. color scheme, layout format, ...)
-     */
-    private fun retrieveThemeComponentsArtifacts(theme: DocumentTheme?): Set<OutputResource> =
-        buildSet {
-            fun getFullResourcePath(resourceSubPath: String): String = "/render/theme/$resourceSubPath.css"
-
-            /**
-             * Pushes a new output artifact to the set if it exists.
-             * @param resourceName name of the resource
-             * @param resourcePath path of the resource starting from the theme folder, without extension
-             */
-            fun artifact(
-                resourceName: String,
-                resourcePath: String = resourceName,
-            ) {
-                val artifact =
-                    LazyOutputArtifact.internalOrNull(
-                        resource = getFullResourcePath(resourcePath),
-                        // The name is not used here, as this artifact will be concatenated to others in generateResources.
-                        name = resourceName,
-                        type = ArtifactType.CSS,
-                    )
-                if (artifact != null) {
-                    this += artifact
-                }
-            }
-
-            // Pushing theme components.
-            artifact("global")
-            theme?.layout?.let { artifact(it, "layout/$it") }
-            theme?.color?.let { artifact(it, "color/$it") }
-
-            // In case the active locale features its own theme components, add them as well.
-            // For example, Chinese typefaces (#105).
-            context.documentInfo.locale?.shortTag?.let {
-                artifact(it, "locale/$it")
-            }
-
-            // A theme.css file contains only @import statements for each theme component
-            // in order to link them into a single file that can be easily included in the main HTML file.
-            this +=
-                TextOutputArtifact(
-                    name = "theme",
-                    content =
-                        joinToString(separator = "\n") {
-                            "@import url('${it.name}.css');"
-                        },
-                    type = ArtifactType.CSS,
-                )
+            // The HTML content is always included, regardless of the other options.
+            val resources = resourcesProvider() + ProxiedPostRendererResource(base)
+            resources.forEach { it.includeTo(this, rendered) }
         }
-
-    /**
-     * @return a set that contains an output artifact for each required script component
-     */
-    private fun retrieveScriptComponentsArtifacts(): Set<OutputResource> =
-        setOf(
-            LazyOutputArtifact.internal(
-                resource = "/render/script/quarkdown.js",
-                // The name is not used here, as this artifact will be concatenated to others in generateResources.
-                name = "quarkdown",
-                type = ArtifactType.JAVASCRIPT,
-            ),
-        )
 
     override fun wrapResources(
         name: String,
