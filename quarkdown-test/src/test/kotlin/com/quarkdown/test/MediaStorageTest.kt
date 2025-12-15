@@ -176,7 +176,7 @@ class MediaStorageTest {
             },
         ) {
             assertEquals(1, mediaStorage.all.size)
-            assertContains("<img src=\"media/icon", it)
+            assertContains(it, "<img src=\"media/icon")
         }
     }
 
