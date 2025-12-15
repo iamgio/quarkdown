@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>HtmlPostRenderer</title>
+    <title>ScriptPostRendererResource</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -92,21 +92,55 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-html::com.quarkdown.rendering.html.post/HtmlPostRenderer/HtmlPostRenderer/#com.quarkdown.core.context.Context#kotlin.String#kotlin.Function0[com.quarkdown.core.template.TemplateProcessor]#com.quarkdown.rendering.html.post.HtmlOnlyPostRenderer#kotlin.Function0[kotlin.collections.Set[com.quarkdown.rendering.html.post.resources.PostRendererResource]]/PointingToDeclaration//-203176000">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.post</a><span class="delimiter">/</span><a href="index.html">HtmlPostRenderer</a><span class="delimiter">/</span><span class="current">HtmlPostRenderer</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-html::com.quarkdown.rendering.html.post.resources/ScriptPostRendererResource///PointingToDeclaration//-203176000">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.post.resources</a><span class="delimiter">/</span><span class="current">ScriptPostRendererResource</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Html</span><wbr><span>Post</span><wbr><span><span>Renderer</span></span></h1>
+    <h1 class="cover"><span>Script</span><wbr><span>Post</span><wbr><span>Renderer</span><wbr><span><span>Resource</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ScriptPostRendererResource</a> : <a href="../-post-renderer-resource/index.html">PostRendererResource</a></div><p class="paragraph">A <a href="../-post-renderer-resource/index.html">PostRendererResource</a> that includes runtime JavaScript files required by the HTML output.</p><p class="paragraph">The <code class="lang-kotlin">quarkdown.js</code> script is pre-bundled from TypeScript sources and provides client-side functionality for interactive Quarkdown features.</p></div></div>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">relativePathToRoot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"."</span><span class="token punctuation">, </span></span><span class="parameter ">baseTemplateProcessor<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator"> = </span>baseHtmlTemplateProcessor<span class="token punctuation">, </span></span><span class="parameter ">base<span class="token operator">: </span><a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a><span class="token operator"> = </span>HtmlOnlyPostRenderer(context, baseTemplateProcessor, relativePathToRoot = relativePathToRoot)<span class="token punctuation">, </span></span><span class="parameter ">resourcesProvider<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{
-            setOf(
-                ThemePostRendererResource(
-                    theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
-                    locale = context.documentInfo.locale,
-                ),
-                ScriptPostRendererResource(),
-                MediaPostRendererResource(context.mediaStorage),
-            )
-        }</span></span><span class="token punctuation">)</span></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the <a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a> of the document being rendered</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>relative</span><wbr><span>Path</span><wbr><span>To</span><wbr><span><span>Root</span></span></u></div></span></div><div><div class="title"><p class="paragraph">relative path from the current document to the root document, used to correctly link resources</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>base</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the base <a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a> to inject with content and process via <a href="../-html-post-renderer-template/index.html">HtmlPostRendererTemplate</a></p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>base</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the base <a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a> to delegate HTML generation to</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>resources</span><wbr><span><span>Provider</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the set of <a href="../../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a> to include in the output. Delegation to <a href="../../../quarkdown-html/com.quarkdown.rendering.html.post/-html-post-renderer/[60]init[62].html">base</a> is always included</p></div></div></div></div></div></div></div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="375790824%2FConstructors%2F-203176000" anchor-label="ScriptPostRendererResource" id="375790824%2FConstructors%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-script-post-renderer-resource.html"><span>Script</span><wbr><span>Post</span><wbr><span>Renderer</span><wbr><span><span>Resource</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="375790824%2FConstructors%2F-203176000"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1816820008%2FFunctions%2F-203176000" anchor-label="includeTo" id="-1816820008%2FFunctions%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="include-to.html"><span>include</span><wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1816820008%2FFunctions%2F-203176000"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="include-to.html"><span class="token function">includeTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">resources<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-set/index.html">MutableSet</a><span class="token operator">&lt;</span><a href="../../../quarkdown-core/com.quarkdown.core.pipeline.output/-output-resource/index.html">OutputResource</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">rendered<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Collects resources and adds them to the output set.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>

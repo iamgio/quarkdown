@@ -266,6 +266,7 @@ com.quarkdown.rendering.html.extension
 com.quarkdown.rendering.html.node
 com.quarkdown.rendering.html.pdf
 com.quarkdown.rendering.html.post
+com.quarkdown.rendering.html.post.resources
 module:quarkdown-interaction
 com.quarkdown.interaction
 com.quarkdown.interaction.executable
