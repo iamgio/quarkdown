@@ -40,9 +40,10 @@ class HtmlPostRendererTest {
 
     private fun postRenderer(
         template: String,
+        relativePathToRoot: String = ".",
         block: TemplateProcessor.() -> TemplateProcessor = { this },
     ): HtmlPostRenderer =
-        HtmlPostRenderer(context, baseTemplateProcessor = {
+        HtmlPostRenderer(context, relativePathToRoot = relativePathToRoot, baseTemplateProcessor = {
             TemplateProcessor(template).block()
         })
 
@@ -122,6 +123,14 @@ class HtmlPostRendererTest {
             "<head><meta name=\"author\" content=\"Alice, Bob\"></head>",
             postRenderer.createTemplateProcessor().process(),
         )
+    }
+
+    @Test
+    fun `with path to root`() {
+        val rootPostRenderer = postRenderer(relativePathToRoot = ".", template = "[[ROOTPATH]]/dir")
+        val nestedPostRenderer = postRenderer(relativePathToRoot = "..", template = "[[ROOTPATH]]/dir")
+        assertEquals("./dir", rootPostRenderer.createTemplateProcessor().process())
+        assertEquals("../dir", nestedPostRenderer.createTemplateProcessor().process())
     }
 
     @Test
@@ -427,6 +436,8 @@ class HtmlPostRendererTest {
                     [[if:AUTHORS]]
                     <meta name="author" content="[[AUTHORS]]"></meta>
                     [[endif:AUTHORS]]
+                    <link rel="stylesheet" href="[[ROOTPATH]]/...css"></link>
+                    <script src="[[ROOTPATH]]/...js"></script>
                     [[if:SLIDES]]
                     <link rel="stylesheet" href="...css"></link>
                     [[endif:SLIDES]]
@@ -475,6 +486,8 @@ class HtmlPostRendererTest {
             <html lang="en">
             <head>
                 <meta name="description" content="The Quarkdown typesetting system">
+                <link rel="stylesheet" href="./...css"></link>
+                <script src="./...js"></script>
                 <link rel="stylesheet" href="...css"></link>
                 <script src="...js"></script>
                 <script src="...js"></script>
