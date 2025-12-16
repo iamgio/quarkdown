@@ -50,6 +50,7 @@ body.quarkdown {
     @include media-queries.mobile($orNarrowPrint: true) {
       > main {
         width: 100%;
+        font-size: 1.1em;
       }
 
       // The right margin area may have footnotes
