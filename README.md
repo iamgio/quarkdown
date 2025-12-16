@@ -239,6 +239,17 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 ## Installation
 
+### Install script (Linux/macOS)
+
+```shell
+curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.sh | sudo env "PATH=$PATH" bash
+```
+
+Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
+If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager.
+
+For more installation options, check out [get-quarkdown](https://github.com/quarkdown-labs/get-quarkdown).
+
 ### Homebrew (Linux/macOS)
 
 ```shell
@@ -252,17 +263,6 @@ scoop bucket add java
 scoop bucket add quarkdown https://github.com/quarkdown-labs/scoop-quarkdown
 scoop install quarkdown
 ```
-
-### Install script (Linux/macOS)
-
-```shell
-curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.sh | sudo env "PATH=$PATH" bash
-```
-
-Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
-If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager unless `--no-pm` is used.
-
-For more installation options, check out [get-quarkdown](https://github.com/quarkdown-labs/get-quarkdown).
 
 ### GitHub Actions
 
