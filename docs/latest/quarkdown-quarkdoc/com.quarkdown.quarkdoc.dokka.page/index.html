@@ -1,0 +1,218 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.quarkdown.quarkdoc.dokka.page</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.13.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-quarkdoc/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-quarkdoc/main" data-filter=":quarkdown-quarkdoc/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="quarkdown-quarkdoc::com.quarkdown.quarkdoc.dokka.page////PointingToDeclaration//-807095081">
+  <div class="breadcrumbs"><a href="../index.html">quarkdown-quarkdoc</a><span class="delimiter">/</span><span class="current">com.quarkdown.quarkdoc.dokka.page</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-1553113605%2FClasslikes%2F-807095081" anchor-label="DocumentablePageTransformer" id="-1553113605%2FClasslikes%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-documentable-page-transformer/index.html"><span>Documentable</span><wbr><span>Page</span><wbr><span><span>Transformer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1553113605%2FClasslikes%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-documentable-page-transformer/index.html">DocumentablePageTransformer</a><span class="token operator">&lt;</span><a href="-documentable-page-transformer/index.html">D</a><span class="token operator"> : </span><span data-unresolved-link="org.jetbrains.dokka.model/Documentable///PointingToDeclaration/">Documentable</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/">DokkaContext</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.jetbrains.dokka.transformers.pages/PageTransformer///PointingToDeclaration/">PageTransformer</span></div><div class="brief "><p class="paragraph">A <span data-unresolved-link="org.jetbrains.dokka.transformers.pages/PageTransformer///PointingToDeclaration/">PageTransformer</span> that features a ready-to-use content builder for building documentation pages for <span data-unresolved-link="org.jetbrains.dokka.model/Documentable///PointingToDeclaration/">Documentable</span>s of type <a href="-documentable-page-transformer/index.html">D</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="797397161%2FClasslikes%2F-807095081" anchor-label="DocumentTypeConstraintsPageTransformer" id="797397161%2FClasslikes%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-document-type-constraints-page-transformer/index.html"><span>Document</span><wbr><span>Type</span><wbr><span>Constraints</span><wbr><span>Page</span><wbr><span><span>Transformer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="797397161%2FClasslikes%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-document-type-constraints-page-transformer/index.html">DocumentTypeConstraintsPageTransformer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/">DokkaContext</span></span></span><span class="token punctuation">)</span> : <a href="-new-section-documentable-page-transformer/index.html">NewSectionDocumentablePageTransformer</a><span class="token operator">&lt;</span><span data-unresolved-link="org.jetbrains.dokka.model/DFunction///PointingToDeclaration/">DFunction</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../quarkdown-core/com.quarkdown.core.document/-document-type/index.html">DocumentType</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Given a function that is constrained to specific document types, this page transformer explains these constraints in a new section of the documentation page.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="501276164%2FClasslikes%2F-807095081" anchor-label="LikelyChainedPageTransformer" id="501276164%2FClasslikes%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-likely-chained-page-transformer/index.html"><span>Likely</span><wbr><span>Chained</span><wbr><span>Page</span><wbr><span><span>Transformer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="501276164%2FClasslikes%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-likely-chained-page-transformer/index.html">LikelyChainedPageTransformer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/">DokkaContext</span></span></span><span class="token punctuation">)</span> : <a href="-new-section-documentable-page-transformer/index.html">NewSectionDocumentablePageTransformer</a><span class="token operator">&lt;</span><span data-unresolved-link="org.jetbrains.dokka.model/DFunction///PointingToDeclaration/">DFunction</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Transformer that generates a new section for the <code class="lang-kotlin">@wiki</code> documentation tag of a function, with a link to the corresponding wiki page.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1563197440%2FClasslikes%2F-807095081" anchor-label="NewSectionDocumentablePageTransformer" id="-1563197440%2FClasslikes%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-new-section-documentable-page-transformer/index.html"><span>New</span><wbr><span>Section</span><wbr><span>Documentable</span><wbr><span>Page</span><wbr><span><span>Transformer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1563197440%2FClasslikes%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-new-section-documentable-page-transformer/index.html">NewSectionDocumentablePageTransformer</a><span class="token operator">&lt;</span><a href="-new-section-documentable-page-transformer/index.html">D</a><span class="token operator"> : </span><span data-unresolved-link="org.jetbrains.dokka.model/Documentable///PointingToDeclaration/">Documentable</span><span class="token punctuation">, </span><a href="-new-section-documentable-page-transformer/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/">DokkaContext</span></span></span><span class="token punctuation">)</span> : <a href="-documentable-page-transformer/index.html">DocumentablePageTransformer</a><span class="token operator">&lt;</span><a href="-new-section-documentable-page-transformer/index.html">D</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A <span data-unresolved-link="org.jetbrains.dokka.transformers.pages/PageTransformer///PointingToDeclaration/">org.jetbrains.dokka.transformers.pages.PageTransformer</span> that creates a new titled section in the documentation page of a <span data-unresolved-link="org.jetbrains.dokka.model/Documentable///PointingToDeclaration/">Documentable</span>. For instance, <i>Parameters</i>, <i>Return</i>, <i>See also</i>, etc. are titled sections.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1518262096%2FClasslikes%2F-807095081" anchor-label="WikiLinkPageTransformer" id="1518262096%2FClasslikes%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-wiki-link-page-transformer/index.html"><span>Wiki</span><wbr><span>Link</span><wbr><span>Page</span><wbr><span><span>Transformer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1518262096%2FClasslikes%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-wiki-link-page-transformer/index.html">WikiLinkPageTransformer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/">DokkaContext</span></span></span><span class="token punctuation">)</span> : <a href="-new-section-documentable-page-transformer/index.html">NewSectionDocumentablePageTransformer</a><span class="token operator">&lt;</span><span data-unresolved-link="org.jetbrains.dokka.model/DFunction///PointingToDeclaration/">DFunction</span><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Transformer that generates a new section for the <code class="lang-kotlin">@wiki</code> documentation tag of a function, with a link to the corresponding wiki page.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-716389380%2FProperties%2F-807095081" anchor-label="WIKI_ROOT" id="-716389380%2FProperties%2F-807095081" data-filterable-set=":quarkdown-quarkdoc/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-quarkdoc/main" data-filterable-set=":quarkdown-quarkdoc/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-w-i-k-i_-r-o-o-t.html"><span>WIKI_</span><wbr><span>ROOT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-716389380%2FProperties%2F-807095081"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-quarkdoc/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-w-i-k-i_-r-o-o-t.html">WIKI_ROOT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The root URL of the Quarkdown wiki to link to.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

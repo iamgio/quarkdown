@@ -1,0 +1,358 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>QuarkdownLanguageServer</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/stylesheet.css" rel="Stylesheet"></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    quarkdown
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.13.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-lsp/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-lsp/main" data-filter=":quarkdown-lsp/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    quarkdown
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-lsp::com.quarkdown.lsp/QuarkdownLanguageServer///PointingToDeclaration//-248931646">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-lsp</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.lsp</a><span class="delimiter">/</span><span class="current">QuarkdownLanguageServer</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Quarkdown</span><wbr><span>Language</span><wbr><span><span>Server</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">QuarkdownLanguageServer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">quarkdownDirectory<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.eclipse.lsp4j.services/LanguageServer///PointingToDeclaration/">LanguageServer</span>, <span data-unresolved-link="org.eclipse.lsp4j.services/LanguageClientAware///PointingToDeclaration/">LanguageClientAware</span></div><p class="paragraph">Quarkdown Language Server implementation.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>quarkdown</span><wbr><span><span>Directory</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the directory containing the Quarkdown distribution, if available</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="507544684%2FConstructors%2F-248931646" anchor-label="QuarkdownLanguageServer" id="507544684%2FConstructors%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-quarkdown-language-server.html"><span>Quarkdown</span><wbr><span>Language</span><wbr><span><span>Server</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="507544684%2FConstructors%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">quarkdownDirectory<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="151120304%2FProperties%2F-248931646" anchor-label="docsDirectory" id="151120304%2FProperties%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="docs-directory.html"><span>docs</span><wbr><span><span>Directory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="151120304%2FProperties%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="docs-directory.html">docsDirectory</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The directory containing the documentation files, if available. This is located in the Quarkdown distribution.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-755556013%2FFunctions%2F-248931646" anchor-label="cancelProgress" id="-755556013%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-755556013%2FFunctions%2F-248931646"><span>cancel</span><wbr><span><span>Progress</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-755556013%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-755556013%2FFunctions%2F-248931646"><span class="token function">cancelProgress</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/WorkDoneProgressCancelParams///PointingToDeclaration/">WorkDoneProgressCancelParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1880857492%2FFunctions%2F-248931646" anchor-label="connect" id="-1880857492%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="connect.html"><span><span>connect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1880857492%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="connect.html"><span class="token function">connect</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">client<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j.services/LanguageClient///PointingToDeclaration/">LanguageClient</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-835810009%2FFunctions%2F-248931646" anchor-label="docsDirectoryOrThrow" id="-835810009%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="docs-directory-or-throw.html"><span>docs</span><wbr><span>Directory</span><wbr><span>Or</span><wbr><span><span>Throw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-835810009%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="docs-directory-or-throw.html"><span class="token function">docsDirectoryOrThrow</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1999951206%2FFunctions%2F-248931646" anchor-label="exit" id="-1999951206%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="exit.html"><span><span>exit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1999951206%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="exit.html"><span class="token function">exit</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-94144303%2FFunctions%2F-248931646" anchor-label="getNotebookDocumentService" id="-94144303%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-94144303%2FFunctions%2F-248931646"><span>get</span><wbr><span>Notebook</span><wbr><span>Document</span><wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-94144303%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-94144303%2FFunctions%2F-248931646"><span class="token function">getNotebookDocumentService</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j.services/NotebookDocumentService///PointingToDeclaration/">NotebookDocumentService</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1316186145%2FFunctions%2F-248931646" anchor-label="getTextDocumentService" id="1316186145%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-text-document-service.html"><span>get</span><wbr><span>Text</span><wbr><span>Document</span><wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1316186145%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-text-document-service.html"><span class="token function">getTextDocumentService</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j.services/TextDocumentService///PointingToDeclaration/">TextDocumentService</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1649477900%2FFunctions%2F-248931646" anchor-label="getWorkspaceService" id="1649477900%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-workspace-service.html"><span>get</span><wbr><span>Workspace</span><wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1649477900%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-workspace-service.html"><span class="token function">getWorkspaceService</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j.services/WorkspaceService///PointingToDeclaration/">WorkspaceService</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1707166095%2FFunctions%2F-248931646" anchor-label="initialize" id="-1707166095%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="initialize.html"><span><span>initialize</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1707166095%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="initialize.html"><span class="token function">initialize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">params<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/InitializeParams///PointingToDeclaration/">InitializeParams</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/InitializeResult///PointingToDeclaration/">InitializeResult</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-619395652%2FFunctions%2F-248931646" anchor-label="initialized" id="-619395652%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-36177268%2FFunctions%2F-248931646"><span><span>initialized</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-619395652%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-36177268%2FFunctions%2F-248931646"><span class="token function"><strike>initialized</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1844399428%2FFunctions%2F-248931646"><span class="token function">initialized</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/InitializedParams///PointingToDeclaration/">InitializedParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="245176934%2FFunctions%2F-248931646" anchor-label="log" id="245176934%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="log.html"><span><span>log</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="245176934%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="log.html"><span class="token function">log</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Logs a message to the client.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1243186765%2FFunctions%2F-248931646" anchor-label="publishDiagnostics" id="1243186765%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="publish-diagnostics.html"><span>publish</span><wbr><span><span>Diagnostics</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1243186765%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="publish-diagnostics.html"><span class="token function">publishDiagnostics</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">uri<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">diagnostics<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.eclipse.lsp4j/Diagnostic///PointingToDeclaration/">Diagnostic</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Publishes diagnostics to the client.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1609354866%2FFunctions%2F-248931646" anchor-label="setTrace" id="-1609354866%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1609354866%2FFunctions%2F-248931646"><span>set</span><wbr><span><span>Trace</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1609354866%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1609354866%2FFunctions%2F-248931646"><span class="token function">setTrace</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p0<span class="token operator">: </span><span data-unresolved-link="org.eclipse.lsp4j/SetTraceParams///PointingToDeclaration/">SetTraceParams</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1688463646%2FFunctions%2F-248931646" anchor-label="shutdown" id="-1688463646%2FFunctions%2F-248931646" data-filterable-set=":quarkdown-lsp/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-lsp/main" data-filterable-set=":quarkdown-lsp/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="shutdown.html"><span><span>shutdown</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1688463646%2FFunctions%2F-248931646"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-lsp/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="shutdown.html"><span class="token function">shutdown</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html">CompletableFuture</a><span class="token operator">&lt;</span><span class="token keyword">in </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Quarkdown</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
