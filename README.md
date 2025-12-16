@@ -135,13 +135,13 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 
 - **HTML**
   - [X] **Plain**  
-    Continuous flow like Notion/Obsidian, perfect for knowledge management.
+    Continuous flow like Notion/Obsidian, perfect for static websites and knowledge management - check out the author's [personal website](https://iamgio.eu/).
 
   - [X] **Paged** <sup>via [paged.js](https://pagedjs.org)</sup>  
-    Perfect for papers, articles and books - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock)!
+    Perfect for papers, articles and books - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock).
 
   - [X] **Slides** <sup>via [reveal.js](https://revealjs.com)</sup>  
-    Perfect for interactive presentations - check out the [demo presentation](https://iamgio.eu/quarkdown/demo)!
+    Perfect for interactive presentations.
 
 - **PDF**
   - [X] All document types and features supported by HTML are also supported when exporting to PDF.
