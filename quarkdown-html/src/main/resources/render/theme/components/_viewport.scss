@@ -24,7 +24,7 @@ body.quarkdown {
     margin: 32px 0;
 
     > main {
-      width: 100%;
+      width: min(100%, 90ch);
       column-count: var(--qd-column-count);
     }
 
@@ -48,8 +48,12 @@ body.quarkdown {
 
     // Responsiveness
     @include media-queries.mobile($orNarrowPrint: true) {
+      > main {
+        width: 100%;
+      }
+
       // The right margin area may have footnotes
-      aside#margin-area-left, aside#margin-area-right:empty {
+      > aside#margin-area-left, > aside#margin-area-right:empty {
         max-width: 0;
         --aside-inner-margin: 8px;
       }
