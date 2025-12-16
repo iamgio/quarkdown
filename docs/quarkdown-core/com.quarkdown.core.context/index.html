@@ -43,7 +43,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">1.12.1
+        <div class="library-version" id="library-version">1.13.0
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
@@ -113,6 +113,21 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-base-context/index.html">BaseContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>attributes<span class="token operator">: </span><a href="../com.quarkdown.core.ast.attributes/-ast-attributes/index.html">AstAttributes</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>flavor<span class="token operator">: </span><a href="../com.quarkdown.core.flavor/-markdown-flavor/index.html">MarkdownFlavor</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>libraries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptySet()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>subdocument<span class="token operator">: </span><a href="../com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token operator"> = </span>Subdocument.Root</span></span><span class="token punctuation">)</span> : <a href="-context/index.html">Context</a></div><div class="brief "><p class="paragraph">An immutable <a href="-context/index.html">Context</a> implementation. This might be used in tests as a toy context, but in a concrete execution, its mutable subclass <a href="-mutable-context/index.html">MutableContext</a> is used.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="915400626%2FClasslikes%2F1831116724" anchor-label="ChildContext" id="915400626%2FClasslikes%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-child-context/index.html"><span>Child</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="915400626%2FClasslikes%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-child-context/index.html">ChildContext</a><span class="token operator">&lt;</span><a href="-child-context/index.html">C</a><span class="token operator"> : </span><a href="-context/index.html">Context</a><span class="token operator">&gt;</span> : <a href="-context/index.html">Context</a></div><div class="brief "><p class="paragraph">A <a href="-context/index.html">Context</a> that has a parent context, forming a scope tree. This context can access its parent's properties and inherit them.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -191,7 +206,37 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-scope-context/index.html">ScopeContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>parent<span class="token operator">: </span><a href="-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>subdocument<span class="token operator">: </span><a href="../com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token operator"> = </span>parent.subdocument</span></span><span class="token punctuation">)</span> : <a href="-mutable-context/index.html">MutableContext</a></div><div class="brief "><p class="paragraph">A context that is the result of a fork from an original parent <a href="-context/index.html">Context</a>. Several properties are inherited from it.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-scope-context/index.html">ScopeContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>parent<span class="token operator">: </span><a href="-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter ">fileSystem<span class="token operator">: </span><a href="../com.quarkdown.core.context.file/-file-system/index.html">FileSystem</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="-subdocument-context/index.html">SubdocumentContext</a></div><div class="brief "><p class="paragraph">A context that is the result of a fork from an original parent <a href="-context/index.html">Context</a>. All properties are inherited from it, but not all, such as libraries, are shared mutably.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="77924179%2FClasslikes%2F1831116724" anchor-label="SharedContext" id="77924179%2FClasslikes%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shared-context/index.html"><span>Shared</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="77924179%2FClasslikes%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-shared-context/index.html">SharedContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>parent<span class="token operator">: </span><a href="-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>fileSystem<span class="token operator">: </span><a href="../com.quarkdown.core.context.file/-file-system/index.html">FileSystem</a><span class="token operator"> = </span>parent.fileSystem</span></span><span class="token punctuation">)</span> : <a href="-mutable-context/index.html">MutableContext</a>, <a href="-child-context/index.html">ChildContext</a><span class="token operator">&lt;</span><a href="-mutable-context/index.html">MutableContext</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A context that shares all of its properties with its parent <a href="-mutable-context/index.html">MutableContext</a>. This is useful when a context needs to be forked, for example to update its <a href="-shared-context/file-system.html">fileSystem</a>, but still its state mutably.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1232070385%2FClasslikes%2F1831116724" anchor-label="SubdocumentContext" id="1232070385%2FClasslikes%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-subdocument-context/index.html"><span>Subdocument</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1232070385%2FClasslikes%2F1831116724"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-subdocument-context/index.html">SubdocumentContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>parent<span class="token operator">: </span><a href="-mutable-context/index.html">MutableContext</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>subdocument<span class="token operator">: </span><a href="../com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token punctuation">, </span></span><span class="parameter ">_fileSystem<span class="token operator">: </span><a href="../com.quarkdown.core.context.file/-file-system/index.html">FileSystem</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="-mutable-context/index.html">MutableContext</a>, <a href="-child-context/index.html">ChildContext</a><span class="token operator">&lt;</span><a href="-mutable-context/index.html">MutableContext</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A context that is the result of a fork from an original parent <a href="-context/index.html">Context</a>. All properties are inherited from it, but not all, such as libraries, are shared mutably.</p></div></div></div>
                 </div>
               </div>
             </div>
