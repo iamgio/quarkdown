@@ -46,17 +46,33 @@ body.quarkdown {
       }
     }
 
-    // Responsiveness
+    // Mobile responsiveness
     @include media-queries.mobile($orNarrowPrint: true) {
-      > main {
-        width: 100%;
+      flex-direction: column;
+      padding: 0 16px;
+
+      > * {
         font-size: 1.1em;
       }
 
-      // The right margin area may have footnotes
-      > aside#margin-area-left, > aside#margin-area-right:empty {
-        max-width: 0;
-        --aside-inner-margin: 8px;
+      > main {
+        width: 100%;
+      }
+
+      > aside#margin-area-left {
+        display: none;
+      }
+
+      // Footnotes go to the bottom
+      > aside#margin-area-right {
+        --aside-inner-margin: 0;
+        max-width: none;
+        width: auto;
+        margin-top: 16px;
+
+        .footnote-definition {
+          margin-top: 0.5em !important;
+        }
       }
     }
   }
