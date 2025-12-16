@@ -1,5 +1,6 @@
 package com.quarkdown.core.context
 
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.Function
@@ -16,10 +17,12 @@ import com.quarkdown.core.pipeline.Pipeline
  *
  * @param parent context this scope was forked from
  * @param subdocument the subdocument this context is processing
+ * @param _fileSystem file system to use in this context. Overrides the attached pipeline's file system if provided
  */
 open class SubdocumentContext(
     override val parent: MutableContext,
     subdocument: Subdocument,
+    private val _fileSystem: FileSystem? = null,
 ) : MutableContext(
         flavor = parent.flavor,
         libraries = emptySet(),
@@ -37,6 +40,13 @@ open class SubdocumentContext(
     override val loadableLibraries by parent::loadableLibraries
     override val localizationTables by parent::localizationTables
     override var subdocumentGraph by parent::subdocumentGraph
+
+    /**
+     * If a file system is provided during construction, it is used.
+     * Otherwise, [BaseContext]'s implementation is used, which retrieves it from [attachedPipeline].
+     */
+    override val fileSystem: FileSystem
+        get() = _fileSystem ?: super.fileSystem
 
     /**
      * If no matching function is found among this [SubdocumentContext]'s own [libraries],

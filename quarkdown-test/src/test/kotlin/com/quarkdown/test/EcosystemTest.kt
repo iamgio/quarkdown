@@ -1,6 +1,9 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.function.quarkdownName
+import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.stdlib.ContextSandbox
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -12,102 +15,144 @@ private const val OUTPUT_BASIC_SOURCE = "<h1>Title</h1><p>Some <em>text</em>.</p
 private const val OUTPUT_FUNCTION_WITH_CONTENT = "<h2>Included</h2><pre><code>code\ncode</code></pre>"
 private const val OUTPUT_ABSOLUTE_IMAGE = "<p>img: <img src=\"/img/icon.png\" alt=\"img\" /></p>"
 
+private fun forSandboxes(
+    vararg sandboxes: ContextSandbox,
+    expectOthersFail: Boolean = true,
+    block: (String) -> Unit,
+) {
+    sandboxes.forEach {
+        Log.info("Testing ecosystem success in sandbox: ${it.quarkdownName}")
+        block(it.quarkdownName)
+    }
+
+    if (expectOthersFail) {
+        val others = ContextSandbox.entries.toSet() - sandboxes.toSet()
+        others.forEach { sandbox ->
+            Log.info("Testing ecosystem failure in sandbox: ${sandbox.quarkdownName}")
+            assertFails {
+                block(sandbox.quarkdownName)
+            }
+        }
+    }
+}
+
 /**
  * Tests for including files and libraries.
  */
 class EcosystemTest {
     @Test
     fun `include source`() {
-        execute(
-            """
-            .noautopagebreak
-            .include {include/basic-source.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                OUTPUT_BASIC_SOURCE,
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .noautopagebreak
+                .include {include/basic-source.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    OUTPUT_BASIC_SOURCE,
+                    it,
+                )
+            }
         }
     }
 
     @Test
     fun `include source with stdlib call`() {
-        execute(".include {include/stdlib-call.md}") {
-            assertContains(it, "Lorem ipsum")
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .include {include/stdlib-call.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertContains(it, "Lorem ipsum")
+            }
         }
     }
 
     @Test
     fun `modify document info from included source`() {
-        execute(
-            """
-            .include {include/document-info-modification.md}
-            """.trimIndent(),
-        ) {
-            assertEquals("Modified Title", documentInfo.name)
-            assertEquals("it", documentInfo.locale?.shortTag)
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE) { sandbox ->
+            execute(
+                """
+                .include {include/document-info-modification.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals("Modified Title", documentInfo.name)
+                assertEquals("it", documentInfo.locale?.shortTag)
+            }
         }
     }
 
     @Test
     fun `include function from source`() {
-        execute(
-            """
-            .include {include/function-definition.md}
-            .hello {world}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hello, world!</p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE) { sandbox ->
+            execute(
+                """
+                .include {include/function-definition.md} sandbox:{$sandbox}
+                .hello {world}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>Hello, world!</p>",
+                    it,
+                )
+            }
         }
+    }
 
-        execute(
-            """
-            .noautopagebreak
-            # Main
-            .include {include/function-with-content.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<h1>Main</h1>$OUTPUT_FUNCTION_WITH_CONTENT",
-                it,
-            )
+    @Test
+    fun `include uncalled function plus content from source`() {
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .noautopagebreak
+                # Main
+                .include {include/function-with-content.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<h1>Main</h1>$OUTPUT_FUNCTION_WITH_CONTENT",
+                    it,
+                )
+            }
         }
     }
 
     @Test
     fun `share function with included files`() {
-        execute(
-            """
-            .function {hello}
-                x:
-                Hello, .x!
-            .include {include/shared-function-usage.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<h3>Hello, world!</h3>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .function {hello}
+                    x:
+                    Hello, .x!
+                .include {include/shared-function-usage.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<h3>Hello, world!</h3>",
+                    it,
+                )
+            }
         }
     }
 
     @Test
     fun `transitive inclusion`() {
-        execute(
-            """
-            .noautopagebreak
-            # Main
-            .include {include/transitive-include.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<h1>Main</h1><h1>Included</h1><p>Hello, Gio!</p><h3>Hello, world!</h3>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .noautopagebreak
+                # Main
+                .include {include/transitive-include.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<h1>Main</h1><h1>Included</h1><p>Hello, Gio!</p><h3>Hello, world!</h3>",
+                    it,
+                )
+            }
         }
     }
 
@@ -125,49 +170,55 @@ class EcosystemTest {
 
     @Test
     fun `mutate included data`() {
-        execute(
-            """
-            .include {include/mutable-data.md}
-            
-            .saygreeting
-            
-            .var {mygreeting} {Hello}
-            
-            .saygreeting
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Hi</p><p>Hello</p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE) { sandbox ->
+            execute(
+                """
+                .include {include/mutable-data.md} sandbox:{$sandbox}
+                
+                .saygreeting
+                
+                .var {mygreeting} {Hello}
+                
+                .saygreeting
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>Hi</p><p>Hello</p>",
+                    it,
+                )
+            }
         }
     }
 
     @Test
     fun `'read' call from updated working directory`() {
-        execute(
-            """
-            .include {include/read-relative-path.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>Line 1\nLine 2\n\nLine 3</p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .include {include/read-relative-path.md}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>Line 1\nLine 2\n\nLine 3</p>",
+                    it,
+                )
+            }
         }
     }
 
     @Test
     fun `relative-path image from updated working directory`() {
-        execute(
-            """
-            .include {include/relative-image.md}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<p>img: <img src=\"img/icon.png\" alt=\"img\" /></p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .include {include/relative-image.md}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>img: <img src=\"img/icon.png\" alt=\"img\" /></p>",
+                    it,
+                )
+            }
         }
     }
 
@@ -215,19 +266,21 @@ class EcosystemTest {
 
     @Test
     fun `include library`() {
-        // Load library named 'hello' from libraries/hello.qd
-        execute(
-            """
-            .include {hello}
-            .hellofromlib {world}
-            """.trimIndent(),
-            loadableLibraries = setOf("hello"),
-            useDummyLibraryDirectory = true,
-        ) {
-            assertEquals(
-                "<p>Hello, <em>world</em>!</p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            // Load library named 'hello' from libraries/hello.qd
+            execute(
+                """
+                .include {hello} sandbox:{$sandbox}
+                .hellofromlib {world}
+                """.trimIndent(),
+                loadableLibraries = setOf("hello"),
+                useDummyLibraryDirectory = true,
+            ) {
+                assertEquals(
+                    "<p>Hello, <em>world</em>!</p>",
+                    it,
+                )
+            }
         }
     }
 
@@ -262,19 +315,21 @@ class EcosystemTest {
 
     @Test
     fun `include multiple sources`() {
-        execute(
-            """
-            .noautopagebreak
-            .include {include/basic-source.md}
-            .include {include/function-with-content.md}
-            
-            .hello {world}
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "$OUTPUT_BASIC_SOURCE$OUTPUT_FUNCTION_WITH_CONTENT<p>Hello, world!</p>",
-                it,
-            )
+        forSandboxes(ContextSandbox.SHARE) { sandbox ->
+            execute(
+                """
+                .noautopagebreak
+                .include {include/basic-source.md} sandbox:{$sandbox}
+                .include {include/function-with-content.md} sandbox:{$sandbox}
+                
+                .hello {world}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "$OUTPUT_BASIC_SOURCE$OUTPUT_FUNCTION_WITH_CONTENT<p>Hello, world!</p>",
+                    it,
+                )
+            }
         }
     }
 
