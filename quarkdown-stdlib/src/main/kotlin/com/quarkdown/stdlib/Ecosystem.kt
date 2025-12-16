@@ -5,12 +5,15 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.context.SharedContext
+import com.quarkdown.core.context.SubdocumentContext
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
@@ -54,13 +57,43 @@ internal fun includeResource(
 }
 
 /**
+ * Relationship between the main context and the included file's context via [include].
+ * See [include] for details about each mode.
+ */
+enum class ContextSandbox {
+    /** @see SharedContext */
+    SHARE,
+
+    /** @see ScopeContext */
+    SCOPE,
+
+    /** @see SubdocumentContext */
+    SUBDOCUMENT,
+}
+
+/**
  * This function has two behaviors:
- * - Reads a Quarkdown file and includes its parsed content in the current document.
+ * - Reads a Quarkdown file and includes its parsed content in the current document,
+ *   using the specified [sandbox] strategy to determine what information is shared between the main context and the included file's context.
  * - Loads a library into the current context. Loadable libraries are fetched from the library folder (`--libs` CLI option).
+ *   [sandbox] is ignored in this case.
  *
- * The context of the main file is shared to the sub-file and vice versa, allowing for sharing of variables, functions and other declarations.
+ * The context of the included file is always inherited from the main file, with an updated working directory that matches the included file's location.
+ * [sandbox] defines, instead, what information is shared back to the main file's context, and how. The following modes are listed in ascending order of isolation:
+ *
+ * - `share` (default): exchanges information bi-directionally. Changes made in the included file's context are reflected in the main file's context, and vice versa,
+ *            allowing for full sharing of variables, functions and other declarations.
+ *            This is represented by [SharedContext].
+ *
+ * - `scope`: like `share`, but the included file's context does not share new declarations (functions and variables) back to the main file's context.
+ *            This is the behavior used within lambda blocks, such as [foreach], and is represented by [ScopeContext].
+ *
+ * - `subdocument`: no information is shared back to the main file's context, only inherited from it. This also applies to the document info (metadata, title, etc.),
+ *                  This is the behavior used for subdocuments, and is represented by [SubdocumentContext].
  *
  * @param path either a path (relative or absolute with extension) to the file to include, or the name of a loadable library
+ * @param sandbox relationship between the main context and the included file's context
+ *
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
  * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated
  * @wiki Including other Quarkdown files
@@ -68,6 +101,7 @@ internal fun includeResource(
 fun include(
     @Injected context: MutableContext,
     path: String,
+    @LikelyNamed sandbox: ContextSandbox = ContextSandbox.SHARE,
 ): OutputValue<*> {
     // Load library by name if it exists.
     context.loadLibrary(path)?.let { return VoidValue }
@@ -75,15 +109,20 @@ fun include(
     // File lookup
     val file = file(context, path)
 
-    // Shared context initialization with updated working directory.
+    // Context initialization with updated working directory.
     val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory = file.parentFile)
-    val newContext: Context = SharedContext(context, newFileSystem)
+    val newContext: Context =
+        when (sandbox) {
+            ContextSandbox.SHARE -> SharedContext(context, newFileSystem)
+            ContextSandbox.SCOPE -> ScopeContext(context, newFileSystem)
+            ContextSandbox.SUBDOCUMENT -> SubdocumentContext(context, context.subdocument, newFileSystem)
+        }
 
     return includeResource(newContext, file.bufferedReader())
 }
 
 /**
- * Performs a bulk include of the given paths via [include].
+ * Performs a bulk include of the given paths via [include] (with the default `share` sandbox).
  * @param paths paths to the files or library names to include
  * @return a collection containing the output of the included files
  * @throws IllegalArgumentException if any of the loaded sources cannot be evaluated

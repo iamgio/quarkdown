@@ -1,5 +1,6 @@
 package com.quarkdown.core.context
 
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.Function
@@ -16,10 +17,12 @@ import com.quarkdown.core.pipeline.Pipeline
  *
  * @param parent context this scope was forked from
  * @param subdocument the subdocument this context is processing
+ * @param fileSystem file system to use in this context
  */
 open class SubdocumentContext(
     override val parent: MutableContext,
     subdocument: Subdocument,
+    override val fileSystem: FileSystem = parent.fileSystem,
 ) : MutableContext(
         flavor = parent.flavor,
         libraries = emptySet(),
