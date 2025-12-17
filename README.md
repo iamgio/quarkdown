@@ -415,6 +415,7 @@ A special thanks to all the sponsors who [supported this project](https://github
   <a href="https://github.com/dcopia"><img src="https://avatars.githubusercontent.com/u/162327812?v=4" alt="dcopia" width="35"></a>
   <a href="https://github.com/Pallandos"><img src="https://avatars.githubusercontent.com/u/146179143?v=4" alt="Pallandos" width="35"></a>
   <a href="https://github.com/imogenxingren"><img src="https://avatars.githubusercontent.com/u/36161957?v=4" alt="imogenxingren" width="35"></a>
+  <a href="https://github.com/serkonda7"><img src="https://avatars.githubusercontent.com/u/40118727?v=4" alt="serkonda7" width="35"></a>
 </p>
 
 ## Concept
