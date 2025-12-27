@@ -49,8 +49,9 @@ class SecurityTest {
         execute(
             ".docname {../test.abc}",
             outputResourceHook = { group ->
+                val file = group?.accept(FileResourceExporter(location = File("."), write = false))
                 assertEquals("../test.abc", group?.name)
-                assertEquals("-test-abc", group?.accept(FileResourceExporter(location = File("."), write = false))?.name)
+                assertEquals("-.-test.abc", file?.name)
             },
         ) {
             assertEquals("../test.abc", documentInfo.name)
