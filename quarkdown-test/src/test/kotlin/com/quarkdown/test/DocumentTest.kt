@@ -11,9 +11,11 @@ import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.NamedColor
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
@@ -109,6 +111,17 @@ class DocumentTest {
             assertEquals(2.0, documentInfo.layout.paragraphStyle.lineHeight)
             assertEquals(1.5, documentInfo.layout.paragraphStyle.spacing)
             assertEquals(2.0, documentInfo.layout.paragraphStyle.indent)
+        }
+    }
+
+    @Test
+    fun `document cannot have blank name`() {
+        assertFails {
+            execute(".docname { }") {}
+        }
+
+        execute(".docname { }", errorHandler = BasePipelineErrorHandler()) {
+            assertNull(documentInfo.name)
         }
     }
 
