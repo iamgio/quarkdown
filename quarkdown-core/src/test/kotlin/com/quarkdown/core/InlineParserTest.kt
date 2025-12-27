@@ -450,10 +450,12 @@ class InlineParserTest {
     fun emphasis() {
         val nodes = inlineIterator<Emphasis>(readSource("/parsing/inline/emphasis.md"))
 
-        with(nodes.next()) {
-            with(children.first()) {
-                assertIs<Text>(this)
-                assertEquals("foo", text)
+        repeat(2) {
+            with(nodes.next()) {
+                with(children.first()) {
+                    assertIs<Text>(this)
+                    assertEquals("foo", text)
+                }
             }
         }
 
@@ -478,6 +480,37 @@ class InlineParserTest {
             with(children.first()) {
                 assertIs<Text>(this)
                 assertEquals("foo_bar_baz", text)
+            }
+        }
+
+        with(nodes.next()) {
+            val content = children.iterator()
+            with(content.next()) {
+                assertIs<Text>(this)
+                assertEquals("foo", text)
+            }
+            with(content.next()) {
+                assertIs<Emphasis>(this)
+                assertIs<Text>(children.first())
+                assertEquals("bar", (children.first() as Text).text)
+            }
+            with(content.next()) {
+                assertIs<Text>(this)
+                assertEquals("baz", text)
+            }
+        }
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<Text>(this)
+                assertEquals("foo bar)", text)
+            }
+        }
+
+        with(nodes.next()) {
+            with(children.first()) {
+                assertIs<Text>(this)
+                assertEquals("(foo bar)", text)
             }
         }
 

@@ -171,6 +171,19 @@ class LexerTest {
 
         repeat(2) {
             with(inlineLex(sources.next())) {
+                assertIs<EmphasisToken>(next())
+                assertFalse(hasNext())
+            }
+        }
+
+        with(inlineLex(sources.next())) {
+            assertIs<PlainTextToken>(next())
+            assertIs<StrongToken>(next())
+            assertFalse(hasNext())
+        }
+
+        repeat(2) {
+            with(inlineLex(sources.next())) {
                 assertIs<PlainTextToken>(next())
                 assertIs<StrongToken>(next())
                 assertIs<PlainTextToken>(next())

@@ -361,8 +361,8 @@ private fun delimiteredPattern(
         "(?!start)((.|\\R)+?)" +
         // End delimiter
         if (strict) {
-            // If strict, the start delimiter must also not be left-flanking
-            "((?<![\\spunct])end(?=[\\spunct]))"
+            // If strict, the end delimiter must also not be left-flanking
+            "((?<![\\spunct])end(?=[\\spunct])|(?<!\\s)end(?=[\\spunct]))"
         } else {
             "((?<![\\spunct])end|(?<!\\s)end(?=[\\spunct]))"
         },

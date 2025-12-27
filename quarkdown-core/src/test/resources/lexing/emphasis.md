@@ -6,6 +6,18 @@ __text__
 
 ---
 
+*text*
+
+---
+
+_text_
+
+---
+
+(__text)__
+
+---
+
 abc **strong abc** text **test** aaaa *emphasis*
 
 ---
