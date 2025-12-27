@@ -9,6 +9,10 @@ import com.quarkdown.core.property.Property
  * [Property], assigned to each image link, that points to a local relative URL (path) that is different from the original.
  * For instance, an image may have a link to `images/picture.png`,
  * but if it's loaded from an included document with a different base path, it may be resolved to, for example, `../images/picture.png`.
+ *
+ * This property assumes paths are stored in a normalized format (i.e., no `./` or `../` segments),
+ * and using `/` as the path separator.
+ *
  * @see com.quarkdown.core.ast.base.inline.Link
  * @see com.quarkdown.core.context.hooks.LinkUrlResolverHook for the storing stage
  */

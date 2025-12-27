@@ -10,6 +10,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.util.isURL
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.invariantSeparatorsPathString
 
 /**
  * Hook that resolves relative link paths based on their file system.
@@ -21,7 +22,7 @@ import kotlin.io.path.Path
  * This is mainly applied to images.
  *
  * @param context root context to use for resolution
- * @see com.quarkdown.core.ast.attributes.link.ResolvedImagePathProperty
+ * @see com.quarkdown.core.ast.attributes.link.ResolvedLinkUrlProperty
  */
 class LinkUrlResolverHook(
     private val context: MutableContext,
@@ -45,7 +46,7 @@ class LinkUrlResolverHook(
                 ?.normalize()
 
         resolved?.let {
-            link.setResolvedUrl(context, it.toString())
+            link.setResolvedUrl(context, it.invariantSeparatorsPathString)
         }
     }
 
