@@ -159,8 +159,9 @@ fun docType(
  * The current document name is .docname
  * ```
  *
- * @param name optional name to assign to the document
+ * @param name optional non-blank name to assign to the document
  * @return the current document name if [name] is unset, nothing otherwise
+ * @throws IllegalArgumentException if [name] is blank
  * @wiki Document metadata
  */
 @Name("docname")
@@ -171,7 +172,10 @@ fun docName(
     context.modifyOrEchoDocumentInfo(
         name,
         get = { (this.name ?: "").wrappedAsValue() },
-        modify = { copy(name = it) },
+        modify = {
+            require(it.isNotBlank()) { "Document name cannot be blank." }
+            copy(name = it)
+        },
     )
 
 /**
