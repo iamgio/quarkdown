@@ -16,5 +16,11 @@ class Math(
     override val referenceId: String? = null,
 ) : LocationTrackableNode,
     CrossReferenceableNode {
+    /**
+     * A math block is numbered if it has a [referenceId].
+     */
+    override val canTrackLocation: Boolean
+        get() = referenceId != null
+
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
