@@ -290,6 +290,39 @@ class CrossReferenceTest {
     }
 
     @Test
+    fun `numbered references (custom figure)`() {
+        execute(
+            """
+            .numbering
+                - figures: 1
+            
+            See .ref {my-fig} and .ref {my-other-fig}.
+            
+            .figure ref:{my-fig}
+                This is a custom figure.
+            
+            .figure caption:{My caption} ref:{my-other-fig}
+                This is another custom figure.
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>" +
+                    "<figure id=\"figure-1\">" +
+                    "<p>This is a custom figure.</p>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"1\"></figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-2\">" +
+                    "<p>This is another custom figure.</p>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"2\">My caption</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `reference before definition (table)`() {
         execute(
             """

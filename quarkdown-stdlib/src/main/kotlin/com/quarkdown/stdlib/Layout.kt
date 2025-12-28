@@ -413,19 +413,25 @@ fun inlineCollapse(
 ) = InlineCollapse(full.children, short.children, open).wrappedAsValue()
 
 /**
- * Inserts content in a figure block, which features an optional caption and can be numbered according to the `figures` numbering rules.
+ * Inserts content in a figure block, with an optional caption.
+ *
+ * If either [caption] or [referenceId] is set, the figure will be numbered according to the `figures` [numbering] rule.
  *
  * @param caption optional caption of the figure
+ * @param referenceId optional ID for cross-referencing via [reference]
  * @param body content of the figure
  * @return the new [Figure] node
  */
 fun figure(
     @LikelyNamed caption: String? = null,
+    @Name("ref") referenceId: String? = null,
     @LikelyBody body: MarkdownContent,
 ): NodeValue =
-    object : Figure<MarkdownContent>(body) {
-        override val caption: String? = caption
-    }.wrappedAsValue()
+    Figure<MarkdownContent>(
+        body,
+        caption = caption,
+        referenceId = referenceId,
+    ).wrappedAsValue()
 
 /**
  * Node that can be numbered depending on its location in the document
