@@ -106,10 +106,11 @@ fun StringBuilder.replace(
 
 /**
  * @return [this] string with all non-alphanumeric characters,
- *         except for `-`, `_`, `@`, and `.`, replaced with [replacement]
+ *         except for `-`, `_`, `@`, replaced with [replacement].
+ *         `.` is sanitized only at the beginning and the end of the string.
  * @param replacement character to replace invalid characters with
  */
-fun String.sanitizeFileName(replacement: String) = this.replace("[^a-zA-Z0-9\\-_.@]+".toRegex(), replacement)
+fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^a-zA-Z0-9\\-_.@]+".toRegex(), replacement)
 
 /**
  * @return [this] string with line separators replaced with `\n`,
