@@ -52,9 +52,9 @@ class LocationAwareLabelStorerHook(
         if (!context.options.enableLocationAwareness) return
 
         updateHeadingLabels(iterator)
-        updateLabels<Figure<*>>(DocumentNumbering::figures, iterator, filter = { it.caption != null })
+        updateLabels<Figure<*>>(DocumentNumbering::figures, iterator)
         updateLabels<Table>(DocumentNumbering::tables, iterator)
-        updateLabels<Math>(DocumentNumbering::math, iterator, filter = { it.referenceId != null })
+        updateLabels<Math>(DocumentNumbering::math, iterator)
         updateLabels<Code>(DocumentNumbering::codeBlocks, iterator)
 
         // Updates the labels of Numbered nodes, which are grouped by their key.
@@ -98,7 +98,7 @@ class LocationAwareLabelStorerHook(
     private inline fun <reified T : LocationTrackableNode> updateLabels(
         formatSupplier: (DocumentNumbering) -> NumberingFormat?,
         iterator: ObservableAstIterator,
-        crossinline filter: (T) -> Boolean = { true },
+        crossinline filter: (T) -> Boolean = { it.canTrackLocation },
     ) {
         // Gets the needed numbering format from the global numbering settings.
         val format = formatSupplier(context.documentInfo.numberingOrDefault ?: return)

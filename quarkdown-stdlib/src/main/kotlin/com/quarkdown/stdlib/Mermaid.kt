@@ -1,7 +1,7 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
-import com.quarkdown.core.ast.quarkdown.block.MermaidDiagramFigure
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
@@ -31,14 +31,18 @@ val Mermaid: QuarkdownModule =
 
 private fun mermaidFigure(
     caption: String?,
+    referenceId: String? = null,
     code: String,
-) = MermaidDiagramFigure(
+) = Figure<MermaidDiagram>(
     MermaidDiagram(code),
-    caption,
+    caption = caption,
+    referenceId = referenceId,
 ).wrappedAsValue()
 
 /**
  * Creates a Mermaid diagram.
+ *
+ * If either [caption] or [referenceId] is set, the diagram will be numbered as a figure.
  *
  * ```
  * .mermaid
@@ -54,14 +58,20 @@ private fun mermaidFigure(
  *     .read {path/to/diagram.mmd}
  * ```
  *
- * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
+ * @param caption optional caption
+ * @param referenceId optional ID for cross-referencing via [reference]
  * @param code the Mermaid code of the diagram
- * @return a new [MermaidDiagramFigure] node
+ * @return a new [Figure] node
  */
 fun mermaid(
     @LikelyNamed caption: String? = null,
+    @Name("ref") referenceId: String? = null,
     @LikelyBody code: EvaluableString,
-) = mermaidFigure(caption, code.content)
+) = mermaidFigure(
+    caption = caption,
+    referenceId = referenceId,
+    code = code.content,
+)
 
 /**
  * A chart line is a list of its points.
@@ -173,7 +183,8 @@ private fun StringBuilder.axis(
  * @param xAxisTags optional categorical tags for the X axis. Incompatible with [xAxisRange].
  * @param yAxisLabel optional label for the Y axis
  * @param yAxisRange optional range for the Y axis. If open-ended, the range will be set to the minimum and maximum values of the Y values
- * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure.
+ * @param caption optional caption. If a caption is present, the diagram will be numbered as a figure
+ * @param referenceId optional ID for cross-referencing via [reference]
  * @param values the Y values to plot.
  *               They can be a list of points, which will be plotted as a single line,
  *               or a list of lists of points, which will be plotted as multiple lines.
@@ -191,6 +202,7 @@ fun xyChart(
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
     @LikelyNamed caption: String? = null,
+    @Name("ref") referenceId: String? = null,
     @LikelyBody values: Iterable<OutputValue<*>>,
 ): NodeValue {
     val lines: List<ChartLine> = extractLines(values)
@@ -217,7 +229,7 @@ fun xyChart(
         }
 
     val code = "xychart-beta\n" + content.indent("\t")
-    return mermaidFigure(caption, code)
+    return mermaidFigure(caption = caption, referenceId = referenceId, code = code)
 }
 
 /**

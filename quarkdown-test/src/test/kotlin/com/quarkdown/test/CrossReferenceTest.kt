@@ -254,6 +254,75 @@ class CrossReferenceTest {
     }
 
     @Test
+    fun `numbered references (mermaid figure)`() {
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+                - figures: A
+            
+            See .ref {my-diagram} and .ref {my-other-diagram}.
+            
+            .mermaid ref:{my-diagram}
+                graph TD
+                    A --> B
+                    
+            .mermaid caption:{My other diagram} ref:{my-other-diagram}
+                graph TD
+                    A --> B
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"A\"></span>" +
+                    " and <span class=\"cross-reference\" data-location=\"B\"></span>.</p>" +
+                    "<figure id=\"figure-A\">" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A --&gt; B</pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"A\"></figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-B\">" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A --&gt; B</pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"B\">My other diagram</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered references (custom figure)`() {
+        execute(
+            """
+            .numbering
+                - figures: 1
+            
+            See .ref {my-fig} and .ref {my-other-fig}.
+            
+            .figure ref:{my-fig}
+                This is a custom figure.
+            
+            .figure caption:{My caption} ref:{my-other-fig}
+                This is another custom figure.
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>" +
+                    "<figure id=\"figure-1\">" +
+                    "<p>This is a custom figure.</p>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"1\"></figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-2\">" +
+                    "<p>This is another custom figure.</p>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"2\">My caption</figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `reference before definition (table)`() {
         execute(
             """

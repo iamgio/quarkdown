@@ -581,6 +581,11 @@ class NumberingTest {
                     A-->C
             
             ![](img.png "Caption 3")
+            
+            .mermaid ref:{mermaid-diagram}
+                graph TD
+                    A-->B
+                    A-->C
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
@@ -595,6 +600,33 @@ class NumberingTest {
                     "</figure>" +
                     "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.3\">Caption 3</figcaption>" +
+                    "</figure>" +
+                    "<figure id=\"figure-1.4\">" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
+                    "<figcaption class=\"caption-bottom\" data-location=\"1.4\"></figcaption>" +
+                    "</figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `mermaid diagram without caption and ref id is not numbered`() {
+        execute(
+            """
+            .numbering
+                - figures: 1
+            
+            .mermaid
+                graph TD
+                    A-->B
+                    A-->C
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<figure>" +
+                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "</figure>",
                 it,
             )
