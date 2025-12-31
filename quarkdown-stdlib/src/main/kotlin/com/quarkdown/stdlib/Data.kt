@@ -200,6 +200,7 @@ enum class CsvParsingMode(
  * @param path path of the CSV file (with extension) to show
  * @param mode mode to handle the content of each cell and header (plain or Markdown)
  * @param caption optional caption of the table. If set, the table will be numbered according to the current [numbering] format
+ * @param referenceId optional ID for cross-referencing via [reference]
  * @return a table whose content is loaded from the file located in [path]
  * @wiki File data
  */
@@ -208,6 +209,7 @@ fun csv(
     path: String,
     @LikelyNamed mode: CsvParsingMode = CsvParsingMode.PLAIN,
     @LikelyNamed caption: String? = null,
+    @Name("ref") referenceId: String? = null,
 ): NodeValue {
     val file = file(context, path)
     val columns = mutableListOf<Table.MutableColumn>()
@@ -237,7 +239,8 @@ fun csv(
     }
 
     return Table(
-        columns.map { it.toColumn() },
-        caption,
+        columns = columns.map { it.toColumn() },
+        caption = caption,
+        referenceId = referenceId,
     ).wrappedAsValue()
 }
