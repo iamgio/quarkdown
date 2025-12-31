@@ -3,6 +3,7 @@ package com.quarkdown.test
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 /**
@@ -375,6 +376,40 @@ class CrossReferenceTest {
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
                     "<caption class=\"caption-bottom\" data-location=\"ii\" data-localized-kind=\"Table\">My caption</caption></table>",
                 it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered references (csv table)`() {
+        execute(
+            """
+            .numbering
+                - tables: 1
+                
+            See .ref {my-table} and .ref {my-other-table}.
+            
+            .csv {csv/people.csv} ref:{my-table}
+            
+            | Header 1 | Header 2 |
+            |----------|----------|
+            | Cell 1   | Cell 2   |
+            {#my-other-table}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertContains(
+                it,
+                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
+                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>",
+            )
+            assertContains(
+                it,
+                "<caption class=\"caption-bottom\" data-location=\"1\"></caption></table>",
+            )
+            assertContains(
+                it,
+                "<caption class=\"caption-bottom\" data-location=\"2\"></caption></table>",
             )
         }
     }
