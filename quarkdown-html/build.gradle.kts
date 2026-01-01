@@ -5,7 +5,7 @@ import com.github.gradle.node.npm.task.NpxTask
 plugins {
     kotlin("jvm")
     id("com.github.node-gradle.node") version "7.1.0"
-    id("io.miret.etienne.sass") version "1.5.2"
+    id("io.miret.etienne.sass") version "1.6.0"
 }
 
 dependencies {

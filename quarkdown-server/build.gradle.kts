@@ -6,7 +6,7 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(project(":quarkdown-core"))
 
-    val ktorVersion = "3.3.1"
+    val ktorVersion = "3.3.3"
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-websockets:$ktorVersion")
