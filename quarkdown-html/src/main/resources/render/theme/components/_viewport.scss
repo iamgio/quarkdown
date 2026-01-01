@@ -18,7 +18,8 @@ body.quarkdown {
   }
 
   // Plain viewport
-  &.quarkdown-plain {
+  &.quarkdown-plain,
+  &.quarkdown-docs :is(header, .content-wrapper) {
     display: flex;
     flex-direction: row;
     margin: 32px 0;
@@ -29,19 +30,19 @@ body.quarkdown {
     }
 
     > aside {
-      $width: 30vw;
-      max-width: #{$width};
-      width: #{$width};
-
+      --aside-width: 30vw;
       --aside-outer-margin: 12px;
       --aside-inner-margin: calc(var(--aside-outer-margin) * 2);
+
+      width: var(--aside-width);
+      max-width: var(--aside-width);
       margin: 0 var(--aside-outer-margin);
 
-      &#margin-area-left {
+      &:first-child {
         margin-right: var(--aside-inner-margin);
       }
 
-      &#margin-area-right {
+      &:last-child {
         margin-left: var(--aside-inner-margin);
       }
     }
@@ -73,6 +74,26 @@ body.quarkdown {
         .footnote-definition {
           margin-top: 0.5em !important;
         }
+      }
+    }
+  }
+
+  &.quarkdown-docs {
+    display: flex;
+    flex-direction: column;
+
+    :is(header, .content-wrapper) > aside {
+      --aside-width: 20vw;
+      --aside-outer-margin: 32px;
+    }
+
+    .content-wrapper {
+      aside:first-child {
+        border-right: 1px solid;
+      }
+
+      aside:last-child {
+        border-left: 1px solid;
       }
     }
   }
