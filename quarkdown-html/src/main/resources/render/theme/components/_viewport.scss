@@ -86,6 +86,14 @@ body.quarkdown {
     :is(header, .content-wrapper) > aside {
       --aside-width: 20vw;
       --aside-outer-margin: 32px;
+
+      &:first-child {
+        padding-right: calc(var(--aside-outer-margin) / 2);
+      }
+
+      &:last-child {
+        padding-left: calc(var(--aside-outer-margin) / 2);
+      }
     }
 
     .content-wrapper {
