@@ -63,19 +63,28 @@ object TemplatePlaceholders {
     const val DOCUMENT_TYPE = "DOCTYPE"
 
     /**
-     * Whether this document is plain, with no sections or pages.
+     * Whether this document is plain, with no pages.
+     * @see com.quarkdown.core.document.DocumentType.PLAIN
      */
     const val IS_PLAIN = "PLAIN"
 
     /**
      * Whether this document is grouped in pages.
+     * @see com.quarkdown.core.document.DocumentType.PAGED
      */
     const val IS_PAGED = "PAGED"
 
     /**
      * Whether this document is a presentation.
+     * @see com.quarkdown.core.document.DocumentType.SLIDES
      */
     const val IS_SLIDES = "SLIDES"
+
+    /**
+     * Whether this document is docs.
+     * @see com.quarkdown.core.document.DocumentType.DOCS
+     */
+    const val IS_DOCS = "DOCS"
 
     /**
      * Width of the document.
