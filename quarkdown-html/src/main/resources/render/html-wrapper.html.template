@@ -162,12 +162,24 @@
     <aside class="margin-area"></aside>
 </header>
 <div class="content-wrapper">
-    <aside id="margin-area-left" class="margin-area"></aside>
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
     <main>
         [[CONTENT]]
-        <footer><div></div><div></div><div></div></footer>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
     </main>
-    <aside id="margin-area-right" class="margin-area"></aside>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
 </div>
 [[endif:DOCS]]
 </body>

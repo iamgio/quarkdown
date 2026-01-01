@@ -4,6 +4,7 @@ import {Sidebar} from "../handlers/sidebar";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
 import {FootnotesPlain} from "../handlers/footnotes/footnotes-plain";
 import {PlainDocument} from "./plain-document";
+import {PageMarginsDocs} from "../handlers/page-margins/page-margins-docs";
 
 /**
  * 'Docs' document implementation for HTML documents targeting documentation sites and wikis.
@@ -12,7 +13,7 @@ import {PlainDocument} from "./plain-document";
 export class DocsDocument extends PlainDocument {
     getHandlers(): DocumentHandler[] {
         return [
-
+            new PageMarginsDocs(this),
         ];
     }
 }
