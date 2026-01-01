@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("com.quarkdown.amber") version "2.1.3"
+    id("com.quarkdown.amber") version "2.1.4"
     `java-test-fixtures`
 }
 
@@ -12,8 +12,8 @@ dependencies {
     testImplementation(testFixtures(project))
     implementation(kotlin("reflect"))
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.4")
-    implementation("org.apache.logging.log4j:log4j-core:2.25.2")
-    implementation("org.apache.commons:commons-text:1.14.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.25.3")
+    implementation("org.apache.commons:commons-text:1.15.0")
     implementation("com.github.ajalt.colormath:colormath:3.6.1")
     implementation("com.github.fracpete:romannumerals4j:0.0.1")
     implementation("org.jbibtex:jbibtex:1.0.20")
