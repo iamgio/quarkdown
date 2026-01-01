@@ -165,6 +165,7 @@
     <aside id="margin-area-left" class="margin-area"></aside>
     <main>
         [[CONTENT]]
+        <footer><div></div><div></div><div></div></footer>
     </main>
     <aside id="margin-area-right" class="margin-area"></aside>
 </div>

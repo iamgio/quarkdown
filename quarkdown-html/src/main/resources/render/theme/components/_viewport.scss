@@ -78,6 +78,7 @@ body.quarkdown {
     }
   }
 
+  // Docs viewport
   &.quarkdown-docs {
     display: flex;
     flex-direction: column;
@@ -88,6 +89,13 @@ body.quarkdown {
     }
 
     .content-wrapper {
+      main > footer {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
       aside:first-child {
         border-right: 1px solid;
       }
