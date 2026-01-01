@@ -129,6 +129,9 @@
         [[if:PAGED]]
         const doc = new PagedDocument();
         [[endif:PAGED]]
+        [[if:DOCS]]
+        const doc = new DocsDocument();
+        [[endif:DOCS]]
         prepare(doc);
     </script>
 </head>
