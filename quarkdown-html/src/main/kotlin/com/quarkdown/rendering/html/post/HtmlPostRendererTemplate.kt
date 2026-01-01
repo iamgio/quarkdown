@@ -83,6 +83,8 @@ class HtmlPostRendererTemplate(
         conditional(TemplatePlaceholders.IS_PAGED, document.type == DocumentType.PAGED)
         // "Slides" document rendering via RevealJS.
         conditional(TemplatePlaceholders.IS_SLIDES, document.type == DocumentType.SLIDES)
+        // "Docs" document rendering.
+        conditional(TemplatePlaceholders.IS_DOCS, document.type == DocumentType.DOCS)
     }
 
     /**

@@ -150,5 +150,21 @@
 [[if:PAGED]]
 [[CONTENT]]
 [[endif:PAGED]]
+[[if:DOCS]]
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <input id="search-input" type="text" placeholder="Search">
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area"></aside>
+    <main>
+        [[CONTENT]]
+    </main>
+    <aside id="margin-area-right" class="margin-area"></aside>
+</div>
+[[endif:DOCS]]
 </body>
 </html>
