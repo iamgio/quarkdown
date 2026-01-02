@@ -1,0 +1,7 @@
+@use "util/media-queries" as media-queries;
+
+.quarkdown-docs {
+  aside a[aria-current] {
+    font-weight: bold;
+  }
+}
