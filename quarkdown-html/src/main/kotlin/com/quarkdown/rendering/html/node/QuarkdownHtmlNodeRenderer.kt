@@ -211,8 +211,10 @@ class QuarkdownHtmlNodeRenderer(
                     when {
                         // If the border style is set, it is used.
                         node.borderStyle != null -> node.borderStyle
+
                         // If border properties are set, a normal (solid) border is used.
                         node.borderColor != null || node.borderWidth != null -> Container.BorderStyle.NORMAL
+
                         // No border style.
                         else -> null
                     }
@@ -318,12 +320,16 @@ class QuarkdownHtmlNodeRenderer(
             // Localized title.
             val titleText = context.localizeOrNull(key = "tableofcontents")
 
-            // Title heading. Its content is either the node's user-set title or a default localized one.
-            +Heading(
-                depth = 1,
-                text = node.title ?: buildInline { titleText?.let { text(it) } },
-                customId = "table-of-contents",
-            )
+            // Title heading.
+            // Its content is either the node's user-set title or a default localized one.
+            // If the user-set title is empty, no title is shown.
+            if (node.title?.isEmpty() == false) {
+                +Heading(
+                    depth = 1,
+                    text = node.title ?: buildInline { titleText?.let { text(it) } },
+                    customId = "table-of-contents",
+                )
+            }
 
             // Content.
             +buildTag("nav") {
@@ -409,14 +415,24 @@ class QuarkdownHtmlNodeRenderer(
                 className("cross-reference")
 
                 when (definition) {
-                    is LocationTrackableNode if definition.getLocationLabel(context) != null ->
+                    is LocationTrackableNode if definition.getLocationLabel(context) != null -> {
                         withLocationLabel(definition)
+                    }
+
                     // If no label is available, use the caption if possible.
-                    is CaptionableNode if definition.caption != null -> +definition.caption!!
+                    is CaptionableNode if definition.caption != null -> {
+                        +definition.caption!!
+                    }
+
                     // Fallback: use the target's text if possible.
-                    is TextNode -> +definition.text
+                    is TextNode -> {
+                        +definition.text
+                    }
+
                     // Fallback: raw reference ID.
-                    else -> +node.referenceId
+                    else -> {
+                        +node.referenceId
+                    }
                 }
                 if (definition is LocalizedKind) {
                     withLocalizedKind(definition)
@@ -424,13 +440,18 @@ class QuarkdownHtmlNodeRenderer(
             }
 
         return when (anchorId) {
-            null -> reference // No linkable ID.
-            else ->
+            null -> {
+                reference
+            }
+
+            // No linkable ID.
+            else -> {
                 buildTag("a") {
                     // ID available: link to the target.
                     attribute("href", "#$anchorId")
                     +reference
                 }
+            }
         }
     }
 
@@ -560,13 +581,17 @@ class QuarkdownHtmlNodeRenderer(
         val tagBuilder =
             when {
                 // When a heading has a depth of 0 (achievable only via functions), it is an invisible marker with an ID.
-                node.isMarker ->
+                node.isMarker -> {
                     tagBuilder("div") {
                         className("marker")
                         hidden()
                     }
+                }
+
                 // Regular headings.
-                else -> tagBuilder("h${node.depth}", node.text)
+                else -> {
+                    tagBuilder("h${node.depth}", node.text)
+                }
             }
 
         // The heading tag itself.
@@ -654,7 +679,9 @@ class QuarkdownHtmlNodeRenderer(
             +codeTag
 
             when (val content = node.content) {
-                null -> {} // No additional content.
+                null -> {}
+
+                // No additional content.
                 is CodeSpan.ColorContent -> {
                     // If the code contains a color code, show the color preview.
                     +buildTag("span") {
