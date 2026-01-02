@@ -1,7 +1,7 @@
 @use "../../components/util/location-selectors" as location-selectors;
 
 @mixin minimal-toc {
-  nav {
+  nav, .nav {
     ul, ol {
       list-style-type: none;
       margin: 0;
@@ -27,12 +27,12 @@
   }
 
   .quarkdown-slides {
-    nav > :is(ul, ol) {
+    :is(nav, .nav) > :is(ul, ol) {
       // Resets the no-clipping workaround because this theme's ToC hides list markers.
       margin-left: auto;
     }
 
-    nav, h1#table-of-contents {
+    nav, .nav, h1#table-of-contents {
       margin-left: 44px;
     }
   }
