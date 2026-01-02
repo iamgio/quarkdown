@@ -323,7 +323,7 @@ class QuarkdownHtmlNodeRenderer(
             // Title heading.
             // Its content is either the node's user-set title or a default localized one.
             // If the user-set title is empty, no title is shown.
-            if (node.title?.isEmpty() == false) {
+            if (node.title?.isEmpty() != true) {
                 +Heading(
                     depth = 1,
                     text = node.title ?: buildInline { titleText?.let { text(it) } },
