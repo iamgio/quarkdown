@@ -1,4 +1,5 @@
 @use "util/media-queries" as media-queries;
+@use "util/misc-selectors" as *;
 
 .quarkdown {
   // Paged and docs documents have dedicated areas for each margin. Others use fixed positions.
@@ -6,6 +7,10 @@
     position: fixed;
     background-color: var(--qd-background-color);
     z-index: 9999;
+  }
+
+  .page-margin-content:not(.quarkdown-docs .page-margin-content) > #{$margin-reset} {
+    margin: 0 !important;
   }
 
   &.quarkdown-slides .page-margin-content {
