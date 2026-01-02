@@ -264,11 +264,12 @@ open class BaseHtmlNodeRenderer(
             .void(true)
             .build()
 
-    override fun visit(node: Link) =
+    private fun buildLinkTag(node: Link): HtmlTagBuilder =
         tagBuilder("a", node.label)
             .attribute("href", node.url)
             .optionalAttribute("title", node.title)
-            .build()
+
+    override fun visit(node: Link) = buildLinkTag(node).build()
 
     // The fallback node is rendered if a corresponding definition can't be found.
     override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
@@ -278,11 +279,18 @@ open class BaseHtmlNodeRenderer(
             node.getSubdocument(context)
                 ?: return "[???]"
 
-        return Link(
-            label = node.label,
-            url = "./${subdocument.getOutputFileName(context)}",
-            title = node.title,
-        ).accept(this)
+        val isCurrentSubdocument = subdocument == this.context.subdocument
+
+        val link =
+            Link(
+                label = node.label,
+                url = "./${subdocument.getOutputFileName(context)}",
+                title = node.title,
+            )
+
+        return buildLinkTag(link)
+            .optionalAttribute("aria-current", "page".takeIf { isCurrentSubdocument })
+            .build()
     }
 
     override fun visit(node: ReferenceFootnote): CharSequence {
