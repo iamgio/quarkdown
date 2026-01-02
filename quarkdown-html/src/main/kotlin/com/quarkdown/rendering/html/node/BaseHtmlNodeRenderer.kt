@@ -281,10 +281,17 @@ open class BaseHtmlNodeRenderer(
 
         val isCurrentSubdocument = subdocument == this.context.subdocument
 
+        // Subdocuments are exported flatly. Links to other subdocuments must go up one level.
+        val pathToRoot =
+            when (this.context.subdocument) {
+                Subdocument.Root -> "."
+                else -> ".."
+            }
+
         val link =
             Link(
                 label = node.label,
-                url = "./${subdocument.getOutputFileName(context)}",
+                url = "$pathToRoot/${subdocument.getOutputFileName(context)}",
                 title = node.title,
             )
 
