@@ -2,14 +2,14 @@
 
 @mixin minimal-toc {
   nav {
-    ol {
+    ul, ol {
       list-style-type: none;
       margin: 0;
       padding-left: 12px;
 
       // Nested entries
-      ol {
-        border-left: 2px solid;
+      ul, ol {
+        border-left: 2px solid var(--qd-nested-navigation-line-color);
         border-radius: 2px;
         margin-left: 1px;
         padding: 0 0 0 28px;
@@ -27,7 +27,7 @@
   }
 
   .quarkdown-slides {
-    nav > ol {
+    nav > :is(ul, ol) {
       // Resets the no-clipping workaround because this theme's ToC hides list markers.
       margin-left: auto;
     }

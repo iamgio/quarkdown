@@ -5,6 +5,7 @@
     --qd-background-color: white;
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: hsl(0, 100%, 33%);
+    --qd-nested-navigation-line-color: rgba(0, 0, 0, .2);
     --qd-color-on-primary: var(--qd-main-color);
     --qd-mermaid-node-background-color: var(--qd-background-color);
 
@@ -38,10 +39,6 @@
 
     .box.callout {
         --box-header-background-color: rgba(0, 0, 0, .03);
-    }
-
-    nav ol ol {
-        border-color: rgba(0, 0, 0, .2);
     }
 
     .mermaid .plot .line-plot-3 path {

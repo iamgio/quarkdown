@@ -5,6 +5,7 @@
   --qd-background-color: #242528;
   --qd-main-color: #C9C9D7;
   --qd-link-color: #5FC7C7;
+  --qd-nested-navigation-line-color: rgba(255, 255, 255, 0.1);
   --qd-callout-background-color: var(--qd-primary-color);
   --qd-callout-foreground-color: var(--qd-color-on-primary);
   --qd-tip-background-color: rgb(60, 114, 74);
@@ -49,14 +50,6 @@
   blockquote.warning {
     --box-header-foreground-color: var(--qd-warning-background-color);
     --box-content-foreground-color: var(--qd-main-color);
-  }
-
-  .codespan-content:not(.box .codespan-content) {
-    background-color: rgba(34, 74, 81, .4);
-  }
-
-  nav ol ol {
-    border-color: rgba(255, 255, 255, .1);
   }
 
   .page-margin-bottom-center {

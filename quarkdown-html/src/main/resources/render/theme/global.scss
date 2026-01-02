@@ -39,6 +39,7 @@
   --qd-color-on-primary: var(--qd-background-color); // Text color on primary background color
   --qd-heading-color: var(--qd-main-color); // Heading (titles) color
   --qd-link-color: inherit; // Link color
+  --qd-nested-navigation-line-color: color-mix(in srgb, var(--qd-primary-color) 20%, transparent); // When expected by the layout theme, sets the color of lines in nested navigation (e.g. ToC)
   --qd-callout-box-header-color: var(--qd-main-color); // Color of the header of callout box headers. This is just a referenceable value and is not used in this global theme
   --qd-collapsed-text-color: var(--qd-link-color); // Color of expandible text
   --qd-error-message-collapsed-text-color: rgb(240, 246, 77); // Color of expandible text in error messages
