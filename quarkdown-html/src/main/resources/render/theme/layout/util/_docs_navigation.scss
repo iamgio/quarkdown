@@ -1,0 +1,16 @@
+// Utility mixin that detects components that handle navigation in docs documents,
+// and applies a background color to the selected navigation item.
+// Non-selected items are applied the same padding to avoid layout shift when selecting items.
+@mixin selected-docs-nav-item-background {
+  &.quarkdown-docs {
+    aside :has(a[aria-current]) a {
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+
+    aside a[aria-current] {
+      background-color: var(--qd-link-color);
+      color: var(--qd-background-color);
+    }
+  }
+}

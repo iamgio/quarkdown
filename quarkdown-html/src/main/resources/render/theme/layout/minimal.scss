@@ -3,6 +3,7 @@
 @use "util/minimal-tables" as *;
 @use "util/minimal-toc" as *;
 @use "util/minimal-footer" as *;
+@use "util/docs_navigation" as docs-navigation;
 @use "../components/util/location-selectors" as location-selectors;
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import url('https://fonts.googleapis.com/css?family=Inter');
@@ -33,6 +34,7 @@
   @include minimal-tables;
   @include minimal-toc;
   @include minimal-footer;
+  @include docs-navigation.selected-docs-nav-item-background;
 
   ul, ol {
     line-height: 1.5;
@@ -80,5 +82,11 @@
     opacity: .3;
     font-weight: normal;
     margin-right: 0.4em;
+  }
+
+  &.quarkdown-docs {
+    header {
+      border-bottom: 1px solid var(--qd-docs-separator-border-color);
+    }
   }
 }
