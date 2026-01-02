@@ -156,6 +156,16 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `no table of contents title`() {
+        execute(".tableofcontents title:{}") {
+            assertEquals(
+                "<nav data-role=\"table-of-contents\"><ol></ol></nav>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents markers`() {
         execute(
             """
