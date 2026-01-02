@@ -480,6 +480,7 @@ fun numbering(
         when (val unwrapped = format.unwrappedValue) {
             // Disable numbering. Setting to null would instead trigger the default one.
             "none" -> NumberingFormat(symbols = emptyList())
+
             // Parse the format string.
             else -> NumberingFormat.fromString(unwrapped)
         }
@@ -942,7 +943,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  * Generates a table of contents, based on the headings in the document,
  * organized in a hierarchical structure defined by each heading's depth.
  *
- * @param title title of the table of contents. If unset, the default localized title is used
+ * @param title title of the table of contents. If unset, the default localized title is used. If blank, no title is displayed.
  * @param maxDepth maximum depth of the table of contents.
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
  * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
