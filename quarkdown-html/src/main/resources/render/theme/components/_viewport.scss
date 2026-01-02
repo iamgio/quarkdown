@@ -22,7 +22,6 @@ body.quarkdown {
   &.quarkdown-docs :is(header, .content-wrapper) {
     display: flex;
     flex-direction: row;
-    margin: 32px 0;
 
     > main {
       width: min(100%, 90ch);
@@ -78,14 +77,20 @@ body.quarkdown {
     }
   }
 
+  &.quarkdown-plain {
+    margin: 32px 0;
+  }
+
   // Docs viewport
   &.quarkdown-docs {
+    margin: 0;
     display: flex;
     flex-direction: column;
 
     :is(header, .content-wrapper) > aside {
       --aside-width: 20vw;
       --aside-outer-margin: 32px;
+      padding-top: 32px;
 
       &:first-child {
         padding-right: calc(var(--aside-outer-margin) / 2);
@@ -93,23 +98,6 @@ body.quarkdown {
 
       &:last-child {
         padding-left: calc(var(--aside-outer-margin) / 2);
-      }
-    }
-
-    .content-wrapper {
-      main > footer {
-        margin-top: 32px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      aside:first-child {
-        border-right: 1px solid;
-      }
-
-      aside:last-child {
-        border-left: 1px solid;
       }
     }
   }

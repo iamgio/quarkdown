@@ -1,7 +1,33 @@
 @use "util/media-queries" as media-queries;
 
 .quarkdown-docs {
-  aside a[aria-current] {
-    font-weight: bold;
+  > header {
+    padding: 16px 0;
+    background-color: var(--qd-docs-header-background-color);
+  }
+
+  aside a {
+    text-decoration: none;
+
+    &[aria-current] {
+      font-weight: bold;
+    }
+  }
+
+  .content-wrapper {
+    main > footer {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    aside:first-child {
+      border-right: 1px solid;
+    }
+
+    aside:last-child {
+      border-left: 1px solid;
+    }
   }
 }
