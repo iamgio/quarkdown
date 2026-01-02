@@ -74,6 +74,7 @@
   --qd-list-margin-multiplier: 0.4; // --qd-paragraph-vertical-margin * this = list vertical margin
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
   --qd-box-content-vertical-padding: 8px; // Vertical padding of box content
+  --qd-nested-navigation-padding-left: 28px; // When expected by the layout theme, padding-left of nested ToC entries
 
   // Border
   --qd-page-content-border-width: unset;
