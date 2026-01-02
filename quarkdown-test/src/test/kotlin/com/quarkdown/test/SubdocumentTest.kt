@@ -273,6 +273,31 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `subdocument link should mark current subdocument`() {
+        arrayOf(
+            "[Document](subdoc/nav-includer.qd)",
+            ".subdocument {subdoc/nav-includer.qd} label:{Document}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(4, subdocumentGraph.vertices.size)
+                    assertEquals(4, getSubdocumentResourceCount(it))
+                },
+            ) {
+                if (subdocument.name == "nav-includer") {
+                    assertEquals(
+                        "<ul><li><a href=\"./simple-1\">1</a></li>" +
+                            "<li><a href=\"./simple-2\">2</a></li>" +
+                            "<li><a href=\"./nav-includer\" aria-current=\"page\">3</a></li></ul>",
+                        it,
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
     fun `all from directory`() {
         execute(
             """
