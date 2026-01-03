@@ -59,12 +59,12 @@ body.quarkdown {
         width: 100%;
       }
 
-      > aside#margin-area-left {
+      > aside:first-child {
         display: none;
       }
 
       // Footnotes go to the bottom
-      > aside#margin-area-right {
+      > aside:last-child {
         --aside-inner-margin: 0;
         max-width: none;
         width: auto;
@@ -86,10 +86,26 @@ body.quarkdown {
     margin: 0;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+
+    header {
+      height: var(--qd-docs-header-height);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .content-wrapper > aside {
+      overflow-y: auto;
+      max-height: calc(100vh - var(--qd-docs-header-height));
+      position: sticky;
+      top: var(--qd-docs-header-height);
+    }
 
     :is(header, .content-wrapper) > aside {
       --aside-width: 20vw;
       --aside-outer-margin: 32px;
+
       padding-top: 32px;
 
       &:first-child {
