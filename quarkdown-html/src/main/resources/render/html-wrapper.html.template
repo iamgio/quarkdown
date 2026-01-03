@@ -157,7 +157,11 @@
 <header>
     <aside class="margin-area"></aside>
     <main>
-        <input id="search-input" type="text" placeholder="Search">
+        <div class="search-field">
+            <i class='bx bx-search'></i>
+            <input id="search-input" type="text" placeholder="Search docs...">
+            <kbd>/</kbd>
+        </div>
     </main>
     <aside class="margin-area"></aside>
 </header>
