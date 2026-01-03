@@ -2,6 +2,5 @@
 .docdescription {Subdocument description}
 
 .dockeywords
-
-- keyword1
-- keyword2
+  - keyword1
+  - keyword2
