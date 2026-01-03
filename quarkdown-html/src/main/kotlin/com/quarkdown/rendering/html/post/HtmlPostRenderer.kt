@@ -36,7 +36,12 @@ class HtmlPostRenderer(
     val context: Context,
     relativePathToRoot: String = ".",
     private val baseTemplateProcessor: () -> TemplateProcessor = baseHtmlTemplateProcessor,
-    private val base: HtmlOnlyPostRenderer = HtmlOnlyPostRenderer(context, baseTemplateProcessor, relativePathToRoot = relativePathToRoot),
+    private val base: HtmlOnlyPostRenderer =
+        HtmlOnlyPostRenderer(
+            context,
+            baseTemplateProcessor,
+            relativePathToRoot = relativePathToRoot,
+        ),
     private val resourcesProvider: () -> Set<PostRendererResource> =
         {
             setOf(

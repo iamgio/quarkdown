@@ -12,6 +12,12 @@ object Pipelines {
     private val pipelines: MutableMap<Context, Pipeline> = mutableMapOf()
 
     /**
+     * All unique contexts that have an attached pipeline.
+     */
+    val allContexts: Set<Context>
+        get() = pipelines.keys
+
+    /**
      * @param context context to retrieve the pipeline from
      * @return the pipeline attached to [context], if it exists.
      *         A context can only have up to one attached pipeline.
@@ -33,5 +39,13 @@ object Pipelines {
         }
 
         pipelines[context] = pipeline
+    }
+
+    /**
+     * Clears all stored pipelines.
+     * Primarily intended for use in testing.
+     */
+    fun clear() {
+        pipelines.clear()
     }
 }

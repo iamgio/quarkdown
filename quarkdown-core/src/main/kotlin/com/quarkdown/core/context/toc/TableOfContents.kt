@@ -18,12 +18,14 @@ data class TableOfContents(
      * @param depth depth of the item.
      *              This does not necessarily correspond to the depth of this item in the stack of items,
      *              but rather represents the importance of the item.
+     * @param isDecorative whether the item is decorative, and should be included in the ToC at discretion of the renderer
      * @param subItems nested items
      */
     data class Item(
         val text: InlineContent,
         val target: Identifiable,
         val depth: Int,
+        val isDecorative: Boolean,
         val subItems: List<Item> = emptyList(),
     ) {
         /**
@@ -35,6 +37,7 @@ data class TableOfContents(
             heading.text,
             heading,
             heading.depth,
+            heading.isDecorative,
             subItems,
         )
     }
