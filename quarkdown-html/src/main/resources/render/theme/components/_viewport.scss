@@ -88,7 +88,6 @@ body.quarkdown {
     margin: 0;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
 
     header {
       height: var(--qd-docs-header-height);
@@ -100,9 +99,9 @@ body.quarkdown {
 
     .content-wrapper > aside {
       overflow-y: auto;
-      max-height: calc(100vh - var(--header-height));
       position: sticky;
       top: var(--header-height);
+      max-height: calc(100vh - var(--header-height));
     }
 
     :is(header, .content-wrapper) > aside {

@@ -2,18 +2,20 @@
 // and applies a background color to the selected navigation item.
 // Non-selected items are applied the same padding to avoid layout shift when selecting items.
 @mixin selected-docs-nav-item-background {
-  &.quarkdown-docs {
-    aside {
-      .nav {
-        a {
-          padding: 0.2em 0.4em;
-          transform: translateX(-0.4em);
-          border-radius: 4px;
+  $horizontal-padding: 0.4em;
 
-          &[aria-current] {
-            background-color: var(--qd-link-color);
-            color: var(--qd-background-color);
-          }
+  &.quarkdown-docs {
+    aside .nav {
+      margin-left: $horizontal-padding;
+
+      a {
+        padding: 0.2em $horizontal-padding;
+        transform: translateX(-$horizontal-padding);
+        border-radius: 4px;
+
+        &[aria-current] {
+          background-color: var(--qd-link-color);
+          color: var(--qd-background-color);
         }
       }
     }
