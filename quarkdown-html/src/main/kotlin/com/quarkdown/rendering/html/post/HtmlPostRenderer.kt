@@ -53,7 +53,6 @@ class HtmlPostRenderer(
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
-                // SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.subdocumentGraph)),
             )
         },
 ) : PostRenderer by base {

@@ -40,4 +40,12 @@ object Pipelines {
 
         pipelines[context] = pipeline
     }
+
+    /**
+     * Clears all stored pipelines.
+     * Primarily intended for use in testing.
+     */
+    fun clear() {
+        pipelines.clear()
+    }
 }
