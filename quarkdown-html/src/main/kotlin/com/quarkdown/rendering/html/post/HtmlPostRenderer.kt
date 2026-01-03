@@ -11,9 +11,7 @@ import com.quarkdown.rendering.html.post.resources.MediaPostRendererResource
 import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
-import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
-import com.quarkdown.rendering.html.search.SearchIndexGenerator
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
