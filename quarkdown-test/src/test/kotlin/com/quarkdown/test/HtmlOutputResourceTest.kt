@@ -6,6 +6,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import kotlinx.serialization.json.Json
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -45,10 +46,16 @@ class HtmlOutputResourceTest {
         ) {}
     }
 
-    private fun getSearchIndexResource(group: OutputResource?): TextOutputArtifact {
+    private fun getSearchIndexOutputResource(group: OutputResource?): TextOutputArtifact {
         val resources = getSubResources(group)
         return resources.filterIsInstance<TextOutputArtifact>().first { it.name == "search-index" }
     }
+
+    private fun getSearchIndexInternalResource(name: String): String =
+        javaClass
+            .getResource("/data/search-index/$name.json")!!
+            .readText()
+            .let { Json.parseToJsonElement(it).toString() }
 
     @Test
     fun `with search index, no headings, no metadata`() {
@@ -61,10 +68,8 @@ class HtmlOutputResourceTest {
             """.trimIndent(),
             outputResourceHook = { group ->
                 assertEquals(
-                    javaClass
-                        .getResource("/data/search-index/search-index-no-headings-no-metadata.json")!!
-                        .readText(),
-                    getSearchIndexResource(group).content,
+                    getSearchIndexInternalResource("search-index-no-headings-no-metadata"),
+                    getSearchIndexOutputResource(group).content,
                 )
             },
         ) {}
@@ -82,10 +87,8 @@ class HtmlOutputResourceTest {
             """.trimIndent(),
             outputResourceHook = { group ->
                 assertEquals(
-                    javaClass
-                        .getResource("/data/search-index/search-index-no-headings-with-metadata.json")!!
-                        .readText(),
-                    getSearchIndexResource(group).content,
+                    getSearchIndexInternalResource("search-index-no-headings-with-metadata"),
+                    getSearchIndexOutputResource(group).content,
                 )
             },
         ) {}
@@ -103,10 +106,8 @@ class HtmlOutputResourceTest {
             """.trimIndent(),
             outputResourceHook = { group ->
                 assertEquals(
-                    javaClass
-                        .getResource("/data/search-index/search-index-with-headings.json")!!
-                        .readText(),
-                    getSearchIndexResource(group).content,
+                    getSearchIndexInternalResource("search-index-with-headings"),
+                    getSearchIndexOutputResource(group).content,
                 )
             },
         ) {}
