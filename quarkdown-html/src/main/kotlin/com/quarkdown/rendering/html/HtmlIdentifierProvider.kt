@@ -8,11 +8,11 @@ import com.quarkdown.core.util.toPlainText
 
 /**
  * Provides identifiers for elements suitable for HTML rendering.
- * @param renderer renderer that uses this provider
+ * @param renderer renderer that this provider should use to convert nodes to plain text via [toPlainText]
  * @see IdentifierProvider
  */
 class HtmlIdentifierProvider private constructor(
-    private val renderer: NodeRenderer,
+    private val renderer: NodeRenderer?,
 ) : IdentifierProvider<String> {
     /**
      * Converts [this] string to a URI-like string removing special characters and replacing whitespaces with dashes.
@@ -49,8 +49,8 @@ class HtmlIdentifierProvider private constructor(
     companion object {
         /**
          * Creates an instance of [HtmlIdentifierProvider].
-         * @param renderer renderer that uses this provider
+         * @param renderer renderer that this provider should use to convert nodes to plain text via [toPlainText]
          */
-        fun of(renderer: NodeRenderer) = HtmlIdentifierProvider(renderer)
+        fun of(renderer: NodeRenderer?) = HtmlIdentifierProvider(renderer)
     }
 }
