@@ -99,12 +99,18 @@ class SubdocumentTest {
     }
 
     @Test
-    fun `third-party presence should be shared from subdocument to parent`() {
+    fun `third-party presence should not be shared from subdocument to parent`() {
         execute(
             "",
             subdocumentGraph = { it.addVertex(thirdPartySubdoc).addEdge(Subdocument.Root, thirdPartySubdoc) },
             outputResourceHook = {
-                assertTrue(attributes.hasMermaidDiagram)
+                assertFalse(attributes.hasMermaidDiagram)
+
+                // Root should not have the mermaid script, the subdocument should.
+                val rootResource = getSubdocumentResource(it, Subdocument.Root, this)
+                val subdocResource = getSubdocumentResource(it, thirdPartySubdoc, this)
+                assertFalse(rootResource.content.contains("mermaid.min.js"))
+                assertContains(subdocResource.content, "mermaid.min.js")
             },
         ) {}
     }
