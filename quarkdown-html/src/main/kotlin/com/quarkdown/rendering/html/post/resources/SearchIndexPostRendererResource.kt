@@ -6,6 +6,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.rendering.html.search.SearchIndex
+import kotlinx.serialization.json.Json
 
 /**
  * A [PostRendererResource] that outputs a search index as a JSON file.
@@ -28,7 +29,7 @@ class SearchIndexPostRendererResource(
         resources +=
             TextOutputArtifact(
                 name = "search-index",
-                content = "${index.entries}",
+                content = Json.encodeToString(index),
                 type = ArtifactType.JSON,
             )
     }

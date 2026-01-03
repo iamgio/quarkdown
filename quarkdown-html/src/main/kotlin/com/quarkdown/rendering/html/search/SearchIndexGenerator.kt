@@ -31,7 +31,7 @@ object SearchIndexGenerator {
                             ?: return@mapNotNull null
 
                     SearchEntry(
-                        url = subdocument.getOutputFileName(context),
+                        url = "/" + subdocument.getOutputFileName(context),
                         title = context.documentInfo.name,
                         description = context.documentInfo.description,
                         keywords = context.documentInfo.keywords,
