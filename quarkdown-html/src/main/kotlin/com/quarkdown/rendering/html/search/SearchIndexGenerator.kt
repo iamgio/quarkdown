@@ -1,6 +1,5 @@
 package com.quarkdown.rendering.html.search
 
-import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.sub.Subdocument
