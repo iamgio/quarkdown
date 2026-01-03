@@ -35,16 +35,24 @@ object SearchIndexGenerator {
                         title = context.documentInfo.name,
                         description = context.documentInfo.description,
                         keywords = context.documentInfo.keywords,
-                        headings =
-                            context.attributes.tableOfContents?.items?.map { item ->
-                                SearchHeading(
-                                    anchor = item.target.accept(HtmlIdentifierProvider.of(renderer = null)),
-                                    text = item.text.toPlainText(),
-                                    level = item.depth,
-                                )
-                            } ?: emptyList(),
+                        headings = getHeadings(context),
                     )
                 },
         )
+    }
+
+    private fun getHeadings(context: Context): List<SearchHeading> {
+        val toc = context.attributes.tableOfContents ?: return emptyList()
+
+        return toc.items
+            .asSequence()
+            .filterNot { it.isDecorative }
+            .map { item ->
+                SearchHeading(
+                    anchor = item.target.accept(HtmlIdentifierProvider.of(renderer = null)),
+                    text = item.text.toPlainText(),
+                    level = item.depth,
+                )
+            }.toList()
     }
 }
