@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.post
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentTheme
+import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.orDefault
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -11,7 +12,9 @@ import com.quarkdown.rendering.html.post.resources.MediaPostRendererResource
 import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
+import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
+import com.quarkdown.rendering.html.search.SearchIndexGenerator
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -44,13 +47,18 @@ class HtmlPostRenderer(
         ),
     private val resourcesProvider: () -> Set<PostRendererResource> =
         {
-            setOf(
+            setOfNotNull(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
+                if (context.documentInfo.type == DocumentType.DOCS) {
+                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.subdocumentGraph))
+                } else {
+                    null
+                },
             )
         },
 ) : PostRenderer by base {

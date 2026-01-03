@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "url": "/",
+      "title": "Test",
+      "description": null,
+      "keywords": [],
+      "headings": []
+    },
+    {
+      "url": "/simple-1",
+      "title": "Test",
+      "description": null,
+      "keywords": [],
+      "headings": []
+    },
+    {
+      "url": "/metadata",
+      "title": "Subdocument name",
+      "description": "Subdocument description",
+      "keywords": [
+        "keyword1",
+        "keyword2"
+      ],
+      "headings": []
+    }
+  ]
+}

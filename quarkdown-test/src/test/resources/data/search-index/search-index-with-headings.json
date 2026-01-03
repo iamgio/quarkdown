@@ -1,0 +1,67 @@
+{
+  "entries": [
+    {
+      "url": "/",
+      "title": "Test",
+      "description": null,
+      "keywords": [],
+      "headings": []
+    },
+    {
+      "url": "/headings-1",
+      "title": "Test",
+      "description": null,
+      "keywords": [],
+      "headings": [
+        {
+          "anchor": "a",
+          "text": "A",
+          "level": 1
+        },
+        {
+          "anchor": "b",
+          "text": "B",
+          "level": 2
+        },
+        {
+          "anchor": "c",
+          "text": "C",
+          "level": 1
+        },
+        {
+          "anchor": "d",
+          "text": "D",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "url": "/headings-2",
+      "title": "Test",
+      "description": null,
+      "keywords": [],
+      "headings": [
+        {
+          "anchor": "e",
+          "text": "E",
+          "level": 1
+        },
+        {
+          "anchor": "f",
+          "text": "F",
+          "level": 2
+        },
+        {
+          "anchor": "g",
+          "text": "G",
+          "level": 1
+        },
+        {
+          "anchor": "h",
+          "text": "H",
+          "level": 3
+        }
+      ]
+    }
+  ]
+}

@@ -1,15 +1,25 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
+import com.quarkdown.core.pipeline.Pipelines
+import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 
 /**
  * Tests for generation of HTML output resources.
  */
 class HtmlOutputResourceTest {
+    @BeforeTest
+    fun setup() {
+        Pipelines.clear()
+    }
+
     @Test
     fun `regular output with index, theme and script dirs`() {
         execute(
@@ -31,6 +41,73 @@ class HtmlOutputResourceTest {
             outputResourceHook = { group ->
                 val resources = getSubResources(group).map { it.name }
                 assertContains(resources, MEDIA_SUBDIRECTORY_NAME)
+            },
+        ) {}
+    }
+
+    private fun getSearchIndexResource(group: OutputResource?): TextOutputArtifact {
+        val resources = getSubResources(group)
+        return resources.filterIsInstance<TextOutputArtifact>().first { it.name == "search-index" }
+    }
+
+    @Test
+    fun `with search index, no headings, no metadata`() {
+        execute(
+            """
+            .doctype {docs}
+            
+            [1](subdoc/simple-1.qd)
+            [2](subdoc/simple-2.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertEquals(
+                    javaClass
+                        .getResource("/data/search-index/search-index-no-headings-no-metadata.json")!!
+                        .readText(),
+                    getSearchIndexResource(group).content,
+                )
+            },
+        ) {}
+    }
+
+    @Test
+    fun `with search index, no headings, with metadata`() {
+        execute(
+            """
+            .docname {Test}
+            .doctype {docs}
+            
+            [1](subdoc/simple-1.qd)
+            [2](subdoc/metadata.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertEquals(
+                    javaClass
+                        .getResource("/data/search-index/search-index-no-headings-with-metadata.json")!!
+                        .readText(),
+                    getSearchIndexResource(group).content,
+                )
+            },
+        ) {}
+    }
+
+    @Test
+    fun `with search index, with headings`() {
+        execute(
+            """
+            .docname {Test}
+            .doctype {docs}
+            
+            [1](subdoc/headings-1.qd)
+            [1](subdoc/headings-2.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertEquals(
+                    javaClass
+                        .getResource("/data/search-index/search-index-with-headings.json")!!
+                        .readText(),
+                    getSearchIndexResource(group).content,
+                )
             },
         ) {}
     }
