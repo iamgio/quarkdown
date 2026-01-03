@@ -1,9 +1,7 @@
 package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.rendering.html.search.SearchIndex
 import kotlinx.serialization.json.Json
