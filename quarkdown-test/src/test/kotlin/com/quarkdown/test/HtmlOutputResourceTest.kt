@@ -105,4 +105,26 @@ class HtmlOutputResourceTest {
             },
         ) {}
     }
+
+    @Test
+    fun `with search index, with page margin`() {
+        execute(
+            """
+            .docname {Test}
+            .doctype {docs}
+            .pagemargin {righttop}
+                This is page margin content that should not appear in the search index
+            
+            # Heading
+            
+            Text
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertEquals(
+                    getSearchIndexInternalResource("search-index-with-page-margin"),
+                    getSearchIndexOutputResource(group).content,
+                )
+            },
+        ) {}
+    }
 }

@@ -1,6 +1,8 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
@@ -30,6 +32,13 @@ class SearchIndexGeneratorTest {
         val graph: Graph<Subdocument> = DirectedGraph<Subdocument>().addVertex(Subdocument.Root)
         context.documentInfo =
             DocumentInfo(name = "Test Document", description = "A test document", keywords = listOf("test", "document"))
+        context.attributes.root =
+            AstRoot(
+                buildBlocks {
+                    paragraph { emphasis { text("Hello, World!") } }
+                    paragraph { text("This is a test document.") }
+                },
+            )
         context.subdocumentGraph = VisitableOnceGraph(graph)
         context.attachMockPipeline()
 
@@ -44,6 +53,7 @@ class SearchIndexGeneratorTest {
                             title = "Test Document",
                             description = "A test document",
                             keywords = listOf("test", "document"),
+                            content = "Hello, World!\n\nThis is a test document.",
                             headings = emptyList(),
                         ),
                     ),
@@ -80,6 +90,9 @@ class SearchIndexGeneratorTest {
                 keywords = listOf("child", "document"),
             )
 
+        rootContext.attributes.root = AstRoot(buildBlocks { paragraph { text("Root content") } })
+        childContext.attributes.root = AstRoot(buildBlocks { paragraph { text("Child content") } })
+
         rootContext.subdocumentGraph = VisitableOnceGraph(graph)
         rootContext.sharedSubdocumentsData = rootContext.sharedSubdocumentsData.addContext(childSubdoc, childContext)
         rootContext.attachMockPipeline()
@@ -96,6 +109,7 @@ class SearchIndexGeneratorTest {
                             title = "Root Document",
                             description = "The root document",
                             keywords = listOf("root", "document"),
+                            content = "Root content",
                             headings = emptyList(),
                         ),
                         SearchEntry(
@@ -103,6 +117,7 @@ class SearchIndexGeneratorTest {
                             title = "Child Document",
                             description = "A child document",
                             keywords = listOf("child", "document"),
+                            content = "Child content",
                             headings = emptyList(),
                         ),
                     ),
@@ -143,6 +158,7 @@ class SearchIndexGeneratorTest {
                             title = "Document with Headings",
                             description = "A document that has headings",
                             keywords = listOf("headings"),
+                            content = "",
                             headings =
                                 listOf(
                                     SearchHeading(

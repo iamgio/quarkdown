@@ -5,6 +5,7 @@
       "title": "Test",
       "description": null,
       "keywords": [],
+      "content": "1\n1",
       "headings": []
     },
     {
@@ -12,6 +13,7 @@
       "title": "Test",
       "description": null,
       "keywords": [],
+      "content": "A\n\nB\n\nC\n\nD",
       "headings": [
         {
           "anchor": "a",
@@ -40,6 +42,7 @@
       "title": "Test",
       "description": null,
       "keywords": [],
+      "content": "E\n\nF\n\nG\n\nH",
       "headings": [
         {
           "anchor": "e",

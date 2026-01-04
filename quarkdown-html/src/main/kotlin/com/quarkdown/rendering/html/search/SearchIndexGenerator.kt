@@ -8,6 +8,7 @@ import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.util.toPlainText
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
+import com.quarkdown.rendering.plaintext.node.PlainTextNodeRenderer
 
 /**
  * Generates a [SearchIndex] from the subdocument graph of a multi-document project.
@@ -33,6 +34,12 @@ object SearchIndexGenerator {
                         title = context.documentInfo.name,
                         description = context.documentInfo.description,
                         keywords = context.documentInfo.keywords,
+                        content =
+                            context.attributes.root
+                                ?.accept(PlainTextNodeRenderer(context))
+                                ?.trimEnd()
+                                ?.toString()
+                                ?: "",
                         headings = getHeadings(context),
                     )
                 },

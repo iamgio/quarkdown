@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-server"))
+    implementation(project(":quarkdown-plaintext")) // For search index generation
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 }
 

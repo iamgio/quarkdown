@@ -5,6 +5,7 @@
       "title": "Test",
       "description": null,
       "keywords": [],
+      "content": "1\n2",
       "headings": []
     },
     {
@@ -12,6 +13,7 @@
       "title": "Test",
       "description": null,
       "keywords": [],
+      "content": "Hello 1",
       "headings": []
     },
     {
@@ -22,6 +24,7 @@
         "keyword1",
         "keyword2"
       ],
+      "content": "",
       "headings": []
     }
   ]
