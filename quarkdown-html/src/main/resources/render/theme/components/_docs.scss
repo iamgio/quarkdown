@@ -20,6 +20,11 @@
       border: 1px solid var(--qd-docs-separator-border-color);
       border-radius: 8px;
       background-color: var(--qd-background-color);
+      transition: border-color 0.2s;
+
+      &:focus-within {
+        border-color: var(--qd-primary-color);
+      }
 
       i {
         margin-left: 2px;

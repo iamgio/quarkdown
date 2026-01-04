@@ -1,10 +1,7 @@
-import {QuarkdownDocument} from "../quarkdown-document";
 import {DocumentHandler} from "../document-handler";
-import {Sidebar} from "../handlers/sidebar";
-import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../queue/execution-queues";
-import {FootnotesPlain} from "../handlers/footnotes/footnotes-plain";
 import {PlainDocument} from "./plain-document";
 import {PageMarginsDocs} from "../handlers/page-margins/page-margins-docs";
+import {SearchFieldFocus} from "../handlers/docs/search-field-focus";
 
 /**
  * 'Docs' document implementation for HTML documents targeting documentation sites and wikis.
@@ -13,7 +10,8 @@ import {PageMarginsDocs} from "../handlers/page-margins/page-margins-docs";
 export class DocsDocument extends PlainDocument {
     getHandlers(): DocumentHandler[] {
         return [
-            new PageMarginsDocs(this),
+            new SearchFieldFocus(this),
+            new PageMarginsDocs(this)
         ];
     }
 }
