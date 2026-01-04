@@ -31,7 +31,7 @@ class PlainTextPostRenderer(
         setOf(
             TextOutputArtifact(
                 name = context.subdocument.getOutputFileName(context),
-                content = rendered,
+                content = rendered.trimEnd(),
                 type = ArtifactType.PLAIN_TEXT,
             ),
         )

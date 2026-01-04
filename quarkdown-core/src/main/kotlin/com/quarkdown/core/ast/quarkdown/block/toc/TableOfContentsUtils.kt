@@ -1,6 +1,7 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.inline.Link
@@ -32,12 +33,16 @@ private fun filterTableOfContentsItems(
  * Converts a table of contents to a renderable [OrderedList].
  * @param renderer renderer to use to render items
  * @param items ToC items [view] contains, prior to filtering
+ * @param loose whether the list should be rendered in loose mode
+ * @param wrapLinksInParagraphs whether to wrap the links in paragraphs
  * @param linkUrlMapper function that obtains the URL to send to when a ToC item is interacted with
  */
 fun convertTableOfContentsToListNode(
     view: TableOfContentsView,
     renderer: NodeVisitor<CharSequence>,
     items: List<TableOfContents.Item>,
+    loose: Boolean = true,
+    wrapLinksInParagraphs: Boolean = false,
     linkUrlMapper: (TableOfContents.Item) -> String,
 ): OrderedList {
     // Gets the content of an inner (nested, level 2+ headings) ToC item.
@@ -48,17 +53,19 @@ fun convertTableOfContentsToListNode(
                 item.text.stripRichContent(renderer),
                 url = linkUrlMapper(item),
                 title = null,
-            ),
+            ).let {
+                if (wrapLinksInParagraphs) Paragraph(listOf(it)) else it
+            },
             // Recursively include sub-items.
             filterTableOfContentsItems(view, item.subItems)
                 .takeIf { it.any() }
-                ?.let { convertTableOfContentsToListNode(view, renderer, it.toList(), linkUrlMapper) },
+                ?.let { convertTableOfContentsToListNode(view, renderer, it.toList(), loose, wrapLinksInParagraphs, linkUrlMapper) },
         )
 
     // Level 1 headings.
     return OrderedList(
         startIndex = 1,
-        isLoose = true,
+        isLoose = loose,
         children =
             filterTableOfContentsItems(view, items)
                 .map {

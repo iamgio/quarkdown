@@ -77,6 +77,7 @@ import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.rendering.NodeRenderer
+import com.quarkdown.core.util.indent
 
 /**
  * Node renderer that converts the AST to plain text.
@@ -101,9 +102,9 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: Newline) = ""
 
-    override fun visit(node: Code) = node.content.blockNode
+    override fun visit(node: Code) = node.content.indent("\t").blockNode
 
-    override fun visit(node: HorizontalRule) = "\n-----".blockNode
+    override fun visit(node: HorizontalRule) = "-----".blockNode
 
     override fun visit(node: Heading) = node.visitChildren().blockNode
 
@@ -116,7 +117,7 @@ class PlainTextNodeRenderer(
             node.children.forEachIndexed { index, item ->
                 append(index + node.startIndex)
                 append(". ")
-                appendLine(item.accept(this@PlainTextNodeRenderer).trimEnd())
+                appendLine(item.accept(this@PlainTextNodeRenderer).trim())
                 if (node.isLoose) {
                     appendLine()
                 }
@@ -127,14 +128,14 @@ class PlainTextNodeRenderer(
         buildString {
             node.children.forEach { item ->
                 append("- ")
-                appendLine(item.accept(this@PlainTextNodeRenderer).trimEnd())
+                appendLine(item.accept(this@PlainTextNodeRenderer).trim())
                 if (node.isLoose) {
                     appendLine()
                 }
             }
         }.blockNode
 
-    override fun visit(node: ListItem) = node.visitChildren()
+    override fun visit(node: ListItem) = node.visitChildren().indent("\t")
 
     override fun visit(node: Html) = ""
 
@@ -156,7 +157,7 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: ReferenceLink) = node.label.visitAll()
 
-    override fun visit(node: SubdocumentLink) = node.visitChildren()
+    override fun visit(node: SubdocumentLink) = visit(node.link)
 
     override fun visit(node: ReferenceFootnote) = "" // Footnotes are currently unsupported
 
@@ -186,7 +187,7 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: PageBreak) = ""
 
-    override fun visit(node: Math) = "\n\n${node.expression}\n\n"
+    override fun visit(node: Math) = node.expression.trim().blockNode
 
     override fun visit(node: Container) = node.visitChildren().blockNode
 
@@ -200,7 +201,7 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: Clipped) = node.visitChildren()
 
-    override fun visit(node: Box) = "\n" + (node.title?.visitAll()?.plus("\n-----\n") ?: "") + node.visitChildren() + "\n".blockNode
+    override fun visit(node: Box) = ((node.title?.visitAll()?.plus("\n-----\n") ?: "") + node.visitChildren()).blockNode
 
     override fun visit(node: Collapse) = node.visitChildren()
 
@@ -220,16 +221,20 @@ class PlainTextNodeRenderer(
             Heading(
                 depth = 1,
                 text = it,
-            )
+            ).accept(this).let(builder::append)
         }
 
         // Content.
-        convertTableOfContentsToListNode(
-            node,
-            this@PlainTextNodeRenderer,
-            tableOfContents.items,
-            linkUrlMapper = { "" },
-        ).accept(this).let(builder::append)
+        val list =
+            convertTableOfContentsToListNode(
+                node,
+                this@PlainTextNodeRenderer,
+                tableOfContents.items,
+                loose = false,
+                wrapLinksInParagraphs = true,
+                linkUrlMapper = { "" },
+            )
+        list.accept(this).let(builder::append)
 
         return builder.toString().blockNode
     }
