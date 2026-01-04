@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -89,6 +90,31 @@ class BibliographyTest {
                 "<p>abc [1] def [2] ghi [3]</p>" +
                     PLAIN_BIBLIOGRAPHY_OUTPUT +
                     "<p>abc [1] def [2] ghi [3]</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `citation (plaintext)`() {
+        execute(
+            """
+            abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
+            
+            $BIBLIOGRAPHY_CALL
+            
+            abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
+            """.trimIndent(),
+            renderer = { rendererFactory, ctx -> rendererFactory.plainText(ctx) },
+        ) {
+            assertEquals(
+                "abc [1] def [2] ghi [3]\n\n" +
+                    "[1] Albert Einstein. Zur Elektrodynamik bewegter Körper. (German) " +
+                    "[On the electrodynamics of moving bodies]. Annalen der Physik, 322(10):891–921, 1905.\n" +
+                    "[2] Michel Goossens, Frank Mittelbach, and Alexander Samarin. The LaTeX Companion. " +
+                    "Addison-Wesley, Reading, Massachusetts, 1993.\n" +
+                    "[3] Donald Knuth. Knuth: Computers and Typesetting. http://www-cs-faculty.stanford.edu/~uno/abcde.html.\n\n" +
+                    "abc [1] def [2] ghi [3]\n\n",
                 it,
             )
         }

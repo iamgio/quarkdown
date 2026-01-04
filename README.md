@@ -338,6 +338,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
   - `html-pdf` (equivalent to `-r html --pdf`)
+  - `text` (plain text)
 
 - `-b <browser>` or `--browser <browser>`: sets the browser to launch the preview with. Defaults to `default`. Accepted values:
   - `default`
