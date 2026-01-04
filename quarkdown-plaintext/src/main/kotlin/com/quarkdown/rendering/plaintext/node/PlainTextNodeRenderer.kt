@@ -256,9 +256,15 @@ class PlainTextNodeRenderer(
         }
 
         // Content.
-        node.bibliography.entries.values.mapIndexed { index, entry ->
+        node.bibliography.entries.values.forEachIndexed { index, entry ->
             builder.append(node.style.labelProvider.getLabel(entry, index))
-            builder.append(node.style.contentProvider.getContent(entry))
+            builder.append(" ")
+            builder.append(
+                node.style.contentProvider
+                    .getContent(entry)
+                    .visitAll(),
+            )
+            builder.appendLine()
         }
 
         return builder.toString().blockNode
