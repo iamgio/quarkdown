@@ -60,6 +60,11 @@ fun NestableNode.flattenedChildren(): Sequence<Node> =
 /**
  * Converts processed [InlineContent] to its plain text representation.
  * For example, the Markdown input `foo **bar `baz`**` has `foo bar baz` as its plain text.
+ *
+ * Note: this is a quick and efficient implementation, practical for the use cases inside the core compiler
+ * (e.g., stripping away formatting from image labels).
+ * For a full-fledged plain text rendering, see the `quarkdown-plaintext` module instead.
+ *
  * @param renderer optional renderer to use to render critical content and text symbols
  * @return plain text of the inline content
  * @see PlainTextNode
@@ -69,10 +74,10 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
 
     // Visits the tree and appends the text content of each node.
     AstRoot(this).flattenedChildren().forEach {
-        when {
-            it is CriticalContent && renderer != null -> builder.append(renderer.visit(it))
-            it is TextSymbol && renderer != null -> builder.append(renderer.visit(it))
-            it is PlainTextNode -> builder.append(it.text)
+        when (it) {
+            is CriticalContent if renderer != null -> builder.append(renderer.visit(it))
+            is TextSymbol if renderer != null -> builder.append(renderer.visit(it))
+            is PlainTextNode -> builder.append(it.text)
         }
     }
 
