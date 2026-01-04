@@ -307,6 +307,7 @@ class PlainTextNodeRenderer(
         if (definition is LocalizedKind) {
             val localizedKind = context.localizeOrNull(key = definition.kindLocalizationKey)
             localizedKind?.let(builder::append)
+            builder.append(' ')
         }
 
         builder.append(content)

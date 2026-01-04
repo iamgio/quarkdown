@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
@@ -145,6 +146,32 @@ class CrossReferenceTest {
                     "<span class=\"cross-reference\" data-location=\"1.1\" data-localized-kind=\"Section\"></span></a>.</p>" +
                     "<h1 id=\"first-ref\" data-location=\"1\">Title</h1>" +
                     "<h2 id=\"second-ref\" data-location=\"1.1\">Subitle</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `localized numbered references (heading, plaintext)`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+                - headings: 1.1
+            
+            See .ref {first-ref} and .ref {second-ref}.
+            
+            # Title {#first-ref}
+            
+            ## Subtitle {#second-ref}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+            renderer = { factory, ctx -> factory.plainText(ctx) },
+        ) {
+            assertEquals(
+                "See Section 1 and Section 1.1.\n\n" +
+                    "Title\n\n" +
+                    "Subtitle\n\n",
                 it,
             )
         }
