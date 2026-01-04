@@ -8,6 +8,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
@@ -90,11 +91,12 @@ interface Context {
     val subdocument: Subdocument
 
     /**
-     * Directed graph of the subdocuments that are part of the document complex.
-     * Each subdocument is a separate document file that can be rendered independently,
-     * and is referenced by a link from the main document or another subdocument.
+     * Data about all the subdocuments that are part of the document complex.
+     * This data is shared across all contexts involved in the document complex,
+     * regardless of the sandboxing level.
+     * @see SubdocumentsData for more information
      */
-    val subdocumentGraph: Graph<Subdocument>
+    val sharedSubdocumentsData: SubdocumentsData<out Graph<Subdocument>>
 
     /**
      * The file system relative to this context

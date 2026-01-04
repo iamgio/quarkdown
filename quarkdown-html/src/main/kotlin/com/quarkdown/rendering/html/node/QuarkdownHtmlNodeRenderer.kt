@@ -56,6 +56,7 @@ import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
+import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.NumberingFormat

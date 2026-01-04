@@ -1,13 +1,11 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
 import kotlinx.serialization.json.Json
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -16,11 +14,6 @@ import kotlin.test.assertEquals
  * Tests for generation of HTML output resources.
  */
 class HtmlOutputResourceTest {
-    @BeforeTest
-    fun setup() {
-        Pipelines.clear()
-    }
-
     @Test
     fun `regular output with index, theme and script dirs`() {
         execute(

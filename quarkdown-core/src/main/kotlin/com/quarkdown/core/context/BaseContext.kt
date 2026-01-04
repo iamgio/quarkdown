@@ -8,6 +8,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.context.file.SimpleFileSystem
+import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
@@ -56,7 +57,11 @@ open class BaseContext(
 
     override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
 
-    override val subdocumentGraph: VisitableOnceGraph<Subdocument> = DirectedGraph<Subdocument>().visitableOnce
+    override val sharedSubdocumentsData: SubdocumentsData<VisitableOnceGraph<Subdocument>> =
+        SubdocumentsData(
+            graph = DirectedGraph<Subdocument>().visitableOnce,
+            withContexts = mapOf(subdocument to this),
+        )
 
     override val fileSystem: FileSystem
         get() {

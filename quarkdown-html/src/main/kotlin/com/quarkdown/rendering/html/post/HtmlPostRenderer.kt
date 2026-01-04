@@ -55,7 +55,7 @@ class HtmlPostRenderer(
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
                 if (context.documentInfo.type == DocumentType.DOCS) {
-                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.subdocumentGraph))
+                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
                 } else {
                     null
                 },
