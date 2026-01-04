@@ -31,11 +31,19 @@ export class SearchField extends DocumentHandler {
         this.bindEvents();
     }
 
+    /**
+     * Retrieves the search index path from the meta tag.
+     * @returns The path to the search index JSON, or null if not found
+     */
     private getSearchIndexPath(): string | null {
         const meta = document.querySelector(`meta[name="${SEARCH_INDEX_META_NAME}"]`);
         return meta?.getAttribute("content") ?? null;
     }
 
+    /**
+     * Fetches and initializes the search index from the given path.
+     * @param indexPath - URL path to the search index JSON file
+     */
     private async initializeSearch(indexPath: string): Promise<void> {
         const response = await fetch(indexPath);
         if (!response.ok) return;
@@ -44,6 +52,9 @@ export class SearchField extends DocumentHandler {
         this.search = createSearch(index, {maxResults: MAX_RESULTS});
     }
 
+    /**
+     * Creates the results dropdown container and appends it to the search wrapper.
+     */
     private createResultsContainer(): void {
         const wrapper = this.input!.closest(".search-wrapper");
         if (!wrapper) return;
@@ -55,6 +66,9 @@ export class SearchField extends DocumentHandler {
         wrapper.appendChild(this.resultsContainer);
     }
 
+    /**
+     * Binds event listeners for search input, keyboard navigation, and blur handling.
+     */
     private bindEvents(): void {
         this.input!.addEventListener("input", () => this.onInputChange());
         this.input!.addEventListener("keydown", (e) => this.onKeyDown(e));
@@ -62,11 +76,17 @@ export class SearchField extends DocumentHandler {
         this.resultsContainer!.addEventListener("mousedown", (e) => e.preventDefault());
     }
 
+    /**
+     * Handles input changes with debouncing to avoid excessive searches.
+     */
     private onInputChange(): void {
         if (this.debounceTimeout) clearTimeout(this.debounceTimeout);
         this.debounceTimeout = setTimeout(() => this.performSearch(), DEBOUNCE_MS);
     }
 
+    /**
+     * Executes the search query and renders the results.
+     */
     private performSearch(): void {
         const query = this.input!.value.trim();
         if (!query || !this.search) {
@@ -78,6 +98,10 @@ export class SearchField extends DocumentHandler {
         this.renderResults(results);
     }
 
+    /**
+     * Renders search results into the dropdown container.
+     * @param results - Array of search results to display
+     */
     private renderResults(results: DocumentSearchResult[]): void {
         if (results.length === 0) {
             this.hideResults();
@@ -91,29 +115,130 @@ export class SearchField extends DocumentHandler {
         this.resultsContainer!.hidden = false;
     }
 
+    /**
+     * Renders a single search result item as an HTML string.
+     * @param result - The search result to render
+     * @param index - The index of the result for keyboard navigation
+     * @returns HTML string for the result item
+     */
     private renderResultItem(result: DocumentSearchResult, index: number): string {
-        const {entry} = result;
+        const {entry, matchedTerms} = result;
         const title = entry.title ?? entry.url;
-        const description = entry.description ?? this.getContentPreview(entry.content);
+        const description = this.getHighlightedDescription(entry, matchedTerms);
 
         return `<a href="${entry.url}" class="search-result" role="option" data-index="${index}">
             <span class="search-result-title">${this.escapeHtml(title)}</span>
-            ${description ? `<span class="search-result-description">${this.escapeHtml(description)}</span>` : ""}
+            ${description ? `<span class="search-result-description">${description}</span>` : ""}
         </a>`;
     }
 
-    private getContentPreview(content: string): string {
-        const maxLength = 300;
-        if (content.length <= maxLength) return content;
-        return content.slice(0, maxLength).trimEnd() + "…";
+    /**
+     * Generates a highlighted description with matched terms in bold.
+     * @param entry - The search entry containing description and content
+     * @param matchedTerms - Array of terms that matched the search query
+     * @returns HTML string with highlighted matches
+     */
+    private getHighlightedDescription(entry: DocumentSearchResult["entry"], matchedTerms: string[]): string {
+        const text = entry.description ?? entry.content;
+        if (!text) return "";
+
+        const preview = this.extractPreviewAroundMatch(text, matchedTerms);
+        return this.highlightTerms(preview, matchedTerms);
     }
 
+    /**
+     * Extracts a preview of the content centered around the first match.
+     * @param content - The full content text
+     * @param matchedTerms - Array of matched search terms
+     * @returns A truncated preview with ellipsis if needed
+     */
+    private extractPreviewAroundMatch(content: string, matchedTerms: string[]): string {
+        const maxLength = 300;
+        if (content.length <= maxLength) return content;
+
+        // Find the first matching term in the content
+        const lowerContent = content.toLowerCase();
+        let firstMatchIndex = -1;
+
+        for (const term of matchedTerms) {
+            const index = lowerContent.indexOf(term.toLowerCase());
+            if (index !== -1 && (firstMatchIndex === -1 || index < firstMatchIndex)) {
+                firstMatchIndex = index;
+            }
+        }
+
+        // If no match found, return from the beginning
+        if (firstMatchIndex === -1) {
+            return content.slice(0, maxLength).trimEnd() + "…";
+        }
+
+        // Center the preview around the match
+        const halfLength = Math.floor(maxLength / 2);
+        let start = Math.max(0, firstMatchIndex - halfLength);
+        let end = Math.min(content.length, start + maxLength);
+
+        // Adjust start if we're near the end
+        if (end === content.length) {
+            start = Math.max(0, end - maxLength);
+        }
+
+        let preview = content.slice(start, end);
+
+        // Add ellipsis
+        if (start > 0) preview = "…" + preview.trimStart();
+        if (end < content.length) preview = preview.trimEnd() + "…";
+
+        return preview;
+    }
+
+    /**
+     * Wraps matched terms in the text with strong tags for highlighting.
+     * @param text - The text to process
+     * @param matchedTerms - Array of terms to highlight
+     * @returns HTML string with matches wrapped in strong tags
+     */
+    private highlightTerms(text: string, matchedTerms: string[]): string {
+        if (matchedTerms.length === 0) return this.escapeHtml(text);
+
+        // Sort terms by length (longest first) to avoid partial replacements
+        const sortedTerms = [...matchedTerms].sort((a, b) => b.length - a.length);
+        const pattern = new RegExp(`(${sortedTerms.map(t => this.escapeRegExp(t)).join("|")})`, "gi");
+
+        // Split by matches and process each part
+        const parts = text.split(pattern);
+        return parts
+            .map((part) => {
+                const isMatch = sortedTerms.some((term) => part.toLowerCase() === term.toLowerCase());
+                const escaped = this.escapeHtml(part);
+                return isMatch ? `<strong>${escaped}</strong>` : escaped;
+            })
+            .join("");
+    }
+
+    /**
+     * Escapes special regex characters in a string.
+     * @param text - The string to escape
+     * @returns The escaped string safe for use in a RegExp
+     */
+    private escapeRegExp(text: string): string {
+        return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    /**
+     * Escapes HTML special characters to prevent XSS.
+     * @param text - The text to escape
+     * @returns The escaped HTML-safe string
+     */
     private escapeHtml(text: string): string {
         const div = document.createElement("div");
         div.textContent = text;
         return div.innerHTML;
     }
 
+    /**
+     * Handles keyboard navigation within the search results.
+     * @param event - The keyboard event
+     */
     private onKeyDown(event: KeyboardEvent): void {
         if (this.resultsContainer!.hidden) return;
 
@@ -141,16 +266,27 @@ export class SearchField extends DocumentHandler {
         }
     }
 
+    /**
+     * Updates the selected item in the results list.
+     * @param items - The list of result elements
+     * @param index - The index to select
+     */
     private selectItem(items: NodeListOf<HTMLElement>, index: number): void {
         items.forEach((item, i) => item.classList.toggle("selected", i === index));
         this.selectedIndex = index;
     }
 
+    /**
+     * Hides the results dropdown and resets selection.
+     */
     private hideResults(): void {
         this.resultsContainer!.hidden = true;
         this.selectedIndex = -1;
     }
 
+    /**
+     * Hides results after a short delay to allow click events to fire.
+     */
     private hideResultsDelayed(): void {
         setTimeout(() => this.hideResults(), 150);
     }
