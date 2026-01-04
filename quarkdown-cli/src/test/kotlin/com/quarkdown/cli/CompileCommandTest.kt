@@ -347,4 +347,46 @@ class CompileCommandTest : TempDirectory() {
             )
         checkPdf()
     }
+
+    @Test
+    fun `plaintext, single subdocument`() {
+        val (_, _, _) = test("--render", "text")
+        val outputFile = outputDirectory.resolve("$DEFAULT_OUTPUT_DIRECTORY_NAME.txt")
+        assertTrue(outputFile.exists())
+        val outputContent = outputFile.readText()
+        assertTrue(outputContent.contains("Page 1"))
+        assertTrue(outputContent.contains("Page 2"))
+        assertTrue(outputContent.contains("Page 3"))
+    }
+
+    @Test
+    fun `plaintext, multiple subdocuments`() {
+        setupSubdocuments()
+        val (_, _, _) = test("--render", "text")
+        val outputDir = outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+        assertTrue(outputDir.exists())
+        assertTrue(outputDir.isDirectory)
+
+        val mainOutputFile = outputDir.resolve("index.txt")
+        assertTrue(mainOutputFile.exists())
+        val mainOutputContent = mainOutputFile.readText()
+        assertTrue(mainOutputContent.contains("Page 1"))
+        assertTrue(mainOutputContent.contains("Page 2"))
+        assertTrue(mainOutputContent.contains("Page 3"))
+
+        val subdoc1OutputFile = outputDir.resolve("subdoc1.txt")
+        assertTrue(subdoc1OutputFile.exists())
+        val subdoc1OutputContent = subdoc1OutputFile.readText()
+        assertTrue(subdoc1OutputContent.contains("This is a subdocument."))
+
+        val subdoc2OutputFile = outputDir.resolve("subdoc2.txt")
+        assertTrue(subdoc2OutputFile.exists())
+        val subdoc2OutputContent = subdoc2OutputFile.readText()
+        assertTrue(subdoc2OutputContent.contains("This is another subdocument."))
+
+        val subdoc3OutputFile = outputDir.resolve("subdoc3.txt")
+        assertTrue(subdoc3OutputFile.exists())
+        val subdoc3OutputContent = subdoc3OutputFile.readText()
+        assertTrue(subdoc3OutputContent.contains("This is yet another subdocument."))
+    }
 }

@@ -4,6 +4,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.MutableContextOptions
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.VisitableOnceGraph
 import com.quarkdown.core.pipeline.Pipeline
@@ -12,6 +13,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.core.rendering.RenderingComponents
 import com.quarkdown.rendering.html.extension.html
 import com.quarkdown.stdlib.Stdlib
 import java.io.File
@@ -36,6 +38,7 @@ val DEFAULT_OPTIONS =
  * Executes a Quarkdown source.
  * @param source Quarkdown source to execute
  * @param options execution options
+ * @param renderer function that provides the rendering components to use (defaults to HTML)
  * @param subdocumentGraph modifier of the subdocument graph before rendering
  * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
  * @param useDummyLibraryDirectory whether to use the dummy library directory for loading libraries instead of the one from the `libs` module
@@ -50,6 +53,7 @@ val DEFAULT_OPTIONS =
 fun execute(
     source: String,
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
+    renderer: (RendererFactory, Context) -> RenderingComponents = { rendererFactory, ctx -> rendererFactory.html(ctx) },
     subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
     useDummyLibraryDirectory: Boolean = false,
@@ -98,7 +102,7 @@ fun execute(
                 minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
             ),
             libraries = setOf(Stdlib.library),
-            renderer = { rendererFactory, ctx -> rendererFactory.html(ctx) },
+            renderer = renderer,
             hooks,
         )
 

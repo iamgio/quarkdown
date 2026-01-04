@@ -8,6 +8,7 @@ enum class ArtifactType {
     CSS,
     JAVASCRIPT,
     JSON,
+    PLAIN_TEXT,
 
     /**
      * Quarkdown source file (QD)
