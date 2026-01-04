@@ -8,6 +8,7 @@ dependencies {
     testImplementation("org.apache.pdfbox:pdfbox:3.0.6")
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-html"))
+    implementation(project(":quarkdown-plaintext"))
     implementation(project(":quarkdown-server"))
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-stdlib"))

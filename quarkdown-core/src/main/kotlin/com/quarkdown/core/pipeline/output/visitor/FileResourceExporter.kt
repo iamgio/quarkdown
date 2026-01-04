@@ -47,6 +47,7 @@ class FileResourceExporter(
                     ArtifactType.CSS -> ".css"
                     ArtifactType.JAVASCRIPT -> ".js"
                     ArtifactType.JSON -> ".json"
+                    ArtifactType.PLAIN_TEXT -> ".txt"
                     ArtifactType.QUARKDOWN -> ".qd"
                     ArtifactType.AUTO -> "" // Assumes the file name already contains an extension.
                 }
