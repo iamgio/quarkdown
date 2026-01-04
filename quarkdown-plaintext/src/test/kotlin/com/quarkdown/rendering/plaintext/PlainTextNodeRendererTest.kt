@@ -35,7 +35,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- *
+ * Tests for [PlainTextNodeRenderer].
  */
 class PlainTextNodeRendererTest {
     private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(PlainTextNodeRenderer(context))
