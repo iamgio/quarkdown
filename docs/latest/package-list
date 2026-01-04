@@ -292,6 +292,10 @@ com.quarkdown.lsp.pattern
 com.quarkdown.lsp.subservices
 com.quarkdown.lsp.tokenizer
 com.quarkdown.lsp.util
+module:quarkdown-plaintext
+com.quarkdown.rendering.plaintext.extension
+com.quarkdown.rendering.plaintext.node
+com.quarkdown.rendering.plaintext.post
 module:quarkdown-quarkdoc
 com.quarkdown.quarkdoc.dokka
 com.quarkdown.quarkdoc.dokka.kdoc

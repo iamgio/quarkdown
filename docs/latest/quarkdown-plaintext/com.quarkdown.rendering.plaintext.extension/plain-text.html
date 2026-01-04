@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>toPlainText</title>
+    <title>plainText</title>
 <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-plaintext/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-plaintext/main" data-filter=":quarkdown-plaintext/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.util//toPlainText/kotlin.collections.List[com.quarkdown.core.ast.Node]#com.quarkdown.core.visitor.node.NodeVisitor[kotlin.CharSequence]?/PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="index.html">com.quarkdown.core.util</a><span class="delimiter">/</span><span class="current">toPlainText</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-plaintext::com.quarkdown.rendering.plaintext.extension//plainText/com.quarkdown.core.flavor.RendererFactory#com.quarkdown.core.context.Context/PointingToDeclaration//1917236080">
+  <div class="breadcrumbs"><a href="../index.html">quarkdown-plaintext</a><span class="delimiter">/</span><a href="index.html">com.quarkdown.rendering.plaintext.extension</a><span class="delimiter">/</span><span class="current">plainText</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>to</span><wbr><span>Plain</span><wbr><span><span>Text</span></span></h1>
+    <h1 class="cover"><span>plain</span><wbr><span><span>Text</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../com.quarkdown.core.ast/-inline-content/index.html">InlineContent</a><span class="token punctuation">.</span><a href="to-plain-text.html"><span class="token function">toPlainText</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">renderer<span class="token operator">: </span><a href="../com.quarkdown.core.visitor.node/-node-visitor/index.html">NodeVisitor</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><p class="paragraph">Converts processed <a href="../com.quarkdown.core.ast/-inline-content/index.html">InlineContent</a> to its plain text representation. For example, the Markdown input <code class="lang-kotlin">foo **bar </code>baz<code class="lang-kotlin">**</code> has <code class="lang-kotlin">foo bar baz</code> as its plain text.</p><p class="paragraph">Note: this is a quick and efficient implementation, practical for the use cases inside the core compiler (e.g., stripping away formatting from image labels). For a full-fledged plain text rendering, see the <code class="lang-kotlin">quarkdown-plaintext</code> module instead.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">plain text of the inline content</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>renderer</span></span></u></div></span></div><div><div class="title"><p class="paragraph">optional renderer to use to render critical content and text symbols</p></div></div></div></div></div><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../com.quarkdown.core.ast.base.inline/-plain-text-node/index.html"><span>Plain</span><wbr><span>Text</span><wbr><span><span>Node</span></span></a></div></span></div><div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-plaintext/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../quarkdown-core/com.quarkdown.core.flavor/-renderer-factory/index.html">RendererFactory</a><span class="token punctuation">.</span><a href="plain-text.html"><span class="token function">plainText</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../quarkdown-core/com.quarkdown.core.rendering/-rendering-components/index.html">RenderingComponents</a></div><p class="paragraph">The plain-text rendering plug-in produces a plain-text representation of the document. It can be used for generating text-only versions of documents for accessibility or for further processing by text-based tools.</p></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
