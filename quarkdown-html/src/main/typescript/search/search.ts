@@ -152,10 +152,13 @@ export class DocumentSearch {
         }
 
         const results: MiniSearchResult[] = this.miniSearch.search(query, searchOptions);
+        const seenUrls = new Set<string>();
         const mappedResults: DocumentSearchResult[] = results
             .map((result) => {
                 const entry = this.entriesMap.get(result.id as number);
                 if (!entry) return null;
+                if (seenUrls.has(entry.url)) return null;
+                seenUrls.add(entry.url);
 
                 return {
                     entry,

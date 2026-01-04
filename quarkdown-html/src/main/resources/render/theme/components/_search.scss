@@ -1,0 +1,106 @@
+.quarkdown .search-wrapper {
+  display: grid;
+  position: relative;
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    gap: 8px;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid var(--qd-docs-separator-border-color);
+    border-radius: 8px;
+    background-color: var(--qd-background-color);
+    transition: border-color 0.2s;
+
+    &:focus-within {
+      border-color: var(--qd-primary-color);
+    }
+
+    i {
+      margin-left: 2px;
+      font-size: 1.1em;
+      opacity: 0.7;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.95em;
+
+      &::placeholder {
+        opacity: 0.7;
+      }
+    }
+
+    kbd {
+      font-family: inherit;
+      font-size: 0.85em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--qd-docs-separator-border-color);
+    }
+  }
+
+  #search-results {
+    position: absolute;
+    top: calc(100% - 4px);
+    left: 0;
+    right: 0;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 6px;
+    background-color: var(--qd-background-color);
+    border: 1px solid var(--qd-docs-separator-border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+
+    .search-result {
+      display: block;
+      padding: 12px 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: background-color 0.15s;
+
+      &:hover,
+      &.selected {
+        background-color: var(--qd-docs-highlight-color, rgba(0, 0, 0, 0.05));
+      }
+
+      &:first-child {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+
+      & + .search-result {
+        padding-top: 14px;
+        border-top: 1px solid var(--qd-docs-separator-border-color);
+      }
+
+      &-title {
+        display: block;
+        font-weight: 500;
+      }
+
+      &-description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        margin-top: 4px;
+        font-size: 0.85em;
+        line-height: 1.5;
+        opacity: 0.7;
+        overflow: hidden;
+      }
+    }
+  }
+}
