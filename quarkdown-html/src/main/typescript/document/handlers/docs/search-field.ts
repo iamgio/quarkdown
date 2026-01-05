@@ -122,9 +122,9 @@ export class SearchField extends DocumentHandler {
      * @returns HTML string for the result item
      */
     private renderResultItem(result: DocumentSearchResult, index: number): string {
-        const {entry, matchedTerms} = result;
+        const {entry} = result;
         const title = entry.title ?? entry.url;
-        const description = this.getHighlightedDescription(entry, matchedTerms);
+        const description = this.getHighlightedDescription(result);
 
         return `<a href="${entry.url}" class="search-result" role="option" data-index="${index}">
             <span class="search-result-title">${this.escapeHtml(title)}</span>
@@ -134,16 +134,32 @@ export class SearchField extends DocumentHandler {
 
     /**
      * Generates a highlighted description with matched terms in bold.
-     * @param entry - The search entry containing description and content
-     * @param matchedTerms - Array of terms that matched the search query
+     * @param result - The search result containing entry and match info
      * @returns HTML string with highlighted matches
      */
-    private getHighlightedDescription(entry: DocumentSearchResult["entry"], matchedTerms: string[]): string {
+    private getHighlightedDescription(result: DocumentSearchResult): string {
+        const {entry, matchedTerms, matchedFields} = result;
         const text = entry.description ?? this.trimTitleFromContent(entry.content, entry.title);
         if (!text) return "";
 
+        // If match is from the title, don't highlight anything
+        if (this.isTitleMatch(matchedFields)) {
+            const preview = this.extractPreviewAroundMatch(text, []);
+            return this.escapeHtml(preview);
+        }
+
         const preview = this.extractPreviewAroundMatch(text, matchedTerms);
         return this.highlightTerms(preview, matchedTerms);
+    }
+
+    /**
+     * Checks if any match came from the title field.
+     * @param matchedFields - Map of terms to fields they matched in
+     * @returns True if any match is from the document title
+     */
+    private isTitleMatch(matchedFields: Record<string, string[]>): boolean {
+        console.log(matchedFields);
+        return Object.values(matchedFields).flat().includes("title");
     }
 
     /**

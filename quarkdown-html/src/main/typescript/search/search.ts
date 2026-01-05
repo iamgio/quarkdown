@@ -48,6 +48,8 @@ export interface DocumentSearchResult {
     entry: SearchEntry;
     score: number;
     matchedTerms: string[];
+    /** Map of matched terms to the fields they were found in */
+    matchedFields: Record<string, string[]>;
 }
 
 /**
@@ -164,6 +166,7 @@ export class DocumentSearch {
                     entry,
                     score: result.score,
                     matchedTerms: result.terms,
+                    matchedFields: result.match,
                 };
             })
             .filter((result): result is DocumentSearchResult => result !== null);
