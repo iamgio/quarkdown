@@ -201,8 +201,8 @@ export class SearchField extends DocumentHandler {
             : this.escapeHtml(item.title);
 
         return `<a href="${this.escapeHtml(item.url)}" class="${className}" role="option" data-index="${index}">
-            <span class="search-result-title">${titleHtml}</span>
-            ${item.description ? `<span class="search-result-description">${item.description}</span>` : ""}
+            <div class="search-result-title">${titleHtml}</div>
+            ${item.description ? `<div class="search-result-description">${item.description}</div>` : ""}
         </a>`;
     }
 

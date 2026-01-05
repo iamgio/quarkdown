@@ -87,8 +87,7 @@
       }
 
       &-title {
-        display: block;
-        font-weight: 500;
+        font-weight: bold;
       }
 
       &-chevron {
@@ -102,7 +101,7 @@
       }
 
       &-description {
-        margin-top: 4px;
+        margin-top: 8px;
         font-size: 0.85em;
         line-height: 1.5;
         white-space: pre-line;
