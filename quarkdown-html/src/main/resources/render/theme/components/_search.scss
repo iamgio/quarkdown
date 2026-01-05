@@ -30,6 +30,7 @@
       outline: none;
       background: transparent;
       font-size: 0.95em;
+      color: var(--qd-main-color);
 
       &::placeholder {
         opacity: 0.7;
@@ -56,7 +57,7 @@
     background-color: var(--qd-background-color);
     border: 1px solid var(--qd-docs-separator-border-color);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
     z-index: 100;
 
     .search-result {
@@ -68,7 +69,7 @@
 
       &:hover,
       &.selected {
-        background-color: var(--qd-docs-highlight-color, rgba(0, 0, 0, 0.05));
+        background-color: var(--qd-selected-background-color);
       }
 
       &:first-child {
