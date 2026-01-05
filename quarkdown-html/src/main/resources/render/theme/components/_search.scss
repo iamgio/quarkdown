@@ -91,6 +91,13 @@
         font-weight: 500;
       }
 
+      &-heading {
+        .search-result-title::before {
+          content: "# ";
+          opacity: 0.5;
+        }
+      }
+
       &-description {
         margin-top: 4px;
         font-size: 0.85em;

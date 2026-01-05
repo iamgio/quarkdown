@@ -1,6 +1,16 @@
 import {DocumentHandler} from "../../document-handler";
 import {createSearch, DocumentSearch, DocumentSearchResult} from "../../../search/search";
 
+/**
+ * A display item for rendering in the search results dropdown.
+ */
+interface DisplayItem {
+    url: string;
+    title: string;
+    description: string;
+    isHeading?: boolean;
+}
+
 const SEARCH_INPUT_ID = "search-input";
 const SEARCH_RESULTS_ID = "search-results";
 const SEARCH_INDEX_META_NAME = "quarkdown:search-index";
@@ -108,27 +118,86 @@ export class SearchField extends DocumentHandler {
             return;
         }
 
+        const displayItems = results.flatMap((result) => this.expandResult(result));
+
         this.selectedIndex = -1;
-        this.resultsContainer!.innerHTML = results
-            .map((result, index) => this.renderResultItem(result, index))
+        this.resultsContainer!.innerHTML = displayItems
+            .map((item, index) => this.renderResultItem(item, index))
             .join("");
         this.resultsContainer!.hidden = false;
     }
 
     /**
+     * Expands a search result into display items, creating separate items for heading matches.
+     * @param result - The search result to expand
+     * @returns Array of display items
+     */
+    private expandResult(result: DocumentSearchResult): DisplayItem[] {
+        const {entry, matchedFields} = result;
+        const items: DisplayItem[] = [];
+
+        // Add the main page result
+        items.push({
+            url: entry.url,
+            title: entry.title ?? entry.url,
+            description: this.getHighlightedDescription(result),
+        });
+
+        // Add separate items for heading matches
+        const headingTerms = this.getTermsForField(matchedFields, "headings");
+        if (headingTerms.length > 0) {
+            const matchingHeadings = this.findMatchingHeadings(entry.headings, headingTerms);
+            for (const heading of matchingHeadings) {
+                items.push({
+                    url: `${entry.url}#${heading.anchor}`,
+                    title: heading.text,
+                    description: "",
+                    isHeading: true,
+                });
+            }
+        }
+
+        return items;
+    }
+
+    /**
+     * Gets the terms that matched in a specific field.
+     * @param matchedFields - Map of terms to fields they matched in
+     * @param field - The field to get terms for
+     * @returns Array of terms that matched in the specified field
+     */
+    private getTermsForField(matchedFields: Record<string, string[]>, field: string): string[] {
+        return Object.entries(matchedFields)
+            .filter(([, fields]) => fields.includes(field))
+            .map(([term]) => term);
+    }
+
+    /**
+     * Finds headings that match any of the search terms.
+     * @param headings - Array of headings to search
+     * @param terms - Array of terms to match against
+     * @returns Headings that contain any of the terms
+     */
+    private findMatchingHeadings(
+        headings: DocumentSearchResult["entry"]["headings"],
+        terms: string[]
+    ): DocumentSearchResult["entry"]["headings"] {
+        return headings.filter((heading) =>
+            terms.some((term) => heading.text.toLowerCase().includes(term.toLowerCase()))
+        );
+    }
+
+    /**
      * Renders a single search result item as an HTML string.
-     * @param result - The search result to render
+     * @param item - The display item to render
      * @param index - The index of the result for keyboard navigation
      * @returns HTML string for the result item
      */
-    private renderResultItem(result: DocumentSearchResult, index: number): string {
-        const {entry} = result;
-        const title = entry.title ?? entry.url;
-        const description = this.getHighlightedDescription(result);
-
-        return `<a href="${entry.url}" class="search-result" role="option" data-index="${index}">
-            <span class="search-result-title">${this.escapeHtml(title)}</span>
-            ${description ? `<span class="search-result-description">${description}</span>` : ""}
+    private renderResultItem(item: DisplayItem, index: number): string {
+        const className = item.isHeading ? "search-result search-result-heading" : "search-result";
+        return `<a href="${item.url}" class="${className}" role="option" data-index="${index}">
+            <span class="search-result-title">${this.escapeHtml(item.title)}</span>
+            ${item.description ? `<span class="search-result-description">${item.description}</span>` : ""}
         </a>`;
     }
 
@@ -142,7 +211,7 @@ export class SearchField extends DocumentHandler {
         const text = entry.description ?? this.trimTitleFromContent(entry.content, entry.title);
         if (!text) return "";
 
-        // If match is from the title, don't highlight anything
+        // If match is from the title or headings, don't highlight anything
         if (this.isTitleMatch(matchedFields)) {
             const preview = this.extractPreviewAroundMatch(text, []);
             return this.escapeHtml(preview);
@@ -153,13 +222,13 @@ export class SearchField extends DocumentHandler {
     }
 
     /**
-     * Checks if any match came from the title field.
+     * Checks if any match came from the title or headings.
      * @param matchedFields - Map of terms to fields they matched in
-     * @returns True if any match is from the document title
+     * @returns True if any match is from the document title or headings
      */
     private isTitleMatch(matchedFields: Record<string, string[]>): boolean {
-        console.log(matchedFields);
-        return Object.values(matchedFields).flat().includes("title");
+        const flattened = Object.values(matchedFields).flat();
+        return flattened.includes("title") || flattened.includes("headings");
     }
 
     /**
