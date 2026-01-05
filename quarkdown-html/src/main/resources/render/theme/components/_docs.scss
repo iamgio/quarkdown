@@ -1,4 +1,6 @@
 @use "util/media-queries" as media-queries;
+@use "../layout/util/progressive-heading-sizes" as *;
+@use "../layout/util/progressive-heading-margins" as *;
 
 .quarkdown-docs {
   --qd-nested-navigation-padding-left: 1.2em;
@@ -34,5 +36,10 @@
     aside:last-child {
       border-left: 1px solid var(--qd-docs-separator-border-color);
     }
+  }
+
+  .page-margin-content {
+    @include progressive-heading-sizes($multiplier: .9);
+    @include progressive-heading-margins($bottomAddition: 0);
   }
 }
