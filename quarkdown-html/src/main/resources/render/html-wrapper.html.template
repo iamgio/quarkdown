@@ -161,7 +161,7 @@
         <div class="search-wrapper">
             <div class="search-field">
                 <i class='bx bx-search'></i>
-                <input id="search-input" type="text" placeholder="Search">
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
                 <kbd>/</kbd>
             </div>
         </div>
