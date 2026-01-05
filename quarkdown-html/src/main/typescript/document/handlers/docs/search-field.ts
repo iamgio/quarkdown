@@ -8,7 +8,8 @@ interface DisplayItem {
     url: string;
     title: string;
     description: string;
-    isHeading?: boolean;
+    /** For heading results: the parent page title */
+    parentTitle?: string;
 }
 
 const SEARCH_INPUT_ID = "search-input";
@@ -152,7 +153,7 @@ export class SearchField extends DocumentHandler {
                     url: `${entry.url}#${heading.anchor}`,
                     title: heading.text,
                     description: "",
-                    isHeading: true,
+                    parentTitle: entry.title ?? entry.url,
                 });
             }
         }
@@ -194,9 +195,13 @@ export class SearchField extends DocumentHandler {
      * @returns HTML string for the result item
      */
     private renderResultItem(item: DisplayItem, index: number): string {
-        const className = item.isHeading ? "search-result search-result-heading" : "search-result";
-        return `<a href="${item.url}" class="${className}" role="option" data-index="${index}">
-            <span class="search-result-title">${this.escapeHtml(item.title)}</span>
+        const className = item.parentTitle ? "search-result search-result-heading" : "search-result";
+        const titleHtml = item.parentTitle
+            ? `${this.escapeHtml(item.parentTitle)}<span class="search-result-chevron"></span>${this.escapeHtml(item.title)}`
+            : this.escapeHtml(item.title);
+
+        return `<a href="${this.escapeHtml(item.url)}" class="${className}" role="option" data-index="${index}">
+            <span class="search-result-title">${titleHtml}</span>
             ${item.description ? `<span class="search-result-description">${item.description}</span>` : ""}
         </a>`;
     }

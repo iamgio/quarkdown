@@ -91,10 +91,13 @@
         font-weight: 500;
       }
 
-      &-heading {
-        .search-result-title::before {
-          content: "# ";
+      &-chevron {
+        &::before {
+          content: "\ea50"; // bx-chevron-right
+          font-family: "boxicons", serif;
+          margin: 0 4px;
           opacity: 0.5;
+          vertical-align: -2px;
         }
       }
 
