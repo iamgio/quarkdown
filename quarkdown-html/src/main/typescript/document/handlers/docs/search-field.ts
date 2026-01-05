@@ -127,14 +127,16 @@ export class SearchField extends DocumentHandler {
         const items = this.resultsContainer!.querySelectorAll<HTMLElement>(".search-result");
         if (items.length === 0) return;
 
+        const lastIndex = items.length - 1;
+
         switch (event.key) {
             case "ArrowDown":
                 event.preventDefault();
-                this.selectItem(items, Math.min(this.selectedIndex + 1, items.length - 1));
+                this.selectItem(items, this.selectedIndex < lastIndex ? this.selectedIndex + 1 : 0);
                 break;
             case "ArrowUp":
                 event.preventDefault();
-                this.selectItem(items, Math.max(this.selectedIndex - 1, 0));
+                this.selectItem(items, this.selectedIndex > 0 ? this.selectedIndex - 1 : lastIndex);
                 break;
             case "Enter":
                 if (this.selectedIndex >= 0) {
