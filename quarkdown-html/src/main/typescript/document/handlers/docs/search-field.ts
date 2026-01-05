@@ -139,11 +139,28 @@ export class SearchField extends DocumentHandler {
      * @returns HTML string with highlighted matches
      */
     private getHighlightedDescription(entry: DocumentSearchResult["entry"], matchedTerms: string[]): string {
-        const text = entry.description ?? entry.content;
+        const text = entry.description ?? this.trimTitleFromContent(entry.content, entry.title);
         if (!text) return "";
 
         const preview = this.extractPreviewAroundMatch(text, matchedTerms);
         return this.highlightTerms(preview, matchedTerms);
+    }
+
+    /**
+     * Removes the title from the beginning of the content, if present.
+     * This is caused by the plain text extraction including the H1 title.
+     * @param content - The full content text
+     * @param title - The entry title to trim
+     * @returns Content with title trimmed from the start
+     */
+    private trimTitleFromContent(content: string, title: string | null): string {
+        if (!title || !content) return content;
+
+        const trimmedContent = content.trimStart();
+        if (trimmedContent.toLowerCase().startsWith(title.toLowerCase())) {
+            return trimmedContent.slice(title.length).trimStart();
+        }
+        return content;
     }
 
     /**
