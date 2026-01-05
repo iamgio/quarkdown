@@ -158,6 +158,7 @@ export class SearchField extends DocumentHandler {
     private selectItem(items: NodeListOf<HTMLElement>, index: number): void {
         items.forEach((item, i) => item.classList.toggle("selected", i === index));
         this.selectedIndex = index;
+        items[index].scrollIntoView({block: "nearest"});
     }
 
     /**
