@@ -13,7 +13,7 @@
     }
 
     > aside img {
-      height: var(--qd-docs-header-height);
+      max-height: calc(var(--qd-docs-header-height) - 16px);
     }
   }
 
