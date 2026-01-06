@@ -166,6 +166,36 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `table of contents skipping level 1`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents
+            
+            ## ABC
+            
+            ### DEF
+            
+            ## GHI
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\"></h1>" +
+                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#abc\">ABC</a>" +
+                    "<ol><li><a href=\"#def\">DEF</a></li></ol></li>" +
+                    "<li><a href=\"#ghi\">GHI</a></li>" +
+                    "</ol></nav>" +
+                    "<h2 id=\"abc\">ABC</h2>" +
+                    "<h3 id=\"def\">DEF</h3>" +
+                    "<h2 id=\"ghi\">GHI</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents markers`() {
         execute(
             """
@@ -231,6 +261,39 @@ class TableOfContentsTest {
                     "<h1 id=\"abc\">ABC</h1>" +
                     "<h2 id=\"unnumbered-2\" data-decorative=\"\">Unnumbered 2</h2>" +
                     "<h1 id=\"def\">DEF</h1>" +
+                    "<h2 id=\"y\">Y</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `exclude unnumbered headings from table of contents, but spread children`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents includeunnumbered:{no}
+            
+            #! ABC
+            
+            ## X
+            
+            ### X/1
+            
+            ## Y
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\"></h1>" +
+                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<li><a href=\"#x\">X</a>" +
+                    "<ol><li><a href=\"#x1\">X/1</a></li></ol></li>" +
+                    "<li><a href=\"#y\">Y</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"abc\" data-decorative=\"\">ABC</h1>" +
+                    "<h2 id=\"x\">X</h2>" +
+                    "<h3 id=\"x1\">X/1</h3>" +
                     "<h2 id=\"y\">Y</h2>",
                 it,
             )
