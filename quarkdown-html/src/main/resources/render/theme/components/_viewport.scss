@@ -46,10 +46,10 @@ body.quarkdown {
       }
     }
 
-    // Mobile responsiveness
     @include media-queries.mobile($orNarrowPrint: true) {
       flex-direction: column;
-      padding: 0 16px;
+      padding-left: 16px;
+      padding-right: 16px;
 
       > * {
         font-size: 1.1em;
@@ -58,7 +58,13 @@ body.quarkdown {
       > main {
         width: 100%;
       }
+    }
+  }
 
+  &.quarkdown-plain {
+    margin: 32px 0;
+
+    @include media-queries.mobile($orNarrowPrint: true) {
       > aside:first-child {
         display: none;
       }
@@ -75,10 +81,6 @@ body.quarkdown {
         }
       }
     }
-  }
-
-  &.quarkdown-plain {
-    margin: 32px 0;
   }
 
   // Docs viewport
@@ -116,6 +118,34 @@ body.quarkdown {
 
       &:last-child {
         padding-left: calc(var(--aside-outer-margin) / 2);
+      }
+    }
+
+    // Higher specificity for mobile adjustments.
+    &.quarkdown-docs {
+      @include media-queries.mobile($orNarrowPrint: true) {
+        header {
+          flex-direction: row;
+
+          > aside {
+            display: none;
+          }
+        }
+
+        .content-wrapper > aside {
+          position: static;
+          width: auto;
+          max-width: none;
+          margin: 16px 0 0 0;
+          padding-left: 0;
+          padding-right: 0;
+          border: none;
+          order: 2;
+
+          &:first-child {
+            border-top: 1px solid var(--qd-docs-separator-border-color);
+          }
+        }
       }
     }
   }

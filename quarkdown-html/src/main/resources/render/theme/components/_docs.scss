@@ -39,7 +39,9 @@
   }
 
   .page-margin-content {
-    @include progressive-heading-sizes($multiplier: .9);
+    @include progressive-heading-sizes($multiplier: 1);
     @include progressive-heading-margins($bottomAddition: 0);
+
+    font-size: 0.9em;
   }
 }
