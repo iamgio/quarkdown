@@ -9,13 +9,13 @@
     gap: 8px;
     max-width: 400px;
     padding: 8px 12px;
-    border: 1px solid var(--qd-docs-separator-border-color);
+    border: 1px solid var(--qd-docs-search-border-color);
     border-radius: 8px;
     background-color: var(--qd-background-color);
     transition: border-color 0.2s;
 
     &:focus-within {
-      border-color: var(--qd-primary-color);
+      border-color: var(--qd-docs-search-focused-border);
     }
 
     i {
@@ -42,7 +42,7 @@
       font-size: 0.85em;
       padding: 2px 8px;
       border-radius: 4px;
-      border: 1px solid var(--qd-docs-separator-border-color);
+      border: 1px solid var(--qd-docs-search-border-color);
     }
   }
 

@@ -154,6 +154,8 @@
   --qd-docs-header-vertical-padding: 12px;
   --qd-docs-header-background-color: var(--qd-primary-color);
   --qd-docs-separator-border-color: var(--qd-docs-header-background-color);
+  --qd-docs-search-border-color: var(--qd-docs-separator-border-color);
+  --qd-docs-search-focused-border: var(--qd-primary-color);
 
   // Reveal properties
   --r-background-color: var(--qd-background-color);
