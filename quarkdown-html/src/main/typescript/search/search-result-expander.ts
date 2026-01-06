@@ -31,7 +31,7 @@ export function expandResult(result: DocumentSearchResult): DisplayItem[] {
     // Add separate items for heading matches
     const headingTerms = getTermsForField(matchedFields, "headings");
     if (headingTerms.length > 0) {
-        const matchingHeadings = findMatchingHeadings(entry.headings, headingTerms);
+        const matchingHeadings = findMatchingHeadings(entry.headings, headingTerms, entry.title);
         for (const heading of matchingHeadings) {
             items.push({
                 url: `${entry.url}#${heading.anchor}`,
@@ -58,17 +58,22 @@ function getTermsForField(matchedFields: Record<string, string[]>, field: string
 }
 
 /**
- * Finds headings that match any of the search terms.
+ * Finds headings that match any of the search terms, excluding those that match the document title.
  * @param headings - Array of headings to search
  * @param terms - Array of terms to match against
+ * @param title - The document title to exclude from results
  * @returns Headings that contain any of the terms
  */
 function findMatchingHeadings(
     headings: DocumentSearchResult["entry"]["headings"],
-    terms: string[]
+    terms: string[],
+    title: string | null
 ): DocumentSearchResult["entry"]["headings"] {
-    return headings.filter((heading) =>
-        terms.some((term) => heading.text.toLowerCase().includes(term.toLowerCase()))
+    const normalizedTitle = title?.toLowerCase();
+    return headings.filter(
+        (heading) =>
+            heading.text.toLowerCase() !== normalizedTitle &&
+            terms.some((term) => heading.text.toLowerCase().includes(term.toLowerCase()))
     );
 }
 

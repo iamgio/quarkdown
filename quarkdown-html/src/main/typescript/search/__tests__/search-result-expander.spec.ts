@@ -95,6 +95,29 @@ describe("expandResult", () => {
         expect(items[2].url).toBe("/docs/page#config");
     });
 
+    it("excludes headings that match document title", () => {
+        const result = createResult({
+            entry: {
+                url: "/docs/page",
+                title: "Introduction",
+                description: null,
+                keywords: [],
+                content: "Content",
+                headings: [
+                    {anchor: "intro", text: "Introduction", level: 1},
+                    {anchor: "setup", text: "Setup Guide", level: 2},
+                ],
+            },
+            matchedTerms: ["intro"],
+            matchedFields: {intro: ["headings"]},
+        });
+        const items = expandResult(result);
+
+        expect(items).toHaveLength(1);
+        expect(items[0].title).toBe("Introduction");
+        expect(items[0].parentTitle).toBeUndefined();
+    });
+
     it("uses description for preview when available", () => {
         const result = createResult({
             entry: {
