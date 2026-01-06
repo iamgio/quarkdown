@@ -26,8 +26,14 @@ private fun filterTableOfContentsItems(
         .asSequence()
         // Items that exceed the maximum depth.
         .filter { it.depth <= view.maxDepth }
-        // Unnumbered items unless included.
-        .filter { view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true }
+        // Unnumbered items are excluded unless included. If excluded, their children are spread up.
+        .flatMap {
+            if (view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true) {
+                sequenceOf(it)
+            } else {
+                filterTableOfContentsItems(view, it.subItems)
+            }
+        }
 
 /**
  * Converts a table of contents to a renderable [OrderedList].

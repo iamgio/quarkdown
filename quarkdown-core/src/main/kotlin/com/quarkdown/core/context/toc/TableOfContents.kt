@@ -70,28 +70,29 @@ data class TableOfContents(
          * @return the generated table of contents
          */
         fun generate(headings: Sequence<Heading>): TableOfContents {
-            // The minimum depth among the headings.
-            val minDepth =
-                headings.minOfOrNull { it.depth }
-                    ?: return TableOfContents(emptyList()) // No headings.
-
             /**
              * Helper function to add a heading into the correct place in the hierarchy.
              * @param hierarchy the current hierarchy
              * @param item the item to add
-             * @param depth depth of the item to add
              */
             fun addItemToHierarchy(
                 hierarchy: List<Item>,
                 item: Item,
-                depth: Int,
             ): List<Item> {
-                if (depth == minDepth || hierarchy.isEmpty()) {
+                if (hierarchy.isEmpty()) {
                     return hierarchy + item
                 }
 
                 val parent = hierarchy.last()
-                val newSubItems = addItemToHierarchy(parent.subItems, item, depth - 1)
+
+                // If the new item's depth is less than or equal to the parent's depth,
+                // it should be a sibling, not a child.
+                if (item.depth <= parent.depth) {
+                    return hierarchy + item
+                }
+
+                // Otherwise, add as a descendant of the parent.
+                val newSubItems = addItemToHierarchy(parent.subItems, item)
                 return hierarchy.dropLast(1) + parent.copy(subItems = newSubItems)
             }
 
@@ -99,7 +100,7 @@ data class TableOfContents(
             val result =
                 headings
                     .fold(emptyList<Item>()) { accumulator, heading ->
-                        addItemToHierarchy(accumulator, Item(heading), heading.depth)
+                        addItemToHierarchy(accumulator, Item(heading))
                     }
 
             return TableOfContents(result)

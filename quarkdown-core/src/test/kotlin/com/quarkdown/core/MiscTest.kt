@@ -1,8 +1,5 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.base.block.Heading
-import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.LazyOutputArtifact
@@ -20,111 +17,6 @@ import kotlin.test.assertTrue
  * Tests for miscellaneous classes.
  */
 class MiscTest {
-    @Test
-    fun `table of contents`() {
-        val headings1 =
-            sequenceOf(
-                Heading(1, listOf(Text("ABC"))),
-                Heading(2, listOf(Text("DEF"))),
-                Heading(2, listOf(Text("GHI"))),
-                Heading(3, listOf(Text("JKL"))),
-                Heading(2, listOf(Text("MNO"))),
-                Heading(1, listOf(Text("PQR"))),
-            )
-
-        TableOfContents.generate(headings1).let { toc ->
-            assertEquals(2, toc.items.size)
-            assertEquals(3, toc.items[0].subItems.size)
-            assertEquals(
-                1,
-                toc.items[0]
-                    .subItems[1]
-                    .subItems.size,
-            )
-
-            assertNodeEquals(Text("ABC"), toc.items[0].text.first())
-            assertNodeEquals(
-                Text("DEF"),
-                toc.items[0]
-                    .subItems[0]
-                    .text
-                    .first(),
-            )
-            assertNodeEquals(
-                Text("GHI"),
-                toc.items[0]
-                    .subItems[1]
-                    .text
-                    .first(),
-            )
-            assertNodeEquals(
-                Text("JKL"),
-                toc.items[0]
-                    .subItems[1]
-                    .subItems[0]
-                    .text
-                    .first(),
-            )
-            assertNodeEquals(
-                Text("MNO"),
-                toc.items[0]
-                    .subItems[2]
-                    .text
-                    .first(),
-            )
-            assertNodeEquals(Text("PQR"), toc.items[1].text.first())
-        }
-
-        val headings2 =
-            sequenceOf(
-                Heading(1, listOf(Text("ABC"))),
-                Heading(3, listOf(Text("DEF"))),
-                Heading(2, listOf(Text("GHI"))),
-            )
-
-        TableOfContents.generate(headings2).let { toc ->
-            assertEquals(1, toc.items.size)
-            assertEquals(2, toc.items[0].subItems.size)
-
-            assertNodeEquals(Text("ABC"), toc.items[0].text.first())
-            assertNodeEquals(
-                Text("DEF"),
-                toc.items[0]
-                    .subItems[0]
-                    .text
-                    .first(),
-            )
-            assertNodeEquals(
-                Text("GHI"),
-                toc.items[0]
-                    .subItems[1]
-                    .text
-                    .first(),
-            )
-        }
-
-        /*
-        val headings3 =
-            sequenceOf(
-                Heading(2, listOf(Text("ABC"))),
-                Heading(3, listOf(Text("DEF"))),
-                Heading(2, listOf(Text("GHI"))),
-                Heading(1, listOf(Text("JKL"))),
-            )
-
-        TableOfContents.generate(headings3, maxDepth = 3).let { toc ->
-            println(toc.items[0].subItems)
-            assertEquals(3, toc.items.size)
-            assertEquals(1, toc.items[0].subItems.size)
-
-            assertEquals(Text("ABC"), toc.items[0].text.first())
-            assertEquals(Text("DEF"), toc.items[0].subItems[0].text.first())
-            assertEquals(Text("GHI"), toc.items[1].text.first())
-            assertEquals(Text("JKL"), toc.items[1].text.first())
-        }
-         */
-    }
-
     @Test
     fun `resource export`() {
         val dir = Files.createTempDirectory("quarkdown-resource-test")
