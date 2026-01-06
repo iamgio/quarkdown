@@ -91,26 +91,30 @@ body.quarkdown {
     display: flex;
     flex-direction: column;
 
-    header {
+    > header {
       height: var(--qd-docs-header-height);
       padding: var(--qd-docs-header-vertical-padding) 0;
       position: sticky;
       top: 0;
       z-index: 10;
+
+      > aside {
+        display: flex;
+        align-items: center;
+      }
     }
 
-    .content-wrapper > aside {
+    > .content-wrapper > aside {
       overflow-y: auto;
       position: sticky;
       top: var(--header-height);
       max-height: calc(100vh - var(--header-height));
+      padding-top: 32px;
     }
 
-    :is(header, .content-wrapper) > aside {
+    > :is(header, .content-wrapper) > aside {
       --aside-width: 20vw;
       --aside-outer-margin: 32px;
-
-      padding-top: 32px;
 
       &:first-child {
         padding-right: calc(var(--aside-outer-margin) / 2);
@@ -121,15 +125,11 @@ body.quarkdown {
       }
     }
 
-    // Higher specificity for mobile adjustments.
+    // Higher specificity for responsive adjustments.
     &.quarkdown-docs {
       @include media-queries.mobile($orNarrowPrint: true) {
-        header {
+        > header {
           flex-direction: row;
-
-          > aside {
-            display: none;
-          }
         }
 
         .content-wrapper > aside {
@@ -144,6 +144,24 @@ body.quarkdown {
 
           &:first-child {
             border-top: 1px solid var(--qd-docs-separator-border-color);
+          }
+        }
+      }
+
+      @include media-queries.mobile($orNarrowPrint: false) {
+        > header > aside {
+          display: none;
+        }
+      }
+
+      @include media-queries.print {
+        > header {
+          .search-wrapper {
+            display: none;
+          }
+
+          &:has(> aside:first-child:empty):has(> aside:last-child:empty) {
+            display: none;
           }
         }
       }
