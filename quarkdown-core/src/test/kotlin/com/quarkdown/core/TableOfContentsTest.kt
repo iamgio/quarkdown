@@ -11,12 +11,17 @@ import kotlin.test.assertTrue
  * Tests for [TableOfContents] generation.
  */
 class TableOfContentsTest {
-    private fun heading(level: Int, text: String) = Heading(level, listOf(Text(text)))
+    private fun heading(
+        level: Int,
+        text: String,
+    ) = Heading(level, listOf(Text(text)))
 
-    private fun generateToc(vararg headings: Heading) =
-        TableOfContents.generate(headings.asSequence())
+    private fun generateToc(vararg headings: Heading) = TableOfContents.generate(headings.asSequence())
 
-    private fun assertHeadingText(expected: String, item: TableOfContents.Item) {
+    private fun assertHeadingText(
+        expected: String,
+        item: TableOfContents.Item,
+    ) {
         assertNodeEquals(Text(expected), item.text.first())
     }
 
@@ -37,11 +42,12 @@ class TableOfContentsTest {
 
     @Test
     fun `multiple h1 headings are siblings`() {
-        val toc = generateToc(
-            heading(1, "First"),
-            heading(1, "Second"),
-            heading(1, "Third"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "First"),
+                heading(1, "Second"),
+                heading(1, "Third"),
+            )
 
         assertEquals(3, toc.items.size)
         assertHeadingText("First", toc.items[0])
@@ -51,10 +57,11 @@ class TableOfContentsTest {
 
     @Test
     fun `h2 is nested under h1`() {
-        val toc = generateToc(
-            heading(1, "Parent"),
-            heading(2, "Child"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "Parent"),
+                heading(2, "Child"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(1, toc.items[0].subItems.size)
@@ -64,12 +71,13 @@ class TableOfContentsTest {
 
     @Test
     fun `multiple h2 under same h1`() {
-        val toc = generateToc(
-            heading(1, "Parent"),
-            heading(2, "Child 1"),
-            heading(2, "Child 2"),
-            heading(2, "Child 3"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "Parent"),
+                heading(2, "Child 1"),
+                heading(2, "Child 2"),
+                heading(2, "Child 3"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(3, toc.items[0].subItems.size)
@@ -80,32 +88,44 @@ class TableOfContentsTest {
 
     @Test
     fun `h3 is nested under h2`() {
-        val toc = generateToc(
-            heading(1, "H1"),
-            heading(2, "H2"),
-            heading(3, "H3"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "H1"),
+                heading(2, "H2"),
+                heading(3, "H3"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(1, toc.items[0].subItems.size)
-        assertEquals(1, toc.items[0].subItems[0].subItems.size)
+        assertEquals(
+            1,
+            toc.items[0]
+                .subItems[0]
+                .subItems.size,
+        )
         assertHeadingText("H3", toc.items[0].subItems[0].subItems[0])
     }
 
     @Test
     fun `complex nested hierarchy`() {
-        val toc = generateToc(
-            heading(1, "ABC"),
-            heading(2, "DEF"),
-            heading(2, "GHI"),
-            heading(3, "JKL"),
-            heading(2, "MNO"),
-            heading(1, "PQR"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "ABC"),
+                heading(2, "DEF"),
+                heading(2, "GHI"),
+                heading(3, "JKL"),
+                heading(2, "MNO"),
+                heading(1, "PQR"),
+            )
 
         assertEquals(2, toc.items.size)
         assertEquals(3, toc.items[0].subItems.size)
-        assertEquals(1, toc.items[0].subItems[1].subItems.size)
+        assertEquals(
+            1,
+            toc.items[0]
+                .subItems[1]
+                .subItems.size,
+        )
 
         assertHeadingText("ABC", toc.items[0])
         assertHeadingText("DEF", toc.items[0].subItems[0])
@@ -117,11 +137,12 @@ class TableOfContentsTest {
 
     @Test
     fun `level skip - h1 to h3 directly`() {
-        val toc = generateToc(
-            heading(1, "ABC"),
-            heading(3, "DEF"),
-            heading(2, "GHI"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "ABC"),
+                heading(3, "DEF"),
+                heading(2, "GHI"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(2, toc.items[0].subItems.size)
@@ -133,17 +154,23 @@ class TableOfContentsTest {
 
     @Test
     fun `new h1 resets nesting`() {
-        val toc = generateToc(
-            heading(1, "First Section"),
-            heading(2, "Subsection"),
-            heading(3, "Deep"),
-            heading(1, "Second Section"),
-            heading(2, "Another Subsection"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "First Section"),
+                heading(2, "Subsection"),
+                heading(3, "Deep"),
+                heading(1, "Second Section"),
+                heading(2, "Another Subsection"),
+            )
 
         assertEquals(2, toc.items.size)
         assertEquals(1, toc.items[0].subItems.size)
-        assertEquals(1, toc.items[0].subItems[0].subItems.size)
+        assertEquals(
+            1,
+            toc.items[0]
+                .subItems[0]
+                .subItems.size,
+        )
         assertEquals(1, toc.items[1].subItems.size)
 
         assertHeadingText("First Section", toc.items[0])
@@ -153,14 +180,15 @@ class TableOfContentsTest {
 
     @Test
     fun `deep nesting up to h6`() {
-        val toc = generateToc(
-            heading(1, "Level 1"),
-            heading(2, "Level 2"),
-            heading(3, "Level 3"),
-            heading(4, "Level 4"),
-            heading(5, "Level 5"),
-            heading(6, "Level 6"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "Level 1"),
+                heading(2, "Level 2"),
+                heading(3, "Level 3"),
+                heading(4, "Level 4"),
+                heading(5, "Level 5"),
+                heading(6, "Level 6"),
+            )
 
         assertEquals(1, toc.items.size)
 
@@ -178,13 +206,14 @@ class TableOfContentsTest {
 
     @Test
     fun `alternating levels`() {
-        val toc = generateToc(
-            heading(1, "H1-A"),
-            heading(2, "H2-A"),
-            heading(1, "H1-B"),
-            heading(2, "H2-B"),
-            heading(1, "H1-C"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "H1-A"),
+                heading(2, "H2-A"),
+                heading(1, "H1-B"),
+                heading(2, "H2-B"),
+                heading(1, "H1-C"),
+            )
 
         assertEquals(3, toc.items.size)
         assertEquals(1, toc.items[0].subItems.size)
@@ -200,31 +229,43 @@ class TableOfContentsTest {
 
     @Test
     fun `going back up multiple levels`() {
-        val toc = generateToc(
-            heading(1, "H1"),
-            heading(2, "H2"),
-            heading(3, "H3"),
-            heading(4, "H4"),
-            heading(2, "Back to H2"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "H1"),
+                heading(2, "H2"),
+                heading(3, "H3"),
+                heading(4, "H4"),
+                heading(2, "Back to H2"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(2, toc.items[0].subItems.size)
 
         assertHeadingText("H2", toc.items[0].subItems[0])
         assertHeadingText("Back to H2", toc.items[0].subItems[1])
-        assertEquals(1, toc.items[0].subItems[0].subItems.size)
-        assertEquals(0, toc.items[0].subItems[1].subItems.size)
+        assertEquals(
+            1,
+            toc.items[0]
+                .subItems[0]
+                .subItems.size,
+        )
+        assertEquals(
+            0,
+            toc.items[0]
+                .subItems[1]
+                .subItems.size,
+        )
     }
 
     @Test
     fun `headings starting at level 2`() {
-        val toc = generateToc(
-            heading(2, "ABC"),
-            heading(3, "DEF"),
-            heading(2, "GHI"),
-            heading(1, "JKL"),
-        )
+        val toc =
+            generateToc(
+                heading(2, "ABC"),
+                heading(3, "DEF"),
+                heading(2, "GHI"),
+                heading(1, "JKL"),
+            )
 
         assertEquals(3, toc.items.size)
         assertEquals(1, toc.items[0].subItems.size)
@@ -237,14 +278,15 @@ class TableOfContentsTest {
 
     @Test
     fun `multiple branches at same level`() {
-        val toc = generateToc(
-            heading(1, "Root"),
-            heading(2, "Branch A"),
-            heading(3, "Leaf A1"),
-            heading(3, "Leaf A2"),
-            heading(2, "Branch B"),
-            heading(3, "Leaf B1"),
-        )
+        val toc =
+            generateToc(
+                heading(1, "Root"),
+                heading(2, "Branch A"),
+                heading(3, "Leaf A1"),
+                heading(3, "Leaf A2"),
+                heading(2, "Branch B"),
+                heading(3, "Leaf B1"),
+            )
 
         assertEquals(1, toc.items.size)
         assertEquals(2, toc.items[0].subItems.size)
