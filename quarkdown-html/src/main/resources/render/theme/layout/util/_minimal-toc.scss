@@ -26,7 +26,7 @@
     }
   }
 
-  .quarkdown-slides {
+  &.quarkdown-slides {
     :is(nav, .nav) > :is(ul, ol) {
       // Resets the no-clipping workaround because this theme's ToC hides list markers.
       margin-left: auto;
@@ -35,5 +35,10 @@
     nav, .nav, h1#table-of-contents {
       margin-left: 44px;
     }
+  }
+
+  &.quarkdown-docs {
+    // Visual consistency in docs.
+    --qd-nested-navigation-line-color: var(--qd-docs-separator-border-color);
   }
 }

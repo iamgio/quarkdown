@@ -3,7 +3,8 @@
 @use "util/minimal-tables" as *;
 @use "util/minimal-toc" as *;
 @use "util/minimal-footer" as *;
-@use "util/docs_navigation" as docs-navigation;
+@use "util/docs-headings-border" as *;
+@use "util/docs-navigation" as docs-navigation;
 @use "../components/util/location-selectors" as location-selectors;
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inter');
@@ -34,6 +35,7 @@
   @include minimal-tables;
   @include minimal-toc;
   @include minimal-footer;
+  @include docs-headings-border;
   @include docs-navigation.selected-docs-nav-item-background;
 
   ul, ol {
