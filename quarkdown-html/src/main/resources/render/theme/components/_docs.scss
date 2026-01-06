@@ -11,30 +11,41 @@
     > main {
       display: grid;
     }
-  }
 
-  aside a {
-    text-decoration: none;
-
-    &[aria-current] {
-      font-weight: bold;
+    > aside img {
+      height: var(--qd-docs-header-height);
     }
   }
 
-  .content-wrapper {
-    main > footer {
+  > .content-wrapper {
+    > main > footer {
       margin-top: 32px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
     }
 
-    aside:first-child {
+    > aside:first-child {
       border-right: 1px solid var(--qd-docs-separator-border-color);
     }
 
-    aside:last-child {
+    > aside:last-child {
       border-left: 1px solid var(--qd-docs-separator-border-color);
+    }
+  }
+
+  aside {
+    a {
+      text-decoration: none;
+
+      &[aria-current] {
+        font-weight: bold;
+      }
+    }
+
+    figure, img,
+    figure img {
+      margin: 0 !important;
     }
   }
 
