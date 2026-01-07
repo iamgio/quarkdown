@@ -18,6 +18,10 @@
   --qd-color-on-primary: var(--qd-main-color);
   --qd-mermaid-node-background-color: #ECECFF;
   --qd-mermaid-node-text-color: var(--qd-background-color);
+
+  --qd-docs-header-background-color: #2E3136;
+  --qd-docs-separator-border-color: #393c40;
+  --qd-docs-search-focused-border: var(--qd-link-color);
 }
 
 .quarkdown {
@@ -58,5 +62,13 @@
 
   .mermaid .plot .line-plot-3 path {
     stroke: salmon;
+  }
+
+  #search-results {
+    border: 1px solid var(--qd-docs-search-border-color);
+  }
+
+  .search-result-title {
+    color: var(--qd-link-color);
   }
 }
