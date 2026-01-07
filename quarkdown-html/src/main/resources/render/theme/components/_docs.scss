@@ -1,4 +1,5 @@
 @use "util/media-queries" as media-queries;
+@use "util/heading-selectors" as *;
 @use "../layout/util/progressive-heading-sizes" as *;
 @use "../layout/util/progressive-heading-margins" as *;
 
@@ -54,5 +55,9 @@
     @include progressive-heading-margins($bottomAddition: 0);
 
     font-size: 0.9em;
+
+    #{$headings} {
+      font-weight: 500;
+    }
   }
 }
