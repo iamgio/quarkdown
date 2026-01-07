@@ -1,0 +1,66 @@
+@use "util/progressive-heading-sizes" as *;
+@use "util/progressive-heading-margins" as *;
+@use "util/gh-tables" as *;
+@use "util/minimal-toc" as *;
+@use "util/docs-navigation" as docs-navigation;
+@use "util/docs-headings-border" as *;
+@use "../components/util/location-selectors" as location-selectors;
+
+:root {
+  --qd-main-font: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --qd-code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --qd-code-span-font-size: 0.9em;
+  --qd-slides-code-block-font-size: 1.3em;
+  --qd-line-height: 1.75;
+  --qd-table-default-header-alignment: center;
+  --qd-heading-label-suffix: "";
+  --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
+}
+
+.quarkdown {
+  @include progressive-heading-sizes($multiplier: 1.2);
+  @include progressive-heading-margins($multiplier: 1.1, $bottomAddition: 0.4em);
+  @include gh-tables;
+  @include minimal-toc;
+  @include docs-headings-border;
+
+  h4, h5 {
+    font-weight: 600;
+  }
+
+  blockquote {
+    border-left: 2px solid;
+    padding-left: 1.5em;
+
+    &:not([class]) {
+      background-color: transparent !important;
+    }
+
+    &[data-labeled] > :first-child::before {
+      display: block;
+    }
+  }
+
+  .box > header > h4 {
+    gap: 0.4em;
+  }
+
+  .codespan-content {
+    padding: .12rem .35rem;
+    background-color: color-mix(in srgb, currentColor 3%, transparent);
+  }
+
+  #{location-selectors.$location-heading}::before {
+    margin-right: .5em;
+  }
+
+  nav, .nav {
+    ul, ol {
+      ul, ol {
+        border-width: 1px;
+        margin-left: .75em;
+        padding-left: .9em;
+      }
+    }
+  }
+}

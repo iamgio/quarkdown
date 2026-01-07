@@ -105,6 +105,7 @@
 
   // Tables
   --qd-table-default-cell-alignment: initial; // Text alignment of table cells, if not specified
+  --qd-table-default-header-alignment: var(--qd-table-default-cell-alignment); // Text alignment of table header cells, if not specified
 
   // Quotes
   --qd-quote-type-label-suffix: ": "; // Suffix for localized quote type labels, e.g. Tip, Note, Warning, ...
