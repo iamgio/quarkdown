@@ -116,12 +116,10 @@ body.quarkdown {
       --aside-width: 20vw;
       --aside-outer-margin: 32px;
 
-      &:first-child {
-        padding-right: calc(var(--aside-outer-margin) / 2);
-      }
+      padding-left: 16px;
 
-      &:last-child {
-        padding-left: calc(var(--aside-outer-margin) / 2);
+      &:first-child {
+        margin-left: 0;
       }
     }
 
