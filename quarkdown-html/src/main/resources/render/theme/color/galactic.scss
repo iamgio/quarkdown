@@ -1,0 +1,26 @@
+@use "darko";
+
+:root {
+  --qd-primary-color: rgb(178, 199, 255);
+  --qd-main-color: rgb(208, 210, 217);
+  --qd-heading-color: white;
+  --qd-link-color: var(--qd-primary-color);
+  --qd-background-color: rgb(23, 24, 28);
+  --qd-callout-background-color: rgb(35, 38, 47);
+  --qd-mermaid-node-background-color: white;
+
+  --qd-docs-header-background-color: var(--qd-callout-background-color);
+  --qd-docs-separator-border-color: var(--qd-docs-header-background-color);
+  --qd-docs-search-border-color: rgb(53, 56, 65);
+  --qd-docs-search-focused-border: var(--qd-primary-color);
+}
+
+.quarkdown {
+  .box.callout {
+    --box-header-background-color: color-mix(in srgb, var(--qd-primary-color) 12%, transparent);
+  }
+
+  #search-results {
+    --qd-docs-separator-border-color: var(--qd-main-color-muted);
+  }
+}
