@@ -61,3 +61,13 @@
     }
   }
 }
+
+// Print styles
+:root {
+  @include media-queries.print {
+    --qd-background-color: white !important;
+    --qd-main-color: black !important;
+    --qd-heading-color: black !important;
+    --qd-link-color: blue !important;
+  }
+}
