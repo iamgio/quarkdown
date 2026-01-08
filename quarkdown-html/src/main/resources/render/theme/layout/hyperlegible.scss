@@ -38,6 +38,10 @@
 
     &:not([class]) {
       background-color: transparent !important;
+      border-color: var(--qd-main-color-muted);
+      padding-left: 1em;
+      padding-top: .5em;
+      padding-bottom: .5em;
     }
 
     &[data-labeled] > :first-child::before {
