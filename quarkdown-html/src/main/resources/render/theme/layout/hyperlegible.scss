@@ -71,4 +71,10 @@
       }
     }
   }
+
+  &.quarkdown-docs {
+    header {
+      border-bottom: 1px solid var(--qd-background-color);
+    }
+  }
 }
