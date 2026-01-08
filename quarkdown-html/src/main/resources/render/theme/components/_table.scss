@@ -1,5 +1,9 @@
 .quarkdown table:not(pre table) {
-  :is(th, td):not([align]) {
+  th:not([align]) {
+    text-align: var(--qd-table-default-header-alignment);
+  }
+
+  td:not([align]) {
     text-align: var(--qd-table-default-cell-alignment);
   }
 

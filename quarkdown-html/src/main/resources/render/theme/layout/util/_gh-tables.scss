@@ -1,0 +1,31 @@
+// GitHub style tables
+@mixin gh-tables {
+  table:not(pre table) {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+
+    th, td {
+      padding: 8px 14px;
+      border: 1px solid color-mix(in srgb, var(--qd-main-color) 20%, transparent) !important;
+    }
+
+    th {
+      font-weight: 600;
+    }
+
+    tr {
+      background-color: var(--qd-background-color);
+
+      &:nth-child(2n) {
+        background-color: color-mix(in srgb, var(--qd-main-color) 2%, transparent);
+      }
+    }
+
+    thead tr {
+      background-color: var(--qd-background-color);
+    }
+  }
+}
