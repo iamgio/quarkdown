@@ -36,6 +36,7 @@
   // Colors
   --qd-background-color: inherit; // Background color
   --qd-main-color: inherit; // Main text color
+  --qd-main-color-muted: color-mix(in srgb, var(--qd-main-color) 20%, transparent); // Muted main text color
   --qd-primary-color: var(--qd-main-color); // Primary/accent color
   --qd-color-on-primary: var(--qd-background-color); // Text color on primary background color
   --qd-heading-color: var(--qd-main-color); // Heading (titles) color
