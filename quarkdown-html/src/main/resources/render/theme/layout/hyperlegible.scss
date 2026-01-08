@@ -2,8 +2,8 @@
 @use "util/progressive-heading-margins" as *;
 @use "util/gh-tables" as *;
 @use "util/minimal-toc" as *;
-@use "util/docs-navigation" as docs-navigation;
-@use "util/docs-headings-border" as *;
+//@use "util/docs-navigation" as docs-navigation;
+//@use "util/docs-headings-border" as *;
 @use "../components/util/location-selectors" as location-selectors;
 
 :root {
@@ -22,7 +22,7 @@
   @include progressive-heading-margins($multiplier: 1.1, $bottomAddition: 0.4em);
   @include gh-tables;
   @include minimal-toc;
-  @include docs-headings-border;
+  //@include docs-headings-border;
 
   h4, h5 {
     font-weight: 600;
