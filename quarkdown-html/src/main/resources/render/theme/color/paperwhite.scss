@@ -21,16 +21,20 @@
     }
 
     pre code {
-        background-color: transparent;
-        padding: 0;
+        background-color: var(--qd-background-color);
+        border: 1px solid var(--qd-main-color-muted);
+    }
+
+    &.quarkdown-paged {
+        pre code {
+            padding-left: 0;
+            padding-right: 0;
+            border: none;
+        }
     }
 
     &.quarkdown-slides {
         blockquote {
-            box-shadow: none;
-        }
-
-        pre {
             box-shadow: none;
         }
     }
