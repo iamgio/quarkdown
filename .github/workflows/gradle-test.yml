@@ -9,7 +9,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,13 @@ jobs:
         job-id: main
         arguments: ktlintCheck test
 
-    # E2E tests
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+      with:
+        full-checkout: ${{ inputs.full-checkout }}
 
     - name: Install E2E dependencies
       run: npm ci
