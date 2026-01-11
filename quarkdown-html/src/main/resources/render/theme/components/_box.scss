@@ -1,4 +1,5 @@
 @use "_font";
+@use "util/icon" as *;
 
 .quarkdown .box {
   width: 100%;
@@ -18,6 +19,7 @@
   }
 
   > header {
+    display: flex;
     color: var(--box-header-foreground-color);
     background-color: var(--box-header-background-color);
     border-radius: var(--qd-box-border-radius) var(--qd-box-border-radius) 0 0;
@@ -70,41 +72,40 @@
     }
   }
 
-  // Box icons
+  // Header icons
 
   > header > h4::before {
-    font-family: 'boxicons', monospace;
     font-weight: normal;
     float: left;
-    width: 18px;
-    margin-right: 6px;
+    margin-right: 10px;
     margin-top: var(--qd-box-icon-baseline);
   }
 
-  @mixin header-icon($icon) {
+  @mixin header-icon($icon, $margin-top: null) {
     > header > h4 {
-      margin-right: 24px; // 18px icon + 6px margin, used to realign text to the center
       display: flex;
       flex-direction: row;
       align-items: center; // Align icons
       justify-content: var(--qd-horizontal-alignment-global);
 
       &::before {
-        content: $icon;
+        @include icon($icon);
+        @if $margin-top != null { margin-top: $margin-top; }
+        font-size: 0.8em;
       }
     }
   }
 
   &.tip {
-    @include header-icon("\ea0d"); /* 'bulb' icon */
+    @include header-icon("\f46b"); /* 'lightbulb' icon */
   }
 
   &.note {
-    @include header-icon("\eb21"); /* 'info' icon */
+    @include header-icon("\f431"); /* 'info circle' icon */
   }
 
   &.warning {
-    @include header-icon("\eac5"); /* 'error' (triangle) icon */
+    @include header-icon("\f33b", $margin-top: 0px); /* 'warning triangle' icon */
   }
 }
 

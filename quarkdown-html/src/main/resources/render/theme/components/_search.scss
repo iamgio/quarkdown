@@ -1,3 +1,5 @@
+@use "util/icon" as *;
+
 .quarkdown .search-wrapper {
   display: grid;
   position: relative;
@@ -20,7 +22,6 @@
 
     i {
       margin-left: 2px;
-      font-size: 1.1em;
       opacity: 0.7;
     }
 
@@ -93,11 +94,10 @@
 
       &-chevron {
         &::before {
-          content: "\ea50"; // bx-chevron-right
-          font-family: "boxicons", serif;
-          margin: 0 4px;
+          @include icon("\f285"); // 'chevron-right' icon
+          font-size: 0.75em;
+          margin: 0 8px;
           opacity: 0.5;
-          vertical-align: -2px;
         }
       }
 

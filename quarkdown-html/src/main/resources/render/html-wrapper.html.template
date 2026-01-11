@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/theme/white.css">
     [[endif:SLIDES]]
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="[[ROOTPATH]]/theme/theme.css">
     [[if:CODE]]
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
@@ -160,7 +160,7 @@
     <main>
         <div class="search-wrapper">
             <div class="search-field">
-                <i class='bx bx-search'></i>
+                <i class='bi bi-search'></i>
                 <input id="search-input" type="text" placeholder="Search" autocomplete="off">
                 <kbd>/</kbd>
             </div>
