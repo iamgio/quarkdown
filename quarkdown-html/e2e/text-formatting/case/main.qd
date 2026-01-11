@@ -1,0 +1,3 @@
+.text {LOWERCASE} case:{lowercase}
+.text {uppercase} case:{uppercase}
+.text {capitalize this} case:{capitalize}
