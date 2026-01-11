@@ -1,20 +1,20 @@
+import {getBeforeContent, isBeforeInline} from "../../__util/css";
 import {suite} from "../../quarkdown";
 
 const {test, expect} = suite(__dirname);
 
-async function getBeforeContent(locator: any): Promise<string> {
-    return locator.evaluate((el: Element) => getComputedStyle(el, "::before").content);
-}
-
 test("applies numbering to all element types", async (page) => {
     // Headings: 1.1 format (h1=1, h2=1.1, h3 not numbered)
-    expect(await getBeforeContent(page.locator("h1").first())).toContain("1");
+    const h1 = page.locator("h1").first();
+    expect(await getBeforeContent(h1)).toContain("1");
+    expect(await isBeforeInline(h1)).toBe(true);
     expect(await getBeforeContent(page.locator("h2").first())).toContain("1.1");
 
     // Figures: 1.a format
     const figures = page.locator("figure[id^='figure-'] figcaption");
     await expect(figures).toHaveCount(4);
     expect(await getBeforeContent(figures.nth(0))).toContain("0.a");
+    expect(await isBeforeInline(figures.nth(0))).toBe(true);
     expect(await getBeforeContent(figures.nth(1))).toContain("1.a");
     expect(await getBeforeContent(figures.nth(2))).toContain("1.b");
     expect(await getBeforeContent(figures.nth(3))).toContain("1.c");
