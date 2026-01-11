@@ -101,13 +101,18 @@
             baseTemplateProcessor,
             relativePathToRoot = relativePathToRoot,
         )<span class="token punctuation">, </span></span><span class="parameter ">resourcesProvider<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{
-            setOf(
+            setOfNotNull(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
+                if (context.documentInfo.type == DocumentType.DOCS) {
+                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
+                } else {
+                    null
+                },
             )
         }</span></span><span class="token punctuation">)</span> : <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a></div><p class="paragraph">A <a href="../../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a> that injects content into an HTML template. This includes all the features of <a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a>, plus:</p><ul><li><p class="paragraph">Theme components</p></li><li><p class="paragraph">Runtime scripts</p></li><li><p class="paragraph">Media resources</p></li></ul><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the <a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a> of the document being rendered</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>relative</span><wbr><span>Path</span><wbr><span>To</span><wbr><span><span>Root</span></span></u></div></span></div><div><div class="title"><p class="paragraph">relative path from the current document to the root document, used to correctly link resources</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>base</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the base <a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a> to inject with content and process via <a href="../-html-post-renderer-template/index.html">HtmlPostRendererTemplate</a></p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>base</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the base <a href="../-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a> to delegate HTML generation to</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>resources</span><wbr><span><span>Provider</span></span></u></div></span></div><div><div class="title"><p class="paragraph">supplier of the set of <a href="../../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a> to include in the output. Delegation to <a href="../../../quarkdown-html/com.quarkdown.rendering.html.post/-html-post-renderer/base.html">base</a> is always included</p></div></div></div></div></div></div></div>
   </div>
@@ -131,13 +136,18 @@
             baseTemplateProcessor,
             relativePathToRoot = relativePathToRoot,
         )<span class="token punctuation">, </span></span><span class="parameter ">resourcesProvider<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{
-            setOf(
+            setOfNotNull(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
+                if (context.documentInfo.type == DocumentType.DOCS) {
+                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
+                } else {
+                    null
+                },
             )
         }</span></span><span class="token punctuation">)</span></div></div></div>
                 </div>

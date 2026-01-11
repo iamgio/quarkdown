@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>SearchIndexGenerator</title>
+    <title>SubdocumentsData</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-html/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-html/main" data-filter=":quarkdown-html/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,36 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-html::com.quarkdown.rendering.html.search/SearchIndexGenerator///PointingToDeclaration//-203176000">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.search</a><span class="delimiter">/</span><span class="current">SearchIndexGenerator</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.context.subdocument/SubdocumentsData/SubdocumentsData/#TypeParam(bounds=[com.quarkdown.core.graph.Graph[com.quarkdown.core.document.sub.Subdocument]])#kotlin.collections.Map[com.quarkdown.core.document.sub.Subdocument,com.quarkdown.core.context.Context]/PointingToDeclaration//1831116724">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.context.subdocument</a><span class="delimiter">/</span><a href="index.html">SubdocumentsData</a><span class="delimiter">/</span><span class="current">SubdocumentsData</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Search</span><wbr><span>Index</span><wbr><span><span>Generator</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">SearchIndexGenerator</a></div><p class="paragraph">Generates a <a href="../-search-index/index.html">SearchIndex</a> from the subdocument graph of a multi-document project. The generated index is intended to be serialized to JSON and used for client-side search.</p></div></div>
+    <h1 class="cover"><span>Subdocuments</span><wbr><span><span>Data</span></span></h1>
   </div>
-  <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
-    <div class="tabs-section-body">
-      <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-1806475069%2FFunctions%2F-203176000" anchor-label="generate" id="-1806475069%2FFunctions%2F-203176000" data-filterable-set=":quarkdown-html/main"></a>
-          <div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="generate.html"><span><span>generate</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1806475069%2FFunctions%2F-203176000"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="generate.html"><span class="token function">generate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context.subdocument/-subdocuments-data/index.html">SubdocumentsData</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../../../quarkdown-core/com.quarkdown.core.graph/-graph/index.html">Graph</a><span class="token operator">&lt;</span><a href="../../../quarkdown-core/com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-search-index/index.html">SearchIndex</a></div><div class="brief "><p class="paragraph">Generates a search index from the given subdocument graph. Each subdocument becomes a <a href="../-search-entry/index.html">SearchEntry</a> containing its URL, metadata, and headings.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">graph<span class="token operator">: </span><a href="index.html">G</a><span class="token punctuation">, </span></span><span class="parameter ">withContexts<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token punctuation">, </span><a href="../../com.quarkdown.core.context/-context/index.html">Context</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>graph</span></span></u></div></span></div><div><div class="title"><p class="paragraph">directed graph of the subdocuments that are part of the document complex</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>with</span><wbr><span><span>Contexts</span></span></u></div></span></div><div><div class="title"><p class="paragraph">mapping of each subdocument in the graph to the context it is processed with</p></div></div></div></div></div></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>

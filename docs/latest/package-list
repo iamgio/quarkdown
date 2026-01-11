@@ -191,6 +191,7 @@ com.quarkdown.core.context.hooks.location
 com.quarkdown.core.context.hooks.presence
 com.quarkdown.core.context.hooks.reference
 com.quarkdown.core.context.localization
+com.quarkdown.core.context.subdocument
 com.quarkdown.core.context.toc
 com.quarkdown.core.document
 com.quarkdown.core.document.layout

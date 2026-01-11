@@ -147,13 +147,18 @@
             baseTemplateProcessor,
             relativePathToRoot = relativePathToRoot,
         )<span class="token punctuation">, </span></span><span class="parameter ">resourcesProvider<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../com.quarkdown.rendering.html.post.resources/-post-renderer-resource/index.html">PostRendererResource</a><span class="token operator">&gt;</span><span class="token operator"> = </span>{
-            setOf(
+            setOfNotNull(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),
+                if (context.documentInfo.type == DocumentType.DOCS) {
+                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
+                } else {
+                    null
+                },
             )
         }</span></span><span class="token punctuation">)</span> : <a href="../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a></div><div class="brief "><p class="paragraph">A <a href="../../quarkdown-core/com.quarkdown.core.rendering/-post-renderer/index.html">PostRenderer</a> that injects content into an HTML template. This includes all the features of <a href="-html-only-post-renderer/index.html">HtmlOnlyPostRenderer</a>, plus:</p></div></div></div>
                 </div>
