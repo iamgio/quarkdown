@@ -63,6 +63,7 @@ $dokka.location:com.quarkdown.stdlib//functionExists/#com.quarkdown.core.context
 $dokka.location:com.quarkdown.stdlib//generateTableByRows/#com.quarkdown.core.context.Context#kotlin.collections.List[com.quarkdown.core.function.value.OutputValue[*]]#kotlin.collections.List[com.quarkdown.core.function.value.IterableValue[com.quarkdown.core.function.value.OutputValue[*]]]/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html
 $dokka.location:com.quarkdown.stdlib//grid/#kotlin.Int#com.quarkdown.core.ast.quarkdown.block.Stacked.MainAxisAlignment#com.quarkdown.core.ast.quarkdown.block.Stacked.CrossAxisAlignment#com.quarkdown.core.document.size.Size?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html
 $dokka.location:com.quarkdown.stdlib//html/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/html.html
+$dokka.location:com.quarkdown.stdlib//icon/#kotlin.String/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Icon/icon.html
 $dokka.location:com.quarkdown.stdlib//if/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/if.html
 $dokka.location:com.quarkdown.stdlib//ifNot/#kotlin.Boolean#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/ifnot.html
 $dokka.location:com.quarkdown.stdlib//ifPresent/#com.quarkdown.core.function.value.DynamicValue#com.quarkdown.core.function.value.data.Lambda/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/ifpresent.html
@@ -334,6 +335,7 @@ com.quarkdown.stdlib.module.Document
 com.quarkdown.stdlib.module.Ecosystem
 com.quarkdown.stdlib.module.Emoji
 com.quarkdown.stdlib.module.Flow
+com.quarkdown.stdlib.module.Icon
 com.quarkdown.stdlib.module.Injection
 com.quarkdown.stdlib.module.Layout
 com.quarkdown.stdlib.module.Library
