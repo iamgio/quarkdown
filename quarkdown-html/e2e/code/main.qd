@@ -1,0 +1,7 @@
+# Code
+
+```javascript
+function hello() {
+    return "world";
+}
+```
