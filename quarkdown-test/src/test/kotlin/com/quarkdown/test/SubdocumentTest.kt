@@ -1,6 +1,7 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
+import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.test.util.execute

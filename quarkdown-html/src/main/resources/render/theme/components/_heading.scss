@@ -1,7 +1,12 @@
 @use "util/heading-selectors" as *;
+@use "../layout/util/progressive-heading-sizes" as *;
+@use "../layout/util/progressive-heading-margins" as *;
 @use "font";
 
 .quarkdown {
+  @include progressive-heading-sizes;
+  @include progressive-heading-margins;
+
   #{$headings} {
     color: var(--qd-heading-color);
     margin: var(--qd-heading-margin);

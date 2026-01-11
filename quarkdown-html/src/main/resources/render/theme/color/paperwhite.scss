@@ -5,8 +5,14 @@
     --qd-background-color: white;
     --qd-main-color: hsl(0, 5%, 10%);
     --qd-link-color: hsl(0, 100%, 33%);
+    --qd-nested-navigation-line-color: rgba(0, 0, 0, .2);
     --qd-color-on-primary: var(--qd-main-color);
     --qd-mermaid-node-background-color: var(--qd-background-color);
+
+    --qd-docs-header-background-color: rgb(246, 247, 249);
+    --qd-docs-separator-border-color: rgb(237, 238, 243);
+    --qd-docs-search-border-color: rgb(193, 195, 200);
+    --qd-docs-search-focused-border: var(--qd-main-color);
 }
 
 .quarkdown {
@@ -15,16 +21,20 @@
     }
 
     pre code {
-        background-color: transparent;
-        padding: 0;
+        background-color: var(--qd-background-color);
+        border: 1px solid var(--qd-main-color-muted);
+    }
+
+    &.quarkdown-paged {
+        pre code {
+            padding-left: 0;
+            padding-right: 0;
+            border: none;
+        }
     }
 
     &.quarkdown-slides {
         blockquote {
-            box-shadow: none;
-        }
-
-        pre {
             box-shadow: none;
         }
     }
@@ -35,10 +45,6 @@
 
     .box.callout {
         --box-header-background-color: rgba(0, 0, 0, .03);
-    }
-
-    nav ol ol {
-        border-color: rgba(0, 0, 0, .2);
     }
 
     .mermaid .plot .line-plot-3 path {

@@ -1,6 +1,7 @@
 package com.quarkdown.core.pipeline.stages
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.pipeline.stage.PeekPipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData

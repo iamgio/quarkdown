@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.base.inline.setSubdocument
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.log.Log
 

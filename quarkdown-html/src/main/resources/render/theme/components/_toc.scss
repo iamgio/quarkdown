@@ -7,16 +7,16 @@
     display: inline;
   }
 
-  nav {
+  nav, .nav {
     text-align: start;
 
-    ol {
+    ul, ol {
       flex-basis: 100%;
       width: 100%;
       list-style-position: inside;
       margin: 0 0 0 1em;
 
-      &:not(ol ol) {
+      &:not(:is(ul, ol) :is(ul, ol)) {
         padding-left: 0;
       }
     }

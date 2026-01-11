@@ -27,6 +27,7 @@ data class SearchEntry(
     val title: String?,
     val description: String?,
     val keywords: List<String>,
+    val content: String,
     val headings: List<SearchHeading>,
 )
 

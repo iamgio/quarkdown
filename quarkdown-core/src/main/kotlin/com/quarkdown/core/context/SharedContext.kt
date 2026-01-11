@@ -26,7 +26,7 @@ open class SharedContext(
     override val loadableLibraries by parent::loadableLibraries
     override val localizationTables by parent::localizationTables
     override val mediaStorage by parent::mediaStorage
-    override var subdocumentGraph by parent::subdocumentGraph
+    override var sharedSubdocumentsData by parent::sharedSubdocumentsData
 
     override fun getFunctionByName(name: String): Function<*>? = parent.getFunctionByName(name)
 }

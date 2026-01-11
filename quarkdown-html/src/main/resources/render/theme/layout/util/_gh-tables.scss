@@ -9,7 +9,7 @@
 
     th, td {
       padding: 8px 14px;
-      border: 1px solid color-mix(in srgb, var(--qd-main-color) 20%, transparent) !important;
+      border: 1px solid var(--qd-main-color-muted) !important;
     }
 
     th {

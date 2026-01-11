@@ -54,4 +54,9 @@ enum class DocumentType(
      * A slides-based document for presentations.
      */
     SLIDES(PageOrientation.LANDSCAPE),
+
+    /**
+     * A document optimized for documentation, knowledge bases, and wikis.
+     */
+    DOCS(PageOrientation.PORTRAIT),
 }

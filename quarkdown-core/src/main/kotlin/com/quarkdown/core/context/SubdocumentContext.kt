@@ -38,7 +38,7 @@ open class SubdocumentContext(
     override val options by parent::options
     override val loadableLibraries by parent::loadableLibraries
     override val localizationTables by parent::localizationTables
-    override var subdocumentGraph by parent::subdocumentGraph
+    override var sharedSubdocumentsData by parent::sharedSubdocumentsData
 
     /**
      * If a file system is provided during construction, it is used.

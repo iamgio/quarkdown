@@ -42,7 +42,8 @@ class SubdocumentRegistrationTest {
         )
 
     private fun traverse(root: Node) {
-        context.subdocumentGraph = context.subdocumentGraph.addVertex(Subdocument.Root)
+        context.sharedSubdocumentsData =
+            context.sharedSubdocumentsData.copy(graph = context.sharedSubdocumentsData.graph.addVertex(Subdocument.Root))
         ObservableAstIterator()
             .attach(SubdocumentRegistrationHook(context))
             .traverse(root as NestableNode)
@@ -61,11 +62,13 @@ class SubdocumentRegistrationTest {
 
         assertEquals(
             2,
-            context.subdocumentGraph.vertices.size,
+            context.sharedSubdocumentsData.graph.vertices.size,
         )
         assertEquals(
             link1.getSubdocument(context),
-            context.subdocumentGraph.getNeighbors(Subdocument.Root).single(),
+            context.sharedSubdocumentsData.graph
+                .getNeighbors(Subdocument.Root)
+                .single(),
         )
     }
 
@@ -83,11 +86,13 @@ class SubdocumentRegistrationTest {
 
         assertEquals(
             3,
-            context.subdocumentGraph.vertices.size,
+            context.sharedSubdocumentsData.graph.vertices.size,
         )
         assertEquals(
             2,
-            context.subdocumentGraph.getNeighbors(Subdocument.Root).count(),
+            context.sharedSubdocumentsData.graph
+                .getNeighbors(Subdocument.Root)
+                .count(),
         )
     }
 
@@ -105,11 +110,13 @@ class SubdocumentRegistrationTest {
 
         assertEquals(
             2,
-            context.subdocumentGraph.vertices.size,
+            context.sharedSubdocumentsData.graph.vertices.size,
         )
         assertEquals(
             1,
-            context.subdocumentGraph.getNeighbors(Subdocument.Root).count(),
+            context.sharedSubdocumentsData.graph
+                .getNeighbors(Subdocument.Root)
+                .count(),
         )
     }
 }

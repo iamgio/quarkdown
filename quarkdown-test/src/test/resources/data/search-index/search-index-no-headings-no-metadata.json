@@ -1,0 +1,28 @@
+{
+  "entries": [
+    {
+      "url": "/",
+      "title": null,
+      "description": null,
+      "keywords": [],
+      "content": "1\n2",
+      "headings": []
+    },
+    {
+      "url": "/simple-1",
+      "title": null,
+      "description": null,
+      "keywords": [],
+      "content": "Hello 1",
+      "headings": []
+    },
+    {
+      "url": "/simple-2",
+      "title": null,
+      "description": null,
+      "keywords": [],
+      "content": "Hello 2",
+      "headings": []
+    }
+  ]
+}

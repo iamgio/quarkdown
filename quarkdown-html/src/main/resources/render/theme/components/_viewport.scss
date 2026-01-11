@@ -17,11 +17,11 @@ body.quarkdown {
     background-color: var(--qd-background-color);
   }
 
-  // Plain viewport
-  &.quarkdown-plain {
+  // Plain & docs viewport
+  &.quarkdown-plain,
+  &.quarkdown-docs :is(header, .content-wrapper) {
     display: flex;
     flex-direction: row;
-    margin: 32px 0;
 
     > main {
       width: min(100%, 90ch);
@@ -29,42 +29,54 @@ body.quarkdown {
     }
 
     > aside {
-      $width: 30vw;
-      max-width: #{$width};
-      width: #{$width};
-
+      --aside-width: 30vw;
       --aside-outer-margin: 12px;
       --aside-inner-margin: calc(var(--aside-outer-margin) * 2);
+
+      width: var(--aside-width);
+      max-width: var(--aside-width);
       margin: 0 var(--aside-outer-margin);
 
-      &#margin-area-left {
+      &:first-child {
         margin-right: var(--aside-inner-margin);
       }
 
-      &#margin-area-right {
+      &:last-child {
         margin-left: var(--aside-inner-margin);
       }
     }
+  }
 
-    // Mobile responsiveness
+  // Plain & docs viewport responsive adjustments
+  // Plain reflows at sm breakpoint, docs at md
+  @mixin reflow-plain-like-viewport {
+    flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    > main {
+      width: 100%;
+    }
+
     @include media-queries.mobile($orNarrowPrint: true) {
-      flex-direction: column;
-      padding: 0 16px;
-
       > * {
         font-size: 1.1em;
       }
+    }
+  }
 
-      > main {
-        width: 100%;
-      }
+  &.quarkdown-plain {
+    margin: 32px 0;
 
-      > aside#margin-area-left {
+    @include media-queries.mobile($orNarrowPrint: true) {
+      @include reflow-plain-like-viewport;
+
+      > aside:first-child {
         display: none;
       }
 
       // Footnotes go to the bottom
-      > aside#margin-area-right {
+      > aside:last-child {
         --aside-inner-margin: 0;
         max-width: none;
         width: auto;
@@ -72,6 +84,95 @@ body.quarkdown {
 
         .footnote-definition {
           margin-top: 0.5em !important;
+        }
+      }
+    }
+  }
+
+  // Docs viewport
+  &.quarkdown-docs {
+    --header-height: calc(var(--qd-docs-header-height) + var(--qd-docs-header-vertical-padding) * 2);
+
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+
+    > header {
+      height: var(--qd-docs-header-height);
+      padding: var(--qd-docs-header-vertical-padding) 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      > aside {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    > .content-wrapper > aside {
+      overflow-y: auto;
+      position: sticky;
+      top: var(--header-height);
+      max-height: calc(100vh - var(--header-height));
+      padding-top: 32px;
+    }
+
+    > :is(header, .content-wrapper) > aside {
+      --aside-width: 20vw;
+      --aside-outer-margin: 32px;
+
+      padding-left: 20px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    // Higher specificity for responsive adjustments.
+    &.quarkdown-docs {
+      @include media-queries.md-down($orNarrowPrint: true) {
+        margin-bottom: 32px;
+
+        > header, > .content-wrapper {
+          @include reflow-plain-like-viewport;
+        }
+
+        > header {
+          flex-direction: row;
+        }
+
+        > .content-wrapper > aside {
+          position: static;
+          width: auto;
+          max-width: none;
+          margin: 16px 0 0 0;
+          padding-left: 0;
+          padding-right: 0;
+          border: none;
+          order: 2;
+
+          &:first-child {
+            border-top: 1px solid var(--qd-docs-separator-border-color);
+          }
+        }
+      }
+
+      @include media-queries.md-down($orNarrowPrint: false) {
+        > header > aside {
+          display: none;
+        }
+      }
+
+      @include media-queries.print {
+        > header {
+          .search-wrapper {
+            display: none;
+          }
+
+          &:has(> aside:first-child:empty):has(> aside:last-child:empty) {
+            display: none;
+          }
         }
       }
     }

@@ -1,9 +1,13 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.SubdocumentContext
+import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
@@ -11,12 +15,10 @@ import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.DirectedGraph
 import com.quarkdown.core.graph.Graph
 import com.quarkdown.core.graph.VisitableOnceGraph
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.rendering.html.search.SearchEntry
 import com.quarkdown.rendering.html.search.SearchHeading
 import com.quarkdown.rendering.html.search.SearchIndex
 import com.quarkdown.rendering.html.search.SearchIndexGenerator
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -24,21 +26,23 @@ import kotlin.test.assertEquals
  * Tests for [SearchIndexGenerator].
  */
 class SearchIndexGeneratorTest {
-    @BeforeTest
-    fun setup() {
-        Pipelines.clear()
-    }
-
     @Test
     fun `single subdocument`() {
         val context = MutableContext(QuarkdownFlavor, subdocument = Subdocument.Root)
         val graph: Graph<Subdocument> = DirectedGraph<Subdocument>().addVertex(Subdocument.Root)
         context.documentInfo =
             DocumentInfo(name = "Test Document", description = "A test document", keywords = listOf("test", "document"))
+        context.attributes.root =
+            AstRoot(
+                buildBlocks {
+                    paragraph { emphasis { text("Hello, World!") } }
+                    paragraph { text("This is a test document.") }
+                },
+            )
         context.subdocumentGraph = VisitableOnceGraph(graph)
         context.attachMockPipeline()
 
-        val index = SearchIndexGenerator.generate(graph)
+        val index = SearchIndexGenerator.generate(context.sharedSubdocumentsData)
 
         assertEquals(
             SearchIndex(
@@ -49,6 +53,7 @@ class SearchIndexGeneratorTest {
                             title = "Test Document",
                             description = "A test document",
                             keywords = listOf("test", "document"),
+                            content = "Hello, World!\n\nThis is a test document.",
                             headings = emptyList(),
                         ),
                     ),
@@ -59,38 +64,41 @@ class SearchIndexGeneratorTest {
 
     @Test
     fun `two subdocuments`() {
-        val subdoc1 = Subdocument.Root
-        val subdoc2 = Subdocument.Resource(name = "child", path = "", content = "")
+        val rootSubdoc = Subdocument.Root
+        val childSubdoc = Subdocument.Resource(name = "child", path = "", content = "")
 
-        val context1 = MutableContext(QuarkdownFlavor, subdocument = subdoc1)
-        val context2 = MutableContext(QuarkdownFlavor, subdocument = subdoc2)
+        val rootContext = MutableContext(QuarkdownFlavor, subdocument = rootSubdoc)
+        val childContext = SubdocumentContext(parent = rootContext, subdocument = childSubdoc)
 
         val graph: Graph<Subdocument> =
             DirectedGraph<Subdocument>()
-                .addVertex(subdoc1)
-                .addVertex(subdoc2)
-                .addEdge(subdoc1, subdoc2)
+                .addVertex(rootSubdoc)
+                .addVertex(childSubdoc)
+                .addEdge(rootSubdoc, childSubdoc)
 
-        context1.documentInfo =
+        rootContext.documentInfo =
             DocumentInfo(
                 name = "Root Document",
                 description = "The root document",
                 keywords = listOf("root", "document"),
             )
 
-        context2.documentInfo =
+        childContext.documentInfo =
             DocumentInfo(
                 name = "Child Document",
                 description = "A child document",
                 keywords = listOf("child", "document"),
             )
 
-        context1.subdocumentGraph = VisitableOnceGraph(graph)
-        context2.subdocumentGraph = VisitableOnceGraph(graph)
-        context1.attachMockPipeline()
-        context2.attachMockPipeline()
+        rootContext.attributes.root = AstRoot(buildBlocks { paragraph { text("Root content") } })
+        childContext.attributes.root = AstRoot(buildBlocks { paragraph { text("Child content") } })
 
-        val index = SearchIndexGenerator.generate(graph)
+        rootContext.subdocumentGraph = VisitableOnceGraph(graph)
+        rootContext.sharedSubdocumentsData = rootContext.sharedSubdocumentsData.addContext(childSubdoc, childContext)
+        rootContext.attachMockPipeline()
+        childContext.attachMockPipeline()
+
+        val index = SearchIndexGenerator.generate(rootContext.sharedSubdocumentsData)
 
         assertEquals(
             SearchIndex(
@@ -101,6 +109,7 @@ class SearchIndexGeneratorTest {
                             title = "Root Document",
                             description = "The root document",
                             keywords = listOf("root", "document"),
+                            content = "Root content",
                             headings = emptyList(),
                         ),
                         SearchEntry(
@@ -108,6 +117,7 @@ class SearchIndexGeneratorTest {
                             title = "Child Document",
                             description = "A child document",
                             keywords = listOf("child", "document"),
+                            content = "Child content",
                             headings = emptyList(),
                         ),
                     ),
@@ -137,7 +147,7 @@ class SearchIndexGeneratorTest {
         context.subdocumentGraph = VisitableOnceGraph(graph)
         context.attachMockPipeline()
 
-        val index = SearchIndexGenerator.generate(graph)
+        val index = SearchIndexGenerator.generate(context.sharedSubdocumentsData)
 
         assertEquals(
             SearchIndex(
@@ -148,6 +158,7 @@ class SearchIndexGeneratorTest {
                             title = "Document with Headings",
                             description = "A document that has headings",
                             keywords = listOf("headings"),
+                            content = "",
                             headings =
                                 listOf(
                                     SearchHeading(

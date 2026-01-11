@@ -1,16 +1,32 @@
 @use "util/media-queries" as media-queries;
+@use "util/heading-selectors" as *;
+@use "util/misc-selectors" as *;
 
 .quarkdown {
-  .page-margin-content:not(.quarkdown-paged .page-margin-content) {
-    // Paged documents have dedicated areas for each margin. Others use fixed positions.
+  // Paged and docs documents have dedicated areas for each margin. Others use fixed positions.
+  .page-margin-content:not(:is(.quarkdown-paged, .quarkdown-docs) .page-margin-content) {
     position: fixed;
     background-color: var(--qd-background-color);
     z-index: 9999;
   }
 
+  .page-margin-content:not(.quarkdown-docs .page-margin-content) > #{$margin-reset} {
+    margin: 0 !important;
+  }
+
   &.quarkdown-slides .page-margin-content {
     // 'fixed' is not acceptable for slides PDF (#189).
     position: absolute !important;
+  }
+
+  &.quarkdown-docs .page-margin-content {
+    rotate: none !important;
+    transform: none !important;
+
+    > :is(#{$headings}):first-child,
+    > * > :is(#{$headings}):first-child {
+      margin-top: 0 !important;
+    }
   }
 
   .pagedjs_margin-left-top, .pagedjs_margin-right-top {

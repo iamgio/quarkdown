@@ -9,7 +9,7 @@ private const val UNIQUE_NAME_FORMAT = "%s@%d"
 /**
  * A subdocument in a Quarkdown document is an independent unit that can be rendered separately,
  * can be linked from other documents, and can link to other subdocuments in order to create a graph of subdocuments,
- * available via [com.quarkdown.core.context.Context.subdocumentGraph].
+ * available via [com.quarkdown.core.context.Context.sharedSubdocumentsData].
  *
  * Additionally, a [com.quarkdown.core.rendering.PostRenderer] may adopt different strategies for rendering
  * different kinds of subdocuments.
@@ -38,7 +38,7 @@ sealed interface Subdocument {
      * that do not have a file representation.
      *
      * The root subdocument is the starting point of the subdocument graph,
-     * available via [com.quarkdown.core.context.Context.subdocumentGraph].
+     * available via [com.quarkdown.core.context.Context.sharedSubdocumentsData].
      */
     data object Root : Subdocument {
         override val name: String

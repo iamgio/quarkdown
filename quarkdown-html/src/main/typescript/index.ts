@@ -7,6 +7,7 @@ import {prepare} from "./document/quarkdown-document";
 import {notifyLivePreview} from "./live/live-preview";
 import {SlidesDocument} from "./document/type/slides-document";
 import {PagedDocument} from "./document/type/paged-document";
+import {DocsDocument} from "./document/type/docs-document";
 
 /**
  * Returns whether the document is finalized and ready.
@@ -28,3 +29,4 @@ context.prepare = prepare;
 context.PlainDocument = PlainDocument;
 context.PagedDocument = PagedDocument;
 context.SlidesDocument = SlidesDocument;
+context.DocsDocument = DocsDocument;
