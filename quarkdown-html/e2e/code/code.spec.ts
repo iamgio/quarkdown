@@ -1,7 +1,7 @@
-import {expect, test, testDocument} from "../quarkdown";
+import {suite} from "../quarkdown";
 
-test("highlights code blocks", async ({page}) => {
-    await testDocument(__dirname, page, async (page) => {
-        await expect(page.locator("pre code.hljs")).toBeVisible();
-    });
+const {test, expect} = suite(__dirname);
+
+test("highlights code blocks", async (page) => {
+    await expect(page.locator("pre code.hljs")).toBeVisible();
 });

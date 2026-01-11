@@ -48,18 +48,7 @@ async function waitForServer(url: string, timeout = 10000): Promise<void> {
     throw new Error(`Server not ready at ${url} after ${timeout}ms`);
 }
 
-/**
- * Compiles a document, starts a server, navigates to it, and runs custom test logic.
- *
- * @param testDir - The test directory (__dirname from the spec file)
- * @param page - Playwright page
- * @param fn - Custom test logic to run after setup
- */
-export async function testDocument(
-    testDir: string,
-    page: Page,
-    fn: (page: Page) => Promise<void>
-): Promise<void> {
+async function runTest(testDir: string, page: Page, fn: (page: Page) => Promise<void>): Promise<void> {
     const sourcePath = path.join(testDir, ENTRY_POINT);
     const outName = path.relative(__dirname, testDir).split(path.sep).join("-");
     const outputDir = compile(sourcePath, outName);
@@ -76,5 +65,15 @@ export async function testDocument(
     }
 }
 
-export {expect};
-export const test = base;
+/**
+ * Creates a test suite for a specific directory.
+ * @param testDir - The test directory (__dirname from the spec file)
+ */
+export function suite(testDir: string) {
+    return {
+        test: (name: string, fn: (page: Page) => Promise<void>) => {
+            base(name, async ({page}) => runTest(testDir, page, fn));
+        },
+        expect,
+    };
+}
