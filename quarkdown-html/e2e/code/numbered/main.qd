@@ -1,0 +1,9 @@
+.numbering
+    - code: 1
+
+```javascript
+console.log("Hello, World!");
+```
+
+.code lang:{python} caption:{A print statement}
+    print("Hello, World!")

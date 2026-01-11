@@ -4,8 +4,12 @@ import * as path from "path";
 
 const PROJECT_ROOT = path.resolve(__dirname, "../..");
 const OUTPUT_DIR = path.join(PROJECT_ROOT, "build/e2e");
-const SERVER_PORT = 8089;
 const ENTRY_POINT = "main.qd";
+
+let portCounter = 8089;
+function nextPort(): number {
+    return portCounter++;
+}
 
 function compile(source: string, outName: string): string {
     const sourcePath = path.isAbsolute(source) ? source : path.join(PROJECT_ROOT, source);
@@ -19,8 +23,8 @@ function compile(source: string, outName: string): string {
     return path.join(OUTPUT_DIR, outName);
 }
 
-function startServer(outputDir: string): {process: ChildProcess; url: string; stop: () => void} {
-    const args = `start -f ${outputDir} -p ${SERVER_PORT}`;
+function startServer(outputDir: string, port: number): {process: ChildProcess; url: string; stop: () => void} {
+    const args = `start -f ${outputDir} -p ${port}`;
 
     const proc = spawn("./gradlew", [":quarkdown-cli:run", `--args=${args}`, "--quiet"], {
         cwd: PROJECT_ROOT,
@@ -29,7 +33,7 @@ function startServer(outputDir: string): {process: ChildProcess; url: string; st
 
     return {
         process: proc,
-        url: `http://localhost:${SERVER_PORT}`,
+        url: `http://localhost:${port}`,
         stop: () => proc.kill(),
     };
 }
@@ -52,7 +56,8 @@ async function runTest(testDir: string, page: Page, fn: (page: Page) => Promise<
     const sourcePath = path.join(testDir, ENTRY_POINT);
     const outName = path.relative(__dirname, testDir).split(path.sep).join("-");
     const outputDir = compile(sourcePath, outName);
-    const server = startServer(outputDir);
+    const port = nextPort();
+    const server = startServer(outputDir, port);
 
     try {
         await waitForServer(server.url);

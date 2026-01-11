@@ -1,0 +1,12 @@
+.code lang:{java} focus:{4..6}
+    public final class Wrapper<T> {
+        private final T value;
+
+        public Wrapper(T value) {
+            this.value = value;
+        }
+
+        public T getValue() {
+            return this.value;
+        }
+    }
