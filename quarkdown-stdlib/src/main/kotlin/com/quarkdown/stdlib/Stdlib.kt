@@ -27,6 +27,7 @@ object Stdlib : LibraryExporter {
                     Math,
                     Logical,
                     String,
+                    Icon,
                     Emoji,
                     Collection,
                     Dictionary,

@@ -60,6 +60,7 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
+import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -277,6 +278,8 @@ class PlainTextNodeRenderer(
     override fun visit(node: MathSpan) = node.expression
 
     override fun visit(node: TextTransform) = node.visitChildren()
+
+    override fun visit(node: IconImage) = ""
 
     override fun visit(node: InlineCollapse) = node.visitChildren()
 

@@ -50,6 +50,7 @@ import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
+import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -1061,6 +1062,12 @@ class HtmlNodeRendererTest {
                 children = buildInline { text("Foo") },
             ).render(),
         )
+    }
+
+    @Test
+    fun icon() {
+        assertEquals("<i class=\"icon-image bi bi-alarm\" aria-hidden=\"true\">\n</i>", IconImage("alarm").render())
+        assertEquals("<i class=\"icon-image bi bi-1-circle\" aria-hidden=\"true\">\n</i>", IconImage("1-circle").render())
     }
 
     @Test

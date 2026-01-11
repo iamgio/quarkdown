@@ -50,6 +50,7 @@ import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
+import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -178,6 +179,8 @@ interface NodeVisitor<T> {
     fun visit(node: MathSpan): T
 
     fun visit(node: TextTransform): T
+
+    fun visit(node: IconImage): T
 
     fun visit(node: InlineCollapse): T
 
