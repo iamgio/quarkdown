@@ -5,9 +5,9 @@ $non-mobile-breakpoint: $mobile-breakpoint + 1px;
 $md-breakpoint: 1200px;
 $narrow-print-breakpoint: 1000px;
 
-@mixin bp-down($breakpoint, $orPrint: false) {
-  @if $orPrint {
-    @media screen and (max-width: $breakpoint), print and (max-width: $breakpoint) {
+@mixin bp-down($breakpoint, $print-breakpoint: null) {
+  @if $print-breakpoint != null {
+    @media screen and (max-width: $breakpoint), print and (max-width: $print-breakpoint) {
       @content;
     }
   } @else {
@@ -20,7 +20,7 @@ $narrow-print-breakpoint: 1000px;
 // Targets mobile screens.
 // @param $orNarrowPrint - if true, also targets narrow print media.
 @mixin mobile($orNarrowPrint: false) {
-  @include bp-down($mobile-breakpoint, $orNarrowPrint) {
+  @include bp-down($mobile-breakpoint, if($orNarrowPrint, $narrow-print-breakpoint, null)) {
     @content;
   }
 }
@@ -40,7 +40,7 @@ $narrow-print-breakpoint: 1000px;
 }
 
 @mixin md-down($orNarrowPrint: false) {
-  @include bp-down($md-breakpoint, $orNarrowPrint) {
+  @include bp-down($md-breakpoint, if($orNarrowPrint, $narrow-print-breakpoint, null)) {
     @content;
   }
 }
