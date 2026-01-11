@@ -13,8 +13,21 @@
       display: grid;
     }
 
-    > aside img {
+    a {
+      color: var(--qd-main-color);
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--qd-link-color);
+      }
+    }
+
+    img {
       max-height: calc(var(--qd-docs-header-height) - 16px);
+    }
+
+    .icon-image {
+      font-size: 1.8em;
     }
   }
 

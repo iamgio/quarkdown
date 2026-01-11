@@ -39,6 +39,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
+import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -64,6 +65,7 @@ import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
+import com.quarkdown.core.util.Escape
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.CssBuilder
@@ -497,6 +499,13 @@ class QuarkdownHtmlNodeRenderer(
             )
             +node.children
             style { textTransform(node.data) }
+        }
+
+    override fun visit(node: IconImage): CharSequence =
+        buildTag("i") {
+            val name = Escape.Html.escape(node.name)
+            classNames("icon-image", "bi", "bi-$name")
+            attribute("aria-hidden", "true")
         }
 
     override fun visit(node: InlineCollapse) =

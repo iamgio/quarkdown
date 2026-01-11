@@ -1,0 +1,13 @@
+# Icons
+
+.var {icons}
+    - heart
+    - heart-fill
+    - arrow-down
+    - arrow-down-fill
+    - airplane-fill
+    - warning-triangle
+    - github
+
+.foreach {.icons}
+    .codespan {.1} becomes .icon {.1};
