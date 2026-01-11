@@ -53,14 +53,14 @@ class TextTransformData(
         MEDIUM,
 
         /**
-         * Larger font size (150%).
-         */
-        LARGER,
-
-        /**
-         * Large font size (200%).
+         * Large font size (150%).
          */
         LARGE,
+
+        /**
+         * Larger font size (200%).
+         */
+        LARGER,
 
         /**
          * Huge font size (300%).
