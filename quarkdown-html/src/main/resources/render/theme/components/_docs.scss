@@ -1,0 +1,73 @@
+@use "util/media-queries" as media-queries;
+@use "util/heading-selectors" as *;
+@use "../layout/util/progressive-heading-sizes" as *;
+@use "../layout/util/progressive-heading-margins" as *;
+
+.quarkdown-docs {
+  --qd-nested-navigation-padding-left: 1.2em;
+
+  > header {
+    background-color: var(--qd-docs-header-background-color);
+
+    > main {
+      display: grid;
+    }
+
+    > aside img {
+      max-height: calc(var(--qd-docs-header-height) - 16px);
+    }
+  }
+
+  > .content-wrapper {
+    > main > footer {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    > aside:first-child {
+      border-right: 1px solid var(--qd-docs-separator-border-color);
+    }
+
+    > aside:last-child {
+      border-left: 1px solid var(--qd-docs-separator-border-color);
+    }
+  }
+
+  aside {
+    a {
+      text-decoration: none;
+
+      &[aria-current] {
+        font-weight: bold;
+      }
+    }
+
+    figure, img,
+    figure img {
+      margin: 0 !important;
+    }
+  }
+
+  .page-margin-content {
+    @include progressive-heading-sizes($multiplier: 1);
+    @include progressive-heading-margins($bottomAddition: 0);
+
+    font-size: 0.9em;
+
+    #{$headings} {
+      font-weight: 500;
+    }
+  }
+}
+
+// Print styles
+:root {
+  @include media-queries.print {
+    --qd-background-color: white !important;
+    --qd-main-color: black !important;
+    --qd-heading-color: black !important;
+    --qd-link-color: blue !important;
+  }
+}

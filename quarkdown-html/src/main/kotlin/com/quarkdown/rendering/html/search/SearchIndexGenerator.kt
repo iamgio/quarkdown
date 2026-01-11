@@ -1,13 +1,14 @@
 package com.quarkdown.rendering.html.search
 
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.graph.Graph
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.util.toPlainText
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
+import com.quarkdown.rendering.plaintext.node.PlainTextNodeRenderer
 
 /**
  * Generates a [SearchIndex] from the subdocument graph of a multi-document project.
@@ -18,25 +19,27 @@ object SearchIndexGenerator {
      * Generates a search index from the given subdocument graph.
      * Each subdocument becomes a [SearchEntry] containing its URL, metadata, and headings.
      * @param graph the subdocument graph representing the documentation structure
-     * @param contextLookup a function to retrieve the [Context] for a given [Subdocument]
      * @return a [SearchIndex] containing all searchable entries
      */
-    fun generate(
-        graph: Graph<Subdocument>,
-        contextLookup: (Subdocument) -> Context? = { subdocument -> Pipelines.allContexts.find { it.subdocument == subdocument } },
-    ): SearchIndex {
-        val subdocuments = graph.vertices
+    fun generate(graph: SubdocumentsData<out Graph<Subdocument>>): SearchIndex {
+        val subdocuments = graph.graph.vertices
 
         return SearchIndex(
             entries =
                 subdocuments.mapNotNull { subdocument ->
-                    val context = contextLookup(subdocument) ?: return@mapNotNull null
+                    val context = graph.withContexts[subdocument] ?: return@mapNotNull null
 
                     SearchEntry(
                         url = "/" + if (subdocument is Subdocument.Root) "" else subdocument.getOutputFileName(context),
                         title = context.documentInfo.name,
                         description = context.documentInfo.description,
                         keywords = context.documentInfo.keywords,
+                        content =
+                            context.attributes.root
+                                ?.accept(PlainTextNodeRenderer(context))
+                                ?.trimEnd()
+                                ?.toString()
+                                ?: "",
                         headings = getHeadings(context),
                     )
                 },

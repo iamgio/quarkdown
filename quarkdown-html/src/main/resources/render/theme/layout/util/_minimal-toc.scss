@@ -1,18 +1,18 @@
 @use "../../components/util/location-selectors" as location-selectors;
 
 @mixin minimal-toc {
-  nav {
-    ol {
+  nav, .nav {
+    ul, ol {
       list-style-type: none;
       margin: 0;
       padding-left: 12px;
 
       // Nested entries
-      ol {
-        border-left: 2px solid;
+      ul, ol {
+        border-left: 2px solid var(--qd-nested-navigation-line-color);
         border-radius: 2px;
         margin-left: 1px;
-        padding: 0 0 0 28px;
+        padding: 0 0 0 var(--qd-nested-navigation-padding-left);
       }
     }
 
@@ -26,14 +26,19 @@
     }
   }
 
-  .quarkdown-slides {
-    nav > ol {
+  &.quarkdown-slides {
+    :is(nav, .nav) > :is(ul, ol) {
       // Resets the no-clipping workaround because this theme's ToC hides list markers.
       margin-left: auto;
     }
 
-    nav, h1#table-of-contents {
+    nav, .nav, h1#table-of-contents {
       margin-left: 44px;
     }
+  }
+
+  &.quarkdown-docs {
+    // Visual consistency in docs.
+    --qd-nested-navigation-line-color: var(--qd-docs-separator-border-color);
   }
 }

@@ -1,0 +1,6 @@
+@mixin docs-headings-border {
+  &.quarkdown-docs h1 {
+    border-bottom: 1px solid var(--qd-docs-separator-border-color);
+    padding-bottom: 24px;
+  }
+}

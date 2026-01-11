@@ -1,27 +1,49 @@
 @mixin latex-toc {
-  nav a {
-    text-decoration: none;
-  }
+  nav, .nav {
+    a {
+      text-decoration: none;
+    }
 
-  nav ol {
-    margin: 0;
-    padding-left: 0;
-  }
+    ul, ol {
+      margin: 0;
+      padding-left: 0;
+    }
 
-  nav > ol ol {
-    padding-left: 2rem;
-  }
+    > ul, ol {
+      ul, ol {
+        padding-left: 2rem;
+      }
 
-  nav > ol > li {
-    margin-top: 20px;
-  }
+      > li {
+        margin-top: 20px;
 
-  nav > ol > li > a {
-    font-weight: bold;
-  }
+        > a {
+          font-weight: bold;
+        }
+      }
+    }
 
-  nav li {
-    margin-top: 7px;
-    list-style-type: none; /* Only numbering-generated bullets are shown */
+    li {
+      margin-top: 7px;
+      list-style-type: none; /* Only numbering-generated bullets are shown */
+    }
+
+    &:is(.quarkdown-docs nav, .quarkdown-docs .nav) {
+      > ul, ol {
+        margin-left: 0;
+
+        ul, ol {
+          padding-left: 1.5rem;
+        }
+
+        > li {
+          margin-top: 4px;
+
+          a {
+            font-weight: normal;
+          }
+        }
+      }
+    }
   }
 }

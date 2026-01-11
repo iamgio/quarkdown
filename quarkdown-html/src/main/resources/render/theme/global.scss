@@ -26,6 +26,8 @@
 @use "components/bibliography";
 @use "components/page-margin";
 @use "components/landscape";
+@use "components/docs";
+@use "components/search.scss";
 @use "components/sidebar";
 
 :root {
@@ -34,10 +36,13 @@
   // Colors
   --qd-background-color: inherit; // Background color
   --qd-main-color: inherit; // Main text color
+  --qd-main-color-muted: color-mix(in srgb, var(--qd-main-color) 20%, transparent); // Muted main text color
   --qd-primary-color: var(--qd-main-color); // Primary/accent color
   --qd-color-on-primary: var(--qd-background-color); // Text color on primary background color
   --qd-heading-color: var(--qd-main-color); // Heading (titles) color
   --qd-link-color: inherit; // Link color
+  --qd-nested-navigation-line-color: color-mix(in srgb, var(--qd-primary-color) 20%, transparent); // When expected by the layout theme, sets the color of lines in nested navigation (e.g. ToC)
+  --qd-selected-background-color: color-mix(in srgb, var(--qd-main-color) 5%, transparent); // Background color of selected items over the main background color (e.g. selected search result)
   --qd-callout-box-header-color: var(--qd-main-color); // Color of the header of callout box headers. This is just a referenceable value and is not used in this global theme
   --qd-collapsed-text-color: var(--qd-link-color); // Color of expandible text
   --qd-error-message-collapsed-text-color: rgb(240, 246, 77); // Color of expandible text in error messages
@@ -72,6 +77,7 @@
   --qd-list-margin-multiplier: 0.4; // --qd-paragraph-vertical-margin * this = list vertical margin
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
   --qd-box-content-vertical-padding: 8px; // Vertical padding of box content
+  --qd-nested-navigation-padding-left: 28px; // When expected by the layout theme, padding-left of nested ToC entries
 
   // Border
   --qd-page-content-border-width: unset;
@@ -144,6 +150,14 @@
   --qd-mermaid-node-text-color: var(--qd-color-on-primary);
   --qd-mermaid-node-line-color: var(--qd-main-color);
   --qd-mermaid-node-filter: none;
+
+  // Docs
+  --qd-docs-header-height: 60px;
+  --qd-docs-header-vertical-padding: 12px;
+  --qd-docs-header-background-color: var(--qd-primary-color);
+  --qd-docs-separator-border-color: var(--qd-docs-header-background-color);
+  --qd-docs-search-border-color: var(--qd-docs-separator-border-color);
+  --qd-docs-search-focused-border: var(--qd-primary-color);
 
   // Reveal properties
   --r-background-color: var(--qd-background-color);

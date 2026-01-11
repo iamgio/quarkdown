@@ -48,12 +48,15 @@ class ResourceGenerationStage(
         pipeline: Pipeline,
         context: MutableContext,
     ): Set<OutputResource> =
-        context.subdocumentGraph
-            .visitNeighbors(context.subdocument, update = { context.subdocumentGraph = it })
-            .asSequence()
+        context.sharedSubdocumentsData.graph
+            .visitNeighbors(
+                context.subdocument,
+                update = { context.sharedSubdocumentsData = context.sharedSubdocumentsData.copy(graph = it) },
+            ).asSequence()
             .filterIsInstance<Subdocument.Resource>()
             .flatMap { nextSubdocument ->
                 val subContext = SubdocumentContext(parent = context, subdocument = nextSubdocument)
+                context.sharedSubdocumentsData = context.sharedSubdocumentsData.addContext(nextSubdocument, subContext)
                 pipeline.copy(subContext).executeUnwrapped(nextSubdocument.content)
             }.toSet()
 }
