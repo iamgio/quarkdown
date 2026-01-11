@@ -1,46 +1,52 @@
 // Media query utilities and breakpoints.
 
-$mobile-breakpoint: 800px;
-$non-mobile-breakpoint: $mobile-breakpoint + 1px;
-$md-breakpoint: 1200px;
-$narrow-print-breakpoint: 1000px;
+// Mobile
+$sm: 800px;
+$sm-print: 1000px; // 'sm' size for print media (PDF)
+
+// Tablet
+$md: 1200px;
+$md-print: 1400px; // 'md' size for print media (PDF)
 
 @mixin bp-down($breakpoint, $print-breakpoint: null) {
   @if $print-breakpoint != null {
-    @media screen and (max-width: $breakpoint), print and (max-width: $print-breakpoint) {
+    @media screen and (max-width: $breakpoint), print and (max-width: $print-breakpoint), pagedjs-ignore {
       @content;
     }
   } @else {
-    @media screen and (max-width: $breakpoint) {
+    @media screen and (max-width: $breakpoint), pagedjs-ignore {
       @content;
     }
   }
 }
 
-// Targets mobile screens.
-// @param $orNarrowPrint - if true, also targets narrow print media.
-@mixin mobile($orNarrowPrint: false) {
-  @include bp-down($mobile-breakpoint, if($orNarrowPrint, $narrow-print-breakpoint, null)) {
+@mixin bp-up($breakpoint) {
+  @media screen and (min-width: #{$breakpoint + 1}), pagedjs-ignore {
     @content;
   }
 }
 
-// Targets non-mobile screens.
-// @param $orPrint - if true, also targets print media on screen (paged viewports, but *not* PDFs).
-@mixin non-mobile($orNonPrintPaged: false) {
-  @if $orNonPrintPaged == false {
-    @media screen and (min-width: $non-mobile-breakpoint) {
-      @content;
-    }
-  } @else {
-    @media screen and (min-width: $non-mobile-breakpoint), pagedjs-ignore {
-      @content;
-    }
+// @param $print - if true, also targets narrow print media.
+@mixin sm-down($print: false) {
+  @include bp-down($sm, if($print, $sm-print, null)) {
+    @content;
   }
 }
 
-@mixin md-down($orNarrowPrint: false) {
-  @include bp-down($md-breakpoint, if($orNarrowPrint, $narrow-print-breakpoint, null)) {
+@mixin sm-up {
+  @include bp-up($sm) {
+    @content;
+  }
+}
+
+@mixin md-down($print: false) {
+  @include bp-down($md, if($print, $md-print, null)) {
+    @content;
+  }
+}
+
+@mixin md-up {
+  @include bp-up($md) {
     @content;
   }
 }

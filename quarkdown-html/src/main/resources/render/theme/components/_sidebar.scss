@@ -6,6 +6,7 @@ $max-level: 3;
 $level-width: 9px;
 
 .quarkdown .sidebar {
+  display: none;
   top: 50%;
   right: 0;
   transform: translateY(-50%);
@@ -13,6 +14,10 @@ $level-width: 9px;
   border-radius: 5px;
   max-height: 90vh;
   overflow-y: auto;
+
+  @include media-queries.sm-up {
+    display: block;
+  }
 
   ol {
     list-style: none;
@@ -80,20 +85,3 @@ $level-width: 9px;
   }
 }
 
-@include media-queries.print {
-  .sidebar {
-    display: none;
-  }
-}
-
-@include media-queries.mobile {
-  .sidebar {
-    display: none;
-  }
-}
-
-@include media-queries.non-mobile($orNonPrintPaged: true) {
-  .sidebar {
-    display: block !important;
-  }
-}

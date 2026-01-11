@@ -58,7 +58,7 @@ body.quarkdown {
       width: 100%;
     }
 
-    @include media-queries.mobile($orNarrowPrint: true) {
+    @include media-queries.sm-down($print: true) {
       > * {
         font-size: 1.1em;
       }
@@ -68,7 +68,7 @@ body.quarkdown {
   &.quarkdown-plain {
     margin: 32px 0;
 
-    @include media-queries.mobile($orNarrowPrint: true) {
+    @include media-queries.sm-down($print: true) {
       @include reflow-plain-like-viewport;
 
       > aside:first-child {
@@ -131,7 +131,7 @@ body.quarkdown {
 
     // Higher specificity for responsive adjustments.
     &.quarkdown-docs {
-      @include media-queries.md-down($orNarrowPrint: true) {
+      @include media-queries.md-down($print: true) {
         margin-bottom: 32px;
 
         > header, > .content-wrapper {
@@ -158,7 +158,7 @@ body.quarkdown {
         }
       }
 
-      @include media-queries.md-down($orNarrowPrint: false) {
+      @include media-queries.md-down($print: false) {
         > header > aside {
           display: none;
         }
