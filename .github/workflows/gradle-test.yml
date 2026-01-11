@@ -31,14 +31,8 @@ jobs:
       with:
         full-checkout: ${{ inputs.full-checkout }}
 
-    - name: Install E2E dependencies
-      run: npm ci
-      working-directory: quarkdown-html
-
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps chromium
-      working-directory: quarkdown-html
-
     - name: Run E2E tests
-      run: npm run test:e2e
-      working-directory: quarkdown-html
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: e2e
+        arguments: :quarkdown-html:e2eTest
