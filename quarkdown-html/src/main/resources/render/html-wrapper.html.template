@@ -14,6 +14,7 @@
     <meta name="author" content="[[AUTHORS]]">
     [[endif:AUTHORS]]
     <meta name="viewport" content="width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]">
+    <meta name="quarkdown:root-path" content="[[ROOTPATH]]">
     [[if:DOCS]]<meta name="quarkdown:search-index" content="[[ROOTPATH]]/search-index.json">[[endif:DOCS]]
     <title>[[TITLE]]</title>
     <script src="[[ROOTPATH]]/script/quarkdown.js"></script>

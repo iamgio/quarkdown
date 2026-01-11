@@ -2,6 +2,7 @@ import {DocumentHandler} from "../../document-handler";
 import {createSearch, DocumentSearch, DocumentSearchResult} from "../../../search/search";
 import {expandResult} from "../../../search/search-result-expander";
 import {renderResultItems} from "../../../search/search-result-renderer";
+import {getMetaContent, getRootPath} from "../../../util/meta";
 
 const SEARCH_INPUT_ID = "search-input";
 const SEARCH_RESULTS_ID = "search-results";
@@ -38,8 +39,7 @@ export class SearchField extends DocumentHandler {
      * @returns The path to the search index JSON, or null if not found
      */
     private getSearchIndexPath(): string | null {
-        const meta = document.querySelector(`meta[name="${SEARCH_INDEX_META_NAME}"]`);
-        return meta?.getAttribute("content") ?? null;
+        return getMetaContent(SEARCH_INDEX_META_NAME);
     }
 
     /**
@@ -110,11 +110,24 @@ export class SearchField extends DocumentHandler {
             return;
         }
 
-        const displayItems = results.flatMap((result) => expandResult(result));
+        const displayItems = results
+            .flatMap((result) => expandResult(result))
+            .map((item) => ({...item, url: this.resolveUrl(item.url)}));
 
         this.selectedIndex = -1;
         this.resultsContainer!.innerHTML = renderResultItems(displayItems);
         this.resultsContainer!.hidden = false;
+    }
+
+    /**
+     * Resolves a URL to be relative to the current page's parent directory.
+     * URLs starting with '/' are converted to relative paths.
+     * @param url - The URL to resolve
+     * @returns The resolved relative URL
+     */
+    private resolveUrl(url: string): string {
+        if (!url.startsWith("/")) return url;
+        return getRootPath() + url;
     }
 
     /**
