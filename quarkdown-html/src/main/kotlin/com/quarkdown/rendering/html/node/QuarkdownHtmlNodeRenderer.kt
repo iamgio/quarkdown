@@ -504,7 +504,6 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: IconImage): CharSequence =
         buildTag("i") {
             val name = Escape.Html.escape(node.name)
-            // Boxicons library.
             classNames("icon-image", "bi", "bi-$name")
             attribute("aria-hidden", "true")
         }
