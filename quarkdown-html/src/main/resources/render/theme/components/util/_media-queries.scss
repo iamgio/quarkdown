@@ -2,19 +2,26 @@
 
 $mobile-breakpoint: 800px;
 $non-mobile-breakpoint: $mobile-breakpoint + 1px;
+$md-breakpoint: 1200px;
 $narrow-print-breakpoint: 1000px;
+
+@mixin bp-down($breakpoint, $orPrint: false) {
+  @if $orPrint {
+    @media screen and (max-width: $breakpoint), print and (max-width: $breakpoint) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
 
 // Targets mobile screens.
 // @param $orNarrowPrint - if true, also targets narrow print media.
 @mixin mobile($orNarrowPrint: false) {
-  @if $orNarrowPrint {
-    @media screen and (max-width: $mobile-breakpoint), print and (max-width: $narrow-print-breakpoint) {
-      @content;
-    }
-  } @else {
-    @media screen and (max-width: $mobile-breakpoint) {
-      @content;
-    }
+  @include bp-down($mobile-breakpoint, $orNarrowPrint) {
+    @content;
   }
 }
 
@@ -29,6 +36,12 @@ $narrow-print-breakpoint: 1000px;
     @media screen and (min-width: $non-mobile-breakpoint), pagedjs-ignore {
       @content;
     }
+  }
+}
+
+@mixin md-down($orNarrowPrint: false) {
+  @include bp-down($md-breakpoint, $orNarrowPrint) {
+    @content;
   }
 }
 

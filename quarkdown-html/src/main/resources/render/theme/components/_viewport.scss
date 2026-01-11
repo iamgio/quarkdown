@@ -17,7 +17,7 @@ body.quarkdown {
     background-color: var(--qd-background-color);
   }
 
-  // Plain viewport
+  // Plain & docs viewport
   &.quarkdown-plain,
   &.quarkdown-docs :is(header, .content-wrapper) {
     display: flex;
@@ -45,18 +45,22 @@ body.quarkdown {
         margin-left: var(--aside-inner-margin);
       }
     }
+  }
+
+  // Plain & docs viewport responsive adjustments
+  // Plain reflows at sm breakpoint, docs at md
+  @mixin reflow-plain-like-viewport {
+    flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    > main {
+      width: 100%;
+    }
 
     @include media-queries.mobile($orNarrowPrint: true) {
-      flex-direction: column;
-      padding-left: 16px;
-      padding-right: 16px;
-
       > * {
         font-size: 1.1em;
-      }
-
-      > main {
-        width: 100%;
       }
     }
   }
@@ -65,6 +69,8 @@ body.quarkdown {
     margin: 32px 0;
 
     @include media-queries.mobile($orNarrowPrint: true) {
+      @include reflow-plain-like-viewport;
+
       > aside:first-child {
         display: none;
       }
@@ -125,12 +131,18 @@ body.quarkdown {
 
     // Higher specificity for responsive adjustments.
     &.quarkdown-docs {
-      @include media-queries.mobile($orNarrowPrint: true) {
+      @include media-queries.md-down($orNarrowPrint: true) {
+        margin-bottom: 32px;
+
+        > header, > .content-wrapper {
+          @include reflow-plain-like-viewport;
+        }
+
         > header {
           flex-direction: row;
         }
 
-        .content-wrapper > aside {
+        > .content-wrapper > aside {
           position: static;
           width: auto;
           max-width: none;
@@ -146,7 +158,7 @@ body.quarkdown {
         }
       }
 
-      @include media-queries.mobile($orNarrowPrint: false) {
+      @include media-queries.md-down($orNarrowPrint: false) {
         > header > aside {
           display: none;
         }
