@@ -60,10 +60,8 @@
       font-weight: 500;
     }
   }
-}
 
-// Print styles
-:root {
+  // Print styles
   @include media-queries.print {
     --qd-background-color: white !important;
     --qd-main-color: black !important;
