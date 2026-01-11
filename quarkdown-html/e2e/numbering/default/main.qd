@@ -1,0 +1,47 @@
+.numbering
+  - headings: 1.1
+  - figures: 1.a
+  - tables: i
+  - equations: (1.A)
+  - code: 1
+  - footnotes: I
+
+.figure caption:{Fig 1}
+    Fig
+
+# A
+
+$ Equation 1 $ {#_}
+
+## B
+
+.figure caption:{Fig 2}
+    Fig
+
+.figure caption:{Fig 3}
+    Fig
+
+```text
+Code 1
+```
+
+### C
+
+```text
+Code 2
+```
+
+$ Equation 2 $ {#_}
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+
+footnote[^1].
+
+[^1]: This is footnote 1.
+
+.mermaid caption:{Fig 4}
+    graph TD
+        A-->B
+        A-->C
