@@ -1,27 +1,8 @@
 import {evaluateComputedStyle, getComputedSizeProperty} from "../../__util/css";
+import {fontFamilyMatches, getCssVar} from "../index";
 import {suite} from "../../quarkdown";
-import {Page} from "@playwright/test";
 
 const {testMatrix, expect} = suite(__dirname);
-
-/**
- * Gets the computed value of a CSS custom property.
- */
-async function getCssVar(page: Page, varName: string): Promise<string> {
-    return page.evaluate((name) => {
-        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    }, varName);
-}
-
-/**
- * Checks if the computed font family matches the expected font family,
- * ignoring quotes and case.
- */
-function fontFamilyMatches(computedFontFamily: string, expectedFontFamily: string): boolean {
-    const cleanedComputed = computedFontFamily.replace(/['"]/g, "").toLowerCase();
-    const cleanedExpected = expectedFontFamily.replace(/['"]/g, "").toLowerCase();
-    return cleanedComputed.startsWith(cleanedExpected);
-}
 
 testMatrix(
     "applies correct default fonts",

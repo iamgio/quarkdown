@@ -543,9 +543,11 @@ fun disableNumbering(
  *
  * The [size] parameter does not stack instead, and only the last specified size is used among all configurations.
  *
- * @param main main font family of content on each page
- * @param heading font family of headings on each page. Overrides [main] for headings if set
- * @param code font family of code blocks and code spans on each page. Overrides [main] for code if set
+ * @param main main font family of regular content: paragraphs, lists, blockquotes, tables and other textual elements
+ * @param heading font family of headings.
+ *                If unset, [main] is applied to headings too
+ *                only if the layout [theme] does not enforce a specific heading font
+ * @param code font family of code blocks and code spans
  * @param size main font size of the text on each page. Other elements, such as headings, will scale accordingly
  * @wiki Font configuration
  */
