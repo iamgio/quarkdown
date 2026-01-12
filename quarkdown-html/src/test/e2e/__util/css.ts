@@ -46,18 +46,20 @@ export async function isBeforeInline(locator: Locator): Promise<boolean> {
 }
 
 /**
- * Gets the computed pixel value of a CSS size property or variable.
- * @param page - Playwright page instance
- * @param value - CSS value to compute (e.g., "var(--qd-block-margin)", "2em")
+ * Gets the computed pixel value of a CSS size in the context of a specific element.
+ * Useful for em values which are relative to the element's inherited font-size.
+ * @param context - Playwright locator for the context element, or Page (uses body)
+ * @param value - CSS value to compute (e.g., "var(--qd-block-margin)", "1.3em")
  * @returns The computed size in pixels
  */
-export async function getComputedSizeProperty(page: Page, value: string): Promise<number> {
-    return page.evaluate((cssValue) => {
-        const el = document.createElement("div");
-        el.style.height = cssValue;
-        document.body.appendChild(el);
-        const size = el.getBoundingClientRect().height;
-        el.remove();
+export async function getComputedSizeProperty(context: Locator | Page, value: string): Promise<number> {
+    const locator = "goto" in context ? context.locator("body") : context;
+    return locator.evaluate((el, cssValue) => {
+        const temp = document.createElement("div");
+        temp.style.height = cssValue;
+        el.appendChild(temp);
+        const size = temp.getBoundingClientRect().height;
+        temp.remove();
         return size;
     }, value);
 }
