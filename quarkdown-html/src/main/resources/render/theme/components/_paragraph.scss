@@ -25,9 +25,9 @@ p {
   // Spacing between two sibling paragraphs
   + #{$valid-paragraph},
     // Spacing between two sibling paragraphs with a floating element in-between
-  + .quarkdown .float + #{$valid-paragraph},
+  + .float + #{$valid-paragraph},
     // Spacing between the paragraph and its floating element sibling
-  + .quarkdown .float:has(+ #{$valid-paragraph}) {
+  + .float:has(+ #{$valid-paragraph}) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
   }
 }

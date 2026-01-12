@@ -37,6 +37,12 @@ The quick brown fox jumps over the lazy dog. This is a separator text.
 ---
 
 .foreach {.floatalignments}
+	The more that you practice, the more you're able to visualize things.
+	Beauty is everywhere; you only have to look to see it. However you want to change this, that's the way it should be.
+	It's a lot of fun. If you comply with that rule, how can you go wrong? Get a nice, even distribution of paint all through the bristles.
+	We don't know where that goes--it doesn't matter at this point. Let's just have a good time.  
+	Anything you are willing to practice, you can do! Think like a cloud.
+
 	.float {.1}
 		!(118px)[Sky](images/sky.jpg)
 
