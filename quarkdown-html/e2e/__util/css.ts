@@ -1,4 +1,4 @@
-import {Locator} from "@playwright/test";
+import {Locator, Page} from "@playwright/test";
 
 /**
  * Gets the full visible text of an element including ::before and ::after pseudo-element content.
@@ -43,4 +43,30 @@ export async function isBeforeInline(locator: Locator): Promise<boolean> {
         // ::before is inline if element top matches text top (within 1px tolerance)
         return Math.abs(elementRect.top - textRect.top) <= 1;
     });
+}
+
+/**
+ * Gets the computed pixel value of a CSS size property or variable.
+ * @param page - Playwright page instance
+ * @param value - CSS value to compute (e.g., "var(--qd-block-margin)", "2em")
+ * @returns The computed size in pixels
+ */
+export async function getComputedSizeProperty(page: Page, value: string): Promise<number> {
+    return page.evaluate((cssValue) => {
+        const el = document.createElement("div");
+        el.style.height = cssValue;
+        document.body.appendChild(el);
+        const size = el.getBoundingClientRect().height;
+        el.remove();
+        return size;
+    }, value);
+}
+
+/**
+ * Gets the computed style of an element.
+ * @param locator - Playwright locator for the element
+ * @returns The computed CSSStyleDeclaration as a plain object
+ */
+export async function evaluateComputedStyle(locator: Locator): Promise<CSSStyleDeclaration> {
+    return locator.evaluate((el) => globalThis.getComputedStyle(el));
 }
