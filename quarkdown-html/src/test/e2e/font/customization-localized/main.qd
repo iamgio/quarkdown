@@ -1,0 +1,12 @@
+.doclang {zh}
+.theme layout:{minimal}
+
+.font {../../__assets/NotoSans-Regular.ttf} heading:{../../__assets/Karla-Bold.ttf}
+
+## 你好
+
+你好
+
+```
+code block
+```
