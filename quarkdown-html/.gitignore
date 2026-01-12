@@ -7,5 +7,5 @@ src/main/resources/render/theme/**/*.css
 src/main/resources/render/theme/**/*.css.map
 
 # e2e
-playwright-report/
-test-results/
+**/playwright-report/
+**/test-results/
