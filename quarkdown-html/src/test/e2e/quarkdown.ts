@@ -1,8 +1,18 @@
 import {expect, Page, test as base} from "@playwright/test";
-import {DocumentType} from "./__util/paths";
+import {DocumentType, OUTPUT_DIR} from "./__util/paths";
 import {runTest} from "./__util/runner";
+import * as path from "path";
 
 export type {DocumentType} from "./__util/paths";
+
+/**
+ * Returns the output directory path for a given test directory.
+ */
+export function outputDir(testDir: string): string {
+    const e2eDir = path.resolve(__dirname);
+    const outName = path.relative(e2eDir, testDir).split(path.sep).join("-");
+    return path.join(OUTPUT_DIR, outName);
+}
 
 /**
  * Creates a test suite for a specific directory.
