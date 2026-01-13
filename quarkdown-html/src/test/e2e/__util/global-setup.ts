@@ -5,6 +5,7 @@ import {OUTPUT_DIR, PROJECT_ROOT} from "./paths";
 
 const SERVER_PORT = 8089;
 const SERVER_STATE_FILE = path.join(OUTPUT_DIR, ".server-state.json");
+const CLI_PATH = path.join(PROJECT_ROOT, "quarkdown-cli/build/install/quarkdown-cli/bin/quarkdown-cli");
 
 export default async function globalSetup() {
     // Build CLI once
@@ -17,11 +18,11 @@ export default async function globalSetup() {
     // Ensure output directory exists
     fs.mkdirSync(OUTPUT_DIR, {recursive: true});
 
-    // Spawn server process
-    const serverScript = path.join(__dirname, "server-process.ts");
-    const proc = spawn("npx", ["tsx", serverScript, OUTPUT_DIR, String(SERVER_PORT)], {
+    // Spawn Quarkdown server using pre-built CLI
+    const proc = spawn(CLI_PATH, ["start", "-f", OUTPUT_DIR, "-p", String(SERVER_PORT)], {
         detached: true,
         stdio: "ignore",
+        cwd: PROJECT_ROOT,
     });
     proc.unref();
 
