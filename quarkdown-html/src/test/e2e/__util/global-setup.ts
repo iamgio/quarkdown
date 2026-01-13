@@ -1,12 +1,19 @@
+import {execSync, spawn} from "child_process";
 import * as fs from "fs";
 import * as path from "path";
-import {spawn} from "child_process";
-import {OUTPUT_DIR} from "./paths";
+import {OUTPUT_DIR, PROJECT_ROOT} from "./paths";
 
 const SERVER_PORT = 8089;
 const SERVER_STATE_FILE = path.join(OUTPUT_DIR, ".server-state.json");
 
 export default async function globalSetup() {
+    // Build CLI once
+    console.log("Building Quarkdown CLI...");
+    execSync("./gradlew :quarkdown-cli:installDist --quiet", {
+        cwd: PROJECT_ROOT,
+        stdio: "inherit",
+    });
+
     // Ensure output directory exists
     fs.mkdirSync(OUTPUT_DIR, {recursive: true});
 
