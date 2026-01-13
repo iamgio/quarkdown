@@ -29,7 +29,7 @@ export default async function globalSetup() {
     console.log(`E2E server started at ${url} (pid: ${proc.pid})`);
 }
 
-async function waitForServer(url: string, timeout = 10000): Promise<void> {
+async function waitForServer(url: string, timeout = 60000): Promise<void> {
     const start = Date.now();
     while (Date.now() - start < timeout) {
         try {
