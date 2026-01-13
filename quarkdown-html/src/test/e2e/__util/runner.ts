@@ -56,9 +56,9 @@ export async function runTest(
         outName = baseOutName;
     }
 
-    compile(sourcePath, outName);
-
     try {
+        compile(sourcePath, outName);
+
         const url = `${getServerUrl()}/${outName}/`;
         await page.goto(url);
         await waitForReady(page);
