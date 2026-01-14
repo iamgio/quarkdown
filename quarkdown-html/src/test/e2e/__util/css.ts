@@ -46,6 +46,33 @@ export async function isBeforeInline(locator: Locator): Promise<boolean> {
 }
 
 /**
+ * Computes a CSS value by applying it to a temporary element and reading the computed result.
+ * @param context - Playwright locator or Page for context
+ * @param property - CSS property to set (e.g., "height", "color")
+ * @param value - CSS value to compute (e.g., "var(--qd-link-color)", "1.3em")
+ * @param getter - Function to extract the computed value from the temp element
+ */
+async function computeCssValue<T>(
+    context: Locator | Page,
+    property: string,
+    value: string,
+    getter: (el: HTMLElement) => T
+): Promise<T> {
+    const locator = "goto" in context ? context.locator("body") : context;
+    return locator.evaluate(
+        (el, {prop, val, getterFn}) => {
+            const temp = document.createElement("div");
+            temp.style.setProperty(prop, val);
+            el.appendChild(temp);
+            const result = new Function("el", `return ${getterFn}`)(temp);
+            temp.remove();
+            return result;
+        },
+        {prop: property, val: value, getterFn: getter.toString().replace(/^\(?\w+\)?\s*=>\s*/, "")}
+    );
+}
+
+/**
  * Gets the computed pixel value of a CSS size in the context of a specific element.
  * Useful for em values which are relative to the element's inherited font-size.
  * @param context - Playwright locator for the context element, or Page (uses body)
@@ -53,15 +80,17 @@ export async function isBeforeInline(locator: Locator): Promise<boolean> {
  * @returns The computed size in pixels
  */
 export async function getComputedSizeProperty(context: Locator | Page, value: string): Promise<number> {
-    const locator = "goto" in context ? context.locator("body") : context;
-    return locator.evaluate((el, cssValue) => {
-        const temp = document.createElement("div");
-        temp.style.height = cssValue;
-        el.appendChild(temp);
-        const size = temp.getBoundingClientRect().height;
-        temp.remove();
-        return size;
-    }, value);
+    return computeCssValue(context, "height", value, (el) => el.getBoundingClientRect().height);
+}
+
+/**
+ * Gets the computed RGB color value of a CSS value.
+ * @param context - Playwright locator or Page for context
+ * @param value - CSS color value (e.g., "var(--qd-link-color)", "hsl(0, 100%, 50%)")
+ * @returns The computed color in RGB format (e.g., "rgb(168, 0, 0)")
+ */
+export async function getComputedColor(context: Locator | Page, value: string): Promise<string> {
+    return computeCssValue(context, "color", value, (el) => getComputedStyle(el).color);
 }
 
 /**
