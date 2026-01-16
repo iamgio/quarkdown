@@ -2,15 +2,21 @@
 @use "util/icon" as *;
 
 .quarkdown .box {
-  width: 100%;
-  border-radius: var(--qd-box-border-radius);
   --box-background-color: transparent;
   --box-content-foreground-color: var(--qd-main-color);
   --box-header-foreground-color: var(--qd-main-color);
-  --box-header-background-color: color-mix(in srgb,
-          var(--box-header-foreground-color) 2.5%,
-          color-mix(in srgb, var(--box-background-color) 98%, rgba(0, 0, 0, .1))
+  --box-header-background-color: var(--qd-box-header-background-color,
+          color-mix(in srgb,
+                  var(--box-header-foreground-color, var(--qd-main-color)) 2.5%,
+                  color-mix(in srgb,
+                          var(--box-background-color, transparent) 98%,
+                          rgba(0, 0, 0, .1)
+                  )
+          )
   );
+
+  width: 100%;
+  border-radius: var(--qd-box-border-radius);
   background-color: var(--box-background-color);
   break-inside: avoid;
 
@@ -113,34 +119,39 @@
 .quarkdown {
   .callout {
     --box-background-color: var(--qd-callout-background-color);
-    --box-header-foreground-color: var(--qd-callout-foreground-color);
+    --box-content-foreground-color: var(--qd-callout-content-foreground-color);
+    --box-header-foreground-color: var(--qd-callout-title-foreground-color);
   }
 
   .tip {
     --box-background-color: var(--qd-tip-background-color);
-    --box-header-foreground-color: var(--qd-tip-foreground-color);
+    --box-content-foreground-color: var(--qd-tip-content-foreground-color);
+    --box-header-foreground-color: var(--qd-tip-title-foreground-color);
   }
 
   .note {
     --box-background-color: var(--qd-note-background-color);
-    --box-header-foreground-color: var(--qd-note-foreground-color);
+    --box-content-foreground-color: var(--qd-note-content-foreground-color);
+    --box-header-foreground-color: var(--qd-note-title-foreground-color);
   }
 
   .important {
     --box-background-color: var(--qd-important-background-color);
-    --box-header-foreground-color: var(--qd-important-foreground-color);
+    --box-content-foreground-color: var(--qd-important-content-foreground-color);
+    --box-header-foreground-color: var(--qd-important-title-foreground-color);
   }
 
   .warning {
     --box-background-color: var(--qd-warning-background-color);
-    --box-header-foreground-color: var(--qd-warning-foreground-color);;
+    --box-content-foreground-color: var(--qd-warning-content-foreground-color);
+    --box-header-foreground-color: var(--qd-warning-title-foreground-color);
   }
 
   .error {
-    --box-background-color: var(--qd-error-background-color);
-    --box-content-foreground-color: var(--qd-error-foreground-color);
-    --box-header-foreground-color: var(--qd-error-foreground-color);
     --box-header-background-color: rgba(0, 0, 0, .1);
+    --box-background-color: var(--qd-error-background-color);
+    --box-content-foreground-color: var(--qd-error-content-foreground-color);
+    --box-header-foreground-color: var(--qd-error-title-foreground-color);
 
     &, p {
       text-align: start !important;

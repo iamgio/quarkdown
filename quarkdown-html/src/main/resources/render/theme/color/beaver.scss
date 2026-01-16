@@ -13,7 +13,8 @@
   --qd-link-color: var(--qd-primary-color);
   --qd-color-on-primary: var(--qd-background-color);
   --qd-callout-background-color: rgb(234, 233, 247);
-  --qd-callout-foreground-color: rgb(83, 81, 152);
+  --qd-callout-content-foreground-color: var(--qd-main-color);
+  --qd-callout-title-foreground-color: rgb(83, 81, 152);
   --qd-mermaid-node-background-color: var(--qd-background-color);
   --qd-mermaid-node-text-color: var(--qd-main-color);
 }
@@ -27,21 +28,15 @@
     background-color: var(--secondary);
   }
 
-  .box {
-    > header > h4 {
-      color: inherit;
+  .box.callout {
+    --qd-box-header-background-color: color-mix(in srgb, var(--qd-callout-title-foreground-color) 7%, var(--qd-callout-background-color));
+
+    .box-content li::marker {
+      color: var(--qd-callout-foreground-color);
     }
 
-    &.callout {
-      --box-header-background-color: color-mix(in srgb, var(--qd-callout-foreground-color) 7%, var(--qd-callout-background-color));
-
-      .box-content li::marker {
-        color: var(--qd-callout-foreground-color);
-      }
-
-      &:has(.box-content h1) {
-        background-color: var(--secondary);
-      }
+    &:has(.box-content h1) {
+      background-color: var(--secondary);
     }
   }
 
