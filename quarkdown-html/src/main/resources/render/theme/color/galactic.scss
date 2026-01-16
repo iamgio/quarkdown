@@ -6,7 +6,7 @@
   --qd-heading-color: white;
   --qd-link-color: var(--qd-primary-color);
   --qd-background-color: rgb(23, 24, 28);
-  --qd-callout-background-color: rgb(35, 38, 47);
+  --qd-warning-title-foreground-color: var(--qd-warning-background-color);
   --qd-mermaid-node-background-color: white;
 
   --qd-docs-header-background-color: var(--qd-callout-background-color);
@@ -16,8 +16,17 @@
 }
 
 .quarkdown {
-  .box.callout {
-    --box-header-background-color: color-mix(in srgb, var(--qd-primary-color) 12%, transparent);
+  .box:not(.error) {
+    background: color-mix(in srgb, var(--box-background-color) 5%, transparent);
+    --qd-box-header-background-color: color-mix(in srgb, var(--box-header-foreground-color) 6%, transparent);
+
+    border-style: solid;
+    border-color: var(--box-header-foreground-color);
+    border-width: 1px 3px 1px 2px;
+
+    &.warning {
+      --qd-warning-content-foreground-color: var(--qd-main-color);
+    }
   }
 
   #search-results {
