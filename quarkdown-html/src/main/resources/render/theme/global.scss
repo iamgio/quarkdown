@@ -123,24 +123,31 @@
   --qd-box-border-radius: 8px;
   --qd-box-section-padding: 12px 16px; // Padding of box sections (header and content)
   --qd-box-icon-baseline: 0; // Y offset of icons in box headers
+  --qd-box-header-background-color: unset; // Background color of box headers (if not set, computed from header foreground color)
 
   // Callout elements
-  --qd-callout-foreground-color: var(--qd-color-on-primary);
-  --qd-callout-background-color: color-mix(in srgb, var(--qd-callout-foreground-color) 5%, transparent);
+  --qd-callout-content-foreground-color: var(--qd-color-on-primary);
+  --qd-callout-title-foreground-color: var(--qd-color-on-primary);
+  --qd-callout-background-color: color-mix(in srgb, var(--qd-callout-title-foreground-color) 5%, transparent);
   // Tip elements
-  --qd-tip-foreground-color: rgb(33, 102, 25);
-  --qd-tip-background-color: color-mix(in srgb, var(--qd-tip-foreground-color) 5%, transparent);
+  --qd-tip-content-foreground-color: var(--qd-main-color);
+  --qd-tip-title-foreground-color: rgb(33, 102, 25);
+  --qd-tip-background-color: color-mix(in srgb, var(--qd-tip-title-foreground-color) 5%, transparent);
   // Note elements
-  --qd-note-foreground-color: rgb(25, 60, 102);
-  --qd-note-background-color: color-mix(in srgb, var(--qd-note-foreground-color) 5%, transparent);
+  --qd-note-content-foreground-color: var(--qd-main-color);
+  --qd-note-title-foreground-color: rgb(25, 60, 102);
+  --qd-note-background-color: color-mix(in srgb, var(--qd-note-title-foreground-color) 5%, transparent);
   // Warning elements
-  --qd-warning-foreground-color: rgb(161, 76, 32);
-  --qd-warning-background-color: color-mix(in srgb, var(--qd-warning-foreground-color) 5%, transparent);
+  --qd-warning-content-foreground-color: var(--qd-main-color);
+  --qd-warning-title-foreground-color: rgb(161, 76, 32);
+  --qd-warning-background-color: color-mix(in srgb, var(--qd-warning-title-foreground-color) 5%, transparent);
   // Important elements
-  --qd-important-foreground-color: rgb(145, 34, 34);
-  --qd-important-background-color: color-mix(in srgb, var(--qd-important-foreground-color) 5%, transparent);
+  --qd-important-content-foreground-color: var(--qd-main-color);
+  --qd-important-title-foreground-color: rgb(145, 34, 34);
+  --qd-important-background-color: color-mix(in srgb, var(--qd-important-title-foreground-color) 5%, transparent);
   // Error elements
-  --qd-error-foreground-color: white;
+  --qd-error-content-foreground-color: white;
+  --qd-error-title-foreground-color: white;
   --qd-error-background-color: rgb(224, 67, 64);
 
   // Mermaid diagrams
