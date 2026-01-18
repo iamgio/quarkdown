@@ -57,10 +57,11 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
+            this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
+
             // Applying the page number within the page.
             this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
                 pageNumberElement.innerText = pageNumber.toString();
-                this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
             });
 
             pageNumber += 1;
