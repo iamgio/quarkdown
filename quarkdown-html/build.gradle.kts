@@ -57,7 +57,7 @@ tasks.processResources {
     dependsOn(bundleTypeScript)
 }
 
-val npmTest =
+val npmUnitTest =
     tasks.register<NpmTask>("npmTest") {
         group = "verification"
         description = "Runs npm tests"
@@ -66,5 +66,22 @@ val npmTest =
     }
 
 tasks.test {
-    dependsOn(npmTest)
+    dependsOn(npmUnitTest)
 }
+
+val installPlaywrightBrowsers =
+    tasks.register<NpxTask>("installPlaywrightBrowsers") {
+        group = "verification"
+        description = "Installs Playwright browsers"
+        dependsOn(tasks.npmInstall)
+        command.set("playwright")
+        args.set(listOf("install", "--with-deps", "chromium"))
+    }
+
+val npmE2eTest =
+    tasks.register<NpmTask>("e2eTest") {
+        group = "verification"
+        description = "Runs end-to-end tests"
+        dependsOn(installPlaywrightBrowsers)
+        args.set(listOf("run", "test:e2e"))
+    }

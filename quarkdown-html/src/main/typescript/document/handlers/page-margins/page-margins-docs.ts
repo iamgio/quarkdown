@@ -10,7 +10,7 @@ const FOOTER = `${CONTENT} > main > footer`;
 /**
  * Maps margin position names to their target container selectors.
  */
-const MARGIN_TARGETS: Record<string, string> = {
+export const MARGIN_TARGETS: Record<string, string> = {
     // Header
     'top-left-corner': `${HEADER} > aside:first-child`,
     'top-left': `${HEADER} > aside:first-child`,

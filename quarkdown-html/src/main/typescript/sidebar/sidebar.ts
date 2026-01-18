@@ -94,9 +94,10 @@ function populateNavigationItems(sidebarList: HTMLOListElement): void {
             setCurrentActiveItem
         );
 
-        // Initial check and scroll event listener
+        // Initial check and scroll/resize event listener
         checkForActive();
         window.addEventListener('scroll', checkForActive);
+        window.addEventListener('resize', checkForActive);
     });
 }
 

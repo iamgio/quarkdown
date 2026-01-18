@@ -24,7 +24,10 @@ export abstract class PageMarginsDocumentHandler extends DocumentHandler<PagedLi
      */
     async onPreRendering() {
         this.selectPageMarginInitializers(document.body)
-            .forEach(initializer => initializer.style.display = 'none');
+            .forEach(initializer => {
+                initializer.setAttribute('data-hidden', 'true');
+                initializer.style.display = 'none';
+            });
     }
 
     /**

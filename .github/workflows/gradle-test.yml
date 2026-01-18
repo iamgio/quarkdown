@@ -9,7 +9,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,3 +22,17 @@ jobs:
       with:
         job-id: main
         arguments: ktlintCheck test
+
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+      with:
+        full-checkout: ${{ inputs.full-checkout }}
+
+    - name: Run E2E tests
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: e2e
+        arguments: :quarkdown-html:e2eTest

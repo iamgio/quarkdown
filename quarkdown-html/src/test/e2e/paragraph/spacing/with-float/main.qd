@@ -1,0 +1,13 @@
+.doclang {English}
+
+.loremipsum
+
+.float {start}
+    !(50)[](../../../__assets/rect.png)
+
+.loremipsum
+
+.float {end}
+    !(50)[](../../../__assets/rect.png)
+
+.loremipsum

@@ -1,0 +1,7 @@
+.text {tiny} size:{tiny}
+.text {small} size:{small}
+.text {normal} size:{normal}
+.text {medium} size:{medium}
+.text {large} size:{large}
+.text {larger} size:{larger}
+.text {huge} size:{huge}

@@ -1,0 +1,12 @@
+.pagemargin {bottomcenter}
+    .currentpage / .totalpages
+
+# Page 1
+
+# Page 2
+
+# Page 3
+
+# Page 20
+
+.resetpagenumber start:{20}

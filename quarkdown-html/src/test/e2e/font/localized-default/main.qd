@@ -1,0 +1,10 @@
+.doclang {zh}
+.theme layout:{minimal}
+
+## 你好
+
+你好
+
+```
+code block
+```

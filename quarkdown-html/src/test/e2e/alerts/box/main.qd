@@ -1,0 +1,16 @@
+.theme layout:{minimal}
+
+.box {Title} type:{callout}
+    Content
+
+.box {Title} type:{tip}
+    Content
+
+.box {Title} type:{note}
+    Content
+
+.box {Title} type:{warning}
+    Content
+
+.box {Title} type:{error}
+    Content

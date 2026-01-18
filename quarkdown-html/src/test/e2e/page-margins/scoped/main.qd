@@ -1,0 +1,14 @@
+.pagemargin {bottomcenter}
+    A
+
+# Page 1
+
+# Page 2
+
+.pagemargin {topcenter}
+    B
+
+# Page 3
+
+.pagemargin {bottomcenter}
+    C
