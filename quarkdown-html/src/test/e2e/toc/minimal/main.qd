@@ -1,0 +1,19 @@
+.theme layout:{minimal}
+.numbering
+    - headings: 1.1.1
+
+.tableofcontents
+
+# 1
+
+# 2
+
+## 2.1
+
+### 2.1.1
+
+# 3
+
+## 3.1
+
+## 3.2

@@ -120,6 +120,10 @@ testMatrix(
         await expect(pages).toBeAttached();
         await expect(pagedPage).toHaveCount(1);
 
+        // Page number attributes start from 1 and match
+        await expect(pagedPage).toHaveAttribute("data-page-number", "1");
+        await expect(pagedPage).toHaveAttribute("data-display-page-number", "1");
+
         // Content is in correct location
         const contentDiv = pagedPage.locator(".pagedjs_area > .pagedjs_page_content > div");
         await expect(contentDiv).toBeAttached();
@@ -146,6 +150,9 @@ testMatrix(
         await expect(section).toHaveCount(1);
         await expect(backgrounds).toBeAttached();
         await expect(slideBackground).toHaveCount(1);
+
+        // Slide number attribute starts from 1
+        await expect(section).toHaveAttribute("data-display-page-number", "1");
 
         // Section contains the content
         const heading = section.locator("h1");
