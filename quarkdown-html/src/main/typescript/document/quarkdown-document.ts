@@ -41,7 +41,7 @@ export interface QuarkdownDocument {
  */
 export function prepare(document: QuarkdownDocument): void {
     const handlers: DocumentHandler[] =
-        filterConditionalHandlers([...getGlobalHandlers(document), ...document.getHandlers()]);
+        filterConditionalHandlers([...document.getHandlers(), ...getGlobalHandlers(document)]);
 
     handlers.forEach(handler => handler.pushToQueue());
 
