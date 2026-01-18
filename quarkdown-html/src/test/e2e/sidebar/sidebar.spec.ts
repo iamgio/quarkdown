@@ -1,7 +1,7 @@
 import {getComputedColor} from "../__util/css";
 import {suite} from "../quarkdown";
 
-const {test, testMatrix, expect} = suite(__dirname);
+const {testMatrix, expect} = suite(__dirname);
 
 // sm breakpoint is 800px
 const MOBILE_WIDTH = 600;
@@ -72,6 +72,18 @@ testMatrix(
 
         const sidebar = page.locator(".sidebar");
         await expect(sidebar).toBeAttached();
+        await expect(sidebar).toHaveCSS("display", "none");
+    }
+);
+
+testMatrix(
+    "hides sidebar in print mode",
+    ["plain", "paged"],
+    async (page) => {
+        const sidebar = page.locator(".sidebar");
+        await expect(sidebar).toBeAttached();
+
+        await page.emulateMedia({media: "print"});
         await expect(sidebar).toHaveCSS("display", "none");
     }
 );
