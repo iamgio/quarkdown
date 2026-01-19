@@ -71,10 +71,11 @@
             [[if:HALIGNMENT_LOCAL]]
             --qd-horizontal-alignment-local: [[HALIGNMENT_LOCAL]] !important;
             --qd-horizontal-alignment-global: unset !important;
+            --qd-horizontal-alignment-list-items: unset !important;
             [[endif:HALIGNMENT_LOCAL]]
             [[if:HALIGNMENT_GLOBAL]]
             --qd-horizontal-alignment-global: [[HALIGNMENT_GLOBAL]] !important;
-            --qd-horizontal-alignment-local: unset !important;
+            --qd-horizontal-alignment-local: [[HALIGNMENT_GLOBAL]] !important;
             [[endif:HALIGNMENT_GLOBAL]]
             [[if:PAGEBORDERWIDTH]]
             --qd-page-content-border-width: [[PAGEBORDERWIDTH]];
