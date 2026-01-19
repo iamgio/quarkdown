@@ -98,10 +98,13 @@
 
   // Global horizontal alignment of content.
   // This is applied to all elements in the document.
-  --qd-horizontal-alignment-global: var(--qd-paged-horizontal-alignment-global);
+  --qd-horizontal-alignment-global: start;
   // Local horizontal alignment of content.
   // This is applied only to selected elements in the document (e.g. justification).
-  --qd-horizontal-alignment-local: var(--qd-paged-horizontal-alignment-local);
+  --qd-horizontal-alignment-local: var(--qd-horizontal-alignment-global);
+  // Horizontal alignment of list items.
+  // Defaults to local alignment, but can be customized separately in case the local alignment is `center`.
+  --qd-horizontal-alignment-list-items: unset;
 
   // Code
   --qd-code-line-height: var(--qd-line-height); // Line height of code blocks
