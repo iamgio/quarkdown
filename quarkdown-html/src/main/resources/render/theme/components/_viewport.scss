@@ -55,7 +55,7 @@ body.quarkdown {
     padding-right: 16px;
 
     > main {
-      width: 100%;
+      width: 100% !important;
     }
 
     @include media-queries.sm-down($print: true) {

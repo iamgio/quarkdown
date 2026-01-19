@@ -2,15 +2,13 @@
 
 // Mobile
 $sm: 800px;
-$sm-print: 1000px; // 'sm' size for print media (PDF)
 
 // Tablet
 $md: 1200px;
-$md-print: 1400px; // 'md' size for print media (PDF)
 
-@mixin bp-down($breakpoint, $print-breakpoint: null) {
-  @if $print-breakpoint != null {
-    @media screen and (max-width: $breakpoint), print and (max-width: $print-breakpoint), pagedjs-ignore {
+@mixin bp-down($breakpoint, $print: false) {
+  @if $print {
+    @media screen and (max-width: $breakpoint), print, pagedjs-ignore {
       @content;
     }
   } @else {
@@ -26,9 +24,8 @@ $md-print: 1400px; // 'md' size for print media (PDF)
   }
 }
 
-// @param $print - if true, also targets narrow print media.
 @mixin sm-down($print: false) {
-  @include bp-down($sm, if($print, $sm-print, null)) {
+  @include bp-down($sm, $print) {
     @content;
   }
 }
@@ -40,7 +37,7 @@ $md-print: 1400px; // 'md' size for print media (PDF)
 }
 
 @mixin md-down($print: false) {
-  @include bp-down($md, if($print, $md-print, null)) {
+  @include bp-down($md, $print) {
     @content;
   }
 }
