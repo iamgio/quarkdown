@@ -14,18 +14,20 @@ testMatrix(
 
         let alignmentGlobal = "start";
         let alignmentLocal = "start";
+        let alignmentListItem = "start";
 
         if (docType === "slides") {
             alignmentGlobal = "center";
             alignmentLocal = "center";
         } else if (docType === "plain" || docType === "paged") {
             alignmentLocal = "justify";
+            alignmentListItem = "justify";
         }
 
         await expect(heading).toHaveCSS("text-align", alignmentGlobal);
         await expect(paragraph).toHaveCSS("text-align", alignmentLocal);
         await expect(paragraph).toHaveCSS("text-align-last", alignmentGlobal);
-        await expect(listItem).toHaveCSS("text-align", alignmentLocal);
+        await expect(listItem).toHaveCSS("text-align", alignmentListItem);
         await expect(listItem).toHaveCSS("text-align-last", "start");
         await expect(inlineMath).toHaveCSS("text-align", "start");
         await expect(inlineMath).toHaveCSS("text-align-last", "auto");
