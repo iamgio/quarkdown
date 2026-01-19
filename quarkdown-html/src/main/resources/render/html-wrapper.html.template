@@ -106,6 +106,10 @@
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
         }
 
+        body.quarkdown-plain.quarkdown-plain > main {
+            [[if:PAGEWIDTH]]width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
+        }
+
         body.quarkdown-slides.quarkdown-slides .reveal {
             [[if:PAGEWIDTH]]width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
             [[if:PAGEHEIGHT]]height: [[PAGEHEIGHT]];[[endif:PAGEHEIGHT]]
