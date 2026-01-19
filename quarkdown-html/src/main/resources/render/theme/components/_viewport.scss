@@ -68,8 +68,16 @@ body.quarkdown {
   &.quarkdown-plain {
     margin: 32px 0;
 
+    > main {
+      @include content-area-border;
+    }
+
     @include media-queries.sm-down($print: true) {
       @include reflow-plain-like-viewport;
+
+      > main {
+        border: none;
+      }
 
       > aside:first-child {
         display: none;
@@ -179,11 +187,19 @@ body.quarkdown {
   }
 
   // Slides viewport
-  &.quarkdown-slides .reveal .slides {
-    @include content-area-border;
+  &.quarkdown-slides .reveal {
+    &:not(:has(.pdf-page)) {
+      @include content-area-border;
+    }
 
-    > section, .pdf-page {
-      column-count: var(--qd-column-count);
+    .slides {
+      > .pdf-page {
+        @include content-area-border;
+      }
+
+      > section, .pdf-page {
+        column-count: var(--qd-column-count);
+      }
     }
   }
 
