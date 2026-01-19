@@ -1,5 +1,5 @@
 import {suite} from "../../../quarkdown";
-import {A5_HEIGHT_PX, A5_WIDTH_PX, getPageSizeTarget} from "../index";
+import {A5_HEIGHT_PX, A5_WIDTH_PX, getPageSizeTarget} from "../../index";
 
 const {testMatrix, expect} = suite(__dirname);
 

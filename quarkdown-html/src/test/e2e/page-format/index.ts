@@ -1,5 +1,5 @@
 import {Locator, Page} from "@playwright/test";
-import {DocumentType} from "../../__util/paths";
+import {DocumentType} from "../__util/paths";
 
 // A4 dimensions: 210mm × 297mm
 export const A4_WIDTH_PX = 210 * 96 / 25.4; // ~793.7px
