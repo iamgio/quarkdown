@@ -1,0 +1,34 @@
+.pagemargin {topleft}
+    .lastheading {1}
+
+.pagemargin {topcenter}
+    .lastheading {2}
+
+.pagemargin {topright}
+    .lastheading {3}
+
+.autopagebreak maxdepth:{3}
+
+# 1
+
+<<<
+
+abc
+
+## 1.1
+
+<<<
+
+def
+
+### 1.1.1
+
+<<<
+
+ghi
+
+## 1.2
+
+### 1.2.1
+
+# 2
