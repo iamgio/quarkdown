@@ -1,0 +1,9 @@
+- - issue: 144
+  - pr: 145
+  - next-release: 1.7.0
+  - cause: margin applied to `blockquote :first-child` and `:last-child` in `latex` theme
+
+- - issue: 193
+  - pr: 195
+  - next-release: 1.9.1
+  - cause: margin applied to `box-content :last-child`

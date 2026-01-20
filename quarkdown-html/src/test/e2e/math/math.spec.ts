@@ -30,5 +30,14 @@ testMatrix(
         const inlineBaseBox = await inlineFormula.locator(".base").first().boundingBox();
 
         expect(blockBaseBox!.x).toBeGreaterThan(inlineBaseBox!.x);
+
+        // Ensure no component has text-align or text-align-last set to `justify`
+        const allElements = page.locator("formula .katex *");
+        const count = await allElements.count();
+        for (let i = 0; i < count; i++) {
+            const element = allElements.nth(i);
+            await expect(element).not.toHaveCSS("text-align", "justify");
+            await expect(element).not.toHaveCSS("text-align-last", "justify");
+        }
     }
 );
