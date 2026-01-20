@@ -10,8 +10,12 @@ export class FootnotesSlides extends FootnotesDocumentHandler {
             const page = this.quarkdownDocument.getParentViewport(reference);
             if (!page) return;
 
+            const footnoteAreaParent = page.classList.contains('pdf-page')
+                ? page.querySelector('section')!
+                : page;
+
             definition.remove();
-            getOrCreateFootnoteArea(page)?.appendChild(definition);
+            getOrCreateFootnoteArea(footnoteAreaParent)?.appendChild(definition);
         });
     }
 }
