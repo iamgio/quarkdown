@@ -12,7 +12,7 @@ const EXPECTED_TEXTS = [
 
 testMatrix(
     "renders page counter correctly",
-    ["paged", "slides"],
+    ["paged", "slides", "slides-print"],
     async (page, docType) => {
         const containers = getPageContainers(page, docType);
         await expect(containers).toHaveCount(4);

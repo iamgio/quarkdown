@@ -19,9 +19,11 @@ function uniqueId(): string {
  * @returns Path to the temporary source file
  */
 function createSourceWithDocType(testDir: string, docType: DocumentType, id: string): string {
+    const docTypeValue = docType === "slides-print" ? "slides" : docType;
+
     const sourcePath = path.join(testDir, ENTRY_POINT);
     const content = fs.readFileSync(sourcePath, "utf-8");
-    const withDocType = `.doctype {${docType}}\n\n${content}`;
+    const withDocType = `.doctype {${docTypeValue}}\n\n${content}`;
 
     const tempPath = path.join(testDir, `main-${docType}-${id}.qd`);
     fs.writeFileSync(tempPath, withDocType);
@@ -59,7 +61,8 @@ export async function runTest(
     try {
         compile(sourcePath, outName);
 
-        const url = `${getServerUrl()}/${outName}/`;
+        const query = docType === "slides-print" ? "print-pdf" : "";
+        const url = `${getServerUrl()}/${outName}/?${query}`;
         await page.goto(url);
         await waitForReady(page);
         await fn(page);

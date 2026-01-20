@@ -5,7 +5,7 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "renders page margins correctly",
-    ["paged", "slides", "docs"],
+    ["paged", "slides", "slides-print", "docs"],
     async (page, docType) => {
         async function assertMarginContent(marginContent: ReturnType<typeof page.locator>, text: string) {
             await expect(marginContent).toBeAttached();

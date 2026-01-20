@@ -52,7 +52,7 @@ export const DOCS_CONTAINERS: Record<string, string> = DOCS_MARGIN_CONTAINERS;
 export function getPageContainers(page: Page, docType: string): Locator {
     return docType === "paged"
         ? page.locator(".pagedjs_page")
-        : page.locator(".reveal > .backgrounds > .slide-background");
+        : page.locator(".reveal .slide-background");
 }
 
 /**

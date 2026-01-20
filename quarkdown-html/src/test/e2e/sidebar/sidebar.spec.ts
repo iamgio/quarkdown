@@ -8,11 +8,11 @@ const MOBILE_WIDTH = 600;
 
 testMatrix(
     "renders sidebar correctly per doctype",
-    ["plain", "paged", "slides", "docs"],
+    ["plain", "paged", "slides", "slides-print", "docs"],
     async (page, docType) => {
         const sidebar = page.locator(".sidebar");
 
-        if (docType === "slides" || docType === "docs") {
+        if (docType === "slides" || docType === "slides-print" || docType === "docs") {
             // Slides and docs don't have sidebar
             await expect(sidebar).not.toBeAttached();
             return;

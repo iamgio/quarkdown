@@ -5,11 +5,13 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "applies page border correctly",
-    ["plain", "paged", "slides"],
+    ["plain", "paged", "slides", "slides-print"],
     async (page, docType) => {
         let target = getPageSizeTarget(page, docType);
         if (docType === "paged") {
             target = target.locator(".pagedjs_area");
+        } else if (docType === "slides-print") {
+            target = target.locator(".pdf-page").first();
         }
 
         await expect(target).toHaveCSS("border-top-width", "30px");

@@ -19,7 +19,7 @@ const MIRROR_MARGINS: Record<string, {odd: string; even: string}> = {
 
 testMatrix(
     "renders mirrored page margins correctly",
-    ["paged", "slides"],
+    ["paged", "slides", "slides-print"],
     async (page, docType) => {
         const containers = getPageContainers(page, docType);
         await expect(containers).toHaveCount(4);

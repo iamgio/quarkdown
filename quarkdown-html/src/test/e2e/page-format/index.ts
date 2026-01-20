@@ -14,6 +14,7 @@ export function getPageSizeTarget(page: Page, docType: DocumentType): Locator {
         case "plain":
             return page.locator("body > main");
         case "slides":
+        case "slides-print":
             return page.locator(".reveal");
         case "paged":
             return page.locator(".pagedjs_page").first();

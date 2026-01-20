@@ -4,7 +4,7 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "applies correct text alignment per doctype",
-    ["plain", "paged", "slides", "docs"],
+    ["plain", "paged", "slides", "slides-print", "docs"],
     async (page, docType) => {
         const heading = page.locator("h1").first();
         const paragraph = page.locator("p").first();
@@ -16,7 +16,7 @@ testMatrix(
         let alignmentLocal = "start";
         let alignmentListItem = "start";
 
-        if (docType === "slides") {
+        if (docType === "slides" || docType === "slides-print") {
             alignmentGlobal = "center";
             alignmentLocal = "center";
         } else if (docType === "plain" || docType === "paged") {

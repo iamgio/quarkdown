@@ -20,7 +20,7 @@ const MARGINS = ["topleft", "topcenter", "topright"] as const;
 
 testMatrix(
     "displays persistent headings in page margins",
-    ["paged", "slides"],
+    ["paged", "slides", "slides-print"],
     async (page, docType) => {
         const pages = getPageContainers(page, docType);
         await expect(pages).toHaveCount(EXPECTED_HEADINGS.length);

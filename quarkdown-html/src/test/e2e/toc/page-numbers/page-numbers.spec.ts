@@ -5,14 +5,14 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "renders table of contents with page numbers for paged doctypes",
-    ["plain", "paged", "slides", "docs"],
+    ["plain", "paged", "slides", "slides-print", "docs"],
     async (page, docType) => {
         const count = 4;
         const {nav, items} = await assertTocStructure(page, count);
 
         const pageNumbers = nav.locator(".toc-page-number");
 
-        if (docType === "paged" || docType === "slides") {
+        if (docType === "paged" || docType === "slides" || docType === "slides-print") {
             await expect(pageNumbers).toHaveCount(count);
 
             // Check page number values

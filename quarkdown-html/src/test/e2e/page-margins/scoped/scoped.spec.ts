@@ -12,7 +12,7 @@ const EXPECTED: Array<{topcenter?: string; bottomcenter?: string}> = [
 
 testMatrix(
     "renders scoped page margins correctly",
-    ["paged", "slides"],
+    ["paged", "slides", "slides-print"],
     async (page, docType) => {
         const containers = getPageContainers(page, docType);
         await expect(containers).toHaveCount(3);
