@@ -1,0 +1,20 @@
+.row
+  A
+
+  B
+  
+  C
+  
+.column
+  A
+
+  B
+  
+  C
+  
+.grid columns:{2}
+  A
+
+  B
+  
+  C
