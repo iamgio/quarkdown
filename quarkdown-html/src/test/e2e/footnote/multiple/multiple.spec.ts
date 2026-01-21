@@ -4,7 +4,7 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "renders multiple footnotes correctly",
-    ["plain", "paged", "slides"],
+    ["plain", "paged", "slides", "docs"],
     async (page, docType) => {
         const definitions = page.locator(".footnote-definition");
         await expect(definitions).toHaveCount(4);
@@ -52,6 +52,11 @@ testMatrix(
             case "slides": {
                 const footnoteArea = page.locator(".footnote-area");
                 await expect(footnoteArea).toBeAttached();
+                await expect(footnoteArea.locator(".footnote-definition")).toHaveCount(4);
+                break;
+            }
+            case "docs": {
+                const footnoteArea = page.locator("#footnote-area");
                 await expect(footnoteArea.locator(".footnote-definition")).toHaveCount(4);
                 break;
             }

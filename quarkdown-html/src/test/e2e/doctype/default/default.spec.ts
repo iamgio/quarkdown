@@ -80,6 +80,10 @@ testMatrix(
         const searchInput = header.locator("#search-input");
         await expect(searchInput).toBeAttached();
 
+        // Footnote area is not present (no footnotes)
+        const footnoteArea = page.locator("#footnote-area");
+        await expect(footnoteArea).not.toBeAttached();
+
         // Content width is limited
         const mainBox = await contentMain.boundingBox();
         const wrapperBox = await contentWrapper.boundingBox();

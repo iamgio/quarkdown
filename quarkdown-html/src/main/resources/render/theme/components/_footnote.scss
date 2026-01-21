@@ -20,6 +20,17 @@
   margin-top: calc(2.5 * var(--qd-block-margin));
 }
 
+.quarkdown-docs {
+  #footnote-area {
+    font-size: 0.9em;
+    margin-top: calc(2 * var(--qd-block-margin));
+  }
+
+  .footnote-rule {
+    width: 20%;
+  }
+}
+
 .quarkdown-plain .footnote-definition {
   font-size: 0.7em;
 }

@@ -4,7 +4,7 @@ const {testMatrix, expect} = suite(__dirname);
 
 testMatrix(
     "renders footnote in correct area",
-    ["plain", "paged", "slides", "slides-print"],
+    ["plain", "paged", "slides", "slides-print", "docs"],
     async (page, docType) => {
         const reference = page.locator(".footnote-reference");
         await expect(reference).toBeAttached();
@@ -63,6 +63,13 @@ testMatrix(
                 expect(areaBox).not.toBeNull();
                 const bottomHalfStart = slideBox!.y + slideBox!.height * 0.5;
                 expect(areaBox!.y).toBeGreaterThanOrEqual(bottomHalfStart);
+                break;
+            }
+            case "docs": {
+                // Docs: footnotes are in the footnote-area at the bottom of the page
+                const footnoteArea = page.locator("#footnote-area");
+                await expect(footnoteArea).toBeAttached();
+                await expect(footnoteArea.locator(".footnote-definition")).toBeAttached();
                 break;
             }
         }
