@@ -1,0 +1,31 @@
+.pagemargin {topoutsidecorner}
+    topoutsidecorner
+
+.pagemargin {topoutside}
+    topoutside
+
+.pagemargin {topinsidecorner}
+    topinsidecorner
+
+.pagemargin {topinside}
+    topinside
+
+.pagemargin {bottomoutsidecorner}
+    bottomoutsidecorner
+
+.pagemargin {bottomoutside}
+    bottomoutside
+
+.pagemargin {bottominsidecorner}
+    bottominsidecorner
+
+.pagemargin {bottominside}
+    bottominside
+
+# Page 1
+
+# Page 2
+
+# Page 3
+
+# Page 4

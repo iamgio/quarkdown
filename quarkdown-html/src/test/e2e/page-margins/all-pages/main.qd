@@ -1,0 +1,53 @@
+.pagemargin {topleftcorner}
+    topleftcorner
+
+.pagemargin {topleft}
+    topleft
+
+.pagemargin {topcenter}
+    topcenter
+
+.pagemargin {topright}
+    topright
+
+.pagemargin {toprightcorner}
+    toprightcorner
+
+.pagemargin {righttop}
+    righttop
+
+.pagemargin {rightmiddle}
+    rightmiddle
+
+.pagemargin {rightbottom}
+    rightbottom
+
+.pagemargin {bottomrightcorner}
+    bottomrightcorner
+
+.pagemargin {bottomright}
+    bottomright
+
+.pagemargin {bottomcenter}
+    bottomcenter
+
+.pagemargin {bottomleft}
+    bottomleft
+
+.pagemargin {bottomleftcorner}
+    bottomleftcorner
+
+.pagemargin {leftbottom}
+    leftbottom
+
+.pagemargin {leftmiddle}
+    leftmiddle
+
+.pagemargin {lefttop}
+    lefttop
+
+# Page 1
+
+# Page 2
+
+# Page 3

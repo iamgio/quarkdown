@@ -1,0 +1,4 @@
+- issue: 123
+- pr: 125
+- next-release: 1.6.2
+- cause: Justification should be local rather than global

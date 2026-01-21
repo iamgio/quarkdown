@@ -1,0 +1,16 @@
+.doclang {English}
+.numbering
+  - figures: 1
+  - tables: 1
+  - code: 1
+
+.figure caption:{Fig}
+    Fig
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+"Table"
+
+.code lang:{text} caption:{Code}
+    Code

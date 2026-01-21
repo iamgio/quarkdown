@@ -1,0 +1,4 @@
+- issue: 134
+- pr: 151
+- next-release: 1.7.0
+- cause: math rendered in post-rendering rather than pre-rendering

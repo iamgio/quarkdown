@@ -1,0 +1,6 @@
+.css
+    a {
+        color: red !important;
+    }
+
+[Link](https://example.com)

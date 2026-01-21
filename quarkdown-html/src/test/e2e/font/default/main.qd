@@ -1,0 +1,18 @@
+.theme layout:{latex}
+
+## Heading
+
+Text
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+
+`code span`
+
+```
+code block
+```
+
+.box {Box}
+    Text

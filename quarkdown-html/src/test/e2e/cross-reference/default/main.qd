@@ -1,0 +1,15 @@
+.numbering
+  - headings: 1
+  - tables: 1
+  - equations: (1)
+
+# Title {#title}
+
+$ y = mx + b $ {#line-eq}
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+"Table" {#tab}
+
+See .ref {title}, .ref {line-eq} and .ref {tab}.

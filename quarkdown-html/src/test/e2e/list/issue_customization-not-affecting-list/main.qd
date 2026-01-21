@@ -1,0 +1,9 @@
+.paragraphstyle spacing:{0} lineheight:{0.8} letterspacing:{-0.05}
+
+- **def1:** .loremipsum
+- **def2:** .loremipsum
+- **def3:** .loremipsum
+
+.loremipsum
+
+.loremipsum

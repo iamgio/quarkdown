@@ -1,0 +1,4 @@
+- issue: 137
+- pr: 139
+- next-release: 1.6.3
+- cause: `--qd-line-height` and other properties set by `paragraphstyle`

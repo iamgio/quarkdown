@@ -1,0 +1,10 @@
+.theme layout:{minimal}
+.font {../../__assets/NotoSans-Regular.ttf} heading:{../../__assets/Karla-Bold.ttf} code:{../../__assets/RobotoMono-Regular.ttf}
+
+## Heading
+
+Text
+
+```
+code block
+```

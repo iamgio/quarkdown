@@ -1,0 +1,19 @@
+.doctype {paged}
+
+$$$
+\begin{cases}
+x+y+z=1\\
+2x-y+z=2\\
+x-2y+3z=3
+\end{cases}
+$$$
+
+.container height:{80%} fullwidth:{yes} background:{blue}
+
+$$$
+\begin{cases}
+x+y+z=1\\
+2x-y+z=2\\
+x-2y+3z=3
+\end{cases}
+$$$

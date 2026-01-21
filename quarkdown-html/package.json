@@ -8,7 +8,9 @@
   "main": "src/main/typescript/index.ts",
   "scripts": {
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {
     "esbuild": "^0.25.10",
@@ -22,6 +24,7 @@
     "minisearch": "^7.2.0",
     "vitest": "^3.2.4",
     "happy-dom": "^20.0.2",
-    "@types/node": "^24.7.2"
+    "@types/node": "^24.7.2",
+    "@playwright/test": "^1.57.0"
   }
 }
