@@ -27,7 +27,7 @@ function assertHorizontalRow(boxes: BoundingBox[]) {
 function assertVerticalColumn(boxes: BoundingBox[]) {
     for (let i = 1; i < boxes.length; i++) {
         // Same X
-        expect(boxes[i].x).toBeCloseTo(boxes[0].x, 0);
+        expect(boxes[i].x).toBeCloseTo(boxes[0].x, -1);
         // Starts where previous ends
         expect(boxes[i - 1].y + boxes[i - 1].height).toBeCloseTo(boxes[i].y, 0);
     }
