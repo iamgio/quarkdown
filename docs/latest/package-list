@@ -93,6 +93,7 @@ $dokka.location:com.quarkdown.stdlib//lowercase/#kotlin.String/PointingToDeclara
 $dokka.location:com.quarkdown.stdlib//marker/#com.quarkdown.core.ast.InlineMarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/marker.html
 $dokka.location:com.quarkdown.stdlib//mermaid/#kotlin.String?#kotlin.String?#com.quarkdown.core.function.value.data.EvaluableString/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/mermaid.html
 $dokka.location:com.quarkdown.stdlib//multiply/#kotlin.Number#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/multiply.html
+$dokka.location:com.quarkdown.stdlib//navigationContainer/#com.quarkdown.core.ast.quarkdown.block.NavigationContainer.Role?#com.quarkdown.core.ast.MarkdownContent/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/navigation.html
 $dokka.location:com.quarkdown.stdlib//negate/#kotlin.Number/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Math/negate.html
 $dokka.location:com.quarkdown.stdlib//node/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/node.html
 $dokka.location:com.quarkdown.stdlib//none/#/PointingToDeclaration/quarkdown-stdlib/com.quarkdown.stdlib.module.Optionality/none.html
