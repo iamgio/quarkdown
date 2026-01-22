@@ -51,6 +51,7 @@ import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
@@ -384,6 +385,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Collapse): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: Whitespace): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: NavigationContainer): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: TableOfContentsView): CharSequence = throw UnsupportedRenderException(node)
 

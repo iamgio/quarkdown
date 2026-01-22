@@ -5,7 +5,7 @@
   $horizontal-padding: 0.4em;
 
   &.quarkdown-docs {
-    aside .nav {
+    aside nav[data-role="page-list"] {
       margin-left: $horizontal-padding;
 
       a {

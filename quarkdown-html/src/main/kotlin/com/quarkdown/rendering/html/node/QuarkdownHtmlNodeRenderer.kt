@@ -13,6 +13,7 @@ import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Table
+import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildInline
@@ -29,6 +30,7 @@ import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
@@ -66,6 +68,7 @@ import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.Escape
+import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.CssBuilder
@@ -126,8 +129,6 @@ class QuarkdownHtmlNodeRenderer(
      * @param captionTagName tag name of the caption element. E.g. "figcaption" for figures, "caption" for tables
      * @param idPrefix prefix for the ID. For instance, the prefix `figure` lets the ID be `figure-X.Y`, where `X.Y` is the label.
      * @param positionProvider position of the caption relative to the content
-     * @param requiresCaption whether [CaptionableNode.caption] is explictly required to show the element.
-     *                        If `true` and no caption is set, nothing is shown
      * @see CaptionableNode
      * @see getLocationLabel to retrieve the numbered label
      */
@@ -316,6 +317,13 @@ class QuarkdownHtmlNodeRenderer(
             }
         }
 
+    override fun visit(node: NavigationContainer) =
+        buildTag("nav") {
+            optionalAttribute("role", node.role?.asCSS)
+            optionalAttribute("data-role", node.role?.kebabCaseName)
+            +node.children
+        }
+
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
@@ -334,10 +342,8 @@ class QuarkdownHtmlNodeRenderer(
                 )
             }
 
-            // Content.
-            +buildTag("nav") {
-                attribute("data-role", "table-of-contents")
-                +convertTableOfContentsToListNode(
+            val tree: ListBlock =
+                convertTableOfContentsToListNode(
                     node,
                     this@QuarkdownHtmlNodeRenderer,
                     tableOfContents.items,
@@ -345,7 +351,11 @@ class QuarkdownHtmlNodeRenderer(
                         "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
                     },
                 )
-            }
+
+            +NavigationContainer(
+                role = NavigationContainer.Role.TABLE_OF_CONTENTS,
+                listOf(tree),
+            )
         }
     }
 
