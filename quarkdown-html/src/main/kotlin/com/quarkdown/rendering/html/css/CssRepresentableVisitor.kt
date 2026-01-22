@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
@@ -79,6 +80,12 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(quoteType: BlockQuote.Type) = quoteType.kebabCaseName
 
     override fun visit(boxType: Box.Type): String = boxType.kebabCaseName
+
+    override fun visit(navigationRole: NavigationContainer.Role) =
+        when (navigationRole) {
+            NavigationContainer.Role.PAGE_LIST -> "navigation"
+            else -> navigationRole.kebabCaseName
+        }
 
     override fun visit(position: PageMarginPosition) = position.kebabCaseName
 

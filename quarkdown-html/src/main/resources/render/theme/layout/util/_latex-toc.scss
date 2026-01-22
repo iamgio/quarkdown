@@ -1,5 +1,5 @@
 @mixin latex-toc {
-  nav, .nav {
+  nav {
     a {
       text-decoration: none;
     }
@@ -28,7 +28,7 @@
       list-style-type: none; /* Only numbering-generated bullets are shown */
     }
 
-    &:is(.quarkdown-docs nav, .quarkdown-docs .nav) {
+    &:is(.quarkdown-docs nav) {
       > ul, ol {
         margin-left: 0;
 

@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -87,6 +88,7 @@ val Document: QuarkdownModule =
         ::autoPageBreak,
         ::disableAutoPageBreak,
         ::marker,
+        ::navigationContainer,
         ::tableOfContents,
     )
 
@@ -940,6 +942,36 @@ fun disableAutoPageBreak(
  * @wiki Table of contents
  */
 fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
+
+/**
+ * Creates a navigation container, which marks its content as a navigable section.
+ *
+ * This doesn't affect the layout of the document by itself, but rather brings semantic meaning that
+ * can be used by themes and renderers to provide additional navigation features, styling, behaviors and accessibility.
+ *
+ * For example, this can be useful in `docs` documents to mark sidebar navigation sections,
+ * in combination with [pageMarginContent], in order to list links to subdocuments:
+ *
+ * ```
+ * .pagemargin {lefttop}
+ *     .navigation role:{pagelist}
+ *         - [Page 1](page-1.qd)
+ *         - [Page 2](page-2.qd)
+ * ```
+ *
+ * @param role role of the navigation container
+ * @param content content of the container
+ * @return a [NavigationContainer] node
+ */
+@Name("navigation")
+fun navigationContainer(
+    role: NavigationContainer.Role? = null,
+    @LikelyBody content: MarkdownContent,
+): NodeValue =
+    NavigationContainer(
+        role,
+        content.children,
+    ).wrappedAsValue()
 
 /**
  * Generates a table of contents, based on the headings in the document,

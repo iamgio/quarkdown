@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
@@ -18,7 +19,6 @@ import com.quarkdown.core.misc.color.Color
 /**
  * Visitor that produces representations of each [RenderRepresentable] subtype
  * suitable for the final rendered document.
- * @see com.quarkdown.core.rendering.html.CssRepresentableVisitor
  */
 interface RenderRepresentableVisitor<T> {
     fun visit(color: Color): T
@@ -50,6 +50,8 @@ interface RenderRepresentableVisitor<T> {
     fun visit(quoteType: BlockQuote.Type): T
 
     fun visit(boxType: Box.Type): T
+
+    fun visit(navigationRole: NavigationContainer.Role): T
 
     fun visit(position: PageMarginPosition): T
 
