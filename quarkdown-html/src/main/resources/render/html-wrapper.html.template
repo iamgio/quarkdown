@@ -179,6 +179,7 @@
     <main>
         [[CONTENT]]
         <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
         <footer>
             <div class="position-left"></div>
             <div class="position-center"></div>
