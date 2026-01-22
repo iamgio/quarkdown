@@ -48,6 +48,7 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.block.Math
+import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
@@ -879,6 +880,36 @@ class HtmlNodeRendererTest {
                         case = TextTransformData.Case.UPPERCASE,
                         variant = TextTransformData.Variant.SMALL_CAPS,
                     ),
+                children = children,
+            ).render(),
+        )
+    }
+
+    @Test
+    fun navigationContainer() {
+        val out = readParts("quarkdown/navigationcontainer.html")
+        val children = buildBlocks { paragraph { text("Nav") } }
+
+        assertEquals(
+            out.next(),
+            NavigationContainer(
+                role = null,
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            NavigationContainer(
+                role = NavigationContainer.Role.PAGE_LIST,
+                children = children,
+            ).render(),
+        )
+
+        assertEquals(
+            out.next(),
+            NavigationContainer(
+                role = NavigationContainer.Role.TABLE_OF_CONTENTS,
                 children = children,
             ).render(),
         )

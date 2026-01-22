@@ -68,6 +68,7 @@ import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.Escape
+import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.CssBuilder
@@ -318,7 +319,8 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: NavigationContainer) =
         buildTag("nav") {
-            optionalAttribute("data-role", node.role?.asCSS)
+            optionalAttribute("role", node.role?.asCSS)
+            optionalAttribute("data-role", node.role?.kebabCaseName)
             +node.children
         }
 

@@ -28,7 +28,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a></li>" +
                     "<li><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
@@ -67,7 +67,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a>" +
                     "<ol><li><a href=\"#abc1\">ABC/1</a></li></ol></li>" +
                     "<li><a href=\"#def\">DEF</a>" +
@@ -108,7 +108,7 @@ class TableOfContentsTest {
                     "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
                     "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a></li>" +
                     "<li><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
@@ -141,7 +141,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\">Table of Contents</h1>" + // Localized name
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a></li>" +
                     "<li><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
@@ -159,7 +159,7 @@ class TableOfContentsTest {
     fun `no table of contents title`() {
         execute(".tableofcontents title:{}") {
             assertEquals(
-                "<nav data-role=\"table-of-contents\"><ol></ol></nav>",
+                "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol></ol></nav>",
                 it,
             )
         }
@@ -182,7 +182,7 @@ class TableOfContentsTest {
         ) {
             assertEquals(
                 "<h1 id=\"table-of-contents\"></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a>" +
                     "<ol><li><a href=\"#def\">DEF</a></li></ol></li>" +
                     "<li><a href=\"#ghi\">GHI</a></li>" +
@@ -214,7 +214,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#marker-1\">Marker 1</a></li>" +
                     "<li><a href=\"#marker-2\">Marker 2</a></li>" +
                     "</ol></nav>" +
@@ -250,7 +250,7 @@ class TableOfContentsTest {
         ) {
             assertEquals(
                 "<h1 id=\"table-of-contents\"></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#unnumbered-1\">Unnumbered 1</a></li>" +
                     "<li><a href=\"#abc\">ABC</a>" +
                     "<ol><li><a href=\"#unnumbered-2\">Unnumbered 2</a></li></ol></li>" +
@@ -286,7 +286,7 @@ class TableOfContentsTest {
         ) {
             assertEquals(
                 "<h1 id=\"table-of-contents\"></h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#x\">X</a>" +
                     "<ol><li><a href=\"#x1\">X/1</a></li></ol></li>" +
                     "<li><a href=\"#y\">Y</a></li>" +
@@ -320,7 +320,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<div class=\"page-break\" data-hidden=\"\"></div>" +
                     "<h1 id=\"table-of-contents\">TOC</h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a><ol><li><a href=\"#x\">X</a></li></ol></li>" +
                     "<li class=\"focused\"><a href=\"#def\">DEF</a><ol><li><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></nav>" +
@@ -356,7 +356,7 @@ class TableOfContentsTest {
         ) {
             assertEquals(
                 "<h1 id=\"table-of-contents\">TOC</h1>" +
-                    "<nav data-role=\"table-of-contents\"><ol>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-location=\"1\"><a href=\"#a\">A</a>" +
                     "<ol><li data-location=\"1.A\"><a href=\"#a1\">A/1</a>" +
                     "<ol><li data-location=\"1.A.a\"><a href=\"#a11\">A/1/1</a></li></ol></li>" +

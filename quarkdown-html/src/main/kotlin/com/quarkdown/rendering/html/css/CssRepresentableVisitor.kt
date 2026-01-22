@@ -17,18 +17,12 @@ import com.quarkdown.core.document.slides.Transition
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
+import com.quarkdown.core.util.kebabCaseName
 
 /**
  * Producer of CSS representations of [RenderRepresentable]s.
  */
 class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
-    /**
-     * Name of the enum in kebab-case.
-     * Example: `TOP_LEFT_CORNER` -> `top-left-corner`
-     */
-    private val Enum<*>.kebabCaseName: String
-        get() = name.lowercase().replace("_", "-")
-
     override fun visit(color: Color) = with(color) { "rgba($red, $green, $blue, $alpha)" }
 
     override fun visit(size: Size) = "${size.value}${size.unit.symbol}" // e.g. 10px, 5cm, 2in
