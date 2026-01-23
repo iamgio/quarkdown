@@ -8,33 +8,50 @@ const CURRENT_PAGE_SELECTOR = 'a[aria-current="page"]';
  */
 export class PageListAnalyzer {
     private readonly nav: HTMLElement | null;
+    private readonly currentPageAnchor: HTMLAnchorElement | null;
 
     constructor() {
         this.nav = document.querySelector<HTMLElement>(PAGE_LIST_NAV_SELECTOR);
+        this.currentPageAnchor = this.nav?.querySelector<HTMLAnchorElement>(CURRENT_PAGE_SELECTOR) ?? null;
     }
 
     /**
-     * Gets all anchor elements within the page list in document order.
+     * Gets all anchor elements within the page list in document order,
+     * excluding anchor links within the current page.
      */
     private getAllLinks(): HTMLAnchorElement[] {
         if (!this.nav) return [];
-        return Array.from(this.nav.querySelectorAll<HTMLAnchorElement>("a"));
+        return Array.from(this.nav.querySelectorAll<HTMLAnchorElement>("a"))
+            .filter((link) => !this.isSamePageAnchor(link));
+    }
+
+    /**
+     * Checks if a link is an anchor within the current page.
+     */
+    private isSamePageAnchor(link: HTMLAnchorElement): boolean {
+        const href = link.getAttribute("href");
+        if (!href || href.startsWith("#")) return true;
+        if (link.pathname === location.pathname && link.hash !== "") return true;
+        const currentPageHref = this.currentPageAnchor?.getAttribute("href");
+        return !!(currentPageHref && href.startsWith(currentPageHref + "#"));
     }
 
     /**
      * Finds the index of the current page link within all links.
      */
-    private getCurrentIndex(links: HTMLAnchorElement[]): number {
-        return links.findIndex((link) => link.matches(CURRENT_PAGE_SELECTOR));
+    private getCurrentIndex(links: HTMLAnchorElement[]): number | null {
+        if (!this.currentPageAnchor) return null;
+        const index = links.indexOf(this.currentPageAnchor);
+        return index === -1 ? null : index;
     }
 
     /**
-     * Returns the previous page link, or null if there is no previous page.
+     * Returns the next page link, or null if there is no next page.
      */
     getNextPageLink(): HTMLAnchorElement | null {
         const links = this.getAllLinks();
         const currentIndex = this.getCurrentIndex(links);
-        if (currentIndex === -1 || currentIndex >= links.length - 1) return null;
+        if (currentIndex === null || currentIndex >= links.length - 1) return null;
         return links[currentIndex + 1];
     }
 
@@ -44,7 +61,7 @@ export class PageListAnalyzer {
     getPreviousPageLink(): HTMLAnchorElement | null {
         const links = this.getAllLinks();
         const currentIndex = this.getCurrentIndex(links);
-        if (currentIndex <= 0) return null;
+        if (currentIndex === null || currentIndex === 0) return null;
         return links[currentIndex - 1];
     }
 }

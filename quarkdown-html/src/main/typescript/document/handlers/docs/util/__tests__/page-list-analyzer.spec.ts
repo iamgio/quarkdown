@@ -126,4 +126,66 @@ describe('PageListAnalyzer', () => {
         expect(analyzer.getPreviousPageLink()?.textContent).toBe('B');
         expect(analyzer.getNextPageLink()?.textContent).toBe('D');
     });
+
+    it('excludes hash-only anchor links', () => {
+        document.body.innerHTML = `
+            <nav data-role="page-list">
+                <ol>
+                    <li><a href="/a">A</a></li>
+                    <li>
+                        <a href="/b" aria-current="page">B</a>
+                        <ol>
+                            <li><a href="#section1">Section 1</a></li>
+                            <li><a href="#section2">Section 2</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="/c">C</a></li>
+                </ol>
+            </nav>`;
+
+        const analyzer = new PageListAnalyzer();
+        expect(analyzer.getPreviousPageLink()?.textContent).toBe('A');
+        expect(analyzer.getNextPageLink()?.textContent).toBe('C');
+    });
+
+    it('excludes same-page anchors with pathname', () => {
+        document.body.innerHTML = `
+            <nav data-role="page-list">
+                <ol>
+                    <li><a href="/a">A</a></li>
+                    <li>
+                        <a href="/b" aria-current="page">B</a>
+                        <ol>
+                            <li><a href="/b#section1">Section 1</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="/c">C</a></li>
+                </ol>
+            </nav>`;
+
+        const analyzer = new PageListAnalyzer();
+        expect(analyzer.getPreviousPageLink()?.textContent).toBe('A');
+        expect(analyzer.getNextPageLink()?.textContent).toBe('C');
+    });
+
+    it('excludes anchors matching current page href', () => {
+        document.body.innerHTML = `
+            <nav data-role="page-list">
+                <ol>
+                    <li><a href="/a">A</a></li>
+                    <li>
+                        <a href="page-b.html" aria-current="page">B</a>
+                        <ol>
+                            <li><a href="page-b.html#section1">Section 1</a></li>
+                            <li><a href="page-b.html#section2">Section 2</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="/c">C</a></li>
+                </ol>
+            </nav>`;
+
+        const analyzer = new PageListAnalyzer();
+        expect(analyzer.getPreviousPageLink()?.textContent).toBe('A');
+        expect(analyzer.getNextPageLink()?.textContent).toBe('C');
+    });
 });
