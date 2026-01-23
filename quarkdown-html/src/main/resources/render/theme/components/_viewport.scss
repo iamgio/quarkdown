@@ -118,12 +118,18 @@ body.quarkdown {
       }
     }
 
-    > .content-wrapper > aside {
-      overflow-y: auto;
-      position: sticky;
-      top: var(--header-height);
-      max-height: calc(100vh - var(--header-height));
-      padding-top: 32px;
+    > .content-wrapper {
+      > main {
+        margin-bottom: 16px;
+      }
+
+      > aside {
+        overflow-y: auto;
+        position: sticky;
+        top: var(--header-height);
+        max-height: calc(100vh - var(--header-height));
+        padding-top: 32px;
+      }
     }
 
     > :is(header, .content-wrapper) > aside {

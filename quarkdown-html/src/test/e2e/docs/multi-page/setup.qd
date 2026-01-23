@@ -1,0 +1,5 @@
+.pagemargin {lefttop}
+    .navigation role:{pagelist}
+        - [Page 1](page-1.qd)
+        - [Page 2](page-2.qd)
+        - [Page 3](page-3.qd)
