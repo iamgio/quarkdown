@@ -5,6 +5,11 @@ import * as path from "path";
 
 export type {DocumentType} from "./__util/paths";
 
+export interface TestOptions {
+    /** Subdocument path to navigate to (e.g., "page2" for /output/page2/) */
+    subpath?: string;
+}
+
 /**
  * Returns the output directory path for a given test directory.
  */
@@ -25,9 +30,10 @@ export function suite(testDir: string) {
          * Defines a single test case.
          * @param name - Test name
          * @param fn - Test function receiving the Playwright page
+         * @param options - Optional test configuration (subpath)
          */
-        test: (name: string, fn: (page: Page) => Promise<void>) => {
-            base(name, async ({page}) => runTest(testDir, page, fn));
+        test: (name: string, fn: (page: Page) => Promise<void>, options?: TestOptions) => {
+            base(name, async ({page}) => runTest(testDir, page, fn, options));
         },
         /**
          * Runs the same test across multiple document types.
@@ -35,15 +41,17 @@ export function suite(testDir: string) {
          * @param name - Test name (document type will be appended in brackets)
          * @param docTypes - Array of document types to test against
          * @param fn - Test function receiving page and current document type
+         * @param options - Optional test configuration (subpath)
          */
         testMatrix: (
             name: string,
             docTypes: DocumentType[],
-            fn: (page: Page, docType: DocumentType) => Promise<void>
+            fn: (page: Page, docType: DocumentType) => Promise<void>,
+            options?: TestOptions
         ) => {
             for (const docType of docTypes) {
                 base(`${name} [${docType}]`, async ({page}) =>
-                    runTest(testDir, page, (p) => fn(p, docType), docType)
+                    runTest(testDir, page, (p) => fn(p, docType), {docType, ...options})
                 );
             }
         },

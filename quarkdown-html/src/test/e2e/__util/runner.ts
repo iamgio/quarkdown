@@ -30,20 +30,26 @@ function createSourceWithDocType(testDir: string, docType: DocumentType, id: str
     return tempPath;
 }
 
+export interface RunTestOptions {
+    docType?: DocumentType;
+    subpath?: string;
+}
+
 /**
  * Runs a test by compiling a document and navigating to it via the persistent server.
  * Waits for the document to be fully rendered before running the test function.
  * @param testDir - Directory containing the test's main.qd file
  * @param page - Playwright page instance
  * @param fn - Test function to execute
- * @param docType - Optional document type to prepend to the source
+ * @param options - Optional configuration (docType, subpath)
  */
 export async function runTest(
     testDir: string,
     page: Page,
     fn: (page: Page) => Promise<void>,
-    docType?: DocumentType
+    options?: RunTestOptions
 ): Promise<void> {
+    const {docType, subpath} = options ?? {};
     const e2eDir = path.resolve(__dirname, "..");
     const baseOutName = path.relative(e2eDir, testDir).split(path.sep).join("-");
     const id = uniqueId();
@@ -62,7 +68,8 @@ export async function runTest(
         compile(sourcePath, outName);
 
         const query = docType === "slides-print" ? "print-pdf" : "";
-        const url = `${getServerUrl()}/${outName}/?${query}`;
+        const subpathSegment = subpath ? `/${subpath}` : "";
+        const url = `${getServerUrl()}/${outName}${subpathSegment}/?${query}`;
         await page.goto(url);
         await waitForReady(page);
         await fn(page);
