@@ -21,9 +21,8 @@ dependencies {
 }
 
 tasks.compileSass {
-    val dir = projectDir.resolve("src/main/resources/render/theme")
-    sourceDir = dir
-    outputDir = dir
+    sourceDir = projectDir.resolve("src/main/scss")
+    outputDir = projectDir.resolve("src/main/resources/render/theme")
 }
 
 val bundleTypeScript =
