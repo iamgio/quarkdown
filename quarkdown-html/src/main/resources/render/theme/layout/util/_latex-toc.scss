@@ -9,7 +9,7 @@
       padding-left: 0;
     }
 
-    > ul, ol {
+    > ul, > ol {
       ul, ol {
         padding-left: 2rem;
       }
@@ -17,7 +17,7 @@
       > li {
         margin-top: 20px;
 
-        > a {
+        > a:is(nav[data-role="table-of-contents"] a) {
           font-weight: bold;
         }
       }
@@ -29,7 +29,7 @@
     }
 
     &:is(.quarkdown-docs nav) {
-      > ul, ol {
+      > ul, > ol {
         margin-left: 0;
 
         ul, ol {
@@ -39,7 +39,7 @@
         > li {
           margin-top: 4px;
 
-          a {
+          a:is(nav[data-role="table-of-contents"] a) {
             font-weight: normal;
           }
         }
