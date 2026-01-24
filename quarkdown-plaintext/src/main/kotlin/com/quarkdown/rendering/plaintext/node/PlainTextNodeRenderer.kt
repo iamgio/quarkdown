@@ -61,6 +61,7 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
+import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -216,17 +217,10 @@ class PlainTextNodeRenderer(
 
         val builder = StringBuilder()
 
-        // Title.
-        val title =
-            node.title
-                ?: context.localizeOrNull(key = "tableofcontents")?.let { buildInline { text(it) } }
-
-        title?.let {
-            Heading(
-                depth = 1,
-                text = it,
-            ).accept(this).let(builder::append)
-        }
+        // Heading.
+        createTableOfContentsHeading(node, context)
+            ?.accept(this)
+            ?.let(builder::append)
 
         // Content.
         val list =

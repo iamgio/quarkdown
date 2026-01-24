@@ -41,6 +41,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
+import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -60,7 +61,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
 import com.quarkdown.core.context.subdocument.subdocumentGraph
-import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.NumberingFormat
@@ -327,23 +327,9 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
-        val isDocs = context.documentInfo.type == DocumentType.DOCS
 
         return buildMultiTag {
-            // Localized title.
-            val localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents"
-            val titleText = context.localizeOrNull(key = localizationKey)
-
-            // Title heading.
-            // Its content is either the node's user-set title or a default localized one.
-            // If the user-set title is empty, no title is shown.
-            if (node.title?.isEmpty() != true) {
-                +Heading(
-                    depth = if (isDocs) 3 else 1,
-                    text = node.title ?: buildInline { titleText?.let { text(it) } },
-                    customId = "table-of-contents",
-                )
-            }
+            createTableOfContentsHeading(node, context)?.let { +it }
 
             val tree: ListBlock =
                 convertTableOfContentsToListNode(
