@@ -23,7 +23,7 @@ jobs:
         job-id: main
         arguments: ktlintCheck test
 
-  e2e-test:
+  e2e-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +31,46 @@ jobs:
       with:
         full-checkout: ${{ inputs.full-checkout }}
 
-    - name: Run E2E tests
+    - name: Build CLI
+      id: build
       uses: burrunan/gradle-cache-action@v3
       with:
-        job-id: e2e
-        arguments: :quarkdown-html:e2eTest
+        job-id: e2e-build
+        arguments: installDist
+
+    - name: Upload CLI artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: quarkdown-cli
+        path: quarkdown-cli/build/install/quarkdown-cli
+        retention-days: 1
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    needs: e2e-build
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+      with:
+        full-checkout: ${{ inputs.full-checkout }}
+
+    - name: Download CLI artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: quarkdown-cli
+        path: quarkdown-cli/build/install/quarkdown-cli
+
+    - name: Make CLI executable
+      run: chmod +x quarkdown-cli/build/install/quarkdown-cli/bin/quarkdown-cli
+
+    - name: Run E2E tests (shard ${{ matrix.shard }}/4)
+      uses: burrunan/gradle-cache-action@v3
+      env:
+        QUARKDOWN_CLI_PATH: ${{ github.workspace }}/quarkdown-cli/build/install/quarkdown-cli/bin/quarkdown-cli
+      with:
+        job-id: e2e-test
+        arguments: :quarkdown-html:e2eTest -Pshard=${{ matrix.shard }} -PtotalShards=4
