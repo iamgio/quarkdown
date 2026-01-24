@@ -78,9 +78,18 @@ val installPlaywrightBrowsers =
     }
 
 val npmE2eTest =
-    tasks.register<NpmTask>("e2eTest") {
+    tasks.register<NpxTask>("e2eTest") {
         group = "verification"
         description = "Runs end-to-end tests"
         dependsOn(installPlaywrightBrowsers)
-        args.set(listOf("run", "test:e2e"))
+        command.set("playwright")
+
+        val shard = project.findProperty("shard")?.toString()
+        val totalShards = project.findProperty("totalShards")?.toString()
+
+        val argsList = mutableListOf("test")
+        if (shard != null && totalShards != null) {
+            argsList.add("--shard=$shard/$totalShards")
+        }
+        args.set(argsList)
     }
