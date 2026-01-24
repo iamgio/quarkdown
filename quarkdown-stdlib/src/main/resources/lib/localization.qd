@@ -9,6 +9,7 @@
       - error: Error
       - todo: To do
       - tableofcontents: Table of Contents
+      - tableofcontents/docs: On this page
       - bibliography: References
       - figure: Figure
       - table: Table
@@ -22,6 +23,7 @@
       - error: Errore
       - todo: Da fare
       - tableofcontents: Indice
+      - tableofcontents/docs: In questa pagina
       - bibliography: Riferimenti
       - figure: Figura
       - table: Tabella
@@ -35,6 +37,7 @@
       - error: Fehler
       - todo: Aufgabe
       - tableofcontents: Inhaltsverzeichnis
+      - tableofcontents/docs: Auf dieser Seite
       - bibliography: Literaturverzeichnis
       - figure: Abbildung
       - table: Tabelle
@@ -48,6 +51,7 @@
       - error: エラー
       - todo: タスク
       - tableofcontents: 目次
+      - tableofcontents/docs: このページの内容
       - bibliography: 参考文献
       - figure: 図
       - table: テーブル
@@ -61,6 +65,7 @@
       - error: 错误
       - todo: 待办
       - tableofcontents: 目录
+      - tableofcontents/docs: 本页目录
       - bibliography: 参考文献
       - figure: 图
       - table: 表
@@ -74,6 +79,7 @@
       - error: Erreur
       - todo: À faire
       - tableofcontents: Table des matières
+      - tableofcontents/docs: Sur cette page
       - biblioraphy: Sources
       - figure: Figure
       - table: Tableau

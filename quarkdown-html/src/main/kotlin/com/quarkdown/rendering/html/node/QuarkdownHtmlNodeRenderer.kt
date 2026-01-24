@@ -60,6 +60,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
 import com.quarkdown.core.context.subdocument.subdocumentGraph
+import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.numbering.NumberingFormat
@@ -326,17 +327,19 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
+        val isDocs = context.documentInfo.type == DocumentType.DOCS
 
         return buildMultiTag {
             // Localized title.
-            val titleText = context.localizeOrNull(key = "tableofcontents")
+            val localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents"
+            val titleText = context.localizeOrNull(key = localizationKey)
 
             // Title heading.
             // Its content is either the node's user-set title or a default localized one.
             // If the user-set title is empty, no title is shown.
             if (node.title?.isEmpty() != true) {
                 +Heading(
-                    depth = 1,
+                    depth = if (isDocs) 3 else 1,
                     text = node.title ?: buildInline { titleText?.let { text(it) } },
                     customId = "table-of-contents",
                 )

@@ -122,34 +122,24 @@ class TableOfContentsTest {
     }
 
     @Test
-    fun `localized table of contents title`() {
+    fun `localized table of contents title (docs)`() {
         execute(
             """
+            .doctype {docs}
             .doclang {english}
+            .noautopagebreak
             .tableofcontents
             
             # ABC
-            
-            Hi
-            
-            # DEF
-            
-            Hello
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\">Table of Contents</h1>" + // Localized name
+                "<h3 id=\"table-of-contents\">On this page</h3>" + // Localized name
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li><a href=\"#abc\">ABC</a></li>" +
-                    "<li><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"def\">DEF</h1>" +
-                    "<p>Hello</p>",
+                    "<h1 id=\"abc\">ABC</h1>",
                 it,
             )
         }
