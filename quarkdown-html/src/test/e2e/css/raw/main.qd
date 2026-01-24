@@ -1,6 +1,6 @@
 .css
     a {
-        color: red !important;
+        color: red;
     }
 
 [Link](https://example.com)

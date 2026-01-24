@@ -53,7 +53,7 @@ class InjectionTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<style data-hidden=\"\">.class {\n    background: red;\n}</style>",
+                "<style data-hidden=\"\">.class {\n    background: red !important;\n}</style>",
                 it,
             )
         }
@@ -63,7 +63,7 @@ class InjectionTest {
     fun `css from file`() {
         execute(".css {.read {css/style.css}}") {
             assertEquals(
-                "<style data-hidden=\"\">body {\n    background-color: orange;\n}</style>",
+                "<style data-hidden=\"\">body {\n    background-color: orange !important;\n}</style>",
                 it,
             )
         }
@@ -105,7 +105,7 @@ class InjectionTest {
             assertEquals(
                 "<div class=\"container my-custom\"><p>Content</p></div>" +
                     "<p>Hi <span class=\"my-custom\">content</span></p>" +
-                    "<style data-hidden=\"\">.my-custom {\n    color: red;\n}</style>",
+                    "<style data-hidden=\"\">.my-custom {\n    color: red !important;\n}</style>",
                 it,
             )
         }

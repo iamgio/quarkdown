@@ -7,6 +7,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.stdlib.internal.applyImportantToCSS
 
 /**
  * `Injection` stdlib module exporter.
@@ -47,10 +48,13 @@ fun html(
  * The content is wrapped in a `<style>` tag and rendered as-is,
  * without any additional processing or escaping, as long as the rendering target supports HTML.
  *
+ * Each CSS property value automatically has `!important` applied to it,
+ * unless it already has it.
+ *
  * ```css
  * .css
  *   body {
- *     background-color: green !important;
+ *     background-color: green;
  *   }
  * ```
  *
@@ -61,7 +65,7 @@ fun html(
  */
 fun css(
     @LikelyBody content: String,
-) = Html("<style data-hidden=\"\">$content</style>").wrappedAsValue()
+) = Html("<style data-hidden=\"\">${applyImportantToCSS(content)}</style>").wrappedAsValue()
 
 private const val CSS_ROOT_SELECTOR = ":root"
 private const val CSS_PROPERTY_PREFIX = "--qd-"
@@ -78,7 +82,7 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
  *   - main-font-size: 20px
  * ```
  *
- * For a complete list of properties, see the [global theme](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/resources/render/theme/global.scss).
+ * For a complete list of properties, see the [global theme](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/scss/global.scss).
  * Unknown properties will be ignored.
  *
  * The content is wrapped in a `<style>` tag and rendered as-is,
@@ -95,7 +99,7 @@ fun cssProperties(properties: Map<String, Value<*>>) =
             append(CSS_ROOT_SELECTOR)
             append(" { ")
             properties.forEach { (name, value) ->
-                append("$CSS_PROPERTY_PREFIX$name: ${value.unwrappedValue} !important; ")
+                append("$CSS_PROPERTY_PREFIX$name: ${value.unwrappedValue}; ")
             }
             append("}")
         },
