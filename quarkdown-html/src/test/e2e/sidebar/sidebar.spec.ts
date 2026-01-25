@@ -31,9 +31,9 @@ testMatrix(
         expect(sidebarText).not.toContain("Skipped");
 
         // Check dash widths hierarchy: h1 > h2 > h3
-        const h1Dash = sidebar.locator('li[data-depth="1"] > p').first();
-        const h2Dash = sidebar.locator('li[data-depth="2"] > p').first();
-        const h3Dash = sidebar.locator('li[data-depth="3"] > p').first();
+        const h1Dash = sidebar.locator('li[data-depth="1"] > a').first();
+        const h2Dash = sidebar.locator('li[data-depth="2"] > a').first();
+        const h3Dash = sidebar.locator('li[data-depth="3"] > a').first();
 
         const h1Width = await h1Dash.evaluate((el) => {
             const after = getComputedStyle(el, "::after");

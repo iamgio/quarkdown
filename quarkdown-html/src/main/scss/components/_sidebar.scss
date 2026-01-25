@@ -12,9 +12,10 @@ $level-width: 9px;
   right: 0;
   transform: translateY(-50%);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   max-height: 90vh;
   overflow-y: auto;
+  transition: background-color 0.3s;
 
   @include media-queries.sm-up {
     display: block;
@@ -33,7 +34,7 @@ $level-width: 9px;
     margin: 0 !important;
 
     @for $level from 1 through $max-level {
-      &[data-depth="#{$level}"] p::after {
+      &[data-depth="#{$level}"] > a::after {
         width: ($max-level - $level + 1) * $level-width;
         margin-left: ($level - 1) * $level-width;
       }
@@ -44,11 +45,26 @@ $level-width: 9px;
     }
   }
 
-  p {
+  a {
     height: 12px;
     display: flex;
     align-items: center;
     cursor: pointer;
+    color: transparent;
+    font-size: 0.75rem;
+    text-decoration: none !important;
+    transition: color 0.2s;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    gap: 12px;
+
+    &:hover {
+      opacity: 1;
+
+      &::after {
+        opacity: 1;
+      }
+    }
 
     &::after {
       content: '';
@@ -56,38 +72,30 @@ $level-width: 9px;
       height: 2px;
       background: var(--qd-main-color);
       opacity: 0.25;
-      transition: opacity 0.3s;
-    }
+      transition: opacity 0.2s;
 
-    @at-root .quarkdown-paged#{&} {
-      gap: 8px;
-
-      &::after {
+      @at-root .quarkdown-paged#{&} {
         background: #444;
       }
     }
+  }
 
-    &:hover::after {
-      opacity: 1;
-    }
-
-    &:hover > a {
-      background-color: var(--qd-background-color);
-      color: var(--qd-main-color);
-      padding: 4px 16px;
-      border-radius: 8px;
-    }
+  // Expanded state.
+  &:hover {
+    background-color: var(--qd-background-color);
 
     a {
-      display: inline;
-      flex-grow: 0;
-      color: transparent;
-      text-decoration: none !important;
+      color: var(--qd-main-color);
+      opacity: .85;
+
+      &:hover {
+        color: var(--qd-link-color);
+      }
     }
   }
 
   li.active {
-    > p::after {
+    > a::after {
       opacity: .75;
     }
   }
