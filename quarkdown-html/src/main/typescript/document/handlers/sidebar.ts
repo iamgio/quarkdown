@@ -1,13 +1,22 @@
 import {DocumentHandler} from "../document-handler";
-import {createSidebar} from "../../sidebar/sidebar";
+import {initSidebarActiveTracking} from "../../sidebar/sidebar";
 
 /**
- * Document handler responsible for creating and managing the sidebar component.
- * Executes after document rendering is complete.
- * @see createSidebar
+ * Document handler responsible for relocating the sidebar from the template
+ * and initializing active state tracking.
  */
 export class Sidebar extends DocumentHandler {
     async onPostRendering() {
-        createSidebar();
+        const template = document.querySelector<HTMLTemplateElement>('#sidebar-template');
+        if (!template) return;
+
+        const sidebar = template.content.firstElementChild?.cloneNode(true) as HTMLElement;
+        if (!sidebar) return;
+
+        sidebar.style.position = "fixed";
+        document.body.appendChild(sidebar);
+        template.remove();
+
+        initSidebarActiveTracking(sidebar);
     }
 }

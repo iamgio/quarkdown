@@ -39,6 +39,7 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
+import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
@@ -712,4 +713,10 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { withLocationLabel(variant.target) }
+
+    override fun visit(variant: TableOfContentsItemVariant): HtmlTagBuilder.() -> Unit =
+        {
+            attribute("data-target-id", HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(variant.item.target))
+            attribute("data-depth", variant.item.depth.toString())
+        }
 }

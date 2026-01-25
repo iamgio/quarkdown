@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
+import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.toc.TableOfContents
@@ -85,6 +86,8 @@ fun convertTableOfContentsToListNode(
                         children = getNestedItemContent(it),
                         variants =
                             buildList {
+                                this += TableOfContentsItemVariant(it)
+
                                 // When at least one item is focused, the other items are less visible.
                                 this += FocusListItemVariant(isFocused = view.hasFocus(it))
 

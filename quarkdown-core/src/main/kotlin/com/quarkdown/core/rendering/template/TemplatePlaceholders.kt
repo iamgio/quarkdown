@@ -13,6 +13,11 @@ object TemplatePlaceholders {
     const val CONTENT = "CONTENT"
 
     /**
+     * Sidebar content of the document, containing the outline.
+     */
+    const val SIDEBAR = "SIDEBAR"
+
+    /**
      * Path to the root of the document from the current location.
      */
     const val ROOT_PATH = "ROOTPATH"

@@ -5,7 +5,8 @@
 $max-level: 3;
 $level-width: 9px;
 
-.quarkdown .sidebar {
+.quarkdown nav.sidebar.sidebar.sidebar.sidebar {
+  position: fixed;
   display: none;
   top: 50%;
   right: 0;
@@ -26,27 +27,30 @@ $level-width: 9px;
   }
 
   li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     margin: 0 !important;
 
-    @for $level from 0 through ($max-level - 1) {
-      // .h1, .h2, .h3
-      &.h#{$level + 1} a::before {
-        width: ($max-level - $level) * $level-width;
-        margin-left: $level * $level-width;
+    @for $level from 1 through $max-level {
+      &[data-depth="#{$level}"] p::after {
+        width: ($max-level - $level + 1) * $level-width;
+        margin-left: ($level - 1) * $level-width;
       }
+    }
+
+    &:before {
+      display: none;
     }
   }
 
-  a {
-    color: var(--qd-main-color);
+  p {
     height: 12px;
-    text-decoration: none !important;
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
     align-items: center;
+    cursor: pointer;
 
-    &::before {
+    &::after {
       content: '';
       width: 100%;
       height: 2px;
@@ -55,33 +59,37 @@ $level-width: 9px;
       transition: opacity 0.3s;
     }
 
-    &:not(:hover) {
-      color: transparent;
+    @at-root .quarkdown-paged#{&} {
+      gap: 8px;
+
+      &::after {
+        background: #444;
+      }
     }
 
-    &:hover::before {
+    &:hover::after {
       opacity: 1;
     }
 
-    &:hover span {
+    &:hover > a {
       background-color: var(--qd-background-color);
+      color: var(--qd-main-color);
       padding: 4px 16px;
       border-radius: 8px;
     }
 
-    @at-root .quarkdown-paged#{&} {
-      &::before {
-        background: #444;
-      }
-
-      span {
-        margin-right: 10px;
-      }
+    a {
+      display: inline;
+      flex-grow: 0;
+      color: transparent;
+      text-decoration: none !important;
     }
   }
 
-  li.active a::before {
-    opacity: .75;
+  li.active {
+    > p::after {
+      opacity: .75;
+    }
   }
 }
 

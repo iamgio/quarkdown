@@ -60,6 +60,7 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
+import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
@@ -425,4 +426,6 @@ open class BaseHtmlNodeRenderer(
     override fun visit(variant: FocusListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
 
     override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
+
+    override fun visit(variant: TableOfContentsItemVariant): HtmlTagBuilder.() -> Unit = throw UnsupportedRenderException(variant::class)
 }
