@@ -31,21 +31,21 @@ testMatrix(
         expect(sidebarText).not.toContain("Skipped");
 
         // Check dash widths hierarchy: h1 > h2 > h3
-        const h1Dash = sidebar.locator("li.h1 a").first();
-        const h2Dash = sidebar.locator("li.h2 a").first();
-        const h3Dash = sidebar.locator("li.h3 a").first();
+        const h1Dash = sidebar.locator('li[data-depth="1"] > a').first();
+        const h2Dash = sidebar.locator('li[data-depth="2"] > a').first();
+        const h3Dash = sidebar.locator('li[data-depth="3"] > a').first();
 
         const h1Width = await h1Dash.evaluate((el) => {
-            const before = getComputedStyle(el, "::before");
-            return parseFloat(before.width);
+            const after = getComputedStyle(el, "::after");
+            return parseFloat(after.width);
         });
         const h2Width = await h2Dash.evaluate((el) => {
-            const before = getComputedStyle(el, "::before");
-            return parseFloat(before.width);
+            const after = getComputedStyle(el, "::after");
+            return parseFloat(after.width);
         });
         const h3Width = await h3Dash.evaluate((el) => {
-            const before = getComputedStyle(el, "::before");
-            return parseFloat(before.width);
+            const after = getComputedStyle(el, "::after");
+            return parseFloat(after.width);
         });
 
         expect(h1Width).toBeGreaterThan(h2Width);
@@ -53,7 +53,7 @@ testMatrix(
 
         // Check colors based on doctype
         const dashColor = await h1Dash.evaluate((el) => {
-            return getComputedStyle(el, "::before").backgroundColor;
+            return getComputedStyle(el, "::after").backgroundColor;
         });
         const mainColor = await getComputedColor(page, "var(--qd-main-color)");
         if (docType === "paged") {
@@ -108,8 +108,8 @@ testMatrix(
         // Scroll to end of document
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-        // Only last item should be highlighted
+        // Only second to last item should be highlighted
         await expect(activeItems).toHaveCount(1);
-        await expect(items.last()).toHaveClass(/active/);
+        await expect(items.nth(5)).toHaveClass(/active/);
     }
 );

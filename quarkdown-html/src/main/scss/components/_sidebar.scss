@@ -5,15 +5,17 @@
 $max-level: 3;
 $level-width: 9px;
 
-.quarkdown .sidebar {
+.quarkdown nav.sidebar.sidebar.sidebar.sidebar {
+  position: fixed;
   display: none;
   top: 50%;
   right: 0;
   transform: translateY(-50%);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   max-height: 90vh;
   overflow-y: auto;
+  transition: background-color 0.3s;
 
   @include media-queries.sm-up {
     display: block;
@@ -26,62 +28,76 @@ $level-width: 9px;
   }
 
   li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     margin: 0 !important;
 
-    @for $level from 0 through ($max-level - 1) {
-      // .h1, .h2, .h3
-      &.h#{$level + 1} a::before {
-        width: ($max-level - $level) * $level-width;
-        margin-left: $level * $level-width;
+    @for $level from 1 through $max-level {
+      &[data-depth="#{$level}"] > a::after {
+        width: ($max-level - $level + 1) * $level-width;
+        margin-left: ($level - 1) * $level-width;
       }
+    }
+
+    &:before {
+      display: none;
     }
   }
 
   a {
-    color: var(--qd-main-color);
     height: 12px;
-    text-decoration: none !important;
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
     align-items: center;
+    cursor: pointer;
+    color: transparent;
+    font-size: 0.75rem;
+    text-decoration: none !important;
+    transition: color 0.2s;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    gap: 12px;
 
-    &::before {
+    &:hover {
+      opacity: 1;
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    &::after {
       content: '';
       width: 100%;
       height: 2px;
       background: var(--qd-main-color);
       opacity: 0.25;
-      transition: opacity 0.3s;
-    }
+      transition: opacity 0.2s;
 
-    &:not(:hover) {
-      color: transparent;
-    }
-
-    &:hover::before {
-      opacity: 1;
-    }
-
-    &:hover span {
-      background-color: var(--qd-background-color);
-      padding: 4px 16px;
-      border-radius: 8px;
-    }
-
-    @at-root .quarkdown-paged#{&} {
-      &::before {
+      @at-root .quarkdown-paged#{&} {
         background: #444;
-      }
-
-      span {
-        margin-right: 10px;
       }
     }
   }
 
-  li.active a::before {
-    opacity: .75;
+  // Expanded state.
+  &:hover {
+    background-color: var(--qd-background-color);
+
+    a {
+      color: var(--qd-main-color);
+      opacity: .85;
+
+      &:hover {
+        color: var(--qd-link-color);
+      }
+    }
+  }
+
+  li.active {
+    > a::after {
+      opacity: .75;
+    }
   }
 }
 

@@ -137,6 +137,11 @@
         [[endif:DOCS]]
         prepare(doc);
     </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            [[SIDEBAR]]
+        </nav>
+    </template>
 </head>
 <body class="quarkdown quarkdown-[[DOCTYPE]][[if:COLUMNCOUNT]] multicolumn[[endif:COLUMNCOUNT]]">
 [[if:PLAIN]]

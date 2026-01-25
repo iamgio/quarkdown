@@ -2,6 +2,7 @@ package com.quarkdown.core.ast.base.block.list
 
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
+import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 
 /**
  * A variant of a [ListItem] that brings additional functionalities to it.
@@ -25,4 +26,6 @@ interface ListItemVariantVisitor<T> {
     fun visit(variant: FocusListItemVariant): T
 
     fun visit(variant: LocationTargetListItemVariant): T
+
+    fun visit(variant: TableOfContentsItemVariant): T
 }

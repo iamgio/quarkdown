@@ -9,6 +9,7 @@ import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.rendering.PostRenderer
 import com.quarkdown.core.rendering.template.TemplatePlaceholders
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.rendering.html.node.SidebarRenderer
 
 /**
  * A subset of [HtmlPostRenderer] that generates only the HTML output resources without any additional resources.
@@ -41,6 +42,7 @@ class HtmlOnlyPostRenderer(
             context,
         ).create()
             .value(TemplatePlaceholders.ROOT_PATH, relativePathToRoot)
+            .value(TemplatePlaceholders.SIDEBAR, SidebarRenderer.render(context))
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         buildSet {
