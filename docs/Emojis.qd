@@ -1,0 +1,39 @@
+.include {_Setup.qd}
+
+Quarkdown documents support emojis either by direct insertion or through a shortcode.
+
+### Direct insertion
+
+You can directly insert emoji characters into your source code:
+
+```markdown
+Quarkdown's logo is not a planet 🪐
+I love Quarkdown! 😍
+```
+
+### Shortcode function
+
+You can use the `.emoji`<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Emoji/emoji.html)</sup> function with a shortcode:
+
+```
+Quarkdown's logo is not a planet .emoji {ringed-planet}
+I love Quarkdown! .emoji {heart-eyes}
+```
+
+> [!NOTE]
+> During compilation, the first call to `.emoji` in a document will load the entire emoji set, which may slightly increase compilation time.
+> Subsequent calls will be faster.
+
+For a complete list of supported shortcodes, refer to the [Emoji Cheat Sheet](https://quarkdown.com/docs/emoji-list/).
+
+#### Variants
+
+| Type | Result | Code |
+|---|:---:|---|
+| Simple shortcode | 😉 | `.emoji {wink}` |
+| One skin tone | 👋🏾 | `.emoji {waving-hand~medium-dark}` |
+| Two skin tones | 🧑🏼‍🤝‍🧑🏾 | `.emoji {people-holding-hands~medium-light,medium-dark}` |
+
+#### Credits
+
+Shortcodes support is provided by [Emoji.kt](https://github.com/kosi-libs/Emoji.kt). Thanks!

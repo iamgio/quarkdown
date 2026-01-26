@@ -1,0 +1,308 @@
+.include {_Setup.qd}
+
+The **`.numbering`** function sets the global numbering configuration of the document. The following elements can be numbered:
+- Headings and [table of contents](Table-of-contents.qd) entries
+- [Figures](Figure.qd)
+- Tables
+- [Equations](Math.qd)
+- Code blocks
+- [Footnotes](Footnotes.qd)
+- Custom elements (`.numbered`)
+
+The configuration is represented by a [Dictionary](Dictionary.qd).
+The following snippet shows the full configuration schema, where all entries are optional:
+
+```yaml
+.numbering
+  - headings: <format>
+  - figures: <format>
+  - tables: <format>
+  - equations: <format>
+  - code: <format>
+  - footnotes: <format>
+```
+
+Each format parameter accepts either `none`, or a string where each character represents either a counter or a fixed symbol:
+- `1` for decimal (`1, 2, 3, ...`)
+- `a` for lowercase latin alphabet (`a, b, c, ...`)
+- `A` for uppercase latin alphabet (`A, B, C, ...`)
+- `i` for lowercase roman numerals (`i, ii, iii, ...`)
+- `I` for uppercase roman numerals (`I, II, III, ...`)
+- Any other character is a fixed symbol.
+
+### Default formats
+
+The default numbering format, if unspecified, is:
+
+- For `paged` documents:
+  - `1.1.1` for headings;
+  - `1.1` for figures and tables;
+  - `(1)` for equations;
+  - `1` for footnotes.
+
+- For `plain` documents:
+  - `(1)` for equations;
+  - `1` for footnotes.
+
+- For `slides` documents:
+  - `1` for footnotes.
+
+Any active numbering configuration can be turned off via the **`.nonumbering`** function.
+
+### Merging configurations
+
+By default, `.numbering` enhances the current numbering configuration by merging the new configuration with the existing one,
+meaning that only the specified entries are updated, while the rest remain unchanged.
+
+To avoid merging, thus turning off numbering rules for unspecified entries, set the `merge:{no}` argument:
+
+```yaml
+.numbering merge:{no}
+  - figures: 1.1
+```
+
+
+
+### Headings
+
+```markdown
+.numbering
+  - headings: 1.A.a
+
+## Title    <!--   1   -->
+### Title   <!--  1.A  -->
+#### Title  <!-- 1.A.a -->
+#### Title  <!-- 1.A.b -->
+##### Title <!-- None  -->
+### Title   <!--  1.B  -->
+## Title    <!--   2   -->
+### Title   <!--  2.A  -->
+```
+
+!(550)[Latex theme numbering](https://github.com/user-attachments/assets/d6ae1483-43cd-49ea-9934-63c67b8bdd4a)  
+
+!(550)[Latex theme table of contents](https://github.com/user-attachments/assets/1ca513b1-ab48-4d8e-b1f5-46f38e88f75d)
+
+#### Decorative headings
+
+To prevent a heading from being numbered, append a `!` after the last `#` sign. For example `#!`, `##!`, `###!`, etc.
+
+```markdown
+.center
+    #! My document
+
+## Introduction
+
+.loremipsum
+```
+
+Decorative headings also don't appear in [table of contents](Table-of-contents.qd).
+
+!(550)[image](https://github.com/user-attachments/assets/ac3bfcc2-5a48-4ef3-ad67-7f963357aa3a)
+
+
+
+### Figures
+
+[Figures](Figure.qd) are numbered only if they feature a **caption**, which may also be empty.
+
+```markdown
+.numbering
+  - headings: 1.A.a
+  - figures: 1.1
+
+## Title
+
+![Logo](quarkdown-icon.svg "The Quarkdown icon".qd)
+
+### Title
+
+![Logo](quarkdown-icon.svg "".qd)
+
+## Title
+
+![Logo](quarkdown-icon.svg "".qd)
+```
+
+!(550)[Figure numbering with format 1.1](https://github.com/user-attachments/assets/341b6c44-36dd-4304-8a43-3165436531b8)
+
+
+
+When numbering elements, the amount of symbols in the format dictates the rules which cause the counters to reset.  
+The previous example, run with `figures: 1`, results in the following:
+
+!(550)[Figure numbering with format 1](https://github.com/user-attachments/assets/a79104ac-0106-46aa-a7a8-f38f8065b997)
+
+
+
+### Tables
+
+```markdown
+.numbering
+  - headings: 1.A.a
+  - tables: 1.1
+
+## Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |
+"Study results."
+
+### Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |
+
+## Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |
+```
+
+!(550)[Table numbering](https://github.com/user-attachments/assets/b793205e-629f-414a-bee1-780daf636d87)
+
+
+
+### Equations
+
+[Math blocks](Math.qd) (equations) are numbered only if they feature a [cross-reference ID](Cross-references.qd).
+
+```markdown
+.numbering
+  - equations: (1)
+
+$ E = mc^2 $ {#energy}
+
+$ F = ma $ {#force}
+```
+
+Conventionally, if the equation is not cross-referenced anywhere in the document, but you still want it to be numbered, `_` can be set as the ID:
+
+```markdown
+$ E = mc^2 $ {#_}
+
+$ F = ma $ {#_}
+```
+
+!(550)[Equation numbering](https://github.com/user-attachments/assets/fffeec24-fb30-40bf-8d20-6d85701a009e)
+
+
+
+### Code blocks
+
+~~~markdown
+.numbering
+  - code: 1
+
+```python
+def hello():
+    print("Hello, world!")
+```
+
+```kotlin
+fun main() {
+    println("Hello, world!")
+}
+```
+~~~
+
+!(550)[Code blocks](https://github.com/user-attachments/assets/4ae8abca-1696-4745-af9c-b611fcb821ba)
+
+
+
+### Footnotes
+
+The numbering format of [footnotes](Footnotes.qd) is flat, meaning it only considers the leftmost symbol, and the rest is ignored.
+
+If not specified, footnotes format defaults to `1` (decimal).
+
+```markdown
+.numbering
+  - footnotes: i
+
+Here is a footnote reference[^: First], and another one[^: Second].
+```
+
+!(550)[Footnote numbering](https://github.com/user-attachments/assets/c633b667-8b53-4cd6-8002-f0ac2c4a3032)
+
+
+
+### Custom numbered elements
+
+Along with built-in numerable elements we just discussed, Quarkdown additionally allows any element to be numbered if wrapped in a `.numbered` block.
+
+The function accepts two arguments:
+1. A key string. The number of the element is counted across previous occurrences with the same key;
+2. A [lambda](Lambda.qd) block which takes the number as an argument, formatted according to the active numbering format.
+
+```markdown
+.numbered {greetings}
+  number:
+  **Hello!** This block has the number **.number**
+```
+
+Executing the previous block will render an empty string in place of `number`.
+That's because we need to specify the numbering format for `greetings` in the `.numbering` call:
+
+```yaml
+.numbering
+  ...
+  - greetings: 1.a
+```
+
+A numbered block can also be cross-referenced. See [*Cross-references*](Cross-references.qd#custom-numbered-elements) for details.
+
+Full example:
+
+```markdown
+.numbering
+    - headings: 1.1
+    - greetings: 1.a
+
+## Title 1
+
+.numbered {greetings}
+    number:
+    **Hello!** This block has the number **.number**
+
+.numbered {greetings}
+    number:
+    **Hey!** This has instead the number **.number**
+
+## Title 2
+
+.numbered {greetings}
+    number:
+    **Hi!** Here we have the number **.number**
+```
+
+!(600)[Custom numbering](https://github.com/user-attachments/assets/7df10490-4e3d-42f5-aa82-879a840d2be3)
+
+
+
+## Localization
+
+The localized name of the labeled element appear in captions if [`.doclang`](Document-metadata.qd) is set and the locale is supported.  
+For instance *Figure* and *Table* for the English locale, *Figura* and *Tabella* for Italian.
+
+
+
+## Themes
+
+[Layout themes](Themes.qd) affect the way numbers are displayed:
+
+!(550)[Minimal headings numbering](https://github.com/user-attachments/assets/a029b9aa-c2ac-4de4-ab89-8b8fe2221403)
+
+!(550)[Minimal ToC numbering](https://github.com/user-attachments/assets/86edb07c-0c1f-4258-b827-7e9d6321d200)
+
+
+> `minimal` theme

@@ -1,0 +1,29 @@
+.include {_Setup.qd}
+
+The **`.collapse`** function creates an interactive collapsible block, whose status can be toggled by clicking.
+
+It requires an [inline](Markdown-content.qd#inline-content) title (always displayed) and [block](Markdown-content.qd#block-content) content (displayed when expanded).
+
+```markdown
+.collapse {A _collapsible_ block. **Click me!**}
+  Hidden content...  
+  **Surprise!**
+
+  .loremipsum
+```
+
+> Collapsed:  
+> !(600)[Collapsed](https://github.com/user-attachments/assets/09b88a07-fbd2-4f41-9867-e3957b2f0626)
+>
+> Expanded:  
+> !(600)[Expanded](https://github.com/user-attachments/assets/710100b5-a4fa-4697-b99e-4c5d9cd73e41)
+
+
+
+The initial status of a block can be changed via the optional `open` [`Boolean`](Boolean.qd) argument, which defaults to `false` (collapsed).
+
+```markdown
+.collapse {A _collapsible_ block. **Click me!**} open:{yes}
+  ...
+```
+

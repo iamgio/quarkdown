@@ -1,0 +1,97 @@
+.include {_Setup.qd}
+
+Quarkdown offers two ways to include content from other files: **inclusion** and **subdocumenting**.
+
+They are radically different in how they work and what they are used for.
+
+
+
+## Inclusion
+
+[Inclusion](Including-other-Quarkdown-files.qd) via `.include` and `.includeall` is a way to evaluate other Quarkdown source files.
+
+The result of the evaluation is returned, making it look as if the content of the target file was inserted in place of the function call.
+
+This is an **opaque operation**, since there are no traces of the original file in the output.
+
+
+> `main.qd`:
+>
+> ```markdown
+> Hello 1
+>
+> .include {other.qd}
+> ```
+>
+> `other.qd`:
+>
+> ```markdown
+> Hello 2
+> ```
+>
+> Output `index.html`:
+>
+> ```html
+> <p>Hello 1</p>
+> <p>Hello 2</p>
+> ```
+
+#### Context
+
+The execution context is ***shared*** between the main file and the included file.
+
+This means that any customization, function, variable and other  information declared in the main file will be available in the included file, **and vice versa**.
+
+This behavior can optionally be restricted via the [`sandbox`](Including-other-Quarkdown-files.qd#context-sharing) parameter.
+
+#### Circular references
+
+Circular or recursive inclusions are not allowed and will result in an error.
+
+
+
+## Subdocuments
+
+[Subdocuments](Subdocuments.qd) are independent and referenceable source files.
+
+Subdocuments will be rendered as separate resources,
+and links to them are stored in a graph structure.
+
+> `main.qd`:
+>
+> ```markdown
+> Hello 1
+>
+> [Other](other.qd)
+> ```
+>
+> `other.qd`:
+>
+> ```markdown
+> Hello 2
+> ```
+>
+> Output `index.html`:
+>
+> ```html
+> <p>Hello 1</p>
+> <a href="./other">Other</a>
+> ```
+>
+> Output `other.html`:
+>
+> ```html
+> <p>Hello 2</p>
+> ```
+
+#### Context
+
+When evaluating subdocuments, the context is ***inherited*** from the referrer.
+
+This means that any customization and declaration made
+in the referrer will be available in the subdocument,
+but not the other way around.
+
+#### Circular references
+
+Each subdocument is evaluated only once, hence circular and recursive references are allowed.

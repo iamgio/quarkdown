@@ -1,0 +1,163 @@
+.include {_Setup.qd}
+
+The **`.include {file} {sandbox?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html)</sup> function makes it possible to load and evaluate an external Quarkdown source file.
+
+Its parameter accepts a string which represents the **path to the target file**, which may be relative to the location of the main source file, or absolute.
+
+> To include external libraries, please refer to [*Importing external libraries*](Importing-external-libraries.qd).
+
+> `a.qd`
+> ```
+> ### Hello Quarkdown
+>
+> This is external content.
+> ```
+
+> `main.qd`
+> ```
+> .include {a.qd}
+> ```
+> Output:
+>
+> ### Hello Quarkdown
+>
+> This is external content.
+
+> [!CAUTION]
+> Circular dependency results in an error.
+
+
+
+> [!NOTE]
+>
+> Do not confuse inclusion with [subdocuments](Subdocuments.qd):
+> see [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd)
+> for a comparison.
+
+
+
+### Bulk include
+
+A clean approach with using typesetting systems would be having a main file which gathers all the different subfiles together.  
+For this purpose, the `.includeall` function, which takes an [Iterable](Iterable.qd) of paths, comes particularly handy as a shorthand for repeated `.include` calls.
+
+The following snippet is taken from [Mock](https://github.com/iamgio/quarkdown/blob/main/mock)'s `main.qd` file:
+
+```
+.includeall
+    - setup.qd
+    - headings.qd
+    - paragraphs.qd
+    - lists.qd
+    - images.qd
+    - tables.qd
+    - code.qd
+    - textformatting.qd
+    - colorpreview.qd
+    - quotes.qd
+    - boxes.qd
+    - math.qd
+    - mermaid.qd
+    - collapsibles.qd
+    - errors.qd
+    - separators.qd
+    - alignment.qd
+    - stacks.qd
+```
+
+The function can also be combined with [`.listfiles`](File-data.qd) to automatically include all files in a directory:
+
+```
+.includeall {.listfiles {somedirectory} sortby:{name}}
+```
+
+
+
+### Context sharing
+
+`.include`'s `sandbox` parameter lets you control how much isolation the included file has from the main file.
+The included file always inherits the context of the main file, but changes made in the included file can optionally propagate back.
+
+For these examples, consider the following files:
+
+> `file.qd`
+> ```
+> .docname {New name}
+>
+> .function {greet}
+>   name:
+>   Hello, **.name**!
+> ```
+
+> `main.qd`
+> ```
+> .docname {My document}
+> .include {file.qd} sandbox:{<value>}
+>
+> 1. .docname
+> 2. .greet {John}
+> ```
+
+Here are the available options, in ascending order of isolation:
+
+#### `share` (default)
+
+Both contexts are synchronized bidirectionally. This means that any customization, function, variable and other information declared in the included file will also be available in the main file, and vice versa.
+
+> Output:
+>
+> 1. New name
+> 2. Hello, **John**!
+
+
+
+#### `scope`
+
+Similar to `share`, but function and variable declarations do not propagate back to the main file.
+
+This is the same behavior used in nested lambda scopes, such as in [`.function`](Declaring-functions.qd) and [`.foreach`](Loops.qd).
+
+> Output:
+>
+> 1. New name
+> 2. Compile error: `.greet` is not defined.
+
+
+
+#### `subdocument`
+
+The included file is completely isolated from the main file. Any changes, including metadata and layout options, do not propagate back.
+
+This is the same behavior as [subdocuments](Subdocuments.qd).
+
+> Output:
+>
+> 1. My document
+> 2. Compile error: `.greet` is not defined.
+
+
+
+### Use case: setting up
+
+A common use case would be putting all the setup function calls in a separate file (see the *Setting up* section of this wiki to see all).
+
+> `setup.qd`
+> ```
+> .docname {My document}
+> .docauthor {iamgio}
+> .doctype {slides}
+> .doclang {English}
+> .theme {darko} layout:{minimal}
+> 
+> .footer
+>    ...
+> ```
+
+> `main.qd`
+> ```
+> .include {setup.qd}
+>
+> # My cool document
+> 
+> ...
+> ```

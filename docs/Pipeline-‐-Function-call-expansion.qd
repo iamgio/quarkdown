@@ -1,0 +1,34 @@
+.include {_Setup.qd}
+
+> *[← Back to Pipeline](Pipeline.qd)*
+
+## Function call expansion
+
+> Main packages: [`core.function`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/function)
+
+Among the nodes generated from the [Parsing](Pipeline-‐-Parsing.qd) stage, those of type `FunctionCallNode(context, name, arguments)` represent [function calls](Syntax-of-a-function-call.qd).
+
+While all other nodes never change after they're created, this is the only kind of *mutable* node, which means its inner data is expected to change after the AST has been fully generated. Its mutation affects its child nodes, which is initially an empty collection and later populated by a component called *function call expander*.
+
+Before addressing the expansion itself, we should understand how data is exchanged among functions. Quarkdown functions, either explicitly or implicitly, always return a [`Value`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/eu/iamgio/quarkdown/function/value), a type-checked object wrapper.  
+
+In Quarkdown, not all types can be returned and not all types can be used as arguments. Hence, functions should feature `InputValue` parameters and return an `OutputValue`. A complete set of value types is visualized in the following Venn-UML diagram:
+
+!(60%)[Value types](https://github.com/user-attachments/assets/c79a66d2-e646-48c5-a0a3-c3570e8e2c87)
+
+
+
+Whenever a function returns some `OutputValue`, it must be converted to some `Node`, able to be rendered on screen. For instance, a `StringValue` becomes text, an `OrderedCollectionValue` an ordered list, a `BooleanValue` a checkbox, a `DictionaryValue` a table, and so on. This operation is handled by a *value-node mapper*.
+
+For each function call node, enqueued by the parser, the corresponding function is looked up among loaded libraries<sup>[1](#f1)</sup>, argument-parameter bindings are established<sup>[2](#f2)</sup> and the function is executed and its output is obtained.  
+After retrieving the output node from the mapper, the expander can push it to the function call's child nodes, ready for the next stage.
+
+*See next: [Tree traversal](Pipeline-‐-Tree-traversal.qd)*
+
+
+
+---
+
+<sup id="f1">1</sup> User-defined functions are also dynamically stored into a volatile library. Native libraries (e.g. `stdlib`) load their functions via reflection instead.
+
+<sup id="f2">2</sup> Quarkdown is [dynamically typed](Typing.qd), while the native libraries are written in a statically typed language (Kotlin). When an argument-parameter binding is created, if the argument's type is dynamic, a conversion to its parameter's static type is performed via the `ValueFactory`. If the conversion fails, an error is thrown.

@@ -1,0 +1,60 @@
+.include {_Setup.qd}
+
+The **`.captionposition`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html)</sup> function allows globally setting the position of captions, relative to the element they describe.
+
+This applies to:
+- Figures
+  - [Figure Markdown extension](Figure.qd)
+  - [`.figure`](Custom-figure.qd)
+  - [Mermaid diagrams](Mermaid-diagrams.qd) and derivatives (e.g. [XY charts](XY-chart.qd))
+- Tables
+  - [Table caption Markdown extension](Table-caption.qd)
+  - [Tables from CSV](File-data.qd#table-from-csv)
+- Code blocks
+  - [Code caption Markdown extension](Code-caption.qd)
+  - [`.code`](Code.qd)
+
+---
+
+The function's primary parameter is called `default`, which sets the global style for all kinds of captioned elements.  
+Additional parameters `figures`, `tables` and `code` override the default position for those specific elements.
+
+Each parameter is optional and accepts `top`/`bottom` values.  
+By default, documents use `.captionposition {bottom}`.
+
+
+
+```markdown
+.captionposition {bottom}
+
+![Sky](sky.jpg "A nice sky.".qd)
+
+| Name | Favorite food | Favorite beverage |
+|------|---------------|-------------------|
+| John | Chicken       | Orange juice      |
+| Jane | Pasta         | Iced tea          |
+| Joe  | Sushi         | Beer              |
+"Survey results."
+```
+!(600)[Default: bottom](https://github.com/user-attachments/assets/a77154fd-d601-4f9c-b469-42055be10c16)
+
+
+
+```
+.captionposition {top}
+```
+!(600)[Default: top](https://github.com/user-attachments/assets/6ba066d3-53a4-4c4e-a78c-eb305f244350)
+
+
+
+```
+.captionposition {bottom} tables:{bottom}
+```
+!(600)[Default: bottom, tables: top](https://github.com/user-attachments/assets/0838ac08-08aa-4479-b915-fc0c31df2e59)
+
+
+
+
+
+
+> Photo credits: [Pixabay](https://www.pexels.com/photo/blue-skies-53594/)

@@ -1,0 +1,71 @@
+.include {_Setup.qd}
+
+## Table generation by columns
+
+The **`.table`** function takes a single block argument which is an [iterable](Iterable.qd) of **tables**.  
+The result of the call is a **new table** which is the combination, **by columns** of the supplied tables.
+
+In the following example `.repeat` is used, which, as other supported [loops](Loops.qd) do, returns the results from each iteration as an iterable.
+
+```
+.table
+  .repeat {3}
+    n:
+    | Column .n |
+    |-----------|
+    | Cell .n:1 |
+    | Cell .n:2 |
+    | Cell .n:3 |
+```
+
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Cell 1:1 | Cell 2:1 | Cell 3:1 |
+| Cell 1:2 | Cell 2:2 | Cell 3:2 |
+| Cell 1:3 | Cell 2:3 | Cell 3:3 |
+
+
+
+## Table generation by rows
+
+The **`.tablebyrows`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html)</sup> function
+takes two arguments: an optional iterable of headers and an iterable of rows.
+
+```markdown
+.var {headers}
+   - Name
+   - Age
+   - City
+
+.tablebyrows {.headers}
+  - - John
+    - 25
+    - NY
+  - - Lisa
+    - 32
+    - LA
+  - - Mike
+    - 19
+    - CHI
+```
+
+| Name | Age | City |
+|------|-----|------|
+| John | 25  | NY   |
+| Lisa | 32  | LA   |
+| Mike | 19  | CHI  |
+
+```
+.tablebyrows
+    .repeat {3}
+        y:
+        .repeat {3}
+            x:
+            Cell .x:.y
+```
+
+|  |  |  |
+|----------|----------|----------|
+| Cell 1:1 | Cell 2:1 | Cell 3:1 |
+| Cell 1:2 | Cell 2:2 | Cell 3:2 |
+| Cell 1:3 | Cell 2:3 | Cell 3:3 |

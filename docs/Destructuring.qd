@@ -1,0 +1,66 @@
+.include {_Setup.qd}
+
+## Destructuring
+
+Destructuring is the operation that splits a [lambda](Lambda.qd) parameter into its bare components. For instance, a [pair](Iterable.qd#pair) has two components, while a generic [iterable](Iterable.qd) has many.
+
+The following types are destructurable:
+- [`Iterable`](Iterable.qd) (including [`Pair`](Iterable.qd#pair))
+- [`Dictionary`](Dictionary.qd) (as an iterable of pairs)
+
+A value is destructured into `N` components if all the following conditions are met:
+- Its type is destructurable;
+- The lambda expects a single argument (such as [`.foreach`](Loops.qd));
+- `N > 1` lambda parameters are supplied.
+
+When the lambda argument is destructured, the operation is performed on its components rather than the element itself.
+
+
+
+## Example: `.foreach`
+
+In the following example we define a [Dictionary](Dictionary.qd) and iterate over its destructured key-value components:
+
+```markdown
+.var {mydictionary}
+  .dictionary 
+    - a: 1
+    - b: 2
+    - c: 3
+
+.foreach {.mydictionary}
+    key value: <!-- 2 lambda parameters = each pair is destructured into its 2 components -->
+    **.key** has value **.value**
+```
+> **a** has value **1**
+>
+> **b** has value **2**
+>
+> **c** has value **3**
+
+
+
+## Example: `.sorted`
+
+In the following example we define a [Dictionary](Dictionary.qd) and iterate over its destructured key-value components via `.foreach` as in the previous example,
+but only after sorting its entries by value via [`.sorted`](Iterable.qd#operations), which takes a lambda that defines the ordering criteria.
+
+> [!NOTE]
+> Remember that `@lambda` is required when declaring an [inline lambda](Lambda.qd#inline-lambda).
+
+```markdown
+.var {mydictionary}
+    .dictionary
+        - a: 3
+        - b: 1
+        - c: 2
+
+.foreach {.mydictionary::sorted by:{@lambda name value: .value}}
+   name value:
+   .name
+```
+> b
+>
+> c
+>
+> a

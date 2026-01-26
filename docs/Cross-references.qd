@@ -1,0 +1,130 @@
+.include {_Setup.qd}
+
+In typesetting, cross-references are references to other parts of the document, such as figures, tables, sections and equations.
+
+In Quarkdown, a cross-reference is created via the **`.ref {id}`** function, where `id` is the cross-reference ID of the target element.  
+The function may appear either before or after the target element.
+
+> [!NOTE]
+> Cross-referencing works best when elements are numbered and a supported document language is set.  
+> See [*Numbering*](Numbering.qd) and [*Localization*](Localization.qd) for details.
+
+The ID is usually set via the `{#id}` syntax, in locations that depend on the element type, as the following sections explain.  
+For this guide, assume the `1.1` numbering format is used for all elements.
+
+
+
+### Sections
+
+```markdown
+Once Quarkdown is installed, check out .ref {getting-started} for a quick guide.
+
+## Getting started {#getting-started}
+```
+
+!(650)[Sections](https://github.com/user-attachments/assets/15092d0a-1d4f-44b6-80e0-496561e739c1)
+
+> [!TIP]
+> In HTML rendering, the reference ID of headings also sets the HTML `id` attribute, suitable for linking.
+
+
+
+### Figures
+
+```markdown
+The Quarkdown logo is shown in .ref {logo}.
+
+![Logo](icon.svg "The Quarkdown icon".qd) {#logo}
+```
+
+!(650)[Figures](https://github.com/user-attachments/assets/754320fd-442b-45d6-bc29-b4eebae5b22f)
+
+
+
+### Tables
+
+```markdown
+As shown in .ref {data}, coffee is the most popular beverage.
+
+| Person | Beverage |
+|--------|----------|
+| Alice  | Tea      |
+| Bob    | Coffee   |
+| Charlie| Coffee   |
+{#data}
+```
+
+!(650)[Tables](https://github.com/user-attachments/assets/887a99e2-9c61-4be7-94d5-ef90c049d558)
+
+With [caption](Table-caption.qd):
+
+```markdown
+| Person | Beverage |
+|--------|----------|
+| Alice  | Tea      |
+| Bob    | Coffee   |
+| Charlie| Coffee   |
+"Beverage preferences" {#data}
+```
+
+
+
+### Equations
+
+```markdown
+Einstein's famous equation is shown in .ref {energy}.
+
+$ E = mc^2 $ {#energy}
+```
+
+Multi-line:
+
+```markdown
+$$$ {#energy}
+E = mc^2
+$$$
+```
+
+!(650)[Equations](https://github.com/user-attachments/assets/a4c98ad5-e378-4edc-88bc-981fc721737a)
+
+
+
+### Code blocks (listings)
+
+~~~markdown
+See the main function in .ref {main}.
+
+```kotlin {#main}
+fun main() {
+    println("Hello, World!")
+}
+```
+~~~
+
+!(650)[Code blocks](https://github.com/user-attachments/assets/5b870166-b571-41c4-85bc-880ec03216f6)
+
+With [caption](Code-caption.qd):
+
+~~~markdown
+```kotlin "Hello World in Kotlin" {#main}
+fun main() {
+    println("Hello, World!")
+}
+```
+~~~
+
+
+
+### Custom numbered elements
+
+> `.numbered` elements are thoroughly explained in [*Numbering*](Numbering.qd#custom-numbered-elements).
+
+```markdown
+In Example .ref {my-example} you can see a custom numbered element.
+
+.numbered {examples} ref:{my-example}
+    number:
+    **Example .number:** this is a custom numbered element.
+```
+
+!(650)[Custom numbered elements](https://github.com/user-attachments/assets/aa711f85-52db-49d7-946d-08b826e3ebf7)

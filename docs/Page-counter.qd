@@ -1,0 +1,38 @@
+.include {_Setup.qd}
+
+The **`.currentpage`** and **`.totalpages`** functions display, respectively, the current index (beginning from 1) of the page/slide the function call lies in and the total amount of pages/slides. They don't accept any argument.
+
+They are unsupported in `plain` documents, where the `-` placeholder is shown instead.
+
+> [!NOTE]
+> These functions return visual elements (nodes), *not* numbers. Hence, it is not allowed to do, for example, `.sum {.currentpage} {3}`.
+
+### Fixed page counter
+
+A page counter can be displayed on each page thanks to [page margin content](Page-margin-content.qd):
+
+```
+.pagemargin {bottomcenter}
+  .currentpage / .totalpages
+```
+
+### Resetting the page number
+
+The **`.resetpagenumber {from?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html)</sup> function allows overwriting the current page number at any point in a `paged` or `slides` document.
+
+These changes are reflected in `.currentpage` and page numbers in the [table of contents](Table-of-contents.qd).
+
+```markdown
+.pagemargin {topcenter}
+  .currentpage
+
+## First page
+
+## Second page
+
+.resetpagenumber
+
+## Third page
+```
+
+!(_*200)[Page number reset](https://github.com/user-attachments/assets/79ebc375-4aea-4c7e-b80f-39889fd80553)

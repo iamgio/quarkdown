@@ -1,0 +1,76 @@
+.include {_Setup.qd}
+
+The [`.doctype`](Document-metadata.qd) function defines the type of document based on different use cases. Each document type has its own set of features and limitations.
+
+
+
+## Plain (`plain`)
+
+The layout of a plain document is linear, with no page breaks, and the content flows continuously.
+
+Thanks to its responsiveness, it's the optimal choice for websites and knowledge management documents, resembling the style of tools such as Notion or Obsidian.
+
+The document is composed of three main elements:
+- A central content area;
+- Two side margin areas.
+
+!(1000)[Plain](https://github.com/user-attachments/assets/3358f01b-540e-4bbd-99f0-dc2bd319c415)
+
+#### Margin content
+
+[Page margin content](Page-margin-content.qd) is displayed in a fixed position, not affected by scrolling.
+
+#### Footnotes
+
+[Footnotes](Footnotes.qd) are rather sidenotes in this document type, as they are displayed in the right margin area, next to their first reference.
+
+When in mobile view, footnotes are displayed at the end of the page.
+
+#### PDF
+
+When exporting to PDF, the output artifact contains a single page that fits the whole content.
+
+
+
+## Paged (`paged`)
+
+A paged document is a traditional document with content divided into pages.
+
+Page breaks happen either [explicitly](Page-break.qd) or implicitly in case of long content.
+
+!(1000)[Paged](https://github.com/user-attachments/assets/bffc5a27-62fe-4a80-b36a-b53438d40fd9)
+
+#### Margin content
+
+[Page margin content](Page-margin-content.qd) is displayed on each page in a dedicated area.
+
+#### Footnotes
+
+[Footnotes](Footnotes.qd) are displayed at the bottom of the first reference's page, in a dedicated area.
+
+
+
+## Slides (`slides`)
+
+A slides document is designed for presentations, with a layout optimized for displaying content one slide at a time.
+
+Unless specified by the layout [theme](Themes.qd),
+slides center their content horizontally.
+
+Line breaks are only triggered [explicitly](Page-break.qd).
+
+!(1000)[Slides](https://github.com/user-attachments/assets/9c52ddc0-c3d1-48ac-8852-328dab48af64)
+
+#### Margin content
+
+[Page margin content](Page-margin-content.qd) is displayed on each slide, but not in a dedicated area. It could potentially overlap actual content.
+
+#### Footnotes
+
+[Footnotes](Footnotes.qd) are displayed at the bottom of the first reference's slide, but not in a dedicated area.
+
+#### PDF
+
+When exporting to PDF:
+- Each slide is a page of the output artifact;
+- Each [fragment](Slides-fragment.qd) state is displayed on a separate page.

@@ -1,0 +1,50 @@
+.include {_Setup.qd}
+
+The **`.lastheading {depth}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/lastheading.html)</sup> function makes it possible to reference the last heading of a given depth across pages or slides.
+
+Used in combination with [page margin content](Page-margin-content.qd), it allows for persistent headings, such as chapter titles or section names, to be displayed in the page margins.
+
+> `depth` refers to the heading level: `1` for `#`, `2` for `##`, and so on.
+
+```markdown
+.pagemargin {topcenter}
+    *.lastheading depth:{1}*
+
+## Chapter 1
+
+.repeat {10}
+    .loremipsum
+```
+
+!(1000)[Result](https://github.com/user-attachments/assets/19384e81-5cc6-4019-8496-778b1e09f7d2)
+
+
+
+Note that headings of lesser depth reset the last reference.
+In the following example, the depth-2 persistent heading is shown 
+when on a depth-2 section (page 2),
+but resets when entering a depth-1 section (page 3):
+
+```markdown
+.pagemargin {topleft}
+    *.lastheading depth:{1}*
+
+.pagemargin {topright}
+    *.lastheading depth:{2}*
+
+## Chapter 1
+
+.repeat {6}
+    .loremipsum
+
+### Subsection
+
+.loremipsum
+
+## Chapter 2
+
+.repeat {2}
+    .loremipsum
+```
+
+!(1000)[Result](https://github.com/user-attachments/assets/c15ad847-c8c8-4947-a2aa-f3355bbd5566)

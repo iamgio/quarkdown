@@ -1,0 +1,44 @@
+.include {_Setup.qd}
+
+> *[← Back to Pipeline](Pipeline.qd)*
+
+## Rendering
+
+> Main packages: [`core.rendering`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/rendering)
+>
+> Rendering modules: [`quarkdown-html`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-html)
+
+Once the AST is fully generated and enriched, it is time to translate it into a target format, such as HTML.
+
+This is performed via a depth-first traversal of the AST, starting from the root. Each visit to a node produces some output (in the case of HTML, an element tag) which, ideally 1:1, translates the information stored by the node into the target format.
+
+To ensure scalability, Quarkdown locates each rendering target in external modules, such as `quarkdown-html`,
+which can be plugged into the core architecture.
+
+---
+
+Example Markdown input:
+
+```markdown
+## Title
+
+This is **bold** and _italic_ text.
+
+- Item 1
+- Item 2
+```
+
+Output HTML:
+
+```html
+<h1>Title</h1>
+<p>This is <strong>bold</strong> and <em>italic</em> text.</p>
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+</ul>
+```
+
+---
+
+*See next: [Post-rendering](Pipeline-‐-Post-rendering.qd)*

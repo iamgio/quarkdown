@@ -1,0 +1,644 @@
+.include {_Setup.qd}
+
+Welcome to Quarkdown! In this page, we'll explore the main steps and features that will help you create your first document.
+
+> [!TIP]
+> If you're using VS Code, we strongly recommend installing
+> the [official Quarkdown extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode).
+
+This guide provides a shallow overview and won't go into the specific details of each feature. In each section you'll find links to other wiki pages for in-depth explanations of relevant features we'll be using.
+
+
+
+## Creating a document
+
+> Reference: [Project Creator](CLI-‐-Project-creator.qd)
+
+To create a new document, run the project creator from your terminal:
+
+```shell
+quarkdown create my-document
+```
+
+This will create a new folder named `my-document`.
+If you wish to use the working directory instead, you can omit the name.
+
+For this quickstart, we recommend the following options:
+
+- Project name: `Quickstart`
+- Authors: \<your name>
+- Document type: `plain`
+- Document language: `English`
+
+Once the project is created, open `my-document.qd` in your favorite text editor.
+
+You may also delete the existing content inside the first section.
+
+```diff
+## Quickstart
+
+- Welcome to [Quarkdown](https://quarkdown.com)!
+- This is the starting point of your document.
+- ...
+```
+
+### Choosing a document type
+
+> Reference: [Document types](Document-types.qd)
+
+During the initial setup, you'll be asked to choose a document type, which can be one of the following:
+
+- **`plain`** - Continuous flow like Notion/Obsidian, great for knowledge management and web viewing.
+- **`paged`** - Traditional document with page breaks, ideal for PDFs.
+- **`slides`** - Presentation format with interactive navigation.
+
+### Choosing a theme
+
+> Reference: [Themes](Themes.qd)
+
+Themes are split into two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout.
+
+```
+.theme {paperwhite} layout:{latex}
+```
+
+Popular combinations are:
+
+- `paperwhite + latex` - Clean academic look (default)
+- `darko + minimal` - Dark theme with minimal styling
+- `beaver + beamer` - Academic presentation style
+
+See [Themes](Themes.qd) for a complete list of available themes.
+
+
+
+## Compiling
+
+> Reference: [Compiler](CLI-‐-Compiler.qd)
+
+Compile the document to ensure everything is working as expected:
+
+```shell
+cd my-document
+quarkdown c my-document.qd
+```
+
+You should see the HTML output inside the `output` directory. Great!
+
+To export to PDF:
+
+```shell
+quarkdown c my-document.qd --pdf
+```
+
+See the [PDF export](PDF-export.qd) page for more information about PDF export and its requirements.
+If you installed Quarkdown via a package manager or install script, you should be all set.
+
+
+
+## Live preview
+
+To launch live preview, append `-p` (preview) and `-w` (watch) to the compile command:
+
+```shell
+quarkdown c my-document.qd -p -w
+```
+
+This launches the default browser by default.
+To use a different one, use, for example, `--browser chrome`.
+
+If you're using VS Code with the Quarkdown extension,
+you can launch the live preview using the corresponding 🔍 button
+or pressing `Ctrl/⌘+Shift+V`
+
+
+
+## Markup
+
+Quarkdown is built upon Markdown, with several GFM extensions.
+
+To try out basic markup within Quarkdown, you can append the following to the existing content of `my-document.qd`,
+and feel free to play around with it:
+
+```markdown
+### A Quarkdown tour
+
+No need to reinvent the wheel: you can make text **bold** or *italic*,
+~~strike through~~, add `inline code`,
+create [links](https://quarkdown.com), and much more.
+
+- An unordered list
+- With multiple items
+
+1. An ordered list
+2. With multiple items
+
+![Logo](image/logo.png)
+```
+
+!(650)[Markup](https://github.com/user-attachments/assets/0a9a43f8-5383-4a70-bd13-10580fad923c)
+
+You may refer to resources such as [markdownguide ↗](https://www.markdownguide.org/basic-syntax) to know more about Markdown.
+
+### Image size
+
+> References: [Image size](Image-size.qd), [Size](Sizes.qd)
+
+You might have noticed the image in the previous example was way too large.
+
+Quarkdown overcomes a well-known Markdown limitation by allowing image size specification:
+
+```markdown
+!(50%)[Logo](image/logo.png)
+```
+
+Great! The image is now perfectly sized.
+
+!(650)[Image size](https://github.com/user-attachments/assets/c7321c7e-9b06-4e62-836b-bfeb1e5feb85)
+
+This sets the image width to 50% of the available width, while keeping the aspect ratio.
+Supported units include `px`, `pt`, `cm`, `mm`, `in`, and `%`.
+If the unit is omitted, `px` is assumed.
+
+If you wish to specify both width and height:
+
+```markdown
+!(6cm 2cm)[Logo](image/logo.png)
+```
+
+If you wish to specify only the height:
+
+```markdown
+!(_ 2cm)[Logo](image/logo.png)
+```
+
+### Figures
+
+> Reference: [Figures](Figure.qd)
+
+When an image is isolated from other content, like in the previous example, it becomes a figure, which is automatically centered and can have a caption.
+
+Let's go to the previous image:
+
+```markdown
+!(50%)[Logo](image/logo.png)
+```
+
+and enhance it with a caption:
+
+```markdown
+!(50%)[Logo](image/logo.png "The Quarkdown logo".qd)
+```
+
+!(650)[Figure](https://github.com/user-attachments/assets/34f6af0f-ec98-418a-aede-d484a89dd1c9)
+
+### Equations and formulae
+
+> Reference: [TeX formulae](TeX-formulae.qd)
+
+TeX equations can be included by means of the `$ expression $` syntax (beware of whitespaces).
+
+Let's try adding equations to the bottom of our document:
+
+```markdown
+#### Equations
+
+$ E = mc^2 $ is Einstein's mass-energy equivalence formula.
+
+$ f(x, y) = \frac{x}{y} $
+```
+
+You might notice that, despite having the same syntax, the second appears centered and on its own line. Just like figures, isolated equations automatically become block equations.
+
+!(650)[Equations](https://github.com/user-attachments/assets/2f6248fd-3423-47aa-8f6c-cf1c7fcbe887)
+
+
+
+## Function call syntax
+
+> Reference: [Syntax of a function call](Syntax-of-a-function-call.qd)
+
+Before going deeper into other features, let's briefly explore Quarkdown's function call syntax.
+
+Function calls start with a dot and use curly braces for arguments, which may be positional or named:
+
+```
+.pow {5} to:{2} is a mathematical operation.
+```
+
+Function calls can be *inline* or *block*, depending on whether they are isolated or not from other content.
+
+Block function calls also allow an indented *block argument*,
+which always refers to the last parameter of the function, positionally speaking:
+
+```
+.align {center}
+    This multi-line paragraph is the block argument,
+    and it's now centered in the document.
+```
+
+Multiple function calls can also be chained together,
+so that the output of one refers to the first parameter of the next:
+
+```markdown
+.sqrt {10}::round::multiply {2} <!-- 6 -->
+```
+
+> [!TIP]
+> A full list of available functions can be found in the [docs](https://quarkdown.com/docs/quarkdown-stdlib/).
+
+### Variables
+
+> Reference: [Variables](Variables.qd)
+
+A variable is defined using the `.var` function,
+and can be accessed like any function.
+
+```
+.var {name} {John}
+
+My name is .name
+```
+
+A variable can be overwritten by supplying an argument:
+
+```
+.name {Jane}
+```
+
+
+
+## Custom elements
+
+> Reference: [Declaring functions](Declaring-functions.qd), [Boxes](Box.qd)
+
+Custom functions can be defined via `.function`.
+Functions are reusable, versatile components that can encapsulate logic and content.
+In this guide, we'll create a function that generates an *Example* box,
+commonly used in educational documents.
+
+Let's start by defining a function without parameters:
+
+```markdown
+.docauthors
+    - ...
+
+.function {example}
+    .box {Example} type:{tip}
+        This is my example!
+
+## Quickstart
+...
+```
+
+And let's call it:
+
+```markdown
+## Quickstart
+
+.example
+
+...
+```
+
+Great! Calling `.example` now produces a nicely formatted box.
+
+Let's enhance our function by adding a parameter for the content of the box.
+The syntax for parameters is `param1 param2 param3:`.
+
+```markdown
+.function {example}
+    content:
+    .box {Example} type:{tip}
+        .content
+```
+
+And let's update the call accordingly.
+
+```markdown
+.example
+    This is my example!
+```
+
+!(650)[Custom element](https://github.com/user-attachments/assets/039bdd8b-a47f-4ebb-996d-ba0de4632a35)
+
+
+
+Congratulations! You've created your first reusable element that relies on [box](Box.qd).
+Many more layout tools are available, such as [containers](Container.qd) and [stacks](Stacks.qd).
+
+If you're looking for advanced styling of custom elements, you may even use
+CSS rules: see [CSS](CSS.qd) for more information.
+
+> For the sake of simplicity for this guide, let's remove the function call:
+>
+> ```diff
+> - .example
+> -    This is my example!
+> ```
+
+
+
+## Numbering
+
+> Reference: [Numbering](Numbering.qd)
+
+Many documents, especially academic ones, require some elements to be numbered, such as sections, figures, tables, equations and code. In Quarkdown, this can be achieved using the `.numbering` function.
+
+> [!NOTE]
+> `paged` documents come with a default numbering.
+
+Head to the top of our document's source code, right before the beginning of content,
+and set up a simple numbering scheme:
+
+```markdown
+.docauthors
+    - ...
+
+.numbering
+    - headings: 1.1.1
+    - figures: 1.1
+
+.function {example}
+    ...
+
+## Quickstart
+...
+```
+
+> This YAML-like syntax represents a [dictionary](Dictionary.qd) data type.
+
+!(650)[Numbering](https://github.com/user-attachments/assets/eca10ab2-70e8-492f-a1d7-c9b8a7bb4064)
+
+Valid symbols are: 
+- `1` (decimal)
+- `A` (uppercase letters)
+- `a` (lowercase letters)
+- `I` (uppercase Roman numerals)
+- `i` (lowercase Roman numerals)
+
+Any other character will be treated as literal text.
+
+
+
+## Table of contents
+
+> Reference: [Table of contents](Table-of-contents.qd)
+
+It's common for longer documents to have a table of contents at the beginning, listing all sections and subsections.
+
+In Quarkdown, it's as easy as calling the `.tableofcontents` function where you want the table of contents to appear, for example before the first section:
+
+```markdown
+.numbering
+    - ...
+
+.tableofcontents
+
+## Quickstart
+...
+```
+
+
+
+## Footnotes
+
+> Reference: [Footnotes](Footnotes.qd)
+
+Footnotes are a great way to add additional information without cluttering the main text.
+For our quickstart, let's go back to our introduction and add a footnote to it:
+
+```markdown
+### A Quarkdown tour
+
+No need to reinvent the wheel: you can make text **bold** or *italic*,
+~~strike through~~, add `inline code`,
+create [links](https://quarkdown.com), and much more[^1].
+
+[^1]: All Markdown features are supported in Quarkdown
+```
+
+This is the GFM footnote syntax, which Quarkdown fully supports,
+along with compact footnotes, which allow defining a footnote inline, right where it's referenced:
+
+```markdown
+and much more[^: All Markdown features are supported in Quarkdown].
+```
+
+In `plain` documents, footnotes are more like side notes, and appear in the margin, next to the reference.
+In `paged` and `slides` documents, footnotes appear at the bottom of the page or slide.
+
+
+
+## Cross-references
+
+> Reference: [Cross-references](Cross-references.qd)
+
+Cross-references allow referring to other elements in the document which can be numbered.
+
+The first step is to add an ID to the target element.
+After that, the element can be referenced using the `.ref {id}` function.
+
+Let's go back to our figure:
+
+```markdown
+!(50%)[Logo](image/logo.png "The Quarkdown logo".qd)
+```
+
+add the `logo` ID to it, and reference it in the text:
+
+```markdown
+!(50%)[Logo](image/logo.png "The Quarkdown logo".qd) {#logo}
+
+The Quarkdown logo is shown in .ref {logo}.
+```
+
+!(650)[Cross-reference](https://github.com/user-attachments/assets/b8522090-a09a-461a-a36c-fe52a5620b56)
+
+See [Cross-references](Cross-references.qd) to learn how to add IDs to other elements, such as sections, tables, equations and code blocks.
+
+
+
+## Page margins and counter
+
+> References: [Page format](Page-format.qd), [Page margin content](Page-margin-content.qd), [Page counter](Page-counter.qd)
+
+In `paged` and `slides` documents, you'll likely need a page counter
+to improve navigation and provide context to readers.
+
+First off, let's switch to the `paged` document type by changing `.doctype`'s value at the top of our document:
+
+```diff
+- .doctype {plain}
++ .doctype {paged}
+```
+
+> The default page format is A4.
+> Along with other properties, it can be changed using the `.pageformat` function:
+>
+> ```markdown
+> .pageformat {letter} margin:{2cm}
+> ```
+
+Let's now add a page counter to the bottom-center area of each page:
+
+```markdown
+.docauthors
+    - ...
+
+.pagemargin {bottomcenter}
+    .currentpage / .totalpages
+
+.numbering
+    - ...
+```
+
+This way, each page will show its number, and the total number of pages.
+
+In general, `.pagemargin` can be used to add any kind of content to each page.
+See [Page margin content](Page-margin-content.qd) to see the available margin positions.
+
+### Persistent headings
+
+> Reference: [Persistent headings](Persistent-headings.qd)
+
+Page margins can also be used to display the current section, such as chapter title, on each page. The following example displays the current level-1 heading in the bottom left margin:
+
+```markdown
+.pagemargin {bottomcenter}
+    ...
+
+.pagemargin {bottomleft}
+    .lastheading depth:{1}
+
+.numbering
+    - ...
+```
+
+
+
+## Multi-file projects
+
+> Reference: [Inclusion vs. subdocuments](Inclusion-vs-subdocuments.qd)
+
+There are two main ways to split a large document into multiple source files: 
+inclusion and subdocuments.
+
+### Including files
+
+> Reference: [Including other Quarkdown files](Including-other-Quarkdown-files.qd)
+
+The `.include` function allows including the content of another Quarkdown file
+into the current one.
+
+This approach is common in LaTeX and other markup languages,
+in order to split a large document into smaller, more manageable files,
+such as one per chapter or section.
+
+For our quickstart, we could decide to split setup and content into two separate files:
+
+> my-document.qd
+
+```diff
+- .docname {Quickstart}
+- .doctype {paged}
+- .doclang {English}
+- .theme {paperwhite} layout:{latex}
+-
+- .docauthors
+-     - ...
+-
+- .pagemargin {bottomright} 
+-     .currentpage / .totalpages
+-
+- .pagemargin {bottomleft}
+-     .lastheading depth:{1}
+-
+- .numbering 
+-     - headings: 1.1.1
+-     - figures: 1.1
+
++ .include {setup.qd}
++ .include {content.qd}
+
+- .tableofcontents
+-
+- # Quickstart
+-
+- ...
+```
+
+> setup.qd
+
+```markdown
+.docname {MyDocument}
+.doctype {paged}
+.doclang {English}
+.theme {paperwhite} layout:{latex}
+
+.docauthors
+    - Quarkdown
+
+.pagemargin {bottomright} 
+    .currentpage / .totalpages
+
+.numbering 
+    - headings: 1.1.1
+    - figures: 1.1
+```
+
+> content.qd
+
+```markdown
+.tableofcontents
+
+## Quickstart
+
+...
+```
+
+Here we used `.include` twice. For a larger number of files,
+you might consider using `.includeall` instead:
+
+```markdown
+.includeall
+    - setup.qd
+    - content.qd
+```
+
+### Referencing files
+
+> Reference: [Subdocuments](Subdocuments.qd)
+
+The second approach involves subdocuments,
+particularly common in the area of knowledge bases and wikis.
+
+Subdocuments are independent units of content which share
+the same setup and configuration,
+and can be referenced from other documents through links.
+
+> my-document.qd
+
+```markdown
+- [Introduction](introduction.qd)
+- [Chapter 1](chapter1.qd)
+- [Chapter 2](chapter2.qd)
+- [Conclusion](conclusion.qd)
+```
+
+The knowledge graph formed by subdocuments can also be
+visualized:
+
+```markdown
+.subdocumentgraph
+```
+
+!(650)[Subdocuments](https://github.com/user-attachments/assets/db85fe16-b558-4acb-9499-db39d62efbfa)
+
+
+
+## Conclusion
+
+Congratulations! You've completed the Quarkdown quickstart guide and are now familiar with its main features that will assist you with your first real document.
+
+From here, you can explore more advanced topics in the [wiki](https://github.com/iamgio/wiki) and [docs](https://quarkdown.com/docs/).

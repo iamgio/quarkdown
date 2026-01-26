@@ -1,0 +1,33 @@
+.include {_Setup.qd}
+
+Quarkdown follows the standard Markdown specification,
+hence soft line breaks can be created by ending a line with two or more spaces:
+
+> In the following snippet, a whitespace character is represented by `␣` for clarity.
+
+```markdown
+First line␣␣
+Second line
+```
+
+This syntax, however, is not always ideal. It is ambiguous and can lead to confusion.
+Additionally, some editors may unexpectedly trim trailing spaces, removing the intended line breaks.
+
+> Some Markdown users suggest using explicit `<br>` HTML tags.
+> Quarkdown, however, [discourages direct HTML injection](HTML.qd).
+
+As an alternative, Quarkdown provides the **`.br`** function.
+
+```markdown
+First line .br
+Second line
+```
+
+A newline is not mandatory:
+
+```markdown
+First line .br Second line
+```
+
+There are no special conventions regarding the preferred approach
+to break lines. Any of these methods can be chosen based on personal preference.

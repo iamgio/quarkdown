@@ -1,0 +1,16 @@
+.include {_Setup.qd}
+
+> *[← Back to Pipeline](Pipeline.qd)*
+
+## Tree traversal
+
+> Main packages: [`core.ast.iterator`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast/iterator), [`core.context.hooks`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/context/hooks)
+
+After the function calls have been expanded, the AST is traversed depth-first to gather enriched information about the document, such as:
+- Heading hierarchy, used for the [table of contents](Table-of-contents.qd);
+- [Numbering](Numbering.qd): each heading, figure, and others is assigned a unique number based on its location in the heading hierarchy;
+- Link definition bound to each link reference;
+
+For clear performance reasons, only one traversal is performed during this stage. Each operation can however act independently by attaching its own *hook* to the tree iterator, which is triggered when nodes of a certain kind are encountered.
+
+*See next: [Rendering](Pipeline-‐-Rendering.qd)*

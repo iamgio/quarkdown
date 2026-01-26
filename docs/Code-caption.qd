@@ -1,0 +1,28 @@
+.include {_Setup.qd}
+
+The Quarkdown flavor introduces code captions, which can be set by adding a caption directly in the code block declaration. The caption is specified after the language identifier, wrapped in double quotes, single quotes or parentheses, exactly like the image *title* attribute
+and [table captions](Table-caption.qd).
+
+~~~
+```python "Fibonacci function"
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+```
+~~~
+
+!(550)[Caption](https://github.com/user-attachments/assets/97637eb3-c30f-407a-8e31-1c4a0a5840f3)
+
+
+
+The caption can also be wrapped in single quotes or parentheses, exactly like the image *title* attribute:
+
+Code blocks can also be **numbered**: see [Numbering](Numbering.qd) for further information.
+
+```yaml
+.numbering
+    - code: 1.1
+```
+
+!(550)[Numbered caption](https://github.com/user-attachments/assets/b4523220-e88e-4c4c-af5d-d2f665a6f801)

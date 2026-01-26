@@ -1,0 +1,58 @@
+.include {_Setup.qd}
+
+> *[← Back to Pipeline](Pipeline.qd)*
+
+## Parsing
+
+> Main packages: [`core.parser`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser), [`core.ast`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast)
+
+Going on with our metaphor introduced in [Lexing](Pipeline-‐-Lexing.qd), once the nouns, verbs and adjectives are extracted from a sentence, our brain is responsible for linking them together to build some information out of it.
+
+The parser takes the sequence of tokens and organizes them into a tree structure called an *Abstract Syntax Tree* (AST), which defines the relationships between different parts of the document. Each element of the tree is called a *Node*.
+
+---
+
+Example Markdown input:
+
+```markdown
+## Title
+
+This is **bold** and _italic_ text.
+
+- Item 1
+- Item 2
+```
+
+Output AST:
+
+- `AstRoot`
+  - `Heading(depth=1)`
+    - `Text("Title")`
+  - `Paragraph`
+    - `Text("This is ")`
+    - `Strong("bold")`
+    - `Text(" and ")`
+    - `Emphasis("italic")`
+    - `Text(" text")`
+  - `UnorderedList`
+    - `ListItem`
+      - `Paragraph`
+        - `Text("Item 1")`
+    - `ListItem`
+      - `Paragraph`
+        - `Text("Item 2")` 
+
+---
+
+The *lexing* stage produces just the outer blocks, in this example a `HeadingToken`, a `ParagraphToken` and an `UnorderedListToken`.  
+
+In order to gain nested information, the parser analyzes each token and starts searching in deep for nested blocks and inlines.
+- For each block token, triggers the lexing stage on its inner content (*lexeme*)
+- Extracted the inner tokens, they undergo the parsing stage again
+- This continues until no more nested tokens are left. This is called **recursive parsing**, visualized in the following figure:
+
+!(200)[Recursive parsing](https://github.com/user-attachments/assets/0e63d7a9-5a0b-440f-a7b6-ae1bdbe15990)
+
+
+
+*See next: [Function call expansion](Pipeline-‐-Function-call-expansion.qd)*

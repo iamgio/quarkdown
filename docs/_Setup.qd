@@ -1,0 +1,23 @@
+.doctype {docs}
+.doclang {English}
+.theme {galactic} layout:{hyperlegible}
+
+.pagemargin {lefttop}
+    .navigation role:{pagelist}
+        .include {_Sidebar.qd}
+
+.pagemargin {righttop}
+    .tableofcontents
+
+.pagemargin {topleft}
+    ![](/Users/gio/Dev/qd/quarkdown/demo/img/banner.svg)
+
+.pagemargin {topright}
+    .row
+        Docs
+
+        ---
+
+        [.icon {github}](https://github.com/iamgio/quarkdown)
+
+#! .docname

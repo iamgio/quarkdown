@@ -1,0 +1,91 @@
+.include {_Setup.qd}
+
+The **`.container`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html)</sup> function generates a highly customizable blocks of content, along with resetting the current layout rules back to normal.
+
+---
+
+Image you want to make a row with two columns, each one with a heading and some text below. The following is what a novice might attempt:
+
+```html
+<!-- WRONG! -->
+.row alignment:{center} gap:{1cm}
+  ## Left
+  Text on left column.
+    
+  ## Right
+  Text on right column.
+```
+
+As mentioned in the [Stacks](Stacks.qd) page:
+
+> In order to understand which elements they *[stack functions]* must handle, they rely on the strict Markdown concept of block, an isolated chunk of the document [...]
+
+Rendering the previous snippet brings us to this (incorrect) result:
+
+!(556)[Incorrect result](https://github.com/user-attachments/assets/86da7885-aa0f-4ba5-a4ef-adae47d445cb)
+
+Some may then use columns:
+
+```html
+<!-- Could be improved -->
+.row alignment:{center} gap:{1cm}
+  .column cross:{start}
+    ## Left
+    Text on left column.
+    
+  .column cross:{start}
+    ## Right
+    Text on right column.
+```
+
+This works, but the concept isn't really correct: we don't want some *layout rule*, we just want to reset the document flow back to normal.  
+This is what the container layout does: grouping elements together according to the natural flow of the document.
+
+```html
+<!-- Correct! -->
+.row alignment:{center} gap:{1cm}
+  .container
+    ## Left
+    Text on left column.
+    
+  .container
+    ## Right
+    Text on right column.
+```
+
+Result:
+
+!(556)[Correct result](https://github.com/user-attachments/assets/c97db6c3-c311-4177-a0be-6c1608dab86e)
+
+## Styling
+
+Optional parameters:
+
+| Parameter | Description | Accepts | Default |
+|-----------|-------------|---------|---------|
+| `width` | Box width constraint. | [`Size`](Sizes.qd) | No constraint. |
+| `height` | Box height constraint. | [`Size`](Sizes.qd) | No constraint. |
+| `fullwidth` | Whether to take up the parent's full width.<br>Overridden by `width`. | [`Boolean`](Boolean.qd) | False |
+| `foreground` | Text color. | [`Color`](Color.qd) | Document's default. |
+| `background` | Background color. | [`Color`](Color.qd) | (none) |
+| `border` | Border color. | [`Color`](Color.qd) | Browser's default if `borderwidth` is set, none otherwise. |
+| `borderwidth` | Border size. | [`Sizes`](Sizes.qd) | Browser's default if `border` is set, none otherwise. |
+| `borderstyle` | Border type. | `normal`, `dashed`, `dotted`, `double` | `normal` if `border` or `borderwidth` is set, none otherwise. |
+| `margin ` | Whitespace outside content. | [`Sizes`](Sizes.qd) | (none) |
+| `padding ` | Whitespace around content. | [`Sizes`](Sizes.qd) | (none) |
+| `radius` | Corner/border radius. | [`Sizes`](Sizes.qd) | (none) |
+| `alignment` | Content alignment. | `start`, `center`, `end` | Browser's default. |
+| `textalignment` | Text alignment. | `start`, `center`, `end`, `justify` | Browser's default. |
+| `fontsize`, `fontweight`, `fontstyle`, `fontvariant`, `textdecoration`, `textcase` | Text transformation. See [*Advanced text formatting*](Text.qd) for all details. | | (none) |
+| `classname` | Custom CSS class name. | String | (none) |
+
+
+
+```
+.container borderstyle:{dashed} padding:{1cm} fontsize:{medium} fontstyle:{italic} fontvariant:{smallcaps}
+    This is a styled container. Fancy, isn't it?
+
+    Quarkdown can truly give life to complex layouts with ease.
+```
+
+!(650)[Styled container](https://github.com/user-attachments/assets/37766ad8-3344-4e81-8671-9278af538844)
