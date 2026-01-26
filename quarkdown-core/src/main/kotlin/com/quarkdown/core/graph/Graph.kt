@@ -46,8 +46,6 @@ interface Graph<T> {
 
     /**
      * Adds a vertex and an edge in a single operation.
-     * This is more efficient than calling [addVertex] and [addEdge] separately,
-     * as it avoids creating an intermediate graph copy.
      * @param vertex the vertex to add
      * @param edgeFrom the source vertex of the edge
      * @param edgeTo the destination vertex of the edge
@@ -57,5 +55,5 @@ interface Graph<T> {
         vertex: T,
         edgeFrom: T,
         edgeTo: T,
-    ): Graph<T>
+    ): Graph<T> = addVertex(vertex).addEdge(edgeFrom, edgeTo)
 }
