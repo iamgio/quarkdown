@@ -126,6 +126,11 @@
     }
   }
 
+  // Avoids flickering before the page margin content is handled at runtime.
+  > .content-wrapper > main .page-margin-content:not(footer .page-margin-content) {
+    display: none;
+  }
+
   // Print styles
   @include media-queries.print {
     --qd-background-color: white !important;
