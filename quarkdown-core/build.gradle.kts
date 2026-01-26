@@ -17,5 +17,5 @@ dependencies {
     implementation("com.github.ajalt.colormath:colormath:3.6.1")
     implementation("com.github.fracpete:romannumerals4j:0.0.1")
     implementation("org.jbibtex:jbibtex:1.0.20")
-    implementation("org.jgrapht:jgrapht-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
 }
