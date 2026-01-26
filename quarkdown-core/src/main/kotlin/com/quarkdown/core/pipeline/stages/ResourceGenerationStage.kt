@@ -51,7 +51,7 @@ class ResourceGenerationStage(
         context.sharedSubdocumentsData.graph
             .visitNeighbors(
                 context.subdocument,
-                update = { context.sharedSubdocumentsData = context.sharedSubdocumentsData.copy(graph = it) },
+                onVisit = { context.sharedSubdocumentsData = context.sharedSubdocumentsData.copy(graph = it) },
             ).asSequence()
             .filterIsInstance<Subdocument.Resource>()
             .flatMap { nextSubdocument ->

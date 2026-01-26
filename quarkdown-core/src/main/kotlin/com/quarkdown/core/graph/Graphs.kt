@@ -2,9 +2,7 @@
 
 package com.quarkdown.core.graph
 
-import com.quarkdown.core.graph.adapter.JGraphAdapter
-
 /**
- * @return a new directed [Graph]
+ * @return a new empty directed [Graph]
  */
-fun <T> DirectedGraph(): Graph<T> = JGraphAdapter(emptyGraphSupplier = { JGraphAdapter.directed() })
+fun <T> DirectedGraph(): Graph<T> = PersistentDirectedGraph()

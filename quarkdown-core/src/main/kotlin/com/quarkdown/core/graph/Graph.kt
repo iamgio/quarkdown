@@ -43,4 +43,17 @@ interface Graph<T> {
      * @see addEdge
      */
     fun addEdge(pair: Pair<T, T>): Graph<T> = addEdge(from = pair.first, to = pair.second)
+
+    /**
+     * Adds a vertex and an edge in a single operation.
+     * @param vertex the vertex to add
+     * @param edgeFrom the source vertex of the edge
+     * @param edgeTo the destination vertex of the edge
+     * @return a new graph instance with both the vertex and edge added
+     */
+    fun addVertexAndEdge(
+        vertex: T,
+        edgeFrom: T,
+        edgeTo: T,
+    ): Graph<T> = addVertex(vertex).addEdge(edgeFrom, edgeTo)
 }

@@ -27,22 +27,17 @@ data class VisitableOnceGraph<T>(
     /**
      * Visits the unvisited neighbors of the specified vertex, marking each vertex as visited.
      * @param vertex the vertex whose neighbors are to be visited
-     * @param update an action to perform after visiting the neighbors, which is supposed to update the graph state with the visited vertices
+     * @param onVisit callback invoked with the updated graph after visiting the neighbors
      * @return the yet unvisited neighboring vertices that were now visited
      */
     fun visitNeighbors(
         vertex: T,
-        update: (VisitableOnceGraph<T>) -> Unit,
+        onVisit: (VisitableOnceGraph<T>) -> Unit,
     ): Set<T> =
         getUnvisitedNeighbors(vertex)
             .toSet()
             .also { visitedVertices ->
-                val updatedGraph =
-                    VisitableOnceGraph(
-                        graph = graph,
-                        visited = visited + visitedVertices,
-                    )
-                update(updatedGraph)
+                onVisit(copy(visited = visited + visitedVertices))
             }
 
     override fun addVertex(value: T): VisitableOnceGraph<T> = copy(graph = graph.addVertex(value))
@@ -53,6 +48,12 @@ data class VisitableOnceGraph<T>(
     ): VisitableOnceGraph<T> = copy(graph = graph.addEdge(from, to))
 
     override fun addEdge(pair: Pair<T, T>): VisitableOnceGraph<T> = copy(graph = graph.addEdge(pair))
+
+    override fun addVertexAndEdge(
+        vertex: T,
+        edgeFrom: T,
+        edgeTo: T,
+    ): VisitableOnceGraph<T> = copy(graph = graph.addVertexAndEdge(vertex, edgeFrom, edgeTo))
 }
 
 /**

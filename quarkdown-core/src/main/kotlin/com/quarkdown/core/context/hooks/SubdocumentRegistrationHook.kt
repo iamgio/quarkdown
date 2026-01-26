@@ -38,8 +38,11 @@ class SubdocumentRegistrationHook(
 
             context.subdocumentGraph =
                 context.subdocumentGraph
-                    .addVertex(subdocument)
-                    .addEdge(context.subdocument to subdocument)
+                    .addVertexAndEdge(
+                        vertex = subdocument,
+                        edgeFrom = context.subdocument,
+                        edgeTo = subdocument,
+                    )
         }
     }
 }
