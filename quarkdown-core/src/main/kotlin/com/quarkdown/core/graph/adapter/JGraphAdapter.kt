@@ -45,6 +45,17 @@ internal class JGraphAdapter<T>(
             .apply { addEdge(from, to) }
             .let { JGraphAdapter(emptyGraphSupplier, it) }
 
+    override fun addVertexAndEdge(
+        vertex: T,
+        edgeFrom: T,
+        edgeTo: T,
+    ): Graph<T> =
+        copyGraph(graph)
+            .apply {
+                addVertex(vertex)
+                addEdge(edgeFrom, edgeTo)
+            }.let { JGraphAdapter(emptyGraphSupplier, it) }
+
     private fun copyGraph(original: JGraph<T, DefaultEdge>): JGraph<T, DefaultEdge> =
         emptyGraphSupplier().apply { Graphs.addGraph(this, original) }
 

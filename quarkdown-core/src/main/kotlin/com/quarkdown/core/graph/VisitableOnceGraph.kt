@@ -53,6 +53,12 @@ data class VisitableOnceGraph<T>(
     ): VisitableOnceGraph<T> = copy(graph = graph.addEdge(from, to))
 
     override fun addEdge(pair: Pair<T, T>): VisitableOnceGraph<T> = copy(graph = graph.addEdge(pair))
+
+    override fun addVertexAndEdge(
+        vertex: T,
+        edgeFrom: T,
+        edgeTo: T,
+    ): VisitableOnceGraph<T> = copy(graph = graph.addVertexAndEdge(vertex, edgeFrom, edgeTo))
 }
 
 /**

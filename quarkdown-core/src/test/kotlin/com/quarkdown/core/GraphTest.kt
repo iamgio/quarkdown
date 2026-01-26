@@ -58,6 +58,19 @@ class GraphTest {
     }
 
     @Test
+    fun addVertexAndEdge() {
+        val new =
+            graph
+                .addVertex(1)
+                .addVertexAndEdge(vertex = 2, edgeFrom = 1, edgeTo = 2)
+
+        assertContains(new.vertices, 1)
+        assertContains(new.vertices, 2)
+        assertTrue(new.getNeighbors(1).contains(2))
+        assertTrue(new.getNeighbors(2).none())
+    }
+
+    @Test
     fun `visitable once`() {
         var visitableOnce =
             graph.visitableOnce
