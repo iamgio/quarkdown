@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>Graph</title>
+    <title>MutableGraph</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -92,11 +92,11 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-core::com.quarkdown.core.graph/Graph///PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.graph</a><span class="delimiter">/</span><span class="current">Graph</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="quarkdown-core::com.quarkdown.core.graph/MutableGraph///PointingToDeclaration//1831116724">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.graph</a><span class="delimiter">/</span><span class="current">MutableGraph</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>Graph</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><p class="paragraph">A generic, immutable graph structure.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>T</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of vertices in the graph</p></div></div></div></div></div><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-mutable-graph/index.html">MutableGraph</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-persistent-directed-graph/index.html">PersistentDirectedGraph</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-visitable-once-graph/index.html">VisitableOnceGraph</a></div></span></div><div></div></div></div></div></div></div>
+    <h1 class="cover"><span>Mutable</span><wbr><span><span>Graph</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">MutableGraph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span> : <a href="../-graph/index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span></div><p class="paragraph">A mutable <a href="../-graph/index.html">Graph</a> that allows in-place modifications. Mutation methods modify the graph in place and return <code class="lang-kotlin">this</code> for method chaining.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>T</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of vertices in the graph</p></div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
@@ -107,13 +107,13 @@
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="edges.html"><span><span>edges</span></span></a></div>
+                  <div><a href="../-graph/edges.html"><span><span>edges</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1559398453%2FProperties%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="edges.html">edges</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The set of edges in the graph, represented as pairs of vertices.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="../-graph/edges.html">edges</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The set of edges in the graph, represented as pairs of vertices.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -122,13 +122,13 @@
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="vertices.html"><span><span>vertices</span></span></a></div>
+                  <div><a href="../-graph/vertices.html"><span><span>vertices</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1991372522%2FProperties%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="vertices.html">vertices</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The set of vertices in the graph.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="../-graph/vertices.html">vertices</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The set of vertices in the graph.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt; </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../visitable-once.html">visitableOnce</a><span class="token operator">: </span><a href="../-visitable-once-graph/index.html">VisitableOnceGraph</a><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Converts a <a href="index.html">Graph</a> into a <a href="../-visitable-once-graph/index.html">VisitableOnceGraph</a> which allows visiting each vertex only once.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">val </span><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt; </span><a href="../-graph/index.html">Graph</a><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../visitable-once.html">visitableOnce</a><span class="token operator">: </span><a href="../-visitable-once-graph/index.html">VisitableOnceGraph</a><span class="token operator">&lt;</span><a href="../visitable-once.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Converts a <a href="../-graph/index.html">Graph</a> into a <a href="../-visitable-once-graph/index.html">VisitableOnceGraph</a> which allows visiting each vertex only once.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -152,47 +152,47 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="26118932%2FFunctions%2F1831116724" anchor-label="addEdge" id="26118932%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="-1781390884%2FFunctions%2F1831116724" anchor-label="addEdge" id="-1781390884%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-edge.html"><span>add</span><wbr><span><span>Edge</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="26118932%2FFunctions%2F1831116724"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1781390884%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-edge.html"><span class="token function">addEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><br><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="add-edge.html"><span class="token function">addEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">to<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds an edge from one vertex to another.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add-edge.html"><span class="token function">addEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pair<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="index.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">MutableGraph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><br><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add-edge.html"><span class="token function">addEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">to<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">MutableGraph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds an edge from one vertex to another.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1663222664%2FFunctions%2F1831116724" anchor-label="addVertex" id="-1663222664%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+<a data-name="-1685219412%2FFunctions%2F1831116724" anchor-label="addVertex" id="-1685219412%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-vertex.html"><span>add</span><wbr><span><span>Vertex</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1663222664%2FFunctions%2F1831116724"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1685219412%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="add-vertex.html"><span class="token function">addVertex</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds a vertex to the graph.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add-vertex.html"><span class="token function">addVertex</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">MutableGraph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds a vertex to the graph.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="857653308%2FFunctions%2F1831116724" anchor-label="addVertexAndEdge" id="857653308%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+<a data-name="-739851640%2FFunctions%2F1831116724" anchor-label="addVertexAndEdge" id="-739851640%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-vertex-and-edge.html"><span>add</span><wbr><span>Vertex</span><wbr><span>And</span><wbr><span><span>Edge</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="857653308%2FFunctions%2F1831116724"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-739851640%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-vertex-and-edge.html"><span class="token function">addVertexAndEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">vertex<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">edgeFrom<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">edgeTo<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Graph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds a vertex and an edge in a single operation.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="add-vertex-and-edge.html"><span class="token function">addVertexAndEdge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">vertex<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">edgeFrom<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">edgeTo<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">MutableGraph</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Adds a vertex and an edge in a single operation.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -201,13 +201,13 @@
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="get-neighbors.html"><span>get</span><wbr><span><span>Neighbors</span></span></a></div>
+                  <div><a href="../-graph/get-neighbors.html"><span>get</span><wbr><span><span>Neighbors</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1762574906%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-neighbors.html"><span class="token function">getNeighbors</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">vertex<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-graph/get-neighbors.html"><span class="token function">getNeighbors</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">vertex<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
