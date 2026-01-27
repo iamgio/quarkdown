@@ -3,7 +3,7 @@
 
 A block of code can be created as the standard Markdown specification allows, by either a 4-spaces/1-tab indentation or a delimitation of 3 backticks/tildes.
 
-However, Quarkdown also provides a more powerful **`.code`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html)</sup> block function, so **what's the difference**?
+However, Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html} block function, so **what's the difference**?
 
 ### `.code` vs. standard code block
 

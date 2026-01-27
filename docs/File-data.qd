@@ -34,7 +34,7 @@ The strategy used for open ranges is defined as follows:
 
 ## Listing files in a directory
 
-The **`.listfiles {path} {sortby?} {order?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/listfiles.html)</sup> function returns an [iterable](Iterable.qd) of the files in a directory. It's unordered by default, or can be sorted by name or date.
+The **`.listfiles {path} {sortby?} {order?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/listfiles.html} function returns an [iterable](Iterable.qd) of the files in a directory. It's unordered by default, or can be sorted by name or date.
 
 As any other collection, the result can be iterated upon, or supplied to other functions. For example, it's possible to perform automatic bulk inclusions via [`.includeall`](Including-other-Quarkdown-files.qd):
 
@@ -44,7 +44,7 @@ As any other collection, the result can be iterated upon, or supplied to other f
 
 ## Getting a file name
 
-The **`.filename {path} {extension?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/filename.html)</sup> function returns the file name from a given file path. The optional `extension` boolean parameter controls whether the file extension is included in the result.
+The **`.filename {path} {extension?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/filename.html} function returns the file name from a given file path. The optional `extension` boolean parameter controls whether the file extension is included in the result.
 
 ```markdown
 .filename {path/to/myfile.txt} extension:{no}
@@ -53,7 +53,7 @@ The **`.filename {path} {extension?}`**<sup>[[docs]](https://quarkdown.com/docs/
 
 ## Table from CSV
 
-The **`.csv {path} {mode?} {caption?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html)</sup> function loads a table from a CSV file.
+The **`.csv {path} {mode?} {caption?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html} function loads a table from a CSV file.
 The first row of the CSV file is always used as the header row.
 
 Tables loaded from CSV can also be manipulated: see [*Table manipulation*](Table-manipulation.qd) for more.

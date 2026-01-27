@@ -14,7 +14,7 @@ I love Quarkdown! 😍
 
 ### Shortcode function
 
-You can use the `.emoji`<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Emoji/emoji.html)</sup> function with a shortcode:
+You can use the `.emoji` .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Emoji/emoji.html} function with a shortcode:
 
 ```
 Quarkdown's logo is not a planet .emoji {ringed-planet}

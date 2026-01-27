@@ -1,7 +1,7 @@
 .docname {CSS}
 .include {_Setup.qd}
 
-The **`.css`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/css.html)</sup> function makes it possible to apply CSS styles to the document.
+The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/css.html} function makes it possible to apply CSS styles to the document.
 
 > [!WARNING]
 > CSS styles are applied only in HTML (and HTML-PDF) documents,
@@ -76,7 +76,7 @@ This is an .text {inline text} classname:{my-custom-class} with a custom class.
 
 ## Overriding properties
 
-If the purpose is to *override* Quarkdown's default style, then the suggested approach is to take advantage of the **`.cssproperties`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/cssproperties.html)</sup> function.
+If the purpose is to *override* Quarkdown's default style, then the suggested approach is to take advantage of the **`.cssproperties`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/cssproperties.html} function.
 
 This function takes a [dictionary](Dictionary.qd) of strings, where each item is a `--qd-*` CSS property and value pair.
 

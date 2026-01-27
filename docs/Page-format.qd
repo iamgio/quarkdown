@@ -1,7 +1,7 @@
 .docname {Page format}
 .include {_Setup.qd}
 
-The **`.pageformat`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html)</sup> function configures the page format. All its parameters are **optional** and if unset will delegate their default value to the underlying renderer depending on the document type.
+The **`.pageformat`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html} function configures the page format. All its parameters are **optional** and if unset will delegate their default value to the underlying renderer depending on the document type.
 
 | Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents        |
 |----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------|

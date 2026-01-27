@@ -21,7 +21,7 @@ In Quarkdown, not all types can be returned and not all types can be used as arg
 
 Whenever a function returns some `OutputValue`, it must be converted to some `Node`, able to be rendered on screen. For instance, a `StringValue` becomes text, an `OrderedCollectionValue` an ordered list, a `BooleanValue` a checkbox, a `DictionaryValue` a table, and so on. This operation is handled by a *value-node mapper*.
 
-For each function call node, enqueued by the parser, the corresponding function is looked up among loaded libraries<sup>[1](#f1)</sup>, argument-parameter bindings are established<sup>[2](#f2)</sup> and the function is executed and its output is obtained.  
+For each function call node, enqueued by the parser, the corresponding function is looked up among loaded libraries<sup>[1](#f1}, argument-parameter bindings are established<sup>[2](#f2} and the function is executed and its output is obtained.  
 After retrieving the output node from the mapper, the expander can push it to the function call's child nodes, ready for the next stage.
 
 *See next: [Tree traversal](Pipeline-‐-Tree-traversal.qd)*

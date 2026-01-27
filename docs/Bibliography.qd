@@ -3,7 +3,7 @@
 
 Quarkdown provides first-class bibliography generation with out-of-the-box [BibTeX](https://www.bibtex.org) compatibility.
 
-To get started, invoke the **`.bibliography {file.bib}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Bibliography/bibliography.html)</sup> function, with `file.bib` being the path to the `.bib` file.  
+To get started, invoke the **`.bibliography {file.bib}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Bibliography/bibliography.html} function, with `file.bib` being the path to the `.bib` file.  
 You may find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
 
 ```

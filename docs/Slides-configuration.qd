@@ -1,7 +1,7 @@
 .docname {Slides configuration}
 .include {_Setup.qd}
 
-The **`.slides`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html)</sup> function allows overriding the default configuration of `slides` documents. All its parameters are **optional**, and are:
+The **`.slides`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html} function allows overriding the default configuration of `slides` documents. All its parameters are **optional**, and are:
 
 | Parameter | Description | Accepts | Default |
 |-----------|-------------|---------|---------|

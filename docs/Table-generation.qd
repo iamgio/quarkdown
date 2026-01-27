@@ -29,7 +29,7 @@ In the following example `.repeat` is used, which, as other supported [loops](Lo
 
 ## Table generation by rows
 
-The **`.tablebyrows`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html)</sup> function
+The **`.tablebyrows`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html} function
 takes two arguments: an optional iterable of headers and an iterable of rows.
 
 ```markdown

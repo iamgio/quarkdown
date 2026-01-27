@@ -2,9 +2,9 @@
 .include {_Setup.qd}
 
 Stack functions are those, in the subcategory of layout functions, that arrange a group of elements according to certain layout rules. There are three of them: 
-- **`.row`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html)</sup>
-- **`.column`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html)</sup>
-- **`.grid`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html)</sup>
+- **`.row`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html}
+- **`.column`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html}
+- **`.grid`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html}
 
 ---
 

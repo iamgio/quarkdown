@@ -34,7 +34,7 @@ it is considered a reference to a subdocument.
 [My subdocument](file.qd)
 ```
 
-Equivalently, the **`.subdocument {path} {label?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/subdocument.html)</sup> function can be used:
+Equivalently, the **`.subdocument {path} {label?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/subdocument.html} function can be used:
 
 ```markdown
 .subdocument {file.qd} label:{My subdocument}

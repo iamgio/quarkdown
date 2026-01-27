@@ -1,7 +1,7 @@
 .docname {Container}
 .include {_Setup.qd}
 
-The **`.container`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html)</sup> function generates a highly customizable blocks of content, along with resetting the current layout rules back to normal.
+The **`.container`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html} function generates a highly customizable blocks of content, along with resetting the current layout rules back to normal.
 
 ---
 

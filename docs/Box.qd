@@ -1,7 +1,7 @@
 .docname {Box}
 .include {_Setup.qd}
 
-The **`.box`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html)</sup> allows creating a special *box* container.
+The **`.box`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html} allows creating a special *box* container.
 
 A box features an inline *title* and block *content*.
 

@@ -19,7 +19,7 @@ A page counter can be displayed on each page thanks to [page margin content](Pag
 
 ### Resetting the page number
 
-The **`.resetpagenumber {from?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html)</sup> function allows overwriting the current page number at any point in a `paged` or `slides` document.
+The **`.resetpagenumber {from?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html} function allows overwriting the current page number at any point in a `paged` or `slides` document.
 
 These changes are reflected in `.currentpage` and page numbers in the [table of contents](Table-of-contents.qd).
 

@@ -1,7 +1,7 @@
 .docname {Including other Quarkdown files}
 .include {_Setup.qd}
 
-The **`.include {file} {sandbox?}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html)</sup> function makes it possible to load and evaluate an external Quarkdown source file.
+The **`.include {file} {sandbox?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html} function makes it possible to load and evaluate an external Quarkdown source file.
 
 Its parameter accepts a string which represents the **path to the target file**, which may be relative to the location of the main source file, or absolute.
 

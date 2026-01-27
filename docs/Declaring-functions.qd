@@ -1,7 +1,7 @@
 .docname {Declaring functions}
 .include {_Setup.qd}
 
-Functions can also be declared in Quarkdown sources via the **`.function`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html)</sup> function (everything is a function!).
+Functions can also be declared in Quarkdown sources via the **`.function`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html} function (everything is a function!).
 
 It accepts two arguments: the function name and its body.
 
