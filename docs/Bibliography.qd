@@ -10,7 +10,7 @@ You may find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
 .bibliography {file.bib}
 ```
 
-!(671)[Bibliography](https://github.com/user-attachments/assets/3bd64c2e-3af9-4f00-abf1-e343c5e066ab)
+!(671)[Bibliography](Bibliography/bibliography-output.png)
 
 
 
@@ -35,7 +35,7 @@ Similarly, Hawking's book .cite {hawking} has had a profound impact
 on our understanding of cosmology and black holes.
 ```
 
-!(671)[Citation](https://github.com/user-attachments/assets/3f098484-9853-4ba3-9fc1-fa02369dbf3e)
+!(671)[Citation](Bibliography/citation.png)
 
 
 
@@ -47,16 +47,16 @@ Here are the currently supported styles:
 
 - **`plain`**
 
-  !(600)[plain style](https://github.com/user-attachments/assets/be2db3c2-17f2-4672-b1fb-ffa3565c902e)
+  !(600)[plain style](Bibliography/style-plain.png)
 
 - **`ieeetr`**
 
-  !(600)[ieeetr style](https://github.com/user-attachments/assets/efb5e39a-1d4c-4a0a-90cc-5047c4db2af0)
+  !(600)[ieeetr style](Bibliography/style-ieeetr.png)
 
 
 - **`acm`**
 
-  !(600)[acm style](https://github.com/user-attachments/assets/3436780f-3f95-463f-bb80-6a8d0e3c0cae)
+  !(600)[acm style](Bibliography/style-acm.png)
 
 
 
@@ -68,7 +68,7 @@ By default, the title will be [localized](Localization.qd) to the current locale
 .bibliography {file.bib} title:{My bibliography}
 ```
 
-!(671)[Custom title](https://github.com/user-attachments/assets/28034ff9-9cd0-4ab1-adfe-0887ee2265ac)
+!(671)[Custom title](Bibliography/custom-title.png)
 
 
 

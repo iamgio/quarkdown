@@ -15,7 +15,7 @@ Before addressing the expansion itself, we should understand how data is exchang
 
 In Quarkdown, not all types can be returned and not all types can be used as arguments. Hence, functions should feature `InputValue` parameters and return an `OutputValue`. A complete set of value types is visualized in the following Venn-UML diagram:
 
-!(60%)[Value types](https://github.com/user-attachments/assets/c79a66d2-e646-48c5-a0a3-c3570e8e2c87)
+!(60%)[Value types](Pipeline-‐-Function-call-expansion/value-types.svg)
 
 
 

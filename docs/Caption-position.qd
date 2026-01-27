@@ -37,21 +37,21 @@ By default, documents use `.captionposition {bottom}`.
 | Joe  | Sushi         | Beer              |
 "Survey results."
 ```
-!(600)[Default: bottom](https://github.com/user-attachments/assets/a77154fd-d601-4f9c-b469-42055be10c16)
+!(600)[Default: bottom](Caption-position/bottom.png)
 
 
 
 ```
 .captionposition {top}
 ```
-!(600)[Default: top](https://github.com/user-attachments/assets/6ba066d3-53a4-4c4e-a78c-eb305f244350)
+!(600)[Default: top](Caption-position/top.png)
 
 
 
 ```
 .captionposition {bottom} tables:{bottom}
 ```
-!(600)[Default: bottom, tables: top](https://github.com/user-attachments/assets/0838ac08-08aa-4479-b915-fc0c31df2e59)
+!(600)[Default: bottom, tables: top](Caption-position/bottom-tables-top.png)
 
 
 

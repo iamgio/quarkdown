@@ -57,7 +57,7 @@ This is an .text {inline text} classname:{my-custom-class} with a custom class.
     }
 ```
 
-!(600)[Custom classes](https://github.com/user-attachments/assets/448d5be9-dbaf-4117-adc1-46359e8a7fc8)
+!(600)[Custom classes](CSS/custom-classes.png)
 
 > [!TIP]
 > Create your own elements through [custom functions](Declaring-functions.qd):
@@ -70,7 +70,7 @@ This is an .text {inline text} classname:{my-custom-class} with a custom class.
 > This is a .mytext {text} and here is .mytext {another}.
 > ```
 >
-> !(600)[Custom elements](https://github.com/user-attachments/assets/8f1f9ad9-5b17-4b06-b43f-4b723c7602d5)
+> !(600)[Custom elements](CSS/custom-elements.png)
 
 
 

@@ -10,7 +10,7 @@ A box features an inline *title* and block *content*.
   Welcome to the **Quarkdown wiki**!  
   Here you'll learn how to get started with your first document.
 ```
-> !(600)[Box result](https://github.com/user-attachments/assets/5b99cca2-ae0c-4cbe-bba2-1a9876980401)
+> !(600)[Box result](Box/basic.png)
 
 
 
@@ -22,7 +22,7 @@ The title can be omitted:
   Here you'll learn how to get started with your first document.
 ```
 
-> !(600)[Title-less box](https://github.com/user-attachments/assets/2cb134e7-f01a-4cbe-adcb-6e4a4ed34121)
+> !(600)[Title-less box](Box/titleless.png)
 
 
 
@@ -52,7 +52,7 @@ A box can have a type, which is `callout` by default, if not specified. Availabl
   Welcome to the **Quarkdown wiki**!  
   Here you'll learn how to get started with your first document.
 ```
-> !(600)[Typed boxes](https://github.com/user-attachments/assets/28d4f78c-45c7-41ae-9c40-5927f44aefed)
+> !(600)[Typed boxes](Box/typed.png)
 
 
 
@@ -71,7 +71,7 @@ If the title is omitted, [`.doclang`](Document-metadata.qd) is set and the set l
   Welcome to the **Quarkdown wiki**!  
   Here you'll learn how to get started with your first document.
 ```
-> !(600)[Typed title-less boxes](https://github.com/user-attachments/assets/fca7ef6f-bb26-4c7d-b087-9ca4a198bf62)
+> !(600)[Typed title-less boxes](Box/typed-titleless.png)
 
 
 

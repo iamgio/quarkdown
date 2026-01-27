@@ -42,13 +42,13 @@ A ToC can be displayed through the **`.tableofcontents`** function, with the fol
 ...
 ```
 
-!(550)[Table of contents](https://github.com/user-attachments/assets/87e7b145-0aa1-482e-a66d-3038e7c052ce)
+!(550)[Table of contents](Table-of-contents/basic.png)
 
 
 
 [Layout themes](Themes.qd) greatly influence the look of table of contents:
 
-!(550)[Table of contents with minimal theme](https://github.com/user-attachments/assets/b595ebd0-fafa-4278-b34b-d5da418070ba)
+!(550)[Table of contents with minimal theme](Table-of-contents/minimal-theme.png)
 
 > `minimal` theme
 
@@ -75,7 +75,7 @@ A custom numbering format can be set via `.numbering`. See [Numbering](Numbering
 
 If `focus:{A.B}` is added to the previous example:
 
-!(550)[Table of contents with focus](https://github.com/user-attachments/assets/70bb4947-e7a5-4a6b-9466-d5b53d92ce37)
+!(550)[Table of contents with focus](Table-of-contents/focused.png)
 
 
 Focusing may be particularly useful in slides with mini-ToCs at the beginning of each new chapter.  

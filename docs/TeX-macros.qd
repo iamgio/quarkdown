@@ -18,7 +18,7 @@ As with every Quarkdown function, the last argument can be used as a [*block arg
     \nabla
 ```
 
-!(500)[Gradient](https://github.com/user-attachments/assets/60bf078b-2d71-42c6-953e-d171acb048c8)
+!(500)[Gradient](TeX-macros/gradient.png)
 
 
 
@@ -33,7 +33,7 @@ Macros can feature a variable number of parameters:
 $ \sumlim{i=1}{n} a_i $
 ```
 
-!(500)[Sum with limits](https://github.com/user-attachments/assets/09a2cd3a-8436-4e16-b504-27a42dce3f82)
+!(500)[Sum with limits](TeX-macros/sum-limits.png)
 
 
 
@@ -63,4 +63,4 @@ And also composed with other macros:
 $ \highlighthello $
 ```
 
-!(500)[Highlighted hello world](https://github.com/user-attachments/assets/255f119f-1218-4eae-a31d-0e78d044e936)
+!(500)[Highlighted hello world](TeX-macros/highlighted.png)

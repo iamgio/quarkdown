@@ -2,6 +2,8 @@
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
 
+.css {.read {assets/style.css}}
+
 .pagemargin {lefttop}
     .navigation role:{pagelist}
         .include {_Sidebar.qd}
@@ -10,7 +12,7 @@
     .tableofcontents
 
 .pagemargin {topleft}
-    ![](/Users/gio/Dev/qd/quarkdown/demo/img/banner.svg)
+    [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
 
 .pagemargin {topright}
     .row

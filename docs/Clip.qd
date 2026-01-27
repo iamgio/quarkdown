@@ -13,7 +13,7 @@ Supported shapes:
     ![Sky](sky.jpg)
 ```
 
-!(600)[Circle sky](https://github.com/user-attachments/assets/f49dcb96-2e68-4cf7-94fd-71adad0072c7)
+!(600)[Circle sky](Clip/circle-image.png)
 
 
 
@@ -26,7 +26,7 @@ In case of a [figure](Figure.qd) only the content is affected, leaving its capti
     ![Sky](sky.jpg "A beautiful sky.".qd)
 ```
 
-!(600)[Circle sky figure](https://github.com/user-attachments/assets/29b84532-d517-4857-a3c9-a70dfbea5a78)
+!(600)[Circle sky figure](Clip/circle-figure.png)
 
 
 
@@ -38,4 +38,4 @@ Not just images — clipping works with any content. Here a [container](Containe
         #! Hello!
 ```
 
-!(400)[Circle container](https://github.com/user-attachments/assets/ce1f0bd8-76de-4dce-863f-0aff4644d77a)
+!(400)[Circle container](Clip/circle-container.png)

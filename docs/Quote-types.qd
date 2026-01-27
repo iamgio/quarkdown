@@ -9,11 +9,11 @@ If a blockquote begins by `Tip:`, `Note:`, `Warning:` or `Important:`, it is ass
 
 If the document's locale is set via [`.doclang`](Document-metadata.qd) and the locale is supported, a localized prefix is displayed and styled accordingly to the current layout theme.
 
-!(550)[Localized example](https://github.com/user-attachments/assets/6d7cab20-a7c6-4d58-b425-ef71d3015cbb)
+!(550)[Localized example](Quote-types/minimal-theme.png)
 
 > Localized prefix in `minimal` layout theme
 
-!(650)[image](https://github.com/user-attachments/assets/3bf4af68-574d-4b06-bd4c-d6e4480d60f9)
+!(650)[image](Quote-types/latex-theme.png)
 
 > Localized prefix in `latex` layout theme
 

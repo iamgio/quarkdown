@@ -18,7 +18,7 @@ Using `spacing:{0} indent:{2}` will provide the classic LaTeX look.
 
 Default appearance:
 
-!(600)[Default](https://github.com/user-attachments/assets/5fac5aa7-8d64-4aaa-8b93-6585476b54f3)
+!(600)[Default](Paragraph-style/default.png)
 
 
 
@@ -26,4 +26,4 @@ Default appearance:
 .paragraphstyle lineheight:{2.5} spacing:{0} indent:{2}
 ```
 
-!(600)[Customized](https://github.com/user-attachments/assets/76eb2038-54eb-45fa-bf23-ac20b391f23e)
+!(600)[Customized](Paragraph-style/customized.png)

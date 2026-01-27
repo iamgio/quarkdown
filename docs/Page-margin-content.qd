@@ -5,7 +5,7 @@ The **`.pagemargin`** function displays content on each page, in a fixed positio
 
 - In `paged` documents, a special area of each page is reserved for margins:  
 
-  !(_*500)[Paged margin areas](https://github.com/user-attachments/assets/bc41b306-df24-4753-960e-486953f1adb2)
+  !(_*500)[Paged margin areas](Page-margin-content/margin-areas.png)
   
   > Credits: [Paged.js](https://pagedjs.org/documentation/7-generated-content-in-margin-boxes/#margin-boxes-of-a-page)
 
@@ -25,7 +25,7 @@ The function accepts an optional `position` and a body argument `content`:
     **This** is a margin content.
 ```
 
-!(650)[Fixed positions](https://github.com/user-attachments/assets/e3f41b50-179b-4e53-a7df-8cf01c84f026)
+!(650)[Fixed positions](Page-margin-content/fixed-positions.png)
 
 
 
@@ -47,7 +47,7 @@ When used in `paged` and `slides` documents, page margin content takes effect on
 ## Third page
 ```
 
-!(600)[Scoped page margins](https://github.com/user-attachments/assets/a6d35c33-f310-4faf-a8f0-fd9645742e45)
+!(600)[Scoped page margins](Page-margin-content/scoped-margins.png)
 
 
 
@@ -62,7 +62,7 @@ Overwriting the page margin again will change it from that point onward:
     From third page
 ```
 
-!(500)[Scoped page margins](https://github.com/user-attachments/assets/37f5ae9e-f5ef-42a6-80c8-56ed0da86938)
+!(500)[Scoped page margins](Page-margin-content/scoped-overwrite.png)
 
 
 
@@ -79,7 +79,7 @@ and refer to `outside` and `inside` areas:
     **This** is a margin content.
 ```
 
-!(650)[Mirror positions](https://github.com/user-attachments/assets/b5283de2-52e7-4e71-b266-95955c51116a)
+!(650)[Mirror positions](Page-margin-content/mirror-positions.png)
 
 
 Although they are primarily designed for `paged` documents,
@@ -104,7 +104,7 @@ The **`.footer`** function is a shorthand for `.pagemargin {bottomcenter}`.
     [GitHub](https://github.com/iamgio/quarkdown)
 ```
 
-!(700)[Page footer](https://github.com/user-attachments/assets/2fd57bef-e6ed-48b4-a7b6-dd71a03030cd)
+!(700)[Page footer](Page-margin-content/footer.png)
 
 
 

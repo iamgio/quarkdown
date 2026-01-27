@@ -52,4 +52,4 @@ This allows the variable's value to be either inline or block:
 .container background:{yellow} padding:{1cm}
   .myrow
 ```
-> !(600)[Result](https://github.com/user-attachments/assets/2e6b5cd9-c25c-4806-8170-53e5293dcdf8)
+> !(600)[Result](Variables/block-variable.png)

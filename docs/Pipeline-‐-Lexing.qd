@@ -26,7 +26,7 @@ Markdown recognizes two macro-categories of tokens: **block** tokens and **inlin
   - of multiple items
   ```
 
-  !(500)[Blocks](https://github.com/user-attachments/assets/9fc3a5a1-1e11-4415-a287-b1774d6914f2)
+  !(500)[Blocks](Pipeline-‐-Lexing/blocks-diagram.svg)
 
 - Inlines are elements that appear inside blocks and define, most commonly, textual features such as formatting. For example bold, italics, monospaced, links, images.
 

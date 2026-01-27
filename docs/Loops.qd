@@ -28,7 +28,7 @@ Thus, the function can be used as an expression:
   .foreach {1..3}
     *.1* <!-- .1 is an implicit lambda argument: refers to the first parameter -->
 ```
-> !(600)[Result 1](https://github.com/user-attachments/assets/456e6e61-ec42-498a-86de-7130eae25244)
+> !(600)[Result 1](Loops/foreach-range.png)
 
 
 
@@ -45,7 +45,7 @@ Any iterable value is accepted. Here we use a Markdown list:
 
   The letter is **.1**.
 ```
-> !(600)[Result 2](https://github.com/user-attachments/assets/cd176eba-1d45-4d7a-aec9-4ec58714dd84)
+> !(600)[Result 2](Loops/foreach-list.png)
 
 See [*Iterable*](Iterable.qd) for all possible ways of defining an iterable value.
 
@@ -59,7 +59,7 @@ The type of iterated elements is preserved (see [*Typing*](Typing.qd) for more):
     n:
     .multiply {.n} by:{.n}
 ```
-> !(600)[Result 3](https://github.com/user-attachments/assets/0f8fd1b2-2fe0-491e-95bf-7f30032319e1)
+> !(600)[Result 3](Loops/foreach-math.png)
 
 
 

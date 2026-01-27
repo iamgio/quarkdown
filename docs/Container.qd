@@ -23,7 +23,7 @@ As mentioned in the [Stacks](Stacks.qd) page:
 
 Rendering the previous snippet brings us to this (incorrect) result:
 
-!(556)[Incorrect result](https://github.com/user-attachments/assets/86da7885-aa0f-4ba5-a4ef-adae47d445cb)
+!(556)[Incorrect result](Container/row-incorrect.png)
 
 Some may then use columns:
 
@@ -56,7 +56,7 @@ This is what the container layout does: grouping elements together according to 
 
 Result:
 
-!(556)[Correct result](https://github.com/user-attachments/assets/c97db6c3-c311-4177-a0be-6c1608dab86e)
+!(556)[Correct result](Container/row-correct.png)
 
 ## Styling
 

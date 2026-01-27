@@ -86,7 +86,7 @@ All the stack functions accept the following optional arguments:
   ***D***
 ```
 
-!(600)[Grid result](https://github.com/user-attachments/assets/2bd5b3f3-5c28-4996-b31e-374efa2d3fb5)
+!(600)[Grid result](Stacks/grid.png)
 
 Other elements can join too:
 
@@ -105,7 +105,7 @@ Other elements can join too:
     [forrestgump@example.com](mailto:forrestgump@example.com)
 ```
 
-!(600)[Contacts example](https://github.com/user-attachments/assets/d227dcc7-d12b-48f7-b634-8fff4f338080)
+!(600)[Contacts example](Stacks/contacts.png)
 
 
 Stack layouts can be infinitely nested within each other:
@@ -132,5 +132,5 @@ Stack layouts can be infinitely nested within each other:
       H
 ```
 
-!(600)[Nested stacks](https://github.com/user-attachments/assets/7c224f39-86a3-4823-bde8-c6e684dac6e5)
+!(600)[Nested stacks](Stacks/nested.png)
 

@@ -10,7 +10,7 @@ Calling the **`.speakernote`** function will add a speaker note to the current s
   This is a **speaker note** for the current slide.
 ```
 
-!(1000)[image](https://github.com/user-attachments/assets/e5c66471-b159-4e9d-83c9-aeb0c963eaa8)
+!(1000)[image](Slides-speaker-notes/speaker-view.png)
 
 By default, speaker notes are displayed only when the document is viewed in the **speaker view**, which can be enabled by pressing the **`S`** key while viewing the HTML presentation.
 
@@ -24,8 +24,8 @@ Additionally, notes may be displayed outside of the speaker view, and also in ex
 
 - HTML:
 
-  !(1000)[Notes in regular presentation](https://github.com/user-attachments/assets/416614b2-4d96-4575-9857-930f3e7d0293)
+  !(1000)[Notes in regular presentation](Slides-speaker-notes/notes-html.png)
 
 - PDF:
   
-  !(1000)[Notes in PDF](https://github.com/user-attachments/assets/c28f531a-8986-4ddf-8138-9ef6cb303e7a)
+  !(1000)[Notes in PDF](Slides-speaker-notes/notes-pdf.png)

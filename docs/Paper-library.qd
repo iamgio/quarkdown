@@ -33,7 +33,7 @@ The first step is to [import](Importing-external-libraries.qd) the library:
 This is not part of the abstract, instead.
 ```
 
-!(630)[Abstract](https://github.com/user-attachments/assets/d5dbaf26-c253-411a-ae3c-8118726b1bd0)
+!(630)[Abstract](Paper-library/abstract.png)
 
 
 
@@ -47,7 +47,7 @@ The alignment of the title defaults to center and can be changed via `.abstracta
     .loremipsum
 ```
 
-!(630)[image](https://github.com/user-attachments/assets/f6ead1e3-b121-4d3a-ae5b-509b0772a588)
+!(630)[image](Paper-library/abstract-start-aligned.png)
 
 
 
@@ -67,7 +67,7 @@ All the mentioned functions take one block argument which defines the content:
     then the average velocity is defined as $ v = \frac {\Delta x} {\Delta t} $.
 ```
 
-!(600)[Definition](https://github.com/user-attachments/assets/d212dde3-535e-4982-b48e-9cce676b4eb8)
+!(600)[Definition](Paper-library/definition.png)
 
 
 
@@ -77,7 +77,7 @@ The default title suffix is `.` (dot) and can be customized via `.paperblocksuff
 .paperblocksuffix {:}
 ```
 
-!(600)[Custom block suffix](https://github.com/user-attachments/assets/93c0108e-fd63-4e8a-80d0-a4fe70c679eb)
+!(600)[Custom block suffix](Paper-library/custom-suffix.png)
 
 
 
@@ -101,7 +101,7 @@ The format names are plural: `definitions`, `lemmas`, `theorems`, `proofs`.
     .loremipsum
 ```
 
-!(600)[Numbered blocks](https://github.com/user-attachments/assets/ec5982de-fa69-45d0-8bf1-fe2664c8c6f6)
+!(600)[Numbered blocks](Paper-library/numbered-blocks.png)
 
 
 
@@ -115,7 +115,7 @@ Proofs also feature a special *end-of-proof* character, which defaults to `∎`.
     .loremipsum
 ```
 
-!(600)[Proof](https://github.com/user-attachments/assets/ece4f874-1d51-443f-808d-e570303f5dd0)
+!(600)[Proof](Paper-library/proof.png)
 
 The end-of-proof can be customized via `.proofend {string}`:
 
@@ -123,5 +123,5 @@ The end-of-proof can be customized via `.proofend {string}`:
 .proofend {😎}
 ```
 
-!(600)[Proof character customization](https://github.com/user-attachments/assets/a48fe7db-7301-4539-88f7-ef49bf3f0b93)
+!(600)[Proof character customization](Paper-library/proof-custom-end.png)
 

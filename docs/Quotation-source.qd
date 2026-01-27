@@ -10,7 +10,7 @@ In general, if the quote ends with a single-item unordered list, that list item 
 > - William Shakespeare
 ```
 
-!(556)[Result: Shakespeare](https://github.com/user-attachments/assets/0220eaeb-b091-4f9e-9442-d8893fd2b19f)
+!(556)[Result: Shakespeare](Quotation-source/shakespeare.png)
 
 The layout and aesthetics are handled by the current theme.
 
@@ -23,7 +23,7 @@ The source may contain inline content (including function calls):
 > - Dwayne **The Rock** Johnson
 ```
 
-!(556)[Result: The Rock](https://github.com/user-attachments/assets/14641de6-dc17-43ea-b361-dea5a25bf2f5)
+!(556)[Result: The Rock](Quotation-source/the-rock.png)
 
 ---
 
@@ -35,7 +35,7 @@ Any kind of blockquote may have a source:
 > - Michael Scott
 ```
 
-!(556)[Result: Michael Scott](https://github.com/user-attachments/assets/b30bb5cf-c0e2-48d5-88f6-3f87ba8da9c4)
+!(556)[Result: Michael Scott](Quotation-source/nested-quote.png)
 
 ---
 
@@ -46,7 +46,7 @@ Any kind of blockquote may have a source:
 > - [iamgio](https://github.com/iamgio)
 ```
 
-!(556)[Result: iamgio](https://github.com/user-attachments/assets/4ade6630-fce1-4be1-b2a6-21c706e8e36c)
+!(556)[Result: iamgio](Quotation-source/typed-with-source.png)
 
 
 

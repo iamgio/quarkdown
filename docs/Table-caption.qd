@@ -12,7 +12,7 @@ The Quarkdown flavor introduces table captions, which can be set by adding a lin
 "Capitals of Europe"
 ```
 
-!(550)[Result](https://github.com/user-attachments/assets/7557a9cf-26bb-4273-9736-1a21cee12040)
+!(550)[Result](Table-caption/correct.png)
 
 
 
@@ -28,7 +28,7 @@ The caption must be located immediately next to the table, on a new line. The fo
 "Capitals of Europe"
 ```
 
-!(550)[Wrong](https://github.com/user-attachments/assets/9bfcdbbe-e2bb-4a2d-9a77-9ec0c9cf9fb0)
+!(550)[Wrong](Table-caption/incorrect.png)
 
 
 

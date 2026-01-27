@@ -13,7 +13,7 @@ The **`.float {alignment}`** function can turn any content into a floating eleme
 .loremipsum
 ```
 
-!(600)[Floating image](https://github.com/user-attachments/assets/816e20f5-ecf9-4dae-9f89-726270f6e001)
+!(600)[Floating image](Float/floating-image.png)
 
 
 
@@ -27,5 +27,5 @@ Along with images, any other content can become floating:
 .loremipsum
 ```
 
-!(600)[Floating box](https://github.com/user-attachments/assets/e3921535-4b0a-4a1f-a041-f8d75646567e)
+!(600)[Floating box](Float/floating-box.png)
 

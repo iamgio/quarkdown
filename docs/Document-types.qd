@@ -15,7 +15,7 @@ The document is composed of three main elements:
 - A central content area;
 - Two side margin areas.
 
-!(1000)[Plain](https://github.com/user-attachments/assets/3358f01b-540e-4bbd-99f0-dc2bd319c415)
+!(1000)[Plain](Document-types/plain.png)
 
 #### Margin content
 
@@ -39,7 +39,7 @@ A paged document is a traditional document with content divided into pages.
 
 Page breaks happen either [explicitly](Page-break.qd) or implicitly in case of long content.
 
-!(1000)[Paged](https://github.com/user-attachments/assets/bffc5a27-62fe-4a80-b36a-b53438d40fd9)
+!(1000)[Paged](Document-types/paged.png)
 
 #### Margin content
 
@@ -60,7 +60,7 @@ slides center their content horizontally.
 
 Line breaks are only triggered [explicitly](Page-break.qd).
 
-!(1000)[Slides](https://github.com/user-attachments/assets/9c52ddc0-c3d1-48ac-8852-328dab48af64)
+!(1000)[Slides](Document-types/slides.png)
 
 #### Margin content
 

@@ -3,7 +3,7 @@
 
 [**`.pageformat {columns}`**](Page-format.qd) applies a multi-column layout to each page, given that the value of `columns` is higher than 1.
 
-!(700)[Example](https://github.com/user-attachments/assets/0f844b46-ac01-4245-87ae-4fc85506f9ab)
+!(700)[Example](Multi‐column-layout/two-columns.png)
 
 > `.pageformat columns:{2}`
 

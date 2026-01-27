@@ -13,5 +13,5 @@ The **`.figure {caption?} {body}`** adds generalization to the [image figures](F
         Hello, world!
 ```
 
-!(600)[Custom figure](https://github.com/user-attachments/assets/f851d83b-a1a9-460e-8eec-fd9c7b757292)
+!(600)[Custom figure](Custom-figure/result.png)
 

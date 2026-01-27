@@ -14,10 +14,10 @@ To address this, the **`.landscape`** function makes it possible to render conte
     Content
 ```
 
-!(700)[Landscape](https://github.com/user-attachments/assets/d408149f-e44e-4ab2-a2b0-44483d81d289)
+!(700)[Landscape](Landscape-content/landscape.png)
 
 
 
 The same content in portrait orientation would stretch content, reducing readability:
 
-!(700)[Portrait](https://github.com/user-attachments/assets/6c0fd29c-ef9c-4ee4-a4cd-e3586919b977)
+!(700)[Portrait](Landscape-content/portrait.png)

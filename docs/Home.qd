@@ -1,17 +1,12 @@
 .docname {Quarkdown Wiki}
 .include {_Setup.qd}
 
-<p align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-dark.svg">
-  ![Quarkdown banner](https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887)
-</picture>
-</p>
+.css
+    h1 { opacity: 0; height: 0; margin: 0; padding: 0; }
+    
+    figure { margin: 72px 0; }
 
----
-
-<br>
+![Quarkdown](assets/banner-light.svg)
 
 ## Welcome to the Quarkdown wiki!
 

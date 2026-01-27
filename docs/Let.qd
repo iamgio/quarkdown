@@ -24,7 +24,7 @@ The function returns the evaluation of the lambda, thus it can be used as an exp
     name:
     .uppercase {.name}, .lowercase {.name}, .capitalize {.name}
 ```
-> !(600)[Result](https://github.com/user-attachments/assets/ccbe13b2-5d87-47b3-af47-eefcc1507cc1)
+> !(600)[Result](Let/result.png)
 
 
 

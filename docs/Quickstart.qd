@@ -137,7 +137,7 @@ create [links](https://quarkdown.com), and much more.
 ![Logo](image/logo.png)
 ```
 
-!(650)[Markup](https://github.com/user-attachments/assets/0a9a43f8-5383-4a70-bd13-10580fad923c)
+!(650)[Markup](Quickstart/markup.png)
 
 You may refer to resources such as [markdownguide ↗](https://www.markdownguide.org/basic-syntax) to know more about Markdown.
 
@@ -155,7 +155,7 @@ Quarkdown overcomes a well-known Markdown limitation by allowing image size spec
 
 Great! The image is now perfectly sized.
 
-!(650)[Image size](https://github.com/user-attachments/assets/c7321c7e-9b06-4e62-836b-bfeb1e5feb85)
+!(650)[Image size](Quickstart/image-size.png)
 
 This sets the image width to 50% of the available width, while keeping the aspect ratio.
 Supported units include `px`, `pt`, `cm`, `mm`, `in`, and `%`.
@@ -191,7 +191,7 @@ and enhance it with a caption:
 !(50%)[Logo](image/logo.png "The Quarkdown logo".qd)
 ```
 
-!(650)[Figure](https://github.com/user-attachments/assets/34f6af0f-ec98-418a-aede-d484a89dd1c9)
+!(650)[Figure](Quickstart/figure.png)
 
 ### Equations and formulae
 
@@ -211,7 +211,7 @@ $ f(x, y) = \frac{x}{y} $
 
 You might notice that, despite having the same syntax, the second appears centered and on its own line. Just like figures, isolated equations automatically become block equations.
 
-!(650)[Equations](https://github.com/user-attachments/assets/2f6248fd-3423-47aa-8f6c-cf1c7fcbe887)
+!(650)[Equations](Quickstart/equations.png)
 
 
 
@@ -369,7 +369,7 @@ and set up a simple numbering scheme:
 
 > This YAML-like syntax represents a [dictionary](Dictionary.qd) data type.
 
-!(650)[Numbering](https://github.com/user-attachments/assets/eca10ab2-70e8-492f-a1d7-c9b8a7bb4064)
+!(650)[Numbering](Quickstart/numbering.png)
 
 Valid symbols are: 
 - `1` (decimal)
@@ -454,7 +454,7 @@ add the `logo` ID to it, and reference it in the text:
 The Quarkdown logo is shown in .ref {logo}.
 ```
 
-!(650)[Cross-reference](https://github.com/user-attachments/assets/b8522090-a09a-461a-a36c-fe52a5620b56)
+!(650)[Cross-reference](Quickstart/cross-reference.png)
 
 See [Cross-references](Cross-references.qd) to learn how to add IDs to other elements, such as sections, tables, equations and code blocks.
 
@@ -634,7 +634,7 @@ visualized:
 .subdocumentgraph
 ```
 
-!(650)[Subdocuments](https://github.com/user-attachments/assets/db85fe16-b558-4acb-9499-db39d62efbfa)
+!(650)[Subdocuments](Quickstart/subdocuments.png)
 
 
 

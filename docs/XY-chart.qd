@@ -46,7 +46,7 @@ For instance, `..` (infinite) is the default range, which shows the area between
   - 600
 ```
 
-!(600)[Simple list](https://github.com/user-attachments/assets/8521d32f-fb23-491c-956c-07615e53807a)
+!(600)[Simple list](XY-chart/bar-chart.png)
 
 
 
@@ -67,7 +67,7 @@ In case of nested lists (iterable of iterables), multiple lines will be plotted:
     - 450
 ```
 
-!(600)[Nested lists](https://github.com/user-attachments/assets/6c92df85-f98e-480e-9740-6a1b32298530)
+!(600)[Nested lists](XY-chart/multi-line.png)
 
 
 
@@ -97,7 +97,7 @@ Additionally, the first column of the table is used as a set of categorical tags
     .columns::third
 ```
 
-!(600)[CSV](https://github.com/user-attachments/assets/dddae1c0-cded-483a-9c84-8b59096d1880)
+!(600)[CSV](XY-chart/csv.png)
 
 
 
@@ -114,4 +114,4 @@ Quarkdown [loops](Loops.qd) return an iterable containing the result of each ite
         .1::logn::multiply {10}
 ```
 
-!(600)[Loop](https://github.com/user-attachments/assets/c27f6f8f-fb38-4d97-81ac-46da19b719e3)
+!(600)[Loop](XY-chart/loop.png)

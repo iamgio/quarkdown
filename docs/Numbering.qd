@@ -80,9 +80,9 @@ To avoid merging, thus turning off numbering rules for unspecified entries, set 
 ### Title   <!--  2.A  -->
 ```
 
-!(550)[Latex theme numbering](https://github.com/user-attachments/assets/d6ae1483-43cd-49ea-9934-63c67b8bdd4a)  
+!(550)[Latex theme numbering](Numbering/headings-latex.png)  
 
-!(550)[Latex theme table of contents](https://github.com/user-attachments/assets/1ca513b1-ab48-4d8e-b1f5-46f38e88f75d)
+!(550)[Latex theme table of contents](Numbering/toc-latex.png)
 
 #### Decorative headings
 
@@ -99,7 +99,7 @@ To prevent a heading from being numbered, append a `!` after the last `#` sign. 
 
 Decorative headings also don't appear in [table of contents](Table-of-contents.qd).
 
-!(550)[image](https://github.com/user-attachments/assets/ac3bfcc2-5a48-4ef3-ad67-7f963357aa3a)
+!(550)[image](Numbering/decorative-heading.png)
 
 
 
@@ -125,14 +125,14 @@ Decorative headings also don't appear in [table of contents](Table-of-contents.q
 ![Logo](quarkdown-icon.svg "".qd)
 ```
 
-!(550)[Figure numbering with format 1.1](https://github.com/user-attachments/assets/341b6c44-36dd-4304-8a43-3165436531b8)
+!(550)[Figure numbering with format 1.1](Numbering/figures-nested-format.png)
 
 
 
 When numbering elements, the amount of symbols in the format dictates the rules which cause the counters to reset.  
 The previous example, run with `figures: 1`, results in the following:
 
-!(550)[Figure numbering with format 1](https://github.com/user-attachments/assets/a79104ac-0106-46aa-a7a8-f38f8065b997)
+!(550)[Figure numbering with format 1](Numbering/figures-flat-format.png)
 
 
 
@@ -169,7 +169,7 @@ The previous example, run with `figures: 1`, results in the following:
 | **Joe**   | 32  | Sushi         |
 ```
 
-!(550)[Table numbering](https://github.com/user-attachments/assets/b793205e-629f-414a-bee1-780daf636d87)
+!(550)[Table numbering](Numbering/tables.png)
 
 
 
@@ -233,7 +233,7 @@ If not specified, footnotes format defaults to `1` (decimal).
 Here is a footnote reference[^: First], and another one[^: Second].
 ```
 
-!(550)[Footnote numbering](https://github.com/user-attachments/assets/c633b667-8b53-4cd6-8002-f0ac2c4a3032)
+!(550)[Footnote numbering](Numbering/footnotes-roman.png)
 
 
 
@@ -286,7 +286,7 @@ Full example:
     **Hi!** Here we have the number **.number**
 ```
 
-!(600)[Custom numbering](https://github.com/user-attachments/assets/7df10490-4e3d-42f5-aa82-879a840d2be3)
+!(600)[Custom numbering](Numbering/custom-numbered.png)
 
 
 
@@ -301,9 +301,9 @@ For instance *Figure* and *Table* for the English locale, *Figura* and *Tabella*
 
 [Layout themes](Themes.qd) affect the way numbers are displayed:
 
-!(550)[Minimal headings numbering](https://github.com/user-attachments/assets/a029b9aa-c2ac-4de4-ab89-8b8fe2221403)
+!(550)[Minimal headings numbering](Numbering/minimal-headings.png)
 
-!(550)[Minimal ToC numbering](https://github.com/user-attachments/assets/86edb07c-0c1f-4258-b827-7e9d6321d200)
+!(550)[Minimal ToC numbering](Numbering/minimal-toc.png)
 
 
 > `minimal` theme

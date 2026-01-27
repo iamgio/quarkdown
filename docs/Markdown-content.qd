@@ -58,6 +58,6 @@ In general, everything that can be put inside a paragraph can go into an inline 
 This is the link to .text {[Quarkdown](https://github.com/iamgio/quarkdown)} size:{large}
 ```
 
-> !(300)[`.text` result](https://github.com/user-attachments/assets/21d8b056-0bb7-4d84-ac16-3b70d55e39a3)  
+> !(300)[`.text` result](Markdown-content/text-inline.png)  
 >
 > See more: [`.text`](Text.qd)

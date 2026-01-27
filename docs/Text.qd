@@ -19,4 +19,4 @@ The **`.text`** inline function provides extensive text formatting that cannot b
 
 Lorem .text {ipsum} size:{large} decoration:{underoverline} dolor sit amet
 ```
-> !(450)[Result](https://github.com/user-attachments/assets/0c290098-11b3-4ea7-b874-96eea2489870)
+> !(450)[Result](Text/formatted.png)

@@ -53,7 +53,7 @@ Calling the same function with no arguments returns the dictionary itself, which
         .get {email} from:{.info}
 ```
 
-!(550)[Authors layout](https://github.com/user-attachments/assets/99136a4e-451f-4089-bb14-899cebb5def1)
+!(550)[Authors layout](Document-metadata/authors-layout.png)
 
 
 ### Single author

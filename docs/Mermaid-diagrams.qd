@@ -16,7 +16,7 @@ Its block parameter accepts the Mermaid code content. Please refer to [Mermaid's
     E --> F
 ```
 
-!(600)[Diagram](https://github.com/user-attachments/assets/be366982-011c-48ff-b10b-3813ad997b2b)
+!(600)[Diagram](Mermaid-diagrams/flowchart.png)
 
 
 
@@ -29,7 +29,7 @@ The Mermaid code accepts Quarkdown function calls:
     B -- .sum {.n1} {.n2} --> C([Correct])
 ```
 
-!(600)[Diagram with function calls](https://github.com/user-attachments/assets/173a45a2-f6d3-41c5-9375-a402e59fb78c)
+!(600)[Diagram with function calls](Mermaid-diagrams/flowchart-functions.png)
 
 
 
@@ -57,7 +57,7 @@ An optional `caption` argument assigns a caption to the diagram, and lets the bl
     E --> F
 ```
 
-!(600)[Diagram with caption](https://github.com/user-attachments/assets/f2487aba-96f7-4e76-ac55-e01f04c5736f)
+!(600)[Diagram with caption](Mermaid-diagrams/with-caption.png)
 
 
 
@@ -74,4 +74,4 @@ To number the diagram without a caption, pass an empty string as an argument:
     E --> F
 ```
 
-!(600)[Diagram with empty caption](https://github.com/user-attachments/assets/6e94cc87-2067-4b13-ae74-59129543a881)
+!(600)[Diagram with empty caption](Mermaid-diagrams/numbered.png)

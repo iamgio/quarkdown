@@ -12,7 +12,7 @@ This is a footnote reference[^first: This is the definition.],
 and another one[^second: This is another definition.].
 ```
 
-!(550)[Footnote](https://github.com/user-attachments/assets/fb12a9d9-ac1b-480a-a3d4-893e72eb819e)
+!(550)[Footnote](Footnotes/basic.png)
 
 
 
@@ -31,7 +31,7 @@ and another one[^first].
 ```
 
 
-!(550)[Footnote multi-reference](https://github.com/user-attachments/assets/303f217a-a082-4c6d-95f4-113aca3c7def)
+!(550)[Footnote multi-reference](Footnotes/multi-reference.png)
 
 
 
@@ -41,7 +41,7 @@ Definitions can include inline formatting:
 This is a footnote reference[^first: This is the **definition**.]
 ```
 
-!(550)[Footnote formatting](https://github.com/user-attachments/assets/befb566d-46ef-4578-b965-836d939a5d10)
+!(550)[Footnote formatting](Footnotes/formatted.png)
 
 
 
@@ -111,7 +111,7 @@ the `.numbering` function can be used:
   - footnotes: i
 ```
 
-!(550)[Footnote numbering](https://github.com/user-attachments/assets/c633b667-8b53-4cd6-8002-f0ac2c4a3032)
+!(550)[Footnote numbering](Footnotes/roman-numbering.png)
 
 See [*Numbering*](#numbering) for more information about numbering.
 

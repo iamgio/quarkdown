@@ -3,7 +3,7 @@
 
 Quarkdown introduces the concept of **figure**, which is missing in base Markdown. A figure wraps an image and is horizontally centered.
 
-!(600)[Demo: about Quarkdown's logo](https://github.com/user-attachments/assets/e82f9afd-daf8-49e8-b6a8-51b8bd21716e)
+!(600)[Demo: about Quarkdown's logo](Figure/demo.png)
 
 
 

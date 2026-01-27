@@ -22,7 +22,7 @@ The **`.pageformat`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/c
 
 Each page is composed of a *content area* in which the main content is displayed, and a *margin area*, a blank outline that may host [page margin content](Page-margin-content.qd) such as [page counters](Page-counter.qd).
 
-!(400)[Content area](https://github.com/user-attachments/assets/aef08bca-e097-4822-8b16-2bb41f480f06)
+!(400)[Content area](Page-format/content-area.png)
 
 
 
@@ -34,7 +34,7 @@ The `margin` parameter affects the size of the margin area, thus reducing the su
 .pageformat margin:{4cm}
 ```
 
-!(400)[Margins](https://github.com/user-attachments/assets/01acf7a0-dfe8-4a74-bcaf-4df64351477b)
+!(400)[Margins](Page-format/margins.png)
 
 
 
@@ -48,4 +48,4 @@ The `margin` parameter affects the size of the margin area, thus reducing the su
 .pageformat bordertop:{1px} borderbottom:{4px}
 ```
 
-!(400)[image](https://github.com/user-attachments/assets/639fec14-3c6b-4bf8-9b80-6c8cad620b1b)
+!(400)[image](Page-format/borders.png)

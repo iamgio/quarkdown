@@ -50,7 +50,7 @@ through a [for-each loop](Loops.qd):
     .subdocument {.path} label:{.path::filename}
 ```
 
-!(400)[List files](https://github.com/user-attachments/assets/f667eec0-cb8f-4e9f-b9c0-4c9f1478c026)
+!(400)[List files](Subdocuments/list-files.png)
 
 
 
