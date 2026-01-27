@@ -1,3 +1,4 @@
+.docname {Slides speaker notes}
 .include {_Setup.qd}
 
 Speaker notes are helpful tools for remembering talking points, reminders, or extra details while presenting.
@@ -15,7 +16,7 @@ By default, speaker notes are displayed only when the document is viewed in the 
 
 > [!NOTE]
 >
-> Reveal.js' speaker view requires an active [web server](CLI-‐-Webserver.qd).
+> Reveal.js' speaker view requires an active [web server](CLI-Webserver.qd).
 
 ### Outside speaker view
 

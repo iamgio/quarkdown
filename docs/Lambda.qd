@@ -1,3 +1,4 @@
+.docname {Lambda}
 .include {_Setup.qd}
 
 A **lambda** is a block of code that maps a variable amount of parameters into a single output value of any type (see the *Value types* section of this wiki).

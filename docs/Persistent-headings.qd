@@ -1,3 +1,4 @@
+.docname {Persistent headings}
 .include {_Setup.qd}
 
 The **`.lastheading {depth}`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/lastheading.html)</sup> function makes it possible to reference the last heading of a given depth across pages or slides.

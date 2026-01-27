@@ -1,3 +1,4 @@
+.docname {Multi-column layout}
 .include {_Setup.qd}
 
 [**`.pageformat {columns}`**](Page-format.qd) applies a multi-column layout to each page, given that the value of `columns` is higher than 1.

@@ -1,3 +1,4 @@
+.docname {Localization}
 .include {_Setup.qd}
 
 Quarkdown supports **string localization** out of the box.

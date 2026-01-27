@@ -1,3 +1,4 @@
+.docname {CLI - Webserver}
 .include {_Setup.qd}
 
 Quarkdown's webserver allows direct communication between the compiler and the browser,

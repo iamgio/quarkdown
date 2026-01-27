@@ -1,3 +1,4 @@
+.docname {Color}
 .include {_Setup.qd}
 
 A `Color` value can be defined in any of the following ways:

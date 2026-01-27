@@ -1,3 +1,4 @@
+.docname {Stacks}
 .include {_Setup.qd}
 
 Stack functions are those, in the subcategory of layout functions, that arrange a group of elements according to certain layout rules. There are three of them: 

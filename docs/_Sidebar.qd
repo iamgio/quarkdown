@@ -6,10 +6,10 @@
 - [Latest build ↗](https://quarkdown.com/docs/latest/quarkdown-stdlib/)
 
 ###! CLI tools
-- [Compiler](CLI-‐-Compiler.qd)
+- [Compiler](CLI-Compiler.qd)
 - [Exporting to PDF](PDF-export.qd)
-- [Project creator](CLI-‐-Project-creator.qd)
-- [Webserver](CLI-‐-Webserver.qd)
+- [Project creator](CLI-Project-creator.qd)
+- [Webserver](CLI-Webserver.qd)
 
 ###! Markdown enhancements
 - [Figures](Figure.qd)

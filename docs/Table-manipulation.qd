@@ -1,3 +1,4 @@
+.docname {Table manipulation}
 .include {_Setup.qd}
 
 The following table operations can affect not only plain Markdown tables, but also any kind of table including those [loaded from CSV](File-data.qd#table-from-csv).

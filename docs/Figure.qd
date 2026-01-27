@@ -1,3 +1,4 @@
+.docname {Figure}
 .include {_Setup.qd}
 
 Quarkdown introduces the concept of **figure**, which is missing in base Markdown. A figure wraps an image and is horizontally centered.

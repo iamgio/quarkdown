@@ -1,6 +1,7 @@
+.docname {Inside live preview}
 .include {_Setup.qd}
 
-Quarkdown's [webserver](CLI-‐-Webserver.qd) allows direct communication between the compiler's CLI and the browser, making live previewing possible.
+Quarkdown's [webserver](CLI-Webserver.qd) allows direct communication between the compiler's CLI and the browser, making live previewing possible.
 
 In particular, it exposes the following endpoints:
 

@@ -1,3 +1,4 @@
+.docname {Dictionary}
 .include {_Setup.qd}
 
 In Quarkdown, a dictionary is a collection of key-value pairs, without duplicate keys. A key is always a string value, while a value can be of any type.

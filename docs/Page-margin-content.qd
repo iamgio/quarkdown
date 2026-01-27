@@ -1,3 +1,4 @@
+.docname {Page margin content}
 .include {_Setup.qd}
 
 The **`.pagemargin`** function displays content on each page, in a fixed position along its [margins](Page-format.qd#content-area).

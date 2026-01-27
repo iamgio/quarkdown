@@ -1,3 +1,4 @@
+.docname {Clip}
 .include {_Setup.qd}
 
 The **`.clip {shape}`** block function allows clipping its content to a defined shape.

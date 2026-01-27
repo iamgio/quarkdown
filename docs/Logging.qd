@@ -1,3 +1,4 @@
+.docname {Logging}
 .include {_Setup.qd}
 
 Quarkdown features ways to log content to standard channels.

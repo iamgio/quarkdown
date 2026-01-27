@@ -1,3 +1,4 @@
+.docname {Typing}
 .include {_Setup.qd}
 
 Quarkdown is **dynamically typed**: every value that may be passed to a function argument is wrapped in a [`DynamicValue`](https://github.com/iamgio/quarkdown/blob/main/core/src/main/kotlin/eu/iamgio/quarkdown/function/value/DynamicValue.kt) object.

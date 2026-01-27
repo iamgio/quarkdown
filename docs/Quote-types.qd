@@ -1,3 +1,4 @@
+.docname {Quote types}
 .include {_Setup.qd}
 
 If a blockquote begins by `Tip:`, `Note:`, `Warning:` or `Important:`, it is assigned the given type. Said prefix is stripped off and the element is styled accordingly.

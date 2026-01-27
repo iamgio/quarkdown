@@ -1,3 +1,4 @@
+.docname {CLI - Project creator}
 .include {_Setup.qd}
 
 The **project creator** is a CLI project wizard that makes it blazingly fast to set up a new Quarkdown project.

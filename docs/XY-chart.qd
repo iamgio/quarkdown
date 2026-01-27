@@ -1,3 +1,4 @@
+.docname {XY chart}
 .include {_Setup.qd}
 
 The **`.xychart`**<sup>[[docs]](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html)</sup> function allows plotting 2D line/bar charts in a pure, flexible Quarkdown fashion, through the power of [Mermaid](Mermaid-diagrams.qd).

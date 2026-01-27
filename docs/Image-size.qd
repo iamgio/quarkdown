@@ -1,3 +1,4 @@
+.docname {Image size}
 .include {_Setup.qd}
 
 Whereas base Markdown requires HTML code to constrain the size of an image, Quarkdown introduces a new syntax extension to achieve the same result in a more elegant and efficient way:

@@ -1,3 +1,4 @@
+.docname {TeX macros}
 .include {_Setup.qd}
 
 When writing [TeX formulae](TeX-formulae.qd), it may come in handy to have access to user-defined macros.

@@ -1,3 +1,4 @@
+.docname {Custom figure}
 .include {_Setup.qd}
 
 The **`.figure {caption?} {body}`** adds generalization to the [image figures](Figure.qd) syntax extension, as it allows for any content to be handled as a *figure* block, which:

@@ -1,3 +1,4 @@
+.docname {Line breaks}
 .include {_Setup.qd}
 
 Quarkdown follows the standard Markdown specification,

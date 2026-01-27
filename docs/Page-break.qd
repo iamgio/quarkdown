@@ -1,3 +1,4 @@
+.docname {Page break}
 .include {_Setup.qd}
 
 A page break is a forced interruption of the page flow, so that content that follows the break will appear on the next page.  

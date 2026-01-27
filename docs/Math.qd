@@ -1,3 +1,4 @@
+.docname {Math}
 .include {_Setup.qd}
 
 Mathematical functions provide a way of performing numeric operations.

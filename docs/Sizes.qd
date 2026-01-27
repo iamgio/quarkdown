@@ -1,3 +1,4 @@
+.docname {Sizes}
 .include {_Setup.qd}
 
 Many functions accept sizes as arguments. This page explains the correct format to define them.

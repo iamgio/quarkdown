@@ -1,3 +1,4 @@
+.docname {Align}
 .include {_Setup.qd}
 
 The **`.align`** block function sets the horizontal alignment (and multiline text alignment) of content.

@@ -1,3 +1,4 @@
+.docname {Subdocuments}
 .include {_Setup.qd}
 
 When referring to a Quarkdown *document*, we're talking broadly

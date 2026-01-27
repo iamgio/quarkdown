@@ -1,3 +1,4 @@
+.docname {Table generation}
 .include {_Setup.qd}
 
 ## Table generation by columns

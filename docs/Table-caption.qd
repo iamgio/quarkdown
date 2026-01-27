@@ -1,3 +1,4 @@
+.docname {Table caption}
 .include {_Setup.qd}
 
 The Quarkdown flavor introduces table captions, which can be set by adding a line right under the table. The content is wrapped between double quotes, single quotes or parentheses, exactly like the image *title* attribute and [code captions](Code-caption.qd).

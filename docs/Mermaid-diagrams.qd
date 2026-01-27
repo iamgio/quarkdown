@@ -1,3 +1,4 @@
+.docname {Mermaid diagrams}
 .include {_Setup.qd}
 
 Quarkdown offers full Mermaid interoperability via the **`.mermaid`** block function, bringing Mermaid diagrams and charts into your documents.

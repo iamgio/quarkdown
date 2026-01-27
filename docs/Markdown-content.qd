@@ -1,3 +1,4 @@
+.docname {Markdown content}
 .include {_Setup.qd}
 
 Many functions accept rich ~Mark~*Quark*down content as their argument.

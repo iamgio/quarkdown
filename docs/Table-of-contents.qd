@@ -1,3 +1,4 @@
+.docname {Table of contents}
 .include {_Setup.qd}
 
 A table of contents is a quick summary of the document, where links to headings are displayed in a visual hierarchy.

@@ -1,3 +1,4 @@
+.docname {Whitespace}
 .include {_Setup.qd}
 
 Blank space can be added anywhere via the **`.whitespace`** function, which accepts optional `width` and `height` [Size](Sizes.qd#single-size-size) arguments.

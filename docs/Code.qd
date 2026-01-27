@@ -1,3 +1,4 @@
+.docname {Code}
 .include {_Setup.qd}
 
 A block of code can be created as the standard Markdown specification allows, by either a 4-spaces/1-tab indentation or a delimitation of 3 backticks/tildes.

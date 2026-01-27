@@ -1,3 +1,4 @@
+.docname {Loops}
 .include {_Setup.qd}
 
 ## For-each

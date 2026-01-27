@@ -1,3 +1,4 @@
+.docname {Collapsible}
 .include {_Setup.qd}
 
 The **`.collapse`** function creates an interactive collapsible block, whose status can be toggled by clicking.

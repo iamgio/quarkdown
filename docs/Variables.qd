@@ -1,3 +1,4 @@
+.docname {Variables}
 .include {_Setup.qd}
 
 **`.var {name} {value}`** defines a variable. `value` is a [dynamic value](Typing.qd), meaning it may be of any type.

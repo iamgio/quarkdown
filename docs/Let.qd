@@ -1,3 +1,4 @@
+.docname {Let}
 .include {_Setup.qd}
 
 The **`.let`** function defines a temporary variable, accessible only within its scope. It accepts two parameters:

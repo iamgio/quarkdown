@@ -1,3 +1,4 @@
+.docname {Numbering}
 .include {_Setup.qd}
 
 The **`.numbering`** function sets the global numbering configuration of the document. The following elements can be numbered:

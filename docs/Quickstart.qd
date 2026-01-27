@@ -1,3 +1,4 @@
+.docname {Quickstart}
 .include {_Setup.qd}
 
 Welcome to Quarkdown! In this page, we'll explore the main steps and features that will help you create your first document.
@@ -12,7 +13,7 @@ This guide provides a shallow overview and won't go into the specific details of
 
 ## Creating a document
 
-> Reference: [Project Creator](CLI-‐-Project-creator.qd)
+> Reference: [Project Creator](CLI-Project-creator.qd)
 
 To create a new document, run the project creator from your terminal:
 
@@ -74,7 +75,7 @@ See [Themes](Themes.qd) for a complete list of available themes.
 
 ## Compiling
 
-> Reference: [Compiler](CLI-‐-Compiler.qd)
+> Reference: [Compiler](CLI-Compiler.qd)
 
 Compile the document to ensure everything is working as expected:
 

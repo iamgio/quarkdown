@@ -1,3 +1,4 @@
+.docname {Media storage}
 .include {_Setup.qd}
 
 **Media storage** is a feature that ensures all the required files are present in the output directory when a Quarkdown project is exported.
