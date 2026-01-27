@@ -4,6 +4,14 @@
 
 .css {.read {assets/style.css}}
 
+.function {repolink}
+    content href:
+    .text {.content} url:{https://github.com/iamgio/quarkdown/.href}
+
+.function {docslink}
+    href:
+    .text {\[docs]} url:{https://quarkdown.com/docs/quarkdown-stdlib/.href}
+
 .pagemargin {lefttop}
     .navigation role:{pagelist}
         .include {_Sidebar.qd}
