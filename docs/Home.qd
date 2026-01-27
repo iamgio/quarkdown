@@ -1,6 +1,3 @@
-.docname {Home}
-.include {_Setup.qd}
-
 .docname {Quarkdown Wiki}
 .include {_Setup.qd}
 
