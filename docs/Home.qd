@@ -18,7 +18,7 @@ This wiki is designed to be ***complementary* to the project documentation**, av
 - The documentation provides comprehensive details about functions, their input and their output;
 - This wiki, on the other hand, is supposed to be a user-centered collection of features and their use cases.
 
-When browsing this wiki, in case the documentation is particularly interesting for a specific topic, you will find a .docslink {} link.
+When browsing this wiki, in case the documentation is particularly interesting for a specific topic, you will find a .docslink {quarkdown-stdlib} link.
 
 ### Other resources
 

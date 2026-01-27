@@ -10,7 +10,7 @@
 
 .function {docslink}
     href:
-    .text {\[docs]} url:{https://quarkdown.com/docs/quarkdown-stdlib/.href}
+    .html {<sup><a href="https://quarkdown.com/docs/.href" target="_blank">docs ↗</a></sup>}
 
 .pagemargin {lefttop}
     .navigation role:{pagelist}
