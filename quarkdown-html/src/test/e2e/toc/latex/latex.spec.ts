@@ -1,5 +1,5 @@
 import {suite} from "../../quarkdown";
-import {assertTocLinks, assertTocNumbering, assertTocStructure} from "../index";
+import {assertTocLinks, assertTocNumbering, assertTocStructure, TOC_SELECTOR} from "../index";
 
 const {test, expect} = suite(__dirname);
 
@@ -21,7 +21,7 @@ test("links to correct heading anchors", async (page) => {
 });
 
 test("first-level links are bold, others are normal", async (page) => {
-    const nav = page.locator("nav");
+    const nav = page.locator(TOC_SELECTOR);
     const firstLevelLinks = nav.locator("> :is(ul, ol) > li > a");
     const nestedLinks = nav.locator(":is(ul, ol) :is(ul, ol) a");
 

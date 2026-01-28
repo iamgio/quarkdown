@@ -26,6 +26,7 @@
 @use "components/bibliography";
 @use "components/page-margin";
 @use "components/landscape";
+@use "components/paged";
 @use "components/docs";
 @use "components/search.scss";
 @use "components/sidebar";
@@ -34,6 +35,7 @@
   // Quarkdown's exposed properties
 
   // Colors
+  --qd-color-scheme: light; // Color scheme: light or dark
   --qd-background-color: inherit; // Background color
   --qd-main-color: inherit; // Main text color
   --qd-main-color-muted: color-mix(in srgb, var(--qd-main-color) 20%, transparent); // Muted main text color
@@ -169,7 +171,11 @@
   --qd-docs-search-border-color: var(--qd-docs-separator-border-color);
   --qd-docs-search-focused-border: var(--qd-primary-color);
 
-  // Reveal properties
+  // Do not modify the following properties directly.
+
+  color-scheme: var(--qd-color-scheme);
+
+  // Reveal properties.
   --r-background-color: var(--qd-background-color);
   --r-main-color: var(--qd-main-color);
   --r-heading-color: var(--qd-heading-color);
@@ -181,6 +187,6 @@
   --r-block-margin: var(--qd-block-margin);
   --r-heading-margin: var(--qd-heading-margin);
 
-  // Injected properties. These are injected from html-wrapper depending on the user's preferences. Here are default values.
+  // Injected properties.
   --viewport-remaining-height: 50vh;
 }
