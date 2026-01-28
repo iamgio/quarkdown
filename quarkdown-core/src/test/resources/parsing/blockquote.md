@@ -33,14 +33,29 @@ Code
 
 > Note: A note.
 
+> [!NOTE]
+> A note.
+
 > Tip: This is a tip!
+> - A
+> - B
+
+> [!TIP]
+> This is a tip!
 > - A
 > - B
 
 > Warning: you should be
 > more careful.
 
+> [!WARNING]
+> you should be
+> more careful.
+
 > Something: not a typed quote.
+
+> [!SOMETHING]
+> not a typed quote.
 
 > To be, or not to be, that is the question.
 > - William Shakespeare, Hamlet
