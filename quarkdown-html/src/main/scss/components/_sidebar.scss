@@ -73,10 +73,6 @@ $level-width: 9px;
       background: var(--qd-main-color);
       opacity: 0.25;
       transition: opacity 0.2s;
-
-      @at-root .quarkdown-paged#{&} {
-        background: #444;
-      }
     }
   }
 
@@ -94,10 +90,14 @@ $level-width: 9px;
     }
   }
 
+  // Collapsed state has fixed color in paged documents.
+  &:not(:hover):is(.quarkdown-paged .sidebar) a::after {
+    background: #444;
+  }
+
   li.active {
     > a::after {
       opacity: .75;
     }
   }
 }
-
