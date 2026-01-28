@@ -1,9 +1,10 @@
 import {expect, Page} from "@playwright/test";
 
+export const TOC_SELECTOR = "nav[data-role='table-of-contents']";
 export const EXPECTED_NUMBERS = ["1", "2", "2.1", "2.1.1", "3", "3.1", "3.2"];
 
 export async function assertTocStructure(page: Page, itemCount: number = 7) {
-    const nav = page.locator("nav");
+    const nav = page.locator(TOC_SELECTOR);
     await expect(nav).toBeAttached();
 
     const items = nav.locator("li");
@@ -17,7 +18,7 @@ export async function assertTocNumbering(
     format: "latex" | "minimal",
     expectedNumbers: string[] = EXPECTED_NUMBERS
 ) {
-    const nav = page.locator("nav");
+    const nav = page.locator(TOC_SELECTOR);
     const items = nav.locator("li");
 
     for (let i = 0; i < expectedNumbers.length; i++) {
@@ -33,7 +34,7 @@ export async function assertTocNumbering(
 }
 
 export async function assertTocLinks(page: Page, expectedTexts: string[] = EXPECTED_NUMBERS) {
-    const nav = page.locator("nav");
+    const nav = page.locator(TOC_SELECTOR);
     const links = nav.locator("a");
 
     await expect(links).toHaveCount(expectedTexts.length);
