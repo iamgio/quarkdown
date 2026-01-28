@@ -351,10 +351,13 @@ class BlockTokenParser(
                     // :---:
                     delimiter.firstOrNull() == TABLE_ALIGNMENT_CHAR &&
                         delimiter.lastOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.CENTER
+
                     // :---
                     delimiter.firstOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.LEFT
+
                     // ---:
                     delimiter.lastOrNull() == TABLE_ALIGNMENT_CHAR -> Table.Alignment.RIGHT
+
                     // ---
                     else -> Table.Alignment.NONE
                 }
@@ -429,6 +432,7 @@ class BlockTokenParser(
         return when (val singleChild = text.singleOrNull()) {
             // Single image -> a figure.
             is Image -> ImageFigure(singleChild)
+
             // Regular paragraph otherwise (most cases).
             else -> Paragraph(text)
         }
@@ -444,16 +448,14 @@ class BlockTokenParser(
         // Blockquote type, if any. e.g. Tip, note, warning.
         val type: BlockQuote.Type? =
             BlockQuote.Type.entries.find { type ->
-                val prefix = type.name + ": " // e.g. Tip:, Note:, Warning:
-                // If the text begins with the prefix, it's a blockquote of that type.
-                val (newText, prefixFound) = text.removeOptionalPrefix(prefix, ignoreCase = true)
-                // If the prefix was found, it is stripped off.
-                if (prefixFound) {
-                    text = newText
+                sequenceOf(
+                    "${type.name}: ", // e.g. Tip:, Note:, Warning:
+                    "[!${type.name}]", // e.g. [!TIP], [!NOTE], [!WARNING]
+                ).any { prefix ->
+                    val (newText, found) = text.removeOptionalPrefix(prefix, ignoreCase = true)
+                    if (found) text = newText.trimStart()
+                    found
                 }
-
-                // If the prefix was found, the type is set.
-                prefixFound
             }
 
         // Content nodes.

@@ -19,6 +19,7 @@ import com.quarkdown.core.ast.base.block.list.TaskListItemVariant
 import com.quarkdown.core.ast.base.block.list.UnorderedList
 import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.PlainTextNode
+import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildInline
@@ -341,24 +342,37 @@ class BlockParserTest {
             assertEquals(2, children.size)
         }
 
-        with(nodes.next()) {
-            assertEquals("A note.", rawText(this))
-            assertEquals(BlockQuote.Type.NOTE, type)
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("A note.", rawText(this))
+                assertEquals(BlockQuote.Type.NOTE, type)
+            }
         }
 
-        with(nodes.next()) {
-            assertEquals("This is a tip!", rawText(this))
-            assertIs<UnorderedList>(children[1])
-            assertEquals(BlockQuote.Type.TIP, type)
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("This is a tip!", rawText(this))
+                assertIs<UnorderedList>(children[1])
+                assertEquals(BlockQuote.Type.TIP, type)
+            }
         }
 
-        with(nodes.next()) {
-            assertEquals("you should be\nmore careful.", rawText(this))
-            assertEquals(BlockQuote.Type.WARNING, type)
+        repeat(2) {
+            with(nodes.next()) {
+                assertEquals("you should be\nmore careful.", rawText(this))
+                assertEquals(BlockQuote.Type.WARNING, type)
+            }
         }
 
         with(nodes.next()) {
             assertEquals("Something: not a typed quote.", rawText(this))
+            assertNull(type)
+        }
+
+        with(nodes.next()) {
+            val paragraph = children.first() as Paragraph
+            assertIs<ReferenceLink>(paragraph.children.first())
+            assertEquals("not a typed quote.", (paragraph.children[1] as Text).text.trimStart())
             assertNull(type)
         }
 
