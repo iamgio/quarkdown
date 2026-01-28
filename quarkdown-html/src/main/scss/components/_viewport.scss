@@ -211,22 +211,11 @@ body.quarkdown {
 
   // Paged viewport
   &.quarkdown-paged {
-    background-color: lightgray;
-
-    // Paged rendering is not yet complete
-    &:not(:has(.pagedjs_page)) {
-      opacity: 0;
-    }
-
     .pagedjs_pages {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 3mm;
-    }
-
-    .pagedjs_page {
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
     }
 
     .pagedjs_area {
