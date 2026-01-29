@@ -1,3 +1,13 @@
 .page-margin-top-left a {
     display: flex;
 }
+
+.quarkdown-output {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: var(--box-header-background-color);
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}

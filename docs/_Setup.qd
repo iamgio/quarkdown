@@ -24,14 +24,11 @@
 
 .function {examplemirror}
     quarkdowncode:
-    .numbered key:{example}
-        num:
-        .box {Example .num} type:{tip}
-            .code lang:{markdown}
-                .quarkdowncode
+    .example {
+        .code lang:{markdown} code:{.quarkdowncode}
 
-            .container background:{rgba(255, 255, 255, 0.05)} fullwidth:{yes} padding:{8px 12px} radius:{8px}
-                .quarkdowncode
+        .container classname:{quarkdown-output} fullwidth:{yes} body:{.quarkdowncode}
+    }
 
 .pagemargin {lefttop}
     .navigation role:{pagelist}
