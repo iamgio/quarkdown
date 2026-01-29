@@ -135,6 +135,12 @@ export class SearchField extends DocumentHandler {
      * @param event - The keyboard event
      */
     private onKeyDown(event: KeyboardEvent): void {
+        if (event.key === "Escape") {
+            this.hideResults();
+            this.input!.blur();
+            return;
+        }
+
         if (this.resultsContainer!.hidden) return;
 
         const items = this.resultsContainer!.querySelectorAll<HTMLElement>(".search-result");
@@ -156,9 +162,6 @@ export class SearchField extends DocumentHandler {
                     event.preventDefault();
                     items[this.selectedIndex].click();
                 }
-                break;
-            case "Escape":
-                this.hideResults();
                 break;
         }
     }

@@ -18,6 +18,10 @@
 
     &:focus-within {
       border-color: var(--qd-docs-search-focused-border);
+
+      i {
+        color: var(--qd-docs-search-focused-border);
+      }
     }
 
     i {

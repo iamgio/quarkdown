@@ -46,6 +46,25 @@
     > aside:last-child {
       border-left: 1px solid var(--qd-docs-separator-border-color);
     }
+
+    &::after {
+      content: "";
+      transition: background-color 0.3s, backdrop-filter 0.3s;
+    }
+  }
+
+  &:has(#search-results:not(:empty):not([hidden])) {
+    > .content-wrapper::after {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(1px);
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 
   aside {
