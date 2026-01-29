@@ -82,6 +82,12 @@
     }
   }
 
+  // When a page is being viewed, de-emphasize other pages in the page list.
+  nav[data-role="page-list"]:has(a[aria-current]) a:not([aria-current]):not(:hover) {
+    color: var(--qd-main-color);
+    opacity: 0.8;
+  }
+
   // Previous/Next page buttons
   #sibling-pages-button-area {
     display: flex;
