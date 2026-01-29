@@ -2,6 +2,9 @@
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
 
+.numbering
+    - example: 1
+
 .css {.read {assets/style.css}}
 
 .function {repolink}
@@ -11,6 +14,24 @@
 .function {docslink}
     href:
     .html {<sup><a href="https://quarkdown.com/docs/.href" target="_blank">docs ↗</a></sup>}
+
+.function {example}
+    content:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{tip}
+            .content
+
+.function {examplemirror}
+    quarkdowncode:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{tip}
+            .code lang:{markdown}
+                .quarkdowncode
+
+            .container background:{rgba(255, 255, 255, 0.05)} fullwidth:{yes} padding:{8px 12px} radius:{8px}
+                .quarkdowncode
 
 .pagemargin {lefttop}
     .navigation role:{pagelist}

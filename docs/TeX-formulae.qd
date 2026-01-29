@@ -8,52 +8,40 @@ Quarkdown natively supports TeX math equations and formulae. When rendering to H
 
 Inline equations can be created by wrapping text between two `$` symbols. Both delimiters must be preceded and followed by a whitespace (or beginning/end of the line).
 
-```latex
-Let $ \overline v = \frac {\Delta x} {\Delta t} $ be the **average velocity** of an object.
-```
-> !(450)[Inline result](TeX-formulae/inline.png)
-
-
-
+.examplemirror
+    Let $ \overline v = \frac {\Delta x} {\Delta t} $ be the **average velocity** of an object.
 
 ## One-line block
 
 Block equations are usually visually centered and share the same syntax as the inline ones, but need to be isolated from other content:
 
-```latex
-The following function is a **Fourier Transform**:
+.examplemirror
+    The following function is a **Fourier Transform**:
 
-$ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
-```
-> !(750)[One-line block result](TeX-formulae/block.png)
+    $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
 > [!NOTE]
-> This syntax does **not** interrupt paragraphs, so make sure to space blocks properly. If the paragraph is not interrupted, the formula is recognized as inline, due to Markdown's *lazy lines*:
+> This syntax does **not** interrupt paragraphs, so make sure to space blocks properly.
+> If the paragraph is not interrupted, the formula is recognized as inline, due to Markdown's *lazy lines*.
 >
-> ```latex
-> The following function is a **Fourier Transform**:
-> $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
-> ```
->> !(750)[Invalid one-line block](TeX-formulae/block-invalid.png)
+> .examplemirror
+>     The following function is a **Fourier Transform**:
+>     $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
 
 
 ## Multiline block
 
-A block formula can span over multiple lines thanks to a syntax similar to fenced code blocks, though using three `$` symbols as delimiters:
+A block formula can span over multiple lines thanks to a syntax similar to fenced code blocks, though using three `$` symbols as delimiters.
 
-```latex
-$$$
-f(x) =
-\begin{cases}
-    0 & \text{if } x = 0 \\
-    1 & \text{if } x \neq 0
-\end{cases}
-$$$
-```
-> !(750)[Multiline block result](TeX-formulae/multiline.png)
-
-
+.examplemirror
+    $$$
+    f(x) =
+    \begin{cases}
+        0 & \text{if } x = 0 \\
+        1 & \text{if } x \neq 0
+    \end{cases}
+    $$$
 
 ## Macros
 
