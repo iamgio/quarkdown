@@ -5,11 +5,14 @@ The **`.align`** block function sets the horizontal alignment of content, includ
 
 The primary parameter accepts the alignment type: `start`, `center`, or `end`. For convenience, **`.center`** is a shorthand for `.align {center}`.
 
-```markdown
-.align {end}
-    # My document
+.examplemirror
+    .align {end}
+        #! My document
 
-.loremipsum
-```
+    .loremipsum
 
-!(556)[Result](Align/end-alignment.png)
+.examplemirror
+    .center
+        #! My document
+
+    .loremipsum

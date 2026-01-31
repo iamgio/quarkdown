@@ -3,9 +3,24 @@
 }
 
 .quarkdown-output {
-    padding: 8px 12px;
+    padding: 12px 16px;
     border-radius: 8px;
     background-color: var(--box-header-background-color);
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)";
+    color: var(--qd-main-color-muted);
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    margin-top: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50%;
 }
 
 .box:has(.quarkdown-output) pre {

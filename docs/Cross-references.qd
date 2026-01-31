@@ -5,125 +5,99 @@ In typesetting, cross-references are references to other parts of the document, 
 
 In Quarkdown, you create a cross-reference using the **`.ref {id}`** function, where `id` is the cross-reference ID of the target element. The function can appear either before or after the target element.
 
-> [!NOTE]
-> Cross-referencing works best when elements are numbered and you have set a supported document language.
+> Note: Cross-referencing works best when elements are numbered, and you have set a supported document language.
 > See [Numbering](Numbering.qd) and [Localization](Localization.qd) for details.
 
-You typically set the ID using the `{#id}` syntax. The exact location depends on the element type, as the following sections explain. For this guide, assume the `1.1` numbering format is used for all elements.
-
-
+You typically set the ID using the `{#id}` syntax. The exact location depends on the element type, as the following sections explain.
 
 ### Sections
 
-```markdown
-Once Quarkdown is installed, check out .ref {getting-started} for a quick guide.
+.exampleoutput {![Sections](Cross-references/section-reference.png)}
+    Once you install Quarkdown, check out .ref {getting-started} for a quick guide.
 
-## Getting started {#getting-started}
-```
+    ##! Getting started {#getting-started}
 
-!(650)[Sections](https://github.com/user-attachments/assets/15092d0a-1d4f-44b6-80e0-496561e739c1)
-
-> [!TIP]
-> In HTML rendering, the reference ID of headings also becomes the HTML `id` attribute, which makes them suitable for linking.
-
+> Tip: In HTML rendering, the reference ID of headings also becomes the HTML `id` attribute, which makes them suitable for linking.
 
 
 ### Figures
 
-```markdown
-The Quarkdown logo is shown in .ref {logo}.
+.exampleoutput {![Figures](Cross-references/figure-reference.png)}
+    The Quarkdown logo is shown in .ref {logo}.
 
-![Logo](icon.svg "The Quarkdown icon") {#logo}
-```
-
-!(650)[Figures](Cross-references/figure-reference.png)
-
-
+    ![Logo](icon.svg "The Quarkdown icon") {#logo}
 
 ### Tables
 
-```markdown
-As shown in .ref {data}, coffee is the most popular beverage.
+.exampleoutput {![Tables](Cross-references/table-reference.png)}
+    As shown in .ref {data}, coffee is the most popular beverage.
 
-| Person | Beverage |
-|--------|----------|
-| Alice  | Tea      |
-| Bob    | Coffee   |
-| Charlie| Coffee   |
-{#data}
-```
+    | Person  | Beverage |
+    |---------|----------|
+    | Alice   | Tea      |
+    | Bob     | Coffee   |
+    | Charlie | Coffee   |
+    {#data}
 
-!(650)[Tables](https://github.com/user-attachments/assets/887a99e2-9c61-4be7-94d5-ef90c049d558)
+.example
+    With a [caption](Table-caption.qd):
 
-With a [caption](Table-caption.qd):
-
-```markdown
-| Person | Beverage |
-|--------|----------|
-| Alice  | Tea      |
-| Bob    | Coffee   |
-| Charlie| Coffee   |
-"Beverage preferences" {#data}
-```
-
-
+    ```markdown
+    | Person  | Beverage |
+    |---------|----------|
+    | Alice   | Tea      |
+    | Bob     | Coffee   |
+    | Charlie | Coffee   |
+    "Beverage preferences" {#data}
+    ```
 
 ### Equations
 
-```markdown
-Einstein's famous equation is shown in .ref {energy}.
+.exampleoutput {![Equations](Cross-references/equation-reference.png)}
+    Einstein's famous equation is shown in .ref {energy}.
 
-$ E = mc^2 $ {#energy}
-```
+    $ E = mc^2 $ {#energy}
 
-For multi-line equations:
+.example
+    For multi-line equations:
 
-```markdown
-$$$ {#energy}
-E = mc^2
-$$$
-```
+    ```markdown
+    $$$ {#energy}
+    E = mc^2
+    $$$
+    ```
 
-!(650)[Equations](https://github.com/user-attachments/assets/a4c98ad5-e378-4edc-88bc-981fc721737a)
-
-
+> Tip: See [TeX Formulae](TeX-Formulae.qd) for more information on writing equations in Quarkdown.
 
 ### Code blocks (listings)
 
-~~~markdown
-See the main function in .ref {main}.
+.exampleoutput {![Code blocks](Cross-references/codeblock-reference.png)}
+    See the main function in .ref {main}.
 
-```kotlin {#main}
-fun main() {
-    println("Hello, World!")
-}
-```
-~~~
+    ```kotlin {#main}
+    fun main() {
+        println("Hello, World!")
+    }
+    ```
 
-!(650)[Code blocks](https://github.com/user-attachments/assets/5b870166-b571-41c4-85bc-880ec03216f6)
+.example
+    With a [caption](Code-caption.qd):
 
-With a [caption](Code-caption.qd):
-
-~~~markdown
-```kotlin "Hello World in Kotlin" {#main}
-fun main() {
-    println("Hello, World!")
-}
-```
-~~~
-
-
+    ~~~markdown
+    ```kotlin "Hello World in Kotlin" {#main}
+    fun main() {
+        println("Hello, World!")
+    }
+    ```
+    ~~~
 
 ### Custom numbered elements
 
 > The `.numbered` function is explained in detail in [Numbering](Numbering.qd#custom-numbered-elements).
 
-```markdown
-In Example .ref {my-example} you can see a custom numbered element.
+.exampleoutput {![Custom numbered elements](Cross-references/numbered-reference.png)}
+    In Example .ref {my-example} you can see a custom numbered element.
 
-.numbered {examples} ref:{my-example}
-    number:
-    **Example .number:** this is a custom numbered element.
-```
-
-!(650)[Custom numbered elements](https://github.com/user-attachments/assets/aa711f85-52db-49d7-946d-08b826e3ebf7)
+    .numbered {examples} ref:{my-example}
+        number:
+        **Example .number:** this is a custom numbered element.

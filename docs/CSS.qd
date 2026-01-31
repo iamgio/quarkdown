@@ -10,12 +10,13 @@ The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection
 
 ```css
 .css
-  body {
-    background-color: green !important;
-  }
-  h1 {
-    color: pink !important;
-  }
+    body {
+        background-color: green;
+    }
+  
+    h1 {
+        color: pink;
+    }
 ```
 
 You can also load CSS styles from a file using the [`.read`](File-data.qd) function:
@@ -29,47 +30,37 @@ You can also load CSS styles from a file using the [`.read`](File-data.qd) funct
 >
 > For this reason, you must inline the `.read` call as shown in the previous example.
 
-
-
 ## Custom classes
 
 You can assign custom CSS class names to specific elements using the `classname` parameter, which is available in [`.container`](Container.qd) for blocks and [`.text`](Text.qd) for inline elements.
 
-```markdown
-.container classname:{my-custom-class}
-    This is a block with a custom class.
+.examplemirror
+    .container classname:{my-custom-class}
+        This is a block with a custom class.
 
-    - Item 1
-    - Item 2
-    - Item 3
+        - Item 1
+        - Item 2
+        - Item 3
 
----
+    This is an .text {inline text} classname:{my-custom-class} with a custom class.
 
-This is an .text {inline text} classname:{my-custom-class} with a custom class.
+    .css
+        .my-custom-class {
+            padding: 8px;
+            border-radius: 8px;
+            background: linear-gradient(to right, blue 0%, forestgreen 100%);
+        }
 
-.css
-    .my-custom-class {
-      padding: 8px;
-      background: linear-gradient(to right, pink 0%, lightblue 100%);
-    }
-```
+## Custom reusable elements
 
-!(600)[Custom classes](CSS/custom-classes.png)
+You can leverage [custom functions](Declaring-functions.qd) to create reusable elements with custom classes.
 
-> [!TIP]
-> Create your own reusable elements using [custom functions](Declaring-functions.qd):
->
-> ```markdown
-> .function {mytext}
->    content:
->    .text {.content} classname:{my-custom-class}
->
-> This is a .mytext {text} and here is .mytext {another}.
-> ```
->
-> !(600)[Custom elements](CSS/custom-elements.png)
+.examplemirror
+    .function {mytext}
+        content:
+        .text {.content} classname:{my-custom-class}
 
-
+    This is a .mytext {text} and here is .mytext {another}.
 
 ## Overriding properties
 
@@ -77,19 +68,19 @@ If you want to *override* Quarkdown's default styles, we recommend using the **`
 
 This function takes a [dictionary](Dictionary.qd) of strings, where each item is a `--qd-*` CSS property and its value.
 
-> **Why is this preferred over `.css`?**
->
-> Quarkdown's themes use CSS custom properties for more granular control and easier overrides. For instance, the same property may be applied differently depending on the document type.
->
-> When you call functions like [`.pageformat`](Page-format.qd) or [`.paragraphstyle`](Paragraph-style.qd), they apply their effects by injecting the corresponding `--qd-*` properties.
->
-> Overriding a `--qd-*` property rather than its raw CSS equivalent provides smoother control and reduces the risk of future breaking changes.
-
-```yaml
-.cssproperties
-  - background-color: green
-  - heading-color: pink
-  - block-margin: 12px
-```
-
 You can find a complete list of available properties in the [global theme source](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/resources/render/theme/global.scss). Unknown properties are safely ignored.
+
+.example
+    ```yaml
+    .cssproperties
+        - background-color: green
+        - heading-color: pink
+        - block-margin: 12px
+    ```
+
+.box {Why is this preferred over `\.css`?}
+    Quarkdown's themes use CSS custom properties for more granular control and easier overrides. For instance, the same property may be applied differently depending on the document type.
+
+    When you call functions like [`.pageformat`](Page-format.qd) or [`.paragraphstyle`](Paragraph-style.qd), they apply their effects by injecting the corresponding `--qd-*` properties.
+
+    Overriding a `--qd-*` property rather than its raw CSS equivalent provides smoother control and reduces the risk of future breaking changes.

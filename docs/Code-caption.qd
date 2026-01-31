@@ -3,24 +3,23 @@
 
 Quarkdown introduces code captions, which you can set by adding a caption directly in the code block declaration. Place the caption after the language identifier, wrapped in double quotes, single quotes, or parentheses. This syntax is the same as the image *title* attribute and [table captions](Table-caption.qd).
 
-~~~markdown
-```python "Fibonacci function"
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n - 1) + fibonacci(n - 2)
-```
-~~~
+.examplemirror
+    ```python "Fibonacci function"
+    def fibonacci(n):
+        if n <= 1:
+            return n
+        return fibonacci(n - 1) + fibonacci(n - 2)
+    ```
 
-!(550)[Caption](https://github.com/user-attachments/assets/97637eb3-c30f-407a-8e31-1c4a0a5840f3)
+Equivalently, via the [`.code`](Code.qd) function:
 
+.examplemirror
+    .code lang:{python} caption:{Fibonacci function}
+        def fibonacci(n):
+            if n <= 1:
+                return n
+            return fibonacci(n - 1) + fibonacci(n - 2)
 
+## Numbering
 
-You can also **number** code blocks. See [Numbering](Numbering.qd) for more information.
-
-```yaml
-.numbering
-    - code: 1.1
-```
-
-!(550)[Numbered caption](Code-caption/numbered.png)
+You can also **number** code blocks, to display a sequential number alongside the caption. See [Numbering](Numbering.qd) for more information.

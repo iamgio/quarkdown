@@ -5,13 +5,8 @@ Quarkdown provides first-class bibliography generation with out-of-the-box [BibT
 
 To get started, call the **`.bibliography {file.bib}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Bibliography/bibliography.html} function, where `file.bib` is the path to your `.bib` file. You can find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
 
-```markdown
-.bibliography {file.bib}
-```
-
-!(671)[Bibliography](Bibliography/bibliography-output.png)
-
-
+.examplemirror
+  .bibliography {Bibliography/file.bib}
 
 ## Citations
 
@@ -19,32 +14,27 @@ You can cite an entry from the bibliography using the **`.cite {key}`** function
 
 Consider the following BibTeX entry:
 
-```bibtex
+```text
 @article{einstein,
   author = "Albert Einstein",
   ...
 }
 ```
 
-You can cite it using the `einstein` key:
+You can cite it using the `einstein` key.
 
-```markdown
-Einstein's publication .cite {einstein} in 1905 revolutionized the field of physics.
-Similarly, Hawking's book .cite {hawking} has had a profound impact
-on our understanding of cosmology and black holes.
-```
-
-!(671)[Citation](Bibliography/citation.png)
-
-
+.examplemirror
+    Einstein's publication .cite {einstein} in 1905 revolutionized the field of physics.
+    Similarly, Hawking's book .cite {hawking} has had a profound impact
+    on our understanding of cosmology and black holes.
 
 ## Style
 
-The optional `style` parameter configures the look and format of the bibliography and its citation references. It defaults to `plain`. Styles are directly inspired by LaTeX, and you can find comprehensive comparisons [here](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles).
+The optional `style` parameter configures the look and format of the bibliography and its citation references. Styles are directly inspired by LaTeX, and you can find comprehensive comparisons [here](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles).
 
 The currently supported styles are:
 
-- **`plain`**
+- **`plain`** (default)
 
   !(600)[plain style](Bibliography/style-plain.png)
 
@@ -61,15 +51,10 @@ The currently supported styles are:
 
 ## Title
 
-By default, the title is [localized](Localization.qd) to the current locale set via `.doclang`, if supported. You can set a custom title using the `title` parameter:
+By default, the title is [localized](Localization.qd) to the current locale set via `.doclang`, if supported. You can set a custom title using the `title` parameter.
 
-```markdown
-.bibliography {file.bib} title:{My bibliography}
-```
-
-!(671)[Custom title](Bibliography/custom-title.png)
-
-
+.examplemirror
+    .bibliography {Bibliography/file.bib} title:{My bibliography}
 
 Depending on the current [auto page break](Page-break.qd#automatic-break) configuration, the title may cause a page break. You can prevent page breaks by turning the title into a [decorative heading](Numbering.qd#decorative-headings) using the `decorativetitle` parameter:
 

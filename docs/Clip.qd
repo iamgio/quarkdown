@@ -6,36 +6,27 @@ The **`.clip {shape}`** block function clips its content to a defined shape.
 Supported shapes:
 - `circle`
 
-```markdown
-![Sky](sky.jpg)
+.examplemirror
+    ![Sky](assets/sky.jpg)
 
-.clip {circle}
-    ![Sky](sky.jpg)
-```
+    .clip {circle}
+        ![Sky](assets/sky.jpg)
 
-!(600)[Circle sky](Clip/circle-image.png)
-
-
+## Figures
 
 When clipping a [figure](Figure.qd), only the content is affected, leaving the caption intact:
 
-```markdown
-![Sky](sky.jpg "A beautiful sky.")
+.examplemirror
+    ![Sky](assets/sky.jpg "A blue sky.")
 
-.clip {circle}
-    ![Sky](sky.jpg "A beautiful sky.")
-```
+    .clip {circle}
+        ![Sky](assets/sky.jpg "A blue sky.")
 
-!(600)[Circle sky figure](Clip/circle-figure.png)
-
-
+## General content
 
 Clipping works with any content, not just images. Here a [container](Container.qd) is used:
 
-```markdown
-.clip {circle}
-    .container padding:{2cm} background:{orange}
-        #! Hello!
-```
-
-!(400)[Circle container](Clip/circle-container.png)
+.examplemirror
+    .clip {circle}
+        .container padding:{2cm} background:{teal}
+            #! Hello!

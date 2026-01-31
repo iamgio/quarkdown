@@ -3,26 +3,17 @@
 
 The **`.box`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html} function creates a special box container with an inline *title* and block *content*.
 
-```markdown
-.box {Box title}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
-```
-> !(600)[Box result](Box/basic.png)
-
-
+.examplemirror
+    .box {Box title}
+        Welcome to the **Quarkdown wiki**!
+        Here you'll learn how to get started with your first document.
 
 You can omit the title:
 
-```markdown
-.box
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
-```
-
-> !(600)[Title-less box](Box/titleless.png)
-
-
+.examplemirror
+    .box
+        Welcome to the **Quarkdown wiki**!
+        Here you'll learn how to get started with your first document.
 
 ## Box types
 
@@ -34,49 +25,28 @@ A box can have a type, which defaults to `callout` if not specified. The availab
 - `warning`
 - `error`
 
-```markdown
-.docname {Test}
-.docauthor {iamgio}
-.doclang {english}
-.doctype {paged}
-.theme {darko} layout:{minimal}
+.examplemirror
+    .box {Box title} type:{tip}
+        This is a tip box!
 
-.box {Box title} type:{tip}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
+    .box {Box title} type:{note}
+        This is a note box!
 
-.box {Box title} type:{note}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
-
-.box {Box title} type:{warning}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
-```
-> !(600)[Typed boxes](Box/typed.png)
-
-
+    .box {Box title} type:{warning}
+        This is a warning box!
 
 ## Automatic localization
 
 If you omit the title, set [`.doclang`](Document-metadata.qd), and the locale is supported, the box title is automatically [localized](Localization.qd).
 
-```markdown
-.box type:{tip}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
+.examplemirror
+    .box type:{tip}
+        This is a tip box!
 
-.box type:{note}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
+    .box type:{note}
+        This is a note box!
 
-.box type:{warning}
-  Welcome to the **Quarkdown wiki**!
-  Here you'll learn how to get started with your first document.
-```
-> !(600)[Typed title-less boxes](Box/typed-titleless.png)
+    .box type:{warning}
+        This is a warning box!
 
-
-
-> [!TIP]
-> Boxes and [typed quotes](Quote-types.qd) are two different ways to create typed alerts.
+> Tip: Boxes and [typed quotes](Quote-types.qd) are two different ways to create typed alerts.

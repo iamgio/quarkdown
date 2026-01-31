@@ -23,33 +23,35 @@ Each parameter is optional and accepts `top` or `bottom` values. Documents use `
 
 
 
-```markdown
-.captionposition {bottom}
+.example
+    ```markdown
+    .captionposition {bottom}
 
-![Sky](sky.jpg "A nice sky.")
+    ![Sky](sky.jpg "A nice sky.")
 
-| Name | Favorite food | Favorite beverage |
-|------|---------------|-------------------|
-| John | Chicken       | Orange juice      |
-| Jane | Pasta         | Iced tea          |
-| Joe  | Sushi         | Beer              |
-"Survey results."
-```
-!(600)[Default: bottom](Caption-position/bottom.png)
+    | Name | Favorite food | Favorite beverage |
+    |------|---------------|-------------------|
+    | John | Chicken       | Orange juice      |
+    | Jane | Pasta         | Iced tea          |
+    | Joe  | Sushi         | Beer              |
+    "Survey results."
+    ```
 
+    ![Default: bottom](Caption-position/bottom.png)
 
+.example
+    ```markdown
+    .captionposition {top}
+    ```
 
-```markdown
-.captionposition {top}
-```
-!(600)[Default: top](Caption-position/top.png)
+    ![Default: top](Caption-position/top.png)
 
+.example
+    ```markdown
+    .captionposition {bottom} tables:{bottom}
+    ```
 
-
-```markdown
-.captionposition {bottom} tables:{bottom}
-```
-!(600)[Default: bottom, tables: top](Caption-position/bottom-tables-top.png)
+    ![Default: bottom, tables: top](Caption-position/bottom-tables-top.png)
 
 
 

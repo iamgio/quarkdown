@@ -1,61 +1,41 @@
 .docname {Container}
 .include {_Setup.qd}
 
-The **`.container`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html} function creates a highly customizable block of content while resetting the current layout rules back to normal.
+The **`.container`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/container.html} function creates a highly customizable block of content, and resets the current layout rules back to normal.
 
----
+## Layout reset
 
-Imagine you want to create a row with two columns, each containing a heading and some text. A beginner might try this:
+.examplemirror {Imagine you want to create a row with two columns, each containing a heading and some text. A beginner might try the following *wrong* approach. As explained in the [Stacks](Stacks.qd) page, stack functions rely on the strict Markdown concept of a block, an isolated chunk of the document, to determine which elements they handle.} type:{warning}
+    <!-- WRONG! -->
+    .row alignment:{center} gap:{1cm}
+        ##! Left
+        Text on left column.
 
-```html
-<!-- WRONG! -->
-.row alignment:{center} gap:{1cm}
-  ## Left
-  Text on left column.
+        ##! Right
+        Text on right column.
 
-  ## Right
-  Text on right column.
-```
 
-As explained in the [Stacks](Stacks.qd) page:
+.examplemirror {You might then try using columns. This works, but the concept is not quite right. You do not want a *layout rule*; you just want to reset the document flow back to normal. This is exactly what the container does: it groups elements together according to the natural flow of the document.} type:{warning}
+    <!-- Could be improved -->
+    .row alignment:{center} gap:{1cm}
+        .column cross:{start}
+            ##! Left
+            Text on left column.
 
-> Stack functions rely on the strict Markdown concept of a block, an isolated chunk of the document, to determine which elements they handle.
+        .column cross:{start}
+            ##! Right
+            Text on right column.
 
-Rendering the previous snippet produces this incorrect result:
+.examplemirror {The correct way to achieve the desired layout is to use containers. Each container resets the layout rules, allowing the row to treat them as separate blocks of content.}
+    <!-- Correct! -->
+    .row alignment:{center} gap:{1cm}
+        .container
+            ##! Left
+            Text on left column.
 
-!(556)[Incorrect result](Container/row-incorrect.png)
-
-You might then try using columns:
-
-```html
-<!-- Could be improved -->
-.row alignment:{center} gap:{1cm}
-  .column cross:{start}
-    ## Left
-    Text on left column.
-
-  .column cross:{start}
-    ## Right
-    Text on right column.
-```
-
-This works, but the concept is not quite right. You do not want a *layout rule*; you just want to reset the document flow back to normal. This is exactly what the container does: it groups elements together according to the natural flow of the document.
-
-```html
-<!-- Correct! -->
-.row alignment:{center} gap:{1cm}
-  .container
-    ## Left
-    Text on left column.
-
-  .container
-    ## Right
-    Text on right column.
-```
-
-Result:
-
-!(556)[Correct result](Container/row-correct.png)
+        .container
+            ##! Right
+            Text on right column.
 
 ## Styling
 
@@ -80,12 +60,8 @@ The following optional parameters are available:
 | `classname` | Custom CSS class name. | String | None |
 
 
+.examplemirror
+    .container fullwidth:{yes} borderstyle:{dashed} padding:{1cm} fontsize:{medium} fontstyle:{italic} fontvariant:{smallcaps}
+        This is a styled container. Fancy, isn't it?
 
-```markdown
-.container borderstyle:{dashed} padding:{1cm} fontsize:{medium} fontstyle:{italic} fontvariant:{smallcaps}
-    This is a styled container. Fancy, isn't it?
-
-    Quarkdown can truly give life to complex layouts with ease.
-```
-
-!(650)[Styled container](https://github.com/user-attachments/assets/37766ad8-3344-4e81-8671-9278af538844)
+        Quarkdown can truly give life to complex layouts with ease.

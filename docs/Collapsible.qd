@@ -5,25 +5,14 @@ The **`.collapse`** function creates an interactive collapsible block that users
 
 The function requires an [inline](Markdown-content.qd#inline-content) title, which is always displayed, and [block](Markdown-content.qd#block-content) content, which appears when expanded.
 
-```markdown
-.collapse {A _collapsible_ block. **Click me!**}
-  Hidden content...
-  **Surprise!**
+.examplemirror
+    .collapse {A _collapsible_ block. **Click me!**}
+        You found this hidden content.
 
-  .loremipsum
-```
-
-> Collapsed:
-> !(600)[Collapsed](Collapsible/collapsed.png)
->
-> Expanded:
-> !(600)[Expanded](Collapsible/expanded.png)
-
-
+        **Surprise!**
 
 You can change the initial state of the block using the optional `open` [`Boolean`](Boolean.qd) argument, which defaults to `false` (collapsed).
 
-```markdown
-.collapse {A _collapsible_ block. **Click me!**} open:{yes}
-  ...
-```
+.examplemirror
+    .collapse {A _collapsible_ block. **Click me!**} open:{yes}
+        Not so hidden content anymore!
