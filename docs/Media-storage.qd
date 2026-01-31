@@ -1,15 +1,15 @@
 .docname {Media storage}
 .include {_Setup.qd}
 
-**Media storage** is a feature that ensures all the required files are present in the output directory when a Quarkdown project is exported.
+**Media storage** is a feature that ensures all required files are present in the output directory when you export a Quarkdown project.
 
-Here's what it does:
+Here is what it does:
 
-1. Keeps track of the external files (*media*) referenced in a Quarkdown document in **image** and **reference image** nodes;
-2. Each media is copied to the `media` directory inside the output directory;
-3. The image nodes update their source path to the newly created file.
+1. Keeps track of external files (*media*) referenced in a Quarkdown document through **image** and **reference image** nodes
+2. Copies each media file to the `media` directory inside the output directory
+3. Updates the image nodes to point their source path to the newly created file
 
-> #### Example:
+> ### Example
 > Source:
 > ```markdown
 > ![Image](../my-img.png)
@@ -19,19 +19,21 @@ Here's what it does:
 > ![Image](media/my-img@HASH.png)
 > ```
 
-The media storage is enabled by default and can be turned off via the `--no-media-storage` flag.
+Media storage is enabled by default. You can turn it off via the `--no-media-storage` flag.
 
-### Why
-Take HTML as an example: images from remote URLs are loaded effortlessly, while *local* ones (e.g. `../my-img.png`) require the image file to be present on the server at the exact same location.
+## Why
 
-Imagine writing a Quarkdown document, typing `![Image](my-img.png)`, with `my-img.png` located in the same directory as your Quarkdown source. You'd be sure it'll work, but as soon you compile the project and open your HTML artifact you notice the file cannot be found by the browser, simply because it's not there.
+Take HTML as an example: images from remote URLs load effortlessly, while *local* ones (e.g., `../my-img.png`) require the image file to be present on the server at the exact same location.
 
-Thanks to the media storage system, all the media files are carried around.
+Imagine writing a Quarkdown document, typing `![Image](my-img.png)`, with `my-img.png` located in the same directory as your Quarkdown source. You would expect it to work, but as soon as you compile the project and open your HTML artifact, you notice the browser cannot find the file simply because it is not there.
 
-### Options
-The storage is able to handle **both local and remote files**. The rules that determine which types are allowed in the storage are set by the active renderer.
+Thanks to the media storage system, all media files are carried around with your output.
 
-- When rendering to HTML, it is enabled for local files only.  
-- On the other hand LaTeX, which isn't yet supported but might be in the future, also requires remote media to be downloaded locally.
+## Options
+
+The storage can handle **both local and remote files**. The rules that determine which types are allowed in the storage are set by the active renderer.
+
+- When rendering to HTML, storage is enabled for local files only.
+- On the other hand, LaTeX (which is not yet supported but might be in the future) also requires remote media to be downloaded locally.
 
 Overriding these rules is supported, although currently unavailable via CLI.

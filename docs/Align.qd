@@ -1,12 +1,11 @@
 .docname {Align}
 .include {_Setup.qd}
 
-The **`.align`** block function sets the horizontal alignment (and multiline text alignment) of content.
+The **`.align`** block function sets the horizontal alignment of content, including multiline text alignment.
 
-Its primary parameter accepts the alignment type: `start`, `center`, `end`.  
-The **`.center`** function is a shorthand for `.align {center}`.
+The primary parameter accepts the alignment type: `start`, `center`, or `end`. For convenience, **`.center`** is a shorthand for `.align {center}`.
 
-```
+```markdown
 .align {end}
     # My document
 

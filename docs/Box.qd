@@ -1,24 +1,22 @@
 .docname {Box}
 .include {_Setup.qd}
 
-The **`.box`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html} allows creating a special *box* container.
-
-A box features an inline *title* and block *content*.
+The **`.box`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/box.html} function creates a special box container with an inline *title* and block *content*.
 
 ```markdown
 .box {Box title}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 ```
 > !(600)[Box result](Box/basic.png)
 
 
 
-The title can be omitted:
+You can omit the title:
 
 ```markdown
 .box
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 ```
 
@@ -26,7 +24,10 @@ The title can be omitted:
 
 
 
-A box can have a type, which is `callout` by default, if not specified. Available types are:
+## Box types
+
+A box can have a type, which defaults to `callout` if not specified. The available types are:
+
 - `callout`
 - `tip`
 - `note`
@@ -41,34 +42,36 @@ A box can have a type, which is `callout` by default, if not specified. Availabl
 .theme {darko} layout:{minimal}
 
 .box {Box title} type:{tip}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 
 .box {Box title} type:{note}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 
 .box {Box title} type:{warning}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 ```
 > !(600)[Typed boxes](Box/typed.png)
 
 
 
-If the title is omitted, [`.doclang`](Document-metadata.qd) is set and the set locale is supported, the box title is automatically [localized](Localization.qd).
+## Automatic localization
+
+If you omit the title, set [`.doclang`](Document-metadata.qd), and the locale is supported, the box title is automatically [localized](Localization.qd).
 
 ```markdown
 .box type:{tip}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 
 .box type:{note}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 
 .box type:{warning}
-  Welcome to the **Quarkdown wiki**!  
+  Welcome to the **Quarkdown wiki**!
   Here you'll learn how to get started with your first document.
 ```
 > !(600)[Typed title-less boxes](Box/typed-titleless.png)
@@ -76,4 +79,4 @@ If the title is omitted, [`.doclang`](Document-metadata.qd) is set and the set l
 
 
 > [!TIP]
-> Boxes and [typed quotes](Quote-types.qd) are different ways to achieve typed alerts.
+> Boxes and [typed quotes](Quote-types.qd) are two different ways to create typed alerts.

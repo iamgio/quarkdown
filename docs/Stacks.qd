@@ -1,16 +1,16 @@
 .docname {Stacks}
 .include {_Setup.qd}
 
-Stack functions are those, in the subcategory of layout functions, that arrange a group of elements according to certain layout rules. There are three of them: 
+Stack functions are layout functions that arrange a group of elements according to certain layout rules. There are three of them:
 - **`.row`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html}
 - **`.column`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html}
 - **`.grid`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html}
 
 ---
 
-In order to understand which elements they must handle, they rely on the strict Markdown concept of block, an isolated chunk of the document such as a paragraph, a code block, a list, a quote, etc.
+To understand which elements to handle, stack functions rely on the strict Markdown concept of a block, which is an isolated chunk of the document such as a paragraph, a code block, a list, or a quote.
 
-```
+```markdown
 .row
   A
 
@@ -19,9 +19,9 @@ In order to understand which elements they must handle, they rely on the strict 
   C
 ```
 
-The following example has only one item, as both A, B and C are part of the same paragraph (due to *lazy lines*):
+The following example has only one item because A, B, and C are all part of the same paragraph (due to *lazy lines*):
 
-```
+```markdown
 .row
   A
   B
@@ -30,7 +30,7 @@ The following example has only one item, as both A, B and C are part of the same
 
 Images are stackable too, as long as they are in different paragraphs.
 
-```
+```markdown
 .row
   ![](img1.png)
 
@@ -39,7 +39,7 @@ Images are stackable too, as long as they are in different paragraphs.
 
 Every kind of block is supported:
 
-~~~
+~~~markdown
 .row
   > This is
   > a quote
@@ -52,9 +52,9 @@ Every kind of block is supported:
   - a list
 ~~~
 
-According to the CommonMark specification, the following example brings to the same result as the previous one. It's however encouraged to keep the code well readable by spacing blocks properly.
+According to the CommonMark specification, the following example produces the same result as the previous one. However, it is recommended to keep the code readable by spacing blocks properly.
 
-~~~
+~~~markdown
 .row
   > This is
   > a quote
@@ -65,17 +65,17 @@ According to the CommonMark specification, the following example brings to the s
   - a list
 ~~~
 
-All the stack functions accept the following optional arguments:
+All stack functions accept the following optional arguments:
 
 | Parameter | Description | Accepts |
 |-----------|-------------|---------|
-| `alignment` | Main axis alignment (CSS' `justify-content`). | `start`, `center`, `end`, `spacebetween`, `spacearound`, `spaceevenly` |
-| `cross` | Cross axis alignment (CSS' `align-items`). | `start`, `center`, `end`, `stretch` |
+| `alignment` | Main axis alignment (CSS `justify-content`). | `start`, `center`, `end`, `spacebetween`, `spacearound`, `spaceevenly` |
+| `cross` | Cross axis alignment (CSS `align-items`). | `start`, `center`, `end`, `stretch` |
 | `gap` | Space between items. | [`Size`](Sizes.qd) |
 
-`grid` also accepts a mandatory `columns` argument, which takes an integer value.
+The `grid` function also accepts a mandatory `columns` argument, which takes an integer value.
 
-```
+```markdown
 .grid columns:{2} alignment:{spacearound} gap:{1cm}
   A
 
@@ -90,27 +90,26 @@ All the stack functions accept the following optional arguments:
 
 Other elements can join too:
 
-```
+```markdown
 ## Contacts
 
 .row alignment:{spacearound}
   .center
-    **Michael Scott**  
-    Dunder Mifflin Paper Company, Inc.    
+    **Michael Scott**
+    Dunder Mifflin Paper Company, Inc.
     [michaelscott@example.com](mailto:michaelscott@example.com)
 
   .center
-    **Forrest Gump**  
-    Bubba Gump Shrimp Co.  
+    **Forrest Gump**
+    Bubba Gump Shrimp Co.
     [forrestgump@example.com](mailto:forrestgump@example.com)
 ```
 
 !(600)[Contacts example](Stacks/contacts.png)
 
-
 Stack layouts can be infinitely nested within each other:
 
-```
+```markdown
 .row cross:{center} gap:{1in}
   A
 
@@ -125,7 +124,7 @@ Stack layouts can be infinitely nested within each other:
 
   .column gap:{5mm}
     F
-  
+
     .row
       G
 
@@ -133,4 +132,3 @@ Stack layouts can be infinitely nested within each other:
 ```
 
 !(600)[Nested stacks](Stacks/nested.png)
-

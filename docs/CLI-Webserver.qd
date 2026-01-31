@@ -1,10 +1,9 @@
 .docname {CLI - Webserver}
 .include {_Setup.qd}
 
-Quarkdown's webserver allows direct communication between the compiler and the browser,
-making [live previewing](Inside-live-preview.qd) possible.
+Quarkdown's webserver allows direct communication between the compiler and the browser, making [live previewing](Inside-live-preview.qd) possible.
 
-The server can be started via **`quarkdown start`**.
+You can start the server via **`quarkdown start`**.
 
 > [!IMPORTANT]
 > A webserver is **mandatory** in order to show *paged* documents, because of a paged.js requirement.
@@ -12,7 +11,7 @@ The server can be started via **`quarkdown start`**.
 > [!TIP]
 > `quarkdown c ... -p` is shorthand for `quarkdown c ... && quarkdown start -f <generated file> -b default`
 
-#### Options
+## Options
 
 - **`-f <file>`** or **`--file <file>`**: (*mandatory*) the file the server should point to. It would preferably be the output directory of the compilation.
 

@@ -1,21 +1,21 @@
 .docname {Including other Quarkdown files}
 .include {_Setup.qd}
 
-The **`.include {file} {sandbox?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html} function makes it possible to load and evaluate an external Quarkdown source file.
+The **`.include {file} {sandbox?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/include.html} function loads and evaluates an external Quarkdown source file.
 
-Its parameter accepts a string which represents the **path to the target file**, which may be relative to the location of the main source file, or absolute.
+The parameter accepts a string that represents the **path to the target file**, which can be relative to the main source file's location or absolute.
 
-> To include external libraries, please refer to [*Importing external libraries*](Importing-external-libraries.qd).
+> To include external libraries, refer to [*Importing external libraries*](Importing-external-libraries.qd).
 
 > `a.qd`
-> ```
+> ```markdown
 > ### Hello Quarkdown
 >
 > This is external content.
 > ```
 
 > `main.qd`
-> ```
+> ```markdown
 > .include {a.qd}
 > ```
 > Output:
@@ -27,24 +27,18 @@ Its parameter accepts a string which represents the **path to the target file**,
 > [!CAUTION]
 > Circular dependency results in an error.
 
-
-
 > [!NOTE]
 >
-> Do not confuse inclusion with [subdocuments](Subdocuments.qd):
-> see [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd)
-> for a comparison.
+> Do not confuse inclusion with [subdocuments](Subdocuments.qd).
+> See [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd) for a comparison.
 
+## Bulk include
 
+A clean approach with typesetting systems is having a main file that gathers all the different subfiles together. The `.includeall` function, which takes an [Iterable](Iterable.qd) of paths, serves as a convenient shorthand for repeated `.include` calls.
 
-### Bulk include
+The following snippet is from [Mock](https://github.com/iamgio/quarkdown/blob/main/mock)'s `main.qd` file:
 
-A clean approach with using typesetting systems would be having a main file which gathers all the different subfiles together.  
-For this purpose, the `.includeall` function, which takes an [Iterable](Iterable.qd) of paths, comes particularly handy as a shorthand for repeated `.include` calls.
-
-The following snippet is taken from [Mock](https://github.com/iamgio/quarkdown/blob/main/mock)'s `main.qd` file:
-
-```
+```markdown
 .includeall
     - setup.qd
     - headings.qd
@@ -66,23 +60,20 @@ The following snippet is taken from [Mock](https://github.com/iamgio/quarkdown/b
     - stacks.qd
 ```
 
-The function can also be combined with [`.listfiles`](File-data.qd) to automatically include all files in a directory:
+You can also combine the function with [`.listfiles`](File-data.qd) to automatically include all files in a directory:
 
-```
+```markdown
 .includeall {.listfiles {somedirectory} sortby:{name}}
 ```
 
+## Context sharing
 
-
-### Context sharing
-
-`.include`'s `sandbox` parameter lets you control how much isolation the included file has from the main file.
-The included file always inherits the context of the main file, but changes made in the included file can optionally propagate back.
+The `.include` function's `sandbox` parameter lets you control how much isolation the included file has from the main file. The included file always inherits the context of the main file, but you can optionally allow changes in the included file to propagate back.
 
 For these examples, consider the following files:
 
 > `file.qd`
-> ```
+> ```markdown
 > .docname {New name}
 >
 > .function {greet}
@@ -91,7 +82,7 @@ For these examples, consider the following files:
 > ```
 
 > `main.qd`
-> ```
+> ```markdown
 > .docname {My document}
 > .include {file.qd} sandbox:{<value>}
 >
@@ -101,18 +92,16 @@ For these examples, consider the following files:
 
 Here are the available options, in ascending order of isolation:
 
-#### `share` (default)
+### `share` (default)
 
-Both contexts are synchronized bidirectionally. This means that any customization, function, variable and other information declared in the included file will also be available in the main file, and vice versa.
+Both contexts are synchronized bidirectionally. Any customization, function, variable, and other information declared in the included file will also be available in the main file, and vice versa.
 
 > Output:
 >
 > 1. New name
 > 2. Hello, **John**!
 
-
-
-#### `scope`
+### `scope`
 
 Similar to `share`, but function and variable declarations do not propagate back to the main file.
 
@@ -123,9 +112,7 @@ This is the same behavior used in nested lambda scopes, such as in [`.function`]
 > 1. New name
 > 2. Compile error: `.greet` is not defined.
 
-
-
-#### `subdocument`
+### `subdocument`
 
 The included file is completely isolated from the main file. Any changes, including metadata and layout options, do not propagate back.
 
@@ -136,29 +123,27 @@ This is the same behavior as [subdocuments](Subdocuments.qd).
 > 1. My document
 > 2. Compile error: `.greet` is not defined.
 
+## Use case: setting up
 
-
-### Use case: setting up
-
-A common use case would be putting all the setup function calls in a separate file (see the *Setting up* section of this wiki to see all).
+A common use case is putting all setup function calls in a separate file. See the *Setting up* section of this wiki for all available options.
 
 > `setup.qd`
-> ```
+> ```markdown
 > .docname {My document}
 > .docauthor {iamgio}
 > .doctype {slides}
 > .doclang {English}
 > .theme {darko} layout:{minimal}
-> 
+>
 > .footer
 >    ...
 > ```
 
 > `main.qd`
-> ```
+> ```markdown
 > .include {setup.qd}
 >
 > # My cool document
-> 
+>
 > ...
 > ```

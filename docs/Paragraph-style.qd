@@ -1,9 +1,9 @@
 .docname {Paragraph style}
 .include {_Setup.qd}
 
-The **`.paragraphstyle`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/paragraphstyle.html} function makes it possible to override the global style of paragraphs.
+The **`.paragraphstyle`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/paragraphstyle.html} function allows you to override the global style of paragraphs.
 
-Its parameters are optional and, if unset, they delegate their value to the active theme.
+All parameters are optional, and if left unset, they delegate their value to the active theme.
 
 | Parameter | Description | Accepts |
 |-----------|-------------|---------|
@@ -12,7 +12,7 @@ Its parameters are optional and, if unset, they delegate their value to the acti
 | `spacing` | Whitespace between subsequent paragraphs, multiplied by the font size. | Number |
 | `indent`  | Whitespace at the start of each non-first paragraph, multiplied by the font size. | Number |
 
-Using `spacing:{0} indent:{2}` will provide the classic LaTeX look.
+Using `spacing:{0} indent:{2}` produces the classic LaTeX look.
 
 ---
 
@@ -22,7 +22,7 @@ Default appearance:
 
 
 
-```
+```markdown
 .paragraphstyle lineheight:{2.5} spacing:{0} indent:{2}
 ```
 

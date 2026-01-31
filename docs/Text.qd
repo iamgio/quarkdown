@@ -12,7 +12,7 @@ The **`.text`** inline function provides extensive text formatting that cannot b
 | **`decoration`** | `underline`, `overline`, `underoverline`, `strikethrough`, `all` |
 | **`case`** | `uppercase`, `lowercase`, `capitalize` |
 | **`variant`** | `normal`, `smallcaps` |
-| **`url`** | URL to link to. If set, the text becomes a link. If the URL is set but empty, the URL is the text content (assuming it represents a valid URL). |
+| **`url`** | URL to link to. If set, the text becomes a link. If the URL is set but empty, the text content itself is used as the URL (assuming it represents a valid URL). |
 
 ```markdown
 ## A demo of .text {Quarkdown} variant:{smallcaps}

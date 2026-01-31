@@ -11,10 +11,9 @@
 
 Once the AST is fully generated and enriched, it is time to translate it into a target format, such as HTML.
 
-This is performed via a depth-first traversal of the AST, starting from the root. Each visit to a node produces some output (in the case of HTML, an element tag) which, ideally 1:1, translates the information stored by the node into the target format.
+This translation is performed via a depth-first traversal of the AST, starting from the root. Each visit to a node produces some output (in the case of HTML, an element tag) which, ideally in a one-to-one fashion, translates the information stored by the node into the target format.
 
-To ensure scalability, Quarkdown locates each rendering target in external modules, such as `quarkdown-html`,
-which can be plugged into the core architecture.
+To ensure scalability, Quarkdown locates each rendering target in external modules, such as `quarkdown-html`, which can be plugged into the core architecture.
 
 ---
 

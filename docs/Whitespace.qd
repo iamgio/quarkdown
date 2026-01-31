@@ -1,10 +1,10 @@
 .docname {Whitespace}
 .include {_Setup.qd}
 
-Blank space can be added anywhere via the **`.whitespace`** function, which accepts optional `width` and `height` [Size](Sizes.qd#single-size-size) arguments.
+You can add blank space anywhere via the **`.whitespace`** function, which accepts optional `width` and `height` [Size](Sizes.qd#single-size-size) arguments.
 
-- If none is set, a simple whitespace character is rendered (``), useful to add blank lines.
-- If at least one is set, a rectangle of that size is rendered. This might not always work if it's outside of [layout functions](Stacks.qd).
+- If you set neither argument, a simple whitespace character is rendered (` `), which is useful for adding blank lines.
+- If you set at least one argument, a rectangle of that size is rendered. Note that this might not always work outside of [layout functions](Stacks.qd).
 
 ```html
 Line 1
@@ -14,7 +14,7 @@ Line 1
 Line 2
 ```
 
-```
+```markdown
 .row
   A
 

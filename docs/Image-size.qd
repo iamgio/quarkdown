@@ -1,9 +1,9 @@
 .docname {Image size}
 .include {_Setup.qd}
 
-Whereas base Markdown requires HTML code to constrain the size of an image, Quarkdown introduces a new syntax extension to achieve the same result in a more elegant and efficient way:
+While base Markdown requires HTML code to constrain the size of an image, Quarkdown introduces a syntax extension that achieves the same result more elegantly:
 
-```markdown
+```html
 !(200x150)[Alt](image.png)
 
 <!-- or -->
@@ -15,11 +15,11 @@ Whereas base Markdown requires HTML code to constrain the size of an image, Quar
 !(200 150)[Alt](image.png)
 ```
 
-The previous (equivalent) examples load `image.png` with the label `Alt` as CommonMark Markdown would do, but also adding an additional size constraint, making the visible image fit into a 200px by 150px box.
+These equivalent examples load `image.png` with the label `Alt` as CommonMark Markdown does, but also add a size constraint that fits the visible image into a 200px by 150px box.
 
-Apart from pixels, whose unit can be omitted, any other [size](Sizes.qd) unit is supported. In this case the `x` delimiter can no longer be used, in favor of either `*` or a space.
+In addition to pixels (whose unit can be omitted), any other [size](Sizes.qd) unit is supported. When using other units, you must use either `*` or a space as the delimiter instead of `x`.
 
-```markdown
+```html
 !(5cm*35mm)[Alt](image.png)
 
 <!-- or -->
@@ -30,51 +30,54 @@ Apart from pixels, whose unit can be omitted, any other [size](Sizes.qd) unit is
 
 !(2.5inx1cm)[Alt](image.png)
 
-<!-- '%' is an exception. This is valid (although not so readable) -->
+<!-- '%' is an exception. This is valid (although not very readable) -->
 
 !(30%x150%)[Alt](image.png)
 ```
 
-In case one of the components (width or height) is equal to `_` (underscore), it becomes automatic, meaning that component is automatically calculated in order to keep the original aspect ratio.
+When you set either component (width or height) to `_` (underscore), it becomes automatic, meaning that component is calculated to preserve the original aspect ratio.
 
-- Auto height examples:
-  ```markdown
-  <!-- 300px width, auto height -->
-  !(300x_)[Alt](image.png)
+### Auto height
 
-  <!-- 5cm width, auto height -->
-  !(5cm*_)[Alt](image.png)
+```html
+<!-- 300px width, auto height -->
+!(300x_)[Alt](image.png)
 
-  <!-- 2in width, auto height -->
-  !(2in _)[Alt](image.png)
+<!-- 5cm width, auto height -->
+!(5cm*_)[Alt](image.png)
 
-  <!-- 50% width, auto height -->
-  !(50% _)[Alt](image.png)
-  ```
+<!-- 2in width, auto height -->
+!(2in _)[Alt](image.png)
 
-  Additionally, as a convenient shorthand, automatic height can be omitted:
-  ```markdown
-  <!-- 300px width, auto height -->
-  !(300)[Alt](image.png)
+<!-- 50% width, auto height -->
+!(50% _)[Alt](image.png)
+```
 
-  <!-- 5cm width, auto height -->
-  !(5cm)[Alt](image.png)
+As a convenient shorthand, you can omit the automatic height entirely:
 
-  <!-- 2in width, auto height -->
-  !(2in)[Alt](image.png)
+```html
+<!-- 300px width, auto height -->
+!(300)[Alt](image.png)
 
-  <!-- 50% width, auto height -->
-  !(50%)[Alt](image.png)
-  ```
+<!-- 5cm width, auto height -->
+!(5cm)[Alt](image.png)
 
-- Auto width examples:
-  ```markdown
-  <!-- auto width, 100px height -->
-  !(_x100)[Alt](image.png)
+<!-- 2in width, auto height -->
+!(2in)[Alt](image.png)
 
-  <!-- auto width, 15mm height -->
-  !(_*15mm)[Alt](image.png)
+<!-- 50% width, auto height -->
+!(50%)[Alt](image.png)
+```
 
-  <!-- auto width, 2in height -->
-  !(_ 2in)[Alt](image.png)
-  ```
+### Auto width
+
+```html
+<!-- auto width, 100px height -->
+!(_x100)[Alt](image.png)
+
+<!-- auto width, 15mm height -->
+!(_*15mm)[Alt](image.png)
+
+<!-- auto width, 2in height -->
+!(_ 2in)[Alt](image.png)
+```

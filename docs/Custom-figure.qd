@@ -1,9 +1,10 @@
 .docname {Custom figure}
 .include {_Setup.qd}
 
-The **`.figure {caption?} {body}`** adds generalization to the [image figures](Figure.qd) syntax extension, as it allows for any content to be handled as a *figure* block, which:
-- May feature a caption;
-- Can be numbered (see [*Numbering*](Numbering.qd)).
+The **`.figure {caption?} {body}`** function generalizes the [image figures](Figure.qd) syntax extension by allowing any content to be treated as a *figure* block. This means the content:
+
+- Can have a caption
+- Can be numbered (see [Numbering](Numbering.qd))
 
 ```markdown
 ## Custom figures
@@ -14,4 +15,3 @@ The **`.figure {caption?} {body}`** adds generalization to the [image figures](F
 ```
 
 !(600)[Custom figure](Custom-figure/result.png)
-

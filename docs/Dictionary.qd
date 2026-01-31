@@ -1,9 +1,9 @@
 .docname {Dictionary}
 .include {_Setup.qd}
 
-In Quarkdown, a dictionary is a collection of key-value pairs, without duplicate keys. A key is always a string value, while a value can be of any type.
+In Quarkdown, a dictionary is a collection of key-value pairs without duplicate keys. Keys are always strings, while values can be any type.
 
-The syntax for dictionaries recalls the YAML one, as it uses Markdown lists:
+The dictionary syntax resembles YAML and uses Markdown lists:
 
 ```yaml
 - key1: value1
@@ -11,8 +11,7 @@ The syntax for dictionaries recalls the YAML one, as it uses Markdown lists:
 - key3: value3
 ```
 
-Since its syntax clashes with [Iterable](Iterable.qd)'s, wrapping the dictionary declaration in a **`.dictionary`** function ensures no ambiguity is present, in cases where both dictionaries and iterables are accepted.  
-In the following example, [`.foreach`](Loops.qd) is suitable for both, so we enforce to run it on a dictionary to iterate over key-value pairs:
+Since this syntax overlaps with [Iterable](Iterable.qd) syntax, you can wrap the dictionary declaration in a **`.dictionary`** function to remove ambiguity when both types are accepted. In the following example, [`.foreach`](Loops.qd) accepts both iterables and dictionaries, so we explicitly create a dictionary to iterate over key-value pairs:
 
 ```yaml
 .var {mydictionary}
@@ -27,7 +26,7 @@ In the following example, [`.foreach`](Loops.qd) is suitable for both, so we enf
 
 
 
-Dictionaries can be nested if accepted by the called function ([`.localization`](Localization.qd#localization-table) for instance).
+You can nest dictionaries when the function supports it, such as [`.localization`](Localization.qd#localization-table):
 
 ```yaml
 - English:
@@ -38,7 +37,7 @@ Dictionaries can be nested if accepted by the called function ([`.localization`]
   - food: Pasta
 ```
 
-Trailing colons that precede nested dictionaries are not mandatory and can be omitted:
+Trailing colons before nested dictionaries are optional:
 
 ```yaml
 - English
@@ -51,6 +50,6 @@ Trailing colons that precede nested dictionaries are not mandatory and can be om
 
 ## Operations
 
-A dictionary can be passed to any function that accepts an [iterable](Iterable.qd#operations) (it is treated as an iterable of pairs).
+You can pass a dictionary to any function that accepts an [iterable](Iterable.qd#operations), where it is treated as an iterable of pairs.
 
-For a complete list of dictionary operations, please refer to the stdlib's [`Dictionary` documentation](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary).
+For a complete list of dictionary operations, see the [Dictionary documentation](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary) in the standard library.

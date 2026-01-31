@@ -1,9 +1,9 @@
 .docname {TeX macros}
 .include {_Setup.qd}
 
-When writing [TeX formulae](TeX-formulae.qd), it may come in handy to have access to user-defined macros.
+When writing [TeX formulae](TeX-formulae.qd), you may want to use custom macros.
 
-The **`.texmacro {name} {content}`** function defines a new macro which can be used in *math* elements.
+The **`.texmacro {name} {content}`** function defines a new macro that can be used in *math* elements.
 
 ```latex
 .texmacro {\gradient} {\nabla}
@@ -11,7 +11,7 @@ The **`.texmacro {name} {content}`** function defines a new macro which can be u
 $ \gradient f $
 ```
 
-As with every Quarkdown function, the last argument can be used as a [*block argument*](Syntax-of-a-function-call.qd#block-vs-inline-function-calls).
+As with every Quarkdown function, you can use the last argument as a [*block argument*](Syntax-of-a-function-call.qd#block-vs-inline-function-calls).
 
 ```latex
 .texmacro {\gradient}
@@ -19,8 +19,6 @@ As with every Quarkdown function, the last argument can be used as a [*block arg
 ```
 
 !(500)[Gradient](TeX-macros/gradient.png)
-
-
 
 ## Parameters
 
@@ -35,11 +33,9 @@ $ \sumlim{i=1}{n} a_i $
 
 !(500)[Sum with limits](TeX-macros/sum-limits.png)
 
-
-
 ## Composing
 
-Multiple macros can be defined and can be combined, as you would do in LaTeX:
+You can define multiple macros and combine them, as you would do in LaTeX:
 
 ```latex
 .texmacro {\hello}
@@ -51,7 +47,7 @@ Multiple macros can be defined and can be combined, as you would do in LaTeX:
 $ \highlight{\hello} $
 ```
 
-And also composed with other macros:
+You can also compose them with other macros:
 
 ```latex
 .texmacro {\hello}

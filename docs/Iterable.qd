@@ -1,11 +1,11 @@
 .docname {Iterable}
 .include {_Setup.qd}
 
-Iterable values are ordered lists or unordered set that can be iterated through a [loop](Loops.qd).
+Iterable values are ordered lists or unordered sets that you can iterate through with a [loop](Loops.qd).
 
-Iterables can also be destructured: see [*Destructuring*](Destructuring.qd) for more.
+Iterables can also be destructured. See [*Destructuring*](Destructuring.qd) for more information.
 
-### Collection
+## Collection
 
 An ordered or unordered Markdown list is automatically converted to an ordered collection.
 
@@ -44,22 +44,22 @@ Nested collections can be represented by nested Markdown lists as well:
 >
 > E
 
-### Pair
+## Pair
 
 A pair is an iterable of two values.
 
-It may be created via **`.pair {first} {second}`** or retrieved as a [Dictionary](Dictionary.qd) entry.
+You can create a pair via **`.pair {first} {second}`** or retrieve one as a [Dictionary](Dictionary.qd) entry.
 
-### Dictionary
+## Dictionary
 
-When used in a function which requires an iterable, a [Dictionary](Dictionary.qd) value is used as a list of key-value pairs.
+When used in a function that requires an iterable, a [Dictionary](Dictionary.qd) value is treated as a list of key-value pairs.
 
-### Range
+## Range
 
 An integer [`Range`](Range.qd) is a valid ordered iterable value.
 
 ## Operations
 
-Assuming `myiterable` to be an iterable, useful operations such as `getat`, `sorted`, `average` and many more can be accessed via [function call chaining](Syntax-of-a-function-call.qd#chaining-calls) as `.myiterable::operation`.
+Assuming `myiterable` is an iterable, you can access useful operations such as `getat`, `sorted`, `average`, and many more via [function call chaining](Syntax-of-a-function-call.qd#chaining-calls) as `.myiterable::operation`.
 
-For a complete list of operations, please refer to the stdlib's [`Collection` documentation](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection).
+For a complete list of operations, refer to the standard library's [`Collection` documentation](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Collection).

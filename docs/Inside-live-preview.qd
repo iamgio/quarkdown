@@ -1,24 +1,24 @@
 .docname {Inside live preview}
 .include {_Setup.qd}
 
-Quarkdown's [webserver](CLI-Webserver.qd) allows direct communication between the compiler's CLI and the browser, making live previewing possible.
+Quarkdown's [webserver](CLI-Webserver.qd) enables direct communication between the compiler's CLI and the browser, which makes live previewing possible.
 
-In particular, it exposes the following endpoints:
+The server exposes the following endpoints:
 
-- **`/:file`**: Serves static files, relative to the target file (`-f` option of `quarkdown start`).
+- **`/:file`**: Serves static files relative to the target file (the `-f` option of `quarkdown start`).
 
-- **`/live/:file`**: Similar to the previous one, but wraps HTML files in a wrapper, suitable for live reloading.
+- **`/live/:file`**: Works similarly to the previous endpoint, but wraps HTML files in a wrapper that enables live reloading.
 
-- **`/reload`**: WebSocket endpoint for live reloading.
+- **`/reload`**: A WebSocket endpoint for live reloading.
 
-  - Browsers connected to the `/live` endpoint start listening, and reload the page when it receives a reload message.
-  - The CLI connects to this endpoint and sends a message every time a compilation is performed. When it does so, the server broadcasts a reload message to all connected browsers.
+  - Browsers connected to the `/live` endpoint listen for reload messages and refresh the page when they receive one.
+  - The CLI connects to this endpoint and sends a message every time a compilation completes. When this happens, the server broadcasts a reload message to all connected browsers.
 
-### Live preview wrapper
+## Live preview wrapper
 
 When serving a file through the `/live/:file` endpoint, the server wraps HTML files in a simple [HTML wrapper](https://github.com/iamgio/quarkdown/tree/main/quarkdown-server/src/main/resources/live-preview/wrapper.html.template) that displays the content of `/:file` in an [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
 
-Additionally, a small script establishes a persistent WebSocket connection to the `/reload` endpoint. This script listens for reload messages and triggers a reload of the iframe content when a message is received.
+Additionally, a small script establishes a persistent WebSocket connection to the `/reload` endpoint. This script listens for reload messages and triggers a reload of the iframe content when it receives one.
 
 ```mermaid
 sequenceDiagram
@@ -34,15 +34,12 @@ sequenceDiagram
     Browser->>Browser: Reload iframe content
 ```
 
-#### Double buffering
+### Double buffering
 
-When an iframe is reloaded, an unpleasant flickering effect can occur.
-In order to grant a smooth user experience, Quarkdown employs a technique called [double buffering](https://en.wikipedia.org/wiki/Double_buffering).
+When an iframe reloads, an unpleasant flickering effect can occur. To provide a smooth user experience, Quarkdown employs a technique called [double buffering](https://en.wikipedia.org/wiki/Double_buffering).
 
-For context, you are constantly exposed to double buffering:
-your GPU renders the next frame to an off-screen buffer while displaying the current frame. Once the next frame is ready, the buffers are swapped, resulting in a smooth transition without flickering.
+For context, you encounter double buffering constantly in everyday computing: your GPU renders the next frame to an off-screen buffer while displaying the current frame. Once the next frame is ready, the buffers swap, resulting in a smooth transition without flickering.
 
-The same way, Quarkdown holds two iframes, `A` and `B`.  
-Let's say `A` is currently being displayed. When a change is detected, Quarkdown renders the updated content into `B` while `A` is still visible. Once the rendering is complete, the displayed iframe is switched from `A` to `B`, providing a seamless update.
+Quarkdown applies the same principle by maintaining two iframes, `A` and `B`. Suppose `A` is currently visible. When a change is detected, Quarkdown renders the updated content into `B` while `A` remains on screen. Once the rendering completes, the visible iframe switches from `A` to `B`, providing a seamless update.
 
-Also, before swapping the buffers, the scroll position from the previous frame is preserved and restored in the new frame, so the user doesn't lose their place.
+Before swapping the buffers, the system also preserves the scroll position from the previous frame and restores it in the new frame, so you do not lose your place in the document.

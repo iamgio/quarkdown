@@ -1,13 +1,13 @@
 .docname {Quote types}
 .include {_Setup.qd}
 
-If a blockquote begins by `Tip:`, `Note:`, `Warning:` or `Important:`, it is assigned the given type. Said prefix is stripped off and the element is styled accordingly.
+If a blockquote begins with `Tip:`, `Note:`, `Warning:`, or `Important:`, Quarkdown assigns that type to the quote. The prefix is stripped off and the element is styled accordingly.
 
-```
+```markdown
 > Tip: some useful information
 ```
 
-If the document's locale is set via [`.doclang`](Document-metadata.qd) and the locale is supported, a localized prefix is displayed and styled accordingly to the current layout theme.
+If the document's locale is set via [`.doclang`](Document-metadata.qd) and the locale is supported, a localized prefix is displayed and styled according to the current layout theme.
 
 !(550)[Localized example](Quote-types/minimal-theme.png)
 
@@ -16,8 +16,6 @@ If the document's locale is set via [`.doclang`](Document-metadata.qd) and the l
 !(650)[image](Quote-types/latex-theme.png)
 
 > Localized prefix in `latex` layout theme
-
-
 
 > [!TIP]
 > Quotes and [boxes](Box.qd) are different ways to achieve typed alerts.

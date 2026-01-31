@@ -1,12 +1,12 @@
 .docname {Page margin content}
 .include {_Setup.qd}
 
-The **`.pagemargin`** function displays content on each page, in a fixed position along its [margins](Page-format.qd#content-area).
+The **`.pagemargin`** function displays content on each page in a fixed position along its [margins](Page-format.qd#content-area).
 
-- In `paged` documents, a special area of each page is reserved for margins:  
+- In `paged` documents, a special area of each page is reserved for margins:
 
   !(_*500)[Paged margin areas](Page-margin-content/margin-areas.png)
-  
+
   > Credits: [Paged.js](https://pagedjs.org/documentation/7-generated-content-in-margin-boxes/#margin-boxes-of-a-page)
 
 - In `plain` and `slides` documents, content set on margins could potentially overlap page content.
@@ -27,11 +27,9 @@ The function accepts an optional `position` and a body argument `content`:
 
 !(650)[Fixed positions](Page-margin-content/fixed-positions.png)
 
-
-
 ## Scoped margins
 
-When used in `paged` and `slides` documents, page margin content takes effect only from the page where it's declared onward. This allows for different page margin settings in different parts of the document.
+When used in `paged` and `slides` documents, page margin content takes effect only from the page where it is declared onward. This allows for different page margin settings in different parts of the document.
 
 ```markdown
 .pagemargin {topcenter}
@@ -49,9 +47,7 @@ When used in `paged` and `slides` documents, page margin content takes effect on
 
 !(600)[Scoped page margins](Page-margin-content/scoped-margins.png)
 
-
-
-Overwriting the page margin again will change it from that point onward:
+Overwriting the page margin again changes it from that point onward:
 
 ```markdown
 ...
@@ -64,15 +60,11 @@ Overwriting the page margin again will change it from that point onward:
 
 !(500)[Scoped page margins](Page-margin-content/scoped-overwrite.png)
 
-
-
 ## Mirror positions
 
-Along with fixed positions, such as `topright` or `bottomleft`,
-there is also support for *mirror positions*, which adapt based on whether the page is left (even number) or right (odd number).
+Along with fixed positions such as `topright` or `bottomleft`, Quarkdown also supports *mirror positions*, which adapt based on whether the page is left (even number) or right (odd number).
 
-Mirror positions are marked in italics in the table above,
-and refer to `outside` and `inside` areas:
+Mirror positions are marked in italics in the table above and refer to `outside` and `inside` areas:
 
 ```markdown
 .pagemargin {topoutside}
@@ -81,19 +73,15 @@ and refer to `outside` and `inside` areas:
 
 !(650)[Mirror positions](Page-margin-content/mirror-positions.png)
 
-
-Although they are primarily designed for `paged` documents,
-mirror positions are also supported in `slides` ones.
-
-
+Although mirror positions are primarily designed for `paged` documents, they are also supported in `slides` documents.
 
 ## Footer
 
-Most layout themes associate the `bottomcenter` margin to the document footer, and style it differently - for instance, different blocks may be displayed in a row. Footers are particularly used in `slides` documents.
+Most layout themes associate the `bottomcenter` margin with the document footer and style it differently. For instance, different blocks may be displayed in a row. Footers are particularly common in `slides` documents.
 
 The **`.footer`** function is a shorthand for `.pagemargin {bottomcenter}`.
 
-```
+```markdown
 .theme {beaver} layout:{beamer}
 
 .footer
@@ -106,8 +94,6 @@ The **`.footer`** function is a shorthand for `.pagemargin {bottomcenter}`.
 
 !(700)[Page footer](Page-margin-content/footer.png)
 
-
-
 ## Page counter
 
-A page margin can host a page counter: see [Page counter](Page-counter.qd).
+A page margin can host a page counter. See [Page counter](Page-counter.qd) for more information.

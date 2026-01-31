@@ -1,13 +1,12 @@
 .docname {Quickstart}
 .include {_Setup.qd}
 
-Welcome to Quarkdown! In this page, we'll explore the main steps and features that will help you create your first document.
+Welcome to Quarkdown! This guide walks you through the main features you need to create your first document.
 
 > [!TIP]
-> If you're using VS Code, we strongly recommend installing
-> the [official Quarkdown extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode).
+> If you use VS Code, we strongly recommend installing the [official Quarkdown extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode).
 
-This guide provides a shallow overview and won't go into the specific details of each feature. In each section you'll find links to other wiki pages for in-depth explanations of relevant features we'll be using.
+This guide provides a broad overview without diving deep into every detail. Each section includes links to other wiki pages where you can learn more about specific features.
 
 
 
@@ -21,8 +20,7 @@ To create a new document, run the project creator from your terminal:
 quarkdown create my-document
 ```
 
-This will create a new folder named `my-document`.
-If you wish to use the working directory instead, you can omit the name.
+This command creates a new folder named `my-document`. If you want to use the current working directory instead, you can omit the name.
 
 For this quickstart, we recommend the following options:
 
@@ -31,9 +29,7 @@ For this quickstart, we recommend the following options:
 - Document type: `plain`
 - Document language: `English`
 
-Once the project is created, open `my-document.qd` in your favorite text editor.
-
-You may also delete the existing content inside the first section.
+Once the project is created, open `my-document.qd` in your favorite text editor. You can delete the existing content inside the first section if you want to start fresh.
 
 ```diff
 ## Quickstart
@@ -47,27 +43,27 @@ You may also delete the existing content inside the first section.
 
 > Reference: [Document types](Document-types.qd)
 
-During the initial setup, you'll be asked to choose a document type, which can be one of the following:
+During the initial setup, you choose a document type from one of the following options:
 
-- **`plain`** - Continuous flow like Notion/Obsidian, great for knowledge management and web viewing.
-- **`paged`** - Traditional document with page breaks, ideal for PDFs.
-- **`slides`** - Presentation format with interactive navigation.
+- **`plain`**: A continuous flow layout similar to Notion or Obsidian, ideal for knowledge management and web viewing.
+- **`paged`**: A traditional document layout with page breaks, perfect for PDFs.
+- **`slides`**: A presentation format with interactive navigation.
 
 ### Choosing a theme
 
 > Reference: [Themes](Themes.qd)
 
-Themes are split into two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout.
+Themes are split into two groups: *color* themes define the color scheme of a document, while *layout* themes set the general structural rules of the layout.
 
-```
+```markdown
 .theme {paperwhite} layout:{latex}
 ```
 
-Popular combinations are:
+Some popular combinations include:
 
-- `paperwhite + latex` - Clean academic look (default)
-- `darko + minimal` - Dark theme with minimal styling
-- `beaver + beamer` - Academic presentation style
+- `paperwhite + latex`: A clean academic look (this is the default)
+- `darko + minimal`: A dark theme with minimal styling
+- `beaver + beamer`: An academic presentation style
 
 See [Themes](Themes.qd) for a complete list of available themes.
 
@@ -77,23 +73,22 @@ See [Themes](Themes.qd) for a complete list of available themes.
 
 > Reference: [Compiler](CLI-Compiler.qd)
 
-Compile the document to ensure everything is working as expected:
+Compile the document to make sure everything works as expected:
 
 ```shell
 cd my-document
 quarkdown c my-document.qd
 ```
 
-You should see the HTML output inside the `output` directory. Great!
+You should see the HTML output inside the `output` directory.
 
-To export to PDF:
+To export to PDF, add the `--pdf` flag:
 
 ```shell
 quarkdown c my-document.qd --pdf
 ```
 
-See the [PDF export](PDF-export.qd) page for more information about PDF export and its requirements.
-If you installed Quarkdown via a package manager or install script, you should be all set.
+See the [PDF export](PDF-export.qd) page for more information about PDF export and its requirements. If you installed Quarkdown using a package manager or the install script, you should be ready to go.
 
 
 
@@ -105,21 +100,15 @@ To launch live preview, append `-p` (preview) and `-w` (watch) to the compile co
 quarkdown c my-document.qd -p -w
 ```
 
-This launches the default browser by default.
-To use a different one, use, for example, `--browser chrome`.
+This opens the default browser automatically. To use a different browser, specify it with the `--browser` option, for example `--browser chrome`.
 
-If you're using VS Code with the Quarkdown extension,
-you can launch the live preview using the corresponding 🔍 button
-or pressing `Ctrl/⌘+Shift+V`
+If you use VS Code with the Quarkdown extension, you can launch the live preview by clicking the magnifying glass button or pressing `Ctrl/Cmd+Shift+V`.
 
 
 
 ## Markup
 
-Quarkdown is built upon Markdown, with several GFM extensions.
-
-To try out basic markup within Quarkdown, you can append the following to the existing content of `my-document.qd`,
-and feel free to play around with it:
+Quarkdown builds upon Markdown and includes several GFM extensions. To try out basic markup, append the following to your document and experiment with it:
 
 ```markdown
 ### A Quarkdown tour
@@ -139,35 +128,31 @@ create [links](https://quarkdown.com), and much more.
 
 !(650)[Markup](Quickstart/markup.png)
 
-You may refer to resources such as [markdownguide ↗](https://www.markdownguide.org/basic-syntax) to know more about Markdown.
+For a refresher on Markdown basics, see [markdownguide.org](https://www.markdownguide.org/basic-syntax).
 
 ### Image size
 
 > References: [Image size](Image-size.qd), [Size](Sizes.qd)
 
-You might have noticed the image in the previous example was way too large.
-
-Quarkdown overcomes a well-known Markdown limitation by allowing image size specification:
+You might have noticed that the image in the previous example appears too large. Quarkdown overcomes this well-known Markdown limitation by allowing you to specify image dimensions:
 
 ```markdown
 !(50%)[Logo](image/logo.png)
 ```
 
-Great! The image is now perfectly sized.
+Now the image is sized appropriately.
 
 !(650)[Image size](Quickstart/image-size.png)
 
-This sets the image width to 50% of the available width, while keeping the aspect ratio.
-Supported units include `px`, `pt`, `cm`, `mm`, `in`, and `%`.
-If the unit is omitted, `px` is assumed.
+This sets the image width to 50% of the available width while maintaining the aspect ratio. Supported units include `px`, `pt`, `cm`, `mm`, `in`, and `%`. If you omit the unit, Quarkdown assumes `px`.
 
-If you wish to specify both width and height:
+To specify both width and height:
 
 ```markdown
 !(6cm 2cm)[Logo](image/logo.png)
 ```
 
-If you wish to specify only the height:
+To specify only the height:
 
 ```markdown
 !(_ 2cm)[Logo](image/logo.png)
@@ -177,18 +162,18 @@ If you wish to specify only the height:
 
 > Reference: [Figures](Figure.qd)
 
-When an image is isolated from other content, like in the previous example, it becomes a figure, which is automatically centered and can have a caption.
+When an image stands alone, separated from other content, it automatically becomes a figure. Figures are centered and can have a caption.
 
-Let's go to the previous image:
+Take the previous image:
 
 ```markdown
 !(50%)[Logo](image/logo.png)
 ```
 
-and enhance it with a caption:
+You can add a caption by appending a title in quotes:
 
 ```markdown
-!(50%)[Logo](image/logo.png "The Quarkdown logo".qd)
+!(50%)[Logo](image/logo.png "The Quarkdown logo")
 ```
 
 !(650)[Figure](Quickstart/figure.png)
@@ -197,9 +182,9 @@ and enhance it with a caption:
 
 > Reference: [TeX formulae](TeX-formulae.qd)
 
-TeX equations can be included by means of the `$ expression $` syntax (beware of whitespaces).
+You can include TeX equations using the `$ expression $` syntax. Note that whitespace matters.
 
-Let's try adding equations to the bottom of our document:
+Add the following to the bottom of your document:
 
 ```markdown
 #### Equations
@@ -209,7 +194,7 @@ $ E = mc^2 $ is Einstein's mass-energy equivalence formula.
 $ f(x, y) = \frac{x}{y} $
 ```
 
-You might notice that, despite having the same syntax, the second appears centered and on its own line. Just like figures, isolated equations automatically become block equations.
+Notice that the second equation appears centered on its own line, even though it uses the same syntax. Just like figures, isolated equations automatically become block equations.
 
 !(650)[Equations](Quickstart/equations.png)
 
@@ -219,51 +204,48 @@ You might notice that, despite having the same syntax, the second appears center
 
 > Reference: [Syntax of a function call](Syntax-of-a-function-call.qd)
 
-Before going deeper into other features, let's briefly explore Quarkdown's function call syntax.
+Before exploring more features, let's look at Quarkdown's function call syntax.
 
-Function calls start with a dot and use curly braces for arguments, which may be positional or named:
+Function calls start with a dot and use curly braces for arguments. Arguments can be positional or named:
 
-```
+```markdown
 .pow {5} to:{2} is a mathematical operation.
 ```
 
-Function calls can be *inline* or *block*, depending on whether they are isolated or not from other content.
+Function calls can be *inline* or *block*, depending on whether they appear within other content or stand alone.
 
-Block function calls also allow an indented *block argument*,
-which always refers to the last parameter of the function, positionally speaking:
+Block function calls also support an indented *block argument*, which always corresponds to the last parameter of the function:
 
-```
+```markdown
 .align {center}
     This multi-line paragraph is the block argument,
     and it's now centered in the document.
 ```
 
-Multiple function calls can also be chained together,
-so that the output of one refers to the first parameter of the next:
+You can chain multiple function calls together, where the output of one becomes the first argument of the next:
 
 ```markdown
 .sqrt {10}::round::multiply {2} <!-- 6 -->
 ```
 
 > [!TIP]
-> A full list of available functions can be found in the [docs](https://quarkdown.com/docs/quarkdown-stdlib/).
+> You can find a full list of available functions in the [documentation](https://quarkdown.com/docs/quarkdown-stdlib/).
 
 ### Variables
 
 > Reference: [Variables](Variables.qd)
 
-A variable is defined using the `.var` function,
-and can be accessed like any function.
+Define a variable using the `.var` function and access it like any other function:
 
-```
+```markdown
 .var {name} {John}
 
 My name is .name
 ```
 
-A variable can be overwritten by supplying an argument:
+To change a variable's value, call it with a new argument:
 
-```
+```markdown
 .name {Jane}
 ```
 
@@ -273,12 +255,9 @@ A variable can be overwritten by supplying an argument:
 
 > Reference: [Declaring functions](Declaring-functions.qd), [Boxes](Box.qd)
 
-Custom functions can be defined via `.function`.
-Functions are reusable, versatile components that can encapsulate logic and content.
-In this guide, we'll create a function that generates an *Example* box,
-commonly used in educational documents.
+You can define custom functions using `.function`. Functions are reusable components that encapsulate logic and content. In this section, we create a function that generates an *Example* box, commonly used in educational documents.
 
-Let's start by defining a function without parameters:
+Start by defining a function without parameters:
 
 ```markdown
 .docauthors
@@ -292,7 +271,7 @@ Let's start by defining a function without parameters:
 ...
 ```
 
-And let's call it:
+Now call it:
 
 ```markdown
 ## Quickstart
@@ -302,10 +281,9 @@ And let's call it:
 ...
 ```
 
-Great! Calling `.example` now produces a nicely formatted box.
+Calling `.example` produces a nicely formatted box.
 
-Let's enhance our function by adding a parameter for the content of the box.
-The syntax for parameters is `param1 param2 param3:`.
+Let's enhance the function by adding a parameter for the box content. The syntax for parameters is `param1 param2 param3:`.
 
 ```markdown
 .function {example}
@@ -314,7 +292,7 @@ The syntax for parameters is `param1 param2 param3:`.
         .content
 ```
 
-And let's update the call accordingly.
+Update the call accordingly:
 
 ```markdown
 .example
@@ -323,15 +301,11 @@ And let's update the call accordingly.
 
 !(650)[Custom element](https://github.com/user-attachments/assets/039bdd8b-a47f-4ebb-996d-ba0de4632a35)
 
+Congratulations! You've created your first reusable element using [boxes](Box.qd). Many more layout tools are available, such as [containers](Container.qd) and [stacks](Stacks.qd).
 
+For advanced styling of custom elements, you can use CSS rules. See [CSS](CSS.qd) for more information.
 
-Congratulations! You've created your first reusable element that relies on [box](Box.qd).
-Many more layout tools are available, such as [containers](Container.qd) and [stacks](Stacks.qd).
-
-If you're looking for advanced styling of custom elements, you may even use
-CSS rules: see [CSS](CSS.qd) for more information.
-
-> For the sake of simplicity for this guide, let's remove the function call:
+> For the sake of simplicity, let's remove the function call for now:
 >
 > ```diff
 > - .example
@@ -344,13 +318,12 @@ CSS rules: see [CSS](CSS.qd) for more information.
 
 > Reference: [Numbering](Numbering.qd)
 
-Many documents, especially academic ones, require some elements to be numbered, such as sections, figures, tables, equations and code. In Quarkdown, this can be achieved using the `.numbering` function.
+Many documents, especially academic ones, require numbered elements such as sections, figures, tables, equations, and code. In Quarkdown, you can achieve this using the `.numbering` function.
 
 > [!NOTE]
-> `paged` documents come with a default numbering.
+> Documents with the `paged` type come with default numbering enabled.
 
-Head to the top of our document's source code, right before the beginning of content,
-and set up a simple numbering scheme:
+Add a numbering scheme at the top of your document, right before the content begins:
 
 ```markdown
 .docauthors
@@ -371,14 +344,14 @@ and set up a simple numbering scheme:
 
 !(650)[Numbering](Quickstart/numbering.png)
 
-Valid symbols are: 
-- `1` (decimal)
-- `A` (uppercase letters)
-- `a` (lowercase letters)
-- `I` (uppercase Roman numerals)
-- `i` (lowercase Roman numerals)
+Valid symbols for numbering formats are:
+- `1` for decimal numbers
+- `A` for uppercase letters
+- `a` for lowercase letters
+- `I` for uppercase Roman numerals
+- `i` for lowercase Roman numerals
 
-Any other character will be treated as literal text.
+Any other character is treated as literal text.
 
 
 
@@ -386,9 +359,9 @@ Any other character will be treated as literal text.
 
 > Reference: [Table of contents](Table-of-contents.qd)
 
-It's common for longer documents to have a table of contents at the beginning, listing all sections and subsections.
+Longer documents often include a table of contents at the beginning that lists all sections and subsections.
 
-In Quarkdown, it's as easy as calling the `.tableofcontents` function where you want the table of contents to appear, for example before the first section:
+In Quarkdown, simply call the `.tableofcontents` function where you want the table of contents to appear:
 
 ```markdown
 .numbering
@@ -406,8 +379,7 @@ In Quarkdown, it's as easy as calling the `.tableofcontents` function where you 
 
 > Reference: [Footnotes](Footnotes.qd)
 
-Footnotes are a great way to add additional information without cluttering the main text.
-For our quickstart, let's go back to our introduction and add a footnote to it:
+Footnotes let you add additional information without cluttering the main text. Let's add a footnote to our introduction:
 
 ```markdown
 ### A Quarkdown tour
@@ -419,15 +391,13 @@ create [links](https://quarkdown.com), and much more[^1].
 [^1]: All Markdown features are supported in Quarkdown
 ```
 
-This is the GFM footnote syntax, which Quarkdown fully supports,
-along with compact footnotes, which allow defining a footnote inline, right where it's referenced:
+This is the GFM footnote syntax, which Quarkdown fully supports. Quarkdown also supports compact footnotes, which let you define a footnote inline, right where you reference it:
 
 ```markdown
 and much more[^: All Markdown features are supported in Quarkdown].
 ```
 
-In `plain` documents, footnotes are more like side notes, and appear in the margin, next to the reference.
-In `paged` and `slides` documents, footnotes appear at the bottom of the page or slide.
+In `plain` documents, footnotes appear in the margin next to the reference, similar to side notes. In `paged` and `slides` documents, footnotes appear at the bottom of the page or slide.
 
 
 
@@ -435,28 +405,27 @@ In `paged` and `slides` documents, footnotes appear at the bottom of the page or
 
 > Reference: [Cross-references](Cross-references.qd)
 
-Cross-references allow referring to other elements in the document which can be numbered.
+Cross-references let you refer to numbered elements elsewhere in your document.
 
-The first step is to add an ID to the target element.
-After that, the element can be referenced using the `.ref {id}` function.
+First, add an ID to the target element. Then reference it using the `.ref {id}` function.
 
-Let's go back to our figure:
+Take our figure:
 
 ```markdown
-!(50%)[Logo](image/logo.png "The Quarkdown logo".qd)
+!(50%)[Logo](image/logo.png "The Quarkdown logo")
 ```
 
-add the `logo` ID to it, and reference it in the text:
+Add the `logo` ID to it and reference it in the text:
 
 ```markdown
-!(50%)[Logo](image/logo.png "The Quarkdown logo".qd) {#logo}
+!(50%)[Logo](image/logo.png "The Quarkdown logo") {#logo}
 
 The Quarkdown logo is shown in .ref {logo}.
 ```
 
 !(650)[Cross-reference](Quickstart/cross-reference.png)
 
-See [Cross-references](Cross-references.qd) to learn how to add IDs to other elements, such as sections, tables, equations and code blocks.
+See [Cross-references](Cross-references.qd) to learn how to add IDs to other elements, such as sections, tables, equations, and code blocks.
 
 
 
@@ -464,24 +433,22 @@ See [Cross-references](Cross-references.qd) to learn how to add IDs to other ele
 
 > References: [Page format](Page-format.qd), [Page margin content](Page-margin-content.qd), [Page counter](Page-counter.qd)
 
-In `paged` and `slides` documents, you'll likely need a page counter
-to improve navigation and provide context to readers.
+In `paged` and `slides` documents, you typically want a page counter to help readers navigate and understand where they are in the document.
 
-First off, let's switch to the `paged` document type by changing `.doctype`'s value at the top of our document:
+First, switch to the `paged` document type by changing the `.doctype` value at the top of your document:
 
 ```diff
 - .doctype {plain}
 + .doctype {paged}
 ```
 
-> The default page format is A4.
-> Along with other properties, it can be changed using the `.pageformat` function:
+> The default page format is A4. You can change it, along with other properties, using the `.pageformat` function:
 >
 > ```markdown
 > .pageformat {letter} margin:{2cm}
 > ```
 
-Let's now add a page counter to the bottom-center area of each page:
+Now add a page counter to the bottom center of each page:
 
 ```markdown
 .docauthors
@@ -494,16 +461,15 @@ Let's now add a page counter to the bottom-center area of each page:
     - ...
 ```
 
-This way, each page will show its number, and the total number of pages.
+Each page now displays its number and the total number of pages.
 
-In general, `.pagemargin` can be used to add any kind of content to each page.
-See [Page margin content](Page-margin-content.qd) to see the available margin positions.
+The `.pagemargin` function can add any kind of content to each page. See [Page margin content](Page-margin-content.qd) for all available margin positions.
 
 ### Persistent headings
 
 > Reference: [Persistent headings](Persistent-headings.qd)
 
-Page margins can also be used to display the current section, such as chapter title, on each page. The following example displays the current level-1 heading in the bottom left margin:
+Page margins can also display the current section title on each page. The following example shows the current level-1 heading in the bottom left margin:
 
 ```markdown
 .pagemargin {bottomcenter}
@@ -522,21 +488,15 @@ Page margins can also be used to display the current section, such as chapter ti
 
 > Reference: [Inclusion vs. subdocuments](Inclusion-vs-subdocuments.qd)
 
-There are two main ways to split a large document into multiple source files: 
-inclusion and subdocuments.
+There are two main ways to split a large document into multiple source files: inclusion and subdocuments.
 
 ### Including files
 
 > Reference: [Including other Quarkdown files](Including-other-Quarkdown-files.qd)
 
-The `.include` function allows including the content of another Quarkdown file
-into the current one.
+The `.include` function inserts the content of another Quarkdown file into the current one. This approach is common in LaTeX and other markup languages for splitting a large document into smaller, more manageable files, such as one per chapter or section.
 
-This approach is common in LaTeX and other markup languages,
-in order to split a large document into smaller, more manageable files,
-such as one per chapter or section.
-
-For our quickstart, we could decide to split setup and content into two separate files:
+For our quickstart, we could split setup and content into two separate files:
 
 > my-document.qd
 
@@ -549,13 +509,13 @@ For our quickstart, we could decide to split setup and content into two separate
 - .docauthors
 -     - ...
 -
-- .pagemargin {bottomright} 
+- .pagemargin {bottomright}
 -     .currentpage / .totalpages
 -
 - .pagemargin {bottomleft}
 -     .lastheading depth:{1}
 -
-- .numbering 
+- .numbering
 -     - headings: 1.1.1
 -     - figures: 1.1
 
@@ -580,10 +540,10 @@ For our quickstart, we could decide to split setup and content into two separate
 .docauthors
     - Quarkdown
 
-.pagemargin {bottomright} 
+.pagemargin {bottomright}
     .currentpage / .totalpages
 
-.numbering 
+.numbering
     - headings: 1.1.1
     - figures: 1.1
 ```
@@ -598,8 +558,7 @@ For our quickstart, we could decide to split setup and content into two separate
 ...
 ```
 
-Here we used `.include` twice. For a larger number of files,
-you might consider using `.includeall` instead:
+Here we used `.include` twice. For a larger number of files, consider using `.includeall` instead:
 
 ```markdown
 .includeall
@@ -611,12 +570,9 @@ you might consider using `.includeall` instead:
 
 > Reference: [Subdocuments](Subdocuments.qd)
 
-The second approach involves subdocuments,
-particularly common in the area of knowledge bases and wikis.
+The second approach uses subdocuments, which are particularly common for knowledge bases and wikis.
 
-Subdocuments are independent units of content which share
-the same setup and configuration,
-and can be referenced from other documents through links.
+Subdocuments are independent units of content that share the same setup and configuration. You can reference them from other documents through links.
 
 > my-document.qd
 
@@ -627,8 +583,7 @@ and can be referenced from other documents through links.
 - [Conclusion](conclusion.qd)
 ```
 
-The knowledge graph formed by subdocuments can also be
-visualized:
+You can also visualize the knowledge graph formed by subdocuments:
 
 ```markdown
 .subdocumentgraph
@@ -640,6 +595,6 @@ visualized:
 
 ## Conclusion
 
-Congratulations! You've completed the Quarkdown quickstart guide and are now familiar with its main features that will assist you with your first real document.
+Congratulations! You have completed the Quarkdown quickstart guide and are now familiar with its main features. You are ready to create your first real document.
 
-From here, you can explore more advanced topics in the [wiki](https://github.com/iamgio/wiki) and [docs](https://quarkdown.com/docs/).
+From here, you can explore more advanced topics in the [wiki](https://github.com/iamgio/wiki) and [documentation](https://quarkdown.com/docs/).

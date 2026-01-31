@@ -5,10 +5,10 @@ Many functions accept rich ~Mark~*Quark*down content as their argument.
 
 ## Block content
 
-Usually accepted by body parameters, *block content* refers to one or more *block* element that Quarkdown supports. This includes paragraphs, headings, code blocks, quotes, [block function calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls), etc.  
-Inner *inline* element is, of course, processed as well.  
+Body parameters usually accept *block content*, which refers to one or more *block* elements that Quarkdown supports. This includes paragraphs, headings, code blocks, quotes, [block function calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls), and more.
+Inner *inline* elements are processed as well.
 
-In other words, everything you can express with Quarkdown *outside* a function call, will also work here.
+In other words, everything you can express with Quarkdown *outside* a function call will also work here.
 
 ```markdown
 .center
@@ -28,7 +28,7 @@ In other words, everything you can express with Quarkdown *outside* a function c
 
 ## Inline content
 
-*Inline content* strictly accepts inline data, ignoring any block syntax. This includes plain text, strong (bold), emphasis (italics), code spans, links, images, [inline math](TeX-formulae.qd), [inline function calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls), etc.
+*Inline content* strictly accepts inline data and ignores any block syntax. This includes plain text, strong (bold), emphasis (italics), code spans, links, images, [inline math](TeX-formulae.qd), [inline function calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls), and more.
 
 ```markdown
 .box {My _box_ title}
@@ -36,7 +36,7 @@ In other words, everything you can express with Quarkdown *outside* a function c
 ```
 > See more: [`.box`](Box.qd)
 
-Block syntax has no effect where inline content is required. In the following example, *# My box* is parsed as plain text, since headings are blocks.
+Block syntax has no effect where inline content is required. In the following example, *# My box* is parsed as plain text, since headings are block elements.
 
 ```markdown
 .box {# My box}
@@ -52,12 +52,12 @@ Inline function calls are accepted:
 
 > See more: [`.sum`](Math.qd)
 
-In general, everything that can be put inside a paragraph can go into an inline argument as well.
+In general, everything that can appear inside a paragraph can also go into an inline argument.
 
 ```markdown
 This is the link to .text {[Quarkdown](https://github.com/iamgio/quarkdown)} size:{large}
 ```
 
-> !(300)[`.text` result](Markdown-content/text-inline.png)  
+> !(300)[`.text` result](Markdown-content/text-inline.png)
 >
 > See more: [`.text`](Text.qd)

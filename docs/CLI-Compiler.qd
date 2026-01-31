@@ -3,4 +3,4 @@
 
 **`quarkdown c <file>`** is the command for compiling a main source file into a browser-renderable output.
 
-To learn more about all available options, please refer to the [README's *Compiling* section](https://github.com/iamgio/quarkdown?tab=readme-ov-file#compiling).
+For all available options, refer to the [README's *Compiling* section](https://github.com/iamgio/quarkdown?tab=readme-ov-file#compiling).

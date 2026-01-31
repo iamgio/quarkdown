@@ -1,9 +1,9 @@
 .docname {CLI - Project creator}
 .include {_Setup.qd}
 
-The **project creator** is a CLI project wizard that makes it blazingly fast to set up a new Quarkdown project.
+The **project creator** is a CLI project wizard that makes it fast to set up a new Quarkdown project.
 
-**`quarkdown create [directory]`** launches the wizard and generates the project files in the given directory (it will be created if it doesn't exist). Not specifying a value for `directory` generates the files in the working directory.
+**`quarkdown create [directory]`** launches the wizard and generates the project files in the given directory (it will be created if it does not exist). Not specifying a value for `directory` generates the files in the working directory.
 
 The following information will be prompted via standard input, unless the corresponding option is set via command-line arguments:
 
@@ -17,5 +17,5 @@ The following information will be prompted via standard input, unless the corres
 | Layout theme (unprompted) |                                         | `--layout-theme`     | [`.theme`](https://github.com/iamgio/quarkdown/wiki/themes)                     |
 
 Additional options:
-- `--empty`: does not include sample initial content;
+- `--empty`: does not include sample initial content
 - `--main-file <name>`: sets the name of the main `.qd` source file. Defaults to the name of the parent directory.

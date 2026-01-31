@@ -1,7 +1,7 @@
 .docname {Clip}
 .include {_Setup.qd}
 
-The **`.clip {shape}`** block function allows clipping its content to a defined shape.
+The **`.clip {shape}`** block function clips its content to a defined shape.
 
 Supported shapes:
 - `circle`
@@ -17,20 +17,20 @@ Supported shapes:
 
 
 
-In case of a [figure](Figure.qd) only the content is affected, leaving its caption intact:
+When clipping a [figure](Figure.qd), only the content is affected, leaving the caption intact:
 
 ```markdown
-![Sky](sky.jpg "A beautiful sky.".qd)
+![Sky](sky.jpg "A beautiful sky.")
 
 .clip {circle}
-    ![Sky](sky.jpg "A beautiful sky.".qd)
+    ![Sky](sky.jpg "A beautiful sky.")
 ```
 
 !(600)[Circle sky figure](Clip/circle-figure.png)
 
 
 
-Not just images — clipping works with any content. Here a [container](Container.qd) is used:
+Clipping works with any content, not just images. Here a [container](Container.qd) is used:
 
 ```markdown
 .clip {circle}

@@ -1,9 +1,9 @@
 .docname {XY chart}
 .include {_Setup.qd}
 
-The **`.xychart`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html} function allows plotting 2D line/bar charts in a pure, flexible Quarkdown fashion, through the power of [Mermaid](Mermaid-diagrams.qd).
+The **`.xychart`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html} function allows you to plot 2D line and bar charts in a pure, flexible Quarkdown fashion, through the power of [Mermaid](Mermaid-diagrams.qd).
 
-All its parameters, except for `values`, are optional.
+All parameters except for `values` are optional.
 
 | Parameter   | Description                                                                | Accepts                 |
 |-------------|----------------------------------------------------------------------------|-------------------------|
@@ -19,9 +19,9 @@ All its parameters, except for `values`, are optional.
 
 #### Axis ranges
 
-`xrange` and `yrange` define the boundaries of the visible area of the chart, through the usual `x..y` [Range](Range.qd) syntax.
+`xrange` and `yrange` define the boundaries of the visible area of the chart through the usual `x..y` [Range](Range.qd) syntax.
 
-The range may also be open on either end, or both.
+The range may also be open on either end, or both:
 - If open on the left end, the range starts from the minimum value among the plotted points.
 - If open on the right end, the range ends at the maximum value among the plotted points.
 
@@ -33,9 +33,9 @@ For instance, `..` (infinite) is the default range, which shows the area between
 
 ### From static list
 
-`values` can be represented by a Markdown list, just like all iterables.
+You can represent `values` as a Markdown list, just like all iterables.
 
-```
+```markdown
 .xychart bars:{yes} x:{Months} y:{Revenue} yrange:{100..}
   - 250
   - 500
@@ -52,7 +52,7 @@ For instance, `..` (infinite) is the default range, which shows the area between
 
 In case of nested lists (iterable of iterables), multiple lines will be plotted:
 
-```
+```markdown
 .xychart x:{Months} y:{Revenue}
   - - 250
     - 500
@@ -75,19 +75,17 @@ In case of nested lists (iterable of iterables), multiple lines will be plotted:
 
 [Table manipulation](Table-manipulation.qd) functions such as [`.tablecolumn`](Table-manipulation.qd#retrieve-columns) can extract values from the columns of a table as iterables.
 
-```
+```markdown
 .xychart
     .tablecolumn {2}
         .csv {data.csv}
 ```
 
-In case multiple columns must be accessed from the same table, consider calling `.tablecolumns`, which returns a collection of columns, for efficiency.
-Any [`Iterable`](Iterable.qd) operation can then be performed.
+If you need to access multiple columns from the same table, consider calling `.tablecolumns` for efficiency, which returns a collection of columns. You can then perform any [`Iterable`](Iterable.qd) operation on it.
 
-In the following example, the chart displays two lines: one for the second and one for the third column of the CSV.
-Additionally, the first column of the table is used as a set of categorical tags for the X axis.
+In the following example, the chart displays two lines: one for the second and one for the third column of the CSV. Additionally, the first column of the table is used as a set of categorical tags for the X axis.
 
-```
+```markdown
 .var {columns}
     .tablecolumns
         .csv {data.csv}
@@ -105,11 +103,11 @@ Additionally, the first column of the table is used as a set of categorical tags
 
 Quarkdown [loops](Loops.qd) return an iterable containing the result of each iteration, making them a suitable input for `values`, especially in combination with [math](Math.qd) functions.
 
-```
+```markdown
 .xychart
     .repeat {100}
         .1::pow {2}::divide {100}
-    
+
     .repeat {100}
         .1::logn::multiply {10}
 ```

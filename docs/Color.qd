@@ -1,12 +1,13 @@
 .docname {Color}
 .include {_Setup.qd}
 
-A `Color` value can be defined in any of the following ways:
-- **Hexadecimal:** `#hex`, e.g. `#4290F5` (case-insensitive);
-- **RGB:** `rgb(red 0-255, green 0-255, blue 0-255)`, e.g. `rgb(66, 144, 245)`;
-- **RGBA:** `rgba(red 0-255, green 0-255, blue 0-255)`, e.g. `rgb(66, 144, 245, 0.8)`;
-- **HSV:** `hsv(hue, saturation 0-100, value 0-100)`, e.g. `hsv(214, 73, 96)`;
-- **HSL:** `hsl(hue, saturation 0-100, lightness 0-100)`, e.g. `hsv(214, 90, 61)`;
-- **Named**: a [CSS3 color](https://www.w3schools.com/cssref/css_colors.php) name, case-insensitive, without dashes (e.g. `blue`, `darkorange`).
+You can define a `Color` value in any of the following ways:
 
-Except for named ones, any color in a code span (i.e. wrapped by backticks) automatically previews its content in a small box next to it.
+- **Hexadecimal:** `#hex`, for example `#4290F5` (case insensitive)
+- **RGB:** `rgb(red 0-255, green 0-255, blue 0-255)`, for example `rgb(66, 144, 245)`
+- **RGBA:** `rgba(red 0-255, green 0-255, blue 0-255, alpha 0-1)`, for example `rgba(66, 144, 245, 0.8)`
+- **HSV:** `hsv(hue, saturation 0-100, value 0-100)`, for example `hsv(214, 73, 96)`
+- **HSL:** `hsl(hue, saturation 0-100, lightness 0-100)`, for example `hsl(214, 90, 61)`
+- **Named:** A [CSS3 color](https://www.w3schools.com/cssref/css_colors.php) name, case insensitive, without dashes, for example `blue` or `darkorange`
+
+When you write a color in a code span (wrapped in backticks), Quarkdown automatically displays a small preview box next to it. This works for all color formats except named colors.

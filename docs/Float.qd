@@ -1,12 +1,11 @@
 .docname {Float}
 .include {_Setup.qd}
 
-The **`.float {alignment}`** function can turn any content into a floating element, breaking the normal flow and allowing subsequent content to wrap around it.
+The **`.float {alignment}`** function transforms any content into a floating element that breaks the normal flow and allows subsequent content to wrap around it.
 
-`alignment` accepts `start` or `end`.
+The `alignment` parameter accepts `start` or `end`.
 
-
-```
+```markdown
 .float {start}
     !(80%)[Quarkdown](icon.png)
 
@@ -15,11 +14,9 @@ The **`.float {alignment}`** function can turn any content into a floating eleme
 
 !(600)[Floating image](Float/floating-image.png)
 
+In addition to images, you can make any other content float:
 
-
-Along with images, any other content can become floating:
-
-```
+```markdown
 .float {end}
     .box {Hello} type:{warning}
         Floating!
@@ -28,4 +25,3 @@ Along with images, any other content can become floating:
 ```
 
 !(600)[Floating box](Float/floating-box.png)
-

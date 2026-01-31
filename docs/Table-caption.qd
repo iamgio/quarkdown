@@ -1,9 +1,9 @@
 .docname {Table caption}
 .include {_Setup.qd}
 
-The Quarkdown flavor introduces table captions, which can be set by adding a line right under the table. The content is wrapped between double quotes, single quotes or parentheses, exactly like the image *title* attribute and [code captions](Code-caption.qd).
+The Quarkdown flavor introduces table captions, which you can set by adding a line immediately below the table. The content is wrapped between double quotes, single quotes, or parentheses, exactly like the image *title* attribute and [code captions](Code-caption.qd).
 
-```
+```markdown
 | Country | Capital |
 |---------|---------|
 | England | London  |
@@ -18,7 +18,7 @@ The Quarkdown flavor introduces table captions, which can be set by adding a lin
 
 The caption must be located immediately next to the table, on a new line. The following example renders a paragraph instead of a caption:
 
-```
+```markdown
 | Country | Capital |
 |---------|---------|
 | England | London  |
@@ -32,4 +32,4 @@ The caption must be located immediately next to the table, on a new line. The fo
 
 
 
-Tables can also be **numbered**: see [Numbering](Numbering.qd) for further information.
+Tables can also be **numbered**. See [Numbering](Numbering.qd) for further information.

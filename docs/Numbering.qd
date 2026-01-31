@@ -10,8 +10,7 @@ The **`.numbering`** function sets the global numbering configuration of the doc
 - [Footnotes](Footnotes.qd)
 - Custom elements (`.numbered`)
 
-The configuration is represented by a [Dictionary](Dictionary.qd).
-The following snippet shows the full configuration schema, where all entries are optional:
+The configuration is represented by a [Dictionary](Dictionary.qd). The following snippet shows the full configuration schema, where all entries are optional:
 
 ```yaml
 .numbering
@@ -23,7 +22,7 @@ The following snippet shows the full configuration schema, where all entries are
   - footnotes: <format>
 ```
 
-Each format parameter accepts either `none`, or a string where each character represents either a counter or a fixed symbol:
+Each format parameter accepts either `none` or a string where each character represents either a counter or a fixed symbol:
 - `1` for decimal (`1, 2, 3, ...`)
 - `a` for lowercase latin alphabet (`a, b, c, ...`)
 - `A` for uppercase latin alphabet (`A, B, C, ...`)
@@ -31,40 +30,37 @@ Each format parameter accepts either `none`, or a string where each character re
 - `I` for uppercase roman numerals (`I, II, III, ...`)
 - Any other character is a fixed symbol.
 
-### Default formats
+## Default formats
 
 The default numbering format, if unspecified, is:
 
 - For `paged` documents:
-  - `1.1.1` for headings;
-  - `1.1` for figures and tables;
-  - `(1)` for equations;
-  - `1` for footnotes.
+  - `1.1.1` for headings
+  - `1.1` for figures and tables
+  - `(1)` for equations
+  - `1` for footnotes
 
 - For `plain` documents:
-  - `(1)` for equations;
-  - `1` for footnotes.
+  - `(1)` for equations
+  - `1` for footnotes
 
 - For `slides` documents:
-  - `1` for footnotes.
+  - `1` for footnotes
 
-Any active numbering configuration can be turned off via the **`.nonumbering`** function.
+You can turn off any active numbering configuration via the **`.nonumbering`** function.
 
-### Merging configurations
+## Merging configurations
 
-By default, `.numbering` enhances the current numbering configuration by merging the new configuration with the existing one,
-meaning that only the specified entries are updated, while the rest remain unchanged.
+By default, `.numbering` enhances the current numbering configuration by merging the new configuration with the existing one. This means only the specified entries are updated while the rest remain unchanged.
 
-To avoid merging, thus turning off numbering rules for unspecified entries, set the `merge:{no}` argument:
+To avoid merging and turn off numbering rules for unspecified entries, set the `merge:{no}` argument:
 
 ```yaml
 .numbering merge:{no}
   - figures: 1.1
 ```
 
-
-
-### Headings
+## Headings
 
 ```markdown
 .numbering
@@ -80,13 +76,13 @@ To avoid merging, thus turning off numbering rules for unspecified entries, set 
 ### Title   <!--  2.A  -->
 ```
 
-!(550)[Latex theme numbering](Numbering/headings-latex.png)  
+!(550)[Latex theme numbering](Numbering/headings-latex.png)
 
 !(550)[Latex theme table of contents](Numbering/toc-latex.png)
 
-#### Decorative headings
+### Decorative headings
 
-To prevent a heading from being numbered, append a `!` after the last `#` sign. For example `#!`, `##!`, `###!`, etc.
+To prevent a heading from being numbered, append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
 
 ```markdown
 .center
@@ -97,15 +93,13 @@ To prevent a heading from being numbered, append a `!` after the last `#` sign. 
 .loremipsum
 ```
 
-Decorative headings also don't appear in [table of contents](Table-of-contents.qd).
+Decorative headings also do not appear in the [table of contents](Table-of-contents.qd).
 
 !(550)[image](Numbering/decorative-heading.png)
 
+## Figures
 
-
-### Figures
-
-[Figures](Figure.qd) are numbered only if they feature a **caption**, which may also be empty.
+[Figures](Figure.qd) are numbered only if they have a **caption**, which may also be empty.
 
 ```markdown
 .numbering
@@ -114,29 +108,24 @@ Decorative headings also don't appear in [table of contents](Table-of-contents.q
 
 ## Title
 
-![Logo](quarkdown-icon.svg "The Quarkdown icon".qd)
+![Logo](quarkdown-icon.svg "The Quarkdown icon.")
 
 ### Title
 
-![Logo](quarkdown-icon.svg "".qd)
+![Logo](quarkdown-icon.svg "")
 
 ## Title
 
-![Logo](quarkdown-icon.svg "".qd)
+![Logo](quarkdown-icon.svg "")
 ```
 
 !(550)[Figure numbering with format 1.1](Numbering/figures-nested-format.png)
 
-
-
-When numbering elements, the amount of symbols in the format dictates the rules which cause the counters to reset.  
-The previous example, run with `figures: 1`, results in the following:
+When numbering elements, the number of symbols in the format dictates the rules that cause the counters to reset. The previous example, run with `figures: 1`, produces the following:
 
 !(550)[Figure numbering with format 1](Numbering/figures-flat-format.png)
 
-
-
-### Tables
+## Tables
 
 ```markdown
 .numbering
@@ -171,11 +160,9 @@ The previous example, run with `figures: 1`, results in the following:
 
 !(550)[Table numbering](Numbering/tables.png)
 
+## Equations
 
-
-### Equations
-
-[Math blocks](Math.qd) (equations) are numbered only if they feature a [cross-reference ID](Cross-references.qd).
+[Math blocks](Math.qd) (equations) are numbered only if they have a [cross-reference ID](Cross-references.qd).
 
 ```markdown
 .numbering
@@ -186,7 +173,7 @@ $ E = mc^2 $ {#energy}
 $ F = ma $ {#force}
 ```
 
-Conventionally, if the equation is not cross-referenced anywhere in the document, but you still want it to be numbered, `_` can be set as the ID:
+Conventionally, if the equation is not cross-referenced anywhere in the document but you still want it to be numbered, you can use `_` as the ID:
 
 ```markdown
 $ E = mc^2 $ {#_}
@@ -196,9 +183,7 @@ $ F = ma $ {#_}
 
 !(550)[Equation numbering](https://github.com/user-attachments/assets/fffeec24-fb30-40bf-8d20-6d85701a009e)
 
-
-
-### Code blocks
+## Code blocks
 
 ~~~markdown
 .numbering
@@ -218,11 +203,9 @@ fun main() {
 
 !(550)[Code blocks](https://github.com/user-attachments/assets/4ae8abca-1696-4745-af9c-b611fcb821ba)
 
+## Footnotes
 
-
-### Footnotes
-
-The numbering format of [footnotes](Footnotes.qd) is flat, meaning it only considers the leftmost symbol, and the rest is ignored.
+The numbering format of [footnotes](Footnotes.qd) is flat, meaning it only considers the leftmost symbol and ignores the rest.
 
 If not specified, footnotes format defaults to `1` (decimal).
 
@@ -235,15 +218,13 @@ Here is a footnote reference[^: First], and another one[^: Second].
 
 !(550)[Footnote numbering](Numbering/footnotes-roman.png)
 
+## Custom numbered elements
 
-
-### Custom numbered elements
-
-Along with built-in numerable elements we just discussed, Quarkdown additionally allows any element to be numbered if wrapped in a `.numbered` block.
+Along with the built-in numerable elements discussed above, Quarkdown allows any element to be numbered if wrapped in a `.numbered` block.
 
 The function accepts two arguments:
-1. A key string. The number of the element is counted across previous occurrences with the same key;
-2. A [lambda](Lambda.qd) block which takes the number as an argument, formatted according to the active numbering format.
+1. A key string. The element's number is counted across previous occurrences with the same key.
+2. A [lambda](Lambda.qd) block that takes the number as an argument, formatted according to the active numbering format.
 
 ```markdown
 .numbered {greetings}
@@ -251,8 +232,7 @@ The function accepts two arguments:
   **Hello!** This block has the number **.number**
 ```
 
-Executing the previous block will render an empty string in place of `number`.
-That's because we need to specify the numbering format for `greetings` in the `.numbering` call:
+Executing the previous block renders an empty string in place of `number` because you need to specify the numbering format for `greetings` in the `.numbering` call:
 
 ```yaml
 .numbering
@@ -288,14 +268,9 @@ Full example:
 
 !(600)[Custom numbering](Numbering/custom-numbered.png)
 
-
-
 ## Localization
 
-The localized name of the labeled element appear in captions if [`.doclang`](Document-metadata.qd) is set and the locale is supported.  
-For instance *Figure* and *Table* for the English locale, *Figura* and *Tabella* for Italian.
-
-
+The localized name of the labeled element appears in captions if [`.doclang`](Document-metadata.qd) is set and the locale is supported. For instance, *Figure* and *Table* for the English locale, *Figura* and *Tabella* for Italian.
 
 ## Themes
 
@@ -304,6 +279,5 @@ For instance *Figure* and *Table* for the English locale, *Figura* and *Tabella*
 !(550)[Minimal headings numbering](Numbering/minimal-headings.png)
 
 !(550)[Minimal ToC numbering](Numbering/minimal-toc.png)
-
 
 > `minimal` theme

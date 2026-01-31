@@ -1,25 +1,25 @@
 .docname {Page counter}
 .include {_Setup.qd}
 
-The **`.currentpage`** and **`.totalpages`** functions display, respectively, the current index (beginning from 1) of the page/slide the function call lies in and the total amount of pages/slides. They don't accept any argument.
+The **`.currentpage`** and **`.totalpages`** functions display, respectively, the current index (beginning from 1) of the page or slide where the function call appears and the total number of pages or slides. They do not accept any arguments.
 
-They are unsupported in `plain` documents, where the `-` placeholder is shown instead.
+These functions are unsupported in `plain` documents, where the `-` placeholder is shown instead.
 
 > [!NOTE]
-> These functions return visual elements (nodes), *not* numbers. Hence, it is not allowed to do, for example, `.sum {.currentpage} {3}`.
+> These functions return visual elements (nodes), *not* numbers. Therefore, you cannot perform operations like `.sum {.currentpage} {3}`.
 
-### Fixed page counter
+## Fixed page counter
 
-A page counter can be displayed on each page thanks to [page margin content](Page-margin-content.qd):
+You can display a page counter on each page using [page margin content](Page-margin-content.qd):
 
-```
+```markdown
 .pagemargin {bottomcenter}
   .currentpage / .totalpages
 ```
 
-### Resetting the page number
+## Resetting the page number
 
-The **`.resetpagenumber {from?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html} function allows overwriting the current page number at any point in a `paged` or `slides` document.
+The **`.resetpagenumber {from?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/resetpagenumber.html} function allows you to overwrite the current page number at any point in a `paged` or `slides` document.
 
 These changes are reflected in `.currentpage` and page numbers in the [table of contents](Table-of-contents.qd).
 

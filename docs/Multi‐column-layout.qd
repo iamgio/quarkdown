@@ -1,22 +1,22 @@
 .docname {Multi-column layout}
 .include {_Setup.qd}
 
-[**`.pageformat {columns}`**](Page-format.qd) applies a multi-column layout to each page, given that the value of `columns` is higher than 1.
+[**`.pageformat {columns}`**](Page-format.qd) applies a multi-column layout to each page when the value of `columns` is higher than 1.
 
 !(700)[Example](Multi‐column-layout/two-columns.png)
 
 > `.pageformat columns:{2}`
 
 > [!CAUTION]
-> Multi-layout column is yet unstable in `paged` documents and inconsistent across browsers (specially Safari).  
+> Multi-column layout is still unstable in `paged` documents and behaves inconsistently across browsers (especially Safari).
 > If you know how to improve the result via Paged.js, please open a PR.
 
 ## Span property
 
-When in a multi-column layout all elements, except for level 1-3 headings, are rendered within their own column.  
-It's possible to set some content to instead span across all columns of the layout by using the **`.fullspan`** block function.
+In a multi-column layout, all elements except for level 1-3 headings render within their own column.
+You can set some content to span across all columns of the layout by using the **`.fullspan`** block function.
 
-```
+```markdown
 ...
 
 .fullspan

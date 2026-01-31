@@ -1,22 +1,20 @@
 .docname {Variables}
 .include {_Setup.qd}
 
-**`.var {name} {value}`** defines a variable. `value` is a [dynamic value](Typing.qd), meaning it may be of any type.
+**`.var {name} {value}`** defines a variable. The `value` is a [dynamic value](Typing.qd), meaning it can be of any type.
 
-```
+```markdown
 .var {name} {Quarkdown}
 ```
 
-The variable can be accessed as a parameter-less function:
+You can access the variable as a parameter-less function:
 
-```
+```markdown
 Hello, **.name**!
 ```
 > Hello, **Quarkdown**!
 
-
-
-A variable can be reassigned, either via `.myvar {newvalue}` or `.var {myvar} {newvalue}`:
+You can reassign a variable either via `.myvar {newvalue}` or `.var {myvar} {newvalue}`:
 
 ```html
 .var {num} {5}
@@ -33,14 +31,12 @@ A variable can be reassigned, either via `.myvar {newvalue}` or `.var {myvar} {n
 >
 > 6
 
-
-
 As mentioned in [Syntax of a function call](Syntax-of-a-function-call.qd):
 > A body argument always refers to the last parameter of the signature [...]
 
 This allows the variable's value to be either inline or block:
 
-```
+```markdown
 .var {myrow}
   .row gap:{2cm}
     A

@@ -1,22 +1,22 @@
 .docname {Declaring functions}
 .include {_Setup.qd}
 
-Functions can also be declared in Quarkdown sources via the **`.function`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html} function (everything is a function!).
+You can declare functions in Quarkdown sources using the **`.function`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html} function (in Quarkdown, everything is a function!).
 
 It accepts two arguments: the function name and its body.
 
-```
+```markdown
 .function {myfunc}
   Hello, world!
 ```
 
-It can then be called through a normal function call:
+You can then call it through a normal function call:
 
 ```html
 .myfunc <!-- Hello, world! -->
 ```
 
-Note that there are no return statements: every reached statement is part of the output.
+Note that there are no return statements. Every reached statement becomes part of the output.
 
 ```html
 .function {myfunc}
@@ -29,23 +29,23 @@ Note that there are no return statements: every reached statement is part of the
 
 ## Parameters
 
-The body parameter is a [lambda](Lambda.qd): each parameter of the function is as a parameter of the lambda block. Each argument can be accessed within the function body as a [variable](Variables.qd) (which, in Quarkdown, is basically a function with no parameters).
+The body parameter is a [lambda](Lambda.qd), and each parameter of the function is a parameter of the lambda block. You can access each argument within the function body as a [variable](Variables.qd), which in Quarkdown is essentially a function with no parameters.
 
 ```html
 .function {greet}
   to from:
   Hello, .to from .from!
- 
+
 .greet {world} {John} <!-- Hello, world from John! -->
 ```
 
-Arguments can be named as well to improve readability:
+You can name arguments to improve readability:
 
 ```html
 .greet {world} from:{John}
 ```
 
-Any Markdown content can be returned:
+Functions can return any Markdown content:
 
 ```html
 .function {greet}
@@ -53,9 +53,9 @@ Any Markdown content can be returned:
   **Hello, .to** from .from!
 ```
 
-Quarkdown is [weakly typed](Typing.qd) and any kind of value can be returned:
+Quarkdown is [weakly typed](Typing.qd), so functions can return any type of value:
 
-```
+```markdown
 .function {area}
   width height:
   .multiply {width} by:{height}
@@ -75,7 +75,7 @@ The area of the rectangle is **.area {4} {2}**.
 
 ### Optional parameters
 
-If a function parameter ends in a question mark `?`, it becomes optional. If the corresponding argument is not provided, it will be assigned the value [`None`](None.qd).
+If a function parameter ends with a question mark `?`, it becomes optional. When you do not provide the corresponding argument, it receives the value [`None`](None.qd).
 
 ```html
 .function {greet}
@@ -87,7 +87,7 @@ If a function parameter ends in a question mark `?`, it becomes optional. If the
 .greet {world} {John} <!-- Hello, world from John -->
 ```
 
-`None` features several interesting [operations](None.qd#operations), such as placeholders via `.otherwise` which emulate the behavior of default parameters.
+`None` provides several useful [operations](None.qd#operations), such as `.otherwise` for placeholders that emulate default parameter values.
 
 ```html
 .function {greet}

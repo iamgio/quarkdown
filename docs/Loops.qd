@@ -4,8 +4,8 @@
 ## For-each
 
 The main type of loop is provided by the **`.foreach`** function, which accepts:
-1. An [`Iterable`](Iterable.qd) value;
-2. A 1-parameter lambda block, where the argument is the current item being iterated.
+1. An [`Iterable`](Iterable.qd) value
+2. A 1-parameter lambda block, where the argument is the current item being iterated
 
 ```markdown
 .foreach {2..4}
@@ -18,10 +18,7 @@ The main type of loop is provided by the **`.foreach`** function, which accepts:
 >
 > The number is: **4**
 
-
-
-The function returns an ordered iterable **collection** of the same size of the input one, containing the evaluation of the lambda for each iterated value.  
-Thus, the function can be used as an expression:
+The function returns an ordered iterable **collection** of the same size as the input, containing the evaluation of the lambda for each iterated value. This means the function can be used as an expression:
 
 ```html
 .row alignment:{spacearound}
@@ -29,8 +26,6 @@ Thus, the function can be used as an expression:
     *.1* <!-- .1 is an implicit lambda argument: refers to the first parameter -->
 ```
 > !(600)[Result 1](Loops/foreach-range.png)
-
-
 
 Any iterable value is accepted. Here we use a Markdown list:
 
@@ -49,9 +44,7 @@ Any iterable value is accepted. Here we use a Markdown list:
 
 See [*Iterable*](Iterable.qd) for all possible ways of defining an iterable value.
 
-
-
-The type of iterated elements is preserved (see [*Typing*](Typing.qd) for more):
+The type of iterated elements is preserved (see [*Typing*](Typing.qd) for more information):
 
 ```markdown
 .row alignment:{spacearound}
@@ -61,13 +54,11 @@ The type of iterated elements is preserved (see [*Typing*](Typing.qd) for more):
 ```
 > !(600)[Result 3](Loops/foreach-math.png)
 
-
-
 ## Repeat
 
 The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
 
-```
+```markdown
 .repeat {3}
   .1
 ```
@@ -76,4 +67,3 @@ The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
 > 2
 >
 > 3
-

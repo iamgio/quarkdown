@@ -3,27 +3,27 @@
 
 .css
     h1 { opacity: 0; height: 0; margin: 0; padding: 0; }
-    
+
     figure { margin: 72px 0; }
 
 ![Quarkdown](assets/banner-light.svg)
 
-## Welcome to the Quarkdown wiki!
+## Welcome to the Quarkdown Wiki
 
-Use the sidebar to discover how-to guides and behind-the-scenes information.
+Use the sidebar to explore how-to guides and learn about the inner workings of Quarkdown.
 
 ### Documentation
 
-This wiki is designed to be ***complementary* to the project documentation**, available at [quarkdown.com/docs](https://quarkdown.com/docs/quarkdown-stdlib).  
-- The documentation provides comprehensive details about functions, their input and their output;
-- This wiki, on the other hand, is supposed to be a user-centered collection of features and their use cases.
+This wiki complements the **project documentation** available at [quarkdown.com/docs](https://quarkdown.com/docs/quarkdown-stdlib).
+While the documentation provides comprehensive details about functions, their inputs, and their outputs,
+this wiki focuses on practical, user-centered guides that show you how to use Quarkdown's features in real-world scenarios.
 
-When browsing this wiki, in case the documentation is particularly interesting for a specific topic, you will find a .docslink {quarkdown-stdlib} link.
+When a topic has particularly relevant documentation, you will find a .docslink {quarkdown-stdlib} link that takes you directly to it.
 
 ### Other resources
 
-- .repolink {README} {blob/main/README.md#installation} for installation and getting started.
-- [Demo presentation](https://iamgio.eu/quarkdown/demo) built in Quarkdown.
-- [Discussions](https://github.com/iamgio/quarkdown/discussions) to ask questions and show your creations.
-- [quarkdown-test](https://github.com/iamgio/quarkdown/tree/main/quarkdown-test/src/test/kotlin/com/quarkdown/test): this module tests the correct output of full Quarkdown programs, so you can find useful and complete examples here.
-- Since the Quarkdown flavor is an extension of CommonMark/GFM, guides here won't cover standard Markdown syntax. Please refer to other resources, such as [markdownguide ↗](https://www.markdownguide.org/basic-syntax), to know more about Markdown.
+- .repolink {README} {blob/main/README.md#installation} covers installation and getting started.
+- The [demo presentation](https://iamgio.eu/quarkdown/demo) showcases what you can build with Quarkdown.
+- Visit the [Discussions](https://github.com/iamgio/quarkdown/discussions) page to ask questions and share your creations.
+- The [quarkdown-test](https://github.com/iamgio/quarkdown/tree/main/quarkdown-test/src/test/kotlin/com/quarkdown/test) module contains complete, working examples that you can use as reference.
+- Since Quarkdown extends CommonMark and GFM, this wiki does not cover standard Markdown syntax. For Markdown basics, see [markdownguide.org](https://www.markdownguide.org/basic-syntax).

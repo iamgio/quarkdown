@@ -1,77 +1,60 @@
 .docname {Document types}
 .include {_Setup.qd}
 
-The [`.doctype`](Document-metadata.qd) function defines the type of document based on different use cases. Each document type has its own set of features and limitations.
-
-
+The [`.doctype`](Document-metadata.qd) function defines the type of document based on different use cases. Each document type offers its own set of features and behaviors tailored to specific output formats.
 
 ## Plain (`plain`)
 
-The layout of a plain document is linear, with no page breaks, and the content flows continuously.
+A plain document has a linear layout with no page breaks, allowing content to flow continuously from top to bottom. Thanks to its responsive design, this type works well for websites and knowledge management documents, resembling the style of tools such as Notion or Obsidian.
 
-Thanks to its responsiveness, it's the optimal choice for websites and knowledge management documents, resembling the style of tools such as Notion or Obsidian.
-
-The document is composed of three main elements:
-- A central content area;
-- Two side margin areas.
+The document consists of three main elements:
+- A central content area
+- Two side margin areas
 
 !(1000)[Plain](Document-types/plain.png)
 
-#### Margin content
+### Margin content
 
-[Page margin content](Page-margin-content.qd) is displayed in a fixed position, not affected by scrolling.
+[Page margin content](Page-margin-content.qd) appears in a fixed position that remains visible as you scroll.
 
-#### Footnotes
+### Footnotes
 
-[Footnotes](Footnotes.qd) are rather sidenotes in this document type, as they are displayed in the right margin area, next to their first reference.
+[Footnotes](Footnotes.qd) appear as sidenotes in this document type, positioned in the right margin area next to their first reference. On mobile devices, footnotes appear at the end of the page instead.
 
-When in mobile view, footnotes are displayed at the end of the page.
+### PDF
 
-#### PDF
-
-When exporting to PDF, the output artifact contains a single page that fits the whole content.
-
-
+When you export to PDF, the output artifact contains a single page that fits the entire content.
 
 ## Paged (`paged`)
 
-A paged document is a traditional document with content divided into pages.
-
-Page breaks happen either [explicitly](Page-break.qd) or implicitly in case of long content.
+A paged document follows a traditional layout with content divided into separate pages. Page breaks occur either [explicitly](Page-break.qd) through manual insertion or implicitly when content exceeds the available space.
 
 !(1000)[Paged](Document-types/paged.png)
 
-#### Margin content
+### Margin content
 
-[Page margin content](Page-margin-content.qd) is displayed on each page in a dedicated area.
+[Page margin content](Page-margin-content.qd) appears on each page in a dedicated area.
 
-#### Footnotes
+### Footnotes
 
-[Footnotes](Footnotes.qd) are displayed at the bottom of the first reference's page, in a dedicated area.
-
-
+[Footnotes](Footnotes.qd) appear at the bottom of the page where their first reference occurs, in a dedicated area.
 
 ## Slides (`slides`)
 
-A slides document is designed for presentations, with a layout optimized for displaying content one slide at a time.
-
-Unless specified by the layout [theme](Themes.qd),
-slides center their content horizontally.
-
-Line breaks are only triggered [explicitly](Page-break.qd).
+A slides document is designed for presentations, with a layout optimized for displaying content one slide at a time. Unless specified by the layout [theme](Themes.qd), slides center their content horizontally. Slide breaks occur only through [explicit insertion](Page-break.qd).
 
 !(1000)[Slides](Document-types/slides.png)
 
-#### Margin content
+### Margin content
 
-[Page margin content](Page-margin-content.qd) is displayed on each slide, but not in a dedicated area. It could potentially overlap actual content.
+[Page margin content](Page-margin-content.qd) appears on each slide without a dedicated area, which means it could potentially overlap the actual content.
 
-#### Footnotes
+### Footnotes
 
-[Footnotes](Footnotes.qd) are displayed at the bottom of the first reference's slide, but not in a dedicated area.
+[Footnotes](Footnotes.qd) appear at the bottom of the slide where their first reference occurs, without a dedicated area.
 
-#### PDF
+### PDF
 
-When exporting to PDF:
-- Each slide is a page of the output artifact;
-- Each [fragment](Slides-fragment.qd) state is displayed on a separate page.
+When you export to PDF:
+- Each slide becomes a separate page in the output artifact
+- Each [fragment](Slides-fragment.qd) state appears on its own page

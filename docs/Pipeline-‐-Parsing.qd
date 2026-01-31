@@ -7,7 +7,7 @@
 
 > Main packages: [`core.parser`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser), [`core.ast`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast)
 
-Going on with our metaphor introduced in [Lexing](Pipeline-‐-Lexing.qd), once the nouns, verbs and adjectives are extracted from a sentence, our brain is responsible for linking them together to build some information out of it.
+Continuing with the metaphor introduced in [Lexing](Pipeline-‐-Lexing.qd), once the nouns, verbs, and adjectives are extracted from a sentence, our brain is responsible for linking them together to build information out of them.
 
 The parser takes the sequence of tokens and organizes them into a tree structure called an *Abstract Syntax Tree* (AST), which defines the relationships between different parts of the document. Each element of the tree is called a *Node*.
 
@@ -41,16 +41,16 @@ Output AST:
         - `Text("Item 1")`
     - `ListItem`
       - `Paragraph`
-        - `Text("Item 2")` 
+        - `Text("Item 2")`
 
 ---
 
-The *lexing* stage produces just the outer blocks, in this example a `HeadingToken`, a `ParagraphToken` and an `UnorderedListToken`.  
+The *lexing* stage produces just the outer blocks, which in this example are a `HeadingToken`, a `ParagraphToken`, and an `UnorderedListToken`.
 
-In order to gain nested information, the parser analyzes each token and starts searching in deep for nested blocks and inlines.
-- For each block token, triggers the lexing stage on its inner content (*lexeme*)
-- Extracted the inner tokens, they undergo the parsing stage again
-- This continues until no more nested tokens are left. This is called **recursive parsing**, visualized in the following figure:
+To gain nested information, the parser analyzes each token and starts searching in depth for nested blocks and inlines.
+- For each block token, the parser triggers the lexing stage on its inner content (*lexeme*)
+- Once the inner tokens are extracted, they undergo the parsing stage again
+- This process continues until no more nested tokens remain. This is called **recursive parsing**, visualized in the following figure:
 
 !(200)[Recursive parsing](Pipeline-‐-Parsing/recursive-parsing.svg)
 

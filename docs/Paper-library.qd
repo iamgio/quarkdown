@@ -1,7 +1,7 @@
 .docname {Paper library}
 .include {_Setup.qd}
 
-The built-in [`paper`](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper) library is written in Quarkdown and adds support to typical elements of scientific papers in a LaTeX fashion.
+The built-in [`paper`](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper) library is written in Quarkdown and adds support for typical elements of scientific papers in a LaTeX fashion.
 
 The library features the following components:
 - Abstract
@@ -12,22 +12,22 @@ The library features the following components:
   - Proofs
 
 > [!NOTE]
-> The supported languages are aligned to the ones supported by Quarkdown's core: currently English and Italian. See [*Built-in localization*](Localization.qd#built-in-localization) for further information.
+> The supported languages align with those supported by Quarkdown's core: currently English and Italian. See [*Built-in localization*](Localization.qd#built-in-localization) for further information.
 
 
 
 The first step is to [import](Importing-external-libraries.qd) the library:
-```
+```markdown
 .include {paper}
 ```
 
 ### Abstract
 
-**`.abstract`** can generate the layout for a titled *abstract* block. Its content goes in its block argument:
+**`.abstract`** generates the layout for a titled *abstract* block. Its content goes in the block argument:
 
 ```markdown
 .abstract
-    This is my *abstract*! Here goes the summary of the document.  
+    This is my *abstract*! Here goes the summary of the document.
     .loremipsum
 
 This is not part of the abstract, instead.
@@ -43,7 +43,7 @@ The alignment of the title defaults to center and can be changed via `.abstracta
 .abstractalignment {start}
 
 .abstract
-    This is my *abstract*! Here goes the summary of the document.  
+    This is my *abstract*! Here goes the summary of the document.
     .loremipsum
 ```
 
@@ -53,13 +53,13 @@ The alignment of the title defaults to center and can be changed via `.abstracta
 
 ### Titled blocks
 
-Any of the following blocks can be created:
+You can create any of the following blocks:
 - Definition via **`.definition`**
 - Lemma via **`.lemma`**
 - Theorem via **`.theorem`**
 - Proof via **`.proof`**
 
-All the mentioned functions take one block argument which defines the content:
+All the mentioned functions take one block argument that defines the content:
 
 ```latex
 .definition
@@ -73,7 +73,7 @@ All the mentioned functions take one block argument which defines the content:
 
 The default title suffix is `.` (dot) and can be customized via `.paperblocksuffix {suffix}`:
 
-```
+```markdown
 .paperblocksuffix {:}
 ```
 
@@ -81,10 +81,10 @@ The default title suffix is `.` (dot) and can be customized via `.paperblocksuff
 
 
 
-Defining a [numbering format](Numbering.qd) results in the blocks of that type to be numbered.  
+Defining a [numbering format](Numbering.qd) causes the blocks of that type to be numbered.
 The format names are plural: `definitions`, `lemmas`, `theorems`, `proofs`.
 
-```
+```markdown
 .numbering
     - definitions: 1.a
     - lemmas: i
@@ -107,7 +107,7 @@ The format names are plural: `definitions`, `lemmas`, `theorems`, `proofs`.
 
 Proofs also feature a special *end-of-proof* character, which defaults to `∎`.
 
-```
+```markdown
 .theorem
     .loremipsum
 
@@ -117,11 +117,10 @@ Proofs also feature a special *end-of-proof* character, which defaults to `∎`.
 
 !(600)[Proof](Paper-library/proof.png)
 
-The end-of-proof can be customized via `.proofend {string}`:
+You can customize the end-of-proof character via `.proofend {string}`:
 
-```
+```markdown
 .proofend {😎}
 ```
 
 !(600)[Proof character customization](Paper-library/proof-custom-end.png)
-

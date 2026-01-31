@@ -1,18 +1,19 @@
 .docname {Document metadata}
 .include {_Setup.qd}
 
-Information about the document can be set via functions. These functions should conventionally be called at the beginning of a Quarkdown source.
+You can set document information using the following functions. By convention, you should call these functions at the beginning of your Quarkdown source.
 
 | Name | Accepts | Default |
 |------|---------|---------|
-| `.docname`   | The name of the document. | `Untitled Quarkdown Document` |
-| `.docdescription` | A short description of the document. | (empty)       |
+| `.docname` | The name of the document. | `Untitled Quarkdown Document` |
+| `.docdescription` | A short description of the document. | (empty) |
 | `.docauthors` | The authors of the document. | (empty) |
 | `.dockeywords` | Keywords associated with the document, as an [iterable](Iterable.qd). | (empty) |
-| `.doctype`   | Type of output document: `plain`, `slides`, `paged`. See [*Document types*](Document-types.qd) for more information.   | `plain` |
-| `.doclang`   | <p>Language of the document: either a case-insensitive English full name (e.g. `English`, `Italian`, `French (Canada)`) or a IETF BCP 47 language tag (e.g. `en`, `it`, `fr-CA`).</p><p>This defines:<ul><li>The target locale to localize content to.</li><li>Locale-specific styles, such as a Chinese font loaded only for Chinese locales.<li>HTML's `lang` attribute, which enables hyphenation and enhances accessibility.</li></ul></p><p>See [Localization](Localization.qd) for more.</p> | (none) |
+| `.doctype` | Type of output document: `plain`, `slides`, or `paged`. See [Document types](Document-types.qd) for more information. | `plain` |
+| `.doclang` | The language of the document: either a case-insensitive English full name (such as `English`, `Italian`, `French (Canada)`) or an IETF BCP 47 language tag (such as `en`, `it`, `fr-CA`). This setting defines the target locale for content localization, locale-specific styles like Chinese fonts for Chinese locales, and the HTML `lang` attribute for hyphenation and accessibility. See [Localization](Localization.qd) for more. | (none) |
 
-All these functions have a *'modify or echo'* behavior: if the value is not passed as an argument, then they return the previously set value. Example:
+All these functions have a *modify or echo* behavior: if you call them without an argument, they return the previously set value:
+
 ```markdown
 .docname {Quarkdown}
 
@@ -22,17 +23,17 @@ This document is called **.docname**!
 
 ## Authors
 
-`.docauthors` sets the document's authors.
+The `.docauthors` function sets the document's authors.
 
-```
+```markdown
 .docauthors
   - John Doe
   - Jane Doe
 ```
 
-The function takes a [Dictionary](Dictionary.qd) as its value, where each key is the author's name, while values are nested dictionaries which represent the author's information. No constraints are set and any information entry can be used.
+The function takes a [Dictionary](Dictionary.qd) as its value, where each key is the author's name and values are nested dictionaries containing author information. There are no constraints on the information entries you can use.
 
-```
+```markdown
 .docauthors
   - John Doe
     - email: johndoe@example.com
@@ -42,10 +43,10 @@ The function takes a [Dictionary](Dictionary.qd) as its value, where each key is
     - company: GitHub
 ```
 
-Calling the same function with no arguments returns the dictionary itself, which may for example be iterated on to automatically display the authors according to a certain layout. The following example takes advantage of *pair [destructuring](Destructuring.qd)*:
+Calling the function without arguments returns the dictionary itself, which you can iterate over to display authors according to a custom layout. The following example uses pair [destructuring](Destructuring.qd):
 
-```
-.foreach {.docauthors} 
+```markdown
+.foreach {.docauthors}
     name info:
     .row gap:{1cm}
         **.name**
@@ -58,15 +59,15 @@ Calling the same function with no arguments returns the dictionary itself, which
 
 ### Single author
 
-If the document has just one author and no further information is needed, the **`.docauthor {name}`** function is a valid shorthand.  
+If the document has just one author and you don't need additional information, use **`.docauthor {name}`** as a shorthand.
 
-Be the author defined via `.docauthors` or `.docauthor`, calling `.docauthor` with no arguments returns the only author's name.
+Whether you define the author using `.docauthors` or `.docauthor`, calling `.docauthor` without arguments returns the author's name.
 
 ## Keywords
 
-`.dockeywords` sets the document's keywords as an [iterable](Iterable.qd).
+The `.dockeywords` function sets the document's keywords as an [iterable](Iterable.qd).
 
-When exporting the document as HTML, these keywords are used for search engine optimization (SEO).
+When you export the document as HTML, these keywords are used for search engine optimization (SEO).
 
 ```yaml
 .dockeywords

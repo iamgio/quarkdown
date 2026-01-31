@@ -1,20 +1,20 @@
 .docname {Table of contents}
 .include {_Setup.qd}
 
-A table of contents is a quick summary of the document, where links to headings are displayed in a visual hierarchy.
+A table of contents is a quick summary of the document where links to headings are displayed in a visual hierarchy.
 
 - `paged` and `slides` documents also display the corresponding page number.
-- `slides` documents constrain the maximum height, making it vertically scrollable.
+- `slides` documents constrain the maximum height, making the table of contents vertically scrollable.
 
-A ToC can be displayed through the **`.tableofcontents`** function, with the following optional parameters:
+You can display a table of contents through the **`.tableofcontents`** function, with the following optional parameters:
 
 | Parameter | Description | Accepts | Default |
 |-----------|-------------|---------|---------|
-| `title` | Title that precedes the ToC.<br />If unset, it's automatically localized. | Inline content | Automatically localized if [`.doclang`](Document-metadata.qd)'s locale is supported. (e.g. `Table of Contents` for English) |
-| `maxdepth` | Maximum level of headings to display.<br />e.g. `maxdepth = 2` collects `# This` and `## This`, but not `### This`. | `Integer` | `3` |
-| `focus` | If set, adds focus to the item with the same text as this argument.<br/>Inline style (strong, emphasis, etc.) is ignored when comparing the text content. | [Inline content](Markdown-content.qd#inline-content) | (none) |
+| `title` | Title that precedes the table of contents. If unset, it is automatically localized. | Inline content | Automatically localized if [`.doclang`](Document-metadata.qd)'s locale is supported (e.g., `Table of Contents` for English) |
+| `maxdepth` | Maximum level of headings to display. For example, `maxdepth = 2` collects `# This` and `## This`, but not `### This`. | `Integer` | `3` |
+| `focus` | If set, adds focus to the item with the same text as this argument. Inline style (strong, emphasis, etc.) is ignored when comparing the text content. | [Inline content](Markdown-content.qd#inline-content) | (none) |
 
-```
+```markdown
 .tableofcontents maxdepth:{2}
 
 ## A
@@ -44,9 +44,7 @@ A ToC can be displayed through the **`.tableofcontents`** function, with the fol
 
 !(550)[Table of contents](Table-of-contents/basic.png)
 
-
-
-[Layout themes](Themes.qd) greatly influence the look of table of contents:
+[Layout themes](Themes.qd) greatly influence the look of the table of contents:
 
 !(550)[Table of contents with minimal theme](Table-of-contents/minimal-theme.png)
 
@@ -54,41 +52,37 @@ A ToC can be displayed through the **`.tableofcontents`** function, with the fol
 
 ## Ignoring specific headings
 
-[Decorative headings](Numbering.qd#decorative-headings) are not numbered and do not appear in table of contents.  
-A heading is marked as decorative if a `!` is appended to the last `#` sign. For example `#!`, `##!`, `###!`, etc.
+[Decorative headings](Numbering.qd#decorative-headings) are not numbered and do not appear in the table of contents. A heading is marked as decorative if a `!` is appended to the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
 
 ```markdown
 ##! A decorative heading
 ```
 
-Decorative headings can appear in table of contents if the optional `includeunnumbered` parameter is enabled:
+Decorative headings can appear in the table of contents if the optional `includeunnumbered` parameter is enabled:
 
-```
+```markdown
 .tableofcontents includeunnumbered:{yes}
 ```
 
 ## Custom numbering
 
-A custom numbering format can be set via `.numbering`. See [Numbering](Numbering.qd) for more.
+You can set a custom numbering format via `.numbering`. See [Numbering](Numbering.qd) for more information.
 
-## Focusing & markers
+## Focusing and markers
 
 If `focus:{A.B}` is added to the previous example:
 
 !(550)[Table of contents with focus](Table-of-contents/focused.png)
 
+Focusing can be particularly useful in slides with mini tables of contents at the beginning of each new chapter. In that case, consider defining a function like this:
 
-Focusing may be particularly useful in slides with mini-ToCs at the beginning of each new chapter.  
-In that case you may consider defining a function like this:
-
-```
+```markdown
 .function {chapter}
     name:
     .tableofcontents maxdepth:{0} focus:{.name}
     .marker {.name}
 ```
 
-That can be invoked by `.chapter {My chapter}`.
+You can invoke it by `.chapter {My chapter}`.
 
-What `.marker` does is creating an invisible level-0 heading (which isn't usually possible with the standard `#`-based heading syntax).  
-Setting `maxdepth:{0}` displays only markers in the ToC, ignoring other headings. 
+The `.marker` function creates an invisible level-0 heading (which is not normally possible with the standard `#`-based heading syntax). Setting `maxdepth:{0}` displays only markers in the table of contents, ignoring other headings.

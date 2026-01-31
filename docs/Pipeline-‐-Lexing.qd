@@ -7,13 +7,13 @@
 
 > Main packages: [`core.lexer`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/lexer)
 
-Lexing is like breaking down a sentence into its individual words before figuring out the meaning of the sentence. Imagine you’re reading a paragraph, and before understanding the message, you first recognize individual words like nouns, verbs, and punctuation.
+Lexing is like breaking down a sentence into its individual words before figuring out the meaning of the sentence. Imagine you are reading a paragraph, and before understanding the message, you first recognize individual words like nouns, verbs, and punctuation.
 
-In Quarkdown, the lexing process scans a source file, which is nothing but a sequence of characters, and splits it into small pieces called **tokens**. Each token represents a different element, like a headings, a paragraph, or a bold text, and stores basic information like its type, its position in the text, and its textual content (*lexeme*).
+In Quarkdown, the lexing process scans a source file, which is nothing but a sequence of characters, and splits it into small pieces called **tokens**. Each token represents a different element, like a heading, a paragraph, or bold text, and stores basic information such as its type, its position in the text, and its textual content (*lexeme*).
 
 Markdown recognizes two macro-categories of tokens: **block** tokens and **inline** tokens. The difference is based on how these elements are structured in the document:
 
-- Blocks are sections that define the outer structure of a document. For example a paragraph, a list, a heading, a code block, or a quote.
+- Blocks are sections that define the outer structure of a document. For example, a paragraph, a list, a heading, a code block, or a quote.
 
   ```markdown
   # A heading
@@ -28,7 +28,7 @@ Markdown recognizes two macro-categories of tokens: **block** tokens and **inlin
 
   !(500)[Blocks](Pipeline-‐-Lexing/blocks-diagram.svg)
 
-- Inlines are elements that appear inside blocks and define, most commonly, textual features such as formatting. For example bold, italics, monospaced, links, images.
+- Inlines are elements that appear inside blocks and define, most commonly, textual features such as formatting. For example, bold, italics, monospaced, links, and images.
 
   ```markdown
   A **formatted** _text_.
@@ -38,6 +38,6 @@ To accomplish this separation, two distinct lexers are supplied: a block lexer a
 
 **Function calls** are extracted both as blocks and inlines, with just a [few differences](Syntax-of-a-function-call.qd#block-vs-inline-function-calls) between them.
 
-At the beginning, only the block lexer is invoked. Once the source is broken down into its outer blocks, they are passed to the parser which is delegated to search for nested information.
+At the beginning, only the block lexer is invoked. Once the source is broken down into its outer blocks, they are passed to the parser, which is delegated to search for nested information.
 
 *See next: [Parsing](Pipeline-‐-Parsing.qd)*

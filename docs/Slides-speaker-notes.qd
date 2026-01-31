@@ -3,7 +3,7 @@
 
 Speaker notes are helpful tools for remembering talking points, reminders, or extra details while presenting.
 
-Calling the **`.speakernote`** function will add a speaker note to the current slide. It accepts a block of any kind of content, and multiple speaker notes can be added to the same slide.
+Calling the **`.speakernote`** function adds a speaker note to the current slide. The function accepts a block of any kind of content, and you can add multiple speaker notes to the same slide.
 
 ```markdown
 .speakernote
@@ -12,7 +12,7 @@ Calling the **`.speakernote`** function will add a speaker note to the current s
 
 !(1000)[image](Slides-speaker-notes/speaker-view.png)
 
-By default, speaker notes are displayed only when the document is viewed in the **speaker view**, which can be enabled by pressing the **`S`** key while viewing the HTML presentation.
+By default, speaker notes are displayed only when the document is viewed in the **speaker view**, which you can enable by pressing the **`S`** key while viewing the HTML presentation.
 
 > [!NOTE]
 >
@@ -27,5 +27,5 @@ Additionally, notes may be displayed outside of the speaker view, and also in ex
   !(1000)[Notes in regular presentation](Slides-speaker-notes/notes-html.png)
 
 - PDF:
-  
+
   !(1000)[Notes in PDF](Slides-speaker-notes/notes-pdf.png)

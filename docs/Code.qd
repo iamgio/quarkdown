@@ -1,32 +1,32 @@
 .docname {Code}
 .include {_Setup.qd}
 
-A block of code can be created as the standard Markdown specification allows, by either a 4-spaces/1-tab indentation or a delimitation of 3 backticks/tildes.
+You can create code blocks using the standard Markdown specification: either with 4-space or 1-tab indentation, or with triple backticks or tildes.
 
-However, Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html} block function, so **what's the difference**?
+Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html} block function. Here's how it differs from standard code blocks:
 
-### `.code` vs. standard code block
+## `.code` vs. standard code blocks
 
-#### Content processing
-- Standard code blocks don't allow any processing of their content, which is instead rendered as-is;
-- `.code`'s body parameter accepts any Quarkdown string, making it possible to **evaluate functions** before displaying their output as code.  
-  This can be extremely useful when using `.code` in combination with [`.read`](File-data.qd) to load a code snippet from file:
-  ```
-  .code
-    .read {Point.java}
-  ```
+### Content processing
 
-#### Language specification
-- Standard fenced code blocks define their language right after the starter delimiter (e.g. ` ```markdown `);
-- `.code` elements define their language through the optional `lang` argument (e.g. `.code {markdown}` or `.code lang:{markdown}`)
+Standard code blocks render their content as-is without any processing. The `.code` function, on the other hand, accepts any Quarkdown string as its body parameter, which means you can **evaluate functions** before displaying their output as code. This is particularly useful when combining `.code` with [`.read`](File-data.qd) to load a code snippet from a file:
 
-#### Line numbers
-- Standard code blocks always show line numbers by default;
-- `.code` allows toggling line numbers via the optional `linenumbers` [`Boolean`](Boolean.qd) argument, which defaults to `true`.
+```markdown
+.code
+  .read {Point.java}
+```
 
-#### Focused lines
-`.code` allows focusing a [`Range`](Range.qd) of lines (beginning from `1`).  
-Line numbers are required to be enabled in order for this to work, due to the internal implementation.
+### Language specification
+
+Standard fenced code blocks specify their language right after the opening delimiter, for example ` ```markdown `. The `.code` function specifies the language through the optional `lang` argument, for example `.code {markdown}` or `.code lang:{markdown}`.
+
+### Line numbers
+
+Standard code blocks always show line numbers by default. The `.code` function lets you toggle line numbers using the optional `linenumbers` [`Boolean`](Boolean.qd) argument, which defaults to `true`.
+
+### Focused lines
+
+The `.code` function allows you to focus on a [`Range`](Range.qd) of lines, starting from `1`. Line numbers must be enabled for this feature to work.
 
 ```java
 .code {java} focus:{8..10}
@@ -47,7 +47,6 @@ Line numbers are required to be enabled in order for this to work, due to the in
 
 
 
-### Inline code
+## Inline code
 
-Alongside with `.code` as a dynamic alternative to triple backticks (`` ``` ``),
-**`.codespan {text}`** can be used as a dynamic alternative to inline backticks (`` `text` ``), allowing function calls within its content.
+Just as `.code` is a dynamic alternative to triple backticks (`` ``` ``), **`.codespan {text}`** is a dynamic alternative to inline backticks (`` `text` ``). This allows function calls within its content.

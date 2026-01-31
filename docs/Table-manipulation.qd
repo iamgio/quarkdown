@@ -6,7 +6,7 @@ The following table operations can affect not only plain Markdown tables, but al
 <details>
 <summary>CSV example</summary>
 
-```
+```markdown
 .tablesort {2} order:{descending}
     .csv {people.csv}
 ```
@@ -22,7 +22,7 @@ The **`.tablesort`** function sorts a table based on the values of a specific co
 | `column`  | Index of the column, starting from 1. | 1 to number of columns.             |
 | `order`   | Sorting order.                        | `ascending` (default), `descending` |
 
-```
+```markdown
 .tablesort {2} order:{descending}
     | Name | Age | City |
     |------|-----|------|
@@ -31,7 +31,7 @@ The **`.tablesort`** function sorts a table based on the values of a specific co
     | Mike | 19  | CHI  |
 ```
 > Result:
-> ```
+> ```markdown
 > | Name | Age | City |
 > |------|-----|------|
 > | Lisa | 32  | LA   |
@@ -39,9 +39,9 @@ The **`.tablesort`** function sorts a table based on the values of a specific co
 > | Mike | 19  | CHI  |
 > ```
 
-The sorting follows the most natural way, for humans, to sort strings (*alphanumeric* sorting):
+The sorting follows the most natural way for humans to sort strings (*alphanumeric* sorting):
 
-```
+```markdown
 .tablesort {2}
     |   Item   | Price |
     |----------|-------|
@@ -51,15 +51,13 @@ The sorting follows the most natural way, for humans, to sort strings (*alphanum
     | Notebook | $3    |
 ```
 > Result:
-> ```
+> ```markdown
 > |   Item   | Price |
 > |----------|-------|
 > | Eraser   | $0.50 |
 > | Pencil   | $1    |
 > | Notebook | $3    |
 > | Backpack | $20   |
-
-
 
 ## Filter rows
 
@@ -70,7 +68,7 @@ The **`.tablefilter`** function keeps or removes rows based on the values of a s
 | `column`  | Index of the column, starting from 1.                                                                                 | 1 to number of columns.                                               |
 | `filter`  | Lambda that returns whether each row should be kept, with the value of its cell in the corresponding column as input. | [`Dynamic`](Typing.qd) -> [`Boolean`](Boolean.qd) [lambda](Lambda.qd) |
 
-```
+```markdown
 .tablefilter {2} {@lambda x: .x::isgreater {20}}
     | Name | Age | City |
     |------|-----|------|
@@ -79,14 +77,12 @@ The **`.tablefilter`** function keeps or removes rows based on the values of a s
     | Mike | 19  | CHI  |
 ```
 > Result:
-> ```
+> ```markdown
 > | Name | Age | City |
 > |------|-----|------|
 > | John | 25  | NY   |
 > | Lisa | 32  | LA   |
 > ```
-
-
 
 ## Compute/aggregate columns
 
@@ -109,7 +105,7 @@ See [*Iterable*](Iterable.qd) to learn more about available operations on collec
     | Mike | 19  | CHI  |
 ```
 > Result:
-> ```
+> ```markdown
 > | Name | Age | City |
 > |------|-----|------|
 > | John | 25  | NY   |
@@ -118,13 +114,11 @@ See [*Iterable*](Iterable.qd) to learn more about available operations on collec
 > |      | 25  |      |
 > ```
 
-
-
 ## Composition
 
-Multiple table operations can be chained. The order of the operations goes from inner to outer:
+You can chain multiple table operations. The order of operations goes from inner to outer:
 
-```
+```markdown
 .tablecompute {2} {@lambda x: .x::average::round}
     .tablesort {2}
         | Name | Age | City |
@@ -134,7 +128,7 @@ Multiple table operations can be chained. The order of the operations goes from 
         | Mike | 19  | CHI  |
 ```
 > Result:
-> ```
+> ```markdown
 > | Name | Age | City |
 > |------|-----|------|
 > | Mike | 19  | CHI  |
@@ -143,17 +137,15 @@ Multiple table operations can be chained. The order of the operations goes from 
 > |      | 25  |      |
 > ```
 
-
-
 ## Retrieve columns
 
-The **`.tablecolumn`** function extracts values from the cells of a specific column, and returns them as an [Iterable](Iterable.qd).
+The **`.tablecolumn`** function extracts values from the cells of a specific column and returns them as an [Iterable](Iterable.qd).
 
 | Parameter | Description                           | Accepts                 |
 |-----------|---------------------------------------|-------------------------|
 | `column`  | Index of the column, starting from 1. | 1 to number of columns. |
 
-```
+```markdown
 .var {values}
     .tablecolumn {2}
         | Name | Age | City |
@@ -166,12 +158,9 @@ The **`.tablecolumn`** function extracts values from the cells of a specific col
 ```
 > Result: `25`
 
+Additionally, the **`.tablecolumns`** function returns all the columns from the table as an iterable of iterables. This is more efficient when you need to access multiple columns from the same table.
 
-
-Additionally, the **`.tablecolumns`** function returns all the columns from the table, as an iterable of iterables.
-This is more efficient in case you need to access multiple columns from the same table.
-
-```
+```markdown
 .var {columns}
     .tablecolumn
         | Name | Age | City |
@@ -185,7 +174,7 @@ This is more efficient in case you need to access multiple columns from the same
   .col::first
 ```
 > Result:
-> ```
+> ```markdown
 > John
 > 25
 > NY

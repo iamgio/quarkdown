@@ -3,12 +3,12 @@
 
 ## Table generation by columns
 
-The **`.table`** function takes a single block argument which is an [iterable](Iterable.qd) of **tables**.  
-The result of the call is a **new table** which is the combination, **by columns** of the supplied tables.
+The **`.table`** function takes a single block argument which is an [iterable](Iterable.qd) of **tables**.
+The result of the call is a **new table** that combines the supplied tables **by columns**.
 
-In the following example `.repeat` is used, which, as other supported [loops](Loops.qd) do, returns the results from each iteration as an iterable.
+In the following example, `.repeat` is used, which, like other supported [loops](Loops.qd), returns the results from each iteration as an iterable.
 
-```
+```markdown
 .table
   .repeat {3}
     n:
@@ -29,8 +29,7 @@ In the following example `.repeat` is used, which, as other supported [loops](Lo
 
 ## Table generation by rows
 
-The **`.tablebyrows`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html} function
-takes two arguments: an optional iterable of headers and an iterable of rows.
+The **`.tablebyrows`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html} function takes two arguments: an optional iterable of headers and an iterable of rows.
 
 ```markdown
 .var {headers}
@@ -56,7 +55,7 @@ takes two arguments: an optional iterable of headers and an iterable of rows.
 | Lisa | 32  | LA   |
 | Mike | 19  | CHI  |
 
-```
+```markdown
 .tablebyrows
     .repeat {3}
         y:

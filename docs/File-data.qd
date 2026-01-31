@@ -1,44 +1,42 @@
 .docname {File data}
 .include {_Setup.qd}
 
-Quarkdown offers functions to retrieve information from files.
+Quarkdown provides functions to retrieve information from files.
 
 > [!NOTE]
-> The following functions refer to a `path` parameter, which accepts the path to the target file, which may be relative to the location of the main source file, or absolute.  
-> A slash (`/`) is the global path separator, agnostic to the current file system in use.
+> The following functions accept a `path` parameter, which can be either a path relative to the main source file's location or an absolute path. Use a slash (`/`) as the path separator, regardless of the operating system.
 
 ## File text content
 
-The **`.read {path}`** function returns the string content of the given file.
+The **`.read {path}`** function returns the string content of the specified file.
 
-An optional `lines` parameter of type [`Range`](Range.qd) is also supported, which allows for the selection of a specific range of lines (inclusive, starting from 1). An invalid or out of bounds range causes an error.  
-If no range is provided, the whole file is read.
+An optional `lines` parameter of type [`Range`](Range.qd) selects a specific range of lines (inclusive, starting from 1). An invalid or out-of-bounds range causes an error. If you do not provide a range, Quarkdown reads the entire file.
 
-```
+```markdown
 .read {myfile.txt} lines:{3..8}
 ```
 
-The strategy used for open ranges is defined as follows:
+Open ranges work as follows:
 
-- If the range is open on the left end (`..N`) it starts reading from the beginning of the file until line `N`.
-- If the range is open on the right end (`N..`) it reads from line `N` to the end of the file.
-- If the range is open on both ends (`..`) the whole file is read.
+- If the range is open on the left end (`..N`), Quarkdown reads from the beginning of the file to line `N`.
+- If the range is open on the right end (`N..`), Quarkdown reads from line `N` to the end of the file.
+- If the range is open on both ends (`..`), Quarkdown reads the entire file.
 
 > [!TIP]
-> `.read` can be particularly useful when used in combination with [`.code`](Code.qd) and [`.mermaid`](Mermaid-diagrams.qd) in order to load code snippets from external files:
+> `.read` is particularly useful in combination with [`.code`](Code.qd) and [`.mermaid`](Mermaid-diagrams.qd) to load code snippets from external files:
 >
-> ```
+> ```markdown
 > .code {java}
 >   .read {Point.java}
 > ```
 
 ## Listing files in a directory
 
-The **`.listfiles {path} {sortby?} {order?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/listfiles.html} function returns an [iterable](Iterable.qd) of the files in a directory. It's unordered by default, or can be sorted by name or date.
+The **`.listfiles {path} {sortby?} {order?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/listfiles.html} function returns an [iterable](Iterable.qd) of the files in a directory. The result is unordered by default, but you can sort it by name or date.
 
-As any other collection, the result can be iterated upon, or supplied to other functions. For example, it's possible to perform automatic bulk inclusions via [`.includeall`](Including-other-Quarkdown-files.qd):
+Like any other collection, you can iterate over the result or supply it to other functions. For example, you can perform automatic bulk inclusions via [`.includeall`](Including-other-Quarkdown-files.qd):
 
-```
+```markdown
 .includeall {.listfiles {somedirectory} sortby:{name}}
 ```
 
@@ -53,19 +51,15 @@ The **`.filename {path} {extension?}`** .docslink {quarkdown-stdlib/com.quarkdow
 
 ## Table from CSV
 
-The **`.csv {path} {mode?} {caption?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html} function loads a table from a CSV file.
-The first row of the CSV file is always used as the header row.
+The **`.csv {path} {mode?} {caption?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html} function loads a table from a CSV file. The first row of the CSV file always serves as the header row.
 
-Tables loaded from CSV can also be manipulated: see [*Table manipulation*](Table-manipulation.qd) for more.
+Tables loaded from CSV can also be manipulated. See [*Table manipulation*](Table-manipulation.qd) for more information.
 
-```
+```markdown
 .csv {people.csv}
 ```
 
-The `mode` parameter controls how the CSV file is parsed.
-It defaults to `plain`, which treats all cell content as plain text.
-If set to `markdown`, cell content is parsed as inline Quarkdown source code,
-allowing for formatting, rich content, and even inline function calls inside CSV.
+The `mode` parameter controls how the CSV file is parsed. It defaults to `plain`, which treats all cell content as plain text. If you set it to `markdown`, Quarkdown parses cell content as inline Quarkdown source code, allowing formatting, rich content, and inline function calls within the CSV.
 
 ```csv
 Name,  Favorite drink, Age *(as of 2026)*
@@ -73,9 +67,8 @@ Alice, Coffee,         .subtract {2026} {1995}
 Bob,   *Pepsi*,        .subtract {2026} {2001}
 ```
 
+You can also provide a caption:
 
-A caption can also be provided:
-
-```
+```markdown
 .csv {people.csv} caption:{People data.}
 ```

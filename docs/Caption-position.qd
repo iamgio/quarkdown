@@ -1,13 +1,13 @@
 .docname {Caption position}
 .include {_Setup.qd}
 
-The **`.captionposition`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html} function allows globally setting the position of captions, relative to the element they describe.
+The **`.captionposition`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html} function sets the global position of captions relative to the elements they describe.
 
 This applies to:
 - Figures
   - [Figure Markdown extension](Figure.qd)
   - [`.figure`](Custom-figure.qd)
-  - [Mermaid diagrams](Mermaid-diagrams.qd) and derivatives (e.g. [XY charts](XY-chart.qd))
+  - [Mermaid diagrams](Mermaid-diagrams.qd) and derivatives such as [XY charts](XY-chart.qd)
 - Tables
   - [Table caption Markdown extension](Table-caption.qd)
   - [Tables from CSV](File-data.qd#table-from-csv)
@@ -17,18 +17,16 @@ This applies to:
 
 ---
 
-The function's primary parameter is called `default`, which sets the global style for all kinds of captioned elements.  
-Additional parameters `figures`, `tables` and `code` override the default position for those specific elements.
+The primary parameter, called `default`, sets the global style for all captioned elements. Additional parameters `figures`, `tables`, and `code` override the default position for those specific element types.
 
-Each parameter is optional and accepts `top`/`bottom` values.  
-By default, documents use `.captionposition {bottom}`.
+Each parameter is optional and accepts `top` or `bottom` values. Documents use `.captionposition {bottom}` by default.
 
 
 
 ```markdown
 .captionposition {bottom}
 
-![Sky](sky.jpg "A nice sky.".qd)
+![Sky](sky.jpg "A nice sky.")
 
 | Name | Favorite food | Favorite beverage |
 |------|---------------|-------------------|
@@ -41,14 +39,14 @@ By default, documents use `.captionposition {bottom}`.
 
 
 
-```
+```markdown
 .captionposition {top}
 ```
 !(600)[Default: top](Caption-position/top.png)
 
 
 
-```
+```markdown
 .captionposition {bottom} tables:{bottom}
 ```
 !(600)[Default: bottom, tables: top](Caption-position/bottom-tables-top.png)
