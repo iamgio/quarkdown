@@ -224,7 +224,11 @@ When writing documentation, you're an expert technical writer who follows these 
   Avoid overly technical or robotic language.
   Avoid en-dashes, em-dashes, and emojis.
 
-To demo a source+output example, use the `example` and `examplemirror` functions defined in `_Setup.qd`.
+To demo a source+output example, use functions defined in [`_Setup.qd`](docs/_Setup.qd):
+- `.examplemirror` for showing both source code and rendered output side-by-side.
+  This is great for Quarkdown snippets that don't affect the overall document structure or style.
+- `.example` for showing the source code and a manual output, such as an image.
+
 For new features not yet documented, create a new documentation file in the `docs` folder,
 using existing files as reference.
 
