@@ -15,30 +15,38 @@
 
 ## Examples
 
-```markdown
-Hi! I'm .name::otherwise {unnamed}
-```
-> If `name` is `John`: *Hi! I'm John*
-> If it is `none`: *Hi! I'm unnamed*
+.example
+    ```markdown
+    Hi! I'm .name::otherwise {unnamed}
+    ```
+    .quarkdownoutput
+        - If `name` is `John`: *Hi! I'm John*
+        - If it is `none`: *Hi! I'm unnamed*
 
-```markdown
-.num::takeif {@lambda x: .x::equals {5}}
-```
-> If `num` is 5: *5*
-> Otherwise: *None*
+.example
+    ```markdown
+    .num::takeif {@lambda x: .x::equals {5}}
+    ```
+    .quarkdownoutput
+        - If `num` is 5: *5*
+        - Otherwise: *None*
 
-> Confused about `@lambda`? It begins a parametric [inline `Lambda`](Lambda.qd#inline-lambda). Check its page for further details.
+    > Confused about `@lambda`? It begins a parametric [inline `Lambda`](Lambda.qd#inline-lambda). Check its page for further details.
 
-```markdown
-.num::takeif {@lambda x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
-```
-> If `num` is even: *Even*
-> Otherwise: *Odd*
+.example
+    ```markdown
+    .num::takeif {@lambda x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
+    ```
+    .quarkdownoutput
+        - If `num` is even: *Even*
+        - Otherwise: *Odd*
 
-```markdown
-.x::ifpresent {@lambda Yes, .1 is present}::otherwise {Not present}
-```
-> If `x` is `something`: *Yes, something is present*
-> If it is `none`: *Not present*
+.example
+    ```markdown
+    .x::ifpresent {@lambda Yes, .1 is present}::otherwise {Not present}
+    ```
+    .quarkdownoutput
+        - If `x` is `something`: *Yes, something is present*
+        - If it is `none`: *Not present*
 
-> Here, the lambda parameter is implicit and accessed by position.
+    > Here, the lambda parameter is implicit and accessed by position.

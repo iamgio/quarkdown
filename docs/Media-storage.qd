@@ -9,14 +9,13 @@ Here is what it does:
 2. Copies each media file to the `media` directory inside the output directory
 3. Updates the image nodes to point their source path to the newly created file
 
-> ### Example
 > Source:
 > ```markdown
 > ![Image](../my-img.png)
 > ```
 > Result:
 > ```html
-> ![Image](media/my-img@HASH.png)
+> <img src="media/my-img@HASH.png" alt="Image" />
 > ```
 
 Media storage is enabled by default. You can turn it off via the `--no-media-storage` flag.

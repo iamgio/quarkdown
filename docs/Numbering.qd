@@ -44,7 +44,7 @@ The default numbering format, if unspecified, is:
   - `(1)` for equations
   - `1` for footnotes
 
-- For `slides` documents:
+- For `slides` and `docs` documents:
   - `1` for footnotes
 
 You can turn off any active numbering configuration via the **`.nonumbering`** function.
@@ -57,151 +57,137 @@ To avoid merging and turn off numbering rules for unspecified entries, set the `
 
 ```yaml
 .numbering merge:{no}
-  - figures: 1.1
+    - figures: 1.1
 ```
 
 ## Headings
 
-```markdown
-.numbering
-  - headings: 1.A.a
+.example
+    ```markdown
+    .numbering
+        - headings: 1.A.a
 
-## Title    <!--   1   -->
-### Title   <!--  1.A  -->
-#### Title  <!-- 1.A.a -->
-#### Title  <!-- 1.A.b -->
-##### Title <!-- None  -->
-### Title   <!--  1.B  -->
-## Title    <!--   2   -->
-### Title   <!--  2.A  -->
-```
+    ## Title    <!--   1   -->
+    ### Title   <!--  1.A  -->
+    #### Title  <!-- 1.A.a -->
+    #### Title  <!-- 1.A.b -->
+    ##### Title <!-- None  -->
+    ### Title   <!--  1.B  -->
+    ## Title    <!--   2   -->
+    ### Title   <!--  2.A  -->
+    ```
 
-!(550)[Latex theme numbering](Numbering/headings-latex.png)
+    .quarkdownoutput
+      !(550)[Latex theme numbering](Numbering/headings-latex.png)
 
-!(550)[Latex theme table of contents](Numbering/toc-latex.png)
+      !(550)[Latex theme table of contents](Numbering/toc-latex.png)
 
 ### Decorative headings
 
-To prevent a heading from being numbered, append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
+To prevent a heading from being numbered, append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc. Decorative headings also do not appear in the [table of contents](Table-of-contents.qd).
 
-```markdown
-.center
-    #! My document
+.exampleoutput {![Decorative heading](Numbering/decorative-heading.png)}
+    ```markdown
+    .center
+        #! My document
 
-## Introduction
+    ## Introduction
 
-.loremipsum
-```
-
-Decorative headings also do not appear in the [table of contents](Table-of-contents.qd).
-
-!(550)[image](Numbering/decorative-heading.png)
+    .loremipsum
+    ```
 
 ## Figures
 
 [Figures](Figure.qd) are numbered only if they have a **caption**, which may also be empty.
 
-```markdown
-.numbering
-  - headings: 1.A.a
-  - figures: 1.1
+.exampleoutput {!(600)[Figure numbering with format 1.1](Numbering/figures-nested-format.png)}
+    ```markdown
+    .numbering
+        - headings: 1.A.a
+        - figures: 1.1
 
-## Title
+    ## Title
 
-![Logo](quarkdown-icon.svg "The Quarkdown icon.")
+    ![Logo](quarkdown-icon.svg "The Quarkdown icon.")
 
-### Title
+    ### Title
 
-![Logo](quarkdown-icon.svg "")
+    ![Logo](quarkdown-icon.svg "")
 
-## Title
+    ## Title
 
-![Logo](quarkdown-icon.svg "")
-```
-
-!(550)[Figure numbering with format 1.1](Numbering/figures-nested-format.png)
-
-When numbering elements, the number of symbols in the format dictates the rules that cause the counters to reset. The previous example, run with `figures: 1`, produces the following:
-
-!(550)[Figure numbering with format 1](Numbering/figures-flat-format.png)
+    ![Logo](quarkdown-icon.svg "")
+    ```
 
 ## Tables
 
-```markdown
-.numbering
-  - headings: 1.A.a
-  - tables: 1.1
+.exampleoutput {!(600)[Table numbering](Numbering/tables.png)}
+    .numbering
+        - headings: 1.A.a
+        - tables: 1.1
 
-## Title
+    ## Title
 
-|           | Age | Favorite food |
-|-----------|-----|---------------|
-| **Anne**  | 24  | Hamburger     |
-| **Lucas** | 19  | Pizza         |
-| **Joe**   | 32  | Sushi         |
-"Study results."
+    |           | Age | Favorite food |
+    |-----------|-----|---------------|
+    | **Anne**  | 24  | Hamburger     |
+    | **Lucas** | 19  | Pizza         |
+    | **Joe**   | 32  | Sushi         |
+    "Study results."
 
-### Title
+    ### Title
 
-|           | Age | Favorite food |
-|-----------|-----|---------------|
-| **Anne**  | 24  | Hamburger     |
-| **Lucas** | 19  | Pizza         |
-| **Joe**   | 32  | Sushi         |
+    |           | Age | Favorite food |
+    |-----------|-----|---------------|
+    | **Anne**  | 24  | Hamburger     |
+    | **Lucas** | 19  | Pizza         |
+    | **Joe**   | 32  | Sushi         |
 
-## Title
+    ## Title
 
-|           | Age | Favorite food |
-|-----------|-----|---------------|
-| **Anne**  | 24  | Hamburger     |
-| **Lucas** | 19  | Pizza         |
-| **Joe**   | 32  | Sushi         |
-```
-
-!(550)[Table numbering](Numbering/tables.png)
+    |           | Age | Favorite food |
+    |-----------|-----|---------------|
+    | **Anne**  | 24  | Hamburger     |
+    | **Lucas** | 19  | Pizza         |
+    | **Joe**   | 32  | Sushi         |
 
 ## Equations
 
-[Math blocks](Math.qd) (equations) are numbered only if they have a [cross-reference ID](Cross-references.qd).
+[Math blocks](TeX-formulae.qd) (equations) are numbered only if they have a [cross-reference ID](Cross-references.qd).
 
-```markdown
-.numbering
-  - equations: (1)
+.exampleoutput {!(600)[Equation numbering](Numbering/equations.png)}
+    .numbering
+        - equations: (1)
 
-$ E = mc^2 $ {#energy}
+    $ E = mc^2 $ {#energy}
 
-$ F = ma $ {#force}
-```
+    $ F = ma $ {#force}
 
-Conventionally, if the equation is not cross-referenced anywhere in the document but you still want it to be numbered, you can use `_` as the ID:
+Conventionally, if the equation is not cross-referenced anywhere in the document, but you still want it to be numbered, you can use `_` as the ID.
 
-```markdown
-$ E = mc^2 $ {#_}
+.example 
+    ```markdown
+    $ E = mc^2 $ {#_}
 
-$ F = ma $ {#_}
-```
-
-!(550)[Equation numbering](https://github.com/user-attachments/assets/fffeec24-fb30-40bf-8d20-6d85701a009e)
+    $ F = ma $ {#_}
+    ```
 
 ## Code blocks
 
-~~~markdown
-.numbering
-  - code: 1
+.exampleoutput {!(600)[Code blocks](Numbering/equations.png)}
+    .numbering
+        - code: 1
 
-```python
-def hello():
-    print("Hello, world!")
-```
+    ```python
+    def hello():
+        print("Hello, world!")
+    ```
 
-```kotlin
-fun main() {
-    println("Hello, world!")
-}
-```
-~~~
-
-!(550)[Code blocks](https://github.com/user-attachments/assets/4ae8abca-1696-4745-af9c-b611fcb821ba)
+    ```kotlin
+    fun main() {
+        println("Hello, world!")
+    }
+    ```
 
 ## Footnotes
 
@@ -209,14 +195,11 @@ The numbering format of [footnotes](Footnotes.qd) is flat, meaning it only consi
 
 If not specified, footnotes format defaults to `1` (decimal).
 
-```markdown
-.numbering
-  - footnotes: i
+.exampleoutput {![Footnote numbering](Numbering/footnotes-roman.png)}
+    .numbering
+        - footnotes: i
 
-Here is a footnote reference[^: First], and another one[^: Second].
-```
-
-!(550)[Footnote numbering](Numbering/footnotes-roman.png)
+    Here is a footnote reference[^: First], and another one[^: Second].
 
 ## Custom numbered elements
 
@@ -228,56 +211,43 @@ The function accepts two arguments:
 
 ```markdown
 .numbered {greetings}
-  number:
-  **Hello!** This block has the number **.number**
+    number:
+    **Hello!** This block has the number **.number**
 ```
 
 Executing the previous block renders an empty string in place of `number` because you need to specify the numbering format for `greetings` in the `.numbering` call:
 
 ```yaml
 .numbering
-  ...
-  - greetings: 1.a
+    ...
+    - greetings: 1.a
 ```
 
 A numbered block can also be cross-referenced. See [*Cross-references*](Cross-references.qd#custom-numbered-elements) for details.
 
 Full example:
 
-```markdown
-.numbering
-    - headings: 1.1
-    - greetings: 1.a
+.exampleoutput {!(600)[Custom numbering](Numbering/custom-numbered.png)}
+    .numbering
+        - headings: 1.1
+        - greetings: 1.a
 
-## Title 1
+    ## Title 1
 
-.numbered {greetings}
-    number:
-    **Hello!** This block has the number **.number**
+    .numbered {greetings}
+        number:
+        **Hello!** This block has the number **.number**
 
-.numbered {greetings}
-    number:
-    **Hey!** This has instead the number **.number**
+    .numbered {greetings}
+        number:
+        **Hey!** This has instead the number **.number**
 
-## Title 2
+    ## Title 2
 
-.numbered {greetings}
-    number:
-    **Hi!** Here we have the number **.number**
-```
-
-!(600)[Custom numbering](Numbering/custom-numbered.png)
+    .numbered {greetings}
+        number:
+        **Hi!** Here we have the number **.number**
 
 ## Localization
 
 The localized name of the labeled element appears in captions if [`.doclang`](Document-metadata.qd) is set and the locale is supported. For instance, *Figure* and *Table* for the English locale, *Figura* and *Tabella* for Italian.
-
-## Themes
-
-[Layout themes](Themes.qd) affect the way numbers are displayed:
-
-!(550)[Minimal headings numbering](Numbering/minimal-headings.png)
-
-!(550)[Minimal ToC numbering](Numbering/minimal-toc.png)
-
-> `minimal` theme
