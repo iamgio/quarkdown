@@ -14,51 +14,34 @@ A value is destructured into `N` components when all of the following conditions
 
 When Quarkdown destructures the lambda argument, it operates on the individual components rather than the element itself.
 
-
-
 ## Example: `.foreach`
 
-In this example, we define a [Dictionary](Dictionary.qd) and iterate over its destructured key-value components:
+In this example, we define a [Dictionary](Dictionary.qd) and iterate over its destructured key-value components.
 
-```markdown
-.var {mydictionary}
-  .dictionary
-    - a: 1
-    - b: 2
-    - c: 3
+.examplemirror
+    .var {mydictionary}
+        .dictionary
+            - a: 1
+            - b: 2
+            - c: 3
 
-.foreach {.mydictionary}
-    key value: <!-- 2 lambda parameters = each pair is destructured into its 2 components -->
-    **.key** has value **.value**
-```
-> **a** has value **1**
->
-> **b** has value **2**
->
-> **c** has value **3**
-
-
+    .foreach {.mydictionary}
+        key value:
+        **.key** has value **.value**
 
 ## Example: `.sorted`
 
 In this example, we define a [Dictionary](Dictionary.qd) and iterate over its destructured key-value components using `.foreach`, but only after sorting its entries by value using [`.sorted`](Iterable.qd#operations), which takes a lambda that defines the ordering criteria.
 
-> [!NOTE]
-> Remember that `@lambda` is required when declaring an [inline lambda](Lambda.qd#inline-lambda).
+> Note: Remember that `@lambda` is required when declaring an [inline lambda](Lambda.qd#inline-lambda).
 
-```markdown
-.var {mydictionary}
-    .dictionary
-        - a: 3
-        - b: 1
-        - c: 2
+.examplemirror
+    .var {mydictionary}
+        .dictionary
+            - a: 3
+            - b: 1
+            - c: 2
 
-.foreach {.mydictionary::sorted by:{@lambda name value: .value}}
-   name value:
-   .name
-```
-> b
->
-> c
->
-> a
+    .foreach {.mydictionary::sorted by:{@lambda name value: .value}}
+        name value:
+        .name

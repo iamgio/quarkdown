@@ -11,22 +11,21 @@ The dictionary syntax resembles YAML and uses Markdown lists:
 - key3: value3
 ```
 
-Since this syntax overlaps with [Iterable](Iterable.qd) syntax, you can wrap the dictionary declaration in a **`.dictionary`** function to remove ambiguity when both types are accepted. In the following example, [`.foreach`](Loops.qd) accepts both iterables and dictionaries, so we explicitly create a dictionary to iterate over key-value pairs:
+Since this syntax overlaps with [Iterable](Iterable.qd) syntax, you can wrap the dictionary declaration in a **`.dictionary`** function to remove ambiguity when both types are accepted.
 
-```yaml
-.var {mydictionary}
-  .dictionary
-    - key1: value1
-    - key2: value2
-    - key3: value3
+.examplemirror prelude:{[`\.foreach`](Loops.qd) accepts both iterables and dictionaries, so we explicitly create a dictionary to iterate over key-value pairs, and [destructure](Destructuring.qd) them into separate variables.}
+    .var {mydictionary}
+        .dictionary
+            - key1: value1
+            - key2: value2
+            - key3: value3
 
-.foreach {.mydictionary}
-  ...
-```
+    .foreach {.mydictionary}
+        key value:
+        **.key**: .value
 
 
-
-You can nest dictionaries when the function supports it, such as [`.localization`](Localization.qd#localization-table):
+You can nest dictionaries when the function supports it, such as [`.localization`](Localization.qd#creating-your-own-localized-strings):
 
 ```yaml
 - English:

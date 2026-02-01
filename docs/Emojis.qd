@@ -7,19 +7,17 @@ Quarkdown documents support emojis through direct insertion or shortcode functio
 
 You can insert emoji characters directly into your source code:
 
-```markdown
-Quarkdown's logo is not a planet 🪐
-I love Quarkdown! 😍
-```
+.examplemirror
+    Quarkdown's logo is not a planet 🪐  
+    I love Quarkdown! 😍
 
 ## Shortcode function
 
 You can use the `.emoji` .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Emoji/emoji.html} function with a shortcode:
 
-```markdown
-Quarkdown's logo is not a planet .emoji {ringed-planet}
-I love Quarkdown! .emoji {heart-eyes}
-```
+.examplemirror
+    Quarkdown's logo is not a planet .emoji {ringed-planet}  
+    I love Quarkdown! .emoji {heart-eyes}
 
 > [!NOTE]
 > During compilation, the first call to `.emoji` in a document loads the entire emoji set, which may slightly increase compilation time. Subsequent calls are faster.

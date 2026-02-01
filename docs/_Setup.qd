@@ -22,6 +22,11 @@
         .box {Example .num} type:{tip}
             .content
 
+.function {quarkdownoutput}
+    content:
+    .container classname:{quarkdown-output} fullwidth:{yes}
+        .content
+
 .function {exampleoutput}
     output quarkdowncode:
     .numbered key:{example}

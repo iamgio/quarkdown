@@ -58,3 +58,20 @@ A slides document is designed for presentations, with a layout optimized for dis
 When you export to PDF:
 - Each slide becomes a separate page in the output artifact
 - Each [fragment](Slides-fragment.qd) state appears on its own page
+
+## Docs (`docs`)
+
+A docs document is designed for technical documentation, featuring a structured navigation-first layout with sidebars, a header with a search bar, and navigation buttons in the footer. This type is ideal for creating wikis, guides, and reference materials. The wiki you are currently reading is a docs document!
+
+Docs documents leverage [subdocuments](Subdocuments.qd), and include a lightweight, precise and client-side search functionality that allows finding content within the entire documentation set.
+
+### Margin content
+
+- `top*` margin content appears in the top header area
+- `left*` margin content appears in the left sidebar area
+- `right*` margin content appears in the right sidebar area
+- `bottom*` margin content appears in the bottom footer area
+
+### Footnotes
+
+[Footnotes](Footnotes.qd) appear at the bottom of the page, in a dedicated area.

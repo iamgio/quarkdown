@@ -23,7 +23,7 @@ The function returns the lambda's result if the condition is satisfied, or nothi
                 .if {yes}
                     Hello!
 
-This behavior lets you use the function as part of any expression. For example, you can use it to conditionally include content inside layout functions, such as [stacks](Stack.qd).
+This behavior lets you use the function as part of any expression. For example, you can use it to conditionally include content inside layout functions, such as [stacks](Stacks.qd).
 
 .examplemirror
     .row gap:{1cm}
