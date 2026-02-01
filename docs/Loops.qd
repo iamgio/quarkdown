@@ -5,65 +5,45 @@
 
 The main type of loop is provided by the **`.foreach`** function, which accepts:
 1. An [`Iterable`](Iterable.qd) value
-2. A 1-parameter lambda block, where the argument is the current item being iterated
+2. A single-parameter [lambda](Lambda.qd) block, where the argument is the current item being iterated
 
-```markdown
-.foreach {2..4}
-  n:
-  The number is: **.n**
-```
-> The number is: **2**
->
-> The number is: **3**
->
-> The number is: **4**
+.examplemirror
+    .foreach {2..4}
+        n:
+        The number is: **.n**
 
-The function returns an ordered iterable **collection** of the same size as the input, containing the evaluation of the lambda for each iterated value. This means the function can be used as an expression:
+The function returns an ordered iterable **collection** of the same size as the input, containing the evaluation of the lambda for each iterated value. This means the function can be used as an expression, similarly to the `map` function in many programming languages.
 
-```html
-.row alignment:{spacearound}
-  .foreach {1..3}
-    *.1* <!-- .1 is an implicit lambda argument: refers to the first parameter -->
-```
-> !(600)[Result 1](Loops/foreach-range.png)
+.examplemirror {Keep in mind that `\.1` implicitly refers to the first parameter of the lambda.}
+    .row alignment:{spacearound}
+        .foreach {1..3}
+            .1
 
-Any iterable value is accepted. Here we use a Markdown list:
+Any iterable value is accepted, including Markdown lists. See [*Iterable*](Iterable.qd) for all possible ways of defining an iterable value.
 
-```markdown
-.var {letters}
-  - A
-  - B
-  - C
+.examplemirror
+    .var {letters}
+      - A
+      - B
+      - C
 
-.foreach {.letters}
-  ### .1
+    .foreach {.letters}
+      ###! .1
 
-  The letter is **.1**.
-```
-> !(600)[Result 2](Loops/foreach-list.png)
+      The letter is **.1**.
 
-See [*Iterable*](Iterable.qd) for all possible ways of defining an iterable value.
+The type of iterated elements is preserved. See [*Typing*](Typing.qd) for more information.
 
-The type of iterated elements is preserved (see [*Typing*](Typing.qd) for more information):
-
-```markdown
-.row alignment:{spacearound}
-  .foreach {1..5}
-    n:
-    .multiply {.n} by:{.n}
-```
-> !(600)[Result 3](Loops/foreach-math.png)
+.examplemirror
+    .row alignment:{spacearound} 
+        .foreach {1..5}
+            n:
+            .multiply {.n} by:{.n}
 
 ## Repeat
 
 The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
 
-```markdown
-.repeat {3}
-  .1
-```
-> 1
->
-> 2
->
-> 3
+.examplemirror
+    .repeat {3}
+        .1

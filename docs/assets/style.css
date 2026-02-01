@@ -14,9 +14,12 @@
 }
 
 .quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
-    margin-top: 0 !important;
     padding: 0 !important;
     border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
 }
 
 .quarkdown-output img[src*="sky"] {

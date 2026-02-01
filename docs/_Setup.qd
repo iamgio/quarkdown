@@ -28,10 +28,13 @@
         .content
 
 .function {exampleoutput}
-    output quarkdowncode:
+    output prelude? quarkdowncode:
     .numbered key:{example}
         num:
         .box {Example .num} type:{tip}
+            .if {.prelude::isnone::not}
+                .prelude
+
             .code lang:{markdown} linenumbers:{no}
                 .quarkdowncode
 

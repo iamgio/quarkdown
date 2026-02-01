@@ -20,19 +20,18 @@ When serving a file through the `/live/:file` endpoint, the server wraps HTML fi
 
 Additionally, a small script establishes a persistent WebSocket connection to the `/reload` endpoint. This script listens for reload messages and triggers a reload of the iframe content when it receives one.
 
-```mermaid
-sequenceDiagram
-    participant Browser
-    participant Server
-    participant CLI
+.mermaid
+    sequenceDiagram
+        participant Browser
+        participant Server
+        participant CLI
 
-    Browser->>Server: GET /live/:file
-    Server-->>Browser: Live preview HTML wrapper
-    Browser->>Server: WebSocket connect /reload
-    CLI->>Server: WebSocket message /reload
-    Server->>Browser: WebSocket broadcast /reload
-    Browser->>Browser: Reload iframe content
-```
+        Browser->>Server: GET /live/:file
+        Server-->>Browser: Live preview HTML wrapper
+        Browser->>Server: WebSocket connect /reload
+        CLI->>Server: WebSocket message /reload
+        Server->>Browser: WebSocket broadcast /reload
+        Browser->>Browser: Reload iframe content
 
 ### Double buffering
 

@@ -18,14 +18,14 @@ The second parameter is .param2
 ```
 
 You can omit the header in these cases:
-- When the lambda expects 0 parameters (e.g., in [conditional statements](Conditional-statements.qd))
+- When the lambda expects 0 parameters (such as in [conditional statements](Conditional-statements.qd))
 - In any other case, the parameters become *implicit* and can be accessed by position via `.1`, `.2`, `.3`, etc.
 
 ```markdown
 The second parameter is .2
 ```
 
-Lambdas are the only construct that can fork and create new **scopes**.
+Lambdas are constructs that can fork and create new **scopes**.
 - Nested scopes inherit properties from their parent, such as defined variables and functions.
 - Properties defined inside a nested scope cannot be accessed by their parent, meaning variables defined within a lambda block do not exist outside of the lambda itself.
 
@@ -51,15 +51,15 @@ This is only needed if you access parameters of the lambda. If the evaluation is
 
 ```markdown
 .foreach {2..5}
-  n:
-  The number is **.n**
+    n:
+    The number is **.n**
 ```
 
 With implicit parameter:
 
 ```markdown
 .foreach {2..5}
-  The number is **.1**
+    The number is **.1**
 ```
 
 ### [`.function`](Declaring-functions.qd)
@@ -68,8 +68,8 @@ The body of `.function` is a lambda that accepts a variable amount of *explicit*
 
 ```markdown
 .function {area}
-  width height:
-  .multiply {width} by:{height}
+    width height:
+    .multiply {.width} by:{.height}
 ```
 
 ### [`.takeif`](None.qd#operations)

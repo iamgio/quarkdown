@@ -1,9 +1,7 @@
 .docname {Landscape content}
 .include {_Setup.qd}
 
-> [!CAUTION]
->
-> This feature is **experimental**.
+> Warning: This feature is **experimental**.
 
 Fitting wide tables, diagrams, charts, or other horizontally expansive elements onto a vertical page can be challenging, and the content may become difficult to read when constrained to portrait orientation.
 

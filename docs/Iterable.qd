@@ -9,40 +9,28 @@ Iterables can also be destructured. See [*Destructuring*](Destructuring.qd) for 
 
 An ordered or unordered Markdown list is automatically converted to an ordered collection.
 
-```markdown
-.var {letters}
-  - A
-  - B
-  - C
+.examplemirror
+    .var {letters}
+        - A
+        - B
+        - C
 
-.foreach {.letters}
-  .1::lowercase
-```
-> a
->
-> b
->
-> c
+    .foreach {.letters}
+        .1::lowercase
 
-Nested collections can be represented by nested Markdown lists as well:
+Nested collections can be represented by nested Markdown lists as well.
 
-```markdown
-.var {letters}
-  - - A
-    - B
-  - - C
-    - D
-  - - E
-    - F
+.examplemirror
+    .var {letters}
+        - - A
+          - B
+        - - C
+          - D
+        - - E
+          - F
 
-.foreach {.letters}
-  .1::first
-```
-> A
->
-> C
->
-> E
+    .foreach {.letters}
+        .1::first
 
 ## Pair
 

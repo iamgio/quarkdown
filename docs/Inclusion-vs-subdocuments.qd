@@ -9,26 +9,28 @@ Quarkdown offers two ways to include content from other files: **inclusion** and
 
 The function returns the evaluation result, making it appear as if the target file's content was inserted directly in place of the function call. This is an **opaque operation** because the output contains no traces of the original file.
 
-> `main.qd`:
->
-> ```markdown
-> Hello 1
->
-> .include {other.qd}
-> ```
->
-> `other.qd`:
->
-> ```markdown
-> Hello 2
-> ```
->
-> Output `index.html`:
->
-> ```html
-> <p>Hello 1</p>
-> <p>Hello 2</p>
-> ```
+.example
+    > `main.qd`:
+    >
+    > ```markdown
+    > Hello 1
+    >
+    > .include {other.qd}
+    > ```
+
+    > `other.qd`:
+    >
+    > ```markdown
+    > Hello 2
+    > ```
+
+    .quarkdownoutput
+        .html {<p style="opacity: 0.6">index.html:</p>}
+
+        ```html
+        <p>Hello 1</p>
+        <p>Hello 2</p>
+        ```
 
 ### Context
 
@@ -48,32 +50,34 @@ Circular or recursive inclusions are not allowed and will result in an error.
 
 Subdocuments render as separate resources, and Quarkdown stores links to them in a graph structure.
 
-> `main.qd`:
->
-> ```markdown
-> Hello 1
->
-> [Other](other.qd)
-> ```
->
-> `other.qd`:
->
-> ```markdown
-> Hello 2
-> ```
->
-> Output `index.html`:
->
-> ```html
-> <p>Hello 1</p>
-> <a href="./other">Other</a>
-> ```
->
-> Output `other.html`:
->
-> ```html
-> <p>Hello 2</p>
-> ```
+.example
+    > `main.qd`:
+    >
+    > ```markdown
+    > Hello 1
+    >
+    > [Other](other.qd)
+    > ```
+
+    > `other.qd`:
+    >
+    > ```markdown
+    > Hello 2
+    > ```
+
+    .quarkdownoutput
+        .html {<p style="opacity: 0.6">index.html:</p>}
+
+        ```html
+        <p>Hello 1</p>
+        <p><a href="./other">Other</a></p>
+        ```
+
+        .html {<p style="opacity: 0.6">other.html:</p>}
+
+        ```html
+        <p>Hello 2</p>
+        ```
 
 ### Context
 

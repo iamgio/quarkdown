@@ -7,25 +7,25 @@ The parameter accepts a string that represents the **path to the target file**, 
 
 > To include external libraries, refer to [*Importing external libraries*](Importing-external-libraries.qd).
 
-> `a.qd`
-> ```markdown
-> ### Hello Quarkdown
->
-> This is external content.
-> ```
+.example
+    > `file.qd`
+    > ```markdown
+    > ### Hello Quarkdown
+    >
+    > This is external content.
+    > ```
 
-> `main.qd`
-> ```markdown
-> .include {a.qd}
-> ```
-> Output:
->
-> ### Hello Quarkdown
->
-> This is external content.
+    > `main.qd`
+    > ```markdown
+    > .include {file.qd}
+    > ```
 
-> [!CAUTION]
-> Circular dependency results in an error.
+    .quarkdownoutput
+        ### Hello Quarkdown
+
+        This is external content.
+
+> Important: Circular dependency results in an error.
 
 > [!NOTE]
 >
@@ -38,27 +38,8 @@ A clean approach with typesetting systems is having a main file that gathers all
 
 The following snippet is from [Mock](https://github.com/iamgio/quarkdown/blob/main/mock)'s `main.qd` file:
 
-```markdown
-.includeall
-    - setup.qd
-    - headings.qd
-    - paragraphs.qd
-    - lists.qd
-    - images.qd
-    - tables.qd
-    - code.qd
-    - textformatting.qd
-    - colorpreview.qd
-    - quotes.qd
-    - boxes.qd
-    - math.qd
-    - mermaid.qd
-    - collapsibles.qd
-    - errors.qd
-    - separators.qd
-    - alignment.qd
-    - stacks.qd
-```
+.code lang:{markdown}
+    .read {../mock/main.qd} lines:{6..}
 
 You can also combine the function with [`.listfiles`](File-data.qd) to automatically include all files in a directory:
 
@@ -108,7 +89,6 @@ Similar to `share`, but function and variable declarations do not propagate back
 This is the same behavior used in nested lambda scopes, such as in [`.function`](Declaring-functions.qd) and [`.foreach`](Loops.qd).
 
 > Output:
->
 > 1. New name
 > 2. Compile error: `.greet` is not defined.
 

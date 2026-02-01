@@ -11,8 +11,7 @@ The `locale` value can be either a case-insensitive English full name (e.g., `En
 
 Quarkdown's built-in libraries expose localization tables that localize elements such as [quote types](Quote-types.qd), [numbering](Numbering.qd) captions, and [table of contents](Table-of-contents.qd) title.
 
-> [!NOTE]
-> The currently supported locales are **English, Italian, German, French, Chinese, and Japanese**.
+> Note: The currently supported locales are **English, Italian, German, French, Chinese, and Japanese**.
 >
 > Contributions to support new locales are welcome:
 > - [stdlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-stdlib/src/main/resources/lib/localization)
@@ -20,44 +19,29 @@ Quarkdown's built-in libraries expose localization tables that localize elements
 
 ## Creating your own localized strings
 
-Imagine a function `.theorem` that displays the paragraph name **`Theorem. `**, LaTeX style:
+.examplemirror {Imagine a function `\.theorem` that displays **`Theorem.`** before its content. You could define it as follows:} type:{warning}
+    .function {theorem}
+        **Theorem.**
 
-```markdown
-.function {theorem}
-    **Theorem.**
-
-.theorem This is my theorem...
-```
-
-> Output:
-> **Theorem.** This is my theorem...
-
-<br>
+    .theorem This is my theorem
 
 This works well for your own English document, but what if you are making a library for everyone to use? You would need to support multiple languages. This is where *localization tables* come in.
 
-The `.localization {name}` function defines a new **localization table** associated with a unique name. Its body parameter accepts a particular Markdown unordered list that, in Quarkdown, is called a [*dictionary*](Dictionary.qd).
+The `.localization {name}` function defines a new **localization table** associated with a unique name. Its body parameter accepts a particular Markdown list that, in Quarkdown, is called a [*dictionary*](Dictionary.qd).
 
-This localization dictionary exposes key-value pairs for each locale that you intend to support. The locale names follow the same rules as those from `.doclang`, meaning they can be full names or tags.
+This localization dictionary exposes key-value pairs for each locale that you intend to support. The locale names follow the same rules as those from `.doclang`, meaning they can be full names or tags. As long as `.doclang` is set, you can access the localized string via `.localize {table:key}`, in this case `.localize {mylib:theorem}`.
 
-```yaml
-.localization name:{mylib}
-  - English
-    - theorem: Theorem
-  - Italian
-    - theorem: Teorema
-```
+.exampleoutput {**Theorem.** This is my theorem} prelude:{The previous function would now look like this:}
+    .localization name:{mylib}
+        - English
+          - theorem: Theorem
+        - Italian
+          - theorem: Teorema
 
-As long as `.doclang` is set, you can access the localized string via `.localize {table:key}`, in this case `.localize {mylib:theorem}`.
+    .function {theorem}
+        **.localize {mylib:theorem}.**
 
-The previous function would now look like this:
-
-```markdown
-.function {theorem}
-    **.localize {mylib:theorem}.**
-
-.theorem This is my theorem...
-```
+    .theorem This is my theorem
 
 ## Extending a built-in localization table
 

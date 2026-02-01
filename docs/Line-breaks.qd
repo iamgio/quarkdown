@@ -16,15 +16,11 @@ This syntax, however, is not always ideal. It can be ambiguous and lead to confu
 
 As an alternative, Quarkdown provides the **`.br`** function for explicit line breaks.
 
-```markdown
-First line .br
-Second line
-```
+.examplemirror
+    First line .br
+    Second line
 
-A newline after the function call is not mandatory:
-
-```markdown
-First line .br Second line
-```
+.examplemirror {A newline after the function call is not mandatory.}
+    First line .br Second line
 
 There are no special conventions regarding the preferred approach for breaking lines. You can choose any of these methods based on your personal preference.
