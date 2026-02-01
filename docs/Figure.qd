@@ -1,26 +1,22 @@
 .docname {Figure}
 .include {_Setup.qd}
 
-Quarkdown introduces the concept of **figure**, which is missing in base Markdown. A figure wraps an image and centers it horizontally.
+Quarkdown introduces the concept of **figure**, which is missing in base Markdown. A figure wraps an image and centers it horizontally. When a paragraph contains only a single image (in other words, the image is isolated from other content), Quarkdown automatically converts it into a figure.
 
-!(600)[Demo: about Quarkdown's logo](Figure/demo.png)
+.examplemirror
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-When a paragraph contains only a single image (in other words, an isolated image), Quarkdown automatically converts it into a figure.
+    ![Icon](assets/icon.svg)
 
-```markdown
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-![Alt](img.png)
+> Tip: The [image size](Image-size.qd) feature works on figures as well.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-```
+## Caption
 
 If the image contains a *title* attribute (wrapped in double quotes, single quotes, or parentheses), Quarkdown displays it as a caption.
 
-```markdown
-![Logo](quarkdown-icon.svg "The Quarkdown icon.")
-```
+.examplemirror
+    ![Icon](assets/icon.svg "The Quarkdown icon.")
 
-The [image size](Image-size.qd) feature works on figures as well.
-
-Figures can be **numbered**. See [Numbering](Numbering.qd) for more information.
+> Tip: Figures can be **numbered**. See [Numbering](Numbering.qd) for more information.

@@ -5,39 +5,31 @@ Footnotes allow readers to reference additional information without cluttering t
 
 ## Compact footnotes
 
-Quarkdown introduces a compact `[^label: definition]` syntax that allows you to define footnotes directly at their reference point:
+Quarkdown introduces a compact `[^label: definition]` syntax that allows you to define footnotes directly at their reference point.
 
-```markdown
-This is a footnote reference[^first: This is the definition.],
-and another one[^second: This is another definition.].
-```
+.exampleoutput {![Footnote](Footnotes/basic.png)}
+    This is a footnote reference[^first: This is the definition.],
+    and another one[^second: This is another definition.].
 
-!(550)[Footnote](Footnotes/basic.png)
+Named footnotes can be referenced multiple times.
 
-When an inlined footnote does not need to be referenced elsewhere, you can omit the label to create an *anonymous* footnote:
+.exampleoutput {![Footnote multi-reference](Footnotes/multi-reference.png)}
+    This is a footnote reference[^first: This is the definition],
+    and another one[^first].
 
-```markdown
-This is a footnote reference[^: This is the definition.],
-and another one[^: This is another definition.].
-```
+Definitions can include inline formatting.
 
-Named footnotes can be referenced multiple times:
+.exampleoutput {![Footnote formatting](Footnotes/formatted.png)}
+    This is a footnote reference[^first: This is the **definition**.]
 
-```markdown
-This is a footnote reference[^first: This is the definition],
-and another one[^first].
-```
+### Anonymous footnotes
 
+When an inlined footnote does not need to be referenced elsewhere, you can omit the label to create an *anonymous* footnote.
 
-!(550)[Footnote multi-reference](Footnotes/multi-reference.png)
-
-Definitions can include inline formatting:
-
-```markdown
-This is a footnote reference[^first: This is the **definition**.]
-```
-
-!(550)[Footnote formatting](Footnotes/formatted.png)
+.example
+    .code lang:{markdown} linenumbers:{no}
+        This is a footnote reference[^: This is the definition.],
+        and another one[^: This is another definition.].
 
 ## Standard footnotes
 
@@ -94,18 +86,13 @@ This is a footnote reference[^first], and another one[^second].
 
 ## Numbering
 
-Footnotes are numbered by default with decimal numbers, starting from 1. To apply a different numbering style, such as Roman numerals, use the `.numbering` function:
+Footnotes are numbered by default with decimal numbers, starting from 1. To apply a different numbering style, such as Roman numerals, use the `.numbering` function. See [*Numbering*](Numbering.qd) for more information.
 
-```yaml
-.numbering
-  - footnotes: i
-```
+.exampleoutput {![Footnote Roman numbering](Footnotes/roman-numbering.png)}
+    .numbering
+        - footnotes: i
 
-!(550)[Footnote numbering](Footnotes/roman-numbering.png)
-
-See [*Numbering*](Numbering.qd) for more information.
-
-Footnotes are numbered incrementally across the document. Page-level numbering is not supported yet.
+Footnotes are numbered incrementally across the subdocument. Page-level numbering is not supported yet.
 
 ## Display
 

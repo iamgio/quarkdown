@@ -1,0 +1,3 @@
+Name,  Favorite drink, Age *(as of 2026)*
+Alice, Coffee,         .subtract {2026} {1995}
+Bob,   *Pepsi*,        .subtract {2026} {2001}

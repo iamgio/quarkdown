@@ -35,11 +35,8 @@ Example:
 
 Multiple `.font` calls create overlapping font configurations. Each font configuration overrides the previous one as long as it contains glyphs for the characters being rendered. Otherwise, Quarkdown uses the previous font configuration as a fallback.
 
-This is particularly useful for multi-language documents, such as documents containing both Latin and CJK (Chinese, Japanese, Korean) characters. For example, you can set a primary font for Latin characters and a fallback font for CJK characters:
+This is particularly useful for multi-language documents, such as documents containing both Latin and CJK (Chinese, Japanese, Korean) characters. For example, you can set a primary font for Latin characters and a fallback font for CJK characters, as shown in the following example.
 
-```markdown
-.font {GoogleFonts:Ma Shan Zheng}
-.font {GoogleFonts:Corinthia}
-```
-
-!(650)[Multi-language fonts](Font-configuration/multi-language.png)
+.exampleoutput {![Multi-language fonts](Font-configuration/multi-language.png)}
+    .font {GoogleFonts:Ma Shan Zheng}
+    .font {GoogleFonts:Corinthia}

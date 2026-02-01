@@ -5,23 +5,17 @@ The **`.float {alignment}`** function transforms any content into a floating ele
 
 The `alignment` parameter accepts `start` or `end`.
 
-```markdown
-.float {start}
-    !(80%)[Quarkdown](icon.png)
+.examplemirror
+    .float {start}
+        !(70%)[Icon](assets/icon.svg)
 
-.loremipsum
-```
+    .loremipsum
 
-!(600)[Floating image](Float/floating-image.png)
+In addition to images, you can make any other content float.
 
-In addition to images, you can make any other content float:
+.examplemirror
+    .float {end}
+        .box {Hello} type:{warning}
+            Floating!
 
-```markdown
-.float {end}
-    .box {Hello} type:{warning}
-        Floating!
-
-.loremipsum
-```
-
-!(600)[Floating box](Float/floating-box.png)
+    .loremipsum
