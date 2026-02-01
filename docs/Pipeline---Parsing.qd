@@ -1,13 +1,9 @@
 .docname {Pipeline - Parsing}
 .include {_Setup.qd}
 
-> *[← Back to Pipeline](Pipeline.qd)*
+> Main packages: .repolink {`core.parser`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser}, .repolink {`core.ast`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast}
 
-## Parsing
-
-> Main packages: [`core.parser`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser), [`core.ast`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast)
-
-Continuing with the metaphor introduced in [Lexing](Pipeline-‐-Lexing.qd), once the nouns, verbs, and adjectives are extracted from a sentence, our brain is responsible for linking them together to build information out of them.
+Continuing with the metaphor introduced in [Lexing](Pipeline---Lexing.qd), once the nouns, verbs, and adjectives are extracted from a sentence, our brain is responsible for linking them together to build information out of them.
 
 The parser takes the sequence of tokens and organizes them into a tree structure called an *Abstract Syntax Tree* (AST), which defines the relationships between different parts of the document. Each element of the tree is called a *Node*.
 
@@ -53,7 +49,3 @@ To gain nested information, the parser analyzes each token and starts searching 
 - This process continues until no more nested tokens remain. This is called **recursive parsing**, visualized in the following figure:
 
 !(200)[Recursive parsing](Pipeline-‐-Parsing/recursive-parsing.svg)
-
-
-
-*See next: [Function call expansion](Pipeline-‐-Function-call-expansion.qd)*

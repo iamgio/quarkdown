@@ -1,11 +1,7 @@
 .docname {Pipeline - Lexing}
 .include {_Setup.qd}
 
-> *[← Back to Pipeline](Pipeline.qd)*
-
-## Lexing
-
-> Main packages: [`core.lexer`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/lexer)
+> Main packages: .repolink {`core.lexer`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/lexer}
 
 Lexing is like breaking down a sentence into its individual words before figuring out the meaning of the sentence. Imagine you are reading a paragraph, and before understanding the message, you first recognize individual words like nouns, verbs, and punctuation.
 
@@ -39,5 +35,3 @@ To accomplish this separation, two distinct lexers are supplied: a block lexer a
 **Function calls** are extracted both as blocks and inlines, with just a [few differences](Syntax-of-a-function-call.qd#block-vs-inline-function-calls) between them.
 
 At the beginning, only the block lexer is invoked. Once the source is broken down into its outer blocks, they are passed to the parser, which is delegated to search for nested information.
-
-*See next: [Parsing](Pipeline-‐-Parsing.qd)*

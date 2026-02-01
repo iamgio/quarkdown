@@ -1,10 +1,9 @@
 .docname {Page break}
 .include {_Setup.qd}
 
-A page break is a forced interruption of the page flow that causes content following the break to appear on the next page. Page breaks do not affect `plain` documents, except for printing.
+A page break is a forced interruption of the page flow that causes content following the break to appear on the next page. Page breaks do not affect `plain` and `docs` documents, except for printing.
 
-> [!NOTE]
-> The word *page* is interchangeable with *slide* in the context of a `slides` document.
+> Note: The word *page* is interchangeable with *slide* in the context of a `slides` document.
 
 ## Manual break
 
@@ -18,14 +17,12 @@ Page 1
 Page 2
 ```
 
-This pattern does not interrupt the current block, so it might appear as plain text if the criteria for closing a block (such as an empty line for paragraphs) are not satisfied. The following example does not trigger a page break:
+This pattern does not interrupt the current block, so it might appear as plain text if the criteria for closing a block (such as an empty line for paragraphs) are not satisfied. The following example does not trigger a page break.
 
-```markdown
-Page 1
-<<<
-Page 2
-```
-> Page 1 <<< Page 2
+.examplemirror type:{warning}
+    Page 1
+    <<<
+    Page 2
 
 ## Automatic break
 
@@ -35,16 +32,19 @@ By default, only level-1 headings (one `#` symbol) trigger automatic page breaks
 
 This function takes a `maxdepth` integer argument that indicates the maximum level a heading should be in order to trigger a page break. Heading levels range from 1 to 6.
 
-```html
-.autopagebreak maxdepth:{3}
+.example
+    ```html
+    .autopagebreak maxdepth:{3}
 
-## A    <!-- Break -->
+    ## A    <!-- Break -->
 
-### B   <!-- Break -->
+    ### B   <!-- Break -->
 
-#### C  <!-- Break -->
+    #### C  <!-- Break -->
 
-##### D <!-- No break -->
-```
+    ##### D <!-- No break -->
+    ```
+
+### Disabling automatic breaks
 
 **`.noautopagebreak`**, which is equivalent to `.autopagebreak {0}`, disables automatic breaks.

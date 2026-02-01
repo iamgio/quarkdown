@@ -3,18 +3,17 @@
 
 The **`.pageformat`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html} function configures the page format. All its parameters are **optional**, and if left unset, they delegate their default value to the underlying renderer depending on the document type.
 
-| Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents        |
-|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------|
-| `size`                                                   | Name of the paper format.                                                                                                                                               | `A0`..`A10`, `B0`..`B5`, `letter`, `legal`, `ledger`                                       | `paged`, `slides`          |
-| `width`                                                  | Page width. If `size` is set too, this value overrides its width.                                                                                                       | [`Size`](Sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`          |
-| `height`                                                 | Page height. If `size` is set too, this value overrides its height.                                                                                                     | [`Size`](Sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`          |
-| `orientation`                                            | Whether width and height of the paper format (`size`) should be swapped. This defaults to `portrait` for `plain` and `paged` documents and to `landscape` for `slides`. | `portrait`, `landscape`                                                                    | `paged`, `slides`          |
-| `margin`                                                 | Blank space between page borders and content area.                                                                                                                      | [`Sizes`](Sizes.qd#size-group-sizes), e.g. `1cm`, `15mm 30px`, `2in 1in 3in 2in`           | `plain`, `paged`, `slides` |
-| `fontsize`                                               | Base font size. Other elements, such as headings, scale accordingly.                                                                                               | [`Size`](Sizes.qd#size-single-size)                                                        | `plain`, `paged`, `slides` |
-| `bordertop`, `borderright`, `borderbottom`, `borderleft` | Thickness of the border at each side of the content area.                                                                                                               | [`Size`](Sizes.qd)                                                                         | `paged`, `slides`          |
-| `bordercolor`                                            | Color of the border around the content area.                                                                                                                            | [`Color`](Color.qd)                                                                        | `paged`, `slides`          |
-| `columns`                                                | Number of columns in each page. If set to 2 or higher, the document has a [multi-column layout](Multi‐column-layout.qd).                                             | Positive integer                                                                           | `plain`, `paged`, `slides` |
-| `alignment`                                              | Horizontal content and text alignment.                                                                                                                                  | `start` (default in `slides`), `center`, `end`, `justify` (default in `plain` and `paged`) | `plain`, `paged`, `slides` |
+| Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents                |
+|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------|
+| `size`                                                   | Name of the paper format.                                                                                                                                               | `A0`..`A10`, `B0`..`B5`, `letter`, `legal`, `ledger`                                       | `paged`, `slides`                  |
+| `width`                                                  | Page width. If `size` is set too, this value overrides its width.                                                                                                       | [`Size`](Sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `plain`, `paged`, `slides`         |
+| `height`                                                 | Page height. If `size` is set too, this value overrides its height.                                                                                                     | [`Size`](Sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`                  |
+| `orientation`                                            | Whether width and height of the paper format (`size`) should be swapped. This defaults to `portrait` for `plain` and `paged` documents and to `landscape` for `slides`. | `portrait`, `landscape`                                                                    | `paged`, `slides`                  |
+| `margin`                                                 | Blank space between page borders and content area.                                                                                                                      | [`Sizes`](Sizes.qd#size-group-sizes), e.g. `1cm`, `15mm 30px`, `2in 1in 3in 2in`           | `plain`, `paged`, `slides`         |
+| `bordertop`, `borderright`, `borderbottom`, `borderleft` | Thickness of the border at each side of the content area.                                                                                                               | [`Size`](Sizes.qd)                                                                         | `plain`, `paged`, `slides`         |
+| `bordercolor`                                            | Color of the border around the content area.                                                                                                                            | [`Color`](Color.qd)                                                                        | `plain`, `paged`, `slides`         |
+| `columns`                                                | Number of columns in each page. If set to 2 or higher, the document has a [multi-column layout](Multi‐column-layout.qd).                                                | Positive integer                                                                           | `plain`, `paged`, `slides`         |
+| `alignment`                                              | Horizontal content and text alignment.                                                                                                                                  | `start` (default in `slides`), `center`, `end`, `justify` (default in `plain` and `paged`) | `plain`, `paged`, `slides`, `docs` |
 
 ## Content area
 
@@ -26,11 +25,8 @@ Each page consists of a *content area* in which the main content is displayed, a
 
 The `margin` parameter affects the size of the margin area, reducing the surface of the content area.
 
-```markdown
-.pageformat margin:{4cm}
-```
-
-!(400)[Margins](Page-format/margins.png)
+.exampleoutput {!(500)[Margins](Page-format/margins.png)}
+    .pageformat margin:{4cm}
 
 ### Borders
 
@@ -38,8 +34,5 @@ The `bordertop`, `borderright`, `borderbottom`, `borderleft`, and `bordercolor` 
 - If you specify at least one side, the border applies to the specified sides. If you do not specify the color, it uses the default foreground text color.
 - If you do not specify any side but do specify the color, the border applies to all sides with a default thickness.
 
-```markdown
-.pageformat bordertop:{1px} borderbottom:{4px}
-```
-
-!(400)[image](Page-format/borders.png)
+.exampleoutput {!(500)[image](Page-format/borders.png)}
+    .pageformat bordertop:{1px} borderbottom:{4px}

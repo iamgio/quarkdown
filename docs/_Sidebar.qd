@@ -128,5 +128,11 @@
 - [Media storage](Media-storage.qd)
 
 ###! Inside Quarkdown
-- [How does Quarkdown work? *The pipeline*](Pipeline.qd)
+- [Quarkdown's pipeline](Pipeline.qd)
+  - [Lexing](Pipeline---Lexing.qd)
+  - [Parsing](Pipeline---Parsing.qd)
+  - [Function call expansion](Pipeline---Function-call-expansion.qd)
+  - [Tree traversal](Pipeline---Tree-traversal.qd)
+  - [Rendering](Pipeline---Rendering.qd)
+  - [Post-rendering](Pipeline---Post-rendering.qd)
 - [How does live preview work?](Inside-live-preview.qd)

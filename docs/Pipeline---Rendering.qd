@@ -1,13 +1,9 @@
 .docname {Pipeline - Rendering}
 .include {_Setup.qd}
 
-> *[← Back to Pipeline](Pipeline.qd)*
-
-## Rendering
-
-> Main packages: [`core.rendering`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/rendering)
+> Main packages: .repolink {`core.rendering`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/rendering}
 >
-> Rendering modules: [`quarkdown-html`](https://github.com/iamgio/quarkdown/tree/main/quarkdown-html)
+> Rendering modules: .repolink {`quarkdown-html`} {tree/main/quarkdown-html}, .repolink {`quarkdown-plaintext`} {tree/main/quarkdown-plaintext}
 
 Once the AST is fully generated and enriched, it is time to translate it into a target format, such as HTML.
 
@@ -38,7 +34,3 @@ Output HTML:
   <li>Item 2</li>
 </ul>
 ```
-
----
-
-*See next: [Post-rendering](Pipeline-‐-Post-rendering.qd)*

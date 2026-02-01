@@ -1,7 +1,8 @@
 .docname {Paper library}
 .include {_Setup.qd}
+.include {paper}
 
-The built-in [`paper`](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper) library is written in Quarkdown and adds support for typical elements of scientific papers in a LaTeX fashion.
+The built-in .repolink {`paper`} {blob/main/quarkdown-libs/src/main/resources/paper} library is written in Quarkdown and adds support for typical elements of scientific papers in a LaTeX fashion.
 
 The library features the following components:
 - Abstract
@@ -11,47 +12,35 @@ The library features the following components:
   - Theorems
   - Proofs
 
-> [!NOTE]
-> The supported languages align with those supported by Quarkdown's core: currently English and Italian. See [*Built-in localization*](Localization.qd#built-in-localization) for further information.
-
-
+> Note: The supported languages align with those supported by Quarkdown's core. See [*Built-in localization*](Localization.qd#built-in-localization) for further information.
 
 The first step is to [import](Importing-external-libraries.qd) the library:
+
 ```markdown
 .include {paper}
 ```
 
-### Abstract
+## Abstract
 
-**`.abstract`** generates the layout for a titled *abstract* block. Its content goes in the block argument:
+**`.abstract`** generates the layout for a titled *abstract* block. Its content goes in the block argument.
 
-```markdown
-.abstract
-    This is my *abstract*! Here goes the summary of the document.
-    .loremipsum
+.exampleoutput {![Abstract](Paper-library/abstract.png)}
+    .abstract
+        This is my *abstract*! Here goes the summary of the document.  
+        .loremipsum
 
-This is not part of the abstract, instead.
-```
+    This is not part of the abstract, instead.
 
-!(630)[Abstract](Paper-library/abstract.png)
+The alignment of the title defaults to center and can be changed via `.abstractalignment {start|center|end}`.
 
+.exampleoutput {![Abstract with start-aligned title](Paper-library/abstract-start-aligned.png)}
+    .abstractalignment {start}
 
+    .abstract
+        This is my *abstract*! Here goes the summary of the document.  
+        .loremipsum
 
-The alignment of the title defaults to center and can be changed via `.abstractalignment {start|center|end}`:
-
-```markdown
-.abstractalignment {start}
-
-.abstract
-    This is my *abstract*! Here goes the summary of the document.
-    .loremipsum
-```
-
-!(630)[image](Paper-library/abstract-start-aligned.png)
-
-
-
-### Titled blocks
+## Titled blocks
 
 You can create any of the following blocks:
 - Definition via **`.definition`**
@@ -59,68 +48,52 @@ You can create any of the following blocks:
 - Theorem via **`.theorem`**
 - Proof via **`.proof`**
 
-All the mentioned functions take one block argument that defines the content:
+All the mentioned functions take one block argument that defines the content.
 
-```latex
-.definition
-    Let $ \Delta x $ be an object's change in position over a time interval $ \Delta t $,
-    then the average velocity is defined as $ v = \frac {\Delta x} {\Delta t} $.
-```
+.exampleoutput {![Definition](Paper-library/definition.png)}
+    .definition
+        Let $ \Delta x $ be an object's change in position over a time interval $ \Delta t $,
+        then the average velocity is defined as $ v = \frac {\Delta x} {\Delta t} $.
 
-!(600)[Definition](Paper-library/definition.png)
-
-
+### Custom title suffix
 
 The default title suffix is `.` (dot) and can be customized via `.paperblocksuffix {suffix}`:
 
-```markdown
-.paperblocksuffix {:}
-```
+.exampleoutput {![Custom block suffix](Paper-library/custom-suffix.png)}
+    .paperblocksuffix {:}
 
-!(600)[Custom block suffix](Paper-library/custom-suffix.png)
+### Numbering
 
+Defining a [numbering format](Numbering.qd) causes the blocks of that type to be numbered. The format names are plural: `definitions`, `lemmas`, `theorems`, `proofs`.
 
+.exampleoutput {!(600)[Numbered blocks](Paper-library/numbered-blocks.png)}
+    .numbering
+        - definitions: 1.a
+        - lemmas: i
 
-Defining a [numbering format](Numbering.qd) causes the blocks of that type to be numbered.
-The format names are plural: `definitions`, `lemmas`, `theorems`, `proofs`.
+    ...
 
-```markdown
-.numbering
-    - definitions: 1.a
-    - lemmas: i
+    .definition
+        .loremipsum
 
-...
+    .lemma
+        .loremipsum
 
-.definition
-    .loremipsum
+    .definition
+        .loremipsum
 
-.lemma
-    .loremipsum
-
-.definition
-    .loremipsum
-```
-
-!(600)[Numbered blocks](Paper-library/numbered-blocks.png)
-
-
+### End-of-proof
 
 Proofs also feature a special *end-of-proof* character, which defaults to `∎`.
 
-```markdown
-.theorem
-    .loremipsum
+.exampleoutput {![Proof with end character](Paper-library/proof.png)}
+    .theorem
+        .loremipsum
 
-.proof
-    .loremipsum
-```
-
-!(600)[Proof](Paper-library/proof.png)
+    .proof
+        .loremipsum
 
 You can customize the end-of-proof character via `.proofend {string}`:
 
-```markdown
-.proofend {😎}
-```
-
-!(600)[Proof character customization](Paper-library/proof-custom-end.png)
+.exampleoutput {![Proof character customization](Paper-library/proof-custom-end.png)}
+    .proofend {😎}
