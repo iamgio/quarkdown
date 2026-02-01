@@ -5,45 +5,27 @@ Quarkdown allows a blockquote to have a citation source.
 
 In general, if the quote ends with a single-item unordered list, that list item is set as the citation source. You can specify the source using any of the supported unordered list bullets: `-`, `*`, `+`, although using `-` is recommended.
 
-```markdown
-> To be, or not to be, that is the question.
-> - William Shakespeare
-```
+.examplemirror
+    > To be, or not to be, that is the question.
+    > - William Shakespeare
 
-!(556)[Result: Shakespeare](Quotation-source/shakespeare.png)
+The layout and aesthetics are handled by the current layout theme.
 
-The layout and aesthetics are handled by the current theme.
+The source may contain inline content, including function calls.
 
----
+.examplemirror
+    > Failure's not an option. It's just a step.
+    > - Dwayne **The Rock** Johnson
 
-The source may contain inline content, including function calls:
+.examplemirror
+    >> You miss 100% of the shots you don't take.
+    >> - Wayne Gretzky
+    > - Michael Scott
 
-```markdown
-> Failure's not an option. It's just a step.
-> - Dwayne **The Rock** Johnson
-```
-
-!(556)[Result: The Rock](Quotation-source/the-rock.png)
-
----
-
-Any kind of blockquote may have a source:
-
-```markdown
->> You miss 100% of the shots you don't take.
->> - Wayne Gretzky
-> - Michael Scott
-```
-
-!(556)[Result: Michael Scott](Quotation-source/nested-quote.png)
-
----
+## Typed quotes
 
 [Typed quotes](Quote-types.qd) may also have sources:
 
-```markdown
-> Tip: Try out **Quarkdown**!
-> - [iamgio](https://github.com/iamgio)
-```
-
-!(556)[Result: iamgio](Quotation-source/typed-with-source.png)
+.examplemirror
+    > Tip: Try out **Quarkdown**!
+    > - [Gio](https://github.com/iamgio)

@@ -3,12 +3,9 @@
 
 Welcome to Quarkdown! This guide walks you through the main features you need to create your first document.
 
-> [!TIP]
-> If you use VS Code, we strongly recommend installing the [official Quarkdown extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode).
+> Tip: If you use VS Code, we strongly recommend installing the [official Quarkdown extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode).
 
 This guide provides a broad overview without diving deep into every detail. Each section includes links to other wiki pages where you can learn more about specific features.
-
-
 
 ## Creating a document
 
@@ -89,8 +86,6 @@ quarkdown c my-document.qd --pdf
 ```
 
 See the [PDF export](PDF-export.qd) page for more information about PDF export and its requirements. If you installed Quarkdown using a package manager or the install script, you should be ready to go.
-
-
 
 ## Live preview
 
@@ -198,8 +193,6 @@ Notice that the second equation appears centered on its own line, even though it
 
 !(650)[Equations](Quickstart/equations.png)
 
-
-
 ## Function call syntax
 
 > Reference: [Syntax of a function call](Syntax-of-a-function-call.qd)
@@ -224,12 +217,10 @@ Block function calls also support an indented *block argument*, which always cor
 
 You can chain multiple function calls together, where the output of one becomes the first argument of the next:
 
-```markdown
-.sqrt {10}::round::multiply {2} <!-- 6 -->
-```
+.examplemirror
+    .sqrt {10}::round::multiply {2}
 
-> [!TIP]
-> You can find a full list of available functions in the [documentation](https://quarkdown.com/docs/quarkdown-stdlib/).
+> Tip: you can find a full list of available functions in the [documentation](https://quarkdown.com/docs/quarkdown-stdlib/).
 
 ### Variables
 
@@ -248,8 +239,6 @@ To change a variable's value, call it with a new argument:
 ```markdown
 .name {Jane}
 ```
-
-
 
 ## Custom elements
 
@@ -299,7 +288,7 @@ Update the call accordingly:
     This is my example!
 ```
 
-!(650)[Custom element](https://github.com/user-attachments/assets/039bdd8b-a47f-4ebb-996d-ba0de4632a35)
+!(650)[Custom element](Quickstart/custom-element.png)
 
 Congratulations! You've created your first reusable element using [boxes](Box.qd). Many more layout tools are available, such as [containers](Container.qd) and [stacks](Stacks.qd).
 
@@ -312,16 +301,13 @@ For advanced styling of custom elements, you can use CSS rules. See [CSS](CSS.qd
 > -    This is my example!
 > ```
 
-
-
 ## Numbering
 
 > Reference: [Numbering](Numbering.qd)
 
 Many documents, especially academic ones, require numbered elements such as sections, figures, tables, equations, and code. In Quarkdown, you can achieve this using the `.numbering` function.
 
-> [!NOTE]
-> Documents with the `paged` type come with default numbering enabled.
+> Note: Documents with the `paged` type come with default numbering enabled.
 
 Add a numbering scheme at the top of your document, right before the content begins:
 
@@ -353,8 +339,6 @@ Valid symbols for numbering formats are:
 
 Any other character is treated as literal text.
 
-
-
 ## Table of contents
 
 > Reference: [Table of contents](Table-of-contents.qd)
@@ -372,8 +356,6 @@ In Quarkdown, simply call the `.tableofcontents` function where you want the tab
 ## Quickstart
 ...
 ```
-
-
 
 ## Footnotes
 
@@ -398,8 +380,6 @@ and much more[^: All Markdown features are supported in Quarkdown].
 ```
 
 In `plain` documents, footnotes appear in the margin next to the reference, similar to side notes. In `paged` and `slides` documents, footnotes appear at the bottom of the page or slide.
-
-
 
 ## Cross-references
 
@@ -597,4 +577,4 @@ You can also visualize the knowledge graph formed by subdocuments:
 
 Congratulations! You have completed the Quarkdown quickstart guide and are now familiar with its main features. You are ready to create your first real document.
 
-From here, you can explore more advanced topics in the [wiki](https://github.com/iamgio/wiki) and [documentation](https://quarkdown.com/docs/).
+From here, you can explore more advanced topics in the rest of this wiki and in the [documentation](https://quarkdown.com/docs/).
