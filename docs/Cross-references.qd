@@ -67,7 +67,7 @@ You typically set the ID using the `{#id}` syntax. The exact location depends on
     $$$
     ```
 
-> Tip: See [TeX Formulae](TeX-Formulae.qd) for more information on writing equations in Quarkdown.
+> Tip: See [TeX Formulae](TeX-formulae.qd) for more information on writing equations in Quarkdown.
 
 ### Code blocks (listings)
 
