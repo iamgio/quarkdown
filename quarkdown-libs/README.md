@@ -8,4 +8,4 @@ At runtime, the CLI option `-l` or `--libs` sets the path to the library directo
 In order to load a library from the library directory, the `.include {name}` function can be used.
 After the library is loaded, the functions defined in the library can be used in the main document.
 
-See [wiki: *Importing external libraries*](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries) for further information.
+See [wiki: *Importing external libraries*](https://quarkdown.com/wiki/importing-external-libraries) for further information.

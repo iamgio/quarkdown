@@ -8,6 +8,6 @@ Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the startin
 - To enable live preview, run:  
   `quarkdown c [[MAINFILE]].qd -p -w`
 
-For further information and guides, please check out the [official wiki](https://github.com/iamgio/quarkdown/wiki).
+For further information and guides, please check out the [official wiki](https://quarkdown.com/wiki).
 
 !(50%)[Quarkdown](image/logo.png)

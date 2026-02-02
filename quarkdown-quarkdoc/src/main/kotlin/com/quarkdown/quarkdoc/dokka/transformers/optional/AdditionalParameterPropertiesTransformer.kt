@@ -5,6 +5,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.factory.ValueFactory.enum
 import com.quarkdown.quarkdoc.dokka.kdoc.buildDocTags
+import com.quarkdown.quarkdoc.dokka.page.WIKI_ROOT
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
 import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
@@ -16,11 +17,9 @@ import org.jetbrains.dokka.model.doc.DocTag
 import org.jetbrains.dokka.model.doc.Ul
 import org.jetbrains.dokka.plugability.DokkaContext
 
-private const val BODY_PARAMETER_WIKI_URL =
-    "https://github.com/iamgio/quarkdown/wiki/syntax-of-a-function-call#block-vs-inline-function-calls"
+private const val BODY_PARAMETER_WIKI_URL = WIKI_ROOT + "syntax-of-a-function-call#block-vs-inline-function-calls"
 
-private const val NAMED_PARAMETER_WIKI_URL =
-    "https://github.com/iamgio/quarkdown/wiki/syntax-of-a-function-call"
+private const val NAMED_PARAMETER_WIKI_URL = WIKI_ROOT + "syntax-of-a-function-call"
 
 /**
  * Transformer that appends documentation to parameters
