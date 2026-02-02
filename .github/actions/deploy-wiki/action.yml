@@ -15,19 +15,12 @@ runs:
     - name: Build wiki documentation
       run: |
         cd docs
-        ${{ inputs.quarkdown-path }} c Home.qd --clean
-      shell: bash
-
-    - name: Find output directory
-      id: find-output
-      run: |
-        OUTPUT_DIR=$(find docs/output -mindepth 1 -maxdepth 1 -type d | head -n 1)
-        echo "output-dir=$OUTPUT_DIR" >> $GITHUB_OUTPUT
+        ${{ inputs.quarkdown-path }} c Home.qd --clean --out-name wiki
       shell: bash
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ inputs.github-token }}
-        publish_dir: ${{ steps.find-output.outputs.output-dir }}
+        publish_dir: docs/output/wiki
         destination_dir: wiki
