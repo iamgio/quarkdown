@@ -6,129 +6,69 @@ Stack functions are layout functions that arrange a group of elements according 
 - **`.column`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html}
 - **`.grid`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html}
 
----
+## Blocks
 
-To understand which elements to handle, stack functions rely on the strict Markdown concept of a block, which is an isolated chunk of the document such as a paragraph, a code block, a list, or a quote.
+To understand which elements to handle, stack functions rely on the strict Markdown concept of a block, which is an isolated chunk of the document: a paragraph, a code block, a list, a quote, a figure, or another function call.
 
-```markdown
-.row
-  A
+.examplemirror
+    .row gap:{1cm}
+        A
 
-  B
+        B
 
-  C
-```
+        C
 
-The following example has only one item because A, B, and C are all part of the same paragraph (due to *lazy lines*):
+.examplemirror {The following example has only one item because A, B, and C are all part of the same paragraph (due to *lazy lines*):} type:{warning}
+    .row gap:{1cm}
+        A
+        B
+        C
 
-```markdown
-.row
-  A
-  B
-  C
-```
 
-Images are stackable too, as long as they are in different paragraphs.
+.examplemirror
+    .row
+        ![](assets/icon.svg)
 
-```markdown
-.row
-  ![](img1.png)
+        ![](assets/icon.svg)
 
-  ![](img2.png)
-```
-
-Every kind of block is supported:
-
-~~~markdown
-.row
-  > This is
-  > a quote
-
-  ```java
-  This is code
-  ```
-
-  - This is
-  - a list
-~~~
-
-According to the CommonMark specification, the following example produces the same result as the previous one. However, it is recommended to keep the code readable by spacing blocks properly.
-
-~~~markdown
-.row
-  > This is
-  > a quote
-  ```java
-  This is code
-  ```
-  - This is
-  - a list
-~~~
+## Parameters
 
 All stack functions accept the following optional arguments:
 
-| Parameter | Description | Accepts |
-|-----------|-------------|---------|
+| Parameter   | Description                                  | Accepts                                                                |
+|-------------|----------------------------------------------|------------------------------------------------------------------------|
 | `alignment` | Main axis alignment (CSS `justify-content`). | `start`, `center`, `end`, `spacebetween`, `spacearound`, `spaceevenly` |
-| `cross` | Cross axis alignment (CSS `align-items`). | `start`, `center`, `end`, `stretch` |
-| `gap` | Space between items. | [`Size`](Sizes.qd) |
+| `cross`     | Cross axis alignment (CSS `align-items`).    | `start`, `center`, `end`, `stretch`                                    |
+| `gap`       | Space between items.                         | [`Size`](Sizes.qd)                                                     |
 
 The `grid` function also accepts a mandatory `columns` argument, which takes an integer value.
 
-```markdown
-.grid columns:{2} alignment:{spacearound} gap:{1cm}
-  A
+.examplemirror
+    .grid columns:{2} alignment:{spacearound}
+        A
 
-  *B*
+        *B*
 
-  **C**
+        **C**
 
-  ***D***
-```
+        ***D***
 
-!(600)[Grid result](Stacks/grid.png)
+## Composition
 
-Other elements can join too:
+You can compose stack functions to create complex layouts:
 
-```markdown
-## Contacts
+.examplemirror
+    .row alignment:{spacearound}
+        .column
+            **Michael Scott**
 
-.row alignment:{spacearound}
-  .center
-    **Michael Scott**
-    Dunder Mifflin Paper Company, Inc.
-    [michaelscott@example.com](mailto:michaelscott@example.com)
+            Dunder Mifflin Paper Company, Inc.
 
-  .center
-    **Forrest Gump**
-    Bubba Gump Shrimp Co.
-    [forrestgump@example.com](mailto:forrestgump@example.com)
-```
+            [michaelscott@example.com](mailto:michaelscott@example.com)
 
-!(600)[Contacts example](Stacks/contacts.png)
+        .column
+            **Forrest Gump**
 
-Stack layouts can be infinitely nested within each other:
+            Bubba Gump Shrimp Co.
 
-```markdown
-.row cross:{center} gap:{1in}
-  A
-
-  .grid columns:{2}
-    B
-
-    C
-
-    D
-
-    E
-
-  .column gap:{5mm}
-    F
-
-    .row
-      G
-
-      H
-```
-
-!(600)[Nested stacks](Stacks/nested.png)
+            [forrestgump@example.com](mailto:forrestgump@example.com)

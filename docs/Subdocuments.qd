@@ -3,15 +3,13 @@
 
 When referring to a Quarkdown *document*, we are talking broadly about the group of resources that make up a Quarkdown project.
 
-Commonly, especially in the case of knowledge management and wikis, pages can have links that point to other pages, building a network of interconnected ***subdocuments***.
+Commonly, especially in the case of knowledge management and wikis like this one, pages can have links that point to other pages, building a network of interconnected ***subdocuments***.
 
-In Quarkdown, a subdocument's entry point is a source file that is referenced by another subdocument. In practice, when I do [this](Home.qd), I am referring to a subdocument.
+In Quarkdown, a subdocument's entry point is a source file that is referenced by another subdocument. In practice, when I do [this](Quickstart.qd), I am referring to a subdocument.
 
 Every project consists of at least one subdocument: the main one, called *root*.
 
-> [!NOTE]
->
-> Do not confuse subdocuments with [inclusion](Including-other-Quarkdown-files.qd). See [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd) for a comparison.
+> Note: Do not confuse subdocuments with [inclusion](Including-other-Quarkdown-files.qd). See [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd) for a comparison.
 
 ## Referencing subdocuments
 
@@ -45,39 +43,42 @@ When referencing a subdocument, its content is evaluated like an independent Qua
 
 A relevant difference is that **subdocuments inherit the referrer's context**: document metadata, customizations, functions, variables, and more.
 
-> `main.qd`:
-> ```markdown
-> .doctype {paged}
-> .theme {darko}
-> .pageformat margin:{1cm}
->
-> .function {greet}
->     Hello!
->
-> [Introduction](introduction.qd)
-> ```
->
-> `introduction.qd`:
-> ```markdown
-> No need to set the document up again, it's already inherited!
->
-> .greet
-> ```
+.example
+    > `main.qd`:
+    > ```markdown
+    > .doctype {paged}
+    > .theme {darko}
+    > .pageformat margin:{1cm}
+    >
+    > .function {greet}
+    >     Hello!
+    >
+    > [Introduction](introduction.qd)
+    > ```
+
+    > `introduction.qd`:
+    > ```markdown
+    > No need to set the document up again, it's already inherited!
+    >
+    > .greet
+    > ```
 
 Unlike [`.include`](Including-other-Quarkdown-files.qd), the context is *inherited*, not *shared*: changes made in the subdocument do not affect the referrer.
 
-> `main.qd`:
-> ```markdown
-> [Introduction](introduction.qd)
->
-> .greet <!-- Error: unresolved -->
-> ```
->
-> `introduction.qd`:
-> ```markdown
-> .function {greet}
->     Hello!
-> ```
+.example
+    The following example produces an error because `greet` is not defined in the referrer context:
+    > `main.qd`:
+    > ```markdown
+    > [Introduction](introduction.qd)
+    >
+    > .greet <!-- Error: unresolved -->
+    > ```
+
+    > `introduction.qd`:
+    > ```markdown
+    > .function {greet}
+    >     Hello!
+    > ```
 
 ## Working directory
 
@@ -101,7 +102,7 @@ Subdocuments are structured in a directed graph, where the edges are the links b
 
 You can visualize the graph via the **`.subdocumentgraph`** function:
 
-!(700)[Graph](https://github.com/user-attachments/assets/266bf169-255a-46c5-97a7-455aff815b8f)
+!(700)[Graph](Subdocuments/graph.png)
 
 ## Output
 
@@ -138,9 +139,7 @@ MyDocument/
 | conclusion.pdf
 ```
 
-> [!IMPORTANT]
->
-> Subdocument links in PDF output are not navigable.
+> Note: Subdocument links in PDF output are not navigable yet.
 
 If only the root subdocument is present, then only `MyDocument.pdf` is generated without the need for a directory.
 

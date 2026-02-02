@@ -3,10 +3,10 @@
 
 The **`.slides`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html} function allows you to override the default configuration of `slides` documents. All of its parameters are **optional**:
 
-| Parameter | Description | Accepts | Default |
-|-----------|-------------|---------|---------|
-| `center` | Whether content should be centered vertically. | [`Boolean`](Boolean.qd) | Up to the current layout theme. |
-| `controls` | Whether navigation controls should be shown. | [`Boolean`](Boolean.qd) | `true` |
-| `speakernotes` | Whether [speaker notes](Slides-speaker-notes.qd) should be displayed outside of the speaker view. | [`Boolean`](Boolean.qd) | `false` |
-| `transition` | Transition style between slides. | `none`, `fade`, `slide`, `zoom` | `slide` |
-| `speed` | Transition speed between slides.<br/>Requires `transition` to be set. | `default`, `fast`, `slow` | `default` |
+| Parameter      | Description                                                                                       | Accepts                         | Default                         |
+|----------------|---------------------------------------------------------------------------------------------------|---------------------------------|---------------------------------|
+| `center`       | Whether content should be centered vertically.                                                    | [`Boolean`](Boolean.qd)         | Up to the current layout theme. |
+| `controls`     | Whether navigation controls should be shown.                                                      | [`Boolean`](Boolean.qd)         | `true`                          |
+| `speakernotes` | Whether [speaker notes](Slides-speaker-notes.qd) should be displayed outside of the speaker view. | [`Boolean`](Boolean.qd)         | `false`                         |
+| `transition`   | Transition style between slides.                                                                  | `none`, `fade`, `slide`, `zoom` | `slide`                         |
+| `speed`        | Transition speed between slides.<br/>Requires `transition` to be set.                             | `default`, `fast`, `slow`       | `default`                       |
