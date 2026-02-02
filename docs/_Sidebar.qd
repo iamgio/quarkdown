@@ -5,11 +5,30 @@
 - [Stable ↗](https://quarkdown.com/docs/quarkdown-stdlib/)
 - [Latest build ↗](https://quarkdown.com/docs/latest/quarkdown-stdlib/)
 
-###! CLI tools
-- [Compiler](CLI-Compiler.qd)
-- [Exporting to PDF](PDF-export.qd)
-- [Project creator](CLI-Project-creator.qd)
-- [Webserver](CLI-Webserver.qd)
+###! Functions
+- [Syntax of a function call](Syntax-of-a-function-call.qd)
+  - [Chaining calls](Syntax-of-a-function-call.qd#chaining-calls)
+  - [Block vs. inline calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls)
+- [Declaring functions](Declaring-functions.qd)
+- [Dynamic typing](Typing.qd)
+- [Localization](Localization.qd)
+
+###! Document setup
+- [Document metadata](Document-metadata.qd)
+  - [Document types](Document-types.qd)
+- [Theme](Themes.qd)
+- [Fonts](Font-configuration.qd)
+- [Page format](Page-format.qd)
+  - [Multi-column layout](Multi‐column-layout.qd)
+- [Page margin content](Page-margin-content.qd)
+- [Page counter](Page-counter.qd)
+- [Persistent headings](Persistent-headings.qd)
+- [Numbering](Numbering.qd)
+- [Paragraph style](Paragraph-style.qd)
+- [Caption position](Caption-position.qd)
+- [Table of contents](Table-of-contents.qd)
+- [Bibliography](Bibliography.qd)
+- [Footnotes](Footnotes.qd)
 
 ###! Markdown enhancements
 - [Figures](Figure.qd)
@@ -22,43 +41,11 @@
 - [Quotation source](Quotation-source.qd)
 - [Cross-references](Cross-references.qd)
 - [Page breaks](Page-break.qd)
+  - [Automatic break](Page-break.qd#automatic-break)
 - [Text symbols](Text-symbols.qd)
 - [Emojis](Emojis.qd)
 
-###! Functions
-- [Syntax of a function call](Syntax-of-a-function-call.qd)
-  - [Chaining calls](Syntax-of-a-function-call.qd#chaining-calls)
-  - [Block vs. inline calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls)
-- [Declaring functions](Declaring-functions.qd)
-- [Dynamic typing](Typing.qd)
-- [Localization](Localization.qd)
-
-####! Setting up
-- [Document metadata](Document-metadata.qd)
-  - [Document types](Document-types.qd)
-- [Theme](Themes.qd)
-- [CSS](CSS.qd)
-- [Fonts](Font-configuration.qd)
-- [Page format](Page-format.qd)
-  - [Multi-column layout](Multi‐column-layout.qd)
-- [Page margin content](Page-margin-content.qd)
-- [Page counter](Page-counter.qd)
-- [Persistent headings](Persistent-headings.qd)
-- [Automatic page break](Page-break.qd#automatic-break)
-- [Numbering](Numbering.qd)
-- [Paragraph style](Paragraph-style.qd)
-- [Caption position](Caption-position.qd)
-- [Table of contents](Table-of-contents.qd)
-- [Bibliography](Bibliography.qd)
-- [Footnotes](Footnotes.qd)
-
-####! Multi-file projects
-- [Including other Quarkdown files](Including-other-Quarkdown-files.qd)
-- [Referencing other Quarkdown files](Subdocuments.qd)
-  - [Including vs. referencing](Inclusion-vs-subdocuments.qd)
-- [Importing external libraries](Importing-external-libraries.qd)
-
-####! Layout
+###! Layout
 - [Stacks: rows, columns, grids](Stacks.qd)
 - [Container](Container.qd)
 - [Align](Align.qd)
@@ -70,11 +57,13 @@
 - [Landscape](Landscape-content.qd)
 - [Whitespace](Whitespace.qd)
 
-####! Charts & diagrams
-- [XY chart](XY-chart.qd)
-- [Mermaid diagrams](Mermaid-diagrams.qd)
+###! Multi-file projects
+- [Including other Quarkdown files](Including-other-Quarkdown-files.qd)
+- [Referencing other Quarkdown files](Subdocuments.qd)
+  - [Including vs. referencing](Inclusion-vs-subdocuments.qd)
+- [Importing external libraries](Importing-external-libraries.qd)
 
-####! Scripting & control flow
+###! Variables & scripting
 - [Variables](Variables.qd)
 - [Optionality](None.qd)
 - [Math](Math.qd)
@@ -82,30 +71,33 @@
 - [Loops](Loops.qd)
 - [Let](Let.qd)
 - [Destructuring](Destructuring.qd)
+
+###! Data & tables
 - [Table manipulation](Table-manipulation.qd)
 - [Table generation](Table-generation.qd)
+- [Text content from file](File-data.qd#file-text-content)
+- [Table from CSV data](File-data.qd#table-from-csv)
 
-####! Utilities
+###! Charts & diagrams
+- [XY chart](XY-chart.qd)
+- [Mermaid diagrams](Mermaid-diagrams.qd)
+
+###! Text & code
 - [Advanced text formatting](Text.qd)
 - [Advanced code block](Code.qd)
 - [Explicit line breaks](Line-breaks.qd)
 - [TeX macros](TeX-macros.qd)
 
-####! Slides
+###! Slides
 - [Slides configuration](Slides-configuration.qd)
 - [Interactive fragment](Slides-fragment.qd)
 - [Speaker notes](Slides-speaker-notes.qd)
 
-####! I/O
-- [Text content from file](File-data.qd#file-text-content)
-- [Table from CSV data](File-data.qd#table-from-csv)
-- [Logging](Logging.qd)
-
-####! Native content
+###! Native content
 - [HTML](HTML.qd)
 - [CSS](CSS.qd)
 
-####! Value types
+###! Value types
 - String
 - Number
 - [Markdown content](Markdown-content.qd)
@@ -123,8 +115,15 @@
 ###! Built-in libraries
 - [Paper: abstract, definitions, theorems](Paper-library.qd)
 
-###! Extra features
+###! Resources & logging
 - [Media storage](Media-storage.qd)
+- [Logging](Logging.qd)
+
+###! CLI tools
+- [Compiler](CLI-Compiler.qd)
+- [Exporting to PDF](PDF-export.qd)
+- [Project creator](CLI-Project-creator.qd)
+- [Webserver](CLI-Webserver.qd)
 
 ###! Inside Quarkdown
 - [Quarkdown's pipeline](Pipeline.qd)
