@@ -63,7 +63,7 @@
     .tableofcontents
 
 .pagemargin {topleft}
-    [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
+    [![Quarkdown](assets/docs-banner-light.svg)](https://quarkdown.com)
 
 .pagemargin {topright}
     .row
