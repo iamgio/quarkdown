@@ -3,33 +3,27 @@
 
 The Quarkdown flavor introduces table captions, which you can set by adding a line immediately below the table. The content is wrapped between double quotes, single quotes, or parentheses, exactly like the image *title* attribute and [code captions](Code-caption.qd).
 
-```markdown
-| Country | Capital |
-|---------|---------|
-| England | London  |
-| Italy   | Rome    |
-| France  | Paris   |
-"Capitals of Europe"
-```
+.examplemirror
+    | Country | Capital |
+    |---------|---------|
+    | England | London  |
+    | Italy   | Rome    |
+    | France  | Paris   |
+    "Capitals of Europe"
 
-!(550)[Result](Table-caption/correct.png)
+.examplemirror {The caption must be located immediately next to the table, on a new line. The following example renders a paragraph instead of a caption:} type:{warning}
+    | Country | Capital |
+    |---------|---------|
+    | England | London  |
+    | Italy   | Rome    |
+    | France  | Paris   |
 
+    "Capitals of Europe"
 
+## Changing position
 
-The caption must be located immediately next to the table, on a new line. The following example renders a paragraph instead of a caption:
+The relative position of captions can be customized. See [Caption position](Caption-position.qd) for further information.
 
-```markdown
-| Country | Capital |
-|---------|---------|
-| England | London  |
-| Italy   | Rome    |
-| France  | Paris   |
-
-"Capitals of Europe"
-```
-
-!(550)[Wrong](Table-caption/incorrect.png)
-
-
+## Numbering
 
 Tables can also be **numbered**. See [Numbering](Numbering.qd) for further information.

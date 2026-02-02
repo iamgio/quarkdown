@@ -1,64 +1,72 @@
 .docname {Table of contents}
 .include {_Setup.qd}
 
-A table of contents is a quick summary of the document where links to headings are displayed in a visual hierarchy.
+A table of contents provides a quick overview of your document by displaying links to headings in a visual hierarchy. Readers can click on any entry to jump directly to that section. You can see a table of contents right now in the right sidebar, or at the end of the page if you're on a mobile device.
 
-- `paged` and `slides` documents also display the corresponding page number.
-- `slides` documents constrain the maximum height, making the table of contents vertically scrollable.
+You can display a table of contents through the **`.tableofcontents`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/tableofcontents.html} function.
 
-You can display a table of contents through the **`.tableofcontents`** function, with the following optional parameters:
+## Basic usage
+
+The function accepts the following optional parameters:
 
 | Parameter | Description | Accepts | Default |
 |-----------|-------------|---------|---------|
 | `title` | Title that precedes the table of contents. If unset, it is automatically localized. | Inline content | Automatically localized if [`.doclang`](Document-metadata.qd)'s locale is supported (e.g., `Table of Contents` for English) |
-| `maxdepth` | Maximum level of headings to display. For example, `maxdepth = 2` collects `# This` and `## This`, but not `### This`. | `Integer` | `3` |
-| `focus` | If set, adds focus to the item with the same text as this argument. Inline style (strong, emphasis, etc.) is ignored when comparing the text content. | [Inline content](Markdown-content.qd#inline-content) | (none) |
+| `maxdepth` | Maximum heading level to display. For example, `maxdepth:{2}` collects `#` and `##` headings, but not `###` or deeper. | Integer | `3` |
+| `focus` | Highlights the item matching this text. Inline formatting (bold, italics) is ignored when comparing. | [Inline content](Markdown-content.qd#inline-content) | (none) |
 
-```markdown
-.tableofcontents maxdepth:{2}
+.exampleoutput {!(550)[Table of contents](Table-of-contents/basic.png)}
+    .tableofcontents maxdepth:{2}
 
-## A
+    ## A
 
-...
+    ...
 
-### A.A
+    ### A.A
 
-...
+    ...
 
-### A.B
+    ### A.B
 
-...
+    ...
 
-## B
+    ## B
 
-...
+    ...
 
-## C
+    ## C
 
-### C.A
+    ### C.A
 
-#### C.A.A
+    #### C.A.A
 
-...
-```
+    ...
 
-!(550)[Table of contents](Table-of-contents/basic.png)
+## Behavior by document type
 
-[Layout themes](Themes.qd) greatly influence the look of the table of contents:
+The table of contents adapts to different document types:
 
-!(550)[Table of contents with minimal theme](Table-of-contents/minimal-theme.png)
+- In **`paged`** and **`slides`** documents, each entry also displays the corresponding page number.
+- In **`slides`** documents, the table of contents has a constrained height and becomes vertically scrollable when content overflows.
 
-> `minimal` theme
+## Theming
+
+[Layout themes](Themes.qd) greatly influence the appearance of the table of contents.
+
+.example
+    !(550)[Table of contents with minimal theme](Table-of-contents/minimal-theme.png "'minimal' theme")
 
 ## Ignoring specific headings
 
-[Decorative headings](Numbering.qd#decorative-headings) are not numbered and do not appear in the table of contents. A heading is marked as decorative if a `!` is appended to the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
+Sometimes you want certain headings to appear in your document but not in the table of contents. [Decorative headings](Numbering.qd#decorative-headings) serve this purpose: they are not numbered and do not appear in the table of contents by default.
+
+To mark a heading as decorative, append `!` to the last `#` sign:
 
 ```markdown
 ##! A decorative heading
 ```
 
-Decorative headings can appear in the table of contents if the optional `includeunnumbered` parameter is enabled:
+If you want decorative headings to appear in the table of contents anyway, enable the `includeunnumbered` parameter:
 
 ```markdown
 .tableofcontents includeunnumbered:{yes}
@@ -66,15 +74,22 @@ Decorative headings can appear in the table of contents if the optional `include
 
 ## Custom numbering
 
-You can set a custom numbering format via `.numbering`. See [Numbering](Numbering.qd) for more information.
+You can customize how headings are numbered in the table of contents via the `.numbering` function. See [Numbering](Numbering.qd) for more information.
 
-## Focusing and markers
+## Focusing entries
 
-If `focus:{A.B}` is added to the previous example:
+The `focus` parameter highlights a specific entry in the table of contents, drawing attention to the current section.
 
-!(550)[Table of contents with focus](Table-of-contents/focused.png)
+.exampleoutput {!(550)[Table of contents with focus](Table-of-contents/focused.png)} prelude:{Adding `focus:{A.B}` to the previous example highlights that entry:}
+    .tableofcontents maxdepth:{2} focus:{A.B}
 
-Focusing can be particularly useful in slides with mini tables of contents at the beginning of each new chapter. In that case, consider defining a function like this:
+This feature is particularly useful in presentations, where you might want to show a mini table of contents at the beginning of each chapter to orient your audience.
+
+### Using markers for chapter navigation
+
+For slide presentations, you can combine focusing with **markers** to create elegant chapter navigation. The `.marker` function creates an invisible level-0 heading, which is not normally possible with the standard `#`-based syntax.
+
+Here is a practical pattern for chapter slides:
 
 ```markdown
 .function {chapter}
@@ -83,6 +98,4 @@ Focusing can be particularly useful in slides with mini tables of contents at th
     .marker {.name}
 ```
 
-You can invoke it by `.chapter {My chapter}`.
-
-The `.marker` function creates an invisible level-0 heading (which is not normally possible with the standard `#`-based heading syntax). Setting `maxdepth:{0}` displays only markers in the table of contents, ignoring other headings.
+You can then invoke it with `.chapter {My chapter}` at the start of each section. Setting `maxdepth:{0}` ensures only markers appear in the table of contents, creating a clean chapter-level overview rather than showing all headings.

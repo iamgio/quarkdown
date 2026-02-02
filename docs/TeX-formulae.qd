@@ -19,8 +19,7 @@ Block equations are usually visually centered and share the same syntax as inlin
 
     $ F(u) = \int^{+\infty}_{-\infty} f(x) e^{-i 2\pi x} dx $
 
-> [!NOTE]
-> This syntax does **not** interrupt paragraphs, so make sure to space blocks properly. If the paragraph is not interrupted, the formula is recognized as inline due to Markdown's *lazy lines*.
+> Note: This syntax does **not** interrupt paragraphs, so make sure to space blocks properly. If the paragraph is not interrupted, the formula is recognized as inline due to Markdown's *lazy lines*.
 >
 > .examplemirror
 >     The following function is a **Fourier Transform**:

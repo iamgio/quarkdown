@@ -10,22 +10,25 @@ You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** funct
 ### Color themes
 - `paperwhite` (default)
 - `darko`
+- `galactic`
 - `beaver`
 
 ### Layout themes
 - `latex` (default)
+- `hyperlegible`
 - `minimal`
 - `beamer`
 
 ---
 
 Some suggested combinations are:
-- `darko+minimal` (used by the [demo presentation](https://iamgio.eu/quarkdown/demo/))
 - `paperwhite+latex` (LaTeX look, great for `paged` documents)
+- `galactic+hyperlegible` (this wiki)
+- `darko+minimal`
 - `beaver+beamer` (Beamer look, great for academic-style presentations)
 
 ## Contributing
 
-[Theme contributions](https://github.com/iamgio/quarkdown/tree/main/quarkdown-html/src/main/resources/render/theme) are welcome.
+.repolink {Theme contributions} {tree/main/quarkdown-html/src/main/scss} are welcome.
 
-Please make sure themes work well with all three document types before submitting. The [Mock document](https://github.com/iamgio/quarkdown?tab=readme-ov-file#mock-document) is a great way to test themes.
+Please make sure themes work well with all three document types before submitting. The .repolink {Mock document} {tree/main/mock#readme} is a great way to test themes against a variety of different elements.

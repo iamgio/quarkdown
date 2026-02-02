@@ -1,23 +1,23 @@
 .docname {XY chart}
 .include {_Setup.qd}
 
-The **`.xychart`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html} function allows you to plot 2D line and bar charts in a pure, flexible Quarkdown fashion, through the power of [Mermaid](Mermaid-diagrams.qd).
+The **`.xychart`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html} function allows you to plot 2D line and bar charts in a pure, flexible Quarkdown fashion, through the power of [Mermaid diagrams](Mermaid-diagrams.qd).
 
-All parameters except for `values` are optional.
+All parameters, except for `values`, are optional.
 
-| Parameter   | Description                                                                | Accepts                 |
-|-------------|----------------------------------------------------------------------------|-------------------------|
-| `lines`     | Whether to draw lines (defaults to true).                                  | [Boolean](Boolean.qd)      |
-| `bars`      | Whether to draw bars (defaults to false).                                  | [Boolean](Boolean.qd)      |
-| `x`         | Label for the X axis.                                                      | String                  |
-| `xrange`    | Numerical range for the X axis. Can be open-ended. Incompatible with `xtags`. | [Range](Range.qd) |
-| `xtags`     | Categorical tags for the X axis. Incompatible with `xrange`.               | [Iterable](Iterable.qd)    |
-| `y`         | Label for the Y axis.                                                      | String                  |
-| `yrange`    | Range for the Y axis. Can be open-ended.                                   | [Range](Range.qd)          |
-| `caption`   | Caption. If present, the chart is [numbered](Numbering.qd) as a figure.       | String                  |
-| `values`    | Y values to plot. | <ul><li>[Iterable](Iterable.qd) of points (single line)</li><li>Iterable of iterables of points (multiple lines)</li></ul> |
+| Parameter | Description                                                                   | Accepts                                                                                                      |
+|-----------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| `lines`   | Whether to draw lines (defaults to true).                                     | [Boolean](Boolean.qd)                                                                                        |
+| `bars`    | Whether to draw bars (defaults to false).                                     | [Boolean](Boolean.qd)                                                                                        |
+| `x`       | Label for the X axis.                                                         | String                                                                                                       |
+| `xrange`  | Numerical range for the X axis. Can be open-ended. Incompatible with `xtags`. | [Range](Range.qd)                                                                                            |
+| `xtags`   | Categorical tags for the X axis. Incompatible with `xrange`.                  | [Iterable](Iterable.qd)                                                                                      |
+| `y`       | Label for the Y axis.                                                         | String                                                                                                       |
+| `yrange`  | Range for the Y axis. Can be open-ended.                                      | [Range](Range.qd)                                                                                            |
+| `caption` | Caption. If present, the chart is [numbered](Numbering.qd) as a figure.       | String                                                                                                       |
+| `values`  | Y values to plot.                                                             | [Iterable](Iterable.qd) of points (single line), or iterable of iterables of points (multiple lines)         |
 
-#### Axis ranges
+## Axis ranges
 
 `xrange` and `yrange` define the boundaries of the visible area of the chart through the usual `x..y` [Range](Range.qd) syntax.
 
@@ -27,89 +27,68 @@ The range may also be open on either end, or both:
 
 For instance, `..` (infinite) is the default range, which shows the area between the minimum and maximum values.
 
-
-
 ## Possible input sources
 
-### From static list
+### From static list (single line)
 
 You can represent `values` as a Markdown list, just like all iterables.
 
-```markdown
-.xychart bars:{yes} x:{Months} y:{Revenue} yrange:{100..}
-  - 250
-  - 500
-  - 350
-  - 450
-  - 400
-  - 500
-  - 600
-```
+.examplemirror
+    .xychart bars:{yes} x:{Months} y:{Revenue} yrange:{100..}
+        - 250
+        - 500
+        - 350
+        - 450
+        - 400
+        - 500
+        - 600
 
-!(600)[Simple list](XY-chart/bar-chart.png)
-
-
+### From static list (multiple lines)
 
 In case of nested lists (iterable of iterables), multiple lines will be plotted:
 
-```markdown
-.xychart x:{Months} y:{Revenue}
-  - - 250
-    - 500
-    - 350
-    - 450
-    - 400
+.examplemirror
+    .xychart x:{Months} y:{Revenue}
+        - - 250
+          - 500
+          - 350
+          - 450
+          - 400
 
-  - - 400
-    - 150
-    - 200
-    - 400
-    - 450
-```
-
-!(600)[Nested lists](XY-chart/multi-line.png)
-
-
-
-### From CSV/table
-
-[Table manipulation](Table-manipulation.qd) functions such as [`.tablecolumn`](Table-manipulation.qd#retrieve-columns) can extract values from the columns of a table as iterables.
-
-```markdown
-.xychart
-    .tablecolumn {2}
-        .csv {data.csv}
-```
-
-If you need to access multiple columns from the same table, consider calling `.tablecolumns` for efficiency, which returns a collection of columns. You can then perform any [`Iterable`](Iterable.qd) operation on it.
-
-In the following example, the chart displays two lines: one for the second and one for the third column of the CSV. Additionally, the first column of the table is used as a set of categorical tags for the X axis.
-
-```markdown
-.var {columns}
-    .tablecolumns
-        .csv {data.csv}
-
-.xychart xtags:{.columns::first} x:{Years} y:{Sales}
-    .columns::second
-    .columns::third
-```
-
-!(600)[CSV](XY-chart/csv.png)
-
-
+        - - 400
+          - 150
+          - 200
+          - 400
+          - 450
 
 ### From iterations
 
 Quarkdown [loops](Loops.qd) return an iterable containing the result of each iteration, making them a suitable input for `values`, especially in combination with [math](Math.qd) functions.
 
-```markdown
-.xychart
-    .repeat {100}
-        .1::pow {2}::divide {100}
+.examplemirror
+    .xychart
+        .repeat {100}
+            .1::pow {2}::divide {100}
 
-    .repeat {100}
-        .1::logn::multiply {10}
-```
+        .repeat {100}
+            .1::logn::multiply {10}
 
-!(600)[Loop](XY-chart/loop.png)
+### From CSV/table
+
+[Table manipulation](Table-manipulation.qd) functions such as [`.tablecolumn`](Table-manipulation.qd#retrieve-columns) can extract values from the columns of a table as iterables.
+
+.examplemirror
+    .xychart
+        .tablecolumn {2}
+            .csv {assets/sales.csv}
+
+If you need to access multiple columns from the same table, consider calling `.tablecolumns` for efficiency, which returns a collection of columns. You can then perform any [`Iterable`](Iterable.qd) operation on it.
+
+.examplemirror {In the following example, the chart displays two lines: one for the second and one for the third column of the CSV. Additionally, the first column of the table is used as a set of categorical tags for the X axis.}
+    .var {columns}
+        .tablecolumns
+            .csv {assets/sales.csv}
+
+    .xychart xtags:{.columns::first} x:{Years} y:{Sales}
+        .columns::second
+        .columns::third

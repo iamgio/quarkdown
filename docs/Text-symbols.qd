@@ -26,8 +26,12 @@ Text is automatically replaced wherever inline content is accepted (for example,
 | `(R)`  | ®           |                                                                                               |
 | `(TM)` | ™           |                                                                                               |
 
+.examplemirror
+    "Quarkdown"--a typesetting system--supports automatic text replacements.
+
+## Escaping
+
 Escaping a sequence with a backslash `\` prevents the text from being replaced:
 
-```markdown
-\->
-```
+.examplemirror
+    \->

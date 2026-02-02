@@ -3,60 +3,51 @@
 
 When writing [TeX formulae](TeX-formulae.qd), you may want to use custom macros.
 
-The **`.texmacro {name} {content}`** function defines a new macro that can be used in *math* elements.
+The **`.texmacro {name} {content}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/texmacro.html} function defines a new macro that can be used in equations.
 
-```latex
-.texmacro {\gradient} {\nabla}
+.examplemirror
+    .texmacro {\gradient} {\nabla}
 
-$ \gradient f $
-```
+    $ \gradient f $
 
 As with every Quarkdown function, you can use the last argument as a [*block argument*](Syntax-of-a-function-call.qd#block-vs-inline-function-calls).
 
-```latex
-.texmacro {\gradient}
-    \nabla
-```
-
-!(500)[Gradient](TeX-macros/gradient.png)
+.example
+    ```text
+    .texmacro {\gradient}
+        \nabla
+    ```
 
 ## Parameters
 
-Macros can feature a variable number of parameters:
+Macros can feature a variable number of parameters, which are referenced inside the macro content as `#1`, `#2`, and so on.
 
-```latex
-.texmacro {\sumlim}
-    \sum_{#1}^{#2}
+.examplemirror
+    .texmacro {\sumlim}
+        \sum_{#1}^{#2}
 
-$ \sumlim{i=1}{n} a_i $
-```
-
-!(500)[Sum with limits](TeX-macros/sum-limits.png)
+    $ \sumlim{i=1}{n} a_i $
 
 ## Composing
 
 You can define multiple macros and combine them, as you would do in LaTeX:
 
-```latex
-.texmacro {\hello}
-    \text {Hello, \textit {world}}
+.examplemirror
+    .texmacro {\hello}
+        \text {Hello, \textit {world}}
 
-.texmacro {\highlight}
-    \colorbox{yellow}{#1}
+    .texmacro {\highlight}
+        \colorbox{blue}{#1}
 
-$ \highlight{\hello} $
-```
+    $ \highlight{\hello} $
 
-You can also compose them with other macros:
+You can also compose them on top of other macros:
 
-```latex
-.texmacro {\hello}
-    \text {Hello, \textit {world}}
+.examplemirror
+    .texmacro {\hello}
+        \text {Hello, \textit {world}}
 
-.texmacro {\highlighthello}
-    \colorbox{yellow}{\hello}
+    .texmacro {\highlighthello}
+        \colorbox{blue}{\hello}
 
-$ \highlighthello $
-```
-
-!(500)[Highlighted hello world](TeX-macros/highlighted.png)
+    $ \highlighthello $
