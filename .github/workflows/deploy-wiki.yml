@@ -1,0 +1,23 @@
+name: Deploy Wiki
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+
+      - name: Build distribution
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          job-id: main
+          arguments: installDist
+
+      - name: Deploy wiki
+        uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
+        with:
+          quarkdown-path: ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown
+          github-token: ${{ secrets.GITHUB_TOKEN }}
