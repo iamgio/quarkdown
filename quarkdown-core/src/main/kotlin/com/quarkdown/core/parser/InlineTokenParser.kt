@@ -131,10 +131,13 @@ class InlineTokenParser(
         return CriticalContent(
             when {
                 entity == "colon" -> ":"
+
                 // Hexadecimal (e.g. &#xD06)
                 entity.startsWith("#x") -> groups.next().decodeToContent(radix = 16)
+
                 // Decimal (e.g. &#35)
                 entity.startsWith("#") -> groups.next().decodeToContent(radix = 10)
+
                 // HTML entity (e.g. &nbsp;)
                 else -> Escape.Html.unescape(token.data.text)
             },
@@ -166,9 +169,15 @@ class InlineTokenParser(
                 title = groups.nextOrNull()?.trimDelimiters()?.trim(),
                 fileSystem = context.fileSystem,
             )
+
+        // The anchor is stripped from the URL, if present, to allow proper subdocument detection.
+        // If the stripped URL points to a subdocument, it is a subdocument link.
+        val result = link.stripAnchor()
+        val strippedLink = result?.first ?: link
+        val anchor = result?.second
+
         return when {
-            // If the URL points to a subdocument, it is a subdocument link.
-            context.isSubdocumentUrl(link.url) -> SubdocumentLink(link)
+            context.isSubdocumentUrl(strippedLink.url) -> SubdocumentLink(strippedLink, anchor)
             else -> link
         }
     }
@@ -193,18 +202,20 @@ class InlineTokenParser(
             // All-in-one case:
             // Named: [^label: definition]
             // Anonymous: [^: definition]
-            definition != null ->
+            definition != null -> {
                 ReferenceDefinitionFootnote(
                     label.takeUnless { it.isBlank() } ?: context.newUuid(),
                     definition = parseSubContent(definition),
                 )
+            }
 
             // Reference only case.
-            else ->
+            else -> {
                 ReferenceFootnote(
                     label,
                     fallback = { Text(token.data.text) },
                 )
+            }
         }
     }
 
