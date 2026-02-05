@@ -24,7 +24,7 @@ body.quarkdown {
     flex-direction: row;
 
     > main {
-      width: min(100%, 90ch);
+      width: min(100%, var(--max-content-width, 45rem));
       column-count: var(--qd-column-count);
     }
 
@@ -99,6 +99,7 @@ body.quarkdown {
 
   // Docs viewport
   &.quarkdown-docs {
+    --max-content-width: 50rem;
     --header-height: calc(var(--qd-docs-header-height) + var(--qd-docs-header-vertical-padding) * 2);
 
     margin: 0;

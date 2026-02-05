@@ -49,3 +49,8 @@
   overflow-y: scroll;
   max-height: 50vh;
 }
+
+// Hide ToC title in docs if there are no entries.
+.quarkdown-docs #table-of-contents:has(+ nav[data-role="table-of-contents"] > :only-child:empty) {
+  visibility: hidden;
+}

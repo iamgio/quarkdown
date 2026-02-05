@@ -1,8 +1,5 @@
 package com.quarkdown.core.util
 
-import java.net.MalformedURLException
-import java.net.URL
-
 /**
  * @param prefix prefix to remove
  * @param ignoreCase whether to ignore case when searching for the prefix
@@ -121,19 +118,3 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
         "\n" -> this
         else -> this.toString().replace(separator, "\n")
     }
-
-/**
- * @return a URL from [this] string if it's a valid URL, or `null` otherwise
- */
-fun String.toURLOrNull(): URL? =
-    try {
-        URL(this)
-    } catch (_: MalformedURLException) {
-        null
-    }
-
-/**
- * Whether [this] string is a valid URL.
- */
-val String.isURL: Boolean
-    get() = toURLOrNull() != null

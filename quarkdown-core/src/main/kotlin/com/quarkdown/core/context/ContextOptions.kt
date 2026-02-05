@@ -54,8 +54,10 @@ fun Context.shouldAutoPageBreak(heading: Heading) =
         heading.depth <= this.options.autoPageBreakHeadingMaxDepth
 
 /**
+ * @param url URL or file path to check, without any surrounding whitespace or anchors
  * @return whether the given [url], which may also be a file path, points to a Quarkdown subdocument
  * depending on its suffix (file extension).
+ * @see com.quarkdown.core.ast.base.inline.SubdocumentLink
  */
 fun Context.isSubdocumentUrl(url: String): Boolean = options.subdocumentUrlSuffixes.any { url.endsWith(it, ignoreCase = true) }
 

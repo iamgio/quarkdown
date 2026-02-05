@@ -172,6 +172,26 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `simple subdocument from file with anchor`() {
+        arrayOf(
+            "The link is: [1](subdoc/headings-1.qd#a)",
+            "The link is: .subdocument {subdoc/headings-1.qd} label:{1} anchor:{a}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(2, subdocumentGraph.vertices.size)
+                    assertEquals(2, getSubdocumentResourceCount(it))
+                },
+            ) {
+                if (subdocument == Subdocument.Root) {
+                    assertEquals("<p>The link is: <a href=\"./headings-1#a\">1</a></p>", it)
+                }
+            }
+        }
+    }
+
+    @Test
     fun `empty label subdocument from file`() {
         arrayOf(
             "The link is: [](subdoc/simple-1.qd)",
