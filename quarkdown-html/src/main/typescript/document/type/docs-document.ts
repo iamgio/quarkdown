@@ -5,6 +5,7 @@ import {SearchFieldFocus} from "../handlers/docs/search-field-focus";
 import {SearchField} from "../handlers/docs/search-field";
 import {FootnotesDocs} from "../handlers/footnotes/footnotes-docs";
 import {SiblingPagesButtons} from "../handlers/docs/sibling-pages-buttons";
+import {PageListAutoscroll} from "../handlers/docs/page-list-autoscroll";
 
 /**
  * 'Docs' document implementation for HTML documents targeting documentation sites and wikis.
@@ -18,6 +19,7 @@ export class DocsDocument extends PlainDocument {
             new SiblingPagesButtons(this),
             new PageMarginsDocs(this),
             new FootnotesDocs(this),
+            new PageListAutoscroll(this),
         ];
     }
 }
