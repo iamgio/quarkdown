@@ -54,6 +54,8 @@ test("scrolling left aside does not affect main or right aside", async (page) =>
 });
 
 test("scrolling window does not affect aside internal scroll", async (page) => {
+    await page.emulateMedia({reducedMotion: "reduce"});
+
     const contentAsideFirst = page.locator(".quarkdown-docs > .content-wrapper > aside:first-child");
     const contentAsideLast = page.locator(".quarkdown-docs > .content-wrapper > aside:last-child");
 
@@ -81,6 +83,8 @@ test("scrolling window does not affect aside internal scroll", async (page) => {
 });
 
 test("anchor scroll positions heading correctly", async (page) => {
+    await page.emulateMedia({reducedMotion: "reduce"});
+
     const header = page.locator(".quarkdown-docs > header");
     const headerBox = await header.boundingBox();
     expect(headerBox).not.toBeNull();
@@ -93,7 +97,6 @@ test("anchor scroll positions heading correctly", async (page) => {
 
     // Navigate to the #gamma anchor
     await page.goto(page.url() + "#gamma");
-    await page.waitForTimeout(100); // Wait for scroll to complete
 
     const gammaHeading = page.locator("h1#gamma");
     await expect(gammaHeading).toBeVisible();
