@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -26,6 +27,27 @@ class Link(
 
     override val text: InlineContent
         get() = label
+
+    /**
+     * Creates a copy of this link with the given [url].
+     */
+    fun copy(url: String) =
+        Link(
+            label = label,
+            url = url,
+            title = title,
+            fileSystem = fileSystem,
+        )
+
+    /**
+     * Strips the anchor (fragment) from the URL.
+     * @return a pair of the link with the anchor removed and the anchor itself,
+     *         or `null` if no anchor is present
+     */
+    fun stripAnchor(): Pair<Link, String>? {
+        val (url, anchor) = this.url.stripAnchor() ?: return null
+        return Pair(copy(url = url), anchor)
+    }
 }
 
 /**

@@ -148,12 +148,14 @@ fun includeAll(
  * @param path path to the subdocument
  * @param label optional label for the link.
  *              If not provided, this function will just add the subdocument to the document graph, without displaying a link.
+ * @param anchor optional anchor to a specific section within the subdocument
  * @return a [SubdocumentLink] node, which may be hidden if [label] is not provided
  * @wiki Subdocuments
  */
 fun subdocument(
     path: String,
     label: InlineMarkdownContent? = null,
+    anchor: String? = null,
 ): NodeValue =
     SubdocumentLink(
         Link(
@@ -161,4 +163,5 @@ fun subdocument(
             url = path,
             title = null,
         ),
+        anchor = anchor,
     ).wrappedAsValue()

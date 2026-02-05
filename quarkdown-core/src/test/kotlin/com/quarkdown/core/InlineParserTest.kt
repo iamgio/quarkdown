@@ -137,7 +137,23 @@ class InlineParserTest {
         repeat(2) {
             with(nodes.next()) {
                 assertEquals("path/to/file.qd", url)
+                assertNull(anchor)
             }
+        }
+
+        with(nodes.next()) {
+            assertEquals("path/to/file.qd", url)
+            assertEquals("anchor", anchor)
+        }
+
+        with(nodes.next()) {
+            assertEquals("path/to/file.qd", url)
+            assertEquals("anchor#anchor", anchor)
+        }
+
+        with(nodes.next()) {
+            assertEquals("path/to/file.md", url)
+            assertNull(anchor)
         }
 
         assertFalse(nodes.hasNext())
