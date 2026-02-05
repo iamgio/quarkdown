@@ -8,6 +8,9 @@ test("page list auto-scrolls to show current page", async (page) => {
 
     await expect(currentPageLink).toBeVisible();
 
+    // Wait for smooth scroll animation to complete
+    await page.waitForTimeout(500);
+
     // Verify the aside has scrolled (scrollTop > 0 since current page is at the end of the list)
     const scrollTop = await aside.evaluate((el) => el.scrollTop);
     expect(scrollTop).toBeGreaterThan(0);
