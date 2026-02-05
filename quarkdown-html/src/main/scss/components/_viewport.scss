@@ -109,8 +109,10 @@ body.quarkdown {
     > header {
       height: var(--qd-docs-header-height);
       padding: var(--qd-docs-header-vertical-padding) 0;
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 10;
 
       > aside {
@@ -120,8 +122,15 @@ body.quarkdown {
     }
 
     > .content-wrapper {
+      margin-top: var(--header-height);
+
       > main {
         margin-bottom: 16px;
+
+        // Offset anchor scroll position to account for the fixed header.
+        :target {
+          scroll-margin-top: calc(var(--header-height) + 32px);
+        }
       }
 
       > aside {
