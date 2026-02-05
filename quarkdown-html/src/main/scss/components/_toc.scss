@@ -51,6 +51,6 @@
 }
 
 // Hide ToC title in docs if there are no entries.
-.quarkdown-docs #table-of-contents:has(+ nav[data-role="table-of-contents"] > :is(ul, ol):empty) {
+.quarkdown-docs #table-of-contents:has(+ nav[data-role="table-of-contents"] > :only-child:empty) {
   visibility: hidden;
 }
