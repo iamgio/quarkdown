@@ -81,25 +81,25 @@
     .var {numberingtag} {.concatenate {.type} {s}}
     .namedparagraph {.localizedname} {.numberingtag} {.content}
 
-<-- A numerable 'definition' block -->
+<!-- A numerable 'definition' block -->
 
 .function {definition}
     content:
     .INTERNALtypedparagraph {definition} {.content}
 
-<-- A numerable 'lemma' block -->
+<!-- A numerable 'lemma' block -->
 
 .function {lemma}
     content:
     .INTERNALtypedparagraph {lemma} {.content}
 
-<-- A numerable 'theorem' block -->
+<!-- A numerable 'theorem' block -->
 
 .function {theorem}
     content:
     .INTERNALtypedparagraph {theorem} {.content}
 
-<-- A numerable 'proof' block -->
+<!-- A numerable 'proof' block -->
 
 .function {proof}
     content:

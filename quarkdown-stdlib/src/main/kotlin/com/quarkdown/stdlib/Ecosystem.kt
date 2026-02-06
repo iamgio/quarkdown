@@ -75,7 +75,8 @@ enum class ContextSandbox {
  * This function has two behaviors:
  * - Reads a Quarkdown file and includes its parsed content in the current document,
  *   using the specified [sandbox] strategy to determine what information is shared between the main context and the included file's context.
- * - Loads a library into the current context. Loadable libraries are fetched from the library folder (`--libs` CLI option).
+ * - Loads a library into the current context and includes its parsed content in the current document.
+ *   Loadable libraries are fetched from the library folder (`--libs` CLI option).
  *   [sandbox] is ignored in this case.
  *
  * The context of the included file is always inherited from the main file, with an updated working directory that matches the included file's location.
@@ -86,7 +87,7 @@ enum class ContextSandbox {
  *            This is represented by [SharedContext].
  *
  * - `scope`: like `share`, but the included file's context does not share new declarations (functions and variables) back to the main file's context.
- *            This is the behavior used within lambda blocks, such as [foreach], and is represented by [ScopeContext].
+ *            This is the behavior used within lambda blocks, such as [forEach], and is represented by [ScopeContext].
  *
  * - `subdocument`: no information is shared back to the main file's context, only inherited from it. This also applies to the document info (metadata, title, etc.),
  *                  This is the behavior used for subdocuments, and is represented by [SubdocumentContext].
@@ -104,7 +105,7 @@ fun include(
     @LikelyNamed sandbox: ContextSandbox = ContextSandbox.SHARE,
 ): OutputValue<*> {
     // Load library by name if it exists.
-    context.loadLibrary(path)?.let { return VoidValue }
+    context.loadLibrary(path)?.let { (_, value) -> return value ?: VoidValue }
 
     // File lookup
     val file = file(context, path)

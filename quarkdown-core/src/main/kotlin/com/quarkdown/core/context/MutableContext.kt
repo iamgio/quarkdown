@@ -9,6 +9,7 @@ import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryRegistrant
+import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.localization.MutableLocalizationTables
 import com.quarkdown.core.media.storage.MutableMediaStorage
 
@@ -75,15 +76,13 @@ open class MutableContext(
 
     /**
      * Loads a loadable library by name and registers it in the context.
-     * After a successful load, the library is removed from [loadableLibraries] and added to [libraries],
-     * with its [Library.onLoad] action executed.
+     * After a successful load, the library is added to [libraries], with its [Library.onLoad] action executed.
      * @param name name of the library to load, case-sensitive
-     * @return the loaded library, if it exists
+     * @return the loaded library, if it exists, paired with the value returned by its [Library.onLoad] action if it exists
      */
-    fun loadLibrary(name: String): Library? =
-        loadableLibraries.find { it.name == name }?.also {
-            loadableLibraries.remove(it)
-            LibraryRegistrant(this).register(it)
+    fun loadLibrary(name: String): Pair<Library, OutputValue<*>?>? =
+        loadableLibraries.find { it.name == name }?.let { library ->
+            library to LibraryRegistrant(this).register(library)
         }
 
     /**

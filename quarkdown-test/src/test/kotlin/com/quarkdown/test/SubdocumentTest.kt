@@ -13,6 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -300,7 +301,7 @@ class SubdocumentTest {
     }
 
     @Test
-    fun `subdocument link should mark current subdocument and  account for non-root path`() {
+    fun `subdocument link should mark current subdocument and account for non-root path`() {
         arrayOf(
             "[Document](subdoc/nav-includer.qd)",
             ".subdocument {subdoc/nav-includer.qd} label:{Document}",
@@ -325,6 +326,104 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `including content library in subdocument should not affect parent`() {
+        execute(
+            "[1](subdoc/include-lib-1.qd)",
+            loadableLibraries = setOf("content"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<p><a href=\"./include-lib-1\">1</a></p>", it)
+            } else {
+                assertEquals("<h2>Title</h2><p>Content</p>", it)
+            }
+        }
+    }
+
+    @Test
+    fun `including symbol library in subdocument should not affect parent`() {
+        execute(
+            "[1](subdoc/include-lib-2.qd)",
+            loadableLibraries = setOf("hello"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<p><a href=\"./include-lib-2\">1</a></p>", it)
+                assertNull(getFunctionByName("hellofromlib"))
+            } else {
+                assertEquals("", it)
+                assertNotNull(getFunctionByName("hellofromlib"))
+            }
+        }
+    }
+
+    @Test
+    fun `including content library in parent should not affect subdocuments`() {
+        execute(
+            ".include {content}\n\n[1](subdoc/simple-1.qd)",
+            loadableLibraries = setOf("content"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./simple-1\">1</a></p>", it)
+            } else {
+                assertEquals("<p>Hello 1</p>", it)
+            }
+        }
+    }
+
+    @Test
+    fun `including symbol library in parent should load into subdocuments`() {
+        execute(
+            ".include {hello}\n\n.hellofromlib {X}\n\n[1](subdoc/simple-1.qd)",
+            loadableLibraries = setOf("hello"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<p>Hello, <em>X</em>!</p><p><a href=\"./simple-1\">1</a></p>", it)
+            } else {
+                assertEquals("<p>Hello 1</p>", it)
+            }
+            assertNotNull(getFunctionByName("hellofromlib"))
+        }
+    }
+
+    @Test
+    fun `including symbol library in subdocument should not affect sibling subdocuments`() {
+        execute(
+            "[1](subdoc/include-lib-2.qd)\n\n[2](subdoc/simple-1.qd)",
+            loadableLibraries = setOf("hello"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<p><a href=\"./include-lib-2\">1</a></p><p><a href=\"./simple-1\">2</a></p>", it)
+                assertNull(getFunctionByName("hellofromlib"))
+            } else if (subdocument.name == "include-lib-2") {
+                assertEquals("", it)
+                assertNotNull(getFunctionByName("hellofromlib"))
+            } else if (subdocument.name == "simple-1") {
+                assertEquals("<p>Hello 1</p>", it)
+                assertNull(getFunctionByName("hellofromlib"))
+            }
+        }
+    }
+
+    @Test
+    fun `content library can be included in both parent and subdocument without conflict`() {
+        execute(
+            ".include {content}\n\n[1](subdoc/include-lib-1.qd)",
+            loadableLibraries = setOf("content"),
+            useDummyLibraryDirectory = true,
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./include-lib-1\">1</a></p>", it)
+            } else {
+                assertEquals("<h2>Title</h2><p>Content</p>", it)
+            }
+        }
+    }
+
+    @Test
     fun `all from directory`() {
         execute(
             """
@@ -332,6 +431,8 @@ class SubdocumentTest {
                 path:
                 .path::subdocument label:{.path::filename extension:{no}}
             """.trimIndent(),
+            loadableLibraries = setOf("hello", "content"),
+            useDummyLibraryDirectory = true,
             outputResourceHook = {
                 val files = File(fileSystem.workingDirectory, "subdoc").listFiles()!!
                 assertEquals(files.size + 1, subdocumentGraph.vertices.size) // +1 for root

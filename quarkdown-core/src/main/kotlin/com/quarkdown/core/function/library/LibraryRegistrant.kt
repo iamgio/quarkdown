@@ -2,6 +2,7 @@ package com.quarkdown.core.function.library
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.function.value.OutputValue
 
 /**
  * Component that is responsible for registering libraries in a pipeline's [Context],
@@ -16,9 +17,9 @@ class LibraryRegistrant(
      * and its [Library.onLoad] action is executed.
      * @param library library to register
      */
-    fun register(library: Library) {
+    fun register(library: Library): OutputValue<*>? {
         context.libraries += library
-        library.onLoad?.invoke(context)
+        return library.onLoad?.invoke(context)
     }
 
     /**
