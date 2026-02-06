@@ -13,6 +13,8 @@ export function getPageSizeTarget(page: Page, docType: DocumentType): Locator {
     switch (docType) {
         case "plain":
             return page.locator("body > main");
+        case "docs":
+            return page.locator(".content-wrapper > main");
         case "slides":
         case "slides-print":
             return page.locator(".reveal");
