@@ -1,0 +1,10 @@
+.doctype {docs}
+.doclang {en}
+
+.pagemargin {lefttop}
+    .navigation role:{pagelist}
+        - [Simple](simple.qd)
+        - [Long Code](long-code.qd)
+
+.pagemargin {righttop}
+    .tableofcontents
