@@ -67,6 +67,7 @@
             [[if:HEADINGFONTFAMILY]]--qd-heading-custom-font: [[HEADINGFONTFAMILY]];[[endif:HEADINGFONTFAMILY]]
             [[if:CODEFONTFAMILY]]--qd-code-custom-font: [[CODEFONTFAMILY]];[[endif:CODEFONTFAMILY]]
             [[if:FONTSIZE]]--qd-main-font-size: [[FONTSIZE]];[[endif:FONTSIZE]]
+            [[if:PAGEWIDTH]]--qd-content-width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
             [[if:COLUMNCOUNT]]--qd-column-count: [[COLUMNCOUNT]];[[endif:COLUMNCOUNT]]
             [[if:HALIGNMENT_LOCAL]]
             --qd-horizontal-alignment-local: [[HALIGNMENT_LOCAL]] !important;
@@ -99,9 +100,9 @@
             break-after: avoid;
         }
 
-        body.quarkdown-plain.quarkdown-plain {
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
-            [[if:PAGEWIDTH]]--qd-content-width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
         }
 
         body.quarkdown-slides.quarkdown-slides .reveal {

@@ -7,7 +7,7 @@ const EXPECTED_WIDTH = 100;
 
 testMatrix(
     "applies page width to correct element",
-    ["plain", "paged", "slides"],
+    ["plain", "paged", "slides", "docs"],
     async (page, docType) => {
         const target = getPageSizeTarget(page, docType);
 
@@ -20,6 +20,7 @@ testMatrix(
                 expect(box!.height).toBeCloseTo(A4_HEIGHT_PX, 0);
                 break;
             case "plain":
+            case "docs":
                 for (let i = 0; i < 2; i++) {
                     const isPrint = i !== 0;
 
@@ -32,10 +33,10 @@ testMatrix(
                     const bodyBox = await body.boundingBox();
                     expect(bodyBox).not.toBeNull();
                     if (isPrint) {
-                        expect(targetBox?.width).not.toBeCloseTo(EXPECTED_WIDTH, 0);
+                        expect(targetBox!.width).not.toBeCloseTo(EXPECTED_WIDTH, 0);
                         expect(targetBox!.width).toBeCloseTo(bodyBox!.width, -2);
                     } else {
-                        expect(targetBox?.width).toBeCloseTo(EXPECTED_WIDTH, 0);
+                        expect(targetBox!.width).toBeCloseTo(EXPECTED_WIDTH, 0);
                         expect(targetBox!.width).not.toBeCloseTo(bodyBox!.width, -2);
                     }
                 }
