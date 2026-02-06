@@ -101,10 +101,7 @@
 
         body.quarkdown-plain.quarkdown-plain {
             [[if:PAGEMARGIN]]margin: [[PAGEMARGIN]];[[endif:PAGEMARGIN]]
-        }
-
-        body.quarkdown-plain.quarkdown-plain > main {
-            [[if:PAGEWIDTH]]width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
+            [[if:PAGEWIDTH]]--qd-content-width: [[PAGEWIDTH]];[[endif:PAGEWIDTH]]
         }
 
         body.quarkdown-slides.quarkdown-slides .reveal {
