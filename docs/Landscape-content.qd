@@ -1,5 +1,5 @@
 .docname {Landscape content}
-.include {_Setup.qd}
+.include {docs}
 
 > Warning: This feature is **experimental**.
 

@@ -1,5 +1,5 @@
 .docname {Document types}
-.include {_Setup.qd}
+.include {docs}
 
 The [`.doctype`](Document-metadata.qd) function defines the type of document based on different use cases. Each document type offers its own set of features and behaviors tailored to specific output formats.
 

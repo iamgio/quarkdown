@@ -1,5 +1,5 @@
 .docname {Document metadata}
-.include {_Setup.qd}
+.include {docs}
 
 You can set document information using the following functions. By convention, you should call these functions at the beginning of your Quarkdown source.
 

@@ -1,5 +1,5 @@
 .docname {Pipeline - Tree traversal}
-.include {_Setup.qd}
+.include {docs}
 
 > Main packages: .repolink {`core.ast.iterator`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast/iterator}, .repolink {`core.context.hooks`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/context/hooks}
 

@@ -1,5 +1,5 @@
 .docname {TeX macros}
-.include {_Setup.qd}
+.include {docs}
 
 When writing [TeX formulae](TeX-formulae.qd), you may want to use custom macros.
 

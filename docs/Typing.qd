@@ -1,5 +1,5 @@
 .docname {Typing}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown is **dynamically typed**: every value that may be passed to a function argument is wrapped in a `DynamicValue` object. This object can represent any supported type, and it carries the information needed to convert itself to the expected type when required.
 

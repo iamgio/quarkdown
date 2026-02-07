@@ -1,5 +1,5 @@
 .docname {Boolean}
-.include {_Setup.qd}
+.include {docs}
 
 Boolean values are represented by the following literals, which are **case insensitive**:
 

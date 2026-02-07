@@ -1,5 +1,5 @@
 .docname {Inside live preview}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown's [webserver](CLI-Webserver.qd) enables direct communication between the compiler's CLI and the browser, which makes live previewing possible.
 

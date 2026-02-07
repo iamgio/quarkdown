@@ -1,5 +1,5 @@
 .docname {Quickstart}
-.include {_Setup.qd}
+.include {docs}
 
 Welcome to Quarkdown! This guide walks you through the main features you need to create your first document.
 

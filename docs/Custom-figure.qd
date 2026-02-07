@@ -1,5 +1,5 @@
 .docname {Custom figure}
-.include {_Setup.qd}
+.include {docs}
 
 .numbering
     - figures: 1

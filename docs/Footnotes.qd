@@ -1,5 +1,5 @@
 .docname {Footnotes}
-.include {_Setup.qd}
+.include {docs}
 
 Footnotes allow readers to reference additional information without cluttering the main content.
 

@@ -1,5 +1,5 @@
 .docname {Range}
-.include {_Setup.qd}
+.include {docs}
 
 The syntax for defining a range is **`a..b`**, where `a` and `b` are non-negative integers, for example `2..10`.
 

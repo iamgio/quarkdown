@@ -1,5 +1,5 @@
 .docname {Pipeline - Parsing}
-.include {_Setup.qd}
+.include {docs}
 
 > Main packages: .repolink {`core.parser`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser}, .repolink {`core.ast`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast}
 

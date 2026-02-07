@@ -1,5 +1,5 @@
 .docname {Quotation source}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown allows a blockquote to have a citation source.
 

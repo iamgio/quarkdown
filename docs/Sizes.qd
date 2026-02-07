@@ -1,5 +1,5 @@
 .docname {Sizes}
-.include {_Setup.qd}
+.include {docs}
 
 Many functions accept sizes as arguments. This page explains the correct format for defining them.
 

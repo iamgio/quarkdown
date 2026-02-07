@@ -1,5 +1,5 @@
 .docname {Themes}
-.include {_Setup.qd}
+.include {docs}
 
 A theme defines the look and feel of your Quarkdown document. More themes are planned for the future.
 

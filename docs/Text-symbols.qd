@@ -1,5 +1,5 @@
 .docname {Text symbols}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown features automatic text replacement for commonly used UTF-8 symbols.
 

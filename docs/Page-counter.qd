@@ -1,5 +1,5 @@
 .docname {Page counter}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.currentpage`** and **`.totalpages`** functions display, respectively, the current index (beginning from 1) of the page or slide where the function call appears and the total number of pages or slides. They do not accept any arguments.
 

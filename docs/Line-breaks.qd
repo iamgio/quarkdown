@@ -1,5 +1,5 @@
 .docname {Line breaks}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown follows the standard Markdown specification, so you can create soft line breaks by ending a line with two or more spaces:
 

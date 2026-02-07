@@ -1,5 +1,5 @@
 .docname {Quarkdown Wiki}
-.include {_Setup.qd}
+.include {docs}
 
 .css
     h1 { opacity: 0; height: 0; margin: 0; padding: 0; }

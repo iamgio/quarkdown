@@ -1,5 +1,5 @@
 .docname {File data}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown provides functions to retrieve information from files.
 

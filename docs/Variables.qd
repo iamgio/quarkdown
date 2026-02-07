@@ -1,5 +1,5 @@
 .docname {Variables}
-.include {_Setup.qd}
+.include {docs}
 
 Variables allow you to store and reuse values throughout your document. They are essential for avoiding repetition, creating dynamic content, and building reusable components.
 

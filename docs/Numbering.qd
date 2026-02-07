@@ -1,5 +1,5 @@
 .docname {Numbering}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.numbering`** function sets the global numbering configuration of the document. The following elements can be numbered:
 - Headings and [table of contents](Table-of-contents.qd) entries

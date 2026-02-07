@@ -1,5 +1,5 @@
 .docname {PDF export}
-.include {_Setup.qd}
+.include {docs}
 
 When running Quarkdown's [compiler](CLI-Compiler.qd) via `quarkdown c`, specifying the **`--pdf`** flag generates a PDF file.
 

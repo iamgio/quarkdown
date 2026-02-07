@@ -1,5 +1,5 @@
 .docname {HTML}
-.include {_Setup.qd}
+.include {docs}
 
 Standard Markdown specifications allow freely mixing Markdown and HTML, as they are meant to be implemented by parsers that solely rely on HTML rendering.
 

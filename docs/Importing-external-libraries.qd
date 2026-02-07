@@ -1,5 +1,5 @@
 .docname {Importing external libraries}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.include`** function, previously seen in [*Including other Quarkdown files*](Including-other-Quarkdown-files.qd), can also import external **libraries**.
 

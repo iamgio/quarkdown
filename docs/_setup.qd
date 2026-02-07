@@ -1,6 +1,8 @@
-.doctype {docs}
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
+
+.pagelistposition {righttop}
+.tocposition {lefttop}
 
 .numbering
     - example: 1
@@ -55,13 +57,6 @@
             .container classname:{quarkdown-output} fullwidth:{yes}
                 .quarkdowncode
 
-.pagemargin {lefttop}
-    .navigation role:{pagelist}
-        .include {_Sidebar.qd}
-
-.pagemargin {righttop}
-    .tableofcontents
-
 .pagemargin {topleft}
     [![Quarkdown](assets/docs-banner-light.svg)](https://quarkdown.com)
 
@@ -72,5 +67,3 @@
         ---
 
         [.icon {github}](https://github.com/iamgio/quarkdown)
-
-#! .docname

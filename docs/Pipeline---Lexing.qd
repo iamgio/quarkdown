@@ -1,5 +1,5 @@
 .docname {Pipeline - Lexing}
-.include {_Setup.qd}
+.include {docs}
 
 > Main packages: .repolink {`core.lexer`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/lexer}
 

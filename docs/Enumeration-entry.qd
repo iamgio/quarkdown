@@ -1,5 +1,5 @@
 .docname {Enumeration entry}
-.include {_Setup.qd}
+.include {docs}
 
 An **enumeration entry** is an input value that matches the name of an element from an enumeration. Enumerations cannot be created from the Quarkdown language, so the term *enumeration* refers to a native JVM `enum`.
 

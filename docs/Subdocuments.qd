@@ -1,5 +1,5 @@
 .docname {Subdocuments}
-.include {_Setup.qd}
+.include {docs}
 
 When referring to a Quarkdown *document*, we are talking broadly about the group of resources that make up a Quarkdown project.
 

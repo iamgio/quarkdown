@@ -1,5 +1,5 @@
 .docname {TeX formulae}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown natively supports TeX math equations and formulae. When rendering to HTML, this feature is powered by [KaTeX](https://www.katex.org).
 

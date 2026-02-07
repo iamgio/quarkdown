@@ -1,5 +1,5 @@
 .docname {None}
-.include {_Setup.qd}
+.include {docs}
 
 *None* is a special value that represents nothing or emptiness (similar to `null` in many programming languages). Functions can return it, and it also serves as a placeholder for [optional parameters](Declaring-functions.qd#optional-parameters).
 

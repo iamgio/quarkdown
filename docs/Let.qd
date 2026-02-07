@@ -1,5 +1,5 @@
 .docname {Let}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.let`** function defines a temporary variable that is accessible only within its scope. It accepts two parameters:
 1. The value, of [any type](Typing.qd), to assign to the scoped variable

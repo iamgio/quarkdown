@@ -1,5 +1,5 @@
 .docname {Conditional statements}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.if`** function creates a conditional statement:
 

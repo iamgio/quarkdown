@@ -1,5 +1,5 @@
 .docname {Destructuring}
-.include {_Setup.qd}
+.include {docs}
 
 Destructuring splits a [lambda](Lambda.qd) parameter into its individual components. For instance, a [pair](Iterable.qd#pair) has two components, while a generic [iterable](Iterable.qd) can have many.
 

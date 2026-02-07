@@ -1,5 +1,5 @@
 .docname {CLI - Compiler}
-.include {_Setup.qd}
+.include {docs}
 
 **`quarkdown c <file>`** is the command for compiling a main source file into a browser-renderable output.
 

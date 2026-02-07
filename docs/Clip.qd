@@ -1,5 +1,5 @@
 .docname {Clip}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.clip {shape}`** block function clips its content to a defined shape.
 

@@ -1,5 +1,5 @@
 .docname {Iterable}
-.include {_Setup.qd}
+.include {docs}
 
 Iterable values are ordered lists or unordered sets that you can iterate through with a [loop](Loops.qd).
 

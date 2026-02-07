@@ -1,5 +1,5 @@
 .docname {Cross references}
-.include {_Setup.qd}
+.include {docs}
 
 In typesetting, cross-references are references to other parts of the document, such as figures, tables, sections, and equations.
 

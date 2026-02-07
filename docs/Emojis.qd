@@ -1,5 +1,5 @@
 .docname {Emojis}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown documents support emojis through direct insertion or shortcode functions.
 

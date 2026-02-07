@@ -1,5 +1,5 @@
 .docname {Code caption}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown introduces code captions, which you can set by adding a caption directly in the code block declaration. Place the caption after the language identifier, wrapped in double quotes, single quotes, or parentheses. This syntax is the same as the image *title* attribute and [table captions](Table-caption.qd).
 

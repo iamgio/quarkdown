@@ -1,5 +1,5 @@
 .docname {Markdown content}
-.include {_Setup.qd}
+.include {docs}
 
 Many functions accept rich Quarkdown content as their argument.
 

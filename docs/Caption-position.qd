@@ -1,5 +1,5 @@
 .docname {Caption position}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.captionposition`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/captionposition.html} function sets the global position of captions relative to the elements they describe.
 

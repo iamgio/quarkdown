@@ -1,5 +1,5 @@
 .docname {Inclusion vs subdocuments}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown offers two ways to include content from other files: **inclusion** and **subdocumenting**. These approaches differ significantly in how they work and what they are best suited for.
 

@@ -1,5 +1,5 @@
 .docname {Text}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.text`** inline function provides extensive text formatting that cannot be expressed in plain Markdown.
 

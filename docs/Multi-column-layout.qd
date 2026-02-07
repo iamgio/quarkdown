@@ -1,5 +1,5 @@
 .docname {Multi-column layout}
-.include {_Setup.qd}
+.include {docs}
 
 > Warning: This feature is **experimental**, unstable in `paged` documents, and behaves inconsistently across browsers (especially Safari).
 > PRs to improve this feature are welcome.

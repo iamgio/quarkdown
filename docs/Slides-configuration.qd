@@ -1,5 +1,5 @@
 .docname {Slides configuration}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.slides`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Slides/slides.html} function allows you to override the default configuration of `slides` documents. All of its parameters are **optional**:
 

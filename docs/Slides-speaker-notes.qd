@@ -1,5 +1,5 @@
 .docname {Slides speaker notes}
-.include {_Setup.qd}
+.include {docs}
 
 Speaker notes are helpful tools for remembering talking points, reminders, or extra details while presenting.
 

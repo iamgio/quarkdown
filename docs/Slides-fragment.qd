@@ -1,5 +1,5 @@
 .docname {Slides fragment}
-.include {_Setup.qd}
+.include {docs}
 
 A **fragment** is an interactive section of a slide that can show or hide content when the user attempts to go to the next slide.
 

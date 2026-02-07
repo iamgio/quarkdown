@@ -1,5 +1,5 @@
 .docname {Stacks}
-.include {_Setup.qd}
+.include {docs}
 
 Stack functions are layout functions that arrange a group of elements according to certain layout rules. There are three of them:
 - **`.row`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html}

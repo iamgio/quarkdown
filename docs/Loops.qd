@@ -1,5 +1,5 @@
 .docname {Loops}
-.include {_Setup.qd}
+.include {docs}
 
 ## For-each
 

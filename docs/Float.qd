@@ -1,5 +1,5 @@
 .docname {Float}
-.include {_Setup.qd}
+.include {docs}
 
 The **`.float {alignment}`** function transforms any content into a floating element that breaks the normal flow and allows subsequent content to wrap around it.
 

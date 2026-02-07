@@ -1,5 +1,5 @@
 .docname {Image size}
-.include {_Setup.qd}
+.include {docs}
 
 While base Markdown requires HTML code to constrain the size of an image, Quarkdown introduces a syntax extension that achieves the same result more elegantly: `!(WIDTHxHEIGHT)[ALT](URL)`.
 

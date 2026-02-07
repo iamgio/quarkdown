@@ -1,5 +1,5 @@
 .docname {Bibliography}
-.include {_Setup.qd}
+.include {docs}
 
 Quarkdown provides first-class bibliography generation with out-of-the-box [BibTeX](https://www.bibtex.org) compatibility.
 

@@ -1,5 +1,5 @@
 .docname {Math}
-.include {_Setup.qd}
+.include {docs}
 
 Mathematical functions provide a way to perform numeric operations.
 
