@@ -33,6 +33,7 @@ import java.io.File
 val Data: QuarkdownModule =
     moduleOf(
         ::read,
+        ::pathToRoot,
         ::listFiles,
         ::fileName,
         ::csv,
@@ -92,6 +93,32 @@ fun read(
         .subList(lineRange)
         .joinToString("\n")
         .wrappedAsValue()
+}
+
+/**
+ * Retrieves the relative path to the root of the file system.
+ * The root of the file system is determined by the working directory of the pipeline, which is typically the
+ * parent directory of the target file processed by `quarkdown compile`.
+ *
+ * Example:
+ *
+ * - When used in the root folder: `.pathtoroot` returns `.`
+ * - When used in `<root>/subfolder`: `.pathtoroot` returns `..`
+ * - When used in `<root>/subfolder1/subfolder2`: `.pathtoroot` returns `../..`
+ *
+ * @return a string value of the relative path to the root of the file system
+ * @throws IllegalStateException if the file system root is not defined or if the relative path cannot be determined
+ */
+@Name("pathtoroot")
+fun pathToRoot(
+    @Injected context: Context,
+): StringValue {
+    val root = context.fileSystem.root ?: throw IllegalStateException("File system root is not defined.")
+    return context.fileSystem
+        .relativePathTo(root)
+        ?.toString()
+        ?.wrappedAsValue()
+        ?: throw IllegalStateException("Unable to determine relative path to file system root.")
 }
 
 /**
