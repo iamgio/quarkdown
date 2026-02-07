@@ -69,7 +69,13 @@ class DataTest {
     }
 
     @Test
-    fun `path to root`() {
+    fun `path to root, root`() {
+        val relativePath = pathToRoot(context).unwrappedValue
+        assertEquals(".", relativePath)
+    }
+
+    @Test
+    fun `path to root, nested`() {
         val nested =
             File(DATA_FOLDER, "nested")
                 .resolve("a")

@@ -107,13 +107,13 @@ fun read(
  * - When used in `<root>/subfolder1/subfolder2`: `.pathtoroot` returns `../..`
  *
  * @return a string value of the relative path to the root of the file system
- * @throws IllegalStateException if the file system root is not defined or if the relative path cannot be determined
+ * @throws IllegalStateException if the relative path cannot be determined
  */
 @Name("pathtoroot")
 fun pathToRoot(
     @Injected context: Context,
 ): StringValue {
-    val root = context.fileSystem.root ?: throw IllegalStateException("File system root is not defined.")
+    val root = context.fileSystem.root ?: return ".".wrappedAsValue()
     return context.fileSystem
         .relativePathTo(root)
         ?.toString()
