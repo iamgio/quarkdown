@@ -326,6 +326,20 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `subdocument should not update relative paths`() {
+        execute(
+            "[1](include/relative-image.md)",
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(
+                    "<p>img: <img src=\"../img/icon.png\" alt=\"img\" /></p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
     fun `including content library in subdocument should not affect parent`() {
         execute(
             "[1](subdoc/include-lib-1.qd)",

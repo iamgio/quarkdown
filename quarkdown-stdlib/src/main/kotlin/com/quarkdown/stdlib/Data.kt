@@ -97,8 +97,7 @@ fun read(
 
 /**
  * Retrieves the relative path to the root of the file system.
- * The root of the file system is determined by the working directory of the pipeline, which is typically the
- * parent directory of the target file processed by `quarkdown compile`.
+ * The root of the file system is determined by the working directory of the current subdocument.
  *
  * Example:
  *
