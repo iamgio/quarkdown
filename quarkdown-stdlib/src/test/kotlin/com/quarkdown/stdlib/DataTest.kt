@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.pipeline.PipelineOptions
@@ -65,6 +66,24 @@ class DataTest {
         assertFails { read(context, path, Range(0, 3)) }
         assertFails { read(context, path, Range(null, 9)) }
         assertFails { read(context, path, Range(9, null)) }
+    }
+
+    @Test
+    fun `path to root, root`() {
+        val relativePath = pathToRoot(context).unwrappedValue
+        assertEquals(".", relativePath)
+    }
+
+    @Test
+    fun `path to root, nested`() {
+        val nested =
+            File(DATA_FOLDER, "nested")
+                .resolve("a")
+                .resolve("b")
+        val branchedOutFileSystem = context.fileSystem.branch(workingDirectory = nested)
+        val branchedOutContext = SharedContext(context, branchedOutFileSystem)
+        val relativePath = pathToRoot(branchedOutContext).unwrappedValue
+        assertEquals("../../..", relativePath)
     }
 
     @Test

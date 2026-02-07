@@ -22,7 +22,6 @@ object LibraryUtils {
             .map {
                 QdLibraryExporter(
                     it,
-                    File(directory, "$it.qd").reader(),
-                ).library
+                ) { File(directory, "$it.qd").reader() }.library
             }.toSet()
 }

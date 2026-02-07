@@ -314,6 +314,20 @@ class EcosystemTest {
     }
 
     @Test
+    fun `include library content`() {
+        execute(
+            ".include {content}",
+            loadableLibraries = setOf("content"),
+            useDummyLibraryDirectory = true,
+        ) {
+            assertEquals(
+                "<h2>Title</h2><p>Content</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `include multiple sources`() {
         forSandboxes(ContextSandbox.SHARE) { sandbox ->
             execute(
