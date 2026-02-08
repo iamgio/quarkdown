@@ -1,0 +1,87 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css");
+:root {
+  --qd-color-scheme: dark;
+  --qd-primary-color: #224A51;
+  --qd-background-color: #242528;
+  --qd-main-color: #DADAEB;
+  --qd-link-color: #5FC7C7;
+  --qd-nested-navigation-line-color: rgba(255, 255, 255, 0.1);
+  --qd-box-header-background-color: rgba(23, 53, 56, 0.35);
+  --qd-callout-background-color: var(--qd-primary-color);
+  --qd-callout-foreground-color: var(--qd-color-on-primary);
+  --qd-tip-background-color: rgb(60, 114, 74);
+  --qd-tip-title-foreground-color: rgb(210, 250, 214);
+  --qd-note-background-color: rgb(52, 79, 117);
+  --qd-note-title-foreground-color: rgb(197, 222, 255);
+  --qd-warning-background-color: rgb(239, 203, 99);
+  --qd-warning-title-foreground-color: #333;
+  --qd-important-title-foreground-color: #FF7373;
+  --qd-color-on-primary: var(--qd-main-color);
+  --qd-mermaid-node-background-color: #ECECFF;
+  --qd-mermaid-node-text-color: var(--qd-background-color);
+  --qd-docs-header-background-color: #2E3136;
+  --qd-docs-separator-border-color: #393c40;
+  --qd-docs-search-focused-border: var(--qd-link-color);
+}
+
+.quarkdown hr {
+  opacity: 0.5;
+}
+.quarkdown pre :has(code) {
+  --shadow-opacity: 0.08;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, var(--shadow-opacity));
+}
+.quarkdown .quarkdown-slides pre {
+  --shadow-opacity: 0.1;
+}
+.quarkdown .warning {
+  --qd-box-header-background-color: rgba(0, 0, 0, .1);
+}
+.quarkdown .warning.box {
+  --qd-warning-content-foreground-color: var(--qd-warning-title-foreground-color);
+}
+.quarkdown blockquote.warning {
+  --box-header-foreground-color: var(--qd-warning-background-color);
+}
+.quarkdown .page-margin-bottom-center {
+  border-color: var(--qd-link-color);
+}
+.quarkdown .mermaid .plot .line-plot-3 path {
+  stroke: salmon;
+}
+.quarkdown #search-results {
+  border: 1px solid var(--qd-docs-search-border-color);
+}
+.quarkdown .search-result-title {
+  color: var(--qd-link-color);
+}
+
+:root {
+  --qd-primary-color: rgb(178, 199, 255);
+  --qd-main-color: rgb(208, 210, 217);
+  --qd-heading-color: white;
+  --qd-link-color: var(--qd-primary-color);
+  --qd-background-color: rgb(23, 24, 28);
+  --qd-warning-title-foreground-color: var(--qd-warning-background-color);
+  --qd-mermaid-node-background-color: white;
+  --qd-docs-header-background-color: rgb(35, 38, 47);
+  --qd-docs-separator-border-color: var(--qd-docs-header-background-color);
+  --qd-docs-search-border-color: rgb(53, 56, 65);
+  --qd-docs-search-focused-border: var(--qd-primary-color);
+}
+
+.quarkdown .box:not(.error) {
+  background: color-mix(in srgb, var(--box-background-color) 5%, transparent);
+  --qd-box-header-background-color: color-mix(in srgb, var(--box-header-foreground-color) 6%, transparent);
+  border-style: solid;
+  border-color: var(--box-header-foreground-color);
+  border-width: 1px 3px 1px 2px;
+}
+.quarkdown .box:not(.error).warning {
+  --qd-warning-content-foreground-color: var(--qd-main-color);
+}
+.quarkdown #search-results {
+  --qd-docs-separator-border-color: var(--qd-main-color-muted);
+}
+
+/*# sourceMappingURL=galactic.css.map */

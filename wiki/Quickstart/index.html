@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta name="generator" content="Quarkdown">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="quarkdown:root-path" content="..">
+    <meta name="quarkdown:search-index" content="../search-index.json">
+    <title>Quickstart</title>
+    <script src="../script/quarkdown.js"></script>
+    <script>const capabilities = window.quarkdownCapabilities</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script>capabilities.code = true;</script>
+
+    <style>
+
+        body {
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
+        }
+
+        body.quarkdown-slides.quarkdown-slides .reveal {
+        }
+
+        @page {
+            size: auto auto;
+        }
+
+        p {
+        }
+    </style>
+    <script>
+        const doc = new DocsDocument();
+        prepare(doc);
+    </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            <ol><li data-target-id="creating-a-document" data-depth="2"><a href="#creating-a-document">Creating a document</a><ol><li data-target-id="choosing-a-document-type" data-depth="3"><a href="#choosing-a-document-type">Choosing a document type</a></li><li data-target-id="choosing-a-theme" data-depth="3"><a href="#choosing-a-theme">Choosing a theme</a></li></ol></li><li data-target-id="compiling" data-depth="2"><a href="#compiling">Compiling</a></li><li data-target-id="live-preview" data-depth="2"><a href="#live-preview">Live preview</a></li><li data-target-id="markup" data-depth="2"><a href="#markup">Markup</a><ol><li data-target-id="image-size" data-depth="3"><a href="#image-size">Image size</a></li><li data-target-id="figures" data-depth="3"><a href="#figures">Figures</a></li><li data-target-id="equations-and-formulae" data-depth="3"><a href="#equations-and-formulae">Equations and formulae</a></li></ol></li><li data-target-id="function-call-syntax" data-depth="2"><a href="#function-call-syntax">Function call syntax</a><ol><li data-target-id="variables" data-depth="3"><a href="#variables">Variables</a></li></ol></li><li data-target-id="custom-elements" data-depth="2"><a href="#custom-elements">Custom elements</a></li><li data-target-id="numbering" data-depth="2"><a href="#numbering">Numbering</a></li><li data-target-id="table-of-contents" data-depth="2"><a href="#table-of-contents">Table of contents</a></li><li data-target-id="footnotes" data-depth="2"><a href="#footnotes">Footnotes</a></li><li data-target-id="cross-references" data-depth="2"><a href="#cross-references">Cross-references</a></li><li data-target-id="page-margins-and-counter" data-depth="2"><a href="#page-margins-and-counter">Page margins and counter</a><ol><li data-target-id="persistent-headings" data-depth="3"><a href="#persistent-headings">Persistent headings</a></li></ol></li><li data-target-id="multi-file-projects" data-depth="2"><a href="#multi-file-projects">Multi-file projects</a><ol><li data-target-id="including-files" data-depth="3"><a href="#including-files">Including files</a></li><li data-target-id="referencing-files" data-depth="3"><a href="#referencing-files">Referencing files</a></li></ol></li><li data-target-id="conclusion" data-depth="2"><a href="#conclusion">Conclusion</a></li></ol>
+        </nav>
+    </template>
+</head>
+<body class="quarkdown quarkdown-docs">
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <div class="search-wrapper">
+            <div class="search-field">
+                <i class='bi bi-search'></i>
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+    <main>
+        <style data-hidden="">.page-margin-top-left a {
+    display: flex !important;
+}
+
+.quarkdown-output {
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background-color: var(--box-header-background-color) !important;
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)" !important;
+    color: var(--qd-main-color-muted) !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50% !important;
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}</style><div class="page-margin-content page-margin-top-left" data-on-left-page="top-left" data-on-right-page="top-left"><p><a href="https://quarkdown.com"><img src="media/docs-banner-light@-1099472378.svg" alt="Quarkdown" /></a></p></div><div class="page-margin-content page-margin-top-right" data-on-left-page="top-right" data-on-right-page="top-right"><div style="justify-content: flex-start; align-items: center;" class="stack stack-row"><p><a href="/docs">Docs</a></p><hr /><p><a href="https://github.com/iamgio/quarkdown"><i class="icon-image bi bi-github" aria-hidden="true"></i></a></p></div></div><div class="page-margin-content page-margin-left-top" data-on-left-page="left-top" data-on-right-page="left-top"><nav role="navigation" data-role="page-list"><h3 id="getting-started" data-decorative="">Getting started</h3><ul><li><a href="../Quickstart">Quickstart</a></li></ul><h3 id="documentation" data-decorative="">Documentation</h3><ul><li><a href="https://quarkdown.com/docs/quarkdown-stdlib/">Stable ↗</a></li><li><a href="https://quarkdown.com/docs/latest/quarkdown-stdlib/">Latest build ↗</a></li></ul><h3 id="functions" data-decorative="">Functions</h3><ul><li><a href="../Syntax-of-a-function-call">Syntax of a function call</a><ul><li><a href="../Syntax-of-a-function-call#chaining-calls">Chaining calls</a></li><li><a href="../Syntax-of-a-function-call#block-vs-inline-function-calls">Block vs. inline calls</a></li></ul></li><li><a href="../Declaring-functions">Declaring functions</a></li><li><a href="../Typing">Dynamic typing</a></li><li><a href="../Localization">Localization</a></li></ul><h3 id="document-setup" data-decorative="">Document setup</h3><ul><li><a href="../Document-metadata">Document metadata</a><ul><li><a href="../Document-types">Document types</a></li></ul></li><li><a href="../Themes">Theme</a></li><li><a href="../Font-configuration">Fonts</a></li><li><a href="../Page-format">Page format</a><ul><li><a href="../Multi-column-layout">Multi-column layout</a></li></ul></li><li><a href="../Page-margin-content">Page margin content</a></li><li><a href="../Page-counter">Page counter</a></li><li><a href="../Persistent-headings">Persistent headings</a></li><li><a href="../Numbering">Numbering</a></li><li><a href="../Paragraph-style">Paragraph style</a></li><li><a href="../Caption-position">Caption position</a></li><li><a href="../Table-of-contents">Table of contents</a></li><li><a href="../Bibliography">Bibliography</a></li><li><a href="../Footnotes">Footnotes</a></li></ul><h3 id="markdown-enhancements" data-decorative="">Markdown enhancements</h3><ul><li><a href="../Figure">Figures</a></li><li><a href="../Image-size">Image size</a></li><li><a href="../TeX-formulae">TeX formulae</a></li><li><a href="../Table-caption">Table caption</a></li><li><a href="../Code-caption">Code caption</a></li><li><a href="../Numbering#decorative-headings">Decorative headings</a></li><li><a href="../Quote-types">Alerts (quote types)</a></li><li><a href="../Quotation-source">Quotation source</a></li><li><a href="../Cross-references">Cross-references</a></li><li><a href="../Page-break">Page breaks</a><ul><li><a href="../Page-break#automatic-break">Automatic break</a></li></ul></li><li><a href="../Text-symbols">Text symbols</a></li><li><a href="../Emojis">Emojis</a></li></ul><h3 id="layout" data-decorative="">Layout</h3><ul><li><a href="../Stacks">Stacks: rows, columns, grids</a></li><li><a href="../Container">Container</a></li><li><a href="../Align">Align</a></li><li><a href="../Float">Float</a></li><li><a href="../Custom-figure">Figure</a></li><li><a href="../Clip">Clip</a></li><li><a href="../Box">Box</a></li><li><a href="../Collapsible">Collapsible</a></li><li><a href="../Landscape-content">Landscape</a></li><li><a href="../Whitespace">Whitespace</a></li></ul><h3 id="multi-file-projects" data-decorative="">Multi-file projects</h3><ul><li><a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></li><li><a href="../Subdocuments">Referencing other Quarkdown files</a><ul><li><a href="../Inclusion-vs-subdocuments">Including vs. referencing</a></li></ul></li><li><a href="../Importing-external-libraries">Importing external libraries</a></li></ul><h3 id="variables-amp-scripting" data-decorative="">Variables &amp; scripting</h3><ul><li><a href="../Variables">Variables</a></li><li><a href="../None">Optionality</a></li><li><a href="../Math">Math</a></li><li><a href="../Conditional-statements">Conditional statements</a></li><li><a href="../Loops">Loops</a></li><li><a href="../Let">Let</a></li><li><a href="../Destructuring">Destructuring</a></li></ul><h3 id="data-amp-tables" data-decorative="">Data &amp; tables</h3><ul><li><a href="../Table-manipulation">Table manipulation</a></li><li><a href="../Table-generation">Table generation</a></li><li><a href="../File-data#file-text-content">Text content from file</a></li><li><a href="../File-data#table-from-csv">Table from CSV data</a></li></ul><h3 id="charts-amp-diagrams" data-decorative="">Charts &amp; diagrams</h3><ul><li><a href="../XY-chart">XY chart</a></li><li><a href="../Mermaid-diagrams">Mermaid diagrams</a></li></ul><h3 id="text-amp-code" data-decorative="">Text &amp; code</h3><ul><li><a href="../Text">Advanced text formatting</a></li><li><a href="../Code">Advanced code block</a></li><li><a href="../Line-breaks">Explicit line breaks</a></li><li><a href="../TeX-macros">TeX macros</a></li></ul><h3 id="slides" data-decorative="">Slides</h3><ul><li><a href="../Slides-configuration">Slides configuration</a></li><li><a href="../Slides-fragment">Interactive fragment</a></li><li><a href="../Slides-speaker-notes">Speaker notes</a></li></ul><h3 id="native-content" data-decorative="">Native content</h3><ul><li><a href="../HTML">HTML</a></li><li><a href="../CSS">CSS</a></li></ul><h3 id="value-types" data-decorative="">Value types</h3><ul><li>String</li><li>Number</li><li><a href="../Markdown-content">Markdown content</a></li><li><a href="../Boolean">Boolean</a></li><li><a href="../None">None</a></li><li><a href="../Enumeration-entry">Enumeration entry</a></li><li><a href="../Iterable">Iterable</a></li><li><a href="../Dictionary">Dictionary</a></li><li><a href="../Range">Range</a></li><li><a href="../Lambda">Lambda</a></li><li><a href="../Sizes">Size(s)</a></li><li><a href="../Color">Color</a></li><li><a href="../Typing">Dynamic</a></li></ul><h3 id="built-in-libraries" data-decorative="">Built-in libraries</h3><ul><li><a href="../Paper-library">Paper: abstract, definitions, theorems</a></li></ul><h3 id="resources-amp-logging" data-decorative="">Resources &amp; logging</h3><ul><li><a href="../Media-storage">Media storage</a></li><li><a href="../Logging">Logging</a></li></ul><h3 id="cli-tools" data-decorative="">CLI tools</h3><ul><li><a href="../CLI-Compiler">Compiler</a></li><li><a href="../PDF-export">Exporting to PDF</a></li><li><a href="../CLI-Project-creator">Project creator</a></li><li><a href="../CLI-Webserver">Webserver</a></li></ul><h3 id="inside-quarkdown" data-decorative="">Inside Quarkdown</h3><ul><li><a href="../Pipeline">Quarkdown&rsquo;s pipeline</a><ul><li><a href="../Pipeline---Lexing">Lexing</a></li><li><a href="../Pipeline---Parsing">Parsing</a></li><li><a href="../Pipeline---Function-call-expansion">Function call expansion</a></li><li><a href="../Pipeline---Tree-traversal">Tree traversal</a></li><li><a href="../Pipeline---Rendering">Rendering</a></li><li><a href="../Pipeline---Post-rendering">Post-rendering</a></li></ul></li><li><a href="../Inside-live-preview">How does live preview work?</a></li></ul></nav></div><div class="page-margin-content page-margin-right-top" data-on-left-page="right-top" data-on-right-page="right-top"><h3 id="table-of-contents">On this page</h3><nav role="table-of-contents" data-role="table-of-contents"><ol><li data-target-id="creating-a-document" data-depth="2"><a href="#creating-a-document">Creating a document</a><ol><li data-target-id="choosing-a-document-type" data-depth="3"><a href="#choosing-a-document-type">Choosing a document type</a></li><li data-target-id="choosing-a-theme" data-depth="3"><a href="#choosing-a-theme">Choosing a theme</a></li></ol></li><li data-target-id="compiling" data-depth="2"><a href="#compiling">Compiling</a></li><li data-target-id="live-preview" data-depth="2"><a href="#live-preview">Live preview</a></li><li data-target-id="markup" data-depth="2"><a href="#markup">Markup</a><ol><li data-target-id="image-size" data-depth="3"><a href="#image-size">Image size</a></li><li data-target-id="figures" data-depth="3"><a href="#figures">Figures</a></li><li data-target-id="equations-and-formulae" data-depth="3"><a href="#equations-and-formulae">Equations and formulae</a></li></ol></li><li data-target-id="function-call-syntax" data-depth="2"><a href="#function-call-syntax">Function call syntax</a><ol><li data-target-id="variables" data-depth="3"><a href="#variables">Variables</a></li></ol></li><li data-target-id="custom-elements" data-depth="2"><a href="#custom-elements">Custom elements</a></li><li data-target-id="numbering" data-depth="2"><a href="#numbering">Numbering</a></li><li data-target-id="table-of-contents" data-depth="2"><a href="#table-of-contents">Table of contents</a></li><li data-target-id="footnotes" data-depth="2"><a href="#footnotes">Footnotes</a></li><li data-target-id="cross-references" data-depth="2"><a href="#cross-references">Cross-references</a></li><li data-target-id="page-margins-and-counter" data-depth="2"><a href="#page-margins-and-counter">Page margins and counter</a><ol><li data-target-id="persistent-headings" data-depth="3"><a href="#persistent-headings">Persistent headings</a></li></ol></li><li data-target-id="multi-file-projects" data-depth="2"><a href="#multi-file-projects">Multi-file projects</a><ol><li data-target-id="including-files" data-depth="3"><a href="#including-files">Including files</a></li><li data-target-id="referencing-files" data-depth="3"><a href="#referencing-files">Referencing files</a></li></ol></li><li data-target-id="conclusion" data-depth="2"><a href="#conclusion">Conclusion</a></li></ol></nav></div><h1 id="quickstart" data-decorative="">Quickstart</h1><p>Welcome to Quarkdown! This guide walks you through the main features you need to create your first document.</p><blockquote class="tip" style="--quote-type-label: 'Tip';" data-labeled=""><p>If you use VS Code, we strongly recommend installing the <a href="https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode">official Quarkdown extension</a>.</p></blockquote><p>This guide provides a broad overview without diving deep into every detail. Each section includes links to other wiki pages where you can learn more about specific features.</p><h2 id="creating-a-document">Creating a document</h2><blockquote><p>Reference: <a href="../CLI-Project-creator">Project Creator</a></p></blockquote><p>To create a new document, run the project creator from your terminal:</p><pre><code class="language-shell">quarkdown create my-document</code></pre><p>This command creates a new folder named <span class="codespan-content"><code>my-document</code></span>. If you want to use the current working directory instead, you can omit the name.</p><p>For this quickstart, we recommend the following options:</p><ul><li>Project name: <span class="codespan-content"><code>Quickstart</code></span></li><li>Authors: <your name&gt;</li><li>Document type: <span class="codespan-content"><code>plain</code></span></li><li>Document language: <span class="codespan-content"><code>English</code></span></li></ul><p>Once the project is created, open <span class="codespan-content"><code>my-document.qd</code></span> in your favorite text editor. You can delete the existing content inside the first section if you want to start fresh.</p><pre><code class="language-diff">## Quickstart
+
+- Welcome to [Quarkdown](https://quarkdown.com)!
+- This is the starting point of your document.
+- ...</code></pre><h3 id="choosing-a-document-type">Choosing a document type</h3><blockquote><p>Reference: <a href="../Document-types">Document types</a></p></blockquote><p>During the initial setup, you choose a document type from one of the following options:</p><ul><li><strong><span class="codespan-content"><code>plain</code></span></strong>: A continuous flow layout similar to Notion or Obsidian, ideal for knowledge management and web viewing.</li><li><strong><span class="codespan-content"><code>paged</code></span></strong>: A traditional document layout with page breaks, perfect for PDFs.</li><li><strong><span class="codespan-content"><code>slides</code></span></strong>: A presentation format with interactive navigation.</li></ul><h3 id="choosing-a-theme">Choosing a theme</h3><blockquote><p>Reference: <a href="../Themes">Themes</a></p></blockquote><p>Themes are split into two groups: <em>color</em> themes define the color scheme of a document, while <em>layout</em> themes set the general structural rules of the layout.</p><pre><code class="language-markdown">.theme {paperwhite} layout:{latex}</code></pre><p>Some popular combinations include:</p><ul><li><span class="codespan-content"><code>paperwhite + latex</code></span>: A clean academic look (this is the default)</li><li><span class="codespan-content"><code>darko + minimal</code></span>: A dark theme with minimal styling</li><li><span class="codespan-content"><code>beaver + beamer</code></span>: An academic presentation style</li></ul><p>See <a href="../Themes">Themes</a> for a complete list of available themes.</p><h2 id="compiling">Compiling</h2><blockquote><p>Reference: <a href="../CLI-Compiler">Compiler</a></p></blockquote><p>Compile the document to make sure everything works as expected:</p><pre><code class="language-shell">cd my-document
+quarkdown c my-document.qd</code></pre><p>You should see the HTML output inside the <span class="codespan-content"><code>output</code></span> directory.</p><p>To export to PDF, add the <span class="codespan-content"><code>--pdf</code></span> flag:</p><pre><code class="language-shell">quarkdown c my-document.qd --pdf</code></pre><p>See the <a href="../PDF-export">PDF export</a> page for more information about PDF export and its requirements. If you installed Quarkdown using a package manager or the install script, you should be ready to go.</p><h2 id="live-preview">Live preview</h2><p>To launch live preview, append <span class="codespan-content"><code>-p</code></span> (preview) and <span class="codespan-content"><code>-w</code></span> (watch) to the compile command:</p><pre><code class="language-shell">quarkdown c my-document.qd -p -w</code></pre><p>This opens the default browser automatically. To use a different browser, specify it with the <span class="codespan-content"><code>--browser</code></span> option, for example <span class="codespan-content"><code>--browser chrome</code></span>.</p><p>If you use VS Code with the Quarkdown extension, you can launch the live preview by clicking the magnifying glass button or pressing <span class="codespan-content"><code>Ctrl/Cmd+Shift+V</code></span>.</p><h2 id="markup">Markup</h2><p>Quarkdown builds upon Markdown and includes several GFM extensions. To try out basic markup, append the following to your document and experiment with it:</p><pre><code class="language-markdown">### A Quarkdown tour
+
+No need to reinvent the wheel: you can make text **bold** or *italic*,
+~~strike through~~, add `inline code`,
+create [links](https://quarkdown.com), and much more.
+
+- An unordered list
+- With multiple items
+
+1. An ordered list
+2. With multiple items
+
+![Logo](image/logo.png)</code></pre><figure><img src="media/markup@-2127341178.png" alt="Markup" style="width: 650.0px;" /></figure><p>For a refresher on Markdown basics, see <a href="https://www.markdownguide.org/basic-syntax">markdownguide.org</a>.</p><h3 id="image-size">Image size</h3><blockquote><p>References: <a href="../Image-size">Image size</a>, <a href="../Sizes">Size</a></p></blockquote><p>You might have noticed that the image in the previous example appears too large. Quarkdown overcomes this well-known Markdown limitation by allowing you to specify image dimensions:</p><pre><code class="language-markdown">!(50%)[Logo](image/logo.png)</code></pre><p>Now the image is sized appropriately.</p><figure><img src="media/image-size@510992947.png" alt="Image size" style="width: 650.0px;" /></figure><p>This sets the image width to 50% of the available width while maintaining the aspect ratio. Supported units include <span class="codespan-content"><code>px</code></span>, <span class="codespan-content"><code>pt</code></span>, <span class="codespan-content"><code>cm</code></span>, <span class="codespan-content"><code>mm</code></span>, <span class="codespan-content"><code>in</code></span>, and <span class="codespan-content"><code>%</code></span>. If you omit the unit, Quarkdown assumes <span class="codespan-content"><code>px</code></span>.</p><p>To specify both width and height:</p><pre><code class="language-markdown">!(6cm 2cm)[Logo](image/logo.png)</code></pre><p>To specify only the height:</p><pre><code class="language-markdown">!(_ 2cm)[Logo](image/logo.png)</code></pre><h3 id="figures">Figures</h3><blockquote><p>Reference: <a href="../Figure">Figures</a></p></blockquote><p>When an image stands alone, separated from other content, it automatically becomes a figure. Figures are centered and can have a caption.</p><p>Take the previous image:</p><pre><code class="language-markdown">!(50%)[Logo](image/logo.png)</code></pre><p>You can add a caption by appending a title in quotes:</p><pre><code class="language-markdown">!(50%)[Logo](image/logo.png &quot;The Quarkdown logo&quot;)</code></pre><figure><img src="media/figure@164108098.png" alt="Figure" style="width: 650.0px;" /></figure><h3 id="equations-and-formulae">Equations and formulae</h3><blockquote><p>Reference: <a href="../TeX-formulae">TeX formulae</a></p></blockquote><p>You can include TeX equations using the <span class="codespan-content"><code>$ expression $</code></span> syntax. Note that whitespace matters.</p><p>Add the following to the bottom of your document:</p><pre><code class="language-markdown">#### Equations
+
+$ E = mc^2 $ is Einstein&#39;s mass-energy equivalence formula.
+
+$ f(x, y) = \frac{x}{y} $</code></pre><p>Notice that the second equation appears centered on its own line, even though it uses the same syntax. Just like figures, isolated equations automatically become block equations.</p><figure><img src="media/equations@1503589055.png" alt="Equations" style="width: 650.0px;" /></figure><h2 id="function-call-syntax">Function call syntax</h2><blockquote><p>Reference: <a href="../Syntax-of-a-function-call">Syntax of a function call</a></p></blockquote><p>Before exploring more features, let&rsquo;s look at Quarkdown&rsquo;s function call syntax.</p><p>Function calls start with a dot and use curly braces for arguments. Arguments can be positional or named:</p><pre><code class="language-markdown">.pow {5} to:{2} is a mathematical operation.</code></pre><p>Function calls can be <em>inline</em> or <em>block</em>, depending on whether they appear within other content or stand alone.</p><p>Block function calls also support an indented <em>block argument</em>, which always corresponds to the last parameter of the function:</p><pre><code class="language-markdown">.align {center}
+    This multi-line paragraph is the block argument,
+    and it&#39;s now centered in the document.</code></pre><p>You can chain multiple function calls together, where the output of one becomes the first argument of the next:</p><div class="box tip"><header><h4>Example 1</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.sqrt {10}::round::multiply {2}</code></pre><div class="container fullwidth quarkdown-output"><p>6</p></div></div></div><blockquote class="tip" style="--quote-type-label: 'Tip';" data-labeled=""><p>you can find a full list of available functions in the <a href="https://quarkdown.com/docs/quarkdown-stdlib/">documentation</a>.</p></blockquote><h3 id="variables">Variables</h3><blockquote><p>Reference: <a href="../Variables">Variables</a></p></blockquote><p>Define a variable using the <span class="codespan-content"><code>.var</code></span> function and access it like any other function:</p><pre><code class="language-markdown">.var {name} {John}
+
+My name is .name</code></pre><p>To change a variable&rsquo;s value, call it with a new argument:</p><pre><code class="language-markdown">.name {Jane}</code></pre><h2 id="custom-elements">Custom elements</h2><blockquote><p>Reference: <a href="../Declaring-functions">Declaring functions</a>, <a href="../Box">Boxes</a></p></blockquote><p>You can define custom functions using <span class="codespan-content"><code>.function</code></span>. Functions are reusable components that encapsulate logic and content. In this section, we create a function that generates an <em>Example</em> box, commonly used in educational documents.</p><p>Start by defining a function without parameters:</p><pre><code class="language-markdown">.docauthors
+    - ...
+
+.function {example}
+    .box {Example} type:{tip}
+        This is my example!
+
+## Quickstart
+...</code></pre><p>Now call it:</p><pre><code class="language-markdown">## Quickstart
+
+.example
+
+...</code></pre><p>Calling <span class="codespan-content"><code>.example</code></span> produces a nicely formatted box.</p><p>Let&rsquo;s enhance the function by adding a parameter for the box content. The syntax for parameters is <span class="codespan-content"><code>param1 param2 param3:</code></span>.</p><pre><code class="language-markdown">.function {example}
+    content:
+    .box {Example} type:{tip}
+        .content</code></pre><p>Update the call accordingly:</p><pre><code class="language-markdown">.example
+    This is my example!</code></pre><figure><img src="media/custom-element@2135901982.png" alt="Custom element" style="width: 650.0px;" /></figure><p>Congratulations! You&rsquo;ve created your first reusable element using <a href="../Box">boxes</a>. Many more layout tools are available, such as <a href="../Container">containers</a> and <a href="../Stacks">stacks</a>.</p><p>For advanced styling of custom elements, you can use CSS rules. See <a href="../CSS">CSS</a> for more information.</p><blockquote><p>For the sake of simplicity, let&rsquo;s remove the function call for now:</p><pre><code class="language-diff">- .example
+-    This is my example!</code></pre></blockquote><h2 id="numbering">Numbering</h2><blockquote><p>Reference: <a href="../Numbering">Numbering</a></p></blockquote><p>Many documents, especially academic ones, require numbered elements such as sections, figures, tables, equations, and code. In Quarkdown, you can achieve this using the <span class="codespan-content"><code>.numbering</code></span> function.</p><blockquote class="note" style="--quote-type-label: 'Note';" data-labeled=""><p>Documents with the <span class="codespan-content"><code>paged</code></span> type come with default numbering enabled.</p></blockquote><p>Add a numbering scheme at the top of your document, right before the content begins:</p><pre><code class="language-markdown">.docauthors
+    - ...
+
+.numbering
+    - headings: 1.1.1
+    - figures: 1.1
+
+.function {example}
+    ...
+
+## Quickstart
+...</code></pre><blockquote><p>This YAML-like syntax represents a <a href="../Dictionary">dictionary</a> data type.</p></blockquote><figure><img src="media/numbering@-520506863.png" alt="Numbering" style="width: 650.0px;" /></figure><p>Valid symbols for numbering formats are:</p><ul><li><span class="codespan-content"><code>1</code></span> for decimal numbers</li><li><span class="codespan-content"><code>A</code></span> for uppercase letters</li><li><span class="codespan-content"><code>a</code></span> for lowercase letters</li><li><span class="codespan-content"><code>I</code></span> for uppercase Roman numerals</li><li><span class="codespan-content"><code>i</code></span> for lowercase Roman numerals</li></ul><p>Any other character is treated as literal text.</p><h2 id="table-of-contents">Table of contents</h2><blockquote><p>Reference: <a href="../Table-of-contents">Table of contents</a></p></blockquote><p>Longer documents often include a table of contents at the beginning that lists all sections and subsections.</p><p>In Quarkdown, simply call the <span class="codespan-content"><code>.tableofcontents</code></span> function where you want the table of contents to appear:</p><pre><code class="language-markdown">.numbering
+    - ...
+
+.tableofcontents
+
+## Quickstart
+...</code></pre><h2 id="footnotes">Footnotes</h2><blockquote><p>Reference: <a href="../Footnotes">Footnotes</a></p></blockquote><p>Footnotes let you add additional information without cluttering the main text. Let&rsquo;s add a footnote to our introduction:</p><pre><code class="language-markdown">### A Quarkdown tour
+
+No need to reinvent the wheel: you can make text **bold** or *italic*,
+~~strike through~~, add `inline code`,
+create [links](https://quarkdown.com), and much more[^1].
+
+[^1]: All Markdown features are supported in Quarkdown</code></pre><p>This is the GFM footnote syntax, which Quarkdown fully supports. Quarkdown also supports compact footnotes, which let you define a footnote inline, right where you reference it:</p><pre><code class="language-markdown">and much more[^: All Markdown features are supported in Quarkdown].</code></pre><p>In <span class="codespan-content"><code>plain</code></span> documents, footnotes appear in the margin next to the reference, similar to side notes. In <span class="codespan-content"><code>paged</code></span> and <span class="codespan-content"><code>slides</code></span> documents, footnotes appear at the bottom of the page or slide.</p><h2 id="cross-references">Cross-references</h2><blockquote><p>Reference: <a href="../Cross-references">Cross-references</a></p></blockquote><p>Cross-references let you refer to numbered elements elsewhere in your document.</p><p>First, add an ID to the target element. Then reference it using the <span class="codespan-content"><code>.ref {id}</code></span> function.</p><p>Take our figure:</p><pre><code class="language-markdown">!(50%)[Logo](image/logo.png &quot;The Quarkdown logo&quot;)</code></pre><p>Add the <span class="codespan-content"><code>logo</code></span> ID to it and reference it in the text:</p><pre><code class="language-markdown">!(50%)[Logo](image/logo.png &quot;The Quarkdown logo&quot;) {#logo}
+
+The Quarkdown logo is shown in .ref {logo}.</code></pre><figure><img src="media/cross-reference@-2122274924.png" alt="Cross-reference" style="width: 650.0px;" /></figure><p>See <a href="../Cross-references">Cross-references</a> to learn how to add IDs to other elements, such as sections, tables, equations, and code blocks.</p><h2 id="page-margins-and-counter">Page margins and counter</h2><blockquote><p>References: <a href="../Page-format">Page format</a>, <a href="../Page-margin-content">Page margin content</a>, <a href="../Page-counter">Page counter</a></p></blockquote><p>In <span class="codespan-content"><code>paged</code></span> and <span class="codespan-content"><code>slides</code></span> documents, you typically want a page counter to help readers navigate and understand where they are in the document.</p><p>First, switch to the <span class="codespan-content"><code>paged</code></span> document type by changing the <span class="codespan-content"><code>.doctype</code></span> value at the top of your document:</p><pre><code class="language-diff">- .doctype {plain}
++ .doctype {paged}</code></pre><blockquote><p>The default page format is A4. You can change it, along with other properties, using the <span class="codespan-content"><code>.pageformat</code></span> function:</p><pre><code class="language-markdown">.pageformat {letter} margin:{2cm}</code></pre></blockquote><p>Now add a page counter to the bottom center of each page:</p><pre><code class="language-markdown">.docauthors
+    - ...
+
+.pagemargin {bottomcenter}
+    .currentpage / .totalpages
+
+.numbering
+    - ...</code></pre><p>Each page now displays its number and the total number of pages.</p><p>The <span class="codespan-content"><code>.pagemargin</code></span> function can add any kind of content to each page. See <a href="../Page-margin-content">Page margin content</a> for all available margin positions.</p><h3 id="persistent-headings">Persistent headings</h3><blockquote><p>Reference: <a href="../Persistent-headings">Persistent headings</a></p></blockquote><p>Page margins can also display the current section title on each page. The following example shows the current level-1 heading in the bottom left margin:</p><pre><code class="language-markdown">.pagemargin {bottomcenter}
+    ...
+
+.pagemargin {bottomleft}
+    .lastheading depth:{1}
+
+.numbering
+    - ...</code></pre><h2 id="multi-file-projects">Multi-file projects</h2><blockquote><p>Reference: <a href="../Inclusion-vs-subdocuments">Inclusion vs. subdocuments</a></p></blockquote><p>There are two main ways to split a large document into multiple source files: inclusion and subdocuments.</p><h3 id="including-files">Including files</h3><blockquote><p>Reference: <a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></p></blockquote><p>The <span class="codespan-content"><code>.include</code></span> function inserts the content of another Quarkdown file into the current one. This approach is common in LaTeX and other markup languages for splitting a large document into smaller, more manageable files, such as one per chapter or section.</p><p>For our quickstart, we could split setup and content into two separate files:</p><blockquote><p>my-document.qd</p></blockquote><pre><code class="language-diff">- .docname {Quickstart}
+- .doctype {paged}
+- .doclang {English}
+- .theme {paperwhite} layout:{latex}
+-
+- .docauthors
+-     - ...
+-
+- .pagemargin {bottomright}
+-     .currentpage / .totalpages
+-
+- .pagemargin {bottomleft}
+-     .lastheading depth:{1}
+-
+- .numbering
+-     - headings: 1.1.1
+-     - figures: 1.1
+
++ .include {setup.qd}
++ .include {content.qd}
+
+- .tableofcontents
+-
+- # Quickstart
+-
+- ...</code></pre><blockquote><p>setup.qd</p></blockquote><pre><code class="language-markdown">.docname {MyDocument}
+.doctype {paged}
+.doclang {English}
+.theme {paperwhite} layout:{latex}
+
+.docauthors
+    - Quarkdown
+
+.pagemargin {bottomright}
+    .currentpage / .totalpages
+
+.numbering
+    - headings: 1.1.1
+    - figures: 1.1</code></pre><blockquote><p>content.qd</p></blockquote><pre><code class="language-markdown">.tableofcontents
+
+## Quickstart
+
+...</code></pre><p>Here we used <span class="codespan-content"><code>.include</code></span> twice. For a larger number of files, consider using <span class="codespan-content"><code>.includeall</code></span> instead:</p><pre><code class="language-markdown">.includeall
+    - setup.qd
+    - content.qd</code></pre><h3 id="referencing-files">Referencing files</h3><blockquote><p>Reference: <a href="../Subdocuments">Subdocuments</a></p></blockquote><p>The second approach uses subdocuments, which are particularly common for knowledge bases and wikis.</p><p>Subdocuments are independent units of content that share the same setup and configuration. You can reference them from other documents through links.</p><blockquote><p>my-document.qd</p></blockquote><pre><code class="language-markdown">- [Introduction](introduction.qd)
+- [Chapter 1](chapter1.qd)
+- [Chapter 2](chapter2.qd)
+- [Conclusion](conclusion.qd)</code></pre><p>You can also visualize the knowledge graph formed by subdocuments:</p><pre><code class="language-markdown">.subdocumentgraph</code></pre><figure><img src="media/subdocuments@-1777547530.png" alt="Subdocuments" style="width: 650.0px;" /></figure><h2 id="conclusion">Conclusion</h2><p>Congratulations! You have completed the Quarkdown quickstart guide and are now familiar with its main features. You are ready to create your first real document.</p><p>From here, you can explore more advanced topics in the rest of this wiki and in the <a href="https://quarkdown.com/docs/">documentation</a>.</p>
+        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
+    </main>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+</div>
+</body>
+</html>

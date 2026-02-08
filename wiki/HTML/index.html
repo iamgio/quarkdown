@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta name="generator" content="Quarkdown">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="quarkdown:root-path" content="..">
+    <meta name="quarkdown:search-index" content="../search-index.json">
+    <title>HTML</title>
+    <script src="../script/quarkdown.js"></script>
+    <script>const capabilities = window.quarkdownCapabilities</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script>capabilities.code = true;</script>
+
+    <style>
+
+        body {
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
+        }
+
+        body.quarkdown-slides.quarkdown-slides .reveal {
+        }
+
+        @page {
+            size: auto auto;
+        }
+
+        p {
+        }
+    </style>
+    <script>
+        const doc = new DocsDocument();
+        prepare(doc);
+    </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            <ol><li data-target-id="forcing-html-injection" data-depth="2"><a href="#forcing-html-injection">Forcing HTML injection</a></li></ol>
+        </nav>
+    </template>
+</head>
+<body class="quarkdown quarkdown-docs">
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <div class="search-wrapper">
+            <div class="search-field">
+                <i class='bi bi-search'></i>
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+    <main>
+        <style data-hidden="">.page-margin-top-left a {
+    display: flex !important;
+}
+
+.quarkdown-output {
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background-color: var(--box-header-background-color) !important;
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)" !important;
+    color: var(--qd-main-color-muted) !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50% !important;
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}</style><div class="page-margin-content page-margin-top-left" data-on-left-page="top-left" data-on-right-page="top-left"><p><a href="https://quarkdown.com"><img src="media/docs-banner-light@-1099472378.svg" alt="Quarkdown" /></a></p></div><div class="page-margin-content page-margin-top-right" data-on-left-page="top-right" data-on-right-page="top-right"><div style="justify-content: flex-start; align-items: center;" class="stack stack-row"><p><a href="/docs">Docs</a></p><hr /><p><a href="https://github.com/iamgio/quarkdown"><i class="icon-image bi bi-github" aria-hidden="true"></i></a></p></div></div><div class="page-margin-content page-margin-left-top" data-on-left-page="left-top" data-on-right-page="left-top"><nav role="navigation" data-role="page-list"><h3 id="getting-started" data-decorative="">Getting started</h3><ul><li><a href="../Quickstart">Quickstart</a></li></ul><h3 id="documentation" data-decorative="">Documentation</h3><ul><li><a href="https://quarkdown.com/docs/quarkdown-stdlib/">Stable ↗</a></li><li><a href="https://quarkdown.com/docs/latest/quarkdown-stdlib/">Latest build ↗</a></li></ul><h3 id="functions" data-decorative="">Functions</h3><ul><li><a href="../Syntax-of-a-function-call">Syntax of a function call</a><ul><li><a href="../Syntax-of-a-function-call#chaining-calls">Chaining calls</a></li><li><a href="../Syntax-of-a-function-call#block-vs-inline-function-calls">Block vs. inline calls</a></li></ul></li><li><a href="../Declaring-functions">Declaring functions</a></li><li><a href="../Typing">Dynamic typing</a></li><li><a href="../Localization">Localization</a></li></ul><h3 id="document-setup" data-decorative="">Document setup</h3><ul><li><a href="../Document-metadata">Document metadata</a><ul><li><a href="../Document-types">Document types</a></li></ul></li><li><a href="../Themes">Theme</a></li><li><a href="../Font-configuration">Fonts</a></li><li><a href="../Page-format">Page format</a><ul><li><a href="../Multi-column-layout">Multi-column layout</a></li></ul></li><li><a href="../Page-margin-content">Page margin content</a></li><li><a href="../Page-counter">Page counter</a></li><li><a href="../Persistent-headings">Persistent headings</a></li><li><a href="../Numbering">Numbering</a></li><li><a href="../Paragraph-style">Paragraph style</a></li><li><a href="../Caption-position">Caption position</a></li><li><a href="../Table-of-contents">Table of contents</a></li><li><a href="../Bibliography">Bibliography</a></li><li><a href="../Footnotes">Footnotes</a></li></ul><h3 id="markdown-enhancements" data-decorative="">Markdown enhancements</h3><ul><li><a href="../Figure">Figures</a></li><li><a href="../Image-size">Image size</a></li><li><a href="../TeX-formulae">TeX formulae</a></li><li><a href="../Table-caption">Table caption</a></li><li><a href="../Code-caption">Code caption</a></li><li><a href="../Numbering#decorative-headings">Decorative headings</a></li><li><a href="../Quote-types">Alerts (quote types)</a></li><li><a href="../Quotation-source">Quotation source</a></li><li><a href="../Cross-references">Cross-references</a></li><li><a href="../Page-break">Page breaks</a><ul><li><a href="../Page-break#automatic-break">Automatic break</a></li></ul></li><li><a href="../Text-symbols">Text symbols</a></li><li><a href="../Emojis">Emojis</a></li></ul><h3 id="layout" data-decorative="">Layout</h3><ul><li><a href="../Stacks">Stacks: rows, columns, grids</a></li><li><a href="../Container">Container</a></li><li><a href="../Align">Align</a></li><li><a href="../Float">Float</a></li><li><a href="../Custom-figure">Figure</a></li><li><a href="../Clip">Clip</a></li><li><a href="../Box">Box</a></li><li><a href="../Collapsible">Collapsible</a></li><li><a href="../Landscape-content">Landscape</a></li><li><a href="../Whitespace">Whitespace</a></li></ul><h3 id="multi-file-projects" data-decorative="">Multi-file projects</h3><ul><li><a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></li><li><a href="../Subdocuments">Referencing other Quarkdown files</a><ul><li><a href="../Inclusion-vs-subdocuments">Including vs. referencing</a></li></ul></li><li><a href="../Importing-external-libraries">Importing external libraries</a></li></ul><h3 id="variables-amp-scripting" data-decorative="">Variables &amp; scripting</h3><ul><li><a href="../Variables">Variables</a></li><li><a href="../None">Optionality</a></li><li><a href="../Math">Math</a></li><li><a href="../Conditional-statements">Conditional statements</a></li><li><a href="../Loops">Loops</a></li><li><a href="../Let">Let</a></li><li><a href="../Destructuring">Destructuring</a></li></ul><h3 id="data-amp-tables" data-decorative="">Data &amp; tables</h3><ul><li><a href="../Table-manipulation">Table manipulation</a></li><li><a href="../Table-generation">Table generation</a></li><li><a href="../File-data#file-text-content">Text content from file</a></li><li><a href="../File-data#table-from-csv">Table from CSV data</a></li></ul><h3 id="charts-amp-diagrams" data-decorative="">Charts &amp; diagrams</h3><ul><li><a href="../XY-chart">XY chart</a></li><li><a href="../Mermaid-diagrams">Mermaid diagrams</a></li></ul><h3 id="text-amp-code" data-decorative="">Text &amp; code</h3><ul><li><a href="../Text">Advanced text formatting</a></li><li><a href="../Code">Advanced code block</a></li><li><a href="../Line-breaks">Explicit line breaks</a></li><li><a href="../TeX-macros">TeX macros</a></li></ul><h3 id="slides" data-decorative="">Slides</h3><ul><li><a href="../Slides-configuration">Slides configuration</a></li><li><a href="../Slides-fragment">Interactive fragment</a></li><li><a href="../Slides-speaker-notes">Speaker notes</a></li></ul><h3 id="native-content" data-decorative="">Native content</h3><ul><li><a href="../HTML" aria-current="page">HTML</a></li><li><a href="../CSS">CSS</a></li></ul><h3 id="value-types" data-decorative="">Value types</h3><ul><li>String</li><li>Number</li><li><a href="../Markdown-content">Markdown content</a></li><li><a href="../Boolean">Boolean</a></li><li><a href="../None">None</a></li><li><a href="../Enumeration-entry">Enumeration entry</a></li><li><a href="../Iterable">Iterable</a></li><li><a href="../Dictionary">Dictionary</a></li><li><a href="../Range">Range</a></li><li><a href="../Lambda">Lambda</a></li><li><a href="../Sizes">Size(s)</a></li><li><a href="../Color">Color</a></li><li><a href="../Typing">Dynamic</a></li></ul><h3 id="built-in-libraries" data-decorative="">Built-in libraries</h3><ul><li><a href="../Paper-library">Paper: abstract, definitions, theorems</a></li></ul><h3 id="resources-amp-logging" data-decorative="">Resources &amp; logging</h3><ul><li><a href="../Media-storage">Media storage</a></li><li><a href="../Logging">Logging</a></li></ul><h3 id="cli-tools" data-decorative="">CLI tools</h3><ul><li><a href="../CLI-Compiler">Compiler</a></li><li><a href="../PDF-export">Exporting to PDF</a></li><li><a href="../CLI-Project-creator">Project creator</a></li><li><a href="../CLI-Webserver">Webserver</a></li></ul><h3 id="inside-quarkdown" data-decorative="">Inside Quarkdown</h3><ul><li><a href="../Pipeline">Quarkdown&rsquo;s pipeline</a><ul><li><a href="../Pipeline---Lexing">Lexing</a></li><li><a href="../Pipeline---Parsing">Parsing</a></li><li><a href="../Pipeline---Function-call-expansion">Function call expansion</a></li><li><a href="../Pipeline---Tree-traversal">Tree traversal</a></li><li><a href="../Pipeline---Rendering">Rendering</a></li><li><a href="../Pipeline---Post-rendering">Post-rendering</a></li></ul></li><li><a href="../Inside-live-preview">How does live preview work?</a></li></ul></nav></div><div class="page-margin-content page-margin-right-top" data-on-left-page="right-top" data-on-right-page="right-top"><h3 id="table-of-contents">On this page</h3><nav role="table-of-contents" data-role="table-of-contents"><ol><li data-target-id="forcing-html-injection" data-depth="2"><a href="#forcing-html-injection">Forcing HTML injection</a></li></ol></nav></div><h1 id="html" data-decorative="">HTML</h1><p>Standard Markdown specifications allow freely mixing Markdown and HTML, as they are meant to be implemented by parsers that solely rely on HTML rendering.</p><pre><code class="language-markdown">**Hello** &lt;em&gt;world&lt;/em&gt;!</code></pre><p>On the other hand, Quarkdown strongly encourages <strong>target agnosticism</strong> in order to maintain rendering consistency across all supported rendering targets.</p><p>At this time, only HTML rendering is supported (note: PDF export is not a rendering target, as it works on top of HTML post-processing). There are however future plans to bring support to more targets, such as LaTeX. In that case, HTML content cannot be handled by the native target anymore.</p><p>For this reason, Quarkdown dropped mixed content support and focused on covering the most frequent HTML workarounds with dedicated functions.</p><div class="box tip"><header><h4>Example 1</h4></header><div class="box-content"><ul><li>A collapsible block in standard Markdown via HTML:<pre><code class="language-html">&lt;details&gt;
+&lt;summary&gt;Title of the collapsible block&lt;/summary&gt;
+Content of the collapsible block.
+&lt;/details&gt;</code></pre></li><li>The same in Quarkdown, using the <a href="../Collapsible"><span class="codespan-content"><code>.collapse</code></span></a> function:<pre><code class="language-markdown">.collapse {Title of the collapsible block}
+    Content of the collapsible block.</code></pre></li></ul></div></div><div class="box tip"><header><h4>Example 2</h4></header><div class="box-content"><ul><li>A styled container in HTML:<pre><code class="language-html">&lt;div style=&quot;border: 1px solid black; padding: 8px;&quot;&gt;
+    This is a styled container.
+&lt;/div&gt;</code></pre></li><li>The same in Quarkdown, using <a href="../Container"><span class="codespan-content"><code>.container</code></span></a>:<pre><code class="language-markdown">.container border:{black} borderwidth:{1} padding:{8}
+    This is a styled container.</code></pre></li></ul></div></div><h2 id="forcing-html-injection">Forcing HTML injection</h2><p>As a last resort, if the functionality you are looking for is not supported out of the box, you might consider calling the <span class="codespan-content"><code>.html</code></span> function, which directly renders its content into the final document, as long as the rendering target is HTML.</p><div class="box tip"><header><h4>Example 3</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">**Hello** .html {&lt;em&gt;world&lt;/em&gt;}!</code></pre><div class="container fullwidth quarkdown-output"><p><strong>Hello</strong> <em>world</em>!</p></div></div></div><div class="box tip"><header><h4>Example 4</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.html
+    &lt;div style=&quot;transform: scaleY(0.6);&quot;&gt;
+        My HTML container
+    &lt;/div&gt;</code></pre><div class="container fullwidth quarkdown-output"><div style="transform: scaleY(0.6);">
+    My HTML container
+</div></div></div></div><blockquote class="warning" style="--quote-type-label: 'Warning';" data-labeled=""><ul><li>The rendered output is unsanitized content, possibly vulnerable.</li><li>This approach is not target-agnostic, as other rendering targets will ignore the provided content.</li></ul></blockquote>
+        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
+    </main>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+</div>
+</body>
+</html>

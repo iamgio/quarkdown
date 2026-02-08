@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta name="generator" content="Quarkdown">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="quarkdown:root-path" content="..">
+    <meta name="quarkdown:search-index" content="../search-index.json">
+    <title>Numbering</title>
+    <script src="../script/quarkdown.js"></script>
+    <script>const capabilities = window.quarkdownCapabilities</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script>capabilities.code = true;</script>
+
+    <style>
+
+        body {
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
+        }
+
+        body.quarkdown-slides.quarkdown-slides .reveal {
+        }
+
+        @page {
+            size: auto auto;
+        }
+
+        p {
+        }
+    </style>
+    <script>
+        const doc = new DocsDocument();
+        prepare(doc);
+    </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            <ol><li data-target-id="default-formats" data-depth="2"><a href="#default-formats">Default formats</a></li><li data-target-id="merging-configurations" data-depth="2"><a href="#merging-configurations">Merging configurations</a></li><li data-target-id="headings" data-depth="2"><a href="#headings">Headings</a><ol><li data-target-id="decorative-headings" data-depth="3"><a href="#decorative-headings">Decorative headings</a></li></ol></li><li data-target-id="figures" data-depth="2"><a href="#figures">Figures</a></li><li data-target-id="tables" data-depth="2"><a href="#tables">Tables</a></li><li data-target-id="equations" data-depth="2"><a href="#equations">Equations</a></li><li data-target-id="code-blocks" data-depth="2"><a href="#code-blocks">Code blocks</a></li><li data-target-id="footnotes" data-depth="2"><a href="#footnotes">Footnotes</a></li><li data-target-id="custom-numbered-elements" data-depth="2"><a href="#custom-numbered-elements">Custom numbered elements</a></li><li data-target-id="localization" data-depth="2"><a href="#localization">Localization</a></li></ol>
+        </nav>
+    </template>
+</head>
+<body class="quarkdown quarkdown-docs">
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <div class="search-wrapper">
+            <div class="search-field">
+                <i class='bi bi-search'></i>
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+    <main>
+        <style data-hidden="">.page-margin-top-left a {
+    display: flex !important;
+}
+
+.quarkdown-output {
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background-color: var(--box-header-background-color) !important;
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)" !important;
+    color: var(--qd-main-color-muted) !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50% !important;
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}</style><div class="page-margin-content page-margin-top-left" data-on-left-page="top-left" data-on-right-page="top-left"><p><a href="https://quarkdown.com"><img src="media/docs-banner-light@-1099472378.svg" alt="Quarkdown" /></a></p></div><div class="page-margin-content page-margin-top-right" data-on-left-page="top-right" data-on-right-page="top-right"><div style="justify-content: flex-start; align-items: center;" class="stack stack-row"><p><a href="/docs">Docs</a></p><hr /><p><a href="https://github.com/iamgio/quarkdown"><i class="icon-image bi bi-github" aria-hidden="true"></i></a></p></div></div><div class="page-margin-content page-margin-left-top" data-on-left-page="left-top" data-on-right-page="left-top"><nav role="navigation" data-role="page-list"><h3 id="getting-started" data-decorative="">Getting started</h3><ul><li><a href="../Quickstart">Quickstart</a></li></ul><h3 id="documentation" data-decorative="">Documentation</h3><ul><li><a href="https://quarkdown.com/docs/quarkdown-stdlib/">Stable ↗</a></li><li><a href="https://quarkdown.com/docs/latest/quarkdown-stdlib/">Latest build ↗</a></li></ul><h3 id="functions" data-decorative="">Functions</h3><ul><li><a href="../Syntax-of-a-function-call">Syntax of a function call</a><ul><li><a href="../Syntax-of-a-function-call#chaining-calls">Chaining calls</a></li><li><a href="../Syntax-of-a-function-call#block-vs-inline-function-calls">Block vs. inline calls</a></li></ul></li><li><a href="../Declaring-functions">Declaring functions</a></li><li><a href="../Typing">Dynamic typing</a></li><li><a href="../Localization">Localization</a></li></ul><h3 id="document-setup" data-decorative="">Document setup</h3><ul><li><a href="../Document-metadata">Document metadata</a><ul><li><a href="../Document-types">Document types</a></li></ul></li><li><a href="../Themes">Theme</a></li><li><a href="../Font-configuration">Fonts</a></li><li><a href="../Page-format">Page format</a><ul><li><a href="../Multi-column-layout">Multi-column layout</a></li></ul></li><li><a href="../Page-margin-content">Page margin content</a></li><li><a href="../Page-counter">Page counter</a></li><li><a href="../Persistent-headings">Persistent headings</a></li><li><a href="../Numbering" aria-current="page">Numbering</a></li><li><a href="../Paragraph-style">Paragraph style</a></li><li><a href="../Caption-position">Caption position</a></li><li><a href="../Table-of-contents">Table of contents</a></li><li><a href="../Bibliography">Bibliography</a></li><li><a href="../Footnotes">Footnotes</a></li></ul><h3 id="markdown-enhancements" data-decorative="">Markdown enhancements</h3><ul><li><a href="../Figure">Figures</a></li><li><a href="../Image-size">Image size</a></li><li><a href="../TeX-formulae">TeX formulae</a></li><li><a href="../Table-caption">Table caption</a></li><li><a href="../Code-caption">Code caption</a></li><li><a href="../Numbering#decorative-headings" aria-current="page">Decorative headings</a></li><li><a href="../Quote-types">Alerts (quote types)</a></li><li><a href="../Quotation-source">Quotation source</a></li><li><a href="../Cross-references">Cross-references</a></li><li><a href="../Page-break">Page breaks</a><ul><li><a href="../Page-break#automatic-break">Automatic break</a></li></ul></li><li><a href="../Text-symbols">Text symbols</a></li><li><a href="../Emojis">Emojis</a></li></ul><h3 id="layout" data-decorative="">Layout</h3><ul><li><a href="../Stacks">Stacks: rows, columns, grids</a></li><li><a href="../Container">Container</a></li><li><a href="../Align">Align</a></li><li><a href="../Float">Float</a></li><li><a href="../Custom-figure">Figure</a></li><li><a href="../Clip">Clip</a></li><li><a href="../Box">Box</a></li><li><a href="../Collapsible">Collapsible</a></li><li><a href="../Landscape-content">Landscape</a></li><li><a href="../Whitespace">Whitespace</a></li></ul><h3 id="multi-file-projects" data-decorative="">Multi-file projects</h3><ul><li><a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></li><li><a href="../Subdocuments">Referencing other Quarkdown files</a><ul><li><a href="../Inclusion-vs-subdocuments">Including vs. referencing</a></li></ul></li><li><a href="../Importing-external-libraries">Importing external libraries</a></li></ul><h3 id="variables-amp-scripting" data-decorative="">Variables &amp; scripting</h3><ul><li><a href="../Variables">Variables</a></li><li><a href="../None">Optionality</a></li><li><a href="../Math">Math</a></li><li><a href="../Conditional-statements">Conditional statements</a></li><li><a href="../Loops">Loops</a></li><li><a href="../Let">Let</a></li><li><a href="../Destructuring">Destructuring</a></li></ul><h3 id="data-amp-tables" data-decorative="">Data &amp; tables</h3><ul><li><a href="../Table-manipulation">Table manipulation</a></li><li><a href="../Table-generation">Table generation</a></li><li><a href="../File-data#file-text-content">Text content from file</a></li><li><a href="../File-data#table-from-csv">Table from CSV data</a></li></ul><h3 id="charts-amp-diagrams" data-decorative="">Charts &amp; diagrams</h3><ul><li><a href="../XY-chart">XY chart</a></li><li><a href="../Mermaid-diagrams">Mermaid diagrams</a></li></ul><h3 id="text-amp-code" data-decorative="">Text &amp; code</h3><ul><li><a href="../Text">Advanced text formatting</a></li><li><a href="../Code">Advanced code block</a></li><li><a href="../Line-breaks">Explicit line breaks</a></li><li><a href="../TeX-macros">TeX macros</a></li></ul><h3 id="slides" data-decorative="">Slides</h3><ul><li><a href="../Slides-configuration">Slides configuration</a></li><li><a href="../Slides-fragment">Interactive fragment</a></li><li><a href="../Slides-speaker-notes">Speaker notes</a></li></ul><h3 id="native-content" data-decorative="">Native content</h3><ul><li><a href="../HTML">HTML</a></li><li><a href="../CSS">CSS</a></li></ul><h3 id="value-types" data-decorative="">Value types</h3><ul><li>String</li><li>Number</li><li><a href="../Markdown-content">Markdown content</a></li><li><a href="../Boolean">Boolean</a></li><li><a href="../None">None</a></li><li><a href="../Enumeration-entry">Enumeration entry</a></li><li><a href="../Iterable">Iterable</a></li><li><a href="../Dictionary">Dictionary</a></li><li><a href="../Range">Range</a></li><li><a href="../Lambda">Lambda</a></li><li><a href="../Sizes">Size(s)</a></li><li><a href="../Color">Color</a></li><li><a href="../Typing">Dynamic</a></li></ul><h3 id="built-in-libraries" data-decorative="">Built-in libraries</h3><ul><li><a href="../Paper-library">Paper: abstract, definitions, theorems</a></li></ul><h3 id="resources-amp-logging" data-decorative="">Resources &amp; logging</h3><ul><li><a href="../Media-storage">Media storage</a></li><li><a href="../Logging">Logging</a></li></ul><h3 id="cli-tools" data-decorative="">CLI tools</h3><ul><li><a href="../CLI-Compiler">Compiler</a></li><li><a href="../PDF-export">Exporting to PDF</a></li><li><a href="../CLI-Project-creator">Project creator</a></li><li><a href="../CLI-Webserver">Webserver</a></li></ul><h3 id="inside-quarkdown" data-decorative="">Inside Quarkdown</h3><ul><li><a href="../Pipeline">Quarkdown&rsquo;s pipeline</a><ul><li><a href="../Pipeline---Lexing">Lexing</a></li><li><a href="../Pipeline---Parsing">Parsing</a></li><li><a href="../Pipeline---Function-call-expansion">Function call expansion</a></li><li><a href="../Pipeline---Tree-traversal">Tree traversal</a></li><li><a href="../Pipeline---Rendering">Rendering</a></li><li><a href="../Pipeline---Post-rendering">Post-rendering</a></li></ul></li><li><a href="../Inside-live-preview">How does live preview work?</a></li></ul></nav></div><div class="page-margin-content page-margin-right-top" data-on-left-page="right-top" data-on-right-page="right-top"><h3 id="table-of-contents">On this page</h3><nav role="table-of-contents" data-role="table-of-contents"><ol><li data-target-id="default-formats" data-depth="2"><a href="#default-formats">Default formats</a></li><li data-target-id="merging-configurations" data-depth="2"><a href="#merging-configurations">Merging configurations</a></li><li data-target-id="headings" data-depth="2"><a href="#headings">Headings</a><ol><li data-target-id="decorative-headings" data-depth="3"><a href="#decorative-headings">Decorative headings</a></li></ol></li><li data-target-id="figures" data-depth="2"><a href="#figures">Figures</a></li><li data-target-id="tables" data-depth="2"><a href="#tables">Tables</a></li><li data-target-id="equations" data-depth="2"><a href="#equations">Equations</a></li><li data-target-id="code-blocks" data-depth="2"><a href="#code-blocks">Code blocks</a></li><li data-target-id="footnotes" data-depth="2"><a href="#footnotes">Footnotes</a></li><li data-target-id="custom-numbered-elements" data-depth="2"><a href="#custom-numbered-elements">Custom numbered elements</a></li><li data-target-id="localization" data-depth="2"><a href="#localization">Localization</a></li></ol></nav></div><h1 id="numbering" data-decorative="">Numbering</h1><p>The <strong><span class="codespan-content"><code>.numbering</code></span></strong> function sets the global numbering configuration of the document. The following elements can be numbered:</p><ul><li>Headings and <a href="../Table-of-contents">table of contents</a> entries</li><li><a href="../Figure">Figures</a></li><li>Tables</li><li><a href="../Math">Equations</a></li><li>Code blocks</li><li><a href="../Footnotes">Footnotes</a></li><li>Custom elements (<span class="codespan-content"><code>.numbered</code></span>)</li></ul><p>The configuration is represented by a <a href="../Dictionary">Dictionary</a>. The following snippet shows the full configuration schema, where all entries are optional:</p><pre><code class="language-yaml">.numbering
+  - headings: &lt;format&gt;
+  - figures: &lt;format&gt;
+  - tables: &lt;format&gt;
+  - equations: &lt;format&gt;
+  - code: &lt;format&gt;
+  - footnotes: &lt;format&gt;</code></pre><p>Each format parameter accepts either <span class="codespan-content"><code>none</code></span> or a string where each character represents either a counter or a fixed symbol:</p><ul><li><span class="codespan-content"><code>1</code></span> for decimal (<span class="codespan-content"><code>1, 2, 3, ...</code></span>)</li><li><span class="codespan-content"><code>a</code></span> for lowercase latin alphabet (<span class="codespan-content"><code>a, b, c, ...</code></span>)</li><li><span class="codespan-content"><code>A</code></span> for uppercase latin alphabet (<span class="codespan-content"><code>A, B, C, ...</code></span>)</li><li><span class="codespan-content"><code>i</code></span> for lowercase roman numerals (<span class="codespan-content"><code>i, ii, iii, ...</code></span>)</li><li><span class="codespan-content"><code>I</code></span> for uppercase roman numerals (<span class="codespan-content"><code>I, II, III, ...</code></span>)</li><li>Any other character is a fixed symbol.</li></ul><h2 id="default-formats">Default formats</h2><p>The default numbering format, if unspecified, is:</p><ul><li><p>For <span class="codespan-content"><code>paged</code></span> documents:</p><ul><li><span class="codespan-content"><code>1.1.1</code></span> for headings</li><li><span class="codespan-content"><code>1.1</code></span> for figures and tables</li><li><span class="codespan-content"><code>(1)</code></span> for equations</li><li><span class="codespan-content"><code>1</code></span> for footnotes</li></ul></li><li><p>For <span class="codespan-content"><code>plain</code></span> documents:</p><ul><li><span class="codespan-content"><code>(1)</code></span> for equations</li><li><span class="codespan-content"><code>1</code></span> for footnotes</li></ul></li><li><p>For <span class="codespan-content"><code>slides</code></span> and <span class="codespan-content"><code>docs</code></span> documents:</p><ul><li><span class="codespan-content"><code>1</code></span> for footnotes</li></ul></li></ul><p>You can turn off any active numbering configuration via the <strong><span class="codespan-content"><code>.nonumbering</code></span></strong> function.</p><h2 id="merging-configurations">Merging configurations</h2><p>By default, <span class="codespan-content"><code>.numbering</code></span> enhances the current numbering configuration by merging the new configuration with the existing one. This means only the specified entries are updated while the rest remain unchanged.</p><p>To avoid merging and turn off numbering rules for unspecified entries, set the <span class="codespan-content"><code>merge:{no}</code></span> argument:</p><pre><code class="language-yaml">.numbering merge:{no}
+    - figures: 1.1</code></pre><h2 id="headings">Headings</h2><div class="box tip"><header><h4>Example 1</h4></header><div class="box-content"><pre><code class="language-markdown">.numbering
+    - headings: 1.A.a
+
+## Title    &lt;!--   1   --&gt;
+### Title   &lt;!--  1.A  --&gt;
+#### Title  &lt;!-- 1.A.a --&gt;
+#### Title  &lt;!-- 1.A.b --&gt;
+##### Title &lt;!-- None  --&gt;
+### Title   &lt;!--  1.B  --&gt;
+## Title    &lt;!--   2   --&gt;
+### Title   &lt;!--  2.A  --&gt;</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/headings-latex@-1512791076.png" alt="Latex theme numbering" style="width: 550.0px;" /></figure><figure><img src="media/toc-latex@663368445.png" alt="Latex theme table of contents" style="width: 550.0px;" /></figure></div></div></div><h3 id="decorative-headings">Decorative headings</h3><p>To prevent a heading from being numbered, append a <span class="codespan-content"><code>!</code></span> after the last <span class="codespan-content"><code>#</code></span> sign. For example: <span class="codespan-content"><code>#!</code></span>, <span class="codespan-content"><code>##!</code></span>, <span class="codespan-content"><code>###!</code></span>, etc. Decorative headings also do not appear in the <a href="../Table-of-contents">table of contents</a>.</p><div class="box tip"><header><h4>Example 2</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">```markdown
+.center
+    #! My document
+
+## Introduction
+
+.loremipsum
+```</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/decorative-heading@-1598239075.png" alt="Decorative heading" /></figure></div></div></div><h2 id="figures">Figures</h2><p><a href="../Figure">Figures</a> are numbered only if they have a <strong>caption</strong>, which may also be empty.</p><div class="box tip"><header><h4>Example 3</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">```markdown
+.numbering
+    - headings: 1.A.a
+    - figures: 1.1
+
+## Title
+
+![Logo](quarkdown-icon.svg &quot;The Quarkdown icon.&quot;)
+
+### Title
+
+![Logo](quarkdown-icon.svg &quot;&quot;)
+
+## Title
+
+![Logo](quarkdown-icon.svg &quot;&quot;)
+```</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/figures-nested-format@1649458559.png" alt="Figure numbering with format 1.1" style="width: 600.0px;" /></figure></div></div></div><h2 id="tables">Tables</h2><div class="box tip"><header><h4>Example 4</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.numbering
+    - headings: 1.A.a
+    - tables: 1.1
+
+## Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |
+&quot;Study results.&quot;
+
+### Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |
+
+## Title
+
+|           | Age | Favorite food |
+|-----------|-----|---------------|
+| **Anne**  | 24  | Hamburger     |
+| **Lucas** | 19  | Pizza         |
+| **Joe**   | 32  | Sushi         |</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/tables@1369318701.png" alt="Table numbering" style="width: 600.0px;" /></figure></div></div></div><h2 id="equations">Equations</h2><p><a href="../TeX-formulae">Math blocks</a> (equations) are numbered only if they have a <a href="../Cross-references">cross-reference ID</a>.</p><div class="box tip"><header><h4>Example 5</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.numbering
+    - equations: (1)
+
+$ E = mc^2 $ {#energy}
+
+$ F = ma $ {#force}</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/equations@1006890711.png" alt="Equation numbering" style="width: 600.0px;" /></figure></div></div></div><p>Conventionally, if the equation is not cross-referenced anywhere in the document, but you still want it to be numbered, you can use <span class="codespan-content"><code>_</code></span> as the ID.</p><div class="box tip"><header><h4>Example 6</h4></header><div class="box-content"><pre><code class="language-markdown">$ E = mc^2 $ {#_}
+
+$ F = ma $ {#_}</code></pre></div></div><h2 id="code-blocks">Code blocks</h2><div class="box tip"><header><h4>Example 7</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.numbering
+    - code: 1
+
+```python
+def hello():
+    print(&quot;Hello, world!&quot;)
+```
+
+```kotlin
+fun main() {
+    println(&quot;Hello, world!&quot;)
+}
+```</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/equations@1006890711.png" alt="Code blocks" style="width: 600.0px;" /></figure></div></div></div><h2 id="footnotes">Footnotes</h2><p>The numbering format of <a href="../Footnotes">footnotes</a> is flat, meaning it only considers the leftmost symbol and ignores the rest.</p><p>If not specified, footnotes format defaults to <span class="codespan-content"><code>1</code></span> (decimal).</p><div class="box tip"><header><h4>Example 8</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.numbering
+    - footnotes: i
+
+Here is a footnote reference[^: First], and another one[^: Second].</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/footnotes-roman@-389433357.png" alt="Footnote numbering" /></figure></div></div></div><h2 id="custom-numbered-elements">Custom numbered elements</h2><p>Along with the built-in numerable elements discussed above, Quarkdown allows any element to be numbered if wrapped in a <span class="codespan-content"><code>.numbered</code></span> block.</p><p>The function accepts two arguments:</p><ol><li>A key string. The element&rsquo;s number is counted across previous occurrences with the same key.</li><li>A <a href="../Lambda">lambda</a> block that takes the number as an argument, formatted according to the active numbering format.</li></ol><pre><code class="language-markdown">.numbered {greetings}
+    number:
+    **Hello!** This block has the number **.number**</code></pre><p>Executing the previous block renders an empty string in place of <span class="codespan-content"><code>number</code></span> because you need to specify the numbering format for <span class="codespan-content"><code>greetings</code></span> in the <span class="codespan-content"><code>.numbering</code></span> call:</p><pre><code class="language-yaml">.numbering
+    ...
+    - greetings: 1.a</code></pre><p>A numbered block can also be cross-referenced. See <a href="../Cross-references#custom-numbered-elements"><em>Cross-references</em></a> for details.</p><p>Full example:</p><div class="box tip"><header><h4>Example 9</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.numbering
+    - headings: 1.1
+    - greetings: 1.a
+
+## Title 1
+
+.numbered {greetings}
+    number:
+    **Hello!** This block has the number **.number**
+
+.numbered {greetings}
+    number:
+    **Hey!** This has instead the number **.number**
+
+## Title 2
+
+.numbered {greetings}
+    number:
+    **Hi!** Here we have the number **.number**</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/custom-numbered@182297138.png" alt="Custom numbering" style="width: 600.0px;" /></figure></div></div></div><h2 id="localization">Localization</h2><p>The localized name of the labeled element appears in captions if <a href="../Document-metadata"><span class="codespan-content"><code>.doclang</code></span></a> is set and the locale is supported. For instance, <em>Figure</em> and <em>Table</em> for the English locale, <em>Figura</em> and <em>Tabella</em> for Italian.</p>
+        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
+    </main>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+</div>
+</body>
+</html>

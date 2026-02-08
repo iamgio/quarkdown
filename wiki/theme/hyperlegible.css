@@ -1,0 +1,165 @@
+:root {
+  --qd-main-font: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --qd-code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --qd-code-span-font-size: 0.9em;
+  --qd-slides-code-block-font-size: 1.3em;
+  --qd-line-height: 1.75;
+  --qd-table-default-header-alignment: center;
+  --qd-heading-label-suffix: "";
+  --qd-quote-type-label-suffix: "";
+  --qd-mermaid-node-filter: drop-shadow(1px 2px var(--qd-mermaid-node-border-color));
+}
+
+.quarkdown h1 {
+  --h-font-scale: 3;
+  font-size: 3em;
+}
+.quarkdown h2 {
+  --h-font-scale: 2.04;
+  font-size: 2.04em;
+}
+.quarkdown h3 {
+  --h-font-scale: 1.68;
+  font-size: 1.68em;
+}
+.quarkdown h4 {
+  --h-font-scale: 1.44;
+  font-size: 1.44em;
+}
+.quarkdown h5, .quarkdown h6 {
+  --h-font-scale: 1.2;
+  font-size: 1.2em;
+}
+.quarkdown h1 {
+  line-height: calc(3.575em / var(--h-font-scale, 1.5));
+  margin-bottom: calc(2.1875em / var(--h-font-scale, 1.5));
+}
+.quarkdown h2 {
+  line-height: calc(2.2em / var(--h-font-scale, 1.5));
+  margin-top: calc(3.3em / var(--h-font-scale, 1.5));
+}
+.quarkdown h3 {
+  margin-top: calc(2.75em / var(--h-font-scale, 1.5));
+}
+.quarkdown h4 {
+  margin-top: calc(2.2em / var(--h-font-scale, 1.5));
+}
+.quarkdown h5 {
+  margin-top: calc(1.98em / var(--h-font-scale, 1.5));
+}
+.quarkdown h6 {
+  margin-top: calc(2.75rem / var(--h-font-scale, 1.5));
+}
+.quarkdown h3, .quarkdown h4, .quarkdown h5, .quarkdown h6 {
+  line-height: calc(1.7875em / var(--h-font-scale, 1.5));
+}
+.quarkdown h1 + h2 {
+  margin-top: calc(1.7875em / var(--h-font-scale, 1.5));
+}
+.quarkdown h2 + h3,
+.quarkdown h3 + h4,
+.quarkdown h4 + h5 {
+  margin-top: calc(0.88em / var(--h-font-scale, 1.5));
+}
+.quarkdown h5 + h6 {
+  margin-top: calc(0.88rem / var(--h-font-scale, 1.5));
+}
+.quarkdown h2, .quarkdown h3, .quarkdown h4, .quarkdown h5, .quarkdown h6 {
+  margin-bottom: calc(1.28em / var(--h-font-scale, 1.5));
+}
+.quarkdown table:not(pre table) {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+.quarkdown table:not(pre table) th, .quarkdown table:not(pre table) td {
+  padding: 8px 14px;
+  border: 1px solid var(--qd-main-color-muted) !important;
+}
+.quarkdown table:not(pre table) th {
+  font-weight: 600;
+}
+.quarkdown table:not(pre table) tr {
+  background-color: var(--qd-background-color);
+}
+.quarkdown table:not(pre table) tr:nth-child(2n) {
+  background-color: color-mix(in srgb, var(--qd-main-color) 2%, var(--qd-background-color));
+}
+.quarkdown table:not(pre table) thead tr {
+  background-color: var(--qd-background-color);
+}
+.quarkdown nav ul, .quarkdown nav ol {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 12px;
+}
+.quarkdown nav ul ul, .quarkdown nav ul ol, .quarkdown nav ol ul, .quarkdown nav ol ol {
+  border-left: 2px solid var(--qd-nested-navigation-line-color);
+  border-radius: 2px;
+  margin-left: 1px;
+  padding: 0 0 0 var(--qd-nested-navigation-padding-left);
+}
+.quarkdown nav li {
+  margin: 4px 0;
+}
+.quarkdown nav [data-location]::before {
+  opacity: 0.5;
+}
+.quarkdown.quarkdown-slides nav > :is(ul, ol) {
+  margin-left: auto;
+}
+.quarkdown.quarkdown-slides nav, .quarkdown.quarkdown-slides h1#table-of-contents {
+  margin-left: 44px;
+}
+.quarkdown.quarkdown-docs {
+  --qd-nested-navigation-line-color: var(--qd-docs-separator-border-color);
+}
+.quarkdown.quarkdown-docs h1 {
+  border-bottom: 1px solid var(--qd-docs-separator-border-color);
+  padding-bottom: 24px;
+}
+.quarkdown h4, .quarkdown h5 {
+  font-weight: 600;
+}
+.quarkdown a:hover {
+  text-decoration: underline;
+}
+.quarkdown blockquote {
+  border-left: 2px solid;
+  padding-left: 1.5em;
+}
+.quarkdown blockquote:not([class]) {
+  background-color: transparent !important;
+  border-color: var(--qd-main-color-muted);
+  padding-left: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.quarkdown blockquote[data-labeled] > :first-child::before {
+  display: block;
+}
+.quarkdown pre {
+  --qd-block-margin: 3em;
+}
+.quarkdown .box > header > h4 {
+  font-size: 1.2em;
+}
+.quarkdown .codespan-content {
+  padding: 0.12rem 0.35rem;
+  background-color: color-mix(in srgb, currentColor 3%, transparent);
+}
+.quarkdown [data-location]:is(h1, h2, h3, h4, h5, h6, li)::before {
+  margin-right: 0.5em;
+}
+.quarkdown nav ul ul, .quarkdown nav ul ol, .quarkdown nav ol ul, .quarkdown nav ol ol {
+  border-width: 1px;
+  margin-left: 0.75em;
+  padding-left: 0.9em;
+}
+.quarkdown.quarkdown-docs header {
+  border-bottom: 1px solid var(--qd-background-color);
+}
+
+/*# sourceMappingURL=hyperlegible.css.map */

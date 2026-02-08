@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta name="generator" content="Quarkdown">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="quarkdown:root-path" content="..">
+    <meta name="quarkdown:search-index" content="../search-index.json">
+    <title>Page margin content</title>
+    <script src="../script/quarkdown.js"></script>
+    <script>const capabilities = window.quarkdownCapabilities</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script>capabilities.code = true;</script>
+
+    <style>
+
+        body {
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
+        }
+
+        body.quarkdown-slides.quarkdown-slides .reveal {
+        }
+
+        @page {
+            size: auto auto;
+        }
+
+        p {
+        }
+    </style>
+    <script>
+        const doc = new DocsDocument();
+        prepare(doc);
+    </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            <ol><li data-target-id="scoped-margins" data-depth="2"><a href="#scoped-margins">Scoped margins</a></li><li data-target-id="mirror-positions" data-depth="2"><a href="#mirror-positions">Mirror positions</a></li><li data-target-id="footer" data-depth="2"><a href="#footer">Footer</a></li><li data-target-id="page-counter" data-depth="2"><a href="#page-counter">Page counter</a></li></ol>
+        </nav>
+    </template>
+</head>
+<body class="quarkdown quarkdown-docs">
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <div class="search-wrapper">
+            <div class="search-field">
+                <i class='bi bi-search'></i>
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+    <main>
+        <style data-hidden="">.page-margin-top-left a {
+    display: flex !important;
+}
+
+.quarkdown-output {
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background-color: var(--box-header-background-color) !important;
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)" !important;
+    color: var(--qd-main-color-muted) !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50% !important;
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}</style><div class="page-margin-content page-margin-top-left" data-on-left-page="top-left" data-on-right-page="top-left"><p><a href="https://quarkdown.com"><img src="media/docs-banner-light@-1099472378.svg" alt="Quarkdown" /></a></p></div><div class="page-margin-content page-margin-top-right" data-on-left-page="top-right" data-on-right-page="top-right"><div style="justify-content: flex-start; align-items: center;" class="stack stack-row"><p><a href="/docs">Docs</a></p><hr /><p><a href="https://github.com/iamgio/quarkdown"><i class="icon-image bi bi-github" aria-hidden="true"></i></a></p></div></div><div class="page-margin-content page-margin-left-top" data-on-left-page="left-top" data-on-right-page="left-top"><nav role="navigation" data-role="page-list"><h3 id="getting-started" data-decorative="">Getting started</h3><ul><li><a href="../Quickstart">Quickstart</a></li></ul><h3 id="documentation" data-decorative="">Documentation</h3><ul><li><a href="https://quarkdown.com/docs/quarkdown-stdlib/">Stable ↗</a></li><li><a href="https://quarkdown.com/docs/latest/quarkdown-stdlib/">Latest build ↗</a></li></ul><h3 id="functions" data-decorative="">Functions</h3><ul><li><a href="../Syntax-of-a-function-call">Syntax of a function call</a><ul><li><a href="../Syntax-of-a-function-call#chaining-calls">Chaining calls</a></li><li><a href="../Syntax-of-a-function-call#block-vs-inline-function-calls">Block vs. inline calls</a></li></ul></li><li><a href="../Declaring-functions">Declaring functions</a></li><li><a href="../Typing">Dynamic typing</a></li><li><a href="../Localization">Localization</a></li></ul><h3 id="document-setup" data-decorative="">Document setup</h3><ul><li><a href="../Document-metadata">Document metadata</a><ul><li><a href="../Document-types">Document types</a></li></ul></li><li><a href="../Themes">Theme</a></li><li><a href="../Font-configuration">Fonts</a></li><li><a href="../Page-format">Page format</a><ul><li><a href="../Multi-column-layout">Multi-column layout</a></li></ul></li><li><a href="../Page-margin-content" aria-current="page">Page margin content</a></li><li><a href="../Page-counter">Page counter</a></li><li><a href="../Persistent-headings">Persistent headings</a></li><li><a href="../Numbering">Numbering</a></li><li><a href="../Paragraph-style">Paragraph style</a></li><li><a href="../Caption-position">Caption position</a></li><li><a href="../Table-of-contents">Table of contents</a></li><li><a href="../Bibliography">Bibliography</a></li><li><a href="../Footnotes">Footnotes</a></li></ul><h3 id="markdown-enhancements" data-decorative="">Markdown enhancements</h3><ul><li><a href="../Figure">Figures</a></li><li><a href="../Image-size">Image size</a></li><li><a href="../TeX-formulae">TeX formulae</a></li><li><a href="../Table-caption">Table caption</a></li><li><a href="../Code-caption">Code caption</a></li><li><a href="../Numbering#decorative-headings">Decorative headings</a></li><li><a href="../Quote-types">Alerts (quote types)</a></li><li><a href="../Quotation-source">Quotation source</a></li><li><a href="../Cross-references">Cross-references</a></li><li><a href="../Page-break">Page breaks</a><ul><li><a href="../Page-break#automatic-break">Automatic break</a></li></ul></li><li><a href="../Text-symbols">Text symbols</a></li><li><a href="../Emojis">Emojis</a></li></ul><h3 id="layout" data-decorative="">Layout</h3><ul><li><a href="../Stacks">Stacks: rows, columns, grids</a></li><li><a href="../Container">Container</a></li><li><a href="../Align">Align</a></li><li><a href="../Float">Float</a></li><li><a href="../Custom-figure">Figure</a></li><li><a href="../Clip">Clip</a></li><li><a href="../Box">Box</a></li><li><a href="../Collapsible">Collapsible</a></li><li><a href="../Landscape-content">Landscape</a></li><li><a href="../Whitespace">Whitespace</a></li></ul><h3 id="multi-file-projects" data-decorative="">Multi-file projects</h3><ul><li><a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></li><li><a href="../Subdocuments">Referencing other Quarkdown files</a><ul><li><a href="../Inclusion-vs-subdocuments">Including vs. referencing</a></li></ul></li><li><a href="../Importing-external-libraries">Importing external libraries</a></li></ul><h3 id="variables-amp-scripting" data-decorative="">Variables &amp; scripting</h3><ul><li><a href="../Variables">Variables</a></li><li><a href="../None">Optionality</a></li><li><a href="../Math">Math</a></li><li><a href="../Conditional-statements">Conditional statements</a></li><li><a href="../Loops">Loops</a></li><li><a href="../Let">Let</a></li><li><a href="../Destructuring">Destructuring</a></li></ul><h3 id="data-amp-tables" data-decorative="">Data &amp; tables</h3><ul><li><a href="../Table-manipulation">Table manipulation</a></li><li><a href="../Table-generation">Table generation</a></li><li><a href="../File-data#file-text-content">Text content from file</a></li><li><a href="../File-data#table-from-csv">Table from CSV data</a></li></ul><h3 id="charts-amp-diagrams" data-decorative="">Charts &amp; diagrams</h3><ul><li><a href="../XY-chart">XY chart</a></li><li><a href="../Mermaid-diagrams">Mermaid diagrams</a></li></ul><h3 id="text-amp-code" data-decorative="">Text &amp; code</h3><ul><li><a href="../Text">Advanced text formatting</a></li><li><a href="../Code">Advanced code block</a></li><li><a href="../Line-breaks">Explicit line breaks</a></li><li><a href="../TeX-macros">TeX macros</a></li></ul><h3 id="slides" data-decorative="">Slides</h3><ul><li><a href="../Slides-configuration">Slides configuration</a></li><li><a href="../Slides-fragment">Interactive fragment</a></li><li><a href="../Slides-speaker-notes">Speaker notes</a></li></ul><h3 id="native-content" data-decorative="">Native content</h3><ul><li><a href="../HTML">HTML</a></li><li><a href="../CSS">CSS</a></li></ul><h3 id="value-types" data-decorative="">Value types</h3><ul><li>String</li><li>Number</li><li><a href="../Markdown-content">Markdown content</a></li><li><a href="../Boolean">Boolean</a></li><li><a href="../None">None</a></li><li><a href="../Enumeration-entry">Enumeration entry</a></li><li><a href="../Iterable">Iterable</a></li><li><a href="../Dictionary">Dictionary</a></li><li><a href="../Range">Range</a></li><li><a href="../Lambda">Lambda</a></li><li><a href="../Sizes">Size(s)</a></li><li><a href="../Color">Color</a></li><li><a href="../Typing">Dynamic</a></li></ul><h3 id="built-in-libraries" data-decorative="">Built-in libraries</h3><ul><li><a href="../Paper-library">Paper: abstract, definitions, theorems</a></li></ul><h3 id="resources-amp-logging" data-decorative="">Resources &amp; logging</h3><ul><li><a href="../Media-storage">Media storage</a></li><li><a href="../Logging">Logging</a></li></ul><h3 id="cli-tools" data-decorative="">CLI tools</h3><ul><li><a href="../CLI-Compiler">Compiler</a></li><li><a href="../PDF-export">Exporting to PDF</a></li><li><a href="../CLI-Project-creator">Project creator</a></li><li><a href="../CLI-Webserver">Webserver</a></li></ul><h3 id="inside-quarkdown" data-decorative="">Inside Quarkdown</h3><ul><li><a href="../Pipeline">Quarkdown&rsquo;s pipeline</a><ul><li><a href="../Pipeline---Lexing">Lexing</a></li><li><a href="../Pipeline---Parsing">Parsing</a></li><li><a href="../Pipeline---Function-call-expansion">Function call expansion</a></li><li><a href="../Pipeline---Tree-traversal">Tree traversal</a></li><li><a href="../Pipeline---Rendering">Rendering</a></li><li><a href="../Pipeline---Post-rendering">Post-rendering</a></li></ul></li><li><a href="../Inside-live-preview">How does live preview work?</a></li></ul></nav></div><div class="page-margin-content page-margin-right-top" data-on-left-page="right-top" data-on-right-page="right-top"><h3 id="table-of-contents">On this page</h3><nav role="table-of-contents" data-role="table-of-contents"><ol><li data-target-id="scoped-margins" data-depth="2"><a href="#scoped-margins">Scoped margins</a></li><li data-target-id="mirror-positions" data-depth="2"><a href="#mirror-positions">Mirror positions</a></li><li data-target-id="footer" data-depth="2"><a href="#footer">Footer</a></li><li data-target-id="page-counter" data-depth="2"><a href="#page-counter">Page counter</a></li></ol></nav></div><h1 id="page-margin-content" data-decorative="">Page margin content</h1><p>The <strong><span class="codespan-content"><code>.pagemargin</code></span></strong> function displays content on each page in a fixed position along its <a href="../Page-format#content-area">margins</a>.</p><ul><li><p>In <span class="codespan-content"><code>paged</code></span> documents, a special area of each page is reserved for margins:</p><figure><img src="media/margin-areas@375201134.png" alt="Paged margin areas" style="height: 600.0px;" /></figure><blockquote><p>Credits: <a href="https://pagedjs.org/documentation/7-generated-content-in-margin-boxes/#margin-boxes-of-a-page">Paged.js</a></p></blockquote></li><li><p>In <span class="codespan-content"><code>plain</code></span> and <span class="codespan-content"><code>slides</code></span> documents, content set on margins could potentially overlap page content.</p></li><li><p>In <span class="codespan-content"><code>plain</code></span> documents, where the concept of <em>page</em> does not exist, page margins are displayed once per document.</p></li></ul><p>The function accepts an optional <span class="codespan-content"><code>position</code></span> and a body argument <span class="codespan-content"><code>content</code></span>:</p><table><thead><tr><th>Parameter</th><th>Description</th><th>Accepts</th></tr></thead><tbody><tr><td><span class="codespan-content"><code>position</code></span></td><td>Page area to target.</td><td><span class="codespan-content"><code>topleftcorner</code></span>, <span class="codespan-content"><code>topleft</code></span>, <span class="codespan-content"><code>topcenter</code></span>, <span class="codespan-content"><code>topright</code></span>, <span class="codespan-content"><code>toprightcorner</code></span>, <span class="codespan-content"><code>righttop</code></span>, <span class="codespan-content"><code>rightmiddle</code></span>, <span class="codespan-content"><code>rightbottom</code></span>, <span class="codespan-content"><code>bottomrightcorner</code></span>, <span class="codespan-content"><code>bottomright</code></span>, <span class="codespan-content"><code>bottomcenter</code></span>, <span class="codespan-content"><code>bottomleft</code></span>, <span class="codespan-content"><code>bottomleftcorner</code></span>, <span class="codespan-content"><code>leftbottom</code></span>, <span class="codespan-content"><code>leftmiddle</code></span>, <span class="codespan-content"><code>lefttop</code></span>, <em><span class="codespan-content"><code>topoutsidecorner</code></span>, <span class="codespan-content"><code>topoutside</code></span>, <span class="codespan-content"><code>topinsidecorner</code></span>, <span class="codespan-content"><code>topinside</code></span>, <span class="codespan-content"><code>bottomoutsidecorner</code></span>, <span class="codespan-content"><code>bottomoutside</code></span>, <span class="codespan-content"><code>bottominsidecorner</code></span>, <span class="codespan-content"><code>bottominside</code></span></em></td></tr><tr><td><span class="codespan-content"><code>content</code></span></td><td>Element to display.</td><td><a href="../Markdown-content#block-content">Block content</a></td></tr></tbody></table><div class="box tip"><header><h4>Example 1</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.pagemargin {topright}
+    **This** is a margin content.</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/fixed-positions@-1787767842.png" alt="Fixed positions" /></figure></div></div></div><h2 id="scoped-margins">Scoped margins</h2><p>When used in <span class="codespan-content"><code>paged</code></span> and <span class="codespan-content"><code>slides</code></span> documents, page margin content takes effect only from the page where it is declared onward. This allows for different page margin settings in different parts of the document.</p><div class="box tip"><header><h4>Example 2</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.pagemargin {topcenter}
+    On all pages
+
+## First page
+
+## Second page
+
+.pagemargin {topleft}
+    From second page
+
+## Third page</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/scoped-margins@-1097279119.png" alt="Scoped page margins" /></figure></div></div></div><p>Overwriting the page margin again changes it from that point onward.</p><div class="box tip"><header><h4>Example 3</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">...
+
+## Third page
+
+.pagemargin {topcenter}
+    From third page</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/scoped-overwrite@-749775497.png" alt="Scoped page margins" /></figure></div></div></div><h2 id="mirror-positions">Mirror positions</h2><p>Along with fixed positions such as <span class="codespan-content"><code>topright</code></span> or <span class="codespan-content"><code>bottomleft</code></span>, Quarkdown also supports <em>mirror positions</em>, which adapt based on whether the page is left (even number) or right (odd number).</p><p>Mirror positions are marked in italics in the table above and refer to <span class="codespan-content"><code>outside</code></span> and <span class="codespan-content"><code>inside</code></span> areas:</p><div class="box tip"><header><h4>Example 4</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.pagemargin {topoutside}
+    **This** is a margin content.</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/mirror-positions@-150703451.png" alt="Mirror positions" /></figure></div></div></div><h2 id="footer">Footer</h2><p>Most layout themes associate the <span class="codespan-content"><code>bottomcenter</code></span> margin with the document footer and style it differently. For instance, different blocks may be displayed in a row. Footers are particularly common in <span class="codespan-content"><code>slides</code></span> documents.</p><p>The <strong><span class="codespan-content"><code>.footer</code></span></strong> function is a shorthand for <span class="codespan-content"><code>.pagemargin {bottomcenter}</code></span>.</p><div class="box tip"><header><h4>Example 5</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.theme {beaver} layout:{beamer}
+
+.footer
+    .docauthor
+
+    **.docname**
+
+    [GitHub](https://github.com/iamgio/quarkdown)</code></pre><div class="container fullwidth quarkdown-output"><figure><img src="media/footer@-340285406.png" alt="Page footer" /></figure></div></div></div><h2 id="page-counter">Page counter</h2><p>A page margin can host a page counter. See <a href="../Page-counter">Page counter</a> for more information.</p>
+        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
+    </main>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+</div>
+</body>
+</html>

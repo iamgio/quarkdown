@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta name="generator" content="Quarkdown">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="quarkdown:root-path" content="..">
+    <meta name="quarkdown:search-index" content="../search-index.json">
+    <title>XY chart</title>
+    <script src="../script/quarkdown.js"></script>
+    <script>const capabilities = window.quarkdownCapabilities</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../theme/theme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script>capabilities.code = true;</script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>capabilities.mermaid = true;</script>
+
+    <style>
+
+        body {
+        }
+
+        .page-break {
+            break-before: always;
+        }
+
+        .quarkdown-plain .page-break {
+            break-before: avoid;
+            break-after: avoid;
+        }
+
+        body.quarkdown-plain.quarkdown-plain,
+        body.quarkdown-docs.quarkmarkdown-docs {
+        }
+
+        body.quarkdown-slides.quarkdown-slides .reveal {
+        }
+
+        @page {
+            size: auto auto;
+        }
+
+        p {
+        }
+    </style>
+    <script>
+        const doc = new DocsDocument();
+        prepare(doc);
+    </script>
+    <template id="sidebar-template">
+        <nav class="sidebar" role="doc-toc">
+            <ol><li data-target-id="axis-ranges" data-depth="2"><a href="#axis-ranges">Axis ranges</a></li><li data-target-id="possible-input-sources" data-depth="2"><a href="#possible-input-sources">Possible input sources</a><ol><li data-target-id="from-static-list-single-line" data-depth="3"><a href="#from-static-list-single-line">From static list (single line)</a></li><li data-target-id="from-static-list-multiple-lines" data-depth="3"><a href="#from-static-list-multiple-lines">From static list (multiple lines)</a></li><li data-target-id="from-iterations" data-depth="3"><a href="#from-iterations">From iterations</a></li><li data-target-id="from-csvtable" data-depth="3"><a href="#from-csvtable">From CSV/table</a></li></ol></li></ol>
+        </nav>
+    </template>
+</head>
+<body class="quarkdown quarkdown-docs">
+<header>
+    <aside class="margin-area"></aside>
+    <main>
+        <div class="search-wrapper">
+            <div class="search-field">
+                <i class='bi bi-search'></i>
+                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+                <kbd>/</kbd>
+            </div>
+        </div>
+    </main>
+    <aside class="margin-area"></aside>
+</header>
+<div class="content-wrapper">
+    <aside id="margin-area-left" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+    <main>
+        <style data-hidden="">.page-margin-top-left a {
+    display: flex !important;
+}
+
+.quarkdown-output {
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background-color: var(--box-header-background-color) !important;
+}
+
+.quarkdown-output:empty::after {
+    content: "(No output)" !important;
+    color: var(--qd-main-color-muted) !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6) {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.quarkdown-output :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0 !important;
+}
+
+.quarkdown-output img[src*="sky"] {
+    max-width: 50% !important;
+}
+
+.box:has(.quarkdown-output) pre {
+    margin-bottom: 16px !important;
+}</style><div class="page-margin-content page-margin-top-left" data-on-left-page="top-left" data-on-right-page="top-left"><p><a href="https://quarkdown.com"><img src="media/docs-banner-light@-1099472378.svg" alt="Quarkdown" /></a></p></div><div class="page-margin-content page-margin-top-right" data-on-left-page="top-right" data-on-right-page="top-right"><div style="justify-content: flex-start; align-items: center;" class="stack stack-row"><p><a href="/docs">Docs</a></p><hr /><p><a href="https://github.com/iamgio/quarkdown"><i class="icon-image bi bi-github" aria-hidden="true"></i></a></p></div></div><div class="page-margin-content page-margin-left-top" data-on-left-page="left-top" data-on-right-page="left-top"><nav role="navigation" data-role="page-list"><h3 id="getting-started" data-decorative="">Getting started</h3><ul><li><a href="../Quickstart">Quickstart</a></li></ul><h3 id="documentation" data-decorative="">Documentation</h3><ul><li><a href="https://quarkdown.com/docs/quarkdown-stdlib/">Stable ↗</a></li><li><a href="https://quarkdown.com/docs/latest/quarkdown-stdlib/">Latest build ↗</a></li></ul><h3 id="functions" data-decorative="">Functions</h3><ul><li><a href="../Syntax-of-a-function-call">Syntax of a function call</a><ul><li><a href="../Syntax-of-a-function-call#chaining-calls">Chaining calls</a></li><li><a href="../Syntax-of-a-function-call#block-vs-inline-function-calls">Block vs. inline calls</a></li></ul></li><li><a href="../Declaring-functions">Declaring functions</a></li><li><a href="../Typing">Dynamic typing</a></li><li><a href="../Localization">Localization</a></li></ul><h3 id="document-setup" data-decorative="">Document setup</h3><ul><li><a href="../Document-metadata">Document metadata</a><ul><li><a href="../Document-types">Document types</a></li></ul></li><li><a href="../Themes">Theme</a></li><li><a href="../Font-configuration">Fonts</a></li><li><a href="../Page-format">Page format</a><ul><li><a href="../Multi-column-layout">Multi-column layout</a></li></ul></li><li><a href="../Page-margin-content">Page margin content</a></li><li><a href="../Page-counter">Page counter</a></li><li><a href="../Persistent-headings">Persistent headings</a></li><li><a href="../Numbering">Numbering</a></li><li><a href="../Paragraph-style">Paragraph style</a></li><li><a href="../Caption-position">Caption position</a></li><li><a href="../Table-of-contents">Table of contents</a></li><li><a href="../Bibliography">Bibliography</a></li><li><a href="../Footnotes">Footnotes</a></li></ul><h3 id="markdown-enhancements" data-decorative="">Markdown enhancements</h3><ul><li><a href="../Figure">Figures</a></li><li><a href="../Image-size">Image size</a></li><li><a href="../TeX-formulae">TeX formulae</a></li><li><a href="../Table-caption">Table caption</a></li><li><a href="../Code-caption">Code caption</a></li><li><a href="../Numbering#decorative-headings">Decorative headings</a></li><li><a href="../Quote-types">Alerts (quote types)</a></li><li><a href="../Quotation-source">Quotation source</a></li><li><a href="../Cross-references">Cross-references</a></li><li><a href="../Page-break">Page breaks</a><ul><li><a href="../Page-break#automatic-break">Automatic break</a></li></ul></li><li><a href="../Text-symbols">Text symbols</a></li><li><a href="../Emojis">Emojis</a></li></ul><h3 id="layout" data-decorative="">Layout</h3><ul><li><a href="../Stacks">Stacks: rows, columns, grids</a></li><li><a href="../Container">Container</a></li><li><a href="../Align">Align</a></li><li><a href="../Float">Float</a></li><li><a href="../Custom-figure">Figure</a></li><li><a href="../Clip">Clip</a></li><li><a href="../Box">Box</a></li><li><a href="../Collapsible">Collapsible</a></li><li><a href="../Landscape-content">Landscape</a></li><li><a href="../Whitespace">Whitespace</a></li></ul><h3 id="multi-file-projects" data-decorative="">Multi-file projects</h3><ul><li><a href="../Including-other-Quarkdown-files">Including other Quarkdown files</a></li><li><a href="../Subdocuments">Referencing other Quarkdown files</a><ul><li><a href="../Inclusion-vs-subdocuments">Including vs. referencing</a></li></ul></li><li><a href="../Importing-external-libraries">Importing external libraries</a></li></ul><h3 id="variables-amp-scripting" data-decorative="">Variables &amp; scripting</h3><ul><li><a href="../Variables">Variables</a></li><li><a href="../None">Optionality</a></li><li><a href="../Math">Math</a></li><li><a href="../Conditional-statements">Conditional statements</a></li><li><a href="../Loops">Loops</a></li><li><a href="../Let">Let</a></li><li><a href="../Destructuring">Destructuring</a></li></ul><h3 id="data-amp-tables" data-decorative="">Data &amp; tables</h3><ul><li><a href="../Table-manipulation">Table manipulation</a></li><li><a href="../Table-generation">Table generation</a></li><li><a href="../File-data#file-text-content">Text content from file</a></li><li><a href="../File-data#table-from-csv">Table from CSV data</a></li></ul><h3 id="charts-amp-diagrams" data-decorative="">Charts &amp; diagrams</h3><ul><li><a href="../XY-chart" aria-current="page">XY chart</a></li><li><a href="../Mermaid-diagrams">Mermaid diagrams</a></li></ul><h3 id="text-amp-code" data-decorative="">Text &amp; code</h3><ul><li><a href="../Text">Advanced text formatting</a></li><li><a href="../Code">Advanced code block</a></li><li><a href="../Line-breaks">Explicit line breaks</a></li><li><a href="../TeX-macros">TeX macros</a></li></ul><h3 id="slides" data-decorative="">Slides</h3><ul><li><a href="../Slides-configuration">Slides configuration</a></li><li><a href="../Slides-fragment">Interactive fragment</a></li><li><a href="../Slides-speaker-notes">Speaker notes</a></li></ul><h3 id="native-content" data-decorative="">Native content</h3><ul><li><a href="../HTML">HTML</a></li><li><a href="../CSS">CSS</a></li></ul><h3 id="value-types" data-decorative="">Value types</h3><ul><li>String</li><li>Number</li><li><a href="../Markdown-content">Markdown content</a></li><li><a href="../Boolean">Boolean</a></li><li><a href="../None">None</a></li><li><a href="../Enumeration-entry">Enumeration entry</a></li><li><a href="../Iterable">Iterable</a></li><li><a href="../Dictionary">Dictionary</a></li><li><a href="../Range">Range</a></li><li><a href="../Lambda">Lambda</a></li><li><a href="../Sizes">Size(s)</a></li><li><a href="../Color">Color</a></li><li><a href="../Typing">Dynamic</a></li></ul><h3 id="built-in-libraries" data-decorative="">Built-in libraries</h3><ul><li><a href="../Paper-library">Paper: abstract, definitions, theorems</a></li></ul><h3 id="resources-amp-logging" data-decorative="">Resources &amp; logging</h3><ul><li><a href="../Media-storage">Media storage</a></li><li><a href="../Logging">Logging</a></li></ul><h3 id="cli-tools" data-decorative="">CLI tools</h3><ul><li><a href="../CLI-Compiler">Compiler</a></li><li><a href="../PDF-export">Exporting to PDF</a></li><li><a href="../CLI-Project-creator">Project creator</a></li><li><a href="../CLI-Webserver">Webserver</a></li></ul><h3 id="inside-quarkdown" data-decorative="">Inside Quarkdown</h3><ul><li><a href="../Pipeline">Quarkdown&rsquo;s pipeline</a><ul><li><a href="../Pipeline---Lexing">Lexing</a></li><li><a href="../Pipeline---Parsing">Parsing</a></li><li><a href="../Pipeline---Function-call-expansion">Function call expansion</a></li><li><a href="../Pipeline---Tree-traversal">Tree traversal</a></li><li><a href="../Pipeline---Rendering">Rendering</a></li><li><a href="../Pipeline---Post-rendering">Post-rendering</a></li></ul></li><li><a href="../Inside-live-preview">How does live preview work?</a></li></ul></nav></div><div class="page-margin-content page-margin-right-top" data-on-left-page="right-top" data-on-right-page="right-top"><h3 id="table-of-contents">On this page</h3><nav role="table-of-contents" data-role="table-of-contents"><ol><li data-target-id="axis-ranges" data-depth="2"><a href="#axis-ranges">Axis ranges</a></li><li data-target-id="possible-input-sources" data-depth="2"><a href="#possible-input-sources">Possible input sources</a><ol><li data-target-id="from-static-list-single-line" data-depth="3"><a href="#from-static-list-single-line">From static list (single line)</a></li><li data-target-id="from-static-list-multiple-lines" data-depth="3"><a href="#from-static-list-multiple-lines">From static list (multiple lines)</a></li><li data-target-id="from-iterations" data-depth="3"><a href="#from-iterations">From iterations</a></li><li data-target-id="from-csvtable" data-depth="3"><a href="#from-csvtable">From CSV/table</a></li></ol></li></ol></nav></div><h1 id="xy-chart" data-decorative="">XY chart</h1><p>The <strong><span class="codespan-content"><code>.xychart</code></span></strong> <sup><a href="https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Mermaid/xychart.html" target="_blank">docs ↗</a></sup> function allows you to plot 2D line and bar charts in a pure, flexible Quarkdown fashion, through the power of <a href="../Mermaid-diagrams">Mermaid diagrams</a>.</p><p>All parameters, except for <span class="codespan-content"><code>values</code></span>, are optional.</p><table><thead><tr><th>Parameter</th><th>Description</th><th>Accepts</th></tr></thead><tbody><tr><td><span class="codespan-content"><code>lines</code></span></td><td>Whether to draw lines (defaults to true).</td><td><a href="../Boolean">Boolean</a></td></tr><tr><td><span class="codespan-content"><code>bars</code></span></td><td>Whether to draw bars (defaults to false).</td><td><a href="../Boolean">Boolean</a></td></tr><tr><td><span class="codespan-content"><code>x</code></span></td><td>Label for the X axis.</td><td>String</td></tr><tr><td><span class="codespan-content"><code>xrange</code></span></td><td>Numerical range for the X axis. Can be open-ended. Incompatible with <span class="codespan-content"><code>xtags</code></span>.</td><td><a href="../Range">Range</a></td></tr><tr><td><span class="codespan-content"><code>xtags</code></span></td><td>Categorical tags for the X axis. Incompatible with <span class="codespan-content"><code>xrange</code></span>.</td><td><a href="../Iterable">Iterable</a></td></tr><tr><td><span class="codespan-content"><code>y</code></span></td><td>Label for the Y axis.</td><td>String</td></tr><tr><td><span class="codespan-content"><code>yrange</code></span></td><td>Range for the Y axis. Can be open-ended.</td><td><a href="../Range">Range</a></td></tr><tr><td><span class="codespan-content"><code>caption</code></span></td><td>Caption. If present, the chart is <a href="../Numbering">numbered</a> as a figure.</td><td>String</td></tr><tr><td><span class="codespan-content"><code>values</code></span></td><td>Y values to plot.</td><td><a href="../Iterable">Iterable</a> of points (single line), or iterable of iterables of points (multiple lines)</td></tr></tbody></table><h2 id="axis-ranges">Axis ranges</h2><p><span class="codespan-content"><code>xrange</code></span> and <span class="codespan-content"><code>yrange</code></span> define the boundaries of the visible area of the chart through the usual <span class="codespan-content"><code>x..y</code></span> <a href="../Range">Range</a> syntax.</p><p>The range may also be open on either end, or both:</p><ul><li>If open on the left end, the range starts from the minimum value among the plotted points.</li><li>If open on the right end, the range ends at the maximum value among the plotted points.</li></ul><p>For instance, <span class="codespan-content"><code>..</code></span> (infinite) is the default range, which shows the area between the minimum and maximum values.</p><h2 id="possible-input-sources">Possible input sources</h2><h3 id="from-static-list-single-line">From static list (single line)</h3><p>You can represent <span class="codespan-content"><code>values</code></span> as a Markdown list, just like all iterables.</p><div class="box tip"><header><h4>Example 1</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.xychart bars:{yes} x:{Months} y:{Revenue} yrange:{100..}
+    - 250
+    - 500
+    - 350
+    - 450
+    - 400
+    - 500
+    - 600</code></pre><div class="container fullwidth quarkdown-output"><figure><pre class="mermaid fill-height">xychart-beta
+	x-axis &quot;Months&quot;
+	y-axis &quot;Revenue&quot; 100 --&gt; 600.0
+	bar [250.0, 500.0, 350.0, 450.0, 400.0, 500.0, 600.0]
+	line [250.0, 500.0, 350.0, 450.0, 400.0, 500.0, 600.0]
+</pre></figure></div></div></div><h3 id="from-static-list-multiple-lines">From static list (multiple lines)</h3><p>In case of nested lists (iterable of iterables), multiple lines will be plotted:</p><div class="box tip"><header><h4>Example 2</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.xychart x:{Months} y:{Revenue}
+    - - 250
+      - 500
+      - 350
+      - 450
+      - 400
+
+    - - 400
+      - 150
+      - 200
+      - 400
+      - 450</code></pre><div class="container fullwidth quarkdown-output"><figure><pre class="mermaid fill-height">xychart-beta
+	x-axis &quot;Months&quot;
+	y-axis &quot;Revenue&quot;
+	line [250.0, 500.0, 350.0, 450.0, 400.0]
+	line [400.0, 150.0, 200.0, 400.0, 450.0]
+</pre></figure></div></div></div><h3 id="from-iterations">From iterations</h3><p>Quarkdown <a href="../Loops">loops</a> return an iterable containing the result of each iteration, making them a suitable input for <span class="codespan-content"><code>values</code></span>, especially in combination with <a href="../Math">math</a> functions.</p><div class="box tip"><header><h4>Example 3</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.xychart
+    .repeat {100}
+        .1::pow {2}::divide {100}
+
+    .repeat {100}
+        .1::logn::multiply {10}</code></pre><div class="container fullwidth quarkdown-output"><figure><pre class="mermaid fill-height">xychart-beta
+	line [0.0, 6.931471824645996, 10.986123085021973, 13.862943649291992, 16.094379425048828, 17.91759490966797, 19.4591007232666, 20.794414520263672, 21.972246170043945, 23.02585220336914, 23.978954315185547, 24.84906768798828, 25.649492263793945, 26.390573501586914, 27.080501556396484, 27.725887298583984, 28.332134246826172, 28.903717041015625, 29.44438934326172, 29.95732307434082, 30.44522476196289, 30.910425186157227, 31.354942321777344, 31.78053855895996, 32.188758850097656, 32.580963134765625, 32.958370208740234, 33.322044372558594, 33.67295837402344, 34.0119743347168, 34.33987045288086, 34.6573600769043, 34.9650764465332, 35.26360321044922, 35.55348205566406, 35.83518981933594, 36.10917663574219, 36.37586212158203, 36.635616302490234, 36.8887939453125, 37.135719299316406, 37.3766975402832, 37.612003326416016, 37.841896057128906, 38.066627502441406, 38.286415100097656, 38.5014762878418, 38.71200942993164, 38.9182014465332, 39.12023162841797, 39.31825637817383, 39.51243591308594, 39.702919006347656, 39.88983917236328, 40.073333740234375, 40.253517150878906, 40.430511474609375, 40.60443115234375, 40.77537536621094, 40.94344711303711, 41.10873794555664, 41.27134323120117, 41.43134689331055, 41.588829040527344, 41.743873596191406, 41.896549224853516, 42.04692840576172, 42.19507598876953, 42.341064453125, 42.48495101928711, 42.626800537109375, 42.76666259765625, 42.90459442138672, 43.040653228759766, 43.17488098144531, 43.307334899902344, 43.438053131103516, 43.56708908081055, 43.69447708129883, 43.82026672363281, 43.94449234008789, 44.06719207763672, 44.18840408325195, 44.30816650390625, 44.426513671875, 44.54347229003906, 44.659080505371094, 44.77336883544922, 44.8863639831543, 44.99809646606445, 45.10859680175781, 45.21788787841797, 45.32599639892578, 45.43294906616211, 45.53876876831055, 45.64348220825195, 45.747108459472656, 45.84967803955078, 45.95119857788086, 46.05170440673828]
+	line [0.009999999776482582, 0.03999999910593033, 0.09000000357627869, 0.1599999964237213, 0.25, 0.36000001430511475, 0.49000000953674316, 0.6399999856948853, 0.8100000023841858, 1.0, 1.2100000381469727, 1.440000057220459, 1.690000057220459, 1.9600000381469727, 2.25, 2.559999942779541, 2.890000104904175, 3.240000009536743, 3.609999895095825, 4.0, 4.409999847412109, 4.840000152587891, 5.289999961853027, 5.760000228881836, 6.25, 6.760000228881836, 7.289999961853027, 7.840000152587891, 8.40999984741211, 9.0, 9.609999656677246, 10.239999771118164, 10.890000343322754, 11.5600004196167, 12.25, 12.960000038146973, 13.6899995803833, 14.4399995803833, 15.210000038146973, 16.0, 16.809999465942383, 17.639999389648438, 18.489999771118164, 19.360000610351562, 20.25, 21.15999984741211, 22.09000015258789, 23.040000915527344, 24.010000228881836, 25.0, 26.010000228881836, 27.040000915527344, 28.09000015258789, 29.15999984741211, 30.25, 31.360000610351562, 32.4900016784668, 33.63999938964844, 34.810001373291016, 36.0, 37.209999084472656, 38.439998626708984, 39.689998626708984, 40.959999084472656, 42.25, 43.560001373291016, 44.88999938964844, 46.2400016784668, 47.61000061035156, 49.0, 50.40999984741211, 51.84000015258789, 53.290000915527344, 54.7599983215332, 56.25, 57.7599983215332, 59.290000915527344, 60.84000015258789, 62.40999984741211, 64.0, 65.61000061035156, 67.23999786376953, 68.88999938964844, 70.55999755859375, 72.25, 73.95999908447266, 75.69000244140625, 77.44000244140625, 79.20999908447266, 81.0, 82.80999755859375, 84.63999938964844, 86.48999786376953, 88.36000061035156, 90.25, 92.16000366210938, 94.08999633789062, 96.04000091552734, 98.01000213623047, 100.0]
+</pre></figure></div></div></div><h3 id="from-csvtable">From CSV/table</h3><p><a href="../Table-manipulation">Table manipulation</a> functions such as <a href="../Table-manipulation#retrieve-columns"><span class="codespan-content"><code>.tablecolumn</code></span></a> can extract values from the columns of a table as iterables.</p><div class="box tip"><header><h4>Example 4</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.xychart
+    .tablecolumn {2}
+        .csv {assets/sales.csv}</code></pre><div class="container fullwidth quarkdown-output"><figure><pre class="mermaid fill-height">xychart-beta
+	line [85.0, 100.0, 135.0, 180.0, 240.0, 320.0, 430.0, 580.0, 800.0]
+</pre></figure></div></div></div><p>If you need to access multiple columns from the same table, consider calling <span class="codespan-content"><code>.tablecolumns</code></span> for efficiency, which returns a collection of columns. You can then perform any <a href="../Iterable"><span class="codespan-content"><code>Iterable</code></span></a> operation on it.</p><div class="box tip"><header><h4>Example 5</h4></header><div class="box-content"><p>In the following example, the chart displays two lines: one for the second and one for the third column of the CSV. Additionally, the first column of the table is used as a set of categorical tags for the X axis.</p><pre><code class="language-markdown nohljsln">.var {columns}
+    .tablecolumns
+        .csv {assets/sales.csv}
+
+.xychart xtags:{.columns::first} x:{Years} y:{Sales}
+    .columns::second
+    .columns::third</code></pre><div class="container fullwidth quarkdown-output"><figure><pre class="mermaid fill-height">xychart-beta
+	x-axis &quot;Years&quot; [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+	y-axis &quot;Sales&quot;
+	line [230.0, 190.0, 180.0, 175.0, 200.0, 250.0, 290.0, 350.0, 470.0]
+	line [85.0, 100.0, 135.0, 180.0, 240.0, 320.0, 430.0, 580.0, 800.0, 0.0]
+</pre></figure></div></div></div>
+        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="sibling-pages-button-area"></div>
+        <footer>
+            <div class="position-left"></div>
+            <div class="position-center"></div>
+            <div class="position-right"></div>
+        </footer>
+    </main>
+    <aside id="margin-area-right" class="margin-area">
+        <div class="position-top"></div>
+        <div class="position-middle"></div>
+        <div class="position-bottom"></div>
+    </aside>
+</div>
+</body>
+</html>
