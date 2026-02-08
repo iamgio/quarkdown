@@ -1,0 +1,15 @@
+.doctype {docs}
+
+.var {pagelistposition} {lefttop}
+.var {tocposition} {righttop}
+
+.include {.pathtoroot/_setup.qd}
+
+.pagemargin {.pagelistposition}
+    .navigation role:{pagelist}
+        .include {.pathtoroot/_nav.qd}
+
+.pagemargin {.tocposition}
+    .tableofcontents
+
+#! .docname

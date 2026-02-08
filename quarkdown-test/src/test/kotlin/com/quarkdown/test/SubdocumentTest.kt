@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
 import com.quarkdown.test.util.getSubdocumentResource
@@ -326,6 +327,54 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `subdocument link from included file should account for different path`() {
+        execute(
+            ".include {include/subdocument-linker.qd}",
+            outputResourceHook = {
+                assertEquals(2, subdocumentGraph.vertices.size)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `subdocument should not update relative paths`() {
+        execute(
+            "[1](include/relative-image.md)",
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(
+                    "<p>img: <img src=\"../img/icon.png\" alt=\"img\" /></p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `path-to-root should return correct relative path in subdocuments`() {
+        execute(
+            """
+            .include {utils/path-to-root.qd}
+                
+            [1](subdoc/subdoc.qd)
+            """.trimIndent(),
+            workingDirectory = File(DATA_FOLDER, "subdoc").resolve("path-to-root"),
+        ) {
+            if (subdocument == Subdocument.Root) {
+                assertEquals(
+                    "<p>..</p><p>..</p><p><a href=\"./subdoc\">1</a></p>",
+                    it,
+                )
+            } else {
+                assertEquals(
+                    "<p>..</p><p>../subdoc</p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
     fun `including content library in subdocument should not affect parent`() {
         execute(
             "[1](subdoc/include-lib-1.qd)",
@@ -427,14 +476,14 @@ class SubdocumentTest {
     fun `all from directory`() {
         execute(
             """
-            .foreach {.listfiles {subdoc} sortby:{name}}
+            .foreach {.listfiles {subdoc} directories:{no} sortby:{name}}
                 path:
                 .path::subdocument label:{.path::filename extension:{no}}
             """.trimIndent(),
             loadableLibraries = setOf("hello", "content"),
             useDummyLibraryDirectory = true,
             outputResourceHook = {
-                val files = File(fileSystem.workingDirectory, "subdoc").listFiles()!!
+                val files = File(fileSystem.workingDirectory, "subdoc").listFiles()!!.filter { it.isFile }
                 assertEquals(files.size + 1, subdocumentGraph.vertices.size) // +1 for root
 
                 files.forEach { file ->

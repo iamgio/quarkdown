@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -22,7 +23,9 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
+import com.quarkdown.stdlib.internal.RootGranularity
 import com.quarkdown.stdlib.internal.Sorting
+import com.quarkdown.stdlib.internal.getRootFileSystem
 import com.quarkdown.stdlib.internal.sortedBy
 import java.io.File
 
@@ -97,28 +100,66 @@ fun read(
 
 /**
  * Retrieves the relative path to the root of the file system.
- * The root of the file system is determined by the working directory of the pipeline, which is typically the
- * parent directory of the target file processed by `quarkdown compile`.
+ * The root of the file system is determined by the working directory of either the project or the current subdocument, depending on the specified [granularity].
  *
- * Example:
+ * If set to [RootGranularity.PROJECT], the root is the parent directory of the target file being processed by the `quarkdown compile` command.
+ * If set to [RootGranularity.SUBDOCUMENT], the root is the parent directory of the current subdocument file.
  *
- * - When used in the root folder: `.pathtoroot` returns `.`
- * - When used in `<root>/subfolder`: `.pathtoroot` returns `..`
- * - When used in `<root>/subfolder1/subfolder2`: `.pathtoroot` returns `../..`
+ * For example, consider the following file tree:
+ * ```
+ * My-Project/
+ * ├─ main.qd
+ * ├─ file.txt
+ * ├─ subdocuments/
+ *    ├─ subdocument.qd
+ *    ├─ file.txt
+ * ├─ utils/
+ *    ├─ example.qd
+ * ```
  *
+ * If `main.qd` invokes `.pathtoroot`, the result is `.` regardless of the granularity, since the working directory is the root of the project.
+ *
+ * Consider the content of `example.qd`:
+ * ```
+ * .read {.pathtoroot/file.txt}
+ *
+ * .read {.pathtoroot granularity:{subdocument}/file.txt}
+ * ```
+ *
+ * Now, assume `main.qd` invokes `.include {utils/example.qd}`.
+ * Regardless of the granularity, the `.pathtoroot` calls in `example.qd` return `..`,
+ * so that `My-Project/file.txt` is correctly accessed by `My-Project/utils/example.qd` through the relative path `../file.txt`.
+ *
+ * Assume now that `subdocument.qd` is a subdocument and invokes `.include {../utils/example.qd}`.
+ * - With [RootGranularity.PROJECT], the `.pathtoroot` calls in `example.qd` return `..`,
+ *   so that `My-Project/file.txt` is accessed by `My-Project/utils/example.qd` through the relative path `../file.txt`.
+ * - With [RootGranularity.SUBDOCUMENT], the `.pathtoroot` calls in `example.qd` return `../subdocuments`,
+ *   so that `My-Project/subdocuments/file.txt` is accessed by `My-Project/utils/example.qd` through the relative path `../subdocuments/file.txt`.
+ *
+ * @param granularity the granularity for determining the root of the file system
  * @return a string value of the relative path to the root of the file system
  * @throws IllegalStateException if the relative path cannot be determined
  */
 @Name("pathtoroot")
 fun pathToRoot(
     @Injected context: Context,
+    @LikelyNamed granularity: RootGranularity = RootGranularity.PROJECT,
 ): StringValue {
-    val root = context.fileSystem.root ?: return ".".wrappedAsValue()
-    return context.fileSystem
-        .relativePathTo(root)
-        ?.toString()
-        ?.wrappedAsValue()
-        ?: throw IllegalStateException("Unable to determine relative path to file system root.")
+    val root: FileSystem = getRootFileSystem(context, granularity) ?: return ".".wrappedAsValue()
+    val path: String =
+        context.fileSystem.relativePathTo(root)?.toString()
+            ?: throw IllegalStateException(
+                """
+                Unable to determine relative path to file system root.
+                Root: ${root.workingDirectory}
+                Current working directory: ${context.fileSystem.workingDirectory}
+                """.trimIndent(),
+            )
+
+    if (path.isEmpty()) {
+        return ".".wrappedAsValue()
+    }
+    return path.wrappedAsValue()
 }
 
 /**
