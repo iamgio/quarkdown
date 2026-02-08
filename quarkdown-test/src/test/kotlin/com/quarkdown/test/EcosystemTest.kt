@@ -329,6 +329,18 @@ class EcosystemTest {
     }
 
     @Test
+    fun `library keeps includer's file system`() {
+        execute(
+            ".include {file-reader}",
+            loadableLibraries = setOf("file-reader"),
+            useDummyLibraryDirectory = true,
+        ) {
+            // 2 occurrences of <table>
+            assertEquals(2, it.split("<table>").size - 1)
+        }
+    }
+
+    @Test
     fun `include multiple sources`() {
         forSandboxes(ContextSandbox.SHARE) { sandbox ->
             execute(
