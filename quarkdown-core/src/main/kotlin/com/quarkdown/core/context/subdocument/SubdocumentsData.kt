@@ -62,6 +62,7 @@ var MutableContext.subdocumentGraph: VisitableOnceGraph<Subdocument>
  * @return the matching resource, or `null` if not found
  */
 fun Graph<Subdocument>.findResourceByPath(path: String): Subdocument.Resource? =
-    vertices.asSequence()
+    vertices
+        .asSequence()
         .filterIsInstance<Subdocument.Resource>()
         .find { it.path == path }
