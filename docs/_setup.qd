@@ -1,0 +1,66 @@
+.doclang {English}
+.theme {galactic} layout:{hyperlegible}
+
+.numbering
+    - example: 1
+
+.css {.read {assets/style.css}}
+
+.function {repolink}
+    content href:
+    .text {.content} url:{https://github.com/iamgio/quarkdown/.href}
+
+.function {docslink}
+    href:
+    .html {<sup><a href="https://quarkdown.com/docs/.href" target="_blank">docs ↗</a></sup>}
+
+.function {example}
+    content:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{tip}
+            .content
+
+.function {quarkdownoutput}
+    content:
+    .container classname:{quarkdown-output} fullwidth:{yes}
+        .content
+
+.function {exampleoutput}
+    output prelude? quarkdowncode:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{tip}
+            .if {.prelude::isnone::not}
+                .prelude
+
+            .code lang:{markdown} linenumbers:{no}
+                .quarkdowncode
+
+            .container classname:{quarkdown-output} fullwidth:{yes}
+                .output
+
+.function {examplemirror}
+    prelude? type? quarkdowncode:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{.type::otherwise {tip}}
+            .if {.prelude::isnone::not}
+                .prelude
+
+            .code lang:{markdown} linenumbers:{no}
+                .quarkdowncode
+
+            .container classname:{quarkdown-output} fullwidth:{yes}
+                .quarkdowncode
+
+.pagemargin {topleft}
+    [![Quarkdown](assets/docs-banner-light.svg)](https://quarkdown.com)
+
+.pagemargin {topright}
+    .row
+        [Docs](/docs)
+
+        ---
+
+        [.icon {github}](https://github.com/iamgio/quarkdown)

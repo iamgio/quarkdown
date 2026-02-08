@@ -1,0 +1,104 @@
+.docname {Declaring functions}
+.include {docs}
+
+You can declare functions using the **`.function`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/function.html} function (in Quarkdown, everything is a function!).
+
+It accepts two arguments: the function name and its body. The function can then be invoked as a normal function call - see [Syntax of a function call](Syntax-of-a-function-call.qd).
+
+.examplemirror
+    .function {helloworld}
+        Hello, world!
+
+    .helloworld
+
+## Parameters
+
+The body parameter is a [lambda](Lambda.qd), and each parameter of the function is a parameter of the lambda block. You can access each argument within the function body as a [variable](Variables.qd), which in Quarkdown is essentially a function with no parameters.
+
+.examplemirror
+    .function {greet}
+        to from:
+        Hello, .to from .from!
+
+    .greet {world} {John}
+
+> Tip: You can name arguments to improve readability:
+>
+> ```markdown
+> .greet {world} from:{John}
+> ```
+
+### Optional parameters
+
+If a function parameter ends with a question mark `?`, it becomes optional. When you do not provide the corresponding argument, it receives the value [`None`](None.qd).
+
+.examplemirror
+    .function {greet}
+        to from?:
+        Hello, .to from .from!
+
+    .greet {world}
+
+    .greet {world} {John}
+
+`None` provides several useful [operations](None.qd#operations), such as `.otherwise` for placeholders that emulate default parameter values.
+
+.examplemirror
+    .function {greet}
+        to from?:
+        Hello, .to from .from::otherwise {unnamed}!
+
+    .greet {world}
+
+    .greet {world} {John}
+
+### Block parameters
+
+Block arguments always correspond to the last parameter of a function. There is no special syntax to declare them; just define the function as usual.
+
+.examplemirror
+    .function {myexample}
+        title content:
+        .box {.title}
+            .content
+
+    .myexample {Example title}
+        This is the content of the example.
+
+## Returning values
+
+In Quarkdown, there are no return statements. Every reached instruction becomes part of the output - see [Conditional statements](Conditional-statements.qd).
+
+.examplemirror
+    .function {myfunction}
+        .if {.iseven {3}}
+            A
+        B
+
+    .myfunction
+
+Functions can return any Markdown content. 
+
+.examplemirror
+    .function {greet}
+        to from:
+        **Hello, .to** from .from!
+
+    .greet {world} from:{John}
+
+Quarkdown is [weakly typed](Typing.qd), so functions can return any type of value.
+
+.examplemirror
+    .function {area}
+        width height:
+        .multiply {.width} by:{.height}
+
+    The area of the rectangle is **.area {4} {2}**.
+
+.examplemirror
+    .function {isadult}
+        age:
+        .age::isgreater than:{18}
+
+    .if {.isadult age:{20}}
+        You're an adult!

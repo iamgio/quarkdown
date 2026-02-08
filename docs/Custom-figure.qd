@@ -1,0 +1,15 @@
+.docname {Custom figure}
+.include {docs}
+
+.numbering
+    - figures: 1
+
+The **`.figure {caption?} {body}`** function generalizes the [image figures](Figure.qd) syntax extension by allowing any content to be treated as a *figure* block. This means the content:
+
+- Can have a caption
+- Can be numbered - see [Numbering](Numbering.qd)
+
+.examplemirror
+    .figure caption:{My caption.}
+        .container padding:{1cm} background:{teal}
+            Hello, world!

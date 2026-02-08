@@ -13,7 +13,7 @@
     hyphens: auto;
   }
 
-  p, li {
+  p, li, td, .footnote-definition {
     line-height: var(--qd-line-height);
     letter-spacing: var(--qd-letter-spacing);
   }

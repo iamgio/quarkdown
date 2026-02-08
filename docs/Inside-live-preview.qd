@@ -1,0 +1,44 @@
+.docname {Inside live preview}
+.include {docs}
+
+Quarkdown's [webserver](CLI-Webserver.qd) enables direct communication between the compiler's CLI and the browser, which makes live previewing possible.
+
+The server exposes the following endpoints:
+
+- **`/:file`**: Serves static files relative to the target file (the `-f` option of `quarkdown start`).
+
+- **`/live/:file`**: Works similarly to the previous endpoint, but wraps HTML files in a wrapper that enables live reloading.
+
+- **`/reload`**: A WebSocket endpoint for live reloading.
+
+  - Browsers connected to the `/live` endpoint listen for reload messages and refresh the page when they receive one.
+  - The CLI connects to this endpoint and sends a message every time a compilation completes. When this happens, the server broadcasts a reload message to all connected browsers.
+
+## Live preview wrapper
+
+When serving a file through the `/live/:file` endpoint, the server wraps HTML files in a simple [HTML wrapper](https://github.com/iamgio/quarkdown/tree/main/quarkdown-server/src/main/resources/live-preview/wrapper.html.template) that displays the content of `/:file` in an [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
+
+Additionally, a small script establishes a persistent WebSocket connection to the `/reload` endpoint. This script listens for reload messages and triggers a reload of the iframe content when it receives one.
+
+.mermaid
+    sequenceDiagram
+        participant Browser
+        participant Server
+        participant CLI
+
+        Browser->>Server: GET /live/:file
+        Server-->>Browser: Live preview HTML wrapper
+        Browser->>Server: WebSocket connect /reload
+        CLI->>Server: WebSocket message /reload
+        Server->>Browser: WebSocket broadcast /reload
+        Browser->>Browser: Reload iframe content
+
+### Double buffering
+
+When an iframe reloads, an unpleasant flickering effect can occur. To provide a smooth user experience, Quarkdown employs a technique called [double buffering](https://en.wikipedia.org/wiki/Double_buffering).
+
+For context, you encounter double buffering constantly in everyday computing: your GPU renders the next frame to an off-screen buffer while displaying the current frame. Once the next frame is ready, the buffers swap, resulting in a smooth transition without flickering.
+
+Quarkdown applies the same principle by maintaining two iframes, `A` and `B`. Suppose `A` is currently visible. When a change is detected, Quarkdown renders the updated content into `B` while `A` remains on screen. Once the rendering completes, the visible iframe switches from `A` to `B`, providing a seamless update.
+
+Before swapping the buffers, the system also preserves the scroll position from the previous frame and restores it in the new frame, so you do not lose your place in the document.

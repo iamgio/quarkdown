@@ -1,0 +1,136 @@
+###! Getting started
+- [Quickstart](Quickstart.qd)
+
+###! Documentation
+- [Stable ↗](https://quarkdown.com/docs/quarkdown-stdlib/)
+- [Latest build ↗](https://quarkdown.com/docs/latest/quarkdown-stdlib/)
+
+###! Functions
+- [Syntax of a function call](Syntax-of-a-function-call.qd)
+  - [Chaining calls](Syntax-of-a-function-call.qd#chaining-calls)
+  - [Block vs. inline calls](Syntax-of-a-function-call.qd#block-vs-inline-function-calls)
+- [Declaring functions](Declaring-functions.qd)
+- [Dynamic typing](Typing.qd)
+- [Localization](Localization.qd)
+
+###! Document setup
+- [Document metadata](Document-metadata.qd)
+  - [Document types](Document-types.qd)
+- [Theme](Themes.qd)
+- [Fonts](Font-configuration.qd)
+- [Page format](Page-format.qd)
+  - [Multi-column layout](Multi-column-layout.qd)
+- [Page margin content](Page-margin-content.qd)
+- [Page counter](Page-counter.qd)
+- [Persistent headings](Persistent-headings.qd)
+- [Numbering](Numbering.qd)
+- [Paragraph style](Paragraph-style.qd)
+- [Caption position](Caption-position.qd)
+- [Table of contents](Table-of-contents.qd)
+- [Bibliography](Bibliography.qd)
+- [Footnotes](Footnotes.qd)
+
+###! Markdown enhancements
+- [Figures](Figure.qd)
+- [Image size](Image-size.qd)
+- [TeX formulae](TeX-formulae.qd)
+- [Table caption](Table-caption.qd)
+- [Code caption](Code-caption.qd)
+- [Decorative headings](Numbering.qd#decorative-headings)
+- [Alerts (quote types)](Quote-types.qd)
+- [Quotation source](Quotation-source.qd)
+- [Cross-references](Cross-references.qd)
+- [Page breaks](Page-break.qd)
+  - [Automatic break](Page-break.qd#automatic-break)
+- [Text symbols](Text-symbols.qd)
+- [Emojis](Emojis.qd)
+
+###! Layout
+- [Stacks: rows, columns, grids](Stacks.qd)
+- [Container](Container.qd)
+- [Align](Align.qd)
+- [Float](Float.qd)
+- [Figure](Custom-figure.qd)
+- [Clip](Clip.qd)
+- [Box](Box.qd)
+- [Collapsible](Collapsible.qd)
+- [Landscape](Landscape-content.qd)
+- [Whitespace](Whitespace.qd)
+
+###! Multi-file projects
+- [Including other Quarkdown files](Including-other-Quarkdown-files.qd)
+- [Referencing other Quarkdown files](Subdocuments.qd)
+  - [Including vs. referencing](Inclusion-vs-subdocuments.qd)
+- [Importing external libraries](Importing-external-libraries.qd)
+
+###! Variables & scripting
+- [Variables](Variables.qd)
+- [Optionality](None.qd)
+- [Math](Math.qd)
+- [Conditional statements](Conditional-statements.qd)
+- [Loops](Loops.qd)
+- [Let](Let.qd)
+- [Destructuring](Destructuring.qd)
+
+###! Data & tables
+- [Table manipulation](Table-manipulation.qd)
+- [Table generation](Table-generation.qd)
+- [Text content from file](File-data.qd#file-text-content)
+- [Table from CSV data](File-data.qd#table-from-csv)
+
+###! Charts & diagrams
+- [XY chart](XY-chart.qd)
+- [Mermaid diagrams](Mermaid-diagrams.qd)
+
+###! Text & code
+- [Advanced text formatting](Text.qd)
+- [Advanced code block](Code.qd)
+- [Explicit line breaks](Line-breaks.qd)
+- [TeX macros](TeX-macros.qd)
+
+###! Slides
+- [Slides configuration](Slides-configuration.qd)
+- [Interactive fragment](Slides-fragment.qd)
+- [Speaker notes](Slides-speaker-notes.qd)
+
+###! Native content
+- [HTML](HTML.qd)
+- [CSS](CSS.qd)
+
+###! Value types
+- String
+- Number
+- [Markdown content](Markdown-content.qd)
+- [Boolean](Boolean.qd)
+- [None](None.qd)
+- [Enumeration entry](Enumeration-entry.qd)
+- [Iterable](Iterable.qd)
+- [Dictionary](Dictionary.qd)
+- [Range](Range.qd)
+- [Lambda](Lambda.qd)
+- [Size(s)](Sizes.qd)
+- [Color](Color.qd)
+- [Dynamic](Typing.qd)
+
+###! Built-in libraries
+- [Paper: abstract, definitions, theorems](Paper-library.qd)
+
+###! Resources & logging
+- [Media storage](Media-storage.qd)
+- [Logging](Logging.qd)
+
+###! CLI tools
+- [Compiler](CLI-Compiler.qd)
+- [Exporting to PDF](PDF-export.qd)
+- [Project creator](CLI-Project-creator.qd)
+- [Webserver](CLI-Webserver.qd)
+
+###! Inside Quarkdown
+- [Quarkdown's pipeline](Pipeline.qd)
+  - [Lexing](Pipeline---Lexing.qd)
+  - [Parsing](Pipeline---Parsing.qd)
+  - [Function call expansion](Pipeline---Function-call-expansion.qd)
+  - [Tree traversal](Pipeline---Tree-traversal.qd)
+  - [Rendering](Pipeline---Rendering.qd)
+  - [Post-rendering](Pipeline---Post-rendering.qd)
+- [How does live preview work?](Inside-live-preview.qd)

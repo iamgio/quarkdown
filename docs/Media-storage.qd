@@ -1,0 +1,38 @@
+.docname {Media storage}
+.include {docs}
+
+**Media storage** is a feature that ensures all required files are present in the output directory when you export a Quarkdown project.
+
+Here is what it does:
+
+1. Keeps track of external files (*media*) referenced in a Quarkdown document through **image** and **reference image** nodes
+2. Copies each media file to the `media` directory inside the output directory
+3. Updates the image nodes to point their source path to the newly created file
+
+> Source:
+> ```markdown
+> ![Image](../my-img.png)
+> ```
+> Result:
+> ```html
+> <img src="media/my-img@HASH.png" alt="Image" />
+> ```
+
+Media storage is enabled by default. You can turn it off via the `--no-media-storage` flag.
+
+## Why
+
+Take HTML as an example: images from remote URLs load effortlessly, while *local* ones (e.g., `../my-img.png`) require the image file to be present on the server at the exact same location.
+
+Imagine writing a Quarkdown document, typing `![Image](my-img.png)`, with `my-img.png` located in the same directory as your Quarkdown source. You would expect it to work, but as soon as you compile the project and open your HTML artifact, you notice the browser cannot find the file simply because it is not there.
+
+Thanks to the media storage system, all media files are carried around with your output.
+
+## Options
+
+The storage can handle **both local and remote files**. The rules that determine which types are allowed in the storage are set by the active renderer.
+
+- When rendering to HTML, storage is enabled for local files only.
+- On the other hand, LaTeX (which is not yet supported but might be in the future) also requires remote media to be downloaded locally.
+
+Overriding these rules is supported, although currently unavailable via CLI.

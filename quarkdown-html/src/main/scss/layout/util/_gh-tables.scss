@@ -20,7 +20,7 @@
       background-color: var(--qd-background-color);
 
       &:nth-child(2n) {
-        background-color: color-mix(in srgb, var(--qd-main-color) 2%, transparent);
+        background-color: color-mix(in srgb, var(--qd-main-color) 2%, var(--qd-background-color));
       }
     }
 

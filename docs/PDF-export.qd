@@ -1,0 +1,36 @@
+.docname {PDF export}
+.include {docs}
+
+When running Quarkdown's [compiler](CLI-Compiler.qd) via `quarkdown c`, specifying the **`--pdf`** flag generates a PDF file.
+
+- The content of the PDF matches exactly what the HTML output would render in the Chrome browser.
+- All document types and features supported by the HTML target are also supported.
+
+### Requirements
+
+To generate PDF files from HTML, the following dependencies are required:
+- Node.js
+- npm (usually bundled with Node.js)
+- [Puppeteer](https://pptr.dev) (`npm install puppeteer --prefix <quarkdown_dir>/lib`)
+
+Package managers and install scripts already take care of these dependencies.
+
+### Additional options
+
+- `--node-path <path>`: Sets the path to the Node.js executable. Defaults to `node`.
+
+- `--npm-path <path>`: Sets the path to the npm executable. Defaults to `npm`.
+
+- `--pdf-no-sandbox`: Disables Chrome sandbox during PDF generation.
+  This is potentially unsafe and should only be used when strictly needed. For instance, some Linux distributions do not support headless sandbox.
+
+### Environment variables
+
+- `QD_NPM_PREFIX`: Directory where `node_modules` should be found. Defaults to `lib` if Quarkdown was installed via a package manager or install script.
+
+### Exporting manually (legacy way)
+
+You can export an HTML artifact to PDF via the **in-browser print** feature (`CTRL/CMD + P`).
+
+While `paged` (and `plain`) documents are print-ready, you need a few additional steps to save your `slides` document as PDF.
+Please refer to [Reveal's instructions](https://revealjs.com/pdf-export/#instructions) to learn how to do so.

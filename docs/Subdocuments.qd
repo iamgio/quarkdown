@@ -1,0 +1,152 @@
+.docname {Subdocuments}
+.include {docs}
+
+When referring to a Quarkdown *document*, we are talking broadly about the group of resources that make up a Quarkdown project.
+
+Commonly, especially in the case of knowledge management and wikis like this one, pages can have links that point to other pages, building a network of interconnected ***subdocuments***.
+
+In Quarkdown, a subdocument's entry point is a source file that is referenced by another subdocument. In practice, when I do [this](Quickstart.qd), I am referring to a subdocument.
+
+Every project consists of at least one subdocument: the main one, called *root*.
+
+> Note: Do not confuse subdocuments with [inclusion](Including-other-Quarkdown-files.qd). See [*Inclusion vs. subdocuments*](Inclusion-vs-subdocuments.qd) for a comparison.
+
+## Referencing subdocuments
+
+Whenever a Markdown link points to a local `.qd` or `.md` file, it is considered a reference to a subdocument.
+
+```markdown
+[My subdocument](file.qd)
+```
+
+Equivalently, you can use the **`.subdocument {path} {label?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/subdocument.html} function:
+
+```markdown
+.subdocument {file.qd} label:{My subdocument}
+```
+
+Unlike the link syntax, the function accepts dynamic paths, making it suitable for more complex use cases. For instance, you can use it in combination with [`.listfiles`](File-data.qd#listing-files-in-a-directory) to automatically link all documents in a directory through a [for-each loop](Loops.qd):
+
+```markdown
+.foreach {.listfiles {pages} sortby:{date} order:{descending}}
+    path:
+    .subdocument {.path} label:{.path::filename}
+```
+
+!(400)[List files](Subdocuments/list-files.png)
+
+Quarkdown makes sure a file is evaluated only once, so circular and recursive references are handled gracefully.
+
+## Context inheritance
+
+When referencing a subdocument, its content is evaluated like an independent Quarkdown document.
+
+A relevant difference is that **subdocuments inherit the referrer's context**: document metadata, customizations, functions, variables, and more.
+
+.example
+    > `main.qd`:
+    > ```markdown
+    > .doctype {paged}
+    > .theme {darko}
+    > .pageformat margin:{1cm}
+    >
+    > .function {greet}
+    >     Hello!
+    >
+    > [Introduction](introduction.qd)
+    > ```
+
+    > `introduction.qd`:
+    > ```markdown
+    > No need to set the document up again, it's already inherited!
+    >
+    > .greet
+    > ```
+
+Unlike [`.include`](Including-other-Quarkdown-files.qd), the context is *inherited*, not *shared*: changes made in the subdocument do not affect the referrer.
+
+.example
+    The following example produces an error because `greet` is not defined in the referrer context:
+    > `main.qd`:
+    > ```markdown
+    > [Introduction](introduction.qd)
+    >
+    > .greet <!-- Error: unresolved -->
+    > ```
+
+    > `introduction.qd`:
+    > ```markdown
+    > .function {greet}
+    >     Hello!
+    > ```
+
+## Working directory
+
+The working directory of a subdocument is relative to the subdocument's entry point, not the referrer:
+
+```plaintext
+main.qd
+pages/
+| introduction.qd
+images/
+| image.png
+```
+
+Whereas `main.qd` can reference `images/image.png`, `introduction.qd` should reference it as `../images/image.png`.
+
+> The [media storage system](Media-storage.qd) can still store media files across subdocuments.
+
+## Subdocument graph
+
+Subdocuments are structured in a directed graph, where the edges are the links between them.
+
+You can visualize the graph via the **`.subdocumentgraph`** function:
+
+!(700)[Graph](Subdocuments/graph.png)
+
+## Output
+
+Subdocuments are exported differently depending on the output target.
+
+### HTML
+
+Each subdocument is exported as a separate subdirectory in the same directory as `index.html`.
+
+Configuration resources, such as themes and runtime scripts, are generated only once. [Media](Media-storage.qd) is stored per subdocument instead.
+
+```plaintext
+MyDocument/
+|  media/
+|  theme/
+|  script/
+|  introduction/
+|  |  media/
+|  |  index.html
+|  conclusion/
+|  |  media/
+|  |  index.html
+|  index.html
+```
+
+### PDF
+
+Each subdocument is exported as a separate PDF file.
+
+```plaintext
+MyDocument/
+| index.pdf
+| introduction.pdf
+| conclusion.pdf
+```
+
+> Note: Subdocument links in PDF output are not navigable yet.
+
+If only the root subdocument is present, then only `MyDocument.pdf` is generated without the need for a directory.
+
+### Minimizing name collisions
+
+Since the subdocument output files lie flatly in the same directory, it is possible that two subdocuments with the same name but from different directories end up colliding.
+
+By default, Quarkdown accepts this collision-prone behavior in order to generate human-readable URLs.
+
+If collisions cannot be avoided, launching the compiler with the `--no-subdoc-collisions` flag will append a hash to the output file names.

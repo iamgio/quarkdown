@@ -1,0 +1,34 @@
+.docname {Themes}
+.include {docs}
+
+A theme defines the look and feel of your Quarkdown document. More themes are planned for the future.
+
+Themes are split into two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout. Combining them allows you to create a document that truly stands out.
+
+You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** function.
+
+### Color themes
+- `paperwhite` (default)
+- `darko`
+- `galactic`
+- `beaver`
+
+### Layout themes
+- `latex` (default)
+- `hyperlegible`
+- `minimal`
+- `beamer`
+
+---
+
+Some suggested combinations are:
+- `paperwhite+latex` (LaTeX look, great for `paged` documents)
+- `galactic+hyperlegible` (this wiki)
+- `darko+minimal`
+- `beaver+beamer` (Beamer look, great for academic-style presentations)
+
+## Contributing
+
+.repolink {Theme contributions} {tree/main/quarkdown-html/src/main/scss} are welcome.
+
+Please make sure themes work well with all three document types before submitting. The .repolink {Mock document} {tree/main/mock#readme} is a great way to test themes against a variety of different elements.
