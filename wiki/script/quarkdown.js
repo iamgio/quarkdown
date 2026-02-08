@@ -4009,12 +4009,23 @@
     }
   });
 
+  // src/main/typescript/util/browser.ts
+  function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  }
+  var init_browser = __esm({
+    "src/main/typescript/util/browser.ts"() {
+      "use strict";
+    }
+  });
+
   // src/main/typescript/document/handlers/docs/page-list-autoscroll.ts
   var PAGE_LIST_SELECTOR, CURRENT_PAGE_SELECTOR2, STORAGE_KEY, PageListAutoscroll;
   var init_page_list_autoscroll = __esm({
     "src/main/typescript/document/handlers/docs/page-list-autoscroll.ts"() {
       "use strict";
       init_document_handler();
+      init_browser();
       PAGE_LIST_SELECTOR = 'nav[data-role="page-list"]';
       CURRENT_PAGE_SELECTOR2 = "[aria-current]";
       STORAGE_KEY = "qd-page-list-scroll";
@@ -4027,7 +4038,9 @@
           const aside = currentPage.closest("aside");
           if (!aside) return;
           this.restoreScrollPosition(aside);
-          this.scrollToCurrentPage(aside, currentPage);
+          if (!isSafari()) {
+            this.scrollToCurrentPage(aside, currentPage);
+          }
           this.saveScrollPositionOnScroll(aside);
         }
         restoreScrollPosition(aside) {
