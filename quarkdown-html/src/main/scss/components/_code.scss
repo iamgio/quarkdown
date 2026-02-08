@@ -51,6 +51,18 @@
     opacity: var(--qd-code-line-numbers-opacity);
   }
 
+  // Diff
+
+  .hljs-deletion {
+    background-color: darkred;
+    color: white;
+  }
+
+  .hljs-addition {
+    background-color: darkgreen;
+    color: white;
+  }
+
   // Code block copy button
 
   .hljs-copy-wrapper {

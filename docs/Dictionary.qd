@@ -1,0 +1,54 @@
+.docname {Dictionary}
+.include {docs}
+
+In Quarkdown, a dictionary is a collection of key-value pairs without duplicate keys. Keys are always strings, while values can be any type.
+
+The dictionary syntax resembles YAML and uses Markdown lists:
+
+```yaml
+- key1: value1
+- key2: value2
+- key3: value3
+```
+
+Since this syntax overlaps with [Iterable](Iterable.qd) syntax, you can wrap the dictionary declaration in a **`.dictionary`** function to remove ambiguity when both types are accepted.
+
+.examplemirror prelude:{[`\.foreach`](Loops.qd) accepts both iterables and dictionaries, so we explicitly create a dictionary to iterate over key-value pairs, and [destructure](Destructuring.qd) them into separate variables.}
+    .var {mydictionary}
+        .dictionary
+            - key1: value1
+            - key2: value2
+            - key3: value3
+
+    .foreach {.mydictionary}
+        key value:
+        **.key**: .value
+
+
+You can nest dictionaries when the function supports it, such as [`.localization`](Localization.qd#creating-your-own-localized-strings):
+
+```yaml
+- English:
+  - greeting: Hello
+  - food: Fish and chips
+- Italian:
+  - greeting: Ciao
+  - food: Pasta
+```
+
+Trailing colons before nested dictionaries are optional:
+
+```yaml
+- English
+  - greeting: Hello
+  - food: Fish and chips
+- Italian
+  - greeting: Ciao
+  - food: Pasta
+```
+
+## Operations
+
+You can pass a dictionary to any function that accepts an [iterable](Iterable.qd#operations), where it is treated as an iterable of pairs.
+
+For a complete list of dictionary operations, see the [Dictionary documentation](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Dictionary) in the standard library.

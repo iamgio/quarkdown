@@ -1,0 +1,18 @@
+.docname {Align}
+.include {docs}
+
+The **`.align`** block function sets the horizontal alignment of content, including multiline text alignment.
+
+The primary parameter accepts the alignment type: `start`, `center`, or `end`. For convenience, **`.center`** is a shorthand for `.align {center}`.
+
+.examplemirror
+    .align {end}
+        #! My document
+
+    .loremipsum
+
+.examplemirror
+    .center
+        #! My document
+
+    .loremipsum

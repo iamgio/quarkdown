@@ -1,0 +1,89 @@
+.docname {Document metadata}
+.include {docs}
+
+You can set document information using the following functions. By convention, you should call these functions at the beginning of your Quarkdown source.
+
+| Name              | Accepts                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default                       |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
+| `.docname`        | The name of the document.                                                                                                                                                                                                                                                                                                                                                                                                                    | `Untitled Quarkdown Document` |
+| `.docdescription` | A short description of the document.                                                                                                                                                                                                                                                                                                                                                                                                         | (empty)                       |
+| `.docauthors`     | The authors of the document.                                                                                                                                                                                                                                                                                                                                                                                                                 | (empty)                       |
+| `.dockeywords`    | Keywords associated with the document, as an [iterable](Iterable.qd).                                                                                                                                                                                                                                                                                                                                                                        | (empty)                       |
+| `.doctype`        | Type of output document: `plain`, `slides`, `paged`, `docs`. See [Document types](Document-types.qd) for more information.                                                                                                                                                                                                                                                                                                                   | `plain`                       |
+| `.doclang`        | The language of the document: either a case-insensitive English full name (such as `English`, `Italian`, `French (Canada)`) or an IETF BCP 47 language tag (such as `en`, `it`, `fr-CA`). .br This setting defines the target locale for content localization, locale-specific styles like Chinese fonts for Chinese locales, and the HTML `lang` attribute for hyphenation and accessibility. See [Localization](Localization.qd) for more. | (none)                        |
+
+## Modify-or-echo
+
+All these functions have a *modify or echo* behavior: if you call them without an argument, they return the previously set value:
+
+.exampleoutput {This document is called **Quarkdown**!}
+    .docname {Quarkdown}
+
+    This document is named **.docname**!
+
+## Authors
+
+The `.docauthors` function sets the document's authors.
+
+```markdown
+.docauthors
+    - John Doe
+    - Jane Doe
+```
+
+The function takes a [Dictionary](Dictionary.qd) as its value, where each key is the author's name and values are nested dictionaries containing author information. There are no constraints on the information entries you can use.
+
+```markdown
+.docauthors
+    - John Doe
+        - email: johndoe@example.com
+        - website: example.com
+    - Jane Doe
+        - email: janedoe@example.com
+    - company: GitHub
+```
+
+Calling the function without arguments returns the dictionary itself, which you can iterate over to display authors according to a custom layout. 
+
+.example
+    ```markdown
+    .foreach {.docauthors}
+        name info:
+        .row gap:{1cm}
+            **.name**
+
+            .get {email} from:{.info}
+    ```
+    .quarkdownoutput
+        .row gap:{1cm}
+            **John Doe**
+
+            johndoe@example.com
+
+        .row gap:{1cm}
+            **Jane Doe**
+
+            janedoe@example.com
+
+### Single author
+
+If the document has just one author, and you don't need additional information, use **`.docauthor {name}`** as a shorthand.
+
+Whether you define the author using `.docauthors` or `.docauthor`, calling `.docauthor` without arguments returns the author's name.
+
+```markdown
+.docauthor {John Doe}
+```
+
+## Keywords
+
+The `.dockeywords` function sets the document's keywords as an [iterable](Iterable.qd).
+
+When exporting the document as HTML, these keywords are used for search engine optimization (SEO).
+
+```yaml
+.dockeywords
+  - markdown
+  - typesetting
+  - papers
+```

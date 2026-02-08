@@ -1,0 +1,86 @@
+.docname {CSS}
+.include {docs}
+
+The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/css.html} function lets you apply CSS styles to the document.
+
+> [!WARNING]
+> CSS styles only apply to HTML and HTML-PDF documents. They have no effect on other output formats.
+>
+> See the [HTML](HTML.qd) page for more details on this topic.
+
+```css
+.css
+    body {
+        background-color: green;
+    }
+  
+    h1 {
+        color: pink;
+    }
+```
+
+You can also load CSS styles from a file using the [`.read`](File-data.qd) function:
+
+```markdown
+.css {.read {styles.css}}
+```
+
+> [!NOTE]
+> Unlike [`.code`](Code.qd), the `.css` function does not allow function calls inside its body argument because they would be ambiguous with CSS syntax.
+>
+> For this reason, you must inline the `.read` call as shown in the previous example.
+
+## Custom classes
+
+You can assign custom CSS class names to specific elements using the `classname` parameter, which is available in [`.container`](Container.qd) for blocks and [`.text`](Text.qd) for inline elements.
+
+.examplemirror
+    .container classname:{my-custom-class}
+        This is a block with a custom class.
+
+        - Item 1
+        - Item 2
+        - Item 3
+
+    This is an .text {inline text} classname:{my-custom-class} with a custom class.
+
+    .css
+        .my-custom-class {
+            padding: 8px;
+            border-radius: 8px;
+            background: linear-gradient(to right, blue 0%, forestgreen 100%);
+        }
+
+## Custom reusable elements
+
+You can leverage [custom functions](Declaring-functions.qd) to create reusable elements with custom classes.
+
+.examplemirror
+    .function {mytext}
+        content:
+        .text {.content} classname:{my-custom-class}
+
+    This is a .mytext {text} and here is .mytext {another}.
+
+## Overriding properties
+
+If you want to *override* Quarkdown's default styles, we recommend using the **`.cssproperties`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/cssproperties.html} function.
+
+This function takes a [dictionary](Dictionary.qd) of strings, where each item is a `--qd-*` CSS property and its value.
+
+You can find a complete list of available properties in the [global theme source](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/resources/render/theme/global.scss). Unknown properties are safely ignored.
+
+.example
+    ```yaml
+    .cssproperties
+        - background-color: green
+        - heading-color: pink
+        - block-margin: 12px
+    ```
+
+.box {Why is this preferred over `\.css`?}
+    Quarkdown's themes use CSS custom properties for more granular control and easier overrides. For instance, the same property may be applied differently depending on the document type.
+
+    When you call functions like [`.pageformat`](Page-format.qd) or [`.paragraphstyle`](Paragraph-style.qd), they apply their effects by injecting the corresponding `--qd-*` properties.
+
+    Overriding a `--qd-*` property rather than its raw CSS equivalent provides smoother control and reduces the risk of future breaking changes.
