@@ -1,9 +1,6 @@
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
 
-.pagelistposition {righttop}
-.tocposition {lefttop}
-
 .numbering
     - example: 1
 
