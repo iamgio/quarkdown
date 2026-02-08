@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>MutableContext</title>
+    <title>values</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-stdlib/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-stdlib/main" data-filter=":quarkdown-stdlib/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.context/MutableContext/MutableContext/#com.quarkdown.core.flavor.MarkdownFlavor#kotlin.collections.Set[com.quarkdown.core.function.library.Library]#kotlin.collections.Set[com.quarkdown.core.function.library.Library]#com.quarkdown.core.document.sub.Subdocument#com.quarkdown.core.ast.attributes.MutableAstAttributes#com.quarkdown.core.context.MutableContextOptions/PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.context</a><span class="delimiter">/</span><a href="index.html">MutableContext</a><span class="delimiter">/</span><span class="current">MutableContext</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-stdlib::com.quarkdown.stdlib.internal/RootGranularity/values/#/PointingToDeclaration//742850071">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-stdlib</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.stdlib.internal</a><span class="delimiter">/</span><a href="index.html">RootGranularity</a><span class="delimiter">/</span><span class="current">values</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Mutable</span><wbr><span><span>Context</span></span></h1>
+    <h1 class="cover"><span><span>values</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">flavor<span class="token operator">: </span><a href="../../com.quarkdown.core.flavor/-markdown-flavor/index.html">MarkdownFlavor</a><span class="token operator"> = </span>QuarkdownFlavor<span class="token punctuation">, </span></span><span class="parameter ">libraries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptySet()<span class="token punctuation">, </span></span><span class="parameter ">loadableLibraries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="../../com.quarkdown.core.function.library/-library/index.html">Library</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptySet()<span class="token punctuation">, </span></span><span class="parameter ">subdocument<span class="token operator">: </span><a href="../../com.quarkdown.core.document.sub/-subdocument/index.html">Subdocument</a><span class="token operator"> = </span>Subdocument.Root<span class="token punctuation">, </span></span><span class="parameter ">attributes<span class="token operator">: </span><a href="../../com.quarkdown.core.ast.attributes/-mutable-ast-attributes/index.html">MutableAstAttributes</a><span class="token operator"> = </span>MutableAstAttributes()<span class="token punctuation">, </span></span><span class="parameter ">options<span class="token operator">: </span><a href="../-mutable-context-options/index.html">MutableContextOptions</a><span class="token operator"> = </span>MutableContextOptions()</span></span><span class="token punctuation">)</span></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>flavor</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Markdown flavor used for this pipeline. It specifies how to produce the needed components</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>libraries</span></span></u></div></span></div><div><div class="title"><p class="paragraph">loaded libraries to look up functions from</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>attributes</span></span></u></div></span></div><div><div class="title"><p class="paragraph">attributes of the node tree, which can be manipulated on demand</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>subdocument</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the subdocument this context is processing</p></div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-stdlib/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="values.html"><span class="token function">values</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="index.html">RootGranularity</a><span class="token operator">&gt;</span></div><p class="paragraph">Returns an array containing the constants of this enum type, in the order they're declared.</p><p class="paragraph">This method may be used to iterate over the constants.</p></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
