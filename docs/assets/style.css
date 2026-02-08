@@ -2,6 +2,10 @@
     display: flex;
 }
 
+header .version {
+    opacity: 0.6;
+}
+
 .quarkdown-output {
     padding: 12px 16px;
     border-radius: 8px;

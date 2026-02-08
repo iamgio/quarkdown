@@ -55,7 +55,10 @@
                 .quarkdowncode
 
 .pagemargin {topleft}
-    [![Quarkdown](assets/docs-banner-light.svg)](https://quarkdown.com)
+    .row gap:{12px}
+        [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
+
+        .read {../version.txt}::text classname:{version}
 
 .pagemargin {topright}
     .row
