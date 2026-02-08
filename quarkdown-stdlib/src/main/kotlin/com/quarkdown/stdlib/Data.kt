@@ -146,11 +146,14 @@ fun pathToRoot(
     @LikelyNamed granularity: RootGranularity = RootGranularity.PROJECT,
 ): StringValue {
     val root: FileSystem = getRootFileSystem(context, granularity) ?: return ".".wrappedAsValue()
-    return context.fileSystem
-        .relativePathTo(root)
-        ?.toString()
-        ?.wrappedAsValue()
-        ?: throw IllegalStateException("Unable to determine relative path to file system root.")
+    val path: String =
+        context.fileSystem.relativePathTo(root)?.toString()
+            ?: throw IllegalStateException("Unable to determine relative path to file system root.")
+
+    if (path.isEmpty()) {
+        return ".".wrappedAsValue()
+    }
+    return path.wrappedAsValue()
 }
 
 /**
