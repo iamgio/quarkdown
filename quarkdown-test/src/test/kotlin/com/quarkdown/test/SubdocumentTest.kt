@@ -327,6 +327,16 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `subdocument link from included file should account for different path`() {
+        execute(
+            ".include {include/subdocument-linker.qd}",
+            outputResourceHook = {
+                assertEquals(2, subdocumentGraph.vertices.size)
+            },
+        ) {}
+    }
+
+    @Test
     fun `subdocument should not update relative paths`() {
         execute(
             "[1](include/relative-image.md)",

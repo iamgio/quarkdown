@@ -19,7 +19,8 @@ class SubdocumentRegistrationHook(
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
         iterator.on<SubdocumentLink> { link ->
-            val file = context.fileSystem.resolve(path = link.url)
+            val fileSystem = link.fileSystem ?: context.fileSystem
+            val file = fileSystem.resolve(path = link.url)
 
             if (!file.exists()) {
                 Log.warn("Cannot find subdocument referenced by a link: $file")
@@ -30,7 +31,7 @@ class SubdocumentRegistrationHook(
                 Subdocument.Resource(
                     name = file.nameWithoutExtension,
                     path = file.absolutePath,
-                    workingDirectory = file.parentFile,
+                    workingDirectory = file.parentFile.canonicalFile,
                     content = file.readText(),
                 )
 

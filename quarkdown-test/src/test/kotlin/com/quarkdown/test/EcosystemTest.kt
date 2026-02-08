@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
@@ -386,7 +387,9 @@ class EcosystemTest {
             .includeall {.listfiles {include} sortby:{name}}
             """.trimIndent(),
         ) {
-            assertTrue(it.startsWith(OUTPUT_ABSOLUTE_IMAGE + OUTPUT_BASIC_SOURCE))
+            if (subdocument == Subdocument.Root) {
+                assertTrue(it.startsWith(OUTPUT_ABSOLUTE_IMAGE + OUTPUT_BASIC_SOURCE))
+            }
         }
     }
 }
