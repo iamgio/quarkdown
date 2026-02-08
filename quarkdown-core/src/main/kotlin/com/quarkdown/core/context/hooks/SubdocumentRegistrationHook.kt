@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.base.inline.setSubdocument
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.subdocument.findResourceByPath
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.log.Log
@@ -27,13 +28,17 @@ class SubdocumentRegistrationHook(
                 return@on
             }
 
+            val path = file.absolutePath
+
+            // Reuse an already-registered subdocument to avoid redundant file I/O.
             val subdocument =
-                Subdocument.Resource(
-                    name = file.nameWithoutExtension,
-                    path = file.absolutePath,
-                    workingDirectory = file.parentFile.canonicalFile,
-                    content = file.readText(),
-                )
+                context.subdocumentGraph.findResourceByPath(path)
+                    ?: Subdocument.Resource(
+                        name = file.nameWithoutExtension,
+                        path = path,
+                        workingDirectory = file.parentFile.canonicalFile,
+                        content = file.readText(),
+                    )
 
             link.setSubdocument(context, subdocument)
 

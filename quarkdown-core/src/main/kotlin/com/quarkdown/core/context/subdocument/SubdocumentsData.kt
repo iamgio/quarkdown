@@ -56,3 +56,13 @@ var MutableContext.subdocumentGraph: VisitableOnceGraph<Subdocument>
     set(value) {
         this.sharedSubdocumentsData = this.sharedSubdocumentsData.copy(graph = value)
     }
+
+/**
+ * Finds a [Subdocument.Resource] vertex in the graph by its absolute [path].
+ * @return the matching resource, or `null` if not found
+ */
+fun Graph<Subdocument>.findResourceByPath(path: String): Subdocument.Resource? =
+    vertices
+        .asSequence()
+        .filterIsInstance<Subdocument.Resource>()
+        .find { it.path == path }
