@@ -41,7 +41,7 @@ jobs:
     - name: Upload CLI artifact
       uses: actions/upload-artifact@v4
       with:
-        name: quarkdown
+        name: quarkdown-e2e-cli
         path: build/install/quarkdown
         retention-days: 1
 
@@ -61,7 +61,7 @@ jobs:
     - name: Download CLI artifact
       uses: actions/download-artifact@v4
       with:
-        name: quarkdown
+        name: quarkdown-e2e-cli
         path: build/install/quarkdown
 
     - name: Make CLI executable
