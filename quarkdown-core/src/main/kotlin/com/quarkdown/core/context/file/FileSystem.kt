@@ -3,6 +3,7 @@ package com.quarkdown.core.context.file
 import com.quarkdown.core.util.IOUtils
 import java.io.File
 import java.nio.file.Path
+import kotlin.io.path.absolute
 
 /**
  * A file system abstraction which can retrieve files,
@@ -69,8 +70,8 @@ internal data class SimpleFileSystem(
     override fun resolve(path: String): File = IOUtils.resolvePath(path, workingDirectory)
 
     override fun relativePathTo(other: FileSystem): Path? {
-        val from = this.workingDirectory?.toPath() ?: return null
-        val to = other.workingDirectory?.toPath() ?: return null
+        val from = this.workingDirectory?.toPath()?.absolute() ?: return null
+        val to = other.workingDirectory?.toPath()?.absolute() ?: return null
         return try {
             from.relativize(to)
         } catch (_: IllegalArgumentException) {

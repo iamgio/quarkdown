@@ -148,7 +148,13 @@ fun pathToRoot(
     val root: FileSystem = getRootFileSystem(context, granularity) ?: return ".".wrappedAsValue()
     val path: String =
         context.fileSystem.relativePathTo(root)?.toString()
-            ?: throw IllegalStateException("Unable to determine relative path to file system root.")
+            ?: throw IllegalStateException(
+                """
+                Unable to determine relative path to file system root.
+                Root: ${root.workingDirectory}
+                Current working directory: ${context.fileSystem.workingDirectory}
+                """.trimIndent(),
+            )
 
     if (path.isEmpty()) {
         return ".".wrappedAsValue()
