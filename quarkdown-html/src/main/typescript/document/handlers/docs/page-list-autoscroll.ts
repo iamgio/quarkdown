@@ -1,4 +1,5 @@
 import {DocumentHandler} from "../../document-handler";
+import {isSafari} from "../../../util/browser";
 
 const PAGE_LIST_SELECTOR = 'nav[data-role="page-list"]';
 const CURRENT_PAGE_SELECTOR = "[aria-current]";
@@ -8,6 +9,9 @@ const STORAGE_KEY = "qd-page-list-scroll";
  * Document handler that scrolls the page list sidebar to show the current page.
  * Restores the previous scroll position from sessionStorage, then smooth scrolls
  * to bring the current page into view.
+ *
+ * On Safari, only the scroll position is restored without further adjustments,
+ * as Safari's smooth scroll does not respect a programmatically set starting position.
  */
 export class PageListAutoscroll extends DocumentHandler {
     async onPostRendering() {
@@ -21,7 +25,11 @@ export class PageListAutoscroll extends DocumentHandler {
         if (!aside) return;
 
         this.restoreScrollPosition(aside);
-        this.scrollToCurrentPage(aside, currentPage);
+
+        if (!isSafari()) {
+            this.scrollToCurrentPage(aside, currentPage);
+        }
+
         this.saveScrollPositionOnScroll(aside);
     }
 
