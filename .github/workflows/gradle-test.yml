@@ -61,16 +61,16 @@ jobs:
     - name: Download CLI artifact
       uses: actions/download-artifact@v4
       with:
-        name: quarkdown-cli
-        path: quarkdown-cli/build/install/quarkdown-cli
+        name: quarkdown
+        path: build/install/quarkdown
 
     - name: Make CLI executable
-      run: chmod +x quarkdown-cli/build/install/quarkdown-cli/bin/quarkdown-cli
+      run: chmod +x build/install/quarkdown/bin/quarkdown
 
     - name: Run E2E tests (shard ${{ matrix.shard }}/4)
       uses: burrunan/gradle-cache-action@v3
       env:
-        QUARKDOWN_CLI_PATH: ${{ github.workspace }}/quarkdown-cli/build/install/quarkdown-cli/bin/quarkdown-cli
+        QUARKDOWN_CLI_PATH: ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown
       with:
         job-id: e2e-test
         arguments: :quarkdown-html:e2eTest -Pshard=${{ matrix.shard }} -PtotalShards=4
