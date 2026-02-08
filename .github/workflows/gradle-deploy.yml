@@ -56,6 +56,13 @@ jobs:
     - name: Echo output files
       run: ls -d "$PWD/build/"*
 
+    - name: Deploy wiki
+      if: github.ref_type == 'tag'
+      uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
+      with:
+        quarkdown-path: ${{ github.workspace }}/build/unzipped/quarkdown/bin/quarkdown
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Distribute artifact
       uses: actions/upload-artifact@v4
       with:
