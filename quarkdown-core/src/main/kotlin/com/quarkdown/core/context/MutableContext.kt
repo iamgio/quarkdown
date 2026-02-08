@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor
+import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryRegistrant
@@ -21,7 +22,7 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
  * @param subdocument the subdocument this context is processing
  */
 open class MutableContext(
-    flavor: MarkdownFlavor,
+    flavor: MarkdownFlavor = QuarkdownFlavor,
     libraries: Set<Library> = emptySet(),
     loadableLibraries: Set<Library> = emptySet(),
     subdocument: Subdocument = Subdocument.Root,

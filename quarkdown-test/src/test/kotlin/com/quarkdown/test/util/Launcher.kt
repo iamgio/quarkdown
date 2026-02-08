@@ -40,6 +40,7 @@ val DEFAULT_OPTIONS =
  * @param source Quarkdown source to execute
  * @param options execution options
  * @param renderer function that provides the rendering components to use (defaults to HTML)
+ * @param workingDirectory working directory to use for the execution, used for resolving relative paths and as the root for the file system
  * @param subdocumentGraph modifier of the subdocument graph before rendering
  * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
  * @param useDummyLibraryDirectory whether to use the dummy library directory for loading libraries instead of the one from the `libs` module
@@ -55,6 +56,7 @@ fun execute(
     source: String,
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
     renderer: (RendererFactory, Context) -> RenderingComponents = { rendererFactory, ctx -> rendererFactory.html(ctx) },
+    workingDirectory: File = File(DATA_FOLDER),
     subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
     useDummyLibraryDirectory: Boolean = false,
@@ -98,7 +100,7 @@ fun execute(
             context,
             PipelineOptions(
                 errorHandler = errorHandler,
-                workingDirectory = File(DATA_FOLDER),
+                workingDirectory = workingDirectory,
                 enableMediaStorage = enableMediaStorage,
                 minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
             ),

@@ -12,6 +12,12 @@ interface ChildContext<C : Context> : Context {
     val parent: C
 
     /**
+     * The root context of the scope tree that this context belongs to.
+     */
+    val root: Context
+        get() = this.lastParentOrNull { true } ?: this
+
+    /**
      * @param predicate condition to match
      * @return the last context (upwards, towards the root, starting from this context) that matches the [predicate],
      *         or `null` if no parent in the scope tree matches the given condition
@@ -20,8 +26,10 @@ interface ChildContext<C : Context> : Context {
         when {
             // This is the last context to match the condition.
             predicate(this) && !predicate(parent) -> this
+
             // The root context matches the condition.
             parent !is ChildContext<*> && predicate(parent) -> parent
+
             // Scan the parent context.
             else -> (parent as? ChildContext<*>)?.lastParentOrNull(predicate)
         }
