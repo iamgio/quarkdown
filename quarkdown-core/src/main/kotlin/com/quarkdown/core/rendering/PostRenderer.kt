@@ -2,11 +2,10 @@ package com.quarkdown.core.rendering
 
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.template.TemplateProcessor
 
 /**
  * Strategy used to run the post-rendering stage:
- * the rendered content from the rendering stage is injected into a template offered by the post-renderer.
+ * the rendered content from the rendering stage is wrapped in the document structure offered by the post-renderer.
  * Additionally, the post-renderer provides the output resources that can be saved to file.
  */
 interface PostRenderer {
@@ -21,14 +20,12 @@ interface PostRenderer {
     val preferredMediaStorageOptions: MediaStorageOptions
 
     /**
-     * Creates a new instance of a template processor for this rendering strategy.
-     * A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file.
-     * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * See `resources/render/html-wrapper.html.template` for an HTML template.
-     * @return a new instance of the corresponding template processor
-     * @see TemplateProcessor
+     * Wraps rendered content in the full document structure for this rendering strategy.
+     * For example, an HTML post-renderer wraps content in `<html><head>...</head><body>...</body></html>`.
+     * @param content the rendered content to wrap
+     * @return the wrapped content
      */
-    fun createTemplateProcessor(): TemplateProcessor
+    fun wrap(content: CharSequence): CharSequence
 
     /**
      * Generates the required output resources.
@@ -51,11 +48,3 @@ interface PostRenderer {
         resources: Set<OutputResource>,
     ): OutputResource?
 }
-
-/**
- * Wraps rendered code in a template.
- * @param content code to wrap
- * @return [content], wrapped in the corresponding template for this rendering strategy
- * @see TemplateProcessor
- */
-fun PostRenderer.wrap(content: CharSequence) = createTemplateProcessor().content(content).process()

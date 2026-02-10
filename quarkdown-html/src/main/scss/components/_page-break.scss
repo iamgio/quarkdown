@@ -1,0 +1,9 @@
+.page-break {
+  break-before: always;
+}
+
+.quarkdown-plain .page-break,
+.quarkdown-docs .page-break {
+  break-before: avoid;
+  break-after: avoid;
+}

@@ -7,7 +7,6 @@ import com.quarkdown.core.document.orDefault
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.rendering.html.post.resources.MediaPostRendererResource
 import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
@@ -24,25 +23,22 @@ private val DEFAULT_THEME =
     )
 
 /**
- * A [PostRenderer] that injects content into an HTML template. This includes all the features of [HtmlOnlyPostRenderer], plus:
+ * A [PostRenderer] that wraps content into a full HTML document. This includes all the features of [HtmlOnlyPostRenderer], plus:
  * - Theme components
  * - Runtime scripts
  * - Media resources
  *
  * @param context the [Context] of the document being rendered
  * @param relativePathToRoot relative path from the current document to the root document, used to correctly link resources
- * @param baseTemplateProcessor supplier of the base [TemplateProcessor] to inject with content and process via [HtmlPostRendererTemplate]
  * @param base the base [HtmlOnlyPostRenderer] to delegate HTML generation to
  * @param resourcesProvider supplier of the set of [PostRendererResource] to include in the output. Delegation to [base] is always included
  */
 class HtmlPostRenderer(
     val context: Context,
     relativePathToRoot: String = ".",
-    private val baseTemplateProcessor: () -> TemplateProcessor = baseHtmlTemplateProcessor,
     private val base: HtmlOnlyPostRenderer =
         HtmlOnlyPostRenderer(
             context,
-            baseTemplateProcessor,
             relativePathToRoot = relativePathToRoot,
         ),
     private val resourcesProvider: () -> Set<PostRendererResource> =

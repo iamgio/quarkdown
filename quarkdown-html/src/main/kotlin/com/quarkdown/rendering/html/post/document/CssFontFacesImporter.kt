@@ -1,4 +1,4 @@
-package com.quarkdown.rendering.html.post
+package com.quarkdown.rendering.html.post.document
 
 import com.quarkdown.core.media.LocalMedia
 import com.quarkdown.core.media.MediaVisitor
