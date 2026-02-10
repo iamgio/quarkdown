@@ -47,9 +47,11 @@ It's possible to over-engineer when necessary to achieve high cohesion, low coup
 leveraging design patterns, such as strategy and visitor (frequent in this codebase), and best practices.
 
 Write medium-sized documentation comments for all public classes, methods, and properties,
-and also non-public ones when the logic is not straightforward.
+and also non-public ones when the logic is not straightforward. Update existing documentation when making changes to the codebase, both in code and [docs](docs), and make sure to keep it consistent with the style used in the project.
 
 Aim for a test-driven development (TDD) approach when possible. Tests play an important role. See [Testing](#testing) below.
+
+When creating new files, always add them to git via `git add`, and make sure to place them in the correct module and package, following the existing project structure.
 
 ## Overview
 
@@ -66,7 +68,7 @@ along with rendering extensions, such as [quarkdown-html](quarkdown-html) and [q
 the language server, located in [quarkdown-lsp](quarkdown-lsp),
 the CLI, located in [quarkdown-cli](quarkdown-cli),
 and other modules, is written in Kotlin with the Ktlint code style.
-You don't need to run the linter, as long as you follow the code style used in the project.
+Follow the code style used in the project, and make sure to run `./gradlew ktlintFormat` after making changes to ensure the code is properly formatted.
 
 ### Pipeline
 
