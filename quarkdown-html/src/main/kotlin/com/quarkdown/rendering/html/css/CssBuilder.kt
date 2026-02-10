@@ -72,8 +72,7 @@ class CssBuilder {
      * @return an indented, multi-line string representation of the CSS entries,
      *         suitable for a rule body in a stylesheet block
      */
-    fun buildBlock(indent: String = "    ") =
-        entries.entries.joinToString(separator = "\n") { "$indent${it.key}: ${it.value};" }
+    fun buildBlock(indent: String = "    ") = entries.entries.joinToString(separator = "\n") { "$indent${it.key}: ${it.value};" }
 }
 
 /**
