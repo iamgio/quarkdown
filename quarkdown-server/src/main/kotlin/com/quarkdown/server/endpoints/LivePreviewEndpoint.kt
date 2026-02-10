@@ -48,7 +48,7 @@ class LivePreviewEndpoint(
         val file = getTargetFile(call)
 
         if (!file.exists() || !file.isFile) {
-            call.respond(HttpStatusCode.NotFound, null)
+            call.respondText("Not Found", status = HttpStatusCode.NotFound)
             return
         }
 
@@ -57,7 +57,7 @@ class LivePreviewEndpoint(
                 call.respondText(createHtmlWrapperText(file, port), ContentType.Text.Html)
 
             // Non-HTML files are served directly.
-            file.exists() ->
+            else ->
                 call.respondFile(file)
         }
     }
@@ -66,8 +66,9 @@ class LivePreviewEndpoint(
         targetFile: File,
         serverPort: Int,
     ): String {
-        // Since we are one level deep in /live/, we need to adjust the relative path to the source file.
-        val sourceFile = "../${targetFile.name}"
+        // The iframe src is an absolute path from the server root,
+        // which correctly handles both root-level and subdirectory files.
+        val sourceFile = "/${targetFile.relativeTo(origin).path}"
 
         return TemplateProcessor
             .fromResourceName("/live-preview/wrapper.html.template", referenceClass = javaClass)

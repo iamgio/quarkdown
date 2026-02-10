@@ -232,6 +232,109 @@ class LocalFileWebServerTest {
         }
 
     @Test
+    fun `late-connecting client does not receive stale messages`() =
+        runBlocking {
+            val client =
+                HttpClient(CIO) {
+                    install(WebSockets)
+                }
+
+            try {
+                // Client A connects and sends a message.
+                val messageSent = CompletableDeferred<Unit>()
+                val senderJob =
+                    launch {
+                        client.webSocket("ws://localhost:$port/reload") {
+                            send(Frame.Text("reload-1"))
+                            messageSent.complete(Unit)
+                            // Keep connection open briefly to allow the broadcast to propagate.
+                            delay(500)
+                        }
+                    }
+
+                // Wait until the message has been broadcast.
+                withTimeout(5.seconds) { messageSent.await() }
+                delay(300)
+
+                // Client B connects after the message was sent.
+                // It should NOT receive the stale "reload-1" message.
+                val receivedStaleMessage = CompletableDeferred<Boolean>()
+                val lateReceiverJob =
+                    launch {
+                        client.webSocket("ws://localhost:$port/reload") {
+                            try {
+                                withTimeout(1.seconds) {
+                                    incoming.receive()
+                                    receivedStaleMessage.complete(true)
+                                }
+                            } catch (_: Exception) {
+                                // Timeout means no message was received — expected.
+                                receivedStaleMessage.complete(false)
+                            }
+                        }
+                    }
+
+                val gotStale =
+                    withTimeout(5.seconds) {
+                        receivedStaleMessage.await()
+                    }
+
+                assertEquals(false, gotStale, "Late-connecting client should not receive stale messages")
+
+                senderJob.cancel()
+                lateReceiverJob.cancel()
+            } finally {
+                client.close()
+            }
+        }
+
+    @Test
+    fun `server message content is transmitted correctly`() =
+        runBlocking {
+            val client =
+                HttpClient(CIO) {
+                    install(WebSockets)
+                }
+
+            try {
+                val messageReceived = CompletableDeferred<String>()
+
+                // Receiver listens for the exact message content.
+                val receiverJob =
+                    launch {
+                        client.webSocket("ws://localhost:$port/reload") {
+                            val frame = incoming.receive()
+                            if (frame is Frame.Text) {
+                                messageReceived.complete(frame.readText())
+                            }
+                        }
+                    }
+
+                delay(500)
+
+                // Sender transmits the ServerMessage.content value.
+                val senderJob =
+                    launch {
+                        client.webSocket("ws://localhost:$port/reload") {
+                            send(Frame.Text("reload"))
+                        }
+                    }
+
+                val received =
+                    withTimeout(5.seconds) {
+                        messageReceived.await()
+                    }
+
+                assertEquals("reload", received, "Received message should match ServerMessage.content")
+
+                receiverJob.cancel()
+                senderJob.cancel()
+            } finally {
+                client.close()
+            }
+        }
+
+    @Test
     fun `server handles file not found`() =
         runBlocking {
             // Create HTTP client

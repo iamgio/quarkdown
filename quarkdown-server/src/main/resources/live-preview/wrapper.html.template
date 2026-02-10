@@ -49,10 +49,6 @@
         }
 
         .hidden {
-            opacity: .5;
-        }
-
-        .hidden {
             opacity: 0;
             z-index: 999998;
             pointer-events: none;
@@ -105,6 +101,8 @@
 
         socket.addEventListener('close', (event) => {
             console.log(`WebSocket closed: Code=${event.code}, Reason=${event.reason}`);
+            // Automatically reconnect after a brief delay.
+            setTimeout(() => startWebSocket(serverUrl, endpoint, onMessage), 1000);
         });
 
         socket.addEventListener("error", (error) => {
@@ -227,18 +225,14 @@
         newFrame.contentWindow.onscroll = null;
         newFrame.onload = null;
 
-        // (#199) If the URL has changed (e.g. different slide, subdocument, etc.), update the hidden frame's URL to match.
-        const activeUrl = currentFrame.contentWindow.location.href;
-        if (newFrame.src !== activeUrl) {
-            newFrame.src = activeUrl;
-        }
-
         // Swap frame visibility.
         setFrameVisibility(newFrame, true);
         setFrameVisibility(currentFrame, false);
 
-        // Update the active frame.
+        // Update active/inactive frame IDs.
+        const previousActive = activeFrameId;
         activeFrameId = inactiveFrameId;
+        inactiveFrameId = previousActive;
     }
 </script>
 <script data-name="reload">
@@ -248,10 +242,21 @@
      */
     function reload() {
         inactiveFrameId = (activeFrameId + 1) % NUM_FRAMES;
+        const active = getActiveFrame();
         const nextFrame = getInactiveFrame();
 
         // Make sure the frame to reload is properly hidden.
         setFrameVisibility(nextFrame, false);
+
+        // (#199) If the URL has changed (e.g. different slide, subdocument, etc.),
+        // sync the inactive frame's src before reloading.
+        const activeUrl = active.contentWindow?.location?.href;
+        if (activeUrl && nextFrame.src !== activeUrl) {
+            nextFrame.src = activeUrl;
+            // Setting src triggers a load, so swap on that load event instead of calling reload.
+            nextFrame.onload = swapFrames;
+            return;
+        }
 
         // Set up the load event before reloading.
         nextFrame.onload = swapFrames;
