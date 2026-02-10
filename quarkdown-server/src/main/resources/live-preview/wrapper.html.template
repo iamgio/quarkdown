@@ -138,9 +138,36 @@
     let activeFrameId = 0;
     let inactiveFrameId = 1;
 
+    // Stored scroll position, continuously tracked on the active frame.
     let scrollX = 0;
     let scrollY = 0;
     let isScrollStickyToBottom = false;
+
+    // During a reload, the swap is deferred until the hidden frame is fully ready:
+    // both loaded (onload) and rendered (postRenderingCompleted).
+    // Their relative ordering is unpredictable (postMessage vs onload are separate tasks),
+    // so the swap commits as soon as both signals have arrived.
+    let reloadPending = false;
+    let frameLoaded = false;
+    let frameRendered = false;
+    let swapFallbackTimer = null;
+
+    /**
+     * Suppresses CSS smooth scrolling inside the given frame, so that
+     * programmatic scroll restoration is always instant.
+     * @param {HTMLIFrameElement} frame - The frame element
+     */
+    function suppressSmoothScroll(frame) {
+        const doc = frame.contentDocument;
+        if (doc) doc.documentElement.style.scrollBehavior = 'auto';
+    }
+
+    // Re-apply after every iframe reload, since the document is replaced.
+    for (let i = 0; i < NUM_FRAMES; i++) {
+        document.getElementById(`frame-${i}`).addEventListener('load', function () {
+            suppressSmoothScroll(this);
+        });
+    }
 
     /**
      * @returns {HTMLIFrameElement} The frame element which is currently active (visible).
@@ -157,90 +184,146 @@
     }
 
     /**
-     * @returns {boolean} Whether the scroll position is at the veryt bottom of the page
+     * @returns {boolean} Whether the scroll position is at the very bottom of the page
      */
-    function isScrolledToBottom(activeFrame) {
-        const frameWindow = activeFrame.contentWindow;
-        if (!frameWindow) return false;
+    function isScrolledToBottom(frame) {
+        const win = frame.contentWindow;
+        if (!win) return false;
 
-        const scrollableHeight = frameWindow.document.body.scrollHeight;
-        const viewportHeight = frameWindow.innerHeight;
-        const scrollY = frameWindow.scrollY || 0;
+        const scrollableHeight = win.document.body.scrollHeight;
+        const viewportHeight = win.innerHeight;
+        const currentY = win.scrollY || 0;
 
         // If content fits in viewport or scrolled to bottom.
-        return scrollableHeight <= viewportHeight || scrollY >= scrollableHeight - viewportHeight - 1;
+        return scrollableHeight <= viewportHeight || currentY >= scrollableHeight - viewportHeight - 1;
     }
 
     /**
-     * Synchronizes scroll of the given frame to the stored scroll position.
-     * If the user is scrolled to the bottom, keeps them at the bottom after reload.
-     * Otherwise, restores the previous scroll position.
-     * @param {HTMLIFrameElement} frame - The frame element
+     * Reads the current scroll position from the given frame into the stored values.
+     * @param {HTMLIFrameElement} frame - The frame to read from
      */
-    function syncScrollPosition(frame) {
-        const y = isScrollStickyToBottom ? frame.contentWindow.document.body.scrollHeight : scrollY;
-        frame.contentWindow.scrollTo(scrollX, y);
+    function captureScrollPosition(frame) {
+        const win = frame.contentWindow;
+        if (!win) return;
+        scrollX = win.scrollX || 0;
+        scrollY = win.scrollY || 0;
+        isScrollStickyToBottom = isScrolledToBottom(frame);
     }
 
     /**
-     * Sets up scroll event listeners on the active frame to sync scroll position to the buffered frame.
-     * @param {HTMLIFrameElement} active - The currently active frame
+     * Restores the stored scroll position on the given frame.
+     * If the user was at the bottom, keeps them at the bottom.
+     * @param {HTMLIFrameElement} frame - The frame to scroll
      */
-    function setupScrollSync(active) {
-        active.contentWindow.onscroll = () => {
-            if (active?.contentWindow?.scrollY) {
-                scrollX = active.contentWindow.scrollX;
-                scrollY = active.contentWindow.scrollY;
-                isScrollStickyToBottom = isScrolledToBottom(active);
-            }
+    function restoreScrollPosition(frame) {
+        suppressSmoothScroll(frame);
+        const win = frame.contentWindow;
+        if (!win) return;
+        const y = isScrollStickyToBottom ? win.document.body.scrollHeight : scrollY;
+        win.scrollTo(scrollX, y);
+    }
+
+    /**
+     * Starts continuously tracking scroll on the given frame,
+     * storing the position for later restoration.
+     * @param {HTMLIFrameElement} frame - The frame to track
+     */
+    function setupScrollTracking(frame) {
+        const win = frame.contentWindow;
+        if (!win) return;
+
+        win.onscroll = () => {
+            scrollX = win.scrollX || 0;
+            scrollY = win.scrollY || 0;
+            isScrollStickyToBottom = isScrolledToBottom(frame);
         };
     }
 
     /**
-     * Toggles the visibility class of a frame
+     * Stops scroll tracking on the given frame.
+     * @param {HTMLIFrameElement} frame
+     */
+    function teardownScrollTracking(frame) {
+        const win = frame.contentWindow;
+        if (win) win.onscroll = null;
+    }
+
+    /**
+     * Toggles the visibility class of a frame.
      * @param {HTMLElement} frame - The frame element
      * @param {boolean} isVisible - Whether the frame should be visible
      */
     function setFrameVisibility(frame, isVisible) {
-        const visible = 'visible';
-        const hidden = 'hidden';
         if (isVisible) {
-            frame.classList.remove(hidden);
-            frame.classList.add(visible);
+            frame.classList.remove('hidden');
+            frame.classList.add('visible');
         } else {
-            frame.classList.remove(visible);
-            frame.classList.add(hidden);
+            frame.classList.remove('visible');
+            frame.classList.add('hidden');
         }
     }
 
     /**
-     * Swaps the visibility of the frames after the hidden one has loaded and synchronizes scroll position between frames.
+     * Attempts to commit the swap if both readiness signals have arrived.
+     * Does nothing if either the frame hasn't loaded or hasn't rendered yet.
      */
-    function swapFrames() {
-        const currentFrame = getActiveFrame();
-        const newFrame = getInactiveFrame();
+    function maybeCommitSwap() {
+        if (frameLoaded && frameRendered) {
+            commitSwap();
+        }
+    }
 
-        // Reset handlers.
-        currentFrame.contentWindow.onscroll = null;
-        newFrame.contentWindow.onscroll = null;
-        newFrame.onload = null;
+    /**
+     * Performs the frame swap. Only called when the hidden frame is fully ready
+     * (loaded and rendered), so scroll can be restored accurately on the
+     * still-hidden frame before it becomes visible.
+     */
+    function commitSwap() {
+        clearTimeout(swapFallbackTimer);
 
-        // Swap frame visibility.
-        setFrameVisibility(newFrame, true);
-        setFrameVisibility(currentFrame, false);
+        const outgoing = getActiveFrame();
+        const incoming = getInactiveFrame();
 
-        // Update active/inactive frame IDs.
-        const previousActive = activeFrameId;
+        // Snapshot the scroll position from the outgoing frame at the last possible moment,
+        // so any user scrolling since the reload started is captured.
+        captureScrollPosition(outgoing);
+
+        // Detach all handlers.
+        teardownScrollTracking(outgoing);
+        teardownScrollTracking(incoming);
+        incoming.onload = null;
+
+        // Restore scroll on the still-hidden incoming frame.
+        restoreScrollPosition(incoming);
+
+        // Swap visibility.
+        setFrameVisibility(incoming, true);
+        setFrameVisibility(outgoing, false);
+
+        // Update IDs.
+        const prev = activeFrameId;
         activeFrameId = inactiveFrameId;
-        inactiveFrameId = previousActive;
+        inactiveFrameId = prev;
+
+        // Start tracking on the new active frame.
+        setupScrollTracking(incoming);
+
+        // Reset reload state.
+        reloadPending = false;
+        frameLoaded = false;
+        frameRendered = false;
     }
 </script>
 <script data-name="reload">
     /**
      * Reloads the preview using double buffering to prevent flickering.
-     * Ensures the frame is properly prepared before reloading.
      */
     function reload() {
+        reloadPending = true;
+        frameLoaded = false;
+        frameRendered = false;
+        clearTimeout(swapFallbackTimer);
+
         inactiveFrameId = (activeFrameId + 1) % NUM_FRAMES;
         const active = getActiveFrame();
         const nextFrame = getInactiveFrame();
@@ -253,31 +336,41 @@
         const activeUrl = active.contentWindow?.location?.href;
         if (activeUrl && nextFrame.src !== activeUrl) {
             nextFrame.src = activeUrl;
-            // Setting src triggers a load, so swap on that load event instead of calling reload.
-            nextFrame.onload = swapFrames;
+            // Setting src triggers a load, so the onload handler below covers this path too.
+            nextFrame.onload = onFrameLoaded;
             return;
         }
 
-        // Set up the load event before reloading.
-        nextFrame.onload = swapFrames;
-
-        // Reload the hidden frame.
+        nextFrame.onload = onFrameLoaded;
         nextFrame?.contentWindow?.location?.reload();
     }
 
     /**
-     * Synchronizes the scroll position of the currently active frame.
+     * Signal: the hidden frame's document and subresources have loaded.
      */
-    function syncActiveScroll() {
-        const frame = getActiveFrame();
-        if (frame && frame.contentWindow) {
-            syncScrollPosition(frame);
-            setupScrollSync(frame);
-        }
+    function onFrameLoaded() {
+        frameLoaded = true;
+        // Start a fallback timer for content that never sends postRenderingCompleted.
+        swapFallbackTimer = setTimeout(commitSwap, 300);
+        maybeCommitSwap();
     }
 
-    // When rendering is completed in the iframe, syncs scroll position.
-    messageListeners.set('postRenderingCompleted', syncActiveScroll);
+    /**
+     * Signal: the hidden frame's content has finished its async rendering pipeline.
+     * For Quarkdown content this fires after the post-rendering execution queue completes.
+     */
+    function onFrameRendered() {
+        if (!reloadPending) {
+            // Initial page load (no reload in progress).
+            // Just set up scroll tracking on the active frame.
+            setupScrollTracking(getActiveFrame());
+            return;
+        }
+        frameRendered = true;
+        maybeCommitSwap();
+    }
+
+    messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
 <script>startReloadWebSocket("localhost:[[SERVERPORT]]")</script>
 </body>
