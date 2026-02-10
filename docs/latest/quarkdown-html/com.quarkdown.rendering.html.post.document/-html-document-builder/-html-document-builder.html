@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>createTemplateProcessor</title>
+    <title>HtmlDocumentBuilder</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-plaintext/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-html/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-plaintext/main" data-filter=":quarkdown-plaintext/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-html/main" data-filter=":quarkdown-html/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-plaintext::com.quarkdown.rendering.plaintext.post/PlainTextPostRenderer/createTemplateProcessor/#/PointingToDeclaration//1917236080">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-plaintext</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.plaintext.post</a><span class="delimiter">/</span><a href="index.html">PlainTextPostRenderer</a><span class="delimiter">/</span><span class="current">createTemplateProcessor</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-html::com.quarkdown.rendering.html.post.document/HtmlDocumentBuilder/HtmlDocumentBuilder/#com.quarkdown.core.context.Context#kotlin.String#kotlin.CharSequence/PointingToDeclaration//-203176000">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.post.document</a><span class="delimiter">/</span><a href="index.html">HtmlDocumentBuilder</a><span class="delimiter">/</span><span class="current">HtmlDocumentBuilder</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>create</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></h1>
+    <h1 class="cover"><span>Html</span><wbr><span>Document</span><wbr><span><span>Builder</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-plaintext/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="create-template-processor.html"><span class="token function">createTemplateProcessor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="../../../quarkdown-core/com.quarkdown.core.context/-context/index.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">relativePathToRoot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">sidebarContent<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span></div><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the rendering context containing document metadata, attributes, and configuration</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>relative</span><wbr><span>Path</span><wbr><span>To</span><wbr><span><span>Root</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the relative path from the current document to the root directory,     used to correctly reference shared resources (scripts, themes, etc.)</p></div></div></div></div><div class="table-row" data-filterable-current=":quarkdown-html/main" data-filterable-set=":quarkdown-html/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>sidebar</span><wbr><span><span>Content</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the pre-rendered sidebar HTML content (table of contents)</p></div></div></div></div></div></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>

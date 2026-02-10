@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>createTemplateProcessor</title>
+    <title>toSnippets</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-html/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-html/main" data-filter=":quarkdown-html/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.rendering/PostRenderer/createTemplateProcessor/#/PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.rendering</a><span class="delimiter">/</span><a href="index.html">PostRenderer</a><span class="delimiter">/</span><span class="current">createTemplateProcessor</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-html::com.quarkdown.rendering.html.post.document/CssFontFacesImporter/toSnippets/#/PointingToDeclaration//-203176000">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-html</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.rendering.html.post.document</a><span class="delimiter">/</span><a href="index.html">CssFontFacesImporter</a><span class="delimiter">/</span><span class="current">toSnippets</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>create</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></h1>
+    <h1 class="cover"><span>to</span><wbr><span><span>Snippets</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="create-template-processor.html"><span class="token function">createTemplateProcessor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a></div><p class="paragraph">Creates a new instance of a template processor for this rendering strategy. A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file. For example, an HTML wrapper may add <code class="lang-kotlin">&lt;html&gt;&lt;head&gt;...&lt;/head&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;</code>, with the content injected in <code class="lang-kotlin">body</code>. See <code class="lang-kotlin">resources/render/html-wrapper.html.template</code> for an HTML template.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">a new instance of the corresponding template processor</p></span><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../../com.quarkdown.core.template/-template-processor/index.html"><span>Template</span><wbr><span><span>Processor</span></span></a></div></span></div><div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-html/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="to-snippets.html"><span class="token function">toSnippets</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">one CSS import snippet per <a href="../../../quarkdown-core/com.quarkdown.core.misc.font/-font-family/index.html">FontFamily</a> in the list.</p></span></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>

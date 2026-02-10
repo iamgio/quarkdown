@@ -96,10 +96,10 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.rendering</a><span class="delimiter">/</span><span class="current">PostRenderer</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Post</span><wbr><span><span>Renderer</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">PostRenderer</a></div><p class="paragraph">Strategy used to run the post-rendering stage: the rendered content from the rendering stage is injected into a template offered by the post-renderer. Additionally, the post-renderer provides the output resources that can be saved to file.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">PostRenderer</a></div><p class="paragraph">Strategy used to run the post-rendering stage: the rendered content from the rendering stage is wrapped in the document structure offered by the post-renderer. Additionally, the post-renderer provides the output resources that can be saved to file.</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
@@ -122,22 +122,7 @@
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
-        <div class="table"><a data-name="1954761950%2FFunctions%2F1831116724" anchor-label="createTemplateProcessor" id="1954761950%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
-          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="create-template-processor.html"><span>create</span><wbr><span>Template</span><wbr><span><span>Processor</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1954761950%2FFunctions%2F1831116724"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="create-template-processor.html"><span class="token function">createTemplateProcessor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a></div><div class="brief "><p class="paragraph">Creates a new instance of a template processor for this rendering strategy. A template adds static content to the output code, and supports injection of values via placeholder keys, like a template file. For example, an HTML wrapper may add <code class="lang-kotlin">&lt;html&gt;&lt;head&gt;...&lt;/head&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;</code>, with the content injected in <code class="lang-kotlin">body</code>. See <code class="lang-kotlin">resources/render/html-wrapper.html.template</code> for an HTML template.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1591623340%2FFunctions%2F1831116724" anchor-label="generateResources" id="-1591623340%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+        <div class="table"><a data-name="-1591623340%2FFunctions%2F1831116724" anchor-label="generateResources" id="-1591623340%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
           <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -152,17 +137,17 @@
               </div>
             </div>
           </div>
-<a data-name="-1401035740%2FFunctions%2F1831116724" anchor-label="wrap" id="-1401035740%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
+<a data-name="323243464%2FFunctions%2F1831116724" anchor-label="wrap" id="323243464%2FFunctions%2F1831116724" data-filterable-set=":quarkdown-core/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../wrap.html"><span><span>wrap</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1401035740%2FFunctions%2F1831116724"></span>
+                  <div><a href="wrap.html"><span><span>wrap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="323243464%2FFunctions%2F1831116724"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">PostRenderer</a><span class="token punctuation">.</span><a href="../wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div><div class="brief "><p class="paragraph">Wraps rendered code in a template.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="wrap.html"><span class="token function">wrap</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></div><div class="brief "><p class="paragraph">Wraps rendered content in the full document structure for this rendering strategy. For example, an HTML post-renderer wraps content in <code class="lang-kotlin">&lt;html&gt;&lt;head&gt;...&lt;/head&gt;&lt;body&gt;...&lt;/body&gt;&lt;/html&gt;</code>.</p></div></div></div>
                 </div>
               </div>
             </div>
