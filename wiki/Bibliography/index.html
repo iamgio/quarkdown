@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="en">
-<head>
+  <head>
     <meta name="generator" content="Quarkdown">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,74 +9,50 @@
     <title>Bibliography</title>
     <script src="../script/quarkdown.js"></script>
     <script>const capabilities = window.quarkdownCapabilities</script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../theme/theme.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../theme/theme.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
     <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <link href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css" rel="stylesheet">
     <script>capabilities.code = true;</script>
-
     <style>
 
-        body {
-        }
+body {
+}
 
-        .page-break {
-            break-before: always;
-        }
+body.quarkdown-plain.quarkdown-plain,
+body.quarkdown-docs.quarkdown-docs {
+}
 
-        .quarkdown-plain .page-break {
-            break-before: avoid;
-            break-after: avoid;
-        }
+body.quarkdown-slides.quarkdown-slides .reveal {
+}
 
-        body.quarkdown-plain.quarkdown-plain,
-        body.quarkdown-docs.quarkmarkdown-docs {
-        }
+@page {
+    size: auto auto;}
 
-        body.quarkdown-slides.quarkdown-slides .reveal {
-        }
-
-        @page {
-            size: auto auto;
-        }
-
-        p {
-        }
-    </style>
-    <script>
-        const doc = new DocsDocument();
-        prepare(doc);
-    </script>
-    <template id="sidebar-template">
-        <nav class="sidebar" role="doc-toc">
-            <ol><li data-target-id="citations" data-depth="2"><a href="#citations">Citations</a></li><li data-target-id="style" data-depth="2"><a href="#style">Style</a></li><li data-target-id="title" data-depth="2"><a href="#title">Title</a></li></ol>
-        </nav>
-    </template>
-</head>
-<body class="quarkdown quarkdown-docs">
-<header>
-    <aside class="margin-area"></aside>
-    <main>
+p {
+}</style>
+    <script>prepare(new DocsDocument());</script>
+<template id="sidebar-template"><nav class="sidebar" role="doc-toc"><ol><li data-target-id="citations" data-depth="2"><a href="#citations">Citations</a></li><li data-target-id="style" data-depth="2"><a href="#style">Style</a></li><li data-target-id="title" data-depth="2"><a href="#title">Title</a></li></ol></nav>
+</template>  </head>
+  <body class="quarkdown quarkdown-docs">
+    <header>
+      <aside class="margin-area"></aside>
+      <main>
         <div class="search-wrapper">
-            <div class="search-field">
-                <i class='bi bi-search'></i>
-                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
-                <kbd>/</kbd>
-            </div>
+          <div class="search-field"><i class="bi bi-search"></i><input type="text" id="search-input" placeholder="Search" autocomplete="off"><kbd>/</kbd></div>
         </div>
-    </main>
-    <aside class="margin-area"></aside>
-</header>
-<div class="content-wrapper">
-    <aside id="margin-area-left" class="margin-area">
+      </main>
+      <aside class="margin-area"></aside>
+    </header>
+    <div class="content-wrapper">
+      <aside class="margin-area" id="margin-area-left">
         <div class="position-top"></div>
         <div class="position-middle"></div>
         <div class="position-bottom"></div>
-    </aside>
-    <main>
-        <style data-hidden="">.page-margin-top-left a {
+      </aside>
+      <main><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7ff9d84e763543269faa5a5ae685ef9d"}'></script><style data-hidden="">.page-margin-top-left a {
     display: flex !important;
 }
 
@@ -119,19 +94,21 @@ Similarly, Hawking&#39;s book .cite {hawking} has had a profound impact
 on our understanding of cosmology and black holes.</code></pre><div class="container fullwidth quarkdown-output"><p>Einstein&rsquo;s publication [1] in 1905 revolutionized the field of physics.
 Similarly, Hawking&rsquo;s book [2] has had a profound impact
 on our understanding of cosmology and black holes.</p></div></div></div><h2 id="style">Style</h2><p>The optional <span class="codespan-content"><code>style</code></span> parameter configures the look and format of the bibliography and its citation references. Styles are directly inspired by LaTeX, and you can find comprehensive comparisons <a href="https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles">here</a>.</p><p>The currently supported styles are:</p><ul><li><p><strong><span class="codespan-content"><code>plain</code></span></strong> (default)</p><figure><img src="media/style-plain@482241427.png" alt="plain style" style="width: 600.0px;" /></figure></li><li><p><strong><span class="codespan-content"><code>ieeetr</code></span></strong></p><figure><img src="media/style-ieeetr@-1765681271.png" alt="ieeetr style" style="width: 600.0px;" /></figure></li></ul><ul><li><strong><span class="codespan-content"><code>acm</code></span></strong><figure><img src="media/style-acm@-618546670.png" alt="acm style" style="width: 600.0px;" /></figure></li></ul><h2 id="title">Title</h2><p>By default, the title is <a href="../Localization">localized</a> to the current locale set via <span class="codespan-content"><code>.doclang</code></span>, if supported. You can set a custom title using the <span class="codespan-content"><code>title</code></span> parameter.</p><div class="box tip"><header><h4>Example 3</h4></header><div class="box-content"><pre><code class="language-markdown nohljsln">.bibliography {Bibliography/file.bib} title:{My bibliography}</code></pre><div class="container fullwidth quarkdown-output"><div class="page-break" data-hidden=""></div><h1 id="my-bibliography">My bibliography</h1><div class="bibliography bibliography-plain"><span class="bibliography-entry-label">[1]</span><span class="bibliography-entry-content">Albert Einstein. Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]. <em>Annalen der Physik</em>, 322(10):891–921, 1905.</span><span class="bibliography-entry-label">[2]</span><span class="bibliography-entry-content">Stephen Hawking. <em>A Brief History of Time</em>. Bantam Books, 1988.</span><span class="bibliography-entry-label">[3]</span><span class="bibliography-entry-content">Michel Goossens, Frank Mittelbach, and Alexander Samarin. <em>The LaTeX Companion</em>. Addison-Wesley, Reading, Massachusetts, 1993.</span></div></div></div></div><p>Depending on the current <a href="../Page-break#automatic-break">auto page break</a> configuration, the title may cause a page break. You can prevent page breaks by turning the title into a <a href="../Numbering#decorative-headings">decorative heading</a> using the <span class="codespan-content"><code>decorativetitle</code></span> parameter:</p><pre><code class="language-markdown">.bibliography {file.bib} title:{My bibliography} decorativetitle:{yes}</code></pre>
-        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="footnote-area">
+          <div class="footnote-rule"></div>
+        </div>
         <div id="sibling-pages-button-area"></div>
         <footer>
-            <div class="position-left"></div>
-            <div class="position-center"></div>
-            <div class="position-right"></div>
+          <div class="position-left"></div>
+          <div class="position-center"></div>
+          <div class="position-right"></div>
         </footer>
-    </main>
-    <aside id="margin-area-right" class="margin-area">
+      </main>
+      <aside class="margin-area" id="margin-area-right">
         <div class="position-top"></div>
         <div class="position-middle"></div>
         <div class="position-bottom"></div>
-    </aside>
-</div>
-</body>
+      </aside>
+    </div>
+  </body>
 </html>

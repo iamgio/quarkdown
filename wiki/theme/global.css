@@ -239,6 +239,16 @@ body.quarkdown.quarkdown-paged .pagedjs_area {
   --qd-horizontal-alignment-local: start;
 }
 
+.page-break {
+  break-before: always;
+}
+
+.quarkdown-plain .page-break,
+.quarkdown-docs .page-break {
+  break-before: avoid;
+  break-after: avoid;
+}
+
 .quarkdown.multicolumn .full-column-span, .quarkdown.multicolumn h1, .quarkdown.multicolumn h2, .quarkdown.multicolumn h3, .quarkdown.multicolumn nav {
   column-span: all;
 }

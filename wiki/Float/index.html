@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!--suppress ALL -->
 <html lang="en">
-<head>
+  <head>
     <meta name="generator" content="Quarkdown">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,74 +9,50 @@
     <title>Float</title>
     <script src="../script/quarkdown.js"></script>
     <script>const capabilities = window.quarkdownCapabilities</script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../theme/theme.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../theme/theme.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
     <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <link href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css" rel="stylesheet">
     <script>capabilities.code = true;</script>
-
     <style>
 
-        body {
-        }
+body {
+}
 
-        .page-break {
-            break-before: always;
-        }
+body.quarkdown-plain.quarkdown-plain,
+body.quarkdown-docs.quarkdown-docs {
+}
 
-        .quarkdown-plain .page-break {
-            break-before: avoid;
-            break-after: avoid;
-        }
+body.quarkdown-slides.quarkdown-slides .reveal {
+}
 
-        body.quarkdown-plain.quarkdown-plain,
-        body.quarkdown-docs.quarkmarkdown-docs {
-        }
+@page {
+    size: auto auto;}
 
-        body.quarkdown-slides.quarkdown-slides .reveal {
-        }
-
-        @page {
-            size: auto auto;
-        }
-
-        p {
-        }
-    </style>
-    <script>
-        const doc = new DocsDocument();
-        prepare(doc);
-    </script>
-    <template id="sidebar-template">
-        <nav class="sidebar" role="doc-toc">
-            <ol></ol>
-        </nav>
-    </template>
-</head>
-<body class="quarkdown quarkdown-docs">
-<header>
-    <aside class="margin-area"></aside>
-    <main>
+p {
+}</style>
+    <script>prepare(new DocsDocument());</script>
+<template id="sidebar-template"><nav class="sidebar" role="doc-toc"><ol></ol></nav>
+</template>  </head>
+  <body class="quarkdown quarkdown-docs">
+    <header>
+      <aside class="margin-area"></aside>
+      <main>
         <div class="search-wrapper">
-            <div class="search-field">
-                <i class='bi bi-search'></i>
-                <input id="search-input" type="text" placeholder="Search" autocomplete="off">
-                <kbd>/</kbd>
-            </div>
+          <div class="search-field"><i class="bi bi-search"></i><input type="text" id="search-input" placeholder="Search" autocomplete="off"><kbd>/</kbd></div>
         </div>
-    </main>
-    <aside class="margin-area"></aside>
-</header>
-<div class="content-wrapper">
-    <aside id="margin-area-left" class="margin-area">
+      </main>
+      <aside class="margin-area"></aside>
+    </header>
+    <div class="content-wrapper">
+      <aside class="margin-area" id="margin-area-left">
         <div class="position-top"></div>
         <div class="position-middle"></div>
         <div class="position-bottom"></div>
-    </aside>
-    <main>
-        <style data-hidden="">.page-margin-top-left a {
+      </aside>
+      <main><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7ff9d84e763543269faa5a5ae685ef9d"}'></script><style data-hidden="">.page-margin-top-left a {
     display: flex !important;
 }
 
@@ -119,19 +94,21 @@ header .version {
         Floating!
 
 .loremipsum</code></pre><div class="container fullwidth quarkdown-output"><div class="container float" style="float: inline-end;"><div class="box warning"><header><h4>Hello</h4></header><div class="box-content"><p>Floating!</p></div></div></div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquet ut erat nec suscipit. Mauris vitae massa eu leo molestie ullamcorper. Fusce ornare neque quis faucibus laoreet. Pellentesque mauris sapien, pretium sed leo vitae, aliquam suscipit dolor. Aenean egestas congue rutrum. Nunc eget eros eu justo fringilla lobortis efficitur non est. In ultrices lectus ac iaculis cursus. Phasellus at luctus nibh, non porttitor ex. Vestibulum ligula metus, dignissim ac nisi non, tristique hendrerit purus.</p></div></div></div>
-        <div id="footnote-area"><div class="footnote-rule"></div></div>
+        <div id="footnote-area">
+          <div class="footnote-rule"></div>
+        </div>
         <div id="sibling-pages-button-area"></div>
         <footer>
-            <div class="position-left"></div>
-            <div class="position-center"></div>
-            <div class="position-right"></div>
+          <div class="position-left"></div>
+          <div class="position-center"></div>
+          <div class="position-right"></div>
         </footer>
-    </main>
-    <aside id="margin-area-right" class="margin-area">
+      </main>
+      <aside class="margin-area" id="margin-area-right">
         <div class="position-top"></div>
         <div class="position-middle"></div>
         <div class="position-bottom"></div>
-    </aside>
-</div>
-</body>
+      </aside>
+    </div>
+  </body>
 </html>
