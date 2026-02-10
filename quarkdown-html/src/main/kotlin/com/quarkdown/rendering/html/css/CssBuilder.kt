@@ -3,7 +3,11 @@ package com.quarkdown.rendering.html.css
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 
 /**
- * A builder of inline CSS rules.
+ * A builder of CSS declarations (property-value pairs), with null-safe insertion.
+ *
+ * Supports two output formats:
+ * - [build] produces a single-line inline style (e.g. for the `style` HTML attribute).
+ * - [buildBlock] produces an indented, multi-line block (e.g. for a stylesheet rule body).
  */
 class CssBuilder {
     /**
@@ -48,9 +52,28 @@ class CssBuilder {
     infix fun String.value(value: RenderRepresentable?) = entry(this, value)
 
     /**
-     * @return a string representation of the CSS entries contained within this builder
+     * Like [value], but appends `!important` to the declaration.
+     * @see value
+     */
+    infix fun String.importantValue(value: String?) = entry(this, value?.let { "$it !important" })
+
+    /**
+     * Like [value], but appends `!important` to the declaration.
+     * @see value
+     */
+    infix fun String.importantValue(value: RenderRepresentable?) = importantValue(value?.asCSS)
+
+    /**
+     * @return a single-line string representation of the CSS entries, suitable for inline styles
      */
     fun build() = entries.entries.joinToString(separator = " ") { "${it.key}: ${it.value};" }
+
+    /**
+     * @return an indented, multi-line string representation of the CSS entries,
+     *         suitable for a rule body in a stylesheet block
+     */
+    fun buildBlock(indent: String = "    ") =
+        entries.entries.joinToString(separator = "\n") { "$indent${it.key}: ${it.value};" }
 }
 
 /**

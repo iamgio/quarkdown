@@ -10,8 +10,6 @@ import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.pipeline.output.visitor.copy
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.rendering.template.TemplatePlaceholders
-import com.quarkdown.core.template.TemplateProcessor
 
 /**
  * Post-renderer that generates plain-text output artifacts.
@@ -25,7 +23,7 @@ class PlainTextPostRenderer(
     override val preferredMediaStorageOptions: MediaStorageOptions
         get() = ReadOnlyMediaStorageOptions()
 
-    override fun createTemplateProcessor(): TemplateProcessor = TemplateProcessor("[[${TemplatePlaceholders.CONTENT}]]")
+    override fun wrap(content: CharSequence): CharSequence = content
 
     override fun generateResources(rendered: CharSequence): Set<OutputResource> =
         setOf(

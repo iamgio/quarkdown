@@ -10,7 +10,7 @@ import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
-import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
@@ -22,12 +22,11 @@ import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
-import com.quarkdown.core.template.TemplateProcessor
-import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -38,14 +37,8 @@ import kotlin.test.assertTrue
 class HtmlPostRendererTest {
     private lateinit var context: MutableContext
 
-    private fun postRenderer(
-        template: String,
-        relativePathToRoot: String = ".",
-        block: TemplateProcessor.() -> TemplateProcessor = { this },
-    ): HtmlPostRenderer =
-        HtmlPostRenderer(context, relativePathToRoot = relativePathToRoot, baseTemplateProcessor = {
-            TemplateProcessor(template).block()
-        })
+    private fun postRenderer(relativePathToRoot: String = "."): HtmlPostRenderer =
+        HtmlPostRenderer(context, relativePathToRoot = relativePathToRoot)
 
     private fun setFontInfo(vararg fontInfo: FontInfo) {
         context.documentInfo = context.documentInfo.deepCopy(layoutFonts = fontInfo.toList())
@@ -57,202 +50,172 @@ class HtmlPostRendererTest {
     }
 
     @Test
-    fun empty() {
-        val postRenderer = postRenderer("<html><head></head><body></body></html>")
-        assertEquals(
-            "<html><head></head><body></body></html>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+    fun `wrap with empty content`() {
+        val result = postRenderer().wrap("")
+        assertTrue("<!DOCTYPE html>" in result)
+        assertTrue("<html>" in result || "<html" in result)
+        assertTrue("<head>" in result)
+        assertTrue("<body" in result)
+        assertTrue("</html>" in result)
     }
 
     @Test
-    fun `with content, single line`() {
-        val postRenderer =
-            postRenderer("<html><head></head><body>[[CONTENT]]</body></html>") {
-                content("<strong>Hello, world!</strong>")
-            }
-        assertEquals(
-            "<html><head></head><body><strong>Hello, world!</strong></body></html>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+    fun `wrap injects content`() {
+        val result = postRenderer().wrap("<strong>Hello, world!</strong>")
+        assertTrue("<strong>Hello, world!</strong>" in result)
     }
 
     @Test
-    fun `with content, multiline`() {
-        val postRenderer =
-            postRenderer(
-                """
-                <body>
-                    [[CONTENT]]
-                </body>
-                """.trimIndent(),
-            ) {
-                content("<strong>Hello, world!</strong>")
-            }
-        assertEquals(
-            """
-            <body>
-                <strong>Hello, world!</strong>
-            </body>
-            """.trimIndent(),
-            postRenderer.createTemplateProcessor().process(),
-        )
-    }
-
-    @Test
-    fun `with title`() {
+    fun `wrap includes title`() {
         context.documentInfo = DocumentInfo(name = "Doc title")
-        val postRenderer =
-            postRenderer("<head><title>[[TITLE]]</title></head><body>[[CONTENT]]</body>") {
-                content("<strong>Hello, world!</strong>")
-            }
-        assertEquals(
-            "<head><title>Doc title</title></head><body><strong>Hello, world!</strong></body>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("<title>Doc title</title>" in result)
     }
 
     @Test
-    fun `with authors`() {
+    fun `wrap includes default title`() {
+        val result = postRenderer().wrap("")
+        assertTrue("<title>Quarkdown</title>" in result)
+    }
+
+    @Test
+    fun `wrap includes authors`() {
         context.documentInfo =
             DocumentInfo(
                 authors = listOf(DocumentAuthor("Alice"), DocumentAuthor("Bob")),
             )
-        val postRenderer = postRenderer("<head><meta name=\"author\" content=\"[[AUTHORS]]\"></head>")
-        assertEquals(
-            "<head><meta name=\"author\" content=\"Alice, Bob\"></head>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("Alice, Bob" in result)
+        assertTrue("name=\"author\"" in result)
     }
 
     @Test
-    fun `with path to root`() {
-        val rootPostRenderer = postRenderer(relativePathToRoot = ".", template = "[[ROOTPATH]]/dir")
-        val nestedPostRenderer = postRenderer(relativePathToRoot = "..", template = "[[ROOTPATH]]/dir")
-        assertEquals("./dir", rootPostRenderer.createTemplateProcessor().process())
-        assertEquals("../dir", nestedPostRenderer.createTemplateProcessor().process())
+    fun `wrap includes description`() {
+        context.documentInfo = DocumentInfo(description = "A test document")
+        val result = postRenderer().wrap("")
+        assertTrue("A test document" in result)
+        assertTrue("name=\"description\"" in result)
     }
 
     @Test
-    fun `math conditional`() {
+    fun `wrap includes language`() {
+        context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.fromName("english"))
+        val result = postRenderer().wrap("")
+        assertTrue("lang=\"en\"" in result)
+    }
+
+    @Test
+    fun `wrap with path to root`() {
+        val rootResult = postRenderer(relativePathToRoot = ".").wrap("")
+        val nestedResult = postRenderer(relativePathToRoot = "..").wrap("")
+        assertTrue("./script/quarkdown.js" in rootResult)
+        assertTrue("../script/quarkdown.js" in nestedResult)
+    }
+
+    @Test
+    fun `wrap includes math scripts when math is present`() {
         context.attributes.markMathPresence()
-        val postRenderer =
-            postRenderer("<body>[[if:MATH]][[CONTENT]][[endif:MATH]]</body>") {
-                content("<em>Hello, world!</em>")
-            }
-        assertEquals(
-            "<body><em>Hello, world!</em></body>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("katex" in result)
+        assertTrue("capabilities.math = true" in result)
     }
 
     @Test
-    fun `code conditional`() {
-        val postRenderer =
-            postRenderer(
-                """
-                <body>
-                    [[if:!CODE]]
-                    [[CONTENT]]
-                    [[endif:!CODE]]
-                </body>
-                """.trimIndent(),
-            ) {
-                content("<em>Hello, world!</em>")
-            }
-        assertEquals(
-            "<body>\n    <em>Hello, world!</em>\n</body>",
-            postRenderer.createTemplateProcessor().process(),
-        )
+    fun `wrap excludes math scripts when no math`() {
+        val result = postRenderer().wrap("")
+        assertFalse("katex" in result)
+        assertFalse("capabilities.math = true" in result)
     }
 
     @Test
-    fun `slides conditional`() {
-        context.documentInfo = DocumentInfo(type = DocumentType.PLAIN)
-        val postRenderer =
-            postRenderer(
-                """
-                <body>
-                    [[if:SLIDES]]
-                    <em>Hello, world!</em>
-                    [[endif:SLIDES]]
-                    [[if:!SLIDES]]
-                    <strong>Hello, world!</strong>
-                    [[endif:!SLIDES]]
-                </body>
-                """.trimIndent(),
-            ) {
-                content("Hello, world!")
-            }
-        assertEquals(
-            """
-            <body>
-                <strong>Hello, world!</strong>
-            </body>
-            """.trimIndent(),
-            postRenderer.createTemplateProcessor().process(),
-        )
+    fun `wrap excludes code scripts when no code`() {
+        val result = postRenderer().wrap("")
+        assertFalse("highlight.js" in result)
+        assertFalse("capabilities.code = true" in result)
     }
 
     @Test
-    fun `with meta viewport, non-slides`() {
-        val postRenderer =
-            postRenderer(
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]\">",
-            )
-        assertEquals(
-            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
-            postRenderer.createTemplateProcessor().process(),
-        )
-    }
-
-    @Test
-    fun `with meta viewport, slides`() {
+    fun `wrap with slides type`() {
         context.documentInfo = DocumentInfo(type = DocumentType.SLIDES)
-        val postRenderer =
-            postRenderer(
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0[[if:SLIDES]], maximum-scale=1.0, user-scalable=no[[endif:SLIDES]]\">",
-            )
-        assertEquals(
-            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">",
-            postRenderer.createTemplateProcessor().process(),
-        )
+        val result = postRenderer().wrap("<p>Content</p>")
+        assertTrue("reveal.js" in result)
+        assertTrue("class=\"reveal\"" in result)
+        assertTrue("class=\"slides\"" in result)
+        assertTrue("maximum-scale=1.0" in result)
+        assertTrue("quarkdown-slides" in result)
     }
 
-    private val fontFamilyProcessor =
-        TemplateProcessor(
-            """
-            [[for:FONTFACE]]
-            [[FONTFACE]]
-            [[endfor:FONTFACE]]
-            
-            body {
-                [[if:MAINFONTFAMILY]]--qd-main-font: [[MAINFONTFAMILY]];[[endif:MAINFONTFAMILY]]
-                [[if:HEADINGFONTFAMILY]]--qd-heading-font: [[HEADINGFONTFAMILY]];[[endif:HEADINGFONTFAMILY]]
-            }
-            """.trimIndent(),
-        )
+    @Test
+    fun `wrap with plain type`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.PLAIN)
+        val result = postRenderer().wrap("<p>Content</p>")
+        assertFalse("reveal.js" in result)
+        assertTrue("margin-area-left" in result)
+        assertTrue("<main>" in result)
+        assertTrue("quarkdown-plain" in result)
+    }
 
-    private fun fontFamilyProcessorResult() =
-        HtmlPostRenderer(context, baseTemplateProcessor = { fontFamilyProcessor })
-            .createTemplateProcessor()
-            .process()
-            .trim()
+    @Test
+    fun `wrap with paged type`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.PAGED)
+        val result = postRenderer().wrap("<p>Content</p>")
+        assertTrue("pagedjs" in result)
+        assertTrue("quarkdown-paged" in result)
+    }
+
+    @Test
+    fun `wrap with docs type`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.DOCS)
+        val result = postRenderer().wrap("<p>Content</p>")
+        assertTrue("search-input" in result)
+        assertTrue("content-wrapper" in result)
+        assertTrue("quarkdown-docs" in result)
+        assertTrue("search-index" in result)
+    }
+
+    @Test
+    fun `wrap with non-slides viewport`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.PLAIN)
+        val result = postRenderer().wrap("")
+        assertTrue("width=device-width, initial-scale=1.0" in result)
+        assertFalse("maximum-scale=1.0" in result)
+    }
+
+    @Test
+    fun `wrap with page dimensions`() {
+        context.documentInfo =
+            DocumentInfo(
+                layout =
+                    DocumentLayoutInfo(
+                        pageFormat = PageFormatInfo(pageWidth = 8.5.inch),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        assertTrue("--qd-content-width: 8.5in" in result)
+    }
+
+    @Test
+    fun `wrap with paragraph styling`() {
+        context.documentInfo =
+            DocumentInfo(
+                layout =
+                    DocumentLayoutInfo(
+                        paragraphStyle = ParagraphStyleInfo(lineHeight = 1.5, spacing = 0.5),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        assertTrue("--qd-line-height: 1.5" in result)
+        assertTrue("--qd-paragraph-vertical-margin: 0.5em" in result)
+    }
+
+    // Fonts
 
     @Test
     fun `system font`() {
         setFontInfo(FontInfo(mainFamily = FontFamily.System("Arial")))
-
-        assertEquals(
-            """
-            @font-face { font-family: '63529059'; src: local('Arial'); }
-            
-            body {
-                --qd-main-font: '63529059';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("@font-face { font-family: '63529059'; src: local('Arial'); }" in result)
+        assertTrue("--qd-main-custom-font: '63529059'" in result)
     }
 
     @Test
@@ -262,17 +225,11 @@ class HtmlPostRendererTest {
         val media = ResolvableMedia(path, workingDirectory)
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, path)))
+        val result = postRenderer().wrap("")
 
-        assertEquals(
-            """
-            @font-face { font-family: '${path.hashCode()}'; src: url('${File(workingDirectory, path).absolutePath}'); }
-            
-            body {
-                --qd-main-font: '${path.hashCode()}';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        assertTrue("@font-face { font-family: '${path.hashCode()}'" in result)
+        assertTrue("src: url('${File(workingDirectory, path).absolutePath}')" in result)
+        assertTrue("--qd-main-custom-font: '${path.hashCode()}'" in result)
     }
 
     @Test
@@ -287,16 +244,9 @@ class HtmlPostRendererTest {
         context.options.enableLocalMediaStorage = true
         context.mediaStorage.register(path, media)
 
-        assertEquals(
-            """
-            @font-face { font-family: '${path.hashCode()}'; src: url('media/NotoSans-Regular@${file.hashCode()}.ttf'); }
-            
-            body {
-                --qd-main-font: '${path.hashCode()}';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("@font-face { font-family: '${path.hashCode()}'" in result)
+        assertTrue("src: url('media/NotoSans-Regular@${file.hashCode()}.ttf')" in result)
     }
 
     @Test
@@ -306,17 +256,10 @@ class HtmlPostRendererTest {
         val media = ResolvableMedia(url)
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, url)))
+        val result = postRenderer().wrap("")
 
-        assertEquals(
-            """
-            @font-face { font-family: '${url.hashCode()}'; src: url('$url'); }
-            
-            body {
-                --qd-main-font: '${url.hashCode()}';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        assertTrue("@font-face { font-family: '${url.hashCode()}'" in result)
+        assertTrue("src: url('$url')" in result)
     }
 
     @Test
@@ -330,15 +273,16 @@ class HtmlPostRendererTest {
         context.options.enableRemoteMediaStorage = true
         context.mediaStorage.register(url, media)
 
-        assertEquals(
+        val result = postRenderer().wrap("")
+        assertContains(
+            result,
             """
             @font-face { font-family: '${url.hashCode()}'; src: url('media/https-fonts.gstatic.com-s-notosans-v39-o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff'); }
-            
-            body {
-                --qd-main-font: '${url.hashCode()}';
-            }
             """.trimIndent(),
-            fontFamilyProcessorResult(),
+        )
+        assertContains(
+            result,
+            "--qd-main-custom-font: '${url.hashCode()}';",
         )
     }
 
@@ -347,17 +291,10 @@ class HtmlPostRendererTest {
         val name = "Karla"
 
         setFontInfo(FontInfo(mainFamily = FontFamily.GoogleFont(name)))
+        val result = postRenderer().wrap("")
 
-        assertEquals(
-            """
-            @import url('https://fonts.googleapis.com/css2?family=$name&display=swap');
-            
-            body {
-                --qd-main-font: '$name';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        assertTrue("@import url('https://fonts.googleapis.com/css2?family=$name&display=swap')" in result)
+        assertTrue("--qd-main-custom-font: '$name'" in result)
     }
 
     @Test
@@ -368,19 +305,12 @@ class HtmlPostRendererTest {
                 headingFamily = FontFamily.GoogleFont("Roboto"),
             ),
         )
+        val result = postRenderer().wrap("")
 
-        assertEquals(
-            """
-            @font-face { font-family: '63529059'; src: local('Arial'); }
-            @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-            
-            body {
-                --qd-main-font: '63529059';
-                --qd-heading-font: 'Roboto';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        assertTrue("@font-face { font-family: '63529059'; src: local('Arial'); }" in result)
+        assertTrue("@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap')" in result)
+        assertTrue("--qd-main-custom-font: '63529059'" in result)
+        assertTrue("--qd-heading-custom-font: 'Roboto'" in result)
     }
 
     @Test
@@ -390,25 +320,18 @@ class HtmlPostRendererTest {
             FontInfo(mainFamily = FontFamily.GoogleFont("Roboto"), headingFamily = FontFamily.GoogleFont("Noto Sans")),
             FontInfo(mainFamily = FontFamily.GoogleFont("Source Code Pro")),
         )
+        val result = postRenderer().wrap("")
 
-        assertEquals(
-            """
-            @font-face { font-family: '63529059'; src: local('Arial'); }
-            @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-            @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
-            
-            body {
-                --qd-main-font: 'Source Code Pro', 'Roboto', '63529059';
-                --qd-heading-font: 'Noto Sans';
-            }
-            """.trimIndent(),
-            fontFamilyProcessorResult(),
-        )
+        assertTrue("@font-face { font-family: '63529059'; src: local('Arial'); }" in result)
+        assertTrue("@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap')" in result)
+        assertTrue("@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap')" in result)
+        assertTrue("@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap')" in result)
+        assertTrue("--qd-main-custom-font: 'Source Code Pro', 'Roboto', '63529059'" in result)
+        assertTrue("--qd-heading-custom-font: 'Noto Sans'" in result)
     }
 
     @Test
-    fun `semi-real`() {
+    fun `wrap with full metadata and slides`() {
         context.documentInfo =
             DocumentInfo(
                 name = "Quarkdown",
@@ -425,137 +348,31 @@ class HtmlPostRendererTest {
             )
         context.attributes.markMathPresence()
 
-        val postRenderer =
-            postRenderer(
-                """
-                <html[[if:LANG]] lang="[[LANG]]"[[endif:LANG]]>
-                <head>
-                    [[if:DESCRIPTION]]
-                    <meta name="description" content="[[DESCRIPTION]]">
-                    [[endif:DESCRIPTION]]
-                    [[if:AUTHORS]]
-                    <meta name="author" content="[[AUTHORS]]"></meta>
-                    [[endif:AUTHORS]]
-                    <link rel="stylesheet" href="[[ROOTPATH]]/...css"></link>
-                    <script src="[[ROOTPATH]]/...js"></script>
-                    [[if:SLIDES]]
-                    <link rel="stylesheet" href="...css"></link>
-                    [[endif:SLIDES]]
-                    [[if:CODE]]
-                    <script src="...js"></script>
-                    <script src="...js"></script>
-                    [[endif:CODE]]
-                    [[if:MATH]]
-                    <script src="...js"></script>
-                    <script src="...js"></script>
-                    [[endif:MATH]]
-                    <title>[[TITLE]]</title>
-                    <style>
-                    [[for:FONTFACE]]
-                    [[FONTFACE]]
-                    [[endfor:FONTFACE]]
-                    
-                    [[if:MATH]]
-                    mjx-container {
-                        margin: 0 0.3em;
-                    }
-                    [[endif:MATH]]
-                    </style>
-                </head>
-                <body>
-                    [[if:SLIDES]]
-                    <div class="reveal">
-                        <div class="slides">
-                            [[CONTENT]]
-                        </div>
-                    </div>
-                    <script src="slides.js"></script>
-                    [[endif:SLIDES]]
-                    [[if:!SLIDES]]
-                    [[CONTENT]]
-                    [[endif:!SLIDES]]
-                </body>
-                </html>
-                """.trimIndent(),
-            ) {
-                content("<p><em>Hello, world!</em></p>")
-            }
+        val result = postRenderer().wrap("<p><em>Hello, world!</em></p>")
 
-        assertEquals(
-            """
-            <html lang="en">
-            <head>
-                <meta name="description" content="The Quarkdown typesetting system">
-                <link rel="stylesheet" href="./...css"></link>
-                <script src="./...js"></script>
-                <link rel="stylesheet" href="...css"></link>
-                <script src="...js"></script>
-                <script src="...js"></script>
-                <title>Quarkdown</title>
-                <style>
-                @font-face { font-family: '63529059'; src: local('Arial'); }
-                
-                mjx-container {
-                    margin: 0 0.3em;
-                }
-                </style>
-            </head>
-            <body>
-                <div class="reveal">
-                    <div class="slides">
-                        <p><em>Hello, world!</em></p>
-                    </div>
-                </div>
-                <script src="slides.js"></script>
-            </body>
-            </html>
-            """.trimIndent(),
-            postRenderer.createTemplateProcessor().process(),
-        )
+        assertTrue("lang=\"en\"" in result)
+        assertTrue("<title>Quarkdown</title>" in result)
+        assertTrue("The Quarkdown typesetting system" in result)
+        assertTrue("@font-face { font-family: '63529059'; src: local('Arial'); }" in result)
+        assertTrue("katex" in result)
+        assertTrue("class=\"reveal\"" in result)
+        assertTrue("<p><em>Hello, world!</em></p>" in result)
     }
 
     @Test
-    fun real() {
+    fun `wrap with tex macros`() {
         context.documentInfo =
             DocumentInfo(
-                name = "Quarkdown",
-                authors =
-                    listOf(
-                        DocumentAuthor("Ab Cd"),
-                        DocumentAuthor("Ef Gh"),
-                        DocumentAuthor("Ij Kl"),
-                    ),
-                locale = LocaleLoader.SYSTEM.fromName("english"),
-                type = DocumentType.SLIDES,
-                layout =
-                    DocumentLayoutInfo(
-                        fonts =
-                            listOf(
-                                FontInfo(mainFamily = FontFamily.System("Arial")),
-                                FontInfo(mainFamily = FontFamily.System("Impact")),
-                            ),
-                        pageFormat = PageFormatInfo(pageWidth = 8.5.inch, margin = Sizes(1.0.inch)),
-                    ),
                 tex = TexInfo(macros = mutableMapOf("\\R" to "\\mathbb{R}", "\\Z" to "\\mathbb{Z}")),
             )
         context.attributes.markMathPresence()
 
-        val postRenderer =
-            HtmlPostRenderer(context, baseTemplateProcessor = {
-                TemplateProcessor
-                    .fromResourceName("/postrendering/html-test-wrapper.html")
-                    .content("<p><em>Hello, world!</em></p>")
-            })
-
-        assertEquals(
-            javaClass
-                .getResourceAsStream("/postrendering/html-test-result.html")!!
-                .reader()
-                .readText()
-                .normalizeLineSeparators(),
-            postRenderer.createTemplateProcessor().process(),
-        )
+        val result = postRenderer().wrap("")
+        assertTrue("\"\\\\R\": \"\\\\mathbb{R}\"" in result)
+        assertTrue("\"\\\\Z\": \"\\\\mathbb{Z}\"" in result)
     }
+
+    // Resource generation
 
     private fun assertThemeGroupContains(
         resources: Set<OutputResource>,

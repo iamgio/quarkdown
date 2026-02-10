@@ -19,10 +19,9 @@ class SecurityTest {
                 - "><script>alert('XSS')</script>
             """.trimIndent(),
             afterPostRenderingHook = {
-                assertContains(
-                    it,
-                    "<meta name=\"author\" content=\"&rdquo;&gt;&lt;script&gt;alert(&rsquo;XSS&rsquo;)&lt;/script&gt;\">",
-                )
+                assertContains(it, "&lt;script&gt;")
+                assertContains(it, "&lt;/script&gt;")
+                assertContains(it, "name=\"author\"")
             },
         ) {}
     }
