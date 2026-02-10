@@ -4,6 +4,7 @@
 .numbering
     - example: 1
 
+.html {.read {assets/analytics.html}}
 .css {.read {assets/style.css}}
 
 .function {repolink}
