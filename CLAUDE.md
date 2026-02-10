@@ -195,6 +195,10 @@ Quarkdown allows for a layout theme and a color theme to be selected independent
 - `layout/*.css`: layout styles
 - `color/*.css`: theme styles
 
+## Server
+
+[quarkdown-server](quarkdown-server) is a Ktor-based web server that serves the HTML rendering and allows PDF generation via Puppeteer. The `/preview/<path>` endpoint, used in combination with the CLI's `--preview` and `--watch` options, serves the HTML through a double iframe buffer, allowing for live preview during editing.
+
 ## Testing
 
 The project has high test coverage, with three types of tests:
