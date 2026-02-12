@@ -8,4 +8,4 @@ Endpoints:
 - `/live/[file]` for wrapping HTML files with live preview capabilities;
 - `/reload` for WebSocket connections to notify clients of file changes.
 
-For architectural details, see [Inside Quarkdown - How does live preview work?](https://github.com/iamgio/quarkdown/wiki/inside-live-preview).
+For architectural details, see [Inside Quarkdown - How does live preview work?](https://quarkdown.com/wiki/inside-live-preview).

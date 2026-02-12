@@ -23,7 +23,7 @@ class NodeModuleNotInstalledException(
         and it must be available at Quarkdown's launch. The current value is '${Env.npmPrefix}'. Note that '/node_modules' is automatically appended
         to this path, so if your system has modules installed in '/usr/lib/node_modules', use '/usr/lib'.
         
-        For more information, see: https://github.com/iamgio/quarkdown/wiki/pdf-export
+        For more information, see: https://quarkdown.com/wiki/pdf-export
         
         Note: installing Quarkdown via a package manager is suggested, as it sets up the required dependencies automatically.
         """.trimIndent(),

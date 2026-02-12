@@ -2,7 +2,7 @@
 [Issue]: https://github.com/iamgio/quarkdown/issues
 [Discussions]: https://github.com/iamgio/quarkdown/discussions
 [Discussion]: https://github.com/iamgio/quarkdown/discussions
-[wiki]: https://github.com/iamgio/quarkdown/wiki
+[wiki]: https://quarkdown.com/wiki
 [documentation]: https://quarkdown.com/docs
 [standard library]: https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib
 
@@ -118,7 +118,7 @@ The following list shows contributions that are highly welcome, in order of impo
 
 ### Understanding the architecture
 
-The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](https://github.com/iamgio/quarkdown/wiki/pipeline).
+The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](https://quarkdown.com/wiki/pipeline).
 However, contributions to Quarkdown's core are not the priority at the moment.
 
 

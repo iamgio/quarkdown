@@ -14,7 +14,7 @@ private const val TAG_NAME = "wiki"
 /**
  * The root URL of the Quarkdown wiki to link to.
  */
-const val WIKI_ROOT = "https://github.com/iamgio/quarkdown/wiki/"
+const val WIKI_ROOT = "https://quarkdown.com/wiki/"
 
 /**
  * Transformer that generates a new section for the `@wiki` documentation tag of a function,
