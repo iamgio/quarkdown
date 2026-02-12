@@ -3,19 +3,18 @@ package com.quarkdown.cli.creator.template
 import com.quarkdown.core.template.TemplateProcessor
 
 /**
- * Factory that creates a [TemplateProcessor] that helps generate the main file of a new Quarkdown project.
+ * Factory that creates one or multiple [TemplateProcessor]s that generate files of a new Quarkdown project.
  * @see TemplateProcessor
  */
 interface ProjectCreatorTemplateProcessorFactory {
     /**
-     * The name of the file to be created from this template processor, without extension.
-     * If `null`, it defaults to the main file.
-     */
-    val targetFileName: String?
-        get() = null
-
-    /**
-     * @return the [TemplateProcessor] that processes the main file of a new Quarkdown project
+     * @return the [TemplateProcessor] that processes a file of a new Quarkdown project
      */
     fun create(): TemplateProcessor
+
+    /**
+     * @return a mapping of file names to [TemplateProcessor]s that process files of a new Quarkdown project.
+     * The file name `null` is reserved for the main file
+     */
+    fun createFilenameMappings(): Map<String?, TemplateProcessor> = mapOf(null to create())
 }

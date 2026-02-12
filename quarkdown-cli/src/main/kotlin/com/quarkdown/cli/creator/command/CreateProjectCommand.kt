@@ -144,6 +144,6 @@ class CreateProjectCommand : CliktCommand("create") {
         directory.mkdirs()
         creator.createResources().forEach { it.saveTo(directory) }
 
-        Log.info("Project created in ${directory.canonicalPath}")
+        Log.info("Project created into ${directory.canonicalPath}")
     }
 }

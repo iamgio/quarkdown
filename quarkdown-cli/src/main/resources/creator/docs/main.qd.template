@@ -1,0 +1,4 @@
+[[if:NAME]].docname {[[NAME]]}[[endif:NAME]]
+.include {docs}
+
+[[if:INITIALCONTENT]][[INITIALCONTENT]][[endif:INITIALCONTENT]]

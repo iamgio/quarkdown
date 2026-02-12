@@ -1,6 +1,8 @@
-[[if:NAME]]# [[NAME]][[endif:NAME]]
+[[if:!DOCS]][[if:NAME]]# [[NAME]][[endif:NAME]][[endif:!DOCS]]
 
 Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the starting point of your document.
+
+[[if:DOCS]]## Compiling[[endif:DOCS]]
 
 - To compile this document, please `cd` to this file's parent directory and run:  
   `quarkdown c [[MAINFILE]].qd`
@@ -8,6 +10,14 @@ Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the startin
 - To enable live preview, run:  
   `quarkdown c [[MAINFILE]].qd -p -w`
 
+[[if:DOCS]]## Wiki[[endif:DOCS]]
+
 For further information and guides, please check out the [official wiki](https://github.com/iamgio/quarkdown/wiki).
 
-!(50%)[Quarkdown](image/logo.png)
+[[if:!DOCS]]!(50%)[Quarkdown](image/logo.png)[[endif:!DOCS]]
+
+[[if:DOCS]]## Structure
+
+- `_setup.qd`: global setup, included in each subdocument.
+- `_nav.qd`: navigation tree, displayed in the sidebar.
+[[endif:DOCS]]

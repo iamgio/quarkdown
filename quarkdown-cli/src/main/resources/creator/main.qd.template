@@ -25,4 +25,9 @@
     .currentpage
 [[endif:PAGECOUNTER]]
 
-[[if:INITIALCONTENT]][[INITIALCONTENT]][[endif:INITIALCONTENT]]
+[[if:DOCS]][[if:NAME]]
+.pagemargin {topleft}
+    [[NAME]]
+[[endif:NAME]][[endif:DOCS]]
+
+[[if:!DOCS]][[if:INITIALCONTENT]][[INITIALCONTENT]][[endif:INITIALCONTENT]][[endif:!DOCS]]
