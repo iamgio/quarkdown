@@ -32,10 +32,10 @@ class ReloadEndpoint {
     private val activeConnections = ConcurrentHashMap<String, Boolean>()
     private val connectionCounter = AtomicInteger(0)
 
-    // Shared flow to broadcast messages to all connected clients with replay capability
-    // This ensures that clients connecting after a message is sent will still receive it
-    // Using a larger replay buffer to ensure all messages are delivered in concurrent scenarios
-    private val messageResponseFlow = MutableSharedFlow<String>(replay = 10, extraBufferCapacity = 10)
+    // Shared flow to broadcast messages to all connected clients.
+    // No replay is needed: a newly connected client already has the latest content,
+    // and replaying stale messages would trigger redundant reloads.
+    private val messageResponseFlow = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 10)
     private val sharedFlow = messageResponseFlow.asSharedFlow()
 
     /**
