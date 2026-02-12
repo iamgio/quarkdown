@@ -96,7 +96,7 @@
   <div class="breadcrumbs"><a href="../../index.html">quarkdown-server</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.server.message</a><span class="delimiter">/</span><span class="current">ServerMessage</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Server</span><wbr><span><span>Message</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ServerMessage</a></div><p class="paragraph">A message sent from the client to the server as a WebSocket.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ServerMessage</a></div><p class="paragraph">A message sent from the client to the server as a WebSocket text frame.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -120,6 +120,25 @@
           </div>
         </div>
       </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1537880447%2FProperties%2F1314577368" anchor-label="content" id="1537880447%2FProperties%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
+          <div class="table-row" data-filterable-current=":quarkdown-server/main" data-filterable-set=":quarkdown-server/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="content.html"><span><span>content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1537880447%2FProperties%2F1314577368"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="content.html">content</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The text content of this message.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div data-togglable="FUNCTION">
         <h2 class="">Functions</h2>
         <div class="table"><a data-name="198843207%2FFunctions%2F1314577368" anchor-label="send" id="198843207%2FFunctions%2F1314577368" data-filterable-set=":quarkdown-server/main"></a>
@@ -132,7 +151,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="send.html"><span class="token function">send</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">session<span class="token operator">: </span><a href="../-server-message-session/index.html">ServerMessageSession</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Asynchronously sends the message to a WebSocket server.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-server/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="send.html"><span class="token function">send</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">session<span class="token operator">: </span><a href="../-server-message-session/index.html">ServerMessageSession</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sends the message to a WebSocket server.</p></div></div></div>
                 </div>
               </div>
             </div>
