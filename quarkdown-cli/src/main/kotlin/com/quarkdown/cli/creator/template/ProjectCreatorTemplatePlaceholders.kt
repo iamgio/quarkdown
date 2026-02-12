@@ -9,6 +9,7 @@ object ProjectCreatorTemplatePlaceholders {
     const val KEYWORDS = "KEYWORDS"
     const val AUTHORS = "AUTHORS"
     const val TYPE = "TYPE"
+    const val IS_DOCS = "DOCS"
     const val LANGUAGE = "LANG"
     const val HAS_THEME = "THEME"
     const val COLOR_THEME = "COLORTHEME"

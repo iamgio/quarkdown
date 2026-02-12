@@ -1,0 +1,12 @@
+.docname {My docs}
+.include {docs}
+
+Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the home page of your documentation.
+
+To compile this documentation, please `cd` to this file's parent directory and run:
+
+```shell
+quarkdown c [[MAINFILE]].qd
+```
+
+For further information and guides, please check out the [official wiki](https://quarkdown.com/wiki).

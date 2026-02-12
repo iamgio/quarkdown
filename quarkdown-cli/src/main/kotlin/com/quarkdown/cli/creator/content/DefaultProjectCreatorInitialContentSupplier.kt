@@ -11,7 +11,7 @@ private const val LOGO = "logo.png"
 private const val IMAGES_GROUP_NAME = "image"
 
 /**
- * A [ProjectCreatorInitialContentSupplier] that provides some initial content for introductio purposes:
+ * A [ProjectCreatorInitialContentSupplier] that provides some initial content for introduction purposes:
  * - A simple Quarkdown code snippet
  * - An image of the Quarkdown logo
  */

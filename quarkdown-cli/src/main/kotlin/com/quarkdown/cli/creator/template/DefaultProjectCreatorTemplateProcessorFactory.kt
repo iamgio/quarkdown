@@ -27,6 +27,7 @@ class DefaultProjectCreatorTemplateProcessorFactory(
                 conditional(AUTHORS, info.authors.isNotEmpty())
                 iterable(AUTHORS, info.authors.map { it.name })
                 optionalValue(TYPE, info.type.quarkdownName)
+                optionalValue(IS_DOCS, info.type == DocumentType.DOCS)
                 optionalValue(LANGUAGE, info.locale?.displayName)
                 conditional(HAS_THEME, info.theme?.hasComponent == true)
                 optionalValue(COLOR_THEME, info.theme?.color)

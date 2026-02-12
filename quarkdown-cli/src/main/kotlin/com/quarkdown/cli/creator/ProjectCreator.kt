@@ -14,9 +14,9 @@ import com.quarkdown.core.template.TemplateProcessor
  * @param templateProcessorFactory factory that generates the template for the main file
  * @param initialContentSupplier supplier of the initial content (code content and assets)
  * @param mainFileName name of the main file, without extension
- * @see DefaultProjectCreatorTemplateProcessorFactory
- * @see DefaultProjectCreatorInitialContentSupplier
- * @see EmptyProjectCreatorInitialContentSupplier
+ * @see com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
+ * @see com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
+ * @see com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
  */
 class ProjectCreator(
     private val templateProcessorFactory: ProjectCreatorTemplateProcessorFactory,
@@ -48,7 +48,7 @@ class ProjectCreator(
     fun createResources(): Set<OutputResource> {
         val main =
             TextOutputArtifact(
-                mainFileName,
+                templateProcessorFactory.targetFileName ?: mainFileName,
                 this.createTemplateProcessor().process().trim(),
                 ArtifactType.QUARKDOWN,
             )
