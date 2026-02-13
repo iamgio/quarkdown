@@ -1,6 +1,5 @@
 @param name: String? = null
 @param ask: Boolean = false
-
 Hello@if(name != null), ${name}@endif!
 
 @if(ask)
