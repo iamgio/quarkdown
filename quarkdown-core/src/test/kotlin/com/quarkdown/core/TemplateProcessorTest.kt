@@ -22,86 +22,136 @@ class TemplateProcessorTest {
 
     @Test
     fun `single value`() {
-        val template = TemplateProcessor("Hello, [[NAME]]!")
-        template.value("NAME", "world")
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String
+                Hello, ${'$'}{name}!
+                """.trimIndent(),
+            )
+        template.value("name", "world")
         assertEquals("Hello, world!", template.process())
     }
 
     @Test
     fun `double value`() {
-        val template = TemplateProcessor("Hello, [[NAME]] from [[FROM]]!")
-        template.value("NAME", "world")
-        template.value("FROM", "Quarkdown")
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String
+                @param from: String
+                Hello, ${'$'}{name} from ${'$'}{from}!
+                """.trimIndent(),
+            )
+        template.value("name", "world")
+        template.value("from", "Quarkdown")
         assertEquals("Hello, world from Quarkdown!", template.process())
     }
 
     @Test
-    fun `single value not set`() {
-        val template = TemplateProcessor("Hello, [[NAME]]!")
-        assertEquals("Hello, [[NAME]]!", template.process())
+    fun `single value with default`() {
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String = "unnamed"
+                Hello, ${'$'}{name}!
+                """.trimIndent(),
+            )
+        assertEquals("Hello, unnamed!", template.process())
     }
 
     @Test
     fun `single condition`() {
-        val template = TemplateProcessor("Hello[[if:HASNAME]], world[[endif:HASNAME]]!")
+        val trueTemplate =
+            TemplateProcessor(
+                """
+                @param hasName: Boolean = false
+                Hello@if(hasName), world@endif!
+                """.trimIndent(),
+            )
 
-        template.conditional("HASNAME", false)
-        assertEquals("Hello!", template.process())
+        trueTemplate.conditional("hasName", false)
+        assertEquals("Hello!", trueTemplate.process())
 
-        template.conditional("HASNAME", true)
-        assertEquals("Hello, world!", template.process())
+        trueTemplate.conditional("hasName", true)
+        assertEquals("Hello, world!", trueTemplate.process())
     }
 
     @Test
     fun `double condition`() {
         val template =
-            TemplateProcessor("Hello[[if:HASNAME]], world[[endif:HASNAME]]![[if:ASK]] How are you?[[endif:ASK]]")
+            TemplateProcessor(
+                """
+                @param hasName: Boolean = false
+                @param ask: Boolean = false
+                Hello@if(hasName), world@endif!@if(ask) How are you?@endif
+                """.trimIndent(),
+            )
 
-        template.conditional("HASNAME", false)
-        template.conditional("ASK", false)
+        template.conditional("hasName", false)
+        template.conditional("ask", false)
         assertEquals("Hello!", template.process())
 
-        template.conditional("ASK", true)
+        template.conditional("ask", true)
         assertEquals("Hello! How are you?", template.process())
 
-        template.conditional("HASNAME", true)
+        template.conditional("hasName", true)
         assertEquals("Hello, world! How are you?", template.process())
 
-        template.conditional("ASK", false)
+        template.conditional("ask", false)
         assertEquals("Hello, world!", template.process())
     }
 
     @Test
     fun `single value and single condition`() {
-        val template = TemplateProcessor("Hello, [[NAME]]![[if:ASK]] How are you?[[endif:ASK]]")
-        template.value("NAME", "world")
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String
+                @param ask: Boolean = false
+                Hello, ${'$'}{name}!@if(ask) How are you?@endif
+                """.trimIndent(),
+            )
+        template.value("name", "world")
 
-        template.conditional("ASK", false)
+        template.conditional("ask", false)
         assertEquals("Hello, world!", template.process())
 
-        template.conditional("ASK", true)
+        template.conditional("ask", true)
         assertEquals("Hello, world! How are you?", template.process())
     }
 
     @Test
     fun `optional value as condition`() {
-        val template = TemplateProcessor("Hello[[if:NAME]], [[NAME]][[endif:NAME]]!")
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String? = null
+                Hello@if(name != null), ${'$'}{name}@endif!
+                """.trimIndent(),
+            )
 
-        template.optionalValue("NAME", "world")
+        template.optionalValue("name", "world")
         assertEquals("Hello, world!", template.process())
 
-        template.optionalValue("NAME", null)
+        template.optionalValue("name", null)
         assertEquals("Hello!", template.process())
     }
 
     @Test
     fun `optional value if-else`() {
-        val template = TemplateProcessor("Hello, [[if:NAME]][[NAME]][[endif:NAME]][[if:!NAME]]unnamed[[endif:!NAME]]!")
+        val template =
+            TemplateProcessor(
+                """
+                @param name: String? = null
+                Hello, @if(name != null)${'$'}{name}@endif@if(name == null)unnamed@endif!
+                """.trimIndent(),
+            )
 
-        template.optionalValue("NAME", "world")
+        template.optionalValue("name", "world")
         assertEquals("Hello, world!", template.process())
 
-        template.optionalValue("NAME", null)
+        template.optionalValue("name", null)
         assertEquals("Hello, unnamed!", template.process())
     }
 
@@ -110,14 +160,18 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                Hello, [[NAME]]!
-                [[if:ASK]]How are you?
-                I hope you are good.[[endif:ASK]]
+                @param name: String
+                @param ask: Boolean = false
+                Hello, ${'$'}{name}!
+                @if(ask)
+                How are you?
+                I hope you are good.
+                @endif
                 """.trimIndent(),
             )
-        template.value("NAME", "world")
+        template.value("name", "world")
 
-        template.conditional("ASK", true)
+        template.conditional("ask", true)
         assertEquals(
             """
             Hello, world!
@@ -127,7 +181,7 @@ class TemplateProcessorTest {
             template.process(),
         )
 
-        template.conditional("ASK", false)
+        template.conditional("ask", false)
         assertEquals("Hello, world!", template.process())
     }
 
@@ -136,47 +190,61 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                [[if:A]]A[[endif:A]]
+                @param a: Boolean = false
+                @param b: Boolean = false
+                @if(a)
+                A
+                @endif
                 X
-                [[if:B]]B[[endif:B]]
+                @if(b)
+                B
+                @endif
                 """.trimIndent(),
             )
-        template.conditional("A", true)
-        template.conditional("B", false)
+        template.conditional("a", true)
+        template.conditional("b", false)
         assertEquals("A\nX", template.process())
 
-        template.conditional("A", false)
-        template.conditional("B", false)
-        assertEquals("\nX", template.process())
+        template.conditional("a", false)
+        template.conditional("b", false)
+        assertEquals("X", template.process())
 
-        template.conditional("A", false)
-        template.conditional("B", true)
-        assertEquals("\nX\nB", template.process())
+        template.conditional("a", false)
+        template.conditional("b", true)
+        assertEquals("X\nB", template.process())
     }
 
     @Test
     fun `multiline with spaced delimiter`() {
+        // Blank lines act as separators between content sections.
+        // They are placed inside the conditional blocks to control their visibility.
         val template =
             TemplateProcessor(
                 """
-                [[if:A]]A[[endif:A]]
-                
+                @param a: Boolean = false
+                @param b: Boolean = false
+                @if(a)
+                A
+                @endif
+
                 X
-                
-                [[if:B]]B[[endif:B]]
+
+                @if(b)
+                B
+                @endif
                 """.trimIndent(),
             )
-        template.conditional("A", true)
-        template.conditional("B", false)
-        assertEquals("A\n\nX", template.process())
+        template.conditional("a", true)
+        template.conditional("b", false)
+        assertEquals("A\nX", template.process())
 
-        template.conditional("A", false)
-        template.conditional("B", false)
-        assertEquals("\n\nX", template.process())
+        template.conditional("a", false)
+        template.conditional("b", false)
+        assertEquals("X", template.process())
 
-        template.conditional("A", false)
-        template.conditional("B", true)
-        assertEquals("\n\nX\n\nB", template.process())
+        template.conditional("a", false)
+        template.conditional("b", true)
+        assertEquals("X\n\nB", template.process())
     }
 
     @Test
@@ -184,27 +252,36 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                [[if:A]]A[[endif:A]]
-                [[if:B]]B[[endif:B]]
-                [[if:C]]C[[endif:C]]
+                @param a: Boolean = false
+                @param b: Boolean = false
+                @param c: Boolean = false
+                @if(a)
+                A
+                @endif
+                @if(b)
+                B
+                @endif
+                @if(c)
+                C
+                @endif
                 """.trimIndent(),
             )
-        template.conditional("A", true)
-        template.conditional("B", false)
-        template.conditional("C", true)
+        template.conditional("a", true)
+        template.conditional("b", false)
+        template.conditional("c", true)
         assertEquals("A\nC", template.process())
     }
 
     @Test
     fun `from resource`() {
-        val template = TemplateProcessor.fromResourceName("/template/template.txt")
-        template.optionalValue("NAME", "world")
-        template.conditional("ASK", true)
+        val template = TemplateProcessor.fromResourceName("/template/template.kte")
+        template.optionalValue("name", "world")
+        template.conditional("ask", true)
 
         assertEquals(
             """
             Hello, world!
-            
+
             How are you?
             I'm good.
             """.trimIndent(),
@@ -214,15 +291,27 @@ class TemplateProcessorTest {
 
     @Test
     fun `for each with no delimiters`() {
-        val template = TemplateProcessor("Hello, [[for:NAME]][[NAME]][[endfor:NAME]]!")
-        template.iterable("NAME", listOf("Alice", "Bob", "Charlie"))
+        val template =
+            TemplateProcessor(
+                """
+                @param names: List<String> = emptyList()
+                Hello, @for(name in names)${'$'}{name}@endfor!
+                """.trimIndent(),
+            )
+        template.iterable("names", listOf("Alice", "Bob", "Charlie"))
         assertEquals("Hello, AliceBobCharlie!", template.process())
     }
 
     @Test
     fun `for each with delimiters`() {
-        val template = TemplateProcessor("Hello, [[for:NAME]][[NAME]],[[endfor:NAME]]!")
-        template.iterable("NAME", listOf("Alice", "Bob", "Charlie"))
+        val template =
+            TemplateProcessor(
+                """
+                @param names: List<String> = emptyList()
+                Hello, @for(name in names)${'$'}{name},@endfor!
+                """.trimIndent(),
+            )
+        template.iterable("names", listOf("Alice", "Bob", "Charlie"))
         assertEquals("Hello, Alice,Bob,Charlie,!", template.process())
     }
 
@@ -231,13 +320,14 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
+                @param items: List<String> = emptyList()
                 Groceries:
-                [[for:ITEM]]
-                - [[ITEM]]
-                [[endfor:ITEM]]
+                @for(item in items)
+                - ${'$'}{item}
+                @endfor
                 """.trimIndent(),
             )
-        template.iterable("ITEM", listOf("Apples", "Bananas", "Carrots"))
+        template.iterable("items", listOf("Apples", "Bananas", "Carrots"))
         assertEquals(
             """
             Groceries:
@@ -254,13 +344,14 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
+                @param items: List<String> = emptyList()
                 Groceries:
-                [[for:ITEM]]
-                - [[ITEM]]
-                [[endfor:ITEM]]
+                @for(item in items)
+                - ${'$'}{item}
+                @endfor
                 """.trimIndent(),
             )
-        template.iterable("ITEM", emptyList())
+        template.iterable("items", emptyList())
         assertEquals("Groceries:", template.process())
     }
 
@@ -269,16 +360,18 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
+                @param items: List<String> = emptyList()
+                @param letters: List<String> = emptyList()
                 Groceries:
-                [[for:ITEM]]
-                [[for:LETTER]]
-                - [[ITEM]] [[LETTER]]
-                [[endfor:LETTER]]
-                [[endfor:ITEM]]
+                @for(item in items)
+                @for(letter in letters)
+                - ${'$'}{item} ${'$'}{letter}
+                @endfor
+                @endfor
                 """.trimIndent(),
             )
-        template.iterable("ITEM", listOf("Apple", "Banana"))
-        template.iterable("LETTER", listOf("A", "B"))
+        template.iterable("items", listOf("Apple", "Banana"))
+        template.iterable("letters", listOf("A", "B"))
         assertEquals(
             """
             Groceries:

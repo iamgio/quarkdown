@@ -4,7 +4,6 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
 import com.github.ajalt.clikt.parameters.options.check
-import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
@@ -12,8 +11,11 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.DefaultTheme
+import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
+import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -26,9 +28,14 @@ import com.quarkdown.core.pipeline.output.visitor.saveTo
 import java.io.File
 
 /**
- * Default ame of the default directory to save the generated files in.
+ * Default name of the default directory to save the generated files in.
  */
 private const val DEFAULT_DIRECTORY = "."
+
+/**
+ * Default name of the main file, if not specified by the user.
+ */
+private const val DEFAULT_MAIN_FILE_NAME = "main"
 
 /**
  * Command to create a new Quarkdown project with a default template.
@@ -90,10 +97,8 @@ class CreateProjectCommand : CliktCommand("create") {
     }
 
     private val colorTheme: String? by option("--color-theme", help = "Color theme")
-        .default("paperwhite")
 
     private val layoutTheme: String? by option("--layout-theme", help = "Layout theme")
-        .default("latex")
 
     private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
         .flag()
@@ -106,16 +111,27 @@ class CreateProjectCommand : CliktCommand("create") {
             keywords = keywords,
             type = type,
             locale = language,
-            theme = DocumentTheme(colorTheme, layoutTheme),
+            theme =
+                DocumentTheme(
+                    colorTheme ?: DefaultTheme.getColorTheme(type),
+                    layoutTheme ?: DefaultTheme.getLayoutTheme(type),
+                ),
         )
 
     private fun createProjectCreator(): ProjectCreator {
-        val mainFileName = this.mainFileName ?: directory.canonicalFile.name
+        val mainFileName = this.mainFileName ?: DEFAULT_MAIN_FILE_NAME
+        val documentInfo = this.createDocumentInfo()
+        val isDocs = documentInfo.type == DocumentType.DOCS
         return ProjectCreator(
-            templateProcessorFactory = DefaultProjectCreatorTemplateProcessorFactory(this.createDocumentInfo()),
+            templateProcessorFactory =
+                when {
+                    isDocs -> DocsProjectCreatorTemplateProcessorFactory(documentInfo)
+                    else -> DefaultProjectCreatorTemplateProcessorFactory(documentInfo)
+                },
             initialContentSupplier =
                 when {
                     noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
+                    isDocs -> DocsProjectCreatorInitialContentSupplier()
                     else -> DefaultProjectCreatorInitialContentSupplier()
                 },
             mainFileName,
@@ -128,6 +144,6 @@ class CreateProjectCommand : CliktCommand("create") {
         directory.mkdirs()
         creator.createResources().forEach { it.saveTo(directory) }
 
-        Log.info("Project created in ${directory.canonicalPath}")
+        Log.info("Project created into ${directory.canonicalPath}")
     }
 }

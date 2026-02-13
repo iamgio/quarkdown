@@ -1,0 +1,56 @@
+@param name: String? = null
+@param description: String? = null
+@param keywords: List<String> = emptyList()
+@param authors: List<String> = emptyList()
+@param type: String? = null
+@param docs: Boolean = false
+@param lang: String? = null
+@param theme: Boolean = false
+@param colorTheme: String? = null
+@param layoutTheme: String? = null
+@param pageCounter: Boolean = false
+@param initialContent: String? = null
+
+@if(!docs && name != null)
+.docname {${name}}
+@endif
+@if(description != null)
+.docdescription {${description}}
+@endif
+@if(!docs && type != null)
+.doctype {${type}}
+@endif
+@if(lang != null)
+.doclang {${lang}}
+@endif
+@if(theme)
+.theme@if(colorTheme != null) {${colorTheme}}@endif@if(layoutTheme != null) layout:{${layoutTheme}}@endif
+@endif
+@if(!keywords.isEmpty())
+${""}
+.dockeywords
+@for(item in keywords)
+${"  "}- ${item}
+@endfor
+@endif
+@if(!authors.isEmpty())
+${""}
+.docauthors
+@for(item in authors)
+${"  "}- ${item}
+@endfor
+@endif
+@if(pageCounter)
+${""}
+.pagemargin {bottomcenter}
+    .currentpage
+@endif
+@if(docs && name != null)
+${""}
+.pagemargin {topleft}
+    ${name}
+@endif
+@if(!docs && initialContent != null)
+${""}
+${initialContent}
+@endif

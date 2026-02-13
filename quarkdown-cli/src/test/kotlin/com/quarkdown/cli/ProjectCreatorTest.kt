@@ -2,8 +2,10 @@ package com.quarkdown.cli
 
 import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
+import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -15,6 +17,7 @@ import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -31,6 +34,15 @@ class ProjectCreatorTest {
     ) = ProjectCreator(
         DefaultProjectCreatorTemplateProcessorFactory(info),
         if (includeInitialContent) DefaultProjectCreatorInitialContentSupplier() else EmptyProjectCreatorInitialContentSupplier(),
+        mainFileName = "main",
+    )
+
+    private fun docsProjectCreator(
+        info: DocumentInfo,
+        includeInitialContent: Boolean = false,
+    ) = ProjectCreator(
+        DocsProjectCreatorTemplateProcessorFactory(info),
+        if (includeInitialContent) DocsProjectCreatorInitialContentSupplier() else EmptyProjectCreatorInitialContentSupplier(),
         mainFileName = "main",
     )
 
@@ -260,12 +272,119 @@ class ProjectCreatorTest {
                 """
                 .docname {Document}
                 .doctype {plain}
-                
+
                 # Document
                 """.trimIndent(),
             ),
         )
 
         assertTrue("quarkdown c main.qd" in source.textContent)
+        assertFalse("## Compiling" in source.textContent)
+    }
+
+    @Test
+    fun `docs with name`() {
+        val creator = docsProjectCreator(DocumentInfo(name = "Test", type = DocumentType.DOCS))
+        val resources = creator.createResources()
+        assertEquals(2, resources.size)
+
+        val setup = resources.first { it.name == "_setup" }
+        val main = resources.first { it.name == "main" }
+
+        // _setup: name and doctype are excluded for docs.
+        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".doctype" !in setup.textContent)
+        // _setup: has page margin with name.
+        assertContains(setup.textContent, ".pagemargin {topleft}")
+        assertContains(setup.textContent, "Test")
+
+        // main: has .docname and .include {docs}.
+        assertContains(main.textContent, ".docname {Test}")
+        assertContains(main.textContent, ".include {docs}")
+    }
+
+    @Test
+    fun `docs with name and description`() {
+        val creator =
+            docsProjectCreator(
+                DocumentInfo(name = "Test", description = "A test document", type = DocumentType.DOCS),
+            )
+        val resources = creator.createResources()
+        assertEquals(2, resources.size)
+
+        val setup = resources.first { it.name == "_setup" }
+        val main = resources.first { it.name == "main" }
+
+        // _setup: has description and page margin, but not .docname or .doctype.
+        assertContains(setup.textContent, ".docdescription {A test document}")
+        assertContains(setup.textContent, ".pagemargin {topleft}")
+        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".doctype" !in setup.textContent)
+
+        // main: has .docname and .include {docs}.
+        assertContains(main.textContent, ".docname {Test}")
+        assertContains(main.textContent, ".include {docs}")
+    }
+
+    @Test
+    fun `docs with name, author and keywords`() {
+        val creator =
+            docsProjectCreator(
+                DocumentInfo(
+                    name = "Test",
+                    type = DocumentType.DOCS,
+                    authors = singleAuthor,
+                    keywords = listOf("kotlin", "docs"),
+                ),
+            )
+        val resources = creator.createResources()
+        assertEquals(2, resources.size)
+
+        val setup = resources.first { it.name == "_setup" }
+
+        // _setup: has authors, keywords, and page margin.
+        assertContains(setup.textContent, ".docauthors")
+        assertContains(setup.textContent, "- Giorgio")
+        assertContains(setup.textContent, ".dockeywords")
+        assertContains(setup.textContent, "- kotlin")
+        assertContains(setup.textContent, "- docs")
+        assertContains(setup.textContent, ".pagemargin {topleft}")
+
+        // _setup: no .docname or .doctype for docs.
+        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".doctype" !in setup.textContent)
+    }
+
+    @Test
+    fun `docs with initial content`() {
+        val creator =
+            docsProjectCreator(
+                DocumentInfo(name = "Test", type = DocumentType.DOCS),
+                includeInitialContent = true,
+            )
+        val resources = creator.createResources()
+
+        // 2 text outputs (_setup, main) + 4 docs resource files.
+        assertEquals(6, resources.size)
+
+        val main = resources.first { it.name == "main" }
+        assertContains(main.textContent, ".docname {Test}")
+        assertContains(main.textContent, ".include {docs}")
+
+        // Initial content for docs has specific sections.
+        assertContains(main.textContent, "\n## Compiling\n")
+        assertContains(main.textContent, "quarkdown c main.qd")
+        assertContains(main.textContent, "\n## Structure\n")
+        assertContains(main.textContent, "_setup.qd")
+
+        // Initial content for docs does not have a heading or an image.
+        assertTrue("# Test" !in main.textContent)
+        assertTrue("logo.png" !in main.textContent)
+
+        // The docs resource files.
+        assertTrue(resources.any { it.name == "_nav.qd" })
+        assertTrue(resources.any { it.name == "page-1.qd" })
+        assertTrue(resources.any { it.name == "page-2.qd" })
+        assertTrue(resources.any { it.name == "page-3.qd" })
     }
 }

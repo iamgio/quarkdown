@@ -6,7 +6,10 @@ plugins {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    implementation(project(":quarkdown-core"))
+    implementation(project(":quarkdown-core")) {
+        // Exclude kotlin-compiler-embeddable brought in by jte-kotlin, which conflicts with the version used by Dokka.
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
+    }
     implementation(project(":quarkdown-quarkdoc-reader"))
     implementation(kotlin("reflect"))
 

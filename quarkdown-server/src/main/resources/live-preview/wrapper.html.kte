@@ -1,3 +1,6 @@
+@param srcFile: String
+@param serverPort: String
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,8 +82,8 @@
 <body>
 <!-- Double frame buffer makes preview updates smoother -->
 <div class="frame-container">
-    <iframe id="frame-0" class="content-frame visible" src="[[SRCFILE]]"></iframe>
-    <iframe id="frame-1" class="content-frame hidden" src="[[SRCFILE]]"></iframe>
+    <iframe id="frame-0" class="content-frame visible" src="${srcFile}"></iframe>
+    <iframe id="frame-1" class="content-frame hidden" src="${srcFile}"></iframe>
 </div>
 <script data-name="websockets">
     /**
@@ -91,7 +94,7 @@
      * @returns {WebSocket} The WebSocket instance.
      */
     function startWebSocket(serverUrl, endpoint, onMessage) {
-        const socket = new WebSocket(`ws://${serverUrl}/${endpoint}`);
+        const socket = new WebSocket(`ws://${'$'}{serverUrl}/${'$'}{endpoint}`);
 
         socket.addEventListener('open', () => {
             console.log('Connected to server ' + socket.url);
@@ -100,7 +103,7 @@
         socket.addEventListener("message", onMessage);
 
         socket.addEventListener('close', (event) => {
-            console.log(`WebSocket closed: Code=${event.code}, Reason=${event.reason}`);
+            console.log(`WebSocket closed: Code=${'$'}{event.code}, Reason=${'$'}{event.reason}`);
             // Automatically reconnect after a brief delay.
             setTimeout(() => startWebSocket(serverUrl, endpoint, onMessage), 1000);
         });
@@ -164,7 +167,7 @@
 
     // Re-apply after every iframe reload, since the document is replaced.
     for (let i = 0; i < NUM_FRAMES; i++) {
-        document.getElementById(`frame-${i}`).addEventListener('load', function () {
+        document.getElementById(`frame-${'$'}{i}`).addEventListener('load', function () {
             suppressSmoothScroll(this);
         });
     }
@@ -173,14 +176,14 @@
      * @returns {HTMLIFrameElement} The frame element which is currently active (visible).
      */
     function getActiveFrame() {
-        return document.getElementById(`frame-${activeFrameId}`);
+        return document.getElementById(`frame-${'$'}{activeFrameId}`);
     }
 
     /**
      * @returns {HTMLIFrameElement} The frame element which is currently inactive (hidden).
      */
     function getInactiveFrame() {
-        return document.getElementById(`frame-${inactiveFrameId}`);
+        return document.getElementById(`frame-${'$'}{inactiveFrameId}`);
     }
 
     /**
@@ -372,6 +375,6 @@
 
     messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
-<script>startReloadWebSocket("localhost:[[SERVERPORT]]")</script>
+<script>startReloadWebSocket("localhost:${serverPort}")</script>
 </body>
 </html>
