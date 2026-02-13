@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>content</title>
+    <title>createFilenameMappings</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -47,7 +47,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-core/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":quarkdown-cli/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -58,7 +58,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":quarkdown-core/main" data-filter=":quarkdown-core/main">
+                                <input type="checkbox" class="checkbox--input" id=":quarkdown-cli/main" data-filter=":quarkdown-cli/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -92,12 +92,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-core::com.quarkdown.core.template/TemplateProcessor/content/#kotlin.CharSequence/PointingToDeclaration//1831116724">
-  <div class="breadcrumbs"><a href="../../index.html">quarkdown-core</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.core.template</a><span class="delimiter">/</span><a href="index.html">TemplateProcessor</a><span class="delimiter">/</span><span class="current">content</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="quarkdown-cli::com.quarkdown.cli.creator.template/DocsProjectCreatorTemplateProcessorFactory/createFilenameMappings/#/PointingToDeclaration//918969369">
+  <div class="breadcrumbs"><a href="../../index.html">quarkdown-cli</a><span class="delimiter">/</span><a href="../index.html">com.quarkdown.cli.creator.template</a><span class="delimiter">/</span><a href="index.html">DocsProjectCreatorTemplateProcessorFactory</a><span class="delimiter">/</span><span class="current">createFilenameMappings</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>content</span></span></h1>
+    <h1 class="cover"><span>create</span><wbr><span>Filename</span><wbr><span><span>Mappings</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="content.html"><span class="token function">content</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char-sequence/index.html">CharSequence</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div><p class="paragraph">Adds a reference to a content placeholder in the template code. This is used to inject rendered code in a template.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">this for concatenation</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":quarkdown-core/main" data-filterable-set=":quarkdown-core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>content</span></span></u></div></span></div><div><div class="title"><p class="paragraph">value to replace in change of the <code class="lang-kotlin">\[\[CONTENT]]</code> placeholder</p></div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-cli/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="create-filename-mappings.html"><span class="token function">createFilenameMappings</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a><span class="token operator">&gt;</span></div><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">a mapping of file names to <a href="../../../quarkdown-core/com.quarkdown.core.template/-template-processor/index.html">TemplateProcessor</a>s that process files of a new Quarkdown project. The file name <code class="lang-kotlin">null</code> is reserved for the main file</p></span></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>

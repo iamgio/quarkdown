@@ -258,7 +258,6 @@ com.quarkdown.core.property
 com.quarkdown.core.rendering
 com.quarkdown.core.rendering.representable
 com.quarkdown.core.rendering.tag
-com.quarkdown.core.rendering.template
 com.quarkdown.core.template
 com.quarkdown.core.util
 com.quarkdown.core.visitor.node
