@@ -5,6 +5,7 @@ import gg.jte.CodeResolver
 import gg.jte.ContentType
 import gg.jte.TemplateEngine
 import gg.jte.output.StringOutput
+import kotlin.io.path.createTempDirectory
 
 /**
  * A builder-like processor for a template engine backed by JTE (Java Template Engine) with `.kte` Kotlin templates.
@@ -124,9 +125,12 @@ class TemplateProcessor(
             }
 
         val engine =
-            TemplateEngine.create(codeResolver, ContentType.Plain).apply {
-                setTrimControlStructures(true)
-            }
+            TemplateEngine.create(
+                codeResolver,
+                createTempDirectory("jte"),
+                ContentType.Plain,
+            )
+        engine.setTrimControlStructures(true)
         val output = StringOutput()
         engine.render(templateName, params, output)
         return output.toString().trimEnd()
