@@ -9,6 +9,10 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.TextColors.cyan
+import com.github.ajalt.mordant.rendering.TextColors.green
+import com.github.ajalt.mordant.rendering.TextStyles.bold
+import com.github.ajalt.mordant.rendering.TextStyles.dim
 import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.DefaultTheme
@@ -23,7 +27,6 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
-import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.output.visitor.saveTo
 import java.io.File
 
@@ -36,6 +39,15 @@ private const val DEFAULT_DIRECTORY = "."
  * Default name of the main file, if not specified by the user.
  */
 private const val DEFAULT_MAIN_FILE_NAME = "main"
+
+/**
+ * Formats a prompt label with an optional hint, using Mordant styling.
+ * The label is bold and the hint, if present, is dimmed.
+ */
+private fun styledPrompt(
+    label: String,
+    hint: String? = null,
+): String = if (hint != null) "${bold(label)} ${dim(hint)}" else bold(label)
 
 /**
  * Command to create a new Quarkdown project with a default template.
@@ -51,10 +63,10 @@ class CreateProjectCommand : CliktCommand("create") {
     private val mainFileName: String? by option("--main-file", help = "Main file name")
 
     private val name: String? by option("--name", help = "Project name")
-        .prompt("Project name")
+        .prompt(styledPrompt("Project name"))
 
     private val authorsRaw: String by option("--authors", help = "Project authors")
-        .prompt("Authors (separated by commas)")
+        .prompt(styledPrompt("Authors", "(comma-separated)"))
 
     private val authors: List<DocumentAuthor> by lazy {
         authorsRaw
@@ -66,12 +78,12 @@ class CreateProjectCommand : CliktCommand("create") {
     private val type: DocumentType by option("--type", help = "Document type")
         .enum<DocumentType> { it.quarkdownName }
         .prompt(
-            "Document type (${DocumentType.entries.joinToString("/") { it.quarkdownName }})",
+            styledPrompt("Document type", "(${DocumentType.entries.joinToString(", ") { it.quarkdownName }})"),
             default = DocumentType.PLAIN,
         )
 
     private val description: String by option("--description", help = "Document description")
-        .prompt("Document description (optional)")
+        .prompt(styledPrompt("Description"))
 
     private val keywordsRaw: String? by option("--keywords", help = "Document keywords (comma-separated)")
 
@@ -86,7 +98,7 @@ class CreateProjectCommand : CliktCommand("create") {
     private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
 
     private val languageRaw: String? by option("--lang", help = "Document language")
-        .prompt("Document language")
+        .prompt(styledPrompt("Language", "(e.g. English, French, zh, it)"))
         .check(
             lazyMessage = { "$it is not a valid locale." },
             validator = { it.isBlank() || findLocale(it) != null },
@@ -144,6 +156,12 @@ class CreateProjectCommand : CliktCommand("create") {
         directory.mkdirs()
         creator.createResources().forEach { it.saveTo(directory) }
 
-        Log.info("Project created into ${directory.canonicalPath}")
+        val mainFile = "${this.mainFileName ?: DEFAULT_MAIN_FILE_NAME}.qd"
+
+        echo()
+        echo("  ${(green + bold)("Project created")} in ${bold(directory.canonicalPath)}")
+        echo()
+        echo("  ${dim("Compile:")}       ${cyan("quarkdown c $mainFile")}")
+        echo("  ${dim("Live preview:")}  ${cyan("quarkdown c $mainFile -p -w")}")
     }
 }
