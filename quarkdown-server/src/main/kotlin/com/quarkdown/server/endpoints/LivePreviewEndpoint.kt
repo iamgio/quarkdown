@@ -13,8 +13,8 @@ import java.io.File
  */
 private const val DEFAULT_FILE = "index.html"
 
-private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "SRCFILE"
-private const val TEMPLATE_SERVER_PORT_PLACEHOLDER = "SERVERPORT"
+private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "srcFile"
+private const val TEMPLATE_SERVER_PORT_PLACEHOLDER = "serverPort"
 
 /**
  * Handler of the live preview endpoint (`/live/<file>`) which serves static files relative to a target file or directory.
@@ -71,7 +71,7 @@ class LivePreviewEndpoint(
         val sourceFile = "/${targetFile.relativeTo(origin).path}"
 
         return TemplateProcessor
-            .fromResourceName("/live-preview/wrapper.html.template", referenceClass = javaClass)
+            .fromResourceName("/live-preview/wrapper.html.kte", referenceClass = javaClass)
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, sourceFile)
             .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, serverPort.toString())
             .process()

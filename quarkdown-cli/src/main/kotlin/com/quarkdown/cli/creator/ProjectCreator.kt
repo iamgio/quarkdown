@@ -31,14 +31,17 @@ class ProjectCreator(
      * @return the finalized template processor
      */
     private fun finalizeTemplateProcessor(template: TemplateProcessor): TemplateProcessor {
+        // The main file name is injected before copying,
+        // so that the initial content template can reference it.
+        template.optionalValue(ProjectCreatorTemplatePlaceholders.MAIN_FILE, mainFileName)
+
         // Initial content is processed via the same template processor.
         val initialContentCode =
             initialContentSupplier.templateCodeContent
                 ?.let { template.copy(text = it).process().trim() }
 
-        // Processed initial content and additional information are injected into the main template.
+        // Processed initial content is injected into the main template.
         template.optionalValue(ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT, initialContentCode)
-        template.optionalValue(ProjectCreatorTemplatePlaceholders.MAIN_FILE, mainFileName)
 
         return template
     }

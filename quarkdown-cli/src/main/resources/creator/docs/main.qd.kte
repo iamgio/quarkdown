@@ -1,0 +1,11 @@
+@param name: String? = null
+@param initialContent: String? = null
+
+@if(name != null)
+.docname {${name}}
+@endif
+.include {docs}
+
+@if(initialContent != null)
+${initialContent}
+@endif
