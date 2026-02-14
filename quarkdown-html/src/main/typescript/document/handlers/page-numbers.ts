@@ -33,6 +33,50 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
+     * Finds all page number format markers contained in the given page.
+     */
+    private getPageNumberFormatMarkers(page: QuarkdownPage): HTMLElement[] {
+        return Array.from(page.querySelectorAll('.page-number-formatter'));
+    }
+
+    /**
+     * Formats a page number according to the specified format.
+     */
+    private formatPageNumber(pageNumber: number, format: "1" | "a" | "A" | "i" | "I" | string): string {
+        switch (format) {
+            case "1":
+                return pageNumber.toString();
+            case "a":
+                return String.fromCharCode(96 + pageNumber);
+            case "A":
+                return String.fromCharCode(64 + pageNumber);
+            case "i":
+                return this.toRomanNumeral(pageNumber).toLowerCase();
+            case "I":
+                return this.toRomanNumeral(pageNumber);
+            default:
+                return format;
+        }
+    }
+
+    /**
+     * Converts an integer to a Roman numeral string.
+     */
+    private toRomanNumeral(num: number): string {
+        if (isNaN(num))
+            return "NaN";
+        const digits = String(+num).split("");
+        const key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+        let roman = "";
+        let i = 3;
+        while (i--)
+            roman = (key[+digits.pop()! + (i * 10)] || "") + roman;
+        return Array(+digits.join("") + 1).join("M") + roman;
+    }
+
+    /**
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
@@ -47,7 +91,17 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      */
     private updateCurrentPageNumbers(pages: QuarkdownPage[]) {
         let pageNumber = 1;
+        let currentFormat = "1";
         pages.forEach(page => {
+            // Checking for format markers on the current page. The last format marker on the page determines the format for the page number.
+            const formatMarkers = this.getPageNumberFormatMarkers(page);
+            formatMarkers.forEach(marker => {
+                const format = marker.dataset.format;
+                if (format && ["1", "a", "A", "i", "I"].includes(format)) {
+                    currentFormat = format;
+                }
+            });
+
             // Checking for reset markers on the current page. In that case, the page number is directly updated.
             const resetMarkers = this.getPageNumberResetMarkers(page);
             resetMarkers.forEach(marker => {
@@ -57,11 +111,12 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
-            this.quarkdownDocument.setDisplayPageNumber(page, pageNumber.toString());
+            const formattedPageNumber = this.formatPageNumber(pageNumber, currentFormat);
+            this.quarkdownDocument.setDisplayPageNumber(page, formattedPageNumber);
 
             // Applying the page number within the page.
             this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
-                pageNumberElement.innerText = pageNumber.toString();
+                pageNumberElement.innerText = formattedPageNumber;
             });
 
             pageNumber += 1;
@@ -77,8 +132,8 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
             nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
                 const targetId = getAnchorTargetId(anchor);
                 const target = targetId ? document.getElementById(targetId) : undefined;
-                const displayNumber = target ? this.quarkdownDocument.getDisplayPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
-                this.setTableOfContentsPageNumber(anchor, displayNumber);
+                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
         });
     }

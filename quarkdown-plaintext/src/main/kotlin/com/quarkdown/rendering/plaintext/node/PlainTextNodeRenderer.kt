@@ -71,6 +71,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
@@ -334,6 +335,8 @@ class PlainTextNodeRenderer(
     override fun visit(node: SlidesSpeakerNote) = ""
 
     override fun visit(node: PageMarginContentInitializer) = ""
+
+    override fun visit(node: PageNumberFormatter) = ""
 
     override fun visit(node: PageNumberReset) = ""
 

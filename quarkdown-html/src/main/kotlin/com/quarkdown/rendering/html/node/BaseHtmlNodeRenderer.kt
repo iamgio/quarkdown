@@ -71,6 +71,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
@@ -402,6 +403,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: SubdocumentGraph): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageMarginContentInitializer): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: PageNumberFormatter): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: PageNumberReset): CharSequence = throw UnsupportedRenderException(node)
 
