@@ -367,7 +367,10 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
 
-- `--no-subdoc-collisions`: makes generated subdocument file names collision-proof. [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments)
+- `--subdoc-naming <strategy>`: sets the subdocument output naming strategy [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments). Defaults to `file-name`. Accepted values:
+  - `file-name`: uses the subdocument's file name (human-readable, but prone to collisions)
+  - `collision-proof`: appends a hash to `file-name` to minimize name collisions
+  - `document-name`: uses the document name set via `.docname`, falling back to `file-name` if unset
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 

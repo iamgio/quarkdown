@@ -1,6 +1,5 @@
 package com.quarkdown.core.document.sub
 
-import com.quarkdown.core.context.Context
 import java.io.File
 
 private const val ROOT_NAME = "index"
@@ -65,16 +64,3 @@ sealed interface Subdocument {
             get() = UNIQUE_NAME_FORMAT.format(name, path.hashCode())
     }
 }
-
-/**
- * Returns the output file name for the subdocument, based on the context's options.
- * If the pipeline enforces minimal subdocument collisions ([com.quarkdown.core.pipeline.PipelineOptions.minimizeSubdocumentCollisions]),
- * [Subdocument.uniqueName] is returned, otherwise just [Subdocument.name], which is more human-readable but prone to collisions.
- * @param context the context that holds the pipeline options
- * @return the output file name for the subdocument
- */
-fun Subdocument.getOutputFileName(context: Context): String =
-    when {
-        context.attachedPipeline?.options?.minimizeSubdocumentCollisions == true -> uniqueName
-        else -> name
-    }

@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
@@ -60,11 +61,40 @@ class SubdocumentTest {
         execute(
             "",
             subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
-            minimizeSubdocumentCollisions = true,
+            subdocumentNaming = SubdocumentOutputNaming.COLLISION_PROOF,
             outputResourceHook = { group ->
                 val resources = getSubResources(group).map { it.name }
                 assertContains(resources, simpleSubdoc.uniqueName)
                 assertFalse(simpleSubdoc.name in resources)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `document-name subdocument naming with docname set`() {
+        execute(
+            "",
+            subdocumentGraph = {
+                it.addVertex(modifyAndEchoDocumentNameSubdoc).addEdge(Subdocument.Root, modifyAndEchoDocumentNameSubdoc)
+            },
+            subdocumentNaming = SubdocumentOutputNaming.DOCUMENT_NAME,
+            outputResourceHook = { group ->
+                val resources = getSubResources(group).map { it.name }
+                assertContains(resources, "Changed name")
+                assertFalse(modifyAndEchoDocumentNameSubdoc.name in resources)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `document-name subdocument naming falls back to file name`() {
+        execute(
+            "",
+            subdocumentGraph = { it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc) },
+            subdocumentNaming = SubdocumentOutputNaming.DOCUMENT_NAME,
+            outputResourceHook = { group ->
+                val resources = getSubResources(group).map { it.name }
+                assertContains(resources, simpleSubdoc.name)
             },
         ) {}
     }
