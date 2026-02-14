@@ -1,19 +1,4 @@
-/**
- * Converts an integer to a Roman numeral string.
- */
-function toRomanNumeral(num: number): string {
-    if (isNaN(num))
-        return "NaN";
-    const digits = String(+num).split("");
-    const key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
-            "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
-            "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
-    let roman = "";
-    let i = 3;
-    while (i--)
-        roman = (key[+digits.pop()! + (i * 10)] || "") + roman;
-    return Array(+digits.join("") + 1).join("M") + roman;
-}
+import {romanize} from "romans";
 
 /**
  * Formats a page number according to the specified format.
@@ -32,9 +17,9 @@ export function formatPageNumber(pageNumber: number, format: string): string {
         case "A":
             return String.fromCharCode(64 + pageNumber);
         case "i":
-            return toRomanNumeral(pageNumber).toLowerCase();
+            return romanize(pageNumber).toLowerCase();
         case "I":
-            return toRomanNumeral(pageNumber);
+            return romanize(pageNumber);
         default:
             return format;
     }
