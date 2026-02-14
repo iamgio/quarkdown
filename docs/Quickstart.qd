@@ -45,6 +45,7 @@ During the initial setup, you choose a document type from one of the following o
 - **`plain`**: A continuous flow layout similar to Notion or Obsidian, ideal for knowledge management and web viewing.
 - **`paged`**: A traditional document layout with page breaks, perfect for PDFs.
 - **`slides`**: A presentation format with interactive navigation.
+- **`docs`**: A documentation format with a sidebar and table of contents, ideal for knowledge bases and wikis. This wiki itself is a `docs` document.
 
 ### Choosing a theme
 
@@ -60,6 +61,7 @@ Some popular combinations include:
 
 - `paperwhite + latex`: A clean academic look (this is the default)
 - `darko + minimal`: A dark theme with minimal styling
+- `galactic + hyperlegible`: The theme used in this wiki, with a highly readable font
 - `beaver + beamer`: An academic presentation style
 
 See [Themes](Themes.qd) for a complete list of available themes.
@@ -74,7 +76,7 @@ Compile the document to make sure everything works as expected:
 
 ```shell
 cd my-document
-quarkdown c my-document.qd
+quarkdown c main.qd
 ```
 
 You should see the HTML output inside the `output` directory.
@@ -82,7 +84,7 @@ You should see the HTML output inside the `output` directory.
 To export to PDF, add the `--pdf` flag:
 
 ```shell
-quarkdown c my-document.qd --pdf
+quarkdown c main.qd --pdf
 ```
 
 See the [PDF export](PDF-export.qd) page for more information about PDF export and its requirements. If you installed Quarkdown using a package manager or the install script, you should be ready to go.
@@ -92,7 +94,7 @@ See the [PDF export](PDF-export.qd) page for more information about PDF export a
 To launch live preview, append `-p` (preview) and `-w` (watch) to the compile command:
 
 ```shell
-quarkdown c my-document.qd -p -w
+quarkdown c main.qd -p -w
 ```
 
 This opens the default browser automatically. To use a different browser, specify it with the `--browser` option, for example `--browser chrome`.
