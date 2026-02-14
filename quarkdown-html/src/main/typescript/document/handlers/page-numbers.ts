@@ -132,7 +132,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
             nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
                 const targetId = getAnchorTargetId(anchor);
                 const target = targetId ? document.getElementById(targetId) : undefined;
-                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                const displayNumber = target ? this.quarkdownDocument.getDisplayPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
                 this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
         });
