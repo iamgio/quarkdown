@@ -1,6 +1,7 @@
 import {DocumentHandler} from "../document-handler";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
 import {getAnchorTargetId} from "../../util/id";
+import {formatPageNumber} from '../../util/page-number';
 
 /**
  * Abstract base class for document handlers that manage page numbering.
@@ -40,43 +41,6 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
-     * Formats a page number according to the specified format.
-     */
-    private formatPageNumber(pageNumber: number, format: string): string {
-        switch (format) {
-            case "1":
-                return pageNumber.toString();
-            case "a":
-                return String.fromCharCode(96 + pageNumber);
-            case "A":
-                return String.fromCharCode(64 + pageNumber);
-            case "i":
-                return this.toRomanNumeral(pageNumber).toLowerCase();
-            case "I":
-                return this.toRomanNumeral(pageNumber);
-            default:
-                return format;
-        }
-    }
-
-    /**
-     * Converts an integer to a Roman numeral string.
-     */
-    private toRomanNumeral(num: number): string {
-        if (isNaN(num))
-            return "NaN";
-        const digits = String(+num).split("");
-        const key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
-                "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
-                "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
-        let roman = "";
-        let i = 3;
-        while (i--)
-            roman = (key[+digits.pop()! + (i * 10)] || "") + roman;
-        return Array(+digits.join("") + 1).join("M") + roman;
-    }
-
-    /**
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
@@ -111,7 +75,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
-            const formattedPageNumber = this.formatPageNumber(pageNumber, currentFormat);
+            const formattedPageNumber = formatPageNumber(pageNumber, currentFormat);
             this.quarkdownDocument.setDisplayPageNumber(page, formattedPageNumber);
 
             // Applying the page number within the page.
