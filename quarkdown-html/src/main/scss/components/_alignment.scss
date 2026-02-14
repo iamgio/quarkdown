@@ -17,6 +17,11 @@
     text-align-last: center;
   }
 
+  [style*="text-align"] > :is(p, li, span) {
+    text-align: unset !important;
+    text-align-last: unset !important;
+  }
+
   // #263
   formula {
     text-align: initial;
