@@ -68,7 +68,7 @@ If you want to *override* Quarkdown's default styles, we recommend using the **`
 
 This function takes a [dictionary](Dictionary.qd) of strings, where each item is a `--qd-*` CSS property and its value.
 
-You can find a complete list of available properties in the [global theme source](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/resources/render/theme/global.scss). Unknown properties are safely ignored.
+You can find a complete list of available properties in the [global theme source](https://github.com/iamgio/quarkdown/blob/main/quarkdown-html/src/main/scss/global.scss). Unknown properties are safely ignored.
 
 .example
     ```yaml
