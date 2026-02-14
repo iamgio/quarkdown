@@ -42,7 +42,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     /**
      * Formats a page number according to the specified format.
      */
-    private formatPageNumber(pageNumber: number, format: "1" | "a" | "A" | "i" | "I" | string): string {
+    private formatPageNumber(pageNumber: number, format: string): string {
         switch (format) {
             case "1":
                 return pageNumber.toString();
@@ -97,7 +97,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
             const formatMarkers = this.getPageNumberFormatMarkers(page);
             formatMarkers.forEach(marker => {
                 const format = marker.dataset.format;
-                if (format && ["1", "a", "A", "i", "I"].includes(format)) {
+                if (format !== undefined) {
                     currentFormat = format;
                 }
             });
