@@ -6,6 +6,7 @@
 
 # 3
 
+.formatpagenumber format:{i}
 .resetpagenumber {20}
 
 # 4
