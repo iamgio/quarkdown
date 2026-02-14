@@ -105,7 +105,7 @@ This is the same behavior as [subdocuments](Subdocuments.qd).
 
 ## Use case: setting up
 
-A common use case is putting all setup function calls in a separate file. See the *Setting up* section of this wiki for all available options.
+A common use case is putting all setup function calls in a separate file. See the *Document setup* section of this wiki for all available options.
 
 > `setup.qd`
 > ```markdown
