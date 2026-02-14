@@ -52,6 +52,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
@@ -536,6 +537,13 @@ class QuarkdownHtmlNodeRenderer(
         buildTag("div") {
             className("page-number-reset")
             attribute("data-start", node.startFrom)
+            hidden()
+        }
+
+    override fun visit(node: PageNumberFormatter) =
+        buildTag("div") {
+            className("page-number-formatter")
+            attribute("data-format", node.format)
             hidden()
         }
 

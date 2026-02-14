@@ -21,11 +21,17 @@ export interface PagedLikeQuarkdownDocument<TPage extends QuarkdownPage = HTMLEl
     /**
      * Gets the page number of the given page.
      * @param page - The page to get the number for
-     * @param includeDisplayNumbers - Whether to consider logical numbers, which may differ from physical page numbers,
-     *                                e.g. caused by page number resets (default: `true`)
      * @returns The page number (1-based)
      */
-    getPageNumber(page: TPage, includeDisplayNumbers?: boolean): number;
+    getPageNumber(page: TPage): number;
+
+    /**
+     * Gets the display page number of the given page, which may differ from the physical page number,
+     * for example due to page number resets.
+     * @param page - The page to get the display number for
+     * @returns The display page number (1-based)
+     */
+    getDisplayPageNumber(page: TPage): string;
 
     /**
      * @param page - The page to get the type for
@@ -47,5 +53,5 @@ export interface PagedLikeQuarkdownDocument<TPage extends QuarkdownPage = HTMLEl
      * @param page - The page to set the display number for
      * @param pageNumber - The display page number to set (1-based)
      */
-    setDisplayPageNumber(page: TPage, pageNumber: number): void;
+    setDisplayPageNumber(page: TPage, pageNumber: string): void;
 }

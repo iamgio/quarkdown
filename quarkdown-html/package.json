@@ -25,6 +25,7 @@
     "vitest": "^3.2.4",
     "happy-dom": "^20.0.2",
     "@types/node": "^24.7.2",
-    "@playwright/test": "^1.57.0"
+    "@playwright/test": "^1.57.0",
+    "romans": "^3.1.0"
   }
 }

@@ -1,0 +1,12 @@
+.tableofcontents
+
+# 1
+
+# 2
+
+# 3
+
+.formatpagenumber format:{i}
+.resetpagenumber {20}
+
+# 4

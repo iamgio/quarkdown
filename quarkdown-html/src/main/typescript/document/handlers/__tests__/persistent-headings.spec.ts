@@ -29,6 +29,10 @@ class DummyDoc implements PagedLikeQuarkdownDocument {
         return 0;
     }
 
+    getDisplayPageNumber(_: HTMLElement): string {
+        return "0";
+    }
+
     getPageType(_: HTMLElement): "left" | "right" {
         return "left";
     }

@@ -10,14 +10,12 @@ class DummyDocument implements PagedLikeQuarkdownDocument<HTMLElement> {
         return this.pages;
     }
 
-    getPageNumber(page: HTMLElement, includeDisplayNumbers: boolean = true): number {
-        if (includeDisplayNumbers) {
-            const displayNumber = page.dataset.displayPageNumber;
-            if (displayNumber) {
-                return parseInt(displayNumber, 10);
-            }
-        }
+    getPageNumber(page: HTMLElement): number {
         return parseInt(page.dataset.pageNumber || "0", 10);
+    }
+
+    getDisplayPageNumber(page: HTMLElement): string {
+        return page.dataset.displayPageNumber ?? this.getPageNumber(page).toString();
     }
 
     getPageType(): "left" | "right" {
@@ -28,8 +26,8 @@ class DummyDocument implements PagedLikeQuarkdownDocument<HTMLElement> {
         return this.pages.find(page => page.contains(element));
     }
 
-    setDisplayPageNumber(page: HTMLElement, pageNumber: number): void {
-        page.setAttribute("data-display-page-number", pageNumber.toString());
+    setDisplayPageNumber(page: HTMLElement, pageNumber: string): void {
+        page.setAttribute("data-display-page-number", pageNumber);
     }
 
     getParentViewport(): HTMLElement | undefined {
