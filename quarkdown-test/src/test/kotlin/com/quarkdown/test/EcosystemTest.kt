@@ -196,11 +196,27 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
                 """
-                .include {include/read-relative-path.md}
+                .include {include/read-relative-path.md} sandbox:{$sandbox}
                 """.trimIndent(),
             ) {
                 assertEquals(
                     "<p>Line 1\nLine 2\n\nLine 3</p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `'read' call from updated working directory inside scope context`() {
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .include {include/read-relative-path-in-scope.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>Line 1\nLine 2\n\nLine 3</p>".repeat(2),
                     it,
                 )
             }

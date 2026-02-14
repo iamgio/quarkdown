@@ -11,7 +11,7 @@ import com.quarkdown.core.context.file.FileSystem
  */
 open class ScopeContext(
     parent: MutableContext,
-    fileSystem: FileSystem? = null,
+    fileSystem: FileSystem = parent.fileSystem,
 ) : SubdocumentContext(
         parent = parent,
         subdocument = parent.subdocument,
