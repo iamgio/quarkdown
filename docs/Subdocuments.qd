@@ -143,10 +143,27 @@ MyDocument/
 
 If only the root subdocument is present, then only `MyDocument.pdf` is generated without the need for a directory.
 
-### Minimizing name collisions
+### Output naming
+
+By default, subdocument output files are named after their source file name. This behavior can be customized via the `--subdoc-naming <strategy>` compiler option. This applies to all output targets, such as HTML and PDF.
+
+.example
+    `getting-started.qd` -> `getting-started.pdf`
+
+#### Document name
+
+Launching the compiler with `--subdoc-naming document-name` names each subdocument output after their own [`.docname`](Document-metadata.qd), rather than the source file name. If a subdocument does not set `.docname`, the source file name is used as a fallback. Note that duplicate document names are not handled, and may lead to name collisions and overwritten files.
+
+.example
+    `getting-started.qd` with `.docname {Getting Started}` -> `Getting-Started.pdf`
+
+#### Minimizing name collisions
 
 Since the subdocument output files lie flatly in the same directory, it is possible that two subdocuments with the same name but from different directories end up colliding.
 
 By default, Quarkdown accepts this collision-prone behavior in order to generate human-readable URLs.
 
-If collisions cannot be avoided, launching the compiler with the `--no-subdoc-collisions` flag will append a hash to the output file names.
+If collisions cannot be avoided, launching the compiler with `--subdoc-naming collision-proof` will append a hash to the output file names.
+
+.example
+    `getting-started.qd` -> `getting-started@12345678.pdf`

@@ -241,7 +241,7 @@ class CompileCommandTest : TempDirectory() {
             )
         }
 
-        test("--no-subdoc-collisions")
+        test("--subdoc-naming", "collision-proof")
         assertHtmlContentPresent()
         assertSubdocumentExistsWithHash("subdoc1", subdoc1)
         assertSubdocumentExistsWithHash("subdoc2", subdoc2)
