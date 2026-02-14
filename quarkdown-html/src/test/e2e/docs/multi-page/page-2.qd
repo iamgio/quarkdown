@@ -2,6 +2,9 @@
 
 # Title
 
+.repeat {4}
+    .loremipsum
+
 ## Subtitle
 
 Content 2

@@ -1,14 +1,14 @@
 /**
- * Initializes active state tracking for sidebar navigation items.
+ * Initializes active state tracking for navigation items.
  * Uses IntersectionObserver for efficient scroll-based highlighting.
  *
- * @param sidebar - The sidebar element containing navigation items
+ * @param navigation - The navigation element containing items with `data-target-id` attributes
  */
-export function initSidebarActiveTracking(sidebar: HTMLElement): void {
-    const items = sidebar.querySelectorAll<HTMLLIElement>('li[data-target-id]');
+export function initNavigationActiveTracking(navigation: HTMLElement): void {
+    const items = navigation.querySelectorAll<HTMLLIElement>('li[data-target-id]');
     if (items.length === 0) return;
 
-    // Map target IDs to their corresponding sidebar items
+    // Map target IDs to their corresponding navigation items
     const targetToItem = new Map<string, HTMLLIElement>();
     items.forEach(item => {
         const targetId = item.dataset.targetId;
