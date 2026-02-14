@@ -31,21 +31,21 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return element.closest<HTMLElement>('.pagedjs_page') || undefined;
     }
 
-    getPageNumber(page: HTMLElement, includeDisplayNumbers: boolean = true): number {
+    getPageNumber(page: HTMLElement): number {
         console.log("Getting page number for page:", page.dataset);
-        return parseInt(
-            (includeDisplayNumbers ? page.dataset.displayPageNumber : undefined)
-            ?? page.dataset.pageNumber
-            ?? "0"
-        );
+        return parseInt(page.dataset.pageNumber ?? "0");
+    }
+
+    getDisplayPageNumber(page: HTMLElement): string {
+        return page.dataset.displayPageNumber ?? this.getPageNumber(page).toString();
     }
 
     getPageType(page: HTMLElement): "left" | "right" {
         return page.classList.contains("pagedjs_right_page") ? "right" : "left";
     }
 
-    setDisplayPageNumber(page: HTMLElement, pageNumber: number) {
-        page.setAttribute("data-display-page-number", pageNumber.toString());
+    setDisplayPageNumber(page: HTMLElement, pageNumber: string) {
+        page.setAttribute("data-display-page-number", pageNumber);
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded. */

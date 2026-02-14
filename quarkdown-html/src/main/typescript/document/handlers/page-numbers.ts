@@ -57,7 +57,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
-            this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
+            this.quarkdownDocument.setDisplayPageNumber(page, pageNumber.toString());
 
             // Applying the page number within the page.
             this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
@@ -77,8 +77,8 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
             nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
                 const targetId = getAnchorTargetId(anchor);
                 const target = targetId ? document.getElementById(targetId) : undefined;
-                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
-                this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
+                const displayNumber = target ? this.quarkdownDocument.getDisplayPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                this.setTableOfContentsPageNumber(anchor, displayNumber);
             });
         });
     }
