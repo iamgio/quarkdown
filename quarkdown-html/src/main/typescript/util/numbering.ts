@@ -19,9 +19,9 @@ export function formatNumber(number: number, format: string): string {
         case "1":
             return number.toString();
         case "a":
-            return String.fromCharCode('a'.charCodeAt(0) + number);
+            return String.fromCharCode('a'.charCodeAt(0) + number - 1);
         case "A":
-            return String.fromCharCode('A'.charCodeAt(0) + number);
+            return String.fromCharCode('A'.charCodeAt(0) + number - 1);
         case "i":
             return romanize(number).toLowerCase();
         case "I":
