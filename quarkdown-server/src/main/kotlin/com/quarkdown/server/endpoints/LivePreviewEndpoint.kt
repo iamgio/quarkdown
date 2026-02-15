@@ -71,7 +71,7 @@ class LivePreviewEndpoint(
         val sourceFile = "/${targetFile.relativeTo(origin).path}"
 
         return TemplateProcessor
-            .fromResourceName("/live-preview/wrapper.html.kte", referenceClass = javaClass)
+            .fromResourceName("/live-preview/wrapper.html.jte", referenceClass = javaClass)
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, sourceFile)
             .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, serverPort.toString())
             .process()

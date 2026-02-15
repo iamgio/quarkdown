@@ -25,7 +25,7 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String
+                @param String name
                 Hello, ${'$'}{name}!
                 """.trimIndent(),
             )
@@ -38,8 +38,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String
-                @param from: String
+                @param String name
+                @param String from
                 Hello, ${'$'}{name} from ${'$'}{from}!
                 """.trimIndent(),
             )
@@ -53,7 +53,7 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String = "unnamed"
+                @param String name = "unnamed"
                 Hello, ${'$'}{name}!
                 """.trimIndent(),
             )
@@ -65,7 +65,7 @@ class TemplateProcessorTest {
         val trueTemplate =
             TemplateProcessor(
                 """
-                @param hasName: Boolean = false
+                @param boolean hasName = false
                 Hello@if(hasName), world@endif!
                 """.trimIndent(),
             )
@@ -82,8 +82,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param hasName: Boolean = false
-                @param ask: Boolean = false
+                @param boolean hasName = false
+                @param boolean ask = false
                 Hello@if(hasName), world@endif!@if(ask) How are you?@endif
                 """.trimIndent(),
             )
@@ -107,8 +107,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String
-                @param ask: Boolean = false
+                @param String name
+                @param boolean ask = false
                 Hello, ${'$'}{name}!@if(ask) How are you?@endif
                 """.trimIndent(),
             )
@@ -126,7 +126,7 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String? = null
+                @param String name = null
                 Hello@if(name != null), ${'$'}{name}@endif!
                 """.trimIndent(),
             )
@@ -143,7 +143,7 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String? = null
+                @param String name = null
                 Hello, @if(name != null)${'$'}{name}@endif@if(name == null)unnamed@endif!
                 """.trimIndent(),
             )
@@ -160,8 +160,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param name: String
-                @param ask: Boolean = false
+                @param String name
+                @param boolean ask = false
                 Hello, ${'$'}{name}!
                 @if(ask)
                 How are you?
@@ -190,8 +190,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param a: Boolean = false
-                @param b: Boolean = false
+                @param boolean a = false
+                @param boolean b = false
                 @if(a)
                 A
                 @endif
@@ -221,8 +221,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param a: Boolean = false
-                @param b: Boolean = false
+                @param boolean a = false
+                @param boolean b = false
                 @if(a)
                 A
                 @endif
@@ -252,9 +252,9 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param a: Boolean = false
-                @param b: Boolean = false
-                @param c: Boolean = false
+                @param boolean a = false
+                @param boolean b = false
+                @param boolean c = false
                 @if(a)
                 A
                 @endif
@@ -274,7 +274,7 @@ class TemplateProcessorTest {
 
     @Test
     fun `from resource`() {
-        val template = TemplateProcessor.fromResourceName("/template/template.kte")
+        val template = TemplateProcessor.fromResourceName("/template/template.jte")
         template.optionalValue("name", "world")
         template.conditional("ask", true)
 
@@ -294,8 +294,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param names: List<String> = emptyList()
-                Hello, @for(name in names)${'$'}{name}@endfor!
+                @param java.util.List<String> names = null
+                Hello, @for(String name : names)${'$'}{name}@endfor!
                 """.trimIndent(),
             )
         template.iterable("names", listOf("Alice", "Bob", "Charlie"))
@@ -307,8 +307,8 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param names: List<String> = emptyList()
-                Hello, @for(name in names)${'$'}{name},@endfor!
+                @param java.util.List<String> names = null
+                Hello, @for(String name : names)${'$'}{name},@endfor!
                 """.trimIndent(),
             )
         template.iterable("names", listOf("Alice", "Bob", "Charlie"))
@@ -320,9 +320,9 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param items: List<String> = emptyList()
+                @param java.util.List<String> items = null
                 Groceries:
-                @for(item in items)
+                @for(String item : items)
                 - ${'$'}{item}
                 @endfor
                 """.trimIndent(),
@@ -344,9 +344,9 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param items: List<String> = emptyList()
+                @param java.util.List<String> items = null
                 Groceries:
-                @for(item in items)
+                @for(String item : items)
                 - ${'$'}{item}
                 @endfor
                 """.trimIndent(),
@@ -360,11 +360,11 @@ class TemplateProcessorTest {
         val template =
             TemplateProcessor(
                 """
-                @param items: List<String> = emptyList()
-                @param letters: List<String> = emptyList()
+                @param java.util.List<String> items = null
+                @param java.util.List<String> letters = null
                 Groceries:
-                @for(item in items)
-                @for(letter in letters)
+                @for(String item : items)
+                @for(String letter : letters)
                 - ${'$'}{item} ${'$'}{letter}
                 @endfor
                 @endfor
