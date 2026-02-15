@@ -245,7 +245,8 @@ class QuarkdownHtmlNodeRenderer(
 
                 "justify-content" value node.mainAxisAlignment
                 "align-items" value node.crossAxisAlignment
-                "gap" value node.gap
+                "row-gap" value node.rowGap
+                "column-gap" value node.columnGap
             }
         }
 
