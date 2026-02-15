@@ -1,39 +1,39 @@
-.grid columns:{2} rowGap:{10px}
+.grid columns:{2} vgap:{10px}
   A
 
   B
   
   C
 
-.grid columns:{2} columnGap:{15px}
+.grid columns:{2} hgap:{15px}
   A
 
   B
 
   C
 
-.grid columns:{2} rowGap:{20px} columnGap:{25px}
+.grid columns:{2} vgap:{20px} hgap:{25px}
   A
 
   B
 
   C
 
-.grid columns:{2} gap:{30px} columnGap:{35px}
+.grid columns:{2} gap:{30px} hgap:{35px}
   A
 
   B
 
   C
 
-.grid columns:{2} gap:{40px} rowGap:{45px}
+.grid columns:{2} gap:{40px} vgap:{45px}
   A
 
   B
 
   C
 
-.grid columns:{2} rowGap:{50px} gap:{55px}
+.grid columns:{2} vgap:{50px} gap:{55px}
   A
 
   B

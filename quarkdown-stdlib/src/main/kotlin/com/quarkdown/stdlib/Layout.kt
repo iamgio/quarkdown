@@ -261,8 +261,8 @@ fun grid(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.CENTER,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
-    @LikelyNamed rowGap: Size? = gap,
-    @LikelyNamed columnGap: Size? = gap,
+    @Name("vgap") rowGap: Size? = gap,
+    @Name("hgap") columnGap: Size? = gap,
     @LikelyBody body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")

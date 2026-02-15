@@ -4,8 +4,8 @@ import {assertHorizontalRow, assertVerticalColumn, getChildBoxes} from "../index
 const {test, expect} = suite(__dirname);
 
 const EXPECTED_GAPS = [
-    ["grid applies row gap", 10, undefined],
-    ["grid applies column gap", undefined, 15],
+    ["grid applies row (vertical) gap", 10, undefined],
+    ["grid applies column (horizontal) gap", undefined, 15],
     ["grid applies row gap and column gap", 20, 25],
     ["grid row gap defaults to gap", 30, 35],
     ["grid column gap defaults to gap", 45, 40],

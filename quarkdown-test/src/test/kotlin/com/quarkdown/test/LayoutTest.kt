@@ -123,7 +123,7 @@ class LayoutTest {
     fun gridGap() {
         execute(
             """
-            .grid columns:{2} rowGap:{1cm} columnGap:{2cm}
+            .grid columns:{2} vgap:{1cm} hgap:{2cm}
                 Hello 1
                 
                 Hello 2
@@ -146,7 +146,7 @@ class LayoutTest {
 
         execute(
             """
-            .grid columns:{2} gap:{1cm} columnGap:{2cm}
+            .grid columns:{2} gap:{1cm} hgap:{2cm}
                 Hello 1
                 
                 Hello 2
