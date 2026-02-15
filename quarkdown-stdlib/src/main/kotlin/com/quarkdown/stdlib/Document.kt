@@ -826,15 +826,13 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
  * The format string accepts the same syntax as the one in [numbering], but it only affects page numbers from the current page and onwards.
  *
  * ```
- * .formatpagenumber format:{i}
+ * .formatpagenumber {i}
  * ```
  *
  * @param format page number format to apply from the page where this function appears
  */
 @Name("formatpagenumber")
-fun formatPageNumber(
-    @Name("format") format: String = "1",
-): NodeValue = PageNumberFormatter(format).wrappedAsValue()
+fun formatPageNumber(format: String): NodeValue = PageNumberFormatter(format).wrappedAsValue()
 
 /**
  * Resets the logical page number counter.
