@@ -23,6 +23,20 @@ jobs:
         job-id: main
         arguments: ktlintCheck test
 
+  npm-unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+        with:
+          full-checkout: ${{ inputs.full-checkout }}
+
+      - name: Run npm unit tests
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          job-id: npm-unit-test
+          arguments: :quarkdown-html:e2eTest
+
   e2e-build:
     runs-on: ubuntu-latest
 
