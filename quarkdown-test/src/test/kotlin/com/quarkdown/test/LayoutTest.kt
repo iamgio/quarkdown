@@ -120,6 +120,49 @@ class LayoutTest {
     }
 
     @Test
+    fun gridGap() {
+        execute(
+            """
+            .grid columns:{2} rowGap:{1cm} columnGap:{2cm}
+                Hello 1
+                
+                Hello 2
+                
+                Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div style=\"grid-template-columns: auto auto; justify-content: center; align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\" class=\"stack stack-grid\">" +
+                        "<p>Hello 1</p>" +
+                        "<p>Hello 2</p>" +
+                        "<p>Hello 3</p>" +
+                        "</div>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .grid columns:{2} gap:{1cm} columnGap:{2cm}
+                Hello 1
+                
+                Hello 2
+                
+                Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div style=\"grid-template-columns: auto auto; justify-content: center; align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\" class=\"stack stack-grid\">" +
+                        "<p>Hello 1</p>" +
+                        "<p>Hello 2</p>" +
+                        "<p>Hello 3</p>" +
+                        "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun float() {
         execute(
             """
