@@ -1,0 +1,41 @@
+.grid columns:{2} rowGap:{10px}
+  A
+
+  B
+  
+  C
+
+.grid columns:{2} columnGap:{15px}
+  A
+
+  B
+
+  C
+
+.grid columns:{2} rowGap:{20px} columnGap:{25px}
+  A
+
+  B
+
+  C
+
+.grid columns:{2} gap:{30px} columnGap:{35px}
+  A
+
+  B
+
+  C
+
+.grid columns:{2} gap:{40px} rowGap:{45px}
+  A
+
+  B
+
+  C
+
+.grid columns:{2} rowGap:{50px} gap:{55px}
+  A
+
+  B
+
+  C
