@@ -54,7 +54,7 @@ sealed interface Subdocument {
      * To get consistent results, rely on the context's [com.quarkdown.core.context.file.FileSystem.workingDirectory].
      * @param content the subdocument text content
      */
-    data class Resource(
+    class Resource(
         override val name: String,
         val path: String,
         val workingDirectory: File? = null,
@@ -62,5 +62,13 @@ sealed interface Subdocument {
     ) : Subdocument {
         override val uniqueName: String
             get() = UNIQUE_NAME_FORMAT.format(name, path.hashCode())
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Resource) return false
+            return path == other.path
+        }
+
+        override fun hashCode(): Int = path.hashCode()
     }
 }

@@ -7,9 +7,11 @@
 .html {.read {assets/analytics.html}}
 .css {.read {assets/style.css}}
 
+.var {repourl} {https://github.com/iamgio/quarkdown}
+
 .function {repolink}
     content href:
-    .text {.content} url:{https://github.com/iamgio/quarkdown/.href}
+    .text {.content} url:{.repourl/.href}
 
 .function {docslink}
     href:
@@ -59,7 +61,7 @@
     .row gap:{12px}
         [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
 
-        .read {../version.txt}::text classname:{version}
+        .read {../version.txt}::text classname:{version} url:{.repourl/releases/tag/latest}
 
 .pagemargin {topright}
     .row

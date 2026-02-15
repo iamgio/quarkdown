@@ -6,6 +6,7 @@ import {SearchField} from "../handlers/docs/search-field";
 import {FootnotesDocs} from "../handlers/footnotes/footnotes-docs";
 import {SiblingPagesButtons} from "../handlers/docs/sibling-pages-buttons";
 import {PageListAutoscroll} from "../handlers/docs/page-list-autoscroll";
+import {TocActiveTracking} from "../handlers/docs/toc-active-tracking";
 
 /**
  * 'Docs' document implementation for HTML documents targeting documentation sites and wikis.
@@ -20,6 +21,7 @@ export class DocsDocument extends PlainDocument {
             new PageMarginsDocs(this),
             new FootnotesDocs(this),
             new PageListAutoscroll(this),
+            new TocActiveTracking(this),
         ];
     }
 }

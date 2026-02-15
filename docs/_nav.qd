@@ -113,6 +113,7 @@
 - [Dynamic](Typing.qd)
 
 ###! Built-in libraries
+- [Docs: documentation projects](Docs-library.qd)
 - [Paper: abstract, definitions, theorems](Paper-library.qd)
 
 ###! Resources & logging

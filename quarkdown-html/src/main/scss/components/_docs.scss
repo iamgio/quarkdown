@@ -80,12 +80,17 @@
     figure img {
       margin: 0 !important;
     }
-  }
 
-  // When a page is being viewed, de-emphasize other pages in the page list.
-  nav[data-role="page-list"]:has(a[aria-current]) a:not([aria-current]):not(:hover) {
-    color: var(--qd-main-color);
-    opacity: 0.8;
+    // De-emphasize non-active/non-current links in aside navigation (page list and ToC).
+    nav[data-role="page-list"]:has(a[aria-current]) a:not([aria-current]):not(:hover),
+    nav[data-role="table-of-contents"] li:not(.active) > a:not(:hover) {
+      color: var(--qd-main-color);
+      opacity: 0.8;
+    }
+
+    nav[data-role="table-of-contents"] a {
+      transition: color 0.2s, opacity 0.2s;
+    }
   }
 
   // Previous/Next page buttons

@@ -4,6 +4,7 @@
 
 header .version {
     opacity: 0.6;
+    transform: translateY(2px);
 }
 
 .quarkdown-output {
