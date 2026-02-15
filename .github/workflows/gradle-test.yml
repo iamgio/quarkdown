@@ -35,7 +35,7 @@ jobs:
         uses: burrunan/gradle-cache-action@v3
         with:
           job-id: npm-unit-test
-          arguments: :quarkdown-html:e2eTest
+          arguments: :quarkdown-html:npmTest
 
   e2e-build:
     runs-on: ubuntu-latest
