@@ -41,7 +41,8 @@ All stack functions accept the following optional arguments:
 | `cross`     | Cross axis alignment (CSS `align-items`).    | `start`, `center`, `end`, `stretch`                                    |
 | `gap`       | Space between items.                         | [`Size`](Sizes.qd)                                                     |
 
-The `grid` function also accepts a mandatory `columns` argument, which takes an integer value.
+The `grid` function requires a `columns` argument, which must be specified as an integer. .br
+It also provides optional `vgap` and `hgap` parameters that override the `gap` setting, allowing you to control the vertical and horizontal spacing independently.
 
 .examplemirror
     .grid columns:{2} alignment:{spacearound}
