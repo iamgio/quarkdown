@@ -1,5 +1,5 @@
-@param name: String? = null
-@param ask: Boolean = false
+@param String name = null
+@param boolean ask = false
 Hello@if(name != null), ${name}@endif!
 
 @if(ask)

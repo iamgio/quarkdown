@@ -8,7 +8,7 @@ import gg.jte.output.StringOutput
 import kotlin.io.path.createTempDirectory
 
 /**
- * A builder-like processor for a template engine backed by JTE (Java Template Engine) with `.kte` Kotlin templates.
+ * A builder-like processor for a template engine backed by JTE (Java Template Engine) with `.jte` templates.
  *
  * Three main features:
  *
@@ -23,7 +23,7 @@ import kotlin.io.path.createTempDirectory
  *   while replacing the placeholder with the current item during each iteration.
  *   In JTE templates, iterables are expressed via `@for(item in NAME)${item}@endfor`.
  *
- * @param text text or code of the `.kte` template
+ * @param text text or code of the `.jte` template
  */
 class TemplateProcessor(
     private val text: String,
@@ -114,7 +114,7 @@ class TemplateProcessor(
         val normalizedText = text.normalizeLineSeparators().toString()
         val params = buildParams()
 
-        val templateName = "template.kte"
+        val templateName = "template.jte"
         val codeResolver =
             object : CodeResolver {
                 override fun resolve(name: String): String = normalizedText
