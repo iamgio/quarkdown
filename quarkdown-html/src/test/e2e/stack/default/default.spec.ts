@@ -1,19 +1,7 @@
-import {expect as playwrightExpect, Locator} from "@playwright/test";
 import {suite} from "../../quarkdown";
+import {BoundingBox, getChildBoxes} from "../index";
 
 const {test, expect} = suite(__dirname);
-
-type BoundingBox = NonNullable<Awaited<ReturnType<Locator["boundingBox"]>>>;
-
-async function getChildBoxes(container: Locator, count: number): Promise<BoundingBox[]> {
-    const children = container.locator("> p");
-    await playwrightExpect(children).toHaveCount(count);
-
-    const boxes = await Promise.all(
-        Array.from({length: count}, (_, i) => children.nth(i).boundingBox())
-    );
-    return boxes as BoundingBox[];
-}
 
 function assertHorizontalRow(boxes: BoundingBox[]) {
     for (let i = 1; i < boxes.length; i++) {
