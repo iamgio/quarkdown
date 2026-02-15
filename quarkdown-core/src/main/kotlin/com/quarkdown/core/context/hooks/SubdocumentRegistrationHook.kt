@@ -28,7 +28,7 @@ class SubdocumentRegistrationHook(
                 return@on
             }
 
-            val path = file.absolutePath
+            val path = file.canonicalFile.absolutePath
 
             // Reuse an already-registered subdocument to avoid redundant file I/O.
             val subdocument =
