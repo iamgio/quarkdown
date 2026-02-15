@@ -189,7 +189,8 @@ fun float(
  * @param layout stack type
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
- * @param gap blank space between children. If omitted, the default value is used
+ * @param rowGap blank space between rows. If omitted, the default value is used. Only applicable to [Stacked.Column] and [Stacked.Grid]
+ * @param columnGap blank space between columns. If omitted, the default value is used. Only applicable to [Stacked.Row] and [Stacked.Grid]
  * @param body content to stack
  * @return the new [Stacked] node
  * @see row
@@ -200,9 +201,10 @@ private fun stack(
     layout: Stacked.Layout,
     mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
-    gap: Size? = null,
+    rowGap: Size? = null,
+    columnGap: Size? = null,
     body: MarkdownContent,
-) = Stacked(layout, mainAxisAlignment, crossAxisAlignment, gap, body.children).wrappedAsValue()
+) = Stacked(layout, mainAxisAlignment, crossAxisAlignment, rowGap, columnGap, body.children).wrappedAsValue()
 
 /**
  * Stacks content horizontally.
@@ -219,7 +221,7 @@ fun row(
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
     @LikelyBody body: MarkdownContent,
-) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, gap, body)
+) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, body)
 
 /**
  * Stacks content vertically.
@@ -236,7 +238,7 @@ fun column(
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
     @LikelyBody body: MarkdownContent,
-) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, body)
+) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, body)
 
 /**
  * Stacks content in a grid layout.
@@ -247,6 +249,8 @@ fun column(
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between rows and columns. If omitted, the default value is used
+ * @param rowGap blank space between rows (overrides [gap] for rows). If omitted, the default value is used
+ * @param columnGap blank space between columns (overrides [gap] for columns). If omitted, the default value is used
  * @param body content to stack
  * @return the new [Stacked] node
  * @throws IllegalArgumentException if [columnCount] is non-positive
@@ -257,10 +261,12 @@ fun grid(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.CENTER,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
+    @LikelyNamed rowGap: Size? = gap,
+    @LikelyNamed columnGap: Size? = gap,
     @LikelyBody body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
-    else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, gap, body)
+    else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, rowGap ?: gap, columnGap ?: gap, body)
 }
 
 /**

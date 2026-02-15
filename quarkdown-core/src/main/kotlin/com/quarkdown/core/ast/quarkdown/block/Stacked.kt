@@ -12,13 +12,15 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param layout the way nodes are placed together
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
- * @param gap space between nodes
+ * @param rowGap vertical space between rows of nodes
+ * @param columnGap horizontal space between columns of nodes
  */
 class Stacked(
     val layout: Layout,
     val mainAxisAlignment: MainAxisAlignment,
     val crossAxisAlignment: CrossAxisAlignment,
-    val gap: Size?,
+    val rowGap: Size?,
+    val columnGap: Size?,
     override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
