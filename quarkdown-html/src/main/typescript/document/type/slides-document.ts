@@ -58,29 +58,31 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
         });
     }
 
-    getPageNumber(page: SlidesPage, includeDisplayNumbers: boolean = true): number {
+    getPageNumber(page: SlidesPage): number {
         const slide = page.slide;
-        const displayNumber = includeDisplayNumbers ? slide.dataset.displayPageNumber : undefined;
-        if (displayNumber) {
-            return parseInt(displayNumber, 10);
-        }
 
         if (!slide.parentElement) return 0;
         const index = Array.from(slide.parentElement.children).indexOf(slide)
         return index + 1;
     }
 
+    getDisplayPageNumber(page: SlidesPage): string {
+        const slide = page.slide;
+        const displayNumber = slide.dataset.displayPageNumber;
+        return displayNumber ? displayNumber : this.getPageNumber(page).toString();
+    }
+
+    setDisplayPageNumber(page: SlidesPage, pageNumber: string) {
+        page.slide.setAttribute("data-display-page-number", pageNumber);
+    }
+
     getPageType(page: SlidesPage): "left" | "right" {
-        const pageNumber = this.getPageNumber(page, false);
+        const pageNumber = this.getPageNumber(page);
         return (pageNumber % 2 === 0) ? "left" : "right";
     }
 
     getPage(element: HTMLElement): SlidesPage | undefined {
         return this.getPages().find(page => page.slide === this.getParentViewport(element));
-    }
-
-    setDisplayPageNumber(page: SlidesPage, pageNumber: number) {
-        page.slide.setAttribute("data-display-page-number", pageNumber.toString());
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded */

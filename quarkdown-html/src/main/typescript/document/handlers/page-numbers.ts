@@ -1,6 +1,7 @@
 import {DocumentHandler} from "../document-handler";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
 import {getAnchorTargetId} from "../../util/id";
+import {formatNumber} from "../../util/numbering";
 
 /**
  * Abstract base class for document handlers that manage page numbering.
@@ -33,6 +34,13 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     }
 
     /**
+     * Finds all page number format markers contained in the given page.
+     */
+    private getPageNumberFormatMarkers(page: QuarkdownPage): HTMLElement[] {
+        return Array.from(page.querySelectorAll('.page-number-formatter'));
+    }
+
+    /**
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
@@ -47,7 +55,17 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      */
     private updateCurrentPageNumbers(pages: QuarkdownPage[]) {
         let pageNumber = 1;
+        let currentFormat = "1";
         pages.forEach(page => {
+            // Checking for format markers on the current page. The last format marker on the page determines the format for the page number.
+            const formatMarkers = this.getPageNumberFormatMarkers(page);
+            formatMarkers.forEach(marker => {
+                const format = marker.dataset.format;
+                if (format !== undefined) {
+                    currentFormat = format;
+                }
+            });
+
             // Checking for reset markers on the current page. In that case, the page number is directly updated.
             const resetMarkers = this.getPageNumberResetMarkers(page);
             resetMarkers.forEach(marker => {
@@ -57,11 +75,12 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
-            this.quarkdownDocument.setDisplayPageNumber(page, pageNumber);
+            const formattedPageNumber = formatNumber(pageNumber, currentFormat);
+            this.quarkdownDocument.setDisplayPageNumber(page, formattedPageNumber);
 
             // Applying the page number within the page.
             this.getCurrentPageNumberElements(page).forEach(pageNumberElement => {
-                pageNumberElement.innerText = pageNumber.toString();
+                pageNumberElement.innerText = formattedPageNumber;
             });
 
             pageNumber += 1;
@@ -77,7 +96,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
             nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
                 const targetId = getAnchorTargetId(anchor);
                 const target = targetId ? document.getElementById(targetId) : undefined;
-                const displayNumber = target ? this.quarkdownDocument.getPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
+                const displayNumber = target ? this.quarkdownDocument.getDisplayPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
                 this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
         });

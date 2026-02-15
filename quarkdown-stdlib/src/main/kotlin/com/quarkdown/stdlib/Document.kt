@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
@@ -81,6 +82,7 @@ val Document: QuarkdownModule =
         ::pageFormat,
         ::pageMarginContent,
         ::footer,
+        ::formatPageNumber,
         ::resetPageNumber,
         ::currentPage,
         ::totalPages,
@@ -817,6 +819,20 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
+
+/**
+ * Sets a new page number format from the page where this function appears.
+ *
+ * The format string accepts the same syntax as the one in [numbering], but it only affects page numbers from the current page and onwards.
+ *
+ * ```
+ * .formatpagenumber {i}
+ * ```
+ *
+ * @param format page number format to apply from the page where this function appears
+ */
+@Name("formatpagenumber")
+fun formatPageNumber(format: String): NodeValue = PageNumberFormatter(format).wrappedAsValue()
 
 /**
  * Resets the logical page number counter.

@@ -10,8 +10,12 @@ class DummyDocument implements PagedLikeQuarkdownDocument<QuarkdownPage> {
     return this.pages;
   }
 
-  getPageNumber(_page: QuarkdownPage, _includeDisplayNumbers?: boolean): number {
+  getPageNumber(_page: QuarkdownPage): number {
     return 1;
+  }
+
+  getDisplayPageNumber(_page: QuarkdownPage): string {
+    return "1";
   }
 
   getPageType(page: QuarkdownPage): 'left' | 'right' {
@@ -23,7 +27,7 @@ class DummyDocument implements PagedLikeQuarkdownDocument<QuarkdownPage> {
     return undefined;
   }
 
-  setDisplayPageNumber(_page: QuarkdownPage, _pageNumber: number): void {
+  setDisplayPageNumber(_page: QuarkdownPage, _pageNumber: string): void {
   }
 
   getParentViewport(_element: Element): HTMLElement | undefined {
