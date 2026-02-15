@@ -132,11 +132,14 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"grid-template-columns: auto auto; justify-content: center; align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\" class=\"stack stack-grid\">" +
-                        "<p>Hello 1</p>" +
-                        "<p>Hello 2</p>" +
-                        "<p>Hello 3</p>" +
-                        "</div>",
+                "<div" +
+                    " style=\"grid-template-columns: auto auto; justify-content: center;" +
+                    " align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\"" +
+                    " class=\"stack stack-grid\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "<p>Hello 3</p>" +
+                    "</div>",
                 it,
             )
         }
@@ -152,11 +155,14 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"grid-template-columns: auto auto; justify-content: center; align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\" class=\"stack stack-grid\">" +
-                        "<p>Hello 1</p>" +
-                        "<p>Hello 2</p>" +
-                        "<p>Hello 3</p>" +
-                        "</div>",
+                "<div" +
+                    " style=\"grid-template-columns: auto auto; justify-content: center;" +
+                    " align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\"" +
+                    " class=\"stack stack-grid\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "<p>Hello 3</p>" +
+                    "</div>",
                 it,
             )
         }
