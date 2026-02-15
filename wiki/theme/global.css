@@ -215,6 +215,10 @@ body.quarkdown.quarkdown-paged .pagedjs_area {
   text-align: var(--qd-horizontal-alignment-local);
   text-align-last: center;
 }
+.quarkdown [style*=text-align] > :is(p, li, span) {
+  text-align: unset !important;
+  text-align-last: unset !important;
+}
 .quarkdown formula {
   text-align: initial;
   text-align-last: initial;
@@ -353,15 +357,21 @@ body.quarkdown.quarkdown-paged .pagedjs_area {
 }
 
 p + p:not(.stack > p):not(.page-margin-content > p),
+p + .container:has(> p:first-child),
 p + .float + p:not(.stack > p):not(.page-margin-content > p),
-p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
+p + .float + .container:has(> p:first-child),
+p + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)), .container:has(> p:last-child) + p:not(.stack > p):not(.page-margin-content > p),
+.container:has(> p:last-child) + .container:has(> p:first-child),
+.container:has(> p:last-child) + .float + p:not(.stack > p):not(.page-margin-content > p),
+.container:has(> p:last-child) + .float + .container:has(> p:first-child),
+.container:has(> p:last-child) + .float:has(+ p:not(.stack > p):not(.page-margin-content > p)) {
   margin-top: var(--qd-paragraph-vertical-margin) !important;
 }
 
 figure p,
 .stack > p,
-.container[style*=text-align] > p,
-.container[style*=justify-items] > p,
+[style*=text-align] > p,
+[style*=justify-items] > p,
 .mermaid p,
 .page-margin-content p {
   text-indent: 0 !important;
@@ -1218,9 +1228,13 @@ body.quarkdown-paged .pagedjs_page {
 .quarkdown-docs aside figure img {
   margin: 0 !important;
 }
-.quarkdown-docs nav[data-role=page-list]:has(a[aria-current]) a:not([aria-current]):not(:hover) {
+.quarkdown-docs aside nav[data-role=page-list]:has(a[aria-current]) a:not([aria-current]):not(:hover),
+.quarkdown-docs aside nav[data-role=table-of-contents] li:not(.active) > a:not(:hover) {
   color: var(--qd-main-color);
   opacity: 0.8;
+}
+.quarkdown-docs aside nav[data-role=table-of-contents] a {
+  transition: color 0.2s, opacity 0.2s;
 }
 .quarkdown-docs #sibling-pages-button-area {
   display: flex;

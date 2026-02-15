@@ -147,9 +147,9 @@
     }
   });
 
-  // src/main/typescript/sidebar/sidebar.ts
-  function initSidebarActiveTracking(sidebar) {
-    const items = sidebar.querySelectorAll("li[data-target-id]");
+  // src/main/typescript/navigation/active-tracking.ts
+  function initNavigationActiveTracking(navigation) {
+    const items = navigation.querySelectorAll("li[data-target-id]");
     if (items.length === 0) return;
     const targetToItem = /* @__PURE__ */ new Map();
     items.forEach((item) => {
@@ -222,19 +222,19 @@
       }
     });
   }
-  var init_sidebar = __esm({
-    "src/main/typescript/sidebar/sidebar.ts"() {
+  var init_active_tracking = __esm({
+    "src/main/typescript/navigation/active-tracking.ts"() {
       "use strict";
     }
   });
 
   // src/main/typescript/document/handlers/sidebar.ts
   var Sidebar;
-  var init_sidebar2 = __esm({
+  var init_sidebar = __esm({
     "src/main/typescript/document/handlers/sidebar.ts"() {
       "use strict";
       init_document_handler();
-      init_sidebar();
+      init_active_tracking();
       Sidebar = class extends DocumentHandler {
         async onPostRendering() {
           const template = document.querySelector("#sidebar-template");
@@ -244,7 +244,7 @@
           sidebar.style.position = "fixed";
           document.body.appendChild(sidebar);
           template.remove();
-          initSidebarActiveTracking(sidebar);
+          initNavigationActiveTracking(sidebar);
         }
       };
     }
@@ -348,7 +348,7 @@
   var init_plain_document = __esm({
     "src/main/typescript/document/type/plain-document.ts"() {
       "use strict";
-      init_sidebar2();
+      init_sidebar();
       init_execution_queues();
       init_footnotes_plain();
       PlainDocument = class {
@@ -1463,7 +1463,7 @@
     "src/main/typescript/document/type/paged-document.ts"() {
       "use strict";
       init_execution_queues();
-      init_sidebar2();
+      init_sidebar();
       init_page_margins_paged();
       init_footnotes_paged();
       init_split_code_blocks_fix_paged();
@@ -4067,6 +4067,24 @@
     }
   });
 
+  // src/main/typescript/document/handlers/docs/toc-active-tracking.ts
+  var TOC_SELECTOR, TocActiveTracking;
+  var init_toc_active_tracking = __esm({
+    "src/main/typescript/document/handlers/docs/toc-active-tracking.ts"() {
+      "use strict";
+      init_document_handler();
+      init_active_tracking();
+      TOC_SELECTOR = 'aside nav[data-role="table-of-contents"]';
+      TocActiveTracking = class extends DocumentHandler {
+        async onPostRendering() {
+          const toc = document.querySelector(TOC_SELECTOR);
+          if (!toc) return;
+          initNavigationActiveTracking(toc);
+        }
+      };
+    }
+  });
+
   // src/main/typescript/document/type/docs-document.ts
   var DocsDocument;
   var init_docs_document = __esm({
@@ -4079,6 +4097,7 @@
       init_footnotes_docs();
       init_sibling_pages_buttons();
       init_page_list_autoscroll();
+      init_toc_active_tracking();
       DocsDocument = class extends PlainDocument {
         getHandlers() {
           return [
@@ -4087,7 +4106,8 @@
             new SiblingPagesButtons(this),
             new PageMarginsDocs(this),
             new FootnotesDocs(this),
-            new PageListAutoscroll(this)
+            new PageListAutoscroll(this),
+            new TocActiveTracking(this)
           ];
         }
       };
