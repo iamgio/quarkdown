@@ -34,6 +34,15 @@ export interface PagedLikeQuarkdownDocument<TPage extends QuarkdownPage = HTMLEl
     getDisplayPageNumber(page: TPage): string;
 
     /**
+     * Sets the display page number for the given page.
+     * The display number is a logical page number that may differ from the physical page number,
+     * for example due to page number resets.
+     * @param page - The page to set the display number for
+     * @param pageNumber - The display page number to set (1-based)
+     */
+    setDisplayPageNumber(page: TPage, pageNumber: string): void;
+
+    /**
      * @param page - The page to get the type for
      * @returns The page type ('left' or 'right')
      */
@@ -45,13 +54,4 @@ export interface PagedLikeQuarkdownDocument<TPage extends QuarkdownPage = HTMLEl
      * @returns The containing page, or `undefined` if not found
      */
     getPage(element: HTMLElement): TPage | undefined;
-
-    /**
-     * Sets the display page number for the given page.
-     * The display number is a logical page number that may differ from the physical page number,
-     * for example due to page number resets.
-     * @param page - The page to set the display number for
-     * @param pageNumber - The display page number to set (1-based)
-     */
-    setDisplayPageNumber(page: TPage, pageNumber: string): void;
 }

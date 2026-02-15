@@ -1,7 +1,7 @@
 import {DocumentHandler} from "../document-handler";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
 import {getAnchorTargetId} from "../../util/id";
-import {formatPageNumber} from '../../util/page-number';
+import {formatNumber} from "../../util/numbering";
 
 /**
  * Abstract base class for document handlers that manage page numbering.
@@ -75,7 +75,7 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
                 }
             });
 
-            const formattedPageNumber = formatPageNumber(pageNumber, currentFormat);
+            const formattedPageNumber = formatNumber(pageNumber, currentFormat);
             this.quarkdownDocument.setDisplayPageNumber(page, formattedPageNumber);
 
             // Applying the page number within the page.

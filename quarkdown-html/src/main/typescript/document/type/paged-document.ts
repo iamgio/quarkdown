@@ -32,7 +32,6 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
     }
 
     getPageNumber(page: HTMLElement): number {
-        console.log("Getting page number for page:", page.dataset);
         return parseInt(page.dataset.pageNumber ?? "0");
     }
 
@@ -40,12 +39,12 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return page.dataset.displayPageNumber ?? this.getPageNumber(page).toString();
     }
 
-    getPageType(page: HTMLElement): "left" | "right" {
-        return page.classList.contains("pagedjs_right_page") ? "right" : "left";
-    }
-
     setDisplayPageNumber(page: HTMLElement, pageNumber: string) {
         page.setAttribute("data-display-page-number", pageNumber);
+    }
+
+    getPageType(page: HTMLElement): "left" | "right" {
+        return page.classList.contains("pagedjs_right_page") ? "right" : "left";
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded. */

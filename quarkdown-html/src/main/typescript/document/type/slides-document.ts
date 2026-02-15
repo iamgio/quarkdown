@@ -72,6 +72,10 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
         return displayNumber ? displayNumber : this.getPageNumber(page).toString();
     }
 
+    setDisplayPageNumber(page: SlidesPage, pageNumber: string) {
+        page.slide.setAttribute("data-display-page-number", pageNumber);
+    }
+
     getPageType(page: SlidesPage): "left" | "right" {
         const pageNumber = this.getPageNumber(page);
         return (pageNumber % 2 === 0) ? "left" : "right";
@@ -79,10 +83,6 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
 
     getPage(element: HTMLElement): SlidesPage | undefined {
         return this.getPages().find(page => page.slide === this.getParentViewport(element));
-    }
-
-    setDisplayPageNumber(page: SlidesPage, pageNumber: string) {
-        page.slide.setAttribute("data-display-page-number", pageNumber);
     }
 
     /** Sets up pre-rendering to execute when DOM content is loaded */
