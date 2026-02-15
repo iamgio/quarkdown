@@ -1,0 +1,20 @@
+.row gap:{10px}
+  A
+
+  B
+  
+  C
+  
+.column gap:{15px}
+  A
+
+  B
+  
+  C
+  
+.grid columns:{2} gap:{20px}
+  A
+
+  B
+  
+  C
