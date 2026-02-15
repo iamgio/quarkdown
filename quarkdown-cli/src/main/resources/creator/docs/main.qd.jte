@@ -1,5 +1,5 @@
-@param name: String? = null
-@param initialContent: String? = null
+@param String name = null
+@param String initialContent = null
 
 @if(name != null)
 .docname {${name}}

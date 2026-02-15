@@ -1,7 +1,7 @@
-@param name: String? = null
-@param docs: Boolean = false
-@param initialContent: String? = null
-@param mainFile: String? = null
+@param String name = null
+@param boolean docs = false
+@param String initialContent = null
+@param String mainFile = null
 
 @if(!docs && name != null)
 # ${name}

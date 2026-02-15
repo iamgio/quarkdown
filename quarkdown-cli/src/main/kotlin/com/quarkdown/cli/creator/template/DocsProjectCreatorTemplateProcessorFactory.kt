@@ -3,7 +3,7 @@ package com.quarkdown.cli.creator.template
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.template.TemplateProcessor
 
-private const val TEMPLATE = "/creator/docs/main.qd.kte"
+private const val TEMPLATE = "/creator/docs/main.qd.jte"
 
 /**
  * Implementation of [ProjectCreatorTemplateProcessorFactory] for `docs` projects,

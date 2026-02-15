@@ -38,6 +38,12 @@ jobs:
         job-id: e2e-build
         arguments: installDist
 
+    # Building the wiki to ensure it compiles
+    - name: Build wiki
+      run: |
+        cd docs
+        ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown c Home.qd --strict --clean
+
     - name: Upload CLI artifact
       uses: actions/upload-artifact@v4
       with:

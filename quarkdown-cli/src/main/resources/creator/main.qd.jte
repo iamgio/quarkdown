@@ -1,15 +1,15 @@
-@param name: String? = null
-@param description: String? = null
-@param keywords: List<String> = emptyList()
-@param authors: List<String> = emptyList()
-@param type: String? = null
-@param docs: Boolean = false
-@param lang: String? = null
-@param theme: Boolean = false
-@param colorTheme: String? = null
-@param layoutTheme: String? = null
-@param pageCounter: Boolean = false
-@param initialContent: String? = null
+@param String name = null
+@param String description = null
+@param java.util.List<String> keywords = java.util.Collections.emptyList()
+@param java.util.List<String> authors = java.util.Collections.emptyList()
+@param String type = null
+@param boolean docs = false
+@param String lang = null
+@param boolean theme = false
+@param String colorTheme = null
+@param String layoutTheme = null
+@param boolean pageCounter = false
+@param String initialContent = null
 
 @if(!docs && name != null)
 .docname {${name}}
@@ -29,14 +29,14 @@
 @if(!keywords.isEmpty())
 ${""}
 .dockeywords
-@for(item in keywords)
+@for(String item : keywords)
 ${"  "}- ${item}
 @endfor
 @endif
 @if(!authors.isEmpty())
 ${""}
 .docauthors
-@for(item in authors)
+@for(String item : authors)
 ${"  "}- ${item}
 @endfor
 @endif

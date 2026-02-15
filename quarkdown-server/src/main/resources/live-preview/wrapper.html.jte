@@ -1,5 +1,5 @@
-@param srcFile: String
-@param serverPort: String
+@param String srcFile
+@param String serverPort
 
 <!DOCTYPE html>
 <html>
