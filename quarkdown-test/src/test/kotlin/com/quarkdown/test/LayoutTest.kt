@@ -66,7 +66,7 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: space-between; align-items: flex-start; gap: 1.0cm;\" class=\"stack stack-column\">" +
+                "<div style=\"justify-content: space-between; align-items: flex-start; row-gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<p>Hello 1</p>" +
                     "<h2>Hello 2</h2>" +
                     "<pre><code>Hello 3</code></pre>" +
@@ -97,11 +97,11 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: center; align-items: center; gap: 200.0px;\" class=\"stack stack-row\">" +
+                "<div style=\"justify-content: center; align-items: center; column-gap: 200.0px;\" class=\"stack stack-row\">" +
                     "<div style=\"justify-content: flex-start; align-items: flex-end;\" class=\"stack stack-column\">" +
                     "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
-                    "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-column\">" +
+                    "<div style=\"justify-content: flex-start; align-items: center; row-gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<div class=\"clip clip-circle\"><div class=\"container\">" +
                     "<figure><img src=\"img1.png\" alt=\"\" /></figure>" +
                     "</div></div>" +
