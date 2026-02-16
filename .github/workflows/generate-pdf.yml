@@ -8,6 +8,7 @@ on:
       - '**/README.md'
       - 'LICENSE'
       - '.github/FUNDING.yml'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -57,20 +58,15 @@ jobs:
         name: mock-pdf
         path: pdf/mock
 
-    - name: Push to generated branch
-      run: |
-        mv pdf temp
-        git stash
-        git add temp
-        git fetch
-        LAST_COMMIT=$(git log -n 1 --pretty=format:"%h")
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git checkout generated
-        mkdir -p pdf/mock
-        cp -r temp/mock/* pdf/mock
-        rm -rf temp
-        git add temp
-        git add pdf
-        git commit -m "Generate Mock PDF files (from $LAST_COMMIT)"
-        git push
+    - name: Push to generated repo
+      uses: cpina/github-action-push-to-another-repository@v1.7.2
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.COMMITTER_TOKEN }}
+      with:
+        source-directory: pdf/mock
+        destination-github-username: quarkdown-labs
+        destination-repository-name: generated
+        target-directory: mock
+        commit-message: "Generate Mock PDF files from ${{ github.sha }}"
+        user-name: "github-actions[bot]"
+        user-email: "github-actions[bot]@users.noreply.github.com"
