@@ -21,7 +21,7 @@ runs:
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ inputs.github-token }}
+        personal_token: ${{ inputs.github-token }}
         external_repository: quarkdown-labs/quarkdown.com
         publish_dir: docs/output/wiki
         destination_dir: wiki
