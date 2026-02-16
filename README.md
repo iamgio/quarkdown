@@ -138,7 +138,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
     Continuous flow like Notion/Obsidian, perfect for static websites and knowledge management - check out the author's [personal website](https://iamgio.eu/).
 
   - [X] **Paged** <sup>via [paged.js](https://pagedjs.org)</sup>  
-    Perfect for papers, articles and books - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock).
+    Perfect for papers, articles and books - check out the [demo document](https://github.com/quarkdown-labs/generated/blob/main/mock/paperwhite_latex.pdf).
 
   - [X] **Slides** <sup>via [reveal.js](https://revealjs.com)</sup>  
     Perfect for interactive presentations.
@@ -392,7 +392,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
 - The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qd -p`.
-- The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
+- The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/quarkdown-labs/generated) repo.  
 
 ## Contributing
 
