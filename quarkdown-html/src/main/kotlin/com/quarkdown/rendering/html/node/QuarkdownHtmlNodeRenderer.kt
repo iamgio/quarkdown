@@ -12,6 +12,7 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
@@ -654,11 +655,14 @@ class QuarkdownHtmlNodeRenderer(
                 }
             }
 
+            // If the quote has a type, the first child must be a paragraph, because the label is rendered as ::before.
+            if (node.type != null && node.children.firstOrNull() !is Paragraph) {
+                +tagBuilder("p").acceptEmpty().build()
+            }
+
             +node.children
             node.attribution?.let {
-                +tagBuilder("p", it)
-                    .className("attribution")
-                    .build()
+                +tagBuilder("p", it).className("attribution").build()
             }
         }
 

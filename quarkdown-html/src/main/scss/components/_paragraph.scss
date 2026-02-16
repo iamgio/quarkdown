@@ -3,10 +3,6 @@
     margin-top: 0;
     margin-bottom: 0;
     text-indent: var(--qd-paragraph-text-indent);
-
-    &:empty {
-      display: none;
-    }
   }
 
   &:not(.quarkdown-slides) p {
