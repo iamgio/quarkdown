@@ -149,6 +149,53 @@ class TextTest {
     }
 
     @Test
+    fun `quote type`() {
+        arrayOf("> Tip: this is a tip", "> [!TIP]\n> this is a tip").forEach { source ->
+            execute(".doclang {English}\n$source") {
+                assertEquals(
+                    "<blockquote class=\"tip\" style=\"--quote-type-label: 'Tip';\" data-labeled=\"\"><p>this is a tip</p></blockquote>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `quote type with non-paragraph first child`() {
+        execute(
+            """
+            .doclang {English}
+            > [!TIP]
+            > - this is
+            > - a tip
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<blockquote class=\"tip\" style=\"--quote-type-label: 'Tip';\" data-labeled=\"\">" +
+                    "<p data-accept-empty=\"\"></p>" +
+                    "<ul><li>this is</li><li>a tip</li></ul>" +
+                    "</blockquote>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `quote type with empty content`() {
+        execute(
+            """
+            .doclang {English}
+            > [!TIP]
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<blockquote class=\"tip\" style=\"--quote-type-label: 'Tip';\" data-labeled=\"\"><p data-accept-empty=\"\"></p></blockquote>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `quote attribution`() {
         execute(
             """
