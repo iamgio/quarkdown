@@ -72,7 +72,7 @@ jobs:
       uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
       with:
         quarkdown-path: ${{ github.workspace }}/build/unzipped/quarkdown/bin/quarkdown
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.COMMITTER_TOKEN }}
 
     - name: Distribute artifact
       uses: actions/upload-artifact@v4
@@ -114,7 +114,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref_type == 'tag'
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.COMMITTER_TOKEN }}
         external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs
@@ -122,7 +122,7 @@ jobs:
     - name: Deploy devbuild docs
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.COMMITTER_TOKEN }}
         external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs/latest

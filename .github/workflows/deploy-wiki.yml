@@ -20,4 +20,4 @@ jobs:
         uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
         with:
           quarkdown-path: ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.COMMITTER_TOKEN }}
