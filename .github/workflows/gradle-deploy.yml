@@ -115,6 +115,7 @@ jobs:
       if: github.ref_type == 'tag'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs
 
@@ -122,6 +123,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs/latest
 
