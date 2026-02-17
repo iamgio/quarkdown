@@ -13,6 +13,7 @@ import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
 import com.quarkdown.core.function.reflect.annotation.toValidator
 import com.quarkdown.core.function.value.InputValue
+import com.quarkdown.core.function.value.None
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.error.PipelineException
@@ -47,6 +48,7 @@ class KFunctionAdapter<T : OutputValue<*>>(
                     index = it.index,
                     isOptional = it.isOptional,
                     isInjected = it.hasAnnotation<Injected>(),
+                    isNullable = it.type.isMarkedNullable,
                 )
             }
 
@@ -71,7 +73,8 @@ class KFunctionAdapter<T : OutputValue<*>>(
                             if (it::class.hasAnnotation<NoAutoArgumentUnwrapping>()) it else it.unwrappedValue
                         }
 
-                    param to arg
+                    // Quarkdown's None becomes Kotlin's null for nullable parameters.
+                    param to arg.takeUnless { arg is None && param.type.isMarkedNullable }
                 }
 
             // Call the KFunction.

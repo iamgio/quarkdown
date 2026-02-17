@@ -10,6 +10,9 @@ import kotlin.reflect.KClass
  * @param isOptional whether the corresponding argument in a function call can be omitted
  * @param isInjected whether the corresponding argument in a function call is automatically injected
  *                   and is not to be supplied by the caller.
+ * @param isNullable whether the parameter accepts `null` values.
+ *                   When `true`, [com.quarkdown.core.function.value.NoneValue] arguments are accepted
+ *                   and converted to Kotlin's `null` at invocation time.
  * @param T input type of the parameter
  */
 data class FunctionParameter<T : Any>(
@@ -20,4 +23,7 @@ data class FunctionParameter<T : Any>(
     // When a function parameter is loaded from a KFunction via KFunctionAdapter,
     // a parameter is injected if it's annotated with `@Injected`
     val isInjected: Boolean = false,
+    // When a function parameter is loaded from a KFunction via KFunctionAdapter,
+    // a parameter is nullable if the corresponding KParameter type is marked nullable.
+    val isNullable: Boolean = false,
 )

@@ -18,3 +18,9 @@ data object NoneValue : InputValue<None>, OutputValue<None> {
 
     override fun <O> accept(visitor: OutputValueVisitor<O>): O = visitor.visit(this)
 }
+
+/**
+ * Whether this value represents a missing/null value,
+ * either as a direct [NoneValue] or as a value wrapping [None], [NoneValue], or `null`.
+ */
+fun Value<*>.isNone(): Boolean = this is NoneValue || unwrappedValue.let { it == null || it is None || it is NoneValue }
