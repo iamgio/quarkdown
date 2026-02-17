@@ -18,10 +18,10 @@
     .html {<sup><a href="https://quarkdown.com/docs/.href" target="_blank">docs ↗</a></sup>}
 
 .function {example}
-    content:
+    type? content:
     .numbered key:{example}
         num:
-        .box {Example .num} type:{tip}
+        .box {Example .num} type:{.type::otherwise {tip}}
             .content
 
 .function {quarkdownoutput}
@@ -30,32 +30,20 @@
         .content
 
 .function {exampleoutput}
-    output prelude? quarkdowncode:
-    .numbered key:{example}
-        num:
-        .box {Example .num} type:{tip}
-            .if {.prelude::isnone::not}
-                .prelude
+    output prelude? type? quarkdowncode:
+    .example type:{.type}
+        .if {.prelude::isnone::not}
+            .prelude
 
-            .code lang:{markdown} linenumbers:{no}
-                .quarkdowncode
+        .code lang:{markdown} linenumbers:{no}
+            .quarkdowncode
 
-            .container classname:{quarkdown-output} fullwidth:{yes}
-                .output
+        .container classname:{quarkdown-output} fullwidth:{yes}
+            .output
 
 .function {examplemirror}
     prelude? type? quarkdowncode:
-    .numbered key:{example}
-        num:
-        .box {Example .num} type:{.type::otherwise {tip}}
-            .if {.prelude::isnone::not}
-                .prelude
-
-            .code lang:{markdown} linenumbers:{no}
-                .quarkdowncode
-
-            .container classname:{quarkdown-output} fullwidth:{yes}
-                .quarkdowncode
+    .exampleoutput output:{.quarkdowncode} prelude:{.prelude} type:{.type} quarkdowncode:{.quarkdowncode}
 
 .pagemargin {topleft}
     .row gap:{12px}

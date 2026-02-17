@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.block.list.UnorderedList
 import com.quarkdown.core.ast.dsl.buildBlock
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
@@ -87,13 +88,20 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
             is OutputValue<*> -> value.unwrappedValue.accept(this)
             is Iterable<*> -> GeneralCollectionValue(value.unwrappedValue as Iterable<OutputValue<*>>).accept(this)
             is Node -> value.unwrappedValue
-            else -> this.visit(parseRaw(value.unwrappedValue.toString()))
+            else -> this.visit(parseRaw(value.unwrappedValue.toString(), value.evaluationContext))
         }
 
     /**
      * When a [DynamicValue] cannot be converted to a [NodeValue], its string content is parsed as Markdown.
      * @param raw string content of the [DynamicValue]
+     * @param context optional context to use for parsing instead of the visitor's own.
+     *                When a [DynamicValue] carries an [DynamicValue.evaluationContext],
+     *                it is passed here to preserve the scope in which the value was produced.
+     *                If `null`, the visitor's own context is used.
      * @return wrapped node parsed from the raw Markdown string
      */
-    protected abstract fun parseRaw(raw: String): NodeValue
+    protected abstract fun parseRaw(
+        raw: String,
+        context: Context? = null,
+    ): NodeValue
 }

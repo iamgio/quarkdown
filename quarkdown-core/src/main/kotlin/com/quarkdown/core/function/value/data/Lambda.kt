@@ -1,6 +1,7 @@
 package com.quarkdown.core.function.value.data
 
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.error.InvalidLambdaArgumentCountException
 import com.quarkdown.core.function.library.Library
@@ -48,9 +49,9 @@ open class Lambda(
                         SimpleFunction(
                             parameterName,
                             parameters = emptyList(),
-                        ) { _, _ ->
+                        ) { _, call ->
                             // Value associated to the lambda argument.
-                            DynamicValue(argument.unwrappedValue)
+                            DynamicValue(argument.unwrappedValue, evaluationContext = call.context)
                         }
                     }.toSet(),
         )
@@ -71,6 +72,10 @@ open class Lambda(
     /**
      * Invokes the lambda action with given arguments.
      * @param arguments arguments of the lambda action
+     * @param callingContext optional context of the call site that triggered this lambda invocation.
+     *                       When provided, its own libraries (e.g. lambda parameters, local variables)
+     *                       are propagated to the forked execution context, allowing body arguments
+     *                       containing dynamic references to resolve variables from the calling scope.
      * @param allowDestructuring if `true`, [arguments] has only 1 element which is [Destructurable], and the lambda has N>1 explicit parameters,
      *                           the argument is destructured into N parts.
      *                           For example, a dictionary may be destructured into its key and value.
@@ -78,13 +83,14 @@ open class Lambda(
      */
     fun invokeDynamic(
         arguments: List<Value<*>>,
+        callingContext: Context? = null,
         allowDestructuring: Boolean = true,
     ): OutputValue<*> {
         // Destructuring
         if (allowDestructuring && explicitParameters.size > 1) {
             // The lambda is invoked with the first N destructured components.
             (arguments.singleOrNull() as? Destructurable<*>)
-                ?.let { return invokeDynamic(it.destructured(componentCount = explicitParameters.size)) }
+                ?.let { return invokeDynamic(it.destructured(componentCount = explicitParameters.size), callingContext) }
         }
 
         // Check if the amount of arguments matches the amount of expected parameters.
@@ -103,7 +109,9 @@ open class Lambda(
                     arguments + List(explicitParameters.size - arguments.size) { NoneValue }
                 }
 
-                else -> arguments
+                else -> {
+                    arguments
+                }
             }
 
         // Create a new independent context, copy of the parent one, to execute the lambda block in.
@@ -112,7 +120,16 @@ open class Lambda(
         val context = parentContext.fork()
 
         // Register the arguments in the context, which can be accessed as function calls.
+        // Lambda parameters are added first so they take priority over the calling context's declarations.
         context.libraries += createLambdaParametersLibrary(actualArguments)
+
+        // Propagate the calling scope's own libraries (e.g. its lambda parameters, locally defined variables)
+        // so that dynamic value references passed as body arguments can resolve variables from the calling scope.
+        // These are added after the lambda parameters so that the lambda's own parameters shadow any
+        // same-named declarations from the calling context.
+        if (callingContext is MutableContext) {
+            context.libraries += callingContext.libraries
+        }
 
         // The result of the lambda action is processed.
         return action(actualArguments, context)

@@ -113,6 +113,27 @@ Code blocks using the `diff` language now have improved and clearer styling for 
 
 ### Fixed
 
+#### Fixed subdocument resolution from included files
+
+Linking to subdocuments from files included via `.include` from a different directory now correctly resolves the subdocument path.
+
+#### Fixed unresolved reference of local variables in body arguments
+
+The following snippet used to cause an unresolved reference error for `y`:
+
+```markdown
+.function {a}
+    x:
+    .x
+
+.function {b}
+    y:
+    .a
+        .y
+
+.b {hello}
+```
+
 #### Fixed paragraph spacing with floating element
 
 Fixed an issue that caused no spacing to be present between two paragraphs if a floating element was in-between, via `.float`.
@@ -124,10 +145,6 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 #### Fixed line spacing in table cells
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
-
-#### Fixed subdocument resolution from included files
-
-Linking to subdocuments from files included via `.include` from a different directory now correctly resolves the subdocument path.
 
 ### Sponsors
 

@@ -30,5 +30,8 @@ class InlineNodeOutputValueVisitor(
     override fun visit(value: NoneValue) = CodeSpan(value.unwrappedValue.toString())
 
     // Raw Markdown code is parsed as inline.
-    override fun parseRaw(raw: String) = ValueFactory.inlineMarkdown(raw, context).asNodeValue()
+    override fun parseRaw(
+        raw: String,
+        context: Context?,
+    ) = ValueFactory.inlineMarkdown(raw, context ?: this.context).asNodeValue()
 }

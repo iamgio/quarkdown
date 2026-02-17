@@ -16,7 +16,7 @@ You can set document information using the following functions. By convention, y
 
 All these functions have a *modify or echo* behavior: if you call them without an argument, they return the previously set value:
 
-.exampleoutput {This document is called **Quarkdown**!}
+.exampleoutput {This document is named **Quarkdown**!}
     .docname {Quarkdown}
 
     This document is named **.docname**!
