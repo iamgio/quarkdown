@@ -102,6 +102,73 @@ Defining a new node involves:
 - Adding lexing/parsing logic (very uncommon in the current state of the project) or, more commonly for non-GFM nodes,
   defining a native function in the [standard library](#standard-library) that returns the node. See the `Layout` stdlib module for examples.
 
+### Function calls and scripting
+
+The function call subsystem spans parsing, resolution, execution, and output mapping.
+
+#### Parsing and refinement
+
+Source code function calls (e.g. `.foo {x}::bar {y}`) are first extracted by the `FunctionCallWalker` (lexer-level)
+into `WalkedFunctionCall` structures. These are then refined by `FunctionCallRefiner` into `FunctionCallNode` AST nodes.
+
+**Inline vs body arguments:** Inline arguments (inside `{...}`) are eagerly evaluated as expressions via `ValueFactory.safeExpression`,
+resolving nested function calls at parse time. Body arguments (indented blocks) are stored as raw `DynamicValue` strings
+for lazy evaluation by the consuming function. This distinction is critical: body arguments intentionally defer evaluation
+so that the receiving function can choose to use them as raw text, evaluate them as Markdown, or both.
+
+**Chaining:** `FunctionCallRefiner` transforms the linked-list chain `.foo {x}::bar {y}` into a nested tree `bar(foo(x), y)`.
+
+#### Resolution and execution
+
+`FunctionCallNodeExpander` drives function call expansion during the `FunctionCallExpansionStage`:
+
+1. Each `FunctionCallNode` carries the `Context` it was parsed in (`node.context`).
+2. Resolution: `node.context.resolveUnchecked(node)` finds the function by name and creates an `UncheckedFunctionCall`
+   with `context = this` (the resolving context). This context is accessible as `call.context` during execution.
+3. Execution: the function's `invoke(bindings, call)` runs and returns an `OutputValue`.
+4. Output mapping: the result is passed to a `NodeOutputValueVisitor` (block or inline), which converts it to an AST `Node`.
+
+For `DynamicValue` results containing raw strings, the visitor calls `parseRaw`, which invokes `ValueFactory.blockMarkdown`
+or `ValueFactory.inlineMarkdown` to parse the string as Markdown with function expansion. The context used for `parseRaw`
+is the one held by the `FunctionCallNodeExpander`, which is the context passed to `ValueFactory.markdown` when the current
+parse cycle was initiated.
+
+#### Custom functions and lambdas
+
+Custom user-defined functions (`.function` in the `Flow` stdlib module) bridge Quarkdown scripting with the native function system:
+
+1. **Definition:** `Flow.function()` creates a `SimpleFunction` and registers it in a `Library` prefixed with `__func__`.
+   The function's parameters are derived from the Lambda's explicit parameters.
+
+2. **Lambda invocation (`Lambda.invokeDynamic`):**
+   - Forks from `parentContext` (the context where the Lambda was *defined*, not called).
+   - Registers lambda parameter functions via `createLambdaParametersLibrary`: each parameter becomes a zero-arg `SimpleFunction`
+     that returns `DynamicValue(argument.unwrappedValue)`.
+   - Propagates the calling context's libraries (when `callingContext` is provided), so that variable references
+     from the calling scope can be resolved within the lambda body.
+   - Calls the Lambda's `action(arguments, forkedContext)`, which typically runs `ValueFactory.eval(body, forkedContext)`.
+
+3. **`ValueFactory.eval` and recursive resolution:** `eval` parses a raw string as an expression (via `safeExpression`),
+   evaluates it, and returns the result. When the result is a `DynamicValue` wrapping a single-line string different
+   from the input (indicating an intermediate, unresolved reference such as a lambda parameter holding `.y`), `eval`
+   recursively evaluates the result in the same context. Multi-line strings are excluded from recursion
+   as they represent raw Markdown body content intended for lazy evaluation.
+
+4. **Variables:** `Flow.variable()` defines a variable as a function with an optional parameter, acting as both getter and setter.
+   Variable reassignment scans the context hierarchy upward to find the owning context.
+
+#### Key files
+
+| File                                                  | Role                                                                      |
+|-------------------------------------------------------|---------------------------------------------------------------------------|
+| `FunctionCallRefiner`                                 | Refines walked calls into `FunctionCallNode`s, handles chaining           |
+| `FunctionCallNodeExpander`                            | Expands function call nodes in the AST, maps outputs to nodes             |
+| `FunctionCallExpansionStage`                          | Pipeline stage that drives expansion                                      |
+| `Lambda`                                              | Parameterized action block with context forking and argument registration |
+| `ValueFactory.eval` / `safeExpression` / `expression` | Expression parsing and evaluation                                         |
+| `NodeOutputValueVisitor`                              | Converts function output values to AST nodes                              |
+| `Flow.kt` (`function`, `variable`)                    | Custom function and variable definition                                   |
+
 ## Standard library
 
 The standard library is located in [quarkdown-stdlib](quarkdown-stdlib).

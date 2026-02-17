@@ -201,7 +201,7 @@ class ScriptingTest {
     }
 
     @Test
-    fun `correct caller context propagation in defined function`() {
+    fun `correct caller context propagation in defined function (2 levels)`() {
         execute(
             """
             .function {a}
@@ -212,6 +212,31 @@ class ScriptingTest {
                 y:
                 .a
                     .y
+
+            .b {hi}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>hi</p>", it)
+        }
+    }
+
+    @Test
+    fun `correct caller context propagation in defined function (3 levels)`() {
+        execute(
+            """
+            .function {a}
+                x:
+                .c
+                    .x
+
+            .function {b}
+                y:
+                .a
+                    .y
+
+            .function {c}
+                z:
+                .z
 
             .b {hi}
             """.trimIndent(),
