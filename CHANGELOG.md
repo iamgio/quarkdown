@@ -11,7 +11,7 @@ TODO begin via `quarkdown create`
 
 #### `none` is now converted to `null`
 
-When invoking a native function from the stdlib, [`none`](https://quarkdown.com/wiki/none) is now supported by nullable parameters, and converted to `null`.
+When invoking a native function from the stdlib, [`none`](https://quarkdown.com/wiki/None) is now supported by nullable parameters, and converted to `null`.
 
 Before:
 
