@@ -9,6 +9,38 @@
 TODO also mention page margins
 TODO begin via `quarkdown create`
 
+#### `none` is now converted to `null`
+
+When invoking a native function from the stdlib, [`none`](https://quarkdown.com/wiki/none) is now supported by nullable parameters, and converted to `null`.
+
+Before:
+
+```markdown
+.function {rectangle}
+    width height background?:
+    .if {.background::isnone}
+        .container width:{.width} height:{.height}
+    .ifnot {.background::isnone}
+        .container width:{.width} height:{.height} background:{.background}
+```
+
+After:
+
+```markdown
+.function {rectangle}
+    width height background?:
+    .container width:{.width} height:{.height} background:{.background}
+```
+
+Additionally, `.if` now treats `none` as falsy, without the need for `::isnone`:
+
+```markdown
+.function {greet}
+    name?:
+    .if {.name}
+        Hi, .name!
+```
+
 #### New themes: Galactic (color) and Hyperlegible (layout)
 
 TODO img
@@ -145,6 +177,8 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 #### Fixed line spacing in table cells
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
+
+---
 
 ### Sponsors
 
