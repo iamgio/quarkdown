@@ -49,9 +49,9 @@ open class Lambda(
                         SimpleFunction(
                             parameterName,
                             parameters = emptyList(),
-                        ) { _, _ ->
+                        ) { _, call ->
                             // Value associated to the lambda argument.
-                            DynamicValue(argument.unwrappedValue)
+                            DynamicValue(argument.unwrappedValue, evaluationContext = call.context)
                         }
                     }.toSet(),
         )
@@ -109,7 +109,9 @@ open class Lambda(
                     arguments + List(explicitParameters.size - arguments.size) { NoneValue }
                 }
 
-                else -> arguments
+                else -> {
+                    arguments
+                }
             }
 
         // Create a new independent context, copy of the parent one, to execute the lambda block in.

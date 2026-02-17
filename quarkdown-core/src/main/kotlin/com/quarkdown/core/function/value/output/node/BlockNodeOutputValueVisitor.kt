@@ -39,5 +39,8 @@ class BlockNodeOutputValueVisitor(
     override fun visit(value: NoneValue) = inline.visit(value).inParagraph()
 
     // Raw Markdown code is parsed as blocks.
-    override fun parseRaw(raw: String) = ValueFactory.blockMarkdown(raw, context).asNodeValue()
+    override fun parseRaw(
+        raw: String,
+        context: Context?,
+    ) = ValueFactory.blockMarkdown(raw, context ?: this.context).asNodeValue()
 }

@@ -660,28 +660,10 @@ object ValueFactory {
                 fallback()
             }
 
-        val result =
-            expression.eval().let {
-                it as? OutputValue<*>
-                    ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
-            }
-
-        // If the result is a DynamicValue wrapping a single-line string different from the input,
-        // it means the expression resolved to an intermediate string value
-        // (e.g. a lambda parameter holding an unevaluated function reference like `.x`).
-        // Recursively evaluate it in the same context so that such references are fully resolved
-        // while the correct scope (with the referenced variables) is still available.
-        // Multi-line content is excluded as it represents raw Markdown content (e.g. body blocks)
-        // that should be kept as-is for lazy evaluation by the consumer.
-        if (result is DynamicValue &&
-            result.unwrappedValue is String &&
-            '\n' !in (result.unwrappedValue as String) &&
-            result.unwrappedValue != raw.toString()
-        ) {
-            return eval(result.unwrappedValue as String, context)
+        return expression.eval().let {
+            it as? OutputValue<*>
+                ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
         }
-
-        return result
     }
 
     /**
