@@ -296,13 +296,15 @@ fun function(
 
     // The custom function itself.
     val function =
-        SimpleFunction(name, parameters) { bindings, _ ->
+        SimpleFunction(name, parameters) { bindings, call ->
             // Retrieving arguments from the function call.
             // `None` is used as a default value if the argument for an optional parameter is not provided.
             val args: List<Value<*>> = parameters.map { bindings[it]?.value ?: NoneValue }
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
-            body.invokeDynamic(args)
+            // The calling context is propagated so that dynamic value references within the lambda body
+            // can resolve variables from the calling scope.
+            body.invokeDynamic(args, callingContext = call.context)
         }
 
     // The function is registered and ready to be called.

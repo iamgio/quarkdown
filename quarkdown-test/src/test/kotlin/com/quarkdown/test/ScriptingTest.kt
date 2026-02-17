@@ -201,6 +201,26 @@ class ScriptingTest {
     }
 
     @Test
+    fun `correct caller context propagation in defined function`() {
+        execute(
+            """
+            .function {a}
+                x:
+                .x
+
+            .function {b}
+                y:
+                .a
+                    .y
+
+            .b {hi}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>hi</p>", it)
+        }
+    }
+
+    @Test
     fun `type inference`() {
         execute(
             """
