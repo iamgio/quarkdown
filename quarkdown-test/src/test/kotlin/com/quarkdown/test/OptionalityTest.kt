@@ -319,4 +319,30 @@ class OptionalityTest {
             execute(".sin {.none}") {}
         }
     }
+
+    @Test
+    fun `none in if as falsy`() {
+        execute(
+            """
+            .var {x} {.none}
+            .if {.x}
+               Hi!
+            """.trimIndent(),
+        ) {
+            assertEquals("", it)
+        }
+    }
+
+    @Test
+    fun `none in ifnot as falsy`() {
+        execute(
+            """
+            .var {x} {.none}
+            .ifnot {.x}
+               Hi!
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hi!</p>", it)
+        }
+    }
 }
