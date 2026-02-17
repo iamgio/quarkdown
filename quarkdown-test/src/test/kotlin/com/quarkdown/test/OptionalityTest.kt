@@ -4,7 +4,9 @@ import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 
 /**
  * Tests for scripting capabilities.
@@ -264,6 +266,83 @@ class OptionalityTest {
 
         execute(".none::otherwise {.text {hi} b}") {
             assertEquals("<p><span>hi</span> b</p>", it)
+        }
+    }
+
+    @Test
+    fun `none as null parameter in native function`() {
+        execute(
+            """
+            .row gap:{.none}
+                Test
+            """.trimIndent(),
+        ) {
+            assertFalse("gap" in it)
+        }
+    }
+
+    @Test
+    fun `none as null parameter in custom function`() {
+        execute(
+            """
+            .function {greet}
+                name?:
+                Hi! I am .name::otherwise {unnamed}
+            
+            .greet {.none}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Hi! I am unnamed</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `none as null parameter via operation`() {
+        execute(
+            """
+            .var {condition} {false}
+            .var {gap} {1cm}
+            .row gap:{.condition::takeif {.condition}}
+               Test
+            """.trimIndent(),
+        ) {
+            assertFalse("gap" in it)
+        }
+    }
+
+    @Test
+    fun `none as non-nullable parameter should fail typecheck`() {
+        assertFails {
+            execute(".sin {.none}") {}
+        }
+    }
+
+    @Test
+    fun `none in if as falsy`() {
+        execute(
+            """
+            .var {x} {.none}
+            .if {.x}
+               Hi!
+            """.trimIndent(),
+        ) {
+            assertEquals("", it)
+        }
+    }
+
+    @Test
+    fun `none in ifnot as falsy`() {
+        execute(
+            """
+            .var {x} {.none}
+            .ifnot {.x}
+               Hi!
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hi!</p>", it)
         }
     }
 }

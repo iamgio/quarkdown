@@ -5,15 +5,30 @@
 
 ## Operations
 
-| Function                        | Description                                                                                                                                                     | Return type                          |
-|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| `.none`                         | Creates an empty value.                                                                                                                                         | `none`                               |
-| `.isnone {value}`               | Checks whether `value` is `none`.                                                                                                                               | [`Boolean`](Boolean.qd)              |
+| Function                        | Description                                                                                                                                               | Return type                          |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
+| `.none`                         | Creates an empty value.                                                                                                                                   | `none`                               |
+| `.isnone {value}`               | Checks whether `value` is `none`.                                                                                                                         | [`Boolean`](Boolean.qd)              |
 | `.otherwise {value} {fallback}` | Returns `value` if it is not `none`, `fallback` otherwise. Works best with [function call chaining](Syntax-of-a-function-call.qd#chaining-calls).         | Type of either `value` or `fallback` |
 | `.ifpresent {value} {lambda}`   | If `value` is not `none`, maps it to a new value according to the [lambda](Lambda.qd). If `none`, returns `none`. Works best with function call chaining. | Type returned by `lambda`, or `none` |
 | `.takeif {value} {lambda}`      | Returns `value` if the boolean-returning [lambda](Lambda.qd) is accepted on `value`. Returns `none` otherwise. Works best with function call chaining.    | Type of `value`, or `none`           |
 
-## Examples
+## Passing None to functions
+
+Native functions from the stdlib, written in Kotlin, often accept nullable parameters. When such a parameter is passed `None`, the function treats it as if it were `null`, which often means that the parameter is considered absent.
+
+This is particularly useful when a value is stored in a variable that might or might not be `None`, and you want to forward it to a function without checking first.
+
+.examplemirror
+    .function {highlight} 
+        color?:
+        .container background:{.color}
+            Value of color: .color
+    
+    1. .highlight {teal}
+    2. .highlight
+
+## Example operations
 
 .example
     ```markdown

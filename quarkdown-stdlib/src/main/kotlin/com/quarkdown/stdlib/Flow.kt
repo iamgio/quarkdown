@@ -76,7 +76,14 @@ val Flow: QuarkdownModule =
  *         .numerator::divide by:{.denominator}
  * ```
  *
- * @param condition whether the content should be evaluated
+ * ```
+ * .function {greet}
+ *     name?:
+ *     .if {.name}
+ *         Hi, .name!
+ * ```
+ *
+ * @param condition whether the content should be evaluated. If `none`, it is treated as `false`
  * @param body content to evaluate if [condition] is verified. Accepts 0 parameters.
  * @return the evaluation of [body] if [condition] is `true`, nothing otherwise
  * @wiki Conditional statements
@@ -84,27 +91,27 @@ val Flow: QuarkdownModule =
 @Name("if")
 @Suppress("ktlint:standard:function-naming")
 fun `if`(
-    condition: Boolean,
+    condition: Boolean?,
     @LikelyBody body: Lambda,
 ): OutputValue<*> =
     when (condition) {
         true -> body.invokeDynamic()
-        false -> VoidValue
+        else -> VoidValue
     }
 
 /**
  * Shorthand for `.if {.condition::not}`.
  *
- * @param condition whether the content should *not* be evaluated
+ * @param condition whether the content should *not* be evaluated. If `none`, it is treated as `false`, so the content will be evaluated
  * @param body content to evaluate if [condition] is *not* verified. Accepts 0 parameters.
  * @return [body] if [condition] is false, nothing otherwise
  * @wiki Conditional statements
  */
 @Name("ifnot")
 fun ifNot(
-    condition: Boolean,
+    condition: Boolean?,
     @LikelyBody body: Lambda,
-): OutputValue<*> = `if`(!condition, body)
+): OutputValue<*> = `if`(condition?.not() ?: true, body)
 
 /**
  * Repeats content for each element of an iterable collection.
