@@ -1,0 +1,42 @@
+.docname {Font configuration}
+.include {docs}
+
+The **`.font`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/font.html} function overrides the global font configuration.
+
+## Font family parameters
+
+You can load a font family from any of the following sources (case-sensitive):
+- **File**: `path/to/font.ttf`
+- **URL**: `https://example.com/font.ttf`
+- **System fonts**: `Arial`, `Times New Roman`
+- **Google Fonts**: `GoogleFonts:Roboto`, `GoogleFonts:Noto Sans`
+
+The function provides the following optional parameters for setting custom font families:
+
+- **`main`**: font family for all text content. This also applies to headings if the current theme does not specify a different font for them.
+- **`heading`**: font family for headings (titles). Overrides `main`.
+- **`code`**: font family for code blocks and code spans. Overrides `main`.
+
+Example:
+
+```markdown
+.font {fonts/Inter.ttf} heading:{GoogleFonts:Poppins} code:{Courier New}
+```
+
+> Font resources are processed by the [media storage system](media-storage.qd). This ensures that, for example, HTML output includes local fonts in the output directory for increased portability.
+>
+> Note that system fonts may not be installed on all devices. While this should not affect PDF output, it can be problematic when sharing HTML output.
+
+## Other parameters
+
+- **`size`**: base font [size](sizes.qd). Other elements, such as headings, scale accordingly. For example, `12px`.
+
+## Fallbacks for multi-language documents
+
+Multiple `.font` calls create overlapping font configurations. Each font configuration overrides the previous one as long as it contains glyphs for the characters being rendered. Otherwise, Quarkdown uses the previous font configuration as a fallback.
+
+This is particularly useful for multi-language documents, such as documents containing both Latin and CJK (Chinese, Japanese, Korean) characters. For example, you can set a primary font for Latin characters and a fallback font for CJK characters, as shown in the following example.
+
+.exampleoutput {![Multi-language fonts](font-configuration/multi-language.png)}
+    .font {GoogleFonts:Ma Shan Zheng}
+    .font {GoogleFonts:Corinthia}

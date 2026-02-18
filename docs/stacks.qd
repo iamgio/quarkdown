@@ -1,0 +1,75 @@
+.docname {Stacks}
+.include {docs}
+
+Stack functions are layout functions that arrange a group of elements according to certain layout rules. There are three of them:
+- **`.row`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/row.html}
+- **`.column`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/column.html}
+- **`.grid`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/grid.html}
+
+## Blocks
+
+To understand which elements to handle, stack functions rely on the strict Markdown concept of a block, which is an isolated chunk of the document: a paragraph, a code block, a list, a quote, a figure, or another function call.
+
+.examplemirror
+    .row gap:{1cm}
+        A
+
+        B
+
+        C
+
+.examplemirror {The following example has only one item because A, B, and C are all part of the same paragraph (due to *lazy lines*):} type:{warning}
+    .row gap:{1cm}
+        A
+        B
+        C
+
+
+.examplemirror
+    .row
+        ![](assets/icon.svg)
+
+        ![](assets/icon.svg)
+
+## Parameters
+
+All stack functions accept the following optional arguments:
+
+| Parameter   | Description                                  | Accepts                                                                |
+|-------------|----------------------------------------------|------------------------------------------------------------------------|
+| `alignment` | Main axis alignment (CSS `justify-content`). | `start`, `center`, `end`, `spacebetween`, `spacearound`, `spaceevenly` |
+| `cross`     | Cross axis alignment (CSS `align-items`).    | `start`, `center`, `end`, `stretch`                                    |
+| `gap`       | Space between items.                         | [`Size`](sizes.qd)                                                     |
+
+The `grid` function requires a `columns` argument, which must be specified as an integer. .br
+It also provides optional `vgap` and `hgap` parameters that override the `gap` setting, allowing you to control the vertical and horizontal spacing independently.
+
+.examplemirror
+    .grid columns:{2} alignment:{spacearound}
+        A
+
+        *B*
+
+        **C**
+
+        ***D***
+
+## Composition
+
+You can compose stack functions to create complex layouts:
+
+.examplemirror
+    .row alignment:{spacearound}
+        .column
+            **Michael Scott**
+
+            Dunder Mifflin Paper Company, Inc.
+
+            [michaelscott@example.com](mailto:michaelscott@example.com)
+
+        .column
+            **Forrest Gump**
+
+            Bubba Gump Shrimp Co.
+
+            [forrestgump@example.com](mailto:forrestgump@example.com)

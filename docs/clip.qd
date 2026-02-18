@@ -1,0 +1,32 @@
+.docname {Clip}
+.include {docs}
+
+The **`.clip {shape}`** block function clips its content to a defined shape.
+
+Supported shapes:
+- `circle`
+
+.examplemirror
+    ![Sky](assets/sky.jpg)
+
+    .clip {circle}
+        ![Sky](assets/sky.jpg)
+
+## Figures
+
+When clipping a [figure](figure.qd), only the content is affected, leaving the caption intact:
+
+.examplemirror
+    ![Sky](assets/sky.jpg "A blue sky.")
+
+    .clip {circle}
+        ![Sky](assets/sky.jpg "A blue sky.")
+
+## General content
+
+Clipping works with any content, not just images. Here a [container](container.qd) is used:
+
+.examplemirror
+    .clip {circle}
+        .container padding:{2cm} background:{teal}
+            #! Hello!

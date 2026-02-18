@@ -31,7 +31,7 @@ The Quarkdown flavor extends CommonMark and GFM with various features. The most 
 
 Quarkdown is dynamically typed, although types do live in the native Kotlin implementation of functions.
 
-For a full function call syntax reference, see [here](docs/Syntax-of-a-function-call.qd).
+For a full function call syntax reference, see [here](docs/syntax-of-a-function-call.qd).
 
 For any other information, see the [documentation](docs) and the [README](README.md).
 
@@ -89,7 +89,7 @@ There are three forking methods, depending on the implementation, which affect t
 - `ScopeContext`: like `SharedContext`, but the child context does not share new declarations (functions and variables) back to the parent context.
   This is the behavior used within lambda blocks, such as in `.foreach`.
  `SubdocumentContext`: no information is shared back to the main file's context, only inherited from it. This also applies to the document info (metadata, title, etc.),
-  This is the behavior used for subdocuments (see [Subdocuments](docs/Subdocuments.qd)).
+  This is the behavior used for subdocuments (see [Subdocuments](docs/subdocuments.qd)).
 
 ### Nodes
 
@@ -237,7 +237,7 @@ When writing native functions, the following annotations are useful to document 
   ```
 
 - `@LikelyChained`: indicates that a function is likely to be used in a chained manner via the chain syntax
-  (see [Function call syntax](docs/Syntax-of-a-function-call.qd#chaining-calls)).
+  (see [Function call syntax](docs/syntax-of-a-function-call.qd#chaining-calls)).
   For example, in `.myvar::uppercase`, `uppercase` is marked with `@LikelyChained`.
 
 - `@OnlyForDocumentType`/`@NotForDocumentType`: indicates that a function is only available for, or not available for,
@@ -297,7 +297,7 @@ When writing documentation, you're an expert technical writer who follows these 
   Avoid overly technical or robotic language.
   Avoid en-dashes, em-dashes, and emojis.
 
-To demo a source+output example, use functions defined in [`_Setup.qd`](docs/_Setup.qd):
+To demo a source+output example, use functions defined in [`_Setup.qd`](docs/_setup.qd):
 - `.examplemirror` for showing both source code and rendered output side-by-side.
   This is great for Quarkdown snippets that don't affect the overall document structure or style.
 - `.example` for showing the source code and a manual output, such as an image.

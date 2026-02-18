@@ -8,7 +8,7 @@ This version is the biggest release to date, with a large number of new features
 
 ### Added
 
-#### [`docs` document type](https://quarkdown.com/wiki/Document-types#docs-docs)
+#### [`docs` document type](https://quarkdown.com/wiki/document-types#docs-docs)
 
 `docs` is the fourth document type available in Quarkdown, alongside `plain`, `paged` and `slides`. It is designed for technical documentation, wikis and knowledge bases.
 
@@ -22,7 +22,7 @@ This new theme combination is the one used in the new wiki for improved readabil
 
 <img width="606" height="350" alt="Galactic+Hyperlegible" src="https://github.com/user-attachments/assets/d8609d22-fb57-4db9-8b4a-98fa28cda421" />
 
-#### [GitHub-style alerts](https://quarkdown.com/wiki/Quote-types)
+#### [GitHub-style alerts](https://quarkdown.com/wiki/quote-types)
 
 GitHub's alert syntax is now supported, making it easier to migrate from other tools:
 
@@ -37,7 +37,7 @@ Note that Quarkdown's original syntax is still supported *and recommended*, espe
 > Note: This is a note
 ```
 
-#### [Subdocument links now allow anchors](https://quarkdown.com/wiki/Subdocuments)
+#### [Subdocument links now allow anchors](https://quarkdown.com/wiki/subdocuments)
 
 Links to Quarkdown subdocuments now support anchors, to link to specific sections:
 
@@ -45,7 +45,7 @@ Links to Quarkdown subdocuments now support anchors, to link to specific section
 [Page](page.qd#section)
 ```
 
-#### [Customizable page numbering format](https://quarkdown.com/wiki/Page-counter#formatting-the-page-number)
+#### [Customizable page numbering format](https://quarkdown.com/wiki/page-counter#formatting-the-page-number)
 
 The `.formatpagenumber {format}` function overrides the page numbering format from the current page onward. It accepts the same format specifiers as `.numbering`, and applies to both page counters and table of contents.
 
@@ -62,19 +62,19 @@ The `.formatpagenumber {format}` function overrides the page numbering format fr
 # Third page
 ```
 
-<img width="550" alt="Page number format example" src="https://raw.githubusercontent.com/iamgio/quarkdown/main/docs/Page-counter/format.png" />
+<img width="550" alt="Page number format example" src="https://raw.githubusercontent.com/iamgio/quarkdown/main/docs/page-counter/format.png" />
 
 Thanks @OverSamu!
 
-#### [Horizontal/vertical gap customization of `.grid`](https://quarkdown.com/wiki/Stacks#parameters)
+#### [Horizontal/vertical gap customization of `.grid`](https://quarkdown.com/wiki/stacks#parameters)
 
 The `.grid` function now accepts `hgap` and `vgap` parameters to customize the horizontal and vertical gaps between grid items. `gap` still works as a shorthand for both.
 
 Thanks @OverSamu!
 
-#### [`none` is now converted to `null`](https://quarkdown.com/wiki/None#passing-none-to-functions)
+#### [`none` is now converted to `null`](https://quarkdown.com/wiki/none#passing-none-to-functions)
 
-When invoking a native function from the stdlib, [`none`](https://quarkdown.com/wiki/None) is now supported by nullable parameters, and converted to `null`.
+When invoking a native function from the stdlib, [`none`](https://quarkdown.com/wiki/none) is now supported by nullable parameters, and converted to `null`.
 
 Before:
 
@@ -95,7 +95,7 @@ After:
     .container width:{.width} height:{.height} background:{.background}
 ```
 
-#### [Icons](https://quarkdown.com/wiki/Icons)
+#### [Icons](https://quarkdown.com/wiki/icons)
 
 The new `.icon {name}` function relies on [Bootstrap Icons](https://icons.getbootstrap.com/#icons) to display pixel-perfect icons in your documents.
 

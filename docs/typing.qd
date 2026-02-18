@@ -1,0 +1,41 @@
+.docname {Typing}
+.include {docs}
+
+Quarkdown is **dynamically typed**: every value that may be passed to a function argument is wrapped in a `DynamicValue` object. This object can represent any supported type, and it carries the information needed to convert itself to the expected type when required.
+
+The dynamic value is then *adapted* or converted to the type expected by the signature of the native function (written in Kotlin, which is strongly typed) at invocation time. If a conversion cannot be made, an error occurs.
+
+This invoke-time adaptation reduces constraints, allowing the same value to be handled differently depending on its context.
+
+.examplemirror
+    .var {myvar} {true}
+
+    .if {.myvar}
+        My value is .uppercase {.myvar}
+
+In the previous example:
+- `.var`'s signature accepts a `DynamicValue`.
+- `.if` takes a [`Boolean`](boolean.qd), so the dynamic `true` value kept in the `myvar` variable is converted to boolean.
+- `.uppercase` takes a `String`, so the `true` value is used as a string.
+
+See the *Value types* section of this wiki to see all supported types.
+
+## Example: source + result
+
+The following example is a simplified version of a function defined in this wiki, which shows a Quarkdown code snippet and its visual result right below it:
+
+.examplemirror
+    .function {sourceresult}
+        source:
+        .code {markdown}
+            .source
+        .source
+
+    .sourceresult
+        ##! Quarkdown 
+
+        Quarkdown was born in **.sum {2000} {24}**
+
+The previous example shows how versatile Quarkdown values are. In the function declaration, the `.source` argument is retrieved twice:
+- In [`.code`](code.qd), which expects a string, so the source is read as-is and inserted in a code block.
+- At the top level: the Quarkdown source is automatically adapted to the context, so it is parsed as rich Markdown content.

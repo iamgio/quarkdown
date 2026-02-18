@@ -1,0 +1,64 @@
+.docname {Localization}
+.include {docs}
+
+Quarkdown supports **string localization** out of the box.
+
+The first step is to set the document language via [**`.doclang {locale}`**](document-metadata.qd). Call this function among the other document metadata functions (such as `.docname`, `.docauthor`, etc.).
+
+The `locale` value can be either a case-insensitive English full name (e.g., `English`, `Italian`, `French (Canada)`) or an IETF BCP 47 language tag (e.g., `en`, `it`, `fr-CA`).
+
+## Built-in localization
+
+Quarkdown's built-in libraries expose localization tables that localize elements such as [quote types](quote-types.qd), [numbering](numbering.qd) captions, and [table of contents](table-of-contents.qd) title.
+
+> Note: The currently supported locales are **English, Italian, German, French, Chinese, and Japanese**.
+>
+> Contributions to support new locales are welcome:
+> - [stdlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-stdlib/src/main/resources/lib/localization)
+> - [paperlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper)
+
+## Creating your own localized strings
+
+.examplemirror {Imagine a function `\.theorem` that displays **`Theorem.`** before its content. You could define it as follows:} type:{warning}
+    .function {theorem}
+        **Theorem.**
+
+    .theorem This is my theorem
+
+This works well for your own English document, but what if you are making a library for everyone to use? You would need to support multiple languages. This is where *localization tables* come in.
+
+The `.localization {name}` function defines a new **localization table** associated with a unique name. Its body parameter accepts a particular Markdown list that, in Quarkdown, is called a [*dictionary*](dictionary.qd).
+
+This localization dictionary exposes key-value pairs for each locale that you intend to support. The locale names follow the same rules as those from `.doclang`, meaning they can be full names or tags. As long as `.doclang` is set, you can access the localized string via `.localize {table:key}`, in this case `.localize {mylib:theorem}`.
+
+.exampleoutput {**Theorem.** This is my theorem} prelude:{The previous function would now look like this:}
+    .localization name:{mylib}
+        - English
+          - theorem: Theorem
+        - Italian
+          - theorem: Teorema
+
+    .function {theorem}
+        **.localize {mylib:theorem}.**
+
+    .theorem This is my theorem
+
+## Extending a built-in localization table
+
+If your locale is not yet supported by Quarkdown and you are unable to contribute to the project, you can still extend the built-in localization tables for your document.
+
+When calling `.localization {name}`, an additional **`merge:{yes}`** argument causes the localization table with the given name to be extended with the new user-provided one. Any conflicting entries will be replaced by the new ones.
+
+For instance, [typed boxes](box.qd) feature a localized title by default, such as *Warning* for a warning-typed box. If the document locale is not supported, the title will be missing. To extend the built-in localization with box titles in Canadian French, use the following approach:
+
+```yaml
+.localization {std} merge:{yes}
+    - fr-CA
+      - warning: Avertissement
+      - error: Erreur
+      ...
+```
+
+After that, assuming Canadian French is set in `.doclang`, the new entries will be available to the `.box` function.
+
+Built-in table names and entries are listed in this page's [*Built-in localization*](#built-in-localization).
