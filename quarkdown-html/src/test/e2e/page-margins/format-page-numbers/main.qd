@@ -1,0 +1,12 @@
+.pagemargin {bottomcenter}
+    .currentpage
+
+# Page 1
+
+# Page 2
+
+.formatpagenumber format:{i}
+
+# Page 20
+
+.resetpagenumber start:{20}

@@ -24,7 +24,9 @@ body.quarkdown {
     flex-direction: row;
 
     > main {
-      width: min(100%, var(--max-content-width, 45rem));
+      $width: min(100%, var(--qd-content-width));
+      min-width: $width;
+      max-width: $width;
       column-count: var(--qd-column-count);
     }
 
@@ -55,10 +57,11 @@ body.quarkdown {
     padding-right: 16px;
 
     > main {
-      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
     }
 
-    @include media-queries.sm-down($print: true) {
+    @include media-queries.sm-down($print: false) {
       > * {
         font-size: 1.1em;
       }
@@ -99,8 +102,8 @@ body.quarkdown {
 
   // Docs viewport
   &.quarkdown-docs {
-    --max-content-width: 50rem;
     --header-height: calc(var(--qd-docs-header-height) + var(--qd-docs-header-vertical-padding) * 2);
+    --content-padding-top: 32px;
 
     margin: 0;
     display: flex;
@@ -109,8 +112,10 @@ body.quarkdown {
     > header {
       height: var(--qd-docs-header-height);
       padding: var(--qd-docs-header-vertical-padding) 0;
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 10;
 
       > aside {
@@ -120,8 +125,15 @@ body.quarkdown {
     }
 
     > .content-wrapper {
+      margin-top: var(--header-height);
+
       > main {
         margin-bottom: 16px;
+
+        // Offset anchor scroll position to account for the fixed header.
+        :target {
+          scroll-margin-top: calc(var(--header-height) + var(--content-padding-top));
+        }
       }
 
       > aside {
@@ -129,7 +141,7 @@ body.quarkdown {
         position: sticky;
         top: var(--header-height);
         max-height: calc(100vh - var(--header-height));
-        padding-top: 32px;
+        padding-top: var(--content-padding-top);
       }
     }
 

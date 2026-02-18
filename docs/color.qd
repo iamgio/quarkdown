@@ -1,0 +1,19 @@
+.docname {Color}
+.include {docs}
+
+You can define a `Color` value in any of the following ways:
+
+- **Hexadecimal:** `#hex`
+  - `#4290F5`
+- **RGB:** `rgb(red 0-255, green 0-255, blue 0-255)`
+  - `rgb(66, 144, 245)`
+- **RGBA:** `rgba(red 0-255, green 0-255, blue 0-255, alpha 0-1)`
+  - `rgba(66, 144, 245, 0.8)`
+- **HSV:** `hsv(hue, saturation 0-100, value 0-100)`
+  - `hsv(214, 73, 96)`
+- **HSL:** `hsl(hue, saturation 0-100, lightness 0-100)`
+  - `hsl(214, 90, 61)`
+- **Named:** A [CSS3 color](https://www.w3schools.com/cssref/css_colors.php) name, case-insensitive, without dashes
+  - `blue`, `darkorange`, `white`
+
+When you write a color in a code span (wrapped in backticks), Quarkdown automatically displays a small preview box next to it. This works for all color formats except named colors.

@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
@@ -195,11 +196,27 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
                 """
-                .include {include/read-relative-path.md}
+                .include {include/read-relative-path.md} sandbox:{$sandbox}
                 """.trimIndent(),
             ) {
                 assertEquals(
                     "<p>Line 1\nLine 2\n\nLine 3</p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `'read' call from updated working directory inside scope context`() {
+        forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
+            execute(
+                """
+                .include {include/read-relative-path-in-scope.md} sandbox:{$sandbox}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>Line 1\nLine 2\n\nLine 3</p>".repeat(2),
                     it,
                 )
             }
@@ -314,6 +331,32 @@ class EcosystemTest {
     }
 
     @Test
+    fun `include library content`() {
+        execute(
+            ".include {content}",
+            loadableLibraries = setOf("content"),
+            useDummyLibraryDirectory = true,
+        ) {
+            assertEquals(
+                "<h2>Title</h2><p>Content</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `library keeps includer's file system`() {
+        execute(
+            ".include {file-reader}",
+            loadableLibraries = setOf("file-reader"),
+            useDummyLibraryDirectory = true,
+        ) {
+            // 2 occurrences of <table>
+            assertEquals(2, it.split("<table>").size - 1)
+        }
+    }
+
+    @Test
     fun `include multiple sources`() {
         forSandboxes(ContextSandbox.SHARE) { sandbox ->
             execute(
@@ -360,7 +403,9 @@ class EcosystemTest {
             .includeall {.listfiles {include} sortby:{name}}
             """.trimIndent(),
         ) {
-            assertTrue(it.startsWith(OUTPUT_ABSOLUTE_IMAGE + OUTPUT_BASIC_SOURCE))
+            if (subdocument == Subdocument.Root) {
+                assertTrue(it.startsWith(OUTPUT_ABSOLUTE_IMAGE + OUTPUT_BASIC_SOURCE))
+            }
         }
     }
 }

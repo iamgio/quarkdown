@@ -1,0 +1,22 @@
+.docname {Pipeline - Post rendering}
+.include {docs}
+
+> Main packages: .repolink {`core.rendering`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/rendering}, .repolink {`core.pipeline.output`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/pipeline/output}
+>
+> Rendering modules: .repolink {`quarkdown-html`} {tree/main/quarkdown-html}, .repolink {`quarkdown-plaintext`} {tree/main/quarkdown-plaintext}
+
+After obtaining the translation of the AST to the target format from the [Renderer](pipeline---rendering.qd), you might notice that it is not enough to display to the user. Considering the HTML format, that is just the content that would go inside `<body>`, but everything else is missing: metadata, styling, and possibly a runtime.
+
+Here comes the *post-renderer*, which programmatically builds the full document around the rendered content. For HTML, this is handled by `HtmlDocumentBuilder` (using the `kotlinx.html` DSL), located in .repolink {`html.post.document`} {tree/main/quarkdown-html/src/main/kotlin/com/quarkdown/rendering/html/post/document}. The builder injects all the needed data, such as:
+- The content itself, placed into `<body>`
+- The document target (plain/slides/paged/docs). Each target requires different scripts, stylesheets, and body structure
+- User-defined properties, such as title, page format, and fonts
+- The need to load certain libraries, such as KaTeX for rendering LaTeX formulas. This is only done if at least one formula is used
+
+On top of that, the post-renderer is also responsible for returning the output resources of the compilation. These resources include:
+- The generated HTML
+- The group of stylesheets (global stylesheet, layout theme, and color theme)
+- The group of required runtime scripts
+
+These resources are then added to those provided by the [media storage](media-storage.qd) and ultimately returned by the pipeline.
+It is then up to the invoker to handle those resources, which in the case of .repolink {CLI} {tree/main/quarkdown-cli} are saved to file.

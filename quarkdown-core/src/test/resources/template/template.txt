@@ -1,4 +1,0 @@
-Hello[[if:NAME]], [[NAME]][[endif:NAME]]!
-
-[[if:ASK]]How are you?[[endif:ASK]]
-I'm good.

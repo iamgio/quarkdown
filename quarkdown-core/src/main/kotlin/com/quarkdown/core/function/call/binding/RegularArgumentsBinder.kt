@@ -12,8 +12,10 @@ import com.quarkdown.core.function.error.UnresolvedParameterException
 import com.quarkdown.core.function.reflect.DynamicValueConverter
 import com.quarkdown.core.function.value.AdaptableValue
 import com.quarkdown.core.function.value.DynamicValue
+import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.factory.ValueFactory
+import com.quarkdown.core.function.value.isNone
 import com.quarkdown.core.pipeline.error.PipelineException
 import kotlin.reflect.full.isSubclassOf
 
@@ -45,17 +47,26 @@ class RegularArgumentsBinder(
     ): FunctionParameter<*> =
         when {
             // A body parameter is always the last one in the function signature.
-            argument.isBody -> parameters.lastOrNull()
+            argument.isBody -> {
+                parameters.lastOrNull()
+            }
+
             // A non-body parameter that refers to a parameter by its name.
             argument.isNamed -> {
                 encounteredNamedArgument = true
                 parameters.find { it.name == argument.name }
                     ?: throw UnresolvedParameterException(argument, call)
             }
+
             // Non-body, unnamed parameters follow the index and cannot appear after a named argument has been encountered.
-            !encounteredNamedArgument -> parameters.getOrNull(argumentIndex)
+            !encounteredNamedArgument -> {
+                parameters.getOrNull(argumentIndex)
+            }
+
             // Unnamed arguments cannot appear after a named one.
-            else -> throw UnnamedArgumentAfterNamedException(call)
+            else -> {
+                throw UnnamedArgumentAfterNamedException(call)
+            }
         } ?: throw InvalidArgumentCountException(call) // Error if args count > params count.
 
     /**
@@ -79,6 +90,11 @@ class RegularArgumentsBinder(
             // For instance, custom functions defined from a Quarkdown function have dynamic-type parameters.
             parameter.type == DynamicValue::class -> {
                 argument.copy(expression = DynamicValue(value.unwrappedValue))
+            }
+
+            // NoneValue is accepted for nullable parameters, representing Quarkdown's equivalent of null.
+            parameter.isNullable && value.isNone() -> {
+                argument.copy(expression = NoneValue)
             }
 
             // The value is dynamic and must be converted to a static type.
@@ -116,7 +132,9 @@ class RegularArgumentsBinder(
                 }
             }
 
-            else -> argument
+            else -> {
+                argument
+            }
         }
     }
 
@@ -130,6 +148,7 @@ class RegularArgumentsBinder(
         parameter: FunctionParameter<*>,
         argument: FunctionCallArgument,
     ) {
+        if (argument.value is NoneValue && parameter.isNullable) return
         if (argument.value.unwrappedValue!!::class.isSubclassOf(parameter.type)) return
         if (argument.value::class.isSubclassOf(parameter.type)) return
 

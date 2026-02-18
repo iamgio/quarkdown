@@ -1,0 +1,4 @@
+.theme {darko} layout:{minimal}
+
+.pagelistposition {righttop}
+.tocposition {lefttop}

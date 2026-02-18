@@ -1,0 +1,17 @@
+.docname {Pipeline}
+.include {docs}
+
+When you supply an input file to Quarkdown, it undergoes a process of elaboration to be transformed into an output resource, such as an HTML document that the browser can display. Under the hood, this process is represented by a **sequential pipeline**, in which the output of one stage becomes the input of the next one.
+
+1. [**Lexing**](pipeline---lexing.qd)
+2. [**Parsing**](pipeline---parsing.qd)
+3. [**Function call expansion**](pipeline---function-call-expansion.qd)
+4. [**Tree traversal**](pipeline---tree-traversal.qd)
+5. [**Rendering**](pipeline---rendering.qd)
+6. [**Post-rendering**](pipeline---post-rendering.qd)
+
+
+
+> *This section aims to be a simplification of what is explained in the author's Bachelor's thesis: [Quarkdown - Typesetting versatile di documenti articolati](https://amslaurea.unibo.it/id/eprint/33690/1/garofalo_giorgio_tesi.pdf) (Italian), in which Quarkdown's architecture is thoroughly explained and documented. The thesis is updated to September 2024, while this section is going to be kept up to date.*
+>
+> !(_*500)[Dissertation](pipeline/thesis-cover.png)

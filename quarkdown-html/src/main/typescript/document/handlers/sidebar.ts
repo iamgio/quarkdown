@@ -1,5 +1,5 @@
 import {DocumentHandler} from "../document-handler";
-import {initSidebarActiveTracking} from "../../sidebar/sidebar";
+import {initNavigationActiveTracking} from "../../navigation/active-tracking";
 
 /**
  * Document handler responsible for relocating the sidebar from the template
@@ -17,6 +17,6 @@ export class Sidebar extends DocumentHandler {
         document.body.appendChild(sidebar);
         template.remove();
 
-        initSidebarActiveTracking(sidebar);
+        initNavigationActiveTracking(sidebar);
     }
 }

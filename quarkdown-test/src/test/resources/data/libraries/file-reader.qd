@@ -1,0 +1,3 @@
+.csv {csv/people.csv}
+
+.csv {.pathtoroot/csv/people.csv}

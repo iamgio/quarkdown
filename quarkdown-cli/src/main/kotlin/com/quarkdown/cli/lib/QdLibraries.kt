@@ -22,7 +22,7 @@ object QdLibraries {
             .listFiles()!!
             .asSequence()
             .filter { it.extension == EXTENSION_FILTER }
-            .map { QdLibraryExporter(it.nameWithoutExtension, it.reader()) }
+            .map { QdLibraryExporter(it.nameWithoutExtension) { it.reader() } }
             .toSet()
     }
 }

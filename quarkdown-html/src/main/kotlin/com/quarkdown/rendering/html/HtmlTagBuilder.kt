@@ -119,6 +119,13 @@ class HtmlTagBuilder(
     fun hidden() = attribute("data-hidden", "")
 
     /**
+     * Adds a `data-accept-empty` attribute to this tag as a flag that this element is to keep even if it has no content.
+     * By default, empty elements, such as paragraphs without text, are hidden to avoid unwanted empty spaces.
+     * @return this for concatenation
+     */
+    fun acceptEmpty() = attribute("data-accept-empty", "")
+
+    /**
      * @return this builder and its nested content into stringified HTML code.
      */
     override fun build(): String =

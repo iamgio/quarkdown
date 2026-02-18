@@ -1,8 +1,10 @@
 @use "components/viewport";
 @use "components/alignment";
+@use "components/page-break";
 @use "components/block";
 @use "components/heading";
 @use "components/paragraph";
+@use "components/empty";
 @use "components/link";
 @use "components/math";
 @use "components/hr";
@@ -28,6 +30,7 @@
 @use "components/landscape";
 @use "components/paged";
 @use "components/docs";
+@use "components/smooth-scroll";
 @use "components/search.scss";
 @use "components/sidebar";
 
@@ -92,6 +95,7 @@
   --qd-paragraph-text-indent: none; // Paragraph indentation (with LaTeX policies)
 
   // Misc
+  --qd-content-width: 45rem; // Width of the main content area of plain and docs viewports
   --qd-column-count: unset; // Number of columns for multi-column layout
 
   // Location labels

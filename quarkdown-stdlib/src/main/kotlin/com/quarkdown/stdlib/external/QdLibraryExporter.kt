@@ -13,14 +13,14 @@ import java.io.Reader
  */
 class QdLibraryExporter(
     private val name: String,
-    private val reader: Reader,
+    private val reader: () -> Reader,
 ) : LibraryExporter {
-    override val library: Library
-        get() =
-            Library(
-                name,
-                functions = emptySet(),
-                // The stdlib's includeResource function is used to include the content of the .qd file
-                onLoad = { context -> includeResource(context, reader) },
-            )
+    override val library: Library by lazy {
+        Library(
+            name,
+            functions = emptySet(),
+            // The stdlib's includeResource function is used to include the content of the .qd file
+            onLoad = { context -> includeResource(context, reader()) },
+        )
+    }
 }

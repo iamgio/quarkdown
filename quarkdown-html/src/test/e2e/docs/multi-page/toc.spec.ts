@@ -2,7 +2,11 @@ import {suite} from "../../quarkdown";
 
 const {test, expect} = suite(__dirname);
 
-test("latex table of contents has no bold links", async (page) => {
+test("page with content has visible heading and non-bold links", async (page) => {
+    const heading = page.locator("h3#table-of-contents");
+    await expect(heading).toBeAttached();
+    await expect(heading).toBeVisible();
+
     const nav = page.locator('nav[data-role="table-of-contents"]');
     await expect(nav).toBeAttached();
 
@@ -15,3 +19,14 @@ test("latex table of contents has no bold links", async (page) => {
         await expect(link).toHaveCSS("font-weight", "400");
     }
 }, {subpath: "page-2"});
+
+test("page without content has hidden heading and empty list", async (page) => {
+    const heading = page.locator("h3#table-of-contents");
+    await expect(heading).toBeAttached();
+    await expect(heading).toHaveCSS("visibility", "hidden");
+
+    const nav = page.locator('nav[data-role="table-of-contents"]');
+    const list = nav.locator("> ol");
+    await expect(list).toBeAttached();
+    await expect(list).toBeEmpty();
+}, {subpath: "page-1"});

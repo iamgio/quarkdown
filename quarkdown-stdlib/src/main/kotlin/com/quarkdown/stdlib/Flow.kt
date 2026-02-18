@@ -76,7 +76,14 @@ val Flow: QuarkdownModule =
  *         .numerator::divide by:{.denominator}
  * ```
  *
- * @param condition whether the content should be evaluated
+ * ```
+ * .function {greet}
+ *     name?:
+ *     .if {.name}
+ *         Hi, .name!
+ * ```
+ *
+ * @param condition whether the content should be evaluated. If `none`, it is treated as `false`
  * @param body content to evaluate if [condition] is verified. Accepts 0 parameters.
  * @return the evaluation of [body] if [condition] is `true`, nothing otherwise
  * @wiki Conditional statements
@@ -84,27 +91,27 @@ val Flow: QuarkdownModule =
 @Name("if")
 @Suppress("ktlint:standard:function-naming")
 fun `if`(
-    condition: Boolean,
+    condition: Boolean?,
     @LikelyBody body: Lambda,
 ): OutputValue<*> =
     when (condition) {
         true -> body.invokeDynamic()
-        false -> VoidValue
+        else -> VoidValue
     }
 
 /**
  * Shorthand for `.if {.condition::not}`.
  *
- * @param condition whether the content should *not* be evaluated
+ * @param condition whether the content should *not* be evaluated. If `none`, it is treated as `false`, so the content will be evaluated
  * @param body content to evaluate if [condition] is *not* verified. Accepts 0 parameters.
  * @return [body] if [condition] is false, nothing otherwise
  * @wiki Conditional statements
  */
 @Name("ifnot")
 fun ifNot(
-    condition: Boolean,
+    condition: Boolean?,
     @LikelyBody body: Lambda,
-): OutputValue<*> = `if`(!condition, body)
+): OutputValue<*> = `if`(condition?.not() ?: true, body)
 
 /**
  * Repeats content for each element of an iterable collection.
@@ -296,13 +303,15 @@ fun function(
 
     // The custom function itself.
     val function =
-        SimpleFunction(name, parameters) { bindings, _ ->
+        SimpleFunction(name, parameters) { bindings, call ->
             // Retrieving arguments from the function call.
             // `None` is used as a default value if the argument for an optional parameter is not provided.
             val args: List<Value<*>> = parameters.map { bindings[it]?.value ?: NoneValue }
 
             // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
-            body.invokeDynamic(args)
+            // The calling context is propagated so that dynamic value references within the lambda body
+            // can resolve variables from the calling scope.
+            body.invokeDynamic(args, callingContext = call.context)
         }
 
     // The function is registered and ready to be called.

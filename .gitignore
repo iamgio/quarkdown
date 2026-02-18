@@ -36,6 +36,11 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 ##############################
+## JTE (Java Template Engine)
+##############################
+jte-classes/
+
+##############################
 ## NPM
 ##############################
 node_modules/

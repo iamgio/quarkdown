@@ -1,0 +1,8 @@
+.docname {Page 2}
+.include {docs}
+
+This is page 2.
+
+## See also
+
+You can find more content in [page 3](page-3.qd).

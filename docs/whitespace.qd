@@ -1,0 +1,28 @@
+.docname {Whitespace}
+.include {docs}
+
+You can add blank space anywhere via the **`.whitespace`** function .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Layout/whitespace.html} , which accepts optional `width` and `height` [Size](sizes.qd#single-size-size) arguments.
+
+- If you set neither argument, a simple whitespace character is rendered (` `), which is useful for adding blank lines.
+- If you set at least one argument, a rectangle of that size is rendered. Note that this might not always work outside of [layout functions](stacks.qd).
+
+.examplemirror
+    Line 1
+
+    Line 2
+
+    .whitespace
+
+    Line 3
+
+.examplemirror
+    .row
+        A
+
+        .whitespace width:{1cm}
+
+        B
+
+        .whitespace width:{2cm}
+
+        C

@@ -1,0 +1,31 @@
+.docname {Quotation source}
+.include {docs}
+
+Quarkdown allows a blockquote to have a citation source.
+
+In general, if the quote ends with a single-item unordered list, that list item is set as the citation source. You can specify the source using any of the supported unordered list bullets: `-`, `*`, `+`, although using `-` is recommended.
+
+.examplemirror
+    > To be, or not to be, that is the question.
+    > - William Shakespeare
+
+The layout and aesthetics are handled by the current layout theme.
+
+The source may contain inline content, including function calls.
+
+.examplemirror
+    > Failure's not an option. It's just a step.
+    > - Dwayne **The Rock** Johnson
+
+.examplemirror
+    >> You miss 100% of the shots you don't take.
+    >> - Wayne Gretzky
+    > - Michael Scott
+
+## Typed quotes
+
+[Typed quotes](quote-types.qd) may also have sources:
+
+.examplemirror
+    > Tip: Try out **Quarkdown**!
+    > - [Gio](https://github.com/iamgio)

@@ -1,0 +1,11 @@
+.docname {Icons}
+.include {docs}
+
+The **`.icon {name}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Icon/icon.html} function displays a pixel-perfect icon by its name.
+
+.examplemirror
+    Quarkdown is on .icon {github}
+
+In HTML rendering, the [Bootstrap Icons](https://icons.getbootstrap.com/#icons) library is used. Refer to the library's icon list for all available names.
+
+> Note: No validation is performed at compile time. If an icon name does not exist in the library, it may not be rendered or may be rendered incorrectly.

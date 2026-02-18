@@ -231,11 +231,21 @@ class CompileCommandTest : TempDirectory() {
     fun `with subdocument with minimized collisions`() {
         val (subdoc1, subdoc2, subdoc3) = setupSubdocuments()
 
-        test("--no-subdoc-collisions")
+        fun assertSubdocumentExistsWithHash(
+            name: String,
+            file: File,
+        ) {
+            assertTrue(
+                subdocumentExists("$name@${file.absolutePath.hashCode()}") ||
+                    subdocumentExists("$name@${file.canonicalFile.absolutePath.hashCode()}"),
+            )
+        }
+
+        test("--subdoc-naming", "collision-proof")
         assertHtmlContentPresent()
-        assertTrue(subdocumentExists("subdoc1@${subdoc1.absolutePath.hashCode()}"))
-        assertTrue(subdocumentExists("subdoc2@${subdoc2.absolutePath.hashCode()}"))
-        assertTrue(subdocumentExists("subdoc3@${subdoc3.absolutePath.hashCode()}"))
+        assertSubdocumentExistsWithHash("subdoc1", subdoc1)
+        assertSubdocumentExistsWithHash("subdoc2", subdoc2)
+        assertSubdocumentExistsWithHash("subdoc3", subdoc3)
     }
 
     private fun assumePdfEnvironmentInstalled() {

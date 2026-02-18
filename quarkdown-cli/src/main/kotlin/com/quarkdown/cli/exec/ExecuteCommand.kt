@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
@@ -11,11 +12,13 @@ import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
 import com.quarkdown.cli.util.thisExecutableFile
 import com.quarkdown.cli.watcher.DirectoryWatcher
+import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import java.io.File
@@ -126,13 +129,13 @@ abstract class ExecuteCommand(
     private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
 
     /**
-     * When enabled, risk of subdocument name collisions is minimized by using a hash-based name for subdocuments,
-     * which is less human-readable.
+     * The strategy used to determine subdocument output file names.
      */
-    private val minimizeSubdocumentCollisions: Boolean by option(
-        "--no-subdoc-collisions",
-        help = "Minimize the risk of subdocument name collisions by using a hash-based name for subdocuments",
-    ).flag()
+    private val subdocumentNaming: SubdocumentOutputNaming by option(
+        "--subdoc-naming",
+        help = "Subdocument output naming strategy",
+    ).choice(choices = SubdocumentOutputNaming.entries.associateBy { it.kebabCaseName })
+        .default(SubdocumentOutputNaming.FILE_NAME)
 
     /**
      * When enabled, the program communicates with the local server to dynamically reload the requested resources.
@@ -191,7 +194,7 @@ abstract class ExecuteCommand(
             wrapOutput = !noWrap,
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
             enableMediaStorage = !noMediaStorage,
-            minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
+            subdocumentNaming = subdocumentNaming,
             serverPort = serverPort.takeIf { preview },
             mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
             errorHandler =

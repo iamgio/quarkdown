@@ -1,0 +1,32 @@
+.docname {Enumeration entry}
+.include {docs}
+
+An **enumeration entry** is an input value that matches the name of an element from an enumeration. Enumerations cannot be created from the Quarkdown language, so the term *enumeration* refers to a native JVM `enum`.
+
+This value type is common among function parameters in the standard library. From the user's perspective, these values are just strings. The difference occurs at invocation time, where Quarkdown throws an error if the value does not match any of the available entries.
+
+Name matching follows these rules:
+- **Case-insensitive**: `normal` is equivalent to `NORMAL`
+- **Spacing**: words in native entries are separated by underscores (`_`), which you can omit. For example, `spacebetween` is equivalent to `space_between`
+
+## Examples
+
+[Page format](page-format.qd):
+
+```html
+.pageformat {A4} <!-- A4 is an entry of PageSizeFormat -->
+```
+
+[Stacks](stacks.qd):
+
+```html
+.row alignment:{center} <!-- center is an entry of MainAxisAlignment -->
+  ...
+```
+
+[Box](box.qd):
+
+```html
+.box type:{warning} <!-- warning is an entry of Box.Type -->
+  ...
+```

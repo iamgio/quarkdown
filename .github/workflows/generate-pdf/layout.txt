@@ -1,3 +1,4 @@
 latex
 minimal
 beamer
+hyperlegible

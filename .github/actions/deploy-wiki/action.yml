@@ -1,0 +1,27 @@
+name: Deploy Wiki
+description: Builds and deploys the docs folder to the wiki directory of gh-pages
+
+inputs:
+  quarkdown-path:
+    description: "Path to the Quarkdown executable"
+    required: true
+  github-token:
+    description: "GitHub token for deploying to gh-pages"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Build wiki documentation
+      run: |
+        cd docs
+        ${{ inputs.quarkdown-path }} c Home.qd --strict --clean --out-name wiki
+      shell: bash
+
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        personal_token: ${{ inputs.github-token }}
+        external_repository: quarkdown-labs/quarkdown.com
+        publish_dir: docs/output/wiki
+        destination_dir: wiki

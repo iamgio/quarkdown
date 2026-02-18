@@ -1,0 +1,53 @@
+.docname {TeX macros}
+.include {docs}
+
+When writing [TeX formulae](tex-formulae.qd), you may want to use custom macros.
+
+The **`.texmacro {name} {content}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/texmacro.html} function defines a new macro that can be used in equations.
+
+.examplemirror
+    .texmacro {\gradient} {\nabla}
+
+    $ \gradient f $
+
+As with every Quarkdown function, you can use the last argument as a [*block argument*](syntax-of-a-function-call.qd#block-vs-inline-function-calls).
+
+.example
+    ```text
+    .texmacro {\gradient}
+        \nabla
+    ```
+
+## Parameters
+
+Macros can feature a variable number of parameters, which are referenced inside the macro content as `#1`, `#2`, and so on.
+
+.examplemirror
+    .texmacro {\sumlim}
+        \sum_{#1}^{#2}
+
+    $ \sumlim{i=1}{n} a_i $
+
+## Composing
+
+You can define multiple macros and combine them, as you would do in LaTeX:
+
+.examplemirror
+    .texmacro {\hello}
+        \text {Hello, \textit {world}}
+
+    .texmacro {\highlight}
+        \colorbox{blue}{#1}
+
+    $ \highlight{\hello} $
+
+You can also compose them on top of other macros:
+
+.examplemirror
+    .texmacro {\hello}
+        \text {Hello, \textit {world}}
+
+    .texmacro {\highlighthello}
+        \colorbox{blue}{\hello}
+
+    $ \highlighthello $

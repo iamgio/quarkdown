@@ -1,0 +1,48 @@
+.docname {Table generation}
+.include {docs}
+
+## Table generation by columns
+
+The **`.table`** function takes a single block argument which is an [iterable](iterable.qd) of **tables**.
+The result of the call is a **new table** that combines the supplied tables **by columns**.
+
+In the following example, `.repeat` is used, which, like other supported [loops](loops.qd), returns the results from each iteration as an iterable.
+
+.examplemirror
+    .table
+        .repeat {3}
+            n:
+            | Column .n |
+            |-----------|
+            | Cell .n:1 |
+            | Cell .n:2 |
+            | Cell .n:3 |
+
+## Table generation by rows
+
+The **`.tablebyrows`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation/tablebyrows.html} function takes two arguments: an optional iterable of headers and an iterable of rows.
+
+.examplemirror
+    .var {headers}
+       - Name
+       - Age
+       - City
+
+    .tablebyrows {.headers}
+        - - John
+          - 25
+          - NY
+        - - Lisa
+          - 32
+          - LA
+        - - Mike
+          - 19
+          - CHI
+
+.examplemirror {If no headers are provided, the table will have no header row. Additionally, dynamic content can be used to generate cells:}
+    .tablebyrows
+        .repeat {3}
+            y:
+            .repeat {3}
+                x:
+                Cell .x:.y

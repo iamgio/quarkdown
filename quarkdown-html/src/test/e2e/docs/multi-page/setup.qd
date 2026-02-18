@@ -1,3 +1,5 @@
+.doclang {en}
+
 .pagemargin {lefttop}
     .navigation role:{pagelist}
         - [Page 1](page-1.qd)

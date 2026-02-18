@@ -1,0 +1,50 @@
+.docname {Page break}
+.include {docs}
+
+A page break is a forced interruption of the page flow that causes content following the break to appear on the next page. Page breaks do not affect `plain` and `docs` documents, except for printing.
+
+> Note: The word *page* is interchangeable with *slide* in the context of a `slides` document.
+
+## Manual break
+
+You can trigger a page break by placing a line containing only a sequence of 3 (or more) `<` characters.
+
+```markdown
+Page 1
+
+<<<
+
+Page 2
+```
+
+This pattern does not interrupt the current block, so it might appear as plain text if the criteria for closing a block (such as an empty line for paragraphs) are not satisfied. The following example does not trigger a page break.
+
+.examplemirror type:{warning}
+    Page 1
+    <<<
+    Page 2
+
+## Automatic break
+
+A heading block (`# This!`) can automatically trigger a page break.
+
+By default, only level-1 headings (one `#` symbol) trigger automatic page breaks, but you can customize this via the **`.autopagebreak`** function. Call this function in the setup area of your source code (along with metadata, page format, etc.).
+
+This function takes a `maxdepth` integer argument that indicates the maximum level a heading should be in order to trigger a page break. Heading levels range from 1 to 6.
+
+.example
+    ```html
+    .autopagebreak maxdepth:{3}
+
+    ## A    <!-- Break -->
+
+    ### B   <!-- Break -->
+
+    #### C  <!-- Break -->
+
+    ##### D <!-- No break -->
+    ```
+
+### Disabling automatic breaks
+
+**`.noautopagebreak`**, which is equivalent to `.autopagebreak {0}`, disables automatic breaks.

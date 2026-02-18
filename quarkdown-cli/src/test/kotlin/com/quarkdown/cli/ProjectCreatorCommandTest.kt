@@ -5,6 +5,7 @@ import com.quarkdown.cli.creator.command.CreateProjectCommand
 import org.junit.Test
 import java.io.File
 import kotlin.test.BeforeTest
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -58,7 +59,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
         )
         assertTrue(directory.exists())
 
-        val mainFileName = (if (fixedMainFileName) "main" else directory.name) + ".qd"
+        val mainFileName = "main.qd"
 
         assertTrue(mainFileName in directory.listFiles()!!.map { it.name })
 
@@ -115,5 +116,48 @@ class ProjectCreatorCommandTest : TempDirectory() {
     fun `no keywords`() {
         val main = test(includeKeywords = false)
         assertTrue(".dockeywords" !in main)
+    }
+
+    @Test
+    fun docs() {
+        command.test(
+            directory.resolve(".").absolutePath,
+            "--name",
+            "test",
+            "--authors",
+            "",
+            "--type",
+            "docs",
+            "--description",
+            "",
+            "--lang",
+            "",
+            "--main-file",
+            "main",
+        )
+        assertTrue(directory.exists())
+
+        val fileNames = directory.listFiles()!!.map { it.name }
+
+        // Docs projects create: main.qd, _setup.qd, _nav.qd, page-1.qd, page-2.qd, page-3.qd
+        assertTrue("main.qd" in fileNames)
+        assertTrue("_setup.qd" in fileNames)
+        assertTrue("_nav.qd" in fileNames)
+        assertTrue("page-1.qd" in fileNames)
+        assertTrue("page-2.qd" in fileNames)
+        assertTrue("page-3.qd" in fileNames)
+
+        val setup = directory.resolve("_setup.qd").readText()
+        assertContains(setup, ".pagemargin {topleft}")
+        assertTrue(".doctype" !in setup) // .include {docs} is used on each page instead.
+
+        val main = directory.resolve("main.qd").readText()
+        assertContains(main, ".docname {test}")
+        assertContains(main, ".include {docs}")
+
+        // Each page includes the `docs` library.
+        for (i in 1..3) {
+            assertContains(directory.resolve("page-$i.qd").readText(), ".include {docs}")
+        }
     }
 }

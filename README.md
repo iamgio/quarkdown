@@ -138,7 +138,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
     Continuous flow like Notion/Obsidian, perfect for static websites and knowledge management - check out the author's [personal website](https://iamgio.eu/).
 
   - [X] **Paged** <sup>via [paged.js](https://pagedjs.org)</sup>  
-    Perfect for papers, articles and books - check out the [demo document](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock).
+    Perfect for papers, articles and books - check out the [demo document](https://github.com/quarkdown-labs/generated/blob/main/mock/paperwhite_latex.pdf).
 
   - [X] **Slides** <sup>via [reveal.js](https://revealjs.com)</sup>  
     Perfect for interactive presentations.
@@ -281,7 +281,7 @@ Optionally, adding `<install_dir>/bin` to your `PATH` allows you easier access Q
 
 Requirements:
 - Java 17 or higher
-- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://quarkdown.com/wiki/PDF-export) for details.
+- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://quarkdown.com/wiki/pdf-export) for details.
 
 </details>
 
@@ -298,7 +298,7 @@ New user? You'll find **everything you need** in the **[Quickstart guide](https:
 **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
 to set up a new Quarkdown project, with all [metadata](https://quarkdown.com/wiki/document-metadata) and initial content already present.
 
-For more information about the project creator, check out its [wiki page](https://quarkdown.com/wiki/cli%3A-project-creator).
+For more information about the project creator, check out its [wiki page](https://quarkdown.com/wiki/cli-project-creator).
 
 Alternatively, you may manually create a `.qd` source file and start from there.
 
@@ -367,7 +367,10 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 - `--no-media-storage`: turns the media storage system off. [(?)](https://quarkdown.com/wiki/media-storage)
 
-- `--no-subdoc-collisions`: makes generated subdocument file names collision-proof. [(?)](https://quarkdown.com/wiki/subdocuments)
+- `--subdoc-naming <strategy>`: sets the subdocument output naming strategy [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments). Defaults to `file-name`. Accepted values:
+  - `file-name`: uses the subdocument's file name (human-readable, but prone to collisions)
+  - `collision-proof`: appends a hash to `file-name` to minimize name collisions
+  - `document-name`: uses the document name set via `.docname`, falling back to `file-name` if unset
 
 - `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
 
@@ -389,7 +392,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 making it ideal for exploring and understanding its key features — all while playing and experimenting hands-on with a concrete outcome in the form of pages or slides.
 
 - The document's source files are available in the [`mock`](mock) directory, and can be compiled via `quarkdown c mock/main.qd -p`.
-- The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/iamgio/quarkdown/tree/generated/pdf/mock) branch.  
+- The PDF artifacts generated for all possible theme combinations are available and can be viewed in the [`generated`](https://github.com/quarkdown-labs/generated) repo.  
 
 ## Contributing
 

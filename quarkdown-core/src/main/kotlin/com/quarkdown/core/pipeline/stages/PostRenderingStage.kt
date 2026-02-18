@@ -4,7 +4,6 @@ import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
 import com.quarkdown.core.rendering.PostRenderer
-import com.quarkdown.core.rendering.wrap
 
 /**
  * Pipeline stage responsible for post-processing the rendered output.

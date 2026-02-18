@@ -66,7 +66,7 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: space-between; align-items: flex-start; gap: 1.0cm;\" class=\"stack stack-column\">" +
+                "<div style=\"justify-content: space-between; align-items: flex-start; row-gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<p>Hello 1</p>" +
                     "<h2>Hello 2</h2>" +
                     "<pre><code>Hello 3</code></pre>" +
@@ -97,11 +97,11 @@ class LayoutTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: center; align-items: center; gap: 200.0px;\" class=\"stack stack-row\">" +
+                "<div style=\"justify-content: center; align-items: center; column-gap: 200.0px;\" class=\"stack stack-row\">" +
                     "<div style=\"justify-content: flex-start; align-items: flex-end;\" class=\"stack stack-column\">" +
                     "<h2>Quarkdown</h2><p>A cool language</p>" +
                     "</div>" +
-                    "<div style=\"justify-content: flex-start; align-items: center; gap: 1.0cm;\" class=\"stack stack-column\">" +
+                    "<div style=\"justify-content: flex-start; align-items: center; row-gap: 1.0cm;\" class=\"stack stack-column\">" +
                     "<div class=\"clip clip-circle\"><div class=\"container\">" +
                     "<figure><img src=\"img1.png\" alt=\"\" /></figure>" +
                     "</div></div>" +
@@ -113,6 +113,55 @@ class LayoutTest {
                     "</div></div>" +
                     "</div>" +
                     "<p><strong><a href=\"https://github.com/iamgio/quarkdown\">GitHub</a></strong></p>" +
+                    "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun gridGap() {
+        execute(
+            """
+            .grid columns:{2} vgap:{1cm} hgap:{2cm}
+                Hello 1
+                
+                Hello 2
+                
+                Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"grid-template-columns: auto auto; justify-content: center;" +
+                    " align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\"" +
+                    " class=\"stack stack-grid\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "<p>Hello 3</p>" +
+                    "</div>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .grid columns:{2} gap:{1cm} hgap:{2cm}
+                Hello 1
+                
+                Hello 2
+                
+                Hello 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"grid-template-columns: auto auto; justify-content: center;" +
+                    " align-items: center; row-gap: 1.0cm; column-gap: 2.0cm;\"" +
+                    " class=\"stack stack-grid\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "<p>Hello 3</p>" +
                     "</div>",
                 it,
             )

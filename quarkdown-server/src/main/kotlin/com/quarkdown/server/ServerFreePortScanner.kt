@@ -20,16 +20,24 @@ class ServerFreePortScanner(
         onReady: (Stoppable, port: Int) -> Unit,
     ) {
         var port = startingPort
-        while (true) {
+        while (port <= MAX_PORT) {
             try {
                 server.start(port) { stoppable ->
                     onReady(stoppable, port)
                 }
-                break
+                return
             } catch (e: IOException) {
                 port++
             }
         }
+        throw IOException("No available port found in range $startingPort..$MAX_PORT")
+    }
+
+    companion object {
+        /**
+         * Maximum valid port number.
+         */
+        private const val MAX_PORT = 65535
     }
 }
 

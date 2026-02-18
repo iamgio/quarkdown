@@ -31,14 +31,25 @@ jobs:
       if: github.ref_type == 'tag'
       run: printf "%s" "${GITHUB_REF_NAME#v}" > version.txt
 
-    - name: Commit version bump
+    - name: Update changelog
+      uses: thomaseizinger/keep-a-changelog-new-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        tag: ${{ github.ref_name }}
+
+    - name: Extract release notes
+      id: release-notes
+      if: github.ref_type == 'tag'
+      uses: ffurrer2/extract-release-notes@v3
+
+    - name: Commit release updates
       uses: stefanzweifel/git-auto-commit-action@v7
       if: github.ref_type == 'tag'
       with:
-        commit_message: "chore: bump version to ${{ github.ref_name }}"
+        commit_message: "chore: release ${{ github.ref_name }}"
         commit_user_name: "github-actions"
         commit_user_email: "github-actions[bot]@users.noreply.github.com"
-        file_pattern: version.txt
+        file_pattern: version.txt CHANGELOG.md
         branch: main
 
     - name: Build distribution
@@ -55,6 +66,13 @@ jobs:
 
     - name: Echo output files
       run: ls -d "$PWD/build/"*
+
+    - name: Deploy wiki
+      if: github.ref_type == 'tag'
+      uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
+      with:
+        quarkdown-path: ${{ github.workspace }}/build/unzipped/quarkdown/bin/quarkdown
+        github-token: ${{ secrets.COMMITTER_TOKEN }}
 
     - name: Distribute artifact
       uses: actions/upload-artifact@v4
@@ -79,11 +97,11 @@ jobs:
         files: build/distributions/quarkdown.zip
 
     - name: Create release
-      uses: softprops/action-gh-release@v2.2.2
+      uses: softprops/action-gh-release@v2
       if: github.ref_type == 'tag'
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
-        generate_release_notes: true
+        body: ${{ steps.release-notes.outputs.release_notes }}
         files: build/distributions/quarkdown.zip
 
     - name: Generate docs
@@ -96,14 +114,16 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref_type == 'tag'
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        personal_token: ${{ secrets.COMMITTER_TOKEN }}
+        external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs
 
     - name: Deploy devbuild docs
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        personal_token: ${{ secrets.COMMITTER_TOKEN }}
+        external_repository: quarkdown-labs/quarkdown.com
         publish_dir: ./build/docs
         destination_dir: docs/latest
 

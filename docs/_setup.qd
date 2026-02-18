@@ -1,0 +1,60 @@
+.doclang {English}
+.theme {galactic} layout:{hyperlegible}
+
+.numbering
+    - example: 1
+
+.html {.read {assets/analytics.html}}
+.css {.read {assets/style.css}}
+
+.var {repourl} {https://github.com/iamgio/quarkdown}
+
+.function {repolink}
+    content href:
+    .text {.content} url:{.repourl/.href}
+
+.function {docslink}
+    href:
+    .html {<sup><a href="https://quarkdown.com/docs/.href" target="_blank">docs ↗</a></sup>}
+
+.function {example}
+    type? content:
+    .numbered key:{example}
+        num:
+        .box {Example .num} type:{.type::otherwise {tip}}
+            .content
+
+.function {quarkdownoutput}
+    content:
+    .container classname:{quarkdown-output} fullwidth:{yes}
+        .content
+
+.function {exampleoutput}
+    output prelude? type? quarkdowncode:
+    .example type:{.type}
+        .if {.prelude::isnone::not}
+            .prelude
+
+        .code lang:{markdown} linenumbers:{no}
+            .quarkdowncode
+
+        .container classname:{quarkdown-output} fullwidth:{yes}
+            .output
+
+.function {examplemirror}
+    prelude? type? quarkdowncode:
+    .exampleoutput output:{.quarkdowncode} prelude:{.prelude} type:{.type} quarkdowncode:{.quarkdowncode}
+
+.pagemargin {topleft}
+    .row gap:{12px}
+        [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
+
+        .read {../version.txt}::text classname:{version} url:{.repourl/releases/tag/latest}
+
+.pagemargin {topright}
+    .row
+        [Docs](/docs)
+
+        ---
+
+        [.icon {github}](https://github.com/iamgio/quarkdown)

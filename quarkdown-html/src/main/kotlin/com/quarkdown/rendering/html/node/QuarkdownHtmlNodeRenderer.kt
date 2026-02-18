@@ -12,6 +12,7 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
@@ -52,6 +53,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
+import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
@@ -244,7 +246,8 @@ class QuarkdownHtmlNodeRenderer(
 
                 "justify-content" value node.mainAxisAlignment
                 "align-items" value node.crossAxisAlignment
-                "gap" value node.gap
+                "row-gap" value node.rowGap
+                "column-gap" value node.columnGap
             }
         }
 
@@ -539,6 +542,13 @@ class QuarkdownHtmlNodeRenderer(
             hidden()
         }
 
+    override fun visit(node: PageNumberFormatter) =
+        buildTag("div") {
+            className("page-number-formatter")
+            attribute("data-format", node.format)
+            hidden()
+        }
+
     override fun visit(node: PageCounter) =
         // The current or total page number.
         // The actual number is filled by a script at runtime
@@ -645,11 +655,14 @@ class QuarkdownHtmlNodeRenderer(
                 }
             }
 
+            // If the quote has a type, the first child must be a paragraph, because the label is rendered as ::before.
+            if (node.type != null && node.children.firstOrNull() !is Paragraph) {
+                +tagBuilder("p").acceptEmpty().build()
+            }
+
             +node.children
             node.attribution?.let {
-                +tagBuilder("p", it)
-                    .className("attribution")
-                    .build()
+                +tagBuilder("p", it).className("attribution").build()
             }
         }
 

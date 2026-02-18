@@ -8,12 +8,12 @@ import com.quarkdown.core.pipeline.output.OutputResource
  * This includes:
  * - Code content that goes into the main file
  * - Additional resources (e.g. assets)
- * @see ProjectCreator
+ * @see com.quarkdown.cli.creator.ProjectCreator
  */
 interface ProjectCreatorInitialContentSupplier {
     /**
      * @return the code content that is inserted into the main file.
-     * This code will be processed by the same template processor used by the [ProjectCreator].
+     * This code will be processed by the same template processor used by the [com.quarkdown.cli.creator.ProjectCreator].
      * If `null`, no code content is provided.
      * @see ProjectCreatorTemplateProcessorFactory
      */

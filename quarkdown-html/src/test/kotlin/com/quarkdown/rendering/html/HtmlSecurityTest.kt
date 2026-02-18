@@ -1,41 +1,31 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Tests for system security from HTML code injection and other vulnerabilities.
  */
 class HtmlSecurityTest {
-    private fun texMacrosTemplateProcessor() =
-        TemplateProcessor(
-            """
-            [[for:TEXMACRO]]
-            [[TEXMACRO]],
-            [[endfor:TEXMACRO]]
-            """.trimIndent(),
-        )
-
     private fun testMacro(
         name: String,
         content: String,
-        expectedResult: String,
+        expectedSnippet: String,
     ) {
         val context = MutableContext(QuarkdownFlavor)
 
         context.documentInfo = context.documentInfo.deepCopy(texMacros = mapOf(name to content))
+        context.attributes.markMathPresence()
 
-        val postRenderer = HtmlPostRenderer(context, baseTemplateProcessor = ::texMacrosTemplateProcessor)
+        val postRenderer = HtmlPostRenderer(context)
+        val result = postRenderer.wrap("")
 
-        assertEquals(
-            expectedResult,
-            postRenderer.createTemplateProcessor().process().trim(),
-        )
+        assertTrue(expectedSnippet in result, "Expected snippet not found in output: $expectedSnippet")
     }
 
     @Test
@@ -43,10 +33,7 @@ class HtmlSecurityTest {
         testMacro(
             name = "\\hello",
             content = "\", function() {}",
-            expectedResult =
-                """
-                "\\hello": "\", function() {}",
-                """.trimIndent(),
+            expectedSnippet = "\"\\\\hello\": \"\\\", function() {}\"",
         )
     }
 
@@ -55,10 +42,7 @@ class HtmlSecurityTest {
         testMacro(
             name = """\hello": "", function() {}""",
             content = "\\text {hello}",
-            expectedResult =
-                """
-                "\\hello\": \"\", function() {}": "\\text {hello}",
-                """.trimIndent(),
+            expectedSnippet = "\"\\\\hello\\\": \\\"\\\", function() {}\": \"\\\\text {hello}\"",
         )
     }
 }

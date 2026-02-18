@@ -5,6 +5,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.MutableContextOptions
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.VisitableOnceGraph
@@ -40,13 +41,14 @@ val DEFAULT_OPTIONS =
  * @param source Quarkdown source to execute
  * @param options execution options
  * @param renderer function that provides the rendering components to use (defaults to HTML)
+ * @param workingDirectory working directory to use for the execution, used for resolving relative paths and as the root for the file system
  * @param subdocumentGraph modifier of the subdocument graph before rendering
  * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
  * @param useDummyLibraryDirectory whether to use the dummy library directory for loading libraries instead of the one from the `libs` module
  * @param errorHandler error handler to use
  * @param enableMediaStorage whether the media storage system should be enabled.
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
- * @param minimizeSubdocumentCollisions whether to minimize the risk of subdocument name collisions by using a hash-based name for subdocuments
+ * @param subdocumentNaming the strategy used to determine subdocument output file names
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
  * @param afterPostRenderingHook action run after post-rendering. Parameters are the pipeline context and the post-rendered result
  * @param afterRenderingHook action run after rendering. Parameters are the pipeline context and the rendered result
@@ -55,12 +57,13 @@ fun execute(
     source: String,
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
     renderer: (RendererFactory, Context) -> RenderingComponents = { rendererFactory, ctx -> rendererFactory.html(ctx) },
+    workingDirectory: File = File(DATA_FOLDER),
     subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
     useDummyLibraryDirectory: Boolean = false,
     errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
     enableMediaStorage: Boolean = false,
-    minimizeSubdocumentCollisions: Boolean = false,
+    subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
     afterPostRenderingHook: Context.(CharSequence) -> Unit = {},
     afterRenderingHook: Context.(CharSequence) -> Unit,
@@ -98,9 +101,9 @@ fun execute(
             context,
             PipelineOptions(
                 errorHandler = errorHandler,
-                workingDirectory = File(DATA_FOLDER),
+                workingDirectory = workingDirectory,
                 enableMediaStorage = enableMediaStorage,
-                minimizeSubdocumentCollisions = minimizeSubdocumentCollisions,
+                subdocumentNaming = subdocumentNaming,
             ),
             libraries = setOf(Stdlib.library),
             renderer = renderer,

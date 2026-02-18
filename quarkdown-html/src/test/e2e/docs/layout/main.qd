@@ -1,0 +1,40 @@
+.doctype {docs}
+.doclang {en}
+
+.pagemargin {lefttop}
+    # Left Sidebar
+
+    .repeat {20}
+        .loremipsum
+
+.pagemargin {righttop}
+    .tableofcontents
+
+# Alpha
+
+First section content.
+
+## Alpha One
+
+Alpha One content.
+
+.repeat {10}
+    .loremipsum
+
+## Alpha Two
+
+Alpha Two content.
+
+# Beta
+
+Beta section content.
+
+.repeat {10}
+    .loremipsum
+
+# Gamma
+
+Gamma section content.
+
+.repeat {10}
+    .loremipsum

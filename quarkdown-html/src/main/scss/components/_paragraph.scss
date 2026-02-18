@@ -3,31 +3,32 @@
     margin-top: 0;
     margin-bottom: 0;
     text-indent: var(--qd-paragraph-text-indent);
-
-    &:empty {
-      display: none;
-    }
   }
 
   &:not(.quarkdown-slides) p {
     hyphens: auto;
   }
 
-  p, li {
+  p, li, td, .footnote-definition {
     line-height: var(--qd-line-height);
     letter-spacing: var(--qd-letter-spacing);
   }
 }
 
-p {
-  $valid-paragraph: 'p:not(.stack > p):not(.page-margin-content > p)';
+p, .container:has(> p:last-child) {
+  $valid-paragraph-type-1: 'p:not(.stack > p):not(.page-margin-content > p)';
+  $valid-paragraph-type-2: '.container:has(> p:first-child)';
+
+  // These selectors could be shorter, but pagedjs fails on `+` and complex selectors.
 
   // Spacing between two sibling paragraphs
-  + #{$valid-paragraph},
+  + #{$valid-paragraph-type-1},
+  + #{$valid-paragraph-type-2},
     // Spacing between two sibling paragraphs with a floating element in-between
-  + .float + #{$valid-paragraph},
+  + .float + #{$valid-paragraph-type-1},
+  + .float + #{$valid-paragraph-type-2},
     // Spacing between the paragraph and its floating element sibling
-  + .float:has(+ #{$valid-paragraph}) {
+  + .float:has(+ #{$valid-paragraph-type-1}) {
     margin-top: var(--qd-paragraph-vertical-margin) !important;
   }
 }
@@ -35,8 +36,8 @@ p {
 // Paragraphs that don't expect indentation.
 figure p,
 .stack > p,
-.container[style*="text-align"] > p,
-.container[style*="justify-items"] > p,
+[style*="text-align"] > p,
+[style*="justify-items"] > p,
 .mermaid p,
 .page-margin-content p {
   text-indent: 0 !important;

@@ -11,9 +11,11 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 /**
  * A link to a Quarkdown subdocument.
  * @param link the link to the subdocument
+ * @param anchor an optional anchor to a specific section within the subdocument
  */
 class SubdocumentLink(
     val link: Link,
+    val anchor: String? = null,
 ) : LinkNode by link,
     TextNode by link {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)

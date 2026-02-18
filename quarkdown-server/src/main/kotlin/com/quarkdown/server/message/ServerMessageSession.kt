@@ -23,6 +23,7 @@ class ServerMessageSession(
     private val port: Int,
     private val endpoint: String,
 ) {
+    @Volatile
     private var session: DefaultClientWebSocketSession? = null
 
     private val client: HttpClient by lazy {
@@ -74,7 +75,7 @@ class ServerMessageSession(
      */
     fun send(message: ServerMessage) {
         runBlocking {
-            checkNotNull(session).send(Frame.Text(message.toString()))
+            checkNotNull(session).send(Frame.Text(message.content))
         }
     }
 }

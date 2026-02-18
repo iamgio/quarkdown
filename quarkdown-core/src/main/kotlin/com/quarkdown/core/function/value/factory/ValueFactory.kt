@@ -92,13 +92,17 @@ object ValueFactory {
     @FromDynamicType(Number::class)
     fun number(raw: Any): NumberValue =
         when (raw) {
-            is Number -> NumberValue(raw)
-            else ->
+            is Number -> {
+                NumberValue(raw)
+            }
+
+            else -> {
                 raw
                     .toString()
                     .let { it.toIntOrNull() ?: it.toFloatOrNull() }
                     ?.let { NumberValue(it) }
                     ?: throw IllegalRawValueException("Not a numeric value", raw)
+            }
         }
 
     /**
@@ -111,13 +115,17 @@ object ValueFactory {
     @FromDynamicType(Boolean::class)
     fun boolean(raw: Any): BooleanValue =
         when (raw) {
-            is Boolean -> BooleanValue(raw)
-            else ->
+            is Boolean -> {
+                BooleanValue(raw)
+            }
+
+            else -> {
                 when (raw.toString().lowercase()) {
                     "true", "yes" -> BooleanValue(true)
                     "false", "no" -> BooleanValue(false)
                     else -> throw IllegalRawValueException("Not a valid boolean value", raw)
                 }
+            }
         }
 
     /**
@@ -213,23 +221,31 @@ object ValueFactory {
         return ObjectValue(
             when (parts.size) {
                 // Single size: all sides are the same.
-                1 -> Sizes(all = size(iterator.next()).unwrappedValue)
+                1 -> {
+                    Sizes(all = size(iterator.next()).unwrappedValue)
+                }
+
                 // Two sizes: vertical and horizontal.
-                2 ->
+                2 -> {
                     Sizes(
                         vertical = size(iterator.next()).unwrappedValue,
                         horizontal = size(iterator.next()).unwrappedValue,
                     )
+                }
+
                 // Four sizes: top, right, bottom, left.
-                4 ->
+                4 -> {
                     Sizes(
                         top = size(iterator.next()).unwrappedValue,
                         right = size(iterator.next()).unwrappedValue,
                         bottom = size(iterator.next()).unwrappedValue,
                         left = size(iterator.next()).unwrappedValue,
                     )
+                }
 
-                else -> throw IllegalRawValueException("Invalid top-right-bottom-left sizes", raw)
+                else -> {
+                    throw IllegalRawValueException("Invalid top-right-bottom-left sizes", raw)
+                }
             },
         )
     }
@@ -259,11 +275,15 @@ object ValueFactory {
         values: Array<Enum<*>>,
     ): EnumValue? =
         when (raw) {
-            is Enum<*> -> EnumValue(raw)
-            else ->
+            is Enum<*> -> {
+                EnumValue(raw)
+            }
+
+            else -> {
                 values
                     .find { it.quarkdownName.equals(raw.toString(), ignoreCase = true) }
                     ?.let { EnumValue(it) }
+            }
         }
 
     /**
@@ -322,15 +342,25 @@ object ValueFactory {
         context: Context,
     ): MarkdownContentValue =
         when (raw) {
-            is MarkdownContent -> MarkdownContentValue(raw)
-            is Node -> MarkdownContentValue(MarkdownContent(listOf(raw)))
-            is DynamicValue if raw.unwrappedValue is String -> blockMarkdown(raw.unwrappedValue, context)
-            else ->
+            is MarkdownContent -> {
+                MarkdownContentValue(raw)
+            }
+
+            is Node -> {
+                MarkdownContentValue(MarkdownContent(listOf(raw)))
+            }
+
+            is DynamicValue if raw.unwrappedValue is String -> {
+                blockMarkdown(raw.unwrappedValue, context)
+            }
+
+            else -> {
                 markdown(
                     context.flavor.lexerFactory.newBlockLexer(raw.toString()),
                     context,
                     expandFunctionCalls = true,
                 )
+            }
         }
 
     /**
@@ -344,15 +374,25 @@ object ValueFactory {
         context: Context,
     ): InlineMarkdownContentValue =
         when (raw) {
-            is InlineMarkdownContent -> InlineMarkdownContentValue(raw)
-            is Node -> InlineMarkdownContentValue(InlineMarkdownContent(listOf(raw)))
-            is DynamicValue if raw.unwrappedValue is String -> inlineMarkdown(raw.unwrappedValue, context)
-            else ->
+            is InlineMarkdownContent -> {
+                InlineMarkdownContentValue(raw)
+            }
+
+            is Node -> {
+                InlineMarkdownContentValue(InlineMarkdownContent(listOf(raw)))
+            }
+
+            is DynamicValue if raw.unwrappedValue is String -> {
+                inlineMarkdown(raw.unwrappedValue, context)
+            }
+
+            else -> {
                 markdown(
                     context.flavor.lexerFactory.newInlineLexer(raw.toString()),
                     context,
                     expandFunctionCalls = true,
                 ).asInline()
+            }
         }
 
     /**
@@ -568,8 +608,12 @@ object ValueFactory {
          */
         fun nodeToExpression(node: Node): Expression =
             when (node) {
-                is PlainTextNode -> DynamicValue(node.text) // The actual type is determined later.
-                is FunctionCallNode -> context.resolveUnchecked(node) // Function existance is checked later.
+                is PlainTextNode -> DynamicValue(node.text)
+
+                // The actual type is determined later.
+                is FunctionCallNode -> context.resolveUnchecked(node)
+
+                // Function existance is checked later.
 
                 else -> throw IllegalArgumentException("Unexpected node $node in expression $raw")
             }

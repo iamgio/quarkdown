@@ -63,13 +63,12 @@ open class BaseContext(
             withContexts = mapOf(subdocument to this),
         )
 
-    override val fileSystem: FileSystem
-        get() {
-            val workingDirectory =
-                (subdocument as? Subdocument.Resource)?.workingDirectory
-                    ?: attachedPipeline?.options?.workingDirectory
-            return SimpleFileSystem(workingDirectory)
-        }
+    override val fileSystem: FileSystem by lazy {
+        val workingDirectory =
+            (subdocument as? Subdocument.Resource)?.workingDirectory
+                ?: attachedPipeline?.options?.workingDirectory
+        SimpleFileSystem(workingDirectory)
+    }
 
     override fun getFunctionByName(name: String): Function<*>? =
         libraries
