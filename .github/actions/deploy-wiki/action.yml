@@ -15,7 +15,7 @@ runs:
     - name: Build wiki documentation
       run: |
         cd docs
-        ${{ inputs.quarkdown-path }} c Home.qd --strict --clean --out-name wiki
+        ${{ inputs.quarkdown-path }} c main.qd --strict --clean --out-name wiki
       shell: bash
 
     - name: Deploy to gh-pages

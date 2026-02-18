@@ -42,7 +42,7 @@ jobs:
     - name: Build wiki
       run: |
         cd docs
-        ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown c Home.qd --strict --clean
+        ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown c main.qd --strict --clean
 
     - name: Upload CLI artifact
       uses: actions/upload-artifact@v4
