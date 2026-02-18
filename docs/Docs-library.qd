@@ -90,3 +90,7 @@ You can swap or change these positions by overriding two variables in your `_set
     .pagelistposition {righttop}
     .tocposition {lefttop}
     ```
+
+## Orphan pages
+
+Note that, by design, Quarkdown does not compile orphan source files. In order to be compiled as a [subdocument](Subdocuments.qd), a source file must be referenced by another file, be it in `_nav.qd` or in the content of another page.

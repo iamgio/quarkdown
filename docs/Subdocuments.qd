@@ -19,6 +19,12 @@ Whenever a Markdown link points to a local `.qd` or `.md` file, it is considered
 [My subdocument](file.qd)
 ```
 
+You can also link to a specific section within a subdocument by appending an anchor:
+
+```markdown
+[Section A of my subdocument](file.qd#section-a)
+```
+
 Equivalently, you can use the **`.subdocument {path} {label?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Ecosystem/subdocument.html} function:
 
 ```markdown

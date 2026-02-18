@@ -10,6 +10,20 @@ The **`.if`** function creates a conditional statement:
     .if {yes}
         Hello, Quarkdown!
 
+## None as falsy
+
+`.if` treats [`None`](None.qd) as `false`. This lets you use optional values directly as conditions, without explicitly checking with `.isnone`:
+
+.examplemirror
+    .function {greet}
+        name?:
+        .if {.name}
+            Hi, .name!
+
+    .greet {Alice}
+
+    .greet
+
 ## Nesting
 
 The function returns the lambda's result if the condition is satisfied, or nothing otherwise. This means the function *propagates* its content up the call stack.
