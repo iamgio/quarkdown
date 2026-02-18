@@ -5,7 +5,7 @@
     <img alt="Quarkdown banner" src="https://github.com/user-attachments/assets/68dfb3bf-9466-44f3-b220-7067322c4887">
   </picture>
   <br>
-  <a href="https://github.com/iamgio/quarkdown/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
+  <a href="https://quarkdown.com/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-read-darkcyan"></a>
   <a href="https://quarkdown.com/docs"><img alt="Docs" src="https://img.shields.io/badge/docs-read-blue"></a>
   <a href="https://github.com/iamgio/quarkdown/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/iamgio/quarkdown?color=mediumseagreen"></a>
   <a href="https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode"><img alt="Visual Studio Code Extension Version" src="https://img.shields.io/visual-studio-marketplace/v/quarkdown.quarkdown-vscode?label=vscode"></a>
@@ -107,7 +107,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 <h2 align="center">Looking for something?</h2>
 <p align="center">
   <strong>
-    Check out the <a href="https://github.com/iamgio/quarkdown/wiki" target="_blank">wiki</a>
+    Check out the <a href="https://quarkdown.com/wiki" target="_blank">wiki</a>
   </strong>
   to get started and learn more about the language and its features!
 </p>
@@ -146,7 +146,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 - **PDF**
   - [X] All document types and features supported by HTML are also supported when exporting to PDF.
 
-The desired document type can be set by calling the [`.doctype` function](https://github.com/iamgio/quarkdown/wiki/document-types) within the source itself:
+The desired document type can be set by calling the [`.doctype` function](https://quarkdown.com/wiki/document-types) within the source itself:
 - `.doctype {plain}` (default)
 - `.doctype {paged}`
 - `.doctype {slides}`
@@ -281,7 +281,7 @@ Optionally, adding `<install_dir>/bin` to your `PATH` allows you easier access Q
 
 Requirements:
 - Java 17 or higher
-- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://github.com/iamgio/quarkdown/wiki/PDF-export) for details.
+- (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://quarkdown.com/wiki/pdf-export) for details.
 
 </details>
 
@@ -289,16 +289,16 @@ Requirements:
 
 ## Quickstart 🆕
 
-New user? You'll find **everything you need** in the **[Quickstart guide](https://github.com/iamgio/quarkdown/wiki/quickstart)** to bring life to your first document!
+New user? You'll find **everything you need** in the **[Quickstart guide](https://quarkdown.com/wiki/quickstart)** to bring life to your first document!
 
 &nbsp;
 
 ## Creating a project
 
 **`quarkdown create [directory]`** will launch the prompt-based project wizard, making it quicker than ever
-to set up a new Quarkdown project, with all [metadata](https://github.com/iamgio/quarkdown/wiki/document-metadata) and initial content already present.
+to set up a new Quarkdown project, with all [metadata](https://quarkdown.com/wiki/document-metadata) and initial content already present.
 
-For more information about the project creator, check out its [wiki page](https://github.com/iamgio/quarkdown/wiki/cli%3A-project-creator).
+For more information about the project creator, check out its [wiki page](https://quarkdown.com/wiki/cli-project-creator).
 
 Alternatively, you may manually create a `.qd` source file and start from there.
 
@@ -310,14 +310,14 @@ Running **`quarkdown c file.qd`** will compile the given file and save the outpu
 
 > If the project is composed by multiple source files, the target file must be the root one, i.e. the one that includes the other files.
 >
-> - [How to include other files?](https://github.com/iamgio/quarkdown/wiki/including-other-quarkdown-files)
+> - [How to include other files?](https://quarkdown.com/wiki/including-other-quarkdown-files)
 
 If you would like to familiarize yourself with Quarkdown instead, `quarkdown repl` lets you play with an interactive REPL mode.
 
 #### Options
 
 - **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
-  If a [webserver](https://github.com/iamgio/quarkdown/wiki/cli%3A-webserver) is not running yet, it is started and the document is opened in the default browser.  
+  If a [webserver](https://quarkdown.com/wiki/cli-webserver) is not running yet, it is started and the document is opened in the default browser.  
   This is required in order to render paged documents in the browser.
 
 - **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
@@ -325,15 +325,15 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 > [!TIP]
 > Combine `-p -w` to achieve ***live preview***!
 
-- **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://github.com/iamgio/quarkdown/wiki/pdf-export) page.
+- **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://quarkdown.com/wiki/pdf-export) page.
 
 - `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./output`.
 
 - `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
-  Defaults to the name of the document, set via [`.docname`](https://github.com/iamgio/quarkdown/wiki/document-metadata).  
+  Defaults to the name of the document, set via [`.docname`](https://quarkdown.com/wiki/document-metadata).  
   *Note:* special characters will be replaced with dashes in the actual file name.
 
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://github.com/iamgio/quarkdown/wiki/importing-external-libraries)
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://quarkdown.com/wiki/importing-external-libraries)
 
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
@@ -365,7 +365,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 - `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
   but it should be disabled in production as the results might be visually affected.
 
-- `--no-media-storage`: turns the media storage system off. [(?)](https://github.com/iamgio/quarkdown/wiki/media-storage)
+- `--no-media-storage`: turns the media storage system off. [(?)](https://quarkdown.com/wiki/media-storage)
 
 - `--subdoc-naming <strategy>`: sets the subdocument output naming strategy [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments). Defaults to `file-name`. Accepted values:
   - `file-name`: uses the subdocument's file name (human-readable, but prone to collisions)

@@ -351,7 +351,7 @@ fun docKeywords(
  * If [locale] is specified, sets the document language to that value.
  * The document language affects localization ([localization], [localize]), hyphenation and other locale-specific properties.
  *
- * For a list of supported locales for built-in localizations, see [here](https://github.com/iamgio/quarkdown/wiki/localization).
+ * For a list of supported locales for built-in localizations, see [here](https://quarkdown.com/wiki/localization).
  *
  * ```
  * .doclang {en}
@@ -532,7 +532,7 @@ fun disableNumbering(
  * - From system fonts (e.g. `Arial`, `Times New Roman`)
  * - From Google Fonts (e.g. `GoogleFonts:Roboto`).
  *
- * Local and remote font resources are processed by the [media storage](https://github.com/iamgio/quarkdown/wiki/media-storage).
+ * Local and remote font resources are processed by the [media storage](https://quarkdown.com/wiki/media-storage).
  * This means, for instance, HTML output will carry local fonts into the output directory for increased portability.
  *
  * This function can be called multiple times to add multiple font configurations.
