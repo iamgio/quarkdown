@@ -95,15 +95,6 @@ After:
     .container width:{.width} height:{.height} background:{.background}
 ```
 
-Additionally, `.if` now treats `none` as falsy, without the need for `::isnone`:
-
-```markdown
-.function {greet}
-    name?:
-    .if {.name}
-        Hi, .name!
-```
-
 #### [Icons](https://quarkdown.com/wiki/Icons)
 
 The new `.icon {name}` function relies on [Bootstrap Icons](https://icons.getbootstrap.com/#icons) to display pixel-perfect icons in your documents.
