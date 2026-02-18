@@ -155,6 +155,12 @@ Code blocks using the `diff` language now have improved and clearer styling for 
 
 ### Fixed
 
+#### Major improvements to live preview
+
+Live preview has undergone major performance improvements and increased reliability, especially in combination with the new VS Code extension update.
+
+Live reloading not being performed when editing subdocuments has also been fixed.
+
 #### Fixed subdocument resolution from included files
 
 Linking to subdocuments from files included via `.include` from a different directory now correctly resolves the subdocument path.
