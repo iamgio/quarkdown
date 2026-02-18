@@ -27,7 +27,7 @@ Welcome to [Quarkdown](https://github.com/iamgio/quarkdown)! This is the startin
 
 @endif
 
-For further information and guides, please check out the [official wiki](https://github.com/iamgio/quarkdown/wiki).
+For further information and guides, please check out the [official wiki](https://quarkdown.com/wiki).
 
 @if(!docs)
 !(50%)[Quarkdown](image/logo.png)
