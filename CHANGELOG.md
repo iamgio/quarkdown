@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-02-19
+
 This version is the biggest release to date, with a large number of new features and improvements, and a [new official wiki](https://quarkdown.com/wiki), written in Quarkdown, that fully replaces the GitHub wiki for a better experience.
 
 > Going forward, next minor releases will be smaller and more frequent.
@@ -31,7 +33,7 @@ GitHub's alert syntax is now supported, making it easier to migrate from other t
 > This is a note
 ```
 
-Note that Quarkdown's original syntax is still supported *and recommended*, especially for English documents:
+Note that Quarkdown's original syntax is still supported _and recommended_, especially for English documents:
 
 ```markdown
 > Note: This is a note
@@ -112,8 +114,9 @@ This has no particular use case. It was needed to implement the docs search feat
 #### Get path to root directory
 
 The new `.pathtoroot {granularity?}` function returns the relative path from the current source file to the parent directory of:
-- the root document, if `granularity` is `project` (default)
-- the subdocument, if `granularity` is `subdocument`
+
+-   the root document, if `granularity` is `project` (default)
+-   the subdocument, if `granularity` is `subdocument`
 
 ### Changed
 
@@ -133,9 +136,9 @@ Additionally, its generation is now performed at compile time rather than runtim
 
 `--no-subdoc-collisions` was removed in favor of `--subdoc-naming <strategy>`, which is a flexible way to choose how subdocument output files are named:
 
-- `file-name` (default): each subdocument output file is named after its source file
-- `document-name`: each subdocument output file is named after its `.docname` value
-- `collision-proof`: former `--no-subdoc-collisions`
+-   `file-name` (default): each subdocument output file is named after its source file
+-   `document-name`: each subdocument output file is named after its `.docname` value
+-   `collision-proof`: former `--no-subdoc-collisions`
 
 #### Revamped `create` CLI
 
@@ -194,7 +197,7 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
----
+* * *
 
 ### Sponsors
 
@@ -205,3 +208,7 @@ Shout out to our sponsors! 🎉
 @serkonda7
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
+
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.14.0...HEAD
+
+[1.14.0]: https://github.com/iamgio/quarkdown/compare/36ef163d22c13e51edfca12739b99aa6aa1368b4...v1.14.0
