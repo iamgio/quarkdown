@@ -201,6 +201,40 @@ class ScriptingTest {
     }
 
     @Test
+    fun `function mutating external variable (via var overwrite)`() {
+        execute(
+            """
+            .var {num} {0}
+
+            .function {increase}
+                .var {num} {.num::sum {1}}    
+
+            .increase
+            .num
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1</p>", it)
+        }
+    }
+
+    @Test
+    fun `function mutating external variable (via subscript overwrite)`() {
+        execute(
+            """
+            .var {num} {0}
+
+            .function {increase}
+                .num {.num::sum {1}}    
+
+            .increase
+            .num
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1</p>", it)
+        }
+    }
+
+    @Test
     fun `correct caller context propagation in defined function (2 levels)`() {
         execute(
             """

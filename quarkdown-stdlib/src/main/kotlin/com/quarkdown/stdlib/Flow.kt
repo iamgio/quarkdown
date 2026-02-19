@@ -355,24 +355,38 @@ fun variable(
     name: String,
     value: DynamicValue,
 ): VoidValue {
-    /**
-     * @return whether a variable called [name] was removed from [this] set of libraries.
-     */
-    fun MutableSet<Library>.remove(name: String) = this.removeIf { it.name == CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name }
+    val libraryName = CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name
+
+    fun containsVariable(libraries: Set<Library>) = libraries.any { it.name == libraryName }
+
+    fun removeVariable(libraries: MutableSet<Library>) {
+        libraries.removeIf { it.name == libraryName }
+    }
 
     // Attempt to find an existing owner context that already contains the variable,
     // in case `context` is nested and the owner is up the hierarchy.
     // If null, either the variable is new or the owner is the root context (because `context` would not be a ScopeContext).
+    // The predicate is non-destructive: it only checks for existence without removing,
+    // as removal side effects during scanning would corrupt contexts that propagated
+    // libraries from a calling scope (e.g. via Lambda.invokeDynamic's callingContext).
     val potentialOwnerContext: MutableContext? =
         // Scan contexts upwards until the root.
         // The last one to contain a matching variable name is the owner of the variable.
         (context as? ScopeContext)?.lastParentOrNull {
-            it is MutableContext && it.libraries.remove(name)
+            it is MutableContext && containsVariable(it.libraries)
         } as? MutableContext
 
-    // If an owner has been found, that context is the target context.
-    // Otherwise, it is `context`. Any reference is also removed in case it already exists.
-    val targetContext: MutableContext = potentialOwnerContext ?: context.also { it.libraries.remove(name) }
+    // If an owner has been found, that context is the target context. Otherwise, it is the current one.
+    val targetContext: MutableContext = potentialOwnerContext ?: context
+
+    // Remove the old variable from the target context, if present, to avoid duplicates and ensure the new value is used.
+    removeVariable(targetContext.libraries)
+
+    // Also remove from the current context if it holds a separate copy
+    // (e.g. propagated from a calling scope).
+    if (targetContext !== context) {
+        removeVariable(context.libraries)
+    }
 
     // In case the value contains function calls, it is evaluated to a value.
     val evaluated: OutputValue<*> = ValueFactory.eval(value, targetContext)
