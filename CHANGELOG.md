@@ -18,7 +18,7 @@ You can see it in action in the [new official wiki](https://quarkdown.com/wiki)!
 
 #### New themes: Galactic (color) and Hyperlegible (layout)
 
-This new theme combination is the one used in the new wiki for improved readability and modern look.
+Inspired by Astro, this new theme combination is the one used in the new wiki for improved readability and modern look.
 
 <img width="606" height="350" alt="Galactic+Hyperlegible" src="https://github.com/user-attachments/assets/d8609d22-fb57-4db9-8b4a-98fa28cda421" />
 
