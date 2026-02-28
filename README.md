@@ -144,7 +144,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
     Perfect for interactive presentations.
   
   - [X] **Docs**  
-    Perfect for wikis, technical documentation and large knowledge bases - check out [Quarkdown's wiki](https://quarkdown.com/wiki)
+    Perfect for wikis, technical documentation and large knowledge bases - check out [Quarkdown's wiki](https://quarkdown.com/wiki).
 
 - **PDF**
   - [X] All document types and features supported by HTML are also supported when exporting to PDF.
