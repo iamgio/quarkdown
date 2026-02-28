@@ -142,14 +142,20 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 
   - [X] **Slides** <sup>via [reveal.js](https://revealjs.com)</sup>  
     Perfect for interactive presentations.
+  
+  - [X] **Docs**
+    Perfect for wikis, technical documentation and large knowledge bases - check out [Quarkdown's wiki](https://quarkdown.com/wiki) and its [sources](https://github.com/iamgio/quarkdown/tree/main/docs).
 
 - **PDF**
   - [X] All document types and features supported by HTML are also supported when exporting to PDF.
+
+- **Plain text**
 
 The desired document type can be set by calling the [`.doctype` function](https://quarkdown.com/wiki/document-types) within the source itself:
 - `.doctype {plain}` (default)
 - `.doctype {paged}`
 - `.doctype {slides}`
+- `.doctype {docs}`
 
 # Comparison
 
@@ -161,8 +167,9 @@ The desired document type can be set by calling the [`.doctype` function](https:
 | Book/article export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Presentation export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Static site export    | :white_check_mark: |        :x:         |    Experimental    | :white_check_mark: | :white_check_mark: |
+| Docs/wiki export      | :white_check_mark: |        :x:         |        :x:         | :white_check_mark: | :white_check_mark: |
 | Learning curve        |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
-| Targets               |     HTML, PDF      |  PDF, PostScript   |        PDF         |  HTML, PDF, ePub   |        HTML        |
+| Targets               |   HTML, PDF, TXT   |  PDF, PostScript   |        PDF         |  HTML, PDF, ePub   |        HTML        |
 
 <table>
   <thead>
