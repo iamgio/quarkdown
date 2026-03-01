@@ -4,7 +4,7 @@ import com.github.gradle.node.npm.task.NpxTask
 
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.10"
     id("com.github.node-gradle.node") version "7.1.0"
     id("io.miret.etienne.sass") version "1.6.0"
 }
@@ -18,7 +18,7 @@ dependencies {
     implementation(project(":quarkdown-server"))
     implementation(project(":quarkdown-plaintext")) // For search index generation
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
 
 tasks.compileSass {
