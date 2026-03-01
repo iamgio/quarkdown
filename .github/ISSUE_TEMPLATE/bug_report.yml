@@ -39,7 +39,6 @@ body:
     attributes:
       label: Actual output
       description: The output you got (rendered result, error message, or stack trace).
-      render: text
 
   - type: textarea
     id: expected
