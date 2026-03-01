@@ -1,5 +1,6 @@
-name: Enhancement Suggestion
+name: Enhancement suggestion
 description: Suggest a new feature or improvement
+title: "[Enhancement] "
 labels: ["enhancement"]
 body:
   - type: markdown
