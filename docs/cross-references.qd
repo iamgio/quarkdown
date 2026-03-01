@@ -15,7 +15,7 @@ You typically set the ID using the `{#id}` syntax. The exact location depends on
 .exampleoutput {![Sections](cross-references/section-reference.png)}
     Once you install Quarkdown, check out .ref {getting-started} for a quick guide.
 
-    ##! Getting started {#getting-started}
+    ## Getting started {#getting-started}
 
 > Tip: In HTML rendering, the reference ID of headings also becomes the HTML `id` attribute, which makes them suitable for linking.
 
