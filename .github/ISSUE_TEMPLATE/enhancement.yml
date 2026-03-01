@@ -1,0 +1,43 @@
+name: Enhancement Suggestion
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an enhancement!
+        Please describe your idea so we can evaluate it.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I am using the latest version of Quarkdown.
+          required: true
+        - label: I have checked the [wiki](https://quarkdown.com/wiki) to confirm this feature doesn't already exist.
+          required: true
+        - label: I have searched existing [issues](https://github.com/iamgio/quarkdown/issues) for duplicates.
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and detailed description of the enhancement you'd like to see.
+      placeholder: What would you like to be added or changed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-syntax
+    attributes:
+      label: Proposed syntax or behavior
+      description: If applicable, show how this feature might look in Quarkdown.
+      render: markdown
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context, motivation, screenshots, or information that might help.

@@ -1,0 +1,61 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug!
+        Please fill out the sections below so we can reproduce and fix the issue.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I am using the latest version of Quarkdown.
+          required: true
+        - label: I am using Java 17 or later (`java -version`).
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+      placeholder: Describe what happened and what you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: input
+    attributes:
+      label: Input
+      description: The Quarkdown source that triggers the bug.
+      render: markdown
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Actual output
+      description: The output you got (rendered result, error message, or stack trace).
+      render: text
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+      description: What you expected to see instead.
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: e.g. macOS 15, Windows 11, Ubuntu 24.04
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context, screenshots, or information that might help.
+
