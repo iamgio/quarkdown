@@ -5,6 +5,7 @@ import com.quarkdown.lsp.util.offsetToPosition
 import org.eclipse.lsp4j.Diagnostic
 import org.eclipse.lsp4j.DiagnosticSeverity
 import org.eclipse.lsp4j.Range
+import org.eclipse.lsp4j.jsonrpc.messages.Either
 
 /**
  * A simple diagnostic that can be sent to the client.
@@ -32,7 +33,7 @@ data class SimpleDiagnostic(
  */
 fun SimpleDiagnostic.toLspDiagnostic(text: String): Diagnostic =
     Diagnostic().also {
-        it.range = Range(offsetToPosition(text, range.start), offsetToPosition(text, range.endInclusive))
-        it.message = message
+        it.range = Range(offsetToPosition(text, range.first), offsetToPosition(text, range.endInclusive))
+        it.message = Either.forLeft(message)
         it.severity = severity
     }
