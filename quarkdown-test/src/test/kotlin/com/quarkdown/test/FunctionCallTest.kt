@@ -54,4 +54,27 @@ class FunctionCallTest {
             assertTrue(attributes.hasCode)
         }
     }
+
+    @Test
+    fun `adjacent inline function calls`() {
+        execute(".sum {1} {2} .sum {3} {4}") {
+            assertEquals("<p>3 7</p>", it)
+        }
+
+        execute(".sum {1} {2}") {
+            assertEquals("<p>3</p>", it)
+        }
+
+        execute(".sum {1} {2} result") {
+            assertEquals("<p>3 result</p>", it)
+        }
+
+        execute(".sum {1} {2} abc .sum {3} {4}") {
+            assertEquals("<p>3 abc 7</p>", it)
+        }
+
+        execute(".sum {1} {2} abc {}") {
+            assertEquals("<p>3 abc {}</p>", it)
+        }
+    }
 }

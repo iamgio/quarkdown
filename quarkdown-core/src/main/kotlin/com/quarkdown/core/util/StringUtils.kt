@@ -110,6 +110,17 @@ fun StringBuilder.replace(
 fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^a-zA-Z0-9\\-_.@]+".toRegex(), replacement)
 
 /**
+ * Whether the content of [this] string between [startIndex] and the end of the first line is blank.
+ * If [startIndex] is beyond the first line, this returns `true`.
+ * @param startIndex index to start checking from
+ * @return `true` if the remainder of the first line after [startIndex] is blank or [startIndex] is past the first line
+ */
+fun CharSequence.isBlankUntilEndOfLine(startIndex: Int): Boolean {
+    val firstLineEnd = indexOf('\n').let { if (it < 0) length else it }
+    return startIndex > firstLineEnd || substring(startIndex, firstLineEnd).isBlank()
+}
+
+/**
  * @return [this] string with line separators replaced with `\n`,
  *         or the string itself if `\n` is already the line separator
  */
