@@ -1074,6 +1074,7 @@ class BlockParserTest {
 
         // `.function \{arg1}` is treated as a paragraph (inline function call + text),
         // not as a block function call, because the line has content after the call.
+        // Tested in `inlineFunctionCallInParagraph`.
 
         with(nodes.next()) {
             assertEquals("function", name)
@@ -1172,6 +1173,7 @@ class BlockParserTest {
 
         // `.function {arg{1}} {arg2}}` has a trailing `}` after the parsed arguments,
         // so it is treated as a paragraph (inline function call + trailing text), not a block call.
+        // Tested in `inlineFunctionCallInParagraph`.
 
         with(nodes.next()) {
             assertEquals("function", name)
@@ -1193,6 +1195,31 @@ class BlockParserTest {
                     value.unwrappedValue,
                 )
             }
+        }
+    }
+
+    /**
+     * Verifies that function calls followed by non-whitespace content on the same line
+     * are treated as paragraphs containing inline function calls, not as block function calls.
+     */
+    @Test
+    fun inlineFunctionCallInParagraph() {
+        // `.function \{arg1}`: the escaped brace text follows the call on the same line.
+        with(blocksIterator<Paragraph>(".function \\{arg1}").next()) {
+            val children = children.iterator()
+            assertIs<FunctionCallNode>(children.next())
+            assertEquals(" ", assertIs<Text>(children.next()).text)
+            assertEquals("{", assertIs<Text>(children.next()).text)
+            assertEquals("arg1}", assertIs<Text>(children.next()).text)
+            assertFalse(children.hasNext())
+        }
+
+        // `.function {arg{1}} {arg2}}`: trailing `}` after the parsed arguments.
+        with(blocksIterator<Paragraph>(".function {arg{1}} {arg2}}").next()) {
+            val children = children.iterator()
+            assertIs<FunctionCallNode>(children.next())
+            assertEquals("}", assertIs<Text>(children.next()).text)
+            assertFalse(children.hasNext())
         }
     }
 
