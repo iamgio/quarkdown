@@ -235,4 +235,82 @@ class BibliographyStyleTest {
             AstRoot(content),
         )
     }
+
+    @Test
+    fun `apa, article`() {
+        val style = BibliographyStyle.Apa
+        val label = style.labelProvider.getLabel(article, 0)
+        val content = style.contentProvider.getContent(article)
+        assertEquals("", label)
+        assertNodeEquals(
+            buildInline {
+                text("Einstein, A.")
+                text(" (")
+                text("1905")
+                text(")")
+                text(". ")
+                text("Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]")
+                text(". ")
+                emphasis { text("Annalen der Physik") }
+                text(", ")
+                emphasis { text("322") }
+                text("(")
+                text("10")
+                text(")")
+                text(", ")
+                text("891--921")
+                text(". ")
+                link("https://doi.org/10.1002/andp.19053221004") {
+                    text("https://doi.org/10.1002/andp.19053221004")
+                }
+            }.let(::AstRoot),
+            AstRoot(content)
+        )
+    }
+
+    @Test
+    fun `apa, book`() {
+        val style = BibliographyStyle.Apa
+        val label = style.labelProvider.getLabel(book, 0)
+        val content = style.contentProvider.getContent(book)
+        assertEquals("", label)
+        assertNodeEquals(
+            buildInline {
+                text("Goossens, M., Mittelbach, F., and Samarin, A.")
+                text(" (")
+                text("1993")
+                text(")")
+                text(". ")
+                emphasis { text("The LaTeX Companion") }
+                text(". ")
+                text("Addison-Wesley")
+                text(".")
+            }.let(::AstRoot),
+            AstRoot(content)
+        )
+    }
+
+    @Test
+    fun `apa, misc`() {
+        val style = BibliographyStyle.Apa
+        val content = style.contentProvider.getContent(misc)
+        assertNodeEquals(
+            buildInline {
+                text("Knuth, D.")
+                text(" (")
+                text("n.d.")
+                text(")")
+                text(". ")
+                emphasis { text("Knuth: Computers and Typesetting") }
+                text(" (")
+                text("version: 1.0")
+                text(")")
+                text(". ")
+                link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
+                    text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
+                }
+            }.let(::AstRoot),
+            AstRoot(content)
+        )
+    }
 }

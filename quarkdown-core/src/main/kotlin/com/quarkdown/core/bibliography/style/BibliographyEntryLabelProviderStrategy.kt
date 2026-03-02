@@ -28,4 +28,8 @@ interface BibliographyEntryLabelProviderStrategy {
             index: Int,
         ): String = LABEL_BEGIN + (index + 1) + LABEL_END
     }
+
+    data object None : BibliographyEntryLabelProviderStrategy {
+        override fun getLabel(entry: BibliographyEntry, index: Int): String = ""
+    }
 }
