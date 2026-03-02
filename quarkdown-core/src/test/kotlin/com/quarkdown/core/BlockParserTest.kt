@@ -1072,10 +1072,8 @@ class BlockParserTest {
             assertEquals("arg1}", arguments[0].value.unwrappedValue)
         }
 
-        with(nodes.next()) {
-            assertEquals("function", name)
-            assertEquals(0, arguments.size)
-        }
+        // `.function \{arg1}` is treated as a paragraph (inline function call + text),
+        // not as a block function call, because the line has content after the call.
 
         with(nodes.next()) {
             assertEquals("function", name)
@@ -1172,20 +1170,8 @@ class BlockParserTest {
             }
         }
 
-        with(nodes.next()) {
-            assertEquals("function", name)
-            assertEquals(2, arguments.size)
-
-            val args = arguments.iterator()
-            with(args.next()) {
-                assertEquals("arg{1}", value.unwrappedValue)
-                assertFalse(this.isBody)
-            }
-            with(args.next()) {
-                assertEquals("arg2", value.unwrappedValue)
-                assertFalse(this.isBody)
-            }
-        }
+        // `.function {arg{1}} {arg2}}` has a trailing `}` after the parsed arguments,
+        // so it is treated as a paragraph (inline function call + trailing text), not a block call.
 
         with(nodes.next()) {
             assertEquals("function", name)

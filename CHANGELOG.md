@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Fixed
+
+#### Fixed block function call incorrectly matching lines with trailing content
+
+Fixed an issue that caused a line like `.sum {1} {2} .sum {3} {4}` to be incorrectly lexed as two block function calls rather than a single paragraph with two inline function calls.
+
+### Changed
+
+#### Improved lexer performance
+
+The lexer no longer restarts its regex search from scratch when a function call advances the scan position, resulting in slightly improved performance, especially for documents with many function calls.
+
 ## [1.14.0] - 2026-02-19
 
 This version is the biggest release to date, with a large number of new features and improvements, and a [new official wiki](https://quarkdown.com/wiki), written in Quarkdown, that fully replaces the GitHub wiki for a better experience.

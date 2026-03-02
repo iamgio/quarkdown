@@ -32,15 +32,27 @@ abstract class RegexLexer(
      * Uncaptured parts of the source string preceding the match are converted into fill tokens
      * via [createFillToken].
      *
+     * If a pattern's walker rejects the match by returning `null`, this method reverts the scan position
+     * and returns an empty list, signaling the caller to retry with the [fallbackPatterns].
+     *
      * @param result result of the [Regex] match
-     * @return the tokens produced from this match (typically one content token, optionally preceded by a fill token)
+     * @param activePatterns the patterns to check against the match result (must correspond to the regex
+     *                       that produced [result], so that named group lookups succeed)
+     * @return the tokens produced from this match (typically one content token, optionally preceded by a fill token),
+     *         or an empty list if the walker rejected the match
      */
-    private fun extractMatchingTokens(result: MatchResult): List<Token> {
+    private fun extractMatchingTokens(
+        result: MatchResult,
+        activePatterns: List<TokenRegexPattern> = patterns,
+    ): List<Token> {
         val tokens = mutableListOf<Token>()
 
-        for (pattern in patterns) {
+        for (pattern in activePatterns) {
             val group = result.groups[pattern.name] ?: continue
             val range = group.range
+
+            // Save current position in case the walker rejects the match.
+            val savedIndex = currentIndex
 
             // Fill-tokens are substrings that were not captured by any pattern.
             // These uncaptured groups are scanned and converted to tokens.
@@ -94,6 +106,11 @@ abstract class RegexLexer(
             if (walked != null) {
                 currentIndex += walked.charsConsumed
                 tokens += walked.token
+            } else if (pattern.walker != null) {
+                // The walker rejected this match (e.g., a block function call pattern determined
+                // the content is actually inline-level). Revert position and signal rejection.
+                currentIndex = savedIndex
+                return emptyList()
             } else {
                 // Lets the corresponding Token subclass wrap the data.
                 tokens += pattern.wrap(data)
@@ -112,8 +129,19 @@ abstract class RegexLexer(
 
             while (currentIndex < source.length) {
                 val prevIndex = currentIndex
-                val result = regex.find(paddedSource, currentIndex) ?: break
-                yieldAll(extractMatchingTokens(result))
+                var result = regex.find(paddedSource, currentIndex) ?: break
+                var tokens = extractMatchingTokens(result)
+
+                // If a walker rejected the match, retry with the fallback regex
+                // (which excludes walker-based patterns), allowing other patterns
+                // (e.g. paragraph) to match at the same position.
+                if (tokens.isEmpty() && currentIndex == prevIndex) {
+                    val (fallback, fallbackPats) = fallbackPatterns ?: break
+                    result = fallback.find(paddedSource, currentIndex) ?: break
+                    tokens = extractMatchingTokens(result, fallbackPats)
+                }
+
+                yieldAll(tokens)
                 // Safety: ensure forward progress to prevent infinite loops on zero-width matches.
                 if (currentIndex <= prevIndex) break
             }
@@ -123,4 +151,18 @@ abstract class RegexLexer(
                 createFillToken(position = currentIndex until source.length)?.let { yield(it) }
             }
         }
+
+    /**
+     * Pre-compiled fallback regex and its corresponding pattern list, excluding patterns with walkers.
+     * Used when a walker rejects a match, allowing other patterns (e.g. paragraph)
+     * to match at the same position where the walker-based pattern was rejected.
+     *
+     * `null` if no patterns have walkers (no fallback is ever needed).
+     */
+    private val fallbackPatterns: Pair<Regex, List<TokenRegexPattern>>? by lazy {
+        val nonWalkerPatterns = patterns.filter { it.walker == null }
+        if (nonWalkerPatterns.size == patterns.size) return@lazy null // No walkers exist.
+        if (nonWalkerPatterns.isEmpty()) return@lazy null
+        nonWalkerPatterns.groupify() to nonWalkerPatterns
+    }
 }

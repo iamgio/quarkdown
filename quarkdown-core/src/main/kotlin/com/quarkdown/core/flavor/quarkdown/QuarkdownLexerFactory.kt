@@ -4,6 +4,7 @@ import com.quarkdown.core.flavor.InlineLexerVariant
 import com.quarkdown.core.flavor.LexerFactory
 import com.quarkdown.core.flavor.base.BaseMarkdownLexerFactory
 import com.quarkdown.core.lexer.Lexer
+import com.quarkdown.core.lexer.patterns.FunctionCallPatterns
 import com.quarkdown.core.lexer.patterns.QuarkdownBlockTokenRegexPatterns
 import com.quarkdown.core.lexer.patterns.QuarkdownInlineTokenRegexPatterns
 import com.quarkdown.core.lexer.regex.StandardRegexLexer
@@ -15,6 +16,7 @@ import com.quarkdown.core.lexer.tokens.PlainTextToken
 object QuarkdownLexerFactory : LexerFactory {
     private val blockPatterns = QuarkdownBlockTokenRegexPatterns()
     private val inlinePatterns = QuarkdownInlineTokenRegexPatterns()
+    private val functionCallPatterns = FunctionCallPatterns()
     private val base = BaseMarkdownLexerFactory
 
     /**
@@ -85,7 +87,7 @@ object QuarkdownLexerFactory : LexerFactory {
                 if (allowBlockFunctionCalls) {
                     listOf(
                         escape,
-                        QuarkdownBlockTokenRegexPatterns().functionCall,
+                        functionCallPatterns.expressionBlockFunctionCall,
                         inlineFunctionCall,
                     )
                 } else {
