@@ -2,10 +2,12 @@ package com.quarkdown.core.lexer.tokens
 
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.TokenData
+import com.quarkdown.core.parser.walker.WalkerParsingResult
+import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.core.visitor.token.TokenVisitor
 
 /**
- * An inline function
+ * A function call token, produced by the lexer's walker subsystem.
  * This is a custom Quarkdown element, and is both a block and inline node.
  *
  * Example:
@@ -15,11 +17,13 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  * ```
  * The `body` argument is supported only when used as a block.
  * @param isBlock whether the function call is a block (opposite: inline)
- * @see com.quarkdown.core.ast.FunctionCallNode
+ * @param walkerResult the result of the walker parsing, containing the structured [WalkedFunctionCall]
+ * @see com.quarkdown.core.ast.quarkdown.FunctionCallNode
  */
 class FunctionCallToken(
     data: TokenData,
     val isBlock: Boolean,
+    val walkerResult: WalkerParsingResult<WalkedFunctionCall>,
 ) : Token(data) {
     override fun <T> accept(visitor: TokenVisitor<T>) = visitor.visit(this)
 }

@@ -2,6 +2,7 @@ package com.quarkdown.core.lexer.patterns
 
 import com.quarkdown.core.lexer.regex.RegexBuilder
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
+import com.quarkdown.core.lexer.regex.pattern.WalkedToken
 import com.quarkdown.core.lexer.tokens.FunctionCallToken
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.core.parser.walker.funcall.FunctionCallWalkerParser
@@ -20,7 +21,7 @@ class FunctionCallPatterns {
         get() =
             TokenRegexPattern(
                 name = "InlineFunctionCall",
-                wrap = { FunctionCallToken(it, isBlock = false) },
+                wrap = { error("Inline function call tokens are constructed by the walker") },
                 // The name of the function prefixed by a dot.
                 regex =
                     RegexBuilder("(?<=before)(?=begin(name))")
@@ -28,8 +29,14 @@ class FunctionCallPatterns {
                         .withReference("begin", "\\" + FunctionCallGrammar.BEGIN)
                         .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
                         .build(),
-                // Arguments are scanned by the walker lexer.
-                walker = { FunctionCallWalkerParser(it, allowsBody = false) },
+                // Arguments are scanned by the walker, which produces a typed FunctionCallToken.
+                walker = { data, remaining ->
+                    val result = FunctionCallWalkerParser(remaining, allowsBody = false).parse()
+                    WalkedToken(
+                        token = FunctionCallToken(data, isBlock = false, walkerResult = result),
+                        charsConsumed = result.endIndex,
+                    )
+                },
             )
 
     /**
@@ -43,7 +50,7 @@ class FunctionCallPatterns {
         get() =
             TokenRegexPattern(
                 name = "FunctionCall",
-                wrap = { FunctionCallToken(it, isBlock = true) },
+                wrap = { error("Block function call tokens are constructed by the walker") },
                 // The current operation to make sure the function call is not followed by other non-function content
                 // is just checking if the line ends with an argument end character (}).
                 // This works in most cases, but it should be improved soon with some better check.
@@ -53,8 +60,14 @@ class FunctionCallPatterns {
                         .withReference("close", "(?:.*end)?\\s*\$")
                         .withReference("end", FunctionCallGrammar.ARGUMENT_END.toString())
                         .build(),
-                // Arguments are scanned by the walker lexer.
-                walker = { FunctionCallWalkerParser(it, allowsBody = true) },
+                // Arguments are scanned by the walker, which produces a typed FunctionCallToken.
+                walker = { data, remaining ->
+                    val result = FunctionCallWalkerParser(remaining, allowsBody = true).parse()
+                    WalkedToken(
+                        token = FunctionCallToken(data, isBlock = true, walkerResult = result),
+                        charsConsumed = result.endIndex,
+                    )
+                },
             )
 }
 

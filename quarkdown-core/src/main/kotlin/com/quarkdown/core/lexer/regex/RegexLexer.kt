@@ -6,13 +6,16 @@ import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.TokenData
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
 import com.quarkdown.core.lexer.regex.pattern.groupify
-import com.quarkdown.core.parser.walker.WalkerParser
-import com.quarkdown.core.parser.walker.WalkerParsingResult
 import com.quarkdown.core.util.filterNotNullValues
 import com.quarkdown.core.util.normalizeLineSeparators
 
 /**
  * A [Lexer] that identifies tokens by matching [Regex] patterns.
+ *
+ * Tokenization uses an iterative `find` loop: each iteration calls [Regex.find] starting from
+ * [currentIndex], so that walker-driven position advances are respected without restarting
+ * the entire regex search.
+ *
  * @param source the content to be tokenized
  * @param patterns the patterns to search for, in descending order of priority
  */
@@ -25,38 +28,28 @@ abstract class RegexLexer(
         protected set
 
     /**
-     * Converts captured groups of a [Regex] match to a sequence of tokens, and appends it to [this] list.
-     * Uncaptured parts of the source string are converted into other tokens via [createFillToken].
+     * Extracts tokens from a single [Regex] match result.
+     * Uncaptured parts of the source string preceding the match are converted into fill tokens
+     * via [createFillToken].
+     *
      * @param result result of the [Regex] match
-     * @return whether the tokenization process (regex matching) should be restarted from the current index.
-     * This happens when a matched pattern produces a [WalkerParsingResult] that scans further content.
+     * @return the tokens produced from this match (typically one content token, optionally preceded by a fill token)
      */
-    private fun MutableList<Token>.extractMatchingTokens(result: MatchResult): Boolean {
+    private fun extractMatchingTokens(result: MatchResult): List<Token> {
+        val tokens = mutableListOf<Token>()
+
         for (pattern in patterns) {
             val group = result.groups[pattern.name] ?: continue
             val range = group.range
 
             // Fill-tokens are substrings that were not captured by any pattern.
             // These uncaptured groups are scanned and converted to tokens.
-            pushFillToken(untilIndex = range.first)
+            if (range.first > currentIndex) {
+                createFillToken(position = currentIndex until range.first)?.let { tokens += it }
+            }
 
-            // End of the match
+            // End of the match.
             currentIndex = range.last + 1
-
-            // Text of the token.
-            val text = StringBuilder(group.value)
-
-            // In case the pattern requires additional information that can't be supplied by regex,
-            // its WalkerParser is supplied and starts scanning from this position.
-            // In most cases, a pattern will not have a walker.
-            // Currently, only function calls have walkers (see parser.walker.funcall), as regex cannot handle balanced argument delimiters.
-            val walker: WalkerParser<*>? = pattern.walker?.invoke(source.substring(currentIndex))
-            // Result of the walk.
-            val walkerResult: WalkerParsingResult<*>? =
-                walker?.parse()?.also {
-                    // The matching process is continued from the walker's end position.
-                    currentIndex += it.endIndex
-                }
 
             // Groups with a name, defined by the pattern.
             val namedGroups =
@@ -67,7 +60,7 @@ abstract class RegexLexer(
                     .toMap()
 
             // Regular groups that are not named.
-            // They don't contain values from namedGroups
+            // They don't contain values from namedGroups.
             val groups =
                 result.groups
                     .asSequence()
@@ -77,8 +70,7 @@ abstract class RegexLexer(
                     .map { it.value }
                     .toMutableList()
 
-            // namedGroups as Map<String, String>, which can be affected by
-            // the output of the walker lexer (see below).
+            // namedGroups as Map<String, String>.
             val namedGroupsValues =
                 namedGroups
                     .mapValues { (_, group) -> group.value }
@@ -87,47 +79,48 @@ abstract class RegexLexer(
             // The token data.
             val data =
                 TokenData(
-                    text = text.toString(),
+                    text = group.value,
                     position = range,
                     groups = groups.asSequence(),
                     namedGroups = namedGroupsValues,
-                    walkerResult = walkerResult,
                 )
 
-            // Lets the corresponding Token subclass wrap the data.
-            this += pattern.wrap(data)
-
-            // If the pattern has used a walker to scan content, the regex tokenization process must be restarted,
-            // and it will start matching regexes again from currentIndex.
-            if (walkerResult != null) {
-                return true
+            // In case the pattern requires additional information that can't be supplied by regex,
+            // its walker is invoked to produce a fully typed token and advance the scan position.
+            // In most cases, a pattern will not have a walker.
+            // Currently, only function calls have walkers (see parser.walker.funcall),
+            // as regex cannot handle balanced argument delimiters.
+            val walked = pattern.walker?.invoke(data, source.substring(currentIndex))
+            if (walked != null) {
+                currentIndex += walked.charsConsumed
+                tokens += walked.token
+            } else {
+                // Lets the corresponding Token subclass wrap the data.
+                tokens += pattern.wrap(data)
             }
         }
 
-        return false
+        return tokens
     }
 
-    override fun tokenize(): List<Token> =
-        buildList {
+    override fun tokenize(): Sequence<Token> =
+        sequence {
+            currentIndex = 0
             val regex: Regex = patterns.groupify()
+            // Append an empty line to the tokenized source to prevent issues with some expressions.
+            val paddedSource = "$source\n"
 
-            fun extract() {
-                // Append an empty line to the tokenized source to prevent issues with some expressions.
-                val match: Sequence<MatchResult> = regex.findAll("$source\n", currentIndex)
-
-                match.forEach { result ->
-                    // If a restart is required, the matching process is restarted from the current index.
-                    val shouldRestart = extractMatchingTokens(result)
-                    if (shouldRestart) {
-                        extract()
-                        return
-                    }
-                }
+            while (currentIndex < source.length) {
+                val prevIndex = currentIndex
+                val result = regex.find(paddedSource, currentIndex) ?: break
+                yieldAll(extractMatchingTokens(result))
+                // Safety: ensure forward progress to prevent infinite loops on zero-width matches.
+                if (currentIndex <= prevIndex) break
             }
 
-            extract()
-
             // Add a token to fill the gap between the last token and the EOF.
-            pushFillToken(untilIndex = source.length)
+            if (currentIndex < source.length) {
+                createFillToken(position = currentIndex until source.length)?.let { yield(it) }
+            }
         }
 }

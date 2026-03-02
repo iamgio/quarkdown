@@ -9,7 +9,7 @@ import com.quarkdown.core.pipeline.stage.SharedPipelineData
 /**
  * Pipeline stage responsible for lexical analysis (tokenization) of the input text.
  *
- * This stage produces a list of tokens as output from the provided source text.
+ * This stage produces a lazy sequence of tokens as output from the provided source text.
  * It uses the lexer factory from the context's flavor to create a block lexer that
  * processes the source text and breaks it down into tokens.
  *
@@ -19,13 +19,13 @@ import com.quarkdown.core.pipeline.stage.SharedPipelineData
  */
 class LexingStage(
     private val source: CharSequence,
-) : PipelineStage<Set<Library>, List<Token>> {
+) : PipelineStage<Set<Library>, Sequence<Token>> {
     override val hook = PipelineHooks::afterLexing
 
     override fun process(
         input: Set<Library>,
         data: SharedPipelineData,
-    ): List<Token> =
+    ): Sequence<Token> =
         data.context.flavor.lexerFactory
             .newBlockLexer(this.source)
             .tokenize()

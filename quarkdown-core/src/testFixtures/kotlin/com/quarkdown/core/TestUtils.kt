@@ -64,7 +64,6 @@ inline fun <reified T : Node> nodesIterator(
 ): Iterator<T> =
     lexer
         .tokenize()
-        .asSequence()
         .filterNot { it is NewlineToken }
         .filterNot { it is PlainTextToken && it.data.text.isBlank() }
         .map { it to it.accept(parser) }
