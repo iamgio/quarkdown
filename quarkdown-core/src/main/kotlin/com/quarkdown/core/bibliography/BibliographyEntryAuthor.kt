@@ -12,7 +12,7 @@ data class BibliographyEntryAuthor(
     val lastName: String?,
 )
 
-private val AUTHOR_SEPARATOR = ",? and ".toRegex()
+private val AUTHOR_SEPARATOR = ",? (and|&) ".toRegex()
 private const val NAME_SEPARATOR_LAST_NAME_FIRST = ", "
 private const val NAME_SEPARATOR_FIRST_NAME_FIRST = " "
 
@@ -22,35 +22,36 @@ private const val NAME_SEPARATOR_FIRST_NAME_FIRST = " "
  * @return a list of structured authors, based on the [author] property.
  */
 val BibliographyEntry.structuredAuthors: List<BibliographyEntryAuthor>
-    get() {
-        val rawAuthors =
-            author
-                ?.split(AUTHOR_SEPARATOR)
-                ?.map { it.trim() }
-                ?: return emptyList()
+    get() = author.extractAuthorList()
 
-        return rawAuthors.map { name ->
-            // Last name is first: "Last, First"
-            // First name is first: "First Last"
-            val lastNameFirst = ", " in name
-            val parts =
-                name
-                    .split(if (lastNameFirst) NAME_SEPARATOR_LAST_NAME_FIRST else NAME_SEPARATOR_FIRST_NAME_FIRST)
-                    .map { it.trim() }
+internal fun String?.extractAuthorList(): List<BibliographyEntryAuthor> {
+    val rawAuthors = this
+        ?.split(AUTHOR_SEPARATOR)
+        ?.map { it.trim() }
+        ?: return emptyList()
 
-            when {
-                lastNameFirst ->
-                    BibliographyEntryAuthor(
-                        fullName = name,
-                        firstName = parts.lastOrNull().takeIf { parts.size > 1 },
-                        lastName = parts.firstOrNull(),
-                    )
-                else ->
-                    BibliographyEntryAuthor(
-                        fullName = name,
-                        firstName = parts.firstOrNull().takeIf { parts.size > 1 },
-                        lastName = parts.lastOrNull(),
-                    )
-            }
+    return rawAuthors.map { name ->
+        // Last name is first: "Last, First"
+        // First name is first: "First Last"
+        val lastNameFirst = ", " in name
+        val parts =
+            name
+                .split(if (lastNameFirst) NAME_SEPARATOR_LAST_NAME_FIRST else NAME_SEPARATOR_FIRST_NAME_FIRST)
+                .map { it.trim() }
+
+        when {
+            lastNameFirst ->
+                BibliographyEntryAuthor(
+                    fullName = name,
+                    firstName = parts.lastOrNull().takeIf { parts.size > 1 },
+                    lastName = parts.firstOrNull(),
+                )
+            else ->
+                BibliographyEntryAuthor(
+                    fullName = name,
+                    firstName = parts.firstOrNull().takeIf { parts.size > 1 },
+                    lastName = parts.lastOrNull(),
+                )
         }
     }
+}

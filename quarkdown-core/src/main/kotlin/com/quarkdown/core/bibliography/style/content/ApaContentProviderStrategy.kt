@@ -5,21 +5,34 @@ import com.quarkdown.core.bibliography.ArticleBibliographyEntry
 import com.quarkdown.core.bibliography.BibliographyEntryAuthor
 import com.quarkdown.core.bibliography.BookBibliographyEntry
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
+import com.quarkdown.core.bibliography.structuredAuthors
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
+import com.quarkdown.core.bibliography.style.BibliographyStyleUtils
 import com.quarkdown.core.bibliography.style.dsl.buildBibliographyContent
-import com.quarkdown.core.bibliography.style.formatAuthors
 
 internal data object ApaContentProviderStrategy : BibliographyEntryContentProviderStrategy {
     override fun formatAuthor(author: BibliographyEntryAuthor): String =
         author.firstName
             ?.take(1)
             ?.let { "${author.lastName}, $it." }
-            ?: author.fullName
+            ?: author.fullName?.let { full ->
+                val parts = full.split(" ")
+                if (parts.size >= 2) {
+                    val last = parts.last()
+                    val initials = parts.dropLast(1)
+                        .filter { it.isNotBlank() }
+                        .joinToString(separator = " ") { "${it.first()}." }
+
+                    "$last, $initials"
+                } else {
+                    full
+                }
+            }
             ?: "."
 
     override fun visit(entry: ArticleBibliographyEntry): InlineContent =
         buildBibliographyContent(entry) {
-            formatAuthors(it).just
+            formatAuthors(it.structuredAuthors).just
 
             val yearString = it.year?.ifBlank { null } ?: "n.d."
             " (" and yearString then ")"
@@ -33,6 +46,8 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
                 if (!it.number.isNullOrBlank()) {
                     "(" and it.number then ")"
                 }
+            } else if (!it.number.isNullOrBlank()) {
+                " (" and it.number then ")"
             }
 
             if (!it.pages.isNullOrBlank()) {
@@ -49,37 +64,44 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
 
     override fun visit(entry: BookBibliographyEntry): InlineContent =
         buildBibliographyContent(entry) {
-            formatAuthors(it).just
+            val hasAuthors = it.structuredAuthors.isNotEmpty()
+            val hasEditors = it.structuredEditors.isNotEmpty()
 
-            val yearString = it.year?.ifBlank { null } ?: "n.d."
+            when {
+                hasAuthors -> formatAuthors(it.structuredAuthors).just
+                hasEditors -> formatEditors(it.structuredEditors).just
+                else -> ".".just
+            }
+
+            val yearString = it.year?.takeIf { y -> y.isNotBlank() } ?: "n.d."
             " (" and yearString then ")"
             ". " then it.title.emphasized
 
             val metaInfo = listOfNotNull(
-                entry.editor?.ifBlank { null }?.let { e ->
-                    val isPlural = e.contains(",") || e.contains("&") || e.contains(" and ")
-                    val suffix = if (isPlural) "(Eds.)" else "(Ed.)"
-
-                    "$e $suffix"
-                },
-                entry.edition?.ifBlank { null },
-                entry.volume?.ifBlank { null }?.let { v ->
-                    val cleanVolume = v.replace("^V(ol(ume)?)?[.:]?\\s*".toRegex(RegexOption.IGNORE_CASE), "")
-                    "Vol. $cleanVolume"
-                }
+                if (hasAuthors && hasEditors) formatEditors(it.structuredEditors) else null,
+                entry.edition
+                    ?.takeIf { e -> e.isNotBlank() }
+                    ?.let { e -> normalizeEdition(e) },
+                entry.volume
+                    ?.takeIf { v -> v.isNotBlank() }
+                    ?.let { v ->
+                        "Vol. ${cleanVolumeNumber(v)}"
+                    }
             ).joinToString(separator = ", ")
 
             if (metaInfo.isNotBlank()) {
                 " (" and metaInfo then ")"
             }
 
-            ". " then it.publisher
+            if (!it.publisher.isNullOrBlank()) {
+                ". " then it.publisher
+            }
             ".".just
         }
 
     override fun visit(entry: GenericBibliographyEntry): InlineContent =
         buildBibliographyContent(entry) {
-            formatAuthors(it).just
+            formatAuthors(it.structuredAuthors).just
 
             val yearString = it.year?.ifBlank { null } ?: "n.d."
             " (" and yearString then ")"
@@ -87,7 +109,7 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
 
             if (it.extraFields.isNotEmpty()) {
                 val metaData = it.extraFields.map { (key, value) ->
-                    "$key: $value"
+                    "$key $value"
                 }.joinToString(separator = "; ")
 
                 " (" and metaData then ")"
@@ -99,4 +121,38 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
                 ". " then it.url.asLink
             }
         }
+
+    private fun formatAuthors(authors: List<BibliographyEntryAuthor>): String =
+        BibliographyStyleUtils.joinAuthorsToString(
+            authors = authors,
+            lastSeparator = ", & "
+        ) { author -> formatAuthor(author) }
+
+    private fun formatEditors(editors: List<BibliographyEntryAuthor>): String {
+        val formatted = formatAuthors(editors)
+        val suffix = if (editors.size > 1) " (Eds.)" else " (Ed.)"
+        return formatted + suffix
+    }
+
+    private fun normalizeEdition(raw: String): String {
+        val number = raw.filter { it.isDigit() }
+        return if (number.isNotBlank()) {
+            "$number${ordinalSuffix(number.toInt())} ed."
+        } else {
+            raw
+        }
+    }
+
+    private fun ordinalSuffix(n: Int): String =
+        if (n % 100 in 11..13) {
+            "th"
+        } else when (n % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
+        }
+
+    private fun cleanVolumeNumber(raw: String): String =
+        raw.replace("^V(ol(ume)?)?[.:]?\\s*".toRegex(RegexOption.IGNORE_CASE), "")
 }

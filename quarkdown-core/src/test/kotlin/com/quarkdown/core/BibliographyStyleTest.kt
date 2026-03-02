@@ -276,7 +276,7 @@ class BibliographyStyleTest {
         assertEquals("", label)
         assertNodeEquals(
             buildInline {
-                text("Goossens, M., Mittelbach, F., and Samarin, A.")
+                text("Goossens, M., Mittelbach, F., & Samarin, A.")
                 text(" (")
                 text("1993")
                 text(")")
@@ -303,7 +303,7 @@ class BibliographyStyleTest {
                 text(". ")
                 emphasis { text("Knuth: Computers and Typesetting") }
                 text(" (")
-                text("version: 1.0")
+                text("version 1.0")
                 text(")")
                 text(". ")
                 link("http://www-cs-faculty.stanford.edu/~uno/abcde.html") {
