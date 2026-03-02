@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Escaped characters in numbering formats](https://quarkdown.com/wiki/numbering)
+
+A backslash (`\`) in a numbering format string now escapes the next character, treating it as a fixed symbol. For example, `\1` produces a literal `1` instead of a decimal counter.
+
 ### Fixed
 
 #### Fixed block function call incorrectly matching lines with trailing content

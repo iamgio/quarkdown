@@ -123,4 +123,54 @@ class NumberingFormatTest {
         assertEquals("(2.3)", format.format(2, 3))
         assertEquals("(1", format.format(1))
     }
+
+    @Test
+    fun `escaped counting symbols as fixed`() {
+        // `\1` is a literal "1", not a decimal counter.
+        // `\1.1` -> fixed '1', fixed '.', decimal counter = 3 symbols.
+        val format = NumberingFormat.fromString("\\1.1")
+        assertEquals(3, format.symbols.size)
+        assertIs<NumberingFixedSymbol>(format.symbols[0])
+        assertEquals('1', (format.symbols[0] as NumberingFixedSymbol).value)
+        assertIs<NumberingFixedSymbol>(format.symbols[1])
+        assertIs<DecimalNumberingSymbol>(format.symbols[2])
+
+        assertEquals("1.2", format.format(2))
+    }
+
+    @Test
+    fun `escaped alpha and roman symbols`() {
+        // All counting symbols escaped: no counters, all fixed.
+        val format = NumberingFormat.fromString("\\A\\a\\I\\i")
+        assertEquals(4, format.symbols.size)
+        format.symbols.forEach { assertIs<NumberingFixedSymbol>(it) }
+        assertEquals(0, format.accuracy)
+        assertEquals("AaIi", format.format(1))
+
+        // Mix of escaped and non-escaped.
+        val mixed = NumberingFormat.fromString("\\A-A")
+        assertEquals(3, mixed.symbols.size)
+        assertIs<NumberingFixedSymbol>(mixed.symbols[0])
+        assertIs<NumberingFixedSymbol>(mixed.symbols[1])
+        assertIs<AlphaNumberingSymbol>(mixed.symbols[2])
+        assertEquals("A-B", mixed.format(2))
+    }
+
+    @Test
+    fun `escaped backslash`() {
+        // `\\` is a literal backslash fixed symbol, followed by a decimal counter.
+        val format = NumberingFormat.fromString("\\\\1")
+        assertEquals(2, format.symbols.size)
+        assertEquals('\\', assertIs<NumberingFixedSymbol>(format.symbols[0]).value)
+        assertIs<DecimalNumberingSymbol>(format.symbols[1])
+
+        assertEquals("\\3", format.format(3))
+    }
+
+    @Test
+    fun `trailing backslash is ignored`() {
+        val format = NumberingFormat.fromString("1\\")
+        assertEquals(1, format.symbols.size)
+        assertIs<DecimalNumberingSymbol>(format.symbols[0])
+    }
 }

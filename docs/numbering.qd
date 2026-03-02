@@ -28,6 +28,7 @@ Each format parameter accepts either `none` or a string where each character rep
 - `A` for uppercase latin alphabet (`A, B, C, ...`)
 - `i` for lowercase roman numerals (`i, ii, iii, ...`)
 - `I` for uppercase roman numerals (`I, II, III, ...`)
+- A backslash (`\`) escapes the next character, treating it as a fixed symbol. For example, `\1` produces a literal `1` instead of a decimal counter.
 - Any other character is a fixed symbol.
 
 ## Default formats

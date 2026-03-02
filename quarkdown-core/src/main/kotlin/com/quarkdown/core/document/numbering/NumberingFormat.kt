@@ -105,8 +105,11 @@ data class NumberingFormat(
                     val level = levels.next()
                     if (level in symbol.supportedRange) symbol.map(level) else level.toString()
                 }
+
                 // Fixed symbols are directly appended as-is.
-                is NumberingFixedSymbol -> symbol.value.toString()
+                is NumberingFixedSymbol -> {
+                    symbol.value.toString()
+                }
             }.let(builder::append)
         }
 
@@ -122,26 +125,51 @@ data class NumberingFormat(
 
     companion object {
         /**
+         * @return the [NumberingSymbol] corresponding to the given [char], according to the mapping
+         */
+        private fun charToSymbol(char: Char): NumberingSymbol =
+            when (char) {
+                '1' -> DecimalNumberingSymbol
+                'A' -> AlphaNumberingSymbol(StringCase.Upper)
+                'a' -> AlphaNumberingSymbol(StringCase.Lower)
+                'I' -> RomanNumberingSymbol(StringCase.Upper)
+                'i' -> RomanNumberingSymbol(StringCase.Lower)
+                else -> NumberingFixedSymbol(char)
+            }
+
+        /**
          * Parses a [NumberingFormat] from a string,
          * where each character represents a symbol.
+         *
          * `1`, `a`, `A`, `i` and `I` are reserved for counting,
          * while any other character is considered a fixed symbol.
+         *
+         * A backslash (`\`) escapes the next character, treating it as a fixed symbol
+         * regardless of whether it would normally be a counting symbol.
+         * For example, `\1` produces a literal `1` fixed symbol.
+         *
          * @param string string to parse
          * @return parsed numbering format
          */
-        fun fromString(string: String): NumberingFormat {
-            val symbols =
-                string.map {
-                    when (it) {
-                        '1' -> DecimalNumberingSymbol
-                        'A' -> AlphaNumberingSymbol(StringCase.Upper)
-                        'a' -> AlphaNumberingSymbol(StringCase.Lower)
-                        'I' -> RomanNumberingSymbol(StringCase.Upper)
-                        'i' -> RomanNumberingSymbol(StringCase.Lower)
-                        else -> NumberingFixedSymbol(it)
+        fun fromString(string: String): NumberingFormat =
+            buildList {
+                var escapeNext = false
+                string.forEach { char ->
+                    when {
+                        escapeNext -> {
+                            add(NumberingFixedSymbol(char))
+                            escapeNext = false
+                        }
+
+                        char == '\\' -> {
+                            escapeNext = true
+                        }
+
+                        else -> {
+                            add(charToSymbol(char))
+                        }
                     }
                 }
-            return NumberingFormat(symbols)
-        }
+            }.let(::NumberingFormat)
     }
 }
