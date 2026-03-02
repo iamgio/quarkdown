@@ -44,9 +44,6 @@ object PipelineInitialization {
                 afterRegisteringLibraries = { libs ->
                     Log.debug { "Libraries: " + DebugFormatter.formatLibraries(libs) }
                 },
-                afterLexing = { tokens ->
-                    Log.debug { "Tokens:\n" + DebugFormatter.formatTokens(tokens) }
-                },
                 afterParsing = { document ->
                     Log.debug { "AST:\n" + DebugFormatter.formatAST(document) }
                 },

@@ -49,7 +49,6 @@ import com.quarkdown.core.lexer.tokens.ParagraphToken
 import com.quarkdown.core.lexer.tokens.SetextHeadingToken
 import com.quarkdown.core.lexer.tokens.TableToken
 import com.quarkdown.core.lexer.tokens.UnorderedListToken
-import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
@@ -492,15 +491,12 @@ class BlockTokenParser(
     override fun visit(token: PageBreakToken): Node = PageBreak()
 
     override fun visit(token: FunctionCallToken): Node {
-        val result =
-            token.data.walkerResult
-                ?: throw IllegalStateException("Function call walker result not found.")
-
-        val call = result.value as WalkedFunctionCall
+        val result = token.walkerResult
+        val call = result.value
 
         // The range of the function call in the source code.
         // Note: the end index is provided by the walker, not the lexer.
-        val sourceRangeStart = token.data.position.start
+        val sourceRangeStart = token.data.position.first
         val sourceRangeEnd = sourceRangeStart + result.endIndex
         val sourceRange = sourceRangeStart..sourceRangeEnd
         val sourceText = result.sourceText

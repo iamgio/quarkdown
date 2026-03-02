@@ -21,7 +21,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
  */
 data class PipelineHooks(
     val afterRegisteringLibraries: Pipeline.(Set<Library>) -> Unit = {},
-    val afterLexing: Pipeline.(List<Token>) -> Unit = {},
+    val afterLexing: Pipeline.(Sequence<Token>) -> Unit = {},
     val afterParsing: Pipeline.(AstRoot) -> Unit = {},
     val afterExpanding: Pipeline.(AstRoot) -> Unit = {},
     val afterTreeTraversal: Pipeline.(AstRoot) -> Unit = {},

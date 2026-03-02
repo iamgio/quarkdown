@@ -2,9 +2,8 @@ package com.quarkdown.lsp.tokenizer
 
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import com.quarkdown.core.flavor.quarkdown.QuarkdownLexerFactory
-import com.quarkdown.core.parser.walker.WalkerParsingResult
-import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 import com.quarkdown.core.util.offset
+import com.quarkdown.core.lexer.tokens.FunctionCallToken as CoreFunctionCallToken
 
 // Names of the tokens of the function call grammar (see core/FunctionCallGrammar).
 private const val FUNCTION_CALL_BEGIN_TOKEN_NAME = "begin"
@@ -41,41 +40,43 @@ class FunctionCallTokenizer {
         val tokenizationQueue = mutableMapOf<Int, String>()
 
         val calls: List<FunctionCall> =
-            lexer.tokenize().mapNotNull { token ->
-                val result = token.data.walkerResult ?: return@mapNotNull null
-                val start = token.data.position.first
-                val end = start + result.endIndex
+            lexer
+                .tokenize()
+                .filterIsInstance<CoreFunctionCallToken>()
+                .map { token ->
+                    val result = token.walkerResult
+                    val start = token.data.position.first
+                    val end = start + result.endIndex
 
-                var lastToken: FunctionCallToken.Type? = null
-                // Function call are special tokens, as they are processed by a walker
-                // which produces nested tokens for each part of the call (e.g. name and parameters).
-                // A semantic token is created for each eligible part.
-                val tokens: List<FunctionCallToken> =
-                    result.tokens
-                        .takeWhile { it.offset < result.endIndex }
-                        .mapNotNull { match ->
-                            val start = token.data.position.first + match.offset
+                    var lastToken: FunctionCallToken.Type? = null
+                    // Function call are special tokens, as they are processed by a walker
+                    // which produces nested tokens for each part of the call (e.g. name and parameters).
+                    // A semantic token is created for each eligible part.
+                    val tokens: List<FunctionCallToken> =
+                        result.tokens
+                            .takeWhile { it.offset < result.endIndex }
+                            .mapNotNull { match ->
+                                val start = token.data.position.first + match.offset
 
-                            // Enqueuing the tokenization of function call arguments.
-                            if (match.type.name == FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME) {
-                                tokenizationQueue += start to match.text
-                            }
+                                // Enqueuing the tokenization of function call arguments.
+                                if (match.type.name == FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME) {
+                                    tokenizationQueue += start to match.text
+                                }
 
-                            lastToken = tokenMatchToType(match, lastToken)
-                            FunctionCallToken(
-                                type = lastToken ?: return@mapNotNull null,
-                                range = start..(start + match.length),
-                                lexeme = match.text,
-                            )
-                        }.toList()
+                                lastToken = tokenMatchToType(match, lastToken)
+                                FunctionCallToken(
+                                    type = lastToken ?: return@mapNotNull null,
+                                    range = start..(start + match.length),
+                                    lexeme = match.text,
+                                )
+                            }.toList()
 
-                @Suppress("UNCHECKED_CAST")
-                FunctionCall(
-                    range = start..end,
-                    tokens = tokens,
-                    parserResult = result as WalkerParsingResult<WalkedFunctionCall>,
-                )
-            }
+                    FunctionCall(
+                        range = start..end,
+                        tokens = tokens,
+                        parserResult = result,
+                    )
+                }.toList()
 
         return calls + extractEnqueuedTokens(tokenizationQueue)
     }
@@ -120,44 +121,56 @@ class FunctionCallTokenizer {
         when (match.type.name) {
             // .function
             // ^
-            FUNCTION_CALL_BEGIN_TOKEN_NAME -> FunctionCallToken.Type.BEGIN
+            FUNCTION_CALL_BEGIN_TOKEN_NAME -> {
+                FunctionCallToken.Type.BEGIN
+            }
 
             // .function::function parameter:{...}
             //  ^^^^^^^^  ^^^^^^^^ ^^^^^^^^^ (depending on the last token)
-            FUNCTION_CALL_IDENTIFIER_TOKEN_NAME ->
+            FUNCTION_CALL_IDENTIFIER_TOKEN_NAME -> {
                 when (previous) {
-                    FunctionCallToken.Type.BEGIN, FunctionCallToken.Type.CHAINING_SEPARATOR ->
+                    FunctionCallToken.Type.BEGIN, FunctionCallToken.Type.CHAINING_SEPARATOR -> {
                         FunctionCallToken.Type.FUNCTION_NAME
+                    }
 
-                    else ->
+                    else -> {
                         FunctionCallToken.Type.PARAMETER_NAME
+                    }
                 }
+            }
 
             // .function::function
             //          ^^
-            FUNCTION_CALL_CHAINING_SEPARATOR_NAME ->
+            FUNCTION_CALL_CHAINING_SEPARATOR_NAME -> {
                 FunctionCallToken.Type.CHAINING_SEPARATOR
+            }
 
             // .function parameter:{...}
             //                    ^
-            FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME ->
+            FUNCTION_CALL_PARAMETER_NAME_DELIMITER_TOKEN_NAME -> {
                 FunctionCallToken.Type.NAMED_PARAMETER_DELIMITER
+            }
 
             // .function {...}
             //           ^
-            FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME ->
+            FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME -> {
                 FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN
+            }
 
             // .function {...}
             //               ^
-            FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME ->
+            FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME -> {
                 FunctionCallToken.Type.INLINE_ARGUMENT_END
+            }
 
             // .function {...}
             //            ^^^
-            FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME ->
+            FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME -> {
                 FunctionCallToken.Type.INLINE_ARGUMENT_VALUE
+            }
 
-            else -> null
+            else -> {
+                null
+            }
         }
 }

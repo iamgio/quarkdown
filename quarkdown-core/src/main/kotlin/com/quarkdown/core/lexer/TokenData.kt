@@ -1,7 +1,5 @@
 package com.quarkdown.core.lexer
 
-import com.quarkdown.core.parser.walker.WalkerParsingResult
-
 /**
  * Data of a single, usually small, substring of the source code that stores a chunk of information.
  * For instance, the Markdown code `Hello _Quarkdown_` contains the tokens `Hello `, `_`, `Quarkdown`, `_`.
@@ -16,5 +14,4 @@ data class TokenData(
     val position: IntRange,
     val groups: Sequence<String> = emptySequence(),
     val namedGroups: Map<String, String> = emptyMap(),
-    val walkerResult: WalkerParsingResult<*>? = null,
 )

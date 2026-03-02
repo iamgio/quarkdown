@@ -66,7 +66,6 @@ class LexerTest {
         QuarkdownFlavor.lexerFactory
             .newInlineLexer(source.trim())
             .tokenize()
-            .asSequence()
             .filter { it !is NewlineToken }
             .iterator()
 
@@ -117,7 +116,6 @@ class LexerTest {
         val tokens =
             blockLexer(readSource("/lexing/blocks.md"))
                 .tokenize()
-                .asSequence()
                 .filter { it !is NewlineToken }
                 .iterator()
 
@@ -437,9 +435,9 @@ class LexerTest {
     fun flavors() {
         // Quarkdown features are not detected when using BaseMarkdownFlavor
         val tokens = blockLexer(readSource("/lexing/blocks.md"), flavor = BaseMarkdownFlavor).tokenize()
-        assertTrue(tokens.filterIsInstance<MultilineMathToken>().isEmpty())
-        assertTrue(tokens.filterIsInstance<OnelineMathToken>().isEmpty())
-        assertFalse(tokens.filterIsInstance<BlockQuoteToken>().isEmpty())
+        assertTrue(tokens.none { it is MultilineMathToken })
+        assertTrue(tokens.none { it is OnelineMathToken })
+        assertTrue(tokens.any { it is BlockQuoteToken })
     }
 
     @Test
@@ -640,5 +638,122 @@ class LexerTest {
                     .arguments.size,
             )
         }
+    }
+
+    /**
+     * Verifies that escaped function calls are not tokenized as [FunctionCallToken]s.
+     */
+    @Test
+    fun escapedFunctionCall() {
+        val tokens = inlineLex("\\.func {x}")
+        assertIs<EscapeToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertFalse(tokens.hasNext())
+    }
+
+    /**
+     * Verifies that adjacent inline function calls produce separate [FunctionCallToken]s.
+     */
+    @Test
+    fun adjacentInlineFunctionCalls() {
+        val tokens = inlineLex(".a {x} .b {y}")
+        assertIs<FunctionCallToken>(tokens.next())
+        assertIs<PlainTextToken>(tokens.next())
+        assertIs<FunctionCallToken>(tokens.next())
+        assertFalse(tokens.hasNext())
+    }
+
+    /**
+     * Verifies that a function call at the end of source is tokenized correctly.
+     */
+    @Test
+    fun functionCallAtEndOfSource() {
+        val tokens = inlineLex(".func {x}")
+        assertIs<FunctionCallToken>(tokens.next())
+        assertFalse(tokens.hasNext())
+    }
+
+    /**
+     * Verifies that deeply nested braces within function call arguments are handled correctly.
+     */
+    @Test
+    fun deeplyNestedBraces() {
+        fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
+
+        with(walk(".func {a {b {c {d}}}}")) {
+            assertEquals("func", value.name)
+            assertEquals("a {b {c {d}}}", value.arguments.single().value)
+        }
+    }
+
+    /**
+     * Verifies that a function call immediately after punctuation is recognized.
+     */
+    @Test
+    fun functionCallAfterPunctuation() {
+        with(inlineLex("(.func {x})")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        with(inlineLex("/.func {x}/")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+    }
+
+    /**
+     * Verifies that the walker result on [FunctionCallToken] is correctly typed as [WalkedFunctionCall][com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall].
+     */
+    @Test
+    fun typedWalkerResult() {
+        val tokens =
+            QuarkdownFlavor.lexerFactory
+                .newInlineLexer(".func {x}")
+                .tokenize()
+                .filterIsInstance<FunctionCallToken>()
+                .toList()
+
+        assertEquals(1, tokens.size)
+        with(tokens.single()) {
+            assertEquals("func", walkerResult.value.name)
+            assertEquals(
+                "x",
+                walkerResult.value.arguments
+                    .single()
+                    .value,
+            )
+        }
+    }
+
+    /**
+     * Verifies that multiple consecutive block function calls are all tokenized correctly,
+     * validating the iterative regex loop handles walker-driven position advances.
+     */
+    @Test
+    fun multipleBlockFunctionCalls() {
+        val source =
+            """
+            .first {a}
+
+            .second {b}
+
+            .third {c}
+            """.trimIndent()
+
+        val tokens =
+            blockLexer(source)
+                .tokenize()
+                .filterIsInstance<FunctionCallToken>()
+                .toList()
+
+        assertEquals(3, tokens.size)
+        assertEquals("first", tokens[0].walkerResult.value.name)
+        assertEquals("second", tokens[1].walkerResult.value.name)
+        assertEquals("third", tokens[2].walkerResult.value.name)
     }
 }

@@ -323,7 +323,7 @@ object ValueFactory {
 
         val sharedData = SharedPipelineData(pipeline = pipeline, context = context)
 
-        val parsing: PipelineStage<List<Token>, AstRoot> =
+        val parsing: PipelineStage<Sequence<Token>, AstRoot> =
             ParsingStage thenOptionally FunctionCallExpansionStage.takeIf { expandFunctionCalls }
 
         val root: AstRoot = parsing.execute(lexer.tokenize(), sharedData)
