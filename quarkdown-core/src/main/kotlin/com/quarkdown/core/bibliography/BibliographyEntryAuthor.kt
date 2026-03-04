@@ -25,10 +25,11 @@ val BibliographyEntry.structuredAuthors: List<BibliographyEntryAuthor>
     get() = author.extractAuthorList()
 
 internal fun String?.extractAuthorList(): List<BibliographyEntryAuthor> {
-    val rawAuthors = this
-        ?.split(AUTHOR_SEPARATOR)
-        ?.map { it.trim() }
-        ?: return emptyList()
+    val rawAuthors =
+        this
+            ?.split(AUTHOR_SEPARATOR)
+            ?.map { it.trim() }
+            ?: return emptyList()
 
     return rawAuthors.map { name ->
         // Last name is first: "Last, First"

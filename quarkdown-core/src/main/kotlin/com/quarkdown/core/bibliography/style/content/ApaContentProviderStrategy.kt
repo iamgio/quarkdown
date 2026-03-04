@@ -7,23 +7,19 @@ import com.quarkdown.core.bibliography.BookBibliographyEntry
 import com.quarkdown.core.bibliography.GenericBibliographyEntry
 import com.quarkdown.core.bibliography.structuredAuthors
 import com.quarkdown.core.bibliography.style.BibliographyEntryContentProviderStrategy
-import com.quarkdown.core.bibliography.style.BibliographyStyleUtils
 import com.quarkdown.core.bibliography.style.dsl.buildBibliographyContent
 
 internal data object ApaContentProviderStrategy : BibliographyEntryContentProviderStrategy {
     override fun formatAuthor(author: BibliographyEntryAuthor): String =
         author.firstName
-            ?.take(1)
-            ?.let { "${author.lastName}, $it." }
+            ?.let { "${author.lastName}, ${formatInitials(it)}" }
             ?: author.fullName?.let { full ->
-                val parts = full.split(" ")
+                val parts = full.split("\\s+".toRegex())
                 if (parts.size >= 2) {
                     val last = parts.last()
-                    val initials = parts.dropLast(1)
-                        .filter { it.isNotBlank() }
-                        .joinToString(separator = " ") { "${it.first()}." }
+                    val firstnames = parts.dropLast(1).joinToString(" ")
 
-                    "$last, $initials"
+                    "$last, ${formatInitials(firstnames)}"
                 } else {
                     full
                 }
@@ -77,17 +73,18 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
             " (" and yearString then ")"
             ". " then it.title.emphasized
 
-            val metaInfo = listOfNotNull(
-                if (hasAuthors && hasEditors) formatEditors(it.structuredEditors) else null,
-                entry.edition
-                    ?.takeIf { e -> e.isNotBlank() }
-                    ?.let { e -> normalizeEdition(e) },
-                entry.volume
-                    ?.takeIf { v -> v.isNotBlank() }
-                    ?.let { v ->
-                        "Vol. ${cleanVolumeNumber(v)}"
-                    }
-            ).joinToString(separator = ", ")
+            val metaInfo =
+                listOfNotNull(
+                    if (hasAuthors && hasEditors) formatEditors(it.structuredEditors) else null,
+                    entry.edition
+                        ?.takeIf { e -> e.isNotBlank() }
+                        ?.let { e -> normalizeEdition(e) },
+                    entry.volume
+                        ?.takeIf { v -> v.isNotBlank() }
+                        ?.let { v ->
+                            "Vol. ${cleanVolumeNumber(v)}"
+                        },
+                ).joinToString(separator = ", ")
 
             if (metaInfo.isNotBlank()) {
                 " (" and metaInfo then ")"
@@ -108,9 +105,11 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
             ". " then it.title.emphasized
 
             if (it.extraFields.isNotEmpty()) {
-                val metaData = it.extraFields.map { (key, value) ->
-                    "$key $value"
-                }.joinToString(separator = "; ")
+                val metaData =
+                    it.extraFields
+                        .map { (key, value) ->
+                            "$key $value"
+                        }.joinToString(separator = "; ")
 
                 " (" and metaData then ")"
             }
@@ -123,9 +122,9 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
         }
 
     private fun formatAuthors(authors: List<BibliographyEntryAuthor>): String =
-        BibliographyStyleUtils.joinAuthorsToString(
+        joinAuthorsToString(
             authors = authors,
-            lastSeparator = ", & "
+            lastSeparator = ", & ",
         ) { author -> formatAuthor(author) }
 
     private fun formatEditors(editors: List<BibliographyEntryAuthor>): String {
@@ -133,6 +132,38 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
         val suffix = if (editors.size > 1) " (Eds.)" else " (Ed.)"
         return formatted + suffix
     }
+
+    private fun formatInitials(names: String): String =
+        names
+            .replace("\\s*-\\s*".toRegex(), "-")
+            .replace("\\s+".toRegex(), " ")
+            .replace("(\\p{L})[^\\s-]*".toRegex(), "$1.")
+            .trim()
+
+    private fun joinAuthorsToString(
+        authors: List<BibliographyEntryAuthor>,
+        separator: String = ", ",
+        lastSeparator: String = ", & ",
+        transform: (BibliographyEntryAuthor) -> String,
+    ): String =
+        buildString {
+            if (authors.size <= 20) {
+                authors.forEachIndexed { index, author ->
+                    append(transform(author))
+                    if (index < authors.size - 2) {
+                        append(separator)
+                    } else if (index == authors.size - 2) {
+                        append(lastSeparator)
+                    }
+                }
+            } else {
+                authors.take(19).forEach { author ->
+                    append(transform(author)).append(separator)
+                }
+
+                append("... ").append(transform(authors.last()))
+            }
+        }
 
     private fun normalizeEdition(raw: String): String {
         val number = raw.filter { it.isDigit() }
@@ -146,13 +177,14 @@ internal data object ApaContentProviderStrategy : BibliographyEntryContentProvid
     private fun ordinalSuffix(n: Int): String =
         if (n % 100 in 11..13) {
             "th"
-        } else when (n % 10) {
-            1 -> "st"
-            2 -> "nd"
-            3 -> "rd"
-            else -> "th"
+        } else {
+            when (n % 10) {
+                1 -> "st"
+                2 -> "nd"
+                3 -> "rd"
+                else -> "th"
+            }
         }
 
-    private fun cleanVolumeNumber(raw: String): String =
-        raw.replace("^V(ol(ume)?)?[.:]?\\s*".toRegex(RegexOption.IGNORE_CASE), "")
+    private fun cleanVolumeNumber(raw: String): String = raw.replace("^V(ol(ume)?)?[.:]?\\s*".toRegex(RegexOption.IGNORE_CASE), "")
 }

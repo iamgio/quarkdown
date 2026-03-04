@@ -264,7 +264,7 @@ class BibliographyStyleTest {
                     text("https://doi.org/10.1002/andp.19053221004")
                 }
             }.let(::AstRoot),
-            AstRoot(content)
+            AstRoot(content),
         )
     }
 
@@ -286,7 +286,7 @@ class BibliographyStyleTest {
                 text("Addison-Wesley")
                 text(".")
             }.let(::AstRoot),
-            AstRoot(content)
+            AstRoot(content),
         )
     }
 
@@ -310,7 +310,7 @@ class BibliographyStyleTest {
                     text("http://www-cs-faculty.stanford.edu/~uno/abcde.html")
                 }
             }.let(::AstRoot),
-            AstRoot(content)
+            AstRoot(content),
         )
     }
 }

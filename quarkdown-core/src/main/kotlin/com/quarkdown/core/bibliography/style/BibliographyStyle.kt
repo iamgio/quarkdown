@@ -56,7 +56,6 @@ interface BibliographyStyle {
     }
 
     data object Apa : BibliographyStyle {
-
         override val labelProvider: BibliographyEntryLabelProviderStrategy
             get() = BibliographyEntryLabelProviderStrategy.None
 

@@ -30,6 +30,9 @@ interface BibliographyEntryLabelProviderStrategy {
     }
 
     data object None : BibliographyEntryLabelProviderStrategy {
-        override fun getLabel(entry: BibliographyEntry, index: Int): String = ""
+        override fun getLabel(
+            entry: BibliographyEntry,
+            index: Int,
+        ): String = ""
     }
 }
