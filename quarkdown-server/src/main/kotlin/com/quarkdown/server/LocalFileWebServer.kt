@@ -19,6 +19,13 @@ import java.io.File
 import kotlin.time.Duration.Companion.seconds
 
 /**
+ * Loopback address used by the server and all clients.
+ * Using the explicit IPv4 loopback (`127.0.0.1`) instead of `localhost` avoids IPv6 resolution
+ * issues on Windows, where `localhost` may resolve to `::1` and cause connection timeouts.
+ */
+const val SERVER_HOST = "127.0.0.1"
+
+/**
  * Web server that:
  * - Serves local file at [targetFile];
  * - Supports live preview of HTML files at `/live/{file...}` ([LivePreviewEndpoint]);

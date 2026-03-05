@@ -1,6 +1,7 @@
 package com.quarkdown.server.message
 
 import com.quarkdown.core.log.Log
+import com.quarkdown.server.SERVER_HOST
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.engine.cio.endpoint
@@ -19,7 +20,7 @@ import kotlinx.coroutines.runBlocking
  * @param endpoint WebSocket endpoint path segment (without leading slash)
  */
 class ServerMessageSession(
-    private val host: String = "localhost",
+    private val host: String = SERVER_HOST,
     private val port: Int,
     private val endpoint: String,
 ) {
