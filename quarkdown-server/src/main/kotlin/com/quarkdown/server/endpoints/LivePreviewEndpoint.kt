@@ -53,12 +53,14 @@ class LivePreviewEndpoint(
         }
 
         when {
-            file.extension.lowercase() == "html" ->
+            file.extension.lowercase() == "html" -> {
                 call.respondText(createHtmlWrapperText(file, port), ContentType.Text.Html)
+            }
 
             // Non-HTML files are served directly.
-            else ->
+            else -> {
                 call.respondFile(file)
+            }
         }
     }
 
@@ -68,7 +70,7 @@ class LivePreviewEndpoint(
     ): String {
         // The iframe src is an absolute path from the server root,
         // which correctly handles both root-level and subdirectory files.
-        val sourceFile = "/${targetFile.relativeTo(origin).path}"
+        val sourceFile = "/${targetFile.relativeTo(origin).invariantSeparatorsPath}"
 
         return TemplateProcessor
             .fromResourceName("/live-preview/wrapper.html.jte", referenceClass = javaClass)
