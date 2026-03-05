@@ -83,7 +83,7 @@ class DataTest {
         val branchedOutFileSystem = context.fileSystem.branch(workingDirectory = nested)
         val branchedOutContext = SharedContext(context, branchedOutFileSystem)
         val relativePath = pathToRoot(branchedOutContext).unwrappedValue
-        assertEquals("../../..", relativePath)
+        assertEquals("..${File.separator}..${File.separator}..", relativePath)
     }
 
     @Test
