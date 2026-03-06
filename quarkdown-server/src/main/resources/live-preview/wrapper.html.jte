@@ -1,4 +1,5 @@
 @param String srcFile
+@param String serverHost
 @param String serverPort
 
 <!DOCTYPE html>
@@ -375,6 +376,6 @@
 
     messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
-<script>startReloadWebSocket("localhost:${serverPort}")</script>
+<script>startReloadWebSocket("${serverHost}:${serverPort}")</script>
 </body>
 </html>
