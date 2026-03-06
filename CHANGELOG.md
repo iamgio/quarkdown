@@ -10,6 +10,10 @@ A backslash (`\`) in a numbering format string now escapes the next character, t
 
 ### Fixed
 
+#### Fixed live preview sometimes timing out on Windows
+
+Fixed an IPv6-related issue that caused connections to Quarkdown's server to time out on Windows. *Please also update to the latest version of the VS Code extension to v1.1.2 or later.*
+
 #### Fixed block function call incorrectly matching lines with trailing content
 
 Fixed an issue that caused a line like `.sum {1} {2} .sum {3} {4}` to be incorrectly lexed as two block function calls rather than a single paragraph with two inline function calls.
