@@ -11,10 +11,11 @@ import com.quarkdown.server.browser.DefaultBrowserLauncher
 import com.quarkdown.server.browser.EnvBrowserLauncher
 import com.quarkdown.server.browser.NoneBrowserLauncher
 import com.quarkdown.server.browser.PathBrowserLauncher
+import java.io.File
 import kotlin.io.path.Path
 
 /**
- * Attempts to create a [BrowserLauncher] from fixed choices: `default` or `none`.
+ * Attempts to create a [BrowserLauncher] from fixed choices: `default`, `xdg-open`, or `none`.
  * @param input the input string representing the browser choice
  * @return the corresponding [BrowserLauncher], if any
  */
@@ -22,6 +23,13 @@ private fun fromFixedChoices(input: String): BrowserLauncher? =
     when (input) {
         "default" -> DefaultBrowserLauncher()
         "none" -> NoneBrowserLauncher()
+        "xdg-open" ->
+            System
+                .getenv("PATH")
+                ?.split(File.pathSeparator)
+                ?.map { File(it, "xdg-open") }
+                ?.firstOrNull { it.exists() && it.canExecute() }
+                ?.let { PathBrowserLauncher(Path(it.absolutePath)) }
         else -> null
     }
 
@@ -66,7 +74,7 @@ fun CliktCommand.browserLauncherOption(
     option(
         "-b",
         "--browser",
-        help = "Browser to open the served file in (name, path, 'default', 'none')",
+        help = "Browser to open the served file in (name, path, 'default', 'xdg-open', 'none')",
     ).convert { input ->
         val caseInsensitiveInput = input.lowercase()
         val launcher =
