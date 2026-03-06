@@ -1,5 +1,6 @@
 package com.quarkdown.server
 
+import com.quarkdown.interaction.os.OsUtils
 import com.quarkdown.server.endpoints.LivePreviewEndpoint
 import com.quarkdown.server.endpoints.ReloadEndpoint
 import com.quarkdown.server.stop.KtorStoppableAdapter
@@ -20,10 +21,14 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * Loopback address used by the server and all clients.
- * Using the explicit IPv4 loopback (`127.0.0.1`) instead of `localhost` avoids IPv6 resolution
- * issues on Windows, where `localhost` may resolve to `::1` and cause connection timeouts.
+ * On Windows, `localhost` may resolve to `::1` (IPv6) and cause connection timeouts,
+ * so the explicit IPv4 loopback (`127.0.0.1`) is used instead.
  */
-const val SERVER_HOST = "127.0.0.1"
+val SERVER_HOST: String =
+    OsUtils.dependent(
+        windows = { "127.0.0.1" },
+        unix = { "localhost" },
+    )
 
 /**
  * Web server that:
