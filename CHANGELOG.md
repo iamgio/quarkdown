@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.14.1] - 2026-03-06
+
 ### Added
 
 #### [Escaped characters in numbering formats](https://quarkdown.com/wiki/numbering)
@@ -12,7 +14,7 @@ A backslash (`\`) in a numbering format string now escapes the next character, t
 
 #### Fixed live preview sometimes timing out on Windows
 
-Fixed an IPv6-related issue that caused connections to Quarkdown's server to time out on Windows. *Please also update to the latest version of the VS Code extension to v1.1.2 or later.*
+Fixed an IPv6-related issue that caused connections to Quarkdown's server to time out on Windows. _Please also update to the latest version of the VS Code extension to v1.1.2 or later._
 
 #### Fixed block function call incorrectly matching lines with trailing content
 
@@ -231,6 +233,8 @@ Shout out to our sponsors! 🎉
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.14.1...HEAD
+
+[1.14.1]: https://github.com/iamgio/quarkdown/compare/v1.14.0...v1.14.1
 
 [1.14.0]: https://github.com/iamgio/quarkdown/compare/36ef163d22c13e51edfca12739b99aa6aa1368b4...v1.14.0
