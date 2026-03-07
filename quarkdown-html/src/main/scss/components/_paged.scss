@@ -13,4 +13,8 @@ body.quarkdown-paged {
   .pagedjs_page {
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
   }
+
+  .paged-content-wrapper {
+    height: 100%;
+  }
 }
