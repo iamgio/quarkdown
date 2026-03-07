@@ -27,7 +27,6 @@ body.quarkdown {
       $width: min(100%, var(--qd-content-width));
       min-width: $width;
       max-width: $width;
-      column-count: var(--qd-column-count);
     }
 
     > aside {
@@ -211,14 +210,8 @@ body.quarkdown {
       @include content-area-border;
     }
 
-    .slides {
-      > .pdf-page {
-        @include content-area-border;
-      }
-
-      > section, .pdf-page {
-        column-count: var(--qd-column-count);
-      }
+    .slides > .pdf-page {
+      @include content-area-border;
     }
   }
 

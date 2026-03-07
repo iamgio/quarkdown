@@ -284,7 +284,9 @@ class HtmlDocumentBuilder(
     }
 
     private fun BODY.pagedBody(content: CharSequence) {
-        unsafe { raw(content.toString()) }
+        div("paged-content-wrapper") {
+            unsafe { raw(content.toString()) }
+        }
     }
 
     private fun BODY.docsBody(content: CharSequence) {

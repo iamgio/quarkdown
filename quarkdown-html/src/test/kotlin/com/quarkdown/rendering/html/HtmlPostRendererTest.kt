@@ -161,6 +161,7 @@ class HtmlPostRendererTest {
         val result = postRenderer().wrap("<p>Content</p>")
         assertTrue("pagedjs" in result)
         assertTrue("quarkdown-paged" in result)
+        assertTrue("<div class=\"paged-content-wrapper\">" in result)
     }
 
     @Test
