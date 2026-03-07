@@ -264,6 +264,12 @@ For more installation options, check out [get-quarkdown](https://github.com/quar
 brew install quarkdown-labs/quarkdown/quarkdown
 ```
 
+### Install script (Windows)
+
+```powershell
+irm https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/heads/main/install.ps1 | iex
+```
+
 ### Scoop (Windows)
 
 ```shell
