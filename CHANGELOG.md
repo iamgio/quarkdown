@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Fixed
+
+#### Fixed default browser not opening on Linux (Wayland and XDG environments)
+
+On Linux systems where the Java AWT Desktop API does not support the BROWSE action (e.g., Wayland),
+`DefaultBrowserLauncher` now falls back to `xdg-open` automatically.
+Additionally, `--browser xdg-open` is now a supported named choice for the `--browser` CLI option.
+
 ## [1.14.1] - 2026-03-06
 
 ### Added
