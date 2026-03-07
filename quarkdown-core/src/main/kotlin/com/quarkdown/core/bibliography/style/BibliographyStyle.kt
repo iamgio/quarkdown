@@ -1,6 +1,7 @@
 package com.quarkdown.core.bibliography.style
 
 import com.quarkdown.core.bibliography.style.content.AcmContentProviderStrategy
+import com.quarkdown.core.bibliography.style.content.ApaContentProviderStrategy
 import com.quarkdown.core.bibliography.style.content.IeeetrContentProviderStrategy
 import com.quarkdown.core.bibliography.style.content.PlainContentProviderStrategy
 
@@ -52,5 +53,13 @@ interface BibliographyStyle {
             BibliographyEntryLabelProviderStrategy.IndexOnly
         override val contentProvider: BibliographyEntryContentProviderStrategy =
             AcmContentProviderStrategy
+    }
+
+    data object Apa : BibliographyStyle {
+        override val labelProvider: BibliographyEntryLabelProviderStrategy
+            get() = BibliographyEntryLabelProviderStrategy.None
+
+        override val contentProvider: BibliographyEntryContentProviderStrategy
+            get() = ApaContentProviderStrategy
     }
 }
