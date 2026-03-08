@@ -1,0 +1,7 @@
+Einstein's publication .cite {einstein} in 1905 revolutionized the field of physics.
+Similarly, Hawking's book .cite {hawking} has had a profound impact
+on our understanding of cosmology and black holes.
+
+---
+
+.bibliography {/Users/gio/Dev/qd/quarkdown/docs/bibliography/file.bib} style:{ieeetr}

@@ -35,6 +35,7 @@ enum class BibliographyStyle(
     PLAIN(CoreBibliographyStyle.Plain),
     IEEETR(CoreBibliographyStyle.Ieeetr),
     ACM(CoreBibliographyStyle.Acm),
+    APA(CoreBibliographyStyle.Apa),
 }
 
 /**

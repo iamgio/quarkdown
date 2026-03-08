@@ -371,7 +371,7 @@ class QuarkdownHtmlNodeRenderer(
                 node.bibliography.entries.values.mapIndexed { index, entry ->
                     tag("span") {
                         className("bibliography-entry-label")
-                        +node.style.labelProvider.getLabel(entry, index)
+                        +node.style.labelProvider.getListLabel(entry, index)
                     }
                     tag("span") {
                         className("bibliography-entry-content")
@@ -464,7 +464,7 @@ class QuarkdownHtmlNodeRenderer(
             node.getDefinition(context) ?: return Text("[???]").accept(this)
 
         val index = view.bibliography.indexOf(entry)
-        val label = view.style.labelProvider.getLabel(entry, index)
+        val label = view.style.labelProvider.getCitationLabel(entry, index)
         return Text(label).accept(this)
     }
 

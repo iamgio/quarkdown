@@ -116,6 +116,10 @@ data class BookBibliographyEntry(
     val edition: String? = null,
     override val extraFields: Map<String, String> = emptyMap(),
 ) : BibliographyEntry {
+    val structuredEditors: List<BibliographyEntryAuthor> by lazy {
+        editor.extractAuthorList()
+    }
+
     override fun <T> accept(visitor: BibliographyEntryVisitor<T>): T = visitor.visit(this)
 }
 

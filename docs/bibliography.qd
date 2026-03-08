@@ -36,18 +36,20 @@ The currently supported styles are:
 
 - **`plain`** (default)
 
-  !(600)[plain style](bibliography/style-plain.png)
+  !(700)[plain style](bibliography/style-plain.png)
 
 - **`ieeetr`**
 
-  !(600)[ieeetr style](bibliography/style-ieeetr.png)
+  !(700)[ieeetr style](bibliography/style-ieeetr.png)
 
 
 - **`acm`**
 
-  !(600)[acm style](bibliography/style-acm.png)
+  !(700)[acm style](bibliography/style-acm.png)
 
+- **`apa`**
 
+  !(700)[apa style](bibliography/style-apa.png)
 
 ## Title
 

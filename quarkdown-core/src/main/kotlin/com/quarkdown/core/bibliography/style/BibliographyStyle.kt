@@ -1,6 +1,7 @@
 package com.quarkdown.core.bibliography.style
 
 import com.quarkdown.core.bibliography.style.content.AcmContentProviderStrategy
+import com.quarkdown.core.bibliography.style.content.ApaContentProviderStrategy
 import com.quarkdown.core.bibliography.style.content.IeeetrContentProviderStrategy
 import com.quarkdown.core.bibliography.style.content.PlainContentProviderStrategy
 
@@ -52,5 +53,16 @@ interface BibliographyStyle {
             BibliographyEntryLabelProviderStrategy.IndexOnly
         override val contentProvider: BibliographyEntryContentProviderStrategy =
             AcmContentProviderStrategy
+    }
+
+    /**
+     * APA bibliography style.
+     * Uses author-year citation labels (e.g. `(Einstein, 1905)`) and no list labels.
+     */
+    data object Apa : BibliographyStyle {
+        override val labelProvider: BibliographyEntryLabelProviderStrategy =
+            BibliographyEntryLabelProviderStrategy.AuthorYear
+        override val contentProvider: BibliographyEntryContentProviderStrategy =
+            ApaContentProviderStrategy
     }
 }

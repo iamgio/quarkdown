@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [APA bibliography style](https://quarkdown.com/wiki/bibliography)
+
+The new `apa` style for `.bibliography` formats bibliography entries and citations according to the APA (American Psychological Association) style, widely used in the social sciences.
+
+Thanks @DatL4G!
+
 ### Changed
 
 #### `.fullspan` now relies on `.container`
