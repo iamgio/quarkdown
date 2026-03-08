@@ -27,7 +27,6 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
-import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -198,6 +197,7 @@ class QuarkdownHtmlNodeRenderer(
                 "container",
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
+                "full-column-span".takeIf { node.fullColumnSpan },
                 node.textTransform?.size?.asCSS,
                 node.className,
             )
@@ -257,8 +257,6 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(node: Landscape) = div("landscape", node.children)
-
-    override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
     override fun visit(node: Clipped) =
         div("clip clip-${node.clip.asCSS}") {

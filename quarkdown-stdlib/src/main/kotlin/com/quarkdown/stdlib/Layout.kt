@@ -10,7 +10,6 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
-import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.Stacked
@@ -89,6 +88,7 @@ val Layout: QuarkdownModule =
  * @param textDecoration text decoration of the text. None if unset
  * @param textCase text case of the text. Normal if unset
  * @param float floating position of the container within the parent. Not floating if unset
+ * @param fullColumnSpan whether the container should span across all columns in a multi-column layout. False if unset
  * @param className CSS class name to apply to the container, if supported by the renderer. None if unset
  * @param body content to group
  * @return the new [Container] node
@@ -115,6 +115,7 @@ fun container(
     @Name("textdecoration") textDecoration: TextTransformData.Decoration? = null,
     @Name("textcase") textCase: TextTransformData.Case? = null,
     @LikelyNamed float: Container.FloatAlignment? = null,
+    @Name("fullspan") fullColumnSpan: Boolean = false,
     @Name("classname") className: String? = null,
     @LikelyBody body: MarkdownContent? = null,
 ) = Container(
@@ -133,6 +134,7 @@ fun container(
     textAlignment,
     TextTransformData(fontSize, fontWeight, fontStyle, textDecoration, textCase, fontVariant),
     float,
+    fullColumnSpan,
     className,
     body?.children ?: emptyList(),
 ).wrappedAsValue()
@@ -283,18 +285,19 @@ fun landscape(
 ) = Landscape(body.children).wrappedAsValue()
 
 /**
- * If the document has a multi-column layout (set via [pageFormat]), makes content span across all columns in a multi-column layout.
+ * Shorthand for [container] with `fullspan:{true}`.
+ * Makes content span across all columns in a multi-column layout.
  *
  * If the document has a single-column layout, the effect is the same as [container].
  *
  * @param body content to span across all columns
- * @return the new [FullColumnSpan] span node
+ * @return the new [Container] node with [Container.fullColumnSpan] enabled
  * @wiki Multi-column layout
  */
 @Name("fullspan")
 fun fullColumnSpan(
     @LikelyBody body: MarkdownContent,
-) = FullColumnSpan(body.children).wrappedAsValue()
+) = container(fullColumnSpan = true, body = body)
 
 /**
  * An empty rectangle that adds whitespace to the layout.
