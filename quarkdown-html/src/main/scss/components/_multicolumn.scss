@@ -6,7 +6,7 @@
 
   &.quarkdown-plain > main,
   &.quarkdown-paged .paged-content-wrapper,
-  &.quarkdown-slides .slides > :is(section, .pdf-page),
+  &.quarkdown-slides .slides section,
   &.quarkdown-docs > .content-wrapper > main {
     column-count: var(--qd-column-count);
     column-fill: auto;
