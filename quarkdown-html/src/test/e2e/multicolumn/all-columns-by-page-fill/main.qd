@@ -1,0 +1,4 @@
+.pageformat columns:{2}
+
+.repeat {50}
+    .loremipsum

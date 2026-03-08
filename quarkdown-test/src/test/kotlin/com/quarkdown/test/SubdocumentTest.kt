@@ -397,7 +397,7 @@ class SubdocumentTest {
                 )
             } else {
                 assertEquals(
-                    "<p>..</p><p>../subdoc</p>",
+                    "<p>..</p><p>..${File.separator}subdoc</p>",
                     it,
                 )
             }

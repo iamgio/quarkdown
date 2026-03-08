@@ -72,7 +72,7 @@ class LivePreviewEndpointTest {
                 // The wrapper must contain an iframe whose src is an absolute path from the root.
                 assertTrue(body.contains("src=\"/test.html\""), "Expected iframe src=\"/test.html\" in wrapper")
                 // The wrapper must include the WebSocket script with the correct server port.
-                assertTrue(body.contains("localhost:$port"), "Expected server port in WebSocket script")
+                assertTrue(body.contains("$SERVER_HOST:$port"), "Expected server host and port in WebSocket script")
             }
         }
 

@@ -10,18 +10,38 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+      if: matrix.os == 'ubuntu-latest'
       with:
         full-checkout: ${{ inputs.full-checkout }}
+
+    - name: Checkout Repository (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17 (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: gradle/actions/setup-gradle@v3
 
     - name: Run tests
       uses: burrunan/gradle-cache-action@v3
       with:
-        job-id: main
-        arguments: ktlintCheck test
+        job-id: unit-test-${{ matrix.os }}
+        arguments: ${{ matrix.os == 'ubuntu-latest' && 'ktlintCheck test' || 'test' }}
 
   e2e-build:
     runs-on: ubuntu-latest

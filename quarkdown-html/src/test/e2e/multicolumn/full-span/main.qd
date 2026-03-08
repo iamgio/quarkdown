@@ -1,0 +1,15 @@
+.pageformat columns:{2}
+
+.repeat {2}
+    .loremipsum
+
+## Full span
+
+.repeat {2}
+    .loremipsum
+
+.fullspan
+    Full span
+
+.repeat {2}
+    .loremipsum

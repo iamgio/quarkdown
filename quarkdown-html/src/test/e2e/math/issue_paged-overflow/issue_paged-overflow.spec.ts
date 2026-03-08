@@ -11,13 +11,13 @@ test("math does not overflow to next page incorrectly", async (page) => {
 
     // First page contains first math and container
     const firstPageMath = firstPage.locator("formula");
-    const firstPageContainer = firstPage.locator(".container");
+    const firstPageParagraphs = firstPage.locator("p");
     await expect(firstPageMath).toHaveCount(1);
-    await expect(firstPageContainer).toHaveCount(1);
+    await expect(firstPageParagraphs).toHaveCount(5);
 
     // Second page contains second math
     const secondPageMath = secondPage.locator("formula");
-    const secondPageContainer = secondPage.locator(".container");
+    const secondPageParagraphs = secondPage.locator("p");
     await expect(secondPageMath).toHaveCount(1);
-    await expect(secondPageContainer).toHaveCount(0);
+    await expect(secondPageParagraphs).toHaveCount(0);
 });

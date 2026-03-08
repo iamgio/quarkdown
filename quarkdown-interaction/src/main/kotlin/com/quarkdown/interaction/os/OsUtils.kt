@@ -20,7 +20,7 @@ object OsUtils {
      * Runs the given [windows] or [unix] function depending on the current operating system.
      * @return the result of the function based on the OS
      */
-    private fun <T> dependent(
+    fun <T> dependent(
         windows: () -> T,
         unix: () -> T,
     ) = when {

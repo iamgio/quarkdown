@@ -1,6 +1,7 @@
 package com.quarkdown.server.endpoints
 
 import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.server.SERVER_HOST
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
@@ -14,6 +15,7 @@ import java.io.File
 private const val DEFAULT_FILE = "index.html"
 
 private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "srcFile"
+private const val TEMPLATE_SERVER_HOST_PLACEHOLDER = "serverHost"
 private const val TEMPLATE_SERVER_PORT_PLACEHOLDER = "serverPort"
 
 /**
@@ -53,12 +55,14 @@ class LivePreviewEndpoint(
         }
 
         when {
-            file.extension.lowercase() == "html" ->
+            file.extension.lowercase() == "html" -> {
                 call.respondText(createHtmlWrapperText(file, port), ContentType.Text.Html)
+            }
 
             // Non-HTML files are served directly.
-            else ->
+            else -> {
                 call.respondFile(file)
+            }
         }
     }
 
@@ -68,11 +72,12 @@ class LivePreviewEndpoint(
     ): String {
         // The iframe src is an absolute path from the server root,
         // which correctly handles both root-level and subdirectory files.
-        val sourceFile = "/${targetFile.relativeTo(origin).path}"
+        val sourceFile = "/${targetFile.relativeTo(origin).invariantSeparatorsPath}"
 
         return TemplateProcessor
             .fromResourceName("/live-preview/wrapper.html.jte", referenceClass = javaClass)
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, sourceFile)
+            .value(TEMPLATE_SERVER_HOST_PLACEHOLDER, SERVER_HOST)
             .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, serverPort.toString())
             .process()
             .toString()

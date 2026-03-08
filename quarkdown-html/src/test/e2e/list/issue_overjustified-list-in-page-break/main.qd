@@ -1,6 +1,5 @@
 .doctype {paged}
-
-.container height:{80%} fullwidth:{yes} background:{blue}
+.pageformat height:{10cm}
 
 - A B C D E
 - A B C D E
