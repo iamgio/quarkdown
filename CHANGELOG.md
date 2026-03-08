@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### `.fullspan` now relies on `.container`
+
+`.fullspan`, used to create a block spanning over multiple columns in a multi-column layout, is now shorthand for `.container fullspan:{yes}`.
+
 ### Fixed
 
 #### Stabilized multi-column layout

@@ -45,7 +45,6 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
-import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
@@ -920,7 +919,7 @@ class HtmlNodeRendererTest {
         val out = readParts("quarkdown/fullspan.html")
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
-        assertEquals(out.next(), FullColumnSpan(listOf(paragraph)).render())
+        assertEquals(out.next(), Container(fullColumnSpan = true, children = listOf(paragraph)).render())
     }
 
     @Test
