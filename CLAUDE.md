@@ -275,8 +275,30 @@ The project has high test coverage, with three types of tests:
   which test the compiler as a whole, by compiling Quarkdown source files into different output formats, mainly HTML.
 - End-to-end tests, located in [e2e](quarkdown-html/src/test/e2e), which test the HTML rendering engine in a real browser environment via Playwright,
   ensuring HTML output, TypeScript runtime, and CSS styles work correctly together. CSS, in particular, is prone to visual issues that are hard to catch otherwise.
+  When adding or modifying an E2E test, run only the affected test file to speed up the feedback loop:
+  ```bash
+  cd quarkdown-html && npx playwright test path/to/test.spec.ts
+  ```
 
 When making changes to the compiler or other modules, make sure to add or update tests accordingly.
+
+### E2E test structure
+
+Each E2E test lives in a directory under `quarkdown-html/src/test/e2e/` containing:
+- `main.qd`: the Quarkdown source document for the test.
+- `<test-name>.spec.ts`: the Playwright spec file.
+
+The test framework (`quarkdown.ts`) provides a `suite(testDir)` factory that returns:
+- `test(name, fn, options?)`: defines a single test case. `options` supports `subpath` for subdocument navigation.
+- `testMatrix(name, docTypes, fn, options?)`: runs the same test across multiple document types (e.g. `["plain", "paged", "slides"]`),
+  creating separate test cases for each. The runner prepends `.doctype {type}` to the source automatically.
+  This is the only way to specify a document type; `test()` does not support `docType`.
+- `expect`: Playwright's `expect` for assertions.
+
+The runner (`__util/runner.ts`) compiles the source via the CLI, navigates to the Quarkdown server, and waits for `window.isReady()`.
+Each test run gets a unique ID for parallel isolation.
+
+Utility helpers in `__util/css.ts` provide computed style access.
 
 ## Documentation
 
