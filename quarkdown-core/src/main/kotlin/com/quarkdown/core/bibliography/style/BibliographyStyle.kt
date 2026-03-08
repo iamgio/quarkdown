@@ -55,11 +55,14 @@ interface BibliographyStyle {
             AcmContentProviderStrategy
     }
 
+    /**
+     * APA bibliography style.
+     * Uses author-year citation labels (e.g. `(Einstein, 1905)`) and no list labels.
+     */
     data object Apa : BibliographyStyle {
-        override val labelProvider: BibliographyEntryLabelProviderStrategy
-            get() = BibliographyEntryLabelProviderStrategy.None
-
-        override val contentProvider: BibliographyEntryContentProviderStrategy
-            get() = ApaContentProviderStrategy
+        override val labelProvider: BibliographyEntryLabelProviderStrategy =
+            BibliographyEntryLabelProviderStrategy.AuthorYear
+        override val contentProvider: BibliographyEntryContentProviderStrategy =
+            ApaContentProviderStrategy
     }
 }

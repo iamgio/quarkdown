@@ -253,7 +253,7 @@ class PlainTextNodeRenderer(
 
         // Content.
         node.bibliography.entries.values.forEachIndexed { index, entry ->
-            builder.append(node.style.labelProvider.getLabel(entry, index))
+            builder.append(node.style.labelProvider.getListLabel(entry, index))
             builder.append(" ")
             builder.append(
                 node.style.contentProvider
@@ -323,7 +323,7 @@ class PlainTextNodeRenderer(
             node.getDefinition(context) ?: return "[???]"
 
         val index = view.bibliography.indexOf(entry)
-        val label = view.style.labelProvider.getLabel(entry, index)
+        val label = view.style.labelProvider.getCitationLabel(entry, index)
         return label
     }
 

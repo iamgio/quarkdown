@@ -18,7 +18,7 @@ class BibliographyStyleTest {
     @Test
     fun `plain, article`() {
         val style = BibliographyStyle.Plain
-        val label = style.labelProvider.getLabel(article, 0)
+        val label = style.labelProvider.getCitationLabel(article, 0)
         val content = style.contentProvider.getContent(article)
         assertEquals("[1]", label)
         assertNodeEquals(
@@ -46,7 +46,7 @@ class BibliographyStyleTest {
     @Test
     fun `plain, book`() {
         val style = BibliographyStyle.Plain
-        val label = style.labelProvider.getLabel(book, 0)
+        val label = style.labelProvider.getCitationLabel(book, 0)
         val content = style.contentProvider.getContent(book)
         assertEquals("[1]", label)
         assertNodeEquals(
@@ -90,7 +90,7 @@ class BibliographyStyleTest {
     @Test
     fun `ieeetr, article`() {
         val style = BibliographyStyle.Ieeetr
-        val label = style.labelProvider.getLabel(article, 0)
+        val label = style.labelProvider.getCitationLabel(article, 0)
         val content = style.contentProvider.getContent(article)
         assertEquals("[1]", label)
         assertNodeEquals(
@@ -164,7 +164,7 @@ class BibliographyStyleTest {
     @Test
     fun `acm, article`() {
         val style = BibliographyStyle.Acm
-        val label = style.labelProvider.getLabel(article, 0)
+        val label = style.labelProvider.getCitationLabel(article, 0)
         val content = style.contentProvider.getContent(article)
         assertEquals("[1]", label)
         assertNodeEquals(
@@ -192,7 +192,7 @@ class BibliographyStyleTest {
     @Test
     fun `acm, book`() {
         val style = BibliographyStyle.Acm
-        val label = style.labelProvider.getLabel(book, 0)
+        val label = style.labelProvider.getCitationLabel(book, 0)
         val content = style.contentProvider.getContent(book)
         assertEquals("[1]", label)
         assertNodeEquals(
@@ -239,9 +239,9 @@ class BibliographyStyleTest {
     @Test
     fun `apa, article`() {
         val style = BibliographyStyle.Apa
-        val label = style.labelProvider.getLabel(article, 0)
+        val label = style.labelProvider.getCitationLabel(article, 0)
         val content = style.contentProvider.getContent(article)
-        assertEquals("", label)
+        assertEquals("(Einstein, 1905)", label)
         assertNodeEquals(
             buildInline {
                 text("Einstein, A.")
@@ -271,9 +271,9 @@ class BibliographyStyleTest {
     @Test
     fun `apa, book`() {
         val style = BibliographyStyle.Apa
-        val label = style.labelProvider.getLabel(book, 0)
+        val label = style.labelProvider.getCitationLabel(book, 0)
         val content = style.contentProvider.getContent(book)
-        assertEquals("", label)
+        assertEquals("(Goossens et al., 1993)", label)
         assertNodeEquals(
             buildInline {
                 text("Goossens, M., Mittelbach, F., & Samarin, A.")
@@ -293,6 +293,8 @@ class BibliographyStyleTest {
     @Test
     fun `apa, misc`() {
         val style = BibliographyStyle.Apa
+        val label = style.labelProvider.getCitationLabel(misc, 0)
+        assertEquals("(Knuth, n.d.)", label)
         val content = style.contentProvider.getContent(misc)
         assertNodeEquals(
             buildInline {
