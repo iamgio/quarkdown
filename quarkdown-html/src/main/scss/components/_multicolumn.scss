@@ -1,16 +1,14 @@
-.quarkdown {
-  &.multicolumn {
-    // In a multi-column layout, these elements span across all columns.
-    .full-column-span, h1, h2, h3, nav {
-      column-span: all;
-    }
+.quarkdown.multicolumn {
+  // In a multi-column layout, these elements span across all columns.
+  .full-column-span, h1, h2, h3, nav {
+    column-span: all;
   }
-}
 
-.quarkdown-plain > main,
-.quarkdown-paged .paged-content-wrapper,
-.quarkdown-slides .slides > :is(section, .pdf-page),
-.quarkdown-docs > .content-wrapper > main {
-  column-count: var(--qd-column-count);
-  column-fill: auto;
+  &.quarkdown-plain > main,
+  &.quarkdown-paged .paged-content-wrapper,
+  &.quarkdown-slides .slides > :is(section, .pdf-page),
+  &.quarkdown-docs > .content-wrapper > main {
+    column-count: var(--qd-column-count);
+    column-fill: auto;
+  }
 }
