@@ -1,9 +1,6 @@
 .docname {Multi-column layout}
 .include {docs}
 
-> Warning: This feature is **experimental**, unstable in `paged` documents, and behaves inconsistently across browsers (especially Safari).
-> PRs to improve this feature are welcome.
-
 [**`.pageformat {columns}`**](page-format.qd) applies a multi-column layout to each page when the value of `columns` is higher than 1.
 
 .exampleoutput {![Example](multi-column-layout/two-columns.png)}

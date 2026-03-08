@@ -8,7 +8,8 @@ x-2y+3z=3
 \end{cases}
 $$$
 
-.container height:{80%} fullwidth:{yes} background:{blue}
+.repeat {5}
+    .loremipsum
 
 $$$
 \begin{cases}
