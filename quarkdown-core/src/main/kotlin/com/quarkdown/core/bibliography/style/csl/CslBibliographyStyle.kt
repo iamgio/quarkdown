@@ -9,6 +9,7 @@ import com.quarkdown.core.util.toPlainText
 import de.undercouch.citeproc.BibliographyFileReader
 import de.undercouch.citeproc.CSL
 import de.undercouch.citeproc.ItemDataProvider
+import java.io.IOException
 import java.io.InputStream
 
 /**
@@ -45,7 +46,7 @@ class CslBibliographyStyle(
      */
     val bibliography: Bibliography by lazy {
         Bibliography(
-            provider.ids.associateWith { BibliographyEntry(it) },
+            provider.ids.associateWith(::BibliographyEntry),
         )
     }
 
@@ -99,7 +100,15 @@ class CslBibliographyStyle(
             filename: String,
         ): CslBibliographyStyle {
             val provider = BibliographyFileReader().readBibliographyFile(input, filename)
-            return CslBibliographyStyle(cslStyleName, provider)
+            return try {
+                CslBibliographyStyle(cslStyleName, provider)
+            } catch (e: IOException) {
+                throw IllegalArgumentException(
+                    "Bibliography style '$cslStyleName' does not exist or failed to load. " +
+                        "See https://github.com/citation-style-language/styles for a list of available styles.",
+                    e,
+                )
+            }
         }
     }
 }

@@ -53,6 +53,8 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  *                        which does not trigger automatic page breaks.
  * @return a wrapped [BibliographyView] node
  * @see cite to cite bibliography entries
+ * @throws java.io.IOException if the bibliography file cannot be read or parsed
+ * @throws IllegalArgumentException if the specified style does not exist or is invalid
  * @wiki Bibliography
  */
 fun bibliography(
@@ -63,7 +65,6 @@ fun bibliography(
     @Name("decorativetitle") decorativeTitle: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
-
     val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name)
 
     return BibliographyView(
