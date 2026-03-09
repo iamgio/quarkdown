@@ -1,10 +1,14 @@
 .docname {Bibliography}
 .include {docs}
 
-Quarkdown provides first-class bibliography generation with support for multiple bibliography formats:
-[BibTeX](https://www.bibtex.org) (`.bib`), CSL JSON, YAML, EndNote, and RIS.
+Quarkdown provides CSL-powered bibliography support for the following bibliography formats:
+- [BibTeX](https://www.bibtex.org) (`.bib`)
+- CSL JSON (`.json`)
+- YAML (`.yaml`/`.yml`)
+- EndNote (`.enl`)
+- RIS (`.ris`)
 
-To get started, call the **`.bibliography {file.bib}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.bibliography/bibliography.html} function, where `file.bib` is the path to your bibliography file. You can find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
+To get started, call the **`.bibliography {file}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.bibliography/bibliography.html} function, where `file` is the path to your bibliography file, with extension. You can find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
 
 .examplemirror
   .bibliography {bibliography/file.bib}

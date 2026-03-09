@@ -6,9 +6,17 @@
 
 #### [CSL bibliography styles](https://quarkdown.com/wiki/bibliography) (breaking change)
 
-Bibliography styles are now powered by [CSL](https://citationstyles.org) (Citation Style Language), enabling support for thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles). The `style` parameter now accepts any CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
+Quarkdown's internal bibliography management is now powered by [CSL](https://citationstyles.org) (Citation Style Language).
 
-Breaking change: `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
+- Thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) are now supported. The `style` parameter now accepts any CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
+
+  **Breaking change:** `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
+
+- Along with BibTeX (`.bib`) files, the following file formats are now accepted:
+  - CSL JSON (`.json`)
+  - YAML (`.yaml`/`.yml`)
+  - EndNote (`.enl`)
+  - RIS (`.ris`)
 
 ### Changed
 
