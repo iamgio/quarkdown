@@ -7,7 +7,11 @@ import kotlin.test.assertEquals
 
 private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativetitle:{yes}"
 
-private const val IEEE_BIBLIOGRAPHY_OUTPUT =
+/**
+ * Builds the expected IEEE bibliography HTML output.
+ * @param availableLabel the localized label for online availability (varies by locale)
+ */
+private fun ieeeBibliographyOutput(availableLabel: String = "Available:") =
     "<div class=\"bibliography bibliography-ieee\">" +
         "<span class=\"bibliography-entry-label\">[1]</span>" +
         "<span class=\"bibliography-entry-content\">" +
@@ -27,7 +31,7 @@ private const val IEEE_BIBLIOGRAPHY_OUTPUT =
         "</span>" +
         "<span class=\"bibliography-entry-label\">[3]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. Available: " +
+        "D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. $availableLabel " +
         "<a href=\"http://www-cs-faculty.stanford.edu/uno/abcde.html\">" +
         "http://www-cs-faculty.stanford.edu/uno/abcde.html" +
         "</a>" +
@@ -42,20 +46,20 @@ class BibliographyTest {
     fun `bibliography from bib file`() {
         execute(BIBLIOGRAPHY_CALL) {
             assertEquals(
-                IEEE_BIBLIOGRAPHY_OUTPUT,
+                ieeeBibliographyOutput(),
                 it,
             )
         }
     }
 
     @Test
-    fun `localized bibliography title`() {
+    fun `localized bibliography`() {
         execute(".doclang {en}\n$BIBLIOGRAPHY_CALL") {
             assertEquals(
                 "<h1 data-decorative=\"\">" +
                     "References" +
                     "</h1>" +
-                    IEEE_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(availableLabel = "Available at:"),
                 it,
             )
         }
@@ -68,7 +72,7 @@ class BibliographyTest {
                 "<h1 data-decorative=\"\">" +
                     "My bibliography" +
                     "</h1>" +
-                    IEEE_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(),
                 it,
             )
         }
@@ -87,7 +91,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [1] def [2] ghi [3]</p>" +
-                    IEEE_BIBLIOGRAPHY_OUTPUT +
+                    ieeeBibliographyOutput() +
                     "<p>abc [1] def [2] ghi [3]</p>",
                 it,
             )
@@ -129,7 +133,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [???]</p>" +
-                    IEEE_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(),
                 it,
             )
         }

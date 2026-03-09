@@ -18,6 +18,8 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
   - EndNote (`.enl`)
   - RIS (`.ris`)
 
+- Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
+
 ### Changed
 
 #### `.fullspan` now relies on `.container`

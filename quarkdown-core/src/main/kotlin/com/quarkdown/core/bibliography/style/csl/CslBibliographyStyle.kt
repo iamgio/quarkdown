@@ -5,6 +5,7 @@ import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
+import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.util.toPlainText
 import de.undercouch.citeproc.BibliographyFileReader
 import de.undercouch.citeproc.CSL
@@ -26,17 +27,22 @@ import java.io.InputStream
  *
  * @param cslStyleName the CSL style identifier (e.g. `"apa"`, `"ieee"`, `"chicago-author-date"`)
  * @param provider the item data provider supplying bibliography data to citeproc-java
+ * @param locale optional [RFC 4646](https://www.rfc-editor.org/rfc/rfc4646) locale tag
+ *               (e.g. `"en-US"`, `"de-DE"`). Controls localized terms such as "and"/"und",
+ *               month names, and ordinal suffixes. When `null`, the style's default locale is used,
+ *               falling back to `"en-US"`.
  * @see QuarkdownCslFormat
  * @see CslTokenConverter
  */
 class CslBibliographyStyle(
     private val cslStyleName: String,
     private val provider: ItemDataProvider,
+    locale: String? = null,
 ) : BibliographyStyle {
     private val format = QuarkdownCslFormat()
 
     private val csl =
-        CSL(provider, cslStyleName).apply {
+        CSL(provider, cslStyleName, locale).apply {
             setOutputFormat(format)
             registerCitationItems(provider.ids)
         }
@@ -92,16 +98,19 @@ class CslBibliographyStyle(
          * @param cslStyleName the CSL style identifier
          * @param input the input stream for the bibliography source
          * @param filename the filename hint for format detection
+         * @param locale optional [Locale] for localized terms (e.g. "and"/"und", month names).
+         *               When `null`, the style's default locale is used
          * @return a new [CslBibliographyStyle]
          */
         fun from(
             cslStyleName: String,
             input: InputStream,
             filename: String,
+            locale: Locale? = null,
         ): CslBibliographyStyle {
             val provider = BibliographyFileReader().readBibliographyFile(input, filename)
             return try {
-                CslBibliographyStyle(cslStyleName, provider)
+                CslBibliographyStyle(cslStyleName, provider, locale?.tag)
             } catch (e: IOException) {
                 throw IllegalArgumentException(
                     "Bibliography style '$cslStyleName' does not exist or failed to load. " +

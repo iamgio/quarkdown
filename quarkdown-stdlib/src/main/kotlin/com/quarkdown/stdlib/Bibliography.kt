@@ -4,7 +4,7 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle
-import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -58,14 +58,14 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @wiki Bibliography
  */
 fun bibliography(
-    @Injected context: MutableContext,
+    @Injected context: Context,
     path: String,
     @LikelyNamed style: String = DEFAULT_CSL_STYLE,
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("decorativetitle") decorativeTitle: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
-    val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name)
+    val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name, context.documentInfo.locale)
 
     return BibliographyView(
         title = title?.children,
