@@ -1,9 +1,10 @@
 .docname {Bibliography}
 .include {docs}
 
-Quarkdown provides first-class bibliography generation with out-of-the-box [BibTeX](https://www.bibtex.org) compatibility.
+Quarkdown provides first-class bibliography generation with support for multiple bibliography formats:
+[BibTeX](https://www.bibtex.org) (`.bib`), CSL JSON, YAML, EndNote, and RIS.
 
-To get started, call the **`.bibliography {file.bib}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.bibliography/bibliography.html} function, where `file.bib` is the path to your `.bib` file. You can find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
+To get started, call the **`.bibliography {file.bib}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.bibliography/bibliography.html} function, where `file.bib` is the path to your bibliography file. You can find some BibTeX examples [here](https://www.bibtex.com/e/entry-types/).
 
 .examplemirror
   .bibliography {bibliography/file.bib}
@@ -30,26 +31,14 @@ You can cite it using the `einstein` key.
 
 ## Style
 
-The optional `style` parameter configures the look and format of the bibliography and its citation references. Styles are directly inspired by LaTeX, and you can find comprehensive comparisons [here](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles).
+The optional `style` parameter configures the look and format of the bibliography and its citation references.
+It accepts a [CSL](https://citationstyles.org) (Citation Style Language) style identifier.
+Quarkdown supports thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles),
+including `ieee` (default), `apa`, `chicago-author-date`, `nature`, `vancouver`, and many more.
 
-The currently supported styles are:
-
-- **`plain`** (default)
-
-  !(700)[plain style](bibliography/style-plain.png)
-
-- **`ieeetr`**
-
-  !(700)[ieeetr style](bibliography/style-ieeetr.png)
-
-
-- **`acm`**
-
-  !(700)[acm style](bibliography/style-acm.png)
-
-- **`apa`**
-
-  !(700)[apa style](bibliography/style-apa.png)
+```markdown
+.bibliography {bibliography.bib} style:{apa}
+```
 
 ## Title
 

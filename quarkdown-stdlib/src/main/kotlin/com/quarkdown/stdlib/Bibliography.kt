@@ -3,7 +3,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
-import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
+import com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
@@ -12,7 +12,6 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
-import com.quarkdown.core.bibliography.style.BibliographyStyle as CoreBibliographyStyle
 
 /**
  * `Bibliography` stdlib module exporter.
@@ -26,43 +25,52 @@ val Bibliography: QuarkdownModule =
     )
 
 /**
- * Bibliography styles supported by [bibliography].
- * See [here](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles) for examples of each style.
+ * The default [CSL](https://citationstyles.org) style used when no explicit style is specified.
  */
-enum class BibliographyStyle(
-    internal val style: CoreBibliographyStyle,
-) {
-    PLAIN(CoreBibliographyStyle.Plain),
-    IEEETR(CoreBibliographyStyle.Ieeetr),
-    ACM(CoreBibliographyStyle.Acm),
-    APA(CoreBibliographyStyle.Apa),
-}
+private const val DEFAULT_CSL_STYLE = "ieee"
 
 /**
- * Generates a bibliography from a [BibTeX](https://www.bibtex.org) file.
- * @param path path to the BibTeX file, with extension
- * @param style bibliography style to use
+ * Generates a bibliography from a bibliography file.
+ *
+ * Supported formats include [BibTeX](https://www.bibtex.org) (`.bib`),
+ * CSL JSON, YAML, EndNote, and RIS.
+ *
+ * The bibliography is formatted using a [CSL](https://citationstyles.org) style definition,
+ * powered by [citeproc-java](https://github.com/michel-kraemer/citeproc-java).
+ * This enables support for thousands of citation styles from the
+ * [CSL Style Repository](https://github.com/citation-style-language/styles).
+ *
+ * Example:
+ * ```markdown
+ * .bibliography {bibliography.bib}
+ *     style:{apa}
+ * ```
+ *
+ * @param path path to the bibliography file, with extension
+ * @param style [CSL](https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`).
  * @param title title of the bibliography. If unset, the default localized title is used
  * @param decorativeTitle whether the title, if present, should be a decorative heading,
  *                        which does not trigger automatic page breaks.
  * @return a wrapped [BibliographyView] node
  * @see cite to cite bibliography entries
+ * @throws java.io.IOException if the bibliography file cannot be read or parsed
+ * @throws IllegalArgumentException if the specified style does not exist or is invalid
  * @wiki Bibliography
  */
 fun bibliography(
     @Injected context: MutableContext,
     path: String,
-    @LikelyNamed style: BibliographyStyle = BibliographyStyle.PLAIN,
+    @LikelyNamed style: String = DEFAULT_CSL_STYLE,
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("decorativetitle") decorativeTitle: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
-    val bibliography = BibTeXBibliographyParser.parse(file.reader())
+    val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name)
 
     return BibliographyView(
         title = title?.children,
-        bibliography = bibliography,
-        style = style.style,
+        bibliography = resolvedStyle.bibliography,
+        style = resolvedStyle,
         isTitleDecorative = decorativeTitle,
     ).wrappedAsValue()
 }

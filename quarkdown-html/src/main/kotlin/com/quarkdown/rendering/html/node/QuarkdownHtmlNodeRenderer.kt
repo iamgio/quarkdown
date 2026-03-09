@@ -58,7 +58,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.bibliography.BibliographyEntry
-import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
@@ -375,7 +374,7 @@ class QuarkdownHtmlNodeRenderer(
                     }
                     tag("span") {
                         className("bibliography-entry-content")
-                        +node.style.contentProvider.getContent(entry)
+                        +node.style.contentOf(entry)
                     }
                 }
             }
