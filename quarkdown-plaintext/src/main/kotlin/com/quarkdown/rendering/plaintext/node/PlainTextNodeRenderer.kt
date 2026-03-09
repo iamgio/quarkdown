@@ -76,7 +76,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.bibliography.BibliographyEntry
-import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.rendering.NodeRenderer
@@ -256,8 +255,8 @@ class PlainTextNodeRenderer(
             builder.append(node.style.labelProvider.getListLabel(entry, index))
             builder.append(" ")
             builder.append(
-                node.style.contentProvider
-                    .getContent(entry)
+                node.style
+                    .contentOf(entry)
                     .visitAll(),
             )
             builder.appendLine()

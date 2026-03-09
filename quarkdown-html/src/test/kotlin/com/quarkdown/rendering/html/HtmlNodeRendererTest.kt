@@ -2,9 +2,6 @@
 
 package com.quarkdown.rendering.html
 
-import com.quarkdown.core.BibliographySamples.article
-import com.quarkdown.core.BibliographySamples.book
-import com.quarkdown.core.BibliographySamples.misc
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
@@ -59,6 +56,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.bibliography.Bibliography
+import com.quarkdown.core.bibliography.BibliographyEntry
+import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
@@ -1114,21 +1113,30 @@ class HtmlNodeRendererTest {
     fun bibliography() {
         val out = readParts("quarkdown/bibliography.html")
 
-        assertEquals(
-            out.next(),
-            BibliographyView(
-                title = buildInline { text("Bibliography (plain)") },
-                bibliography = Bibliography(listOf(article, book, misc)),
-                style = BibliographyStyle.Plain,
-            ).render(),
-        )
+        val entries = listOf("einstein", "latexcompanion", "knuthwebsite")
+
+        // Stub style producing simple, predictable output for HTML structure verification.
+        val stubStyle =
+            object : BibliographyStyle {
+                override val name = "test"
+
+                override val labelProvider =
+                    object : BibliographyEntryLabelProviderStrategy {
+                        override fun getCitationLabel(
+                            entry: BibliographyEntry,
+                            index: Int,
+                        ) = "[${index + 1}]"
+                    }
+
+                override fun contentOf(entry: BibliographyEntry) = buildInline { text("Content of ${entry.citationKey}.") }
+            }
 
         assertEquals(
             out.next(),
             BibliographyView(
-                title = buildInline { text("Bibliography (ieeetr)") },
-                bibliography = Bibliography(listOf(article, book, misc)),
-                style = BibliographyStyle.Ieeetr,
+                title = buildInline { text("Bibliography") },
+                bibliography = Bibliography(entries.associateWith { BibliographyEntry(it) }),
+                style = stubStyle,
             ).render(),
         )
     }

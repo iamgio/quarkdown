@@ -7,31 +7,30 @@ import kotlin.test.assertEquals
 
 private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativetitle:{yes}"
 
-private const val PLAIN_BIBLIOGRAPHY_OUTPUT =
-    "<div class=\"bibliography bibliography-plain\">" +
+private const val IEEE_BIBLIOGRAPHY_OUTPUT =
+    "<div class=\"bibliography bibliography-ieee\">" +
         "<span class=\"bibliography-entry-label\">[1]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Albert Einstein. " +
-        "Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]. " +
+        "A. Einstein, \u201CZur Elektrodynamik bewegter K\u00F6rper. (German) " +
+        "[On the electrodynamics of moving bodies],\u201D " +
         "<em>Annalen der Physik</em>" +
-        ", " +
-        "322(10):891–921, 1905." +
+        ", vol. 322, Art. no. 10, 1905, doi: " +
+        "<a href=\"http://dx.doi.org/10.1002/andp.19053221004\">" +
+        "http://dx.doi.org/10.1002/andp.19053221004" +
+        "</a>." +
         "</span>" +
         "<span class=\"bibliography-entry-label\">[2]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Michel Goossens, Frank Mittelbach, and Alexander Samarin. " +
+        "M. Goossens, F. Mittelbach, and A. Samarin, " +
         "<em>The LaTeX Companion</em>" +
-        ". " +
-        "Addison-Wesley, Reading, Massachusetts, 1993." +
+        ". Reading, Massachusetts: Addison-Wesley, 1993." +
         "</span>" +
         "<span class=\"bibliography-entry-label\">[3]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Donald Knuth. " +
-        "Knuth: Computers and Typesetting. " +
-        "<a href=\"http://www-cs-faculty.stanford.edu/~uno/abcde.html\">" +
-        "http://www-cs-faculty.stanford.edu/~uno/abcde.html" +
+        "D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. Available: " +
+        "<a href=\"http://www-cs-faculty.stanford.edu/uno/abcde.html\">" +
+        "http://www-cs-faculty.stanford.edu/uno/abcde.html" +
         "</a>" +
-        "." +
         "</span>" +
         "</div>"
 
@@ -43,7 +42,7 @@ class BibliographyTest {
     fun `bibliography from bib file`() {
         execute(BIBLIOGRAPHY_CALL) {
             assertEquals(
-                PLAIN_BIBLIOGRAPHY_OUTPUT,
+                IEEE_BIBLIOGRAPHY_OUTPUT,
                 it,
             )
         }
@@ -56,7 +55,7 @@ class BibliographyTest {
                 "<h1 data-decorative=\"\">" +
                     "References" +
                     "</h1>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    IEEE_BIBLIOGRAPHY_OUTPUT,
                 it,
             )
         }
@@ -69,7 +68,7 @@ class BibliographyTest {
                 "<h1 data-decorative=\"\">" +
                     "My bibliography" +
                     "</h1>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    IEEE_BIBLIOGRAPHY_OUTPUT,
                 it,
             )
         }
@@ -80,15 +79,15 @@ class BibliographyTest {
         execute(
             """
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
-            
+
             $BIBLIOGRAPHY_CALL
-            
+
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
             """.trimIndent(),
         ) {
             assertEquals(
                 "<p>abc [1] def [2] ghi [3]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT +
+                    IEEE_BIBLIOGRAPHY_OUTPUT +
                     "<p>abc [1] def [2] ghi [3]</p>",
                 it,
             )
@@ -100,20 +99,22 @@ class BibliographyTest {
         execute(
             """
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
-            
+
             $BIBLIOGRAPHY_CALL
-            
+
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
             """.trimIndent(),
             renderer = { rendererFactory, ctx -> rendererFactory.plainText(ctx) },
         ) {
             assertEquals(
                 "abc [1] def [2] ghi [3]\n\n" +
-                    "[1] Albert Einstein. Zur Elektrodynamik bewegter Körper. (German) " +
-                    "[On the electrodynamics of moving bodies]. Annalen der Physik, 322(10):891–921, 1905.\n" +
-                    "[2] Michel Goossens, Frank Mittelbach, and Alexander Samarin. The LaTeX Companion. " +
-                    "Addison-Wesley, Reading, Massachusetts, 1993.\n" +
-                    "[3] Donald Knuth. Knuth: Computers and Typesetting. http://www-cs-faculty.stanford.edu/~uno/abcde.html.\n\n" +
+                    "[1] A. Einstein, \u201CZur Elektrodynamik bewegter K\u00F6rper. (German) " +
+                    "[On the electrodynamics of moving bodies],\u201D Annalen der Physik, " +
+                    "vol. 322, Art. no. 10, 1905, doi: http://dx.doi.org/10.1002/andp.19053221004.\n" +
+                    "[2] M. Goossens, F. Mittelbach, and A. Samarin, The LaTeX Companion. " +
+                    "Reading, Massachusetts: Addison-Wesley, 1993.\n" +
+                    "[3] D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. Available: " +
+                    "http://www-cs-faculty.stanford.edu/uno/abcde.html\n\n" +
                     "abc [1] def [2] ghi [3]\n\n",
                 it,
             )
@@ -128,7 +129,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [???]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    IEEE_BIBLIOGRAPHY_OUTPUT,
                 it,
             )
         }

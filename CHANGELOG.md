@@ -4,11 +4,11 @@
 
 ### Added
 
-#### [APA bibliography style](https://quarkdown.com/wiki/bibliography)
+#### [CSL bibliography styles](https://quarkdown.com/wiki/bibliography) (breaking change)
 
-The new `apa` style for `.bibliography` formats bibliography entries and citations according to the APA (American Psychological Association) style, widely used in the social sciences.
+Bibliography styles are now powered by [CSL](https://citationstyles.org) (Citation Style Language), enabling support for thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles). The `style` parameter now accepts any CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
 
-Thanks @DatL4G!
+Breaking change: `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
 
 ### Changed
 
