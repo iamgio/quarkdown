@@ -57,6 +57,6 @@ object QuarkdownPatterns {
                 .withReference("begin", Regex.escape(BEGIN))
                 .withReference("chain", Regex.escape(CHAIN_SEPARATOR))
                 .withReference("identifier", IDENTIFIER.pattern)
-                .build()
+                .buildRegex()
     }
 }

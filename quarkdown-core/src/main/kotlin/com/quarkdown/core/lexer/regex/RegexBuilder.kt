@@ -25,17 +25,12 @@ class RegexBuilder(
     }
 
     /**
-     * @return a new [Regex]
+     * @return the raw pattern string
      */
-    fun build(): Regex = pattern.toString().toRegex()
-
-    /**
-     * @return a new [Regex] with the given [option].
-     */
-    fun build(option: RegexOption): Regex = pattern.toString().toRegex(option)
+    fun build(): String = pattern.toString()
 
     /**
      * @return a new [Regex] with the given [options].
      */
-    fun build(vararg options: RegexOption): Regex = pattern.toString().toRegex(options.toSet())
+    fun buildRegex(vararg options: RegexOption): Regex = build().toRegex(options.toSet())
 }

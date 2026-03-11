@@ -16,7 +16,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
     ): Regex =
         RegexBuilder("mmath|" + super.interruptionRule(includeList, includeTable).pattern)
             .withReference("mmath", " {0,3}(?:\\\${3,})[^\\n]*\\n")
-            .build()
+            .buildRegex()
 
     /**
      * Three or more `<` characters not followed by any other character.
@@ -27,8 +27,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             name = "PageBreak",
             wrap = ::PageBreakToken,
             regex =
-                "^ {0,3}<{3,}(?=\\s*\$)"
-                    .toRegex(),
+                "^ {0,3}<{3,}(?=\\s*\$)",
         )
     }
 
