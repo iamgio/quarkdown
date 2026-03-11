@@ -21,3 +21,16 @@ internal val callDepth =
             RUNTIME_ERROR_EXIT_CODE,
         )
     }
+
+/**
+ * A [PipelineException] that wraps a [StackOverflowError] occurring during function call expansion.
+ * This may happen before [callDepth] is reached, e.g. during lexer pattern compilation on platforms
+ * with a smaller default thread stack size (such as Windows).
+ */
+internal val stackOverflowPipelineException
+    get() =
+        PipelineException(
+            "Stack overflow during function call expansion. " +
+                "This is likely caused by infinite recursion in a function call.",
+            RUNTIME_ERROR_EXIT_CODE,
+        )

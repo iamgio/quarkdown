@@ -53,6 +53,8 @@ class FunctionCallNodeExpander(
                 e as? PipelineException
                     ?: PipelineException(e.message ?: e.toString(), RUNTIME_ERROR_EXIT_CODE)
             appendOutput(node, pipelineException.asNode(errorHandler))
+        } catch (_: StackOverflowError) {
+            appendOutput(node, stackOverflowPipelineException.asNode(errorHandler))
         }
     }
 
