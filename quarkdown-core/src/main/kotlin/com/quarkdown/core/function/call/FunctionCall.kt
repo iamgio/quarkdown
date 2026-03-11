@@ -7,6 +7,7 @@ import com.quarkdown.core.function.call.binding.AllArgumentsBinder
 import com.quarkdown.core.function.expression.Expression
 import com.quarkdown.core.function.expression.visitor.ExpressionVisitor
 import com.quarkdown.core.function.value.OutputValue
+import com.quarkdown.core.pipeline.error.PipelineException
 
 /**
  * A call to a declared [Function].
@@ -34,6 +35,7 @@ data class FunctionCall<T : OutputValue<*>>(
     /**
      * Checks the call validity and calls the function.
      * @return the function output
+     * @throws PipelineException if the maximum call depth is exceeded
      * @throws Exception if the validation through [Function.validators] does not succeed
      */
     fun execute(): T {
@@ -41,7 +43,10 @@ data class FunctionCall<T : OutputValue<*>>(
 
         // Allows binding each argument to its parameter.
         val bindings = AllArgumentsBinder(this).createBindings(function.parameters)
-        return function.invoke(bindings, this).also(onComplete)
+
+        return callDepth.incrementScoped {
+            function.invoke(bindings, this).also(onComplete)
+        }
     }
 
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
