@@ -30,6 +30,7 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
+import com.quarkdown.core.pipeline.error.PipelineException
 import kotlin.reflect.KFunction
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -210,6 +211,26 @@ class StandaloneFunctionTest {
 
         assertEquals("Hello", call.execute().unwrappedValue)
         assertFailsWith<IllegalStateException> { call.execute() }
+    }
+
+    @Test
+    fun `infinite recursion throws PipelineException`() {
+        lateinit var recursiveCall: FunctionCall<StringValue>
+
+        val function =
+            SimpleFunction(
+                name = "recurse",
+                parameters = emptyList(),
+            ) { _, _ ->
+                // Calls itself infinitely.
+                recursiveCall.execute()
+            }
+
+        recursiveCall = FunctionCall(function, arguments = emptyList())
+
+        val exception = assertFailsWith<PipelineException> { recursiveCall.execute() }
+        assertIs<PipelineException>(exception)
+        assert(exception.message!!.contains("Maximum function call depth"))
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
