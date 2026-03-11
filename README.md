@@ -171,7 +171,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 | Learning curve        |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
 | Targets               |   HTML, PDF, TXT   |  PDF, PostScript   |     HTML, PDF      |  HTML, PDF, ePub   |        HTML        |
 
-[^control]: The ability to autonomously customize the properties of the document and its output artifact through the language itself.
+[^control]: The ability to customize the properties of the document and of its output artifact through the language itself.
 
 <table>
   <thead>
