@@ -93,6 +93,21 @@ class NonStrictErrorHandlingTest {
     }
 
     @Test
+    fun `infinite recursion renders error box`() {
+        execute(
+            """
+            .function {myfunc}
+                .myfunc
+            .myfunc
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "box error")
+            assertContains(it, "Maximum function call depth")
+        }
+    }
+
+    @Test
     fun `long source snippet should be folded`() {
         execute(
             """

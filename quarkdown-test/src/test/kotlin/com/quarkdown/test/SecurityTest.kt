@@ -1,6 +1,5 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
 import com.quarkdown.test.util.execute
@@ -56,20 +55,6 @@ class SecurityTest {
                 .myfunc
                 """.trimIndent(),
             ) {}
-        }
-    }
-
-    @Test
-    fun `infinite recursion in non-strict mode renders error`() {
-        execute(
-            """
-            .function {myfunc}
-                .myfunc
-            .myfunc
-            """.trimIndent(),
-            errorHandler = BasePipelineErrorHandler(),
-        ) {
-            assertContains(it, "Maximum function call depth")
         }
     }
 
