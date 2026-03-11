@@ -1,5 +1,6 @@
 package com.quarkdown.core.function.value.factory
 
+import com.quarkdown.core.RUNTIME_ERROR_EXIT_CODE
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
@@ -51,6 +52,7 @@ import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
+import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
@@ -564,7 +566,7 @@ object ValueFactory {
     /**
      * Evaluates a dynamic expression from a raw string input.
      * Special case: if the raw string starts with `@lambda`, the content is parsed as a [lambda] value.
-     * This is generally an *unsafe* expression, as evaluating it may throw an [InvalidExpressionEvalException].
+     * This is generally an *unsafe* expression, as evaluating it may throw an [com.quarkdown.core.function.error.internal.InvalidExpressionEvalException].
      * See [safeExpression] for a fallback mechanism.
      * @param raw either an [Expression] or a string input that may contain both static values and function calls (e.g. `"2 + 2 is .sum {2} {2}"`)
      * @param context context to retrieve the pipeline from
@@ -624,7 +626,7 @@ object ValueFactory {
 
     /**
      * Evaluates a dynamic expression from a raw string input.
-     * This is a safe expression, meaning that if an [InvalidExpressionEvalException] is caught while
+     * This is a safe expression, meaning that if an [com.quarkdown.core.function.error.internal.InvalidExpressionEvalException] is caught while
      * evaluating it, the expression is discarded and a fallback expression is used.
      * @see expression
      * @see SafeExpression
@@ -662,7 +664,10 @@ object ValueFactory {
 
         return expression.eval().let {
             it as? OutputValue<*>
-                ?: throw IllegalStateException("The result of the expression is not a suitable OutputValue: $it")
+                ?: throw PipelineException(
+                    "The result of the expression is not a suitable OutputValue: $it",
+                    RUNTIME_ERROR_EXIT_CODE,
+                )
         }
     }
 
