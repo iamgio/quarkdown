@@ -162,14 +162,16 @@ The desired document type can be set by calling the [`.doctype` function](https:
 |                       |     Quarkdown      |       LaTeX        |       Typst        |      AsciiDoc      |        MDX         |
 |-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
 | Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Full document control | :white_check_mark: | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
+| Full document control[^control] | :white_check_mark: | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
 | Scripting             | :white_check_mark: |      Partial       | :white_check_mark: |        :x:         | :white_check_mark: |
 | Book/article export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Presentation export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
 | Static site export    | :white_check_mark: |        :x:         |    Experimental    | :white_check_mark: | :white_check_mark: |
 | Docs/wiki export      | :white_check_mark: |        :x:         |        :x:         | :white_check_mark: | :white_check_mark: |
 | Learning curve        |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
-| Targets               |   HTML, PDF, TXT   |  PDF, PostScript   |        PDF         |  HTML, PDF, ePub   |        HTML        |
+| Targets               |   HTML, PDF, TXT   |  PDF, PostScript   |     HTML, PDF      |  HTML, PDF, ePub   |        HTML        |
+
+[^control]: The ability to autonomously customize the properties of the document and its output artifact through the language itself.
 
 <table>
   <thead>
@@ -458,3 +460,5 @@ This is, indeed, the concept **Quarkdown** is built upon.
 
 By default, Quarkdown and its modules are licensed under [GNU GPLv3](./LICENSE), except for modules that include their own `LICENSE` file:
 the CLI (`quarkdown-cli`) and Language Server (`quarkdown-lsp`) modules and binaries are licensed under GNU AGPLv3.
+
+## Footnotes
