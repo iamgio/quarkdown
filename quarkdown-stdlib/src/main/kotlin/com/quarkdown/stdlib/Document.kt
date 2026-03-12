@@ -4,10 +4,10 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.createSectionHeading
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
-import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -999,12 +999,19 @@ fun navigationContainer(
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
  * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
  *                          By default, only numbered headings are included.
- * @param decorativeTitle whether the title, if present, should be a decorative heading,
- *                        which does not trigger automatic page breaks.
+ * @param headingDepth depth of the heading preceding the table of contents.
+ *                     If unset, the depth is determined by the document type.
+ * @param includeHeadingInToc whether the heading preceding the table of contents should itself be indexed
+ *                            in the document's table of contents.
+ *                            Cannot be enabled together with [decorativeHeading]
+ * @param decorativeHeading whether the heading, if present, should be decorative,
+ *                          which means it does not trigger automatic page breaks and is not numbered.
+ *                          Cannot be enabled together with [includeHeadingInToc]
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
  * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
+ * @throws IllegalArgumentException if both [includeHeadingInToc] and [decorativeHeading] are enabled
  * @wiki Table of contents
  */
 @Name("tableofcontents")
@@ -1013,12 +1020,24 @@ fun tableOfContents(
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
-    @Name("decorativetitle") decorativeTitle: Boolean = false,
+    @Name("headingdepth") headingDepth: Int? = null,
+    @Name("indexheading") includeHeadingInToc: Boolean = false,
+    @Name("decorativeheading") decorativeHeading: Boolean = false,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
-): NodeValue =
-    AstRoot(
+): NodeValue {
+    val isDocs = context.documentInfo.type == DocumentType.DOCS
+
+    return AstRoot(
         listOfNotNull(
-            createTableOfContentsHeading(title?.children, context, decorativeTitle),
+            Heading.createSectionHeading(
+                title?.children,
+                localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents",
+                context,
+                depth = headingDepth ?: if (isDocs) 3 else 1,
+                customId = "table-of-contents",
+                isDecorative = decorativeHeading,
+                includeInTableOfContents = includeHeadingInToc,
+            ),
             TableOfContentsView(
                 maxDepth,
                 includeUnnumbered,
@@ -1026,3 +1045,4 @@ fun tableOfContents(
             ),
         ),
     ).wrappedAsValue()
+}

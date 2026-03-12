@@ -5,7 +5,7 @@ import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativetitle:{yes}"
+private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativeheading:{yes}"
 
 /**
  * Builds the expected IEEE bibliography HTML output.

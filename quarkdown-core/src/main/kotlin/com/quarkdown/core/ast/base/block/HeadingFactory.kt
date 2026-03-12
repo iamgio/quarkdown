@@ -29,8 +29,11 @@ import com.quarkdown.core.context.localization.localizeOrNull
  * @param customId optional custom ID for cross-referencing. If set and no title is resolved, the heading
  *                 is still created with empty text to act as an anchor
  * @param isDecorative whether the heading should be decorative
+ * @param includeInTableOfContents whether this heading should be indexed in the document's table of contents.
+ *                                 Requires [isDecorative] to be `false`, as decorative headings are excluded from the table of contents
  * @return a [Heading] node, or `null` if [title] is explicitly empty
  *         or no title could be resolved and no [customId] is provided
+ * @throws IllegalArgumentException if [includeInTableOfContents] is `true` and [isDecorative] is `true`
  */
 fun Heading.Companion.createSectionHeading(
     title: InlineContent?,
@@ -39,7 +42,12 @@ fun Heading.Companion.createSectionHeading(
     depth: Int = 1,
     customId: String? = null,
     isDecorative: Boolean = false,
+    includeInTableOfContents: Boolean = false,
 ): Heading? {
+    require(!(includeInTableOfContents && isDecorative)) {
+        "A decorative heading cannot be indexed in the table of contents."
+    }
+
     // An explicitly empty title means no heading should be shown.
     // null means "use default localized title", so null must not be treated as empty.
     if (title?.isEmpty() == true) {
@@ -57,6 +65,6 @@ fun Heading.Companion.createSectionHeading(
         text = resolvedTitle,
         customId = customId,
         isDecorative = isDecorative,
-        excludeFromTableOfContents = true,
+        excludeFromTableOfContents = !includeInTableOfContents,
     )
 }
