@@ -33,8 +33,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineEscape",
             wrap = ::EscapeToken,
             regex =
-                "\\\\([!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])"
-                    .toRegex(),
+                "\\\\([!\"#$%&'()*+,\\-./:;<=>?@\\[\\]\\\\^_`{|}~])",
         )
     }
 
@@ -47,8 +46,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineEntity",
             wrap = ::EntityToken,
             regex =
-                "&(#(\\d+)|#x([0-9A-Fa-f]+)|\\w+);?"
-                    .toRegex(),
+                "&(#(\\d+)|#x([0-9A-Fa-f]+)|\\w+);?",
         )
     }
 
@@ -61,8 +59,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineCriticalContent",
             wrap = ::CriticalContentToken,
             regex =
-                "[&<>\"']"
-                    .toRegex(),
+                "[&<>\"']",
         )
     }
 
@@ -75,8 +72,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineCodeSpan",
             wrap = ::CodeSpanToken,
             regex =
-                "(?<!`)(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)"
-                    .toRegex(),
+                "(?<!`)(?<codebegin>`+)([^`]|[^`][\\s\\S]*?[^`])\\k<codebegin>(?!`)",
         )
     }
 
@@ -89,8 +85,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineLineBreak",
             wrap = ::LineBreakToken,
             regex =
-                "( {2,}|\\\\)\\R(?!\\s*$)"
-                    .toRegex(),
+                "( {2,}|\\\\)\\R(?!\\s*$)",
         )
     }
 
@@ -198,7 +193,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 RegexBuilder("!(?:\\(imgsize\\))?linkcustomid?")
                     .withReference("imgsize", "(?<imgwidth>.+?)(?:sizedivider(?<imgheight>.+?))?")
                     .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
-                    .withReference("link", link.regex.pattern)
+                    .withReference("link", link.regex)
                     .withReference("customid", PatternHelpers.customId("img"))
                     .build(),
             groupNames = listOf("imgwidth", "imgheight", "imgcustomid"),
@@ -218,7 +213,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
                 RegexBuilder("!(?:\\(imgsize\\))?linkcustomid?")
                     .withReference("imgsize", "(?<refimgwidth>.+?)(?:sizedivider(?<refimgheight>.+?))?")
                     .withReference("sizedivider", IMAGE_SIZE_DIVIDER_HELPER)
-                    .withReference("link", referenceLink.regex.pattern)
+                    .withReference("link", referenceLink.regex)
                     .withReference("customid", PatternHelpers.customId("refimg"))
                     .build(),
             groupNames = listOf("refimgwidth", "refimgheight", "refimgcustomid"),

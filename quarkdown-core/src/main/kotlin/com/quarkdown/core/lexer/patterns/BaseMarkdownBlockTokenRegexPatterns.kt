@@ -35,14 +35,14 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         includeTable: Boolean = true,
     ): Regex =
         RegexBuilder("hr|heading|blockquote|fences|list|table| +\\n")
-            .withReference("hr", horizontalRule.regex.pattern) // Interrupts on horizontal rule
+            .withReference("hr", horizontalRule.regex) // Interrupts on horizontal rule
             .withReference("heading", " {0,3}#{1,6}(?:\\s|$)")
             .withReference("fences", "^ {0,3}((`{3,})|(~{3,}))[^\\n]*\\n")
             .withReference("blockquote", " {0,3}>")
             .apply {
                 if (includeList) withReference("list", " {0,3}(?:[*+-]|1[.)]) ")
-                if (includeTable) withReference("table", table.regex.pattern)
-            }.build()
+                if (includeTable) withReference("table", table.regex)
+            }.buildRegex()
 
     /**
      * 4-spaces indented content.
@@ -53,8 +53,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "BlockCode",
             wrap = ::BlockCodeToken,
             regex =
-                "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+"
-                    .toRegex(),
+                "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+",
         )
     }
 
@@ -68,7 +67,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             wrap = ::BlockQuoteToken,
             regex =
                 RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
-                    .withReference("paragraph", paragraph.regex.pattern)
+                    .withReference("paragraph", paragraph.regex)
                     .build(),
         )
     }
@@ -82,8 +81,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "BlockText",
             wrap = ::BlockTextToken,
             regex =
-                "^[^\\n]+"
-                    .toRegex(),
+                "^[^\\n]+",
         )
     }
 
@@ -148,8 +146,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "HorizontalRule",
             wrap = ::HorizontalRuleToken,
             regex =
-                "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\R+|$)"
-                    .toRegex(),
+                "^ {0,3}((?:-[\\t ]*){3,}|(?:_[ \\t]*){3,}|(?:\\*[ \\t]*){3,})(?:\\R+|$)",
         )
     }
 
@@ -164,7 +161,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
         inBrackets: String,
         content: String,
         interruption: String,
-    ): Regex =
+    ): String =
         RegexBuilder("^ {0,3}\\[$inBrackets\\]: *(?:\\n *)?$content *$interruption")
             .withReference("label", "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+")
             .build()
@@ -185,8 +182,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                             .withReference(
                                 "title",
                                 "(?:\"(?:\\\\\"?|[^\"\\\\])*\"|'[^'\\n]*(?:\\n[^'\\n]+)*\\n?'|\\([^()]*\\))",
-                            ).build()
-                            .pattern,
+                            ).build(),
                     interruption = "(?:\\n+|$)",
                 ),
         )
@@ -234,8 +230,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "Newline",
             wrap = ::NewlineToken,
             regex =
-                "^(?: *(?:\\n|$))+"
-                    .toRegex(),
+                "^(?: *(?:\\n|$))+",
         )
     }
 
@@ -334,7 +329,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     private fun listPattern(
         bulletInitialization: String,
         bulletContinuation: String,
-    ): Regex {
+    ): String {
         val initialization = "^(( {0,3}$bulletInitialization)[ \\t]((?!^(\\s*\\n){2})"
         val continuation = "(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}$bulletContinuation[ \\t]))"
 

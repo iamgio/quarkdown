@@ -11,7 +11,7 @@ interface NamedRegexPattern {
     val name: String
 
     /**
-     * The regex pattern.
+     * The raw regex pattern string.
      */
-    val regex: Regex
+    val regex: String
 }

@@ -583,7 +583,7 @@ object ValueFactory {
         }
 
         // Strip comments.
-        val rawCode = raw.toString().replace(PatternHelpers.COMMENT, "")
+        val rawCode = raw.toString().replace(PatternHelpers.COMMENT.toRegex(), "")
 
         if (rawCode.isEmpty()) return DynamicValue("")
 

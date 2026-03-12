@@ -56,7 +56,7 @@ class FunctionCallPatterns {
             wrap = { error("Block function call tokens are constructed by the walker") },
             regex =
                 RegexBuilder("^ {0,3}call)")
-                    .withReference("call", inlineFunctionCall.regex.pattern.dropLast(1))
+                    .withReference("call", inlineFunctionCall.regex.dropLast(1))
                     .build(),
             walker = { data, remaining ->
                 val result = FunctionCallWalkerParser(remaining, allowsBody = true).parse()
