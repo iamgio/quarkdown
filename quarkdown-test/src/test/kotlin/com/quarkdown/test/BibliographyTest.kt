@@ -1,9 +1,14 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.rendering.plaintext.extension.plainText
+import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativeheading:{yes}"
 
@@ -122,6 +127,49 @@ class BibliographyTest {
                     "abc [1] def [2] ghi [3]\n\n",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `bibliography custom heading depth`() {
+        execute(".doclang {en}\n$BIBLIOGRAPHY_CALL headingdepth:{3}") {
+            assertEquals(
+                "<h3 data-decorative=\"\">" +
+                    "References" +
+                    "</h3>" +
+                    ieeeBibliographyOutput(availableLabel = "Available at:"),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography heading indexed in toc`() {
+        execute(
+            """
+            .doclang {en}
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .bibliography {bib/bibliography.bib} indexheading:{yes}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertTrue(
+                it.contains(
+                    "<li data-target-id=\"references\" data-depth=\"1\">" +
+                        "<a href=\"#references\">References</a></li>",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography decorative heading and indexheading are mutually exclusive`() {
+        assertFailsWith<FunctionCallRuntimeException> {
+            execute("$BIBLIOGRAPHY_CALL indexheading:{yes}") {}
+        }.also { exception ->
+            assertIs<IllegalArgumentException>(exception.cause)
         }
     }
 
