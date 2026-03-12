@@ -1,18 +1,17 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
-import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
+import com.quarkdown.core.ast.base.block.createSectionHeading
 import com.quarkdown.core.ast.base.block.list.ListItem
 import com.quarkdown.core.ast.base.block.list.OrderedList
 import com.quarkdown.core.ast.base.inline.Link
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.numbering.DocumentNumbering
@@ -107,29 +106,29 @@ fun convertTableOfContentsToListNode(
 /**
  * Creates the heading for the Table of Contents, depending on:
  * - Document type
- * - User-set title in the [TableOfContentsView]
+ * - User-set [title]
  * - Localization availability
  *
  * If the user-set title is empty, no title is used.
+ * @param title user-set title. If `null`, the default localized title is used. If empty, no title is displayed.
+ * @param context the context to use for localization and document type information
+ * @param isDecorative whether the heading should be decorative (excluded from ToC and auto page break)
  * @returns a [Heading] node if a title is to be shown, or `null` otherwise.
  */
 fun createTableOfContentsHeading(
-    view: TableOfContentsView,
+    title: InlineContent?,
     context: Context,
-): Node? {
+    isDecorative: Boolean = false,
+): Heading? {
     val isDocs = context.documentInfo.type == DocumentType.DOCS
-
-    // Localized title.
     val localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents"
-    val titleText = context.localizeOrNull(key = localizationKey)
 
-    if (view.title?.isEmpty() == true) {
-        return null
-    }
-
-    return Heading(
+    return Heading.createSectionHeading(
+        title,
+        localizationKey,
+        context,
         depth = if (isDocs) 3 else 1,
-        text = view.title ?: buildInline { titleText?.let { text(it) } },
         customId = "table-of-contents",
+        isDecorative = isDecorative,
     )
 }

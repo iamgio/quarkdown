@@ -1,6 +1,9 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
+import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.createSectionHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle
@@ -51,7 +54,7 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @param title title of the bibliography. If unset, the default localized title is used
  * @param decorativeTitle whether the title, if present, should be a decorative heading,
  *                        which does not trigger automatic page breaks.
- * @return a wrapped [BibliographyView] node
+ * @return an [AstRoot] containing an optional heading and a [BibliographyView]
  * @see cite to cite bibliography entries
  * @throws java.io.IOException if the bibliography file cannot be read or parsed
  * @throws IllegalArgumentException if the specified style does not exist or is invalid
@@ -67,11 +70,22 @@ fun bibliography(
     val file = file(context, path)
     val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name, context.documentInfo.locale)
 
-    return BibliographyView(
-        title = title?.children,
-        bibliography = resolvedStyle.bibliography,
-        style = resolvedStyle,
-        isTitleDecorative = decorativeTitle,
+    val heading =
+        Heading.createSectionHeading(
+            title?.children,
+            localizationKey = "bibliography",
+            context,
+            isDecorative = decorativeTitle,
+        )
+
+    return AstRoot(
+        listOfNotNull(
+            heading,
+            BibliographyView(
+                bibliography = resolvedStyle.bibliography,
+                style = resolvedStyle,
+            ),
+        ),
     ).wrappedAsValue()
 }
 

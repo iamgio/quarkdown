@@ -14,8 +14,7 @@ class TableOfContentsGeneratorHook(
     private val context: MutableContext,
 ) : AstIteratorHook {
     override fun attach(iterator: ObservableAstIterator) {
-        // Collect all headings, including decorative (unnumbered) ones.
-        val headings = iterator.collectAll<Heading>()
+        val headings = iterator.collect<Heading> { !it.excludeFromTableOfContents }
 
         // Generation.
         iterator.onFinished {

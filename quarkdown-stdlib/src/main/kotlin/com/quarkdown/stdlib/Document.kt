@@ -1,11 +1,13 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
+import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
 import com.quarkdown.core.ast.quarkdown.invisible.PageMarginContentInitializer
@@ -13,7 +15,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -998,22 +999,30 @@ fun navigationContainer(
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
  * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
  *                          By default, only numbered headings are included.
+ * @param decorativeTitle whether the title, if present, should be a decorative heading,
+ *                        which does not trigger automatic page breaks.
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
- * @return a [TableOfContents] node
+ * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
  * @wiki Table of contents
  */
 @Name("tableofcontents")
 fun tableOfContents(
+    @Injected context: Context,
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
+    @Name("decorativetitle") decorativeTitle: Boolean = false,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue =
-    TableOfContentsView(
-        title?.children,
-        maxDepth,
-        includeUnnumbered,
-        focusedItem?.children,
+    AstRoot(
+        listOfNotNull(
+            createTableOfContentsHeading(title?.children, context, decorativeTitle),
+            TableOfContentsView(
+                maxDepth,
+                includeUnnumbered,
+                focusedItem?.children,
+            ),
+        ),
     ).wrappedAsValue()
