@@ -1,11 +1,13 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter
 import com.quarkdown.test.util.execute
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 /**
  * Tests for possible security issues.
@@ -40,6 +42,19 @@ class SecurityTest {
                     "graph TD\n    A --&gt; B&lt;/pre&gt;Hello</pre></figure>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `infinite recursion in strict mode`() {
+        assertFailsWith<PipelineException> {
+            execute(
+                """
+                .function {myfunc}
+                    .myfunc
+                .myfunc
+                """.trimIndent(),
+            ) {}
         }
     }
 

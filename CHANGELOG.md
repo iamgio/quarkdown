@@ -32,6 +32,10 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 The [multi-column layout](https://quarkdown.com/wiki/multi-column-layout) via `.pageformat columns:{N}` is no longer experimental, and now works reliably across all document types.
 
+#### Added call stack limit
+
+Infinite recursion in function calls is now detected and reported as a clear error.
+
 ## [1.14.1] - 2026-03-06
 
 ### Added

@@ -1,5 +1,6 @@
 package com.quarkdown.core.function.call
 
+import com.quarkdown.core.RUNTIME_ERROR_EXIT_CODE
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.MutableContext
@@ -35,20 +36,25 @@ class FunctionCallNodeExpander(
             return
         }
 
-        // The function call node is used to retrieve its corresponding function call.
-        // By resolving it from the node's context instead of the root one,
-        // we make sure to call it from the correct scope, hence providing the needed environment.
-        val call: UncheckedFunctionCall<*> = node.context.resolveUnchecked(node)
-
         try {
+            // The function call node is used to retrieve its corresponding function call.
+            // By resolving it from the node's context instead of the root one,
+            // we make sure to call it from the correct scope, hence providing the needed environment.
+            val call: UncheckedFunctionCall<*> = node.context.resolveUnchecked(node)
+
             // The result of the function is converted into a node to be appended to the AST.
             // The value-to-node mapper used depends on whether the function call is block or inline.
             val mapper = if (node.isBlock) blockMapper else inlineMapper
             val outputNode = call.execute().accept(mapper)
             appendOutput(node, outputNode)
-        } catch (e: PipelineException) {
-            // If the function call is invalid, shows an error box.
-            appendOutput(node, e.asNode(errorHandler))
+        } catch (e: Exception) {
+            // PipelineExceptions are rendered as-is. Other unexpected exceptions are wrapped for graceful error rendering.
+            val pipelineException =
+                e as? PipelineException
+                    ?: PipelineException(e.message ?: e.toString(), RUNTIME_ERROR_EXIT_CODE)
+            appendOutput(node, pipelineException.asNode(errorHandler))
+        } catch (_: StackOverflowError) {
+            appendOutput(node, stackOverflowPipelineException.asNode(errorHandler))
         }
     }
 
