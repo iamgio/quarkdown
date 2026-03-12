@@ -17,7 +17,6 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -42,7 +41,6 @@ import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
-import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -329,53 +327,33 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
-        return buildMultiTag {
-            createTableOfContentsHeading(node, context)?.let { +it }
-
-            val tree: ListBlock =
-                convertTableOfContentsToListNode(
-                    node,
-                    this@QuarkdownHtmlNodeRenderer,
-                    tableOfContents.items,
-                    linkUrlMapper = { item ->
-                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
-                    },
-                )
-
-            +NavigationContainer(
-                role = NavigationContainer.Role.TABLE_OF_CONTENTS,
-                listOf(tree),
+        val tree: ListBlock =
+            convertTableOfContentsToListNode(
+                node,
+                this@QuarkdownHtmlNodeRenderer,
+                tableOfContents.items,
+                linkUrlMapper = { item ->
+                    "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                },
             )
-        }
+
+        return NavigationContainer(
+            role = NavigationContainer.Role.TABLE_OF_CONTENTS,
+            listOf(tree),
+        ).accept(this)
     }
 
     override fun visit(node: BibliographyView) =
-        buildMultiTag {
-            // Localized title.
-            val titleText = context.localizeOrNull(key = "bibliography")
-
-            // Title heading. Its content is either the node's user-set title or a default localized one.
-            val title = node.title ?: titleText?.let { buildInline { text(it) } }
-            title?.let {
-                +Heading(
-                    depth = 1,
-                    text = it,
-                    isDecorative = node.isTitleDecorative,
-                )
-            }
-
-            // Content.
-            +buildTag("div") {
-                classNames("bibliography", "bibliography-${node.style.name}")
-                node.bibliography.entries.values.mapIndexed { index, entry ->
-                    tag("span") {
-                        className("bibliography-entry-label")
-                        +node.style.labelProvider.getListLabel(entry, index)
-                    }
-                    tag("span") {
-                        className("bibliography-entry-content")
-                        +node.style.contentOf(entry)
-                    }
+        buildTag("div") {
+            classNames("bibliography", "bibliography-${node.style.name}")
+            node.bibliography.entries.values.mapIndexed { index, entry ->
+                tag("span") {
+                    className("bibliography-entry-label")
+                    +node.style.labelProvider.getListLabel(entry, index)
+                }
+                tag("span") {
+                    className("bibliography-entry-content")
+                    +node.style.contentOf(entry)
                 }
             }
         }

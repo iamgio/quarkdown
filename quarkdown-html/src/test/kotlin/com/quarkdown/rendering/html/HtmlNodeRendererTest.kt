@@ -2,6 +2,7 @@
 
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
@@ -1133,10 +1134,14 @@ class HtmlNodeRendererTest {
 
         assertEquals(
             out.next(),
-            BibliographyView(
-                title = buildInline { text("Bibliography") },
-                bibliography = Bibliography(entries.associateWith { BibliographyEntry(it) }),
-                style = stubStyle,
+            AstRoot(
+                listOf(
+                    Heading(depth = 1, text = buildInline { text("Bibliography") }),
+                    BibliographyView(
+                        bibliography = Bibliography(entries.associateWith { BibliographyEntry(it) }),
+                        style = stubStyle,
+                    ),
+                ),
             ).render(),
         )
     }

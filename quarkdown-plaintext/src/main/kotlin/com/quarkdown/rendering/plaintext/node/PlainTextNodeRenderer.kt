@@ -38,7 +38,6 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -60,7 +59,6 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
-import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -212,14 +210,6 @@ class PlainTextNodeRenderer(
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
-        val builder = StringBuilder()
-
-        // Heading.
-        createTableOfContentsHeading(node, context)
-            ?.accept(this)
-            ?.let(builder::append)
-
-        // Content.
         val list =
             convertTableOfContentsToListNode(
                 node,
@@ -229,41 +219,23 @@ class PlainTextNodeRenderer(
                 wrapLinksInParagraphs = true,
                 linkUrlMapper = { "" },
             )
-        list.accept(this).let(builder::append)
 
-        return builder.toString().blockNode
+        return list.accept(this).toString().blockNode
     }
 
-    override fun visit(node: BibliographyView): CharSequence {
-        val builder = StringBuilder()
-
-        // Title.
-        val title =
-            node.title
-                ?: context.localizeOrNull(key = "bibliography")?.let { buildInline { text(it) } }
-
-        title?.let {
-            Heading(
-                depth = 1,
-                text = it,
-                isDecorative = node.isTitleDecorative,
-            ).accept(this).let(builder::append)
-        }
-
-        // Content.
-        node.bibliography.entries.values.forEachIndexed { index, entry ->
-            builder.append(node.style.labelProvider.getListLabel(entry, index))
-            builder.append(" ")
-            builder.append(
-                node.style
-                    .contentOf(entry)
-                    .visitAll(),
-            )
-            builder.appendLine()
-        }
-
-        return builder.toString().blockNode
-    }
+    override fun visit(node: BibliographyView): CharSequence =
+        buildString {
+            node.bibliography.entries.values.forEachIndexed { index, entry ->
+                append(node.style.labelProvider.getListLabel(entry, index))
+                append(" ")
+                append(
+                    node.style
+                        .contentOf(entry)
+                        .visitAll(),
+                )
+                appendLine()
+            }
+        }.blockNode
 
     override fun visit(node: MermaidDiagram) = ""
 

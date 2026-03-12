@@ -20,7 +20,7 @@ object SidebarRenderer {
     fun render(context: Context): CharSequence {
         val toc = context.attributes.tableOfContents ?: return ""
         val renderer = QuarkdownHtmlNodeRenderer(context)
-        val view = TableOfContentsView(title = null, maxDepth = MAX_DEPTH, includeUnnumbered = false)
+        val view = TableOfContentsView(maxDepth = MAX_DEPTH, includeUnnumbered = false)
         val list =
             convertTableOfContentsToListNode(
                 view,

@@ -45,7 +45,6 @@ class BibliographyCitationResolutionTest {
 
     private val bibliographyView =
         BibliographyView(
-            title = null,
             bibliography =
                 Bibliography(
                     listOf("einstein", "latexcompanion", "knuthwebsite")
