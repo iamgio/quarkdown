@@ -195,6 +195,56 @@ class NumberingTest {
     }
 
     @Test
+    fun `heading primitive unnumbered`() {
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+               - headings: 1.1
+            # A
+            ## A/1
+            .heading {Skipped} depth:{1} numbered:{no}
+            # B
+            # C
+            ## C/1
+            ## C/2
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2 data-location=\"1.1\">A/1</h2>" +
+                    "<h1>Skipped</h1>" +
+                    "<h1 data-location=\"2\">B</h1>" +
+                    "<h1 data-location=\"3\">C</h1>" +
+                    "<h2 data-location=\"3.1\">C/1</h2>" +
+                    "<h2 data-location=\"3.2\">C/2</h2>",
+                it,
+            )
+        }
+
+        // Unnumbered but still indexed in the ToC.
+        execute(
+            """
+            .noautopagebreak
+            .numbering
+               - headings: 1.1
+            # A
+            .heading {Not numbered} depth:{2} numbered:{no} indexed:{yes}
+            # B
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 data-location=\"1\">A</h1>" +
+                    "<h2>Not numbered</h2>" +
+                    "<h1 data-location=\"2\">B</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `default numbering`() {
         // Default numbering set by the document type.
         execute(

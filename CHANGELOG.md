@@ -20,6 +20,11 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 - Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
 
+#### [`.heading` primitive function](https://quarkdown.com/wiki/heading)
+
+The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
+It allows explicit control over numbering (`numbered`), table of contents indexing (`indexed`), page breaks (`breakpage`), depth, and reference ID (`ref`).
+
 #### [Better heading configuration for table of contents and bibliography](https://quarkdown.com/wiki/table-of-contents)
 
 Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:

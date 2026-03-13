@@ -1,0 +1,73 @@
+.docname {Heading}
+.include {docs}
+
+The **`.heading {content} depth:{N}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/heading.html} function creates a heading with fine-grained control over its behavior.
+
+Unlike standard Markdown headings (`#`, `##`, etc.), this function allows explicit control over numbering, page breaks, table of contents indexing, and custom identifiers.
+
+## Parameters
+
+| Parameter | Description | Accepts | Default |
+|-----------|-------------|---------|---------|
+| `content` | Inline content of the heading. | Inline content | Required |
+| `depth` | Importance level of the heading (1 for H1, 6 for H6). | Integer (1-6) | Required |
+| `ref` | Custom identifier for [cross-referencing](cross-references.qd). If unset, the ID is automatically generated. | String | Unset |
+| `numbered` | Whether the heading is [numbered](numbering.qd) and has its position tracked in the document hierarchy. Actual numbering depends on the active `.numbering` configuration. | Boolean | `yes` |
+| `indexed` | Whether the heading appears in the [table of contents](table-of-contents.qd) and navigation sidebar. Implicitly enables `numbered`. | Boolean | `yes` |
+| `breakpage` | Whether the heading triggers an automatic [page break](page-break.qd#automatic-break). | Boolean | `yes` |
+
+## Basic usage
+
+```markdown
+.heading {My heading} depth:{2}
+```
+
+This is equivalent to writing `## My heading` in standard Markdown.
+
+## Controlling numbering
+
+You can create headings that are not tracked by the [numbering](numbering.qd) system:
+
+```markdown
+.heading {Appendix} depth:{1} numbered:{no}
+```
+
+This heading behaves like a [decorative heading](numbering.qd#decorative-headings) with respect to numbering, but without the additional restrictions that come with `#!`. Specifically, you can independently control whether the heading is indexed in the table of contents.
+
+## Controlling table of contents indexing
+
+By default, headings appear in the [table of contents](table-of-contents.qd). You can exclude a heading while still allowing it to be numbered:
+
+```markdown
+.heading {Secret section} depth:{2} indexed:{no}
+```
+
+Conversely, you can include an unnumbered heading in the table of contents:
+
+```markdown
+.heading {Acknowledgments} depth:{1} numbered:{no} indexed:{yes}
+```
+
+## Disabling page breaks
+
+By default, headings trigger automatic page breaks (when [`.autopagebreak`](page-break.qd#automatic-break) is enabled). You can disable this for individual headings:
+
+```markdown
+.heading {Continued} depth:{1} breakpage:{no}
+```
+
+## Custom identifiers
+
+You can assign a custom identifier for [cross-referencing](cross-references.qd):
+
+```markdown
+.heading {Introduction} depth:{2} ref:{intro}
+```
+
+## Decorative headings
+
+A heading with all optional flags disabled is equivalent to a [decorative heading](numbering.qd#decorative-headings) (`#!`):
+
+```markdown
+.heading {My decorative heading} depth:{2} numbered:{no} indexed:{no} breakpage:{no}
+```

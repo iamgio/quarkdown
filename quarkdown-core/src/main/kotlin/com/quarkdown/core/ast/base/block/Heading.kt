@@ -55,5 +55,16 @@ class Heading(
     override val referenceId: String?
         get() = this.customId
 
-    companion object
+    companion object {
+        /**
+         * The minimum allowed heading depth (H1).
+         * This does not take 0-depth headings into account. See [isMarker] for marker headings.
+         */
+        const val MIN_DEPTH = 1
+
+        /**
+         * The maximum allowed heading depth (H6).
+         */
+        const val MAX_DEPTH = 6
+    }
 }
