@@ -7,17 +7,29 @@ A page break is a forced interruption of the page flow that causes content follo
 
 ## Manual break
 
-You can trigger a page break by placing a line containing only a sequence of 3 (or more) `<` characters.
+You can trigger a page break in two ways:
 
-```markdown
-Page 1
+- Placing a line containing only a sequence of 3 (or more) `<` characters:
 
-<<<
+  ```markdown
+  Page 1
 
-Page 2
-```
+  <<<
 
-This pattern does not interrupt the current block, so it might appear as plain text if the criteria for closing a block (such as an empty line for paragraphs) are not satisfied. The following example does not trigger a page break.
+  Page 2
+  ```
+
+- Using the **`.pagebreak`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/pagebreak.html} function:
+
+  ```markdown
+  Page 1
+
+  .pagebreak
+
+  Page 2
+  ```
+
+> The `<<<` pattern does not interrupt the current block, so it might appear as plain text if the criteria for closing a block (such as an empty line for paragraphs) are not satisfied. The following example does not trigger a page break.
 
 .examplemirror type:{warning}
     Page 1
