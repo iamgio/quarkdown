@@ -37,7 +37,7 @@ The library takes care of the following:
 2. Including `_setup.qd` from the project root
 3. Placing the navigation from `_nav.qd` in the left sidebar via [`.pagemargin`](page-margin-content.qd) and [`.navigation`](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Document/navigation-container.html)
 4. Placing a [table of contents](table-of-contents.qd) in the right sidebar
-5. Adding a [decorative heading](numbering.qd#decorative-headings) from [`.docname`](document-metadata.qd)
+5. Adding a [decorative heading](headings.qd#decorative-headings) from [`.docname`](document-metadata.qd)
 
 ## Setup file
 
@@ -55,7 +55,7 @@ The `_setup.qd` file is a good place for project-wide configuration shared acros
 
 ## Navigation file
 
-The `_nav.qd` file contains the links that appear in the page list sidebar. It consists of a list of links to subdocuments, optionally grouped by [decorative headings](numbering.qd#decorative-headings):
+The `_nav.qd` file contains the links that appear in the page list sidebar. It consists of a list of links to subdocuments, optionally grouped by [decorative headings](headings.qd#decorative-headings):
 
 .example
     > `_nav.qd`
