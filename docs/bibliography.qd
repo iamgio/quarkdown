@@ -51,8 +51,18 @@ By default, the title is [localized](localization.qd) to the current locale set 
 .examplemirror
     .bibliography {bibliography/file.bib} title:{My bibliography}
 
-Depending on the current [auto page break](page-break.qd#automatic-break) configuration, the title may cause a page break. You can prevent page breaks by turning the title into a [decorative heading](numbering.qd#decorative-headings) using the `decorativetitle` parameter:
+### Heading options
+
+The heading that precedes the bibliography can be further customized with the following parameters:
+
+| Parameter           | Description                                                                                                                   | Accepts | Default |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------|---------|---------|
+| `headingdepth`      | Depth of the heading that precedes the bibliography.                                                                          | Integer | `1`     |
+| `indexheading`      | Whether the heading should be included in the document's [table of contents](table-of-contents.qd).                           | Boolean | `no`    |
+| `decorativeheading` | Whether the heading should be [decorative](numbering.qd#decorative-headings), preventing automatic page breaks and numbering. | Boolean | `no`    |
+
+For example, depending on the current [auto page break](page-break.qd#automatic-break) configuration, the title may cause a page break. You can prevent page breaks by making the heading decorative:
 
 ```markdown
-.bibliography {file.bib} title:{My bibliography} decorativetitle:{yes}
+.bibliography {file.bib} title:{My bibliography} decorativeheading:{yes}
 ```

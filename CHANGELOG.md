@@ -20,6 +20,14 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 - Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
 
+#### [Better heading configuration for table of contents and bibliography](https://quarkdown.com/wiki/table-of-contents)
+
+Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:
+
+- `headingdepth`: the depth of the heading (1-6).
+- `indexheading`: when enabled, the heading is included in the document's own table of contents.
+- `decorativeheading`: renamed from `decorativetitle` (breaking change). 
+
 ### Changed
 
 #### `.fullspan` now relies on `.container`

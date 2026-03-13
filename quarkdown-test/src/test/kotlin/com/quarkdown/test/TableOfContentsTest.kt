@@ -1,9 +1,12 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 
 /**
  * Tests for tables of contents.
@@ -324,6 +327,65 @@ class TableOfContentsTest {
                     "<h2 id=\"y\">Y</h2>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `table of contents custom heading depth`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents headingdepth:{3}
+
+            # ABC
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h3 id=\"table-of-contents\"></h3>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"abc\">ABC</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents heading indexed in toc`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents title:{TOC} indexheading:{yes}
+
+            # ABC
+
+            # DEF
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\">TOC</h1>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"table-of-contents\" data-depth=\"1\">" +
+                    "<a href=\"#table-of-contents\">TOC</a></li>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
+                    "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h1 id=\"def\">DEF</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents decorative heading and indexheading are mutually exclusive`() {
+        assertFailsWith<FunctionCallRuntimeException> {
+            execute(".tableofcontents decorativeheading:{yes} indexheading:{yes}") {}
+        }.also { exception ->
+            assertIs<IllegalArgumentException>(exception.cause)
         }
     }
 

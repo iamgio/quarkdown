@@ -13,7 +13,6 @@ The function accepts the following optional parameters:
 |-----------|-------------|---------|---------|
 | `title` | Title that precedes the table of contents. If unset, it is automatically localized. | Inline content | Automatically localized if [`.doclang`](document-metadata.qd)'s locale is supported (e.g., `Table of Contents` for English) |
 | `maxdepth` | Maximum heading level to display. For example, `maxdepth:{2}` collects `#` and `##` headings, but not `###` or deeper. | Integer | `3` |
-| `focus` | Highlights the item matching this text. Inline formatting (bold, italics) is ignored when comparing. | [Inline content](markdown-content.qd#inline-content) | (none) |
 
 .exampleoutput {!(550)[Table of contents](table-of-contents/basic.png)}
     .tableofcontents maxdepth:{2}
@@ -76,6 +75,16 @@ If you want decorative headings to appear in the table of contents anyway, enabl
 
 You can customize how headings are numbered in the table of contents via the `.numbering` function. See [Numbering](numbering.qd) for more information.
 
+## Heading options
+
+The heading that precedes the table of contents can be customized with the following parameters:
+
+| Parameter           | Description                                                                                                                   | Accepts | Default                                             |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------|---------|-----------------------------------------------------|
+| `headingdepth`      | Depth of the heading that precedes the table of contents.                                                                     | Integer | Depends on document type (1 for most, 3 for `docs`) |
+| `indexheading`      | Whether the heading should be included in the table of contents itself.                                                       | Boolean | `no`                                                |
+| `decorativeheading` | Whether the heading should be [decorative](numbering.qd#decorative-headings), preventing automatic page breaks and numbering. | Boolean | `no`                                                |
+
 ## Focusing entries
 
 The `focus` parameter highlights a specific entry in the table of contents, drawing attention to the current section.
@@ -87,7 +96,7 @@ This feature is particularly useful in presentations, where you might want to sh
 
 ### Using markers for chapter navigation
 
-For slide presentations, you can combine focusing with **markers** to create elegant chapter navigation. The `.marker` function creates an invisible level-0 heading, which is not normally possible with the standard `#`-based syntax.
+For slide presentations, you can combine `focus` with **markers** to create elegant chapter navigation. The `.marker` function creates an invisible level-0 heading, which is not normally possible with the standard `#`-based syntax.
 
 Here is a practical pattern for chapter slides:
 
