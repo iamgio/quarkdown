@@ -141,12 +141,12 @@ class BibliographyTest {
     }
 
     @Test
-    fun `bibliography heading indexed in toc`() {
+    fun `bibliography heading indexed in toc, unnumbered`() {
         execute(
             """
             .doclang {en}
             .noautopagebreak
-            .tableofcontents title:{} includeunnumbered:{yes}
+            .tableofcontents title:{}
 
             .bibliography {bib/bibliography.bib} indexheading:{yes}
             """.trimIndent(),
@@ -155,6 +155,29 @@ class BibliographyTest {
             assertTrue(
                 it.contains(
                     "<li data-target-id=\"references\" data-depth=\"1\">" +
+                        "<a href=\"#references\">References</a></li>",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography heading indexed in toc, numbered`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+               - headings: 1.A.a
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .bibliography {bib/bibliography.bib} indexheading:{yes} numberheading:{yes}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true, enableLocationAwareness = true),
+        ) {
+            assertTrue(
+                it.contains(
+                    "<li data-target-id=\"references\" data-depth=\"1\" data-location=\"1\">" +
                         "<a href=\"#references\">References</a></li>",
                 ),
             )

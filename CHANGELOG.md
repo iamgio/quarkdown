@@ -31,6 +31,11 @@ Both `.tableofcontents` and `.bibliography` now accept the following optional pa
 
 ### Changed
 
+#### Removed `includeunnumbered` parameter from `.tableofcontents`
+
+The `includeunnumbered` parameter has been removed, in favor of the more granular heading configuration previously mentioned.
+Now all indexable headings are included in the ToC by default, regardless of their numbering.
+
 #### `.fullspan` now relies on `.container`
 
 `.fullspan`, used to create a block spanning over multiple columns in a multi-column layout, is now shorthand for `.container fullspan:{yes}`.

@@ -513,7 +513,13 @@ class HtmlNodeRendererTest {
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
         assertEquals(
             out.next(),
-            Heading(2, listOf(Text("Foo bar")), canBreakPage = false, canTrackLocation = false).render(noIdNoPageBreak),
+            Heading(
+                2,
+                listOf(Text("Foo bar")),
+                canBreakPage = false,
+                canTrackLocation = false,
+                excludeFromTableOfContents = true,
+            ).render(noIdNoPageBreak),
         )
         assertEquals(out.next(), Heading(3, listOf(Text("Foo bar")), customId = "my-id").render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noIdNoPageBreak))

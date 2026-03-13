@@ -997,8 +997,6 @@ fun navigationContainer(
  * @param title title of the table of contents. If unset, the default localized title is used. If blank, no title is displayed.
  * @param maxDepth maximum depth of the table of contents.
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
- * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
- *                          By default, only numbered headings are included.
  * @param breakPage whether the heading preceding the table of contents triggers an automatic page break.
  *                  Enabled by default.
  * @param headingDepth depth of the heading preceding the table of contents.
@@ -1019,7 +1017,6 @@ fun tableOfContents(
     @Injected context: Context,
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
-    @Name("includeunnumbered") includeUnnumbered: Boolean = false,
     @Name("breakpage") breakPage: Boolean = true,
     @Name("headingdepth") headingDepth: Int? = null,
     @Name("numberheading") trackHeadingLocation: Boolean = false,
@@ -1042,7 +1039,6 @@ fun tableOfContents(
             ),
             TableOfContentsView(
                 maxDepth,
-                includeUnnumbered,
                 focusedItem?.children,
             ),
         ),

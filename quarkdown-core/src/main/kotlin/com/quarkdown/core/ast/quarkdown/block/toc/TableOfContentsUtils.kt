@@ -15,8 +15,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
  * Filters [TableOfContents.Item]s based on the given [TableOfContentsView]'s configuration:
- * - Items that exceed the maximum depth are filtered out.
- * - Unnumbered items are filtered out if [TableOfContentsView.includeUnnumbered] is `false`.
+ * items that exceed the maximum depth are filtered out.
  * @returns a sequence of filtered [TableOfContents.Item]s.
  */
 private fun filterTableOfContentsItems(
@@ -25,16 +24,7 @@ private fun filterTableOfContentsItems(
 ): Sequence<TableOfContents.Item> =
     items
         .asSequence()
-        // Items that exceed the maximum depth.
         .filter { it.depth <= view.maxDepth }
-        // Unnumbered items are excluded unless included. If excluded, their children are spread up.
-        .flatMap {
-            if (view.includeUnnumbered || (it.target as? LocationTrackableNode)?.canTrackLocation == true) {
-                sequenceOf(it)
-            } else {
-                filterTableOfContentsItems(view, it.subItems)
-            }
-        }
 
 /**
  * Converts a table of contents to a renderable [OrderedList].

@@ -12,12 +12,10 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * retrieved from the auto-generated [AstAttributes.tableOfContents], is displayed.
  * @param maxDepth maximum depth the table of contents to display.
  *                 For instance, if `maxDepth` is 2, only headings of level 1 and 2 will be displayed
- * @param includeUnnumbered if `true`, unnumbered (decorative) headings are also included
  * @param focusedItem if not `null`, adds focus to the item of the table of contents with the same text content as this value
  */
 class TableOfContentsView(
     val maxDepth: Int,
-    val includeUnnumbered: Boolean = false,
     private val focusedItem: InlineContent? = null,
 ) : Node {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)

@@ -48,7 +48,7 @@ class Heading(
      * Whether this heading is decorative, i.e. it cannot trigger page breaks and its location is not tracked.
      */
     val isDecorative: Boolean
-        get() = !canBreakPage && !canTrackLocation
+        get() = !canBreakPage && !canTrackLocation && excludeFromTableOfContents
 
     /**
      * If the heading has a custom ID, it can be used for cross-referencing.

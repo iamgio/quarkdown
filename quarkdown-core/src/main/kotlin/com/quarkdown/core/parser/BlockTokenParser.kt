@@ -160,6 +160,7 @@ class BlockTokenParser(
             customId = customId,
             canBreakPage = !isDecorative,
             canTrackLocation = !isDecorative,
+            excludeFromTableOfContents = isDecorative,
         )
     }
 
