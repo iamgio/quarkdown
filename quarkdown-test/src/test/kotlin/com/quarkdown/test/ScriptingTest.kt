@@ -86,7 +86,7 @@ class ScriptingTest {
         ) {
             assertEquals(
                 (
-                    "<h2>Title 2</h2><h2>Title 2</h2><div class=\"page-break\" data-hidden=\"\"></div><h1>Title 1</h1>".repeat(
+                    "<h2>Title 2</h2><h2>Title 2</h2><h1 class=\"page-break\">Title 1</h1>".repeat(
                         2,
                     ) +
                         "<p>Some text</p>"

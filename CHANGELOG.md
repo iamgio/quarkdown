@@ -24,9 +24,10 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:
 
+- `breakpage`: controls whether the heading triggers an automatic page break.
 - `headingdepth`: the depth of the heading (1-6).
+- `numberheading`: controls whether the heading is numbered in the document hierarchy.
 - `indexheading`: when enabled, the heading is included in the document's own table of contents.
-- `decorativeheading`: renamed from `decorativetitle` (breaking change). 
 
 ### Changed
 

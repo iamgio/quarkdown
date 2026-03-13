@@ -1,12 +1,9 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
 
 /**
  * Tests for tables of contents.
@@ -17,28 +14,25 @@ class TableOfContentsTest {
         execute(
             """
             .tableofcontents
-            
+
             # ABC
-            
+
             Hi
-            
+
             # DEF
-            
+
             Hello
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\"></h1>" +
+                "<h1 class=\"page-break\" id=\"table-of-contents\"></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
                     "<p>Hello</p>",
                 it,
             )
@@ -47,29 +41,28 @@ class TableOfContentsTest {
         execute(
             """
             .tableofcontents title:{_TOC_}
-            
+
             # ABC
-            
+
             Hi
-            
+
             ## _ABC/1_
-            
+
             Hello
-            
+
             # DEF
-            
+
             DEF/1
             ---
-            
+
             Hi there
-            
+
             ### DEF/2
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
+                "<h1 class=\"page-break\" id=\"table-of-contents\"><em>TOC</em></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a>" +
                     "<ol><li data-target-id=\"abc1\" data-depth=\"2\"><a href=\"#abc1\">ABC/1</a></li></ol></li>" +
@@ -78,11 +71,9 @@ class TableOfContentsTest {
                     "<ol><li data-target-id=\"def2\" data-depth=\"3\"><a href=\"#def2\">DEF/2</a></li>" +
                     "</ol></li></ol></li>" +
                     "</ol></nav>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
                     "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
                     "<h2 id=\"def1\">DEF/1</h2>" +
                     "<p>Hi there</p>" +
                     "<h3 id=\"def2\">DEF/2</h3>",
@@ -93,31 +84,28 @@ class TableOfContentsTest {
         execute(
             """
             # ABC
-            
+
             Hi
-            
+
             .tableofcontents
-            
+
             ##! Ignored from TOC
-            
+
             # DEF
-            
+
             Hello
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\"></h1>" +
+                "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 class=\"page-break\" id=\"table-of-contents\"></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
                     "<h2 id=\"ignored-from-toc\" data-decorative=\"\">Ignored from TOC</h2>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
                     "<p>Hello</p>",
                 it,
             )
@@ -132,7 +120,7 @@ class TableOfContentsTest {
             .doclang {english}
             .noautopagebreak
             .tableofcontents
-            
+
             # ABC
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
@@ -164,11 +152,11 @@ class TableOfContentsTest {
             """
             .noautopagebreak
             .tableofcontents
-            
+
             ## ABC
-            
+
             ### DEF
-            
+
             ## GHI
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
@@ -193,27 +181,25 @@ class TableOfContentsTest {
         execute(
             """
             .tableofcontents title:{***TOC***} maxdepth:{0}
-            
+
             .marker {*Marker 1*}
-            
+
             # ABC
-            
+
             .marker {*Marker 2*}
-            
+
             ## DEF
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
+                "<h1 class=\"page-break\" id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"marker-1\" data-depth=\"0\"><a href=\"#marker-1\">Marker 1</a></li>" +
                     "<li data-target-id=\"marker-2\" data-depth=\"0\"><a href=\"#marker-2\">Marker 2</a></li>" +
                     "</ol></nav>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-2\"></div>" +
                     "<h2 id=\"def\">DEF</h2>",
                 it,
@@ -228,15 +214,15 @@ class TableOfContentsTest {
             """
             .noautopagebreak
             .tableofcontents includeunnumbered:{true}
-            
+
             #! Unnumbered 1
-            
+
             # ABC
-            
+
             ##! Unnumbered 2
-            
+
             # DEF
-            
+
             ## Y
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
@@ -266,13 +252,13 @@ class TableOfContentsTest {
             """
             .noautopagebreak
             .tableofcontents includeunnumbered:{no}
-            
+
             #! ABC
-            
+
             ## X
-            
+
             ### X/1
-            
+
             ## Y
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
@@ -299,31 +285,28 @@ class TableOfContentsTest {
         execute(
             """
             .tableofcontents title:{TOC} focus:{DEF}
-            
+
             # ABC
-            
+
             ## X
-            
+
             # DEF
-            
+
             ## Y
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"table-of-contents\">TOC</h1>" +
+                "<h1 class=\"page-break\" id=\"table-of-contents\">TOC</h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a><ol>" +
                     "<li data-target-id=\"x\" data-depth=\"2\"><a href=\"#x\">X</a></li></ol></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\" class=\"focused\"><a href=\"#def\">DEF</a><ol>" +
                     "<li data-target-id=\"y\" data-depth=\"2\"><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></nav>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"abc\">ABC</h1>" +
+                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1>" +
                     "<h2 id=\"x\">X</h2>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h1 id=\"def\">DEF</h1>" +
+                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
                     "<h2 id=\"y\">Y</h2>",
                 it,
             )
@@ -353,11 +336,11 @@ class TableOfContentsTest {
     }
 
     @Test
-    fun `table of contents heading indexed in toc`() {
+    fun `table of contents heading indexed in toc, unnumbered`() {
         execute(
             """
             .noautopagebreak
-            .tableofcontents title:{TOC} indexheading:{yes}
+            .tableofcontents title:{TOC} indexheading:{yes} includeunnumbered:{yes}
 
             # ABC
 
@@ -381,11 +364,32 @@ class TableOfContentsTest {
     }
 
     @Test
-    fun `table of contents decorative heading and indexheading are mutually exclusive`() {
-        assertFailsWith<FunctionCallRuntimeException> {
-            execute(".tableofcontents decorativeheading:{yes} indexheading:{yes}") {}
-        }.also { exception ->
-            assertIs<IllegalArgumentException>(exception.cause)
+    fun `table of contents heading indexed in toc, numbered`() {
+        execute(
+            """
+            .numbering
+               - headings: 1.A.a
+            .noautopagebreak
+            .tableofcontents title:{TOC} indexheading:{yes} numberheading:{yes}
+
+            # ABC
+
+            # DEF
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true, enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\" data-location=\"1\">TOC</h1>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"table-of-contents\" data-depth=\"1\" data-location=\"1\">" +
+                    "<a href=\"#table-of-contents\">TOC</a></li>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\" data-location=\"2\"><a href=\"#abc\">ABC</a></li>" +
+                    "<li data-target-id=\"def\" data-depth=\"1\" data-location=\"3\"><a href=\"#def\">DEF</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"abc\" data-location=\"2\">ABC</h1>" +
+                    "<h1 id=\"def\" data-location=\"3\">DEF</h1>",
+                it,
+            )
         }
     }
 
@@ -398,8 +402,8 @@ class TableOfContentsTest {
                - headings: 1.A.a
             .noautopagebreak
             .tableofcontents title:{TOC}
-            
-            # A            
+
+            # A
             ## A/1
             ### A/1/1
             ## A/2

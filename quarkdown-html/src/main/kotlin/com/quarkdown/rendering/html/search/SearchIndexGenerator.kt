@@ -56,7 +56,6 @@ object SearchIndexGenerator {
         return toc.items
             .asSequence()
             .flatMap(::flatten)
-            .filterNot { it.isDecorative }
             .map { item ->
                 SearchHeading(
                     anchor = item.target.accept(HtmlIdentifierProvider.of(renderer = null)),
