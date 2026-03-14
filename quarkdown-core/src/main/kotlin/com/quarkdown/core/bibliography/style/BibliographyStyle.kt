@@ -1,11 +1,15 @@
 package com.quarkdown.core.bibliography.style
 
-import com.quarkdown.core.bibliography.style.content.AcmContentProviderStrategy
-import com.quarkdown.core.bibliography.style.content.IeeetrContentProviderStrategy
-import com.quarkdown.core.bibliography.style.content.PlainContentProviderStrategy
+import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.bibliography.BibliographyEntry
 
 /**
- * TeX-inspired styles for rendering bibliography entries.
+ * Defines how bibliography entries and citations are formatted.
+ * Implementations provide both a [labelProvider] for citation labels and list labels,
+ * and a [contentProvider] for the formatted entry content.
+ *
+ * The primary implementation is [com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle],
+ * which supports any [CSL](https://citationstyles.org) style definition.
  */
 interface BibliographyStyle {
     /**
@@ -14,43 +18,14 @@ interface BibliographyStyle {
     val labelProvider: BibliographyEntryLabelProviderStrategy
 
     /**
-     * Strategy to retrieve content for bibliography entries.
+     * Provides the formatted inline content for a bibliography entry.
+     * @param entry the bibliography entry to format
+     * @return the formatted inline content
      */
-    val contentProvider: BibliographyEntryContentProviderStrategy
+    fun contentOf(entry: BibliographyEntry): InlineContent
 
     /**
      * The name of this bibliography style.
      */
     val name: String
-        get() = this::class.simpleName?.lowercase() ?: "unknown"
-
-    /**
-     * TeX bibliography style `plain`.
-     */
-    data object Plain : BibliographyStyle {
-        override val labelProvider: BibliographyEntryLabelProviderStrategy =
-            BibliographyEntryLabelProviderStrategy.IndexOnly
-        override val contentProvider: BibliographyEntryContentProviderStrategy =
-            PlainContentProviderStrategy
-    }
-
-    /**
-     * TeX bibliography style `ieeetr`.
-     */
-    data object Ieeetr : BibliographyStyle {
-        override val labelProvider: BibliographyEntryLabelProviderStrategy =
-            BibliographyEntryLabelProviderStrategy.IndexOnly
-        override val contentProvider: BibliographyEntryContentProviderStrategy =
-            IeeetrContentProviderStrategy
-    }
-
-    /**
-     * TeX bibliography style `acm`.
-     */
-    data object Acm : BibliographyStyle {
-        override val labelProvider: BibliographyEntryLabelProviderStrategy =
-            BibliographyEntryLabelProviderStrategy.IndexOnly
-        override val contentProvider: BibliographyEntryContentProviderStrategy =
-            AcmContentProviderStrategy
-    }
 }

@@ -122,6 +122,6 @@ enum class TextSymbolReplacement(
         TokenRegexPattern(
             name = "InlineTextReplacement${name.replace("_", "")}",
             wrap = { data -> TextSymbolToken(data, symbol = this) },
-            regex = regex,
+            regex = regex.pattern,
         )
 }

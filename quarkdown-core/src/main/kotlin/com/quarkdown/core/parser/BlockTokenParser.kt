@@ -157,8 +157,10 @@ class BlockTokenParser(
         return Heading(
             depth,
             text.toInline(),
-            isDecorative,
-            customId,
+            customId = customId,
+            canBreakPage = !isDecorative,
+            canTrackLocation = !isDecorative,
+            excludeFromTableOfContents = isDecorative,
         )
     }
 

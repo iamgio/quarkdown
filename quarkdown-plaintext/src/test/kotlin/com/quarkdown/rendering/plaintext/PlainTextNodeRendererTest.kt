@@ -425,9 +425,11 @@ class PlainTextNodeRendererTest {
         assertEquals(
             "Table of Contents\n\n" +
                 "1. Welcome\n2. Introduction\n\t1. Getting Started\n\n",
-            TableOfContentsView(
-                title = buildInline { text("Table of Contents") },
-                maxDepth = 3,
+            AstRoot(
+                listOf(
+                    Heading(depth = 1, text = buildInline { text("Table of Contents") }),
+                    TableOfContentsView(maxDepth = 3),
+                ),
             ).render(context),
         )
     }

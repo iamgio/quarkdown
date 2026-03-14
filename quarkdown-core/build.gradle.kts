@@ -17,6 +17,8 @@ dependencies {
     implementation("gg.jte:jte:3.2.3")
     implementation("com.github.ajalt.colormath:colormath:3.6.1")
     implementation("com.github.fracpete:romannumerals4j:0.0.1")
-    implementation("org.jbibtex:jbibtex:1.0.20")
+    implementation("de.undercouch:citeproc-java:3.5.0")
+    implementation("org.citationstyles:styles:26.2")
+    implementation("org.citationstyles:locales:26.2")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
 }

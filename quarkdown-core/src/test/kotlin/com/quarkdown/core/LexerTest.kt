@@ -80,17 +80,17 @@ class LexerTest {
                     TokenRegexPattern(
                         name = "FIRST",
                         wrap = wrap,
-                        regex = "AB.".toRegex(),
+                        regex = "AB.",
                     ),
                     TokenRegexPattern(
                         name = "SECOND",
                         wrap = wrap,
-                        regex = "DE.?".toRegex(),
+                        regex = "DE.?",
                     ),
                     TokenRegexPattern(
                         name = "NEWLINE",
                         wrap = wrap,
-                        regex = "\\R".toRegex(),
+                        regex = "\\R",
                     ),
                 ),
                 fillTokenType = wrap,

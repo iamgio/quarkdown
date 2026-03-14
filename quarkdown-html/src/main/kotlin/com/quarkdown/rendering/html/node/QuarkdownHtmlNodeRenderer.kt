@@ -14,10 +14,10 @@ import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
+import com.quarkdown.core.ast.base.block.isMarker
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -27,7 +27,6 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
-import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -43,7 +42,6 @@ import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
-import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -59,7 +57,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.bibliography.BibliographyEntry
-import com.quarkdown.core.bibliography.style.getContent
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
@@ -198,6 +195,7 @@ class QuarkdownHtmlNodeRenderer(
                 "container",
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
+                "full-column-span".takeIf { node.fullColumnSpan },
                 node.textTransform?.size?.asCSS,
                 node.className,
             )
@@ -257,8 +255,6 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(node: Landscape) = div("landscape", node.children)
-
-    override fun visit(node: FullColumnSpan) = div("full-column-span", node.children)
 
     override fun visit(node: Clipped) =
         div("clip clip-${node.clip.asCSS}") {
@@ -332,53 +328,33 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
-        return buildMultiTag {
-            createTableOfContentsHeading(node, context)?.let { +it }
-
-            val tree: ListBlock =
-                convertTableOfContentsToListNode(
-                    node,
-                    this@QuarkdownHtmlNodeRenderer,
-                    tableOfContents.items,
-                    linkUrlMapper = { item ->
-                        "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
-                    },
-                )
-
-            +NavigationContainer(
-                role = NavigationContainer.Role.TABLE_OF_CONTENTS,
-                listOf(tree),
+        val tree: ListBlock =
+            convertTableOfContentsToListNode(
+                node,
+                this@QuarkdownHtmlNodeRenderer,
+                tableOfContents.items,
+                linkUrlMapper = { item ->
+                    "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                },
             )
-        }
+
+        return NavigationContainer(
+            role = NavigationContainer.Role.TABLE_OF_CONTENTS,
+            listOf(tree),
+        ).accept(this)
     }
 
     override fun visit(node: BibliographyView) =
-        buildMultiTag {
-            // Localized title.
-            val titleText = context.localizeOrNull(key = "bibliography")
-
-            // Title heading. Its content is either the node's user-set title or a default localized one.
-            val title = node.title ?: titleText?.let { buildInline { text(it) } }
-            title?.let {
-                +Heading(
-                    depth = 1,
-                    text = it,
-                    isDecorative = node.isTitleDecorative,
-                )
-            }
-
-            // Content.
-            +buildTag("div") {
-                classNames("bibliography", "bibliography-${node.style.name}")
-                node.bibliography.entries.values.mapIndexed { index, entry ->
-                    tag("span") {
-                        className("bibliography-entry-label")
-                        +node.style.labelProvider.getLabel(entry, index)
-                    }
-                    tag("span") {
-                        className("bibliography-entry-content")
-                        +node.style.contentProvider.getContent(entry)
-                    }
+        buildTag("div") {
+            classNames("bibliography", "bibliography-${node.style.name}")
+            node.bibliography.entries.values.mapIndexed { index, entry ->
+                tag("span") {
+                    className("bibliography-entry-label")
+                    +node.style.labelProvider.getListLabel(entry, index)
+                }
+                tag("span") {
+                    className("bibliography-entry-content")
+                    +node.style.contentOf(entry)
                 }
             }
         }
@@ -466,7 +442,7 @@ class QuarkdownHtmlNodeRenderer(
             node.getDefinition(context) ?: return Text("[???]").accept(this)
 
         val index = view.bibliography.indexOf(entry)
-        val label = view.style.labelProvider.getLabel(entry, index)
+        val label = view.style.labelProvider.getCitationLabel(entry, index)
         return Text(label).accept(this)
     }
 
@@ -615,25 +591,18 @@ class QuarkdownHtmlNodeRenderer(
             }
 
         // The heading tag itself.
-        val tag =
-            tagBuilder
-                .optionalAttribute(
-                    "id",
-                    // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider
-                        .of(renderer = this)
-                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
-                        ?.getId(node),
-                ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
-                .withLocationLabel(node)
-                .build()
-
-        return buildMultiTag {
-            if (context.shouldAutoPageBreak(node)) {
-                +PageBreak()
-            }
-            +tag
-        }
+        return tagBuilder
+            .className("page-break".takeIf { context.shouldAutoPageBreak(node) })
+            .optionalAttribute(
+                "id",
+                // Generate an automatic identifier if allowed by settings.
+                HtmlIdentifierProvider
+                    .of(renderer = this)
+                    .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
+                    ?.getId(node),
+            ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
+            .withLocationLabel(node)
+            .build()
     }
 
     // On top of the base behavior, a blockquote can have a type and an attribution.

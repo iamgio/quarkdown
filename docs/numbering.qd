@@ -83,19 +83,12 @@ To avoid merging and turn off numbering rules for unspecified entries, set the `
 
       !(550)[Latex theme table of contents](numbering/toc-latex.png)
 
-### Decorative headings
+### Excluding headings from numbering
 
-To prevent a heading from being numbered, append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc. Decorative headings also do not appear in the [table of contents](table-of-contents.qd).
+To prevent a heading from being numbered, you can either:
 
-.exampleoutput {![Decorative heading](numbering/decorative-heading.png)}
-    ```markdown
-    .center
-        #! My document
-
-    ## Introduction
-
-    .loremipsum
-    ```
+- Use a [decorative heading](headings.qd#decorative-headings) (`#!`, `##!`, etc.), which also excludes the heading from the [table of contents](table-of-contents.qd).
+- Use the [`.heading`](headings.qd) function with `numbered:{no}` for more granular control, allowing you to independently decide whether the heading appears in the table of contents.
 
 ## Figures
 

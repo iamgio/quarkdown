@@ -191,7 +191,6 @@ class SubdocumentTest {
             execute(
                 source,
                 outputResourceHook = {
-                    println(subdocumentGraph.vertices)
                     assertEquals(2, subdocumentGraph.vertices.size)
                     assertEquals(2, getSubdocumentResourceCount(it))
                 },

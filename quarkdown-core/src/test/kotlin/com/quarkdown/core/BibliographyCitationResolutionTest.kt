@@ -8,6 +8,8 @@ import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.Bibliography
+import com.quarkdown.core.bibliography.BibliographyEntry
+import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.reference.BibliographyCitationResolverHook
@@ -18,6 +20,24 @@ import kotlin.test.assertEquals
 private const val CITATION_KEY = "einstein"
 
 /**
+ * Stub [BibliographyStyle] for tests that only need citation resolution, not formatting.
+ */
+private val stubStyle =
+    object : BibliographyStyle {
+        override val name = "stub"
+
+        override val labelProvider =
+            object : BibliographyEntryLabelProviderStrategy {
+                override fun getCitationLabel(
+                    entry: BibliographyEntry,
+                    index: Int,
+                ) = "[${index + 1}]"
+            }
+
+        override fun contentOf(entry: BibliographyEntry) = emptyList<Node>()
+    }
+
+/**
  * Tests for resolving bibliography citations to their bibliography entries.
  */
 class BibliographyCitationResolutionTest {
@@ -25,16 +45,12 @@ class BibliographyCitationResolutionTest {
 
     private val bibliographyView =
         BibliographyView(
-            title = null,
             bibliography =
                 Bibliography(
-                    listOf(
-                        BibliographySamples.article,
-                        BibliographySamples.book,
-                        BibliographySamples.misc,
-                    ),
+                    listOf("einstein", "latexcompanion", "knuthwebsite")
+                        .associateWith { BibliographyEntry(it) },
                 ),
-            style = BibliographyStyle.Plain,
+            style = stubStyle,
         )
 
     private val citation = BibliographyCitation(CITATION_KEY)

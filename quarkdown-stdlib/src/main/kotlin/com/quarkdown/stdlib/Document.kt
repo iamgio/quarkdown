@@ -1,8 +1,11 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.createSectionHeading
+import com.quarkdown.core.ast.base.block.marker
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -13,7 +16,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberFormatter
 import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -996,24 +998,50 @@ fun navigationContainer(
  * @param title title of the table of contents. If unset, the default localized title is used. If blank, no title is displayed.
  * @param maxDepth maximum depth of the table of contents.
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
- * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
- *                          By default, only numbered headings are included.
+ * @param breakPage whether the heading preceding the table of contents triggers an automatic page break.
+ *                  Enabled by default.
+ * @param headingDepth depth of the heading preceding the table of contents.
+ *                     If unset, the depth is determined by the document type.
+ * @param trackHeadingLocation whether the heading preceding the table of contents should be numbered
+ *                             and have its position tracked in the document hierarchy.
+ *                             Implicitly enabled when [indexHeading] is enabled.
+ * @param indexHeading whether the heading preceding the table of contents should itself be indexed
+ *                     in the document's table of contents.
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
- * @return a [TableOfContents] node
+ * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
  * @wiki Table of contents
  */
 @Name("tableofcontents")
 fun tableOfContents(
+    @Injected context: Context,
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
-    @Name("includeunnumbered") includeUnnumbered: Boolean = false,
+    @Name("breakpage") breakPage: Boolean = true,
+    @Name("headingdepth") headingDepth: Int? = null,
+    @Name("numberheading") trackHeadingLocation: Boolean = false,
+    @Name("indexheading") indexHeading: Boolean = false,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
-): NodeValue =
-    TableOfContentsView(
-        title?.children,
-        maxDepth,
-        includeUnnumbered,
-        focusedItem?.children,
+): NodeValue {
+    val isDocs = context.documentInfo.type == DocumentType.DOCS
+
+    return AstRoot(
+        listOfNotNull(
+            Heading.createSectionHeading(
+                title?.children,
+                localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents",
+                context,
+                depth = headingDepth ?: if (isDocs) 3 else 1,
+                customId = "table-of-contents",
+                canBreakPage = breakPage,
+                canTrackLocation = trackHeadingLocation,
+                includeInTableOfContents = indexHeading,
+            ),
+            TableOfContentsView(
+                maxDepth,
+                focusedItem?.children,
+            ),
+        ),
     ).wrappedAsValue()
+}

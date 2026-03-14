@@ -1,7 +1,7 @@
 .quarkdown .container {
   display: inline-block;
 
-  &.fullwidth {
+  &.fullwidth, &.full-column-span {
     display: block;
   }
 

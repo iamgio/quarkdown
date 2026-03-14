@@ -2,12 +2,62 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [CSL bibliography styles](https://quarkdown.com/wiki/bibliography) (breaking change)
+
+Quarkdown's internal bibliography management is now powered by [CSL](https://citationstyles.org) (Citation Style Language).
+
+- Thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) are now supported. The `style` parameter now accepts any CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
+
+  **Breaking change:** `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
+
+- Along with BibTeX (`.bib`) files, the following file formats are now accepted:
+  - CSL JSON (`.json`)
+  - YAML (`.yaml`/`.yml`)
+  - EndNote (`.enl`)
+  - RIS (`.ris`)
+
+- Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
+
+#### [`.heading` primitive function](https://quarkdown.com/wiki/headings)
+
+The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
+It allows explicit control over numbering (`numbered`), table of contents indexing (`indexed`), page breaks (`breakpage`), depth, and reference ID (`ref`).
+
+#### [Better heading configuration for table of contents and bibliography](https://quarkdown.com/wiki/table-of-contents)
+
+Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:
+
+- `breakpage`: controls whether the heading triggers an automatic page break.
+- `headingdepth`: the depth of the heading (1-6).
+- `numberheading`: controls whether the heading is numbered in the document hierarchy.
+- `indexheading`: when enabled, the heading is included in the document's own table of contents.
+
+### Changed
+
+#### Removed `includeunnumbered` parameter from `.tableofcontents`
+
+The `includeunnumbered` parameter has been removed, in favor of the more granular heading configuration previously mentioned.
+Now all indexable headings are included in the ToC by default, regardless of their numbering.
+
+#### `.fullspan` now relies on `.container`
+
+`.fullspan`, used to create a block spanning over multiple columns in a multi-column layout, is now shorthand for `.container fullspan:{yes}`.
+
 ### Fixed
+
+#### Stabilized multi-column layout
+
+The [multi-column layout](https://quarkdown.com/wiki/multi-column-layout) via `.pageformat columns:{N}` is no longer experimental, and now works reliably across all document types.
+
+#### Added call stack limit
+
+Infinite recursion in function calls is now detected and reported as a clear error.
 
 #### Fixed default browser not opening on Linux (Wayland and XDG environments)
 
-On Linux systems where the Java AWT Desktop API does not support the BROWSE action (e.g., Wayland),
-`DefaultBrowserLauncher` now falls back to `xdg-open` automatically.
+On Linux systems where the Java AWT Desktop API does not support the BROWSE action (e.g., Wayland), `DefaultBrowserLauncher` now falls back to `xdg-open` automatically.
 Additionally, `--browser xdg-open` is now a supported named choice for the `--browser` CLI option.
 
 ## [1.14.1] - 2026-03-06

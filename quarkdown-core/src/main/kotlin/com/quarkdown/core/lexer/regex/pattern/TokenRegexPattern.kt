@@ -21,7 +21,7 @@ import com.quarkdown.core.lexer.TokenData
 data class TokenRegexPattern(
     override val name: String,
     val wrap: (TokenData) -> Token,
-    override val regex: Regex,
+    override val regex: String,
     val groupNames: List<String> = emptyList(),
     val walker: ((TokenData, CharSequence) -> WalkedToken?)? = null,
 ) : NamedRegexPattern

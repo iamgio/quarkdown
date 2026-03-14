@@ -31,7 +31,7 @@ internal object PatternHelpers {
             "(?<![ \\t])[ \\t]\\$"
 
     /** Comments. */
-    val COMMENT = "<!--(-?>|[\\s\\S]*?-->)".toRegex()
+    const val COMMENT = "<!--(-?>|[\\s\\S]*?-->)"
 
     /**
      * Custom ID: {#custom-id}

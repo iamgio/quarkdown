@@ -2,9 +2,7 @@
 
 package com.quarkdown.rendering.html
 
-import com.quarkdown.core.BibliographySamples.article
-import com.quarkdown.core.BibliographySamples.book
-import com.quarkdown.core.BibliographySamples.misc
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
@@ -45,7 +43,6 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
-import com.quarkdown.core.ast.quarkdown.block.FullColumnSpan
 import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
@@ -60,6 +57,8 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.bibliography.Bibliography
+import com.quarkdown.core.bibliography.BibliographyEntry
+import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
@@ -512,7 +511,16 @@ class HtmlNodeRendererTest {
 
         assertEquals(out.next(), Heading(1, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(noIdNoPageBreak))
-        assertEquals(out.next(), Heading(2, listOf(Text("Foo bar")), isDecorative = true).render(noIdNoPageBreak))
+        assertEquals(
+            out.next(),
+            Heading(
+                2,
+                listOf(Text("Foo bar")),
+                canBreakPage = false,
+                canTrackLocation = false,
+                excludeFromTableOfContents = true,
+            ).render(noIdNoPageBreak),
+        )
         assertEquals(out.next(), Heading(3, listOf(Text("Foo bar")), customId = "my-id").render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Strong(listOf(Text("Foo bar"))))).render(noIdNoPageBreak))
         assertEquals(out.next(), Heading(4, listOf(Text("Foo"), Emphasis(listOf(Text("bar"))))).render(noIdNoPageBreak))
@@ -920,7 +928,7 @@ class HtmlNodeRendererTest {
         val out = readParts("quarkdown/fullspan.html")
         val paragraph = Paragraph(listOf(Text("Foo"), LineBreak, Text("bar")))
 
-        assertEquals(out.next(), FullColumnSpan(listOf(paragraph)).render())
+        assertEquals(out.next(), Container(fullColumnSpan = true, children = listOf(paragraph)).render())
     }
 
     @Test
@@ -1115,21 +1123,34 @@ class HtmlNodeRendererTest {
     fun bibliography() {
         val out = readParts("quarkdown/bibliography.html")
 
-        assertEquals(
-            out.next(),
-            BibliographyView(
-                title = buildInline { text("Bibliography (plain)") },
-                bibliography = Bibliography(listOf(article, book, misc)),
-                style = BibliographyStyle.Plain,
-            ).render(),
-        )
+        val entries = listOf("einstein", "latexcompanion", "knuthwebsite")
+
+        // Stub style producing simple, predictable output for HTML structure verification.
+        val stubStyle =
+            object : BibliographyStyle {
+                override val name = "test"
+
+                override val labelProvider =
+                    object : BibliographyEntryLabelProviderStrategy {
+                        override fun getCitationLabel(
+                            entry: BibliographyEntry,
+                            index: Int,
+                        ) = "[${index + 1}]"
+                    }
+
+                override fun contentOf(entry: BibliographyEntry) = buildInline { text("Content of ${entry.citationKey}.") }
+            }
 
         assertEquals(
             out.next(),
-            BibliographyView(
-                title = buildInline { text("Bibliography (ieeetr)") },
-                bibliography = Bibliography(listOf(article, book, misc)),
-                style = BibliographyStyle.Ieeetr,
+            AstRoot(
+                listOf(
+                    Heading(depth = 1, text = buildInline { text("Bibliography") }),
+                    BibliographyView(
+                        bibliography = Bibliography(entries.associateWith { BibliographyEntry(it) }),
+                        style = stubStyle,
+                    ),
+                ),
             ).render(),
         )
     }

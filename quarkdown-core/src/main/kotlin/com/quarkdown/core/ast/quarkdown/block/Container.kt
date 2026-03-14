@@ -26,8 +26,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param alignment alignment of the content
  * @param textAlignment alignment of the text
  * @param textTransform transformation applied to the text content
- * @param fontSize relative font size of the text
  * @param float floating position of the container within the subsequent content
+ * @param fullColumnSpan whether the container should span across all columns in a multi-column layout
  * @param className custom class name for the container, useful for applying custom styles, if supported by the renderer
  */
 class Container(
@@ -46,6 +46,7 @@ class Container(
     val textAlignment: TextAlignment? = null,
     val textTransform: TextTransformData? = null,
     val float: FloatAlignment? = null,
+    val fullColumnSpan: Boolean = false,
     val className: String? = null,
     override val children: List<Node>,
 ) : NestableNode {

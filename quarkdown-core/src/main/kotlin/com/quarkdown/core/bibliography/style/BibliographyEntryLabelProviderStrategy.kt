@@ -2,30 +2,31 @@ package com.quarkdown.core.bibliography.style
 
 import com.quarkdown.core.bibliography.BibliographyEntry
 
-private const val LABEL_BEGIN = "["
-private const val LABEL_END = "]"
-
 /**
  * Supplier of citation labels for bibliography entries.
+ * Labels serve two purposes:
+ * - **Citation labels** appear inline in the document text (e.g. `[1]` or `(Einstein, 1905)`).
+ * - **List labels** appear next to each entry in the bibliography list (e.g. `[1]` or empty for APA).
  */
 interface BibliographyEntryLabelProviderStrategy {
     /**
-     * @param entry the bibliography entry for which to get the label
+     * Returns the label for an in-text citation (e.g. `[1]` or `(Einstein, 1905)`).
+     * @param entry the bibliography entry being cited
      * @param index the index of the entry in the bibliography list, starting from 0
-     * @returns the citation label for the given bibliography entry.
      */
-    fun getLabel(
+    fun getCitationLabel(
         entry: BibliographyEntry,
         index: Int,
     ): String
 
     /**
-     * [BibliographyEntryLabelProviderStrategy] that provides labels in the format `[1]`, `[2]`, etc.
+     * Returns the label for a bibliography list entry (e.g. `[1]` or empty).
+     * Defaults to [getCitationLabel] unless overridden.
+     * @param entry the bibliography entry in the list
+     * @param index the index of the entry in the bibliography list, starting from 0
      */
-    data object IndexOnly : BibliographyEntryLabelProviderStrategy {
-        override fun getLabel(
-            entry: BibliographyEntry,
-            index: Int,
-        ): String = LABEL_BEGIN + (index + 1) + LABEL_END
-    }
+    fun getListLabel(
+        entry: BibliographyEntry,
+        index: Int,
+    ): String = getCitationLabel(entry, index)
 }

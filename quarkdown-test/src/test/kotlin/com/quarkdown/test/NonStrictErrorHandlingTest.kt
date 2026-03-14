@@ -5,6 +5,7 @@ import com.quarkdown.test.util.execute
 import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Tests for non-strict error handling, where errors are reported in the output instead of throwing exceptions.
@@ -89,6 +90,22 @@ class NonStrictErrorHandlingTest {
             assertContains(it, "<h4>Error: if</h4>")
             assertContains(it, "Cannot call function if")
             assertContains(it, ".if {invalid}")
+        }
+    }
+
+    @Test
+    fun `infinite recursion renders error box`() {
+        execute(
+            """
+            .function {myfunc}
+                .myfunc
+            .myfunc
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "box error")
+            // The error message depends on the platform: the call depth limit may be reached first, or a stack overflow may occur earlier.
+            assertTrue("Maximum function call depth" in it || "Stack overflow" in it)
         }
     }
 

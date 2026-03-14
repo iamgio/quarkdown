@@ -1,37 +1,42 @@
 package com.quarkdown.test
 
 import com.quarkdown.rendering.plaintext.extension.plainText
+import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativetitle:{yes}"
+private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} breakpage:{no}"
 
-private const val PLAIN_BIBLIOGRAPHY_OUTPUT =
-    "<div class=\"bibliography bibliography-plain\">" +
+/**
+ * Builds the expected IEEE bibliography HTML output.
+ * @param availableLabel the localized label for online availability (varies by locale)
+ */
+private fun ieeeBibliographyOutput(availableLabel: String = "Available:") =
+    "<div class=\"bibliography bibliography-ieee\">" +
         "<span class=\"bibliography-entry-label\">[1]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Albert Einstein. " +
-        "Zur Elektrodynamik bewegter Körper. (German) [On the electrodynamics of moving bodies]. " +
+        "A. Einstein, \u201CZur Elektrodynamik bewegter K\u00F6rper. (German) " +
+        "[On the electrodynamics of moving bodies],\u201D " +
         "<em>Annalen der Physik</em>" +
-        ", " +
-        "322(10):891–921, 1905." +
+        ", vol. 322, Art. no. 10, 1905, doi: " +
+        "<a href=\"http://dx.doi.org/10.1002/andp.19053221004\">" +
+        "http://dx.doi.org/10.1002/andp.19053221004" +
+        "</a>." +
         "</span>" +
         "<span class=\"bibliography-entry-label\">[2]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Michel Goossens, Frank Mittelbach, and Alexander Samarin. " +
+        "M. Goossens, F. Mittelbach, and A. Samarin, " +
         "<em>The LaTeX Companion</em>" +
-        ". " +
-        "Addison-Wesley, Reading, Massachusetts, 1993." +
+        ". Reading, Massachusetts: Addison-Wesley, 1993." +
         "</span>" +
         "<span class=\"bibliography-entry-label\">[3]</span>" +
         "<span class=\"bibliography-entry-content\">" +
-        "Donald Knuth. " +
-        "Knuth: Computers and Typesetting. " +
-        "<a href=\"http://www-cs-faculty.stanford.edu/~uno/abcde.html\">" +
-        "http://www-cs-faculty.stanford.edu/~uno/abcde.html" +
+        "D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. $availableLabel " +
+        "<a href=\"http://www-cs-faculty.stanford.edu/uno/abcde.html\">" +
+        "http://www-cs-faculty.stanford.edu/uno/abcde.html" +
         "</a>" +
-        "." +
         "</span>" +
         "</div>"
 
@@ -43,20 +48,20 @@ class BibliographyTest {
     fun `bibliography from bib file`() {
         execute(BIBLIOGRAPHY_CALL) {
             assertEquals(
-                PLAIN_BIBLIOGRAPHY_OUTPUT,
+                ieeeBibliographyOutput(),
                 it,
             )
         }
     }
 
     @Test
-    fun `localized bibliography title`() {
+    fun `localized bibliography`() {
         execute(".doclang {en}\n$BIBLIOGRAPHY_CALL") {
             assertEquals(
                 "<h1 data-decorative=\"\">" +
                     "References" +
                     "</h1>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(availableLabel = "Available at:"),
                 it,
             )
         }
@@ -69,7 +74,7 @@ class BibliographyTest {
                 "<h1 data-decorative=\"\">" +
                     "My bibliography" +
                     "</h1>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(),
                 it,
             )
         }
@@ -80,15 +85,15 @@ class BibliographyTest {
         execute(
             """
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
-            
+
             $BIBLIOGRAPHY_CALL
-            
+
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
             """.trimIndent(),
         ) {
             assertEquals(
                 "<p>abc [1] def [2] ghi [3]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT +
+                    ieeeBibliographyOutput() +
                     "<p>abc [1] def [2] ghi [3]</p>",
                 it,
             )
@@ -100,22 +105,81 @@ class BibliographyTest {
         execute(
             """
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
-            
+
             $BIBLIOGRAPHY_CALL
-            
+
             abc .cite {einstein} def .cite {latexcompanion} ghi .cite {knuthwebsite}
             """.trimIndent(),
             renderer = { rendererFactory, ctx -> rendererFactory.plainText(ctx) },
         ) {
             assertEquals(
                 "abc [1] def [2] ghi [3]\n\n" +
-                    "[1] Albert Einstein. Zur Elektrodynamik bewegter Körper. (German) " +
-                    "[On the electrodynamics of moving bodies]. Annalen der Physik, 322(10):891–921, 1905.\n" +
-                    "[2] Michel Goossens, Frank Mittelbach, and Alexander Samarin. The LaTeX Companion. " +
-                    "Addison-Wesley, Reading, Massachusetts, 1993.\n" +
-                    "[3] Donald Knuth. Knuth: Computers and Typesetting. http://www-cs-faculty.stanford.edu/~uno/abcde.html.\n\n" +
+                    "[1] A. Einstein, \u201CZur Elektrodynamik bewegter K\u00F6rper. (German) " +
+                    "[On the electrodynamics of moving bodies],\u201D Annalen der Physik, " +
+                    "vol. 322, Art. no. 10, 1905, doi: http://dx.doi.org/10.1002/andp.19053221004.\n" +
+                    "[2] M. Goossens, F. Mittelbach, and A. Samarin, The LaTeX Companion. " +
+                    "Reading, Massachusetts: Addison-Wesley, 1993.\n" +
+                    "[3] D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. Available: " +
+                    "http://www-cs-faculty.stanford.edu/uno/abcde.html\n\n" +
                     "abc [1] def [2] ghi [3]\n\n",
                 it,
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography custom heading depth`() {
+        execute(".doclang {en}\n$BIBLIOGRAPHY_CALL headingdepth:{3}") {
+            assertEquals(
+                "<h3 data-decorative=\"\">" +
+                    "References" +
+                    "</h3>" +
+                    ieeeBibliographyOutput(availableLabel = "Available at:"),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography heading indexed in toc, unnumbered`() {
+        execute(
+            """
+            .doclang {en}
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .bibliography {bib/bibliography.bib} indexheading:{yes}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertTrue(
+                it.contains(
+                    "<li data-target-id=\"references\" data-depth=\"1\">" +
+                        "<a href=\"#references\">References</a></li>",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `bibliography heading indexed in toc, numbered`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+               - headings: 1.A.a
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .bibliography {bib/bibliography.bib} indexheading:{yes} numberheading:{yes}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true, enableLocationAwareness = true),
+        ) {
+            assertTrue(
+                it.contains(
+                    "<li data-target-id=\"references\" data-depth=\"1\" data-location=\"1\">" +
+                        "<a href=\"#references\">References</a></li>",
+                ),
             )
         }
     }
@@ -128,7 +192,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [???]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    ieeeBibliographyOutput(),
                 it,
             )
         }
