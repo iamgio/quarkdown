@@ -57,7 +57,7 @@ The table of contents adapts to different document types:
 
 ## Ignoring specific headings
 
-Sometimes you want certain headings to appear in your document but not in the table of contents. [Decorative headings](numbering.qd#decorative-headings) serve this purpose: they are not numbered and are excluded from the table of contents.
+Sometimes you want certain headings to appear in your document but not in the table of contents. [Decorative headings](headings.qd#decorative-headings) serve this purpose: they are not numbered and are excluded from the table of contents.
 
 To mark a heading as decorative, append `!` to the last `#` sign:
 
