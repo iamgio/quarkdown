@@ -1,0 +1,3 @@
+- pr: 387
+- next-release: 1.15.0
+- cause: "Minimal theme applies border to `nav ol ol` elements. Fixed by `border: 0` in _sidebar.scss"
