@@ -208,12 +208,11 @@ class TableOfContentsTest {
     }
 
     @Test
-    fun `include unnumbered headings in table of contents`() {
-        // Include unnumbered headings
+    fun `unnumbered headings excluded from table of contents`() {
         execute(
             """
             .noautopagebreak
-            .tableofcontents includeunnumbered:{true}
+            .tableofcontents
 
             #! Unnumbered 1
 
@@ -230,9 +229,7 @@ class TableOfContentsTest {
             assertEquals(
                 "<h1 id=\"table-of-contents\"></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
-                    "<li data-target-id=\"unnumbered-1\" data-depth=\"1\"><a href=\"#unnumbered-1\">Unnumbered 1</a></li>" +
-                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a>" +
-                    "<ol><li data-target-id=\"unnumbered-2\" data-depth=\"2\"><a href=\"#unnumbered-2\">Unnumbered 2</a></li></ol></li>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a>" +
                     "<ol><li data-target-id=\"y\" data-depth=\"2\"><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></nav>" +
@@ -251,7 +248,7 @@ class TableOfContentsTest {
         execute(
             """
             .noautopagebreak
-            .tableofcontents includeunnumbered:{no}
+            .tableofcontents
 
             #! ABC
 
@@ -340,7 +337,7 @@ class TableOfContentsTest {
         execute(
             """
             .noautopagebreak
-            .tableofcontents title:{TOC} indexheading:{yes} includeunnumbered:{yes}
+            .tableofcontents title:{TOC} indexheading:{yes}
 
             # ABC
 
