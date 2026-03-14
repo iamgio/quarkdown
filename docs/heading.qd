@@ -13,7 +13,7 @@ Unlike standard Markdown headings (`#`, `##`, etc.), this function allows explic
 | `depth` | Importance level of the heading (1 for H1, 6 for H6). | Integer (1-6) | Required |
 | `ref` | Custom identifier for [cross-referencing](cross-references.qd). If unset, the ID is automatically generated. | String | Unset |
 | `numbered` | Whether the heading is [numbered](numbering.qd) and has its position tracked in the document hierarchy. Actual numbering depends on the active `.numbering` configuration. | Boolean | `yes` |
-| `indexed` | Whether the heading appears in the [table of contents](table-of-contents.qd) and navigation sidebar. Implicitly enables `numbered`. | Boolean | `yes` |
+| `indexed` | Whether the heading appears in the [table of contents](table-of-contents.qd) and navigation sidebar. | Boolean | `yes` |
 | `breakpage` | Whether the heading triggers an automatic [page break](page-break.qd#automatic-break). | Boolean | `yes` |
 
 ## Basic usage

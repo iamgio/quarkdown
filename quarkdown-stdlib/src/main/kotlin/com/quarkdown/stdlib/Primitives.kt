@@ -39,7 +39,7 @@ val Primitives: QuarkdownModule =
  * @param canTrackLocation whether the heading **can** be numbered and has its position tracked in the document hierarchy.
  *                         Actual numbering depends on [numbering].
  * @param includeInTableOfContents whether the heading should appear in the table of contents and navigation sidebar.
- *                                 Has no effect if [canTrackLocation] is disabled.
+ *                                 Can be used independently from [canTrackLocation].
  * @param canBreakPage whether the heading triggers an automatic page break
  * @return a wrapped [Heading] node
  * @throws IllegalArgumentException if [depth] is not in the 1-6 range
