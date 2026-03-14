@@ -391,6 +391,79 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `heading primitive numbered but not indexed`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .heading {Tracked} depth:{1} numbered:{yes} indexed:{no}
+
+            # ABC
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"tracked\">Tracked</h1>" +
+                    "<h1 id=\"abc\">ABC</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `heading primitive not numbered and not indexed`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .heading {Untracked} depth:{1} numbered:{no} indexed:{no}
+
+            # ABC
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"untracked\">Untracked</h1>" +
+                    "<h1 id=\"abc\">ABC</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `heading primitive indexed in toc`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents title:{}
+
+            .heading {Custom} depth:{2} ref:{custom}
+
+            # ABC
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"custom\" data-depth=\"2\"><a href=\"#custom\">Custom</a></li>" +
+                    "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
+                    "</ol></nav>" +
+                    "<h2 id=\"custom\">Custom</h2>" +
+                    "<h1 id=\"abc\">ABC</h1>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents numbering`() {
         // Numbering
         execute(

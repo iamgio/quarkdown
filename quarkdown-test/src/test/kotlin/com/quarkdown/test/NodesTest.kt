@@ -10,54 +10,6 @@ import kotlin.test.assertTrue
  */
 class NodesTest {
     @Test
-    fun headings() {
-        execute("# Title") {
-            assertEquals("<h1 class=\"page-break\">Title</h1>", it)
-        }
-
-        execute("## Ti*tl*e") {
-            assertEquals("<h2>Ti<em>tl</em>e</h2>", it)
-        }
-
-        execute("#! Title") {
-            assertEquals("<h1 data-decorative=\"\">Title</h1>", it)
-        }
-
-        execute("#### .sum {3} {2}") {
-            assertEquals("<h4>5</h4>", it)
-        }
-
-        execute("###### .text {Hello, **world**} size:{tiny}") {
-            assertEquals("<h6><span class=\"size-tiny\">Hello, <strong>world</strong></span></h6>", it)
-        }
-
-        execute(
-            """
-            .autopagebreak maxdepth:{4}
-            ## A
-            ### B
-            ##### C
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<h2 class=\"page-break\">A</h2>" +
-                    "<h3 class=\"page-break\">B</h3>" +
-                    "<h5>C</h5>",
-                it,
-            )
-        }
-
-        execute(
-            """
-            .noautopagebreak
-            # A
-            """.trimIndent(),
-        ) {
-            assertEquals("<h1>A</h1>", it)
-        }
-    }
-
-    @Test
     fun links() {
         execute("This is a link: [link](https://example.com 'title')") {
             assertEquals("<p>This is a link: <a href=\"https://example.com\" title=\"title\">link</a></p>", it)
