@@ -52,18 +52,18 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @param path path to the bibliography file, with extension
  * @param style [CSL](https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`).
  * @param title title of the bibliography. If unset, the default localized title is used
+ * @param breakPage whether the heading preceding the bibliography triggers an automatic page break.
+ *                  Enabled by default.
  * @param headingDepth depth of the heading preceding the bibliography
- * @param includeHeadingInToc whether the heading preceding the bibliography should itself be indexed
- *                            in the document's table of contents.
- *                            Cannot be enabled together with [decorativeHeading]
- * @param decorativeHeading whether the heading, if present, should be decorative,
- *                          which means it does not trigger automatic page breaks and is not numbered.
- *                          Cannot be enabled together with [includeHeadingInToc]
+ * @param trackHeadingLocation whether the heading preceding the bibliography should be numbered
+ *                             and have its position tracked in the document hierarchy.
+ *                             Implicitly enabled when [indexHeading] is enabled.
+ * @param indexHeading whether the heading preceding the bibliography should itself be indexed
+ *                     in the document's table of contents.
  * @return an [AstRoot] containing an optional heading and a [BibliographyView]
  * @see cite to cite bibliography entries
  * @throws java.io.IOException if the bibliography file cannot be read or parsed
- * @throws IllegalArgumentException if the specified style does not exist or is invalid,
- *         or if both [includeHeadingInToc] and [decorativeHeading] are enabled
+ * @throws IllegalArgumentException if the specified style does not exist or is invalid
  * @wiki Bibliography
  */
 fun bibliography(
@@ -71,9 +71,10 @@ fun bibliography(
     path: String,
     @LikelyNamed style: String = DEFAULT_CSL_STYLE,
     @LikelyNamed title: InlineMarkdownContent? = null,
+    @Name("breakpage") breakPage: Boolean = true,
     @Name("headingdepth") headingDepth: Int = 1,
-    @Name("indexheading") includeHeadingInToc: Boolean = false,
-    @Name("decorativeheading") decorativeHeading: Boolean = false,
+    @Name("numberheading") trackHeadingLocation: Boolean = false,
+    @Name("indexheading") indexHeading: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
     val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name, context.documentInfo.locale)
@@ -84,8 +85,9 @@ fun bibliography(
             localizationKey = "bibliography",
             context,
             depth = headingDepth,
-            isDecorative = decorativeHeading,
-            includeInTableOfContents = includeHeadingInToc,
+            canBreakPage = breakPage,
+            canTrackLocation = trackHeadingLocation,
+            includeInTableOfContents = indexHeading,
         )
 
     return AstRoot(

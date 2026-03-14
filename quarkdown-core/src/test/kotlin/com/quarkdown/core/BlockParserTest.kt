@@ -104,7 +104,8 @@ class BlockParserTest {
             assertEquals("Title", rawText)
             assertNull(customId)
             assertEquals(1, depth)
-            assertFalse(isDecorative)
+            assertTrue(canTrackLocation)
+            assertTrue(canBreakPage)
         }
         with(nodes.next()) {
             assertEquals("Title", rawText)
@@ -120,13 +121,15 @@ class BlockParserTest {
             assertEquals("Decorative title", rawText)
             assertNull(customId)
             assertEquals(1, depth)
-            assertTrue(isDecorative)
+            assertFalse(canTrackLocation)
+            assertFalse(canBreakPage)
         }
         with(nodes.next()) {
             assertEquals("Decorative title", rawText)
             assertNull(customId)
             assertEquals(6, depth)
-            assertTrue(isDecorative)
+            assertFalse(canTrackLocation)
+            assertFalse(canBreakPage)
         }
         with(nodes.next()) {
             assertTrue(text.isEmpty())

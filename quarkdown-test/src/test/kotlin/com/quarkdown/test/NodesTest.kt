@@ -12,7 +12,7 @@ class NodesTest {
     @Test
     fun headings() {
         execute("# Title") {
-            assertEquals("<div class=\"page-break\" data-hidden=\"\"></div><h1>Title</h1>", it)
+            assertEquals("<h1 class=\"page-break\">Title</h1>", it)
         }
 
         execute("## Ti*tl*e") {
@@ -40,10 +40,8 @@ class NodesTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h2>A</h2>" +
-                    "<div class=\"page-break\" data-hidden=\"\"></div>" +
-                    "<h3>B</h3>" +
+                "<h2 class=\"page-break\">A</h2>" +
+                    "<h3 class=\"page-break\">B</h3>" +
                     "<h5>C</h5>",
                 it,
             )

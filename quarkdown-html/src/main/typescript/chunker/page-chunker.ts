@@ -3,25 +3,30 @@ import {isBlank} from "../util/visibility";
 /**
  * Utility that splits content into chunks based on page break elements.
  *
+ * Page breaks come in two forms:
+ * Elements with the `page-break` class (e.g. `<div class="page-break">`, `<h1 class="page-break">`)
+ * start a new chunk and are preserved as the first element of that chunk.
+ *
  * @example Input:
  *
  * ```html
  * <div class="slides">
  *     <p>First</p>
- *     <div class="page-break"></div>
- *     <p>Second</p>
+ *     <h1 class="page-break">Second</h1>
+ *     <p>Content</p>
  * </div>
  * ```
  *
  * Output:
- * 
+ *
  * ```html
  * <div class="slides">
  *     <section>
  *         <p>First</p>
- *      </section>
+ *     </section>
  *     <section>
- *         <p>Second</p>
+ *         <h1 class="page-break">Second</h1>
+ *         <p>Content</p>
  *     </section>
  * </div>
  * ```
@@ -46,10 +51,12 @@ export class PageChunker {
 
         Array.from(this.container.children).forEach((child: Element) => {
             const el = child as HTMLElement;
-            if (el.className === "page-break") {
-                // If we hit a page break, finalize the current section and start a new one.
+            if (el.classList.contains("page-break")) {
+                // Finalize the current chunk and start a new one.
                 chunks.push(currentChunk);
                 currentChunk = createElement();
+
+                currentChunk.appendChild(child);
             } else {
                 // Otherwise, add the child to the current section.
                 currentChunk.appendChild(child);

@@ -1,16 +1,13 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} decorativeheading:{yes}"
+private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} breakpage:{no}"
 
 /**
  * Builds the expected IEEE bibliography HTML output.
@@ -149,7 +146,7 @@ class BibliographyTest {
             """
             .doclang {en}
             .noautopagebreak
-            .tableofcontents title:{}
+            .tableofcontents title:{} includeunnumbered:{yes}
 
             .bibliography {bib/bibliography.bib} indexheading:{yes}
             """.trimIndent(),
@@ -161,15 +158,6 @@ class BibliographyTest {
                         "<a href=\"#references\">References</a></li>",
                 ),
             )
-        }
-    }
-
-    @Test
-    fun `bibliography decorative heading and indexheading are mutually exclusive`() {
-        assertFailsWith<FunctionCallRuntimeException> {
-            execute("$BIBLIOGRAPHY_CALL indexheading:{yes}") {}
-        }.also { exception ->
-            assertIs<IllegalArgumentException>(exception.cause)
         }
     }
 

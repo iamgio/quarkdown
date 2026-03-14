@@ -999,19 +999,19 @@ fun navigationContainer(
  *                 Only headings with a depth (number of leading `#`s) equal to or less than this value are included.
  * @param includeUnnumbered if enabled, unnumbered (decorative) headings are also included in the table of contents.
  *                          By default, only numbered headings are included.
+ * @param breakPage whether the heading preceding the table of contents triggers an automatic page break.
+ *                  Enabled by default.
  * @param headingDepth depth of the heading preceding the table of contents.
  *                     If unset, the depth is determined by the document type.
- * @param includeHeadingInToc whether the heading preceding the table of contents should itself be indexed
- *                            in the document's table of contents.
- *                            Cannot be enabled together with [decorativeHeading]
- * @param decorativeHeading whether the heading, if present, should be decorative,
- *                          which means it does not trigger automatic page breaks and is not numbered.
- *                          Cannot be enabled together with [includeHeadingInToc]
+ * @param trackHeadingLocation whether the heading preceding the table of contents should be numbered
+ *                             and have its position tracked in the document hierarchy.
+ *                             Implicitly enabled when [indexHeading] is enabled.
+ * @param indexHeading whether the heading preceding the table of contents should itself be indexed
+ *                     in the document's table of contents.
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
  * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
- * @throws IllegalArgumentException if both [includeHeadingInToc] and [decorativeHeading] are enabled
  * @wiki Table of contents
  */
 @Name("tableofcontents")
@@ -1020,9 +1020,10 @@ fun tableOfContents(
     @LikelyNamed title: InlineMarkdownContent? = null,
     @Name("maxdepth") maxDepth: Int = 3,
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
+    @Name("breakpage") breakPage: Boolean = true,
     @Name("headingdepth") headingDepth: Int? = null,
-    @Name("indexheading") includeHeadingInToc: Boolean = false,
-    @Name("decorativeheading") decorativeHeading: Boolean = false,
+    @Name("numberheading") trackHeadingLocation: Boolean = false,
+    @Name("indexheading") indexHeading: Boolean = false,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue {
     val isDocs = context.documentInfo.type == DocumentType.DOCS
@@ -1035,8 +1036,9 @@ fun tableOfContents(
                 context,
                 depth = headingDepth ?: if (isDocs) 3 else 1,
                 customId = "table-of-contents",
-                isDecorative = decorativeHeading,
-                includeInTableOfContents = includeHeadingInToc,
+                canBreakPage = breakPage,
+                canTrackLocation = trackHeadingLocation,
+                includeInTableOfContents = indexHeading,
             ),
             TableOfContentsView(
                 maxDepth,

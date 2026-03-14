@@ -82,8 +82,9 @@ The heading that precedes the table of contents can be customized with the follo
 | Parameter           | Description                                                                                                                   | Accepts | Default                                             |
 |---------------------|-------------------------------------------------------------------------------------------------------------------------------|---------|-----------------------------------------------------|
 | `headingdepth`      | Depth of the heading that precedes the table of contents.                                                                     | Integer | Depends on document type (1 for most, 3 for `docs`) |
-| `indexheading`      | Whether the heading should be included in the table of contents itself.                                                       | Boolean | `no`                                                |
-| `decorativeheading` | Whether the heading should be [decorative](numbering.qd#decorative-headings), preventing automatic page breaks and numbering. | Boolean | `no`                                                |
+| `breakpage`  | Whether the heading triggers an automatic [page break](page-break.qd#automatic-break).                                       | Boolean | `yes`                                               |
+| `numberheading`     | Whether the heading should be [numbered](numbering.qd) and have its position tracked in the document hierarchy.               | Boolean | `no`                                                |
+| `indexheading`      | Whether the heading should be included in the table of contents itself. Implicitly enables `numberheading`.                   | Boolean | `no`                                                |
 
 ## Focusing entries
 

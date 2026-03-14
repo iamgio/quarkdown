@@ -590,25 +590,18 @@ class QuarkdownHtmlNodeRenderer(
             }
 
         // The heading tag itself.
-        val tag =
-            tagBuilder
-                .optionalAttribute(
-                    "id",
-                    // Generate an automatic identifier if allowed by settings.
-                    HtmlIdentifierProvider
-                        .of(renderer = this)
-                        .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
-                        ?.getId(node),
-                ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
-                .withLocationLabel(node)
-                .build()
-
-        return buildMultiTag {
-            if (context.shouldAutoPageBreak(node)) {
-                +PageBreak()
-            }
-            +tag
-        }
+        return tagBuilder
+            .className("page-break".takeIf { context.shouldAutoPageBreak(node) })
+            .optionalAttribute(
+                "id",
+                // Generate an automatic identifier if allowed by settings.
+                HtmlIdentifierProvider
+                    .of(renderer = this)
+                    .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
+                    ?.getId(node),
+            ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
+            .withLocationLabel(node)
+            .build()
     }
 
     // On top of the base behavior, a blockquote can have a type and an attribution.

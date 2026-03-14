@@ -49,8 +49,7 @@ interface ContextOptions : MediaStorageOptions {
  * @see ContextOptions.autoPageBreakHeadingMaxDepth
  */
 fun Context.shouldAutoPageBreak(heading: Heading) =
-    !heading.isMarker &&
-        !heading.isDecorative &&
+    heading.canBreakPage &&
         heading.depth <= this.options.autoPageBreakHeadingMaxDepth
 
 /**
