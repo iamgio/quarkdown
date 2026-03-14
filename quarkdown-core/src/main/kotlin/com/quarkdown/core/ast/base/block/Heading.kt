@@ -7,7 +7,6 @@ import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.TextNode
-import com.quarkdown.core.ast.base.block.Heading.Companion.marker
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -56,25 +55,5 @@ class Heading(
     override val referenceId: String?
         get() = this.customId
 
-    /**
-     * @return whether this heading is a marker
-     * @see marker
-     */
-    val isMarker: Boolean
-        get() = depth == MARKER_HEADING_DEPTH
-
-    companion object {
-        /**
-         * When a [Heading] has this depth value, it is considered an invisible referenceable mark.
-         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by a Quarkdown function.
-         */
-        private const val MARKER_HEADING_DEPTH = 0
-
-        /**
-         * Creates an invisible [Heading] that acts as a marker that can be referenced by other elements in the document.
-         * A useful use case would be, for example, in combination with a [com.quarkdown.core.context.toc.TableOfContents].
-         * Depth 0 cannot be achieved with plain Markdown, but it can be supplied by the Quarkdown function `.marker`.
-         */
-        fun marker(name: InlineContent) = Heading(MARKER_HEADING_DEPTH, name, canBreakPage = false)
-    }
+    companion object
 }
