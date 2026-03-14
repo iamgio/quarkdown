@@ -122,13 +122,20 @@ for (const docType of SCROLLABLE_DOC_TYPES) {
                     timeout: RELOAD_TIMEOUT,
                 });
 
-                // Check scroll position on the now-active iframe (may have swapped).
+                // Wait for scroll position to be restored on the now-active iframe.
+                // Scroll restoration may be slightly delayed (e.g. paged.js layout),
+                // so we poll until the position settles.
                 const newIframeHandle = await page.locator("iframe.visible").elementHandle({timeout: 5000});
                 const newContentFrame = await newIframeHandle!.contentFrame();
-                const scrollAfter = await newContentFrame!.evaluate(() => window.scrollY);
 
-                // Scroll position should be approximately preserved (within tolerance).
-                expect(scrollAfter).toBeGreaterThan(100);
+                await expect
+                    .poll(
+                        () => newContentFrame!.evaluate(() => window.scrollY),
+                        {timeout: 10_000, intervals: [200, 500, 1000]},
+                    )
+                    .toBeGreaterThan(100);
+
+                const scrollAfter = await newContentFrame!.evaluate(() => window.scrollY);
                 expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(200);
             },
             {docType},
