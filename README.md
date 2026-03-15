@@ -358,6 +358,7 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 - `-b <browser>` or `--browser <browser>`: sets the browser to launch the preview with. Defaults to `default`. Accepted values:
   - `default`
   - `none`
+  - `xdg` (uses `xdg-open`). `default` falls back to this.
   - `chrome`
   - `chromium`
   - `firefox`

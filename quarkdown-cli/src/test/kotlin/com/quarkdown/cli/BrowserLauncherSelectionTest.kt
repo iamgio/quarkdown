@@ -7,8 +7,7 @@ import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import com.quarkdown.server.browser.EnvBrowserLauncher
 import com.quarkdown.server.browser.NoneBrowserLauncher
-import com.quarkdown.server.browser.PathBrowserLauncher
-import java.io.File
+import com.quarkdown.server.browser.XdgBrowserLauncher
 import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertIs
@@ -67,18 +66,13 @@ class BrowserLauncherSelectionTest {
     }
 
     @Test
-    fun `xdg-open choice resolves to PathBrowserLauncher when available`() {
-        val xdgOpen =
-            System
-                .getenv("PATH")
-                ?.split(File.pathSeparator)
-                ?.map { File(it, "xdg-open") }
-                ?.firstOrNull { it.exists() && it.canExecute() }
-        if (xdgOpen != null) {
-            assertIs<PathBrowserLauncher>(test("xdg-open"))
+    fun `xdg choice resolves to XdgBrowserLauncher when available`() {
+        val xdgLauncher = XdgBrowserLauncher()
+        if (xdgLauncher.isValid) {
+            assertIs<XdgBrowserLauncher>(test("xdg"))
         } else {
-            // xdg-open is not available on this platform (e.g. macOS): expect failure.
-            assertFails { test("xdg-open") }
+            // xdg-open is not available on this platform
+            assertFails { test("xdg") }
         }
     }
 
