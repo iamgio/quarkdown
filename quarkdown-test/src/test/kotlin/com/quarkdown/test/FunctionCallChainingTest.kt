@@ -29,4 +29,11 @@ class FunctionCallChainingTest {
             assertEquals("<p>5</p>", it)
         }
     }
+
+    @Test
+    fun wrapped() {
+        execute("abc{.sum {2} {4}::subtract {1}}def") {
+            assertEquals("<p>abc5def</p>", it)
+        }
+    }
 }

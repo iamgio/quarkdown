@@ -638,6 +638,40 @@ class LexerTest {
                     .arguments.size,
             )
         }
+
+        // Wrapped function calls.
+
+        with(walk("{.function {x}}")) {
+            assertEquals("function", value.name)
+            assertEquals("{.function {x}}".length, endIndex)
+            with(value.arguments.single()) {
+                assertEquals("x", value)
+                assertNull(name)
+            }
+        }
+
+        with(walk("{.function {x} {y}}")) {
+            assertEquals("function", value.name)
+            assertEquals("{.function {x} {y}}".length, endIndex)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+        }
+
+        with(walk("{.function {x} name:{y}}")) {
+            assertEquals("function", value.name)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
+                assertEquals("name", name)
+                assertEquals("y", value)
+            }
+        }
+
+        with(walk("{.foo {a}::bar {b}}")) {
+            assertEquals("foo", value.name)
+            assertEquals(1, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+        }
     }
 
     /**
@@ -683,6 +717,67 @@ class LexerTest {
         with(walk(".func {a {b {c {d}}}}")) {
             assertEquals("func", value.name)
             assertEquals("a {b {c {d}}}", value.arguments.single().value)
+        }
+    }
+
+    /**
+     * Verifies that wrapped function calls (e.g. `{.func {x}}`) are tokenized correctly.
+     */
+    @Test
+    fun wrappedInlineFunctionCall() {
+        // Standalone wrapped call.
+        with(inlineLex("{.func {x}}")) {
+            assertIs<FunctionCallToken>(next())
+            assertFalse(hasNext())
+        }
+
+        // Wrapped call between text (loose).
+        with(inlineLex("hello {.func {x}} world")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        // Wrapped call between text (tight).
+        with(inlineLex("hello{.func {x}}world")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        // Multiple wrapped calls.
+        with(inlineLex("{.a {x}} {.b {y}}")) {
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertFalse(hasNext())
+        }
+
+        // Wrapped call with multiple arguments.
+        with(inlineLex("{.func {x} {y}}")) {
+            val token = next()
+            assertIs<FunctionCallToken>(token)
+            assertEquals("func", token.walkerResult.value.name)
+            assertEquals(2, token.walkerResult.value.arguments.size)
+            assertFalse(hasNext())
+        }
+
+        // Escaped wrapping brace: not treated as a wrapped call.
+        with(inlineLex("\\{.func {x}}")) {
+            assertIs<EscapeToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        // Incomplete wrapped call: the opening brace is plain text,
+        // and the function call falls back to the standard (non-wrapped) match.
+        with(inlineLex("{.func {x}")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertFalse(hasNext())
         }
     }
 

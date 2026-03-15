@@ -24,9 +24,11 @@ class FunctionCallPatterns {
             wrap = { error("Inline function call tokens are constructed by the walker") },
             // The name of the function prefixed by a dot.
             regex =
-                RegexBuilder("(?<=before)(?=begin(name))")
+                RegexBuilder("(?:(?<=before)(?=call))|(?:(?=wrapcall))")
                     .withReference("before", FUNCTION_CALL_PATTERN_BEFORE)
-                    .withReference("begin", "\\" + FunctionCallGrammar.BEGIN)
+                    .withReference("call", "begin(name)")
+                    .withReference("wrap", Regex.escape(FunctionCallGrammar.ARGUMENT_BEGIN.toString()))
+                    .withReference("begin", Regex.escape(FunctionCallGrammar.BEGIN.toString()))
                     .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
                     .build(),
             walker = { data, remaining ->
@@ -55,7 +57,7 @@ class FunctionCallPatterns {
             name = "FunctionCall",
             wrap = { error("Block function call tokens are constructed by the walker") },
             regex =
-                RegexBuilder("^ {0,3}call)")
+                RegexBuilder("^ {0,3}(?:call))")
                     .withReference("call", inlineFunctionCall.regex.dropLast(1))
                     .build(),
             walker = { data, remaining ->

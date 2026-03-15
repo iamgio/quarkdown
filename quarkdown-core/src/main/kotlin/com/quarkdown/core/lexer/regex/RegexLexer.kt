@@ -1,5 +1,6 @@
 package com.quarkdown.core.lexer.regex
 
+import com.github.h0tk3y.betterParse.parser.ParseException
 import com.quarkdown.core.lexer.AbstractLexer
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
@@ -102,13 +103,24 @@ abstract class RegexLexer(
             // In most cases, a pattern will not have a walker.
             // Currently, only function calls have walkers (see parser.walker.funcall),
             // as regex cannot handle balanced argument delimiters.
-            val walked = pattern.walker?.invoke(data, source.substring(currentIndex))
+            // A ParseException from the walker's grammar is treated as a rejection (same as returning null).
+            val walked =
+                if (pattern.walker != null) {
+                    try {
+                        pattern.walker(data, source.substring(currentIndex))
+                    } catch (_: ParseException) {
+                        null
+                    }
+                } else {
+                    null
+                }
             if (walked != null) {
                 currentIndex += walked.charsConsumed
                 tokens += walked.token
             } else if (pattern.walker != null) {
                 // The walker rejected this match (e.g., a block function call pattern determined
-                // the content is actually inline-level). Revert position and signal rejection.
+                // the content is actually inline-level, or a wrapped function call is incomplete).
+                // Revert position and signal rejection.
                 currentIndex = savedIndex
                 return emptyList()
             } else {
@@ -129,16 +141,33 @@ abstract class RegexLexer(
 
             while (currentIndex < source.length) {
                 val prevIndex = currentIndex
-                var result = regex.find(paddedSource, currentIndex) ?: break
+                val result = regex.find(paddedSource, currentIndex) ?: break
                 var tokens = extractMatchingTokens(result)
 
                 // If a walker rejected the match, retry with the fallback regex
                 // (which excludes walker-based patterns), allowing other patterns
                 // (e.g. paragraph) to match at the same position.
                 if (tokens.isEmpty() && currentIndex == prevIndex) {
-                    val (fallback, fallbackPats) = fallbackPatterns ?: break
-                    result = fallback.find(paddedSource, currentIndex) ?: break
-                    tokens = extractMatchingTokens(result, fallbackPats)
+                    val fallbackTokens =
+                        fallbackPatterns?.let { (fallback, fallbackPatterns) ->
+                            fallback.find(paddedSource, currentIndex)?.let {
+                                extractMatchingTokens(it, fallbackPatterns)
+                            }
+                        }
+
+                    if (!fallbackTokens.isNullOrEmpty()) {
+                        tokens = fallbackTokens
+                    } else if (currentIndex == prevIndex) {
+                        // Neither the main regex nor the fallback produced tokens at this position.
+                        // Emit a fill token for the rejected character and advance by one,
+                        // so the main regex can retry at the next position.
+                        // This handles e.g. a malformed wrapped function call `{.func {x}`
+                        // where the walker rejects the wrapped parse but the standard (non-wrapped)
+                        // match `.func {x}` should still be recognized at the next position.
+                        createFillToken(position = currentIndex..currentIndex)?.let { yield(it) }
+                        currentIndex++
+                        continue
+                    }
                 }
 
                 yieldAll(tokens)

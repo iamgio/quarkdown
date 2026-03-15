@@ -3,6 +3,7 @@ package com.quarkdown.core.parser.walker.funcall
 import com.github.h0tk3y.betterParse.combinators.and
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
+import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
 import com.github.h0tk3y.betterParse.combinators.zeroOrMore
 import com.github.h0tk3y.betterParse.grammar.Grammar
@@ -39,6 +40,11 @@ class FunctionCallGrammar(
     private val allowsBody: Boolean,
 ) : Grammar<WalkedFunctionCall>() {
     /**
+     * Whether the parser has begun parsing the actual function call.
+     */
+    private var began = false
+
+    /**
      * Whether the parser is currently parsing an argument.
      * While parsing an argument, the parser should not perform syntactic checks as the argument may contain any content, including Markdown.
      * This is a mutable state variable that is set to true when an argument is being parsed and false when the argument ends.
@@ -49,7 +55,7 @@ class FunctionCallGrammar(
         /**
          * The character that prefixes a function call.
          */
-        const val BEGIN = "."
+        const val BEGIN = '.'
 
         /**
          * The pattern for an identifier (function name or argument name).
@@ -104,7 +110,11 @@ class FunctionCallGrammar(
     /**
      * Token that matches the beginning of a function call.
      */
-    private val begin by literalToken(BEGIN)
+    private val begin by token { string, position ->
+        unescapedMatch(string, position, BEGIN) {
+            began = true
+        }
+    }
 
     /**
      * Token that matches whitespace, ignored between arguments
@@ -118,7 +128,11 @@ class FunctionCallGrammar(
      */
     private val argumentBegin by token { string, position ->
         unescapedMatch(string, position, ARGUMENT_BEGIN) {
-            inArg = true
+            if (!began) {
+                began = true
+            } else {
+                inArg = true
+            }
         }
     }
 
@@ -247,12 +261,11 @@ class FunctionCallGrammar(
         }
 
     /**
-     * Entry point of the grammar.
-     * Parses the whole chain of function calls.
+     * Parses a chain of function calls, separated by [chainSeparator].
      * The result is an ordered linked list of [WalkedFunctionCall]s, and the first of them is returned.
      */
-    override val rootParser =
-        -begin and callParser and zeroOrMore(-chainSeparator and callParser) map { (first, rest) ->
+    private val chainCallParser =
+        callParser and zeroOrMore(-chainSeparator and callParser) map { (first, rest) ->
             var current = first
             for (next in rest) {
                 current.next = next
@@ -260,4 +273,12 @@ class FunctionCallGrammar(
             }
             first
         }
+
+    /**
+     * Entry point of the grammar.
+     * Parses the whole chain of function calls.
+     */
+    override val rootParser =
+        (-begin and chainCallParser) or
+            (-argumentBegin and -begin and chainCallParser and -argumentEnd)
 }

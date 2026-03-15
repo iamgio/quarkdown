@@ -297,4 +297,42 @@ class FunctionCompletionSupplierTest {
 
         assertTrue(completions.isEmpty())
     }
+
+    // Wrapped (tight) function calls
+
+    @Test
+    fun `name completions in wrapped function call`() {
+        val text = "hello{."
+        val completions = getCompletions(text, Position(0, text.length))
+        assertEquals(4, completions.size)
+    }
+
+    @Test
+    fun `name completions in wrapped function call for partial name`() {
+        val text = "hello{.ali"
+        val completions = getCompletions(text, Position(0, text.length))
+
+        assertEquals(1, completions.size)
+        assertEquals(ALIGN_FUNCTION, completions.first().label)
+    }
+
+    @Test
+    fun `name completions in closed wrapped function call for partial name`() {
+        val text = "hello{.ali}"
+        // Cursor before the closing brace.
+        val completions = getCompletions(text, Position(0, text.length - 1))
+
+        assertEquals(1, completions.size)
+        assertEquals(ALIGN_FUNCTION, completions.first().label)
+    }
+
+    @Test
+    fun `parameter completions in wrapped function call`() {
+        val text = "hello{.$ALIGN_FUNCTION "
+        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+
+        assertEquals(2, completions.size)
+        assertContains(completions, ALIGNMENT_PARAMETER)
+        assertContains(completions, BODY_PARAMETER)
+    }
 }

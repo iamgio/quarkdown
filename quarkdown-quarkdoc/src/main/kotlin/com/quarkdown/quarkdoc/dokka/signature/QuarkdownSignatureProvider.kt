@@ -13,7 +13,7 @@ import org.jetbrains.dokka.pages.ContentNode
 import org.jetbrains.dokka.pages.TokenStyle
 import org.jetbrains.dokka.plugability.DokkaContext
 
-internal const val BEGIN = FunctionCallGrammar.BEGIN
+internal const val BEGIN = FunctionCallGrammar.BEGIN.toString()
 internal const val CHAINING_DELIMITER = FunctionCallGrammar.CHAIN_SEPARATOR
 private const val INLINE_PARAMETER_START = FunctionCallGrammar.ARGUMENT_BEGIN.toString()
 private const val INLINE_PARAMETER_END = FunctionCallGrammar.ARGUMENT_END.toString()
@@ -48,13 +48,16 @@ class QuarkdownSignatureProvider(
             )
 
         return when (documentable) {
-            is DFunction ->
+            is DFunction -> {
                 builder
                     .buildGroup {
                         codeBlock { signature(documentable) }
                     }.children
+            }
 
-            else -> kotlin.signature(documentable)
+            else -> {
+                kotlin.signature(documentable)
+            }
         }
     }
 

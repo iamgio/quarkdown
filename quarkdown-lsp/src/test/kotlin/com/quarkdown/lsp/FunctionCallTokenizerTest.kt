@@ -176,4 +176,77 @@ class FunctionCallTokenizerTest {
         assertTrue("function1" in functionNames)
         assertTrue("function2" in functionNames)
     }
+
+    @Test
+    fun `wrapped function call`() {
+        val text = "{.function {x}}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        assertEquals(0..text.length, call.range)
+
+        val nameToken = call.tokens.find { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+        assertNotNull(nameToken)
+        assertEquals("function", nameToken.lexeme)
+
+        // The wrapping braces appear as argument delimiters in the grammar tokens.
+        val argBeginTokens = call.tokens.filter { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN }
+        val argEndTokens = call.tokens.filter { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_END }
+
+        // Two opens: wrap '{' + argument '{'. Two closes: argument '}' + wrap '}'.
+        assertEquals(2, argBeginTokens.size)
+        assertEquals(2, argEndTokens.size)
+    }
+
+    @Test
+    fun `tight wrapped function call`() {
+        val text = "hello{.func {x}}hello"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val nameToken = call.tokens.find { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+        assertNotNull(nameToken)
+        assertEquals("func", nameToken.lexeme)
+
+        // The call range starts at '{' and ends after the closing '}'.
+        assertEquals(5..16, call.range)
+    }
+
+    @Test
+    fun `wrapped function call with chaining`() {
+        val text = "{.func1 {x}::func2 {y}}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val functionNames =
+            call.tokens
+                .filter { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+                .map { it.lexeme }
+
+        assertEquals(listOf("func1", "func2"), functionNames)
+
+        // The wrapping braces are the first and last tokens.
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, call.tokens.first().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, call.tokens.last().type)
+    }
+
+    @Test
+    fun `wrapped function call with named parameter`() {
+        val text = "{.function param:{value}}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+
+        val paramNameToken = call.tokens.find { it.type == FunctionCallToken.Type.PARAMETER_NAME }
+        assertNotNull(paramNameToken)
+        assertEquals("param", paramNameToken.lexeme)
+    }
 }

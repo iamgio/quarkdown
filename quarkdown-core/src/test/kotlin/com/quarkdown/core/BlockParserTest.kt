@@ -1226,6 +1226,38 @@ class BlockParserTest {
         }
     }
 
+    /**
+     * Verifies that wrapped function calls (`{.func {args}}`) are parsed as inline function calls
+     * within paragraphs, with the wrapping braces stripped from the output.
+     */
+    @Test
+    fun wrappedInlineFunctionCall() {
+        // Standalone wrapped call on a line is treated as a block-level function call.
+        with(blocksIterator<FunctionCallNode>("{.function {x}}").next()) {
+            assertEquals("function", name)
+            assertEquals(1, arguments.size)
+            assertEquals("x", arguments[0].value.unwrappedValue)
+        }
+
+        // Wrapped call between text: parsed as a paragraph containing an inline function call.
+        with(blocksIterator<Paragraph>("hello {.function {x}} world").next()) {
+            val children = children.iterator()
+            assertEquals("hello ", assertIs<Text>(children.next()).text)
+            assertIs<FunctionCallNode>(children.next())
+            assertEquals(" world", assertIs<Text>(children.next()).text)
+            assertFalse(children.hasNext())
+        }
+
+        // Tight wrapped call (no spacing around braces).
+        with(blocksIterator<Paragraph>("hello{.function {x}}world").next()) {
+            val children = children.iterator()
+            assertEquals("hello", assertIs<Text>(children.next()).text)
+            assertIs<FunctionCallNode>(children.next())
+            assertEquals("world", assertIs<Text>(children.next()).text)
+            assertFalse(children.hasNext())
+        }
+    }
+
     @Test
     fun chainedFunctionCall() {
         val nodes =

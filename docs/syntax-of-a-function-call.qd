@@ -98,6 +98,18 @@ You can append additional arguments to any function in the chain. Just keep in m
 
 Many core functions are designed to be called in a chain, for example [`None` operations](none.qd#examples).
 
+## Tight function calls
+
+A function call must normally be surrounded by whitespace, a symbol, or the beginning or end of a line. This means that a call directly adjacent to a word character is not recognized:
+
+.examplemirror type:{warning}
+    H.text {2} script:{sub}O
+
+Wrapping the entire function call in curly braces allows it to appear anywhere, regardless of the surrounding characters. The wrapping braces are consumed by the compiler and do not appear in the output:
+
+.examplemirror
+    H{.text {2} script:{sub}}O
+
 ## Block vs. inline function calls
 
 Function calls can appear in two contexts: inline or block.

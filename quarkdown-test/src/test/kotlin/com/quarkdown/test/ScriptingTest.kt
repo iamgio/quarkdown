@@ -548,7 +548,7 @@ class ScriptingTest {
             
             .table
                 .foreach {0..4}
-                    | $ F_{.1} $ |
+                    | $ F_\{.1} $ |
                     |:-------------:|
                     |      .t1      |
                     .var {tmp} {.sum {.t1} {.t2}}
@@ -565,7 +565,7 @@ class ScriptingTest {
                 
                 .table
                     .repeat {.n}
-                        | $ F_{.subtract {.1} {1}} $ |
+                        | $ F_\{.subtract {.1} {1}} $ |
                         |:--------------------------:|
                         |             .t1            |
                         .var {tmp} {.sum {.t1} {.t2}}
@@ -582,7 +582,7 @@ class ScriptingTest {
             
             .function {newtablecolumn}
                 n:
-                |  $ F_{.n} $  |
+                |  $ F_\{.n} $  |
                 |:-------------:|
                 |      .t1      |
             
@@ -610,7 +610,7 @@ class ScriptingTest {
               
             .table
                 .foreach {0..4}
-                    | $ F_{.1} $  |
+                    | $ F_\{.1} $  |
                     |:------------:|
                     | .fib {.1} |
             """.trimIndent()
