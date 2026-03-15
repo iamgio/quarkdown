@@ -25,6 +25,10 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
 It allows explicit control over numbering (`numbered`), table of contents indexing (`indexed`), page breaks (`breakpage`), depth, and reference ID (`ref`).
 
+#### [`.pagebreak` primitive function](https://quarkdown.com/wiki/page-break)
+
+The new `.pagebreak` function provides an explicit way to insert a page break, and can be used within other function calls where the `<<<` syntax would not be recognized.
+
 #### [Better heading configuration for table of contents and bibliography](https://quarkdown.com/wiki/table-of-contents)
 
 Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:

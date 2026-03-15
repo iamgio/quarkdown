@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
@@ -19,6 +20,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 val Primitives: QuarkdownModule =
     moduleOf(
         ::heading,
+        ::pageBreak,
         ::figure,
     )
 
@@ -65,6 +67,21 @@ fun heading(
         excludeFromTableOfContents = !includeInTableOfContents,
     ).let(::NodeValue)
 }
+
+/**
+ * Creates a page break. In standard Quarkdown, this is also achievable with `<<<` on its own line,
+ * but this function provides a more explicit way to insert a page break,
+ * and can be used within other function calls.
+ *
+ * Example:
+ * ```markdown
+ * .pagebreak
+ * ```
+ *
+ * @return a [PageBreak] node
+ */
+@Name("pagebreak")
+fun pageBreak() = PageBreak().wrappedAsValue()
 
 /**
  * Inserts content in a figure block, with an optional caption.
