@@ -470,8 +470,15 @@ class QuarkdownHtmlNodeRenderer(
         "color" value data.color
     }
 
-    override fun visit(node: TextTransform) =
-        buildTag("span") {
+    override fun visit(node: TextTransform): CharSequence {
+        val tagName =
+            when (node.data.script) {
+                TextTransformData.Script.SUB -> "sub"
+                TextTransformData.Script.SUP -> "sup"
+                null -> "span"
+            }
+
+        return buildTag(tagName) {
             classNames(
                 node.data.size?.asCSS, // e.g. 'size-small' class
                 node.className,
@@ -479,6 +486,7 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
             style { textTransform(node.data) }
         }
+    }
 
     override fun visit(node: IconImage): CharSequence =
         buildTag("i") {

@@ -112,6 +112,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(case: TextTransformData.Case) = case.kebabCaseName
 
     override fun visit(variant: TextTransformData.Variant) = variant.kebabCaseName
+
+    override fun visit(script: TextTransformData.Script) = script.kebabCaseName
 }
 
 /**
