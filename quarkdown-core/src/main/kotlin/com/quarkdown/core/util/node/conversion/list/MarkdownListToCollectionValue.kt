@@ -14,7 +14,8 @@ import com.quarkdown.core.util.node.toPlainText
  * Helper that converts a Markdown list to an [OrderedCollectionValue].
  * @param list list to convert
  * @param inlineValueMapper function that maps the node of a list item to a value
- * @param nestedValueMapper function that maps a nested list to a value
+ * @param nestedValueMapper function that maps a nested list item to a value.
+ *        The first argument is the parent node, and the second is the nested [ListBlock]
  * @param T type of values in the collection
  * @see OrderedCollectionValue
  * @see ValueFactory.iterable
@@ -22,7 +23,7 @@ import com.quarkdown.core.util.node.toPlainText
 class MarkdownListToCollectionValue<T : OutputValue<*>>(
     list: ListBlock,
     inlineValueMapper: (Node) -> T,
-    nestedValueMapper: (ListBlock) -> T,
+    nestedValueMapper: (Node, ListBlock) -> T,
 ) : MarkdownListToIterable<OrderedCollectionValue<T>, T>(list, inlineValueMapper, nestedValueMapper) {
     override fun wrap(): OrderedCollectionValue<T> = OrderedCollectionValue(elements.toList())
 
@@ -44,7 +45,7 @@ class MarkdownListToCollectionValue<T : OutputValue<*>>(
                         else -> NodeValue(it)
                     }
                 },
-                nestedValueMapper = { viaValueFactory(it, context).convert() },
+                nestedValueMapper = { _, list -> viaValueFactory(list, context).convert() },
             )
     }
 }

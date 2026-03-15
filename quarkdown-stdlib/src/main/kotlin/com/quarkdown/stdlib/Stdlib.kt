@@ -25,6 +25,7 @@ object Stdlib : LibraryExporter {
                     Layout,
                     Text,
                     Primitives,
+                    MiscElements,
                     Math,
                     Logical,
                     String,

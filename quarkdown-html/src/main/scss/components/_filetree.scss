@@ -1,0 +1,43 @@
+@use "util/icon" as *;
+
+.quarkdown .file-tree.file-tree.file-tree {
+  ul {
+    list-style: none;
+    margin: 0.5em 0 0 0.5em;
+    padding: 0 0 0 0.75em;
+
+    ul {
+      padding-left: 1em;
+      border-left: 1px solid var(--qd-main-color-muted);
+    }
+
+    li {
+      font-family: var(--qd-code-font), monospace;
+      font-size: var(--qd-code-span-font-size);
+
+      &::before {
+        margin-right: 0.5em;
+        vertical-align: middle;
+        position: relative;
+        top: -1px;
+      }
+
+      &.file::before {
+        @include icon("\f392"); // 'file-earmark' icon
+      }
+
+      &.directory::before {
+        @include icon("\f3d1"); // 'folder-fill' icon
+      }
+
+      &.ellipsis {
+        color: transparent;
+
+        &::before {
+          @include icon("\f5d4"); // 'three-dots' icon
+          color: initial;
+        }
+      }
+    }
+  }
+}

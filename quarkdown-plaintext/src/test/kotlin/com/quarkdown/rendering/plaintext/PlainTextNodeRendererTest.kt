@@ -23,6 +23,8 @@ import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.Box
+import com.quarkdown.core.ast.quarkdown.block.FileTree
+import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
@@ -380,6 +382,51 @@ class PlainTextNodeRendererTest {
                 title = buildInline { text("Note") },
                 type = Box.Type.CALLOUT,
                 children = buildBlocks { paragraph { text("Hello") } },
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `file tree, files only`() {
+        assertEquals(
+            "- file1.txt\n- file2.json\n\n",
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("file1.txt"),
+                    FileTreeEntry.File("file2.json"),
+                ),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `file tree, directory with files`() {
+        assertEquals(
+            "- src/\n\t- main.ts\n\t- utils.ts\n- README.md\n\n",
+            FileTree(
+                listOf(
+                    FileTreeEntry.Directory(
+                        "src",
+                        listOf(
+                            FileTreeEntry.File("main.ts"),
+                            FileTreeEntry.File("utils.ts"),
+                        ),
+                    ),
+                    FileTreeEntry.File("README.md"),
+                ),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `file tree, ellipsis`() {
+        assertEquals(
+            "- index.ts\n- ...\n\n",
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("index.ts"),
+                    FileTreeEntry.Ellipsis,
+                ),
             ).render(),
         )
     }

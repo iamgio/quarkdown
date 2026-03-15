@@ -38,6 +38,7 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -47,6 +48,8 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.FileTree
+import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -238,6 +241,33 @@ class PlainTextNodeRenderer(
         }.blockNode
 
     override fun visit(node: MermaidDiagram) = ""
+
+    override fun visit(node: FileTree): CharSequence {
+        val list =
+            buildBlock {
+                unorderedList(loose = false) {
+                    node.entries.forEach { entry ->
+                        listItem {
+                            when (entry) {
+                                is FileTreeEntry.File -> {
+                                    paragraph { text(entry.name) }
+                                }
+
+                                is FileTreeEntry.Directory -> {
+                                    paragraph { text(entry.name + "/") }
+                                    +FileTree(entry.entries)
+                                }
+
+                                FileTreeEntry.Ellipsis -> {
+                                    paragraph { text("...") }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        return list.accept(this).toString().blockNode
+    }
 
     override fun visit(node: SubdocumentGraph) = ""
 
