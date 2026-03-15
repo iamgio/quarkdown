@@ -55,6 +55,13 @@ The [multi-column layout](https://quarkdown.com/wiki/multi-column-layout) via `.
 
 Infinite recursion in function calls is now detected and reported as a clear error.
 
+#### Fixed default browser not opening on Linux (Wayland and XDG environments)
+
+On Linux systems where the Java AWT Desktop API does not support the BROWSE action (e.g., Wayland), `--browser default` now falls back to `xdg-open` automatically.
+Additionally, `--browser xdg` is now a supported named choice for the `--browser` CLI option.
+
+Thanks @szy1840!
+
 ## [1.14.1] - 2026-03-06
 
 ### Added

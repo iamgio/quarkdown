@@ -7,6 +7,7 @@ import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import com.quarkdown.server.browser.EnvBrowserLauncher
 import com.quarkdown.server.browser.NoneBrowserLauncher
+import com.quarkdown.server.browser.XdgBrowserLauncher
 import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertIs
@@ -62,6 +63,17 @@ class BrowserLauncherSelectionTest {
         val choice = "chrome"
         val envName = "BROWSER_${choice.uppercase()}"
         assertIs<EnvBrowserLauncher>(test(choice, env = mapOf(envName to "/path/to/chrome")))
+    }
+
+    @Test
+    fun `xdg choice resolves to XdgBrowserLauncher when available`() {
+        val xdgLauncher = XdgBrowserLauncher()
+        if (xdgLauncher.isValid) {
+            assertIs<XdgBrowserLauncher>(test("xdg"))
+        } else {
+            // xdg-open is not available on this platform
+            assertFails { test("xdg") }
+        }
     }
 
     @Test
