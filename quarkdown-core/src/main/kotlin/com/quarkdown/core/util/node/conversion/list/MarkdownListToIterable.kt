@@ -42,9 +42,9 @@ abstract class MarkdownListToIterable<O, T>(
 
     override fun inlineValue(child: Node) =
         when (child) {
+            // Compact syntax.
             is ListBlock -> nestedValueMapper(child)
 
-            // Compact syntax.
             else -> inlineValueMapper(child)
         }
 
