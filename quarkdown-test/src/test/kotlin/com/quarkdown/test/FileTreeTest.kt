@@ -85,6 +85,36 @@ class FileTreeTest {
     }
 
     @Test
+    fun highlighted() {
+        execute(
+            """
+            .filetree
+                - file1.txt
+                - **file2.txt**
+                - **src**
+                  - **main.ts**
+                  - utils.ts
+                - **...**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"file-tree\"><ul>" +
+                    "<li class=\"file\" data-name=\"file1.txt\">file1.txt</li>" +
+                    "<li class=\"file\" data-name=\"file2.txt\" data-highlighted=\"\">file2.txt</li>" +
+                    "<li class=\"directory\" data-name=\"src\" data-highlighted=\"\">src" +
+                    "<ul>" +
+                    "<li class=\"file\" data-name=\"main.ts\" data-highlighted=\"\">main.ts</li>" +
+                    "<li class=\"file\" data-name=\"utils.ts\">utils.ts</li>" +
+                    "</ul>" +
+                    "</li>" +
+                    "<li class=\"ellipsis\" data-highlighted=\"\">&hellip;</li>" +
+                    "</ul></div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun ellipsis() {
         execute(
             """

@@ -258,7 +258,7 @@ class PlainTextNodeRenderer(
                                     +FileTree(entry.entries)
                                 }
 
-                                FileTreeEntry.Ellipsis -> {
+                                is FileTreeEntry.Ellipsis -> {
                                     paragraph { text("...") }
                                 }
                             }

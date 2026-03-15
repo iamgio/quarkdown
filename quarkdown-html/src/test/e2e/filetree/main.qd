@@ -1,0 +1,6 @@
+.filetree
+    - src
+      - **main.ts**
+      - utils.ts
+    - **README.md**
+    - ...

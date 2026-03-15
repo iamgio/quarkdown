@@ -17,6 +17,7 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.isMarker
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
+import com.quarkdown.core.ast.base.inline.CriticalContent
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
@@ -378,21 +379,24 @@ class QuarkdownHtmlNodeRenderer(
                             when (entry) {
                                 is FileTreeEntry.File -> {
                                     className("file")
-                                    attribute("data-name", entry.name)
-                                    +entry.name
+                                    attribute("data-name", escapeCriticalContent(entry.name))
+                                    +CriticalContent(entry.name)
                                 }
 
                                 is FileTreeEntry.Directory -> {
                                     className("directory")
-                                    attribute("data-name", entry.name)
-                                    +entry.name
+                                    attribute("data-name", escapeCriticalContent(entry.name))
+                                    +CriticalContent(entry.name)
                                     +buildEntries(entry.entries)
                                 }
 
-                                FileTreeEntry.Ellipsis -> {
+                                is FileTreeEntry.Ellipsis -> {
                                     className("ellipsis")
                                     +"&hellip;"
                                 }
+                            }
+                            if (entry.highlighted) {
+                                attribute("data-highlighted", "")
                             }
                         }
                     }

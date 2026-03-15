@@ -120,7 +120,7 @@ class FileTreeTest {
         assertEquals(
             listOf(
                 FileTreeEntry.File("file1.txt"),
-                FileTreeEntry.Ellipsis,
+                FileTreeEntry.Ellipsis(),
             ),
             tree.entries,
         )
@@ -147,8 +147,108 @@ class FileTreeTest {
                     "src",
                     listOf(
                         FileTreeEntry.File("main.ts"),
-                        FileTreeEntry.Ellipsis,
+                        FileTreeEntry.Ellipsis(),
                     ),
+                ),
+            ),
+            tree.entries,
+        )
+    }
+
+    @Test
+    fun `highlighted file`() {
+        val tree =
+            buildBlocks {
+                unorderedList(loose = false) {
+                    listItem { paragraph { text("file1.txt") } }
+                    listItem { paragraph { strong { text("file2.txt") } } }
+                }
+            }.let(::buildFileTree)
+
+        assertEquals(
+            listOf(
+                FileTreeEntry.File("file1.txt"),
+                FileTreeEntry.File("file2.txt", highlighted = true),
+            ),
+            tree.entries,
+        )
+    }
+
+    @Test
+    fun `highlighted directory`() {
+        val tree =
+            buildBlocks {
+                unorderedList(loose = false) {
+                    listItem {
+                        paragraph { strong { text("src") } }
+                        unorderedList(loose = false) {
+                            listItem { paragraph { text("file1.txt") } }
+                            listItem { paragraph { text("file2.txt") } }
+                        }
+                    }
+                }
+            }.let(::buildFileTree)
+
+        assertEquals(
+            listOf(
+                FileTreeEntry.Directory(
+                    "src",
+                    listOf(
+                        FileTreeEntry.File("file1.txt"),
+                        FileTreeEntry.File("file2.txt"),
+                    ),
+                    highlighted = true,
+                ),
+            ),
+            tree.entries,
+        )
+    }
+
+    @Test
+    fun `highlighted ellipsis`() {
+        val tree =
+            buildBlocks {
+                unorderedList(loose = false) {
+                    listItem { paragraph { text("file1.txt") } }
+                    listItem { paragraph { strong { text("...") } } }
+                }
+            }.let(::buildFileTree)
+
+        assertEquals(
+            listOf(
+                FileTreeEntry.File("file1.txt"),
+                FileTreeEntry.Ellipsis(highlighted = true),
+            ),
+            tree.entries,
+        )
+    }
+
+    @Test
+    fun `multiple highlighted entries`() {
+        val tree =
+            buildBlocks {
+                unorderedList(loose = false) {
+                    listItem { paragraph { strong { text("file1.txt") } } }
+                    listItem {
+                        paragraph { strong { text("src") } }
+                        unorderedList(loose = false) {
+                            listItem { paragraph { strong { text("main.ts") } } }
+                            listItem { paragraph { text("utils.ts") } }
+                        }
+                    }
+                }
+            }.let(::buildFileTree)
+
+        assertEquals(
+            listOf(
+                FileTreeEntry.File("file1.txt", highlighted = true),
+                FileTreeEntry.Directory(
+                    "src",
+                    listOf(
+                        FileTreeEntry.File("main.ts", highlighted = true),
+                        FileTreeEntry.File("utils.ts"),
+                    ),
+                    highlighted = true,
                 ),
             ),
             tree.entries,

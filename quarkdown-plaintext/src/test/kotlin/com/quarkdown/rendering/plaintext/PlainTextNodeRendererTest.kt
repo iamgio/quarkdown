@@ -419,13 +419,34 @@ class PlainTextNodeRendererTest {
     }
 
     @Test
+    fun `file tree, highlighted entries`() {
+        assertEquals(
+            "- file1.txt\n- file2.txt\n- src/\n\t- main.ts\n\t- utils.ts\n\n",
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("file1.txt"),
+                    FileTreeEntry.File("file2.txt", highlighted = true),
+                    FileTreeEntry.Directory(
+                        "src",
+                        listOf(
+                            FileTreeEntry.File("main.ts", highlighted = true),
+                            FileTreeEntry.File("utils.ts"),
+                        ),
+                        highlighted = true,
+                    ),
+                ),
+            ).render(),
+        )
+    }
+
+    @Test
     fun `file tree, ellipsis`() {
         assertEquals(
             "- index.ts\n- ...\n\n",
             FileTree(
                 listOf(
                     FileTreeEntry.File("index.ts"),
-                    FileTreeEntry.Ellipsis,
+                    FileTreeEntry.Ellipsis(),
                 ),
             ).render(),
         )

@@ -27,7 +27,29 @@ It allows explicit control over numbering (`numbered`), table of contents indexi
 
 #### [`.pagebreak` primitive function](https://quarkdown.com/wiki/page-break)
 
-The new `.pagebreak` function provides an explicit way to insert a page break, and can be used within other function calls where the `<<<` syntax would not be recognized.
+The new `.pagebreak` function provides an explicit way to insert a page break as an alternative to the `<<<` syntax.
+
+#### [File tree](https://quarkdown.com/wiki/file-tree)
+
+The new `.filetree` function renders a visual file tree from a Markdown list.
+
+```markdown
+.filetree
+    - src
+      - main.ts
+      - ...
+    - README.md
+```
+
+Bold entries (`**name**`) are highlighted with a distinct background color, useful for drawing attention to specific items.
+
+```markdown
+.filetree
+    - src
+      - **main.ts**
+      - utils.ts
+    - README.md
+```
 
 #### [Better heading configuration for table of contents and bibliography](https://quarkdown.com/wiki/table-of-contents)
 
@@ -69,6 +91,10 @@ On Linux systems where the Java AWT Desktop API does not support the BROWSE acti
 Additionally, `--browser xdg` is now a supported named choice for the `--browser` CLI option.
 
 Thanks @szy1840!
+
+#### Improved lexer performance
+
+The lexer has been optimized to reduce regex builds to a minimum, resulting in significantly improved performance for large documents.
 
 ## [1.14.1] - 2026-03-06
 
