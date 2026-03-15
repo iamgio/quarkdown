@@ -60,6 +60,8 @@ import com.quarkdown.core.pipeline.stage.thenOptionally
 import com.quarkdown.core.pipeline.stages.FunctionCallExpansionStage
 import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.util.iterator
+import com.quarkdown.core.util.node.conversion.list.MarkdownListToCollectionValue
+import com.quarkdown.core.util.node.conversion.list.MarkdownListToDictionaryValue
 
 /**
  * Suffix that marks a lambda parameter as optional.
@@ -450,7 +452,7 @@ object ValueFactory {
 
         fun fromMarkdownList() =
             this.extractList(raw, context) { "Not an iterable" }.let {
-                MarkdownListToCollection.viaValueFactory(it, context).convert()
+                MarkdownListToCollectionValue.viaValueFactory(it, context).convert()
             }
 
         return value as? IterableValue<*>
@@ -483,7 +485,7 @@ object ValueFactory {
      * @param context context to retrieve the pipeline from
      * @return a new [DictionaryValue] from the raw input
      * @throws IllegalRawValueException if the raw input cannot be converted to a dictionary
-     * @see MarkdownListToDictionary
+     * @see MarkdownListToDictionaryValue
      */
     @Suppress("UNCHECKED_CAST")
     @FromDynamicType(Map::class, requiresContext = true)
@@ -494,7 +496,7 @@ object ValueFactory {
         (raw as? Map<String, OutputValue<*>>)?.let { return DictionaryValue(it.toMutableMap()) }
 
         val list = this.extractList(raw, context) { "Not a dictionary" }
-        return MarkdownListToDictionary.viaValueFactory(list, context).convert()
+        return MarkdownListToDictionaryValue.viaValueFactory(list, context).convert()
     }
 
     /**

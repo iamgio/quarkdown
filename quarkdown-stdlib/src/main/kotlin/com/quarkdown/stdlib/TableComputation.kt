@@ -20,7 +20,7 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.sortedBy

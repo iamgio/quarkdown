@@ -1,4 +1,4 @@
-package com.quarkdown.core.function.value.factory
+package com.quarkdown.core.util.node.conversion.list
 
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.TextNode
@@ -6,8 +6,10 @@ import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.OutputValue
+import com.quarkdown.core.function.value.factory.IllegalRawValueException
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * Separator between key and value in a dictionary element.
@@ -34,12 +36,12 @@ private const val KEY_VALUE_SEPARATOR = ":"
  * @see DictionaryValue
  * @see ValueFactory.dictionary
  */
-class MarkdownListToDictionary<T : OutputValue<*>>(
+class MarkdownListToDictionaryValue<T : OutputValue<*>>(
     list: ListBlock,
     private val inlineValueMapper: (String) -> T,
     private val nestedValueMapper: (ListBlock) -> T,
     private val nothingValueMapper: () -> T,
-) : MarkdownListToValue<DictionaryValue<T>, Pair<String, T>, TextNode>(list) {
+) : MarkdownListConverter<DictionaryValue<T>, Pair<String, T>, TextNode>(list) {
     private val map = mutableMapOf<String, T>()
 
     override fun push(element: Pair<String, T>) {
@@ -82,15 +84,15 @@ class MarkdownListToDictionary<T : OutputValue<*>>(
 
     companion object {
         /**
-         * [MarkdownListToDictionary] factory via a [ValueFactory].
+         * [MarkdownListToDictionaryValue] factory via a [ValueFactory].
          * @param list list to convert
          * @param context context to use for the conversion
          */
         fun viaValueFactory(
             list: ListBlock,
             context: Context,
-        ): MarkdownListToDictionary<*> =
-            MarkdownListToDictionary(
+        ): MarkdownListToDictionaryValue<*> =
+            MarkdownListToDictionaryValue(
                 list,
                 // Node values are currently unsupported as dictionary values.
                 // Here we give back the raw string as a fallback in case a node is met.

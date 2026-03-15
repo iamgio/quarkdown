@@ -6,7 +6,7 @@ import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.graph.Graph
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.plaintext.node.PlainTextNodeRenderer
 

@@ -4,7 +4,7 @@ import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.AstAttributes
 import com.quarkdown.core.context.toc.TableOfContents
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**

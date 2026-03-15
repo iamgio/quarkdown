@@ -84,7 +84,7 @@ import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.Escape
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS

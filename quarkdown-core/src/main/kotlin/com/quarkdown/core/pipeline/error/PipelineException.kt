@@ -7,7 +7,7 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.error.FunctionException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * An exception thrown during any stage of the pipeline.

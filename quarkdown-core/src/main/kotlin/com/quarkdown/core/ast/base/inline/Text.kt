@@ -5,7 +5,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
  * A [Node] that contains plain text.
- * @see com.quarkdown.core.util.toPlainText
+ * @see com.quarkdown.core.util.node.toPlainText
  */
 interface PlainTextNode : Node {
     val text: String

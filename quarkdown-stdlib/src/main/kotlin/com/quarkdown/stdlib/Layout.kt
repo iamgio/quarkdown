@@ -34,7 +34,7 @@ import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.misc.color.Color
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * `Layout` stdlib module exporter.

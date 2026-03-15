@@ -6,7 +6,7 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.localization.Locale
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import de.undercouch.citeproc.BibliographyFileReader
 import de.undercouch.citeproc.CSL
 import de.undercouch.citeproc.ItemDataProvider

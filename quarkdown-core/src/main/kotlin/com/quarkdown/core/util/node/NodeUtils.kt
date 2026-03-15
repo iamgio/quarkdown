@@ -1,4 +1,4 @@
-package com.quarkdown.core.util
+package com.quarkdown.core.util.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent

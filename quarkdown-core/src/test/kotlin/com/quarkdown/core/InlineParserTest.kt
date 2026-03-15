@@ -25,7 +25,7 @@ import com.quarkdown.core.document.size.px
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.misc.color.Color
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
