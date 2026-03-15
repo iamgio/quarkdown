@@ -34,6 +34,10 @@ Both `.tableofcontents` and `.bibliography` now accept the following optional pa
 - `numberheading`: controls whether the heading is numbered in the document hierarchy.
 - `indexheading`: when enabled, the heading is included in the document's own table of contents.
 
+#### [Subscript and superscript text](https://quarkdown.com/wiki/text)
+
+The `.text` function now accepts a `script` parameter with `sub` and `sup` values for subscript and superscript text.
+
 ### Changed
 
 #### Removed `includeunnumbered` parameter from `.tableofcontents`

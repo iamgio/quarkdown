@@ -17,6 +17,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param decoration text decoration
  * @param case text case
  * @param variant font variant
+ * @param script vertical script position (subscript or superscript)
  * @param color text (foreground) color
  */
 class TextTransformData(
@@ -26,6 +27,7 @@ class TextTransformData(
     val decoration: Decoration? = null,
     val case: Case? = null,
     val variant: Variant? = null,
+    val script: Script? = null,
     val color: Color? = null,
 ) {
     /**
@@ -186,6 +188,24 @@ class TextTransformData(
          * Small-caps font variant.
          */
         SMALL_CAPS,
+        ;
+
+        override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)
+    }
+
+    /**
+     * Vertical script position.
+     */
+    enum class Script : RenderRepresentable {
+        /**
+         * Subscript text.
+         */
+        SUB,
+
+        /**
+         * Superscript text.
+         */
+        SUP,
         ;
 
         override fun <T> accept(visitor: RenderRepresentableVisitor<T>): T = visitor.visit(this)

@@ -72,4 +72,6 @@ interface RenderRepresentableVisitor<T> {
     fun visit(case: TextTransformData.Case): T
 
     fun visit(variant: TextTransformData.Variant): T
+
+    fun visit(script: TextTransformData.Script): T
 }

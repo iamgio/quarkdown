@@ -1101,6 +1101,27 @@ class HtmlNodeRendererTest {
                 children = buildInline { text("Foo") },
             ).render(),
         )
+
+        // Subscript.
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(script = TextTransformData.Script.SUB),
+                children = buildInline { text("2") },
+            ).render(),
+        )
+
+        // Superscript with additional style.
+        assertEquals(
+            out.next(),
+            TextTransform(
+                TextTransformData(
+                    script = TextTransformData.Script.SUP,
+                    weight = TextTransformData.Weight.BOLD,
+                ),
+                children = buildInline { text("2") },
+            ).render(),
+        )
     }
 
     @Test
