@@ -4,7 +4,7 @@ import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.rendering.NodeRenderer
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * Provides identifiers for elements suitable for HTML rendering.

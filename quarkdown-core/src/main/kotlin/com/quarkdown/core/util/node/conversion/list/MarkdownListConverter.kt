@@ -1,21 +1,18 @@
-package com.quarkdown.core.function.value.factory
+package com.quarkdown.core.util.node.conversion.list
 
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.block.Newline
 import com.quarkdown.core.ast.base.block.list.ListBlock
-import com.quarkdown.core.function.value.DictionaryValue
-import com.quarkdown.core.function.value.OutputValue
+import com.quarkdown.core.function.value.factory.IllegalRawValueException
 
 /**
- * Helper that converts a Markdown list to a [Value] of type [V].
+ * Helper that converts a Markdown list to a value of type [T].
  * @param list list to convert
- * @param V type of value to convert to
+ * @param T type of value to convert to
  * @param E type of elements that compose the output value
  * @param N type of nodes, children of the list, that can be handled
- * @see DictionaryValue
- * @see ValueFactory.dictionary
  */
-abstract class MarkdownListToValue<V : OutputValue<*>, E, N : Node>(
+abstract class MarkdownListConverter<T, E, N : Node>(
     private val list: ListBlock,
 ) {
     /**
@@ -63,16 +60,16 @@ abstract class MarkdownListToValue<V : OutputValue<*>, E, N : Node>(
     ): E
 
     /**
-     * Wraps the pushed elements into a value of type [V].
+     * Wraps the pushed elements into a value of type [T].
      * @return the wrapped value
      */
-    protected abstract fun wrap(): V
+    protected abstract fun wrap(): T
 
     /**
-     * @return [list] converted to a value of type [V]
+     * @return [list] converted to a value of type [T]
      * @throws IllegalRawValueException if the list is not in the correct format
      */
-    fun convert(): V {
+    fun convert(): T {
         list.items
             .asSequence()
             .map { it.children.filterNot { child -> child is Newline } }

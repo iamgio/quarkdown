@@ -28,7 +28,7 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.Pipelines
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * An immutable [Context] implementation.

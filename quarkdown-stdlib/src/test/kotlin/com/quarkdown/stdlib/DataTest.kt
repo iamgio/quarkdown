@@ -10,7 +10,7 @@ import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.pipeline.PipelineOptions
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.stdlib.internal.Ordering
 import java.io.File
 import kotlin.test.BeforeTest

@@ -78,8 +78,8 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.readSource
 import com.quarkdown.core.rendering.NodeRenderer
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.core.util.normalizeLineSeparators
-import com.quarkdown.core.util.toPlainText
 import com.quarkdown.rendering.html.extension.html
 import kotlin.test.Test
 import kotlin.test.assertEquals

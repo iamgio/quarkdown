@@ -2,7 +2,7 @@ package com.quarkdown.core.ast.iterator
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.util.flattenedChildren
+import com.quarkdown.core.util.node.flattenedChildren
 
 /**
  * An iterator that performs a DFS traversal through the nodes of an AST,

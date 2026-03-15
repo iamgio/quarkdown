@@ -28,7 +28,7 @@ import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -10,7 +10,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.document.numbering.DocumentNumbering
-import com.quarkdown.core.util.stripRichContent
+import com.quarkdown.core.util.node.stripRichContent
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**

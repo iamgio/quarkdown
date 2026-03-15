@@ -9,7 +9,7 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
-import com.quarkdown.core.util.flattenedChildren
+import com.quarkdown.core.util.node.flattenedChildren
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

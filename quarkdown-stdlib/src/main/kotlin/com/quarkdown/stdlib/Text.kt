@@ -17,7 +17,7 @@ import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.toPlainText
 
 /**
  * `Text` stdlib module exporter.
@@ -69,14 +69,17 @@ fun text(
 
     return when {
         // If URL is specified, wrap the text in a link
-        url != null ->
+        url != null -> {
             Link(
                 listOf(transform),
                 url = url.takeIf { it.isNotBlank() } ?: text.children.toPlainText(),
                 title = null,
             )
+        }
 
-        else -> transform
+        else -> {
+            transform
+        }
     }.wrappedAsValue()
 }
 

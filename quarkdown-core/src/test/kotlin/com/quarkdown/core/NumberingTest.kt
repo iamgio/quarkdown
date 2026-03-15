@@ -17,8 +17,8 @@ import com.quarkdown.core.context.hooks.location.LocationAwarenessHook
 import com.quarkdown.core.document.numbering.DocumentNumbering
 import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
-import com.quarkdown.core.util.flattenedChildren
-import com.quarkdown.core.util.toPlainText
+import com.quarkdown.core.util.node.flattenedChildren
+import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
