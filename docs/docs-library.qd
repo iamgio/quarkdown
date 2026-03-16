@@ -17,7 +17,15 @@ The first step is to [import](importing-external-libraries.qd) the library:
 
 ## Project structure
 
-A project that uses the `docs` library is expected to have:
+A project that uses the `docs` library is expected to have a similar structure:
+
+.filetree
+    - **_setup.qd**
+    - **_nav.qd**
+    - **main.qd**
+    - page-1.qd
+    - page-2.qd
+    - ...
 
 - **`_setup.qd`**, containing shared configuration such as [themes](themes.qd), [fonts](font-configuration.qd), custom [functions](declaring-functions.qd) and [variables](variables.qd). This file is included automatically by the library.
 - **`_nav.qd`** containing the navigation links that populate the page list sidebar. This file is included automatically by the library.

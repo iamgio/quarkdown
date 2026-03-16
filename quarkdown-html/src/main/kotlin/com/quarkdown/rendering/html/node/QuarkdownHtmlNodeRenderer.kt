@@ -27,6 +27,8 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.FileTree
+import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -363,6 +365,39 @@ class QuarkdownHtmlNodeRenderer(
         buildTag("pre") {
             classNames("mermaid", "fill-height")
             +escapeCriticalContent(node.code)
+        }
+
+    override fun visit(node: FileTree): CharSequence =
+        buildTag("div") {
+            className("file-tree")
+
+            fun buildEntries(entries: List<FileTreeEntry>): CharSequence =
+                buildTag("ul") {
+                    entries.forEach { entry ->
+                        tag("li") {
+                            when (entry) {
+                                is FileTreeEntry.File -> {
+                                    className("file")
+                                    attribute("data-name", entry.name)
+                                    +entry.name
+                                }
+
+                                is FileTreeEntry.Directory -> {
+                                    className("directory")
+                                    attribute("data-name", entry.name)
+                                    +entry.name
+                                    +buildEntries(entry.entries)
+                                }
+
+                                FileTreeEntry.Ellipsis -> {
+                                    className("ellipsis")
+                                    +"&hellip;"
+                                }
+                            }
+                        }
+                    }
+                }
+            +buildEntries(node.entries)
         }
 
     override fun visit(node: SubdocumentGraph): CharSequence {
@@ -706,7 +741,10 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(variant: TableOfContentsItemVariant): HtmlTagBuilder.() -> Unit =
         {
-            attribute("data-target-id", HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(variant.item.target))
+            attribute(
+                "data-target-id",
+                HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(variant.item.target),
+            )
             attribute("data-depth", variant.item.depth.toString())
         }
 }

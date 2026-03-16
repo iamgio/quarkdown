@@ -5,14 +5,14 @@ The **`.include`** function, previously seen in [*Including other Quarkdown file
 
 When you download Quarkdown or build it via `distZip`, the `lib/qd` directory contains utility libraries written in Quarkdown itself.
 
-```markdown
-quarkdown/
-├─ lib/qd/
-│  ├─ lib.qd
-│  ├─ ...
-├─ bin/
-│  ├─ quarkdown.jar
-```
+.filetree
+    - quarkdown
+      - lib
+        - qd
+          - lib.qd
+          - ...
+      - bin
+        - quarkdown.jar
 
 You can import `.qd` files into a Quarkdown project via `.include {name}`, without the file extension.
 

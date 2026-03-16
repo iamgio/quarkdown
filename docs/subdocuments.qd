@@ -90,13 +90,12 @@ Unlike [`.include`](including-other-quarkdown-files.qd), the context is *inherit
 
 The working directory of a subdocument is relative to the subdocument's entry point, not the referrer:
 
-```plaintext
-main.qd
-pages/
-| introduction.qd
-images/
-| image.png
-```
+.filetree
+    - main.qd
+    - pages
+      - introduction.qd
+    - images
+      - image.png
 
 Whereas `main.qd` can reference `images/image.png`, `introduction.qd` should reference it as `../images/image.png`.
 
@@ -120,30 +119,28 @@ Each subdocument is exported as a separate subdirectory in the same directory as
 
 Configuration resources, such as themes and runtime scripts, are generated only once. [Media](media-storage.qd) is stored per subdocument instead.
 
-```plaintext
-MyDocument/
-|  media/
-|  theme/
-|  script/
-|  introduction/
-|  |  media/
-|  |  index.html
-|  conclusion/
-|  |  media/
-|  |  index.html
-|  index.html
-```
+.filetree
+    - MyDocument
+      - media
+      - theme
+      - script
+      - introduction
+        - media
+        - index.html
+      - conclusion
+        - media
+        - index.html
+      - index.html
 
 ### PDF
 
 Each subdocument is exported as a separate PDF file.
 
-```plaintext
-MyDocument/
-| index.pdf
-| introduction.pdf
-| conclusion.pdf
-```
+.filetree
+    - MyDocument
+      - index.pdf
+      - introduction.pdf
+      - conclusion.pdf
 
 > Note: Subdocument links in PDF output are not navigable yet.
 

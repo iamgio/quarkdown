@@ -1,7 +1,7 @@
 .quarkdown {
   // Vertical block spacing.
   table:not(code table), pre, figure, blockquote,
-  hr, .stack:not(.stack .stack) {
+  hr, .stack:not(.stack .stack), .file-tree {
     margin-top: var(--qd-block-margin);
     margin-bottom: var(--qd-block-margin);
   }

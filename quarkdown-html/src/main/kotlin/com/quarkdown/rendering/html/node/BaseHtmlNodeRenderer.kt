@@ -47,6 +47,7 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -396,6 +397,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: BibliographyView): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: MermaidDiagram): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: FileTree): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: SubdocumentGraph): CharSequence = throw UnsupportedRenderException(node)
 

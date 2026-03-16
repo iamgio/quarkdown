@@ -43,6 +43,8 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.quarkdown.block.FileTree
+import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.ImageFigure
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
@@ -1137,6 +1139,50 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             LastHeading(depth = 3).render(),
+        )
+    }
+
+    @Test
+    fun `file tree`() {
+        val out = readParts("quarkdown/filetree.html")
+
+        // Files only.
+        assertEquals(
+            out.next(),
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("file1.txt"),
+                    FileTreeEntry.File("file2.json"),
+                ),
+            ).render(),
+        )
+
+        // Directory with files.
+        assertEquals(
+            out.next(),
+            FileTree(
+                listOf(
+                    FileTreeEntry.Directory(
+                        "src",
+                        listOf(
+                            FileTreeEntry.File("main.ts"),
+                            FileTreeEntry.File("utils.ts"),
+                        ),
+                    ),
+                    FileTreeEntry.File("README.md"),
+                ),
+            ).render(),
+        )
+
+        // Ellipsis.
+        assertEquals(
+            out.next(),
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("index.ts"),
+                    FileTreeEntry.Ellipsis,
+                ),
+            ).render(),
         )
     }
 

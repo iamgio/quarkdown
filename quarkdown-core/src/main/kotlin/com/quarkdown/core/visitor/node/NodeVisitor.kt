@@ -39,6 +39,7 @@ import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.Landscape
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -172,6 +173,8 @@ interface NodeVisitor<T> {
     fun visit(node: BibliographyView): T
 
     fun visit(node: MermaidDiagram): T
+
+    fun visit(node: FileTree): T
 
     fun visit(node: SubdocumentGraph): T
 

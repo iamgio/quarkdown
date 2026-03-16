@@ -23,14 +23,18 @@ import com.quarkdown.core.ast.base.block.list.ListBlock
  * @param O type of the final converted output
  * @param T type of individual element values in the list
  * @param list list to convert
- * @param inlineValueMapper function that maps the node of a list item to a value
- * @param nestedValueMapper function that maps a nested list to a value
+ * @param inlineValueMapper function that maps the node of a list item to a value.
+ *        For example, the paragraph node containing `file1.txt` in `- file1.txt`
+ * @param nestedValueMapper function that maps a nested list item to a value.
+ *        The first argument is the parent node (e.g. the paragraph containing the label `dir1` in `- dir1`),
+ *        and the second is the nested [ListBlock] containing its children.
+ *        In the compact syntax (`- - value`), both arguments refer to the same [ListBlock] node
  * @see com.quarkdown.core.function.value.factory.ValueFactory.iterable
  */
 abstract class MarkdownListToIterable<O, T>(
     list: ListBlock,
     private val inlineValueMapper: (Node) -> T,
-    private val nestedValueMapper: (ListBlock) -> T,
+    private val nestedValueMapper: (Node, ListBlock) -> T,
 ) : MarkdownListConverter<O, T, Node>(list) {
     protected val elements = mutableListOf<T>()
 
@@ -42,8 +46,8 @@ abstract class MarkdownListToIterable<O, T>(
 
     override fun inlineValue(child: Node) =
         when (child) {
-            // Compact syntax.
-            is ListBlock -> nestedValueMapper(child)
+            // Compact syntax: the parent node is the list itself.
+            is ListBlock -> nestedValueMapper(child, child)
 
             else -> inlineValueMapper(child)
         }
@@ -52,5 +56,5 @@ abstract class MarkdownListToIterable<O, T>(
     override fun nestedValue(
         child: Node,
         list: ListBlock,
-    ) = nestedValueMapper(list) // The child node is ignored.
+    ) = nestedValueMapper(child, list)
 }
