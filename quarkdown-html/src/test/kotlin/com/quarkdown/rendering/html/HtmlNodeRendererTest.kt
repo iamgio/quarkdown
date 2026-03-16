@@ -1180,7 +1180,27 @@ class HtmlNodeRendererTest {
             FileTree(
                 listOf(
                     FileTreeEntry.File("index.ts"),
-                    FileTreeEntry.Ellipsis,
+                    FileTreeEntry.Ellipsis(),
+                ),
+            ).render(),
+        )
+
+        // Highlighted entries.
+        assertEquals(
+            out.next(),
+            FileTree(
+                listOf(
+                    FileTreeEntry.File("file1.txt"),
+                    FileTreeEntry.File("file2.txt", highlighted = true),
+                    FileTreeEntry.Directory(
+                        "src",
+                        listOf(
+                            FileTreeEntry.File("main.ts", highlighted = true),
+                            FileTreeEntry.File("utils.ts"),
+                        ),
+                        highlighted = true,
+                    ),
+                    FileTreeEntry.Ellipsis(highlighted = true),
                 ),
             ).render(),
         )

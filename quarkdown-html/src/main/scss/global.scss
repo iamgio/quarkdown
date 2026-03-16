@@ -169,6 +169,9 @@
   --qd-mermaid-node-line-color: var(--qd-main-color);
   --qd-mermaid-node-filter: none;
 
+  // File tree
+  --qd-file-tree-highlight-color: color-mix(in srgb, var(--qd-link-color) 10%, transparent);
+
   // Docs
   --qd-docs-header-height: 60px;
   --qd-docs-header-vertical-padding: 12px;

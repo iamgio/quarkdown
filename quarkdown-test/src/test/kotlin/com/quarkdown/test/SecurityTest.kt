@@ -46,6 +46,20 @@ class SecurityTest {
     }
 
     @Test
+    fun `file tree injection`() {
+        execute(
+            """
+            .filetree
+                - </div><script>alert('XSS')</script>
+            """.trimIndent(),
+        ) {
+            val escaped = "&lt;/div&gt;&lt;script&gt;alert(&rsquo;XSS&rsquo;)&lt;/script&gt;"
+            assertContains(it, ">$escaped</li>")
+            assertContains(it, "data-name=\"$escaped\"")
+        }
+    }
+
+    @Test
     fun `infinite recursion in strict mode`() {
         assertFailsWith<PipelineException> {
             execute(

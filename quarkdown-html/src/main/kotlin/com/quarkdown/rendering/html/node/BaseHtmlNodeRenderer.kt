@@ -106,13 +106,7 @@ open class BaseHtmlNodeRenderer(
         pretty: Boolean,
     ) = HtmlTagBuilder(name, renderer = this, pretty)
 
-    override fun escapeCriticalContent(unescaped: String) =
-        unescaped
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace("\"", "&quot;")
-            .replace("\'", "&#39;")
+    override fun escapeCriticalContent(unescaped: String) = Escape.Html.escape(unescaped)
 
     // Root
 
