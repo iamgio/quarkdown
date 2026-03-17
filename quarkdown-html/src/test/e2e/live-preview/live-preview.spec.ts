@@ -122,21 +122,64 @@ for (const docType of SCROLLABLE_DOC_TYPES) {
                     timeout: RELOAD_TIMEOUT,
                 });
 
-                // Wait for scroll position to be restored on the now-active iframe.
-                // Scroll restoration may be slightly delayed (e.g. paged.js layout),
-                // so we poll until the position settles.
+                // Check scroll position on the now-active iframe (may have swapped).
                 const newIframeHandle = await page.locator("iframe.visible").elementHandle({timeout: 5000});
                 const newContentFrame = await newIframeHandle!.contentFrame();
-
-                await expect
-                    .poll(
-                        () => newContentFrame!.evaluate(() => window.scrollY),
-                        {timeout: 10_000, intervals: [200, 500, 1000]},
-                    )
-                    .toBeGreaterThan(100);
-
                 const scrollAfter = await newContentFrame!.evaluate(() => window.scrollY);
+
+                // Scroll position should be approximately preserved (within tolerance).
+                expect(scrollAfter).toBeGreaterThan(100);
                 expect(Math.abs(scrollAfter - scrollBefore)).toBeLessThan(200);
+            },
+            {docType},
+        );
+    });
+}
+
+// --- Sticky-to-bottom scroll preserved across reload ---
+
+for (const docType of SCROLLABLE_DOC_TYPES) {
+    test(`sticky bottom scroll preserved across reload [${docType}]`, async ({page}) => {
+        test.setTimeout(TEST_TIMEOUT);
+
+        await runLivePreviewTest(
+            TEST_DIR,
+            page,
+            async (ctx) => {
+                // Wait for initial content.
+                await expect(ctx.activeFrame.locator("body")).toContainText("Marker Alpha", {
+                    timeout: RELOAD_TIMEOUT,
+                });
+
+                // Scroll the active iframe to the very bottom.
+                const visibleIframe = page.locator("iframe.visible");
+                const iframeHandle = await visibleIframe.elementHandle({timeout: 5000});
+                const contentFrame = await iframeHandle!.contentFrame();
+
+                await contentFrame!.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await page.waitForTimeout(500);
+
+                // Verify we are at the bottom.
+                const isAtBottom = await contentFrame!.evaluate(() => {
+                    return window.scrollY >= document.body.scrollHeight - window.innerHeight - 1;
+                });
+                expect(isAtBottom).toBe(true);
+
+                // Edit main.qd to trigger a reload.
+                ctx.editFile("main.qd", mainWithMarker("Marker Beta"));
+
+                // Wait for the reload to complete.
+                await expect(ctx.activeFrame.locator("body")).toContainText("Marker Beta", {
+                    timeout: RELOAD_TIMEOUT,
+                });
+
+                // Check that the new frame is still at the bottom.
+                const newIframeHandle = await page.locator("iframe.visible").elementHandle({timeout: 5000});
+                const newContentFrame = await newIframeHandle!.contentFrame();
+                const isStillAtBottom = await newContentFrame!.evaluate(() => {
+                    return window.scrollY >= document.body.scrollHeight - window.innerHeight - 1;
+                });
+                expect(isStillAtBottom).toBe(true);
             },
             {docType},
         );

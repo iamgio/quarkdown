@@ -283,6 +283,7 @@
      * still-hidden frame before it becomes visible.
      */
     function commitSwap() {
+        if (!reloadPending) return;
         clearTimeout(swapFallbackTimer);
 
         const outgoing = getActiveFrame();
@@ -355,7 +356,9 @@
     function onFrameLoaded() {
         frameLoaded = true;
         // Start a fallback timer for content that never sends postRenderingCompleted.
-        swapFallbackTimer = setTimeout(commitSwap, 300);
+        // This must be long enough for the content's rendering pipeline to complete,
+        // especially for paged documents where paged.js layout can take several seconds.
+        swapFallbackTimer = setTimeout(commitSwap, 5000);
         maybeCommitSwap();
     }
 
