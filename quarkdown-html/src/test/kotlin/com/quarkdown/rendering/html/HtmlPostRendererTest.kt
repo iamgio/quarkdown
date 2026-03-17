@@ -188,7 +188,7 @@ class HtmlPostRendererTest {
             DocumentInfo(
                 layout =
                     DocumentLayoutInfo(
-                        pageFormat = PageFormatInfo(pageWidth = 8.5.inch),
+                        pageFormats = listOf(PageFormatInfo(pageWidth = 8.5.inch)),
                     ),
             )
         val result = postRenderer().wrap("")
@@ -351,13 +351,13 @@ class HtmlPostRendererTest {
 
         val result = postRenderer().wrap("<p><em>Hello, world!</em></p>")
 
-        assertTrue("lang=\"en\"" in result)
-        assertTrue("<title>Quarkdown</title>" in result)
-        assertTrue("The Quarkdown typesetting system" in result)
-        assertTrue("@font-face { font-family: '63529059'; src: local('Arial'); }" in result)
-        assertTrue("katex" in result)
-        assertTrue("class=\"reveal\"" in result)
-        assertTrue("<p><em>Hello, world!</em></p>" in result)
+        assertContains(result, "lang=\"en\"")
+        assertContains(result, "<title>Quarkdown</title>")
+        assertContains(result, "The Quarkdown typesetting system")
+        assertContains(result, "@font-face { font-family: '63529059'; src: local('Arial'); }")
+        assertContains(result, "katex")
+        assertContains(result, "class=\"reveal\"")
+        assertContains(result, "<p><em>Hello, world!</em></p>")
     }
 
     @Test

@@ -3,9 +3,9 @@ package com.quarkdown.rendering.html.post.document
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.font.FontInfo
+import com.quarkdown.core.document.layout.page.PageFormatInfo
+import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.misc.font.FontFamily
-import com.quarkdown.core.util.get
-import com.quarkdown.core.util.withDefault
 import com.quarkdown.rendering.html.css.asCSS
 import com.quarkdown.rendering.html.css.stylesheet
 
@@ -20,23 +20,27 @@ import com.quarkdown.rendering.html.css.stylesheet
  */
 class HtmlDocumentStylesheet(
     private val context: Context,
+    private val pageFormats: List<PageFormatInfo>,
 ) {
     private val document = context.documentInfo
 
-    private val pageFormat = document.layout.pageFormat.withDefault(document.type.defaultPageFormat)
+    fun build(): String =
+        buildString {
+            appendLine(buildFonts())
+            appendLine(buildParagraphStyle(document.layout.paragraphStyle))
+
+            pageFormats.forEach { pageFormat ->
+                appendLine(buildPageFormat(pageFormat))
+            }
+        }
 
     /**
-     * Builds the full CSS stylesheet content for the document.
-     * @return the CSS string to be embedded in a `<style>` tag
+     * Builds `@font-face` declarations and font CSS custom properties.
+     * Emitted once, outside the per-format loop, since fonts are document-global
+     * and CSS custom properties are invalid inside `@page` at-rules.
      */
-    fun build(): String {
-        val pageWidth = pageFormat.get { pageWidth }
-        val pageHeight = pageFormat.get { pageHeight }
-        val margin = pageFormat.get { margin }
-        val alignment = pageFormat.get { alignment }
-        val paragraphStyle = document.layout.paragraphStyle
-
-        return stylesheet {
+    private fun buildFonts(): String =
+        stylesheet {
             raw(fontFaceSnippets().joinToString("\n"))
 
             rule("body") {
@@ -44,52 +48,78 @@ class HtmlDocumentStylesheet(
                 "--qd-heading-custom-font" value headingFontFamily()
                 "--qd-code-custom-font" value codeFontFamily()
                 "--qd-main-font-size" value fontSizeCss()
-                "--qd-content-width" value pageWidth
-                "--qd-column-count" value pageFormat.get { columnCount }?.toString()
+            }
+        }
 
-                if (alignment != null && alignment.isLocal) {
-                    "--qd-horizontal-alignment-local" importantValue alignment
-                    "--qd-horizontal-alignment-global" importantValue "unset"
-                    "--qd-horizontal-alignment-list-items" importantValue "unset"
-                }
-                if (alignment != null && alignment.isGlobal) {
-                    "--qd-horizontal-alignment-global" importantValue alignment
-                    "--qd-horizontal-alignment-local" importantValue alignment
-                }
-
-                pageFormat.get { contentBorderWidth }?.let {
-                    "--qd-page-content-border-width" value it
-                    "--qd-page-content-border-style" value "solid"
-                }
-                pageFormat.get { contentBorderColor }?.let {
-                    "--qd-page-content-border-color" value it
-                    "--qd-page-content-border-style" value "solid"
-                }
-
+    private fun buildParagraphStyle(paragraphStyle: ParagraphStyleInfo): String =
+        stylesheet {
+            rule("body") {
                 "--qd-line-height" value paragraphStyle.lineHeight?.toString()
                 "--qd-letter-spacing" value paragraphStyle.letterSpacing?.let { "${it}em" }
                 "--qd-paragraph-vertical-margin" value paragraphStyle.spacing?.let { "${it}em" }
             }
-
-            rule(
-                "body.quarkdown-plain.quarkdown-plain",
-                "body.quarkdown-docs.quarkdown-docs",
-            ) {
-                "margin" value margin
-            }
-
-            rule("body.quarkdown-slides.quarkdown-slides .reveal") {
-                "width" value pageWidth
-                "height" value pageHeight
-            }
-
-            rule("@page") {
-                "size" value "${pageWidth?.asCSS ?: "auto"} ${pageHeight?.asCSS ?: "auto"}"
-                "margin" value (margin?.asCSS ?: if (document.type == DocumentType.PLAIN) "0" else null)
-            }
-
             rule("p") {
                 "--qd-paragraph-text-indent" value paragraphStyle.indent?.let { "${it}em" }
+            }
+        }
+
+    /**
+     * Builds the CSS stylesheet for a single [PageFormatInfo], depending on its scope and properties.
+     * When [PageFormatInfo.side] is set, rules are scoped to the corresponding `@page:left` or `@page:right`
+     * selector; otherwise they target `body` and the generic `@page`.
+     * @return the CSS string to be embedded in a `<style>` tag
+     */
+    private fun buildPageFormat(format: PageFormatInfo): String {
+        val (selector, isPageSelector) =
+            when (format.side) {
+                null -> "body" to false
+                else -> "@page:${format.side?.asCSS}" to true
+            }
+
+        return stylesheet {
+            rule(selector) {
+                "--qd-content-width" value format.pageWidth
+                "--qd-column-count" value format.columnCount?.toString()
+
+                if (format.alignment?.isLocal == true) {
+                    "--qd-horizontal-alignment-local" importantValue format.alignment
+                    "--qd-horizontal-alignment-global" importantValue "unset"
+                    "--qd-horizontal-alignment-list-items" importantValue "unset"
+                }
+                if (format.alignment?.isGlobal == true) {
+                    "--qd-horizontal-alignment-global" importantValue format.alignment
+                    "--qd-horizontal-alignment-local" importantValue format.alignment
+                }
+
+                format.contentBorderWidth?.let {
+                    "--qd-page-content-border-width" value it
+                    "--qd-page-content-border-style" value "solid"
+                }
+                format.contentBorderColor?.let {
+                    "--qd-page-content-border-color" value it
+                    "--qd-page-content-border-style" value "solid"
+                }
+            }
+
+            if (!isPageSelector) {
+                rule(
+                    "body.quarkdown-plain.quarkdown-plain",
+                    "body.quarkdown-docs.quarkdown-docs",
+                ) {
+                    "margin" value format.margin
+                }
+
+                rule("body.quarkdown-slides.quarkdown-slides .reveal") {
+                    "width" value format.pageWidth
+                    "height" value format.pageHeight
+                }
+            }
+
+            rule(if (isPageSelector) selector else "@page") {
+                if (format.pageWidth != null || format.pageHeight != null) {
+                    "size" value "${format.pageWidth?.asCSS ?: "auto"} ${format.pageHeight?.asCSS ?: "auto"}"
+                }
+                "margin" value (format.margin?.asCSS ?: if (document.type == DocumentType.PLAIN) "0" else null)
             }
         }
     }

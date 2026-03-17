@@ -1,0 +1,10 @@
+.doctype {paged}
+
+.pageformat alignment:{center}
+.pageformat margin:{5cm} borderleft:{1cm} bordercolor:{red}
+.pageformat side:{left} margin:{1cm} bordercolor:{green}
+.pageformat side:{left} alignment:{end}
+.pageformat side:{right} bordercolor:{blue}
+
+.repeat {20}
+    .loremipsum

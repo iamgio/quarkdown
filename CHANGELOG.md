@@ -72,6 +72,19 @@ Both `.tableofcontents` and `.bibliography` now accept the following optional pa
 
 The `.text` function now accepts a `script` parameter with `sub` and `sup` values for subscript and superscript text.
 
+#### [Per-side page formatting](https://quarkdown.com/wiki/page-format#per-side-formatting)
+
+`.pageformat` now accepts an optional `side` parameter (`left` or `right`) to apply formatting to specific page sides only (recto and verso).
+
+This enables mirrored margins and other asymmetric layouts in `paged` documents.
+Multiple `.pageformat` calls create a stack where later calls override earlier ones.
+
+```markdown
+.pageformat size:{A4}
+.pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
+.pageformat side:{right} margin:{2cm 1cm 2cm 3cm}
+```
+
 ### Changed
 
 #### Removed `includeunnumbered` parameter from `.tableofcontents`

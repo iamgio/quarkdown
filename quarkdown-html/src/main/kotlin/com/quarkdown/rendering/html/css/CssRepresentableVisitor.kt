@@ -11,6 +11,7 @@ import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.page.PageMarginPosition
+import com.quarkdown.core.document.layout.page.PageSide
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.slides.Transition
@@ -114,6 +115,8 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
     override fun visit(variant: TextTransformData.Variant) = variant.kebabCaseName
 
     override fun visit(script: TextTransformData.Script) = script.kebabCaseName
+
+    override fun visit(pageSide: PageSide) = pageSide.kebabCaseName
 }
 
 /**
