@@ -28,6 +28,7 @@ import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
+import com.quarkdown.core.document.layout.page.PageSide
 import com.quarkdown.core.document.layout.page.PageSizeFormat
 import com.quarkdown.core.document.layout.page.merge
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
@@ -686,6 +687,16 @@ fun texMacro(
  * - In case of `plain` documents, this function defines some properties of the whole document, seeing it as just one page.
  *   Not all effects of this function are supported in plain documents.
  *
+ * This function can be called multiple times. Each call appends a new format layer, and later layers
+ * take priority over earlier ones. When [side] is specified, the format is scoped only to specific pages of `paged` documents,
+ * enabling distinct formatting per side (e.g. mirrored margins):
+ *
+ * ```
+ * .pageformat size:{A4}
+ * .pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
+ * .pageformat side:{right} margin:{2cm 1cm 2cm 3cm}
+ * ```
+ *
  * If both [format] and [width] or [height] are set, the latter overrides the former.
  * If both [format] and [width] or [height] are unset, the default value is used.
  *
@@ -694,6 +705,8 @@ fun texMacro(
  * If only [borderColor] is set, the border will be applied with a default width to each side.
  * Border is not supported in plain documents.
  *
+ * @param side the page side this format applies to: `left` (verso) or `right` (recto).
+ *             If unset, the format applies to all pages
  * @param format standard size format of each page (overridden by [width] and [height])
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
@@ -714,6 +727,7 @@ fun texMacro(
 @Name("pageformat")
 fun pageFormat(
     @Injected context: MutableContext,
+    @LikelyNamed side: PageSide? = null,
     @Name("size") format: PageSizeFormat? = null,
     @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
     @LikelyNamed width: Size? = null,
@@ -727,8 +741,6 @@ fun pageFormat(
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
-    val currentFormat = context.documentInfo.layout.pageFormat
-
     // If, for instance, the document is landscape and the given format is portrait,
     // the format is converted to landscape.
     val formatBounds = format?.getBounds(orientation)
@@ -738,6 +750,7 @@ fun pageFormat(
 
     val format =
         PageFormatInfo(
+            side = side,
             pageWidth = width ?: formatBounds?.width,
             pageHeight = height ?: formatBounds?.height,
             margin = margin,
@@ -745,16 +758,16 @@ fun pageFormat(
             alignment = alignment,
             contentBorderWidth =
                 Sizes(
-                    top = borderTop ?: currentFormat.contentBorderWidth?.top ?: Size.ZERO,
-                    right = borderRight ?: currentFormat.contentBorderWidth?.right ?: Size.ZERO,
-                    bottom = borderBottom ?: currentFormat.contentBorderWidth?.bottom ?: Size.ZERO,
-                    left = borderLeft ?: currentFormat.contentBorderWidth?.left ?: Size.ZERO,
+                    top = borderTop ?: Size.ZERO,
+                    right = borderRight ?: Size.ZERO,
+                    bottom = borderBottom ?: Size.ZERO,
+                    left = borderLeft ?: Size.ZERO,
                 ).takeIf { hasBorder },
             contentBorderColor = borderColor,
         )
 
     // Update global page format.
-    context.documentInfo = context.documentInfo.deepCopy(layoutPageFormat = format.merge(currentFormat))
+    context.documentInfo = context.documentInfo.deepCopy(layoutPageFormats = context.documentInfo.layout.pageFormats + format)
 
     return VoidValue
 }

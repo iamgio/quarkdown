@@ -12,6 +12,8 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.NamedColor
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
+import com.quarkdown.stdlib.pageFormat
+import com.quarkdown.stdlib.paragraphStyle
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,10 +41,7 @@ class DocumentTest {
             assertNull(documentInfo.description)
             assertTrue(documentInfo.keywords.isEmpty())
             assertNull(documentInfo.locale)
-            assertNull(documentInfo.layout.pageFormat.pageWidth)
-            assertNull(documentInfo.layout.pageFormat.margin)
-            assertNull(documentInfo.layout.pageFormat.contentBorderWidth)
-            assertNull(documentInfo.layout.pageFormat.contentBorderColor)
+            assertTrue(documentInfo.layout.pageFormats.isEmpty())
             assertNull(documentInfo.layout.paragraphStyle.spacing)
         }
     }
@@ -68,7 +67,7 @@ class DocumentTest {
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
-            .pageformat {A3} orientation:{landscape} margin:{3cm 2px} bordercolor:{green} columns:{4} alignment:{end}
+            .pageformat size:{A3} orientation:{landscape} margin:{3cm 2px} bordercolor:{green} columns:{4} alignment:{end}
             .paragraphstyle lineheight:{2.0} spacing:{1.5} indent:{2}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
@@ -90,9 +89,11 @@ class DocumentTest {
             assertEquals("darko", documentInfo.theme?.color)
             assertEquals("minimal", documentInfo.theme?.layout)
 
+            val pageFormat = documentInfo.layout.pageFormats.last()
+
             PageSizeFormat.A3.getBounds(PageOrientation.LANDSCAPE).let { bounds ->
-                assertEquals(bounds.width, documentInfo.layout.pageFormat.pageWidth)
-                assertEquals(bounds.height, documentInfo.layout.pageFormat.pageHeight)
+                assertEquals(bounds.width, pageFormat.pageWidth)
+                assertEquals(bounds.height, pageFormat.pageHeight)
             }
 
             assertEquals(
@@ -100,13 +101,13 @@ class DocumentTest {
                     vertical = Size(3.0, Size.Unit.CENTIMETERS),
                     horizontal = Size(2.0, Size.Unit.PIXELS),
                 ),
-                documentInfo.layout.pageFormat.margin,
+                pageFormat.margin,
             )
 
-            assertNull(documentInfo.layout.pageFormat.contentBorderWidth)
-            assertEquals(NamedColor.GREEN.color, documentInfo.layout.pageFormat.contentBorderColor)
-            assertEquals(4, documentInfo.layout.pageFormat.columnCount)
-            assertEquals(Container.TextAlignment.END, documentInfo.layout.pageFormat.alignment)
+            assertNull(pageFormat.contentBorderWidth)
+            assertEquals(NamedColor.GREEN.color, pageFormat.contentBorderColor)
+            assertEquals(4, pageFormat.columnCount)
+            assertEquals(Container.TextAlignment.END, pageFormat.alignment)
 
             assertEquals(2.0, documentInfo.layout.paragraphStyle.lineHeight)
             assertEquals(1.5, documentInfo.layout.paragraphStyle.spacing)

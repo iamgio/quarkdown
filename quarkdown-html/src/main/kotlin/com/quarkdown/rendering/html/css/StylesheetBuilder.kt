@@ -18,7 +18,9 @@ class StylesheetBuilder {
         block: CssBuilder.() -> Unit,
     ) {
         val body = CssBuilder().apply(block).buildBlock()
-        parts += "${selectors.joinToString(",\n")} {\n$body}"
+        if (body.isNotBlank()) {
+            parts += "${selectors.joinToString(",\n")} {\n$body}"
+        }
     }
 
     fun build(): String = parts.joinToString("\n\n")

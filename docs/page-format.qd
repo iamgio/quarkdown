@@ -3,8 +3,11 @@
 
 The **`.pageformat`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Document/pageformat.html} function configures the page format. All its parameters are **optional**, and if left unset, they delegate their default value to the underlying renderer depending on the document type.
 
+Multiple calls to `.pageformat` are layered on top of each other, with later calls overriding earlier ones.
+
 | Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents                |
 |----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------|
+| `side`                                                   | Restricts the format to left (verso) or right (recto) pages only. See [Per-side formatting](#per-side-formatting).                                                      | `left`, `right`                                                                            | `paged`                            |
 | `size`                                                   | Name of the paper format.                                                                                                                                               | `A0`..`A10`, `B0`..`B5`, `letter`, `legal`, `ledger`                                       | `paged`, `slides`                  |
 | `width`                                                  | Page width. If `size` is set too, this value overrides its width.                                                                                                       | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `plain`, `paged`, `slides`, `docs` |
 | `height`                                                 | Page height. If `size` is set too, this value overrides its height.                                                                                                     | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`                  |
@@ -36,3 +39,12 @@ The `bordertop`, `borderright`, `borderbottom`, `borderleft`, and `bordercolor` 
 
 .exampleoutput {!(500)[image](page-format/borders.png)}
     .pageformat bordertop:{1px} borderbottom:{4px}
+
+## Per-side formatting
+
+In `paged` documents, the `side` parameter restricts a format to left (verso) or right (recto) pages only. This is useful, for example, for mirrored margins in book-style layouts.
+
+.exampleoutput {![Per-side formatting](page-format/sides.png)}
+    .pageformat size:{A4}
+    .pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
+    .pageformat side:{right} margin:{2cm 1cm 2cm 3cm}

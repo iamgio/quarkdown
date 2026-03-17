@@ -5,15 +5,15 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.Color
-import com.quarkdown.core.util.Defaultable
 
 /**
  * Immutable information about the format of all pages of a document.
  * When any of the fields is `null`, the default value supplied by the underlying renderer is used.
  *
- * This class is marked as [Defaultable], since its default values can be supplied by the document type
- * via [com.quarkdown.core.document.DocumentType.defaultPageFormat].
+ * A document may have multiple [PageFormatInfo] instances with different [side] values,
+ * allowing distinct formatting for left and right pages (e.g. mirrored margins in paged documents).
  *
+ * @param side the page side this format applies to, or `null` for both sides
  * @param pageWidth width of each page
  * @param pageHeight height of each page
  * @param margin blank space around the content of each page
@@ -24,6 +24,7 @@ import com.quarkdown.core.util.Defaultable
  */
 @Mergeable
 data class PageFormatInfo(
+    val side: PageSide? = null,
     val pageWidth: Size? = null,
     val pageHeight: Size? = null,
     val margin: Sizes? = null,
@@ -31,4 +32,10 @@ data class PageFormatInfo(
     val contentBorderColor: Color? = null,
     val columnCount: Int? = null,
     val alignment: Container.TextAlignment? = null,
-) : Defaultable
+)
+
+/**
+ * Merges a list of [PageFormatInfo] layers into a single instance.
+ * Later entries take priority: their non-null fields override earlier ones.
+ */
+fun List<PageFormatInfo>.mergeAll(): PageFormatInfo = reduce { acc, format -> format.merge(acc) }
