@@ -26,13 +26,13 @@ import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 /**
  * Parser tests for inline content.
@@ -200,12 +200,12 @@ class InlineParserTest {
             assertEquals("this is a definition!", definition.toPlainText())
         }
         with(nodes.next()) {
-            assertTrue(
-                label.length ==
-                    java.util.UUID
-                        .randomUUID()
-                        .toString()
-                        .length,
+            assertEquals(
+                label.length,
+                UUID
+                    .randomUUID()
+                    .toString()
+                    .length,
             )
             assertEquals("this is an anonymous definition!", definition.toPlainText())
         }

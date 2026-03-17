@@ -113,6 +113,16 @@ class TextTest {
     }
 
     @Test
+    fun `subscript and superscript`() {
+        execute("H{.text {2} script:{sub}}O is water. E = mc{.text {2} script:{sup}}") {
+            assertEquals(
+                "<p>H<sub>2</sub>O is water. E = mc<sup>2</sup></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `simple whitespace`() {
         execute(
             """

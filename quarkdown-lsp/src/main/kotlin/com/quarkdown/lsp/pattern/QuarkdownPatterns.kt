@@ -16,7 +16,7 @@ object QuarkdownPatterns {
         /**
          * The character that prefixes a function call.
          */
-        const val BEGIN: String = FunctionCallGrammar.BEGIN
+        const val BEGIN: String = FunctionCallGrammar.BEGIN.toString()
 
         /**
          * The pattern for an identifier (function name or argument name).

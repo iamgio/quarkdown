@@ -102,4 +102,23 @@ class FunctionDocumentationHoverSupplierTest {
             ".$CSV_FUNCTION",
         )
     }
+
+    // Wrapped (tight) function calls
+
+    @Test
+    fun `hover over wrapped function call`() {
+        val text = "hello{.$ALIGN_FUNCTION {center}}hello"
+        val position = Position(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2)
+
+        val hover = getHover(text, position)
+        assertNotNull(hover)
+        assertContains(hover.contents.right.value, ".$ALIGN_FUNCTION")
+    }
+
+    @Test
+    fun `hover outside wrapped function call returns null`() {
+        val text = "hello{.$ALIGN_FUNCTION {center}}hello"
+        // Position on "hello" before the wrap.
+        assertNull(getHover(text, Position(0, 2)))
+    }
 }

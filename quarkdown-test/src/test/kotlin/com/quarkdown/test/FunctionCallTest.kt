@@ -77,4 +77,64 @@ class FunctionCallTest {
             assertEquals("<p>3 abc {}</p>", it)
         }
     }
+
+    @Test
+    fun `wrapped block function call`() {
+        execute("{.sum {1} {2}}") {
+            assertEquals("<p>3</p>", it)
+        }
+
+        execute(
+            """
+            .if {yes}
+                {.sum {1} {2}}jkl
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3jkl</p>", it)
+        }
+    }
+
+    @Test
+    fun `wrapped inline function call (loose)`() {
+        execute("hello {.sum {1} {2}} hello") {
+            assertEquals("<p>hello 3 hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `wrapped inline function call (tight)`() {
+        execute("hello{.sum {1} {2}}hello") {
+            assertEquals("<p>hello3hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `escaped wrap`() {
+        execute("hello\\{.sum {1} {2}}hello") {
+            assertEquals("<p>hello{3}hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `malformed wrap`() {
+        execute("{.sum {1} {2} .sum {1} {2}}") {
+            assertEquals("<p>{3 3}</p>", it)
+        }
+
+        execute(
+            """
+            .if {yes}
+                abc{.uppercase {def} .uppercase {ghi}}jkl
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>abc{DEF GHI}jkl</p>", it)
+        }
+    }
+
+    @Test
+    fun `incomplete wrap`() {
+        execute("hello{.sum {1} {2}") {
+            assertEquals("<p>hello{3</p>", it)
+        }
+    }
 }

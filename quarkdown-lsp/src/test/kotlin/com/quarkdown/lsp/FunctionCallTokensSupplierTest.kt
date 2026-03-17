@@ -364,4 +364,54 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 25..26)
         }
     }
+
+    // Wrapped (tight) function calls
+
+    @Test
+    fun `wrapped function call, no args`() {
+        tokenize("{.funcall}") {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 0..1) // Wrap open '{'
+            assertNext(TYPE_BEGIN, 1..2) // '.'
+            assertNext(TYPE_NAME, 2..9) // 'funcall'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 9..10) // Wrap close '}'
+        }
+    }
+
+    @Test
+    fun `wrapped function call with one positional argument`() {
+        tokenize("{.funcall {arg1}}") {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 0..1) // Wrap open
+            assertNext(TYPE_BEGIN, 1..2)
+            assertNext(TYPE_NAME, 2..9)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 10..11) // Arg open
+            assertNext(TokenType.ENUM, 11..15) // arg1
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 15..16) // Arg close
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17) // Wrap close
+        }
+    }
+
+    @Test
+    fun `tight wrapped function call in surrounding text`() {
+        tokenize("hello{.funcall {arg1}}hello") {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 5..6) // Wrap open
+            assertNext(TYPE_BEGIN, 6..7)
+            assertNext(TYPE_NAME, 7..14)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 15..16) // Arg open
+            assertNext(TokenType.ENUM, 16..20) // arg1
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 20..21) // Arg close
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 21..22) // Wrap close
+        }
+    }
+
+    @Test
+    fun `wrapped chained function calls`() {
+        tokenize("{.func1::func2}") {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 0..1) // Wrap open
+            assertNext(TYPE_BEGIN, 1..2)
+            assertNext(TYPE_NAME, 2..7)
+            assertNext(TYPE_CHAINING_SEPARATOR, 7..9)
+            assertNext(TYPE_NAME, 9..14)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 14..15) // Wrap close
+        }
+    }
 }
