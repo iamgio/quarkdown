@@ -125,6 +125,16 @@ When editing long paged documents with live preview, the scroll position could s
 
 The lexer has been optimized to reduce regex builds to a minimum, resulting in significantly improved performance for large documents.
 
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
+
 ## [1.14.1] - 2026-03-06
 
 ### Added

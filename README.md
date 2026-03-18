@@ -419,7 +419,7 @@ Contributions are welcome! Please check [CONTRIBUTING.md](CONTRIBUTING.md) to kn
 A special thanks to all the sponsors who [supported this project](https://github.com/sponsors/iamgio)!
 
 <p align="center">
-  <a href="https://falconer.ai"><img src="https://media.licdn.com/dms/image/sync/v2/D5627AQEv-rlp3aPoUg/articleshare-shrink_800/articleshare-shrink_800/0/1742584632918?e=2147483647&v=beta&t=TlKe3D56q8e7V-G4j26cX3MV5nhza3Jhwy2O3yg20dE" alt="Falconer" width="350"></a>
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 </p>
 
 <p align="center">
