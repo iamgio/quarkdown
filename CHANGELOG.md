@@ -8,7 +8,7 @@
 
 Quarkdown's internal bibliography management is now powered by [CSL](https://citationstyles.org) (Citation Style Language).
 
-- Thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) are now supported. The `style` parameter now accepts any CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
+- A curated selection of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) is now supported. The `style` parameter now accepts a CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
 
   **Breaking change:** `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
 

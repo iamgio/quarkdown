@@ -40,7 +40,7 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  *
  * The bibliography is formatted using a [CSL](https://citationstyles.org) style definition,
  * powered by [citeproc-java](https://github.com/michel-kraemer/citeproc-java).
- * This enables support for thousands of citation styles from the
+ * This enables support for a curated selection of citation styles from the
  * [CSL Style Repository](https://github.com/citation-style-language/styles).
  *
  * Example:
@@ -49,7 +49,8 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * ```
  *
  * @param path path to the bibliography file, with extension
- * @param style [CSL](https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`).
+ * @param style [CSL](https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`)
+ *              from Quarkdown's selection. See the wiki page for a list of supported styles.
  * @param title title of the bibliography. If unset, the default localized title is used
  * @param breakPage whether the heading preceding the bibliography triggers an automatic page break.
  *                  Enabled by default.
