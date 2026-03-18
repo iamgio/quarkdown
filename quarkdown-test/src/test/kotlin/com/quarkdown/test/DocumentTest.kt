@@ -34,7 +34,6 @@ class DocumentTest {
             assertIs<AstRoot>(attributes.root)
             assertFalse(attributes.hasCode)
             assertFalse(attributes.hasMath)
-            assertTrue(attributes.linkDefinitions.isEmpty())
             assertEquals(DocumentType.PLAIN, documentInfo.type)
             assertNull(documentInfo.name)
             assertEquals(0, documentInfo.authors.size)

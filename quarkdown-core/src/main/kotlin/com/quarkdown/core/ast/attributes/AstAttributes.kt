@@ -3,7 +3,6 @@ package com.quarkdown.core.ast.attributes
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
-import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.property.AssociatedProperties
@@ -48,11 +47,6 @@ interface AstAttributes {
     val thirdPartyPresenceProperties: PropertyContainer<Boolean>
 
     /**
-     * The defined links, which can be referenced by other nodes.
-     */
-    val linkDefinitions: List<LinkDefinition>
-
-    /**
      * The function calls to be later executed.
      */
     val functionCalls: List<FunctionCallNode>
@@ -74,7 +68,6 @@ interface AstAttributes {
  * and carry useful information for the next stages of the pipeline.
  * Storing these attributes while parsing prevents a further visit of the final tree.
  * @param root the root node of the tree. According to the architecture, this is set right after the parsing stage
- * @param linkDefinitions the defined links, which can be referenced by other nodes
  * @param functionCalls the function calls to be later executed
  * @param hasCode whether there is at least one code block.
  * @param hasMath whether there is at least one math block or inline.
@@ -84,7 +77,6 @@ data class MutableAstAttributes(
     override var root: NestableNode? = null,
     override val properties: MutableAssociatedProperties<Node, Any> = MutableAssociatedProperties(),
     override val thirdPartyPresenceProperties: MutablePropertyContainer<Boolean> = MutablePropertyContainer(),
-    override val linkDefinitions: MutableList<LinkDefinition> = mutableListOf(),
     override val functionCalls: MutableList<FunctionCallNode> = mutableListOf(),
     override var tableOfContents: TableOfContents? = null,
 ) : AstAttributes {

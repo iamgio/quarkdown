@@ -188,7 +188,7 @@ class InlineTokenParser(
         // When the reference is collapsed, the label is the same as the reference label.
         return ReferenceLink(
             label = label,
-            reference = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
+            referenceLabel = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
             fallback = { Text(token.data.text) },
         )
     }

@@ -1,11 +1,6 @@
 package com.quarkdown.core.context
 
-import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.AstAttributes
-import com.quarkdown.core.ast.base.LinkNode
-import com.quarkdown.core.ast.base.inline.Image
-import com.quarkdown.core.ast.base.inline.ReferenceImage
-import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.context.subdocument.SubdocumentsData
@@ -112,14 +107,6 @@ interface Context {
     fun getFunctionByName(name: String): Function<*>?
 
     /**
-     * Tries to resolve a reference link to an actual link.
-     * If the resolution succeeds, [ReferenceLink.onResolve] callbacks are executed.
-     * @param reference reference link to lookup
-     * @return the corresponding link node, if it exists
-     */
-    fun resolve(reference: ReferenceLink): LinkNode?
-
-    /**
      * @param call function call node to get a function call from
      * @return a new function call that [call] references to, with [call]'s arguments,
      * or `null` if [call] references to an unknown function
@@ -164,18 +151,3 @@ interface Context {
      */
     fun fork(): ScopeContext
 }
-
-/**
- * @param reference reference link to lookup
- * @return the corresponding looked up link node if it exists, its fallback node otherwise
- */
-fun Context.resolveOrFallback(reference: ReferenceLink): Node = resolve(reference) ?: reference.fallback()
-
-/**
- * @param reference reference image to lookup
- * @return the corresponding looked up image node if it exists, its fallback node otherwise
- */
-fun Context.resolveOrFallback(reference: ReferenceImage): Node =
-    resolve(reference.link)
-        ?.let { Image(it, reference.width, reference.height, reference.referenceId) }
-        ?: reference.link.fallback()

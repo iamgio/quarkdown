@@ -2,13 +2,13 @@ package com.quarkdown.core.flavor.base
 
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.hooks.LinkDefinitionRegistrationHook
 import com.quarkdown.core.context.hooks.LinkUrlResolverHook
 import com.quarkdown.core.context.hooks.SubdocumentRegistrationHook
 import com.quarkdown.core.context.hooks.presence.CodePresenceHook
 import com.quarkdown.core.context.hooks.presence.MathPresenceHook
 import com.quarkdown.core.context.hooks.presence.MermaidDiagramPresenceHook
 import com.quarkdown.core.context.hooks.reference.FootnoteResolverHook
+import com.quarkdown.core.context.hooks.reference.LinkDefinitionResolverHook
 import com.quarkdown.core.flavor.TreeIteratorFactory
 
 /**
@@ -17,8 +17,8 @@ import com.quarkdown.core.flavor.TreeIteratorFactory
 class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
     override fun default(context: MutableContext): ObservableAstIterator =
         ObservableAstIterator()
-            // Registers link definitions.
-            .attach(LinkDefinitionRegistrationHook(context))
+            // Resolves reference links to their link definitions.
+            .attach(LinkDefinitionResolverHook(context))
             // Registers subdocuments.
             .attach(SubdocumentRegistrationHook(context))
             // Resolves local URLs/paths for links and images loaded from different base paths.

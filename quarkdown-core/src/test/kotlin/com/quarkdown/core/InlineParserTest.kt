@@ -168,7 +168,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("label", text)
             }
-            assertNodeEquals(Text("ref"), reference.first())
+            assertNodeEquals(Text("ref"), referenceLabel.first())
         }
 
         repeat(2) {
@@ -177,7 +177,7 @@ class InlineParserTest {
                     assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
-                assertNodeEquals(Text("ref"), reference.first())
+                assertNodeEquals(Text("ref"), referenceLabel.first())
             }
         }
     }
@@ -326,7 +326,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("label", text)
             }
-            assertNodeEquals(Text("ref"), link.reference.first())
+            assertNodeEquals(Text("ref"), link.referenceLabel.first())
 
             assertNull(width)
             assertNull(height)
@@ -339,7 +339,7 @@ class InlineParserTest {
                     assertIs<Text>(this)
                     assertEquals("ref", text)
                 }
-                assertNodeEquals(Text("ref"), link.reference.first())
+                assertNodeEquals(Text("ref"), link.referenceLabel.first())
 
                 assertNull(width)
                 assertNull(height)
@@ -351,7 +351,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("ref", text)
             }
-            assertNodeEquals(Text("ref"), link.reference.first())
+            assertNodeEquals(Text("ref"), link.referenceLabel.first())
 
             assertEquals(150.px, width)
             assertEquals(100.px, height)
@@ -362,7 +362,7 @@ class InlineParserTest {
                 assertIs<Text>(this)
                 assertEquals("ref", text)
             }
-            assertNodeEquals(Text("ref"), link.reference.first())
+            assertNodeEquals(Text("ref"), link.referenceLabel.first())
 
             assertEquals(150.px, width)
             assertNull(height)

@@ -5,7 +5,6 @@ package com.quarkdown.rendering.html
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.attributes.reference.setDefinition
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
@@ -13,7 +12,6 @@ import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
-import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.list.ListItem
@@ -62,7 +60,6 @@ import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
-import com.quarkdown.core.context.BaseContext
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.MutableContextOptions
@@ -156,30 +153,25 @@ class HtmlNodeRendererTest {
 
         val label = listOf(Strong(listOf(Text("Foo"))))
 
-        val attributes =
-            MutableAstAttributes(
-                linkDefinitions =
-                    mutableListOf(
-                        LinkDefinition(
-                            label,
-                            url = "/url",
-                            title = "Title",
-                        ),
-                    ),
-            )
-
-        val context = BaseContext(attributes, QuarkdownFlavor)
+        val context = MutableContext()
 
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 
-        assertEquals(
-            out.next(),
-            ReferenceLink(label, label, fallback).render(context),
-        )
-        assertEquals(
-            out.next(),
-            ReferenceLink(listOf(Text("label")), label, fallback).render(context),
-        )
+        // Resolved: label matches the reference, definition is set.
+        val resolved =
+            ReferenceLink(label, label, fallback).also {
+                it.setDefinition(context, Link(it.label, "/url", "Title"))
+            }
+        assertEquals(out.next(), resolved.render(context))
+
+        // Resolved: different display label, same reference label.
+        val resolvedDifferentLabel =
+            ReferenceLink(listOf(Text("label")), label, fallback).also {
+                it.setDefinition(context, Link(it.label, "/url", "Title"))
+            }
+        assertEquals(out.next(), resolvedDifferentLabel.render(context))
+
+        // Unresolved: fallback is rendered.
         assertEquals(
             out.next(),
             ReferenceLink(listOf(Text("label")), label, fallback).render(),
@@ -230,26 +222,19 @@ class HtmlNodeRendererTest {
 
         val label = listOf(Text("Foo"))
 
-        val attributes =
-            MutableAstAttributes(
-                linkDefinitions =
-                    mutableListOf(
-                        LinkDefinition(
-                            label,
-                            url = "/url",
-                            title = "Title",
-                        ),
-                    ),
-            )
-
-        val context = BaseContext(attributes, QuarkdownFlavor)
+        val context = MutableContext()
 
         val fallback = { Emphasis(listOf(Text("fallback"))) }
 
+        fun resolvedRefLink(displayLabel: InlineContent) =
+            ReferenceLink(displayLabel, label, fallback).also {
+                it.setDefinition(context, Link(displayLabel, "/url", "Title"))
+            }
+
         assertEquals(
             out.next(),
             ReferenceImage(
-                ReferenceLink(label, label, fallback),
+                resolvedRefLink(label),
                 width = null,
                 height = null,
             ).render(context),
@@ -257,11 +242,7 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             ReferenceImage(
-                ReferenceLink(
-                    listOf(Text("label")),
-                    label,
-                    fallback,
-                ),
+                resolvedRefLink(listOf(Text("label"))),
                 width = null,
                 height = null,
             ).render(context),
@@ -269,11 +250,7 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             ReferenceImage(
-                ReferenceLink(
-                    listOf(Text("label")),
-                    label,
-                    fallback,
-                ),
+                resolvedRefLink(listOf(Text("label"))),
                 width = 150.px,
                 height = 100.px,
             ).render(context),
