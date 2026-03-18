@@ -45,12 +45,16 @@ to produce a single combined citation label, whose format depends on the active 
 
 The optional `style` parameter configures the look and format of the bibliography and its citation references.
 It accepts a [CSL](https://citationstyles.org) (Citation Style Language) style identifier.
-Quarkdown supports thousands of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles),
-including `ieee` (default), `apa`, `chicago-author-date`, `nature`, `vancouver`, and many more.
+Quarkdown ships with a selection of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles),
+including `ieee` (default), `apa`, `chicago-author-date`, `nature`, `modern-language-association`, and many more.
 
 ```markdown
 .bibliography {bibliography.bib} style:{apa}
 ```
+
+.collapse {Full list of supported styles}
+    .code lang:{text} linenumbers:{no}
+        .read {../quarkdown-core/csl-styles.txt}
 
 ## Title
 

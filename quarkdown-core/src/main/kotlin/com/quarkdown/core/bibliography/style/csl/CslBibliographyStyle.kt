@@ -17,7 +17,7 @@ import java.io.InputStream
  * A [BibliographyStyle] backed by a [CSL](https://citationstyles.org) style definition,
  * powered by [citeproc-java](https://github.com/michel-kraemer/citeproc-java).
  *
- * This enables support for thousands of citation styles defined in the
+ * This enables support for a curated selection of citation styles from the
  * [CSL Style Repository](https://github.com/citation-style-language/styles),
  * including BibTeX, CSL JSON, YAML, EndNote, and RIS bibliography sources.
  *
@@ -111,7 +111,7 @@ class CslBibliographyStyle(
             } catch (e: IOException) {
                 throw IllegalArgumentException(
                     "Bibliography style '$cslStyleName' does not exist or failed to load. " +
-                        "See https://github.com/citation-style-language/styles for a list of available styles.",
+                        "See https://quarkdown.com/wiki/bibliography for a list of available styles.",
                     e,
                 )
             }
