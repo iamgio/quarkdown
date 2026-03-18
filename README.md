@@ -44,8 +44,7 @@
 
 # About
 
-Quarkdown is a modern Markdown-based typesetting system, designed around the key concept of **versatility**, by seamlessly compiling a project
-into a print-ready book, academic paper, knowledge base or an interactive presentation.
+Quarkdown is a modern Markdown-based typesetting system designed for **versatility**. It allows a single project to compile seamlessly into a print-ready book, academic paper, knowledge base, or interactive presentation.
 All through an incredibly powerful Turing-complete extension of Markdown, ensuring your ideas flow automatically into paper.
 
 &nbsp;
