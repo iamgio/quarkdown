@@ -2,6 +2,7 @@ package com.quarkdown.core.ast.base.inline
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.reference.ReferenceNode
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
@@ -53,16 +54,18 @@ class Link(
 /**
  * A link that references a [LinkDefinition].
  * @param label inline content of the displayed label
- * @param reference label of the [LinkDefinition] this link points to
- * @param fallback supplier of the node to show instead of [label] in case the reference is invalid
- * @param onResolve actions to perform when the reference is resolved
- * @see com.quarkdown.core.context.resolveOrFallback
+ * @param referenceLabel label of the [LinkDefinition] this link points to
+ * @param fallback supplier of the node to show instead of [label] in case the reference is not resolved
+ * @param onResolve actions to perform when the reference is resolved.
+ * @see com.quarkdown.core.context.hooks.reference.LinkDefinitionResolverHook
  */
 class ReferenceLink(
     val label: InlineContent,
-    val reference: InlineContent,
+    val referenceLabel: InlineContent,
     val fallback: () -> Node,
     val onResolve: MutableList<(resolved: LinkNode) -> Unit> = mutableListOf(),
-) : Node {
+) : ReferenceNode<ReferenceLink, LinkNode> {
+    override val reference: ReferenceLink = this
+
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

@@ -1,10 +1,6 @@
 package com.quarkdown.core.context
 
 import com.quarkdown.core.ast.attributes.AstAttributes
-import com.quarkdown.core.ast.attributes.link.getResolvedUrl
-import com.quarkdown.core.ast.base.LinkNode
-import com.quarkdown.core.ast.base.inline.Link
-import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.context.file.SimpleFileSystem
@@ -28,7 +24,6 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.Pipelines
-import com.quarkdown.core.util.node.toPlainText
 
 /**
  * An immutable [Context] implementation.
@@ -75,14 +70,6 @@ open class BaseContext(
             .asSequence()
             .flatMap { it.functions }
             .find { it.name == name }
-
-    override fun resolve(reference: ReferenceLink): LinkNode? =
-        attributes.linkDefinitions
-            .firstOrNull { it.label.toPlainText() == reference.reference.toPlainText() }
-            ?.let { Link(reference.label, it.getResolvedUrl(this), it.title, it.fileSystem) }
-            ?.also { link ->
-                reference.onResolve.forEach { action -> action(link) }
-            }
 
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
         val function = getFunctionByName(call.name)

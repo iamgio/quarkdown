@@ -76,7 +76,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.context.resolveOrFallback
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.rendering.UnsupportedRenderException
@@ -270,7 +269,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Link) = buildLinkTag(node).build()
 
     // The fallback node is rendered if a corresponding definition can't be found.
-    override fun visit(node: ReferenceLink) = context.resolveOrFallback(node).accept(this)
+    override fun visit(node: ReferenceLink): CharSequence =
+        (node.getDefinition(context) ?: return node.fallback().accept(this)).accept(this)
 
     override fun visit(node: SubdocumentLink): CharSequence {
         val subdocument: Subdocument =
@@ -329,7 +329,10 @@ open class BaseHtmlNodeRenderer(
             }.void(true)
             .build()
 
-    override fun visit(node: ReferenceImage) = context.resolveOrFallback(node).accept(this)
+    override fun visit(node: ReferenceImage): CharSequence {
+        val link = node.link.getDefinition(context) ?: return node.link.fallback().accept(this)
+        return Image(link, node.width, node.height, node.referenceId).accept(this)
+    }
 
     override fun visit(node: CheckBox) =
         tagBuilder("input") {}
