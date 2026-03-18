@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CLI: Mock" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="com.quarkdown.cli.QuarkdownCliKt" />
+    <module name="quarkdown.quarkdown-cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="c main.qd --libs ../quarkdown-libs/src/main/resources" />
+    <shortenClasspath name="NONE" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/mock" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

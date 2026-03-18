@@ -126,6 +126,8 @@ The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*]
 
 ## Tooling
 
+> If you're using IntelliJ IDEA, you can import run configurations from the `.run` directory.
+
 ### Building
 
 The project uses Gradle as its build system.

@@ -101,5 +101,6 @@ nb-configuration.xml
 ##############################
 ## Miscellaneous
 ##############################
+.claude/
 *.log
 **/_test/
