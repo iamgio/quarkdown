@@ -5,12 +5,14 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
- * Represents a citation to a bibliography entry.
- * @param citationKey the key used to identify the bibliography entry
+ * Represents a citation to one or more bibliography entries.
+ * Multiple keys produce a single combined label (e.g. `[1, 3]` or `(Einstein, 1905; Hawking, 1988)`),
+ * according to the active citation style.
+ * @param citationKeys the keys used to identify the bibliography entries
  */
 class BibliographyCitation(
-    val citationKey: String,
-) : ReferenceNode<BibliographyCitation, Pair<BibliographyEntry, BibliographyView>> {
+    val citationKeys: List<String>,
+) : ReferenceNode<BibliographyCitation, Pair<List<BibliographyEntry>, BibliographyView>> {
     override val reference: BibliographyCitation = this
 
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)

@@ -45,8 +45,7 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  *
  * Example:
  * ```markdown
- * .bibliography {bibliography.bib}
- *     style:{apa}
+ * .bibliography {bibliography.bib} style:{apa}
  * ```
  *
  * @param path path to the bibliography file, with extension
@@ -102,9 +101,11 @@ fun bibliography(
 }
 
 /**
- * Creates a citation to a bibliography entry.
+ * Creates a citation to one or more bibliography entries.
  *
- * The result is a label that matches with that of the bibliography entry with the given [key].
+ * The result is a label that matches with that of the bibliography entries with the given [key].
+ * Multiple keys can be specified as a comma-separated list,
+ * producing a single combined label (e.g. `[1], [3]` or `(Einstein, 1905; Hawking, 1988)`).
  *
  * Example:
  *
@@ -123,17 +124,30 @@ fun bibliography(
  * ```markdown
  * Einstein's work .cite {einstein} is fundamental to modern physics.
  *
+ * These results .cite {einstein, latexcompanion} are well-known.
+ *
  * .bibliography {bibliography.bib}
  * ```
  *
  * Result:
  * ```text
  * Einstein's work [1] is fundamental to modern physics.
+ *
+ * These results [1], [2] are well-known.
  * ```
- * @param key the key of the bibliography entry to cite
+ * @param key the key (or comma-separated keys) of the bibliography entries to cite
  * @return a wrapped [BibliographyCitation] node
+ * @throws IllegalArgumentException if no non-blank citation key is provided
  * @wiki Bibliography#citations
  */
-fun cite(key: String) =
-    BibliographyCitation(key)
-        .wrappedAsValue()
+fun cite(key: String): NodeValue {
+    val keys =
+        key
+            .split(",")
+            .filter { it.isNotBlank() }
+            .map { it.trim() }
+
+    require(keys.isNotEmpty()) { "At least one citation key must be specified." }
+
+    return BibliographyCitation(keys).wrappedAsValue()
+}

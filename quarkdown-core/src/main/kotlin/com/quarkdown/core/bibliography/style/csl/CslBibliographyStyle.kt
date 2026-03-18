@@ -75,11 +75,8 @@ class CslBibliographyStyle(
 
     override val labelProvider =
         object : BibliographyEntryLabelProviderStrategy {
-            override fun getCitationLabel(
-                entry: BibliographyEntry,
-                index: Int,
-            ): String {
-                csl.makeCitation(entry.citationKey)
+            override fun getCitationLabel(entries: List<BibliographyEntry>): String {
+                csl.makeCitation(*entries.map { it.citationKey }.toTypedArray())
                 return format.lastCitationResult.toPlainText().ifBlank { "[?]" }
             }
 

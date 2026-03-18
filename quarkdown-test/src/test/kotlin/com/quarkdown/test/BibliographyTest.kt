@@ -185,9 +185,58 @@ class BibliographyTest {
     }
 
     @Test
+    fun `multi-key citation`() {
+        execute(
+            """
+            abc .cite {einstein, latexcompanion} def
+
+            $BIBLIOGRAPHY_CALL
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>abc [1], [2] def</p>" +
+                    ieeeBibliographyOutput(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `multi-key citation (apa)`() {
+        execute(
+            """
+            abc .cite {einstein, latexcompanion} def
+
+            .bibliography {bib/bibliography.bib} style:{apa} breakpage:{no}
+            """.trimIndent(),
+        ) {
+            // APA uses "et al." for works with 3+ authors.
+            val citation = it.toString().substringAfter("abc ").substringBefore(" def")
+            assertEquals(
+                "(Einstein, 1905; Goossens et al., 1993)",
+                citation,
+            )
+        }
+    }
+
+    @Test
     fun `unresolved citation`() {
         execute(
             "abc .cite {abc}\n\n" +
+                BIBLIOGRAPHY_CALL,
+        ) {
+            assertEquals(
+                "<p>abc [???]</p>" +
+                    ieeeBibliographyOutput(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `partially unresolved multi-key citation`() {
+        execute(
+            "abc .cite {einstein, invalidkey}\n\n" +
                 BIBLIOGRAPHY_CALL,
         ) {
             assertEquals(

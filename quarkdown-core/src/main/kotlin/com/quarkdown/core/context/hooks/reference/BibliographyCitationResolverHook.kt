@@ -8,13 +8,13 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.context.MutableContext
 
 /**
- * Hook that associates a bibliography entry to each [BibliographyCitation]
- * that can be linked to an entry of a [Bibliography]
+ * Hook that associates bibliography entries to each [BibliographyCitation]
+ * that can be linked to entries of a [Bibliography]
  * within a [BibliographyView].
  */
 class BibliographyCitationResolverHook(
     context: MutableContext,
-) : ReferenceDefinitionResolverHook<BibliographyCitation, BibliographyView, Pair<BibliographyEntry, BibliographyView>>(context) {
+) : ReferenceDefinitionResolverHook<BibliographyCitation, BibliographyView, Pair<List<BibliographyEntry>, BibliographyView>>(context) {
     override fun collectReferences(iterator: ObservableAstIterator) = iterator.collectAll<BibliographyCitation>()
 
     override fun collectDefinitions(iterator: ObservableAstIterator) = iterator.collectAll<BibliographyView>()
@@ -23,11 +23,13 @@ class BibliographyCitationResolverHook(
         reference: BibliographyCitation,
         definitions: List<BibliographyView>,
         index: Int,
-    ): Pair<BibliographyView, Pair<BibliographyEntry, BibliographyView>>? =
+    ): Pair<BibliographyView, Pair<List<BibliographyEntry>, BibliographyView>>? =
         definitions
             .firstNotNullOfOrNull { bibliography ->
-                bibliography.bibliography
-                    .entries[reference.citationKey]
-                    ?.let { bibliography to (it to bibliography) }
+                val entries =
+                    reference.citationKeys.map { key ->
+                        bibliography.bibliography.entries[key] ?: return@firstNotNullOfOrNull null
+                    }
+                bibliography to (entries to bibliography)
             }
 }
