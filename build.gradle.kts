@@ -37,7 +37,9 @@ gradle.projectsEvaluated {
                     compileOnly(it)
                 }
 
-                else -> implementation(it)
+                else -> {
+                    implementation(it)
+                }
             }
         }
     }

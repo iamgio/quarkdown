@@ -10,23 +10,19 @@ import com.quarkdown.core.bibliography.BibliographyEntry
  */
 interface BibliographyEntryLabelProviderStrategy {
     /**
-     * Returns the label for an in-text citation (e.g. `[1]` or `(Einstein, 1905)`).
-     * @param entry the bibliography entry being cited
-     * @param index the index of the entry in the bibliography list, starting from 0
+     * Returns the combined label for an in-text citation of one or more bibliography entries
+     * (e.g. `[1]`, `[1, 2]`, or `(Einstein, 1905; Hawking, 1988)`).
+     * @param entries the bibliography entries being cited
      */
-    fun getCitationLabel(
-        entry: BibliographyEntry,
-        index: Int,
-    ): String
+    fun getCitationLabel(entries: List<BibliographyEntry>): String
 
     /**
      * Returns the label for a bibliography list entry (e.g. `[1]` or empty).
-     * Defaults to [getCitationLabel] unless overridden.
      * @param entry the bibliography entry in the list
      * @param index the index of the entry in the bibliography list, starting from 0
      */
     fun getListLabel(
         entry: BibliographyEntry,
         index: Int,
-    ): String = getCitationLabel(entry, index)
+    ): String
 }

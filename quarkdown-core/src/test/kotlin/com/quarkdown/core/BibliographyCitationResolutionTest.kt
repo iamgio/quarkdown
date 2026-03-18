@@ -28,7 +28,9 @@ private val stubStyle =
 
         override val labelProvider =
             object : BibliographyEntryLabelProviderStrategy {
-                override fun getCitationLabel(
+                override fun getCitationLabel(entries: List<BibliographyEntry>) = ""
+
+                override fun getListLabel(
                     entry: BibliographyEntry,
                     index: Int,
                 ) = "[${index + 1}]"
@@ -53,7 +55,7 @@ class BibliographyCitationResolutionTest {
             style = stubStyle,
         )
 
-    private val citation = BibliographyCitation(CITATION_KEY)
+    private val citation = BibliographyCitation(listOf(CITATION_KEY))
 
     private fun traverse(root: Node) {
         ObservableAstIterator()
@@ -73,10 +75,9 @@ class BibliographyCitationResolutionTest {
 
         traverse(root)
 
-        assertEquals(
-            bibliographyView.bibliography.entries[CITATION_KEY],
-            citation.getDefinition(context)?.first,
-        )
+        val resolved = citation.getDefinition(context)?.first
+        assertEquals(1, resolved?.size)
+        assertEquals(bibliographyView.bibliography.entries[CITATION_KEY], resolved?.first())
     }
 
     @Test
@@ -91,9 +92,28 @@ class BibliographyCitationResolutionTest {
 
         traverse(root)
 
-        assertEquals(
-            bibliographyView.bibliography.entries[CITATION_KEY],
-            citation.getDefinition(context)?.first,
-        )
+        val resolved = citation.getDefinition(context)?.first
+        assertEquals(1, resolved?.size)
+        assertEquals(bibliographyView.bibliography.entries[CITATION_KEY], resolved?.first())
+    }
+
+    @Test
+    fun `multi-key citation`() {
+        val multiCitation = BibliographyCitation(listOf("einstein", "latexcompanion"))
+
+        val root =
+            buildBlock {
+                root {
+                    +bibliographyView
+                    +multiCitation
+                }
+            }
+
+        traverse(root)
+
+        val resolved = multiCitation.getDefinition(context)?.first
+        assertEquals(2, resolved?.size)
+        assertEquals(bibliographyView.bibliography.entries["einstein"], resolved?.get(0))
+        assertEquals(bibliographyView.bibliography.entries["latexcompanion"], resolved?.get(1))
     }
 }

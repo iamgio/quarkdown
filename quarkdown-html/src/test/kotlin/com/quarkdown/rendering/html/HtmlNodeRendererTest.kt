@@ -1219,7 +1219,9 @@ class HtmlNodeRendererTest {
 
                 override val labelProvider =
                     object : BibliographyEntryLabelProviderStrategy {
-                        override fun getCitationLabel(
+                        override fun getCitationLabel(entries: List<BibliographyEntry>) = ""
+
+                        override fun getListLabel(
                             entry: BibliographyEntry,
                             index: Int,
                         ) = "[${index + 1}]"

@@ -20,6 +20,10 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 - Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
 
+#### [Multi-key citations](https://quarkdown.com/wiki/bibliography#citations)
+
+`.cite` now accepts a comma-separated list of keys (e.g. `.cite {einstein, hawking}`) to produce a single combined citation label, whose format depends on the active citation style (e.g. `[1], [2]` for IEEE, `(Einstein, 1905; Hawking, 1988)` for APA).
+
 #### [`.heading` primitive function](https://quarkdown.com/wiki/headings)
 
 The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).

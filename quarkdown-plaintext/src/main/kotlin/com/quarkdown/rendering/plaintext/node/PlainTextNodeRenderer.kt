@@ -320,12 +320,10 @@ class PlainTextNodeRenderer(
     }
 
     override fun visit(node: BibliographyCitation): CharSequence {
-        val (entry: BibliographyEntry, view: BibliographyView) =
+        val (entries: List<BibliographyEntry>, view: BibliographyView) =
             node.getDefinition(context) ?: return "[???]"
 
-        val index = view.bibliography.indexOf(entry)
-        val label = view.style.labelProvider.getCitationLabel(entry, index)
-        return label
+        return view.style.labelProvider.getCitationLabel(entries)
     }
 
     override fun visit(node: SlidesFragment) = ""
