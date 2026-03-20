@@ -1,0 +1,7 @@
+.doctype {paged}
+
+.pageformat size:{A4} bordercolor:{red}
+.pageformat pages:{2..3} margin:{3cm} bordercolor:{green}
+
+.repeat {20}
+    .loremipsum

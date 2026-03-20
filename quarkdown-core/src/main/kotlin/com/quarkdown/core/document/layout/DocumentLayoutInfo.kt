@@ -22,16 +22,16 @@ data class DocumentLayoutInfo(
 ) {
     /**
      * Returns the effective page formats by prepending [default] (if non-null)
-     * and folding formats that share the same [PageFormatInfo.side].
+     * and folding formats that share the same [PageFormatInfo.selector].
      *
-     * Within each side group, later formats take priority: their non-null fields
+     * Within each selector group, later formats take priority: their non-null fields
      * override earlier ones via `merge`, while null fields inherit from the layer beneath.
      */
     fun getPageFormatsWithDefault(default: PageFormatInfo?): List<PageFormatInfo> {
         val all = default?.let { listOf(it) + pageFormats } ?: pageFormats
 
         return all
-            .groupBy { it.side }
+            .groupBy { it.selector }
             .values
             .map { formats -> formats.mergeAll() }
     }

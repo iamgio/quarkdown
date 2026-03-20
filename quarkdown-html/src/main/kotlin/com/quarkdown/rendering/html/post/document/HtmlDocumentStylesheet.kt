@@ -6,6 +6,7 @@ import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.misc.font.FontFamily
+import com.quarkdown.rendering.html.css.CssPageSelectors
 import com.quarkdown.rendering.html.css.asCSS
 import com.quarkdown.rendering.html.css.stylesheet
 
@@ -64,44 +65,42 @@ class HtmlDocumentStylesheet(
         }
 
     /**
-     * Builds the CSS stylesheet for a single [PageFormatInfo], depending on its scope and properties.
-     * When [PageFormatInfo.side] is set, rules are scoped to the corresponding `@page:left` or `@page:right`
-     * selector; otherwise they target `body` and the generic `@page`.
-     * @return the CSS string to be embedded in a `<style>` tag
+     * Builds the CSS stylesheet for a single [PageFormatInfo], depending on its scope ([PageFormatInfo.selector]) and properties.
      */
     private fun buildPageFormat(format: PageFormatInfo): String {
-        val (selector, isPageSelector) =
-            when (format.side) {
-                null -> "body" to false
-                else -> "@page:${format.side?.asCSS}" to true
-            }
+        val isScoped = format.selector != null
+
+        // For scoped selectors, expand into individual @page selectors.
+        val pageSelectors = CssPageSelectors.toCss(format.selector)
 
         return stylesheet {
-            rule(selector) {
-                "--qd-content-width" value format.pageWidth
-                "--qd-column-count" value format.columnCount?.toString()
+            for (selector in if (isScoped) pageSelectors else listOf("body")) {
+                rule(selector) {
+                    "--qd-content-width" value format.pageWidth
+                    "--qd-column-count" value format.columnCount?.toString()
 
-                if (format.alignment?.isLocal == true) {
-                    "--qd-horizontal-alignment-local" importantValue format.alignment
-                    "--qd-horizontal-alignment-global" importantValue "unset"
-                    "--qd-horizontal-alignment-list-items" importantValue "unset"
-                }
-                if (format.alignment?.isGlobal == true) {
-                    "--qd-horizontal-alignment-global" importantValue format.alignment
-                    "--qd-horizontal-alignment-local" importantValue format.alignment
-                }
+                    if (format.alignment?.isLocal == true) {
+                        "--qd-horizontal-alignment-local" importantValue format.alignment
+                        "--qd-horizontal-alignment-global" importantValue "unset"
+                        "--qd-horizontal-alignment-list-items" importantValue "unset"
+                    }
+                    if (format.alignment?.isGlobal == true) {
+                        "--qd-horizontal-alignment-global" importantValue format.alignment
+                        "--qd-horizontal-alignment-local" importantValue format.alignment
+                    }
 
-                format.contentBorderWidth?.let {
-                    "--qd-page-content-border-width" value it
-                    "--qd-page-content-border-style" value "solid"
-                }
-                format.contentBorderColor?.let {
-                    "--qd-page-content-border-color" value it
-                    "--qd-page-content-border-style" value "solid"
+                    format.contentBorderWidth?.let {
+                        "--qd-page-content-border-width" value it
+                        "--qd-page-content-border-style" value "solid"
+                    }
+                    format.contentBorderColor?.let {
+                        "--qd-page-content-border-color" value it
+                        "--qd-page-content-border-style" value "solid"
+                    }
                 }
             }
 
-            if (!isPageSelector) {
+            if (!isScoped) {
                 rule(
                     "body.quarkdown-plain.quarkdown-plain",
                     "body.quarkdown-docs.quarkdown-docs",
@@ -115,11 +114,13 @@ class HtmlDocumentStylesheet(
                 }
             }
 
-            rule(if (isPageSelector) selector else "@page") {
-                if (format.pageWidth != null || format.pageHeight != null) {
-                    "size" value "${format.pageWidth?.asCSS ?: "auto"} ${format.pageHeight?.asCSS ?: "auto"}"
+            for (selector in pageSelectors) {
+                rule(selector) {
+                    if (format.pageWidth != null || format.pageHeight != null) {
+                        "size" value "${format.pageWidth?.asCSS ?: "auto"} ${format.pageHeight?.asCSS ?: "auto"}"
+                    }
+                    "margin" value (format.margin?.asCSS ?: if (document.type == DocumentType.PLAIN) "0" else null)
                 }
-                "margin" value (format.margin?.asCSS ?: if (document.type == DocumentType.PLAIN) "0" else null)
             }
         }
     }
