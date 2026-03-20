@@ -43,7 +43,7 @@ The `bordertop`, `borderright`, `borderbottom`, `borderleft`, and `bordercolor` 
 
 ## Scoped formatting
 
-In `paged` documents, the `side` and `range` parameters restrict a format to specific pages.
+In `paged` documents, the `side` and `pages` parameters restrict a format to specific pages.
 
 ### Per-side formatting
 
