@@ -26,6 +26,7 @@ import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
 import com.quarkdown.core.document.layout.caption.merge
 import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
+import com.quarkdown.core.document.layout.page.PageFormatSelector
 import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSide
@@ -53,6 +54,7 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.VoidValue
+import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
@@ -706,7 +708,11 @@ fun texMacro(
  * Border is not supported in plain documents.
  *
  * @param side the page side this format applies to: `left` (verso) or `right` (recto).
- *             If unset, the format applies to all pages
+ *             If unset, the format applies to all pages. Combinable with [range].
+ *             Only supported in `paged` documents
+ * @param range 1-based inclusive range of page indices to restrict this format to (e.g. `2..5`).
+ *              If unset, the format applies to all pages. Combinable with [side].
+ *              Only supported in `paged` documents
  * @param format standard size format of each page (overridden by [width] and [height])
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
@@ -722,12 +728,14 @@ fun texMacro(
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment text alignment of the content on each page
+ * @throws IllegalArgumentException if [range] is open-ended (has no finite end)
  * @wiki Page format
  */
 @Name("pageformat")
 fun pageFormat(
     @Injected context: MutableContext,
     @LikelyNamed side: PageSide? = null,
+    @Name("pages") range: Range? = null,
     @Name("size") format: PageSizeFormat? = null,
     @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
     @LikelyNamed width: Size? = null,
@@ -741,6 +749,8 @@ fun pageFormat(
     @LikelyNamed columns: Int? = null,
     @LikelyNamed alignment: Container.TextAlignment? = null,
 ): VoidValue {
+    require(range == null || range.end != null) { "Page range must have a finite end." }
+
     // If, for instance, the document is landscape and the given format is portrait,
     // the format is converted to landscape.
     val formatBounds = format?.getBounds(orientation)
@@ -750,7 +760,11 @@ fun pageFormat(
 
     val format =
         PageFormatInfo(
-            side = side,
+            selector =
+                PageFormatSelector(
+                    side = side,
+                    range = range,
+                ).takeUnless { it.isGlobal },
             pageWidth = width ?: formatBounds?.width,
             pageHeight = height ?: formatBounds?.height,
             margin = margin,
@@ -767,7 +781,8 @@ fun pageFormat(
         )
 
     // Update global page format.
-    context.documentInfo = context.documentInfo.deepCopy(layoutPageFormats = context.documentInfo.layout.pageFormats + format)
+    context.documentInfo =
+        context.documentInfo.deepCopy(layoutPageFormats = context.documentInfo.layout.pageFormats + format)
 
     return VoidValue
 }

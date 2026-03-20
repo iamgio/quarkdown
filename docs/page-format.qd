@@ -7,7 +7,8 @@ Multiple calls to `.pageformat` are layered on top of each other, with later cal
 
 | Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents                |
 |----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------|
-| `side`                                                   | Restricts the format to left (verso) or right (recto) pages only. See [Per-side formatting](#per-side-formatting).                                                      | `left`, `right`                                                                            | `paged`                            |
+| `side`                                                   | Restricts the format to left (verso) or right (recto) pages only. See [Scoped formatting](#scoped-formatting).                                                          | `left`, `right`                                                                            | `paged`                            |
+| `pages`                                                  | Restricts the format to specific pages by 1-based inclusive range. See [Scoped formatting](#scoped-formatting). Combinable with `side`.                                 | Range, e.g. `2..5`                                                                         | `paged`                            |
 | `size`                                                   | Name of the paper format.                                                                                                                                               | `A0`..`A10`, `B0`..`B5`, `letter`, `legal`, `ledger`                                       | `paged`, `slides`                  |
 | `width`                                                  | Page width. If `size` is set too, this value overrides its width.                                                                                                       | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `plain`, `paged`, `slides`, `docs` |
 | `height`                                                 | Page height. If `size` is set too, this value overrides its height.                                                                                                     | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`                  |
@@ -40,11 +41,29 @@ The `bordertop`, `borderright`, `borderbottom`, `borderleft`, and `bordercolor` 
 .exampleoutput {!(500)[image](page-format/borders.png)}
     .pageformat bordertop:{1px} borderbottom:{4px}
 
-## Per-side formatting
+## Scoped formatting
 
-In `paged` documents, the `side` parameter restricts a format to left (verso) or right (recto) pages only. This is useful, for example, for mirrored margins in book-style layouts.
+In `paged` documents, the `side` and `pages` parameters restrict a format to specific pages.
+
+### Per-side formatting
+
+The `side` parameter restricts a format to left (verso) or right (recto) pages only. This is useful, for example, for mirrored margins in book-style layouts.
 
 .exampleoutput {![Per-side formatting](page-format/sides.png)}
     .pageformat size:{A4}
     .pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
     .pageformat side:{right} margin:{2cm 1cm 2cm 3cm}
+
+### Per-range formatting
+
+The `pages` parameter restricts a format to an inclusive range of page indices, starting from 1. This is useful, for example, for applying distinct styles to the first few pages of a document.
+
+```
+.pageformat pages:{2..5} margin:{3cm}
+```
+
+`side` and `pages` can also be combined to target specific sides within a range:
+
+```
+.pageformat side:{left} pages:{1..3} bordercolor:{green}
+```

@@ -1,0 +1,9 @@
+.doctype {paged}
+
+.pageformat size:{A4} borderleft:{1cm} bordercolor:{red}
+.pageformat side:{left} bordercolor:{blue}
+.pageformat pages:{2..4} bordercolor:{green}
+.pageformat side:{right} pages:{2..4} bordercolor:{purple}
+
+.repeat {30}
+    .loremipsum

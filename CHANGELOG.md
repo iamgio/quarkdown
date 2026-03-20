@@ -24,6 +24,23 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 `.cite` now accepts a comma-separated list of keys (e.g. `.cite {einstein, hawking}`) to produce a single combined citation label, whose format depends on the active citation style (e.g. `[1], [2]` for IEEE, `(Einstein, 1905; Hawking, 1988)` for APA).
 
+#### [Scoped page formatting](https://quarkdown.com/wiki/page-format#scoped-formatting)
+
+`.pageformat` now supports scoping formats to specific pages in `paged` documents via two combinable parameters:
+
+- `side` (`left` or `right`): restricts formatting to recto or verso pages, enabling mirrored margins and other asymmetric layouts.
+- `pages` (e.g. `2..5`): restricts formatting to an inclusive range of page indices.
+
+```markdown
+.pageformat size:{A4}
+.pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
+.pageformat side:{right} margin:{2cm 1cm 2cm 3cm}
+```
+
+```markdown
+.pageformat pages:{1..3} borderbottom:{4px}
+```
+
 #### [`.heading` primitive function](https://quarkdown.com/wiki/headings)
 
 The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
@@ -75,19 +92,6 @@ Both `.tableofcontents` and `.bibliography` now accept the following optional pa
 #### [Subscript and superscript text](https://quarkdown.com/wiki/text)
 
 The `.text` function now accepts a `script` parameter with `sub` and `sup` values for subscript and superscript text.
-
-#### [Per-side page formatting](https://quarkdown.com/wiki/page-format#per-side-formatting)
-
-`.pageformat` now accepts an optional `side` parameter (`left` or `right`) to apply formatting to specific page sides only (recto and verso).
-
-This enables mirrored margins and other asymmetric layouts in `paged` documents.
-Multiple `.pageformat` calls create a stack where later calls override earlier ones.
-
-```markdown
-.pageformat size:{A4}
-.pageformat side:{left} margin:{2cm 3cm 2cm 1cm}
-.pageformat side:{right} margin:{2cm 1cm 2cm 3cm}
-```
 
 ### Changed
 
