@@ -5,7 +5,7 @@ The **`.numbering`** function sets the global numbering configuration of the doc
 - Headings and [table of contents](table-of-contents.qd) entries
 - [Figures](figure.qd)
 - Tables
-- [Equations](math.qd)
+- [Equations](tex-formulae.qd)
 - Code blocks
 - [Footnotes](footnotes.qd)
 - Custom elements (`.numbered`)
