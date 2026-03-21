@@ -1,0 +1,45 @@
+.doctype {paged}
+
+.mermaid
+    flowchart TD
+        A --> B
+        B --> C
+        C --> D
+        D --> E
+        E --> F
+        F --> G
+        G --> H
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+.mermaid
+    flowchart TD
+        I --> J
+        J --> K
+        K --> L
+        L --> M
+        M --> N
+        N --> O
+        O --> P
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6

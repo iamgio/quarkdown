@@ -305,11 +305,11 @@ class CrossReferenceTest {
                 "<p>See <span class=\"cross-reference\" data-location=\"A\"></span>" +
                     " and <span class=\"cross-reference\" data-location=\"B\"></span>.</p>" +
                     "<figure id=\"figure-A\">" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A --&gt; B</pre>" +
+                    "<pre class=\"mermaid\">graph TD\n    A --&gt; B</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"A\"></figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-B\">" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A --&gt; B</pre>" +
+                    "<pre class=\"mermaid\">graph TD\n    A --&gt; B</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"B\">My other diagram</figcaption>" +
                     "</figure>",
                 it,

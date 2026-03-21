@@ -1,0 +1,4 @@
+- issue: 407
+- pr: 408
+- next-release: 1.15.0
+- cause: Mermaid diagrams having height set to the dynamic `--viewport-remaining-height`, tricking paged.js page breaking algorithm

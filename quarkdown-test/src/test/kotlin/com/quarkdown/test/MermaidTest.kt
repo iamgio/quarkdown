@@ -7,7 +7,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private const val MERMAID_OPEN = "<figure><pre class=\"mermaid fill-height\">"
+private const val MERMAID_OPEN = "<figure><pre class=\"mermaid\">"
 private const val MERMAID_CLOSE = "</pre></figure>"
 
 /**

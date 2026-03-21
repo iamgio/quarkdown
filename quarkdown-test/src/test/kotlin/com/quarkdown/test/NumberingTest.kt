@@ -645,14 +645,14 @@ class NumberingTest {
                     "<figcaption class=\"caption-bottom\" data-location=\"1.1\">Caption 1</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.2\">" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
+                    "<pre class=\"mermaid\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.2\">Caption 2</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.3\">Caption 3</figcaption>" +
                     "</figure>" +
                     "<figure id=\"figure-1.4\">" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
+                    "<pre class=\"mermaid\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.4\"></figcaption>" +
                     "</figure>",
                 it,
@@ -676,7 +676,7 @@ class NumberingTest {
         ) {
             assertEquals(
                 "<figure>" +
-                    "<pre class=\"mermaid fill-height\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
+                    "<pre class=\"mermaid\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "</figure>",
                 it,
             )

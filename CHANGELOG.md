@@ -125,6 +125,10 @@ Thanks @szy1840!
 
 When editing long paged documents with live preview, the scroll position could sometimes be restored only partially because of long paged.js load times. The swap now reliably waits for the content to be fully loaded.
 
+#### Fixed Mermaid diagrams breaking page breaks
+
+Fixed an issue that caused Mermaid diagrams in `paged` documents to cause subsequent content to overflow instead of being pushed to the next page.
+
 #### Improved lexer performance
 
 The lexer has been optimized to reduce regex builds to a minimum, resulting in significantly improved performance for large documents.
