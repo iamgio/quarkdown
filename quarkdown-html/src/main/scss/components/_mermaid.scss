@@ -5,11 +5,11 @@
 
   &.quarkdown-paged {
     .mermaid > svg {
-      max-height: calc(var(--viewport-remaining-height)); // Fit the diagram into the remaining space of the viewport.
+      max-height: var(--pagedjs-pagebox-height);
     }
 
     figure:has(figcaption) .mermaid > svg {
-      max-height: calc(var(--viewport-remaining-height) - 100px);
+      max-height: calc(var(--pagedjs-pagebox-height) - 100px);
     }
   }
 

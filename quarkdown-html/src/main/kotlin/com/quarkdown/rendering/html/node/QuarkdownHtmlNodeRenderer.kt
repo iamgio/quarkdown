@@ -364,7 +364,7 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: MermaidDiagram) =
         buildTag("pre") {
-            classNames("mermaid", "fill-height")
+            classNames("mermaid")
             +escapeCriticalContent(node.code)
         }
 

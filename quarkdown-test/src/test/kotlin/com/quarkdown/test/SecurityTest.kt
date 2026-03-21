@@ -38,7 +38,7 @@ class SecurityTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<figure><pre class=\"mermaid fill-height\">" +
+                "<figure><pre class=\"mermaid\">" +
                     "graph TD\n    A --&gt; B&lt;/pre&gt;Hello</pre></figure>",
                 it,
             )
