@@ -47,13 +47,13 @@ export class MermaidRenderer extends DocumentHandler {
         if (cachedSvg) {
             console.debug('Using cached SVG for diagram:', id);
             element.innerHTML = cachedSvg;
+            element.dataset.fromCache = 'true';
             return;
         }
 
         console.debug('Rendering diagram:', id);
 
         const diagram = await mermaid.render(id, code, element);
-        console.log(diagram);
         const svg = diagram.svg;
         element.innerHTML = svg;
         sessionStorage.setItem(id, svg);
