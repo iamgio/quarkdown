@@ -110,6 +110,10 @@ The `.text` function now accepts a `script` parameter with `sub` and `sup` value
 The `includeunnumbered` parameter has been removed, in favor of the more granular heading configuration previously mentioned.
 Now all indexable headings are included in the ToC by default, regardless of their numbering.
 
+#### `.container`'s `margin` now suppresses children's margins
+
+When an explicit margin is applied to a `.container`, it now suppresses the margins of its direct children, for a more intuitive and flexible layout configuration.
+
 #### `.fullspan` now relies on `.container`
 
 `.fullspan`, used to create a block spanning over multiple columns in a multi-column layout, is now shorthand for `.container fullspan:{yes}`.

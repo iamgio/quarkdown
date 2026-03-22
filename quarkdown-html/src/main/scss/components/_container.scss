@@ -9,6 +9,21 @@
     margin: 0;
   }
 
+  // When the container has an explicit inline margin, the default margins of children
+  // that don't carry their own inline margin are suppressed.
+  &[style*="margin"] > :not([style*="margin"]) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    &:first-child {
+      margin-top: 0 !important;
+    }
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
+  }
+
   > .stack {
     width: 100%;
     height: 100%;
