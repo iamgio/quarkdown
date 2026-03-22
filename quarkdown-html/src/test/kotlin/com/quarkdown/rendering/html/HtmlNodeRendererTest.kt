@@ -143,7 +143,7 @@ class HtmlNodeRendererTest {
         )
         assertEquals(
             out.next(),
-            Link(label = listOf(Text("Foo bar baz")), url = "url", title = "Title").render(),
+            Link(label = listOf(Text("Foo bar baz")), url = "url", title = listOf(Text("Title"))).render(),
         )
     }
 
@@ -160,14 +160,14 @@ class HtmlNodeRendererTest {
         // Resolved: label matches the reference, definition is set.
         val resolved =
             ReferenceLink(label, label, fallback).also {
-                it.setDefinition(context, Link(it.label, "/url", "Title"))
+                it.setDefinition(context, Link(it.label, "/url", listOf(Text("Title"))))
             }
         assertEquals(out.next(), resolved.render(context))
 
         // Resolved: different display label, same reference label.
         val resolvedDifferentLabel =
             ReferenceLink(listOf(Text("label")), label, fallback).also {
-                it.setDefinition(context, Link(it.label, "/url", "Title"))
+                it.setDefinition(context, Link(it.label, "/url", listOf(Text("Title"))))
             }
         assertEquals(out.next(), resolvedDifferentLabel.render(context))
 
@@ -193,7 +193,7 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             Image(
-                Link(label = listOf(), url = "/url", title = "Title"),
+                Link(label = listOf(), url = "/url", title = listOf(Text("Title"))),
                 width = null,
                 height = null,
             ).render(),
@@ -209,7 +209,7 @@ class HtmlNodeRendererTest {
         assertEquals(
             out.next(),
             Image(
-                Link(label = buildInline { text("Foo bar") }, url = "/url", title = "Title"),
+                Link(label = buildInline { text("Foo bar") }, url = "/url", title = listOf(Text("Title"))),
                 width = 3.2.cm,
                 height = null,
             ).render(),
@@ -228,7 +228,7 @@ class HtmlNodeRendererTest {
 
         fun resolvedRefLink(displayLabel: InlineContent) =
             ReferenceLink(displayLabel, label, fallback).also {
-                it.setDefinition(context, Link(displayLabel, "/url", "Title"))
+                it.setDefinition(context, Link(displayLabel, "/url", listOf(Text("Title"))))
             }
 
         assertEquals(
@@ -277,7 +277,7 @@ class HtmlNodeRendererTest {
             out.next(),
             ImageFigure(
                 Image(
-                    Link(label = listOf(), url = "/url", title = ""),
+                    Link(label = listOf(), url = "/url", title = listOf(Text(""))),
                     width = null,
                     height = null,
                 ),
@@ -287,7 +287,7 @@ class HtmlNodeRendererTest {
             out.next(),
             ImageFigure(
                 Image(
-                    Link(label = listOf(), url = "/url", title = "Title"),
+                    Link(label = listOf(), url = "/url", title = listOf(Text("Title"))),
                     width = null,
                     height = null,
                 ),
@@ -297,7 +297,7 @@ class HtmlNodeRendererTest {
             out.next(),
             ImageFigure(
                 Image(
-                    Link(label = listOf(), url = "/url", title = "Title"),
+                    Link(label = listOf(), url = "/url", title = listOf(Text("Title"))),
                     width = 150.px,
                     height = 100.px,
                 ),
@@ -463,7 +463,7 @@ class HtmlNodeRendererTest {
         )
         assertEquals(
             out.next(),
-            Code("class Point {\n    ...\n}", language = "java", caption = "A Java code example.").render(),
+            Code("class Point {\n    ...\n}", language = "java", caption = listOf(Text("A Java code example."))).render(),
         )
     }
 
@@ -768,7 +768,7 @@ class HtmlNodeRendererTest {
                             ),
                     ),
                 ),
-                caption = "Table 'caption'.",
+                caption = listOf(Text("Table 'caption'.")),
             ).render(),
         )
     }

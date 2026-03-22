@@ -113,7 +113,7 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  */
 fun code(
     @Name("lang") language: String? = null,
-    @LikelyNamed caption: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
     @Name("ref") referenceId: String? = null,
@@ -124,7 +124,7 @@ fun code(
         language = language,
         showLineNumbers = showLineNumbers,
         focusedLines = focusedLines,
-        caption = caption,
+        caption = caption?.children,
         referenceId = referenceId,
     ).wrappedAsValue()
 

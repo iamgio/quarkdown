@@ -10,13 +10,13 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * Creation of a referenceable link definition.
  * @param label inline content of the displayed label
  * @param url URL this link points to
- * @param title optional title
+ * @param title optional inline title
  * @param fileSystem optional file system this link is relative to
  */
 class LinkDefinition(
     override val label: InlineContent,
     override val url: String,
-    override val title: String?,
+    override val title: InlineContent?,
     override val fileSystem: FileSystem? = null,
 ) : LinkNode,
     TextNode {

@@ -395,7 +395,7 @@ object ValueFactory {
                     context.flavor.lexerFactory.newInlineLexer(raw.toString()),
                     context,
                     expandFunctionCalls = true,
-                ).asInline()
+                ).adapt()
             }
         }
 

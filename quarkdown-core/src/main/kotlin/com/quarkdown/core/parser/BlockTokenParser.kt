@@ -108,14 +108,13 @@ class BlockTokenParser(
             groups
                 .next()
                 .lineSequence()
-                .map { it.replace("^ {0,$initialSpaces}".toRegex(), "") }
-                .joinToString(separator = "\n")
+                .joinToString(separator = "\n") { it.replace("^ {0,$initialSpaces}".toRegex(), "") }
                 .removePrefix("\n")
                 .removeSuffix("\n")
 
         return Code(
             language = language?.takeIf { it.isNotBlank() }?.trim(),
-            caption = caption?.trimDelimiters(),
+            caption = caption?.trimDelimiters()?.toInline(),
             referenceId = referenceId,
             content = content,
         )
@@ -189,7 +188,12 @@ class BlockTokenParser(
             label = groups.next().trim().toInline(),
             url = groups.next().trim(),
             // Remove first and last character
-            title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+            title =
+                groups
+                    .nextOrNull()
+                    ?.trimDelimiters()
+                    ?.trim()
+                    ?.toInline(),
             fileSystem = context.fileSystem,
         )
     }
@@ -413,7 +417,7 @@ class BlockTokenParser(
 
         return Table(
             columns = columns.map { it.toColumn() },
-            caption = caption,
+            caption = caption?.toInline(),
             referenceId = customId,
         )
     }

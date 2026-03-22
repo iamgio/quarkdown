@@ -237,7 +237,7 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)
             assertEquals("text", language)
-            assertEquals("The caption", caption)
+            assertNodeEquals(listOf(Text("The caption")), caption!!)
             assertNull(referenceId)
         }
         repeat(2) {
@@ -255,8 +255,16 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)
             assertEquals("text", language)
-            assertEquals("The caption", caption)
+            assertNodeEquals(listOf(Text("The caption")), caption!!)
             assertEquals("custom-id", referenceId)
+        }
+        with(nodes.next()) {
+            assertEquals("Code line 1\nCode line 2", content)
+            assertEquals("text", language)
+            assertNodeEquals(
+                listOf(Text("A "), Emphasis(listOf(Text("formatted caption")))),
+                caption!!,
+            )
         }
     }
 
@@ -432,23 +440,23 @@ class BlockParserTest {
             with(nodes.next()) {
                 assertEquals("label", rawText)
                 assertEquals("https://google.com", url)
-                assertEquals("Title", title)
+                assertNodeEquals(listOf(Text("Title")), title!!)
             }
         }
         with(nodes.next()) {
             assertEquals("label", rawText)
             assertEquals("https://google.com", url)
-            assertEquals("Multiline\ntitle", title)
+            assertNodeEquals(listOf(Text("Multiline\ntitle")), title!!)
         }
         with(nodes.next()) {
             assertEquals("label", rawText)
             assertEquals("https://google.com", url)
-            assertEquals("Line 1\nLine 2\nLine 3", title)
+            assertNodeEquals(listOf(Text("Line 1\nLine 2\nLine 3")), title!!)
         }
         with(nodes.next()) {
             assertEquals("label", rawText)
             assertEquals("/url", url)
-            assertEquals("Title", title)
+            assertNodeEquals(listOf(Text("Title")), title!!)
         }
     }
 
@@ -591,7 +599,7 @@ class BlockParserTest {
 
         repeat(2) {
             with(nodes.next()) {
-                assertEquals("Table caption", caption)
+                assertNodeEquals(listOf(Text("Table caption")), caption!!)
                 assertNull(referenceId)
 
                 val columns = columns.iterator()
@@ -618,8 +626,16 @@ class BlockParserTest {
         }
 
         with(nodes.next()) {
-            assertEquals("Table caption", caption)
+            assertNodeEquals(listOf(Text("Table caption")), caption!!)
             assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                listOf(Text("A "), Emphasis(listOf(Text("formatted caption")))),
+                caption!!,
+            )
+            assertNull(referenceId)
         }
 
         assertFalse(nodes.hasNext())
@@ -987,7 +1003,7 @@ class BlockParserTest {
                 }.first(),
                 child,
             )
-            assertEquals("Title", caption)
+            assertNodeEquals(listOf(Text("Title")), caption!!)
         }
 
         with(nodes.next()) {
@@ -1046,6 +1062,13 @@ class BlockParserTest {
 
         with(nodes.next()) {
             assertEquals("custom-id", referenceId)
+        }
+
+        with(nodes.next()) {
+            assertNodeEquals(
+                listOf(Text("A "), Emphasis(listOf(Text("formatted caption")))),
+                caption!!,
+            )
         }
     }
 

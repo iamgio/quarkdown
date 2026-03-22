@@ -54,7 +54,7 @@ class InlineAstBuilder : AstBuilder() {
         url: String,
         title: String? = null,
         label: InlineAstBuilder.() -> Unit,
-    ) = +Link(buildInline(label), url, title)
+    ) = +Link(buildInline(label), url, title?.let { listOf(Text(it)) })
 
     /**
      * @see CodeSpan
@@ -72,7 +72,7 @@ class InlineAstBuilder : AstBuilder() {
         referenceId: String? = null,
         label: InlineAstBuilder.() -> Unit = {},
     ) = +Image(
-        Link(buildInline(label), url, title, fileSystem = SimpleFileSystem()),
+        Link(buildInline(label), url, title?.let { listOf(Text(it)) }, fileSystem = SimpleFileSystem()),
         width,
         height,
         referenceId,

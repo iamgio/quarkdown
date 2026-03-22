@@ -15,3 +15,5 @@
 !(_*10px)[Label](/url)
 
 ![Label](/url) {#custom-id}
+
+![Label](/url "A *formatted caption*")

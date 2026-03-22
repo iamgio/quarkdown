@@ -102,7 +102,7 @@ class AstDslTest {
                                                         Link(
                                                             listOf(Strong(listOf(Text("alt")))),
                                                             url = "url",
-                                                            title = "title",
+                                                            title = listOf(Text("title")),
                                                             fileSystem = SimpleFileSystem(),
                                                         ),
                                                     width = null,

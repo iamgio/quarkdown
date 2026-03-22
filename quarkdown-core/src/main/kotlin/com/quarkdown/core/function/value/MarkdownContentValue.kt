@@ -9,7 +9,8 @@ import com.quarkdown.core.function.expression.visitor.ExpressionVisitor
  */
 data class MarkdownContentValue(
     override val unwrappedValue: MarkdownContent,
-) : InputValue<MarkdownContent> {
+) : InputValue<MarkdownContent>,
+    AdaptableValue<InlineMarkdownContentValue> {
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 
     /**
@@ -18,9 +19,11 @@ data class MarkdownContentValue(
     fun asNodeValue(): NodeValue = NodeValue(unwrappedValue)
 
     /**
-     * @return this Markdown content value to an [InlineMarkdownContent] value. Wrapped content is identical
+     * Adapts this block-level content to inline content.
+     * Wrapped content is identical, allowing seamless conversion when a function parameter
+     * expects [InlineMarkdownContent] but receives [MarkdownContent].
      */
-    fun asInline() = InlineMarkdownContentValue(InlineMarkdownContent(unwrappedValue.children))
+    override fun adapt() = InlineMarkdownContentValue(InlineMarkdownContent(unwrappedValue.children))
 }
 
 /**

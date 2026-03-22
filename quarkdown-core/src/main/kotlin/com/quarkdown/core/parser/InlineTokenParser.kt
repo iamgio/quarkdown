@@ -166,7 +166,12 @@ class InlineTokenParser(
                 label = parseLinkLabelSubContent(groups.next()),
                 url = groups.next().trim(),
                 // Removes leading and trailing delimiters.
-                title = groups.nextOrNull()?.trimDelimiters()?.trim(),
+                title =
+                    groups
+                        .nextOrNull()
+                        ?.trimDelimiters()
+                        ?.trim()
+                        ?.let(::parseSubContent),
                 fileSystem = context.fileSystem,
             )
 

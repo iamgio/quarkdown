@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.SingleChildNestableNode
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
@@ -14,13 +15,13 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * A block which displays a single child, with an optional caption.
  * If a [caption] is provided or [referenceId] is set, the block is numbered.
  * @param child wrapped child
- * @param caption optional caption of the figure block
+ * @param caption optional inline caption of the figure block
  * @param referenceId optional ID that can be cross-referenced via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  * @param T type of the wrapped child node
  */
 open class Figure<T : Node>(
     override val child: T,
-    override val caption: String? = null,
+    override val caption: InlineContent? = null,
     override val referenceId: String? = null,
 ) : SingleChildNestableNode<T>,
     LocationTrackableNode,

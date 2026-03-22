@@ -111,7 +111,7 @@ class InlineParserTest {
                     assertEquals("foo", text)
                 }
                 assertEquals("https://google.com", url)
-                assertEquals(title, "Title")
+                assertNodeEquals(listOf(Text("Title")), title!!)
             }
         }
 
@@ -235,7 +235,7 @@ class InlineParserTest {
                     assertEquals("foo", text)
                 }
                 assertEquals("/img", link.url)
-                assertEquals(link.title, "Title")
+                assertNodeEquals(listOf(Text("Title")), link.title!!)
 
                 assertNull(width)
                 assertNull(height)
@@ -249,7 +249,7 @@ class InlineParserTest {
                 assertEquals("foo", text)
             }
             assertEquals("/img", link.url)
-            assertEquals(link.title, "Title")
+            assertNodeEquals(listOf(Text("Title")), link.title!!)
 
             assertEquals(150.px, width)
             assertEquals(100.px, height)
