@@ -1,0 +1,11 @@
+.figure
+    Hello
+
+.container fullwidth:{yes} margin:{20px}
+    .figure
+        Hello
+
+.container fullwidth:{yes} margin:{20px}
+    .container fullwidth:{yes} margin:{10px}
+        .figure
+            Hello
