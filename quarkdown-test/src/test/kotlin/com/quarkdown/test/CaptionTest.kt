@@ -261,6 +261,51 @@ class CaptionTest {
     }
 
     @Test
+    fun `cross-reference inside caption`() {
+        execute(
+            """
+            ## My heading {#my-heading}
+
+            .figure caption:{See .ref {my-heading}}
+                Content
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2 id=\"my-heading\">My heading</h2>" +
+                    "<figure><p>Content</p>" +
+                    "<figcaption class=\"caption-bottom\"><p>See " +
+                    "<a href=\"#my-heading\"><span class=\"cross-reference\">My heading</span></a>" +
+                    "</p></figcaption></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `cross-reference inside table caption`() {
+        execute(
+            """
+            ## My heading {#my-heading}
+
+            | Header |
+            |--------|
+            | Cell   |
+            "See .ref {my-heading}"
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2 id=\"my-heading\">My heading</h2>" +
+                    "<table><thead><tr><th>Header</th></tr></thead>" +
+                    "<tbody><tr><td>Cell</td></tr></tbody>" +
+                    "<caption class=\"caption-bottom\">See " +
+                    "<a href=\"#my-heading\"><span class=\"cross-reference\">My heading</span></a>" +
+                    "</caption></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `all captions on top but figures`() {
         execute(
             """

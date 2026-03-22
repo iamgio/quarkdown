@@ -75,7 +75,7 @@ class FunctionNodeExpansionTest {
     @Suppress("MemberVisibilityCanBePrivate")
     fun makeQuote(body: MarkdownContent) =
         NodeValue(
-            BlockQuote(children = body.children),
+            BlockQuote(content = body.children),
         )
 
     @BeforeTest
@@ -364,7 +364,7 @@ class FunctionNodeExpansionTest {
         assertEquals(1, node.children.size)
         assertNodeEquals(
             BlockQuote(
-                children =
+                content =
                     listOf(
                         Paragraph(
                             listOf(Text("Hello "), Strong(listOf(Text("world")))),

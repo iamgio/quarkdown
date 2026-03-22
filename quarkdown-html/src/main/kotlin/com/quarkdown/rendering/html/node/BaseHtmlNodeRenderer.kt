@@ -248,7 +248,7 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Paragraph) = buildTag("p", node.text)
 
-    override fun visit(node: BlockQuote) = buildTag("blockquote", node.children)
+    override fun visit(node: BlockQuote) = buildTag("blockquote", node.content)
 
     override fun visit(node: BlankNode) = "" // Fallback block, should not happen
 

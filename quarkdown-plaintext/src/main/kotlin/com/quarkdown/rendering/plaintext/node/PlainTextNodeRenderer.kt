@@ -105,7 +105,11 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: Newline) = ""
 
-    override fun visit(node: Code) = node.content.indent("\t").blockNode
+    override fun visit(node: Code) =
+        buildString {
+            append(node.content.indent("\t"))
+            node.caption?.visitAll()?.let { append("\n", it) }
+        }.blockNode
 
     override fun visit(node: HorizontalRule) = "-----".blockNode
 
@@ -142,11 +146,22 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: Html) = ""
 
-    override fun visit(node: Table) = node.visitChildren().blockNode // Markdown-like table rendering may be supported later
+    override fun visit(node: Table) =
+        buildString {
+            append(
+                node.columns
+                    .asSequence()
+                    .flatMap { it.cells + it.header }
+                    .flatMap { it.text }
+                    .toList()
+                    .visitAll(),
+            )
+            node.caption?.visitAll()?.let { append("\n", it) }
+        }.blockNode
 
     override fun visit(node: Paragraph) = node.visitChildren().blockNode
 
-    override fun visit(node: BlockQuote) = "> ${node.visitChildren().trimEnd().replace("\n", "\n> ")}".blockNode
+    override fun visit(node: BlockQuote) = "> ${node.content.visitAll().trimEnd().replace("\n", "\n> ")}".blockNode
 
     override fun visit(node: BlankNode) = ""
 
@@ -186,7 +201,11 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: FunctionCallNode) = node.visitChildren()
 
-    override fun visit(node: Figure<*>) = node.visitChildren()
+    override fun visit(node: Figure<*>) =
+        buildString {
+            append(node.child.accept(this@PlainTextNodeRenderer))
+            node.caption?.visitAll()?.let { append("\n", it) }
+        }.blockNode
 
     override fun visit(node: PageBreak) = ""
 
@@ -202,9 +221,9 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: Clipped) = node.visitChildren()
 
-    override fun visit(node: Box) = ((node.title?.visitAll()?.plus("\n-----\n") ?: "") + node.visitChildren()).blockNode
+    override fun visit(node: Box) = ((node.title?.visitAll()?.plus("\n-----\n") ?: "") + node.content.visitAll()).blockNode
 
-    override fun visit(node: Collapse) = node.visitChildren()
+    override fun visit(node: Collapse) = node.content.visitAll()
 
     override fun visit(node: Whitespace) = ""
 

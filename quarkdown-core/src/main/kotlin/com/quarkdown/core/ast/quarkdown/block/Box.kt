@@ -11,6 +11,7 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
+import com.quarkdown.core.util.node.group
 import com.quarkdown.core.util.takeLines
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -26,7 +27,7 @@ private const val ERROR_MAX_SOURCE_TEXT_LINES = 10
  * @param padding padding of the box. If `null`, the box uses the default value
  * @param backgroundColor background color of the box. If `null`, the box uses the default value
  * @param foregroundColor foreground color of the box. If `null`, the box uses the default value
- * @param children content of the box
+ * @param content body content of the box
  */
 class Box(
     val title: InlineContent?,
@@ -34,8 +35,11 @@ class Box(
     val padding: Size? = null,
     val backgroundColor: Color? = null,
     val foregroundColor: Color? = null,
-    override val children: List<Node>,
+    val content: List<Node>,
 ) : NestableNode {
+    override val children: List<Node>
+        get() = content + title.group()
+
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
@@ -87,7 +91,7 @@ class Box(
                     text("Error" + if (title != null) ": $title" else "")
                 },
             type = Type.ERROR,
-            children = content,
+            content = content,
         )
 
         /**
