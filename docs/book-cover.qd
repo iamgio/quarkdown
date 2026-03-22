@@ -1,0 +1,18 @@
+.docname {Book cover}
+.include {docs}
+
+A common pattern for [paged documents](document-types.qd) is a full-bleed cover page, where an image spans the entire first page. This is achieved by combining:
+- [`.pageformat`](page-format.qd) to remove margins on the first page;
+- [`.container`](container.qd) to hold a full-width image.
+
+.exampleoutput {!(500)[Book cover](book-cover/result.png)}
+    .doctype {paged}
+
+    .pageformat pages:{..1} margin:{0}
+
+    .container fullwidth:{yes} margin:{0}
+        !(100%)[Cover](cover.png)
+
+    # Introduction
+    
+    ...

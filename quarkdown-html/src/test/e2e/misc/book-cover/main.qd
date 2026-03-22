@@ -1,0 +1,8 @@
+.doctype {paged}
+
+.pageformat pages:{..1} margin:{0}
+
+.container fullwidth:{yes} margin:{0}
+    !(100%)[Cover](A4.png)
+
+# Introduction
