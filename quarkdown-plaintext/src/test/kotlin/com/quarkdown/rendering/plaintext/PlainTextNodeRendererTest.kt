@@ -224,7 +224,7 @@ class PlainTextNodeRendererTest {
         assertEquals(
             "> Hello\n\n",
             BlockQuote(
-                children =
+                content =
                     buildBlocks {
                         paragraph { text("Hello") }
                     },
@@ -237,7 +237,7 @@ class PlainTextNodeRendererTest {
         assertEquals(
             "> Hello\n> \n> \tWorld\n> \t!\n\n",
             BlockQuote(
-                children =
+                content =
                     buildBlocks {
                         paragraph { text("Hello") }
 
@@ -369,7 +369,7 @@ class PlainTextNodeRendererTest {
             Box(
                 title = null,
                 type = Box.Type.CALLOUT,
-                children = buildBlocks { paragraph { text("Hello") } },
+                content = buildBlocks { paragraph { text("Hello") } },
             ).render(),
         )
     }
@@ -381,7 +381,7 @@ class PlainTextNodeRendererTest {
             Box(
                 title = buildInline { text("Note") },
                 type = Box.Type.CALLOUT,
-                children = buildBlocks { paragraph { text("Hello") } },
+                content = buildBlocks { paragraph { text("Hello") } },
             ).render(),
         )
     }

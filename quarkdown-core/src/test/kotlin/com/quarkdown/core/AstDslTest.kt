@@ -89,7 +89,7 @@ class AstDslTest {
                         ),
                     ),
                     BlockQuote(
-                        children =
+                        content =
                             listOf(
                                 Paragraph(
                                     listOf(

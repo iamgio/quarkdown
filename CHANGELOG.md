@@ -135,9 +135,13 @@ Thanks @szy1840!
 
 When editing long paged documents with live preview, the scroll position could sometimes be restored only partially because of long paged.js load times. The swap now reliably waits for the content to be fully loaded.
 
-#### Fixed Mermaid diagrams breaking page breaks
+#### Fixed Mermaid diagrams preventing page breaks
 
 Fixed an issue that caused Mermaid diagrams in `paged` documents to cause subsequent content to overflow instead of being pushed to the next page.
+
+#### Fixed tree traversal not reaching non-body nodes
+
+Fixed an issue that caused tree traversal-dependent features, such as cross-references, to not work in titles of `.box` and `.collapse`, and in block quote attributions.
 
 #### Improved lexer performance
 

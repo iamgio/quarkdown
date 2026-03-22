@@ -281,7 +281,7 @@ class QuarkdownHtmlNodeRenderer(
 
             // Box actual content.
             +div("box-content") {
-                +node.children
+                +node.content
 
                 style { "padding" value node.padding }
             }
@@ -300,7 +300,7 @@ class QuarkdownHtmlNodeRenderer(
             }
 
             tag("summary") { +node.title }
-            +node.children
+            +node.content
         }
 
     override fun visit(node: Whitespace) =
@@ -671,11 +671,11 @@ class QuarkdownHtmlNodeRenderer(
             }
 
             // If the quote has a type, the first child must be a paragraph, because the label is rendered as ::before.
-            if (node.type != null && node.children.firstOrNull() !is Paragraph) {
+            if (node.type != null && node.content.firstOrNull() !is Paragraph) {
                 +tagBuilder("p").acceptEmpty().build()
             }
 
-            +node.children
+            +node.content
             node.attribution?.let {
                 +tagBuilder("p", it).className("attribution").build()
             }

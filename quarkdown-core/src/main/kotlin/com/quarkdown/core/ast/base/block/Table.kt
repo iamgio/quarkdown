@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
+import com.quarkdown.core.util.node.group
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -31,16 +32,17 @@ class Table(
     override val kindLocalizationKey: String
         get() = LocalizedKindKeys.TABLE
 
-    // Exposing all the cell contents as this table's direct children
-    // allows visiting them during a tree traversal.
-    // If they were isolated, they would be unreachable.
+    /**
+     * Exposes all the cell contents and caption as this table's direct children
+     * allowing visiting them during a tree traversal. If they were isolated, they would be unreachable.
+     */
     override val children: List<Node>
         get() =
             columns
                 .asSequence()
                 .flatMap { it.cells + it.header }
                 .flatMap { it.text }
-                .toList()
+                .toList() + caption.group()
 
     /**
      * A column of a table.

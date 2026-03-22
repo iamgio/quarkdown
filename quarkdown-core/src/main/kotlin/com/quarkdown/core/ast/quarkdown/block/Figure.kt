@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
+import com.quarkdown.core.util.node.group
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -28,6 +29,9 @@ open class Figure<T : Node>(
     CrossReferenceableNode,
     CaptionableNode,
     LocalizedKind {
+    override val children: List<Node>
+        get() = listOf(child, caption.group())
+
     override val kindLocalizationKey: String
         get() = LocalizedKindKeys.FIGURE
 

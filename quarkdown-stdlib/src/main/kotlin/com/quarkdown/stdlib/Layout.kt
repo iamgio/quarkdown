@@ -382,7 +382,7 @@ fun toDo(
     return Box(
         title = buildInline { text(title.uppercase()) },
         type = Box.Type.WARNING,
-        children = body.children,
+        content = body.children,
     ).wrappedAsValue().also {
         Log.warn("$title: ${body.children.toPlainText()}")
     }

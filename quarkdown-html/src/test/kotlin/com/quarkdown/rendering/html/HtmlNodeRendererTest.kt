@@ -982,7 +982,7 @@ class HtmlNodeRendererTest {
             Collapse(
                 title = listOf(Emphasis(listOf(Text("Hello")))),
                 isOpen = false,
-                children = listOf(Strong(listOf(Text("world")))),
+                content = listOf(Strong(listOf(Text("world")))),
             ).render(),
         )
 
@@ -991,7 +991,7 @@ class HtmlNodeRendererTest {
             Collapse(
                 title = listOf(Text("Hello")),
                 isOpen = true,
-                children = listOf(BlockQuote(children = listOf(Paragraph(listOf(Text("world")))))),
+                content = listOf(BlockQuote(content = listOf(Paragraph(listOf(Text("world")))))),
             ).render(),
         )
     }
