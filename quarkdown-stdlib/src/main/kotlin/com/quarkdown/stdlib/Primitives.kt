@@ -88,18 +88,18 @@ fun pageBreak() = PageBreak().wrappedAsValue()
  *
  * If either [caption] or [referenceId] is set, the figure will be numbered according to the `figures` [numbering] rule.
  *
- * @param caption optional caption of the figure
+ * @param caption optional inline caption of the figure
  * @param referenceId optional ID for cross-referencing via [reference]
  * @param body content of the figure
  * @return the new [Figure] node
  */
 fun figure(
-    @LikelyNamed caption: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
     @LikelyBody body: MarkdownContent,
 ): NodeValue =
     Figure<MarkdownContent>(
         body,
-        caption = caption,
+        caption = caption?.children,
         referenceId = referenceId,
     ).wrappedAsValue()

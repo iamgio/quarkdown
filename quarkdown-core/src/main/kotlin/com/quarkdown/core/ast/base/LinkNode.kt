@@ -23,7 +23,7 @@ interface LinkNode : Node {
     /**
      * Optional title.
      */
-    val title: String?
+    val title: InlineContent?
 
     /**
      * Optional file system where this link is defined, used for resolving relative paths.

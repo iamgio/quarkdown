@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block
 
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
@@ -24,7 +25,7 @@ class Code(
     val showLineNumbers: Boolean = true,
     val highlight: Boolean = true,
     val focusedLines: Range? = null,
-    override val caption: String? = null,
+    override val caption: InlineContent? = null,
     override val referenceId: String? = null,
 ) : LocationTrackableNode,
     CrossReferenceableNode,

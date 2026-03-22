@@ -295,7 +295,7 @@ class PlainTextNodeRenderer(
 
                 // If no label is available, use the caption if possible.
                 is CaptionableNode if definition.caption != null -> {
-                    definition.caption!!
+                    definition.caption!!.visitAll()
                 }
 
                 // Fallback: use the target's text if possible.

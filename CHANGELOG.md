@@ -24,6 +24,16 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 
 `.cite` now accepts a comma-separated list of keys (e.g. `.cite {einstein, hawking}`) to produce a single combined citation label, whose format depends on the active citation style (e.g. `[1], [2]` for IEEE, `(Einstein, 1905; Hawking, 1988)` for APA).
 
+#### Formatted captions
+
+Captions for all supported elements now accept inline formatting (including inline function calls), rather than plain text. 
+
+```markdown
+![Pi](pi.png "The symbol of *pi*, which approximately equals .pi")
+```
+
+<img width="500" alt="Formatted caption" src="https://github.com/user-attachments/assets/589241b1-9273-41fa-9ffc-54104671a389" />
+
 #### [Scoped page formatting](https://quarkdown.com/wiki/page-format#scoped-formatting)
 
 `.pageformat` now supports scoping formats to specific pages in `paged` documents via two combinable parameters:
@@ -41,11 +51,6 @@ Quarkdown's internal bibliography management is now powered by [CSL](https://cit
 .pageformat pages:{1..3} borderbottom:{4px}
 ```
 
-#### [`.heading` primitive function](https://quarkdown.com/wiki/headings)
-
-The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
-It allows explicit control over numbering (`numbered`), table of contents indexing (`indexed`), page breaks (`breakpage`), depth, and reference ID (`ref`).
-
 #### New syntax: [Tight function calls](https://quarkdown.com/wiki/syntax-of-a-function-call#tight-function-calls)
 
 Inline function calls can now be wrapped in curly braces to delimit them from surrounding content, without relying on whitespace.
@@ -53,6 +58,11 @@ Inline function calls can now be wrapped in curly braces to delimit them from su
 ```markdown
 abc{.uppercase {def}}ghi
 ```
+
+#### [`.heading` primitive function](https://quarkdown.com/wiki/headings)
+
+The new `.heading` function creates headings with granular control over their behavior, unlike standard Markdown headings (`#`, `##`, ...).
+It allows explicit control over numbering (`numbered`), table of contents indexing (`indexed`), page breaks (`breakpage`), depth, and reference ID (`ref`).
 
 #### [`.pagebreak` primitive function](https://quarkdown.com/wiki/page-break)
 
@@ -95,7 +105,7 @@ The `.text` function now accepts a `script` parameter with `sub` and `sup` value
 
 ### Changed
 
-#### Removed `includeunnumbered` parameter from `.tableofcontents`
+#### Removed `includeunnumbered` parameter from `.tableofcontents` (breaking change)
 
 The `includeunnumbered` parameter has been removed, in favor of the more granular heading configuration previously mentioned.
 Now all indexable headings are included in the ToC by default, regardless of their numbering.

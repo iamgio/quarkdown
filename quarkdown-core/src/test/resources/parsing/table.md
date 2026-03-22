@@ -50,3 +50,8 @@ bar | baz
 | G H I | J K L |
 | M N O | P Q R |
 "Table caption" {#custom-id}
+
+| A B C | D E F |
+|-------|-------|
+| G H I | J K L |
+"A *formatted caption*"

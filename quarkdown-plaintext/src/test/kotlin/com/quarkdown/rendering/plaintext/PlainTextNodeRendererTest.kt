@@ -111,7 +111,7 @@ class PlainTextNodeRendererTest {
             LinkDefinition(
                 label = buildInline { text("example") },
                 url = "https://example.com",
-                title = "Example",
+                title = listOf(Text("Example")),
             ).render(),
         )
     }

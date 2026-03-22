@@ -161,7 +161,7 @@ class QuarkdownHtmlNodeRenderer(
                 withLocationLabel(node)
                 withLocalizedKind(node)
 
-                node.caption?.let { +escapeCriticalContent(it) }
+                node.caption?.let { +it }
             }
         }
 

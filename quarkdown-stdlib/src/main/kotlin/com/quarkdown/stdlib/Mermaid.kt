@@ -1,5 +1,7 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
@@ -30,7 +32,7 @@ val Mermaid: QuarkdownModule =
     )
 
 private fun mermaidFigure(
-    caption: String?,
+    caption: InlineContent?,
     referenceId: String? = null,
     code: String,
 ) = Figure<MermaidDiagram>(
@@ -64,11 +66,11 @@ private fun mermaidFigure(
  * @return a new [Figure] node
  */
 fun mermaid(
-    @LikelyNamed caption: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
     @LikelyBody code: EvaluableString,
 ) = mermaidFigure(
-    caption = caption,
+    caption = caption?.children,
     referenceId = referenceId,
     code = code.content,
 )
@@ -201,7 +203,7 @@ fun xyChart(
     @Name("xtags") xAxisTags: Iterable<Value<*>>? = null,
     @Name("y") yAxisLabel: String? = null,
     @Name("yrange") yAxisRange: Range? = null,
-    @LikelyNamed caption: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
     @LikelyBody values: Iterable<OutputValue<*>>,
 ): NodeValue {
@@ -229,7 +231,7 @@ fun xyChart(
         }
 
     val code = "xychart-beta\n" + content.indent("\t")
-    return mermaidFigure(caption = caption, referenceId = referenceId, code = code)
+    return mermaidFigure(caption = caption?.children, referenceId = referenceId, code = code)
 }
 
 /**

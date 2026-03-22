@@ -69,3 +69,8 @@ Code line 2
 Code line 1
 Code line 2
 ```
+
+```text "A *formatted caption*"
+Code line 1
+Code line 2
+```

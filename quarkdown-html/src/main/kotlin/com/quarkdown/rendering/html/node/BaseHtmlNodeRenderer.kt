@@ -264,7 +264,7 @@ open class BaseHtmlNodeRenderer(
     private fun buildLinkTag(node: Link): HtmlTagBuilder =
         tagBuilder("a", node.label)
             .attribute("href", node.url)
-            .optionalAttribute("title", node.title)
+            .optionalAttribute("title", node.title?.toPlainText(renderer = this))
 
     override fun visit(node: Link) = buildLinkTag(node).build()
 
@@ -322,7 +322,7 @@ open class BaseHtmlNodeRenderer(
         tagBuilder("img")
             .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.getResolvedUrl(context))
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
-            .optionalAttribute("title", node.link.title)
+            .optionalAttribute("title", node.link.title?.toPlainText(renderer = this))
             .style {
                 "width" value node.width
                 "height" value node.height

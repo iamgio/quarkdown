@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
@@ -276,7 +277,7 @@ fun csv(
     @Injected context: Context,
     path: String,
     @LikelyNamed mode: CsvParsingMode = CsvParsingMode.PLAIN,
-    @LikelyNamed caption: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
 ): NodeValue {
     val file = file(context, path)
@@ -308,7 +309,7 @@ fun csv(
 
     return Table(
         columns = columns.map { it.toColumn() },
-        caption = caption,
+        caption = caption?.children,
         referenceId = referenceId,
     ).wrappedAsValue()
 }
