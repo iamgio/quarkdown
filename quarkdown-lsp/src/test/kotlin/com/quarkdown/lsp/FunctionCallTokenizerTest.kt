@@ -249,4 +249,86 @@ class FunctionCallTokenizerTest {
         assertNotNull(paramNameToken)
         assertEquals("param", paramNameToken.lexeme)
     }
+
+    @Test
+    fun `nameless function call`() {
+        val text = ".{hello}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        assertEquals(0..text.length, call.range)
+
+        // No FUNCTION_NAME token should be present.
+        val nameToken = call.tokens.find { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+        assertEquals(null, nameToken)
+
+        // The BEGIN token is still present.
+        val beginToken = call.tokens.find { it.type == FunctionCallToken.Type.BEGIN }
+        assertNotNull(beginToken)
+        assertEquals(0..1, beginToken.range)
+
+        // The argument is tokenized normally.
+        val argValueToken = call.tokens.find { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_VALUE }
+        assertNotNull(argValueToken)
+        assertEquals("hello", argValueToken.lexeme)
+    }
+
+    @Test
+    fun `nameless function call with chaining`() {
+        val text = ".{x}::bar {y}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val tokens = call.tokens.iterator()
+
+        assertEquals(FunctionCallToken.Type.BEGIN, tokens.next().type)
+        // No FUNCTION_NAME for the nameless part — argument follows directly.
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_VALUE, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.CHAINING_SEPARATOR, tokens.next().type)
+        // The chained function has a name.
+        with(tokens.next()) {
+            assertEquals(FunctionCallToken.Type.FUNCTION_NAME, type)
+            assertEquals("bar", lexeme)
+        }
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_VALUE, tokens.next().type)
+        assertEquals(FunctionCallToken.Type.INLINE_ARGUMENT_END, tokens.next().type)
+        assertFalse(tokens.hasNext())
+    }
+
+    @Test
+    fun `nameless function call in text`() {
+        val text = "hello .{world} goodbye"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val nameToken = call.tokens.find { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+        assertEquals(null, nameToken)
+
+        val argValueToken = call.tokens.find { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_VALUE }
+        assertNotNull(argValueToken)
+        assertEquals("world", argValueToken.lexeme)
+    }
+
+    @Test
+    fun `wrapped nameless function call`() {
+        val text = "{.{x}}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        assertEquals(0..text.length, call.range)
+
+        val nameToken = call.tokens.find { it.type == FunctionCallToken.Type.FUNCTION_NAME }
+        assertEquals(null, nameToken)
+    }
 }

@@ -18,6 +18,12 @@ private const val CLIP_FUNCTION = "clip"
 private const val COLUMN_FUNCTION = "column"
 private const val CSV_FUNCTION = "csv"
 
+/**
+ * Total number of named documented functions in the test resources.
+ * The identity function (empty name) is excluded from completions.
+ */
+private const val NAMED_FUNCTION_COUNT = 4
+
 private const val LAYOUT_MODULE = "Layout"
 private const val DATA_MODULE = "Data"
 
@@ -69,10 +75,11 @@ class FunctionCompletionSupplierTest {
     fun `completions at beginning of function call`() {
         val text = "hello ."
         val completions = getCompletions(text, Position(0, text.length))
-        assertEquals(4, completions.size)
+        assertEquals(NAMED_FUNCTION_COUNT, completions.size)
 
-        // Verifies the expected function names are present.
+        // Verifies the expected function names are present and the identity function is excluded.
         val labels = completions.map { it.label }.toSet()
+        assertFalse("" in labels)
         assertContains(labels, ALIGN_FUNCTION)
         assertContains(labels, CLIP_FUNCTION)
         assertContains(labels, COLUMN_FUNCTION)
@@ -125,14 +132,14 @@ class FunctionCompletionSupplierTest {
     fun `name completion in chain for empty name`() {
         val text = "hello .$ALIGN_FUNCTION::"
         val completions = getCompletions(text, Position(0, text.length))
-        assertEquals(4, completions.size)
+        assertEquals(NAMED_FUNCTION_COUNT, completions.size)
     }
 
     @Test
     fun `name completion in chain with args`() {
         val text = "hello .$ALIGN_FUNCTION {arg}::"
         val completions = getCompletions(text, Position(0, text.length))
-        assertEquals(4, completions.size)
+        assertEquals(NAMED_FUNCTION_COUNT, completions.size)
     }
 
     @Test
@@ -151,7 +158,7 @@ class FunctionCompletionSupplierTest {
         val suffix = " abc"
         val text = "hello .$ALIGN_FUNCTION::$suffix"
         val completions = getCompletions(text, Position(0, text.length - suffix.length))
-        assertEquals(4, completions.size)
+        assertEquals(NAMED_FUNCTION_COUNT, completions.size)
     }
 
     @Test
@@ -304,7 +311,7 @@ class FunctionCompletionSupplierTest {
     fun `name completions in wrapped function call`() {
         val text = "hello{."
         val completions = getCompletions(text, Position(0, text.length))
-        assertEquals(4, completions.size)
+        assertEquals(NAMED_FUNCTION_COUNT, completions.size)
     }
 
     @Test

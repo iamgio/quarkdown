@@ -137,4 +137,25 @@ class FunctionCallTest {
             assertEquals("<p>hello{3</p>", it)
         }
     }
+
+    @Test
+    fun `identity function`() {
+        execute(".{hello}") {
+            assertEquals("<p>hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `identity function chain`() {
+        execute(".{10}::multiply {2}::sum {5}") {
+            assertEquals("<p>25</p>", it)
+        }
+    }
+
+    @Test
+    fun `wrapped identity function`() {
+        execute("hello{.{world}}hello") {
+            assertEquals("<p>helloworldhello</p>", it)
+        }
+    }
 }
