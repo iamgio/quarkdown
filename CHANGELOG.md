@@ -2,23 +2,25 @@
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-03-24
+
 ### Added
 
 #### [CSL bibliography styles](https://quarkdown.com/wiki/bibliography) (breaking change)
 
 Quarkdown's internal bibliography management is now powered by [CSL](https://citationstyles.org) (Citation Style Language).
 
-- A curated selection of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) is now supported. The `style` parameter now accepts a CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
+-   A curated selection of citation styles from the [CSL Style Repository](https://github.com/citation-style-language/styles) is now supported. The `style` parameter now accepts a CSL style identifier (e.g. `ieee`, `apa`, `chicago-author-date`, `nature`). The default style is now `ieee`.
 
-  **Breaking change:** `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
+    **Breaking change:** `plain` and `ieeetr` styles do not exist anymore, and have been replaced by `ieee`.
 
-- Along with BibTeX (`.bib`) files, the following file formats are now accepted:
-  - CSL JSON (`.json`)
-  - YAML (`.yaml`/`.yml`)
-  - EndNote (`.enl`)
-  - RIS (`.ris`)
+-   Along with BibTeX (`.bib`) files, the following file formats are now accepted:
+    -   CSL JSON (`.json`)
+    -   YAML (`.yaml`/`.yml`)
+    -   EndNote (`.enl`)
+    -   RIS (`.ris`)
 
-- Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
+-   Rendered bibliography entries are now localized to the document locale, set via `.doclang`.
 
 #### [Multi-key citations](https://quarkdown.com/wiki/bibliography#citations)
 
@@ -38,8 +40,8 @@ Captions for all supported elements now accept inline formatting (including inli
 
 `.pageformat` now supports scoping formats to specific pages in `paged` documents via two combinable parameters:
 
-- `side` (`left` or `right`): restricts formatting to recto or verso pages, enabling mirrored margins and other asymmetric layouts.
-- `pages` (e.g. `2..5`): restricts formatting to an inclusive range of page indices.
+-   `side` (`left` or `right`): restricts formatting to recto or verso pages, enabling mirrored margins and other asymmetric layouts.
+-   `pages` (e.g. `2..5`): restricts formatting to an inclusive range of page indices.
 
 ```markdown
 .pageformat size:{A4}
@@ -94,10 +96,10 @@ Bold entries (`**name**`) are highlighted with a distinct background color, usef
 
 Both `.tableofcontents` and `.bibliography` now accept the following optional parameters to control the heading that precedes them:
 
-- `breakpage`: controls whether the heading triggers an automatic page break.
-- `headingdepth`: the depth of the heading (1-6).
-- `numberheading`: controls whether the heading is numbered in the document hierarchy.
-- `indexheading`: when enabled, the heading is included in the document's own table of contents.
+-   `breakpage`: controls whether the heading triggers an automatic page break.
+-   `headingdepth`: the depth of the heading (1-6).
+-   `numberheading`: controls whether the heading is numbered in the document hierarchy.
+-   `indexheading`: when enabled, the heading is included in the document's own table of contents.
 
 #### [Subscript and superscript text](https://quarkdown.com/wiki/text)
 
@@ -392,7 +394,9 @@ Shout out to our sponsors! 🎉
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.14.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.15.0...HEAD
+
+[1.15.0]: https://github.com/iamgio/quarkdown/compare/v1.14.1...v1.15.0
 
 [1.14.1]: https://github.com/iamgio/quarkdown/compare/v1.14.0...v1.14.1
 
