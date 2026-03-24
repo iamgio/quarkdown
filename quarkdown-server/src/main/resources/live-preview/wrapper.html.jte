@@ -336,14 +336,30 @@
         // Make sure the frame to reload is properly hidden.
         setFrameVisibility(nextFrame, false);
 
+        function willTriggerReload(url1, url2) {
+            try {
+                const u1 = new URL(url1);
+                const u2 = new URL(url2);
+
+                // Ignore hash differences, since they don't trigger reloads (#419).
+                return !(u1.origin === u2.origin &&
+                    u1.pathname === u2.pathname &&
+                    u1.search === u2.search);
+            } catch (e) {
+                // Returns false if one of the strings isn't a valid URL
+                return false;
+            }
+        }
+
         // (#199) If the URL has changed (e.g. different slide, subdocument, etc.),
         // sync the inactive frame's src before reloading.
         const activeUrl = active.contentWindow?.location?.href;
         if (activeUrl && nextFrame.src !== activeUrl) {
+            const wtr = willTriggerReload(nextFrame.src, activeUrl);
             nextFrame.src = activeUrl;
             // Setting src triggers a load, so the onload handler below covers this path too.
             nextFrame.onload = onFrameLoaded;
-            return;
+            if (wtr) return;
         }
 
         nextFrame.onload = onFrameLoaded;
