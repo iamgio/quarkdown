@@ -38,7 +38,6 @@ import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.data.Lambda
-import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory.eval
 import com.quarkdown.core.function.value.factory.ValueFactory.expression
@@ -52,6 +51,7 @@ import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.patterns.PatternHelpers
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
+import com.quarkdown.core.parser.walker.lambda.LambdaParser
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
 import com.quarkdown.core.pipeline.stage.PipelineStage
@@ -62,12 +62,6 @@ import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.node.conversion.list.MarkdownListToCollectionValue
 import com.quarkdown.core.util.node.conversion.list.MarkdownListToDictionaryValue
-
-/**
- * Suffix that marks a lambda parameter as optional.
- * @see ValueFactory.lambda
- */
-private const val LAMBDA_OPTIONAL_PARAMETER_SUFFIX = '?'
 
 /**
  * Prefix that forces a generic expression to be parsed as a lambda block.
@@ -504,6 +498,7 @@ object ValueFactory {
      * Lambda example: `param1 param2: Hello, .param1 and .param2!`
      * @param raw string input to parse the lambda from
      * @return a new [LambdaValue] from the raw input
+     * @see LambdaParser
      */
     @FromDynamicType(Lambda::class, requiresContext = true)
     fun lambda(
@@ -512,53 +507,14 @@ object ValueFactory {
     ): LambdaValue {
         if (raw is Lambda) return LambdaValue(raw)
 
-        val rawString = raw.toString()
-
-        // The header is the part before the delimiter.
-        // The header contains the sequence of lambda parameters.
-        // If no header is present, the lambda has no parameters.
-        val headerDelimiter = ":"
-        // Matches a sequence of words separated by spaces or tabs,
-        // followed by an optional '?' (makes it optional),
-        // followed by the delimiter.
-        val headerRegex = "^\\s*(\\w+\\??[ \\t]*)*(?=$headerDelimiter)".toRegex()
-        val header = headerRegex.find(rawString)?.value ?: ""
-
-        // The parameters are extracted from the header.
-        val parameters: List<LambdaParameter> =
-            header
-                .trim()
-                .split("\\s+".toRegex())
-                .asSequence()
-                .filter { it.isNotBlank() }
-                .map { parameterName ->
-                    // If a parameter ends with '?', it is optional.
-                    val isOptional = parameterName.endsWith(LAMBDA_OPTIONAL_PARAMETER_SUFFIX)
-                    // The '?' is stripped from the parameter name.
-                    val name = if (isOptional) parameterName.dropLast(1) else parameterName
-
-                    LambdaParameter(name, isOptional)
-                }.toList()
-
-        // The body is the part after the delimiter,
-        // which is the actual content of the lambda.
-        // The body may contain placeholders wrapped in <<>> that will be replaced with actual arguments upon invocation.
-        val body =
-            if (header.isEmpty()) {
-                rawString
-            } else {
-                // Strip the header and delimiter.
-                rawString
-                    .substring(rawString.indexOf(headerDelimiter) + headerDelimiter.length)
-                    .trimStart()
-            }
+        val (parameters, body) = LambdaParser.parse(raw.toString())
 
         return LambdaValue(
             Lambda(context, explicitParameters = parameters) { _, newContext ->
                 // The body (as a raw code snippet) is evaluated in the context of the lambda
                 // which is a fork of the original one.
                 // Parameters-arguments count match is checked later.
-                // Here we assume they match is correct.
+                // Here we assume the match is correct.
                 // Check Lambda#invokeDynamic for more details.
                 eval(body, newContext)
             },
