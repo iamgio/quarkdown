@@ -43,7 +43,7 @@
 
         &::before {
           @include icon("\f5d4"); // 'three-dots' icon
-          color: initial;
+          color: var(--qd-main-color);
         }
       }
     }
