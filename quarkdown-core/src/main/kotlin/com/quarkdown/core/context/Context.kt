@@ -16,12 +16,13 @@ import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleNotSetException
 import com.quarkdown.core.localization.LocalizationTables
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
+import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.Pipeline
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
  */
-interface Context {
+interface Context : PermissionHolder {
     /**
      * The Markdown flavor in use.
      */

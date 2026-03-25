@@ -1,8 +1,7 @@
-package com.quarkdown.stdlib.internal
+package com.quarkdown.core.context.file
 
 import com.quarkdown.core.context.ChildContext
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.context.file.FileSystem
 
 /**
  * Types of granularity for determining the root of the file system.
@@ -25,18 +24,16 @@ enum class RootGranularity {
  *
  * Example:
  *
- * - When used in the root folder: `.pathtoroot` returns `.`
- * - When used in `<root>/subfolder`: `.pathtoroot` returns `..`
- * - When used in `<root>/subfolder1/subfolder2`: `.pathtoroot` returns `../..`
+ * - When used in the root folder: returns `.`
+ * - When used in `<root>/subfolder`: returns `..`
+ * - When used in `<root>/subfolder1/subfolder2`: returns `../..`
  *
  * @return a string value of the relative path to the root of the file system
  * @throws IllegalStateException if the relative path cannot be determined
  */
-fun getRootFileSystem(
-    context: Context,
-    granularity: RootGranularity = RootGranularity.PROJECT,
-): FileSystem? =
-    when (granularity) {
+fun Context.getRootFileSystem(granularity: RootGranularity = RootGranularity.PROJECT): FileSystem? {
+    val context = this
+    return when (granularity) {
         RootGranularity.SUBDOCUMENT -> {
             context.fileSystem.root
         }
@@ -49,3 +46,4 @@ fun getRootFileSystem(
                 ?.let(context.fileSystem::branch)
         }
     }
+}

@@ -7,6 +7,8 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.RootGranularity
+import com.quarkdown.core.context.file.getRootFileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -21,12 +23,11 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
-import com.quarkdown.stdlib.internal.RootGranularity
 import com.quarkdown.stdlib.internal.Sorting
-import com.quarkdown.stdlib.internal.getRootFileSystem
 import com.quarkdown.stdlib.internal.sortedBy
 import java.io.File
 
@@ -56,6 +57,7 @@ internal fun file(
     requireExistance: Boolean = true,
 ): File {
     val file = context.fileSystem.resolve(path)
+    context.requireReadPermission(file)
 
     if (requireExistance && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")
@@ -146,7 +148,7 @@ fun pathToRoot(
     @Injected context: Context,
     @LikelyNamed granularity: RootGranularity = RootGranularity.PROJECT,
 ): StringValue {
-    val root: FileSystem = getRootFileSystem(context, granularity) ?: return ".".wrappedAsValue()
+    val root: FileSystem = context.getRootFileSystem(granularity) ?: return ".".wrappedAsValue()
     val path: String =
         context.fileSystem.relativePathTo(root)?.toString()
             ?: throw IllegalStateException(

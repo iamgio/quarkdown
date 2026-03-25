@@ -23,4 +23,19 @@ object IOUtils {
         } else {
             File(path)
         }
+
+    /**
+     * Checks whether a [child] file is located in [parent] or any of its subdirectories.
+     * @param parent the parent directory
+     * @param child the child file
+     * @return `true` if the child is located in the parent, `false` otherwise
+     */
+    fun isSubPath(
+        parent: File,
+        child: File,
+    ): Boolean {
+        val parentPath = parent.toPath().toAbsolutePath().normalize()
+        val childPath = child.toPath().toAbsolutePath().normalize()
+        return childPath.startsWith(parentPath)
+    }
 }
