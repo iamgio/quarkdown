@@ -321,6 +321,22 @@
 </script>
 <script data-name="reload">
     /**
+     * Checks whether two URLs differ in a way that causes the browser to trigger a page load
+     * when assigning one to an iframe's `src`. Hash-only differences do not trigger a load (#419).
+     */
+    function differsIgnoringHash(url1, url2) {
+        try {
+            const u1 = new URL(url1);
+            const u2 = new URL(url2);
+            return !(u1.origin === u2.origin &&
+                u1.pathname === u2.pathname &&
+                u1.search === u2.search);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
      * Reloads the preview using double buffering to prevent flickering.
      */
     function reload() {
@@ -336,30 +352,18 @@
         // Make sure the frame to reload is properly hidden.
         setFrameVisibility(nextFrame, false);
 
-        function willTriggerReload(url1, url2) {
-            try {
-                const u1 = new URL(url1);
-                const u2 = new URL(url2);
-
-                // Ignore hash differences, since they don't trigger reloads (#419).
-                return !(u1.origin === u2.origin &&
-                    u1.pathname === u2.pathname &&
-                    u1.search === u2.search);
-            } catch (e) {
-                // Returns false if one of the strings isn't a valid URL
-                return false;
-            }
+        // (#199) If the URL has changed beyond just the hash (e.g. different slide, subdocument, etc.),
+        // sync the inactive frame's src. Setting src already triggers a browser load.
+        const activeUrl = active.contentWindow?.location?.href;
+        if (activeUrl && differsIgnoringHash(nextFrame.src, activeUrl)) {
+            nextFrame.src = activeUrl;
+            nextFrame.onload = onFrameLoaded;
+            return;
         }
 
-        // (#199) If the URL has changed (e.g. different slide, subdocument, etc.),
-        // sync the inactive frame's src before reloading.
-        const activeUrl = active.contentWindow?.location?.href;
+        // For same-page navigations (including hash-only changes), sync the hash and reload manually.
         if (activeUrl && nextFrame.src !== activeUrl) {
-            const wtr = willTriggerReload(nextFrame.src, activeUrl);
             nextFrame.src = activeUrl;
-            // Setting src triggers a load, so the onload handler below covers this path too.
-            nextFrame.onload = onFrameLoaded;
-            if (wtr) return;
         }
 
         nextFrame.onload = onFrameLoaded;
