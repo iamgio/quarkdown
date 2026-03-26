@@ -8,7 +8,7 @@ import com.quarkdown.core.log.Log
  */
 class BasePipelineErrorHandler : PipelineErrorHandler {
     override fun <T> handle(
-        error: PipelineException,
+        error: Throwable,
         sourceFunction: Function<*>?,
         action: () -> T,
     ): T {

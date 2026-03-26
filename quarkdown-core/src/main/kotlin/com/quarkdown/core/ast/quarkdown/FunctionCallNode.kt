@@ -2,8 +2,10 @@ package com.quarkdown.core.ast.quarkdown
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.call.FunctionCallArgument
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -23,8 +25,11 @@ class FunctionCallNode(
     val isBlock: Boolean,
     val sourceText: CharSequence? = null,
     val sourceRange: IntRange? = null,
-) : NestableNode {
+) : NestableNode,
+    ErrorCapableNode {
     override val children: MutableList<Node> = mutableListOf()
 
-    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+    override var error: Pair<Throwable, PipelineErrorHandler>? = null
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }
