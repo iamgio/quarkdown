@@ -1,11 +1,11 @@
 package com.quarkdown.core.context.hooks.location
 
+import com.quarkdown.core.ast.attributes.error.setError
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.context.errorHandler
 import com.quarkdown.core.pipeline.error.PipelineException
 
 /**
@@ -25,8 +25,7 @@ class NumberedEvaluatorHook(
             try {
                 node.children = node.childrenSupplier(label)
             } catch (e: PipelineException) {
-                val errorHandler = context.errorHandler ?: throw e
-                node.error = e to errorHandler
+                node.setError(e, context)
             }
         }
     }

@@ -10,10 +10,16 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.SubdocumentRegistrationHook
+import com.quarkdown.core.context.hooks.UnresolvedSubdocumentException
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.pipeline.PipelineOptions
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 private const val RESOURCE_PATH = "src/test/resources/subdoc"
 
@@ -23,7 +29,7 @@ private const val RESOURCE_PATH = "src/test/resources/subdoc"
 class SubdocumentRegistrationTest {
     private val context = MutableContext(QuarkdownFlavor)
 
-    private val link1 =
+    private fun link1() =
         SubdocumentLink(
             Link(
                 label = buildInline { text("Link") },
@@ -32,11 +38,20 @@ class SubdocumentRegistrationTest {
             ),
         )
 
-    private val link2 =
+    private fun link2() =
         SubdocumentLink(
             Link(
                 label = buildInline { text("Link") },
                 url = "$RESOURCE_PATH/subdoc-2.qd",
+                title = null,
+            ),
+        )
+
+    private fun invalidLink() =
+        SubdocumentLink(
+            Link(
+                label = buildInline { text("Invalid Link") },
+                url = "$RESOURCE_PATH/nonexistent.qd",
                 title = null,
             ),
         )
@@ -51,10 +66,11 @@ class SubdocumentRegistrationTest {
 
     @Test
     fun `root to 1`() {
+        val link = link1()
         val root =
             buildBlock {
                 root {
-                    +link1
+                    +link
                 }
             }
 
@@ -65,15 +81,18 @@ class SubdocumentRegistrationTest {
             context.sharedSubdocumentsData.graph.vertices.size,
         )
         assertEquals(
-            link1.getSubdocument(context),
+            link.getSubdocument(context),
             context.sharedSubdocumentsData.graph
                 .getNeighbors(Subdocument.Root)
                 .single(),
         )
+        assertNull(link.error)
     }
 
     @Test
     fun `root to 1 and 2`() {
+        val link1 = link1()
+        val link2 = link2()
         val root =
             buildBlock {
                 root {
@@ -98,11 +117,12 @@ class SubdocumentRegistrationTest {
 
     @Test
     fun `root to 1 twice`() {
+        val link = link1()
         val root =
             buildBlock {
                 root {
-                    +link1
-                    +link1
+                    +link
+                    +link
                 }
             }
 
@@ -118,5 +138,46 @@ class SubdocumentRegistrationTest {
                 .getNeighbors(Subdocument.Root)
                 .count(),
         )
+    }
+
+    @Test
+    fun `invalid link, no error handler`() {
+        val link = invalidLink()
+        val root =
+            buildBlock {
+                root {
+                    +link
+                }
+            }
+
+        assertFailsWith<UnresolvedSubdocumentException> {
+            traverse(root)
+        }
+    }
+
+    @Test
+    fun `invalid link, with error handler`() {
+        context.attachMockPipeline(
+            options =
+                PipelineOptions(
+                    errorHandler = BasePipelineErrorHandler(),
+                ),
+        )
+
+        val link = invalidLink()
+        val root =
+            buildBlock {
+                root {
+                    +link
+                }
+            }
+
+        traverse(root)
+
+        assertEquals(
+            1,
+            context.sharedSubdocumentsData.graph.vertices.size,
+        )
+        assertNotNull(link.error)
     }
 }

@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -20,7 +21,9 @@ class LinkDefinition(
     override val fileSystem: FileSystem? = null,
 ) : LinkNode,
     TextNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+    override var error: Pair<Throwable, PipelineErrorHandler>? = null
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
      * Alias for [label].

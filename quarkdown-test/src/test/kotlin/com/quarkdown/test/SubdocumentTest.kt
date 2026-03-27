@@ -5,6 +5,7 @@ import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
@@ -14,6 +15,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -238,6 +240,44 @@ class SubdocumentTest {
                 if (subdocument == Subdocument.Root) {
                     assertEquals("<p>The link is: <a href=\"./simple-1\"></a></p>", it)
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `unresolved subdocument, strict`() {
+        arrayOf(
+            "The link is: [1](subdoc/nonexistent.qd)",
+            "The link is: .subdocument {subdoc/nonexistent.qd} label:{1}",
+        ).forEach { source ->
+            assertFails {
+                execute(
+                    source,
+                    outputResourceHook = {
+                        assertEquals(1, subdocumentGraph.vertices.size)
+                        assertEquals(1, getSubdocumentResourceCount(it))
+                    },
+                ) {}
+            }
+        }
+    }
+
+    @Test
+    fun `unresolved subdocument, non-strict`() {
+        arrayOf(
+            "The link is: [1](subdoc/nonexistent.qd)",
+            "The link is: .subdocument {subdoc/nonexistent.qd} label:{1}",
+        ).forEach { source ->
+            execute(
+                source,
+                outputResourceHook = {
+                    assertEquals(1, subdocumentGraph.vertices.size)
+                    assertEquals(1, getSubdocumentResourceCount(it))
+                },
+                errorHandler = BasePipelineErrorHandler(),
+            ) {
+                assertContains(it, "Cannot resolve")
+                assertFalse("</a>" in it)
             }
         }
     }
