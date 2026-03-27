@@ -1222,6 +1222,21 @@ class BlockParserTest {
                 )
             }
         }
+
+        // Nameless (identity) function calls.
+
+        with(nodes.next()) {
+            assertEquals("", name)
+            assertEquals(1, arguments.size)
+            assertEquals("hello", arguments[0].value.unwrappedValue)
+        }
+
+        with(nodes.next()) {
+            assertEquals("", name)
+            assertEquals(2, arguments.size)
+            assertEquals("arg1", arguments[0].value.unwrappedValue)
+            assertEquals("arg2", arguments[1].value.unwrappedValue)
+        }
     }
 
     /**
@@ -1314,6 +1329,50 @@ class BlockParserTest {
             assertEquals("bar", (arguments.first().expression as UncheckedFunctionCall<*>).name)
         }
 
+        // .{x}::bar {y}
+        with(nodes.next()) {
+            assertEquals("bar", name)
+            assertEquals(2, arguments.size)
+            assertEquals("", (arguments.first().expression as UncheckedFunctionCall<*>).name)
+            assertEquals("y", arguments[1].value.unwrappedValue)
+        }
+
+        // .{10}::multiply {2}::sum {5}
+        with(nodes.next()) {
+            assertEquals("sum", name)
+            assertEquals(2, arguments.size)
+            assertEquals("5", arguments[1].value.unwrappedValue)
+            val multiply = arguments.first().expression as UncheckedFunctionCall<*>
+            assertEquals("multiply", multiply.name)
+        }
+
         assertFalse(nodes.hasNext())
+    }
+
+    /**
+     * Verifies that nameless (identity) function calls are parsed correctly
+     * as inline function calls within paragraphs.
+     */
+    @Test
+    fun namelessInlineFunctionCall() {
+        // Nameless call between text.
+        with(blocksIterator<Paragraph>("hello .{x} world").next()) {
+            val children = children.iterator()
+            assertEquals("hello ", assertIs<Text>(children.next()).text)
+            with(assertIs<FunctionCallNode>(children.next())) {
+                assertEquals("", name)
+                assertEquals(1, arguments.size)
+                assertEquals("x", arguments[0].value.unwrappedValue)
+            }
+            assertEquals(" world", assertIs<Text>(children.next()).text)
+            assertFalse(children.hasNext())
+        }
+
+        // Wrapped nameless call.
+        with(blocksIterator<FunctionCallNode>("{.{x}}").next()) {
+            assertEquals("", name)
+            assertEquals(1, arguments.size)
+            assertEquals("x", arguments[0].value.unwrappedValue)
+        }
     }
 }
