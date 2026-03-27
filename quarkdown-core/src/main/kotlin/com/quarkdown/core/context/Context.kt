@@ -18,6 +18,7 @@ import com.quarkdown.core.localization.LocalizationTables
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.Pipeline
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 
 /**
  * Container of information about the current state of the pipeline, shared across the whole pipeline itself.
@@ -152,3 +153,9 @@ interface Context : PermissionHolder {
      */
     fun fork(): ScopeContext
 }
+
+/**
+ * The error handler of the attached pipeline, if it exists.
+ */
+val Context.errorHandler: PipelineErrorHandler?
+    get() = attachedPipeline?.options?.errorHandler

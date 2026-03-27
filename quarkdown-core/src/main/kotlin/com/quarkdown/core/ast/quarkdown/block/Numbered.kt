@@ -2,10 +2,12 @@ package com.quarkdown.core.ast.quarkdown.block
 
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.SectionLocation
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.document.numbering.DocumentNumbering
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -36,9 +38,12 @@ class Numbered(
     override val referenceId: String? = null,
     internal val childrenSupplier: (location: String) -> List<Node>,
 ) : NestableNode,
+    ErrorCapableNode,
     LocationTrackableNode,
     CrossReferenceableNode {
     override var children: List<Node> = emptyList()
 
-    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
+    override var error: Pair<Throwable, PipelineErrorHandler>? = null
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }

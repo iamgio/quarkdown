@@ -1,6 +1,7 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.MarkdownContent
+import com.quarkdown.core.ast.attributes.error.asNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Paragraph
@@ -31,8 +32,10 @@ import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -145,10 +148,13 @@ class FunctionNodeExpansionTest {
 
         expander.expandAll()
 
-        assertEquals(1, node.children.size)
+        assertEquals(0, node.children.size)
+        assertNotNull(node.error)
+        assertContains(node.error!!.first.message!!, "sum(")
 
-        with(node.children.first()) {
+        with(node.error!!.first.asNode(node.error!!.second)) {
             assertIs<Box>(this) // Error box
+            assertEquals(Box.Type.ERROR, this.type)
             assertTrue("sum(" in (this.children.first() as TextNode).text.toPlainText()) // Error message
         }
     }
@@ -193,12 +199,8 @@ class FunctionNodeExpansionTest {
 
         expander.expandAll()
 
-        assertEquals(1, node.children.size)
-
-        with(node.children.first()) {
-            assertIs<Box>(this) // Error box
-            assertTrue("reference" in (this.children.first() as TextNode).text.toPlainText()) // Unresolved reference error message
-        }
+        assertEquals(0, node.children.size)
+        assertContains(node.error!!.first.message!!, "reference")
     }
 
     @Test
@@ -219,11 +221,8 @@ class FunctionNodeExpansionTest {
 
         expander.expandAll()
 
-        assertEquals(1, node.children.size)
-
-        with(node.children.first()) {
-            assertIs<Box>(this) // Error box
-        }
+        assertEquals(0, node.children.size)
+        assertNotNull(node.error)
     }
 
     @Test
@@ -311,12 +310,8 @@ class FunctionNodeExpansionTest {
 
         expander.expandAll()
 
-        assertEquals(1, node.children.size)
-
-        with(node.children.first()) {
-            assertIs<Box>(this) // Error box
-            assertTrue("No such element" in (this.children.first() as TextNode).text.toPlainText()) // Error message
-        }
+        assertEquals(0, node.children.size)
+        assertNotNull(node.error)
     }
 
     @Test
@@ -390,9 +385,7 @@ class FunctionNodeExpansionTest {
 
         expander.expandAll()
 
-        with(node.children.first()) {
-            assertIs<Box>(this)
-            assertEquals(Box.Type.ERROR, this.type)
-        }
+        assertEquals(0, node.children.size)
+        assertNotNull(node.error)
     }
 }

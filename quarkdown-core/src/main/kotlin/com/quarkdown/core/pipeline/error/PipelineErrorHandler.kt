@@ -16,7 +16,7 @@ interface PipelineErrorHandler {
      * @return the result of the action
      */
     fun <T> handle(
-        error: PipelineException,
+        error: Throwable,
         sourceFunction: Function<*>?,
         action: () -> T,
     ): T
