@@ -1,15 +1,19 @@
 package com.quarkdown.core.ast.base
 
 import com.quarkdown.core.ast.InlineContent
-import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
 import com.quarkdown.core.context.file.FileSystem
 
 /**
  * A general link node.
+ * A link can error for various reasons.
+ * For example, a [com.quarkdown.core.ast.base.inline.SubdocumentLink] can error
+ * if the linked subdocument cannot be found.
+ *
  * @see com.quarkdown.core.ast.base.inline.Link
  * @see com.quarkdown.core.ast.base.block.LinkDefinition
  */
-interface LinkNode : Node {
+interface LinkNode : ErrorCapableNode {
     /**
      * Inline content of the displayed label.
      */

@@ -1,6 +1,8 @@
 package com.quarkdown.core.ast.attributes.error
 
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.errorHandler
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -33,4 +35,16 @@ interface ErrorCapableNode : Node {
             ?.let { (throwable, handler) -> throwable.asNode(handler) }
             ?.accept(visitor)
             ?: acceptOnSuccess(visitor)
+}
+
+/**
+ * Sets the given [throwable] as the error of this node, paired with the error handler from [context].
+ * @param throwable the error to set
+ * @param context context to retrieve the error handler from
+ */
+fun ErrorCapableNode.setError(
+    throwable: Throwable,
+    context: Context,
+) {
+    error = throwable to (context.errorHandler ?: throw throwable)
 }

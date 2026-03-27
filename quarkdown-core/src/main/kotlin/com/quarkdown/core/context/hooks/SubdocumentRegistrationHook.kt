@@ -1,5 +1,7 @@
 package com.quarkdown.core.context.hooks
 
+import com.quarkdown.core.RUNTIME_ERROR_EXIT_CODE
+import com.quarkdown.core.ast.attributes.error.setError
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.setSubdocument
 import com.quarkdown.core.ast.iterator.AstIteratorHook
@@ -8,7 +10,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.subdocument.findResourceByPath
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
-import com.quarkdown.core.log.Log
+import com.quarkdown.core.pipeline.error.PipelineException
 
 /**
  * Hook that registers [Subdocument]s in the subdocument graph of [context].
@@ -24,7 +26,7 @@ class SubdocumentRegistrationHook(
             val file = fileSystem.resolve(path = link.url)
 
             if (!file.exists()) {
-                Log.warn("Cannot find subdocument referenced by a link: $file")
+                link.setError(UnresolvedSubdocumentException(link), context)
                 return@on
             }
 
@@ -52,3 +54,14 @@ class SubdocumentRegistrationHook(
         }
     }
 }
+
+/**
+ * Exception thrown when a [SubdocumentLink] cannot be resolved to an existing resource.
+ * @param link the link that failed to resolve
+ */
+class UnresolvedSubdocumentException(
+    link: SubdocumentLink,
+) : PipelineException(
+        message = "Cannot resolve subdocument link: ${link.url}",
+        code = RUNTIME_ERROR_EXIT_CODE,
+    )
