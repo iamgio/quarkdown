@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.property.Property
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -16,9 +17,17 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class SubdocumentLink(
     val link: Link,
     val anchor: String? = null,
-) : LinkNode by link,
-    TextNode by link {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+) : LinkNode,
+    TextNode {
+    override val label by link::label
+    override val url by link::url
+    override val title by link::title
+    override val fileSystem by link::fileSystem
+    override val text by link::text
+
+    override var error: Pair<Throwable, PipelineErrorHandler>? = null
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

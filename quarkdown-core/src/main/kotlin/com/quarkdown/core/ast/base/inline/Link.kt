@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -24,10 +25,12 @@ class Link(
     override val fileSystem: FileSystem? = null,
 ) : LinkNode,
     TextNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
-
     override val text: InlineContent
         get() = label
+
+    override var error: Pair<Throwable, PipelineErrorHandler>? = null
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
      * Creates a copy of this link with the given [url].

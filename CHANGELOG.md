@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Subdocument link to nonexistent file now produces a visual error
+
+A subdocument link pointing to a nonexistent file now produces a clear visual error in the output document, rather than silently rendering `[???]`.
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
