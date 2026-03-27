@@ -1,14 +1,12 @@
 package com.quarkdown.core.function.call
 
-import com.quarkdown.core.RUNTIME_ERROR_EXIT_CODE
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.value.output.OutputValueVisitorFactory
 import com.quarkdown.core.function.value.output.node.NodeOutputValueVisitorFactory
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
-import com.quarkdown.core.pipeline.error.PipelineException
-import com.quarkdown.core.pipeline.error.asNode
+import com.quarkdown.core.pipeline.error.asPipelineException
 
 /**
  * Given a [FunctionCallNode] from the AST, this expander resolves its referenced function, executes it
@@ -31,7 +29,7 @@ class FunctionCallNodeExpander(
      * @param node AST function call node to expand
      */
     private fun expand(node: FunctionCallNode) {
-        if (node.children.isNotEmpty()) {
+        if (node.children.isNotEmpty() || node.error != null) {
             // The function call has already been expanded: do nothing.
             return
         }
@@ -46,28 +44,12 @@ class FunctionCallNodeExpander(
             // The value-to-node mapper used depends on whether the function call is block or inline.
             val mapper = if (node.isBlock) blockMapper else inlineMapper
             val outputNode = call.execute().accept(mapper)
-            appendOutput(node, outputNode)
+            node.children += outputNode
         } catch (e: Exception) {
-            // PipelineExceptions are rendered as-is. Other unexpected exceptions are wrapped for graceful error rendering.
-            val pipelineException =
-                e as? PipelineException
-                    ?: PipelineException(e.message ?: e.toString(), RUNTIME_ERROR_EXIT_CODE)
-            appendOutput(node, pipelineException.asNode(errorHandler))
+            node.error = e.asPipelineException() to errorHandler
         } catch (_: StackOverflowError) {
-            appendOutput(node, stackOverflowPipelineException.asNode(errorHandler))
+            node.error = stackOverflowPipelineException to errorHandler
         }
-    }
-
-    /**
-     * Adds [output] to [call]'s content in the AST.
-     * @param call function call node
-     * @param output output node to append
-     */
-    private fun appendOutput(
-        call: FunctionCallNode,
-        output: Node,
-    ) {
-        call.children += output
     }
 
     /**
