@@ -9,6 +9,7 @@ import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
@@ -48,6 +49,7 @@ val DEFAULT_OPTIONS =
  * @param errorHandler error handler to use
  * @param enableMediaStorage whether the media storage system should be enabled.
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
+ * @param permissions the set of permissions granted to the pipeline
  * @param subdocumentNaming the strategy used to determine subdocument output file names
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
  * @param afterPostRenderingHook action run after post-rendering. Parameters are the pipeline context and the post-rendered result
@@ -63,6 +65,7 @@ fun execute(
     useDummyLibraryDirectory: Boolean = false,
     errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
     enableMediaStorage: Boolean = false,
+    permissions: Set<Permission> = Permission.DEFAULT_SET,
     subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
     afterPostRenderingHook: Context.(CharSequence) -> Unit = {},
@@ -103,6 +106,7 @@ fun execute(
                 errorHandler = errorHandler,
                 workingDirectory = workingDirectory,
                 enableMediaStorage = enableMediaStorage,
+                permissions = permissions,
                 subdocumentNaming = subdocumentNaming,
             ),
             libraries = setOf(Stdlib.library),

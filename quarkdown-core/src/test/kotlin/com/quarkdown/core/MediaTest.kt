@@ -1,11 +1,13 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.Node
-import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.ast.media.getStoredMedia
+import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.media.LocalMedia
 import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.MediaVisitor
@@ -15,11 +17,14 @@ import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
+import com.quarkdown.core.permissions.MissingPermissionException
+import com.quarkdown.core.permissions.Permission
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
@@ -43,12 +48,18 @@ private const val OUT_PATH_2 = "$OUT_DIR/path2/logo.png"
 class MediaTest {
     private val workingDir = File(WORKING_DIR_PATH)
 
-    private lateinit var attributes: MutableAstAttributes
+    private lateinit var context: MutableContext
 
     @BeforeTest
     fun setUp() {
-        attributes = MutableAstAttributes()
+        context = MutableContext()
     }
+
+    private val localPermissionHolder =
+        MockPermissionHolder(permissions = setOf(Permission.GlobalRead))
+
+    private val localAndRemotePermissionHolder =
+        MockPermissionHolder(permissions = setOf(Permission.GlobalRead, Permission.NetworkAccess))
 
     private fun createLocalOnlyStorage(): MutableMediaStorage =
         MutableMediaStorage(
@@ -56,6 +67,7 @@ class MediaTest {
                 enableLocalMediaStorage = true,
                 enableRemoteMediaStorage = false,
             ),
+            permissionHolder = localPermissionHolder,
         )
 
     private fun createLocalAndRemoteStorage(): MutableMediaStorage =
@@ -64,6 +76,7 @@ class MediaTest {
                 enableLocalMediaStorage = true,
                 enableRemoteMediaStorage = true,
             ),
+            permissionHolder = localAndRemotePermissionHolder,
         )
 
     private val selfVisitor =
@@ -150,7 +163,7 @@ class MediaTest {
 
     private fun Node.attach(media: StoredMedia?) {
         if (media == null) return
-        attributes.of(this) += StoredMediaProperty(media)
+        context.attributes.of(this) += StoredMediaProperty(media)
     }
 
     private fun remoteImage(media: StoredMedia?) =
@@ -180,7 +193,7 @@ class MediaTest {
         val storage = createLocalAndRemoteStorage()
         val media = storage.register(REMOTE_LOGO, workingDirectory = null)!!
         val image = remoteImage(media)
-        assertEquals("$OUT_DIR/$REMOTE_LOGO_OUT_NAME", image.link.getStoredMedia(attributes)?.path)
+        assertEquals("$OUT_DIR/$REMOTE_LOGO_OUT_NAME", image.link.getStoredMedia(context.attributes)?.path)
     }
 
     @Test
@@ -188,7 +201,7 @@ class MediaTest {
         val storage = createLocalAndRemoteStorage()
         val media = storage.register(LOCAL_ICON, workingDirectory = workingDir)!!
         val image = localImage(media)
-        image.link.getStoredMedia(attributes)?.path?.let {
+        image.link.getStoredMedia(context.attributes)?.path?.let {
             assertTrue(it.startsWith("$OUT_DIR/icon@"))
             assertTrue(it.endsWith(".png"))
         }
@@ -200,6 +213,74 @@ class MediaTest {
         val media = storage.register(REMOTE_LOGO, workingDirectory = null)
         val image = remoteImage(media)
         assertNull(media)
-        assertNull(image.link.getStoredMedia(attributes))
+        assertNull(image.link.getStoredMedia(context.attributes))
+    }
+
+    // Denied permissions
+
+    private fun createStorageWithPermissions(
+        enableLocal: Boolean = true,
+        enableRemote: Boolean = false,
+        permissions: Set<Permission> = emptySet(),
+        rootFileSystem: FileSystem? = null,
+    ): MutableMediaStorage =
+        MutableMediaStorage(
+            ReadOnlyMediaStorageOptions(
+                enableLocalMediaStorage = enableLocal,
+                enableRemoteMediaStorage = enableRemote,
+            ),
+            permissionHolder = MockPermissionHolder(permissions, rootFileSystem),
+        )
+
+    @Test
+    fun `denied local media registration without read permission`() {
+        val storage = createStorageWithPermissions()
+        assertFailsWith<MissingPermissionException> {
+            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        }
+    }
+
+    @Test
+    fun `denied local media registration with only ProjectRead and no root file system`() {
+        val storage = createStorageWithPermissions(permissions = setOf(Permission.ProjectRead))
+        assertFailsWith<MissingPermissionException> {
+            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        }
+    }
+
+    @Test
+    fun `denied remote media registration without NetworkAccess`() {
+        val storage =
+            createStorageWithPermissions(
+                enableRemote = true,
+                permissions = setOf(Permission.GlobalRead),
+            )
+        assertFailsWith<MissingPermissionException> {
+            storage.register(REMOTE_LOGO, workingDirectory = null)
+        }
+    }
+
+    @Test
+    fun `allowed local media registration with ProjectRead when file is within project`() {
+        val storage =
+            createStorageWithPermissions(
+                permissions = setOf(Permission.ProjectRead),
+                rootFileSystem = SimpleFileSystem(workingDir),
+            )
+        val stored = storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        assertTrue(stored!!.name.startsWith("icon@"))
+    }
+
+    @Test
+    fun `denied local media registration with ProjectRead when file is outside project`() {
+        val narrowRoot = File(WORKING_DIR_PATH, "other")
+        val storage =
+            createStorageWithPermissions(
+                permissions = setOf(Permission.ProjectRead),
+                rootFileSystem = SimpleFileSystem(narrowRoot),
+            )
+        assertFailsWith<MissingPermissionException> {
+            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        }
     }
 }

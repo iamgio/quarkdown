@@ -4,10 +4,13 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.media.StoredMediaProperty
+import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.StoredMedia
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.rendering.html.node.QuarkdownHtmlNodeRenderer
 import java.io.File
 import kotlin.test.BeforeTest
@@ -34,6 +37,16 @@ class MediaTest {
         renderer = QuarkdownHtmlNodeRenderer(context)
         context.options.enableLocalMediaStorage = true
         context.options.enableRemoteMediaStorage = true
+        context.attachMockPipeline(
+            PipelineOptions(
+                permissions =
+                    setOf(
+                        Permission.ProjectRead,
+                        Permission.GlobalRead,
+                        Permission.NetworkAccess,
+                    ),
+            ),
+        )
     }
 
     private fun Node.attach(media: StoredMedia?) {
