@@ -2,6 +2,8 @@ package com.quarkdown.core
 
 import com.quarkdown.core.util.IOUtils
 import java.io.File
+import java.nio.file.Files
+import kotlin.io.path.createDirectories
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,6 +30,20 @@ class IOUtilsTest {
     @Test
     fun `isSubPath normalizes paths`() {
         assertTrue(IOUtils.isSubPath(parent = abs("a", "b"), child = File(abs("a", "b", "..", "b", "c").path)))
+    }
+
+    @Test
+    fun `isSubPath resolves symlinks`() {
+        val tempDir = Files.createTempDirectory("isSubPathTest")
+        try {
+            val projectDir = tempDir.resolve("project").createDirectories()
+            val outsideFile = Files.createFile(tempDir.resolve("secret.txt"))
+            val symlink = Files.createSymbolicLink(projectDir.resolve("link.txt"), outsideFile)
+
+            assertFalse(IOUtils.isSubPath(parent = projectDir.toFile(), child = symlink.toFile()))
+        } finally {
+            tempDir.toFile().deleteRecursively()
+        }
     }
 
     @Test

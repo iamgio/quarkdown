@@ -8,6 +8,8 @@ import com.quarkdown.core.permissions.Permission.ProjectRead
 import com.quarkdown.core.permissions.requirePermission
 import com.quarkdown.core.permissions.requireReadPermission
 import java.io.File
+import java.nio.file.Files
+import kotlin.io.path.createDirectories
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -60,6 +62,27 @@ class PermissionTest {
                 rootFileSystem = SimpleFileSystem(workingDir),
             )
         holder.requireReadPermission(File("/other/file.txt"))
+    }
+
+    @Test
+    fun `requireReadPermission requires GlobalRead for symlink pointing outside project`() {
+        val tempDir = Files.createTempDirectory("permissionSymlinkTest")
+        try {
+            val projectDir = tempDir.resolve("project").createDirectories()
+            val outsideFile = Files.createFile(tempDir.resolve("secret.txt"))
+            val symlink = Files.createSymbolicLink(projectDir.resolve("link.txt"), outsideFile)
+
+            val holder =
+                MockPermissionHolder(
+                    permissions = setOf(ProjectRead),
+                    rootFileSystem = SimpleFileSystem(projectDir.toFile()),
+                )
+            assertFailsWith<MissingPermissionException> {
+                holder.requireReadPermission(symlink.toFile())
+            }
+        } finally {
+            tempDir.toFile().deleteRecursively()
+        }
     }
 
     @Test
