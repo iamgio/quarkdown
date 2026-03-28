@@ -16,7 +16,7 @@ export const CLI_PATH = process.env.QUARKDOWN_CLI_PATH || DEFAULT_CLI_PATH;
 export function compile(source: string, outName: string): string {
     const sourcePath = path.isAbsolute(source) ? source : path.join(PROJECT_ROOT, source);
 
-    execSync(`"${CLI_PATH}" compile "${sourcePath}" --out "${OUTPUT_DIR}" --out-name "${outName}"`, {
+    execSync(`"${CLI_PATH}" compile "${sourcePath}" --out "${OUTPUT_DIR}" --out-name "${outName}" --allow all`, {
         cwd: PROJECT_ROOT,
         stdio: "pipe",
     });
