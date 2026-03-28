@@ -8,6 +8,20 @@
 
 A subdocument link pointing to a nonexistent file now produces a clear visual error in the output document, rather than silently rendering `[???]`.
 
+### Fixed
+
+#### Fixed live preview not updating when an anchor is present
+
+Fixed an issue that caused live preview to skip updates when navigating to an anchor link of the same document, e.g. from the navigation sidebar.
+
+Thanks @OverSamu!
+
+#### Fixed `.filetree`'s 'ellipsis' text color
+
+Ellipsis (`...`) items in file trees now display the correct color.
+
+Thanks @cyphercodes!
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
