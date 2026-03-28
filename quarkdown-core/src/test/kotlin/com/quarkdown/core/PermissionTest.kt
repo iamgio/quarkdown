@@ -2,7 +2,9 @@ package com.quarkdown.core
 
 import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.permissions.MissingPermissionException
-import com.quarkdown.core.permissions.Permission.*
+import com.quarkdown.core.permissions.Permission.GlobalRead
+import com.quarkdown.core.permissions.Permission.NativeContent
+import com.quarkdown.core.permissions.Permission.ProjectRead
 import com.quarkdown.core.permissions.requirePermission
 import com.quarkdown.core.permissions.requireReadPermission
 import java.io.File
