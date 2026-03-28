@@ -33,6 +33,11 @@ sealed interface Permission {
          * The default set of permissions granted to a pipeline when no explicit permissions are specified.
          */
         val DEFAULT_SET = setOf(ProjectRead, NativeContent)
+
+        /**
+         * The complete set of all available permissions.
+         */
+        val ALL = setOf(ProjectRead, GlobalRead, NetworkAccess, NativeContent)
     }
 }
 

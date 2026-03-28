@@ -3,6 +3,7 @@ package com.quarkdown.cli.exec
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
@@ -15,6 +16,7 @@ import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
@@ -35,6 +37,18 @@ const val DEFAULT_OUTPUT_DIRECTORY = "output"
  * It can be overridden by the user.
  */
 val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qd"
+
+/**
+ * CLI name to [Permission] set mapping, shared by `--allow` and `--deny`.
+ */
+private val permissionChoices =
+    mapOf(
+        "project-read" to setOf(Permission.ProjectRead),
+        "global-read" to setOf(Permission.GlobalRead),
+        "network" to setOf(Permission.NetworkAccess),
+        "native-content" to setOf(Permission.NativeContent),
+        "all" to Permission.ALL,
+    )
 
 /**
  * Template for Quarkdown commands that launch a complete pipeline and produce output files.
@@ -123,6 +137,22 @@ abstract class ExecuteCommand(
     private val clean: Boolean by option("--clean", help = "Clean output directory").flag()
 
     /**
+     * Additional permissions to grant on top of [Permission.DEFAULT_SET].
+     */
+    private val allowPermissions: List<Set<Permission>> by option(
+        "--allow",
+        help = "Grant an additional permission (repeatable)",
+    ).choice(permissionChoices).multiple()
+
+    /**
+     * Permissions to revoke from the resulting set.
+     */
+    private val denyPermissions: List<Set<Permission>> by option(
+        "--deny",
+        help = "Revoke a permission (repeatable)",
+    ).choice(permissionChoices).multiple()
+
+    /**
      * When enabled, the program does not store any media (e.g. images) into the output directory `media` directory
      * and nodes that reference those media objects are not updated to reflect the new local path.
      */
@@ -197,6 +227,10 @@ abstract class ExecuteCommand(
             subdocumentNaming = subdocumentNaming,
             serverPort = serverPort.takeIf { preview },
             mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
+            permissions =
+                Permission.DEFAULT_SET +
+                    allowPermissions.flatten().toSet() -
+                    denyPermissions.flatten().toSet(),
             errorHandler =
                 when {
                     strict -> StrictPipelineErrorHandler()
