@@ -64,7 +64,7 @@ class MediaStoragePermissionTest {
         ) {
             assertContains(it, "Error")
             assertContains(it, "Cannot access")
-            assertContains(it, "img/icon.png")
+            assertContains(it, "img${File.separator}icon.png")
         }
     }
 
@@ -81,7 +81,7 @@ class MediaStoragePermissionTest {
         ) {
             assertContains(it, "Error")
             assertContains(it, "Cannot access")
-            assertContains(it, "img/icon.png")
+            assertContains(it, "img${File.separator}icon.png")
         }
     }
 
