@@ -1,5 +1,6 @@
 package com.quarkdown.core.context.hooks
 
+import com.quarkdown.core.ast.attributes.error.setError
 import com.quarkdown.core.ast.attributes.link.getResolvedUrl
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.inline.Image
@@ -10,6 +11,7 @@ import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.media.storage.StoredMedia
+import com.quarkdown.core.permissions.MissingPermissionException
 
 /**
  * Hook that, when a node containing information about media is found,
@@ -37,8 +39,10 @@ class MediaStorerHook(
                     context.fileSystem.workingDirectory,
                 )
             } catch (_: IllegalArgumentException) {
-                // If the media cannot be resolved, it is ignored and not stored.
                 Log.warn("Media cannot be resolved: ${link.url}")
+                return
+            } catch (e: MissingPermissionException) {
+                link.setError(e, context)
                 return
             }
 

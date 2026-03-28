@@ -3,11 +3,13 @@ package com.quarkdown.test
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.Permission.*
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertFailsWith
 
 /**
@@ -32,6 +34,62 @@ class MediaStoragePermissionTest {
                 enableMediaStorage = true,
                 permissions = setOf(NativeContent),
             ) {}
+        }
+    }
+
+    @Test
+    fun `local media as reference image without read permission fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                """
+                [icon]: img/icon.png
+                ![Quarkdown][icon]
+                """.trimIndent(),
+                enableMediaStorage = true,
+                permissions = setOf(NativeContent),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `failing media access renders error with non-strict handler`() {
+        execute(
+            "![Quarkdown](img/icon.png)",
+            enableMediaStorage = true,
+            permissions = setOf(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "Error")
+            assertContains(it, "Cannot access")
+            assertContains(it, "img/icon.png")
+        }
+    }
+
+    @Test
+    fun `failing media access as reference image renders error with non-strict handler`() {
+        execute(
+            """
+            [icon]: img/icon.png
+            ![Quarkdown][icon]
+            """.trimIndent(),
+            enableMediaStorage = true,
+            permissions = setOf(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "Error")
+            assertContains(it, "Cannot access")
+            assertContains(it, "img/icon.png")
+        }
+    }
+
+    @Test
+    fun `unresolved media ignores missing permissions`() {
+        execute(
+            "![Quarkdown](img/nonexistent.png)",
+            enableMediaStorage = true,
+            permissions = setOf(),
+        ) {
+            assertContains(it, "src=\"img/nonexistent.png\"")
         }
     }
 
