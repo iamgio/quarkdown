@@ -2,7 +2,10 @@ package com.quarkdown.test
 
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission
-import com.quarkdown.core.permissions.Permission.*
+import com.quarkdown.core.permissions.Permission.GlobalRead
+import com.quarkdown.core.permissions.Permission.NativeContent
+import com.quarkdown.core.permissions.Permission.NetworkAccess
+import com.quarkdown.core.permissions.Permission.ProjectRead
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.DEFAULT_OPTIONS
