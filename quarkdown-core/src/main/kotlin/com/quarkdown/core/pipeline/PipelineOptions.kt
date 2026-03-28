@@ -3,6 +3,7 @@ package com.quarkdown.core.pipeline
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import java.io.File
@@ -23,6 +24,7 @@ import java.io.File
  * as the media architecture is defined by Quarkdown through a [com.quarkdown.core.context.hooks.MediaStorerHook].
  * If this is disabled, [MediaStorageOptions] are ignored.
  * @param subdocumentNaming the strategy used to determine subdocument output file names
+ * @param permissions the set of permissions granted to this pipeline, controlling access to file system, network, and other resources
  * @param mediaStorageOptionsOverrides rules that override the default behavior of the media storage system
  * @param errorHandler the error handler strategy to use when an error occurs in the pipeline, during the processing of a Quarkdown file
  * @param serverPort port to communicate with the local server on. If not set, no server communication is performed. In a practical scenario,
@@ -36,13 +38,7 @@ data class PipelineOptions(
     val enableMediaStorage: Boolean = true,
     val subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
     val serverPort: Int? = null,
+    val permissions: Set<Permission> = Permission.DEFAULT_SET,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),
     val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
-) {
-    /**
-     * Whether the pipeline could communicate with a server.
-     * If `false`, no server communication is performed.
-     */
-    val useServer: Boolean
-        get() = serverPort != null
-}
+)

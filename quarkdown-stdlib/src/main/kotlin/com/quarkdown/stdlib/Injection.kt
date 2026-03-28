@@ -1,12 +1,17 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Html
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.permissions.requirePermission
 import com.quarkdown.stdlib.internal.applyImportantToCSS
 
 /**
@@ -37,11 +42,19 @@ val Injection: QuarkdownModule =
  *
  * @param content raw HTML content to inject
  * @return a new [Html] node
+ * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @wiki HTML
  */
 fun html(
+    @Injected context: Context,
     @LikelyBody content: String,
-) = Html(content).wrappedAsValue()
+): NodeValue {
+    context.requirePermission(
+        Permission.NativeContent,
+        message = "Cannot inject native HTML content",
+    )
+    return Html(content).wrappedAsValue()
+}
 
 /**
  * Creates a `<style>` HTML element with the provided CSS content.
@@ -60,12 +73,17 @@ fun html(
  *
  * @param content raw CSS content to inject
  * @return a new [Html] node representing the style element
+ * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @see [cssProperties] for a more structured way to override CSS properties.
  * @wiki CSS
  */
 fun css(
+    @Injected context: Context,
     @LikelyBody content: String,
-) = Html("<style data-hidden=\"\">${applyImportantToCSS(content)}</style>").wrappedAsValue()
+) = html(
+    context,
+    "<style data-hidden=\"\">${applyImportantToCSS(content)}</style>",
+)
 
 private const val CSS_ROOT_SELECTOR = ":root"
 private const val CSS_PROPERTY_PREFIX = "--qd-"
@@ -89,18 +107,22 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
  * without any additional processing or escaping, as long as the rendering target supports HTML.
  *
  * @param properties a dictionary of CSS property names and their values
+ * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @return a new [Html] node representing the style element
  * @wiki CSS
  */
 @Name("cssproperties")
-fun cssProperties(properties: Map<String, Value<*>>) =
-    css(
-        buildString {
-            append(CSS_ROOT_SELECTOR)
-            append(" { ")
-            properties.forEach { (name, value) ->
-                append("$CSS_PROPERTY_PREFIX$name: ${value.unwrappedValue}; ")
-            }
-            append("}")
-        },
-    )
+fun cssProperties(
+    @Injected context: Context,
+    properties: Map<String, Value<*>>,
+) = css(
+    context,
+    buildString {
+        append(CSS_ROOT_SELECTOR)
+        append(" { ")
+        properties.forEach { (name, value) ->
+            append("$CSS_PROPERTY_PREFIX$name: ${value.unwrappedValue}; ")
+        }
+        append("}")
+    },
+)

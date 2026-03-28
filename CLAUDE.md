@@ -332,7 +332,7 @@ using existing files as reference.
 To compile it, run the following command from the `docs` folder via `gradlew run`:
 
 ```bash
-c main.qd --clean
+c main.qd --strict --allow all --clean
 ```
 
 This will generate the documentation website in `docs/output/Quarkdown-Wiki`.
