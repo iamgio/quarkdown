@@ -1,4 +1,5 @@
 import {evaluateComputedStyle, getComputedSizeProperty} from "../../__util/css";
+import {SM_WIDTH} from "../../__util/breakpoints";
 import {fontFamilyMatches, getCssVar} from "../index";
 import {suite} from "../../quarkdown";
 
@@ -79,8 +80,6 @@ testMatrix(
         );
     }
 );
-
-const SM_WIDTH = 600;
 
 testMatrix(
     "applies correct code block font sizes on small screens",

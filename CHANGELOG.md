@@ -8,6 +8,14 @@
 
 A subdocument link pointing to a nonexistent file now produces a clear visual error in the output document, rather than silently rendering `[???]`.
 
+#### Reduced code block font size on small screens
+
+Code blocks in `plain` and `docs` documents now use a smaller font size when viewed on small screens, improving readability on mobile devices.
+
+#### Plain documents use `start` alignment on small screens
+
+Text alignment in `plain` documents switches from justified to start-aligned on small screens.
+
 ### Fixed
 
 #### Fixed live preview not updating when an anchor is present
@@ -21,10 +29,6 @@ Thanks @OverSamu!
 Ellipsis (`...`) items in file trees now display the correct color.
 
 Thanks @cyphercodes!
-
-#### Reduced code block font size on small screens
-
-Code blocks in `plain` and `docs` documents now use a smaller font size when viewed on small screens, improving readability on mobile devices.
 
 ## [1.15.0] - 2026-03-24
 
