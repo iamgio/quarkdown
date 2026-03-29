@@ -11,6 +11,7 @@
 @use "components/hr";
 @use "components/list";
 @use "components/table";
+@use "components/caption";
 @use "components/code";
 @use "components/focus";
 @use "components/blockquote";
@@ -64,6 +65,9 @@
   --qd-code-block-font-size: var(--qd-code-span-font-size); // Font size of code blocks in non-slides documents
   --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
   --qd-sm-code-block-font-size: calc(var(--qd-code-block-font-size) * .8); // Font size of code blocks in small screens
+  --qd-caption-font-size: var(--qd-main-font-size); // Font size of captions
+  --qd-sm-caption-font-size: max(calc(var(--qd-caption-font-size) * .9), 0.8em); // Font size of captions in small screens
+  --qd-caption-font-style: normal; // Font style of captions
 
   // Localized fonts, which override the base fonts for specific locales (e.g. Chinese, see locale/zh.scss).
   // Avoid overwriting these elsewhere.
@@ -83,6 +87,7 @@
   --qd-heading-margin: 40px 0 20px 0; // Margin of headings
   --qd-task-checkbox-margin-right: 0.9em; // Right margin of checkboxes in GFM task list items
   --qd-list-margin-multiplier: 0.4; // --qd-paragraph-vertical-margin * this = list vertical margin
+  --qd-caption-margin: 0.4em; // Margin between a caption and its content
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
   --qd-box-content-vertical-padding: 8px; // Vertical padding of box content
   --qd-nested-navigation-padding-left: 28px; // When expected by the layout theme, padding-left of nested ToC entries

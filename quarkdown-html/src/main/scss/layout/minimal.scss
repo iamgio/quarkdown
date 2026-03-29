@@ -17,6 +17,8 @@
   --qd-code-font: "Noto Sans Mono", monospace;
   --qd-slides-code-block-font-size: 1.3em;
   --qd-code-span-font-size: 0.9em;
+  --qd-caption-font-size: 0.8em;
+  --qd-caption-font-style: italic;
   --qd-block-margin: 1.8em;
   --qd-line-height: 1.6;
   --qd-code-line-height: 1.85;
@@ -51,11 +53,6 @@
 
   figure img {
     margin-bottom: 0.5em !important;
-  }
-
-  figure figcaption, table caption {
-    font-size: 0.8em;
-    font-style: italic;
   }
 
   .box > header > h4 {

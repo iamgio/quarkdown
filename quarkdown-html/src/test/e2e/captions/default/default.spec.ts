@@ -30,16 +30,16 @@ test("captions follow global line spacing and letter spacing", async (page) => {
     }
 });
 
-test("captions use correct margins", async (page) => {
+test("applies correct caption margins", async (page) => {
     const figcaption = page.locator("figure figcaption").first();
     const figcaptionStyle = await evaluateComputedStyle(figcaption);
+    const figCaptionMargin = await getComputedSizeProperty(figcaption, "var(--qd-caption-margin)");
+    expect(parseFloat(figcaptionStyle.marginTop)).toBeCloseTo(figCaptionMargin, 1);
 
     const tableCaption = page.locator("table caption");
     const tableCaptionStyle = await evaluateComputedStyle(tableCaption);
-
-    // Both caption types have margin (bottom captions use margin-top)
-    expect(parseFloat(figcaptionStyle.marginTop)).toBeGreaterThan(0);
-    expect(parseFloat(tableCaptionStyle.marginTop)).toBeGreaterThan(0);
+    const tableCaptionMargin = await getComputedSizeProperty(tableCaption, "var(--caption-margin)");
+    expect(parseFloat(tableCaptionStyle.marginTop)).toBeCloseTo(tableCaptionMargin, 1);
 
     // Table captions have larger margin than figure captions
     expect(parseFloat(tableCaptionStyle.marginTop)).toBeGreaterThan(parseFloat(figcaptionStyle.marginTop));
