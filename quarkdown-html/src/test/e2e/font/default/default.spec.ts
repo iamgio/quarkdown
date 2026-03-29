@@ -79,3 +79,28 @@ testMatrix(
         );
     }
 );
+
+const SM_WIDTH = 600;
+
+testMatrix(
+    "applies correct code block font sizes on small screens",
+    ["plain", "paged", "slides", "docs"],
+    async (page, docType) => {
+        await page.setViewportSize({width: SM_WIDTH, height: 800});
+
+        const codeBlockParent = page.locator("pre");
+        const codeBlock = codeBlockParent.locator("code");
+        const codeBlockStyle = await evaluateComputedStyle(codeBlock);
+        const actualFontSize = parseFloat(codeBlockStyle.fontSize);
+
+        if (docType === "plain" || docType === "docs") {
+            // Plain and docs use the sm code block font size on small screens
+            const smCodeBlockFontSize = await getComputedSizeProperty(codeBlockParent, "var(--qd-sm-code-block-font-size)");
+            expect(actualFontSize).toBeCloseTo(smCodeBlockFontSize, 1);
+        } else {
+            // Paged and slides are unaffected
+            const smCodeBlockFontSize = await getComputedSizeProperty(codeBlockParent, "var(--qd-sm-code-block-font-size)");
+            expect(actualFontSize).not.toBeCloseTo(smCodeBlockFontSize, 1);
+        }
+    }
+);

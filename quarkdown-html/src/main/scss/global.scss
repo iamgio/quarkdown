@@ -63,6 +63,7 @@
   --qd-code-span-font-size: var(--qd-main-font-size);
   --qd-code-block-font-size: var(--qd-code-span-font-size); // Font size of code blocks in non-slides documents
   --qd-slides-code-block-font-size: var(--qd-code-block-font-size); // Font size of code blocks in slides documents
+  --qd-sm-code-block-font-size: calc(var(--qd-code-block-font-size) * .8); // Font size of code blocks in small screens
 
   // Localized fonts, which override the base fonts for specific locales (e.g. Chinese, see locale/zh.scss).
   // Avoid overwriting these elsewhere.
