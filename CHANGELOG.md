@@ -12,9 +12,13 @@ A subdocument link pointing to a nonexistent file now produces a clear visual er
 
 Code blocks in `plain` and `docs` documents now use a smaller font size when viewed on small screens, improving readability on mobile devices.
 
-#### Plain documents use `start` alignment on small screens
+#### Plain documents are start-aligned on small screens
 
 Text alignment in `plain` documents switches from justified to start-aligned on small screens.
+
+#### Reduced caption font size on small screens
+
+Captions for figures and tables in `plain` and `docs` documents now use a smaller font size on small screens.
 
 ### Fixed
 
