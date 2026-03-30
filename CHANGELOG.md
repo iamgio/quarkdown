@@ -10,6 +10,12 @@ A subdocument link pointing to a nonexistent file now produces a clear visual er
 
 ### Fixed
 
+#### Split paragraphs in `paged` documents now justify the last line correctly
+
+When a paragraph is auto-split across a page break in a `paged` document, the last line of the first part is now correctly justified, rather than start-aligned.
+
+Thanks @OverSamu!
+
 #### Fixed live preview not updating when an anchor is present
 
 Fixed an issue that caused live preview to skip updates when navigating to an anchor link of the same document, e.g. from the navigation sidebar.
