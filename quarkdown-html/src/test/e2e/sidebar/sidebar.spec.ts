@@ -1,10 +1,8 @@
 import {getComputedColor} from "../__util/css";
+import {SM_WIDTH} from "../__util/breakpoints";
 import {suite} from "../quarkdown";
 
 const {testMatrix, expect} = suite(__dirname);
-
-// sm breakpoint is 800px
-const MOBILE_WIDTH = 600;
 
 testMatrix(
     "renders sidebar correctly per doctype",
@@ -68,7 +66,7 @@ testMatrix(
     "hides sidebar on mobile in plain doctype",
     ["plain"],
     async (page) => {
-        await page.setViewportSize({width: MOBILE_WIDTH, height: 800});
+        await page.setViewportSize({width: SM_WIDTH, height: 800});
 
         const sidebar = page.locator(".sidebar");
         await expect(sidebar).toBeAttached();

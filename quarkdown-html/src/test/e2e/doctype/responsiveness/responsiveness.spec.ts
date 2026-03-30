@@ -1,10 +1,7 @@
+import {SM_WIDTH, TABLET_WIDTH, DESKTOP_WIDTH} from "../../__util/breakpoints";
 import {suite} from "../../quarkdown";
 
 const {testMatrix, expect} = suite(__dirname);
-
-const DESKTOP_WIDTH = 1400;
-const MOBILE_WIDTH = 600;
-const TABLET_WIDTH = 1000;
 
 testMatrix(
     "plain layout reflows at sm breakpoint",
@@ -28,7 +25,7 @@ testMatrix(
         expect(mainBoxDesktop!.width).toBeLessThan(bodyBoxDesktop!.width);
 
         // Mobile: stacked layout
-        await page.setViewportSize({width: MOBILE_WIDTH, height: 800});
+        await page.setViewportSize({width: SM_WIDTH, height: 800});
 
         await expect(body).toHaveCSS("flex-direction", "column");
 
