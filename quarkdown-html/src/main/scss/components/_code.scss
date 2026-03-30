@@ -1,4 +1,5 @@
 @use "font";
+@use "util/media-queries";
 
 .quarkdown {
   code {
@@ -27,6 +28,12 @@
 
     @at-root .quarkdown-slides#{&} {
       font-size: var(--qd-slides-code-block-font-size);
+    }
+
+    @at-root :is(.quarkdown-plain, .quarkdown-docs)#{&} {
+      @include media-queries.sm-down {
+        font-size: var(--qd-sm-code-block-font-size);
+      }
     }
 
     // Line numbers are displayed in a table, so no borders by default

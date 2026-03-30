@@ -22,6 +22,10 @@ Ellipsis (`...`) items in file trees now display the correct color.
 
 Thanks @cyphercodes!
 
+#### Reduced code block font size on small screens
+
+Code blocks in `plain` and `docs` documents now use a smaller font size when viewed on small screens, improving readability on mobile devices.
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
