@@ -36,6 +36,10 @@ Ellipsis (`...`) items in file trees now display the correct color.
 
 Thanks @cyphercodes!
 
+#### Fixed captions not following global line spacing
+
+Captions now follow the global configuration for line spacing and letter spacing.
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
