@@ -139,11 +139,11 @@ class HtmlDocumentBuilder(
     /** Loads Reveal.js scripts and styles for slide documents. No-op for other document types. */
     private fun HEAD.slidesScripts() {
         if (document.type != DocumentType.SLIDES) return
-        script(src = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.js") {}
-        script(src = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/plugin/notes/notes.js") {}
-        link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reset.css")
-        link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.css")
-        link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/theme/white.css")
+        script(src = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reveal.js") {}
+        script(src = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/plugin/notes.js") {}
+        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reset.css")
+        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reveal.css")
+        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/theme/white.css")
     }
 
     private fun HEAD.iconLibrary() {
