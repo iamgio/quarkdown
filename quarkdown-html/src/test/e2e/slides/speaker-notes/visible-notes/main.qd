@@ -1,0 +1,17 @@
+.slides speakernotes:{yes}
+
+# Slide 1
+
+.speakernote
+    hello
+
+# Slide 2
+
+.speakernote
+    **Formatted** speaker note
+
+    - Bullet 1
+    - Bullet 2
+    - Bullet 3
+
+# Slide 3
