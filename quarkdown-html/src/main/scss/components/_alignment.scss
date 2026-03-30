@@ -6,7 +6,9 @@
   // Local alignment (e.g. justification) is applied to specific elements instead of the whole document (#123).
   p:not(.page-margin-content p, .mermaid p) {
     text-align: var(--qd-horizontal-alignment-local);
-    text-align-last: var(--qd-horizontal-alignment-global);
+    &:not([data-split-to]) {
+      text-align-last: var(--qd-horizontal-alignment-global);
+    }
   }
 
   li:not(nav li) {
