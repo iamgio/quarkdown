@@ -4,3 +4,41 @@
 **`quarkdown c <file>`** is the command for compiling a main source file into a browser-renderable output.
 
 For all available options, refer to the [README's *Compiling* section](https://github.com/iamgio/quarkdown?tab=readme-ov-file#compiling).
+
+## Permissions
+
+Quarkdown uses a permission system to control what can be accessed during compilation.
+If a document attempts an action that requires a permission it does not have, a compilation error is raised.
+
+By default, documents are granted a default set of permissions. You can grant or revoke permissions with the `--allow` and `--deny` options:
+
+```shell
+quarkdown c main.qd --allow network --allow global-read
+```
+
+The final permission set is computed as: *defaults + allowed - denied*.
+
+### Available permissions
+
+| Name             | Description                                                                     |
+|------------------|---------------------------------------------------------------------------------|
+| `project-read`   | Read files within the project directory *(default)*                             |
+| `global-read`    | Read files from the entire file system, including outside the project directory |
+| `network`        | Access remote resources over the network (e.g. fetching remote media)           |
+| `native-content` | Embed native content, such as raw HTML and CSS *(default)*                      |
+| `all`            | Shorthand for all of the above                                                  |
+
+> [!NOTE]
+> `project-read`, `global-read` and `network` are only requested when the *compiler* needs access to a resource.
+> 
+> For example, when rendering to HTML:
+> 
+> - The following requires `project-read`, because the [media storage system](media-storage.qd) is turned on for HTML output, and the compiler needs to handle the image file:
+>   ```markdown
+>   ![Image](path/to/image.png)
+>   ```
+>   
+> - The following *doesn't* require `network`, because the compiler doesn't access the resource, but rather lets the URL through, to be handled by the browser:
+>   ```markdown
+>   ![Image](https://example.com/image.png)
+>   ```
