@@ -49,7 +49,7 @@ Thanks @cyphercodes!
 
 Captions now follow the global configuration for line spacing and letter spacing.
 
-#### Fixed Quarkdoc `Wiki page` broken links if it contains anchors
+#### Fixed Quarkdoc `Wiki page` broken links if they contain anchors
 
 The `@wiki` documentation tag now correctly preserves `#` anchor separators in wiki URLs.
 
