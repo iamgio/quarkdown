@@ -1,0 +1,53 @@
+@use "util/media-queries";
+
+.quarkdown {
+  figure > figcaption,
+  table:not(pre table) > caption {
+    --caption-margin: var(--qd-caption-margin);
+    font-size: var(--qd-caption-font-size);
+    font-style: var(--qd-caption-font-style);
+
+    &.caption-top {
+      margin-bottom: var(--caption-margin);
+    }
+
+    &.caption-bottom {
+      margin-top: var(--caption-margin);
+    }
+  }
+
+  figure > figcaption {
+    &.caption-top {
+      order: 0;
+    }
+
+    &.caption-bottom {
+      order: 2;
+    }
+  }
+
+  table:not(pre table) {
+    &:has(> caption.caption-top) {
+      caption-side: top;
+    }
+
+    &:has(> caption.caption-bottom) {
+      caption-side: bottom;
+    }
+
+    > caption {
+      --caption-margin: calc(var(--qd-caption-margin) + 0.5em);
+      white-space: nowrap;
+      overflow-x: hidden;
+    }
+  }
+}
+
+:is(.quarkdown-plain, .quarkdown-docs) {
+  figure > figcaption,
+  table:not(pre table) > caption {
+    @include media-queries.sm-down {
+      font-size: var(--qd-sm-caption-font-size);
+    }
+  }
+}

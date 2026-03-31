@@ -7,8 +7,9 @@ import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument, QuarkdownPage} from "../paged-like-quarkdown-document";
 import {PersistentHeadings} from "../handlers/persistent-headings";
 
-declare const Reveal: typeof import("reveal.js"); // global Reveal at runtime
-declare const RevealNotes: typeof import("reveal.js/plugin/notes/notes");
+type RevealType = typeof import("reveal.js").default;
+declare const Reveal: RevealType;
+declare const RevealNotes: typeof import("reveal.js/dist/plugin/notes").default;
 
 const SLIDE_SELECTOR = ".reveal .slides > :is(section, .pdf-page)";
 const BACKGROUND_SELECTOR = ".reveal :is(.backgrounds, .slides > .pdf-page) > .slide-background";

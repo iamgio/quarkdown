@@ -1,0 +1,4 @@
+.doctype {paged}
+.pageformat height:{5cm} margin:{1cm 2.5cm}
+
+.loremipsum

@@ -1,4 +1,5 @@
 import {evaluateComputedStyle, getComputedSizeProperty} from "../../__util/css";
+import {SM_WIDTH} from "../../__util/breakpoints";
 import {fontFamilyMatches, getCssVar} from "../index";
 import {suite} from "../../quarkdown";
 
@@ -57,6 +58,7 @@ testMatrix(
         const mainFontSize = await getComputedSizeProperty(page, "var(--qd-main-font-size)");
         const codeSpanFontSize = await getComputedSizeProperty(page, "var(--qd-code-span-font-size)");
         const codeBlockFontSize = await getComputedSizeProperty(page, "var(--qd-code-block-font-size)");
+        const captionFontSize = await getComputedSizeProperty(page, "var(--qd-caption-font-size)");
 
         // Paragraph uses main font size
         const paragraph = page.locator("p").first();
@@ -77,5 +79,54 @@ testMatrix(
             docType === "slides" ? slidesCodeBlockFontSize : codeBlockFontSize,
             docType === "slides" ? 0 : 1,
         );
+
+        // Table caption uses caption font size
+        const tableCaption = page.locator("table caption");
+        const tableCaptionStyle = await evaluateComputedStyle(tableCaption);
+        expect(parseFloat(tableCaptionStyle.fontSize)).toBeCloseTo(captionFontSize, 1);
+
+        // Figure caption (code block) uses caption font size
+        const figCaption = page.locator("figure figcaption");
+        const figCaptionStyle = await evaluateComputedStyle(figCaption);
+        expect(parseFloat(figCaptionStyle.fontSize)).toBeCloseTo(captionFontSize, 1);
+    }
+);
+
+testMatrix(
+    "applies correct font sizes on small screens",
+    ["plain", "paged", "slides", "docs"],
+    async (page, docType) => {
+        await page.setViewportSize({width: SM_WIDTH, height: 800});
+
+        const isSmResponsive = docType === "plain" || docType === "docs";
+
+        // Code block font size
+        const codeBlockParent = page.locator("pre");
+        const codeBlock = codeBlockParent.locator("code");
+        const codeBlockStyle = await evaluateComputedStyle(codeBlock);
+        const actualCodeBlockFontSize = parseFloat(codeBlockStyle.fontSize);
+        const smCodeBlockFontSize = await getComputedSizeProperty(codeBlockParent, "var(--qd-sm-code-block-font-size)");
+
+        if (isSmResponsive) {
+            expect(actualCodeBlockFontSize).toBeCloseTo(smCodeBlockFontSize, 1);
+        } else {
+            expect(actualCodeBlockFontSize).not.toBeCloseTo(smCodeBlockFontSize, 1);
+        }
+
+        // Caption font size (table caption and figure caption)
+        const tableCaption = page.locator("table caption");
+        const figCaption = page.locator("figure figcaption");
+        const tableCaptionStyle = await evaluateComputedStyle(tableCaption);
+        const figCaptionStyle = await evaluateComputedStyle(figCaption);
+        const smCaptionFontSize = await getComputedSizeProperty(page, "var(--qd-sm-caption-font-size)");
+
+        if (isSmResponsive) {
+            expect(parseFloat(tableCaptionStyle.fontSize)).toBeCloseTo(smCaptionFontSize, 1);
+            expect(parseFloat(figCaptionStyle.fontSize)).toBeCloseTo(smCaptionFontSize, 1);
+        } else {
+            const captionFontSize = await getComputedSizeProperty(page, "var(--qd-caption-font-size)");
+            expect(parseFloat(tableCaptionStyle.fontSize)).toBeCloseTo(captionFontSize, 1);
+            expect(parseFloat(figCaptionStyle.fontSize)).toBeCloseTo(captionFontSize, 1);
+        }
     }
 );

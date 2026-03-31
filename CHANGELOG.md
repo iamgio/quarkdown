@@ -8,6 +8,47 @@
 
 A subdocument link pointing to a nonexistent file now produces a clear visual error in the output document, rather than silently rendering `[???]`.
 
+#### Reduced code block font size on small screens
+
+Code blocks in `plain` and `docs` documents now use a smaller font size when viewed on small screens, improving readability on mobile devices.
+
+#### Plain documents are start-aligned on small screens
+
+Text alignment in `plain` documents switches from justified to start-aligned on small screens.
+
+#### Reduced caption font size on small screens
+
+Captions for figures and tables in `plain` and `docs` documents now use a smaller font size on small screens.
+
+#### Upgraded to Reveal.js 6
+
+Upgraded Reveal.js, the library powering `slides` documents, to v6.0.0. 
+No breaking changes are expected in the rendered output.
+
+### Fixed
+
+#### Split paragraphs in `paged` documents now justify the last line correctly
+
+When a paragraph is auto-split across a page break in a `paged` document, the last line of the first part is now correctly justified, rather than start-aligned.
+
+Thanks @OverSamu!
+
+#### Fixed live preview not updating when an anchor is present
+
+Fixed an issue that caused live preview to skip updates when navigating to an anchor link of the same document, e.g. from the navigation sidebar.
+
+Thanks @OverSamu!
+
+#### Fixed `.filetree`'s 'ellipsis' text color
+
+Ellipsis (`...`) items in file trees now display the correct color.
+
+Thanks @cyphercodes!
+
+#### Fixed captions not following global line spacing
+
+Captions now follow the global configuration for line spacing and letter spacing.
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
