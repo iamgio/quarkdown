@@ -64,6 +64,7 @@ class MediaStoragePermissionTest {
         ) {
             assertContains(it, "Error")
             assertContains(it, "Cannot access")
+            assertContains(it, ">--allow project-read</")
             assertContains(it, "img${File.separator}icon.png")
         }
     }

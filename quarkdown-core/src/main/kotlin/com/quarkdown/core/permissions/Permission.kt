@@ -9,24 +9,37 @@ package com.quarkdown.core.permissions
  */
 sealed interface Permission {
     /**
+     * The kebab-case identifier for this permission, used in CLI options and error messages.
+     */
+    val name: String
+
+    /**
      * Allows reading files within the project directory.
      */
-    data object ProjectRead : Permission
+    data object ProjectRead : Permission {
+        override val name = "project-read"
+    }
 
     /**
      * Allows reading files from the entire file system, including outside the project directory.
      */
-    data object GlobalRead : Permission
+    data object GlobalRead : Permission {
+        override val name = "global-read"
+    }
 
     /**
      * Allows accessing remote resources over the network (e.g. fetching remote media).
      */
-    data object NetworkAccess : Permission
+    data object NetworkAccess : Permission {
+        override val name = "network"
+    }
 
     /**
      * Allows using native content features (e.g. embedding raw HTML).
      */
-    data object NativeContent : Permission
+    data object NativeContent : Permission {
+        override val name = "native-content"
+    }
 
     companion object {
         /**

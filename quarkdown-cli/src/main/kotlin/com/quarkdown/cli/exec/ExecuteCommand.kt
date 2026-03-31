@@ -40,15 +40,11 @@ val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator +
 
 /**
  * CLI name to [Permission] set mapping, shared by `--allow` and `--deny`.
+ * Individual permissions are keyed by their [Permission.name]; `all` grants every permission.
  */
 private val permissionChoices =
-    mapOf(
-        "project-read" to setOf(Permission.ProjectRead),
-        "global-read" to setOf(Permission.GlobalRead),
-        "network" to setOf(Permission.NetworkAccess),
-        "native-content" to setOf(Permission.NativeContent),
-        "all" to Permission.ALL,
-    )
+    Permission.ALL.associate { it.name to setOf(it) } +
+        ("all" to Permission.ALL)
 
 /**
  * Template for Quarkdown commands that launch a complete pipeline and produce output files.
