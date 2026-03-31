@@ -55,4 +55,20 @@ class WikiLinkTransformerTest : QuarkdocDokkaTest() {
             assertContains(it, WIKI_ROOT + "home%3A+page")
         }
     }
+
+    @Test
+    fun `wiki with anchor`() {
+        test(
+            """
+            /**
+             * @wiki File data#reading-files
+             */
+            fun func() = Unit
+            """.trimIndent(),
+            "func",
+        ) {
+            assertContains(it, "Wiki page")
+            assertContains(it, WIKI_ROOT + "File+data#reading-files")
+        }
+    }
 }

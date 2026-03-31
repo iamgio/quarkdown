@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.page
 
+import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.quarkdoc.dokka.util.findDeep
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
@@ -44,7 +45,16 @@ class WikiLinkPageTransformer(
         documentable: DFunction,
         builder: PageContentBuilder.DocumentableContentBuilder,
     ) = builder.buildGroup {
-        val url = WIKI_ROOT + URLEncoder.encode(data, Charsets.UTF_8)
+        val (page, anchor) = data.stripAnchor() ?: (data to null)
+        val url =
+            buildString {
+                append(WIKI_ROOT)
+                append(URLEncoder.encode(page, Charsets.UTF_8))
+                if (anchor != null) {
+                    append('#')
+                    append(URLEncoder.encode(anchor, Charsets.UTF_8))
+                }
+            }
         link(data, url)
     }
 }
