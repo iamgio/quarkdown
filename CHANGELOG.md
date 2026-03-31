@@ -53,6 +53,16 @@ Captions now follow the global configuration for line spacing and letter spacing
 
 The `@wiki` documentation tag now correctly preserves `#` anchor separators in wiki URLs.
 
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
+
 ## [1.15.0] - 2026-03-24
 
 ### Added
