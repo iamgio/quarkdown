@@ -20,6 +20,11 @@ Text alignment in `plain` documents switches from justified to start-aligned on 
 
 Captions for figures and tables in `plain` and `docs` documents now use a smaller font size on small screens.
 
+#### Upgraded to Reveal.js 6
+
+Upgraded Reveal.js, the library powering `slides` documents, to v6.0.0. 
+No breaking changes are expected in the rendered output.
+
 ### Fixed
 
 #### Split paragraphs in `paged` documents now justify the last line correctly
