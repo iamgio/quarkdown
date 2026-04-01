@@ -15,6 +15,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.permissions.Permission
 
 /**
  * `Bibliography` stdlib module exporter.
@@ -64,6 +65,8 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @see cite to cite bibliography entries
  * @throws java.io.IOException if the bibliography file cannot be read or parsed
  * @throws IllegalArgumentException if the specified style does not exist or is invalid
+ * @permission [Permission.ProjectRead] to read bibliography files located in the project directory
+ * @permission [Permission.GlobalRead] to read bibliography files located outside the project directory
  * @wiki Bibliography
  */
 fun bibliography(

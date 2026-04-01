@@ -42,6 +42,7 @@ val Injection: QuarkdownModule =
  *
  * @param content raw HTML content to inject
  * @return a new [Html] node
+ * @permission [Permission.NativeContent] to inject native HTML content
  * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @wiki HTML
  */
@@ -73,6 +74,7 @@ fun html(
  *
  * @param content raw CSS content to inject
  * @return a new [Html] node representing the style element
+ * @permission [Permission.NativeContent] to inject native CSS content
  * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @see [cssProperties] for a more structured way to override CSS properties.
  * @wiki CSS
@@ -107,8 +109,9 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
  * without any additional processing or escaping, as long as the rendering target supports HTML.
  *
  * @param properties a dictionary of CSS property names and their values
- * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @return a new [Html] node representing the style element
+ * @permission [Permission.NativeContent] to inject native CSS properties
+ * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @wiki CSS
  */
 @Name("cssproperties")
