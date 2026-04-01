@@ -13,11 +13,14 @@ import com.quarkdown.core.context.hooks.SubdocumentRegistrationHook
 import com.quarkdown.core.context.hooks.UnresolvedSubdocumentException
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.permissions.MissingPermissionException
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -27,7 +30,10 @@ private const val RESOURCE_PATH = "src/test/resources/subdoc"
  * Tests for subdocument registration from [SubdocumentLink].
  */
 class SubdocumentRegistrationTest {
-    private val context = MutableContext(QuarkdownFlavor)
+    private val context =
+        object : MutableContext(QuarkdownFlavor) {
+            override val permissions = setOf(Permission.GlobalRead)
+        }
 
     private fun link1() =
         SubdocumentLink(
@@ -179,5 +185,43 @@ class SubdocumentRegistrationTest {
             context.sharedSubdocumentsData.graph.vertices.size,
         )
         assertNotNull(link.error)
+    }
+
+    @Test
+    fun `missing read permission, with error handler`() {
+        val noPermissionsContext =
+            object : MutableContext(QuarkdownFlavor) {
+                override val permissions = emptySet<Permission>()
+            }
+
+        noPermissionsContext.attachMockPipeline(
+            options =
+                PipelineOptions(
+                    errorHandler = BasePipelineErrorHandler(),
+                ),
+        )
+
+        noPermissionsContext.sharedSubdocumentsData =
+            noPermissionsContext.sharedSubdocumentsData.copy(
+                graph = noPermissionsContext.sharedSubdocumentsData.graph.addVertex(Subdocument.Root),
+            )
+
+        val link = link1()
+        val root =
+            buildBlock {
+                root {
+                    +link
+                }
+            }
+
+        ObservableAstIterator()
+            .attach(SubdocumentRegistrationHook(noPermissionsContext))
+            .traverse(root as NestableNode)
+
+        assertEquals(
+            1,
+            noPermissionsContext.sharedSubdocumentsData.graph.vertices.size,
+        )
+        assertIs<MissingPermissionException>(link.error?.first)
     }
 }

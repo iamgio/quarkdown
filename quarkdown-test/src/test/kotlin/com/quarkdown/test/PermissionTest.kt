@@ -1,16 +1,16 @@
 package com.quarkdown.test
 
-import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission.GlobalRead
 import com.quarkdown.core.permissions.Permission.NativeContent
 import com.quarkdown.core.permissions.Permission.ProjectRead
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
 import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
 
 /**
  * Integration tests for the permission system.
@@ -31,24 +31,24 @@ class PermissionTest {
 
     @Test
     fun `read without read permission fails`() {
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".read {code.txt}",
                 permissions = emptySet(),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
     }
 
     @Test
     fun `read file outside project with only ProjectRead fails`() {
         // Use a subdirectory as the working directory so that ../code.txt falls outside it.
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".read {../code.txt}",
                 workingDirectory = File(DATA_FOLDER, "csv"),
                 permissions = setOf(ProjectRead),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
     }
 
     @Test
@@ -70,12 +70,12 @@ class PermissionTest {
 
     @Test
     fun `csv without read permission fails`() {
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".csv {csv/people.csv}",
                 permissions = emptySet(),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
     }
 
     @Test
@@ -88,12 +88,12 @@ class PermissionTest {
 
     @Test
     fun `bibliography without read permission fails`() {
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".bibliography {bib/bibliography.bib} breakpage:{no}",
                 permissions = emptySet(),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
     }
 
     @Test
@@ -106,12 +106,12 @@ class PermissionTest {
 
     @Test
     fun `font without read permission fails`() {
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".font main:{font/NotoSans-Regular.ttf}",
                 permissions = emptySet(),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
     }
 
     // NativeContent
@@ -126,11 +126,73 @@ class PermissionTest {
 
     @Test
     fun `html without NativeContent fails`() {
-        assertFailsWith<FunctionCallRuntimeException> {
+        assertFailsWith<MissingPermissionException> {
             execute(
                 ".html {<b>hello</b>}",
                 permissions = emptySet(),
             ) {}
-        }.also { assertIs<MissingPermissionException>(it.cause) }
+        }
+    }
+
+    // Subdocument read permissions
+
+    @Test
+    fun `subdocument with ProjectRead succeeds`() {
+        execute(
+            "[Link](subdoc/simple-1.qd)",
+            permissions = setOf(ProjectRead),
+        ) {}
+    }
+
+    @Test
+    fun `subdocument without read permission fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                "[Link](subdoc/simple-1.qd)",
+                permissions = emptySet(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `subdocument outside project with only ProjectRead fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                "[Link](../subdoc/simple-1.qd)",
+                workingDirectory = File(DATA_FOLDER, "csv"),
+                permissions = setOf(ProjectRead),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `subdocument outside project with GlobalRead succeeds`() {
+        execute(
+            "[Link](../subdoc/simple-1.qd)",
+            workingDirectory = File(DATA_FOLDER, "csv"),
+            permissions = setOf(GlobalRead),
+        ) {}
+    }
+
+    @Test
+    fun `subdocument function without read permission fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                ".subdocument {subdoc/simple-1.qd}",
+                permissions = emptySet(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `failing subdocument access renders error with non-strict handler`() {
+        execute(
+            "[Link](subdoc/simple-1.qd)",
+            permissions = emptySet(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "Error")
+            assertContains(it, "Cannot access")
+        }
     }
 }

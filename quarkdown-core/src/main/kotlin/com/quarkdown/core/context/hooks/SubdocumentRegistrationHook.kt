@@ -10,6 +10,8 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.subdocument.findResourceByPath
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.permissions.MissingPermissionException
+import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.core.pipeline.error.PipelineException
 
 /**
@@ -27,6 +29,13 @@ class SubdocumentRegistrationHook(
 
             if (!file.exists()) {
                 link.setError(UnresolvedSubdocumentException(link), context)
+                return@on
+            }
+
+            try {
+                context.requireReadPermission(file)
+            } catch (e: MissingPermissionException) {
+                link.setError(e, context)
                 return@on
             }
 
