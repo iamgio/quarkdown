@@ -121,4 +121,37 @@ class FunctionDocumentationHoverSupplierTest {
         // Position on "hello" before the wrap.
         assertNull(getHover(text, Position(0, 2)))
     }
+
+    // Nameless (identity) function calls
+
+    @Test
+    fun `hover over nameless function call shows identity documentation`() {
+        val text = "hello .{world} bye"
+        val position = Position(0, text.indexOf("{"))
+
+        val hover = getHover(text, position)
+        assertNotNull(hover)
+        assertContains(hover.contents.right.value, ". value:{")
+    }
+
+    @Test
+    fun `hover over named function chained after nameless call`() {
+        val text = ".{center}::$ALIGN_FUNCTION"
+        val position = Position(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2)
+
+        val hover = getHover(text, position)
+        assertNotNull(hover)
+        assertContains(hover.contents.right.value, ALIGN_FUNCTION)
+    }
+
+    @Test
+    fun `hover over nameless part of chained call falls back to last chain name`() {
+        // Hovering over the nameless `.{...}` part: no FUNCTION_NAME token is found.
+        val text = ".{center}::$ALIGN_FUNCTION"
+        val position = Position(0, 1) // Over the '{' of the nameless call.
+
+        val hover = getHover(text, position)
+        assertNotNull(hover)
+        assertContains(hover.contents.right.value, ALIGN_FUNCTION)
+    }
 }

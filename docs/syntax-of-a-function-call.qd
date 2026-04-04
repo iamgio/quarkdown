@@ -98,6 +98,18 @@ You can append additional arguments to any function in the chain. Just keep in m
 
 Many core functions are designed to be called in a chain, for example [`None` operations](none.qd#examples).
 
+### Identity function
+
+A nameless function call uses the syntax `.{value}`, omitting the function name entirely. It acts as an identity function, passing its argument through unchanged. This is especially useful as a starting point for a chain when you want to begin with a literal value:
+
+.examplemirror
+    .{30}::multiply {2}
+
+.examplemirror
+    .{Hello}::text variant:{smallcaps}
+
+Without the nameless call, you would need to either use a variable or nest the calls manually.
+
 ## Tight function calls
 
 A function call must normally be surrounded by whitespace, a symbol, or the beginning or end of a line. This means that a call directly adjacent to a word character is not recognized:

@@ -672,6 +672,50 @@ class LexerTest {
             assertEquals("bar", value.next!!.name)
             assertEquals(1, value.next!!.arguments.size)
         }
+
+        // Nameless (identity) function calls.
+
+        with(walk(".{x}")) {
+            assertEquals("", value.name)
+            assertEquals(".{x}".length, endIndex)
+            with(value.arguments.single()) {
+                assertEquals("x", value)
+                assertNull(name)
+            }
+        }
+
+        with(walk(".{x} {y}")) {
+            assertEquals("", value.name)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+        }
+
+        with(walk(".{x}::bar {y}")) {
+            assertEquals("", value.name)
+            assertEquals(1, value.arguments.size)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+        }
+
+        // Trailing `::` should not produce a nameless chained call.
+        with(walk(".foo::")) {
+            assertEquals("foo", value.name)
+            assertNull(value.next)
+            // The `::` is not consumed: the walker stops at the end of the named call.
+            assertEquals(".foo".length, endIndex)
+        }
+
+        with(walk(".{x}::bar {y}::baz {z}")) {
+            assertEquals("", value.name)
+            assertEquals("bar", value.next!!.name)
+            assertEquals("baz", value.next!!.next!!.name)
+        }
+
+        with(walk("{.{x}}")) {
+            assertEquals("", value.name)
+            assertEquals("{.{x}}".length, endIndex)
+            assertEquals("x", value.arguments.single().value)
+        }
     }
 
     /**
@@ -850,5 +894,51 @@ class LexerTest {
         assertEquals("first", tokens[0].walkerResult.value.name)
         assertEquals("second", tokens[1].walkerResult.value.name)
         assertEquals("third", tokens[2].walkerResult.value.name)
+    }
+
+    /**
+     * Verifies that nameless (identity) function calls are tokenized correctly at the inline level.
+     */
+    @Test
+    fun namelessInlineFunctionCall() {
+        with(inlineLex(".{x}")) {
+            assertIs<FunctionCallToken>(next())
+            assertFalse(hasNext())
+        }
+
+        with(inlineLex("hello .{x} world")) {
+            assertIs<PlainTextToken>(next())
+            assertIs<FunctionCallToken>(next())
+            assertIs<PlainTextToken>(next())
+            assertFalse(hasNext())
+        }
+
+        with(inlineLex("{.{x}}")) {
+            assertIs<FunctionCallToken>(next())
+            assertFalse(hasNext())
+        }
+    }
+
+    /**
+     * Verifies that nameless (identity) function calls are tokenized correctly at the block level.
+     */
+    @Test
+    fun namelessBlockFunctionCall() {
+        val tokens =
+            blockLexer(".{hello}")
+                .tokenize()
+                .filterIsInstance<FunctionCallToken>()
+                .toList()
+
+        assertEquals(1, tokens.size)
+        with(tokens.single()) {
+            assertEquals("", walkerResult.value.name)
+            assertEquals(
+                "hello",
+                walkerResult.value.arguments
+                    .single()
+                    .value,
+            )
+        }
     }
 }

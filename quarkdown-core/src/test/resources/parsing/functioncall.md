@@ -43,3 +43,7 @@ not body
 
 .function {arg{1} arg} { { arg2 } }
     body content
+
+.{hello}
+
+.{arg1} {arg2}

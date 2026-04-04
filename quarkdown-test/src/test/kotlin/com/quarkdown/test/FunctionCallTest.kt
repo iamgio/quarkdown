@@ -137,4 +137,32 @@ class FunctionCallTest {
             assertEquals("<p>hello{3</p>", it)
         }
     }
+
+    @Test
+    fun `identity function`() {
+        execute(".{hello}") {
+            assertEquals("<p>hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `malformed nameless function does not parse`() {
+        execute(".") { assertEquals("<p>.</p>", it) }
+        execute("abc . def") { assertEquals("<p>abc . def</p>", it) }
+        execute(". {def}") { assertEquals("<p>. {def}</p>", it) }
+    }
+
+    @Test
+    fun `identity function chain`() {
+        execute(".{10}::multiply {2}::sum {5}") {
+            assertEquals("<p>25</p>", it)
+        }
+    }
+
+    @Test
+    fun `wrapped identity function`() {
+        execute("hello{.{world}}hello") {
+            assertEquals("<p>helloworldhello</p>", it)
+        }
+    }
 }

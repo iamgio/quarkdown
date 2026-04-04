@@ -414,4 +414,54 @@ class FunctionCallTokensSupplierTest {
             assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 14..15) // Wrap close
         }
     }
+
+    // Nameless (identity) function calls
+
+    @Test
+    fun `nameless function call with one positional argument`() {
+        tokenize(".{hello}") {
+            assertNext(TYPE_BEGIN, 0..1) // '.'
+            // No name token — argument follows directly.
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 1..2) // '{'
+            assertNext(TokenType.ENUM, 2..7) // 'hello'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 7..8) // '}'
+        }
+    }
+
+    @Test
+    fun `nameless function call in surrounding text`() {
+        tokenize("text .{42} text") {
+            assertNext(TYPE_BEGIN, 5..6) // '.'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 6..7) // '{'
+            assertNext(TokenType.NUMBER, 7..9) // '42'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 9..10) // '}'
+        }
+    }
+
+    @Test
+    fun `nameless function call chained with named function`() {
+        tokenize(".{10}::multiply {2}") {
+            assertNext(TYPE_BEGIN, 0..1) // '.'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 1..2) // '{'
+            assertNext(TokenType.NUMBER, 2..4) // '10'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 4..5) // '}'
+            assertNext(TYPE_CHAINING_SEPARATOR, 5..7) // '::'
+            assertNext(TYPE_NAME, 7..15) // 'multiply'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 16..17) // '{'
+            assertNext(TokenType.NUMBER, 17..18) // '2'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 18..19) // '}'
+        }
+    }
+
+    @Test
+    fun `wrapped nameless function call`() {
+        tokenize("{.{x}}") {
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 0..1) // Wrap open '{'
+            assertNext(TYPE_BEGIN, 1..2) // '.'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 2..3) // '{'
+            assertNext(TokenType.ENUM, 3..4) // 'x'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 4..5) // '}'
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 5..6) // Wrap close '}'
+        }
+    }
 }
