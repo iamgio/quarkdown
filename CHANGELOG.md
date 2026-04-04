@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.15.1] - 2026-03-31
+
 ### Changed
 
 #### Subdocument link to nonexistent file now produces a visual error
@@ -48,6 +50,20 @@ Thanks @cyphercodes!
 #### Fixed captions not following global line spacing
 
 Captions now follow the global configuration for line spacing and letter spacing.
+
+#### Fixed Quarkdoc `Wiki page` broken links if they contain anchors
+
+The `@wiki` documentation tag now correctly preserves `#` anchor separators in wiki URLs.
+
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [1.15.0] - 2026-03-24
 
@@ -441,7 +457,9 @@ Shout out to our sponsors! 🎉
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v1.15.1...HEAD
+
+[1.15.1]: https://github.com/iamgio/quarkdown/compare/v1.15.0...v1.15.1
 
 [1.15.0]: https://github.com/iamgio/quarkdown/compare/v1.14.1...v1.15.0
 
