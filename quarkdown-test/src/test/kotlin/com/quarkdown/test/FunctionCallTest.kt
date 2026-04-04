@@ -146,6 +146,13 @@ class FunctionCallTest {
     }
 
     @Test
+    fun `malformed nameless function does not parse`() {
+        execute(".") { assertEquals("<p>.</p>", it) }
+        execute("abc . def") { assertEquals("<p>abc . def</p>", it) }
+        execute(". {def}") { assertEquals("<p>. {def}</p>", it) }
+    }
+
+    @Test
     fun `identity function chain`() {
         execute(".{10}::multiply {2}::sum {5}") {
             assertEquals("<p>25</p>", it)
