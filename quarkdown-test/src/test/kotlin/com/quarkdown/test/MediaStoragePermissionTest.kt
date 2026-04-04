@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.Permission.GlobalRead
@@ -13,6 +14,7 @@ import com.quarkdown.test.util.execute
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 /**
@@ -186,5 +188,100 @@ class MediaStoragePermissionTest {
             enableMediaStorage = false,
             permissions = emptySet(),
         ) {}
+    }
+
+    @Test
+    fun `subdocument resolved media with ProjectRead succeeds`() {
+        // subdoc/media-storage.qd contains: ![icon](../img/icon.png)
+        // LinkUrlResolverHook resolves this to img/icon.png (within project).
+        execute(
+            source = "[1](subdoc/media-storage.qd)",
+            enableMediaStorage = true,
+            permissions = setOf(ProjectRead),
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(1, mediaStorage.all.size)
+            }
+        }
+    }
+
+    @Test
+    fun `nested subdocument resolved media with ProjectRead succeeds`() {
+        // subdoc/nested/media-ref.qd contains: ![icon](../../img/icon.png)
+        // LinkUrlResolverHook resolves this to img/icon.png (within project).
+        execute(
+            source = "[1](subdoc/nested/media-ref.qd)",
+            enableMediaStorage = true,
+            permissions = setOf(ProjectRead),
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(1, mediaStorage.all.size)
+            }
+        }
+    }
+
+    @Test
+    fun `subdocument resolved media without read permission fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                source = "[1](subdoc/media-storage.qd)",
+                enableMediaStorage = true,
+                permissions = emptySet(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `nested subdocument resolved media without read permission fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                source = "[1](subdoc/nested/media-ref.qd)",
+                enableMediaStorage = true,
+                permissions = emptySet(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `subdocument resolved media outside project with only ProjectRead fails`() {
+        // nested/media-ref.qd contains: ![icon](../../img/icon.png)
+        // LinkUrlResolverHook resolves this to ../img/icon.png (outside project).
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                source = "[1](nested/media-ref.qd)",
+                workingDirectory = File(DATA_FOLDER, "subdoc"),
+                enableMediaStorage = true,
+                permissions = setOf(ProjectRead),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `subdocument resolved media outside project with GlobalRead succeeds`() {
+        execute(
+            source = "[1](nested/media-ref.qd)",
+            workingDirectory = File(DATA_FOLDER, "subdoc"),
+            enableMediaStorage = true,
+            permissions = setOf(ProjectRead, GlobalRead),
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(1, mediaStorage.all.size)
+            }
+        }
+    }
+
+    @Test
+    fun `subdocument resolved media renders error with non-strict handler`() {
+        execute(
+            source = "[1](subdoc/media-storage.qd)",
+            enableMediaStorage = true,
+            permissions = setOf(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertContains(it, "Error")
+                assertContains(it, "Cannot access")
+            }
+        }
     }
 }

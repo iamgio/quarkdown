@@ -220,4 +220,20 @@ class MediaStorageTest {
             },
         ) {}
     }
+
+    @Test
+    fun `nested subdocument media resolved via relative path`() {
+        execute(
+            source = "[1](subdoc/nested/media-ref.qd)",
+            enableMediaStorage = true,
+            outputResourceHook = { group ->
+                assertFails { getMediaResources(group) } // Root has no media
+                assertNotNull(getMediaResources(group, "media-ref").singleOrNull { it.name.startsWith("icon") })
+            },
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(1, mediaStorage.all.size)
+            }
+        }
+    }
 }
