@@ -3,7 +3,9 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.AstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.RootGranularity
 import com.quarkdown.core.context.file.SimpleFileSystem
+import com.quarkdown.core.context.file.getRootFileSystem
 import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
@@ -22,6 +24,7 @@ import com.quarkdown.core.localization.LocalizationTable
 import com.quarkdown.core.localization.LocalizationTableNotFoundException
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.Pipelines
 
@@ -50,7 +53,9 @@ open class BaseContext(
 
     override val localizationTables = emptyMap<String, LocalizationTable>()
 
-    override val mediaStorage: ReadOnlyMediaStorage by lazy { MutableMediaStorage(options) }
+    override val mediaStorage: ReadOnlyMediaStorage by lazy {
+        MutableMediaStorage(options, permissionHolder = this)
+    }
 
     override val sharedSubdocumentsData: SubdocumentsData<VisitableOnceGraph<Subdocument>> =
         SubdocumentsData(
@@ -63,6 +68,14 @@ open class BaseContext(
             (subdocument as? Subdocument.Resource)?.workingDirectory
                 ?: attachedPipeline?.options?.workingDirectory
         SimpleFileSystem(workingDirectory)
+    }
+
+    override val permissions: Set<Permission> by lazy {
+        attachedPipeline?.options?.permissions.orEmpty()
+    }
+
+    override val rootFileSystem: FileSystem? by lazy {
+        this.getRootFileSystem(granularity = RootGranularity.PROJECT)
     }
 
     override fun getFunctionByName(name: String): Function<*>? =

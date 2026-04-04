@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.inline
 
+import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
@@ -18,8 +19,14 @@ class Image(
     val width: Size?,
     val height: Size?,
     override val referenceId: String? = null,
-) : CrossReferenceableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
+) : CrossReferenceableNode,
+    ErrorCapableNode {
+    /**
+     * Any error associated with the link will be surfaced as an error on the image itself.
+     */
+    override var error by link::error
+
+    override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
 
 /**

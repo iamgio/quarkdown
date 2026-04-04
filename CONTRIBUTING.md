@@ -176,11 +176,11 @@ You can run the Quarkdown CLI directly via Gradle, without needing to build the 
 - To compile the [wiki](docs), run either of the following commands from the `docs` directory:
 
   - ```bash
-    quarkdown c main.qd --clean
+    quarkdown c main.qd --clean --strict --allow all
     ```
 
   - ```bash
-    ./gradlew run --args="c main.qd --clean --libs ../quarkdown-libs/src/main/resources"
+    ./gradlew run --args="c main.qd --clean --strict --allow all --libs ../quarkdown-libs/src/main/resources"
     ```
 
 - To generate Quarkdoc documentation only for the standard library:

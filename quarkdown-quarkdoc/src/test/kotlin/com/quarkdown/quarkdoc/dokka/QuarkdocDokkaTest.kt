@@ -9,6 +9,7 @@ import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
 import org.jetbrains.dokka.utilities.LoggingLevel
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import utils.TestOutputWriterPlugin
 import java.io.File
 import kotlin.reflect.KClass
@@ -74,7 +75,7 @@ open class QuarkdocDokkaTest(
 
     /**
      * Tests the output of a given source file.
-     * @param source the source code to test
+     * @param sources the source code to test
      * @param outName the name of the output file, without extension
      * @param outModule the name of the module to test, or null for the root module
      * @param autoPath if true, the output path is automatically generated based on [outName] and [outModule].
@@ -135,7 +136,7 @@ open class QuarkdocDokkaTest(
         block = block,
     )
 
-    protected fun getText(html: String) =
+    protected fun getText(html: String): String =
         Jsoup
             .parse(html)
             .text()
@@ -169,24 +170,25 @@ open class QuarkdocDokkaTest(
     private fun getTable(
         html: String,
         name: String,
-    ) = Jsoup
-        .parse(html)
-        .select("h4:contains($name)")
-        .firstOrNull()
-        ?.nextElementSibling()
-        ?: throw IllegalStateException("Table $name not found")
+    ): Element =
+        Jsoup
+            .parse(html)
+            .select("h4:contains($name)")
+            .firstOrNull()
+            ?.nextElementSibling()
+            ?: throw IllegalStateException("Table $name not found")
 
     /**
      * @param html the HTML content to parse
      * @return the parameters table element
      * @throws IllegalStateException if the table is not found
      */
-    protected fun getParametersTable(html: String) = getTable(html, "Parameters")
+    protected fun getParametersTable(html: String): Element = getTable(html, "Parameters")
 
     /**
      * @param html the HTML content to parse
      * @return the see-also table element
      * @throws IllegalStateException if the table is not found
      */
-    protected fun getSeeAlsoTable(html: String) = getTable(html, "See also")
+    protected fun getSeeAlsoTable(html: String): Element = getTable(html, "See also")
 }

@@ -35,3 +35,9 @@ const val IO_ERROR_EXIT_CODE = 70
  * Exit code when a runtime error occurs.
  */
 const val RUNTIME_ERROR_EXIT_CODE = 71
+
+/**
+ * Exit code when a required permission is not granted.
+ * @see com.quarkdown.core.permissions.MissingPermissionException
+ */
+const val MISSING_PERMISSION_EXIT_CODE = 72

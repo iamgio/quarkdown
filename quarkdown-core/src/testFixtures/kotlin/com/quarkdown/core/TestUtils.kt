@@ -4,9 +4,12 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.tokens.NewlineToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.Pipelines
@@ -77,6 +80,16 @@ inline fun <reified T : Node> nodesIterator(
         }.map { it.second }
         .filterIsInstance<T>()
         .iterator()
+
+/**
+ * A minimal [PermissionHolder] for tests with configurable permissions and root file system.
+ * @param permissions the set of granted permissions
+ * @param rootFileSystem the root file system, or `null` if all file reads are considered global
+ */
+class MockPermissionHolder(
+    override val permissions: Set<Permission>,
+    override val rootFileSystem: FileSystem? = null,
+) : PermissionHolder
 
 /**
  * Attaches a mock pipeline to a context for tests only, which does not support rendering.

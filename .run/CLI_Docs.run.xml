@@ -2,7 +2,7 @@
   <configuration default="false" name="CLI: Docs" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="com.quarkdown.cli.QuarkdownCliKt" />
     <module name="quarkdown.quarkdown-cli.main" />
-    <option name="PROGRAM_PARAMETERS" value="c main.qd --clean --libs ../quarkdown-libs/src/main/resources --out-name wiki" />
+    <option name="PROGRAM_PARAMETERS" value="c main.qd --strict --allow all --clean --libs ../quarkdown-libs/src/main/resources --out-name wiki" />
     <shortenClasspath name="NONE" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/docs" />
     <method v="2">

@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.attributes.presence.markMathPresence
+import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
@@ -18,6 +19,8 @@ import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.misc.font.FontFamily
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -47,6 +50,16 @@ class HtmlPostRendererTest {
     @BeforeTest
     fun setup() {
         context = MutableContext(QuarkdownFlavor)
+        context.attachMockPipeline(
+            PipelineOptions(
+                permissions =
+                    setOf(
+                        Permission.ProjectRead,
+                        Permission.GlobalRead,
+                        Permission.NetworkAccess,
+                    ),
+            ),
+        )
     }
 
     @Test

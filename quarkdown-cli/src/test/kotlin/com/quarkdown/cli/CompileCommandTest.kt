@@ -3,6 +3,7 @@ package com.quarkdown.cli
 import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.exec.CompileCommand
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
@@ -148,6 +149,51 @@ class CompileCommandTest : TempDirectory() {
         test("--clean")
         assertHtmlContentPresent()
         assertFalse(dummyFile.exists())
+    }
+
+    @Test
+    fun `default permissions`() {
+        val (_, pipelineOptions) = test()
+        assertEquals(Permission.DEFAULT_SET, pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `allow network`() {
+        val (_, pipelineOptions) = test("--allow", "network")
+        assertEquals(Permission.DEFAULT_SET + Permission.NetworkAccess, pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `allow multiple`() {
+        val (_, pipelineOptions) = test("--allow", "network", "--allow", "global-read")
+        assertEquals(
+            Permission.DEFAULT_SET + setOf(Permission.NetworkAccess, Permission.GlobalRead),
+            pipelineOptions.permissions,
+        )
+    }
+
+    @Test
+    fun `allow all`() {
+        val (_, pipelineOptions) = test("--allow", "all")
+        assertEquals(Permission.ALL, pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `deny native content`() {
+        val (_, pipelineOptions) = test("--deny", "native-content")
+        assertEquals(setOf(Permission.ProjectRead), pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `deny all`() {
+        val (_, pipelineOptions) = test("--deny", "all")
+        assertTrue(pipelineOptions.permissions.isEmpty())
+    }
+
+    @Test
+    fun `allow and deny combined`() {
+        val (_, pipelineOptions) = test("--allow", "all", "--deny", "network")
+        assertEquals(Permission.ALL - Permission.NetworkAccess, pipelineOptions.permissions)
     }
 
     @Test

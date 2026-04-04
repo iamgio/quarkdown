@@ -347,12 +347,16 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
   Defaults to the name of the document, set via [`.docname`](https://quarkdown.com/wiki/document-metadata).  
   *Note:* special characters will be replaced with dashes in the actual file name.
 
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://quarkdown.com/wiki/importing-external-libraries)
-
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
   - `html-pdf` (equivalent to `-r html --pdf`)
   - `text` (plain text)
+
+- `--allow <permission>` / `--deny <permission>`: grants or revokes a [permission](https://quarkdown.com/wiki/CLI-Compiler#permissions) (repeatable).  
+  Accepted values: `project-read`, `global-read`, `network`, `native-content`, `all`.  
+  By default, `project-read` and `native-content` are granted.
+
+- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://quarkdown.com/wiki/importing-external-libraries)
 
 - `-b <browser>` or `--browser <browser>`: sets the browser to launch the preview with. Defaults to `default`. Accepted values:
   - `default`

@@ -7,6 +7,8 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.file.RootGranularity
+import com.quarkdown.core.context.file.getRootFileSystem
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -21,12 +23,12 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.data.subList
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
-import com.quarkdown.stdlib.internal.RootGranularity
 import com.quarkdown.stdlib.internal.Sorting
-import com.quarkdown.stdlib.internal.getRootFileSystem
 import com.quarkdown.stdlib.internal.sortedBy
 import java.io.File
 
@@ -56,6 +58,7 @@ internal fun file(
     requireExistance: Boolean = true,
 ): File {
     val file = context.fileSystem.resolve(path)
+    context.requireReadPermission(file)
 
     if (requireExistance && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")
@@ -69,6 +72,8 @@ internal fun file(
  * @param lineRange range of lines to extract from the file.
  *                  If not specified or infinite, the whole file is read
  * @return a string value of the text extracted from the file
+ * @permission [Permission.ProjectRead] to read files located in the project directory
+ * @permission [Permission.GlobalRead] to read files located outside the project directory
  * @throws IllegalArgumentException if [lineRange] is out of bounds
  * @wiki File data
  */
@@ -146,7 +151,7 @@ fun pathToRoot(
     @Injected context: Context,
     @LikelyNamed granularity: RootGranularity = RootGranularity.PROJECT,
 ): StringValue {
-    val root: FileSystem = getRootFileSystem(context, granularity) ?: return ".".wrappedAsValue()
+    val root: FileSystem = context.getRootFileSystem(granularity) ?: return ".".wrappedAsValue()
     val path: String =
         context.fileSystem.relativePathTo(root)?.toString()
             ?: throw IllegalStateException(
@@ -194,6 +199,8 @@ enum class FileSorting(
  * @param order order to sort the files in
  * @return an unordered collection of string values, each representing a file located in the directory, with extension
  * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory
+ * @permission [Permission.ProjectRead] to list files located in the project directory
+ * @permission [Permission.GlobalRead] to list files located outside the project directory
  * @see fileName to exclude the extension from file names
  * @wiki File data
  */
@@ -237,6 +244,8 @@ fun listFiles(
  * @param includeExtension whether to include the file extension in the name
  * @return the name of the file located in [path]
  * @throws IllegalArgumentException if the file does not exist
+ * @permission [Permission.ProjectRead] to access files located in the project directory
+ * @permission [Permission.GlobalRead] to access files located outside the project directory
  * @wiki File data
  */
 @Name("filename")
@@ -271,6 +280,8 @@ enum class CsvParsingMode(
  * @param caption optional caption of the table. If set, the table will be numbered according to the current [numbering] format
  * @param referenceId optional ID for cross-referencing via [reference]
  * @return a table whose content is loaded from the file located in [path]
+ * @permission [Permission.ProjectRead] to read CSV files located in the project directory
+ * @permission [Permission.GlobalRead] to read CSV files located outside the project directory
  * @wiki File data
  */
 fun csv(

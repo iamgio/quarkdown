@@ -7,6 +7,8 @@ import com.quarkdown.core.media.storage.name.MediaNameProviderStrategy
 import com.quarkdown.core.media.storage.name.SanitizedMediaNameProvider
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.media.storage.options.MediaTypeEnabledChecker
+import com.quarkdown.core.media.storage.permissions.MediaAccessPermissionChecker
+import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import java.io.File
@@ -19,12 +21,14 @@ const val MEDIA_SUBDIRECTORY_NAME = "media"
 /**
  * A media storage that can be modified with new entries.
  * @param options storage rules
+ * @param permissionHolder holder to check media access permissions against
  * @param nameProvider strategy used to generate media names.
  *                     The name of a media defines the file name in the output directory,
  *                     hence this is the resource the document should refer to (e.g. images).
  */
 class MutableMediaStorage(
     options: MediaStorageOptions,
+    permissionHolder: PermissionHolder,
     private val nameProvider: MediaNameProviderStrategy = SanitizedMediaNameProvider(),
 ) : ReadOnlyMediaStorage {
     /**
@@ -36,6 +40,12 @@ class MutableMediaStorage(
      * Visitor that checks if a media type is enabled and should be stored.
      */
     private val enabledChecker = MediaTypeEnabledChecker(options)
+
+    /**
+     * Visitor that checks if a media can be accessed according to the granted permissions.
+     * If a required permission is missing, a [com.quarkdown.core.permissions.MissingPermissionException] will be thrown.
+     */
+    private val permissionChecker = MediaAccessPermissionChecker(permissionHolder)
 
     override val name: String = MEDIA_SUBDIRECTORY_NAME
 
@@ -66,6 +76,8 @@ class MutableMediaStorage(
     ): StoredMedia? {
         // Media is not stored if its type isn't enabled.
         if (!media.accept(enabledChecker)) return null
+        // Binding fails if the required permissions to access it aren't granted.
+        media.accept(permissionChecker)
 
         val media =
             StoredMedia(

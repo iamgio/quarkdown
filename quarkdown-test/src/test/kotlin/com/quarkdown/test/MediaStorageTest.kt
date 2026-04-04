@@ -2,6 +2,7 @@ package com.quarkdown.test
 
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
+import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.INDEX
@@ -57,11 +58,12 @@ class MediaStorageTest {
             """
             .container
                 ![Icon](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-light.svg "The Quarkdown icon")
-                
+
                 ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)
             """.trimIndent(),
             options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = true),
             enableMediaStorage = true,
+            permissions = Permission.DEFAULT_SET + Permission.NetworkAccess,
             outputResourceHook = { group ->
                 assertEquals(
                     "https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg",
@@ -122,6 +124,7 @@ class MediaStorageTest {
             """.trimIndent(),
             options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = true),
             enableMediaStorage = true,
+            permissions = Permission.DEFAULT_SET + Permission.NetworkAccess,
         ) {
             assertEquals(
                 "<p><img src=\"media/https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-tbanner-light.svg\" " +
@@ -216,5 +219,21 @@ class MediaStorageTest {
                 ) // 'media' subdocument media
             },
         ) {}
+    }
+
+    @Test
+    fun `nested subdocument media resolved via relative path`() {
+        execute(
+            source = "[1](subdoc/nested/media-ref.qd)",
+            enableMediaStorage = true,
+            outputResourceHook = { group ->
+                assertFails { getMediaResources(group) } // Root has no media
+                assertNotNull(getMediaResources(group, "media-ref").singleOrNull { it.name.startsWith("icon") })
+            },
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(1, mediaStorage.all.size)
+            }
+        }
     }
 }
