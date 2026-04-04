@@ -330,68 +330,18 @@ If you would like to familiarize yourself with Quarkdown instead, `quarkdown rep
 
 #### Options
 
-- **`-p`** or **`--preview`**: enables automatic content reloading after compiling.  
-  If a [webserver](https://quarkdown.com/wiki/cli-webserver) is not running yet, it is started and the document is opened in the default browser.  
-  This is required in order to render paged documents in the browser.
+The most commonly used options are:
 
-- **`-w`** or **`--watch`**: recompiles the source everytime a file from the source directory is changed.  
-  
+- **`-p`** or **`--preview`**: enables automatic content reloading after compiling.
+
+- **`-w`** or **`--watch`**: recompiles the source every time a file from the source directory is changed.
+
 > [!TIP]
 > Combine `-p -w` to achieve ***live preview***!
 
 - **`--pdf`**: produces a PDF file. Learn more in the wiki's [*PDF export*](https://quarkdown.com/wiki/pdf-export) page.
 
-- `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./output`.
-
-- `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
-  Defaults to the name of the document, set via [`.docname`](https://quarkdown.com/wiki/document-metadata).  
-  *Note:* special characters will be replaced with dashes in the actual file name.
-
-- `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
-  - `html`
-  - `html-pdf` (equivalent to `-r html --pdf`)
-  - `text` (plain text)
-
-- `--allow <permission>` / `--deny <permission>`: grants or revokes a [permission](https://quarkdown.com/wiki/CLI-Compiler#permissions) (repeatable).  
-  Accepted values: `project-read`, `global-read`, `network`, `native-content`, `all`.  
-  By default, `project-read` and `native-content` are granted.
-
-- `-l <dir>` or `--libs <dir>`: sets the directory where external libraries can be loaded from. Defaults to `<install dir>/lib/qd`. [(?)](https://quarkdown.com/wiki/importing-external-libraries)
-
-- `-b <browser>` or `--browser <browser>`: sets the browser to launch the preview with. Defaults to `default`. Accepted values:
-  - `default`
-  - `none`
-  - `xdg` (uses `xdg-open`). `default` falls back to this.
-  - `chrome`
-  - `chromium`
-  - `firefox`
-  - `edge` (Windows only)
-  - Any other name, backed by the `BROWSER_<NAME>` environment variable
-  - A full path to a browser executable
-
-- `--server-port <port>`: optional customization of the local webserver's port. Defaults to `8089`.
-
-- `--pipe`: outputs the generated content to stdout instead of saving it to file and suppresses other logs,
-  useful for piping to other commands.
-
-- `--clean`: deletes the content of the output directory before producing new files. Destructive operation.
-
-- `--strict`: forces the program to exit if an error occurs. When not in strict mode, errors are shown as boxes in the document.
-
-- `--nowrap`: prevents the rendered output from being wrapped in a full document structure.
-  If enabled in HTML rendering, only the inner content of the `<body>` tag is produced.
-
-- `--pretty`: produces pretty output code. This is useful for debugging or to read the output code more easily,
-  but it should be disabled in production as the results might be visually affected.
-
-- `--no-media-storage`: turns the media storage system off. [(?)](https://quarkdown.com/wiki/media-storage)
-
-- `--subdoc-naming <strategy>`: sets the subdocument output naming strategy [(?)](https://github.com/iamgio/quarkdown/wiki/subdocuments). Defaults to `file-name`. Accepted values:
-  - `file-name`: uses the subdocument's file name (human-readable, but prone to collisions)
-  - `collision-proof`: appends a hash to `file-name` to minimize name collisions
-  - `document-name`: uses the document name set via `.docname`, falling back to `file-name` if unset
-
-- `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
+For the full list of options, check out the [CLI options](https://quarkdown.com/wiki/cli-options) wiki page.
 
 &nbsp;
 
