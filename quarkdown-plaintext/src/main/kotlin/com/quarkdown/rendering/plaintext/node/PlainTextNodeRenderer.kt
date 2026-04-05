@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
+import com.quarkdown.core.ast.attributes.reference.getCitationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlankNode
@@ -39,6 +40,7 @@ import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
+import com.quarkdown.core.ast.parallelAcceptAll
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -76,7 +78,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
-import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.rendering.NodeRenderer
@@ -91,7 +92,7 @@ class PlainTextNodeRenderer(
 ) : NodeRenderer {
     private fun NestableNode.visitChildren() = children.visitAll()
 
-    private fun InlineContent.visitAll() = joinToString(separator = "") { it.accept(this@PlainTextNodeRenderer) }
+    private fun InlineContent.visitAll() = parallelAcceptAll(this@PlainTextNodeRenderer).joinToString(separator = "")
 
     private val String.blockNode: String
         get() =
@@ -338,12 +339,7 @@ class PlainTextNodeRenderer(
         return builder.toString()
     }
 
-    override fun visit(node: BibliographyCitation): CharSequence {
-        val (entries: List<BibliographyEntry>, view: BibliographyView) =
-            node.getDefinition(context) ?: return "[???]"
-
-        return view.style.labelProvider.getCitationLabel(entries)
-    }
+    override fun visit(node: BibliographyCitation): CharSequence = node.getCitationLabel(context) ?: "[???]"
 
     override fun visit(node: SlidesFragment) = ""
 

@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast
 
+import com.quarkdown.core.util.mapParallel
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -37,3 +38,23 @@ interface SingleChildNestableNode<T : Node> : NestableNode {
     override val children: List<Node>
         get() = listOf(child)
 }
+
+/**
+ * Accepts a visitor for each node sequentially.
+ * @param visitor the visitor to accept
+ * @return the list of results from each visit, preserving order
+ */
+fun <T> List<Node>.acceptAll(visitor: NodeVisitor<T>): List<T> = map { it.accept(visitor) }
+
+/**
+ * Accepts a visitor for each node, executing visits in parallel when beneficial.
+ * Falls back to sequential execution for small lists.
+ * @param visitor the visitor to accept
+ * @param minItems minimum number of nodes required for parallel execution
+ * @return the list of results from each visit, preserving order
+ * @see mapParallel
+ */
+fun <T> List<Node>.parallelAcceptAll(
+    visitor: NodeVisitor<T>,
+    minItems: Int = 50,
+): List<T> = mapParallel(minItems) { it.accept(visitor) }
