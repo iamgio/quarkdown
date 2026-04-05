@@ -1,7 +1,6 @@
 package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 
@@ -9,29 +8,32 @@ import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
  * A [PostRendererResource] that bundles third-party libraries (scripts, styles, fonts) into the output,
  * enabling fully offline HTML rendering without any CDN dependencies.
  *
- * Library inclusion is driven entirely by [ThirdPartyLibrary], the single source of truth
- * for each library's condition and identity. This class simply filters the required libraries
- * and delegates file loading to [ThirdPartyResourceLoader].
+ * Library inclusion is driven by [ThirdPartyLibrary] for scripts and styles,
+ * and by [LayoutThemeManifest] for font libraries declared by the active layout theme.
+ * File loading is delegated to [ThirdPartyResourceLoader].
  *
  * @param context the rendering context, used to evaluate library inclusion conditions
- * @param theme the active document theme, used to determine which font libraries to include
+ * @param layoutTheme the active layout theme name, used to resolve font dependencies
  */
 class ThirdPartyPostRendererResource(
     private val context: Context,
-    private val theme: DocumentTheme,
+    private val layoutTheme: String?,
 ) : PostRendererResource {
     override fun includeTo(
         resources: MutableSet<OutputResource>,
         rendered: CharSequence,
     ) {
-        val requiredNames =
+        val libraryNames =
             ThirdPartyLibrary
-                .all(theme)
+                .all()
                 .filter { it.isRequired(context) }
                 .map { it.name }
 
-        if (requiredNames.isEmpty()) return
+        val fontNames = LayoutThemeManifest.load(layoutTheme)?.fonts.orEmpty()
 
-        resources += ThirdPartyResourceLoader.loadAll("lib", requiredNames)
+        val allNames = libraryNames + fontNames
+        if (allNames.isEmpty()) return
+
+        resources += ThirdPartyResourceLoader.loadAll("lib", allNames)
     }
 }

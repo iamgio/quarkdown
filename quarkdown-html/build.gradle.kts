@@ -22,19 +22,21 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
 
-// Third-party library bundling
-//
-// Libraries from node_modules are copied into src/main/resources/render/lib/
-// at Gradle build time, so they are bundled in the JAR and copied to the
-// Quarkdown output directory at compilation time.
-//
-// A nested third-party-manifest.json is generated at the end so that the
-// Kotlin runtime can enumerate JAR resources (JAR directories are not listable).
-//
-// To add a new library:
-// 1. Add the npm package to package.json
-// 2. Add a LibrarySpec entry to `librariesToBundle`
-// 3. Add a ThirdPartyLibrary subclass in ThirdPartyLibrary.kt
+/*
+Third-party library bundling
+
+Libraries from node_modules are copied into src/main/resources/render/lib/
+at Gradle build time, so they are bundled in the JAR and copied to the
+Quarkdown output directory at compilation time.
+
+A nested third-party-manifest.json is generated at the end so that the
+Kotlin runtime can enumerate JAR resources (JAR directories are not listable).
+
+To add a new library:
+1. Add the npm package to package.json
+2. Add a LibrarySpec entry to `librariesToBundle` (or to `fontsourcePackages` for fonts)
+3. For non-font libraries, add a ThirdPartyLibrary subclass in ThirdPartyLibrary.kt
+*/
 
 val libDir = projectDir.resolve("src/main/resources/render/lib")
 val nodeModules = projectDir.resolve("node_modules")
@@ -70,16 +72,12 @@ val librariesToBundle =
     )
 
 /**
- * @fontsource font sets, keyed by layout theme name.
- * Each entry lists the @fontsource package names to include.
- * All latin-subset woff2 variants are auto-discovered from each package's `files/` directory,
- * and `@font-face` declarations are derived from the `{font}-latin-{weight}-{style}.woff2` naming convention.
+ * @fontsource packages to bundle. Each is placed in its own `lib/fonts/{name}/` directory
+ * with auto-discovered latin woff2 variants and a generated `fonts.css`.
+ * SCSS layout themes select which fonts they need via `@import url(...)`.
  */
-val fontsourceSets =
-    mapOf(
-        "fonts/minimal" to listOf("lato", "inter", "noto-sans-mono"),
-        "fonts/beamer" to listOf("source-sans-pro", "fira-sans", "noto-sans-mono"),
-    )
+val fontsourcePackages =
+    listOf("lato", "inter", "noto-sans-mono", "source-sans-pro", "fira-sans")
 
 /**
  * Highlight.js theme CSS files to copy as SCSS partials for compile-time inlining into color themes.
@@ -137,8 +135,8 @@ val bundleThirdParty =
                 }
             }
 
-            fontsourceSets.forEach { (targetSubdir, fontNames) ->
-                bundleFontsource(targetSubdir, fontNames)
+            fontsourcePackages.forEach { fontName ->
+                bundleFontsource("fonts/$fontName", listOf(fontName))
             }
 
             scssThirdParty.mkdirs()
@@ -174,7 +172,8 @@ fun bundleFontsource(
         val filesDir = nodeModules.resolve("@fontsource/$fontName/files")
         val family = fontName.split("-").joinToString(" ") { it.replaceFirstChar(Char::uppercaseChar) }
 
-        filesDir.listFiles()
+        filesDir
+            .listFiles()
             ?.filter { it.name.startsWith("$fontName-latin-") && it.extension == "woff2" }
             ?.sortedBy { it.name }
             ?.forEach { sourceFile ->
@@ -203,10 +202,8 @@ fun bundleFontsource(
 }
 
 /**
- * Generates `third-party-manifest.json` with one top-level key per library.
- *
- * Each key maps to a nested JSON tree of that library's internal directory structure,
- * with files at each level listed under `_files`:
+ * Generates `third-party-manifest.json` as a nested JSON tree mirroring the `lib/` directory structure.
+ * Files at each level are listed under `_files`; subdirectories become nested objects.
  *
  * ```json
  * {
@@ -214,63 +211,52 @@ fun bundleFontsource(
  *     "_files": ["katex.min.css", "katex.min.js"],
  *     "fonts": { "_files": ["KaTeX_Main-Regular.woff2"] }
  *   },
- *   "fonts/latex": {
- *     "_files": ["fonts.css", "ComputerModern-Serif-Regular.woff"]
+ *   "fonts": {
+ *     "latex": { "_files": ["fonts.css", "ComputerModern-Serif-Regular.woff"] }
  *   }
  * }
  * ```
- *
- * A directory that contains files is a library (e.g. `katex`). A directory that only contains
- * subdirectories is not a library itself; its children are explored recursively until a library
- * is found (e.g. `fonts/` has no files, so `fonts/latex` becomes a library entry).
- * This allows the Kotlin runtime to look up libraries by name without path traversal.
  */
 fun generateNestedManifest() {
     fun dirToJson(dir: File): Map<String, Any> =
         buildMap {
-            dir.listFiles()
-                ?.filter { it.isFile }
+            dir
+                .listFiles()
+                ?.filter { it.isFile && it.name != "third-party-manifest.json" }
                 ?.map { it.name }
                 ?.sorted()
                 ?.takeIf { it.isNotEmpty() }
                 ?.let { put("_files", it) }
 
-            dir.listFiles()
+            dir
+                .listFiles()
                 ?.filter { it.isDirectory }
                 ?.sortedBy { it.name }
                 ?.forEach { put(it.name, dirToJson(it)) }
         }
 
-    val manifest = linkedMapOf<String, Any>()
-
-    fun collectLibraries(dir: File, prefix: String) {
-        dir.listFiles()
-            ?.filter { it.isDirectory }
-            ?.sortedBy { it.name }
-            ?.forEach { child ->
-                val key = if (prefix.isEmpty()) child.name else "$prefix/${child.name}"
-                val hasFiles = child.listFiles()?.any { it.isFile } ?: false
-
-                if (hasFiles) {
-                    manifest[key] = dirToJson(child)
-                } else {
-                    collectLibraries(child, key)
-                }
-            }
-    }
-
-    collectLibraries(libDir, "")
-
-    libDir.resolve("third-party-manifest.json")
-        .writeText(JsonOutput.prettyPrint(JsonOutput.toJson(manifest)))
+    libDir
+        .resolve("third-party-manifest.json")
+        .writeText(JsonOutput.prettyPrint(JsonOutput.toJson(dirToJson(libDir))))
 }
 
 // SCSS and TypeScript bundling
 
+val scssDir = projectDir.resolve("src/main/scss")
+val themeOutputDir = projectDir.resolve("src/main/resources/render/theme")
+
 tasks.compileSass {
-    sourceDir = projectDir.resolve("src/main/scss")
-    outputDir = projectDir.resolve("src/main/resources/render/theme")
+    sourceDir = scssDir
+    outputDir = themeOutputDir
     dependsOn(bundleThirdParty) // hljs SCSS partials must be copied before SASS compilation
+
+    // Copy layout theme JSON manifests (font dependencies) alongside the compiled CSS.
+    doLast {
+        copy {
+            from(scssDir.resolve("layout")) { include("*.json") }
+            into(themeOutputDir.resolve("layout"))
+        }
+    }
 }
 
 val bundleTypeScript =

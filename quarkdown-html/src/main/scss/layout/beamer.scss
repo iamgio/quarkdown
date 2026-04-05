@@ -4,7 +4,11 @@
 @use "util/latex-tables" as *;
 @use "util/beamer-toc" as *;
 //noinspection CssUnknownTarget -- resolved at runtime relative to the output directory
-@import url('../lib/fonts/beamer/fonts.css');
+@import url('../lib/fonts/source-sans-pro/fonts.css');
+//noinspection CssUnknownTarget
+@import url('../lib/fonts/fira-sans/fonts.css');
+//noinspection CssUnknownTarget
+@import url('../lib/fonts/noto-sans-mono/fonts.css');
 
 :root {
   --reveal-center-vertically: false;

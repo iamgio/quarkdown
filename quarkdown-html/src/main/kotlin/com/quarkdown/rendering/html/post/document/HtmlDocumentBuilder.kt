@@ -1,7 +1,6 @@
 package com.quarkdown.rendering.html.post.document
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.rendering.html.post.thirdparty.HeadContribution
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
@@ -38,13 +37,11 @@ import kotlinx.html.unsafe
  * @param context the rendering context containing document metadata, attributes, and configuration
  * @param relativePathToRoot the relative path from the current document to the root directory,
  *                           used to correctly reference shared resources (scripts, themes, etc.)
- * @param theme the active document theme, used to resolve which third-party libraries to include
  * @param sidebarContent the pre-rendered sidebar HTML content (table of contents)
  */
 class HtmlDocumentBuilder(
     private val context: Context,
     private val relativePathToRoot: String,
-    private val theme: DocumentTheme,
     private val sidebarContent: CharSequence,
 ) {
     private val document = context.documentInfo
@@ -132,7 +129,7 @@ class HtmlDocumentBuilder(
      */
     private fun HEAD.thirdPartyLibraries() {
         ThirdPartyLibrary
-            .all(theme)
+            .all()
             .filter { it.isRequired(context) }
             .forEach { library ->
                 library.headContributions.forEach { contribution ->

@@ -7,7 +7,11 @@
 @use "util/docs-navigation" as docs-navigation;
 @use "../components/util/location-selectors" as location-selectors;
 //noinspection CssUnknownTarget -- resolved at runtime relative to the output directory
-@import url('../lib/fonts/minimal/fonts.css');
+@import url('../lib/fonts/lato/fonts.css');
+//noinspection CssUnknownTarget
+@import url('../lib/fonts/inter/fonts.css');
+//noinspection CssUnknownTarget
+@import url('../lib/fonts/noto-sans-mono/fonts.css');
 
 :root {
   --qd-main-font: "Lato", sans-serif;

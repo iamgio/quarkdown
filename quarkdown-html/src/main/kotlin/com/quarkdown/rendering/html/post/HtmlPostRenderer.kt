@@ -42,7 +42,6 @@ class HtmlPostRenderer(
         HtmlOnlyPostRenderer(
             context,
             relativePathToRoot = relativePathToRoot,
-            theme = theme,
         ),
     private val resourcesProvider: () -> Set<PostRendererResource> =
         {
@@ -52,10 +51,7 @@ class HtmlPostRenderer(
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
-                ThirdPartyPostRendererResource(
-                    context = context,
-                    theme = theme,
-                ),
+                ThirdPartyPostRendererResource(context, layoutTheme = theme.layout),
                 MediaPostRendererResource(context.mediaStorage),
                 if (context.documentInfo.type == DocumentType.DOCS) {
                     SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))

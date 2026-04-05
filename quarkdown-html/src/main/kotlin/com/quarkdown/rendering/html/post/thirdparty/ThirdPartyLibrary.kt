@@ -4,10 +4,8 @@ import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.util.Escape
-import com.quarkdown.rendering.html.post.resources.ThirdPartyResourceLoader
 
 /**
  * Single source of truth for a third-party library bundled in the HTML output.
@@ -131,28 +129,9 @@ sealed class ThirdPartyLibrary(
         override fun isRequired(context: Context) = context.documentInfo.type == DocumentType.PAGED
     }
 
-    /**
-     * Layout-specific font files (e.g. `fonts/latex`, `fonts/minimal`, `fonts/beamer`).
-     * The library name is derived dynamically from [DocumentTheme.layout].
-     * No head contributions are needed because fonts are referenced via SCSS `@import url()`.
-     *
-     * Inclusion is determined by checking whether the manifest actually contains
-     * a `fonts/{layout}` entry, avoiding hardcoded theme-to-library mappings.
-     */
-    class LayoutFonts(
-        theme: DocumentTheme,
-    ) : ThirdPartyLibrary(
-            name = "fonts/${theme.layout}",
-        ) {
-        override fun isRequired(context: Context) = ThirdPartyResourceLoader.contains(name)
-    }
-
     companion object {
-        /**
-         * All third-party libraries that may be included in the output.
-         * @param theme the active document theme, used to resolve font libraries
-         */
-        fun all(theme: DocumentTheme): List<ThirdPartyLibrary> =
+        /** All third-party libraries that may be included in the output. */
+        fun all(): List<ThirdPartyLibrary> =
             listOf(
                 BootstrapIcons,
                 HighlightJs,
@@ -160,7 +139,6 @@ sealed class ThirdPartyLibrary(
                 Mermaid,
                 RevealJs,
                 PagedJs,
-                LayoutFonts(theme),
             )
     }
 }

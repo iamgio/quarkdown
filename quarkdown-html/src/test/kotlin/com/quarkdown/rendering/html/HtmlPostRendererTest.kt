@@ -535,8 +535,8 @@ class HtmlPostRendererTest {
         val resources = HtmlPostRenderer(context).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
-            expected = setOf("bootstrap-icons", "katex", "reveal.js", "minimal"),
-            notExpected = setOf("highlight.js", "mermaid", "pagedjs", "latex", "beamer"),
+            expected = setOf("bootstrap-icons", "katex", "reveal.js", "lato", "inter", "noto-sans-mono"),
+            notExpected = setOf("highlight.js", "mermaid", "pagedjs", "latex", "source-sans-pro"),
         )
     }
 
@@ -552,12 +552,12 @@ class HtmlPostRendererTest {
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons", "pagedjs", "latex"),
-            notExpected = setOf("reveal.js", "katex", "highlight.js", "mermaid", "minimal", "beamer"),
+            notExpected = setOf("reveal.js", "katex", "highlight.js", "mermaid", "lato", "inter"),
         )
     }
 
     @Test
-    fun `lib resources, plain with no features`() {
+    fun `lib resources, plain with no features and hyperlegible layout`() {
         context.documentInfo =
             DocumentInfo(
                 type = DocumentType.PLAIN,
@@ -568,7 +568,7 @@ class HtmlPostRendererTest {
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons"),
-            notExpected = setOf("reveal.js", "pagedjs", "katex", "highlight.js", "mermaid", "latex", "minimal", "beamer"),
+            notExpected = setOf("reveal.js", "pagedjs", "katex", "highlight.js", "mermaid", "lato", "latex", "inter"),
         )
     }
 
@@ -583,8 +583,8 @@ class HtmlPostRendererTest {
         val resources = HtmlPostRenderer(context).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
-            expected = setOf("bootstrap-icons", "reveal.js", "beamer"),
-            notExpected = setOf("latex", "minimal"),
+            expected = setOf("bootstrap-icons", "reveal.js", "source-sans-pro", "fira-sans", "noto-sans-mono"),
+            notExpected = setOf("katex", "highlight.js", "mermaid", "pagedjs", "lato", "latex"),
         )
     }
 }
