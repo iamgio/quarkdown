@@ -39,6 +39,7 @@ import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
+import com.quarkdown.core.ast.parallelAcceptAll
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
@@ -91,7 +92,7 @@ class PlainTextNodeRenderer(
 ) : NodeRenderer {
     private fun NestableNode.visitChildren() = children.visitAll()
 
-    private fun InlineContent.visitAll() = joinToString(separator = "") { it.accept(this@PlainTextNodeRenderer) }
+    private fun InlineContent.visitAll() = parallelAcceptAll(this@PlainTextNodeRenderer).joinToString(separator = "")
 
     private val String.blockNode: String
         get() =

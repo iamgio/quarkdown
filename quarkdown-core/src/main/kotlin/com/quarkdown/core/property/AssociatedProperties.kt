@@ -1,5 +1,8 @@
 package com.quarkdown.core.property
 
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
+
 /**
  * Associations between a key of type [T] and a [PropertyContainer].
  *
@@ -30,7 +33,7 @@ interface AssociatedProperties<T, V> {
  * Mutable implementation of [AssociatedProperties].
  */
 class MutableAssociatedProperties<T, V> : AssociatedProperties<T, V> {
-    private val properties: MutableMap<T, MutablePropertyContainer<V>> = mutableMapOf()
+    private val properties: ConcurrentMap<T, MutablePropertyContainer<V>> = ConcurrentHashMap()
 
-    override fun of(key: T): MutablePropertyContainer<V> = properties.getOrPut(key) { MutablePropertyContainer() }
+    override fun of(key: T): MutablePropertyContainer<V> = properties.computeIfAbsent(key) { MutablePropertyContainer() }
 }
