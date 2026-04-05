@@ -23,6 +23,7 @@ dependencies {
     cslStyles("org.citationstyles:styles:26.2")
     implementation("org.citationstyles:locales:26.2")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 // Extracts only the CSL style files listed in csl-styles.txt from the full styles collection, to reduce the bundle size.

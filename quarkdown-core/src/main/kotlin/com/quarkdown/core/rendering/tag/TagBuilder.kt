@@ -1,6 +1,7 @@
 package com.quarkdown.core.rendering.tag
 
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.parallelAcceptAll
 
 /**
  * A builder of a generic output code wrapped within tags (of any kind) which can be unlimitedly nested.
@@ -68,7 +69,7 @@ abstract class TagBuilder(
      * Usage: `+someNode.children`
      */
     operator fun List<Node>.unaryPlus() {
-        forEach { +it }
+        parallelAcceptAll(renderer).forEach { +it }
     }
 }
 
