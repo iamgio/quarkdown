@@ -408,6 +408,31 @@ class HtmlPostRendererTest {
 
     private val plainHtml = "<html><head></head><body></body></html>"
 
+    /**
+     * Recursively collects all resource names in a resource tree.
+     */
+    private fun collectResourceNames(resource: OutputResource): Set<String> =
+        when (resource) {
+            is OutputResourceGroup ->
+                setOf(resource.name) + resource.resources.flatMap { collectResourceNames(it) }
+            else -> setOf(resource.name)
+        }
+
+    /**
+     * Asserts that the `lib` [OutputResourceGroup] contains exactly the expected top-level library names,
+     * and does not contain any of the [notExpected] libraries.
+     */
+    private fun assertLibGroupContains(
+        resources: Set<OutputResource>,
+        expected: Set<String>,
+        notExpected: Set<String> = emptySet(),
+    ) {
+        val libGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "lib" }
+        val allNames = collectResourceNames(libGroup)
+        expected.forEach { assertTrue(it in allNames, "Expected library '$it' not found in lib group") }
+        notExpected.forEach { assertFalse(it in allNames, "Unexpected library '$it' found in lib group") }
+    }
+
     private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
         context.documentInfo =
             DocumentInfo(
@@ -434,7 +459,7 @@ class HtmlPostRendererTest {
     @Test
     fun `resource generation, no media`() =
         `resource generation` { resources ->
-            assertEquals(3, resources.size)
+            assertEquals(4, resources.size) // theme + script + lib + HTML
             assertFalse(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
         }
 
@@ -443,8 +468,8 @@ class HtmlPostRendererTest {
         context.options.enableLocalMediaStorage = true
         context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
         `resource generation` { resources ->
-            assertEquals(4, resources.size)
-            assertTrue(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
+            assertEquals(5, resources.size) // theme + script + lib + media + HTML
+            assertTrue(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name })
         }
     }
 
@@ -456,7 +481,7 @@ class HtmlPostRendererTest {
         val html = "<html><head></head><body></body></html>"
 
         val resources = postRenderer.generateResources(html)
-        assertEquals(3, resources.size)
+        assertEquals(4, resources.size) // theme + script + lib + HTML
 
         assertThemeGroupContains(
             resources,
@@ -472,7 +497,7 @@ class HtmlPostRendererTest {
 
         val postRenderer = HtmlPostRenderer(context)
         val resources = postRenderer.generateResources(plainHtml)
-        assertEquals(3, resources.size)
+        assertEquals(4, resources.size) // theme + script + lib + HTML
 
         assertThemeGroupContains(
             resources,
@@ -487,12 +512,79 @@ class HtmlPostRendererTest {
 
         val postRenderer = HtmlPostRenderer(context)
         val resources = postRenderer.generateResources(plainHtml)
-        assertEquals(3, resources.size)
+        assertEquals(4, resources.size) // theme + script + lib + HTML
 
         assertThemeGroupContains(
             resources,
             expectedThemes = emptySet(),
             notExpectedThemes = setOf("akan"),
+        )
+    }
+
+    // Third-party library resources
+
+    @Test
+    fun `lib resources, slides with math and minimal layout`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                theme = DocumentTheme(color = "darko", layout = "minimal"),
+            )
+        context.attributes.markMathPresence()
+
+        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        assertLibGroupContains(
+            resources,
+            expected = setOf("bootstrap-icons", "katex", "reveal.js", "minimal"),
+            notExpected = setOf("highlight.js", "mermaid", "pagedjs", "latex", "beamer"),
+        )
+    }
+
+    @Test
+    fun `lib resources, paged with latex layout`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.PAGED,
+                theme = DocumentTheme(color = "paperwhite", layout = "latex"),
+            )
+
+        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        assertLibGroupContains(
+            resources,
+            expected = setOf("bootstrap-icons", "pagedjs", "latex"),
+            notExpected = setOf("reveal.js", "katex", "highlight.js", "mermaid", "minimal", "beamer"),
+        )
+    }
+
+    @Test
+    fun `lib resources, plain with no features`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.PLAIN,
+                theme = DocumentTheme(color = "paperwhite", layout = "hyperlegible"),
+            )
+
+        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        assertLibGroupContains(
+            resources,
+            expected = setOf("bootstrap-icons"),
+            notExpected = setOf("reveal.js", "pagedjs", "katex", "highlight.js", "mermaid", "latex", "minimal", "beamer"),
+        )
+    }
+
+    @Test
+    fun `lib resources, beamer layout`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                theme = DocumentTheme(color = "beaver", layout = "beamer"),
+            )
+
+        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        assertLibGroupContains(
+            resources,
+            expected = setOf("bootstrap-icons", "reveal.js", "beamer"),
+            notExpected = setOf("latex", "minimal"),
         )
     }
 }

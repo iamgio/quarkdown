@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Latin Modern Mono';
+    src: url('./LatinModern-Mono-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Latin Modern Mono';
+    src: url('./LatinModern-Mono-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}

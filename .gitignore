@@ -104,6 +104,15 @@ nb-configuration.xml
 ##############################
 /*/output/
 
+# Generated third-party libraries (bundled from node_modules at build time)
+quarkdown-html/src/main/resources/render/lib/*
+!quarkdown-html/src/main/resources/render/lib/fonts
+quarkdown-html/src/main/resources/render/lib/fonts/*
+!quarkdown-html/src/main/resources/render/lib/fonts/latex
+
+# Generated SCSS partials (copied from node_modules at build time)
+quarkdown-html/src/main/scss/thirdparty/
+
 ##############################
 ## Miscellaneous
 ##############################

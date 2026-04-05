@@ -5,8 +5,10 @@
 @use "util/latex-tables" as *;
 @use "util/latex-toc" as *;
 @use "../components/util/location-selectors" as location-selctors;
-@import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
-@import url('https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-mono.css');
+//noinspection CssUnknownTarget -- resolved at runtime relative to the output directory
+@import url('../lib/fonts/latex/fonts.css');
+//noinspection CssUnknownTarget
+@import url('../lib/fonts/latex/latinmodern-mono.css');
 
 :root {
   --qd-main-font: 'Computer Modern Serif', sans-serif;

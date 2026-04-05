@@ -6,9 +6,8 @@
 @use "util/docs-headings-border" as *;
 @use "util/docs-navigation" as docs-navigation;
 @use "../components/util/location-selectors" as location-selectors;
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Inter');
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
+//noinspection CssUnknownTarget -- resolved at runtime relative to the output directory
+@import url('../lib/fonts/minimal/fonts.css');
 
 :root {
   --qd-main-font: "Lato", sans-serif;

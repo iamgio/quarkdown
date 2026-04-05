@@ -3,9 +3,8 @@
 @use "util/progressive-heading-sizes" as *;
 @use "util/latex-tables" as *;
 @use "util/beamer-toc" as *;
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+Mono');
+//noinspection CssUnknownTarget -- resolved at runtime relative to the output directory
+@import url('../lib/fonts/beamer/fonts.css');
 
 :root {
   --reveal-center-vertically: false;
