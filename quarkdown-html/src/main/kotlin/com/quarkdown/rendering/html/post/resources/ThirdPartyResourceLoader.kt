@@ -1,51 +1,31 @@
 package com.quarkdown.rendering.html.post.resources
 
-import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.LazyOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputResource
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.rendering.html.post.resources.ThirdPartyResourceLoader.buildGroup
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-
-private const val FILES_KEY = "_files"
+import java.io.File
 
 /**
- * Loads third-party library files from the JAR classpath into [OutputResource] trees
+ * Loads third-party library files from a filesystem directory into [OutputResource] trees
  * that mirror the on-disk directory structure.
  *
- * File discovery relies on `third-party-manifest.json`, a nested JSON tree generated
- * at Gradle build time by the `bundleThirdParty` task. The tree mirrors the `lib/` directory,
- * with files at each level listed under `_files` keys:
- * ```json
- * {
- *   "katex": { "_files": ["katex.min.js"], "fonts": { "_files": ["KaTeX_Main.woff2"] } },
- *   "fonts": { "lato": { "_files": ["fonts.css", "lato-latin-400-normal.woff2"] } }
- * }
- * ```
+ * Unlike JAR-based resource loading, this operates directly on the filesystem,
+ * eliminating the need for a manifest file since directories can be listed natively.
+ *
+ * Files are represented as [FileReferenceOutputResource]s, which are copied
+ * (not loaded into memory) when saved to the output directory.
  */
 object ThirdPartyResourceLoader {
-    private val manifest: JsonObject by lazy {
-        val content =
-            ThirdPartyResourceLoader::class.java
-                .getResource("/render/lib/third-party-manifest.json")
-                ?.readText()
-                ?: error("Third-party manifest not found")
-        Json.parseToJsonElement(content) as JsonObject
-    }
-
     /**
      * Loads all requested libraries and returns them as a single [OutputResourceGroup].
      *
-     * Each path in [libraryPaths] identifies a node in the manifest tree
+     * Each path in [libraryPaths] identifies a directory under [baseDirectory]
      * (e.g. `"katex"`, `"fonts/lato"`). Paths that share a common ancestor
      * are placed under a single parent group in the output:
      *
      * ```
-     * loadAll("lib", ["katex", "fonts/lato", "fonts/latex"])
+     * loadAll(baseDirectory, "lib", ["katex", "fonts/lato", "fonts/latex"])
      * |  OutputResourceGroup("lib")
      *    | OutputResourceGroup("katex", ...)
      *    |  OutputResourceGroup("fonts")
@@ -53,34 +33,34 @@ object ThirdPartyResourceLoader {
      *       | OutputResourceGroup("latex", ...)
      * ```
      *
+     * @param baseDirectory the filesystem directory containing the library files
      * @param groupName the name of the root [OutputResourceGroup]
-     * @param libraryPaths paths into the manifest tree, one per library to load
+     * @param libraryPaths paths relative to [baseDirectory], one per library to load
      */
     fun loadAll(
+        baseDirectory: File,
         groupName: String,
         libraryPaths: Iterable<String>,
     ): OutputResourceGroup =
         OutputResourceGroup(
             groupName,
-            resolve(manifest, "/render/lib", libraryPaths.toList()),
+            resolve(baseDirectory, libraryPaths.toList()),
         )
 
     /**
-     * Resolves a list of library [paths] against a [parent] manifest node.
+     * Resolves a list of library [paths] against a [parentDirectory].
      *
      * Paths are grouped by their first segment. For each group:
-     * - If a path has no remaining segments (it is a leaf), the corresponding manifest subtree
+     * - If a path has no remaining segments (it is a leaf), the corresponding directory
      *   is fully materialized into an [OutputResourceGroup] via [buildGroup].
      * - Otherwise, an intermediate [OutputResourceGroup] is created for the shared segment,
-     *   and the remaining sub-paths are resolved recursively against the child node.
+     *   and the remaining sub-paths are resolved recursively against the child directory.
      *
-     * @param parent the current manifest JSON node to resolve paths against
-     * @param basePath the JAR classpath prefix corresponding to [parent]
-     * @param paths library paths relative to [parent] (e.g. `["katex", "fonts/lato"]`)
+     * @param parentDirectory the current filesystem directory to resolve paths against
+     * @param paths library paths relative to [parentDirectory] (e.g. `["katex", "fonts/lato"]`)
      */
     private fun resolve(
-        parent: JsonObject,
-        basePath: String,
+        parentDirectory: File,
         paths: List<String>,
     ): Set<OutputResource> =
         buildSet {
@@ -89,43 +69,31 @@ object ThirdPartyResourceLoader {
                     keySelector = { it.substringBefore("/") },
                     valueTransform = { it.substringAfter("/", "") },
                 ).forEach { (segment, remainders) ->
-                    val node = parent[segment]?.jsonObject ?: return@forEach
-                    val childPath = "$basePath/$segment"
+                    val childDir = parentDirectory.resolve(segment)
+                    if (!childDir.isDirectory) return@forEach
 
                     if (remainders.any { it.isEmpty() }) {
-                        this += buildGroup(segment, node, childPath)
+                        this += buildGroup(childDir)
                     } else {
-                        this += OutputResourceGroup(segment, resolve(node, childPath, remainders))
+                        this += OutputResourceGroup(segment, resolve(childDir, remainders))
                     }
                 }
         }
 
     /**
-     * Materializes a manifest subtree into an [OutputResourceGroup],
-     * loading all files and recursing into all subdirectories.
+     * Materializes a filesystem directory into an [OutputResourceGroup],
+     * including all files as [FileReferenceOutputResource]s and recursing into subdirectories.
      *
-     * @param name the directory name for this group
-     * @param json the manifest JSON node whose `_files` and child objects to load
-     * @param basePath the JAR classpath prefix for resolving file resources
+     * @param directory the directory to materialize
      */
-    private fun buildGroup(
-        name: String,
-        json: JsonObject,
-        basePath: String,
-    ): OutputResourceGroup =
+    private fun buildGroup(directory: File): OutputResourceGroup =
         OutputResourceGroup(
-            name,
+            directory.name,
             buildSet {
-                json[FILES_KEY]?.jsonArray?.forEach {
-                    val fileName = it.jsonPrimitive.content
-                    LazyOutputArtifact
-                        .internalOrNull("$basePath/$fileName", fileName, ArtifactType.AUTO)
-                        ?.let { artifact -> this += artifact }
-                }
-
-                for ((key, value) in json) {
-                    if (key != FILES_KEY) {
-                        this += buildGroup(key, value.jsonObject, "$basePath/$key")
+                directory.listFiles()?.sorted()?.forEach { child ->
+                    when {
+                        child.isFile -> this += FileReferenceOutputResource(child.name, child)
+                        child.isDirectory -> this += buildGroup(child)
                     }
                 }
             },

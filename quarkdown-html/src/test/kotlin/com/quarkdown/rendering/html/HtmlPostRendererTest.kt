@@ -26,6 +26,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
+import com.quarkdown.rendering.html.post.resources.ThirdPartyLibraryDirectory
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -40,8 +41,11 @@ import kotlin.test.assertTrue
 class HtmlPostRendererTest {
     private lateinit var context: MutableContext
 
+    private val libraryDirectory: File?
+        get() = ThirdPartyLibraryDirectory.path
+
     private fun postRenderer(relativePathToRoot: String = "."): HtmlPostRenderer =
-        HtmlPostRenderer(context, relativePathToRoot = relativePathToRoot)
+        HtmlPostRenderer(context, relativePathToRoot = relativePathToRoot, libraryDirectory = libraryDirectory)
 
     private fun setFontInfo(vararg fontInfo: FontInfo) {
         context.documentInfo = context.documentInfo.deepCopy(layoutFonts = fontInfo.toList())
@@ -441,7 +445,7 @@ class HtmlPostRendererTest {
             )
         context.attributes.markMathPresence()
 
-        val postRenderer = HtmlPostRenderer(context)
+        val postRenderer = HtmlPostRenderer(context, libraryDirectory = libraryDirectory)
         val resources = postRenderer.generateResources(plainHtml)
 
         block(resources)
@@ -477,7 +481,7 @@ class HtmlPostRendererTest {
     fun `resource generation, default theme`() {
         val context = MutableContext(QuarkdownFlavor)
 
-        val postRenderer = HtmlPostRenderer(context)
+        val postRenderer = HtmlPostRenderer(context, libraryDirectory = libraryDirectory)
         val html = "<html><head></head><body></body></html>"
 
         val resources = postRenderer.generateResources(html)
@@ -495,7 +499,7 @@ class HtmlPostRendererTest {
         val context = MutableContext(QuarkdownFlavor)
         context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("zh-CN"))
 
-        val postRenderer = HtmlPostRenderer(context)
+        val postRenderer = HtmlPostRenderer(context, libraryDirectory = libraryDirectory)
         val resources = postRenderer.generateResources(plainHtml)
         assertEquals(4, resources.size) // theme + script + lib + HTML
 
@@ -510,7 +514,7 @@ class HtmlPostRendererTest {
         val context = MutableContext(QuarkdownFlavor)
         context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("akan"))
 
-        val postRenderer = HtmlPostRenderer(context)
+        val postRenderer = HtmlPostRenderer(context, libraryDirectory = libraryDirectory)
         val resources = postRenderer.generateResources(plainHtml)
         assertEquals(4, resources.size) // theme + script + lib + HTML
 
@@ -532,7 +536,7 @@ class HtmlPostRendererTest {
             )
         context.attributes.markMathPresence()
 
-        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        val resources = HtmlPostRenderer(context, libraryDirectory = libraryDirectory).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons", "katex", "reveal.js", "lato", "inter", "noto-sans-mono"),
@@ -548,7 +552,7 @@ class HtmlPostRendererTest {
                 theme = DocumentTheme(color = "paperwhite", layout = "latex"),
             )
 
-        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        val resources = HtmlPostRenderer(context, libraryDirectory = libraryDirectory).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons", "pagedjs", "latex"),
@@ -564,7 +568,7 @@ class HtmlPostRendererTest {
                 theme = DocumentTheme(color = "paperwhite", layout = "hyperlegible"),
             )
 
-        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        val resources = HtmlPostRenderer(context, libraryDirectory = libraryDirectory).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons"),
@@ -580,7 +584,7 @@ class HtmlPostRendererTest {
                 theme = DocumentTheme(color = "beaver", layout = "beamer"),
             )
 
-        val resources = HtmlPostRenderer(context).generateResources(plainHtml)
+        val resources = HtmlPostRenderer(context, libraryDirectory = libraryDirectory).generateResources(plainHtml)
         assertLibGroupContains(
             resources,
             expected = setOf("bootstrap-icons", "reveal.js", "source-sans-pro", "fira-sans", "noto-sans-mono"),

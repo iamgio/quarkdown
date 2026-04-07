@@ -1,7 +1,6 @@
 
 import com.github.gradle.node.npm.task.NpmTask
 import com.github.gradle.node.npm.task.NpxTask
-import groovy.json.JsonOutput
 
 plugins {
     kotlin("jvm")
@@ -25,12 +24,9 @@ dependencies {
 /*
 Third-party library bundling
 
-Libraries from node_modules are copied into src/main/resources/render/lib/
-at Gradle build time, so they are bundled in the JAR and copied to the
-Quarkdown output directory at compilation time.
-
-A nested third-party-manifest.json is generated at the end so that the
-Kotlin runtime can enumerate JAR resources (JAR directories are not listable).
+Libraries from node_modules are copied into build/thirdparty/
+at Gradle build time, so they are included in the distribution archive
+and loaded from the filesystem at runtime.
 
 To add a new library:
 1. Add the npm package to package.json
@@ -38,15 +34,20 @@ To add a new library:
 3. For non-font libraries, add a ThirdPartyLibrary subclass in ThirdPartyLibrary.kt
 */
 
-val libDir = projectDir.resolve("src/main/resources/render/lib")
+val thirdPartyDir =
+    layout.buildDirectory
+        .dir("thirdparty")
+        .get()
+        .asFile
 val nodeModules = projectDir.resolve("node_modules")
 val scssThirdParty = projectDir.resolve("src/main/scss/thirdparty")
+val staticFontsDir = projectDir.resolve("src/main/fonts")
 
 /**
- * Declarative specification for copying a library from `node_modules` into `lib/`.
+ * Declarative specification for copying a library from `node_modules` into `build/thirdparty/`.
  * Multiple specs may share the same [target] (their files are merged into one directory).
  *
- * @param target output directory name under `lib/`
+ * @param target output directory name under `build/thirdparty/`
  * @param source path relative to `node_modules/`
  * @param includes glob patterns to select files (empty = everything)
  */
@@ -57,7 +58,7 @@ data class LibrarySpec(
 )
 
 /**
- * All libraries to copy from `node_modules` into JAR resources.
+ * All libraries to copy from `node_modules` into the distribution.
  * To add a new library, append a `LibrarySpec` entry here.
  */
 val librariesToBundle =
@@ -72,7 +73,7 @@ val librariesToBundle =
     )
 
 /**
- * @fontsource packages to bundle. Each is placed in its own `lib/fonts/{name}/` directory
+ * @fontsource packages to bundle. Each is placed in its own `build/thirdparty/fonts/{name}/` directory
  * with auto-discovered latin woff2 variants and a generated `fonts.css`.
  * SCSS layout themes select which fonts they need via `@import url(...)`.
  */
@@ -109,19 +110,19 @@ val bundleHighlightJs =
                 "--format=iife",
                 "--global-name=hljs",
                 "--minify",
-                "--outfile=${libDir.resolve("highlight.js/highlight.min.js")}",
+                "--outfile=${thirdPartyDir.resolve("highlight.js/highlight.min.js")}",
             ),
         )
     }
 
 /**
  * Main bundling task: copies libraries, bundles fontsource fonts,
- * copies hljs SCSS partials, and generates the nested manifest JSON.
+ * and copies hljs SCSS partials.
  */
 val bundleThirdParty =
     tasks.register<DefaultTask>("bundleThirdParty") {
         group = "build"
-        description = "Bundles third-party libraries from node_modules into JAR resources"
+        description = "Bundles third-party libraries from node_modules into the distribution"
         dependsOn(tasks.npmInstall)
         dependsOn(bundleHighlightJs)
 
@@ -131,12 +132,18 @@ val bundleThirdParty =
                     from(nodeModules.resolve(source)) {
                         if (includes.isNotEmpty()) include(includes)
                     }
-                    into(libDir.resolve(target))
+                    into(thirdPartyDir.resolve(target))
                 }
             }
 
             fontsourcePackages.forEach { fontName ->
                 bundleFontsource("fonts/$fontName", listOf(fontName))
+            }
+
+            // Copy static (non-npm) font files from the source tree.
+            copy {
+                from(staticFontsDir)
+                into(thirdPartyDir.resolve("fonts"))
             }
 
             scssThirdParty.mkdirs()
@@ -145,14 +152,12 @@ val bundleThirdParty =
                     .resolve("highlight.js/styles/$source")
                     .copyTo(scssThirdParty.resolve("_$partialName.scss"), overwrite = true)
             }
-
-            generateNestedManifest()
         }
     }
 
 /**
  * Auto-discovers latin-subset woff2 files from the given @fontsource packages,
- * copies them into the given [targetSubdir] under `lib/`, and generates a `fonts.css`
+ * copies them into the given [targetSubdir] under `build/thirdparty/`, and generates a `fonts.css`
  * with `@font-face` declarations derived from the file naming convention.
  *
  * @fontsource files follow the pattern `{font}-latin-{weight}-{style}.woff2`,
@@ -162,7 +167,7 @@ fun bundleFontsource(
     targetSubdir: String,
     fontNames: List<String>,
 ) {
-    val targetDir = libDir.resolve(targetSubdir)
+    val targetDir = thirdPartyDir.resolve(targetSubdir)
     val cssBuilder = StringBuilder()
 
     // Matches e.g. "lato-latin-400-normal.woff2" -> (lato, 400, normal)
@@ -199,45 +204,6 @@ fun bundleFontsource(
     }
 
     targetDir.resolve("fonts.css").writeText(cssBuilder.toString())
-}
-
-/**
- * Generates `third-party-manifest.json` as a nested JSON tree mirroring the `lib/` directory structure.
- * Files at each level are listed under `_files`; subdirectories become nested objects.
- *
- * ```json
- * {
- *   "katex": {
- *     "_files": ["katex.min.css", "katex.min.js"],
- *     "fonts": { "_files": ["KaTeX_Main-Regular.woff2"] }
- *   },
- *   "fonts": {
- *     "latex": { "_files": ["fonts.css", "ComputerModern-Serif-Regular.woff"] }
- *   }
- * }
- * ```
- */
-fun generateNestedManifest() {
-    fun dirToJson(dir: File): Map<String, Any> =
-        buildMap {
-            dir
-                .listFiles()
-                ?.filter { it.isFile && it.name != "third-party-manifest.json" }
-                ?.map { it.name }
-                ?.sorted()
-                ?.takeIf { it.isNotEmpty() }
-                ?.let { put("_files", it) }
-
-            dir
-                .listFiles()
-                ?.filter { it.isDirectory }
-                ?.sortedBy { it.name }
-                ?.forEach { put(it.name, dirToJson(it)) }
-        }
-
-    libDir
-        .resolve("third-party-manifest.json")
-        .writeText(JsonOutput.prettyPrint(JsonOutput.toJson(dirToJson(libDir))))
 }
 
 // SCSS and TypeScript bundling
@@ -287,7 +253,16 @@ val bundleTypeScript =
 tasks.processResources {
     dependsOn(tasks.compileSass)
     dependsOn(bundleTypeScript)
-    dependsOn(bundleThirdParty)
+    // bundleThirdParty no longer needed for processResources since libraries are not in the JAR.
+    // It is still needed for compileSass (hljs SCSS partials).
+
+    // Write the absolute path of the third-party directory into a resource file
+    // so the CLI can locate it at runtime regardless of how it was launched.
+    doLast {
+        val propsDir = destinationDir.resolve("render")
+        propsDir.mkdirs()
+        propsDir.resolve("thirdparty.path").writeText(thirdPartyDir.absolutePath)
+    }
 }
 
 // Tests

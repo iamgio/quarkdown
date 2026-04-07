@@ -32,8 +32,8 @@ import java.io.File
 const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
- * Name of the default directory to load libraries from.
- * The default value is relative to the executable JAR file location, and points to the `lib/qd` directory of the distribution archive.
+ * Default directory to load Quarkdown libraries from.
+ * The default value is relative to the executable JAR file location, and points to the `lib/qd` directory of the distribution layout.
  * It can be overridden by the user.
  */
 val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qd"
@@ -202,6 +202,7 @@ abstract class ExecuteCommand(
             source = null,
             outputDirectory,
             libraryDirectory,
+            htmlLibraryDirectory = com.quarkdown.rendering.html.post.resources.ThirdPartyLibraryDirectory.path,
             renderer,
             clean,
             pipe = false,

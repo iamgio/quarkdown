@@ -1,6 +1,7 @@
 package com.quarkdown.core.pipeline.output.visitor
 
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputResource
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.OutputResourceVisitor
@@ -16,6 +17,8 @@ class CopyOutputResourceVisitor(
     override fun visit(artifact: TextOutputArtifact): OutputResource = artifact.copy(name = name)
 
     override fun visit(artifact: BinaryOutputArtifact): OutputResource = artifact.copy(name = name)
+
+    override fun visit(resource: FileReferenceOutputResource): OutputResource = resource.copy(name = name)
 
     override fun visit(group: OutputResourceGroup): OutputResource = group.copy(name = name)
 }

@@ -10,7 +10,7 @@ import com.quarkdown.core.util.Escape
 /**
  * Single source of truth for a third-party library bundled in the HTML output.
  * Each subclass defines:
- * - The library [name] (matching the key in `third-party-manifest.json`)
+ * - The library [name] (matching the directory name under `lib/` in the distribution)
  * - When the library [isRequired] based on the document's context
  * - What HTML [headContributions] (`<script>`, `<link>`, inline scripts) it needs in `<head>`
  *
@@ -19,7 +19,7 @@ import com.quarkdown.core.util.Escape
  * [com.quarkdown.rendering.html.post.document.HtmlDocumentBuilder]
  * (which emits `<script>`/`<link>` tags) use this hierarchy, eliminating duplicated conditions.
  *
- * @param name the library directory name under `lib/` in the output, matching the manifest key
+ * @param name the library directory name under `lib/` in the output
  * @param headContributions the HTML `<head>` elements this library requires
  */
 sealed class ThirdPartyLibrary(

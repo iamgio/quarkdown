@@ -10,4 +10,6 @@ interface OutputResourceVisitor<T> {
     fun visit(artifact: BinaryOutputArtifact): T
 
     fun visit(group: OutputResourceGroup): T
+
+    fun visit(resource: FileReferenceOutputResource): T
 }

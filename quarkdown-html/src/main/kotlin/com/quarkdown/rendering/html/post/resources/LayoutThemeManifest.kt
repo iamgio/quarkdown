@@ -12,8 +12,8 @@ import kotlinx.serialization.json.Json
  * {"fonts": ["fonts/lato", "fonts/inter"]}
  * ```
  *
- * Font names correspond to keys in `third-party-manifest.json` and to directories
- * under `lib/` in the output. SCSS layout themes reference these fonts via `@import url()`,
+ * Font names correspond to directory paths relative to the third-party library directory
+ * (e.g. `"fonts/lato"`, `"fonts/latex"`). SCSS layout themes reference these fonts via `@import url()`,
  * and this class ensures the corresponding files are bundled in the output.
  *
  * @param fonts third-party font library names required by this layout theme

@@ -15,6 +15,7 @@ import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResour
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
 import com.quarkdown.rendering.html.search.SearchIndexGenerator
+import java.io.File
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -31,12 +32,15 @@ private val DEFAULT_THEME =
  *
  * @param context the [Context] of the document being rendered
  * @param relativePathToRoot relative path from the current document to the root document, used to correctly link resources
+ * @param libraryDirectory filesystem directory containing third-party library files (e.g. KaTeX, Mermaid, fonts).
+ *        If `null`, no third-party libraries are bundled in the output.
  * @param base the base [HtmlOnlyPostRenderer] to delegate HTML generation to
  * @param resourcesProvider supplier of the set of [PostRendererResource] to include in the output. Delegation to [base] is always included
  */
 class HtmlPostRenderer(
     val context: Context,
     relativePathToRoot: String = ".",
+    private val libraryDirectory: File? = null,
     private val theme: DocumentTheme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
     private val base: HtmlOnlyPostRenderer =
         HtmlOnlyPostRenderer(
@@ -51,7 +55,7 @@ class HtmlPostRenderer(
                     locale = context.documentInfo.locale,
                 ),
                 ScriptPostRendererResource(),
-                ThirdPartyPostRendererResource(context, layoutTheme = theme.layout),
+                ThirdPartyPostRendererResource(context, layoutTheme = theme.layout, libraryDirectory = libraryDirectory),
                 MediaPostRendererResource(context.mediaStorage),
                 if (context.documentInfo.type == DocumentType.DOCS) {
                     SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))

@@ -9,6 +9,7 @@ import java.io.File
  * @param source main source file to process
  * @param outputDirectory the output directory to save resource in, if set
  * @param libraryDirectory the directory to load .qd library files from
+ * @param htmlLibraryDirectory the directory containing third-party HTML library files
  * @param rendererName name of the renderer to use to generate the output for
  * @param clean whether to clean the output directory before generating new files
  * @param pipe whether to output the rendered result to standard output, suitable for piping
@@ -21,6 +22,7 @@ data class CliOptions(
     val source: File?,
     val outputDirectory: File?,
     val libraryDirectory: File?,
+    val htmlLibraryDirectory: File?,
     val rendererName: String,
     val clean: Boolean,
     val pipe: Boolean,

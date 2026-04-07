@@ -32,8 +32,13 @@ class RendererRetriever(
     fun getRenderer(): (RendererFactory, Context) -> RenderingComponents =
         { factory, context ->
             when {
-                isHtmlPdf() -> factory.htmlPdf(context, createHtmlPdfExportOptions())
-                isHtml() -> factory.html(context)
+                isHtmlPdf() ->
+                    factory.htmlPdf(
+                        context,
+                        createHtmlPdfExportOptions(),
+                        libraryDirectory = options.htmlLibraryDirectory,
+                    )
+                isHtml() -> factory.html(context, libraryDirectory = options.htmlLibraryDirectory)
                 isPlainText() -> factory.plainText(context)
                 else -> throw IllegalArgumentException("Unsupported renderer: '${options.rendererName}'")
             }
