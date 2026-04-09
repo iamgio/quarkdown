@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
+import com.quarkdown.core.ast.attributes.reference.getCitationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
@@ -59,7 +60,6 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
-import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.shouldAutoPageBreak
@@ -477,10 +477,7 @@ class QuarkdownHtmlNodeRenderer(
     }
 
     override fun visit(node: BibliographyCitation): CharSequence {
-        val (entries: List<BibliographyEntry>, view: BibliographyView) =
-            node.getDefinition(context) ?: return Text("[???]").accept(this)
-
-        val label = view.style.labelProvider.getCitationLabel(entries)
+        val label = node.getCitationLabel(context) ?: return Text("[???]").accept(this)
         return Text(label).accept(this)
     }
 
