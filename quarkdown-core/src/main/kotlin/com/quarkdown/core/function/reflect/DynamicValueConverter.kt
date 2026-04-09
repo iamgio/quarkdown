@@ -16,6 +16,26 @@ import kotlin.reflect.full.functions
 import kotlin.reflect.full.isSubclassOf
 
 /**
+ * A cached entry in the [FromDynamicType] dispatch table,
+ * pairing a factory method with its annotation metadata.
+ */
+private data class FactoryEntry(
+    val function: KFunction<*>,
+    val annotation: FromDynamicType,
+)
+
+/**
+ * Cached dispatch table of [ValueFactory] methods annotated with [FromDynamicType].
+ */
+private val factoryEntries: List<FactoryEntry> by lazy {
+    ValueFactory::class.declaredFunctions.flatMap { function ->
+        function.findAnnotations<FromDynamicType>().map { annotation ->
+            FactoryEntry(function, annotation)
+        }
+    }
+}
+
+/**
  * A converter of a value that potentially holds any type (its value is stored as a plain string)
  * to a specific, statically defined [Value] type that can be used as an input for a function call argument.
  * @param value the dynamic value to convert to a typed value
@@ -54,25 +74,25 @@ class DynamicValueConverter(
                 ?: throw NoSuchElementException(element = raw, values)
         }
 
-        // Gets ValueFactory methods annotated with @FromDynamicType(X::class),
-        // and the one with a matching type is invoked.
-        for (function in ValueFactory::class.declaredFunctions) {
-            val annotations = function.findAnnotations<FromDynamicType>()
-            val from = annotations.find { type.isSubclassOf(it.unwrappedType) } ?: continue
+        // Looks up the pre-built dispatch table for a matching factory method.
+        for ((function, annotation) in factoryEntries) {
+            if (!type.isSubclassOf(annotation.unwrappedType)) continue
 
             // The factory method is suitable. Invoking it.
 
             return try {
                 when {
                     // Fetch the context from the function call if it's required.
-                    from.requiresContext -> {
+                    annotation.requiresContext -> {
                         if (context == null) {
                             throw IllegalStateException("Function call does not have an attached context")
                         }
                         function.call(ValueFactory, raw, context)
                     }
 
-                    else -> function.call(ValueFactory, raw)
+                    else -> {
+                        function.call(ValueFactory, raw)
+                    }
                 } as InputValue<*>?
             } catch (e: InvocationTargetException) {
                 throw e.cause ?: e
