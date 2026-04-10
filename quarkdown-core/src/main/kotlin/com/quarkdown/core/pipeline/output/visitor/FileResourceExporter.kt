@@ -2,6 +2,7 @@ package com.quarkdown.core.pipeline.output.visitor
 
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -76,6 +77,23 @@ class FileResourceExporter(
             if (write) {
                 it.parentFile?.mkdirs()
                 it.writeBytes(artifact.content.toByteArray())
+            }
+        }
+
+    /**
+     * Copies a [FileReferenceOutputArtifact] to the output location.
+     * If the source is a directory, it is copied recursively.
+     * @return the copied file or directory
+     */
+    override fun visit(artifact: FileReferenceOutputArtifact) =
+        File(location, artifact.name).also {
+            if (write) {
+                it.parentFile?.mkdirs()
+                if (artifact.file.isDirectory) {
+                    artifact.file.copyRecursively(it, overwrite = true)
+                } else {
+                    artifact.file.copyTo(it, overwrite = true)
+                }
             }
         }
 

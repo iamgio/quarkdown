@@ -8,7 +8,8 @@ import java.io.File
  * For pipeline-related options, see [com.quarkdown.core.pipeline.PipelineOptions].
  * @param source main source file to process
  * @param outputDirectory the output directory to save resource in, if set
- * @param libraryDirectory the directory to load .qd library files from
+ * @param installDirectory the `lib` subdirectory of where Quarkdown is installed, used to locate bundled resources of the Gradle-generated installation layout
+ * @param libraryDirectory the directory to load .qd library files from. Usually [installDirectory]`/qd`
  * @param rendererName name of the renderer to use to generate the output for
  * @param clean whether to clean the output directory before generating new files
  * @param pipe whether to output the rendered result to standard output, suitable for piping
@@ -20,6 +21,7 @@ import java.io.File
 data class CliOptions(
     val source: File?,
     val outputDirectory: File?,
+    val installDirectory: File?,
     val libraryDirectory: File?,
     val rendererName: String,
     val clean: Boolean,

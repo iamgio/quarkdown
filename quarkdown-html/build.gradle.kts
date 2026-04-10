@@ -1,4 +1,3 @@
-
 import com.github.gradle.node.npm.task.NpmTask
 import com.github.gradle.node.npm.task.NpxTask
 
@@ -93,4 +92,118 @@ val npmE2eTest =
             argsList.add("--shard=$shard/$totalShards")
         }
         args.set(argsList)
+    }
+
+// Resources
+
+val nodeModules = projectDir.resolve("node_modules")
+
+val thirdPartyOutDir: File =
+    layout.buildDirectory
+        .dir("thirdparty")
+        .get()
+        .asFile
+
+/**
+ * Declarative specification for copying a library from `node_modules` into `build/thirdparty/`.
+ * Multiple specs may share the same [target] (their files are merged into one directory).
+ *
+ * @param target output directory name under `build/thirdparty/`
+ * @param source path relative to `node_modules/`
+ * @param includes glob patterns to select files (empty = everything)
+ */
+data class LibrarySpec(
+    val target: String,
+    val source: String,
+    val includes: List<String> = emptyList(),
+)
+
+/**
+ * All libraries to copy from `node_modules` into the distribution.
+ */
+val librariesToBundle =
+    listOf(
+        LibrarySpec(
+            "bootstrap-icons",
+            "bootstrap-icons/font",
+            listOf("bootstrap-icons.min.css", "fonts/bootstrap-icons.woff2"),
+        ),
+        LibrarySpec(
+            "highlight.js",
+            "highlight.js/dist",
+            listOf("highlightjs.min.js"),
+        ),
+        LibrarySpec(
+            "highlightjs-line-numbers",
+            "highlightjs-line-numbers.js/dist",
+            listOf("highlightjs-line-numbers.min.js"),
+        ),
+        LibrarySpec(
+            "highlightjs-copy",
+            "highlightjs-copy/dist",
+            listOf("highlightjs-copy.min.js", "highlightjs-copy.min.css"),
+        ),
+        LibrarySpec(
+            "katex",
+            "katex/dist",
+            listOf("katex.min.css", "katex.min.js", "fonts/*.woff2"),
+        ),
+        LibrarySpec(
+            "mermaid",
+            "mermaid/dist",
+            listOf("mermaid.min.js"),
+        ),
+        LibrarySpec(
+            "reveal.js",
+            "reveal.js/dist",
+            listOf("reveal.js", "reset.css", "reveal.css", "theme/white.css", "plugin/notes.js"),
+        ),
+        LibrarySpec("pagedjs", "pagedjs/dist", listOf("paged.polyfill.js")),
+    )
+
+/**
+ * Bundles highlight.js with all common languages into a single browser-ready file,
+ * since the npm package is modular and does not include a pre-built bundle.
+ */
+val bundleHighlightJs =
+    tasks.register<NpxTask>("bundleHighlightJs") {
+        group = "build"
+        description = "Bundles highlight.js into a single browser-ready file"
+        dependsOn(tasks.npmInstall)
+
+        command.set("esbuild")
+        args.set(
+            listOf(
+                "node_modules/highlight.js/lib/common.js",
+                "--bundle",
+                "--platform=browser",
+                "--format=iife",
+                "--global-name=hljs",
+                "--minify",
+                "--outfile=${nodeModules.resolve("highlight.js/dist/highlightjs.min.js")}",
+            ),
+        )
+    }
+
+val bundleThirdParty =
+    tasks.register<DefaultTask>("bundleThirdParty") {
+        group = "build"
+        description = "Bundles runtime third-party libraries from node_modules into the distribution"
+        dependsOn(tasks.npmInstall)
+        dependsOn(bundleHighlightJs)
+
+        println(
+            nodeModules.resolve("highlight.js/dist/highlightjs.min.js").absolutePath,
+        )
+
+        doLast {
+            librariesToBundle.forEach { (target, source, includes) ->
+                copy {
+                    from(nodeModules.resolve(source)) {
+                        if (includes.isNotEmpty()) include(includes)
+                    }
+                    into(thirdPartyOutDir.resolve(target))
+                }
+            }
+        }
     }

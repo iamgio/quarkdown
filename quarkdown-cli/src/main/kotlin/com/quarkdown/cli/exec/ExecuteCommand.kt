@@ -201,7 +201,8 @@ abstract class ExecuteCommand(
             // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
             source = null,
             outputDirectory,
-            libraryDirectory,
+            installDirectory = File("/Users/gio/Dev/qd/quarkdown/build/install/quarkdown/lib"), // thisExecutableFile?.parentFile, // TODO temp
+            libraryDirectory = libraryDirectory,
             renderer,
             clean,
             pipe = false,

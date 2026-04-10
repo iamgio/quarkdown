@@ -7,14 +7,14 @@ import kotlin.io.path.deleteRecursively
 /**
  * The executable JAR file location, if available.
  */
-val thisExecutableFile: File?
-    get() =
-        object {}
-            .javaClass.protectionDomain
-            ?.codeSource
-            ?.location
-            ?.toURI()
-            ?.let(::File)
+val thisExecutableFile: File? by lazy {
+    object {}
+        .javaClass.protectionDomain
+        ?.codeSource
+        ?.location
+        ?.toURI()
+        ?.let(::File)
+}
 
 /**
  * Cleans [this] directory by deleting all files and directories inside it.
