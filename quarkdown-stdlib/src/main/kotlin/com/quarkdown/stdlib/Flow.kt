@@ -31,6 +31,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
  */
 val Flow: QuarkdownModule =
     moduleOf(
+        ::identity,
         ::`if`,
         ::ifNot,
         ::forEach,
@@ -437,6 +438,22 @@ fun let(
     value: DynamicValue,
     @LikelyBody body: Lambda,
 ): OutputValue<*> = body.invokeDynamic(value)
+
+/**
+ * Returns the given value unchanged.
+ * This is the identity function, invoked via the nameless syntax `.{value}`.
+ * It is useful as a starting point for chained calls:
+ *
+ * ```
+ * .{10}::multiply {2}::sum {5}
+ * ```
+ * Result: `25`
+ *
+ * @param value value to pass through
+ * @return the same value, unchanged
+ */
+@Name("")
+fun identity(value: DynamicValue): DynamicValue = value
 
 /**
  * Creates a null invisible node that forces the expression it lies in to be evaluated as Markdown content.

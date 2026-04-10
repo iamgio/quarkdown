@@ -241,31 +241,41 @@ class FunctionCallGrammar(
         }
 
     /**
-     * Parses a single function call.
-     * A function call consists of a function name, inline arguments and an optional body argument.
+     * Parses the arguments and optional body of a function call, shared by both [namedCallParser] and [namelessCallParser].
      */
-    private val callParser =
-        (
-            // Function name.
-            identifier and
-                // Inline arguments.
-                zeroOrMore(argumentParser) and
-                // Body argument.
-                optional(-optional(whitespace) and bodyArgumentParser)
-        ) map { (id, args, body) ->
-            WalkedFunctionCall(
-                id.text,
-                args,
-                body,
-            )
+    private val argumentsParser =
+        // Inline arguments.
+        zeroOrMore(argumentParser) and
+            // Body argument.
+            optional(-optional(whitespace) and bodyArgumentParser)
+
+    /**
+     * Parses a named function call, where the function name is required.
+     * This is used for chained calls (after `::`) where a name is mandatory.
+     */
+    private val namedCallParser =
+        (identifier and argumentsParser) map { (id, argsAndBody) ->
+            val (args, body) = argsAndBody
+            WalkedFunctionCall(id.text, args, body)
+        }
+
+    /**
+     * Parses a nameless (identity) function call, where the function name is omitted (e.g. `.{value}`).
+     * This is only allowed as the first call in a chain, not after `::`.
+     */
+    private val namelessCallParser =
+        argumentsParser map { (args, body) ->
+            WalkedFunctionCall("", args, body)
         }
 
     /**
      * Parses a chain of function calls, separated by [chainSeparator].
+     * The first call in the chain may be nameless (e.g. `.{value}::bar`),
+     * but subsequent calls after `::` must have a name.
      * The result is an ordered linked list of [WalkedFunctionCall]s, and the first of them is returned.
      */
     private val chainCallParser =
-        callParser and zeroOrMore(-chainSeparator and callParser) map { (first, rest) ->
+        (namedCallParser or namelessCallParser) and zeroOrMore(-chainSeparator and namedCallParser) map { (first, rest) ->
             var current = first
             for (next in rest) {
                 current.next = next

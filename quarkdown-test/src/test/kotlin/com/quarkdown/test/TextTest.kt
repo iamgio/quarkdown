@@ -113,6 +113,16 @@ class TextTest {
     }
 
     @Test
+    fun `advanced text formatting with identity function`() {
+        execute("This is a .{small text}::text size:{tiny} variant:{smallcaps}") {
+            assertEquals(
+                "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `subscript and superscript`() {
         execute("H{.text {2} script:{sub}}O is water. E = mc{.text {2} script:{sup}}") {
             assertEquals(

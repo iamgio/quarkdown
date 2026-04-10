@@ -63,5 +63,5 @@ object CacheableFunctionCatalogue {
         nameQuery: String,
     ): Sequence<DocumentedFunction> =
         getCatalogue(docsDirectory)
-            .filter { it.data.name.startsWith(nameQuery, ignoreCase = true) }
+            .filter { it.data.name.isNotEmpty() && it.data.name.startsWith(nameQuery, ignoreCase = true) }
 }
