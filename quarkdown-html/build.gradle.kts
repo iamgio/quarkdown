@@ -54,6 +54,7 @@ val bundleTypeScript =
 tasks.processResources {
     dependsOn(tasks.compileSass)
     dependsOn(bundleTypeScript)
+    dependsOn(bundleThirdParty)
 }
 
 val npmUnitTest =
@@ -66,6 +67,7 @@ val npmUnitTest =
 
 tasks.test {
     dependsOn(npmUnitTest)
+    systemProperty("quarkdown.html.thirdparty.dir", thirdPartyOutDir.absolutePath)
 }
 
 val installPlaywrightBrowsers =

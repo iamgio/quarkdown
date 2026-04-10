@@ -1,6 +1,8 @@
 
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.nio.file.FileAlreadyExistsException
+import java.nio.file.Files
 import java.time.Year
 
 plugins {
@@ -143,22 +145,56 @@ distributions.main {
     }
 }
 
-val bundleThirdParty = tasks.getByPath(":quarkdown-html:bundleThirdParty")
+// Assembles a dev-time install `lib/` layout at `<rootProject>/build/dev-lib` with symlinks.
+// This mirrors the distribution layout so that `gradle run` and IntelliJ runs can resolve the install directory at runtime.
+val assembleDevLib by tasks.registering {
+    dependsOn(":quarkdown-html:bundleThirdParty")
+
+    val devLibDir =
+        layout.buildDirectory
+            .dir("dev-lib")
+            .get()
+            .asFile
+
+    val links =
+        mapOf(
+            "html" to
+                project(":quarkdown-html")
+                    .layout.buildDirectory
+                    .dir("thirdparty")
+                    .get()
+                    .asFile,
+            "qd" to project(":quarkdown-libs").file("src/main/resources"),
+        )
+
+    // Skip the task when all symlinks already exist.
+    outputs.upToDateWhen {
+        links.keys.all { name -> Files.isSymbolicLink(devLibDir.resolve(name).toPath()) }
+    }
+
+    doLast {
+        devLibDir.mkdirs()
+        links.forEach { (name, source) ->
+            val link = devLibDir.resolve(name).toPath()
+            try {
+                Files.createSymbolicLink(link, source.toPath())
+            } catch (_: FileAlreadyExistsException) {
+            }
+        }
+    }
+}
 
 tasks.installDist {
     dependsOn(quarkdocGenerate)
-    dependsOn(bundleThirdParty)
 }
 
 tasks.distZip {
     dependsOn(quarkdocGenerate)
-    dependsOn(bundleThirdParty)
     archiveVersion.set("")
 }
 
 tasks.distTar {
     dependsOn(quarkdocGenerate)
-    dependsOn(bundleThirdParty)
     archiveVersion.set("")
 }
 

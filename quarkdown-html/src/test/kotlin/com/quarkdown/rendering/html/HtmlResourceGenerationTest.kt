@@ -23,7 +23,6 @@ import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 import java.io.File
-import kotlin.io.path.createTempDirectory
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -37,7 +36,16 @@ import kotlin.test.assertTrue
  */
 class HtmlResourceGenerationTest {
     private lateinit var context: MutableContext
-    private lateinit var libraryDir: File
+
+    /**
+     * The real bundled third-party libraries directory, produced by the `bundleThirdParty` Gradle task
+     * and exposed to tests via a system property set by the `test` task.
+     */
+    private val libraryDir: File =
+        File(
+            System.getProperty("quarkdown.html.thirdparty.dir")
+                ?: error("HTML third-party system property is not set; run tests via Gradle."),
+        )
 
     @BeforeTest
     fun setup() {
@@ -47,8 +55,6 @@ class HtmlResourceGenerationTest {
                 permissions = setOf(Permission.ProjectRead, Permission.GlobalRead, Permission.NetworkAccess),
             ),
         )
-        libraryDir = createTempDirectory("quarkdown-lib-test").toFile()
-        libraryDir.deleteOnExit()
     }
 
     private fun postRenderer(libraryDirectory: File? = null): HtmlPostRenderer =
@@ -166,22 +172,9 @@ class HtmlResourceGenerationTest {
         get() = resources.map { it.name }.toSet()
 
     /**
-     * Creates fake library directories under [libraryDir] for all known [ThirdPartyLibrary] entries,
-     * simulating a full Quarkdown installation.
-     */
-    private fun stubAllLibraries() {
-        ThirdPartyLibrary
-            .all()
-            .flatMap { it.names }
-            .forEach { name -> libraryDir.resolve(name).mkdirs() }
-    }
-
-    /**
-     * Generates resources with [libraryDir] and returns the `lib` group.
-     * Calls [stubAllLibraries] beforehand.
+     * Generates resources with the real bundled [libraryDir] and returns the `lib` group.
      */
     private fun generateLibGroup(): OutputResourceGroup? {
-        stubAllLibraries()
         val resources = postRenderer(libraryDirectory = libraryDir).generateResources(plainHtml)
         return resources.findLibGroup()
     }

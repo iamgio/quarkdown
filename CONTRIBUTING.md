@@ -168,7 +168,7 @@ Note that all tests are automatically run on every PR.
 You can run the Quarkdown CLI directly via Gradle, without needing to build the project first:
 
 ```bash
-./gradlew run --args="c <file.qd> [options] --libs quarkdown-libs/src/main/resources"
+./gradlew run --args="c <file.qd> [options]"
 ```
 
 ### Documentation
@@ -180,7 +180,7 @@ You can run the Quarkdown CLI directly via Gradle, without needing to build the 
     ```
 
   - ```bash
-    ./gradlew run --args="c main.qd --clean --strict --allow all --libs ../quarkdown-libs/src/main/resources"
+    ./gradlew run --args="c main.qd --clean --strict --allow all"
     ```
 
 - To generate Quarkdoc documentation only for the standard library:
