@@ -16,7 +16,11 @@ const val HTML_LIBRARY_OUTPUT_PATH = "lib"
  * Library inclusion is driven by [ThirdPartyLibrary] for global scripts and styles,
  * and by [LayoutThemeManifest] for styles and fonts declared by the active layout theme.
  *
- * @param context the rendering context, used to evaluate library inclusion conditions
+ * Since subdocuments share the root's `lib/` directory (they reference it via a relative path),
+ * the set of bundled libraries is the union of those required by the root context and by every
+ * subdocument context in the same document complex.
+ *
+ * @param context the root rendering context, used (together with its subdocument contexts) to evaluate library inclusion conditions
  * @param libraryDirectory the filesystem directory containing third-party library files,
  *        typically `lib/html` within the Quarkdown installation. If `null`, no libraries are bundled.
  */
@@ -30,10 +34,13 @@ class ThirdPartyPostRendererResource(
     ) {
         if (libraryDirectory == null || !libraryDirectory.isDirectory) return
 
+        // Include a library if it is required by the root context or by any subdocument context,
+        // since the same root `lib/` directory is shared.
+        val allContexts = context.sharedSubdocumentsData.withContexts.values
         val libraryNames =
             ThirdPartyLibrary
                 .all()
-                .filter { it.isRequired(context) }
+                .filter { library -> allContexts.any(library::isRequired) }
                 .flatMap { it.names }
 
         resources +=

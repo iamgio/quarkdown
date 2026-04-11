@@ -6,9 +6,11 @@ import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.ast.attributes.presence.markMermaidDiagramPresence
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.SubdocumentContext
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
@@ -338,6 +340,36 @@ class HtmlResourceGenerationTest {
 
         assertNotNull(libGroup)
         assertEquals(setOf("bootstrap-icons"), libGroup.libraryNames)
+    }
+
+    /**
+     * Registers a new [SubdocumentContext] forked from the root [context] and adds it to the shared
+     * subdocuments data, so that it is visible to [ThirdPartyPostRendererResource].
+     */
+    private fun addSubdocumentContext(name: String): SubdocumentContext {
+        val subdocument = Subdocument.Resource(name = name, path = name, content = "")
+        val subContext = SubdocumentContext(parent = context, subdocument = subdocument)
+        context.sharedSubdocumentsData = context.sharedSubdocumentsData.addContext(subdocument, subContext)
+        return subContext
+    }
+
+    @Test
+    fun `lib group includes libraries required by subdocuments`() {
+        context.documentInfo = DocumentInfo(type = DocumentType.DOCS)
+        // Root has no code, math, or diagrams, but subdocuments do.
+        val codeSub = addSubdocumentContext("code-sub")
+        codeSub.attributes.markCodePresence()
+        val mathSub = addSubdocumentContext("math-sub")
+        mathSub.attributes.markMathPresence()
+
+        val libGroup = generateLibGroup()
+
+        assertNotNull(libGroup)
+        assertTrue("bootstrap-icons" in libGroup.libraryNames)
+        assertTrue("katex" in libGroup.libraryNames)
+        ThirdPartyLibrary.HighlightJs.names.forEach {
+            assertTrue(it in libGroup.libraryNames)
+        }
     }
 
     @Test
