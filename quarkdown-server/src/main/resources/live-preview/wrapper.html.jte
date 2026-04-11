@@ -166,10 +166,22 @@
         if (doc) doc.documentElement.style.scrollBehavior = 'auto';
     }
 
+    /**
+     * Disables the browser's automatic scroll restoration on the given frame,
+     * so that our manual scroll restoration during frame swaps is not overridden
+     * by the browser's async restoration after `location.reload()`.
+     * @param {HTMLIFrameElement} frame - The frame element
+     */
+    function disableAutoScrollRestoration(frame) {
+        const history = frame.contentWindow?.history;
+        if (history) history.scrollRestoration = 'manual';
+    }
+
     // Re-apply after every iframe reload, since the document is replaced.
     for (let i = 0; i < NUM_FRAMES; i++) {
         document.getElementById(`frame-${'$'}{i}`).addEventListener('load', function () {
             suppressSmoothScroll(this);
+            disableAutoScrollRestoration(this);
         });
     }
 
