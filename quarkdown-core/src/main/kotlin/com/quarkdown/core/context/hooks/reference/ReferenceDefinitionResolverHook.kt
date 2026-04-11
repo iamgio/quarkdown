@@ -26,7 +26,9 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
             indexReferences(references).forEach { (index, reference) ->
                 val definition = findDefinitionPair(reference.reference, definitions, index)
                 definition?.let {
-                    reference.setDefinition(context, transformDefinitionPair(it))
+                    val transformed = transformDefinitionPair(it)
+                    reference.setDefinition(context, transformed)
+                    onResolved(reference, transformed)
                 }
             }
         }
@@ -71,4 +73,15 @@ abstract class ReferenceDefinitionResolverHook<R, DN : Node, D>(
      * @return the definition to be associated with the reference
      */
     protected open fun transformDefinitionPair(definition: Pair<DN, D>): D = definition.second
+
+    /**
+     * Called after a reference has been successfully resolved and associated with its definition.
+     * Subclasses can override this to perform additional processing per resolved pair.
+     * @param reference the resolved reference node
+     * @param definition the definition associated with the reference
+     */
+    protected open fun onResolved(
+        reference: ReferenceNode<R, D>,
+        definition: D,
+    ) {}
 }

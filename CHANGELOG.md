@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Permission system](https://quarkdown.com/wiki/cli-compiler#permissions)
+
+Quarkdown's permission system controls what a document can access during compilation, for increased safety.
+If the compiler attempts an action that requires a permission it doesn't have, an error is raised.
+
+You can grant or revoke permissions with the `--allow` and `--deny` flags:
+
+```shell
+quarkdown c main.qd --allow global-read --deny native-content
+```
+
+Available permissions: `project-read` (default), `global-read`, `network`, `native-content` (default), `all`. See the wiki page for more details.
+
+### Changed
+
+#### Parallel rendering
+
+Rendering now runs in parallel across sibling elements, improving performance on large documents.
+
 ## [1.15.1] - 2026-03-31
 
 ### Changed

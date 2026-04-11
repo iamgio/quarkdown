@@ -62,12 +62,23 @@ import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.node.conversion.list.MarkdownListToCollectionValue
 import com.quarkdown.core.util.node.conversion.list.MarkdownListToDictionaryValue
+import kotlin.collections.map
 
 /**
  * Prefix that forces a generic expression to be parsed as a lambda block.
  * @see ValueFactory.expression
  */
 private const val EXPRESSION_FORCE_LAMBDA_PREFIX = "@lambda "
+
+/**
+ * Pre-compiled regex for stripping comments from expressions.
+ */
+private val COMMENT_REGEX = PatternHelpers.COMMENT.toRegex()
+
+/**
+ * Pre-compiled regex for splitting whitespace-separated size values.
+ */
+private val WHITESPACE_REGEX = "\\s+".toRegex()
 
 /**
  * Factory of [Value] wrappers from raw data.
@@ -213,7 +224,7 @@ object ValueFactory {
     fun sizes(raw: Any): ObjectValue<Sizes> {
         if (raw is Sizes) return ObjectValue(raw)
 
-        val parts = raw.toString().split("\\s+".toRegex())
+        val parts = raw.toString().split(WHITESPACE_REGEX)
         val iterator = parts.iterator()
 
         return ObjectValue(
@@ -541,7 +552,7 @@ object ValueFactory {
         }
 
         // Strip comments.
-        val rawCode = raw.toString().replace(PatternHelpers.COMMENT.toRegex(), "")
+        val rawCode = raw.toString().replace(COMMENT_REGEX, "")
 
         if (rawCode.isEmpty()) return DynamicValue("")
 
