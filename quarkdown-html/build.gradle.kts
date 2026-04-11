@@ -28,6 +28,8 @@ tasks.compileSass {
             .dir("scss-compiled")
             .get()
             .asFile
+    // Some SCSS partials load stylesheets from node_modules.
+    dependsOn(tasks.npmInstall)
 }
 
 /**
