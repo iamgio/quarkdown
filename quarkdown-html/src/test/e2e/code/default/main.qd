@@ -1,3 +1,5 @@
+.theme {darko}
+
 ```java
 public final class Wrapper<T> {
     private final T value;

@@ -52,9 +52,9 @@ val bundleTypeScript =
     }
 
 tasks.processResources {
-    dependsOn(tasks.compileSass)
     dependsOn(bundleTypeScript)
     dependsOn(bundleThirdParty)
+    dependsOn(tasks.compileSass)
 }
 
 val npmUnitTest =
