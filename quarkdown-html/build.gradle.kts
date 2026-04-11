@@ -30,6 +30,67 @@ tasks.compileSass {
             .asFile
 }
 
+/**
+ * Declarative specification for copying a library from `node_modules` into `build/thirdparty/`.
+ * Multiple specs may share the same [target] (their files are merged into one directory).
+ *
+ * Every bundled library is also passed to esbuild as `--external:<target>`, since these
+ * libraries are loaded at runtime from the bundled `lib/` directory and must not be
+ * inlined into the TypeScript bundle.
+ *
+ * @param target output directory name under `build/thirdparty/`
+ * @param source path relative to `node_modules/`
+ * @param includes glob patterns to select files (empty = everything)
+ */
+data class LibrarySpec(
+    val target: String,
+    val source: String,
+    val includes: List<String> = emptyList(),
+)
+
+/**
+ * All libraries to copy from `node_modules` into the distribution.
+ */
+val librariesToBundle =
+    listOf(
+        LibrarySpec(
+            "bootstrap-icons",
+            "bootstrap-icons/font",
+            listOf("bootstrap-icons.min.css", "fonts/bootstrap-icons.woff2"),
+        ),
+        LibrarySpec(
+            "highlight.js",
+            "highlight.js/dist",
+            listOf("highlightjs.min.js"),
+        ),
+        LibrarySpec(
+            "highlightjs-line-numbers",
+            "highlightjs-line-numbers.js/dist",
+            listOf("highlightjs-line-numbers.min.js"),
+        ),
+        LibrarySpec(
+            "highlightjs-copy",
+            "highlightjs-copy/dist",
+            listOf("highlightjs-copy.min.js", "highlightjs-copy.min.css"),
+        ),
+        LibrarySpec(
+            "katex",
+            "katex/dist",
+            listOf("katex.min.css", "katex.min.js", "fonts/*.woff2"),
+        ),
+        LibrarySpec(
+            "mermaid",
+            "mermaid/dist",
+            listOf("mermaid.min.js"),
+        ),
+        LibrarySpec(
+            "reveal.js",
+            "reveal.js/dist",
+            listOf("reveal.js", "reset.css", "reveal.css", "theme/white.css", "plugin/notes.js"),
+        ),
+        LibrarySpec("pagedjs", "pagedjs/dist", listOf("paged.polyfill.js")),
+    )
+
 val bundleTypeScript =
     tasks.register<NpxTask>("bundleTypeScript") {
         group = "build"
@@ -46,13 +107,8 @@ val bundleTypeScript =
                 "--platform=browser",
                 "--format=iife",
                 "--outfile=src/main/resources/render/script/quarkdown.js",
-                "--external:reveal.js",
-                "--external:pagedjs",
-                "--external:katex",
-                "--external:highlight.js",
-                "--external:mermaid",
                 "--sourcemap",
-            ),
+            ) + librariesToBundle.map { "--external:${it.target}" },
         )
     }
 
@@ -109,63 +165,6 @@ val thirdPartyOutDir: File =
         .dir("thirdparty")
         .get()
         .asFile
-
-/**
- * Declarative specification for copying a library from `node_modules` into `build/thirdparty/`.
- * Multiple specs may share the same [target] (their files are merged into one directory).
- *
- * @param target output directory name under `build/thirdparty/`
- * @param source path relative to `node_modules/`
- * @param includes glob patterns to select files (empty = everything)
- */
-data class LibrarySpec(
-    val target: String,
-    val source: String,
-    val includes: List<String> = emptyList(),
-)
-
-/**
- * All libraries to copy from `node_modules` into the distribution.
- */
-val librariesToBundle =
-    listOf(
-        LibrarySpec(
-            "bootstrap-icons",
-            "bootstrap-icons/font",
-            listOf("bootstrap-icons.min.css", "fonts/bootstrap-icons.woff2"),
-        ),
-        LibrarySpec(
-            "highlight.js",
-            "highlight.js/dist",
-            listOf("highlightjs.min.js"),
-        ),
-        LibrarySpec(
-            "highlightjs-line-numbers",
-            "highlightjs-line-numbers.js/dist",
-            listOf("highlightjs-line-numbers.min.js"),
-        ),
-        LibrarySpec(
-            "highlightjs-copy",
-            "highlightjs-copy/dist",
-            listOf("highlightjs-copy.min.js", "highlightjs-copy.min.css"),
-        ),
-        LibrarySpec(
-            "katex",
-            "katex/dist",
-            listOf("katex.min.css", "katex.min.js", "fonts/*.woff2"),
-        ),
-        LibrarySpec(
-            "mermaid",
-            "mermaid/dist",
-            listOf("mermaid.min.js"),
-        ),
-        LibrarySpec(
-            "reveal.js",
-            "reveal.js/dist",
-            listOf("reveal.js", "reset.css", "reveal.css", "theme/white.css", "plugin/notes.js"),
-        ),
-        LibrarySpec("pagedjs", "pagedjs/dist", listOf("paged.polyfill.js")),
-    )
 
 /**
  * Bundles highlight.js with all common languages into a single browser-ready file,
