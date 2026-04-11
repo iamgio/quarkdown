@@ -194,10 +194,6 @@ val bundleThirdParty =
         dependsOn(tasks.npmInstall)
         dependsOn(bundleHighlightJs)
 
-        println(
-            nodeModules.resolve("highlight.js/dist/highlightjs.min.js").absolutePath,
-        )
-
         doLast {
             librariesToBundle.forEach { (target, source, includes) ->
                 copy {

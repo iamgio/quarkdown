@@ -60,8 +60,8 @@ sealed class ThirdPartyLibrary(
         names = listOf("katex"),
         headContributions =
             listOf(
-                HeadContribution.Stylesheet("katex.min.css"),
-                HeadContribution.DeferredScript("katex.min.js"),
+                HeadContribution.Stylesheet("katex/katex.min.css"),
+                HeadContribution.DeferredScript("katex/katex.min.js"),
                 HeadContribution.ContextualInlineScript { context ->
                     buildString {
                         appendLine("capabilities.math = true;")
@@ -99,11 +99,11 @@ sealed class ThirdPartyLibrary(
         names = listOf("reveal.js"),
         headContributions =
             listOf(
-                HeadContribution.Script("reveal/reveal.js"),
-                HeadContribution.Script("reveal/plugin/notes.js"),
-                HeadContribution.Stylesheet("reveal/reset.css"),
-                HeadContribution.Stylesheet("reveal/reveal.css"),
-                HeadContribution.Stylesheet("reveal/theme/white.css"),
+                HeadContribution.Script("reveal.js/reveal.js"),
+                HeadContribution.Script("reveal.js/plugin/notes.js"),
+                HeadContribution.Stylesheet("reveal.js/reset.css"),
+                HeadContribution.Stylesheet("reveal.js/reveal.css"),
+                HeadContribution.Stylesheet("reveal.js/theme/white.css"),
             ),
     ) {
         override fun isRequired(context: Context) = context.documentInfo.type == DocumentType.SLIDES
