@@ -21,15 +21,15 @@ import java.io.File
  * ```
  * <themeDirectory>/
  *   global.css
- *   locale/<tag>.css
- *   layout/<name>/<name>.css  (+ exported font/asset subfolders)
+ *   layout/<name>/<name>.css   (+ exported font/asset subfolders)
  *   color/<name>/<name>.css
+ *   locale/<tag>/<tag>.css     (+ optional exported assets, e.g. CJK fonts)
  * ```
  *
  * Active components include global styles (always), the selected layout and color
- * themes (with their exported assets), and the locale-specific stylesheet if one
- * exists (e.g. CJK typefaces, #105). A generated `theme.css` manifest imports all
- * of them via nested paths that mirror the output directory layout.
+ * themes, and the locale-specific stylesheet if one exists (e.g. CJK typefaces, #105).
+ * Each component may carry sibling assets next to its CSS, and a generated `theme.css`
+ * manifest imports them all via nested paths that mirror the output directory layout.
  *
  * If [themeDirectory] is `null` or does not exist, no theme resources are emitted
  * (matching [ThirdPartyPostRendererResource]); this keeps theme-independent tests
@@ -66,12 +66,21 @@ class ThemePostRendererResource(
             }
     }
 
-    /** Layout and color themes are the two per-theme subdirectories under the theme root. */
+    /**
+     * The per-name subdirectories under the theme root. Each kind groups stylesheets
+     * keyed by name (`<kind>/<name>/<name>.css`).
+     *
+     * [warnIfMissing] controls whether a missing component is reported: layouts and colors
+     * are explicit user choices, so a typo should be loud; locales are optional fallbacks
+     * (most locales legitimately have no stylesheet) and should fail silently.
+     */
     private enum class Kind(
         val directoryName: String,
+        val warnIfMissing: Boolean,
     ) {
-        LAYOUT("layout"),
-        COLOR("color"),
+        LAYOUT("layout", warnIfMissing = true),
+        COLOR("color", warnIfMissing = true),
+        LOCALE("locale", warnIfMissing = false),
     }
 
     /**
@@ -119,34 +128,24 @@ class ThemePostRendererResource(
     /**
      * Resolves the set of active theme [Component]s against [themeRoot].
      * Missing layout or color themes are logged and skipped rather than raising,
-     * so a broken theme reference degrades gracefully.
+     * so a broken theme reference degrades gracefully; missing locales are silently
+     * skipped, since most locales have no stylesheet.
      */
     private fun resolveComponents(themeRoot: File): List<Component> =
         buildList {
-            addIfFile(themeRoot.resolve(GLOBAL_STYLESHEET), name = GLOBAL_STYLESHEET)
+            val global = themeRoot.resolve(GLOBAL_STYLESHEET)
+            if (global.isFile) add(Component(name = GLOBAL_STYLESHEET, source = global))
 
             theme.layout?.let { resolveThemeDirectory(themeRoot, Kind.LAYOUT, it)?.let(::add) }
             theme.color?.let { resolveThemeDirectory(themeRoot, Kind.COLOR, it)?.let(::add) }
-
-            // Optional locale-specific stylesheet.
-            locale?.shortTag?.let { tag ->
-                val path = "locale/$tag.css"
-                addIfFile(themeRoot.resolve(path), name = path)
-            }
+            locale?.shortTag?.let { resolveThemeDirectory(themeRoot, Kind.LOCALE, it)?.let(::add) }
         }
 
-    /** Adds a file-backed [Component] to the list if [file] exists. */
-    private fun MutableList<Component>.addIfFile(
-        file: File,
-        name: String,
-    ) {
-        if (file.isFile) add(Component(name = name, source = file))
-    }
-
     /**
-     * Resolves the directory for a `layout` or `color` theme, or `null` when missing.
-     * A missing directory is logged at error level and skipped, so a broken theme
-     * reference still produces usable output (just without that component).
+     * Resolves the directory for a [kind]/[name] theme component, or `null` when missing.
+     * If [Kind.warnIfMissing] is set, a missing directory is logged at error level so a
+     * broken theme reference is visible while still producing usable output (without that
+     * component); otherwise it is silently skipped.
      *
      * The returned [Component] references the whole theme directory so its CSS plus
      * any exported sibling assets are copied to the output together.
@@ -159,10 +158,12 @@ class ThemePostRendererResource(
         val relativePath = "${kind.directoryName}/$name"
         val directory = themeRoot.resolve(relativePath)
         if (!directory.isDirectory) {
-            Log.error(
-                "'${kind.directoryName}' theme not found: $name (looked in ${directory.absolutePath}).\n" +
-                    "For a list of available themes, check https://quarkdown.com/wiki/themes or your local theme directory.",
-            )
+            if (kind.warnIfMissing) {
+                Log.error(
+                    "'${kind.directoryName}' theme not found: $name (looked in ${directory.absolutePath}).\n" +
+                        "For a list of available themes, check https://quarkdown.com/wiki/themes or your local theme directory.",
+                )
+            }
             return null
         }
         return Component(name = relativePath, source = directory)

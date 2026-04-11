@@ -143,7 +143,7 @@ class HtmlResourceGenerationTest {
         `generate resources`(
             documentInfo = DocumentInfo(),
             expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme"),
-            notExpectedThemes = setOf("locale/zh.css"),
+            notExpectedThemes = setOf("locale/zh"),
         ) { resources ->
             assertEquals(4, resources.size)
         }
@@ -152,7 +152,7 @@ class HtmlResourceGenerationTest {
     fun `with specific localized theme`() =
         `generate resources`(
             documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("zh-CN")),
-            expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme", "locale/zh.css"),
+            expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme", "locale/zh"),
         ) { resources ->
             assertEquals(4, resources.size)
         }
@@ -162,7 +162,7 @@ class HtmlResourceGenerationTest {
         `generate resources`(
             documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("akan")),
             expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme"),
-            notExpectedThemes = setOf("locale/akan.css"),
+            notExpectedThemes = setOf("locale/akan"),
         ) { resources ->
             assertEquals(4, resources.size)
         }

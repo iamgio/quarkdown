@@ -197,7 +197,11 @@ val scssCompiledDir: File =
         .get()
         .asFile
 
+val scssSrcDir: File = projectDir.resolve("src/main/scss")
 val themesOutDir: File = thirdPartyOutDir.resolve("theme")
+
+/** Theme kinds whose stylesheets are reshaped into per-theme subdirectories. */
+val themeKinds = listOf("layout", "color", "locale")
 
 /**
  * Parses a theme manifest file of shape `{"exports": ["node_modules/@fontsource/foo", ...]}`.
@@ -209,74 +213,52 @@ fun readThemeExports(manifest: File): List<String> {
     return (json["exports"] as? List<*>).orEmpty().filterIsInstance<String>()
 }
 
+/**
+ * Top-level theme names under `src/main/scss/<kind>/`, excluding SCSS partials (`_*.scss`).
+ * Resolved at configuration time, so the task can declare per-theme copy specs upfront.
+ */
+fun discoverThemeNames(kind: String): List<String> =
+    scssSrcDir
+        .resolve(kind)
+        .listFiles { f -> f.isFile && f.extension == "scss" && !f.name.startsWith("_") }
+        ?.map { it.nameWithoutExtension }
+        .orEmpty()
+
 // Reshapes the flat SCSS-compiled output into a per-theme directory layout under
 // build/thirdparty/theme/, and copies each theme's declared export assets alongside
-// its CSS file. Flat entries (global.css, locale/*.css) are preserved as-is;
-// layout and color themes become <kind>/<name>/<name>.css plus exports.
+// its CSS file. The flat global.css is preserved as-is; layouts, colors, and locales
+// each become <kind>/<name>/<name>.css plus any sibling assets declared in <name>.json.
 val assembleThemes =
-    tasks.register<DefaultTask>("assembleThemes") {
+    tasks.register<Sync>("assembleThemes") {
         group = "build"
         description = "Reshapes SCSS-compiled themes and copies their exported assets into build/thirdparty/theme/"
-        dependsOn(tasks.compileSass)
         dependsOn(tasks.npmInstall) // exports may reference node_modules
+        dependsOn(tasks.compileSass)
 
-        val scssSrcDir = projectDir.resolve("src/main/scss")
-        inputs.dir(scssCompiledDir)
-        inputs.dir(scssSrcDir) // picks up .json manifest changes
-        outputs.dir(themesOutDir)
+        into(themesOutDir)
 
-        doLast {
-            themesOutDir.deleteRecursively()
-            themesOutDir.mkdirs()
+        // Flat: global theme.
+        from(scssCompiledDir) {
+            include("global.css", "global.css.map")
+        }
 
-            // Flat: global.css (+ source map, if present).
-            scssCompiledDir.listFiles { f -> f.isFile && f.name.startsWith("global.") }?.forEach { file ->
-                copy {
-                    from(file)
-                    into(themesOutDir)
+        // Nested: <kind>/<name>/<name>.css (+ exports declared in <name>.json).
+        themeKinds.forEach { kind ->
+            discoverThemeNames(kind).forEach { name ->
+                from(scssCompiledDir.resolve(kind)) {
+                    include("$name.css", "$name.css.map")
+                    into("$kind/$name")
                 }
-            }
-
-            // Flat: locale/*.css — not per-theme.
-            scssCompiledDir.resolve("locale").takeIf(File::isDirectory)?.let { dir ->
-                copy {
-                    from(dir) { include("*.css", "*.css.map") }
-                    into(themesOutDir.resolve("locale"))
-                }
-            }
-
-            // Nested: <kind>/<name>/<name>.css (+ exports declared in <name>.json).
-            listOf("layout", "color").forEach { kind ->
-                val compiledKindDir = scssCompiledDir.resolve(kind)
-                if (!compiledKindDir.isDirectory) return@forEach
-
-                compiledKindDir
-                    .listFiles { f -> f.isFile && f.name.endsWith(".css") }
-                    ?.forEach { cssFile ->
-                        val themeName = cssFile.nameWithoutExtension
-                        val dest = themesOutDir.resolve("$kind/$themeName").also { it.mkdirs() }
-
-                        copy {
-                            from(compiledKindDir) {
-                                include("$themeName.css", "$themeName.css.map")
-                            }
-                            into(dest)
+                readThemeExports(scssSrcDir.resolve("$kind/$name.json")).forEach { exportPath ->
+                    val src = projectDir.resolve(exportPath)
+                    if (src.exists()) {
+                        from(src) {
+                            into("$kind/$name/${src.name}")
                         }
-
-                        readThemeExports(scssSrcDir.resolve("$kind/$themeName.json")).forEach { exportPath ->
-                            val src = projectDir.resolve(exportPath)
-                            if (!src.exists()) {
-                                logger.warn(
-                                    "assembleThemes: export path not found: $exportPath (theme $themeName)",
-                                )
-                                return@forEach
-                            }
-                            copy {
-                                from(src)
-                                into(dest.resolve(src.name))
-                            }
-                        }
+                    } else {
+                        logger.warn("assembleThemes: export path not found: $exportPath (theme $name)")
                     }
+                }
             }
         }
     }

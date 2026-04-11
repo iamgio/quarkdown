@@ -275,9 +275,9 @@ Quarkdown allows for a layout theme and a color theme to be selected independent
 
 [scss](quarkdown-html/src/main/scss) is compiled by the `compileSass` Gradle task into `quarkdown-html/build/scss-compiled/`, then reshaped by `assembleThemes` into a per-theme directory layout under `quarkdown-html/build/thirdparty/theme/`, which the root `installLibLayout` copies into `lib/html/theme/`:
 - `global.css`: global styles
-- `locale/<tag>.css`: locale-specific tweaks
 - `layout/<name>/<name>.css` (+ sibling asset folders from `<name>.json` `exports`)
 - `color/<name>/<name>.css`
+- `locale/<tag>/<tag>.css` (+ optional sibling assets, e.g. CJK fonts)
 
 At render time, `ThemePostRendererResource` reads the active theme components directly from the install's `lib/html/theme/` directory, instead of the JAR classpath.
 
