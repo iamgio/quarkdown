@@ -13,8 +13,7 @@ const val HTML_LIBRARY_OUTPUT_PATH = "lib"
  * A [PostRendererResource] that bundles required third-party libraries (scripts, styles, fonts) into the output,
  * enabling fully offline HTML rendering.
  *
- * Library inclusion is driven by [ThirdPartyLibrary] for global scripts and styles,
- * and by [LayoutThemeManifest] for styles and fonts declared by the active layout theme.
+ * Library inclusion is driven by [ThirdPartyLibrary] for global scripts and styles.
  *
  * Since subdocuments share the root's `lib/` directory (they reference it via a relative path),
  * the set of bundled libraries is the union of those required by the root context and by every

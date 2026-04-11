@@ -1,5 +1,6 @@
 import com.github.gradle.node.npm.task.NpmTask
 import com.github.gradle.node.npm.task.NpxTask
+import groovy.json.JsonSlurper
 
 plugins {
     kotlin("jvm")
@@ -22,7 +23,11 @@ dependencies {
 
 tasks.compileSass {
     sourceDir = projectDir.resolve("src/main/scss")
-    outputDir = projectDir.resolve("src/main/resources/render/theme")
+    outputDir =
+        layout.buildDirectory
+            .dir("scss-compiled")
+            .get()
+            .asFile
 }
 
 val bundleTypeScript =
@@ -54,7 +59,6 @@ val bundleTypeScript =
 tasks.processResources {
     dependsOn(bundleTypeScript)
     dependsOn(bundleThirdParty)
-    dependsOn(tasks.compileSass)
 }
 
 val npmUnitTest =
@@ -187,12 +191,103 @@ val bundleHighlightJs =
         )
     }
 
+val scssCompiledDir: File =
+    layout.buildDirectory
+        .dir("scss-compiled")
+        .get()
+        .asFile
+
+val themesOutDir: File = thirdPartyOutDir.resolve("theme")
+
+/**
+ * Parses a theme manifest file of shape `{"exports": ["node_modules/@fontsource/foo", ...]}`.
+ * Returns an empty list if the file does not exist or has no `exports` key.
+ */
+fun readThemeExports(manifest: File): List<String> {
+    if (!manifest.isFile) return emptyList()
+    val json = JsonSlurper().parse(manifest) as? Map<*, *> ?: return emptyList()
+    return (json["exports"] as? List<*>).orEmpty().filterIsInstance<String>()
+}
+
+// Reshapes the flat SCSS-compiled output into a per-theme directory layout under
+// build/thirdparty/theme/, and copies each theme's declared export assets alongside
+// its CSS file. Flat entries (global.css, locale/*.css) are preserved as-is;
+// layout and color themes become <kind>/<name>/<name>.css plus exports.
+val assembleThemes =
+    tasks.register<DefaultTask>("assembleThemes") {
+        group = "build"
+        description = "Reshapes SCSS-compiled themes and copies their exported assets into build/thirdparty/theme/"
+        dependsOn(tasks.compileSass)
+        dependsOn(tasks.npmInstall) // exports may reference node_modules
+
+        val scssSrcDir = projectDir.resolve("src/main/scss")
+        inputs.dir(scssCompiledDir)
+        inputs.dir(scssSrcDir) // picks up .json manifest changes
+        outputs.dir(themesOutDir)
+
+        doLast {
+            themesOutDir.deleteRecursively()
+            themesOutDir.mkdirs()
+
+            // Flat: global.css (+ source map, if present).
+            scssCompiledDir.listFiles { f -> f.isFile && f.name.startsWith("global.") }?.forEach { file ->
+                copy {
+                    from(file)
+                    into(themesOutDir)
+                }
+            }
+
+            // Flat: locale/*.css — not per-theme.
+            scssCompiledDir.resolve("locale").takeIf(File::isDirectory)?.let { dir ->
+                copy {
+                    from(dir) { include("*.css", "*.css.map") }
+                    into(themesOutDir.resolve("locale"))
+                }
+            }
+
+            // Nested: <kind>/<name>/<name>.css (+ exports declared in <name>.json).
+            listOf("layout", "color").forEach { kind ->
+                val compiledKindDir = scssCompiledDir.resolve(kind)
+                if (!compiledKindDir.isDirectory) return@forEach
+
+                compiledKindDir
+                    .listFiles { f -> f.isFile && f.name.endsWith(".css") }
+                    ?.forEach { cssFile ->
+                        val themeName = cssFile.nameWithoutExtension
+                        val dest = themesOutDir.resolve("$kind/$themeName").also { it.mkdirs() }
+
+                        copy {
+                            from(compiledKindDir) {
+                                include("$themeName.css", "$themeName.css.map")
+                            }
+                            into(dest)
+                        }
+
+                        readThemeExports(scssSrcDir.resolve("$kind/$themeName.json")).forEach { exportPath ->
+                            val src = projectDir.resolve(exportPath)
+                            if (!src.exists()) {
+                                logger.warn(
+                                    "assembleThemes: export path not found: $exportPath (theme $themeName)",
+                                )
+                                return@forEach
+                            }
+                            copy {
+                                from(src)
+                                into(dest.resolve(src.name))
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
 val bundleThirdParty =
     tasks.register<DefaultTask>("bundleThirdParty") {
         group = "build"
-        description = "Bundles runtime third-party libraries from node_modules into the distribution"
+        description = "Bundles runtime third-party libraries and themes from node_modules into the distribution"
         dependsOn(tasks.npmInstall)
         dependsOn(bundleHighlightJs)
+        dependsOn(assembleThemes)
 
         doLast {
             librariesToBundle.forEach { (target, source, includes) ->

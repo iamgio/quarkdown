@@ -9,7 +9,7 @@ You can load a font family from any of the following sources (case-sensitive):
 - **File**: `path/to/font.ttf`
 - **URL**: `https://example.com/font.ttf`
 - **System fonts**: `Arial`, `Times New Roman`
-- **Google Fonts**: `GoogleFonts:Roboto`, `GoogleFonts:Noto Sans`
+- **Google Fonts**: `GoogleFonts:Roboto`, `GoogleFonts:Noto Sans` (note: requires an internet connection *at view time*)
 
 The function provides the following optional parameters for setting custom font families:
 

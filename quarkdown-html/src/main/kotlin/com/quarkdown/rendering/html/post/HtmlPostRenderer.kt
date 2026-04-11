@@ -52,6 +52,7 @@ class HtmlPostRenderer(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
+                    themeDirectory = libraryDirectory?.resolve("theme"),
                 ),
                 ScriptPostRendererResource(),
                 MediaPostRendererResource(context.mediaStorage),

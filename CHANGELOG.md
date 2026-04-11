@@ -19,6 +19,20 @@ Available permissions: `project-read` (default), `global-read`, `network`, `nati
 
 ### Changed
 
+#### Fully offline HTML output
+
+HTML documents now render entirely offline. Assets such as fonts, opt-in libraries and code highlighting themes, are now bundled in the Quarkdown installation and copied to each generated document. Previously, the output relied on CDNs and Google Fonts, which meant that opening a document without an internet connection could lead to broken styling and missing features.
+
+With this change, compilation is slightly slower and the output directory size is larger, but it comes with more predictable rendering and significantly faster page loads.
+
+As before, opt-in libraries, such as Mermaid and KaTeX, are still only included if used in the document, so they don't affect performance or output size if not needed.
+
+> [!NOTE]
+> Due to the excessive file size, Chinese-specific fonts (loaded from `.doclang {zh}`) are still loaded remotely.
+
+> [!NOTE]
+> User-picked fonts from Google Fonts are still loaded remotely.
+
 #### Parallel rendering
 
 Rendering now runs in parallel across sibling elements, improving performance on large documents.

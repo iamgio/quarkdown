@@ -31,7 +31,6 @@ import com.quarkdown.core.document.layout.page.PageMarginPosition
 import com.quarkdown.core.document.layout.page.PageOrientation
 import com.quarkdown.core.document.layout.page.PageSide
 import com.quarkdown.core.document.layout.page.PageSizeFormat
-import com.quarkdown.core.document.layout.page.merge
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.document.layout.paragraph.merge
 import com.quarkdown.core.document.numbering.DocumentNumbering
@@ -60,7 +59,6 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.font.FontFamily
-import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.stdlib.internal.loadFontFamily
 
 /**
@@ -408,11 +406,10 @@ fun docLanguage(
  *
  * If any of the components isn't specified, the current one is kept, or the default one is used if not set yet.
  *
- * Check out the wiki page for a list of available themes.
+ * Check out the wiki page for a list of available themes. Theme existence is validated at rendering time.
  *
  * @param color optional color scheme to assign
  * @param layout layout format to assign
- * @throws IOPipelineException if any of the theme components isn't resolved
  * @wiki Themes
  */
 fun theme(
@@ -420,18 +417,10 @@ fun theme(
     color: String? = null,
     @LikelyNamed layout: String? = null,
 ): VoidValue {
-    /**
-     * @throws IOPipelineException if [theme] is not a valid theme
-     */
-    fun checkExistance(theme: String) {
-        object {}.javaClass.getResource("/render/theme/${theme.lowercase()}.css")
-            ?: throw IOPipelineException("Theme $theme not found")
-    }
-
     val theme =
         DocumentTheme(
-            color = color?.lowercase()?.also { checkExistance("color/$it") },
-            layout = layout?.lowercase()?.also { checkExistance("layout/$it") },
+            color = color?.lowercase(),
+            layout = layout?.lowercase(),
         )
 
     // Update global theme.

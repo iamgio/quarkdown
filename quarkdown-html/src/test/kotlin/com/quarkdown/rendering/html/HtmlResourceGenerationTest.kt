@@ -23,6 +23,7 @@ import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
+import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 import java.io.File
 import kotlin.test.BeforeTest
@@ -70,15 +71,18 @@ class HtmlResourceGenerationTest {
         notExpectedThemes: Set<String> = emptySet(),
     ) {
         val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
-        val themes = themeGroup.resources.map { it.name }
-        expectedThemes.forEach { assertTrue(it in themes) }
-        notExpectedThemes.forEach { assertFalse(it in themes) }
+        val themes = themeGroup.resources.map { it.name }.toSet()
+        expectedThemes.forEach { assertTrue(it in themes, "Expected theme entry '$it' in $themes") }
+        notExpectedThemes.forEach { assertFalse(it in themes, "Unexpected theme entry '$it' in $themes") }
 
         val theme = themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact
-
         assertEquals(ArtifactType.CSS, theme.type)
         expectedThemes.filter { it != "theme" }.forEach {
-            assertTrue("@import url('$it.css');" in theme.content)
+            val importPath = ThemePostRendererResource.importPathFor(it)
+            assertTrue(
+                "@import url('$importPath');" in theme.content,
+                "Expected '@import url('$importPath');' in ${theme.content}",
+            )
         }
     }
 
@@ -90,7 +94,7 @@ class HtmlResourceGenerationTest {
                 type = DocumentType.SLIDES,
                 theme = DocumentTheme(color = "darko", layout = "minimal"),
             ),
-        expectedThemes: Set<String> = setOf("darko", "minimal", "global", "theme"),
+        expectedThemes: Set<String> = setOf("color/darko", "layout/minimal", "global.css", "theme"),
         notExpectedThemes: Set<String> = emptySet(),
         initAttributes: MutableAstAttributes.() -> Unit = { markMathPresence() },
         block: (Set<OutputResource>) -> Unit,
@@ -98,7 +102,9 @@ class HtmlResourceGenerationTest {
         context.documentInfo = documentInfo
         context.attributes.initAttributes()
 
-        val postRenderer = HtmlPostRenderer(context)
+        // Theme-sensitive generation requires the real bundled themes directory to look up
+        // per-theme folders on disk.
+        val postRenderer = postRenderer(libraryDirectory = libraryDir)
         val resources = postRenderer.generateResources(plainHtml)
 
         block(resources)
@@ -116,7 +122,8 @@ class HtmlResourceGenerationTest {
     @Test
     fun `no media`() =
         `generate resources` { resources ->
-            assertEquals(3, resources.size)
+            // theme + script + lib + HTML
+            assertEquals(4, resources.size)
             assertFalse(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
         }
 
@@ -125,7 +132,8 @@ class HtmlResourceGenerationTest {
         context.options.enableLocalMediaStorage = true
         context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
         `generate resources` { resources ->
-            assertEquals(4, resources.size)
+            // theme + script + lib + media + HTML
+            assertEquals(5, resources.size)
             assertTrue(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name })
         }
     }
@@ -134,30 +142,59 @@ class HtmlResourceGenerationTest {
     fun `default theme`() =
         `generate resources`(
             documentInfo = DocumentInfo(),
-            expectedThemes = setOf("paperwhite", "latex", "global", "theme"),
-            notExpectedThemes = setOf("zh"),
+            expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme"),
+            notExpectedThemes = setOf("locale/zh.css"),
         ) { resources ->
-            assertEquals(3, resources.size)
+            assertEquals(4, resources.size)
         }
 
     @Test
     fun `with specific localized theme`() =
         `generate resources`(
             documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("zh-CN")),
-            expectedThemes = setOf("paperwhite", "latex", "global", "theme", "zh"),
+            expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme", "locale/zh.css"),
         ) { resources ->
-            assertEquals(3, resources.size)
+            assertEquals(4, resources.size)
         }
 
     @Test
     fun `with missing localized theme`() =
         `generate resources`(
             documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("akan")),
-            expectedThemes = setOf("paperwhite", "latex", "global", "theme"),
-            notExpectedThemes = setOf("akan"),
+            expectedThemes = setOf("color/paperwhite", "layout/latex", "global.css", "theme"),
+            notExpectedThemes = setOf("locale/akan.css"),
         ) { resources ->
-            assertEquals(3, resources.size)
+            assertEquals(4, resources.size)
         }
+
+    @Test
+    fun `no theme group when library directory is null`() {
+        context.documentInfo = DocumentInfo()
+        val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
+        assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == "theme" })
+    }
+
+    @Test
+    fun `layout theme artifact exposes exported asset folder`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                theme = DocumentTheme(color = "beaver", layout = "beamer"),
+            )
+        val resources = postRenderer(libraryDirectory = libraryDir).generateResources(plainHtml)
+        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
+        val beamerArtifact =
+            themeGroup.resources
+                .filterIsInstance<FileReferenceOutputArtifact>()
+                .first { it.name == "layout/beamer" }
+
+        assertTrue(beamerArtifact.file.isDirectory)
+        // Fonts declared by `src/main/scss/layout/beamer.json` must ship alongside the CSS.
+        assertTrue(
+            beamerArtifact.file.resolve("source-sans-pro").isDirectory,
+            "Expected beamer theme to include the 'source-sans-pro' export directory.",
+        )
+    }
 
     // Third-party libraries
 
@@ -344,7 +381,7 @@ class HtmlResourceGenerationTest {
 
     /**
      * Registers a new [SubdocumentContext] forked from the root [context] and adds it to the shared
-     * subdocuments data, so that it is visible to [ThirdPartyPostRendererResource].
+     * subdocuments data, so that it is visible to [com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource].
      */
     private fun addSubdocumentContext(name: String): SubdocumentContext {
         val subdocument = Subdocument.Resource(name = name, path = name, content = "")
