@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-server"))
     implementation(project(":quarkdown-plaintext")) // For search index generation
+    implementation(project(":quarkdown-install-layout-navigator"))
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
@@ -33,14 +34,14 @@ tasks.compileSass {
 }
 
 /**
- * Declarative specification for copying a library from `node_modules` into `build/thirdparty/`.
+ * Declarative specification for copying a library from `node_modules` into `build/install/`.
  * Multiple specs may share the same [target] (their files are merged into one directory).
  *
  * Every bundled library is also passed to esbuild as `--external:<target>`, since these
  * libraries are loaded at runtime from the bundled `lib/` directory and must not be
  * inlined into the TypeScript bundle.
  *
- * @param target output directory name under `build/thirdparty/`
+ * @param target output directory name under `build/install/lib/`
  * @param source path relative to `node_modules/`
  * @param includes glob patterns to select files (empty = everything)
  */
@@ -96,7 +97,7 @@ val librariesToBundle =
 val bundleTypeScript =
     tasks.register<NpxTask>("bundleTypeScript") {
         group = "build"
-        description = "Bundles TypeScript files using esbuild into build/thirdparty/quarkdown.min.js"
+        description = "Bundles TypeScript files using esbuild into build/install/script/quarkdown.min.js"
 
         // Make sure npm install runs first
         dependsOn(tasks.npmInstall)
@@ -104,8 +105,8 @@ val bundleTypeScript =
         // Declared inputs/outputs so Gradle can skip the task when unchanged.
         inputs.dir(projectDir.resolve("src/main/typescript"))
         inputs.file(projectDir.resolve("package.json"))
-        outputs.file(layout.buildDirectory.file("thirdparty/quarkdown.min.js"))
-        outputs.file(layout.buildDirectory.file("thirdparty/quarkdown.min.js.map"))
+        outputs.file(layout.buildDirectory.file("install/script/quarkdown.min.js"))
+        outputs.file(layout.buildDirectory.file("install/script/quarkdown.min.js.map"))
 
         command.set("esbuild")
         args.set(
@@ -115,7 +116,7 @@ val bundleTypeScript =
                 "--platform=browser",
                 "--format=iife",
                 "--minify",
-                "--outfile=build/thirdparty/quarkdown.min.js",
+                "--outfile=build/install/script/quarkdown.min.js",
                 "--sourcemap",
             ) + librariesToBundle.map { "--external:${it.target}" },
         )
@@ -135,7 +136,7 @@ val npmUnitTest =
 
 tasks.test {
     dependsOn(npmUnitTest)
-    systemProperty("quarkdown.html.thirdparty.dir", thirdPartyOutDir.absolutePath)
+    dependsOn(":assembleDevLib")
 }
 
 val installPlaywrightBrowsers =
@@ -168,9 +169,9 @@ val npmE2eTest =
 
 val nodeModules = projectDir.resolve("node_modules")
 
-val thirdPartyOutDir: File =
+val installOutDir: File =
     layout.buildDirectory
-        .dir("thirdparty")
+        .dir("install")
         .get()
         .asFile
 
@@ -209,7 +210,7 @@ val scssCompiledDir: File =
         .asFile
 
 val scssSrcDir: File = projectDir.resolve("src/main/scss")
-val themesOutDir: File = thirdPartyOutDir.resolve("theme")
+val themesOutDir: File = installOutDir.resolve("theme")
 
 /** Theme kinds whose stylesheets are reshaped into per-theme subdirectories. */
 val themeKinds = listOf("layout", "color", "locale")
@@ -239,13 +240,13 @@ fun discoverThemeNames(kind: String): List<String> =
 fun cssWithMap(name: String): List<String> = listOf("$name.css", "$name.css.map")
 
 // Reshapes the flat SCSS-compiled output into a per-theme directory layout under
-// build/thirdparty/theme/, and copies each theme's declared export assets alongside
+// build/install/theme/, and copies each theme's declared export assets alongside
 // its CSS file. The flat global.css is preserved as-is; layouts, colors, and locales
 // each become <kind>/<name>/<name>.css plus any sibling assets declared in <name>.json.
 val assembleThemes =
     tasks.register<Sync>("assembleThemes") {
         group = "build"
-        description = "Reshapes SCSS-compiled themes and copies their exported assets into build/thirdparty/theme/"
+        description = "Reshapes SCSS-compiled themes and copies their exported assets into build/install/theme/"
         dependsOn(tasks.npmInstall) // exports may reference node_modules
         dependsOn(tasks.compileSass)
 
@@ -306,7 +307,7 @@ val bundleThirdParty =
                     from(nodeModules.resolve(source)) {
                         if (includes.isNotEmpty()) include(includes)
                     }
-                    into(thirdPartyOutDir.resolve(target))
+                    into(installOutDir.resolve("lib/$target"))
                 }
             }
         }

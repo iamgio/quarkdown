@@ -21,9 +21,12 @@ import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.installlayout.InstallLayout
+import com.quarkdown.installlayout.InstallLayoutDirectory
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
+import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 import java.io.File
 import kotlin.test.BeforeTest
@@ -41,14 +44,10 @@ class HtmlResourceGenerationTest {
     private lateinit var context: MutableContext
 
     /**
-     * The real bundled third-party libraries directory, produced by the `bundleThirdParty` Gradle task
-     * and exposed to tests via a system property set by the `test` task.
+     * The real HTML resources layout, resolved from the dev-time install layout
+     * (populated by the `:assembleDevLib` Gradle task).
      */
-    private val libraryDir: File =
-        File(
-            System.getProperty("quarkdown.html.thirdparty.dir")
-                ?: error("HTML third-party system property is not set; run tests via Gradle."),
-        )
+    private val htmlResources: InstallLayout.Html = InstallLayout.get.htmlResources
 
     @BeforeTest
     fun setup() {
@@ -60,8 +59,8 @@ class HtmlResourceGenerationTest {
         )
     }
 
-    private fun postRenderer(libraryDirectory: File? = null): HtmlPostRenderer =
-        HtmlPostRenderer(context, libraryDirectory = libraryDirectory)
+    private fun postRenderer(resourcesLayout: InstallLayout.Html? = null): HtmlPostRenderer =
+        HtmlPostRenderer(context, resourcesLayout = resourcesLayout)
 
     // Themes
 
@@ -104,7 +103,7 @@ class HtmlResourceGenerationTest {
 
         // Theme-sensitive generation requires the real bundled themes directory to look up
         // per-theme folders on disk.
-        val postRenderer = postRenderer(libraryDirectory = libraryDir)
+        val postRenderer = postRenderer(resourcesLayout = htmlResources)
         val resources = postRenderer.generateResources(plainHtml)
 
         block(resources)
@@ -115,11 +114,13 @@ class HtmlResourceGenerationTest {
 
         assertThemeGroupContains(resources, expectedThemes, notExpectedThemes)
 
-        val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
-        val scriptNames = scriptGroup.resources.map { it.name }.toSet()
-        assertTrue("quarkdown.min.js" in scriptNames)
-        assertTrue("quarkdown.min.js.map" in scriptNames)
-        scriptGroup.resources.forEach { assertTrue(it is FileReferenceOutputArtifact) }
+        // The script directory is emitted as a single FileReferenceOutputArtifact pointing to
+        // the `script/` directory in the install layout.
+        val scriptArtifact =
+            resources.filterIsInstance<FileReferenceOutputArtifact>().first { it.name == "script" }
+        assertTrue(scriptArtifact.file.isDirectory)
+        assertTrue(scriptArtifact.file.resolve("quarkdown.min.js").isFile)
+        assertTrue(scriptArtifact.file.resolve("quarkdown.min.js.map").isFile)
     }
 
     @Test
@@ -173,15 +174,15 @@ class HtmlResourceGenerationTest {
     @Test
     fun `no theme group when library directory is null`() {
         context.documentInfo = DocumentInfo()
-        val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
+        val resources = postRenderer(resourcesLayout = null).generateResources(plainHtml)
         assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == "theme" })
     }
 
     @Test
-    fun `no script group when library directory is null`() {
+    fun `no script artifact when library directory is null`() {
         context.documentInfo = DocumentInfo()
-        val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
-        assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == "script" })
+        val resources = postRenderer(resourcesLayout = null).generateResources(plainHtml)
+        assertNull(resources.filterIsInstance<FileReferenceOutputArtifact>().firstOrNull { it.name == "script" })
     }
 
     @Test
@@ -191,7 +192,7 @@ class HtmlResourceGenerationTest {
                 type = DocumentType.SLIDES,
                 theme = DocumentTheme(color = "beaver", layout = "beamer"),
             )
-        val resources = postRenderer(libraryDirectory = libraryDir).generateResources(plainHtml)
+        val resources = postRenderer(resourcesLayout = htmlResources).generateResources(plainHtml)
         val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
         val beamerArtifact =
             themeGroup.resources
@@ -221,24 +222,28 @@ class HtmlResourceGenerationTest {
         get() = resources.map { it.name }.toSet()
 
     /**
-     * Generates resources with the real bundled [libraryDir] and returns the `lib` group.
+     * Generates resources with the real bundled [htmlResources] and returns the `lib` group.
      */
     private fun generateLibGroup(): OutputResourceGroup? {
-        val resources = postRenderer(libraryDirectory = libraryDir).generateResources(plainHtml)
+        val resources = postRenderer(resourcesLayout = htmlResources).generateResources(plainHtml)
         return resources.findLibGroup()
     }
 
     @Test
     fun `no lib group when library directory is null`() {
-        val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
+        val resources = postRenderer(resourcesLayout = null).generateResources(plainHtml)
         assertNull(resources.findLibGroup())
     }
 
     @Test
     fun `no lib group when library directory does not exist`() {
-        val nonExistent = File(libraryDir, "nonexistent")
-        val resources = postRenderer(libraryDirectory = nonExistent).generateResources(plainHtml)
-        assertNull(resources.findLibGroup())
+        val bogusLibDir = InstallLayoutDirectory(File("nonexistent"))
+        val resources =
+            buildSet {
+                ThirdPartyPostRendererResource(context, librariesLayout = bogusLibDir)
+                    .includeTo(this, plainHtml)
+            }
+        assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == HTML_LIBRARY_OUTPUT_PATH })
     }
 
     @Test

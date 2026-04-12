@@ -123,6 +123,8 @@ allprojects {
 /**
  * Populates a [CopySpec] with the Quarkdown install library layout, with subdirectories such as `qd/` and `html/`.
  * Used by both [distributions]`.main` and [assembleDevLib].
+ *
+ * This layout is navigable at runtime via the `install-layout-navigator` module.
  */
 val installLibLayout: CopySpec.() -> Unit = {
     // .qd library files.
@@ -131,9 +133,9 @@ val installLibLayout: CopySpec.() -> Unit = {
             include("*.qd")
         }
     }
-    // Third-party HTML libraries for offline rendering.
+    // HTML rendering resources (third-party libraries, themes, scripts) for offline rendering.
     into("html") {
-        from(project(":quarkdown-html").layout.buildDirectory.dir("thirdparty"))
+        from(project(":quarkdown-html").layout.buildDirectory.dir("install"))
     }
 }
 
