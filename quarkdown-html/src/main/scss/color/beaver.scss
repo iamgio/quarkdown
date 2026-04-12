@@ -1,6 +1,8 @@
 /* Beamer's Beaver color theme */
 
-@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css');
+@use "highlightjs";
+
+@include highlightjs.theme("default");
 
 :root {
   --qd-primary-color: rgb(187, 39, 26);

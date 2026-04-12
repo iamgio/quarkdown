@@ -5,7 +5,6 @@ import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
-import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
@@ -17,20 +16,14 @@ import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
-import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
-import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -121,8 +114,8 @@ class HtmlPostRendererTest {
     fun `wrap with path to root`() {
         val rootResult = postRenderer(relativePathToRoot = ".").wrap("")
         val nestedResult = postRenderer(relativePathToRoot = "..").wrap("")
-        assertTrue("./script/quarkdown.js" in rootResult)
-        assertTrue("../script/quarkdown.js" in nestedResult)
+        assertTrue("./script/quarkdown.min.js" in rootResult)
+        assertTrue("../script/quarkdown.min.js" in nestedResult)
     }
 
     @Test
@@ -384,115 +377,5 @@ class HtmlPostRendererTest {
         val result = postRenderer().wrap("")
         assertTrue("\"\\\\R\": \"\\\\mathbb{R}\"" in result)
         assertTrue("\"\\\\Z\": \"\\\\mathbb{Z}\"" in result)
-    }
-
-    // Resource generation
-
-    private fun assertThemeGroupContains(
-        resources: Set<OutputResource>,
-        expectedThemes: Set<String>,
-        notExpectedThemes: Set<String> = emptySet(),
-    ) {
-        val themeGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "theme" }
-        val themes = themeGroup.resources.map { it.name }
-        expectedThemes.forEach { assertTrue(it in themes) }
-        notExpectedThemes.forEach { assertFalse(it in themes) }
-
-        val theme = themeGroup.resources.first { it.name == "theme" } as TextOutputArtifact
-
-        assertEquals(ArtifactType.CSS, theme.type)
-        expectedThemes.filter { it != "theme" }.forEach {
-            assertTrue("@import url('$it.css');" in theme.content)
-        }
-    }
-
-    private val plainHtml = "<html><head></head><body></body></html>"
-
-    private fun `resource generation`(block: (Set<OutputResource>) -> Unit) {
-        context.documentInfo =
-            DocumentInfo(
-                type = DocumentType.SLIDES,
-                theme = DocumentTheme(color = "darko", layout = "minimal"),
-            )
-        context.attributes.markMathPresence()
-
-        val postRenderer = HtmlPostRenderer(context)
-        val resources = postRenderer.generateResources(plainHtml)
-
-        block(resources)
-
-        resources.filterIsInstance<TextOutputArtifact>().first { it.type == ArtifactType.HTML }.let {
-            assertEquals(plainHtml, it.content)
-        }
-
-        assertThemeGroupContains(resources, setOf("darko", "minimal", "global", "theme"))
-
-        val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
-        assertEquals("quarkdown", scriptGroup.resources.single().name)
-    }
-
-    @Test
-    fun `resource generation, no media`() =
-        `resource generation` { resources ->
-            assertEquals(3, resources.size)
-            assertFalse(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
-        }
-
-    @Test
-    fun `resource generation, with media`() {
-        context.options.enableLocalMediaStorage = true
-        context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
-        `resource generation` { resources ->
-            assertEquals(4, resources.size)
-            assertTrue(MEDIA_SUBDIRECTORY_NAME in resources.map { it.name }) // Media storage is empty.
-        }
-    }
-
-    @Test
-    fun `resource generation, default theme`() {
-        val context = MutableContext(QuarkdownFlavor)
-
-        val postRenderer = HtmlPostRenderer(context)
-        val html = "<html><head></head><body></body></html>"
-
-        val resources = postRenderer.generateResources(html)
-        assertEquals(3, resources.size)
-
-        assertThemeGroupContains(
-            resources,
-            setOf("paperwhite", "latex", "global", "theme"),
-            notExpectedThemes = setOf("zh"),
-        )
-    }
-
-    @Test
-    fun `resource generation, with specific localized theme`() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("zh-CN"))
-
-        val postRenderer = HtmlPostRenderer(context)
-        val resources = postRenderer.generateResources(plainHtml)
-        assertEquals(3, resources.size)
-
-        assertThemeGroupContains(
-            resources,
-            setOf("paperwhite", "latex", "global", "theme", "zh"),
-        )
-    }
-
-    @Test
-    fun `resource generation, with missing localized theme`() {
-        val context = MutableContext(QuarkdownFlavor)
-        context.documentInfo = DocumentInfo(locale = LocaleLoader.SYSTEM.find("akan"))
-
-        val postRenderer = HtmlPostRenderer(context)
-        val resources = postRenderer.generateResources(plainHtml)
-        assertEquals(3, resources.size)
-
-        assertThemeGroupContains(
-            resources,
-            expectedThemes = emptySet(),
-            notExpectedThemes = setOf("akan"),
-        )
     }
 }

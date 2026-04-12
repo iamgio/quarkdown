@@ -13,7 +13,9 @@ import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
 import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
+import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
 import com.quarkdown.rendering.html.search.SearchIndexGenerator
+import java.io.File
 
 // Default theme components to use if not specified by the user.
 private val DEFAULT_THEME =
@@ -29,12 +31,15 @@ private val DEFAULT_THEME =
  * - Media resources
  *
  * @param context the [Context] of the document being rendered
+ * @param libraryDirectory the filesystem directory containing third-party library files to bundle into the output,
+ *        typically `lib/html` within the Quarkdown installation
  * @param relativePathToRoot relative path from the current document to the root document, used to correctly link resources
  * @param base the base [HtmlOnlyPostRenderer] to delegate HTML generation to
  * @param resourcesProvider supplier of the set of [PostRendererResource] to include in the output. Delegation to [base] is always included
  */
 class HtmlPostRenderer(
     val context: Context,
+    libraryDirectory: File? = null,
     relativePathToRoot: String = ".",
     private val base: HtmlOnlyPostRenderer =
         HtmlOnlyPostRenderer(
@@ -47,14 +52,16 @@ class HtmlPostRenderer(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
+                    themeDirectory = libraryDirectory?.resolve("theme"),
                 ),
-                ScriptPostRendererResource(),
+                ScriptPostRendererResource(libraryDirectory),
                 MediaPostRendererResource(context.mediaStorage),
                 if (context.documentInfo.type == DocumentType.DOCS) {
                     SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
                 } else {
                     null
                 },
+                ThirdPartyPostRendererResource(context, libraryDirectory),
             )
         },
 ) : PostRenderer by base {

@@ -1,0 +1,7 @@
+@use "sass:meta";
+
+/// Inlines a highlight.js color theme from `node_modules/highlight.js/scss/`.
+/// @param {String} $theme - the theme name (e.g. `default`, `atom-one-dark`)
+@mixin theme($theme) {
+    @include meta.load-css("../../../../node_modules/highlight.js/scss/#{$theme}");
+}

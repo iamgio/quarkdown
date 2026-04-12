@@ -1,11 +1,13 @@
 package com.quarkdown.rendering.html.post.document
 
-import com.quarkdown.core.ast.attributes.presence.hasCode
-import com.quarkdown.core.ast.attributes.presence.hasMath
-import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.util.Escape
+import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
+import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_FILE_NAME
+import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_OUTPUT_PATH
+import com.quarkdown.rendering.html.post.thirdparty.HeadContribution
+import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 import kotlinx.html.BODY
 import kotlinx.html.HEAD
 import kotlinx.html.InputType
@@ -72,13 +74,9 @@ class HtmlDocumentBuilder(
         quarkdownMeta()
         title(document.name ?: "Quarkdown")
         quarkdownScript()
-        pagedScripts()
-        slidesScripts()
-        iconLibrary()
+        texMacrosScript()
+        thirdPartyLibraries()
         themeStylesheet()
-        codeScripts()
-        mathScripts()
-        mermaidScripts()
         documentStyle()
         documentTypeInitScript()
         sidebarTemplate()
@@ -125,68 +123,20 @@ class HtmlDocumentBuilder(
 
     /** Loads the main Quarkdown script and initializes the capabilities object. */
     private fun HEAD.quarkdownScript() {
-        script(src = "$relativePathToRoot/script/quarkdown.js") {}
+        script(src = "$relativePathToRoot/$HTML_SCRIPT_OUTPUT_PATH/$HTML_SCRIPT_FILE_NAME") {}
         script { unsafe { raw("const capabilities = window.quarkdownCapabilities") } }
     }
 
-    /** Loads the Paged.js polyfill for paged documents. No-op for other document types. */
-    private fun HEAD.pagedScripts() {
-        if (document.type != DocumentType.PAGED) return
-        script { unsafe { raw("window.PagedConfig = {auto: false};") } }
-        script(src = "https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js") {}
-    }
-
-    /** Loads Reveal.js scripts and styles for slide documents. No-op for other document types. */
-    private fun HEAD.slidesScripts() {
-        if (document.type != DocumentType.SLIDES) return
-        script(src = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reveal.js") {}
-        script(src = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/plugin/notes.js") {}
-        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reset.css")
-        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/reveal.css")
-        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/reveal.js@6.0.0/dist/theme/white.css")
-    }
-
-    private fun HEAD.iconLibrary() {
-        link(
-            rel = "stylesheet",
-            href = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css",
-        )
-    }
-
-    private fun HEAD.themeStylesheet() {
-        link(rel = "stylesheet", href = "$relativePathToRoot/theme/theme.css")
-    }
-
-    /** Loads Highlight.js and its plugins for code highlighting. No-op if the document contains no code. */
-    private fun HEAD.codeScripts() {
-        if (!context.attributes.hasCode) return
-        script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js") {}
-        script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js") {}
-        script(src = "https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js") {}
-        link(rel = "stylesheet", href = "https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css")
-        script { unsafe { raw("capabilities.code = true;") } }
-    }
-
-    /** Loads KaTeX and emits user-defined TeX macros. No-op if the document contains no math. */
-    private fun HEAD.mathScripts() {
-        if (!context.attributes.hasMath) return
-        link(rel = "stylesheet", href = "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css") {
-            attributes["integrity"] = "sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP"
-            attributes["crossorigin"] = "anonymous"
-        }
-        script(src = "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js") {
-            attributes["defer"] = "true"
-            attributes["integrity"] = "sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6"
-            attributes["crossorigin"] = "anonymous"
-        }
+    /**
+     * Exposes the document's user-defined TeX macros as a `window.texMacros` global.
+     */
+    private fun HEAD.texMacrosScript() {
         script {
             unsafe {
                 raw(
                     buildString {
-                        appendLine("capabilities.math = true;")
-                        appendLine()
                         append("window.texMacros = {")
-                        context.documentInfo.tex.macros.forEach { (key, value) ->
+                        document.tex.macros.forEach { (key, value) ->
                             append('"')
                             append(Escape.JavaScript.escape(key))
                             append("\": \"")
@@ -200,11 +150,45 @@ class HtmlDocumentBuilder(
         }
     }
 
-    /** Loads the Mermaid library for diagram rendering. No-op if the document contains no diagrams. */
-    private fun HEAD.mermaidScripts() {
-        if (!context.attributes.hasMermaidDiagram) return
-        script(src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js") {}
-        script { unsafe { raw("capabilities.mermaid = true;") } }
+    /**
+     * Emits `<script>` and `<link>` tags for all required third-party libraries.
+     * Inclusion conditions and head contributions are defined in [ThirdPartyLibrary],
+     * which serves as the single source of truth shared with [ThirdPartyPostRendererResource][com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource].
+     */
+    private fun HEAD.thirdPartyLibraries() {
+        ThirdPartyLibrary
+            .all()
+            .filter { it.isRequired(context) }
+            .forEach { library ->
+                library.headContributions.forEach { contribution ->
+                    when (contribution) {
+                        is HeadContribution.Script -> {
+                            script(src = "$relativePathToRoot/$HTML_LIBRARY_OUTPUT_PATH/${contribution.path}") {}
+                        }
+
+                        is HeadContribution.DeferredScript -> {
+                            script(src = "$relativePathToRoot/$HTML_LIBRARY_OUTPUT_PATH/${contribution.path}") {
+                                attributes["defer"] = "true"
+                            }
+                        }
+
+                        is HeadContribution.Stylesheet -> {
+                            link(
+                                rel = "stylesheet",
+                                href = "$relativePathToRoot/$HTML_LIBRARY_OUTPUT_PATH/${contribution.path}",
+                            )
+                        }
+
+                        is HeadContribution.InlineScript -> {
+                            script { unsafe { raw(contribution.content) } }
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun HEAD.themeStylesheet() {
+        link(rel = "stylesheet", href = "$relativePathToRoot/theme/theme.css")
     }
 
     /** Embeds the document's CSS stylesheet, generated by [HtmlDocumentStylesheet]. */

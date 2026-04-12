@@ -1,0 +1,7 @@
+{
+  "exports": [
+    "node_modules/@fontsource/lato",
+    "node_modules/@fontsource/inter",
+    "node_modules/@fontsource/noto-sans-mono"
+  ]
+}

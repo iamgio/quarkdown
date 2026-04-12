@@ -35,4 +35,5 @@ val writeVersionFile by tasks.registering {
 
 tasks.processResources {
     dependsOn(writeVersionFile)
+    dependsOn(":assembleDevLib")
 }

@@ -11,7 +11,6 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
-import com.quarkdown.cli.util.thisExecutableFile
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.log.Log
@@ -21,6 +20,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.util.kebabCaseName
+import com.quarkdown.core.util.resolveInstallDirectory
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import java.io.File
@@ -32,11 +32,9 @@ import java.io.File
 const val DEFAULT_OUTPUT_DIRECTORY = "output"
 
 /**
- * Name of the default directory to load libraries from.
- * The default value is relative to the executable JAR file location, and points to the `lib/qd` directory of the distribution archive.
- * It can be overridden by the user.
+ * Name of the subdirectory within the install `lib/` directory that contains the bundled `.qd` libraries.
  */
-val DEFAULT_LIBRARY_DIRECTORY = ".." + File.separator + "lib" + File.separator + "qd"
+private const val QD_LIBRARIES_SUBDIR = "qd"
 
 /**
  * CLI name to [Permission] set mapping, shared by `--allow` and `--deny`.
@@ -91,14 +89,14 @@ abstract class ExecuteCommand(
 
     /**
      * Optional library directory.
-     * If not set, the program looks for libraries in [DEFAULT_LIBRARY_DIRECTORY], relative to the executable JAR file location.
+     * If not set, defaults to the `qd/` subdirectory of the resolved install directory.
      */
     private val libraryDirectory: File? by option("-l", "--libs", help = "Library directory")
         .file(
             mustExist = true,
             canBeFile = false,
             canBeDir = true,
-        ).default(File(thisExecutableFile?.parentFile, DEFAULT_LIBRARY_DIRECTORY))
+        )
 
     /**
      * The rendering target to generate output for.
@@ -196,18 +194,21 @@ abstract class ExecuteCommand(
     /**
      * @return the finalized CLI options based on the command's properties
      */
-    fun createCliOptions() =
-        CliOptions(
+    fun createCliOptions(): CliOptions {
+        val installDirectory = resolveInstallDirectory()
+        return CliOptions(
             // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
             source = null,
             outputDirectory,
-            libraryDirectory,
+            installDirectory = installDirectory,
+            libraryDirectory = libraryDirectory ?: installDirectory?.resolve(QD_LIBRARIES_SUBDIR),
             renderer,
             clean,
             pipe = false,
             nodePath,
             npmPath,
         ).let(::finalizeCliOptions)
+    }
 
     /**
      * @param cliOptions finalized CLI options

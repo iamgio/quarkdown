@@ -123,6 +123,39 @@ The following list shows contributions that are highly welcome, in order of impo
 
 The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](https://quarkdown.com/wiki/pipeline).
 
+### Lib directory
+
+A Quarkdown installation ships a `lib/` directory next to the JARs, containing every resource the runtime needs that does not live on the classpath:
+
+```
+<install>/
+  bin/quarkdown
+  lib/
+    qd/      # bundled .qd library files (from quarkdown-libs)
+    html/    # HTML assets: third-party libraries + themes
+      highlight.js/
+      mermaid/
+      pagedjs/
+      ...
+      theme/
+        global.css
+        layout/<name>/
+        color/<name>/
+        ...
+```
+
+The shape is defined once by `installLibLayout` in the root [`build.gradle.kts`](build.gradle.kts) and reused by two consumers:
+
+- **`installDist` / `distZip`** for the packaged installation (via manual download and package managers). Here, the `lib/` alongside `bin/` contains also the JAR files.
+- **`assembleDevLib`** is a task that materializes the same layout at `<rootProject>/build/dev-lib/`, without needing a full `installDist` run. This synthetic lib directory exists so that `./gradlew run`, tests, and other run configurations can resolve a real install-shaped `lib/` at runtime, picking up the offline bundle and the standard library exactly as a packaged installation would.
+
+### HTML offline asset bundling
+
+Rendered HTML documents are fully offline: every third-party asset (fonts, JS libraries, CSS, code highlighting, themes) is bundled into the Quarkdown installation and copied next to each generated document.
+
+The bundling flow lives in [`quarkdown-html/build.gradle.kts`](quarkdown-html/build.gradle.kts).
+At render time, `ThirdPartyPostRendererResource` and `ThemePostRendererResource` walk the install's `lib/html/` directory and copy the relevant assets next to the generated document.
+
 
 ## Tooling
 
@@ -168,7 +201,7 @@ Note that all tests are automatically run on every PR.
 You can run the Quarkdown CLI directly via Gradle, without needing to build the project first:
 
 ```bash
-./gradlew run --args="c <file.qd> [options] --libs quarkdown-libs/src/main/resources"
+./gradlew run --args="c <file.qd> [options]"
 ```
 
 ### Documentation
@@ -180,7 +213,7 @@ You can run the Quarkdown CLI directly via Gradle, without needing to build the 
     ```
 
   - ```bash
-    ./gradlew run --args="c main.qd --clean --strict --allow all --libs ../quarkdown-libs/src/main/resources"
+    ./gradlew run --args="c main.qd --clean --strict --allow all"
     ```
 
 - To generate Quarkdoc documentation only for the standard library:
