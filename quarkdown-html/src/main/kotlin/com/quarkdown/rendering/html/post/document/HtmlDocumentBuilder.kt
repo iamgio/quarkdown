@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.post.document
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.util.Escape
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_FILE_NAME
 import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_OUTPUT_PATH
@@ -73,6 +74,7 @@ class HtmlDocumentBuilder(
         quarkdownMeta()
         title(document.name ?: "Quarkdown")
         quarkdownScript()
+        texMacrosScript()
         thirdPartyLibraries()
         themeStylesheet()
         documentStyle()
@@ -126,6 +128,29 @@ class HtmlDocumentBuilder(
     }
 
     /**
+     * Exposes the document's user-defined TeX macros as a `window.texMacros` global.
+     */
+    private fun HEAD.texMacrosScript() {
+        script {
+            unsafe {
+                raw(
+                    buildString {
+                        append("window.texMacros = {")
+                        document.tex.macros.forEach { (key, value) ->
+                            append('"')
+                            append(Escape.JavaScript.escape(key))
+                            append("\": \"")
+                            append(Escape.JavaScript.escape(value))
+                            append("\",")
+                        }
+                        append("}")
+                    },
+                )
+            }
+        }
+    }
+
+    /**
      * Emits `<script>` and `<link>` tags for all required third-party libraries.
      * Inclusion conditions and head contributions are defined in [ThirdPartyLibrary],
      * which serves as the single source of truth shared with [ThirdPartyPostRendererResource][com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource].
@@ -156,10 +181,6 @@ class HtmlDocumentBuilder(
 
                         is HeadContribution.InlineScript -> {
                             script { unsafe { raw(contribution.content) } }
-                        }
-
-                        is HeadContribution.ContextualInlineScript -> {
-                            script { unsafe { raw(contribution.contentProvider(context)) } }
                         }
                     }
                 }

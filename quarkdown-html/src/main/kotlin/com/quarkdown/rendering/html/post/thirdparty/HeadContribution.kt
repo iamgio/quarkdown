@@ -1,7 +1,5 @@
 package com.quarkdown.rendering.html.post.thirdparty
 
-import com.quarkdown.core.context.Context
-
 /**
  * A contribution to the HTML `<head>` section emitted by a [ThirdPartyLibrary].
  * Each variant describes a specific type of HTML element to generate.
@@ -37,13 +35,5 @@ sealed interface HeadContribution {
      */
     data class InlineScript(
         val content: String,
-    ) : HeadContribution
-
-    /**
-     * A `<script>` tag whose inline content depends on the rendering context.
-     * @param contentProvider a function producing the JavaScript source from the current [Context]
-     */
-    data class ContextualInlineScript(
-        val contentProvider: (Context) -> String,
     ) : HeadContribution
 }

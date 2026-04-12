@@ -5,7 +5,6 @@ import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.attributes.presence.hasMermaidDiagram
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
-import com.quarkdown.core.util.Escape
 
 /**
  * Single source of truth for a third-party library bundled in the HTML output.
@@ -54,7 +53,6 @@ sealed class ThirdPartyLibrary(
 
     /**
      * KaTeX for rendering math expressions.
-     * Emits user-defined TeX macros as a contextual inline script.
      */
     data object KaTeX : ThirdPartyLibrary(
         names = listOf("katex"),
@@ -62,21 +60,7 @@ sealed class ThirdPartyLibrary(
             listOf(
                 HeadContribution.Stylesheet("katex/katex.min.css"),
                 HeadContribution.DeferredScript("katex/katex.min.js"),
-                HeadContribution.ContextualInlineScript { context ->
-                    buildString {
-                        appendLine("capabilities.math = true;")
-                        appendLine()
-                        append("window.texMacros = {")
-                        context.documentInfo.tex.macros.forEach { (key, value) ->
-                            append('"')
-                            append(Escape.JavaScript.escape(key))
-                            append("\": \"")
-                            append(Escape.JavaScript.escape(value))
-                            append("\",")
-                        }
-                        append("}")
-                    }
-                },
+                HeadContribution.InlineScript("capabilities.math = true;"),
             ),
     ) {
         override fun isRequired(context: Context) = context.attributes.hasMath
