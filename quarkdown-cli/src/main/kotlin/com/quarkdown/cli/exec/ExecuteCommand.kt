@@ -20,7 +20,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.util.kebabCaseName
-import com.quarkdown.core.util.resolveInstallDirectory
+import com.quarkdown.installlayout.InstallLayout
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import java.io.File
@@ -30,11 +30,6 @@ import java.io.File
  * It can be overridden by the user.
  */
 const val DEFAULT_OUTPUT_DIRECTORY = "output"
-
-/**
- * Name of the subdirectory within the install `lib/` directory that contains the bundled `.qd` libraries.
- */
-private const val QD_LIBRARIES_SUBDIR = "qd"
 
 /**
  * CLI name to [Permission] set mapping, shared by `--allow` and `--deny`.
@@ -194,21 +189,18 @@ abstract class ExecuteCommand(
     /**
      * @return the finalized CLI options based on the command's properties
      */
-    fun createCliOptions(): CliOptions {
-        val installDirectory = resolveInstallDirectory()
-        return CliOptions(
+    fun createCliOptions(): CliOptions =
+        CliOptions(
             // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
             source = null,
             outputDirectory,
-            installDirectory = installDirectory,
-            libraryDirectory = libraryDirectory ?: installDirectory?.resolve(QD_LIBRARIES_SUBDIR),
+            libraryDirectory = libraryDirectory ?: InstallLayout.get.quarkdownLibraries.file,
             renderer,
             clean,
             pipe = false,
             nodePath,
             npmPath,
         ).let(::finalizeCliOptions)
-    }
 
     /**
      * @param cliOptions finalized CLI options

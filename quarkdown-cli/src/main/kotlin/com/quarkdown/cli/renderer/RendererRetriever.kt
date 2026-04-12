@@ -46,10 +46,7 @@ class RendererRetriever(
 
     private fun isPlainText() = name == PLAIN_TEXT
 
-    private fun createHtmlExportOptions() =
-        HtmlExportOptions(
-            libraryDirectory = options.installDirectory?.resolve("html"),
-        )
+    private fun createHtmlExportOptions() = HtmlExportOptions()
 
     private fun createHtmlPdfExportOptions() =
         HtmlPdfExportOptions(
