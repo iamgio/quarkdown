@@ -1,11 +1,10 @@
 package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
+import com.quarkdown.installlayout.InstallLayoutDirectory
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
-import java.io.File
 
 const val HTML_LIBRARY_OUTPUT_PATH = "lib"
 
@@ -20,18 +19,19 @@ const val HTML_LIBRARY_OUTPUT_PATH = "lib"
  * subdocument context in the same document complex.
  *
  * @param context the root rendering context, used (together with its subdocument contexts) to evaluate library inclusion conditions
- * @param libraryDirectory the filesystem directory containing third-party library files,
- *        typically `lib/html` within the Quarkdown installation. If `null`, no libraries are bundled.
+ * @param librariesLayout the install layout node for the `lib/` directory containing third-party
+ *        library files, typically [InstallLayout.Html.libraries][com.quarkdown.installlayout.InstallLayout.Html.libraries].
+ *        If `null`, no libraries are bundled.
  */
 class ThirdPartyPostRendererResource(
     private val context: Context,
-    private val libraryDirectory: File?,
+    private val librariesLayout: InstallLayoutDirectory?,
 ) : PostRendererResource {
     override fun includeTo(
         resources: MutableSet<OutputResource>,
         rendered: CharSequence,
     ) {
-        if (libraryDirectory == null || !libraryDirectory.isDirectory) return
+        if (librariesLayout?.exists() != true) return
 
         // Include a library if it is required by the root context or by any subdocument context,
         // since the same root `lib/` directory is shared.
@@ -48,13 +48,10 @@ class ThirdPartyPostRendererResource(
                 resources =
                     libraryNames
                         .map { libraryName ->
-                            val file = libraryDirectory.resolve(libraryName)
-                            FileReferenceOutputArtifact(
-                                name = libraryName,
-                                file =
-                                    file.takeIf(File::isDirectory)
-                                        ?: error("HTML library directory not found: ${file.path}"),
-                            )
+                            librariesLayout
+                                .resolveDirectory(libraryName)
+                                .also { if (!it.exists()) error("HTML library directory not found: ${it.file.path}") }
+                                .asOutputResource()
                         }.toSet(),
             )
     }

@@ -18,12 +18,12 @@ import com.quarkdown.rendering.html.post.HtmlSubdocumentPostRenderer
  */
 fun RendererFactory.html(
     context: Context,
-    options: HtmlExportOptions = HtmlExportOptions(libraryDirectory = null),
+    options: HtmlExportOptions = HtmlExportOptions(),
 ) = RenderingComponents(
     nodeRenderer = accept(HtmlRendererFactoryVisitor(context)),
     postRenderer =
         when (context.subdocument) {
-            Subdocument.Root -> HtmlPostRenderer(context, options.libraryDirectory)
+            Subdocument.Root -> HtmlPostRenderer(context, options.resourcesLayout)
             else -> HtmlSubdocumentPostRenderer(context)
         },
 )
@@ -40,7 +40,7 @@ fun RendererFactory.htmlPdf(
     nodeRenderer = accept(HtmlRendererFactoryVisitor(context)),
     postRenderer =
         PdfHtmlPostRendererDecorator(
-            HtmlPostRenderer(context, htmlOptions.libraryDirectory),
+            HtmlPostRenderer(context, htmlOptions.resourcesLayout),
             options = pdfOptions,
         ),
 )

@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":quarkdown-interaction"))
     implementation(project(":quarkdown-stdlib"))
     implementation(project(":quarkdown-lsp"))
+    implementation(project(":quarkdown-install-layout-navigator"))
     implementation("com.github.ajalt.clikt:clikt:5.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("io.methvin:directory-watcher:0.19.1")

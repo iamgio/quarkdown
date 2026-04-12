@@ -131,17 +131,22 @@ A Quarkdown installation ships a `lib/` directory next to the JARs, containing e
 <install>/
   bin/quarkdown
   lib/
-    qd/      # bundled .qd library files (from quarkdown-libs)
-    html/    # HTML assets: third-party libraries + themes
-      highlight.js/
-      mermaid/
-      pagedjs/
-      ...
-      theme/
+    qd/        # bundled .qd library files (from quarkdown-libs)
+    html/      # HTML rendering resources (navigable at runtime via InstallLayout.Html)
+      lib/     # third-party JS/CSS libraries
+        bootstrap-icons/
+        highlight.js/
+        katex/
+        mermaid/
+        ...
+      script/  # Quarkdown runtime
+        quarkdown.min.js
+        quarkdown.min.js.map
+      theme/   # compiled CSS themes
         global.css
         layout/<name>/
         color/<name>/
-        ...
+        locale/<tag>/
 ```
 
 The shape is defined once by `installLibLayout` in the root [`build.gradle.kts`](build.gradle.kts) and reused by two consumers:

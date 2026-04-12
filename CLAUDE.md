@@ -257,29 +257,30 @@ relying on the webserver, located in [quarkdown-server](quarkdown-server).
 
 Rendered HTML documents are fully offline: every third-party asset (fonts, JS libraries, CSS, code highlighting, themes) is bundled into the Quarkdown installation and copied next to each generated document, instead of being fetched from a CDN at view time.
 
-The bundling flow is centralized in [`quarkdown-html/build.gradle.kts`](quarkdown-html/build.gradle.kts):
+The bundling flow is centralized in [`quarkdown-html/build.gradle.kts`](quarkdown-html/build.gradle.kts), which produces the `build/install/` directory:
 
 1. **`npmInstall`** pulls every runtime dependency declared in `quarkdown-html/package.json` (Bootstrap Icons, KaTeX, highlight.js, Mermaid, reveal.js, Paged.js, `@fontsource/*`, ...) into `quarkdown-html/node_modules/`.
 2. **`bundleHighlightJs`** pre-bundles `highlight.js/lib/common.js` into a single browser-ready IIFE via esbuild, since the npm package ships only as ES modules.
-3. **`bundleThirdParty`** copies a curated subset of `node_modules/` into `quarkdown-html/build/thirdparty/<library>/`. To add a new third-party library, append a new `LibrarySpec` and add it to `package.json`.
-4. **`assembleThemes`** reshapes the `compileSass` output from `build/scss-compiled/` into the per-theme layout under `build/thirdparty/theme/` (see [Themes](#themes)).
-5. The root build's **`installLibLayout`** task copies all of `build/thirdparty/` into `lib/html/` for both `installDist` and `assembleDevLib`, so a Quarkdown installation always carries the bundle alongside the JARs.
+3. **`bundleThirdParty`** copies a curated subset of `node_modules/` into `quarkdown-html/build/install/lib/<library>/`. To add a new third-party library, append a new `LibrarySpec` and add it to `package.json`.
+4. **`bundleTypeScript`** bundles and minifies the Quarkdown runtime TypeScript into `build/install/script/quarkdown.min.js` (+ source map) via esbuild.
+5. **`assembleThemes`** reshapes the `compileSass` output from `build/scss-compiled/` into the per-theme layout under `build/install/theme/` (see [Themes](#themes)).
+6. The root build's **`installLibLayout`** copies all of `build/install/` into `lib/html/` for both `installDist` and `assembleDevLib`, so a Quarkdown installation always carries the bundle alongside the JARs.
 
-At render time, no library is read from the JAR classpath: `ThirdPartyPostRendererResource` (for opt-in libraries like KaTeX, highlight.js, Mermaid, reveal.js, Paged.js) and `ThemePostRendererResource` (for themes) both walk the `lib/html/` directory passed in as `libraryDirectory`, and emit `FileReferenceOutputArtifact`s that the file resource exporter copies next to the rendered HTML. Each post-renderer decides which libraries are active based on document type and AST attribute presence (`markCodePresence`, `markMathPresence`, `markMermaidDiagramPresence`), so unused libraries are never copied to the output.
+At render time, no library is read from the JAR classpath. The install layout is navigated via the `quarkdown-install-layout-navigator` module. Each post-renderer decides which libraries are active based on document type and AST attribute presence (`markCodePresence`, `markMathPresence`, `markMermaidDiagramPresence`), so unused libraries are never copied to the output.
 
-When tests need the real bundle, the `test` task forwards `quarkdown.html.thirdparty.dir` as a system property, and `HtmlResourceGenerationTest` reads it to feed the post-renderers.
+When tests need the real bundle, the `test` task depends on `:assembleDevLib`, and `InstallLayout.get` will return it, mirroring the real installation layout.
 
 ### Themes
 
 Quarkdown allows for a layout theme and a color theme to be selected independently, for more combination possibilities.
 
-[scss](quarkdown-html/src/main/scss) is compiled by the `compileSass` Gradle task into `quarkdown-html/build/scss-compiled/`, then reshaped by `assembleThemes` into a per-theme directory layout under `quarkdown-html/build/thirdparty/theme/`, which the root `installLibLayout` copies into `lib/html/theme/`:
+[scss](quarkdown-html/src/main/scss) is compiled by the `compileSass` Gradle task into `quarkdown-html/build/scss-compiled/`, then reshaped by `assembleThemes` into a per-theme directory layout under `quarkdown-html/build/install/theme/`, which ends up at `lib/html/theme/` in the installation:
 - `global.css`: global styles
 - `layout/<name>/<name>.css` (+ sibling asset folders from `<name>.json` `exports`)
 - `color/<name>/<name>.css`
 - `locale/<tag>/<tag>.css` (+ optional sibling assets, e.g. CJK fonts)
 
-At render time, `ThemePostRendererResource` reads the active theme components directly from the install's `lib/html/theme/` directory, instead of the JAR classpath.
+At render time, `ThemePostRendererResource` receives the `InstallLayout.Html.Themes` node and reads the active theme components from it, instead of the JAR classpath.
 
 #### Shipping offline assets with a theme
 
