@@ -15,4 +15,6 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // Resolve the synthetic `lib/` directory the same way the CLI does at runtime.
+    dependsOn(":assembleDevLib")
 }

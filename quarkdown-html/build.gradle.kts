@@ -235,6 +235,9 @@ fun discoverThemeNames(kind: String): List<String> =
         ?.map { it.nameWithoutExtension }
         .orEmpty()
 
+/** CSS file plus its source map, the unit we copy around per stylesheet. */
+fun cssWithMap(name: String): List<String> = listOf("$name.css", "$name.css.map")
+
 // Reshapes the flat SCSS-compiled output into a per-theme directory layout under
 // build/thirdparty/theme/, and copies each theme's declared export assets alongside
 // its CSS file. The flat global.css is preserved as-is; layouts, colors, and locales
@@ -250,26 +253,40 @@ val assembleThemes =
 
         // Flat: global theme.
         from(scssCompiledDir) {
-            include("global.css", "global.css.map")
+            include(cssWithMap("global"))
         }
+
+        // Collected lazily so we can validate export paths at execution time, after
+        // any task that might produce them (e.g. `npmInstall`) has actually run.
+        val declaredExports = mutableListOf<File>()
 
         // Nested: <kind>/<name>/<name>.css (+ exports declared in <name>.json).
         themeKinds.forEach { kind ->
             discoverThemeNames(kind).forEach { name ->
                 from(scssCompiledDir.resolve(kind)) {
-                    include("$name.css", "$name.css.map")
+                    include(cssWithMap(name))
                     into("$kind/$name")
                 }
                 readThemeExports(scssSrcDir.resolve("$kind/$name.json")).forEach { exportPath ->
                     val src = projectDir.resolve(exportPath)
-                    if (src.exists()) {
-                        from(src) {
-                            into("$kind/$name/${src.name}")
-                        }
-                    } else {
-                        logger.warn("assembleThemes: export path not found: $exportPath (theme $name)")
+                    declaredExports += src
+                    from(src) {
+                        into("$kind/$name/${src.name}")
                     }
                 }
+            }
+        }
+
+        // Fail loudly if any declared export path is still missing by the time the task
+        // runs. Doing this in `doFirst` rather than at configuration time lets upstream
+        // tasks (e.g. `npmInstall`) create the files before we look for them.
+        doFirst {
+            val missing = declaredExports.filterNot(File::exists)
+            if (missing.isNotEmpty()) {
+                throw GradleException(
+                    "assembleThemes: missing theme export paths:\n" +
+                        missing.joinToString("\n") { "  - ${it.relativeTo(projectDir)}" },
+                )
             }
         }
     }

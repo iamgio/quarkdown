@@ -1,7 +1,7 @@
 package com.quarkdown.cli.lsp
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.quarkdown.cli.util.thisExecutableFile
+import com.quarkdown.core.util.thisExecutableFile
 import com.quarkdown.lsp.QuarkdownLanguageServerLauncher
 
 /**

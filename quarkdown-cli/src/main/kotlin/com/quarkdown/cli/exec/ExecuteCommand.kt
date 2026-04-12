@@ -11,7 +11,6 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
-import com.quarkdown.cli.util.resolveInstallDirectory
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.log.Log
@@ -21,6 +20,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.util.kebabCaseName
+import com.quarkdown.core.util.resolveInstallDirectory
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
 import java.io.File
