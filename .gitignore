@@ -102,7 +102,7 @@ nb-configuration.xml
 ##############################
 ## Quarkdown
 ##############################
-/*/output/
+/**/quarkdown-output/
 
 ##############################
 ## Miscellaneous
