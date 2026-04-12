@@ -1,6 +1,2 @@
-# Esbuild
-src/main/resources/render/script/quarkdown.js
-src/main/resources/render/script/quarkdown.js.map
-
 # e2e
 src/test/e2e/**/output/

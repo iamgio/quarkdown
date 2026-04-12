@@ -3,6 +3,8 @@ package com.quarkdown.rendering.html.post.document
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
+import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_FILE_NAME
+import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.thirdparty.HeadContribution
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
 import kotlinx.html.BODY
@@ -119,7 +121,7 @@ class HtmlDocumentBuilder(
 
     /** Loads the main Quarkdown script and initializes the capabilities object. */
     private fun HEAD.quarkdownScript() {
-        script(src = "$relativePathToRoot/script/quarkdown.js") {}
+        script(src = "$relativePathToRoot/$HTML_SCRIPT_OUTPUT_PATH/$HTML_SCRIPT_FILE_NAME") {}
         script { unsafe { raw("const capabilities = window.quarkdownCapabilities") } }
     }
 

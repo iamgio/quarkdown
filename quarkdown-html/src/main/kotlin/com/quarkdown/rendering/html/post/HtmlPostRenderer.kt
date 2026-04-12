@@ -54,7 +54,7 @@ class HtmlPostRenderer(
                     locale = context.documentInfo.locale,
                     themeDirectory = libraryDirectory?.resolve("theme"),
                 ),
-                ScriptPostRendererResource(),
+                ScriptPostRendererResource(libraryDirectory),
                 MediaPostRendererResource(context.mediaStorage),
                 if (context.documentInfo.type == DocumentType.DOCS) {
                     SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))

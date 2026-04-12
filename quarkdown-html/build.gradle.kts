@@ -96,10 +96,16 @@ val librariesToBundle =
 val bundleTypeScript =
     tasks.register<NpxTask>("bundleTypeScript") {
         group = "build"
-        description = "Bundles TypeScript files using esbuild"
+        description = "Bundles TypeScript files using esbuild into build/thirdparty/quarkdown.min.js"
 
         // Make sure npm install runs first
         dependsOn(tasks.npmInstall)
+
+        // Declared inputs/outputs so Gradle can skip the task when unchanged.
+        inputs.dir(projectDir.resolve("src/main/typescript"))
+        inputs.file(projectDir.resolve("package.json"))
+        outputs.file(layout.buildDirectory.file("thirdparty/quarkdown.min.js"))
+        outputs.file(layout.buildDirectory.file("thirdparty/quarkdown.min.js.map"))
 
         command.set("esbuild")
         args.set(
@@ -108,14 +114,14 @@ val bundleTypeScript =
                 "--bundle",
                 "--platform=browser",
                 "--format=iife",
-                "--outfile=src/main/resources/render/script/quarkdown.js",
+                "--minify",
+                "--outfile=build/thirdparty/quarkdown.min.js",
                 "--sourcemap",
             ) + librariesToBundle.map { "--external:${it.target}" },
         )
     }
 
 tasks.processResources {
-    dependsOn(bundleTypeScript)
     dependsOn(bundleThirdParty)
 }
 
@@ -177,6 +183,10 @@ val bundleHighlightJs =
         group = "build"
         description = "Bundles highlight.js into a single browser-ready file"
         dependsOn(tasks.npmInstall)
+
+        // Declared inputs/outputs so Gradle can skip the task when unchanged.
+        inputs.file(nodeModules.resolve("highlight.js/lib/common.js"))
+        outputs.file(nodeModules.resolve("highlight.js/dist/highlightjs.min.js"))
 
         command.set("esbuild")
         args.set(
@@ -271,6 +281,7 @@ val bundleThirdParty =
         dependsOn(tasks.npmInstall)
         dependsOn(bundleHighlightJs)
         dependsOn(assembleThemes)
+        dependsOn(bundleTypeScript)
 
         doLast {
             librariesToBundle.forEach { (target, source, includes) ->

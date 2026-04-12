@@ -114,8 +114,8 @@ class HtmlPostRendererTest {
     fun `wrap with path to root`() {
         val rootResult = postRenderer(relativePathToRoot = ".").wrap("")
         val nestedResult = postRenderer(relativePathToRoot = "..").wrap("")
-        assertTrue("./script/quarkdown.js" in rootResult)
-        assertTrue("../script/quarkdown.js" in nestedResult)
+        assertTrue("./script/quarkdown.min.js" in rootResult)
+        assertTrue("../script/quarkdown.min.js" in nestedResult)
     }
 
     @Test

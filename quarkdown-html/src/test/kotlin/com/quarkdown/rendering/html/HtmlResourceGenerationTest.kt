@@ -116,7 +116,10 @@ class HtmlResourceGenerationTest {
         assertThemeGroupContains(resources, expectedThemes, notExpectedThemes)
 
         val scriptGroup = resources.filterIsInstance<OutputResourceGroup>().first { it.name == "script" }
-        assertEquals("quarkdown", scriptGroup.resources.single().name)
+        val scriptNames = scriptGroup.resources.map { it.name }.toSet()
+        assertTrue("quarkdown.min.js" in scriptNames)
+        assertTrue("quarkdown.min.js.map" in scriptNames)
+        scriptGroup.resources.forEach { assertTrue(it is FileReferenceOutputArtifact) }
     }
 
     @Test
@@ -172,6 +175,13 @@ class HtmlResourceGenerationTest {
         context.documentInfo = DocumentInfo()
         val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
         assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == "theme" })
+    }
+
+    @Test
+    fun `no script group when library directory is null`() {
+        context.documentInfo = DocumentInfo()
+        val resources = postRenderer(libraryDirectory = null).generateResources(plainHtml)
+        assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == "script" })
     }
 
     @Test
